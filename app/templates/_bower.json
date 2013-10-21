@@ -1,0 +1,18 @@
+{
+  "name": "<%= _.camelize(baseName) %>",
+  "version": "0.0.0",
+  "dependencies": {
+    "sass-bootstrap": "~3.0.0",
+    "modernizr": "~2.6.2",
+    "jquery": "~1.10.2",
+    "angular": "~1.0.7",
+    "json3": "~3.2.4",
+    "angular-resource": "~1.0.7",
+    "angular-cookies": "~1.0.7",
+    "angular-sanitize": "~1.0.7"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.0.7",
+    "angular-scenario": "~1.0.7"
+  }
+}

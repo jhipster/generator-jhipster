@@ -1,4 +1,47 @@
-generator-jhipster
-==================
+Hipster stack for Java developers
+==========================
 
-Hipster stack for Java developers. Yeoman + Maven + Spring + AngularJS in one handy generator.
+Presentation
+------------------
+
+**This project is not yet finished!!! We are currently working on an alpha release**
+
+This is a Yeoman generator, used to create a Yeoman + Maven + Spring + AngularJS project.
+
+Goals
+-------------------
+
+Generate a complete and modern Web app, unifying :
+
+- Maven on the server side
+- Yeoman + Bower + Grunt on the client side
+
+Technology stack on the server side
+--------------------
+
+A complete Spring application :
+
+- "development" and "production" profiles
+- Spring Security
+- Spring MVC REST + Jackson
+- Spring Data JPA + Bean Validation
+
+Ready to go into production :
+
+- Monitoring with Yammer Metrics
+- Caching with ehcache
+- Optimized static resources
+- Builds a standard WAR file
+
+Technology stack on the client side
+--------------------
+
+Single Web page application :
+
+- Responsive Web Design
+- HTML5 Boilerplate
+- Twitter Bootstrap and Sass
+- AngularJS
+
+Easy installation of new libraries with Bower.
+Build, optimization and live reload with Grunt.

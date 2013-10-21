@@ -1,0 +1,46 @@
+{
+  "name": "generator-jhipster",
+  "version": "0.0.1",
+  "description": "Java + Spring + JPA + AngularJS complete dev stack",
+  "keywords": [
+    "yeoman-generator",
+    "Java",
+    "Spring",
+	  "JPA",
+    "AngularJS"
+  ],
+  "homepage": "https://github.com/jdubois/generator-jhipster",
+  "bugs": "https://github.com/jdubois/generator-jhipster/issues",
+  "author": {
+    "name": "Julien Dubois",
+    "email": "",
+    "url": "https://github.com/jdubois"
+  },
+  "main": "app/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jdubois/generator-jhipster.git"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "yeoman-generator": "~0.13.1",
+    "chalk": "~0.2.1"
+  },
+  "devDependencies": {
+    "mocha": "~1.12.0"
+  },
+  "peerDependencies": {
+    "yo": ">=1.0.0-rc.1"
+  },
+  "engines": {
+    "node": ">=0.8.0",
+    "npm": ">=1.2.10"
+  },
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ]
+}
