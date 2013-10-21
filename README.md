@@ -8,6 +8,11 @@ Presentation
 
 This is a Yeoman generator, used to create a Yeoman + Maven + Spring + AngularJS project.
 
+You can install and use it easily:
+
+- See the [Yeoman community generators page](http://yeoman.io/community-generators.html) or
+- Go get [the official package on npmjs.org](https://npmjs.org/package/generator-jhipster) 
+
 Goals
 -------------------
 
