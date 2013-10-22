@@ -123,6 +123,9 @@ JhipsterGenerator.prototype.app = function app() {
   this.mkdir(webappDir);
   this.mkdir(webappDir + 'WEB-INF');
   this.template(webappDir + 'WEB-INF/_web.xml', webappDir + 'WEB-INF/web.xml');
+
+  // SCSS
+  this.copy('src/main/scss/main.scss', 'src/main/scss/main.scss');
   
   // HTML5 BoilerPlate
   this.copy(webappDir + 'favicon.ico', webappDir + 'favicon.ico');
@@ -130,6 +133,7 @@ JhipsterGenerator.prototype.app = function app() {
   this.copy(webappDir + 'robots.txt', webappDir + 'robots.txt');
   this.copy(webappDir + 'htaccess.txt', webappDir + '.htaccess');
   this.copy(webappDir + 'scripts/main.js', webappDir + 'scripts/main.js');
+  this.copy(webappDir + 'styles/documentation.css', webappDir + 'styles/documentation.css');
   this.indexFile = this.readFileAsString(path.join(this.sourceRoot(), webappDir + 'index.html'));
   this.indexFile = this.engine(this.indexFile, this);
   this.indexFile = this.appendScripts(this.indexFile, 'scripts/main.js', [
