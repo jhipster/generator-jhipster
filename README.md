@@ -22,7 +22,6 @@ Generate a complete and modern Web app, unifying:
 
 - Maven on the server side
 - Yeoman + Bower + Grunt on the client side
-- 
 
 Usage
 -------------------
