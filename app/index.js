@@ -130,6 +130,7 @@ JhipsterGenerator.prototype.app = function app() {
   // HTML5 BoilerPlate
   this.copy(webappDir + 'favicon.ico', webappDir + 'favicon.ico');
   this.copy(webappDir + '404.html', webappDir + '404.html');
+  this.copy(webappDir + '500.html', webappDir + '500.html');
   this.copy(webappDir + 'robots.txt', webappDir + 'robots.txt');
   this.copy(webappDir + 'htaccess.txt', webappDir + '.htaccess');
   this.copy(webappDir + 'scripts/main.js', webappDir + 'scripts/main.js');
