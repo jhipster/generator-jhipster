@@ -14,6 +14,10 @@ import java.io.IOException;
 @ComponentScan(basePackages = {
         "<%=packageName%>.service",
         "<%=packageName%>.security"})
+@Import(value = {
+        AsyncConfiguration.class,
+        CacheConfiguration.class,
+        MetricsConfiguration.class})
 @ImportResource("classpath:META-INF/spring/applicationContext-*.xml")
 public class ApplicationConfiguration {
 
