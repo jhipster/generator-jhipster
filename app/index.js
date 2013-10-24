@@ -76,8 +76,8 @@ JhipsterGenerator.prototype.app = function app() {
 
   this.copy(resourceDir + '/META-INF/persistence.xml', resourceDir + 'META-INF/persistence.xml');
   this.copy(resourceDir + '/META-INF/spring/applicationContext-metrics.xml', resourceDir + 'META-INF/spring/applicationContext-metrics.xml');
-  this.template(resourceDir + '/META-INF/spring/_applicationContext-database.xml', resourceDir + 'META-INF/spring/applicationContext-database.xml');
-  this.template(resourceDir + '/META-INF/spring/_applicationContext-security.xml', resourceDir + 'META-INF/spring/applicationContext-security.xml');
+  this.copy(resourceDir + '/META-INF/spring/applicationContext-database.xml', resourceDir + 'META-INF/spring/applicationContext-database.xml');
+  this.copy(resourceDir + '/META-INF/spring/applicationContext-security.xml', resourceDir + 'META-INF/spring/applicationContext-security.xml');
 
   this.copy(resourceDir + '/META-INF/application/application.properties', resourceDir + 'META-INF/' + this.baseName + '/' + this.baseName + ".properties");
 
