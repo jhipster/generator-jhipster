@@ -21,16 +21,6 @@
         <listener-class><%= packageName %>.web.init.WebConfigurer</listener-class>
     </listener>
 
-    <filter>
-        <filter-name>GzipFilter</filter-name>
-        <filter-class>net.sf.ehcache.constructs.web.filter.GzipFilter</filter-class>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>GzipFilter</filter-name>
-        <url-pattern>/app/*</url-pattern>
-    </filter-mapping>
-
     <error-page>
         <error-code>500</error-code>
         <location>/500.html</location>

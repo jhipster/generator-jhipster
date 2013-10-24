@@ -1,12 +1,12 @@
 package <%=packageName%>.web.init;
 
-import com.yammer.metrics.reporting.AdminServlet;
-import com.yammer.metrics.web.DefaultWebappMetricsFilter;
 import <%=packageName%>.conf.ApplicationConfiguration;
 import <%=packageName%>.conf.DispatcherServletConfig;
+import com.yammer.metrics.reporting.AdminServlet;
+import com.yammer.metrics.web.DefaultWebappMetricsFilter;
+import net.sf.ehcache.constructs.web.filter.GzipFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.env.Environment;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -37,6 +37,32 @@ public class WebConfigurer implements ServletContextListener {
 
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
 
+        ServletRegistration.Dynamic dispatcherServlet = initSpring(servletContext, rootContext);
+        initSpringSecurity(servletContext, disps);
+        initMetricsServlet(servletContext, disps, dispatcherServlet);
+        initGzip(servletContext, disps);
+
+        log.debug("Web application fully configured");
+    }
+
+    /**
+     * Initializes the GZip filter.
+     */
+    private void initGzip(ServletContext servletContext, EnumSet<DispatcherType> disps) {
+        log.debug("Registering GZip Filter");
+        FilterRegistration.Dynamic gzipFilter = servletContext.addFilter("gzipFilter",
+                new GzipFilter());
+
+        gzipFilter.addMappingForUrlPatterns(disps, true, "/app/*");
+        gzipFilter.addMappingForUrlPatterns(disps, true, "/scripts/*");
+        gzipFilter.addMappingForUrlPatterns(disps, true, "/styles/*");
+        gzipFilter.addMappingForUrlPatterns(disps, true, "*.html");
+    }
+
+    /**
+     * Initializes Spring and Spring MVC.
+     */
+    private ServletRegistration.Dynamic initSpring(ServletContext servletContext, AnnotationConfigWebApplicationContext rootContext) {
         log.debug("Configuring Spring Web application context");
         AnnotationConfigWebApplicationContext dispatcherServletConfig = new AnnotationConfigWebApplicationContext();
         dispatcherServletConfig.setParent(rootContext);
@@ -47,28 +73,37 @@ public class WebConfigurer implements ServletContextListener {
                 dispatcherServletConfig));
         dispatcherServlet.addMapping("/app/*");
         dispatcherServlet.setLoadOnStartup(1);
+        return dispatcherServlet;
+    }
 
+    /**
+     * Initializes Spring Security.
+     */
+    private void initSpringSecurity(ServletContext servletContext, EnumSet<DispatcherType> disps) {
         log.debug("Registering Spring Security Filter");
         FilterRegistration.Dynamic springSecurityFilter = servletContext.addFilter("springSecurityFilterChain",
                 new DelegatingFilterProxy());
 
         springSecurityFilter.setAsyncSupported(true);
-        springSecurityFilter.addMappingForServletNames(disps, true, "dispatcher", "atmosphereServlet");
-
-        log.debug("Web application fully configured");
+        springSecurityFilter.addMappingForServletNames(disps, true, "dispatcher");
     }
 
-    private void initMetricsServlet(ServletContext servletContext, EnumSet<DispatcherType> disps, ServletRegistration.Dynamic dispatcherServlet) {
-        log.debug("Setting Metrics profile for the Web ApplicationContext");
+    /**
+     * Initializes Yammer Metrics.
+     */
+    private void initMetricsServlet(ServletContext servletContext, EnumSet<DispatcherType> disps, 
+            ServletRegistration.Dynamic dispatcherServlet) {
 
-        log.debug("Registering Metrics Filter");
+        log.debug("Registering Yammer Metrics Filter");
         FilterRegistration.Dynamic metricsFilter = servletContext.addFilter("webappMetricsFilter",
                 new DefaultWebappMetricsFilter());
+        
         metricsFilter.addMappingForUrlPatterns(disps, true, "/*");
 
-        log.debug("Registering Metrics Admin Servlet");
+        log.debug("Registering Yammer Metrics Admin Servlet");
         ServletRegistration.Dynamic metricsAdminServlet =
                 servletContext.addServlet("metricsAdminServlet", new AdminServlet());
+        
         metricsAdminServlet.addMapping("/metrics/*");
         dispatcherServlet.setLoadOnStartup(2);
     }
@@ -81,5 +116,4 @@ public class WebConfigurer implements ServletContextListener {
         gwac.close();
         log.debug("Web application destroyed");
     }
-
 }
