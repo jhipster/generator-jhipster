@@ -23,6 +23,27 @@ Generate a complete and modern Web app, unifying:
 - Maven on the server side
 - Yeoman + Bower + Grunt on the client side
 
+Usage
+-------------------
+
+To generate your application, type:
+```bash
+yo jhipster
+```
+
+Once the application is generated, you can launch the Java server with Maven:
+```bash
+mvn jetty:run
+```
+The application will be available on [http://localhost:8080](http://localhost:8080)
+
+You can also run Grunt to work on the client-side JavaScript application:
+```bash
+grunt server
+```
+This should open up your Web browser, with live reload enabled, on [http://localhost:9000](http://localhost:9000)
+
+
 Technology stack on the server side
 --------------------
 
