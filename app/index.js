@@ -19,7 +19,7 @@ util.inherits(JhipsterGenerator, yeoman.generators.Base);
 JhipsterGenerator.prototype.askFor = function askFor() {
   var cb = this.async();
 
-  console.log(chalk.blue('\n'+
+  console.log(chalk.red('\n'+
   ' _     _   ___   __  _____  ____  ___       __  _____   __    __    _    \n'+        
   '| |_| | | | |_) ( (`  | |  | |_  | |_)     ( (`  | |   / /\\  / /`  | |_/ \n'+       
   '|_| | |_| |_|   _)_)  |_|  |_|__ |_| \\     _)_)  |_|  /_/--\\ \\_\\_, |_| \\ \n'+       
@@ -37,14 +37,20 @@ var prompts = [
         {
             type: 'string',
             name: 'baseName',
-            message: '(1/2) What is the base name of your application?',
+            message: '(1/3) What is the base name of your application?',
             default: 'application'
         },
         {
             type: 'string',
             name: 'packageName',
-            message: '(2/2) What is your default package name?',
+            message: '(2/3) What is your default package name?',
             default: 'com.mycompany'
+        }, 
+        {
+            type: 'confirm',
+            name: 'useCompass',
+            message: '(3/3) Would you like to use the Compass CSS Authoring Framework?',
+            default: false,
         }
 		];
 
@@ -53,6 +59,7 @@ this.prompt(prompts, function (props) {
     this.springSecurityVersion = props.springSecurityVersion;
     this.packageName = props.packageName;
     this.baseName = props.baseName;
+    this.useCompass = props.useCompass;
 
     cb();
   }.bind(this));
@@ -124,8 +131,15 @@ JhipsterGenerator.prototype.app = function app() {
   this.mkdir(webappDir + 'WEB-INF');
   this.template(webappDir + 'WEB-INF/_web.xml', webappDir + 'WEB-INF/web.xml');
 
-  // SCSS
-  this.copy('src/main/scss/main.scss', 'src/main/scss/main.scss');
+  // normal CSS or SCSS?
+  if (this.useCompass) {
+    this.copy('src/main/scss/main.scss', 'src/main/scss/main.scss');
+  } else {
+    this.copy('src/main/webapp/images/glyphicons-halflings.png', 'src/main/webapp/images/glyphicons-halflings.png');
+    this.copy('src/main/webapp/images/glyphicons-halflings-white.png', 'src/main/webapp/images/glyphicons-halflings-white.png');
+    this.copy('src/main/webapp/styles/bootstrap.css', 'src/main/webapp/styles/bootstrap.css');
+    this.copy('src/main/webapp/styles/main.css', 'src/main/webapp/styles/main.css');
+  }
   
   // HTML5 BoilerPlate
   this.copy(webappDir + 'favicon.ico', webappDir + 'favicon.ico');
