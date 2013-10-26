@@ -35,7 +35,7 @@ public class CacheConfiguration {
     @Bean
     public CacheManager cacheManager() {
 		log.debug("Starting Ehcache");
-        cacheManager = new net.sf.ehcache.CacheManager();
+        cacheManager = net.sf.ehcache.CacheManager.create();
         EhCacheCacheManager ehCacheManager = new EhCacheCacheManager();
         ehCacheManager.setCacheManager(cacheManager);
         return ehCacheManager;

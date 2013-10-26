@@ -22,10 +22,11 @@ public class User implements Serializable {
 
     @NotNull
     @Id
-    @JsonIgnore
+    @Size(min = 0, max = 50)
     private String login;
 
     @JsonIgnore
+    @Size(min = 0, max = 50)
     private String password;
 
     @Size(min = 0, max = 50)
@@ -35,6 +36,7 @@ public class User implements Serializable {
     private String lastName;
 
     @Email
+    @Size(min = 0, max = 100)
     private String email;
 
     public String getLogin() {

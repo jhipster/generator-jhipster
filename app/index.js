@@ -35,21 +35,35 @@ console.log('\nWelcome to the Jhipster Generator\n\n');
 
 var prompts = [
         {
-            type: 'string',
+            type: 'input',
             name: 'baseName',
-            message: '(1/3) What is the base name of your application?',
-            default: 'application'
+            message: '(1/4) What is the base name of your application?',
+            default: 'jhipster'
         },
         {
-            type: 'string',
+            type: 'input',
             name: 'packageName',
-            message: '(2/3) What is your default package name?',
+            message: '(2/4) What is your default package name?',
             default: 'com.mycompany'
         }, 
+        { 
+            type: 'list',
+            name: 'databaseType',
+            message: '(3/4) Which development database would you like to use?',
+            choices: [{
+              value: 'hsqldbMemory',
+              name: 'HSQLDB in-memory',
+              checked: true
+            }, {
+              value: 'postgresql',
+              name: 'PostgreSQL',
+              checked: false
+            }]
+        },
         {
             type: 'confirm',
             name: 'useCompass',
-            message: '(3/3) Would you like to use the Compass CSS Authoring Framework?',
+            message: '(4/4) Would you like to use the Compass CSS Authoring Framework?',
             default: false,
         }
 		];
@@ -59,6 +73,7 @@ this.prompt(prompts, function (props) {
     this.springSecurityVersion = props.springSecurityVersion;
     this.packageName = props.packageName;
     this.baseName = props.baseName;
+    this.databaseType = props.databaseType;
     this.useCompass = props.useCompass;
 
     cb();
@@ -82,12 +97,12 @@ JhipsterGenerator.prototype.app = function app() {
   this.template(resourceDir + '_logback.xml', resourceDir + 'logback.xml');
 
   this.copy(resourceDir + '/META-INF/persistence.xml', resourceDir + 'META-INF/persistence.xml');
+  this.copy(resourceDir + '/META-INF/application/application.properties', resourceDir + 'META-INF/' + this.baseName + '/' + this.baseName + '.properties');
+  this.copy(resourceDir + '/META-INF/liquibase/db-changelog.xml', resourceDir + 'META-INF/liquibase/db-changelog.xml');
   this.copy(resourceDir + '/META-INF/spring/applicationContext-metrics.xml', resourceDir + 'META-INF/spring/applicationContext-metrics.xml');
   this.copy(resourceDir + '/META-INF/spring/applicationContext-database.xml', resourceDir + 'META-INF/spring/applicationContext-database.xml');
   this.copy(resourceDir + '/META-INF/spring/applicationContext-security.xml', resourceDir + 'META-INF/spring/applicationContext-security.xml');
-
-  this.copy(resourceDir + '/META-INF/application/application.properties', resourceDir + 'META-INF/' + this.baseName + '/' + this.baseName + ".properties");
-
+ 
   // Create Java files
   var javaDir = 'src/main/java/' + packageFolder + '/';
 

@@ -22,25 +22,29 @@
                 <logback.loglevel>DEBUG</logback.loglevel>
                 <!-- ehcache configuration -->
                 <ehcache.maxBytesLocalHeap>64M</ehcache.maxBytesLocalHeap>
-                <!-- database configuration -->
-                <datasource.driverclassname>org.hsqldb.jdbcDriver</datasource.driverclassname>
+                <!-- database configuration  -->
+                <% if (databaseType == 'postgresql') { %><datasource.driverclassname>org.postgresql.Driver</datasource.driverclassname>
+                <datasource.url>jdbc:postgresql://localhost/<%= baseName %></datasource.url>
+                <datasource.username><%= baseName %></datasource.username>
+                <datasource.password></datasource.password><% } else { %><datasource.driverclassname>org.hsqldb.jdbcDriver</datasource.driverclassname>
                 <datasource.url>jdbc:hsqldb:mem:<%= baseName %></datasource.url>
-                <datasource.username>sa</datasource.username>
-                <datasource.password></datasource.password>
+                <datasource.username></datasource.username>
+                <datasource.password></datasource.password><% } %>
                 <datasource.initialSize>2</datasource.initialSize>
                 <datasource.minIdle>1</datasource.minIdle>
                 <datasource.maxIdle>2</datasource.maxIdle>
                 <datasource.maxActive>5</datasource.maxActive>
-                <hibernate.hbm2ddl.auto>create</hibernate.hbm2ddl.auto>
-                <hibernate.dialect>org.hibernate.dialect.HSQLDialect</hibernate.dialect>
+                <% if (databaseType == 'postgresql') { %><hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect><% } else { %><hibernate.dialect>org.hibernate.dialect.HSQLDialect</hibernate.dialect><% } %>
                 <hibernate.show_sql>true</hibernate.show_sql>
                 <hibernate.generate_statistics>true</hibernate.generate_statistics>
             </properties>
             <dependencies>
                 <dependency>
-                    <groupId>org.hsqldb</groupId>
+                    <% if (databaseType == 'postgresql') { %><groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                    <version>9.2-1003-jdbc4</version><% } else { %><groupId>org.hsqldb</groupId>
                     <artifactId>hsqldb</artifactId>
-                    <version>2.3.1</version>
+                    <version>2.3.1</version><% } %>
                 </dependency>
             </dependencies>
         </profile>
@@ -59,13 +63,12 @@
                 <!-- database configuration -->
                 <datasource.driverclassname>org.postgresql.Driver</datasource.driverclassname>
                 <datasource.url>jdbc:postgresql://localhost/<%= baseName %></datasource.url>
-                <datasource.username></datasource.username>
+                <datasource.username><%= baseName %></datasource.username>
                 <datasource.password></datasource.password>
                 <datasource.initialSize>4</datasource.initialSize>
                 <datasource.minIdle>4</datasource.minIdle>
                 <datasource.maxIdle>10</datasource.maxIdle>
                 <datasource.maxActive>20</datasource.maxActive>
-                <hibernate.hbm2ddl.auto>validate</hibernate.hbm2ddl.auto>
                 <hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect>
                 <hibernate.show_sql>false</hibernate.show_sql>
                 <hibernate.generate_statistics>false</hibernate.generate_statistics>
@@ -206,11 +209,6 @@
         </dependency>
         <dependency>
             <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache-core</artifactId>
-            <version>2.6.5</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache-web</artifactId>
             <version>2.0.4</version>
         </dependency>
@@ -253,6 +251,11 @@
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>5.0.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>3.0.7</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

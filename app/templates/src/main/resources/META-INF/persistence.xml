@@ -9,7 +9,6 @@
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
         <properties>
             <!-- Properties for Hibernate -->
-            <property name="hibernate.hbm2ddl.auto" value="${hibernate.hbm2ddl.auto}" />
             <property name="hibernate.dialect" value="${hibernate.dialect}"/>
 
             <property name="hibernate.cache.use_second_level_cache" value="true"/>
@@ -18,7 +17,7 @@
             <property name="hibernate.show_sql" value="${hibernate.show_sql}"/>
             <property name="hibernate.generate_statistics" value="${hibernate.generate_statistics}"/>
             <property name="hibernate.cache.region.factory_class"
-                      value="net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory"/>
+                      value="org.hibernate.cache.ehcache.EhCacheRegionFactory"/>
                       
         </properties>
     </persistence-unit>

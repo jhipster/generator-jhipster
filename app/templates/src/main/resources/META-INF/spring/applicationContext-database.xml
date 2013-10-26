@@ -49,9 +49,15 @@
         </property>
         
         <property name="persistenceXmlLocation" value="classpath:META-INF/persistence.xml"/>
-        <property name="persistenceUnitName" value="<%= baseName %>"/>
+        <property name="persistenceUnitName" value="primary"/>
         <property name="packagesToScan" value="<%= packageName %>.domain"/>
     </bean>
 
     <jpa:repositories base-package="<%=packageName%>.repository"/>
+
+    <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
+      <property name="dataSource" ref="dataSource" />
+      <property name="changeLog" value="classpath:META-INF/liquibase/db-changelog.xml" />
+      <property name="contexts" value="development, production" />
+ </bean>
 </beans>
