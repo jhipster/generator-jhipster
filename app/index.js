@@ -99,6 +99,8 @@ JhipsterGenerator.prototype.app = function app() {
   this.copy(resourceDir + '/META-INF/persistence.xml', resourceDir + 'META-INF/persistence.xml');
   this.copy(resourceDir + '/META-INF/application/application.properties', resourceDir + 'META-INF/' + this.baseName + '/' + this.baseName + '.properties');
   this.copy(resourceDir + '/META-INF/liquibase/db-changelog.xml', resourceDir + 'META-INF/liquibase/db-changelog.xml');
+  this.copy(resourceDir + '/META-INF/liquibase/users.csv', resourceDir + 'META-INF/liquibase/users.csv');
+  this.copy(resourceDir + '/META-INF/liquibase/authorities.csv', resourceDir + 'META-INF/liquibase/authorities.csv');
   this.copy(resourceDir + '/META-INF/spring/applicationContext-metrics.xml', resourceDir + 'META-INF/spring/applicationContext-metrics.xml');
   this.copy(resourceDir + '/META-INF/spring/applicationContext-database.xml', resourceDir + 'META-INF/spring/applicationContext-database.xml');
   this.copy(resourceDir + '/META-INF/spring/applicationContext-security.xml', resourceDir + 'META-INF/spring/applicationContext-security.xml');
@@ -119,13 +121,14 @@ JhipsterGenerator.prototype.app = function app() {
 
   this.template('src/main/java/package/domain/_package-info.java', javaDir + 'domain/package-info.java');
   this.template('src/main/java/package/domain/_User.java', javaDir + 'domain/User.java');
+  this.template('src/main/java/package/domain/_Authority.java', javaDir + 'domain/Authority.java');
 
   this.template('src/main/java/package/repository/_package-info.java', javaDir + 'repository/package-info.java');
   this.template('src/main/java/package/repository/_UserRepository.java', javaDir + 'repository/UserRepository.java');
 
   this.template('src/main/java/package/security/_package-info.java', javaDir + 'security/package-info.java');
   this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java');
-  this.template('src/main/java/package/security/_SecurityRoles.java', javaDir + 'security/SecurityRoles.java');
+  this.template('src/main/java/package/security/_AuthoritiesConstants.java', javaDir + 'security/AuthoritiesConstants.java');
 
   this.template('src/main/java/package/web/controller/_package-info.java', javaDir + 'web/controller/package-info.java');
   this.template('src/main/java/package/web/controller/_HomeController.java', javaDir + 'web/controller/HomeController.java'); 

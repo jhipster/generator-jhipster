@@ -12,10 +12,35 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="password" type="varchar(50)"/>
-            <column name="firstName" type="varchar(50)"/>
-            <column name="lastName" type="varchar(50)"/>
+            <column name="first_name" type="varchar(50)"/>
+            <column name="last_name" type="varchar(50)"/>
             <column name="email" type="varchar(100)"/>
+            <column name="enabled" type="boolean"/>
         </createTable>
+        <createTable tableName="T_AUTHORITY">
+            <column name="login" type="varchar(50)"/>
+            <column name="name" type="varchar(50)"/>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="login"
+                                 baseTableName="T_AUTHORITY"
+                                 constraintName="fk_authority_user"
+                                 referencedColumnNames="login"
+                                 referencedTableName="T_USER"/>
+        <createIndex indexName="idx_authority_user"
+                     tableName="T_AUTHORITY"
+                     unique="true">
+            <column name="login" type="varchar(50)"/>
+            <column name="name" type="varchar(50)"/>
+        </createIndex>
+        <loadData encoding="UTF-8"
+            file="META-INF/liquibase/users.csv"
+            separator=";"
+            tableName="T_USER"/>
+        <loadData encoding="UTF-8"
+            file="META-INF/liquibase/authorities.csv"
+            separator=";"
+            tableName="T_AUTHORITY"/>
+
     </changeSet>
 
 </databaseChangeLog>

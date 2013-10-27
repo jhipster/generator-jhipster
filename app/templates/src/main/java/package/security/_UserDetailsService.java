@@ -27,6 +27,8 @@ public class UserDetailsService implements org.springframework.security.core.use
 
     private final Collection<GrantedAuthority> userGrantedAuthorities = new ArrayList<GrantedAuthority>();
 
+    private final Collection<GrantedAuthority> adminGrantedAuthorities = new ArrayList<GrantedAuthority>();
+
     @Inject
     private UserRepository userRepository;
 
@@ -36,8 +38,13 @@ public class UserDetailsService implements org.springframework.security.core.use
     @PostConstruct
     public void init() {
         //Roles for "normal" users
-        GrantedAuthority roleUser = new SimpleGrantedAuthority(SecurityRoles.MEMBER);
+        GrantedAuthority roleUser = new SimpleGrantedAuthority(AuthoritiesConstants.USER);
         userGrantedAuthorities.add(roleUser);
+
+        //Roles for "admin" users
+        adminGrantedAuthorities.add(roleUser);
+        GrantedAuthority roleAdmin = new SimpleGrantedAuthority(AuthoritiesConstants.USER);
+        adminGrantedAuthorities.add(roleAdmin);
     }
 
     @Override

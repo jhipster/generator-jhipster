@@ -1,28 +1,28 @@
 package <%=packageName%>.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.validation.groups.Default;
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * A user.
  */
 @Entity
-@Table(name = "T_USER")
+@Table(name="T_USER")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class User implements Serializable {
 
     @NotNull
-    @Id
     @Size(min = 0, max = 50)
+    @Id
     private String login;
 
     @JsonIgnore
@@ -30,14 +30,23 @@ public class User implements Serializable {
     private String password;
 
     @Size(min = 0, max = 50)
+    @Column(name = "first_name")
     private String firstName;
 
     @Size(min = 0, max = 50)
+    @Column(name = "last_name")
     private String lastName;
 
     @Email
     @Size(min = 0, max = 100)
     private String email;
+
+    private boolean enabled;
+
+    @JsonIgnore
+    @OneToMany
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<Authority> authorities;
 
     public String getLogin() {
         return login;
@@ -79,6 +88,24 @@ public class User implements Serializable {
         this.email = email;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    @OneToMany
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    public Set<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -104,6 +131,7 @@ public class User implements Serializable {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
+                ", enabled=" + enabled +
                 "} " + super.toString();
     }
 }

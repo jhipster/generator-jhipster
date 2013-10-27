@@ -1,0 +1,2 @@
+login;password;first_name;last_name;email;enabled
+admin;admin;NULL;Administrator;NULL;1
