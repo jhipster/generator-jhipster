@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * REST controller for managing users.
@@ -25,15 +26,19 @@ public class UserResource {
     private UserRepository userRepository;
 
     /**
-     * GET  /rest/users/:login -> get the "login  " user
+     * GET  /rest/users/:login -> get the "login" user
      */
     @RequestMapping(value = "/rest/users/{login}",
             method = RequestMethod.GET,
             produces = "application/json")
     @ResponseBody
     @Timed
-    public User getUser(@PathVariable String login) {
+    public User getUser(@PathVariable String login, HttpServletResponse response) {
         log.debug("REST request to get User : {}", login);
-        return userRepository.findByLogin(login);
+        User user = userRepository.findByLogin(login);
+        if (user == null) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        }
+        return user;
     }
 }
