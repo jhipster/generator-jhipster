@@ -14,23 +14,23 @@
 
     <global-method-security pre-post-annotations="enabled"/>
 
+    <http pattern="/*" security="none"/>
     <http pattern="/static/**" security="none"/>
     <http pattern="/app/login*" security="none"/>
 
     <http auto-config="true" use-expressions="true" create-session="ifRequired">
         <remember-me key="rememberKey" token-validity-seconds="2592000"/>
-        <intercept-url pattern="/app/**" access="permitAll()"/>
+        <intercept-url pattern="/app/**" access="isAuthenticated()"/>
         <intercept-url pattern="/metrics/**" access="hasRole('ROLE_ADMIN')"/>
-        <intercept-url pattern="/**" access="isAuthenticated()"/>
 
         <form-login
                 login-processing-url="/app/authentication"
-                login-page="/app/login"
+                login-page="/"
                 authentication-failure-url="/app/login?action=loginFailure"
-                default-target-url="/app/"/>
+                default-target-url="/"/>
 
-        <logout logout-url="/app/logout"
-                logout-success-url="/app/login"/>
+        <logout logout-url="/logout"
+                logout-success-url="/"/>
 
     </http>
 

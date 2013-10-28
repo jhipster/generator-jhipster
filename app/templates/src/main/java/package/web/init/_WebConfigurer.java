@@ -85,7 +85,7 @@ public class WebConfigurer implements ServletContextListener {
                 new DelegatingFilterProxy());
 
         springSecurityFilter.setAsyncSupported(true);
-        springSecurityFilter.addMappingForServletNames(disps, true, "dispatcher");
+        springSecurityFilter.addMappingForUrlPatterns(disps, false, "/*");
     }
 
     /**
