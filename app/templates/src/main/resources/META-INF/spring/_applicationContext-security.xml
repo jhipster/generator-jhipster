@@ -16,15 +16,19 @@
 
     <http pattern="/*" security="none"/>
     <http pattern="/static/**" security="none"/>
-    <http pattern="/app/login*" security="none"/>
+        
+    <beans:bean id="http401UnauthorizedEntryPoint" class="<%=packageName%>.security.Http401UnauthorizedEntryPoint"/>
+
+    <http pattern="/app/rest/**" entry-point-ref="http401UnauthorizedEntryPoint" use-expressions="true">
+        <intercept-url pattern="/**" access="isAuthenticated()"/>
+    </http>
 
     <http auto-config="true" use-expressions="true" create-session="ifRequired">
-        <remember-me key="rememberKey" token-validity-seconds="2592000"/>
         <intercept-url pattern="/app/**" access="isAuthenticated()"/>
         <intercept-url pattern="/metrics/**" access="hasRole('ROLE_ADMIN')"/>
 
         <form-login
-                login-processing-url="/app/authentication"
+                login-processing-url="/authentication"
                 login-page="/"
                 authentication-failure-url="/app/login?action=loginFailure"
                 default-target-url="/"/>

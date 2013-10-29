@@ -103,7 +103,7 @@ JhipsterGenerator.prototype.app = function app() {
   this.copy(resourceDir + '/META-INF/liquibase/authorities.csv', resourceDir + 'META-INF/liquibase/authorities.csv');
   this.copy(resourceDir + '/META-INF/spring/applicationContext-metrics.xml', resourceDir + 'META-INF/spring/applicationContext-metrics.xml');
   this.copy(resourceDir + '/META-INF/spring/applicationContext-database.xml', resourceDir + 'META-INF/spring/applicationContext-database.xml');
-  this.copy(resourceDir + '/META-INF/spring/applicationContext-security.xml', resourceDir + 'META-INF/spring/applicationContext-security.xml');
+  this.template(resourceDir + '/META-INF/spring/_applicationContext-security.xml', resourceDir + 'META-INF/spring/applicationContext-security.xml');
  
   // Create Java files
   var javaDir = 'src/main/java/' + packageFolder + '/';
@@ -129,6 +129,7 @@ JhipsterGenerator.prototype.app = function app() {
   this.template('src/main/java/package/security/_package-info.java', javaDir + 'security/package-info.java');
   this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java');
   this.template('src/main/java/package/security/_AuthoritiesConstants.java', javaDir + 'security/AuthoritiesConstants.java');
+  this.template('src/main/java/package/security/_Http401UnauthorizedEntryPoint.java', javaDir + 'security/Http401UnauthorizedEntryPoint.java');
 
   this.template('src/main/java/package/web/controller/_package-info.java', javaDir + 'web/controller/package-info.java');
   this.template('src/main/java/package/web/controller/_HomeController.java', javaDir + 'web/controller/HomeController.java'); 
@@ -169,13 +170,24 @@ JhipsterGenerator.prototype.app = function app() {
   this.copy(webappDir + '500.html', webappDir + '500.html');
   this.copy(webappDir + 'robots.txt', webappDir + 'robots.txt');
   this.copy(webappDir + 'htaccess.txt', webappDir + '.htaccess');
-  this.copy(webappDir + 'scripts/main.js', webappDir + 'scripts/main.js');
-  this.copy(webappDir + 'styles/documentation.css', webappDir + 'styles/documentation.css');
-  this.indexFile = this.readFileAsString(path.join(this.sourceRoot(), webappDir + 'index.html'));
+
+  
+  this.indexFile = this.readFileAsString(path.join(this.sourceRoot(), webappDir + '_index.html'));
   this.indexFile = this.engine(this.indexFile, this);
+
+  // JavaScript
+  this.template(webappDir + 'scripts/_app.js', webappDir + 'scripts/app.js');
+  this.template(webappDir + 'scripts/_controllers.js', webappDir + 'scripts/controllers.js');
+  this.template(webappDir + 'scripts/_services.js', webappDir + 'scripts/services.js');
   this.indexFile = this.appendScripts(this.indexFile, 'scripts/main.js', [
-    'scripts/main.js'
+    'scripts/app.js',
+    'scripts/controllers.js',
+    'scripts/services.js'
   ]);
+
+  // CSS
+  this.copy(webappDir + 'styles/documentation.css', webappDir + 'styles/documentation.css'); 
+
   this.indexFile = this.appendScripts(this.indexFile, 'scripts/plugins.js', [
     'bower_components/sass-bootstrap/js/affix.js',
     'bower_components/sass-bootstrap/js/alert.js',
