@@ -334,21 +334,6 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-ldap</artifactId>
-            <version><%= _.unescape('\$\{spring.security.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-openid</artifactId>
-            <version><%= _.unescape('\$\{spring.security.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-taglibs</artifactId>
-            <version><%= _.unescape('\$\{spring.security.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
             <version><%= _.unescape('\$\{spring.security.version}')%></version>
         </dependency>
