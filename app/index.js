@@ -101,6 +101,7 @@ JhipsterGenerator.prototype.app = function app() {
   this.copy(resourceDir + '/META-INF/liquibase/db-changelog.xml', resourceDir + 'META-INF/liquibase/db-changelog.xml');
   this.copy(resourceDir + '/META-INF/liquibase/users.csv', resourceDir + 'META-INF/liquibase/users.csv');
   this.copy(resourceDir + '/META-INF/liquibase/authorities.csv', resourceDir + 'META-INF/liquibase/authorities.csv');
+  this.copy(resourceDir + '/META-INF/liquibase/users_authorities.csv', resourceDir + 'META-INF/liquibase/users_authorities.csv');
   this.copy(resourceDir + '/META-INF/spring/applicationContext-metrics.xml', resourceDir + 'META-INF/spring/applicationContext-metrics.xml');
   this.copy(resourceDir + '/META-INF/spring/applicationContext-database.xml', resourceDir + 'META-INF/spring/applicationContext-database.xml');
   this.template(resourceDir + '/META-INF/spring/_applicationContext-security.xml', resourceDir + 'META-INF/spring/applicationContext-security.xml');
@@ -130,6 +131,9 @@ JhipsterGenerator.prototype.app = function app() {
   this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java');
   this.template('src/main/java/package/security/_AuthoritiesConstants.java', javaDir + 'security/AuthoritiesConstants.java');
   this.template('src/main/java/package/security/_Http401UnauthorizedEntryPoint.java', javaDir + 'security/Http401UnauthorizedEntryPoint.java');
+  this.template('src/main/java/package/security/_AjaxAuthenticationFailureHandler.java', javaDir + 'security/AjaxAuthenticationFailureHandler.java');
+  this.template('src/main/java/package/security/_AjaxAuthenticationSuccessHandler.java', javaDir + 'security/AjaxAuthenticationSuccessHandler.java');
+  this.template('src/main/java/package/security/_AjaxLogoutSuccessHandler.java', javaDir + 'security/AjaxLogoutSuccessHandler.java');
 
   this.template('src/main/java/package/web/controller/_package-info.java', javaDir + 'web/controller/package-info.java');
   this.template('src/main/java/package/web/controller/_HomeController.java', javaDir + 'web/controller/HomeController.java'); 
@@ -139,6 +143,7 @@ JhipsterGenerator.prototype.app = function app() {
 
   this.template('src/main/java/package/web/rest/_package-info.java', javaDir + 'web/rest/package-info.java'); 
   this.template('src/main/java/package/web/rest/_UserResource.java', javaDir + 'web/rest/UserResource.java'); 
+  this.template('src/main/java/package/web/rest/_AccountResource.java', javaDir + 'web/rest/AccountResource.java');
   
   // Create Test Java files
   var testDir = 'src/test/java/' + packageFolder;
@@ -171,7 +176,11 @@ JhipsterGenerator.prototype.app = function app() {
   this.copy(webappDir + 'robots.txt', webappDir + 'robots.txt');
   this.copy(webappDir + 'htaccess.txt', webappDir + '.htaccess');
 
-  
+  // Angular JS views
+  this.copy(webappDir + '/views/main.html', webappDir + '/views/main.html');
+  this.copy(webappDir + '/views/login.html', webappDir + '/views/login.html');
+
+  // Index page  
   this.indexFile = this.readFileAsString(path.join(this.sourceRoot(), webappDir + '_index.html'));
   this.indexFile = this.engine(this.indexFile, this);
 

@@ -12,5 +12,17 @@
             overflowToDisk="false"
             />
 
+    <cache name="<%=packageName%>.domain.User"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="<%=packageName%>.domain.Authority"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="<%=packageName%>.domain.User.authorities"
+           timeToLiveSeconds="3600">
+    </cache>
+
 </ehcache>
 

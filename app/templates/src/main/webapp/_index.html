@@ -27,20 +27,35 @@
             <div class="header">
                 <ul class="nav nav-pills pull-right">
                     <li class="active"><a href="#">Home</a></li>
-                    <li><a href="/metrics">Metrics</a></li>
+                    <li class="dropdown pointer">
+                        <a class="dropdown-toggle" data-toggle="dropdown">
+                                <span>
+                                    <span class="glyphicon glyphicon-user"></span>
+                                    <span class="hidden-tablet">
+                                        Account
+                                    </span>
+                                    <b class="caret"></b>
+                                </span>
+                        </a>
+                        <ul class="dropdown-menu" ng-controller="MenuController">
+                            <li ng-show="autenticated"><a href="#/account"><span class="glyphicon glyphicon-wrench"></span>
+                                Settings</a></li>
+                            <li ng-show="autenticated"><a href="/metrics"><span class="glyphicon glyphicon-dashboard"></span>
+                                Metrics</a></li>
+                            <li ng-show="autenticated"><a href="#/logout"><span class="glyphicon glyphicon-log-out"></span>
+                                Log out</a></li>
+
+                            <li ng-hide="autenticated"><a href="#/login"><span
+                                    class="glyphicon glyphicon-log-in"> Authenticate {{account.login}}</span></a></li>
+
+                        </ul>
+                    </li>
                 </ul>
-                <h3 class="text-muted"><%= baseName %></h3>
+                <h3 class="text-muted">jhipster</h3>
             </div>
 
-            <div class="jumbotron">
-                <h1>Welcome!</h1>
-                <p class="lead">This is your homepage</p>
-                <p><a class="btn btn-lg btn-success" href="#">Generated successfully!</a></p>
 
-                <div ng-controller="AccountController">
-                    <button ng-click="getAccount()">Test account</button>
-                </div>
-            </div>
+            <div class="well" ng-view></div>
 
             <div class="footer">
                 <p>This is your footer</p>

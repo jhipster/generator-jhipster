@@ -1,7 +1,7 @@
 package <%=packageName%>.web.rest;
 
 import <%=packageName%>.domain.User;
-import <%=packageName%>repository.UserRepository;
+import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.AuthoritiesConstants;
 import com.yammer.metrics.annotation.Timed;
 import org.slf4j.Logger;

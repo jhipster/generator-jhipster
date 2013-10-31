@@ -16,8 +16,6 @@
 
     <http pattern="/*" security="none"/>
     <http pattern="/static/**" security="none"/>
-        
-    <beans:bean id="http401UnauthorizedEntryPoint" class="<%=packageName%>.security.Http401UnauthorizedEntryPoint"/>
 
     <http pattern="/app/rest/**" entry-point-ref="http401UnauthorizedEntryPoint" use-expressions="true">
         <intercept-url pattern="/**" access="isAuthenticated()"/>
@@ -28,13 +26,13 @@
         <intercept-url pattern="/metrics/**" access="hasRole('ROLE_ADMIN')"/>
 
         <form-login
-                login-processing-url="/authentication"
+                login-processing-url="/app/authentication"
                 login-page="/"
-                authentication-failure-url="/app/login?action=loginFailure"
-                default-target-url="/"/>
+                authentication-failure-handler-ref="ajaxAuthenticationFailureHandler"
+                authentication-success-handler-ref="ajaxAuthenticationSuccessHandler"/>
 
-        <logout logout-url="/logout"
-                logout-success-url="/"/>
+        <logout logout-url="/app/logout"
+                success-handler-ref="ajaxLogoutSuccessHandler"/>
 
     </http>
 

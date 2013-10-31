@@ -8,7 +8,16 @@ var <%= baseName %>App = angular.module('<%= baseName %>App', ['ngResource']);
     .config(function ($routeProvider) {
         $routeProvider
             .when('/login', {
+                templateUrl: 'views/login.html',
                 controller: 'LoginController'
+            })
+            .when('/logout', {
+                templateUrl: 'views/main.html',
+                controller: 'LogoutController'
+            })
+            .otherwise({
+                templateUrl: 'views/main.html',
+                controller: 'AccountController'
             })
 
     });

@@ -5,7 +5,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.Email;
 
-import javax.persistence.Entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -26,7 +25,7 @@ public class User implements Serializable {
     private String login;
 
     @JsonIgnore
-    @Size(min = 0, max = 50)
+    @Size(min = 0, max = 100)
     private String password;
 
     @Size(min = 0, max = 50)
@@ -44,7 +43,11 @@ public class User implements Serializable {
     private boolean enabled;
 
     @JsonIgnore
-    @OneToMany
+    @ManyToMany
+    @JoinTable(
+            name="T_USER_AUTHORITY",
+            joinColumns={@JoinColumn(name="login", referencedColumnName="login")},
+            inverseJoinColumns={@JoinColumn(name="name", referencedColumnName="name")})
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Authority> authorities;
 

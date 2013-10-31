@@ -3,41 +3,47 @@
 /* Controllers */
 
 <%= baseName %>App.controller('AccountController', function AccountController($scope, Account) {
-    $scope.getAccount = function () {
-        $scope.account = Account.get({}, function () {
-            // success
-        }, function (response) {
-            if (response.status === 401) {
-                console.log("Access denied, you need to login!")
-            }
-        });
-    };
+    $scope.account = Account.get({}, function () {
+        $scope.autenticated = true;
+    }, function (response) {
+        if (response.status === 401) {
+            $scope.autenticated = false;
+        }
+    });
 });
 
-<%= baseName %>App.controller('LoginController', function LoginController($scope) {
+<%= baseName %>App.controller('MenuController', function MenuController($scope, Account) {
+    $scope.account = Account.get({}, function () {
+        $scope.autenticated = true;
+    }, function (response) {
+        if (response.status === 401) {
+            $scope.autenticated = false;
+        }
+    });
+});
+
+<%= baseName %>App.controller('LoginController', function LoginController($scope, $http, $location) {
     $scope.login = function () {
         var data = "j_username=" + $scope.username + "&j_password=" + $scope.password + "&submit=Login";
-        $http.post('/authentication', data, {
+        $http.post('/app/authentication', data, {
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             }
         }).
             success(function (data, status, headers, config) {
-                console.info("You're now logged in, welcome " + $scope.username);
-                
+                $location.path('');
             }).
             error(function (data, status, headers, config) {
-                console.warn('This is a wrong username or/and a wrong password. Try again');
-                
+                $scope.authenticationError = true;
             });
     };
+});
 
-    $scope.logout = function () {
-        $http.get('/logout')
-            .success(function (data, status, headers, config) {
-                console.info('Logged out');
-                
-            });
-    };
+<%= baseName %>App.controller('LogoutController', function LoginController($scope, $http, $location) {
+    $http.get('/app/logout')
+        .success(function (data, status, headers, config) {
+            console.info('Logged out');
+            $location.path('');
+        });
 });
 

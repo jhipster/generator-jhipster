@@ -1,3 +1,3 @@
-login;name
-admin;ROLE_ADMIN
-admin;ROLE_USER
+name
+ROLE_ADMIN
+ROLE_USER
