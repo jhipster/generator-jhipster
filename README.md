@@ -8,7 +8,7 @@ Presentation
 
 *If you want to help, we will put tasks on [our Github issues page](https://github.com/jdubois/generator-jhipster/issues?labels=enhancement&page=1&state=open)*
 
-This is a Yeoman generator, used to create a Yeoman + Maven + Spring + AngularJS project.
+This is a [Yeoman generator](http://yeoman.io), used to create a Yeoman + Maven + Spring + AngularJS project.
 
 You can install and use it easily:
 
