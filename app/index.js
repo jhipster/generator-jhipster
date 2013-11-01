@@ -37,19 +37,33 @@ var prompts = [
         {
             type: 'input',
             name: 'baseName',
-            message: '(1/4) What is the base name of your application?',
+            message: '(1/5) What is the base name of your application?',
             default: 'jhipster'
         },
         {
             type: 'input',
             name: 'packageName',
-            message: '(2/4) What is your default package name?',
+            message: '(2/5) What is your default package name?',
             default: 'com.mycompany'
         }, 
         { 
             type: 'list',
+            name: 'springVersion',
+            message: '(3/5) Which version of the Spring Framework would you like to use?',
+            choices: [{
+              value: 'spring32',
+              name: 'Spring 3.2 (stable)',
+              checked: true
+            }, {
+              value: 'spring4',
+              name: 'Spring 4.0 (release candidate)',
+              checked: false
+            }]
+        },
+        { 
+            type: 'list',
             name: 'databaseType',
-            message: '(3/4) Which development database would you like to use?',
+            message: '(4/5) Which development database would you like to use?',
             choices: [{
               value: 'hsqldbMemory',
               name: 'HSQLDB in-memory',
@@ -63,7 +77,7 @@ var prompts = [
         {
             type: 'confirm',
             name: 'useCompass',
-            message: '(4/4) Would you like to use the Compass CSS Authoring Framework?',
+            message: '(5/5) Would you like to use the Compass CSS Authoring Framework?',
             default: false,
         }
 		];

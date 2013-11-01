@@ -17,7 +17,7 @@
             <property name="hibernate.show_sql" value="${hibernate.show_sql}"/>
             <property name="hibernate.generate_statistics" value="${hibernate.generate_statistics}"/>
             <property name="hibernate.cache.region.factory_class"
-                      value="org.hibernate.cache.ehcache.EhCacheRegionFactory"/>
+                      value="org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory"/>
                       
         </properties>
     </persistence-unit>
