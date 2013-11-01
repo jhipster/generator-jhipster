@@ -1,7 +1,5 @@
-package <%=packageName%>.web.init;
+package <%=packageName%>.conf;
 
-import <%=packageName%>.conf.ApplicationConfiguration;
-import <%=packageName%>.conf.DispatcherServletConfig;
 import com.yammer.metrics.reporting.AdminServlet;
 import com.yammer.metrics.web.DefaultWebappMetricsFilter;
 import net.sf.ehcache.constructs.web.filter.GzipFilter;
@@ -64,13 +62,13 @@ public class WebConfigurer implements ServletContextListener {
      */
     private ServletRegistration.Dynamic initSpring(ServletContext servletContext, AnnotationConfigWebApplicationContext rootContext) {
         log.debug("Configuring Spring Web application context");
-        AnnotationConfigWebApplicationContext dispatcherServletConfig = new AnnotationConfigWebApplicationContext();
-        dispatcherServletConfig.setParent(rootContext);
-        dispatcherServletConfig.register(DispatcherServletConfig.class);
+        AnnotationConfigWebApplicationContext dispatcherServletConfiguration = new AnnotationConfigWebApplicationContext();
+        dispatcherServletConfiguration.setParent(rootContext);
+        dispatcherServletConfiguration.register(DispatcherServletConfiguration.class);
 
         log.debug("Registering Spring MVC Servlet");
         ServletRegistration.Dynamic dispatcherServlet = servletContext.addServlet("dispatcher", new DispatcherServlet(
-                dispatcherServletConfig));
+                dispatcherServletConfiguration));
         dispatcherServlet.addMapping("/app/*");
         dispatcherServlet.setLoadOnStartup(1);
         return dispatcherServlet;

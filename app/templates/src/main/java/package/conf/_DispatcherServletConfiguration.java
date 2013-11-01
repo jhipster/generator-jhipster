@@ -35,9 +35,9 @@ import java.util.List;
 @EnableWebMvc
 @PropertySource({"classpath:/META-INF/<%= baseName %>/<%= baseName %>.properties"})
 @ImportResource("classpath:META-INF/spring/applicationContext-metrics.xml")
-public class DispatcherServletConfig extends WebMvcConfigurerAdapter {
+public class DispatcherServletConfiguration extends WebMvcConfigurerAdapter {
 
-    private static final Logger log = LoggerFactory.getLogger(DispatcherServletConfig.class);
+    private static final Logger log = LoggerFactory.getLogger(DispatcherServletConfiguration.class);
     
     private static final int CACHE_PERIOD = 60 * 60 * 24 * 30; // Cache for 1 month
     

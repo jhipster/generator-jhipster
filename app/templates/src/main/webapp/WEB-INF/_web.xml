@@ -18,7 +18,7 @@
 
     <!-- All the Servlets and Filters are configured by this ServletContextListener : -->
     <listener>
-        <listener-class><%= packageName %>.web.init.WebConfigurer</listener-class>
+        <listener-class><%= packageName %>.conf.WebConfigurer</listener-class>
     </listener>
 
     <error-page>

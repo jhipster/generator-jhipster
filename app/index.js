@@ -128,9 +128,10 @@ JhipsterGenerator.prototype.app = function app() {
   this.template('src/main/java/package/conf/_ApplicationConfiguration.java', javaDir + 'conf/ApplicationConfiguration.java');
   this.template('src/main/java/package/conf/_AsyncConfiguration.java', javaDir + 'conf/AsyncConfiguration.java');
   this.template('src/main/java/package/conf/_CacheConfiguration.java', javaDir + 'conf/CacheConfiguration.java');
-  this.template('src/main/java/package/conf/_Constants.java', javaDir + 'conf/Constants.java');
-  this.template('src/main/java/package/conf/_DispatcherServletConfig.java', javaDir + 'conf/DispatcherServletConfig.java');
   this.template('src/main/java/package/conf/_MetricsConfiguration.java', javaDir + 'conf/MetricsConfiguration.java');
+  this.template('src/main/java/package/conf/_Constants.java', javaDir + 'conf/Constants.java');
+  this.template('src/main/java/package/conf/_DispatcherServletConfiguration.java', javaDir + 'conf/DispatcherServletConfiguration.java');
+  this.template('src/main/java/package/conf/_WebConfigurer.java', javaDir + 'conf/WebConfigurer.java');
 
   this.template('src/main/java/package/conf/metrics/_package-info.java', javaDir + 'conf/metrics/package-info.java');
   this.template('src/main/java/package/conf/metrics/_DatabaseHealthCheck.java', javaDir + 'conf/metrics/DatabaseHealthCheck.java');
@@ -151,10 +152,7 @@ JhipsterGenerator.prototype.app = function app() {
   this.template('src/main/java/package/security/_AjaxLogoutSuccessHandler.java', javaDir + 'security/AjaxLogoutSuccessHandler.java');
 
   this.template('src/main/java/package/web/controller/_package-info.java', javaDir + 'web/controller/package-info.java');
-  this.template('src/main/java/package/web/controller/_HomeController.java', javaDir + 'web/controller/HomeController.java'); 
-
-  this.template('src/main/java/package/web/init/_package-info.java', javaDir + 'web/init/package-info.java');
-  this.template('src/main/java/package/web/init/_WebConfigurer.java', javaDir + 'web/init/WebConfigurer.java'); 
+  this.template('src/main/java/package/web/controller/_HomeController.java', javaDir + 'web/controller/HomeController.java');  
 
   this.template('src/main/java/package/web/rest/_package-info.java', javaDir + 'web/rest/package-info.java'); 
   this.template('src/main/java/package/web/rest/_UserResource.java', javaDir + 'web/rest/UserResource.java'); 
