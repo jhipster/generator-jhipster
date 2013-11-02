@@ -6,3 +6,20 @@
         return $resource('app/rest/account', {}, {
         });
     });
+
+<%= baseName %>App.factory('AuthenticationSharedService', function($rootScope) {
+    var authenticationSharedService = {};
+
+    authenticationSharedService.message = '';
+
+    authenticationSharedService.prepForBroadcast = function(msg) {
+        this.message = msg;
+        this.broadcastItem();
+    };
+
+    authenticationSharedService.broadcastItem = function() {
+        $rootScope.$broadcast("authenticationEvent");
+    };
+
+    return authenticationSharedService;
+});
