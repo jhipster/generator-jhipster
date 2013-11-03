@@ -27,17 +27,21 @@ import java.util.Date;
 /**
  * Custom implementation of Spring Security's RememberMeServices.
  * <p/>
- * The main algorithm comes from Spring Security's PersistentTokenBasedRememberMeServices, but this class
- * couldn't be cleanly extended.
- * <p/>
  * Persistent tokens are used by Spring Security to automatically log in users.
  * <p/>
  * This is a specific implementation of Spring Security's remember-me authentication, but it is much
  * more powerful than the standard implementations:
- * - This implementation allows a user to see the list of his currently opened sessions, and invalidate them
- * - We also store more information, such as the IP address and the user agent
+ * <ul>
+ * <li>It allows a user to see the list of his currently opened sessions, and invalidate them</li>
+ * <li>It stores more information, such as the IP address and the user agent, for audit purposes<li>
+ * <li>When a user logs out, only his current session is invalidated, and not all of his sessions</li>
+ * </ul>
  * <p/>
  * This is partially inspired by https://github.com/blog/1661-modeling-your-app-s-user-session
+ * <p/>
+ * The main algorithm comes from Spring Security's PersistentTokenBasedRememberMeServices, but this class
+ * couldn't be cleanly extended.
+ * <p/>
  */
 @Service
 public class CustomPersistentRememberMeServices extends
