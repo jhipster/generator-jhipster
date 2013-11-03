@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 /**
  * Utility class for Spring Security.
  */
-public class SecurityUtils {
+public final class SecurityUtils {
 
     private SecurityUtils() {
     }

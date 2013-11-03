@@ -77,9 +77,10 @@ public class PersistentToken implements Serializable {
 
     public void setUserAgent(String userAgent) {
         if (userAgent.length() >= 255) {
-            userAgent = userAgent.substring(0, 254);
+            this.userAgent = userAgent.substring(0, 254);
+        } else {
+            this.userAgent = userAgent;
         }
-        this.userAgent = userAgent;
     }
 
     public User getUser() {
@@ -92,12 +93,18 @@ public class PersistentToken implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         PersistentToken that = (PersistentToken) o;
 
-        if (!series.equals(that.series)) return false;
+        if (!series.equals(that.series)) {
+            return false;
+        }
 
         return true;
     }

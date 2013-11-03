@@ -70,11 +70,10 @@ public class CustomPersistentRememberMeServices extends
     protected UserDetails processAutoLoginCookie(String[] cookieTokens, HttpServletRequest request, HttpServletResponse response) {
 
         PersistentToken token = getPersistentToken(cookieTokens);
+        String login = token.getUser().getLogin();
 
         // Token also matches, so login is valid. Update the token value, keeping the *same* series number.
-        if (log.isDebugEnabled()) {
-            log.debug("Refreshing persistent login token for user '{}', series '{}'", token.getUser().getLogin(), token.getSeries());
-        }
+        log.debug("Refreshing persistent login token for user '{}', series '{}'", login, token.getSeries());
         token.setTokenDate(new Date());
         token.setTokenValue(generateTokenData());
         token.setIpAddress(request.getRemoteAddr());
@@ -84,9 +83,9 @@ public class CustomPersistentRememberMeServices extends
             addCookie(token, request, response);
         } catch (DataAccessException e) {
             log.error("Failed to update token: ", e);
-            throw new RememberMeAuthenticationException("Autologin failed due to data access problem");
+            throw new RememberMeAuthenticationException("Autologin failed due to data access problem: " + e.getMessage());
         }
-        return getUserDetailsService().loadUserByUsername(token.getUser().getLogin());
+        return getUserDetailsService().loadUserByUsername(login);
     }
 
     @Override
@@ -94,7 +93,7 @@ public class CustomPersistentRememberMeServices extends
         String login = successfulAuthentication.getName();
 
         log.debug("Creating new persistent login for user {}", login);
-        com.mycompany.domain.User user = userRepository.findByLogin(login);
+        User user = userRepository.findByLogin(login);
 
         PersistentToken token = new PersistentToken();
         token.setSeries(generateSeriesData());

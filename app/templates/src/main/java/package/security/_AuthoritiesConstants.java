@@ -3,7 +3,7 @@ package <%=packageName%>.security;
 /**
  * Constants for Spring Security authorities.
  */
-public class AuthoritiesConstants {
+public final class AuthoritiesConstants {
 
     private AuthoritiesConstants() {
     }

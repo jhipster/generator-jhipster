@@ -17,7 +17,7 @@ public class DatabaseHealthCheck extends HealthCheck {
     }
 
     @Override
-    public Result check() throws Exception {
+    public Result check() {
         try {
             em.createNativeQuery("SELECT 1");
             return Result.healthy();

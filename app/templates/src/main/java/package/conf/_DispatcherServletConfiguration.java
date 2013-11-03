@@ -47,7 +47,7 @@ public class DispatcherServletConfiguration extends WebMvcConfigurerAdapter {
     private Environment env;
 
     @Bean
-    public ViewResolver ContentNegotiatingViewResolver() {
+    public ViewResolver contentNegotiatingViewResolver() {
         log.debug("Configuring the ContentNegotiatingViewResolver");
         ContentNegotiatingViewResolver viewResolver = new ContentNegotiatingViewResolver();
         List<ViewResolver> viewResolvers = new ArrayList<ViewResolver>();
@@ -132,14 +132,11 @@ public class DispatcherServletConfiguration extends WebMvcConfigurerAdapter {
                                                  Object handler,
                                                  Exception ex) {
                 try {
-                    if (log.isErrorEnabled()) {
-                        log.error("An error has occured : " + ex.getMessage());
-                        ex.printStackTrace();
-                    }
+                    log.error("An error has occured: {}", ex.getMessage());
                     response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                     return new ModelAndView();
                 } catch (Exception handlerException) {
-                    log.warn("Handling of [" + ex.getClass().getName() + "] resulted in Exception", handlerException);
+                    log.warn("Handling of [{}] resulted in Exception", ex.getClass().getName(), handlerException);
                 }
                 return null;
             }
