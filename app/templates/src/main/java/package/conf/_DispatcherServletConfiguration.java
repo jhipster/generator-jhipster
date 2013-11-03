@@ -39,9 +39,11 @@ public class DispatcherServletConfiguration extends WebMvcConfigurerAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(DispatcherServletConfiguration.class);
 
-    private static final int CACHE_PERIOD = 60 * 60 * 24 * 30; // Cache for 1 month
+    // Cache for 1 month
+    private static final int CACHE_PERIOD = 60 * 60 * 24 * 30;
 
-    private static final int MAX_UPLOAD_SIZE = 10 * 1000 * 1000; // 10 Mo max file size
+    // 10 Mo max file size
+    private static final int MAX_UPLOAD_SIZE = 10 * 1000 * 1000;
 
     @Inject
     private Environment env;
