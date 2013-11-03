@@ -1,7 +1,6 @@
 package <%=packageName%>.repository;
 
 import <%=packageName%>.domain.PersistentToken;
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -9,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface PersistentTokenRepository extends JpaRepository<PersistentToken, String> {
 
-    PersistentToken findBySeries(String series) throws DataAccessException;
+    PersistentToken findBySeries(String series);
 
 }

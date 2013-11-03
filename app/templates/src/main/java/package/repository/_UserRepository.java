@@ -1,7 +1,6 @@
 package <%=packageName%>.repository;
 
 import <%=packageName%>.domain.User;
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -9,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface UserRepository extends JpaRepository<User, String> {
 
-    User findByLogin(String login) throws DataAccessException;
+    User findByLogin(String login);
 
 }
