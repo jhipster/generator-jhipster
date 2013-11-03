@@ -15,7 +15,7 @@ import java.util.Set;
  * A user.
  */
 @Entity
-@Table(name="T_USER")
+@Table(name = "T_USER")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class User implements Serializable {
 
@@ -45,11 +45,16 @@ public class User implements Serializable {
     @JsonIgnore
     @ManyToMany
     @JoinTable(
-            name="T_USER_AUTHORITY",
-            joinColumns={@JoinColumn(name="login", referencedColumnName="login")},
-            inverseJoinColumns={@JoinColumn(name="name", referencedColumnName="name")})
+            name = "T_USER_AUTHORITY",
+            joinColumns = {@JoinColumn(name = "login", referencedColumnName = "login")},
+            inverseJoinColumns = {@JoinColumn(name = "name", referencedColumnName = "name")})
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     private Set<Authority> authorities;
+
+    @JsonIgnore
+    @OneToMany
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    private Set<PersistentToken> persistentTokens;
 
     public String getLogin() {
         return login;
@@ -99,14 +104,20 @@ public class User implements Serializable {
         this.enabled = enabled;
     }
 
-    @OneToMany
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
     public Set<Authority> getAuthorities() {
         return authorities;
     }
 
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
+    }
+
+    public Set<PersistentToken> getPersistentTokens() {
+        return persistentTokens;
+    }
+
+    public void setPersistentTokens(Set<PersistentToken> persistentTokens) {
+        this.persistentTokens = persistentTokens;
     }
 
     @Override
@@ -135,6 +146,6 @@ public class User implements Serializable {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", enabled=" + enabled +
-                "} " + super.toString();
+                "}";
     }
 }

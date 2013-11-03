@@ -39,7 +39,7 @@ public class ApplicationConfiguration {
             log.debug("No Spring profile configured, running with default configuration");
         } else {
             for (String profile : env.getActiveProfiles()) {
-                log.debug("Detected Spring profile : " + profile);
+                log.debug("Detected Spring profile : {}", profile);
             }
         }
     }

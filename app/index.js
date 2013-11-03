@@ -137,11 +137,13 @@ JhipsterGenerator.prototype.app = function app() {
   this.template('src/main/java/package/conf/metrics/_DatabaseHealthCheck.java', javaDir + 'conf/metrics/DatabaseHealthCheck.java');
 
   this.template('src/main/java/package/domain/_package-info.java', javaDir + 'domain/package-info.java');
-  this.template('src/main/java/package/domain/_User.java', javaDir + 'domain/User.java');
   this.template('src/main/java/package/domain/_Authority.java', javaDir + 'domain/Authority.java');
+  this.template('src/main/java/package/domain/_PersistentToken.java', javaDir + 'domain/PersistentToken.java');
+  this.template('src/main/java/package/domain/_User.java', javaDir + 'domain/User.java');
 
   this.template('src/main/java/package/repository/_package-info.java', javaDir + 'repository/package-info.java');
   this.template('src/main/java/package/repository/_UserRepository.java', javaDir + 'repository/UserRepository.java');
+  this.template('src/main/java/package/repository/_PersistentTokenRepository.java', javaDir + 'repository/PersistentTokenRepository.java');
 
   this.template('src/main/java/package/security/_package-info.java', javaDir + 'security/package-info.java');
   this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java');
@@ -150,6 +152,8 @@ JhipsterGenerator.prototype.app = function app() {
   this.template('src/main/java/package/security/_AjaxAuthenticationFailureHandler.java', javaDir + 'security/AjaxAuthenticationFailureHandler.java');
   this.template('src/main/java/package/security/_AjaxAuthenticationSuccessHandler.java', javaDir + 'security/AjaxAuthenticationSuccessHandler.java');
   this.template('src/main/java/package/security/_AjaxLogoutSuccessHandler.java', javaDir + 'security/AjaxLogoutSuccessHandler.java');
+  this.template('src/main/java/package/security/_CustomPersistentRememberMeServices.java', javaDir + 'security/CustomPersistentRememberMeServices.java');
+  this.template('src/main/java/package/security/_SecurityUtils.java', javaDir + 'security/SecurityUtils.java');
 
   this.template('src/main/java/package/web/controller/_package-info.java', javaDir + 'web/controller/package-info.java');
   this.template('src/main/java/package/web/controller/_HomeController.java', javaDir + 'web/controller/HomeController.java');  

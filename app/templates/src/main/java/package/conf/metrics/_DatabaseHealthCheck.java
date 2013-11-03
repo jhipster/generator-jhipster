@@ -13,7 +13,7 @@ public class DatabaseHealthCheck extends HealthCheck {
 
     public DatabaseHealthCheck(EntityManager em) {
         super("Database");
-         this.em = em;
+        this.em = em;
     }
 
     @Override

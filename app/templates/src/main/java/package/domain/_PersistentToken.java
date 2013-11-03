@@ -1,0 +1,120 @@
+package <%=packageName%>.domain;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * Persistent tokens are used by Spring Security to automatically log in users.
+ *
+ * @see <%=packageName%>.security.CustomPersistentRememberMeServices
+ */
+@Entity
+@Table(name = "T_PERSISTENT_TOKEN")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class PersistentToken implements Serializable {
+
+    @Id
+    private String series;
+
+    @NotNull
+    @Column(name = "token_value")
+    private String tokenValue;
+
+    @Column(name = "token_date")
+    private Date tokenDate;
+
+    @Size(min = 0, max = 39) //an IPV6 address max length is 39 characters
+    @Column(name = "ip_address")
+    private String ipAddress;
+
+    @Column(name = "user_agent")
+    private String userAgent;
+
+    @ManyToOne
+    private User user;
+
+    public String getSeries() {
+        return series;
+    }
+
+    public void setSeries(String series) {
+        this.series = series;
+    }
+
+    public String getTokenValue() {
+        return tokenValue;
+    }
+
+    public void setTokenValue(String tokenValue) {
+        this.tokenValue = tokenValue;
+    }
+
+    public Date getTokenDate() {
+        return tokenDate;
+    }
+
+    public void setTokenDate(Date tokenDate) {
+        this.tokenDate = tokenDate;
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
+
+    public String getUserAgent() {
+        return userAgent;
+    }
+
+    public void setUserAgent(String userAgent) {
+        if (userAgent.length() >= 255) {
+            userAgent = userAgent.substring(0, 254);
+        }
+        this.userAgent = userAgent;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PersistentToken that = (PersistentToken) o;
+
+        if (!series.equals(that.series)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return series.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "PersistentToken{" +
+                "series='" + series + '\'' +
+                ", tokenValue='" + tokenValue + '\'' +
+                ", tokenDate=" + tokenDate +
+                ", ipAddress='" + ipAddress + '\'' +
+                ", userAgent='" + userAgent + '\'' +
+                "}";
+    }
+}

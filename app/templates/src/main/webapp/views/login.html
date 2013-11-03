@@ -17,6 +17,11 @@
                     <input type="password" class="form-control" id="password" placeholder="Your password"
                            ng-model="password">
                 </div>
+                <div class="form-group">
+                    <label for="rememberMe">Automatic login</label>
+                    <input type="checkbox" class="form-control" id="rememberMe"
+                           ng-model="rememberMe" checked>
+                </div>
                 <button type="submit" class="btn btn-primary" ng-click="login()">Authenticate</button>
             </form>
         </div>

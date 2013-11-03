@@ -15,15 +15,28 @@
     <global-method-security pre-post-annotations="enabled"/>
 
     <http pattern="/*" security="none"/>
-    <http pattern="/static/**" security="none"/>
+    <http pattern="/bower_components/**" security="none"/>
+    <http pattern="/fonts/**" security="none"/>
+    <http pattern="/images/**" security="none"/>
+    <http pattern="/scripts/**" security="none"/>
+    <http pattern="/styles/**" security="none"/>
+    <http pattern="/views/**" security="none"/>
 
     <http pattern="/app/rest/**" entry-point-ref="http401UnauthorizedEntryPoint" use-expressions="true">
+        <remember-me
+                services-ref="customPersistentRememberMeServices"
+                key="jhipsterKey"/>
+
         <intercept-url pattern="/**" access="isAuthenticated()"/>
     </http>
 
-    <http auto-config="true" use-expressions="true" create-session="ifRequired">
+    <http auto-config="true" use-expressions="true">
         <intercept-url pattern="/app/**" access="isAuthenticated()"/>
         <intercept-url pattern="/metrics/**" access="hasRole('ROLE_ADMIN')"/>
+
+        <remember-me
+                services-ref="customPersistentRememberMeServices"
+                key="jhipsterKey"/>
 
         <form-login
                 login-processing-url="/app/authentication"

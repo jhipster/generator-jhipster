@@ -38,15 +38,14 @@
                                 </span>
                         </a>
                         <ul class="dropdown-menu" ng-controller="MenuController">
-                            <li ng-show="autenticated"><a href="#/account"><span class="glyphicon glyphicon-wrench"></span>
+                            <li ng-show="authenticated"><a href="#/account"><span class="glyphicon glyphicon-wrench"></span>
                                 Settings</a></li>
-                            <li ng-show="autenticated"><a href="/metrics"><span class="glyphicon glyphicon-dashboard"></span>
+                            <li ng-show="authenticated"><a href="/metrics"><span class="glyphicon glyphicon-dashboard"></span>
                                 Metrics</a></li>
-                            <li ng-show="autenticated"><a href="#/logout"><span class="glyphicon glyphicon-log-out"></span>
+                            <li ng-show="authenticated"><a href="#/logout"><span class="glyphicon glyphicon-log-out"></span>
                                 Log out</a></li>
 
-                            <li ng-hide="autenticated"><a href="#/login"><span
-                                    class="glyphicon glyphicon-log-in"> Authenticate {{account.login}}</span></a></li>
+                            <li ng-hide="authenticated"><a href="#/login"><span class="glyphicon glyphicon-log-in"> Authenticate {{account.login}}</span></a></li>
 
                         </ul>
                     </li>

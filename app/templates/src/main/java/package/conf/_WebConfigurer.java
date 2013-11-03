@@ -89,19 +89,19 @@ public class WebConfigurer implements ServletContextListener {
     /**
      * Initializes Yammer Metrics.
      */
-    private void initMetricsServlet(ServletContext servletContext, EnumSet<DispatcherType> disps, 
-            ServletRegistration.Dynamic dispatcherServlet) {
+    private void initMetricsServlet(ServletContext servletContext, EnumSet<DispatcherType> disps,
+                                    ServletRegistration.Dynamic dispatcherServlet) {
 
         log.debug("Registering Yammer Metrics Filter");
         FilterRegistration.Dynamic metricsFilter = servletContext.addFilter("webappMetricsFilter",
                 new DefaultWebappMetricsFilter());
-        
+
         metricsFilter.addMappingForUrlPatterns(disps, true, "/*");
 
         log.debug("Registering Yammer Metrics Admin Servlet");
         ServletRegistration.Dynamic metricsAdminServlet =
                 servletContext.addServlet("metricsAdminServlet", new AdminServlet());
-        
+
         metricsAdminServlet.addMapping("/metrics/*");
         dispatcherServlet.setLoadOnStartup(2);
     }

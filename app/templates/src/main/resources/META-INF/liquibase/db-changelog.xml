@@ -17,14 +17,27 @@
             <column name="email" type="varchar(100)"/>
             <column name="enabled" type="boolean"/>
         </createTable>
+
         <createTable tableName="T_AUTHORITY">
             <column name="name" type="varchar(255)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
         </createTable>
+
         <createTable tableName="T_USER_AUTHORITY">
             <column name="login" type="varchar(50)"/>
             <column name="name" type="varchar(255)"/>
+        </createTable>
+
+        <createTable tableName="T_PERSISTENT_TOKEN">
+            <column name="series" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_login" type="varchar(50)"/>
+            <column name="token_value" type="varchar(255)"/>
+            <column name="token_date" type="date"/>
+            <column name="ip_address" type="varchar(39)"/>
+            <column name="user_agent" type="varchar(255)"/>
         </createTable>
 
         <createIndex indexName="idx_user_authority"
@@ -39,9 +52,16 @@
                                  constraintName="fk_authority_name"
                                  referencedColumnNames="name"
                                  referencedTableName="T_AUTHORITY"/>
+
         <addForeignKeyConstraint baseColumnNames="login"
                                  baseTableName="T_USER_AUTHORITY"
                                  constraintName="fk_user_login"
+                                 referencedColumnNames="login"
+                                 referencedTableName="T_USER"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_login"
+                                 baseTableName="T_PERSISTENT_TOKEN"
+                                 constraintName="fk_user_persistent_token"
                                  referencedColumnNames="login"
                                  referencedTableName="T_USER"/>
 
@@ -49,10 +69,12 @@
             file="META-INF/liquibase/users.csv"
             separator=";"
             tableName="T_USER"/>
+
         <loadData encoding="UTF-8"
             file="META-INF/liquibase/authorities.csv"
             separator=";"
             tableName="T_AUTHORITY"/>
+
         <loadData encoding="UTF-8"
                   file="META-INF/liquibase/users_authorities.csv"
                   separator=";"

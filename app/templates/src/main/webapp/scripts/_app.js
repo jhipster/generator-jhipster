@@ -17,7 +17,7 @@ var <%= baseName %>App = angular.module('<%= baseName %>App', ['ngResource']);
             })
             .otherwise({
                 templateUrl: 'views/main.html',
-                controller: 'AccountController'
+                controller: 'MainController'
             })
 
     });

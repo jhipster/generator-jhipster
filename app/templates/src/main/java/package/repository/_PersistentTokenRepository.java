@@ -1,14 +1,14 @@
 package <%=packageName%>.repository;
 
-import <%=packageName%>.domain.User;
+import <%=packageName%>.domain.PersistentToken;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Spring Data JPA repository for the User entity.
  */
-public interface UserRepository extends JpaRepository<User, String> {
+public interface PersistentTokenRepository extends JpaRepository<PersistentToken, String> {
 
-    User findByLogin(String login) throws DataAccessException;
+    PersistentToken findBySeries(String series) throws DataAccessException;
 
 }

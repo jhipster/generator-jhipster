@@ -1,8 +1,5 @@
 package <%=packageName%>.conf;
 
-import com.yammer.metrics.ehcache.InstrumentedEhcache;
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.Ehcache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;

@@ -27,21 +27,21 @@ public class MetricsConfiguration {
 
     @PostConstruct
     public void initMetrics() {
-		log.debug("Initializing Metrics healthchecks");
+        log.debug("Initializing Metrics healthchecks");
         HealthChecks.register(new DatabaseHealthCheck(em));
 
-		if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
-			String graphiteHost = env.getProperty("metrics.graphite.host");
-			if (graphiteHost != null) {
-				log.info("Initializing Metrics Graphite reporting");
-				Integer graphitePort = env.getProperty("metrics.graphite.port", Integer.class);
-				GraphiteReporter.enable(1,
-						TimeUnit.MINUTES,
-						graphiteHost,
-						graphitePort);
-			} else {
-				log.warn("Graphite server is not configured, unable to send any data to Graphite");
-			}
-		}
+        if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
+            String graphiteHost = env.getProperty("metrics.graphite.host");
+            if (graphiteHost != null) {
+                log.info("Initializing Metrics Graphite reporting");
+                Integer graphitePort = env.getProperty("metrics.graphite.port", Integer.class);
+                GraphiteReporter.enable(1,
+                        TimeUnit.MINUTES,
+                        graphiteHost,
+                        graphitePort);
+            } else {
+                log.warn("Graphite server is not configured, unable to send any data to Graphite");
+            }
+        }
     }
 }

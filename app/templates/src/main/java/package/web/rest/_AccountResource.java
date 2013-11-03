@@ -2,16 +2,11 @@ package <%=packageName%>.web.rest;
 
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.UserRepository;
-import <%=packageName%>.security.AuthoritiesConstants;
+import <%=packageName%>.security.SecurityUtils;
 import com.yammer.metrics.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -39,12 +34,7 @@ public class AccountResource {
     @ResponseBody
     @Timed
     public User getAccount(HttpServletResponse response) {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        UserDetails springSecurityUser =
-                (UserDetails) securityContext
-                        .getAuthentication().getPrincipal();
-
-        User user = userRepository.findByLogin(springSecurityUser.getUsername());
+        User user = userRepository.findByLogin(SecurityUtils.getCurrentLogin());
         if (user == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }

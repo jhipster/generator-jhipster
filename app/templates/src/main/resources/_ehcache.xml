@@ -23,6 +23,14 @@
     <cache name="<%=packageName%>.domain.User.authorities"
            timeToLiveSeconds="3600">
     </cache>
+   
+    <cache name="<%=packageName%>.domain.PersistentToken"
+           timeToLiveSeconds="3600">
+    </cache>
+
+    <cache name="<%=packageName%>.domain.User.persistentTokens"
+           timeToLiveSeconds="3600">
+    </cache>
 
 </ehcache>
 
