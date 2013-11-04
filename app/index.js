@@ -37,19 +37,19 @@ var prompts = [
         {
             type: 'input',
             name: 'baseName',
-            message: '(1/5) What is the base name of your application?',
+            message: '(1/6) What is the base name of your application?',
             default: 'jhipster'
         },
         {
             type: 'input',
             name: 'packageName',
-            message: '(2/5) What is your default package name?',
+            message: '(2/6) What is your default package name?',
             default: 'com.mycompany'
         }, 
         { 
             type: 'list',
             name: 'springVersion',
-            message: '(3/5) Which version of the Spring Framework would you like to use?',
+            message: '(3/6) Which version of the Spring Framework would you like to use?',
             choices: [{
               value: 'spring32',
               name: 'Spring 3.2 (stable)',
@@ -60,14 +60,32 @@ var prompts = [
               checked: false
             }]
         },
+                { 
+            type: 'list',
+            name: 'prodDatabaseType',
+            message: '(4/6) Which *production* database would you like to use?',
+            choices: [{
+              value: 'mysql',
+              name: 'MySQL',
+              checked: true
+            }, {
+              value: 'postgresql',
+              name: 'PostgreSQL',
+              checked: false
+            }]
+        },
         { 
             type: 'list',
-            name: 'databaseType',
-            message: '(4/5) Which development database would you like to use?',
+            name: 'devDatabaseType',
+            message: '(5/6) Which *development* database would you like to use?',
             choices: [{
               value: 'hsqldbMemory',
               name: 'HSQLDB in-memory',
               checked: true
+            }, {
+              value: 'mysql',
+              name: 'MySQL',
+              checked: false
             }, {
               value: 'postgresql',
               name: 'PostgreSQL',
@@ -77,7 +95,7 @@ var prompts = [
         {
             type: 'confirm',
             name: 'useCompass',
-            message: '(5/5) Would you like to use the Compass CSS Authoring Framework?',
+            message: '(6/6) Would you like to use the Compass CSS Authoring Framework?',
             default: false,
         }
 		];
@@ -87,7 +105,8 @@ this.prompt(prompts, function (props) {
     this.springSecurityVersion = props.springSecurityVersion;
     this.packageName = props.packageName;
     this.baseName = props.baseName;
-    this.databaseType = props.databaseType;
+    this.devDatabaseType = props.devDatabaseType;
+    this.prodDatabaseType = props.prodDatabaseType;
     this.useCompass = props.useCompass;
 
     cb();

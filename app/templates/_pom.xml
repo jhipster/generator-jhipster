@@ -22,8 +22,11 @@
                 <logback.loglevel>DEBUG</logback.loglevel>
                 <!-- ehcache configuration -->
                 <ehcache.maxBytesLocalHeap>64M</ehcache.maxBytesLocalHeap>
-                <!-- database configuration  -->
-                <% if (databaseType == 'postgresql') { %><datasource.driverclassname>org.postgresql.Driver</datasource.driverclassname>
+                <!-- development database configuration -->
+                <% if (devDatabaseType == 'mysql') { %><datasource.driverclassname>com.mysql.jdbc.Driver</datasource.driverclassname>
+                <datasource.url>jdbc:mysql://localhost:3306/<%= baseName %></datasource.url>
+                <datasource.username>root</datasource.username>
+                <datasource.password></datasource.password><% } else if (devDatabaseType == 'postgresql') { %><datasource.driverclassname>org.postgresql.Driver</datasource.driverclassname>
                 <datasource.url>jdbc:postgresql://localhost/<%= baseName %></datasource.url>
                 <datasource.username><%= baseName %></datasource.username>
                 <datasource.password></datasource.password><% } else { %><datasource.driverclassname>org.hsqldb.jdbcDriver</datasource.driverclassname>
@@ -34,13 +37,15 @@
                 <datasource.minIdle>1</datasource.minIdle>
                 <datasource.maxIdle>2</datasource.maxIdle>
                 <datasource.maxActive>5</datasource.maxActive>
-                <% if (databaseType == 'postgresql') { %><hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect><% } else { %><hibernate.dialect>org.hibernate.dialect.HSQLDialect</hibernate.dialect><% } %>
+                <% if (devDatabaseType == 'mysql') { %><hibernate.dialect>org.hibernate.dialect.MySQLInnoDBDialect</hibernate.dialect><% } else if (devDatabaseType == 'postgresql') { %><hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect><% } else { %><hibernate.dialect>org.hibernate.dialect.HSQLDialect</hibernate.dialect><% } %>
                 <hibernate.show_sql>true</hibernate.show_sql>
                 <hibernate.generate_statistics>true</hibernate.generate_statistics>
             </properties>
             <dependencies>
                 <dependency>
-                    <% if (databaseType == 'postgresql') { %><groupId>org.postgresql</groupId>
+                    <% if (devDatabaseType == 'mysql') { %><groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                    <version>5.1.26</version><% } else if (devDatabaseType == 'postgresql') { %><groupId>org.postgresql</groupId>
                     <artifactId>postgresql</artifactId>
                     <version>9.2-1003-jdbc4</version><% } else { %><groupId>org.hsqldb</groupId>
                     <artifactId>hsqldb</artifactId>
@@ -60,24 +65,29 @@
                 <logback.appender>CONSOLE</logback.appender>
                 <!-- ehcache configuration -->
                 <ehcache.maxBytesLocalHeap>256M</ehcache.maxBytesLocalHeap>
-                <!-- database configuration -->
-                <datasource.driverclassname>org.postgresql.Driver</datasource.driverclassname>
+                <!-- production database configuration -->
+                <% if (prodDatabaseType == 'mysql') { %><datasource.driverclassname>com.mysql.jdbc.Driver</datasource.driverclassname>
+                <datasource.url>jdbc:mysql://localhost:3306/<%= baseName %></datasource.url>
+                <datasource.username>root</datasource.username>
+                <datasource.password></datasource.password><% } else if (prodDatabaseType == 'postgresql') { %><datasource.driverclassname>org.postgresql.Driver</datasource.driverclassname>
                 <datasource.url>jdbc:postgresql://localhost/<%= baseName %></datasource.url>
                 <datasource.username><%= baseName %></datasource.username>
-                <datasource.password></datasource.password>
+                <datasource.password></datasource.password><% } %>
                 <datasource.initialSize>4</datasource.initialSize>
                 <datasource.minIdle>4</datasource.minIdle>
                 <datasource.maxIdle>10</datasource.maxIdle>
                 <datasource.maxActive>20</datasource.maxActive>
-                <hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect>
+                <% if (prodDatabaseType == 'mysql') { %><hibernate.dialect>org.hibernate.dialect.MySQLInnoDBDialect</hibernate.dialect><% } else if (prodDatabaseType == 'postgresql') { %><hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect><% } %>
                 <hibernate.show_sql>false</hibernate.show_sql>
                 <hibernate.generate_statistics>false</hibernate.generate_statistics>
             </properties>
             <dependencies>
                 <dependency>
-                    <groupId>org.postgresql</groupId>
+                    <% if (prodDatabaseType == 'mysql') { %><groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                    <version>5.1.26</version><% } else if (prodDatabaseType == 'postgresql') { %><groupId>org.postgresql</groupId>
                     <artifactId>postgresql</artifactId>
-                    <version>9.2-1003-jdbc4</version>
+                    <version>9.2-1003-jdbc4</version><% } %>
                 </dependency>
             </dependencies>
         </profile>        
