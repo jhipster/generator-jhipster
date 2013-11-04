@@ -36,7 +36,7 @@ public class AccountResource {
     @ResponseBody
     @Timed
     public User getAccount(HttpServletResponse response) {
-        User user = userRepository.findByLogin(SecurityUtils.getCurrentLogin());
+        User user = userRepository.findOne(SecurityUtils.getCurrentLogin());
         if (user == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
@@ -52,7 +52,7 @@ public class AccountResource {
     @ResponseBody
     @Timed
     public List<PersistentToken> getCurrentSessions(HttpServletResponse response) {
-        User user = userRepository.findByLogin(SecurityUtils.getCurrentLogin());
+        User user = userRepository.findOne(SecurityUtils.getCurrentLogin());
         if (user == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }

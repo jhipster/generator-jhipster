@@ -103,7 +103,7 @@ public class CustomPersistentRememberMeServices extends
         String login = successfulAuthentication.getName();
 
         log.debug("Creating new persistent login for user {}", login);
-        User user = userRepository.findByLogin(login);
+        User user = userRepository.findOne(login);
 
         PersistentToken token = new PersistentToken();
         token.setSeries(generateSeriesData());
@@ -154,7 +154,7 @@ public class CustomPersistentRememberMeServices extends
         final String presentedSeries = cookieTokens[0];
         final String presentedToken = cookieTokens[1];
 
-        PersistentToken token = tokenRepository.findBySeries(presentedSeries);
+        PersistentToken token = tokenRepository.findOne(presentedSeries);
 
         if (token == null) {
             // No series match, so we can't authenticate using this cookie

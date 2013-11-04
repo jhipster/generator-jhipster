@@ -11,8 +11,6 @@ import java.util.List;
  */
 public interface PersistentTokenRepository extends JpaRepository<PersistentToken, String> {
 
-    PersistentToken findBySeries(String series);
-
     List<PersistentToken> findByUser(User user);
 
 }
