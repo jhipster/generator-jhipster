@@ -6,8 +6,11 @@
     "yeoman-generator",
     "Java",
     "Spring",
-	  "JPA",
-    "AngularJS"
+    "Spring Security",
+    "JPA",
+    "Hibernate",
+    "AngularJS",
+    "Twitter Bootstrap"
   ],
   "homepage": "https://github.com/jdubois/generator-jhipster",
   "bugs": "https://github.com/jdubois/generator-jhipster/issues",
