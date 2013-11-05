@@ -137,7 +137,7 @@ JhipsterGenerator.prototype.app = function app() {
   this.copy(resourceDir + '/META-INF/liquibase/authorities.csv', resourceDir + 'META-INF/liquibase/authorities.csv');
   this.copy(resourceDir + '/META-INF/liquibase/users_authorities.csv', resourceDir + 'META-INF/liquibase/users_authorities.csv');
   this.copy(resourceDir + '/META-INF/spring/applicationContext-metrics.xml', resourceDir + 'META-INF/spring/applicationContext-metrics.xml');
-  this.copy(resourceDir + '/META-INF/spring/applicationContext-database.xml', resourceDir + 'META-INF/spring/applicationContext-database.xml');
+  this.template(resourceDir + '/META-INF/spring/_applicationContext-database.xml', resourceDir + 'META-INF/spring/applicationContext-database.xml');
   this.template(resourceDir + '/META-INF/spring/_applicationContext-security.xml', resourceDir + 'META-INF/spring/applicationContext-security.xml');
  
   // Create Java files
@@ -183,8 +183,14 @@ JhipsterGenerator.prototype.app = function app() {
   
   // Create Test Java files
   var testDir = 'src/test/java/' + packageFolder;
+  var testResourceDir = 'src/test/resources/';
   this.mkdir(testDir);
-  
+  this.template('src/test/java/package/test/_ApplicationTestConfiguration.java', testDir + 'test/ApplicationTestConfiguration.java');
+  this.template('src/test/java/package/web/rest/_UserResourceTest.java', testDir + 'web/rest/UserResourceTest.java'); 
+  this.copy(testResourceDir + 'META-INF/application/application.properties', testResourceDir + 'META-INF/' + this.baseName + '/' + this.baseName + '.properties');
+  this.template(testResourceDir + 'META-INF/spring/_applicationContext-database.xml', testResourceDir + 'META-INF/spring/applicationContext-database.xml');
+  this.copy(testResourceDir + 'logback.xml', testResourceDir + 'logback.xml');
+
   // Create Webapp
   var webappDir = 'src/main/webapp/';
   this.mkdir(webappDir);
