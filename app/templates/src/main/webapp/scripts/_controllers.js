@@ -23,6 +23,7 @@
 });
 
 <%= baseName %>App.controller('LoginController', function LoginController($scope, $http, $location, AuthenticationSharedService) {
+    $scope.rememberMe = true;
     $scope.login = function () {
         var data =
             "j_username=" + $scope.username +
