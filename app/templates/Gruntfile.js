@@ -7,9 +7,11 @@
 // use this if you want to recursively match all subfolders:
 // 'test/spec/**/*.js'
 
+var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
+
 module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
-  require('time-grunt')(grunt);
+  require('time-grunt')(grunt); 
 
   grunt.initConfig({
     yeoman: {
@@ -28,7 +30,7 @@ module.exports = function (grunt) {
       },
       livereload: {
         options: {
-          livereload: '<%%= connect.options.livereload %>'
+          livereload: 35729
         },
         files: [
           'src/main/webapp/{,*/}*.html',
@@ -71,7 +73,13 @@ module.exports = function (grunt) {
           base: [
             '.tmp',
             'src/main/webapp'
-          ]
+          ],
+          middleware: function (connect) {
+            return [
+              proxySnippet,
+              connect.static(require('path').resolve('src/main/webapp'))
+            ];
+          }
         }
       },
       test: {
@@ -330,6 +338,7 @@ module.exports = function (grunt) {
       'clean:server',
       'concurrent:server',
       'autoprefixer',
+      'configureProxies',
       'connect:livereload',
       'watch'
     ]);
