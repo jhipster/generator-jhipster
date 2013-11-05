@@ -130,7 +130,7 @@ public class CustomPersistentRememberMeServices extends
     @Transactional
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         String rememberMeCookie = extractRememberMeCookie(request);
-        if (rememberMeCookie.length() != 0) {
+        if (rememberMeCookie!= null && rememberMeCookie.length() != 0) {
             try {
                 String[] cookieTokens = decodeCookie(rememberMeCookie);
                 PersistentToken token = getPersistentToken(cookieTokens);
