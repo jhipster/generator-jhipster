@@ -1,0 +1,89 @@
+<div ng-controller="SettingsController" data-ng-init="init()">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <h2>User settings for [<b>{{settingsAccount.login}}</b>]</h2>
+
+            <div class="alert alert-success" ng-show="success">
+                <strong>Settings saved!</strong>
+            </div>
+            <div class="alert alert-danger" ng-show="error">
+                <strong>An error has occured!</strong> Settings could not be saved.
+            </div>
+
+            <form name="form" role="form" novalidate
+                  class="ng-scope ng-invalid ng-invalid-required ng-dirty ng-valid-minlength"
+                  ng-submit="save()">
+
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" class="form-control" name="firstName" placeholder="Your first name"
+                           ng-model="settingsAccount.firstName" ng-minlength=1 ng-maxlength=50 required>
+                    <div class="error"
+                         ng-show="form.firstName.$dirty && form.firstName.$invalid">
+                        <small class="error"
+                               ng-show="form.firstName.$error.required">
+                            Your first name is required.
+                        </small>
+                        <small class="error"
+                               ng-show="form.firstName.$error.minlength">
+                            Your first name is required to be at least 1 character
+                        </small>
+                        <small class="error"
+                               ng-show="form.firstName.$error.maxlength">
+                            Your first name cannot be longer than 50 characters
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" class="form-control" name="lastName" placeholder="Your last name"
+                           ng-model="settingsAccount.lastName" ng-minlength=1 ng-maxlength=50 required>
+                    <div class="error"
+                         ng-show="form.lastName.$dirty && form.lastName.$invalid">
+                        <small class="error"
+                               ng-show="form.lastName.$error.required">
+                            Your last name is required.
+                        </small>
+                        <small class="error"
+                               ng-show="form.lastName.$error.minlength">
+                            Your last name is required to be at least 1 character
+                        </small>
+                        <small class="error"
+                               ng-show="form.lastName.$error.maxlength">
+                            Your last name cannot be longer than 50 characters
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" class="form-control" name="email" placeholder="Your e-mail"
+                           ng-model="settingsAccount.email" ng-minlength=5 ng-maxlength=100 required>
+                    <div class="error"
+                         ng-show="form.email.$dirty && form.email.$invalid">
+                        <small class="error"
+                               ng-show="form.email.$error.required">
+                            Your e-mail is required.
+                        </small>
+                        <small class="error"
+                               ng-show="form.email.$error.email">
+                            Your e-mail is invalid.
+                        </small>
+                        <small class="error"
+                               ng-show="form.email.$error.minlength">
+                            Your e-mail is required to be at least 5 characters
+                        </small>
+                        <small class="error"
+                               ng-show="form.email.$error.maxlength">
+                            Your e-mail cannot be longer than 100 characters
+                        </small>
+                    </div>
+                </div>
+
+                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+
+</div>

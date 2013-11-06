@@ -1,13 +1,30 @@
-<div class="jumbotron" ng-controller="MainController">
-    <h1>Welcome!</h1>
+<div ng-controller="MainController" ng-cloak>
+    <div class="row">
+        <div class="col-md-4">
+            <img  class="img-responsive img-rounded" src="images/hipster.jpg">
+        </div>
+        <div class="col-md-8">
+            <h1>Welcome, Java Hipster!</h1>
+            <p class="lead">This is your homepage</p>
 
-    <p class="lead">This is your homepage</p>
+            <div class="alert alert-success" ng-show="authenticated">
+                You are logged in as user "{{account.login}}".
+            </div>
 
-    <div class="alert alert-success" ng-show="authenticated">
-        You are logged in as user "{{account.login}}".
-    </div>
+            <div class="alert alert-warning" ng-hide="authenticated">
+                If you want to <a href="#/login">authenticate</a>, you can try the default login="admin" and
+                password="admin".
+            </div>
 
-    <div class="alert alert-warning" ng-hide="authenticated">
-        If you want to <a href="#/login">authenticate</a>, you can try the default login="admin" and password="admin".
+            <p>
+                If you have any question on jhipster:
+            </p>
+
+            <ul>
+                <li><a href="https://github.com/jdubois/generator-jhipster" target="_blank">jhipster homepage</a></li>
+                <li><a href="https://github.com/jdubois/generator-jhipster/issues?state=open" target="_blank">jhipster bug tracker</a></li>
+                <li><a href="https://twitter.com/juliendubois" target="_blank">contact @juliendubois on Twitter</a></li>
+            </ul>
+        </div>
     </div>
 </div>

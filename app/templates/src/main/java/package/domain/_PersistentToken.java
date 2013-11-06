@@ -16,7 +16,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "T_PERSISTENT_TOKEN")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class PersistentToken implements Serializable {
 
     @Id

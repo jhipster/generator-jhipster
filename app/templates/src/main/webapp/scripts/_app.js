@@ -11,6 +11,14 @@ var <%= baseName %>App = angular.module('<%= baseName %>App', ['ngResource']);
                 templateUrl: 'views/login.html',
                 controller: 'LoginController'
             })
+            .when('/settings', {
+                templateUrl: 'views/settings.html',
+                controller: 'SettingsController'
+            })
+            .when('/password', {
+                templateUrl: 'views/password.html',
+                controller: 'PasswordController'
+            })
             .when('/logout', {
                 templateUrl: 'views/main.html',
                 controller: 'LogoutController'

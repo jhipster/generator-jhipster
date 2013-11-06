@@ -5,14 +5,19 @@ import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.PersistentTokenRepository;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.SecurityUtils;
+import <%=packageName%>.service.UserService;
 import com.yammer.metrics.annotation.Timed;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -21,9 +26,14 @@ import java.util.List;
 @Controller
 public class AccountResource {
 
+    private static final Logger log = LoggerFactory.getLogger(AccountResource.class);
+
     @Inject
     private UserRepository userRepository;
-    
+
+    @Inject
+    private UserService userService;
+
     @Inject
     private PersistentTokenRepository persistentTokenRepository;
 
@@ -41,6 +51,34 @@ public class AccountResource {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         return user;
+    }
+
+    /**
+     * POST  /rest/account -> update the current user information
+     */
+    @RequestMapping(value = "/rest/account",
+            method = RequestMethod.POST,
+            produces = "application/json")
+    @ResponseBody
+    @Timed
+    public void saveAccount(@RequestBody User user) throws IOException {
+        userService.updateUserInformation(user);
+    }
+
+    /**
+     * POST  /rest/change_password -> changes the current user's password
+     */
+    @RequestMapping(value = "/rest/change_password",
+            method = RequestMethod.POST,
+            produces = "application/json")
+    @ResponseBody
+    @Timed
+    public void changePassword(@RequestBody String password, HttpServletResponse response) throws IOException {
+        if (password == null || password.equals("")) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Password should not be empty");
+        } else {
+            userService.changePassword(password);
+        }
     }
 
     /**

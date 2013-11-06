@@ -16,7 +16,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "T_USER")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class User implements Serializable {
 
     @NotNull
@@ -48,12 +48,12 @@ public class User implements Serializable {
             name = "T_USER_AUTHORITY",
             joinColumns = {@JoinColumn(name = "login", referencedColumnName = "login")},
             inverseJoinColumns = {@JoinColumn(name = "name", referencedColumnName = "name")})
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Authority> authorities;
 
     @JsonIgnore
     @OneToMany
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<PersistentToken> persistentTokens;
 
     public String getLogin() {

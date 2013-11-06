@@ -56,9 +56,9 @@
     <beans:bean id="daoAuthenticationProvider"
                 class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
         <beans:property name="userDetailsService" ref="userDetailsService"/>
-        <beans:property name="passwordEncoder">
-            <beans:bean class="org.springframework.security.crypto.password.StandardPasswordEncoder"/>
-        </beans:property>
+        <beans:property name="passwordEncoder" ref="passwordEncoder"/>
     </beans:bean>
+
+    <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"/>
 
 </beans:beans>

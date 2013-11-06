@@ -135,6 +135,9 @@ public class DispatcherServletConfiguration extends WebMvcConfigurerAdapter {
                                                  Exception ex) {
                 try {
                     log.error("An error has occured: {}", ex.getMessage());
+                    if (log.isDebugEnabled()) {
+                        ex.printStackTrace();
+                    }
                     response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                     return new ModelAndView();
                 } catch (Exception handlerException) {

@@ -175,6 +175,9 @@ JhipsterGenerator.prototype.app = function app() {
   this.template('src/main/java/package/security/_CustomPersistentRememberMeServices.java', javaDir + 'security/CustomPersistentRememberMeServices.java');
   this.template('src/main/java/package/security/_SecurityUtils.java', javaDir + 'security/SecurityUtils.java');
 
+  this.template('src/main/java/package/service/_package-info.java', javaDir + 'service/package-info.java');
+  this.template('src/main/java/package/service/_UserService.java', javaDir + 'service/UserService.java'); 
+
   this.template('src/main/java/package/web/controller/_package-info.java', javaDir + 'web/controller/package-info.java');
   this.template('src/main/java/package/web/controller/_HomeController.java', javaDir + 'web/controller/HomeController.java');  
 
@@ -239,6 +242,9 @@ JhipsterGenerator.prototype.app = function app() {
 
   // CSS
   this.copy(webappDir + 'styles/documentation.css', webappDir + 'styles/documentation.css'); 
+
+  // Images
+  this.copy(webappDir + 'images/hipster.jpg', webappDir + 'images/hipster.jpg');
 
   this.indexFile = this.appendScripts(this.indexFile, 'scripts/plugins.js', [
     'bower_components/sass-bootstrap/js/affix.js',

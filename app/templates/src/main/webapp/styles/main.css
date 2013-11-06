@@ -20,3 +20,8 @@ body {
     line-height: 1;
     letter-spacing: -1px;
 }
+
+.error {
+    color: white;
+    background-color: red;
+}

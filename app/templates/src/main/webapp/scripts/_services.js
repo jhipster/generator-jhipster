@@ -7,6 +7,11 @@
         });
     });
 
+<%= baseName %>App.factory('Password', function($resource){
+    return $resource('app/rest/change_password', {}, {
+    });
+});
+
 <%= baseName %>App.factory('AuthenticationSharedService', function($rootScope) {
     var authenticationSharedService = {};
 
