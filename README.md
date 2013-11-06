@@ -4,9 +4,9 @@ Hipster stack for Java developers
 Presentation
 ------------------
 
-**This project is not yet finished!!! We are currently working on an alpha release**
+**This project is still in an early, non feature-complete version**
 
-*If you want to help, we will put tasks on [our Github issues page](https://github.com/jdubois/generator-jhipster/issues?labels=enhancement&page=1&state=open)*
+*If you want to help, we put tasks on [our Github issues page](https://github.com/jdubois/generator-jhipster/issues?labels=enhancement&page=1&state=open)*
 
 This is a [Yeoman generator](http://yeoman.io), used to create a Yeoman + Maven + Spring + AngularJS project.
 
@@ -42,6 +42,8 @@ You can also run Grunt to work on the client-side JavaScript application:
 grunt server
 ```
 This should open up your Web browser, with live reload enabled, on [http://localhost:9000](http://localhost:9000)
+
+**If you want to go further, and use hot reloading both on the client and the server side, please [https://github.com/jdubois/generator-jhipster/wiki/Hot-reloading](go to this Wiki page).**
 
 
 Technology stack on the server side
