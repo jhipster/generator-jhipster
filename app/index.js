@@ -225,6 +225,8 @@ JhipsterGenerator.prototype.app = function app() {
   // Angular JS views
   this.copy(webappDir + '/views/main.html', webappDir + '/views/main.html');
   this.copy(webappDir + '/views/login.html', webappDir + '/views/login.html');
+  this.copy(webappDir + '/views/password.html', webappDir + '/views/password.html');
+  this.copy(webappDir + '/views/settings.html', webappDir + '/views/settings.html');
 
   // Index page  
   this.indexFile = this.readFileAsString(path.join(this.sourceRoot(), webappDir + '_index.html'));
