@@ -43,7 +43,7 @@ grunt server
 ```
 This should open up your Web browser, with live reload enabled, on [http://localhost:9000](http://localhost:9000)
 
-**If you want to go further, and use hot reloading both on the client and the server side, please [https://github.com/jdubois/generator-jhipster/wiki/Hot-reloading](go to this Wiki page).**
+**If you want to go further, and use hot reloading both on the client and the server side, please [go to this Wiki page](https://github.com/jdubois/generator-jhipster/wiki/Hot-reloading).**
 
 
 Technology stack on the server side
