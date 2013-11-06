@@ -502,6 +502,7 @@
                             <value>development</value>
                         </systemProperty>
                     </systemProperties>
+                    <jvmArgs>-javaagent:spring_loaded/springloaded-1.1.4.jar -noverify</jvmArgs>
                     <webApp>
                         <contextPath>/</contextPath>
                     </webApp>
