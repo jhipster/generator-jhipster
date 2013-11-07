@@ -8,7 +8,13 @@
     });
 
 <%= baseName %>App.factory('Password', function($resource){
-    return $resource('app/rest/change_password', {}, {
+    return $resource('app/rest/account/change_password', {}, {
+    });
+});
+
+<%= baseName %>App.factory('Sessions', function($resource){
+    return $resource('app/rest/account/sessions/:series', {}, {
+        'get': { method: 'GET', isArray: true}
     });
 });
 

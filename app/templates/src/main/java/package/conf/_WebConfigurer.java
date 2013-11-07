@@ -55,6 +55,7 @@ public class WebConfigurer implements ServletContextListener {
         gzipFilter.addMappingForUrlPatterns(disps, true, "/scripts/*");
         gzipFilter.addMappingForUrlPatterns(disps, true, "/styles/*");
         gzipFilter.addMappingForUrlPatterns(disps, true, "*.html");
+        gzipFilter.setAsyncSupported(true);
     }
 
     /**
@@ -71,6 +72,7 @@ public class WebConfigurer implements ServletContextListener {
                 dispatcherServletConfiguration));
         dispatcherServlet.addMapping("/app/*");
         dispatcherServlet.setLoadOnStartup(1);
+        dispatcherServlet.setAsyncSupported(true);
         return dispatcherServlet;
     }
 
@@ -84,6 +86,7 @@ public class WebConfigurer implements ServletContextListener {
 
         springSecurityFilter.setAsyncSupported(true);
         springSecurityFilter.addMappingForUrlPatterns(disps, false, "/*");
+        springSecurityFilter.setAsyncSupported(true);
     }
 
     /**

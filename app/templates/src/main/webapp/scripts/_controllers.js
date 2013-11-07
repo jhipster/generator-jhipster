@@ -6,13 +6,14 @@
 
 });
 
-<%= baseName %>App.controller('MenuController', function MenuController($rootScope, $scope, Account, AuthenticationSharedService) {
+<%= baseName %>App.controller('MenuController', function MenuController($rootScope, $scope, $location, Account, AuthenticationSharedService) {
     $scope.init = function () {
         $rootScope.account = Account.get({}, function () {
             $rootScope.authenticated = true;
         }, function (response) {
             if (response.status === 401) {
                 $rootScope.authenticated = false;
+                $location.path('');
             }
         });
     };
@@ -88,10 +89,31 @@
     };
 });
 
+<%= baseName %>App.controller('SessionsController', function SessionsController($scope, Sessions) {
+    $scope.success = null;
+    $scope.error = null;
+    $scope.sessions = Sessions.get();
+    $scope.invalidate = function (series) {
+        Sessions.delete({series: encodeURIComponent(series)},
+            function (value, responseHeaders) {
+                $scope.error = null;
+                $scope.success = "OK";
+                $scope.sessions = Sessions.get();
+            },
+            function (httpResponse) {
+                $scope.success = null;
+                $scope.error = "ERROR";
+            });
+    };
+});
+
 <%= baseName %>App.controller('LogoutController', function LoginController($scope, $http, $location, AuthenticationSharedService) {
     $http.get('/app/logout')
         .success(function (data, status, headers, config) {
             AuthenticationSharedService.prepForBroadcast("logout");
+            $location.path('');
+        }).
+        error(function (data, status, headers, config) {
             $location.path('');
         });
 });

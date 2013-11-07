@@ -10,14 +10,15 @@ import com.yammer.metrics.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -38,7 +39,7 @@ public class AccountResource {
     private PersistentTokenRepository persistentTokenRepository;
 
     /**
-     * GET  /rest/account -> get the current user
+     * GET  /rest/account -> get the current user.
      */
     @RequestMapping(value = "/rest/account",
             method = RequestMethod.GET,
@@ -54,7 +55,7 @@ public class AccountResource {
     }
 
     /**
-     * POST  /rest/account -> update the current user information
+     * POST  /rest/account -> update the current user information.
      */
     @RequestMapping(value = "/rest/account",
             method = RequestMethod.POST,
@@ -68,7 +69,7 @@ public class AccountResource {
     /**
      * POST  /rest/change_password -> changes the current user's password
      */
-    @RequestMapping(value = "/rest/change_password",
+    @RequestMapping(value = "/rest/account/change_password",
             method = RequestMethod.POST,
             produces = "application/json")
     @ResponseBody
@@ -82,7 +83,7 @@ public class AccountResource {
     }
 
     /**
-     * GET  /rest/account/sessions -> get the current open sessions
+     * GET  /rest/account/sessions -> get the current open sessions.
      */
     @RequestMapping(value = "/rest/account/sessions",
             method = RequestMethod.GET,
@@ -95,5 +96,18 @@ public class AccountResource {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         return persistentTokenRepository.findByUser(user);
+    }
+
+
+    /**
+     * DELETE  /rest/account/sessions?series={series} -> invalidate an existing session.
+     */
+    @RequestMapping(value = "/rest/account/sessions/{series}",
+            method = RequestMethod.DELETE)
+    @ResponseBody
+    @Timed
+    public void invalidateSession(@PathVariable String series) throws UnsupportedEncodingException {
+        String decodedSeries = URLDecoder.decode(series, "UTF-8");
+        persistentTokenRepository.delete(decodedSeries);
     }
 }

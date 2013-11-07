@@ -1,7 +1,12 @@
 package <%=packageName%>.domain;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,20 +17,24 @@ import java.util.Date;
 /**
  * Persistent tokens are used by Spring Security to automatically log in users.
  *
- * @see <%=packageName%>.security.CustomPersistentRememberMeServices
+ * @see com.mycompany.security.CustomPersistentRememberMeServices
  */
 @Entity
 @Table(name = "T_PERSISTENT_TOKEN")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class PersistentToken implements Serializable {
 
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("d MMMM yyyy");
+
     @Id
     private String series;
 
+    @JsonIgnore
     @NotNull
     @Column(name = "token_value")
     private String tokenValue;
 
+    @JsonIgnore
     @Column(name = "token_date")
     private Date tokenDate;
 
@@ -37,6 +46,7 @@ public class PersistentToken implements Serializable {
     @Column(name = "user_agent")
     private String userAgent;
 
+    @JsonIgnore
     @ManyToOne
     private User user;
 
@@ -62,6 +72,12 @@ public class PersistentToken implements Serializable {
 
     public void setTokenDate(Date tokenDate) {
         this.tokenDate = tokenDate;
+    }
+
+    @JsonGetter
+    public String getFormattedTokenDate() {
+        DateTime dateTime = new DateTime(this.tokenDate);
+        return dateTimeFormatter.print(dateTime);
     }
 
     public String getIpAddress() {

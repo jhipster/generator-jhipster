@@ -26,7 +26,7 @@ public class UserResource {
     private UserRepository userRepository;
 
     /**
-     * GET  /rest/users/:login -> get the "login" user
+     * GET  /rest/users/:login -> get the "login" user.
      */
     @RequestMapping(value = "/rest/users/{login}",
             method = RequestMethod.GET,
