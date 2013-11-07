@@ -34,7 +34,7 @@ import java.util.List;
 @ComponentScan("<%=packageName%>.web")
 @EnableWebMvc
 @PropertySource({"classpath:/META-INF/<%= baseName %>/<%= baseName %>.properties"})
-@ImportResource("classpath:META-INF/spring/applicationContext-metrics.xml")
+@Import(value = {MetricsConfiguration.class})
 public class DispatcherServletConfiguration extends WebMvcConfigurerAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(DispatcherServletConfiguration.class);
@@ -97,7 +97,7 @@ public class DispatcherServletConfiguration extends WebMvcConfigurerAdapter {
     @Bean
     public MultipartResolver multipartResolver() {
         CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        multipartResolver.setMaxUploadSize(MAX_UPLOAD_SIZE); 
+        multipartResolver.setMaxUploadSize(MAX_UPLOAD_SIZE);
         return multipartResolver;
     }
 

@@ -1,7 +1,11 @@
 package <%=packageName%>.conf;
 
-import com.yammer.metrics.reporting.AdminServlet;
-import com.yammer.metrics.web.DefaultWebappMetricsFilter;
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.health.HealthCheckRegistry;
+import com.codahale.metrics.servlet.InstrumentedFilter;
+import com.codahale.metrics.servlets.AdminServlet;
+import com.codahale.metrics.servlets.HealthCheckServlet;
+import com.codahale.metrics.servlets.MetricsServlet;
 import net.sf.ehcache.constructs.web.filter.GzipFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +25,10 @@ public class WebConfigurer implements ServletContextListener {
 
     private static final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
 
+    public static final MetricRegistry METRIC_REGISTRY = new MetricRegistry();
+
+    public static final HealthCheckRegistry HEALTH_CHECK_REGISTRY = new HealthCheckRegistry();
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext servletContext = sce.getServletContext();
@@ -35,9 +43,9 @@ public class WebConfigurer implements ServletContextListener {
 
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
 
-        ServletRegistration.Dynamic dispatcherServlet = initSpring(servletContext, rootContext);
+        initSpring(servletContext, rootContext);
         initSpringSecurity(servletContext, disps);
-        initMetricsServlet(servletContext, disps, dispatcherServlet);
+        initMetrics(servletContext, disps);
         initGzip(servletContext, disps);
 
         log.debug("Web application fully configured");
@@ -90,23 +98,29 @@ public class WebConfigurer implements ServletContextListener {
     }
 
     /**
-     * Initializes Yammer Metrics.
+     * Initializes Metrics.
      */
-    private void initMetricsServlet(ServletContext servletContext, EnumSet<DispatcherType> disps,
-                                    ServletRegistration.Dynamic dispatcherServlet) {
+    private void initMetrics(ServletContext servletContext, EnumSet<DispatcherType> disps) {
+        log.debug("Initializing Metrics registries");
+        servletContext.setAttribute(InstrumentedFilter.REGISTRY_ATTRIBUTE,
+                METRIC_REGISTRY);
+        servletContext.setAttribute(MetricsServlet.METRICS_REGISTRY,
+                METRIC_REGISTRY);
+        servletContext.setAttribute(HealthCheckServlet.HEALTH_CHECK_REGISTRY,
+                HEALTH_CHECK_REGISTRY);
 
-        log.debug("Registering Yammer Metrics Filter");
+        log.debug("Registering Metrics Filter");
         FilterRegistration.Dynamic metricsFilter = servletContext.addFilter("webappMetricsFilter",
-                new DefaultWebappMetricsFilter());
+                new InstrumentedFilter());
 
         metricsFilter.addMappingForUrlPatterns(disps, true, "/*");
 
-        log.debug("Registering Yammer Metrics Admin Servlet");
+        log.debug("Registering Metrics Admin Servlet");
         ServletRegistration.Dynamic metricsAdminServlet =
                 servletContext.addServlet("metricsAdminServlet", new AdminServlet());
 
         metricsAdminServlet.addMapping("/metrics/*");
-        dispatcherServlet.setLoadOnStartup(2);
+        metricsAdminServlet.setLoadOnStartup(2);
     }
 
     @Override

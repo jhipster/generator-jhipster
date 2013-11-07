@@ -9,7 +9,7 @@
     </appender>
     <logger name="com.mycompany" level="DEBUG"/>
     <logger name="ch.qos.logback" level="WARN"/>
-    <logger name="com.yammer.metrics" level="WARN"/>
+    <logger name="com.codahale.metrics" level="WARN"/>
     <logger name="net.sf.ehcache" level="WARN"/>
     <logger name="org.apache" level="WARN"/>
     <logger name="org.hibernate.validator" level="WARN"/>

@@ -1,8 +1,8 @@
 package <%=packageName%>.web.rest;
 
+import com.codahale.metrics.annotation.Timed;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.UserRepository;
-import com.yammer.metrics.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;

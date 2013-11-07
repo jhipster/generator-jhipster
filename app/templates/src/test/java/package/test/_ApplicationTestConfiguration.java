@@ -2,7 +2,6 @@ package <%=packageName%>.test;
 
 import <%=packageName%>.conf.AsyncConfiguration;
 import <%=packageName%>.conf.CacheConfiguration;
-import <%=packageName%>.conf.MetricsConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.*;
@@ -15,11 +14,11 @@ import java.io.IOException;
 @Configuration
 @PropertySource({"classpath:/META-INF/<%= baseName %>/<%= baseName %>.properties"})
 @ComponentScan(basePackages = {
-        "com.mycompany.service"})
+        "<%=packageName%>.service",
+        "<%=packageName%>.security"})
 @Import(value = {
         AsyncConfiguration.class,
-        CacheConfiguration.class,
-        MetricsConfiguration.class})
+        CacheConfiguration.class})
 @ImportResource("classpath:/META-INF/spring/applicationContext-*.xml")
 public class ApplicationTestConfiguration {
 

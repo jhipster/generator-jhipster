@@ -58,7 +58,7 @@ A complete [Spring application](http://spring.io/):
 
 Ready to go into production :
 
-- Monitoring with [Yammer Metrics](http://metrics.codahale.com/)
+- Monitoring with [Metrics](http://metrics.codahale.com/)
 - Caching with [ehcache](http://ehcache.org/)
 - Optimized static resources
 - Builds a standard WAR file

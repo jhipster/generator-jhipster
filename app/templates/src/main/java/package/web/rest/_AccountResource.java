@@ -1,24 +1,22 @@
 package <%=packageName%>.web.rest;
 
+import com.codahale.metrics.annotation.Timed;
 import <%=packageName%>.domain.PersistentToken;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.PersistentTokenRepository;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.UserService;
-import com.yammer.metrics.annotation.Timed;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.List;
 
 /**

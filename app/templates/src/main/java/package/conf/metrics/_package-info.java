@@ -1,4 +1,4 @@
 /**
- * Yammer Metrics specific code.
+ * Metrics specific code.
  */
 package <%=packageName%>.conf.metrics;

@@ -18,6 +18,13 @@
     });
 });
 
+<%= baseName %>App.factory('Metrics', function($resource){
+    return $resource('/metrics/metrics', {}, {
+        'get': { method: 'GET'}
+    });
+});
+
+
 <%= baseName %>App.factory('AuthenticationSharedService', function($rootScope) {
     var authenticationSharedService = {};
 

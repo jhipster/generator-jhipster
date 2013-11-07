@@ -44,7 +44,7 @@ var prompts = [
             type: 'input',
             name: 'packageName',
             message: '(2/6) What is your default package name?',
-            default: 'com.mycompany'
+            default: 'com.mycompany.myapp'
         }, 
         { 
             type: 'list',
@@ -137,7 +137,6 @@ JhipsterGenerator.prototype.app = function app() {
   this.copy(resourceDir + '/META-INF/liquibase/users.csv', resourceDir + 'META-INF/liquibase/users.csv');
   this.copy(resourceDir + '/META-INF/liquibase/authorities.csv', resourceDir + 'META-INF/liquibase/authorities.csv');
   this.copy(resourceDir + '/META-INF/liquibase/users_authorities.csv', resourceDir + 'META-INF/liquibase/users_authorities.csv');
-  this.copy(resourceDir + '/META-INF/spring/applicationContext-metrics.xml', resourceDir + 'META-INF/spring/applicationContext-metrics.xml');
   this.template(resourceDir + '/META-INF/spring/_applicationContext-database.xml', resourceDir + 'META-INF/spring/applicationContext-database.xml');
   this.template(resourceDir + '/META-INF/spring/_applicationContext-security.xml', resourceDir + 'META-INF/spring/applicationContext-security.xml');
  
@@ -186,12 +185,13 @@ JhipsterGenerator.prototype.app = function app() {
   this.template('src/main/java/package/web/rest/_AccountResource.java', javaDir + 'web/rest/AccountResource.java');
   
   // Create Test Java files
-  var testDir = 'src/test/java/' + packageFolder;
+  var testDir = 'src/test/java/' + packageFolder + '/';
   var testResourceDir = 'src/test/resources/';
   this.mkdir(testDir);
   this.template('src/test/java/package/test/_ApplicationTestConfiguration.java', testDir + 'test/ApplicationTestConfiguration.java');
   this.template('src/test/java/package/web/rest/_UserResourceTest.java', testDir + 'web/rest/UserResourceTest.java'); 
   this.template(testResourceDir + 'META-INF/spring/_applicationContext-database.xml', testResourceDir + 'META-INF/spring/applicationContext-database.xml');
+  this.template(testResourceDir + 'META-INF/spring/_applicationContext-security.xml', testResourceDir + 'META-INF/spring/applicationContext-security.xml');
   this.copy(testResourceDir + 'logback.xml', testResourceDir + 'logback.xml');
   this.template(testResourceDir + '_ehcache.xml', testResourceDir + 'ehcache.xml');
 
@@ -228,6 +228,7 @@ JhipsterGenerator.prototype.app = function app() {
   this.copy(webappDir + '/views/password.html', webappDir + '/views/password.html');
   this.copy(webappDir + '/views/settings.html', webappDir + '/views/settings.html');
   this.copy(webappDir + '/views/sessions.html', webappDir + '/views/sessions.html');
+  this.copy(webappDir + '/views/metrics.html', webappDir + '/views/metrics.html');
 
   // Index page  
   this.indexFile = this.readFileAsString(path.join(this.sourceRoot(), webappDir + '_index.html'));
