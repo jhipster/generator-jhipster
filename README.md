@@ -53,7 +53,7 @@ A complete [Spring application](http://spring.io/):
 
 - "development" and "production" profiles
 - [Spring Security](http://docs.spring.io/spring-security/site/index.html)
-- Spring MVC REST + [Jackson](https://github.com/FasterXML/jackson)
+- [Spring MVC REST](http://spring.io/guides/gs/rest-service/) + [Jackson](https://github.com/FasterXML/jackson)
 - [Spring Data JPA](http://projects.spring.io/spring-data-jpa/) + Bean Validation
 - Database updates with [Liquibase](http://www.liquibase.org/)
 
@@ -61,7 +61,7 @@ Ready to go into production :
 
 - Monitoring with [Metrics](http://metrics.codahale.com/)
 - Caching with [ehcache](http://ehcache.org/)
-- Optimized static resources
+- Optimized static resources (gzip filter, HTTP cache headers)
 - Builds a standard WAR file
 
 Technology stack on the client side
