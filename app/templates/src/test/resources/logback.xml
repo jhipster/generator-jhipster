@@ -7,7 +7,7 @@
             <Pattern>[%p] %c - %m%n</Pattern>
         </encoder>
     </appender>
-    <logger name="com.mycompany" level="DEBUG"/>
+    <logger name="<%=packageName%>" level="DEBUG"/>
     <logger name="ch.qos.logback" level="WARN"/>
     <logger name="com.codahale.metrics" level="WARN"/>
     <logger name="net.sf.ehcache" level="WARN"/>

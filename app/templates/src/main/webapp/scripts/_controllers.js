@@ -107,13 +107,12 @@
     };
 });
 
-<%= baseName %>App.controller('MetricsController', function MetricsController($scope, Metrics) {
+<%= baseName %>App.controller('MetricsController', function MetricsController($scope, $timeout, Metrics, HealthChecks) {
     $scope.init = function () {
         $scope.metrics = Metrics.get();
-        console.log($scope.metrics);
+        $scope.healthchecks = HealthChecks.get();
     };
 });
-
 
 <%= baseName %>App.controller('LogoutController', function LoginController($scope, $http, $location, AuthenticationSharedService) {
     $http.get('/app/logout')

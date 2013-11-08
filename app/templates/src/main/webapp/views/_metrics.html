@@ -1,0 +1,341 @@
+<div ng-controller="MetricsController" data-ng-init="init()">
+
+    <h2>Application Metrics</h2>
+    <p>
+        <button type="button" class="btn btn-primary" ng-click="init()"><span class="glyphicon glyphicon-refresh"></span> Refresh</button>
+    </p>
+
+    <h3>JVM Metrics</h3>
+    <div class="row">
+        <div class="col-md-3">
+            <b>Memory</b>
+            <p>Total Memory ({{metrics.gauges["jvm.memory.total.used"].value / 1000000 | number:0}}M / {{metrics.gauges["jvm.memory.total.max"].value / 1000000 | number:0}}M)</p>
+            <div class="progress progress-striped">
+                <div class="progress-bar progress-bar-success" role="progressbar"
+                     aria-valuenow='{{metrics.gauges["jvm.memory.total.used"].value / 1000000 | number:0}}'
+                     aria-valuemin="0"
+                     aria-valuemax='{{metrics.gauges["jvm.memory.total.max"].value / 1000000 | number:0}}'
+                     style='width: {{metrics.gauges["jvm.memory.total.used"].value * 100 / metrics.gauges["jvm.memory.total.max"].value  | number:0}}%'>
+                    {{metrics.gauges["jvm.memory.total.used"].value * 100 / metrics.gauges["jvm.memory.total.max"].value  | number:0}}%
+                </div>
+            </div>
+            <p>Heap Memory ({{metrics.gauges["jvm.memory.heap.used"].value / 1000000 | number:0}}M / {{metrics.gauges["jvm.memory.heap.max"].value / 1000000 | number:0}}M)</p>
+            <div class="progress progress-striped">
+                <div class="progress-bar progress-bar-success" role="progressbar"
+                     aria-valuenow='{{metrics.gauges["jvm.memory.heap.used"].value / 1000000 | number:0}}'
+                     aria-valuemin="0"
+                     aria-valuemax='{{metrics.gauges["jvm.memory.heap.max"].value / 1000000 | number:0}}'
+                     style='width: {{metrics.gauges["jvm.memory.heap.usage"].value * 100 | number:0}}%'>
+                    {{(metrics.gauges["jvm.memory.heap.usage"].value * 100 | number:0)}}%
+                </div>
+            </div>
+            <p>Non-heap Memory ({{metrics.gauges["jvm.memory.non-heap.used"].value / 1000000 | number:0}}M / {{metrics.gauges["jvm.memory.non-heap.max"].value / 1000000 | number:0}}M)</p>
+            <div class="progress progress-striped">
+                <div class="progress-bar progress-bar-success" role="progressbar"
+                     aria-valuenow='{{metrics.gauges["jvm.memory.non-heap.used"].value / 1000000 | number:0}}'
+                     aria-valuemin="0"
+                     aria-valuemax='{{metrics.gauges["jvm.memory.non-heap.max"].value / 1000000 | number:0}}'
+                     style='width: {{metrics.gauges["jvm.memory.non-heap.usage"].value * 100 | number:0}}%'>
+                    {{(metrics.gauges["jvm.memory.non-heap.usage"].value * 100 | number:0)}}%
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <b>Threads</b> (Total: {{metrics.gauges["jvm.threads.count"].value}})
+            <p>Runnable {{metrics.gauges["jvm.threads.runnable.count"].value}}</p>
+            <div class="progress progress-striped">
+                <div class="progress-bar progress-bar-success" role="progressbar"
+                     aria-valuenow='{{metrics.gauges["jvm.threads.runnable.count"].value}}'
+                     aria-valuemin="0"
+                     aria-valuemax='{{metrics.gauges["jvm.threads.count"].value}}'
+                     style='width: {{metrics.gauges["jvm.threads.runnable.count"].value * 100 / metrics.gauges["jvm.threads.count"].value | number:0}}%'>
+                    {{metrics.gauges["jvm.threads.runnable.count"].value * 100 / metrics.gauges["jvm.threads.count"].value | number:0}}%
+                </div>
+            </div>
+            <p>Timed waiting ({{metrics.gauges["jvm.threads.timed_waiting.count"].value}})</p>
+            <div class="progress progress-striped">
+                <div class="progress-bar progress-bar-warning" role="progressbar"
+                     aria-valuenow='{{metrics.gauges["jvm.threads.timed_waiting.count"].value}}'
+                     aria-valuemin="0"
+                     aria-valuemax='{{metrics.gauges["jvm.threads.count"].value}}'
+                     style='width: {{metrics.gauges["jvm.threads.timed_waiting.count"].value * 100 / metrics.gauges["jvm.threads.count"].value | number:0}}%'>
+                    {{metrics.gauges["jvm.threads.timed_waiting.count"].value * 100 / metrics.gauges["jvm.threads.count"].value | number:0}}%
+                </div>
+            </div>
+            <p>Waiting ({{metrics.gauges["jvm.threads.waiting.count"].value}})</p>
+            <div class="progress progress-striped">
+                <div class="progress-bar progress-bar-warning" role="progressbar"
+                     aria-valuenow='{{metrics.gauges["jvm.threads.waiting.count"].value}}'
+                     aria-valuemin="0"
+                     aria-valuemax='{{metrics.gauges["jvm.threads.count"].value}}'
+                     style='width: {{metrics.gauges["jvm.threads.waiting.count"].value * 100 / metrics.gauges["jvm.threads.count"].value | number:0}}%'>
+                    {{metrics.gauges["jvm.threads.waiting.count"].value * 100 / metrics.gauges["jvm.threads.count"].value | number:0}}%
+                </div>
+            </div>
+            <p>Blocked ({{metrics.gauges["jvm.threads.blocked.count"].value}})</p>
+            <div class="progress progress-striped">
+                <div class="progress-bar progress-bar-danger" role="progressbar"
+                     aria-valuenow='{{metrics.gauges["jvm.threads.blocked.count"].value}}'
+                     aria-valuemin="0"
+                     aria-valuemax='{{metrics.gauges["jvm.threads.count"].value}}'
+                     style='width: {{metrics.gauges["jvm.threads.blocked.count"].value * 100 / metrics.gauges["jvm.threads.count"].value | number:0}}%'>
+                    {{metrics.gauges["jvm.threads.blocked.count"].value * 100 / metrics.gauges["jvm.threads.count"].value | number:0}}%
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <b>Garbage collections</b>
+            <div class="row">
+                <div class="col-md-9">Mark Sweep count</div>
+                <div class="col-md-3">{{metrics.gauges["jvm.garbage.PS-MarkSweep.count"].value}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-9">Mark Sweep time</div>
+                <div class="col-md-3">{{metrics.gauges["jvm.garbage.PS-MarkSweep.time"].value}}ms</div>
+            </div>
+            <div class="row">
+                <div class="col-md-9">Scavenge count</div>
+                <div class="col-md-3">{{metrics.gauges["jvm.garbage.PS-Scavenge.count"].value}}</div>
+            </div>
+            <div class="row">
+                <div class="col-md-9">Scavenge time</div>
+                <div class="col-md-3">{{metrics.gauges["jvm.garbage.PS-Scavenge.time"].value}}ms</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <b>Health checks</b>
+            <div class="alert alert-success" ng-show="healthchecks.database.heatlhy = true">
+                Database OK
+            </div>
+
+            <div class="alert alert-danger" ng-hide="healthchecks.database.heatlhy = true">
+                Database is NOT available!
+            </div>
+        </div>
+    </div>
+
+    <h3>HTTP requests (events per second)</h3>
+    <p>Active requests: <b>{{metrics.counters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.activeRequests"].count | number:0}}</b> - Total requests: <b>{{metrics.timers["com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests"].count | number:0}}</b></p>
+    <div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Code</th>
+            <th>Count</th>
+            <th>Mean</th>
+            <th>Average (1 min)</th>
+            <th>Average (5 min)</th>
+            <th>Average (15 min)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>OK</td>
+            <td>
+                <div class="progress progress-striped">
+                    <div class="progress-bar progress-bar-success" role="progressbar"
+                    aria-valuenow='{{metrics.meters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.ok"].count * 100 / metrics.timers["com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests"].count}}'
+                    aria-valuemin="0"
+                    aria-valuemax='{{metrics.timers["com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests"].count}}'
+                    style='width:
+                    {{(metrics.meters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.ok"].count * 100 / metrics.timers["com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests"].count) | number:0}}%'>
+                    {{metrics.meters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.ok"].count}}
+                </div>
+            </td>
+            <td>
+                {{metrics.meters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.ok"].mean_rate | number:2}}
+            </td>
+            <td>{{metrics.meters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.ok"].m1_rate | number:2}}
+            </td>
+            <td>{{metrics.meters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.ok"].m5_rate | number:2}}
+            </td>
+            <td>
+                {{metrics.meters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.ok"].m15_rate | number:2}}
+            </td>
+        </tr>
+        <tr>
+            <td>Not Found</td>
+            <td>
+                <div class="progress progress-striped">
+                    <div class="progress-bar progress-bar-warning" role="progressbar"
+                         aria-valuenow='{{metrics.meters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.notFound"].count * 100 / metrics.timers["com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests"].count}}'
+                         aria-valuemin="0"
+                         aria-valuemax='{{metrics.timers["com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests"].count}}'
+                         style='width:
+                    {{(metrics.meters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.notFound"].count * 100 / metrics.timers["com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests"].count) | number:0}}%'>
+                        {{metrics.meters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.notFound"].count}}
+                    </div>
+            </td>
+            <td>
+                {{metrics.meters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.notFound"].mean_rate | number:2}}
+            </td>
+            <td>
+                {{metrics.meters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.notFound"].m1_rate | number:2}}
+            </td>
+            <td>
+                {{metrics.meters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.notFound"].m5_rate | number:2}}
+            </td>
+            <td>
+                {{metrics.meters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.notFound"].m15_rate | number:2}}
+            </td>
+        </tr>
+        <tr>
+            <td>Server error</td>
+            <td>
+                <div class="progress progress-striped">
+                    <div class="progress-bar progress-bar-danger" role="progressbar"
+                         aria-valuenow='{{metrics.meters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.serverError"].count * 100 / metrics.timers["com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests"].count}}'
+                         aria-valuemin="0"
+                         aria-valuemax='{{metrics.timers["com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests"].count}}'
+                         style='width:
+                    {{(metrics.meters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.serverError"].count * 100 / metrics.timers["com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests"].count) | number:0}}%'>
+                        {{metrics.meters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.serverError"].count}}
+                    </div>
+            </td>
+            <td>
+                {{metrics.meters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.serverError"].mean_rate | number:2}}
+            </td>
+            <td>
+                {{metrics.meters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.serverError"].m1_rate | number:2}}
+            </td>
+            <td>
+                {{metrics.meters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.serverError"].m5_rate | number:2}}
+            </td>
+            <td>
+                {{metrics.meters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.serverError"].m15_rate | number:2}}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<h3>Services statistics (time in millisecond)</h3>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Service name</th>
+            <th>Count</th>
+            <th>Mean</th>
+            <th>Min</th>
+            <th>p50</th>
+            <th>p75</th>
+            <th>p95</th>
+            <th>p99</th>
+            <th>Max</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>AccountResource.changePassword</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.changePassword"].count}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.changePassword"].mean * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.changePassword"].min * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.changePassword"].p50 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.changePassword"].p75 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.changePassword"].p95 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.changePassword"].p99 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.changePassword"].max * 1000 | number:0}}</td>
+            </tr>
+            <tr>
+                <td>AccountResource.getAccount</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.getAccount"].count}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.getAccount"].mean * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.getAccount"].min * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.getAccount"].p50 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.getAccount"].p75 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.getAccount"].p95 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.getAccount"].p99 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.getAccount"].max * 1000 | number:0}}</td>
+            </tr>
+            <tr>
+                <td>AccountResource.getCurrentSessions</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.getCurrentSessions"].count}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.getCurrentSessions"].mean * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.getCurrentSessions"].min * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.getCurrentSessions"].p50 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.getCurrentSessions"].p75 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.getCurrentSessions"].p95 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.getCurrentSessions"].p99 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.getCurrentSessions"].max * 1000 | number:0}}</td>
+            </tr>
+            <tr>
+                <td>AccountResource.invalidateSession</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.invalidateSession"].count}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.invalidateSession"].mean * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.invalidateSession"].min * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.invalidateSession"].p50 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.invalidateSession"].p75 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.invalidateSession"].p95 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.invalidateSession"].p99 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.invalidateSession"].max * 1000 | number:0}}</td>
+            </tr>
+            <tr>
+                <td>AccountResource.saveAccount</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.saveAccount"].count}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.saveAccount"].mean * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.saveAccount"].min * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.saveAccount"].p50 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.saveAccount"].p75 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.saveAccount"].p95 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.saveAccount"].p99 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.AccountResource.saveAccount"].max * 1000 | number:0}}</td>
+            </tr>
+            <tr>
+                <td>UserResource.getUser</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.UserResource.getUser"].count}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.UserResource.getUser"].mean * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.UserResource.getUser"].min * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.UserResource.getUser"].p50 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.UserResource.getUser"].p75 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.UserResource.getUser"].p95 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.UserResource.getUser"].p99 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.UserResource.getUser"].max * 1000 | number:0}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<h3>Ehcache statistics</h3>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Cache name</th>
+                    <th>Objects</th>
+                    <th>Hits</th>
+                    <th>Misses</th>
+                    <th>Eviction count</th>
+                    <th>Mean get time (ms)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>User</td>
+                    <td>{{metrics.gauges["net.sf.ehcache.Cache.<%=packageName%>.domain.User.objects"].value}}</td>
+                    <td>{{metrics.gauges["net.sf.ehcache.Cache.<%=packageName%>.domain.User.hits"].value}}</td>
+                    <td>{{metrics.gauges["net.sf.ehcache.Cache.<%=packageName%>.domain.User.misses"].value}}</td>
+                    <td>{{metrics.gauges["net.sf.ehcache.Cache.<%=packageName%>.domain.User.eviction-count"].value}}</td>
+                    <td>{{metrics.gauges["net.sf.ehcache.Cache.<%=packageName%>.domain.User.mean-get-time"].value | number:2}}</td>
+                </tr>
+                <tr>
+                    <td>Authority</td>
+                    <td>{{metrics.gauges["net.sf.ehcache.Cache.<%=packageName%>.domain.Authority.objects"].value}}</td>
+                    <td>{{metrics.gauges["net.sf.ehcache.Cache.<%=packageName%>.domain.Authority.hits"].value}}</td>
+                    <td>{{metrics.gauges["net.sf.ehcache.Cache.<%=packageName%>.domain.Authority.misses"].value}}</td>
+                    <td>{{metrics.gauges["net.sf.ehcache.Cache.<%=packageName%>.domain.Authority.eviction-count"].value}}</td>
+                    <td>{{metrics.gauges["net.sf.ehcache.Cache.<%=packageName%>.domain.Authority.mean-get-time"].value | number:2}}</td>
+                </tr>
+                <tr>
+                    <td>PersistentToken</td>
+                    <td>{{metrics.gauges["net.sf.ehcache.Cache.<%=packageName%>.domain.PersistentToken.objects"].value}}</td>
+                    <td>{{metrics.gauges["net.sf.ehcache.Cache.<%=packageName%>.domain.PersistentToken.hits"].value}}</td>
+                    <td>{{metrics.gauges["net.sf.ehcache.Cache.<%=packageName%>.domain.PersistentToken.misses"].value}}</td>
+                    <td>{{metrics.gauges["net.sf.ehcache.Cache.<%=packageName%>.domain.PersistentToken.eviction-count"].value}}</td>
+                    <td>{{metrics.gauges["net.sf.ehcache.Cache.<%=packageName%>.domain.PersistentToken.mean-get-time"].value | number:2}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>

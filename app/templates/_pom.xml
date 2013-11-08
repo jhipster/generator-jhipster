@@ -145,6 +145,11 @@
         </dependency>
         <dependency>
             <groupId>com.codahale.metrics</groupId>
+            <artifactId>metrics-jvm</artifactId>
+            <version><%= _.unescape('\$\{codahale.metrics.version}')%></version>
+        </dependency>
+        <dependency>
+            <groupId>com.codahale.metrics</groupId>
             <artifactId>metrics-servlet</artifactId>
             <version><%= _.unescape('\$\{codahale.metrics.version}')%></version>
         </dependency>

@@ -4,16 +4,20 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.graphite.Graphite;
 import com.codahale.metrics.graphite.GraphiteReporter;
 import com.codahale.metrics.health.HealthCheckRegistry;
+import com.codahale.metrics.jvm.*;
 import <%=packageName%>.conf.metrics.DatabaseHealthCheck;
 import com.ryantenney.metrics.spring.config.annotation.EnableMetrics;
 import com.ryantenney.metrics.spring.config.annotation.MetricsConfigurerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.sql.DataSource;
+import java.lang.management.ManagementFactory;
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 
@@ -32,6 +36,9 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
     @Inject
     private DataSource dataSource;
 
+    @Inject
+    private CacheManager cacheManager;
+
     @Override
     public MetricRegistry getMetricRegistry() {
         return METRIC_REGISTRY;
@@ -42,11 +49,21 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
         return HEALTH_CHECK_REGISTRY;
     }
 
-    @Override
-    public void configureReporters(MetricRegistry metricRegistry) {
+    @PostConstruct
+    public void init() {
+        log.debug("Registring JVM gauges");
+        METRIC_REGISTRY.register("jvm.memory", new MemoryUsageGaugeSet());
+        METRIC_REGISTRY.register("jvm.garbage", new GarbageCollectorMetricSet());
+        METRIC_REGISTRY.register("jvm.threads", new ThreadStatesGaugeSet());
+        METRIC_REGISTRY.register("jvm.files", new FileDescriptorRatioGauge());
+        METRIC_REGISTRY.register("jvm.buffers", new BufferPoolMetricSet(ManagementFactory.getPlatformMBeanServer()));
+
         log.debug("Initializing Metrics healthchecks");
         HEALTH_CHECK_REGISTRY.register("database", new DatabaseHealthCheck(dataSource));
+    }
 
+    @Override
+    public void configureReporters(MetricRegistry metricRegistry) {
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
             String graphiteHost = env.getProperty("metrics.graphite.host");
             if (graphiteHost != null) {
