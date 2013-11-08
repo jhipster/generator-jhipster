@@ -54,7 +54,8 @@ A complete [Spring application](http://spring.io/):
 - "development" and "production" profiles
 - [Spring Security](http://docs.spring.io/spring-security/site/index.html)
 - Spring MVC REST + [Jackson](https://github.com/FasterXML/jackson)
-- Spring Data JPA + Bean Validation
+- [Spring Data JPA](http://projects.spring.io/spring-data-jpa/) + Bean Validation
+- Database updates with [Liquibase](http://www.liquibase.org/)
 
 Ready to go into production :
 
