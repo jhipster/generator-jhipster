@@ -4,8 +4,6 @@ Hipster stack for Java developers
 Presentation
 ------------------
 
-**This project is still in an early, non feature-complete version**
-
 *If you want to help, we put tasks on [our Github issues page](https://github.com/jdubois/generator-jhipster/issues?labels=enhancement&page=1&state=open)*
 
 This is a [Yeoman generator](http://yeoman.io), used to create a Yeoman + Maven + Spring + AngularJS project.
