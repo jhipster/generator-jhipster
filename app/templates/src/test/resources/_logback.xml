@@ -8,6 +8,7 @@
         </encoder>
     </appender>
     <logger name="<%=packageName%>" level="DEBUG"/>
+    <logger name="com.jayway" level="WARN"/>
     <logger name="ch.qos.logback" level="WARN"/>
     <logger name="com.codahale.metrics" level="WARN"/>
     <logger name="net.sf.ehcache" level="WARN"/>

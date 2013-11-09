@@ -192,7 +192,7 @@ JhipsterGenerator.prototype.app = function app() {
   this.template('src/test/java/package/web/rest/_UserResourceTest.java', testDir + 'web/rest/UserResourceTest.java'); 
   this.template(testResourceDir + 'META-INF/spring/_applicationContext-database.xml', testResourceDir + 'META-INF/spring/applicationContext-database.xml');
   this.template(testResourceDir + 'META-INF/spring/_applicationContext-security.xml', testResourceDir + 'META-INF/spring/applicationContext-security.xml');
-  this.copy(testResourceDir + 'logback.xml', testResourceDir + 'logback.xml');
+  this.template(testResourceDir + '_logback.xml', testResourceDir + 'logback.xml');
   this.template(testResourceDir + '_ehcache.xml', testResourceDir + 'ehcache.xml');
 
   // Create Webapp
