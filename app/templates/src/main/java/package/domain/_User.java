@@ -40,8 +40,6 @@ public class User implements Serializable {
     @Size(min = 0, max = 100)
     private String email;
 
-    private boolean enabled;
-
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -96,14 +94,6 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
     public Set<Authority> getAuthorities() {
         return authorities;
     }
@@ -151,7 +141,6 @@ public class User implements Serializable {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", enabled=" + enabled +
                 "}";
     }
 }

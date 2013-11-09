@@ -15,7 +15,6 @@
             <column name="first_name" type="varchar(50)"/>
             <column name="last_name" type="varchar(50)"/>
             <column name="email" type="varchar(100)"/>
-            <column name="enabled" type="tinyint"/>
         </createTable>
 
         <createTable tableName="T_AUTHORITY">
@@ -66,14 +65,14 @@
                                  referencedTableName="T_USER"/>
 
         <loadData encoding="UTF-8"
-            file="META-INF/liquibase/users.csv"
-            separator=";"
-            tableName="T_USER"/>
+                  file="META-INF/liquibase/users.csv"
+                  separator=";"
+                  tableName="T_USER"/>
 
         <loadData encoding="UTF-8"
-            file="META-INF/liquibase/authorities.csv"
-            separator=";"
-            tableName="T_AUTHORITY"/>
+                  file="META-INF/liquibase/authorities.csv"
+                  separator=";"
+                  tableName="T_AUTHORITY"/>
 
         <loadData encoding="UTF-8"
                   file="META-INF/liquibase/users_authorities.csv"
