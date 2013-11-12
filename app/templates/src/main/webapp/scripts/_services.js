@@ -24,12 +24,6 @@
     });
 });
 
-<%= baseName %>App.factory('HealthChecks', function($resource){
-    return $resource('/metrics/healthcheck', {}, {
-        'get': { method: 'GET'}
-    });
-});
-
 <%= baseName %>App.factory('AuthenticationSharedService', function($rootScope) {
     var authenticationSharedService = {};
 

@@ -7,7 +7,7 @@
 
     <h3>JVM Metrics</h3>
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <b>Memory</b>
             <p>Total Memory ({{metrics.gauges["jvm.memory.total.used"].value / 1000000 | number:0}}M / {{metrics.gauges["jvm.memory.total.max"].value / 1000000 | number:0}}M)</p>
             <div class="progress progress-striped">
@@ -40,7 +40,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <b>Threads</b> (Total: {{metrics.gauges["jvm.threads.count"].value}})
             <p>Runnable {{metrics.gauges["jvm.threads.runnable.count"].value}}</p>
             <div class="progress progress-striped">
@@ -83,7 +83,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <b>Garbage collections</b>
             <div class="row">
                 <div class="col-md-9">Mark Sweep count</div>
@@ -100,16 +100,6 @@
             <div class="row">
                 <div class="col-md-9">Scavenge time</div>
                 <div class="col-md-3">{{metrics.gauges["jvm.garbage.PS-Scavenge.time"].value}}ms</div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <b>Health checks</b>
-            <div class="alert alert-success" ng-show="healthchecks.database.heatlhy = true">
-                Database OK
-            </div>
-
-            <div class="alert alert-danger" ng-hide="healthchecks.database.heatlhy = true">
-                Database is NOT available!
             </div>
         </div>
     </div>

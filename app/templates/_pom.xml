@@ -40,6 +40,13 @@
                 <% if (devDatabaseType == 'mysql') { %><hibernate.dialect>org.hibernate.dialect.MySQLInnoDBDialect</hibernate.dialect><% } else if (devDatabaseType == 'postgresql') { %><hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect><% } else { %><hibernate.dialect>org.hibernate.dialect.HSQLDialect</hibernate.dialect><% } %>
                 <hibernate.show_sql>true</hibernate.show_sql>
                 <hibernate.generate_statistics>true</hibernate.generate_statistics>
+                <!-- email configuration -->
+                <mail.host>localhost</mail.host>
+                <mail.port>25</mail.port>
+                <mail.user></mail.user>
+                <mail.password></mail.password>
+                <mail.tls></mail.tls>
+                <mail.from>jhipster@localhost</mail.from>
             </properties>
             <dependencies>
                 <dependency>
@@ -80,6 +87,13 @@
                 <% if (prodDatabaseType == 'mysql') { %><hibernate.dialect>org.hibernate.dialect.MySQLInnoDBDialect</hibernate.dialect><% } else if (prodDatabaseType == 'postgresql') { %><hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect><% } %>
                 <hibernate.show_sql>false</hibernate.show_sql>
                 <hibernate.generate_statistics>false</hibernate.generate_statistics>
+                <!-- email configuration -->
+                <mail.host>localhost</mail.host>
+                <mail.port>25</mail.port>
+                <mail.user></mail.user>
+                <mail.password></mail.password>
+                <mail.tls></mail.tls>
+                <mail.from>jhipster@localhost</mail.from>
             </properties>
             <dependencies>
                 <dependency>
@@ -258,6 +272,11 @@
             <version>1.7.4</version>
             <type>jar</type>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.geronimo.javamail</groupId>
+            <artifactId>geronimo-javamail_1.4_mail</artifactId>
+            <version>1.8.3</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>

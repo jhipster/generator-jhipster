@@ -147,6 +147,7 @@ JhipsterGenerator.prototype.app = function app() {
   this.template('src/main/java/package/conf/_ApplicationConfiguration.java', javaDir + 'conf/ApplicationConfiguration.java');
   this.template('src/main/java/package/conf/_AsyncConfiguration.java', javaDir + 'conf/AsyncConfiguration.java');
   this.template('src/main/java/package/conf/_CacheConfiguration.java', javaDir + 'conf/CacheConfiguration.java');
+  this.template('src/main/java/package/conf/_MailConfiguration.java', javaDir + 'conf/MailConfiguration.java');
   this.template('src/main/java/package/conf/_MetricsConfiguration.java', javaDir + 'conf/MetricsConfiguration.java');
   this.template('src/main/java/package/conf/_Constants.java', javaDir + 'conf/Constants.java');
   this.template('src/main/java/package/conf/_DispatcherServletConfiguration.java', javaDir + 'conf/DispatcherServletConfiguration.java');
@@ -154,6 +155,7 @@ JhipsterGenerator.prototype.app = function app() {
 
   this.template('src/main/java/package/conf/metrics/_package-info.java', javaDir + 'conf/metrics/package-info.java');
   this.template('src/main/java/package/conf/metrics/_DatabaseHealthCheck.java', javaDir + 'conf/metrics/DatabaseHealthCheck.java');
+  this.template('src/main/java/package/conf/metrics/_JavaMailHealthCheck.java', javaDir + 'conf/metrics/JavaMailHealthCheck.java');
 
   this.template('src/main/java/package/domain/_package-info.java', javaDir + 'domain/package-info.java');
   this.template('src/main/java/package/domain/_Authority.java', javaDir + 'domain/Authority.java');
@@ -175,7 +177,8 @@ JhipsterGenerator.prototype.app = function app() {
   this.template('src/main/java/package/security/_SecurityUtils.java', javaDir + 'security/SecurityUtils.java');
 
   this.template('src/main/java/package/service/_package-info.java', javaDir + 'service/package-info.java');
-  this.template('src/main/java/package/service/_UserService.java', javaDir + 'service/UserService.java'); 
+  this.template('src/main/java/package/service/_UserService.java', javaDir + 'service/UserService.java');
+  this.template('src/main/java/package/service/_MailService.java', javaDir + 'service/MailService.java'); 
 
   this.template('src/main/java/package/web/controller/_package-info.java', javaDir + 'web/controller/package-info.java');
   this.template('src/main/java/package/web/controller/_HomeController.java', javaDir + 'web/controller/HomeController.java');  

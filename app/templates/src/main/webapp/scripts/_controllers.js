@@ -107,10 +107,9 @@
     };
 });
 
-<%= baseName %>App.controller('MetricsController', function MetricsController($scope, $timeout, Metrics, HealthChecks) {
+<%= baseName %>App.controller('MetricsController', function MetricsController($scope, $timeout, Metrics) {
     $scope.init = function () {
         $scope.metrics = Metrics.get();
-        $scope.healthchecks = HealthChecks.get();
     };
 });
 
