@@ -5,14 +5,15 @@
     "sass-bootstrap": "~3.0.0",
     "modernizr": "~2.6.2",
     "jquery": "~1.10.2",
-    "angular": "~1.0.7",
-    "json3": "~3.2.4",
-    "angular-resource": "~1.0.7",
-    "angular-cookies": "~1.0.7",
-    "angular-sanitize": "~1.0.7"
+    "angular": "~1.2.0",
+    "json3": "~3.2.5",
+    "angular-route": "~1.2.0",
+    "angular-resource": "~1.2.0",
+    "angular-cookies": "~1.2.0",
+    "angular-sanitize": "~1.2.0"
   },
   "devDependencies": {
-    "angular-mocks": "~1.0.7",
-    "angular-scenario": "~1.0.7"
+    "angular-mocks": "~1.2.0",
+    "angular-scenario": "~1.2.0"
   }
 }

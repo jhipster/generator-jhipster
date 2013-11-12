@@ -2,7 +2,7 @@
 
 /* App Module */
 
-var <%= baseName %>App = angular.module('<%= baseName %>App', ['ngResource']);
+var <%= baseName %>App = angular.module('<%= baseName %>App', ['ngResource', 'ngRoute']);
 
 <%= baseName %>App
     .config(function ($routeProvider) {
