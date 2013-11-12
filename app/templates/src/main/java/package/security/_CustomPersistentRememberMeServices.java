@@ -32,16 +32,16 @@ import java.util.Date;
  * This is a specific implementation of Spring Security's remember-me authentication, but it is much
  * more powerful than the standard implementations:
  * <ul>
- *   <li>It allows a user to see the list of his currently opened sessions, and invalidate them</li>
- *   <li>It stores more information, such as the IP address and the user agent, for audit purposes<li>
- *   <li>When a user logs out, only his current session is invalidated, and not all of his sessions</li>
+ * <li>It allows a user to see the list of his currently opened sessions, and invalidate them</li>
+ * <li>It stores more information, such as the IP address and the user agent, for audit purposes<li>
+ * <li>When a user logs out, only his current session is invalidated, and not all of his sessions</li>
  * </ul>
  * <p/>
  * This is inspired by:
  * <ul>
- *   <li><a href="http://jaspan.com/improved_persistent_login_cookie_best_practice">Improved Persistent Login Cookie
- *   Best Practice</a></li>
- *   <li><a href="https://github.com/blog/1661-modeling-your-app-s-user-session">Github's "Modeling your App's User Session"</a></li></li>
+ * <li><a href="http://jaspan.com/improved_persistent_login_cookie_best_practice">Improved Persistent Login Cookie
+ * Best Practice</a></li>
+ * <li><a href="https://github.com/blog/1661-modeling-your-app-s-user-session">Github's "Modeling your App's User Session"</a></li></li>
  * </ul>
  * <p/>
  * The main algorithm comes from Spring Security's PersistentTokenBasedRememberMeServices, but this class
