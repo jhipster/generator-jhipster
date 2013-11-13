@@ -23,27 +23,17 @@
     $scope.init();
 });
 
-<%= baseName %>App.controller('LoginController', function LoginController($scope, $http, $location, AuthenticationSharedService) {
+<%= baseName %>App.controller('LoginController', function LoginController($scope, $location, AuthenticationSharedService) {
     $scope.rememberMe = true;
     $scope.login = function () {
-        var data =
-            "j_username=" + $scope.username +
-            "&j_password=" + $scope.password +
-            "&_spring_security_remember_me=" + $scope.rememberMe +
-                "&submit=Login";
-
-        $http.post('/app/authentication', data, {
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            }
-        }).
-            success(function (data, status, headers, config) {
-                AuthenticationSharedService.prepForBroadcast("login");
+        AuthenticationSharedService.login({
+            username: $scope.username,
+            password: $scope.password,
+            rememberMe: $scope.rememberMe,
+            success:function () {
                 $location.path('');
-            }).
-            error(function (data, status, headers, config) {
-                $scope.authenticationError = true;
-            });
+            }
+        })
     };
 });
 
