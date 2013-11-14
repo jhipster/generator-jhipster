@@ -186,6 +186,7 @@ JhipsterGenerator.prototype.app = function app() {
   this.template('src/main/java/package/web/rest/_package-info.java', javaDir + 'web/rest/package-info.java'); 
   this.template('src/main/java/package/web/rest/_UserResource.java', javaDir + 'web/rest/UserResource.java'); 
   this.template('src/main/java/package/web/rest/_AccountResource.java', javaDir + 'web/rest/AccountResource.java');
+  this.template('src/main/java/package/web/rest/_LogsResource.java', javaDir + 'web/rest/LogsResource.java');
   
   // Create Test Java files
   var testDir = 'src/test/java/' + packageFolder + '/';
@@ -231,6 +232,7 @@ JhipsterGenerator.prototype.app = function app() {
   this.copy(webappDir + '/views/password.html', webappDir + '/views/password.html');
   this.copy(webappDir + '/views/settings.html', webappDir + '/views/settings.html');
   this.copy(webappDir + '/views/sessions.html', webappDir + '/views/sessions.html');
+  this.copy(webappDir + '/views/logs.html', webappDir + '/views/logs.html');
   this.template(webappDir + '/views/_metrics.html', webappDir + '/views/metrics.html');
 
   // Index page  
