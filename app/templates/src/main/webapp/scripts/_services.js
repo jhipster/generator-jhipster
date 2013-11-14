@@ -57,3 +57,14 @@
     };
 });
 
+
+<%= baseName %>App.factory('LogsService', function($http) {
+    return {
+        findAll: function () {
+            return $http.get('app/rest/logs');
+        },
+        changeLevel: function (loggerName, newLevel) {
+            return $http.get('app/rest/logs/change/' + loggerName + '/' + newLevel);
+        }
+    }
+});

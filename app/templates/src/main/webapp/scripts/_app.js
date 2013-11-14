@@ -27,6 +27,10 @@ var <%= baseName %>App = angular.module('<%= baseName %>App', ['ngResource', 'ng
                 templateUrl: 'views/metrics.html',
                 controller: 'MetricsController'
             })
+            .when('/logs', {
+                templateUrl: 'views/logs.html',
+                controller: 'LogsController'
+            })
             .when('/logout', {
                 templateUrl: 'views/main.html',
                 controller: 'LogoutController'
