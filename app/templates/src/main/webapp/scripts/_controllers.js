@@ -103,7 +103,7 @@
     };
 });
 
-<%= baseName %>App.controller('LogoutController', function LoginController($scope, $http, $location, AuthenticationSharedService) {
+<%= baseName %>App.controller('LogoutController', function LogoutController($scope, $http, $location, AuthenticationSharedService) {
     $http.get('/app/logout')
         .success(function (data, status, headers, config) {
             AuthenticationSharedService.prepForBroadcast("logout");
