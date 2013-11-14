@@ -14,13 +14,15 @@ import java.util.List;
 
 /**
  * Controller for view and managing Log Level at runtime.
- * @author Yvonnick Esnault
  */
 @Controller
 public class LogsResource {
 
-    org.slf4j.Logger log = LoggerFactory.getLogger(LogsResource.class);
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(LogsResource.class);
 
+    /**
+     * DTO for managing logs.
+     */
     class JsonLogger {
         public String name, level;
 
@@ -40,7 +42,6 @@ public class LogsResource {
 
         List<JsonLogger> loggers = new ArrayList<JsonLogger>();
         for (Logger logger : context.getLoggerList()) {
-            log.debug("Logger {} with level {}", logger.getName(), logger.getEffectiveLevel());
             loggers.add(new JsonLogger(logger));
         }
         return loggers;
@@ -54,5 +55,4 @@ public class LogsResource {
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
         context.getLogger(loggerName).setLevel(Level.valueOf(newLevel));
     }
-
 }

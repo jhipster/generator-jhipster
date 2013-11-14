@@ -57,7 +57,6 @@
     };
 });
 
-
 <%= baseName %>App.factory('LogsService', function($http) {
     return {
         findAll: function () {

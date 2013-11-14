@@ -229,10 +229,10 @@ JhipsterGenerator.prototype.app = function app() {
   // Angular JS views
   this.copy(webappDir + '/views/main.html', webappDir + '/views/main.html');
   this.copy(webappDir + '/views/login.html', webappDir + '/views/login.html');
+  this.copy(webappDir + '/views/logs.html', webappDir + '/views/logs.html');
   this.copy(webappDir + '/views/password.html', webappDir + '/views/password.html');
   this.copy(webappDir + '/views/settings.html', webappDir + '/views/settings.html');
   this.copy(webappDir + '/views/sessions.html', webappDir + '/views/sessions.html');
-  this.copy(webappDir + '/views/logs.html', webappDir + '/views/logs.html');
   this.template(webappDir + '/views/_metrics.html', webappDir + '/views/metrics.html');
 
   // Index page  
