@@ -231,6 +231,7 @@ JhipsterGenerator.prototype.app = function app() {
   this.copy(webappDir + '/views/password.html', webappDir + '/views/password.html');
   this.copy(webappDir + '/views/settings.html', webappDir + '/views/settings.html');
   this.copy(webappDir + '/views/sessions.html', webappDir + '/views/sessions.html');
+  this.copy(webappDir + '/views/logs.html', webappDir + '/views/logs.html');
   this.template(webappDir + '/views/_metrics.html', webappDir + '/views/metrics.html');
 
   // Index page  
