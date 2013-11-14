@@ -60,7 +60,7 @@ Ready to go into production :
 - Monitoring with [Metrics](http://metrics.codahale.com/)
 - Caching with [ehcache](http://ehcache.org/)
 - Optimized static resources (gzip filter, HTTP cache headers)
-- Change logs level at runtime
+- Log management with [Logback](http://logback.qos.ch/), configurable at runtime
 - Builds a standard WAR file
 
 Technology stack on the client side
