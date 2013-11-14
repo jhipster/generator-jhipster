@@ -33,6 +33,7 @@
     <http auto-config="true" use-expressions="true">
         <intercept-url pattern="/app/**" access="isAuthenticated()"/>
         <intercept-url pattern="/metrics/**" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/logs/**" access="hasRole('ROLE_ADMIN')"/>
 
         <remember-me
                 services-ref="customPersistentRememberMeServices"
