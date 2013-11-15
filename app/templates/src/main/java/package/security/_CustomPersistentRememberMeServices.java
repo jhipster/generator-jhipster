@@ -4,6 +4,7 @@ import <%=packageName%>.domain.PersistentToken;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.PersistentTokenRepository;
 import <%=packageName%>.repository.UserRepository;
+import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -22,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.SecureRandom;
 import java.util.Arrays;
-import java.util.Date;
 
 /**
  * Custom implementation of Spring Security's RememberMeServices.
@@ -55,11 +55,13 @@ public class CustomPersistentRememberMeServices extends
     private static final Logger log = LoggerFactory.getLogger(CustomPersistentRememberMeServices.class);
 
     // Token is valid for one month
-    private static final int TOKEN_VALIDITY = 60 * 60 * 24 * 31;
+    private static final int TOKEN_VALIDITY_DAYS = 31;
 
-    public static final int DEFAULT_SERIES_LENGTH = 16;
+    private static final int TOKEN_VALIDITY_SECONDS = 60 * 60 * 24 * TOKEN_VALIDITY_DAYS;
 
-    public static final int DEFAULT_TOKEN_LENGTH = 16;
+    private static final int DEFAULT_SERIES_LENGTH = 16;
+
+    private static final int DEFAULT_TOKEN_LENGTH = 16;
 
     private SecureRandom random;
 
@@ -84,7 +86,7 @@ public class CustomPersistentRememberMeServices extends
 
         // Token also matches, so login is valid. Update the token value, keeping the *same* series number.
         log.debug("Refreshing persistent login token for user '{}', series '{}'", login, token.getSeries());
-        token.setTokenDate(new Date());
+        token.setTokenDate(new LocalDate());
         token.setTokenValue(generateTokenData());
         token.setIpAddress(request.getRemoteAddr());
         token.setUserAgent(request.getHeader("User-Agent"));
@@ -109,7 +111,7 @@ public class CustomPersistentRememberMeServices extends
         token.setSeries(generateSeriesData());
         token.setUser(user);
         token.setTokenValue(generateTokenData());
-        token.setTokenDate(new Date());
+        token.setTokenDate(new LocalDate());
         token.setIpAddress(request.getRemoteAddr());
         token.setUserAgent(request.getHeader("User-Agent"));
         try {
@@ -130,7 +132,7 @@ public class CustomPersistentRememberMeServices extends
     @Transactional
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         String rememberMeCookie = extractRememberMeCookie(request);
-        if (rememberMeCookie!= null && rememberMeCookie.length() != 0) {
+        if (rememberMeCookie != null && rememberMeCookie.length() != 0) {
             try {
                 String[] cookieTokens = decodeCookie(rememberMeCookie);
                 PersistentToken token = getPersistentToken(cookieTokens);
@@ -169,7 +171,7 @@ public class CustomPersistentRememberMeServices extends
             throw new CookieTheftException("Invalid remember-me token (Series/token) mismatch. Implies previous cookie theft attack.");
         }
 
-        if (token.getTokenDate().getTime() + TOKEN_VALIDITY * 1000L < System.currentTimeMillis()) {
+        if (token.getTokenDate().plusDays(TOKEN_VALIDITY_DAYS).isBefore(LocalDate.now())) {
             tokenRepository.delete(token);
             throw new RememberMeAuthenticationException("Remember-me login has expired");
         }
@@ -189,6 +191,8 @@ public class CustomPersistentRememberMeServices extends
     }
 
     private void addCookie(PersistentToken token, HttpServletRequest request, HttpServletResponse response) {
-        setCookie(new String[]{token.getSeries(), token.getTokenValue()}, TOKEN_VALIDITY, request, response);
+        setCookie(
+                new String[]{token.getSeries(), token.getTokenValue()},
+                TOKEN_VALIDITY_SECONDS, request, response);
     }
 }
