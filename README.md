@@ -39,8 +39,8 @@ grunt server
 ```
 This should open up your Web browser, with live reload enabled, on [http://localhost:9000](http://localhost:9000). This 
 Grunt server has a proxy to the REST endpoints on the Java server which we just launched (on 
-[http://localhost:8080/rest](http://localhost:8080/rest), so if you keep your Java server running, your Grunt server
-should have live REST data.
+[http://localhost:8080/rest](http://localhost:8080/rest)), so it should be able to do live REST requests to the Java
+back-end.
 
 **If you want to go further, and use hot reloading both on the client and the server side, please [go to this Wiki page](https://github.com/jdubois/generator-jhipster/wiki/Hot-reloading).**
 
