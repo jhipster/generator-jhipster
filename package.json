@@ -29,7 +29,8 @@
   },
   "dependencies": {
     "yeoman-generator": "~0.13.1",
-    "chalk": "~0.2.1"
+    "chalk": "~0.2.1",
+    "underscore.string": "~2.3.3"
   },
   "devDependencies": {
     "mocha": "~1.12.0"
