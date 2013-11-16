@@ -178,6 +178,11 @@
             <version><%= _.unescape('\$\{codahale.metrics.version}')%></version>
         </dependency>
         <dependency>
+            <groupId>com.codahale.metrics</groupId>
+            <artifactId>metrics-servlets</artifactId>
+            <version><%= _.unescape('\$\{codahale.metrics.version}')%></version>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-json-org</artifactId>
             <version>2.2.3</version>
