@@ -2,28 +2,27 @@
 
 /* Services */
 
-<%= angularAppName %>.factory('Account', function($resource){
-        return $resource('app/rest/account', {}, {
-        });
+<%= angularAppName %>.factory('Account', function($resource){ 
+    return $resource('app/rest/account', {}, {
     });
+});
 
-<%= angularAppName %>.factory('Password', function($resource){
+<%= angularAppName %>.factory('Password', function($resource) {
     return $resource('app/rest/account/change_password', {}, {
     });
 });
 
-<%= angularAppName %>.factory('Sessions', function($resource){
+<%= angularAppName %>.factory('Sessions', function($resource) {
     return $resource('app/rest/account/sessions/:series', {}, {
         'get': { method: 'GET', isArray: true}
     });
 });
 
-<%= angularAppName %>.factory('Metrics', function($resource){
+<%= angularAppName %>.factory('Metrics', function($resource) {
     return $resource('/metrics/metrics', {}, {
         'get': { method: 'GET'}
     });
 });
-
 
 <%= angularAppName %>.factory('AuthenticationSharedService', function($rootScope, $http) {
     return {
