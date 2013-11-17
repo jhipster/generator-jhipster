@@ -2,9 +2,9 @@
 
 /* App Module */
 
-var <%= baseName %>App = angular.module('<%= baseName %>App', ['ngResource', 'ngRoute']);
+var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['ngResource', 'ngRoute']);
 
-<%= baseName %>App
+<%= angularAppName %>
     .config(function ($routeProvider) {
         $routeProvider
             .when('/login', {

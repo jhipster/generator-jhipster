@@ -2,7 +2,8 @@
 var util = require('util'),
     path = require('path'),
     yeoman = require('yeoman-generator'),
-    chalk = require('chalk');
+    chalk = require('chalk'),
+    _s = require('underscore.string');
 
 var JhipsterGenerator = module.exports = function JhipsterGenerator(args, options, config) {
   yeoman.generators.Base.apply(this, arguments);
@@ -227,6 +228,7 @@ JhipsterGenerator.prototype.app = function app() {
   this.copy(webappDir + 'htaccess.txt', webappDir + '.htaccess');
 
   // Angular JS views
+  this.angularAppName = _s.camelize(this.baseName) + 'App';
   this.copy(webappDir + '/views/main.html', webappDir + '/views/main.html');
   this.copy(webappDir + '/views/login.html', webappDir + '/views/login.html');
   this.copy(webappDir + '/views/logs.html', webappDir + '/views/logs.html');

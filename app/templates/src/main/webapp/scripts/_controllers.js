@@ -2,11 +2,11 @@
 
 /* Controllers */
 
-<%= baseName %>App.controller('MainController', function MainController($scope) {
+<%= angularAppName %>.controller('MainController', function MainController($scope) {
 
 });
 
-<%= baseName %>App.controller('MenuController', function MenuController($rootScope, $scope, $location, Account, AuthenticationSharedService) {
+<%= angularAppName %>.controller('MenuController', function MenuController($rootScope, $scope, $location, Account, AuthenticationSharedService) {
     $scope.init = function () {
         $rootScope.account = Account.get({}, function () {
             $rootScope.authenticated = true;
@@ -23,7 +23,7 @@
     $scope.init();
 });
 
-<%= baseName %>App.controller('LoginController', function LoginController($scope, $location, AuthenticationSharedService) {
+<%= angularAppName %>.controller('LoginController', function LoginController($scope, $location, AuthenticationSharedService) {
     $scope.rememberMe = true;
     $scope.login = function () {
         AuthenticationSharedService.login({
@@ -37,7 +37,7 @@
     };
 });
 
-<%= baseName %>App.controller('SettingsController', function SettingsController($scope, Account) {
+<%= angularAppName %>.controller('SettingsController', function SettingsController($scope, Account) {
     $scope.success = null;
     $scope.error = null;
     $scope.init = function () {
@@ -57,7 +57,7 @@
     };
 });
 
-<%= baseName %>App.controller('PasswordController', function PasswordController($scope, Password) {
+<%= angularAppName %>.controller('PasswordController', function PasswordController($scope, Password) {
     $scope.success = null;
     $scope.error = null;
     $scope.doNotMatch = null;
@@ -79,7 +79,7 @@
     };
 });
 
-<%= baseName %>App.controller('SessionsController', function SessionsController($scope, Sessions) {
+<%= angularAppName %>.controller('SessionsController', function SessionsController($scope, Sessions) {
     $scope.success = null;
     $scope.error = null;
     $scope.sessions = Sessions.get();
@@ -97,13 +97,13 @@
     };
 });
 
-<%= baseName %>App.controller('MetricsController', function MetricsController($scope, $timeout, Metrics) {
+<%= angularAppName %>.controller('MetricsController', function MetricsController($scope, $timeout, Metrics) {
     $scope.init = function () {
         $scope.metrics = Metrics.get();
     };
 });
 
-<%= baseName %>App.controller('LogoutController', function LogoutController($scope, $http, $location, AuthenticationSharedService) {
+<%= angularAppName %>.controller('LogoutController', function LogoutController($scope, $http, $location, AuthenticationSharedService) {
     $http.get('/app/logout')
         .success(function (data, status, headers, config) {
             AuthenticationSharedService.prepForBroadcast("logout");
@@ -114,7 +114,7 @@
         });
 });
 
-<%= baseName %>App.controller('LogsController', function LogsController($scope, LogsService) {
+<%= angularAppName %>.controller('LogsController', function LogsController($scope, LogsService) {
     $scope.findAll = function () {
         LogsService.findAll().
             success(function (loggers) {
