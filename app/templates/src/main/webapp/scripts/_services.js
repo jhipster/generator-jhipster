@@ -24,6 +24,13 @@
     });
 });
 
+<%= angularAppName %>.factory('LogsService', function($resource) {
+    return $resource('app/rest/logs', {}, {
+        'findAll': { method: 'GET', isArray: true},
+        'changeLevel':  { method: 'PUT'}
+    });
+});
+
 <%= angularAppName %>.factory('AuthenticationSharedService', function($rootScope, $http) {
     return {
         message: '',
@@ -54,15 +61,4 @@
             });
         }
     };
-});
-
-<%= angularAppName %>.factory('LogsService', function($http) {
-    return {
-        findAll: function () {
-            return $http.get('app/rest/logs');
-        },
-        changeLevel: function (loggerName, newLevel) {
-            return $http.get('app/rest/logs/change/' + loggerName + '/' + newLevel);
-        }
-    }
 });

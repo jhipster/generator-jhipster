@@ -115,26 +115,11 @@
 });
 
 <%= angularAppName %>.controller('LogsController', function LogsController($scope, LogsService) {
-    $scope.findAll = function () {
-        LogsService.findAll().
-            success(function (loggers) {
-                $scope.loggers = loggers;
-            })
-            .error(function (resp) {
-                console.log("Error with LogsService.findAll" + resp);
-            });
-    }
+    $scope.loggers = LogsService.findAll();
 
-    $scope.changeLevel = function(loggerName, newLevel) {
-        LogsService.changeLevel(loggerName, newLevel).
-            success(function(loggers) {
-                console.log("Success changing Level for " + loggerName + " to " + newLevel);
-                $scope.findAll();
-            }).
-            error(function(resp) {
-                console.log("Error with LogsService.changeLevel : " + resp)
-            });
+    $scope.changeLevel = function(name, level) {
+        LogsService.changeLevel({name: name, level: level}, function () {
+            $scope.loggers = LogsService.findAll();
+        });
     }
-
-    $scope.findAll();
 });

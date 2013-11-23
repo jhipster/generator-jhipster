@@ -282,6 +282,28 @@
                 <td>{{metrics.timers["<%=packageName%>.web.rest.UserResource.getUser"].p99 * 1000 | number:0}}</td>
                 <td>{{metrics.timers["<%=packageName%>.web.rest.UserResource.getUser"].max * 1000 | number:0}}</td>
             </tr>
+            <tr>
+                <td>LogsResource.getList</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.LogsResource.getList"].count}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.LogsResource.getList"].mean * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.LogsResource.getList"].min * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.LogsResource.getList"].p50 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.LogsResource.getList"].p75 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.LogsResource.getList"].p95 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.LogsResource.getList"].p99 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.LogsResource.getList"].max * 1000 | number:0}}</td>
+            </tr>
+            <tr>
+                <td>LogsResource.changeLevel</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.LogsResource.changeLevel"].count}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.LogsResource.changeLevel"].mean * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.LogsResource.changeLevel"].min * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.LogsResource.changeLevel"].p50 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.LogsResource.changeLevel"].p75 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.LogsResource.changeLevel"].p95 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.LogsResource.changeLevel"].p99 * 1000 | number:0}}</td>
+                <td>{{metrics.timers["<%=packageName%>.web.rest.LogsResource.changeLevel"].max * 1000 | number:0}}</td>
+            </tr>
         </tbody>
     </table>
 </div>
