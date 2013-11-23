@@ -5,5 +5,6 @@ node_modules
 .classpath
 .project
 .settings
+.tmp
 .merge_file*
 .DS_Store
