@@ -37,6 +37,14 @@
     };
 });
 
+<%= angularAppName %>.controller('LogoutController', function LogoutController($location, AuthenticationSharedService) {
+    AuthenticationSharedService.logout({
+        success:function () {
+            $location.path('');
+        }
+    });
+});
+
 <%= angularAppName %>.controller('SettingsController', function SettingsController($scope, Account) {
     $scope.success = null;
     $scope.error = null;
@@ -101,17 +109,6 @@
     $scope.init = function () {
         $scope.metrics = Metrics.get();
     };
-});
-
-<%= angularAppName %>.controller('LogoutController', function LogoutController($scope, $http, $location, AuthenticationSharedService) {
-    $http.get('/app/logout')
-        .success(function (data, status, headers, config) {
-            AuthenticationSharedService.prepForBroadcast("logout");
-            $location.path('');
-        }).
-        error(function (data, status, headers, config) {
-            $location.path('');
-        });
 });
 
 <%= angularAppName %>.controller('LogsController', function LogsController($scope, LogsService) {

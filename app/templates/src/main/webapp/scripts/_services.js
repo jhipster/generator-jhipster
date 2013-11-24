@@ -49,16 +49,25 @@
                     "Content-Type": "application/x-www-form-urlencoded"
                 }
             }).success(function (data, status, headers, config) {
+                $rootScope.authenticationError = false;
                 that.prepForBroadcast("login");
                 if(param.success){
                     param.success(data, status, headers, config);
                 }
             }).error(function (data, status, headers, config) {
-                $scope.authenticationError = true;
+                $rootScope.authenticationError = true;
                 if(param.error){
                     param.error(data, status, headers, config);
                 }
             });
+        },
+        logout: function () {
+            $rootScope.authenticationError = false;
+            var that = this;
+            $http.get('/app/logout')
+                .success(function (data, status, headers, config) {
+                    that.prepForBroadcast("logout");
+                });
         }
     };
 });

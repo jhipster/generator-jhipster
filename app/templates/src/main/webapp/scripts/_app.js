@@ -41,29 +41,22 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['ngResource
             })
 
         // Handle the 401 error
-        var interceptor = ['$rootScope', '$q', function(scope, $q) {
-
+        var unauthorizedInterceptor = ['$rootScope', '$q', '$location', function(scope, $q, $location) {
             function success(response) {
                 return response;
             }
 
             function error(response) {
                 var status = response.status;
-
                 if (status == 401) {
-                    window.location = "login.html";
-                    return;
+                    $location.path('/login').replace();
                 }
-                // otherwise
                 return $q.reject(response);
-
             }
 
             return function(promise) {
                 return promise.then(success, error);
             }
-
         }];
-        $httpProvider.responseInterceptors.push(interceptor);
-
+        $httpProvider.responseInterceptors.push(unauthorizedInterceptor);
     });
