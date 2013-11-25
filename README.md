@@ -13,6 +13,39 @@ Our goal is to generate a complete and modern Web app, unifying:
 
 You can checkout a sample generated application [here](https://github.com/jdubois/jhipster-sample-app).
 
+Technology stack on the server side
+--------------------
+
+A complete [Spring application](http://spring.io/):
+
+- "development" and "production" profiles
+- [Spring Security](http://docs.spring.io/spring-security/site/index.html)
+- [Spring MVC REST](http://spring.io/guides/gs/rest-service/) + [Jackson](https://github.com/FasterXML/jackson)
+- [Spring Data JPA](http://projects.spring.io/spring-data-jpa/) + Bean Validation
+- Database updates with [Liquibase](http://www.liquibase.org/)
+
+Ready to go into production :
+
+- Monitoring with [Metrics](http://metrics.codahale.com/)
+- Caching with [ehcache](http://ehcache.org/)
+- Optimized static resources (gzip filter, HTTP cache headers)
+- Log management with [Logback](http://logback.qos.ch/), configurable at runtime
+- Builds a standard WAR file
+
+Technology stack on the client side
+--------------------
+
+Single Web page application :
+
+- Responsive Web Design
+- [HTML5 Boilerplate](http://html5boilerplate.com/)
+- [Twitter Bootstrap](http://getbootstrap.com/)
+- [Compass](http://compass-style.org/) / Sass for CSS design
+- [AngularJS](http://angularjs.org/)
+
+Easy installation of new libraries with [Bower](http://bower.io/).
+Build, optimization and live reload with [Grunt](http://gruntjs.com/).
+
 Installation
 -------------------
 
@@ -58,38 +91,5 @@ Grunt server has a proxy to the REST endpoints on the Java server which we just 
 back-end.
 
 **If you want to go further, and use hot reloading both on the client and the server side, please [go to this Wiki page](https://github.com/jdubois/generator-jhipster/wiki/Hot-reloading).**
-
-Technology stack on the server side
---------------------
-
-A complete [Spring application](http://spring.io/):
-
-- "development" and "production" profiles
-- [Spring Security](http://docs.spring.io/spring-security/site/index.html)
-- [Spring MVC REST](http://spring.io/guides/gs/rest-service/) + [Jackson](https://github.com/FasterXML/jackson)
-- [Spring Data JPA](http://projects.spring.io/spring-data-jpa/) + Bean Validation
-- Database updates with [Liquibase](http://www.liquibase.org/)
-
-Ready to go into production :
-
-- Monitoring with [Metrics](http://metrics.codahale.com/)
-- Caching with [ehcache](http://ehcache.org/)
-- Optimized static resources (gzip filter, HTTP cache headers)
-- Log management with [Logback](http://logback.qos.ch/), configurable at runtime
-- Builds a standard WAR file
-
-Technology stack on the client side
---------------------
-
-Single Web page application :
-
-- Responsive Web Design
-- [HTML5 Boilerplate](http://html5boilerplate.com/)
-- [Twitter Bootstrap](http://getbootstrap.com/)
-- [Compass](http://compass-style.org/) / Sass for CSS design
-- [AngularJS](http://angularjs.org/)
-
-Easy installation of new libraries with [Bower](http://bower.io/).
-Build, optimization and live reload with [Grunt](http://gruntjs.com/).
 
 *Copyright (C) 2013 [Julien Dubois](http://www.julien-dubois.com/)*
