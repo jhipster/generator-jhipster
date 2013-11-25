@@ -6,18 +6,33 @@ Presentation
 
 This is a [Yeoman generator](http://yeoman.io), used to create a Yeoman + Maven + Spring + AngularJS project.
 
-You can install and use it easily:
-
-- See the [Yeoman community generators page](http://yeoman.io/community-generators.html) or
-- Go get [the official package on npmjs.org](https://npmjs.org/package/generator-jhipster) 
-
-Goals
--------------------
-
-Generate a complete and modern Web app, unifying:
+Our goal is to generate a complete and modern Web app, unifying:
 
 - Maven on the server side
 - Yeoman + Bower + Grunt on the client side
+
+You can checkout a sample generated application [here](https://github.com/jdubois/jhipster-sample-app).
+
+Installation
+-------------------
+
+Install Node.js from [the Node.js website](http://nodejs.org/).
+
+Install Yeoman:
+
+```bash
+npm install -g yo
+```
+
+Install JHipster:
+
+```bash
+npm install -g generator-webapp
+```
+
+To find more information, tips and help, please have a look at 
+[the Yeoman "getting starting" guide](http://yeoman.io/gettingstarted.html) before 
+[submitting a bug](https://github.com/jdubois/generator-jhipster/issues?state=open).
 
 Usage
 -------------------
