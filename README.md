@@ -6,43 +6,12 @@ Presentation
 
 This is a [Yeoman generator](http://yeoman.io), used to create a Yeoman + Maven + Spring + AngularJS project.
 
-You can install and use it easily:
-
-- See the [Yeoman community generators page](http://yeoman.io/community-generators.html) or
-- Go get [the official package on npmjs.org](https://npmjs.org/package/generator-jhipster) 
-
-Goals
--------------------
-
-Generate a complete and modern Web app, unifying:
+Our goal is to generate a complete and modern Web app, unifying:
 
 - Maven on the server side
 - Yeoman + Bower + Grunt on the client side
 
-Usage
--------------------
-
-To generate your application, type:
-```bash
-yo jhipster
-```
-
-Once the application is generated, you can launch the Java server with Maven:
-```bash
-mvn jetty:run
-```
-The application will be available on [http://localhost:8080](http://localhost:8080)
-
-You can also run Grunt to work on the client-side JavaScript application:
-```bash
-grunt server
-```
-This should open up your Web browser, with live reload enabled, on [http://localhost:9000](http://localhost:9000). This 
-Grunt server has a proxy to the REST endpoints on the Java server which we just launched (on 
-[http://localhost:8080/rest](http://localhost:8080/rest)), so it should be able to do live REST requests to the Java
-back-end.
-
-**If you want to go further, and use hot reloading both on the client and the server side, please [go to this Wiki page](https://github.com/jdubois/generator-jhipster/wiki/Hot-reloading).**
+You can checkout a sample generated application [here](https://github.com/jdubois/jhipster-sample-app).
 
 Technology stack on the server side
 --------------------
@@ -76,5 +45,51 @@ Single Web page application :
 
 Easy installation of new libraries with [Bower](http://bower.io/).
 Build, optimization and live reload with [Grunt](http://gruntjs.com/).
+
+Installation
+-------------------
+
+Install Node.js from [the Node.js website](http://nodejs.org/).
+
+Install Yeoman:
+
+```bash
+npm install -g yo
+```
+
+Install JHipster:
+
+```bash
+npm install -g generator-webapp
+```
+
+To find more information, tips and help, please have a look at 
+[the Yeoman "getting starting" guide](http://yeoman.io/gettingstarted.html) before 
+[submitting a bug](https://github.com/jdubois/generator-jhipster/issues?state=open).
+
+Usage
+-------------------
+
+To generate your application, type:
+```bash
+yo jhipster
+```
+
+Once the application is generated, you can launch the Java server with Maven:
+```bash
+mvn jetty:run
+```
+The application will be available on [http://localhost:8080](http://localhost:8080)
+
+You can also run Grunt to work on the client-side JavaScript application:
+```bash
+grunt server
+```
+This should open up your Web browser, with live reload enabled, on [http://localhost:9000](http://localhost:9000). This 
+Grunt server has a proxy to the REST endpoints on the Java server which we just launched (on 
+[http://localhost:8080/rest](http://localhost:8080/rest)), so it should be able to do live REST requests to the Java
+back-end.
+
+**If you want to go further, and use hot reloading both on the client and the server side, please [go to this Wiki page](https://github.com/jdubois/generator-jhipster/wiki/Hot-reloading).**
 
 *Copyright (C) 2013 [Julien Dubois](http://www.julien-dubois.com/)*
