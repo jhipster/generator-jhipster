@@ -5,7 +5,7 @@
     "sass-bootstrap": "~3.0.0",
     "modernizr": "~2.7.0",
     "jquery": "~1.10.2",
-    "angular": "~1.2.0",
+    "angular": "~1.2.2",
     "json3": "~3.2.5",
     "angular-route": "~1.2.2",
     "angular-resource": "~1.2.2",
