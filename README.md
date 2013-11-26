@@ -60,7 +60,7 @@ npm install -g yo
 Install JHipster:
 
 ```bash
-npm install -g generator-webapp
+npm install -g generator-jhipster
 ```
 
 To find more information, tips and help, please have a look at 
