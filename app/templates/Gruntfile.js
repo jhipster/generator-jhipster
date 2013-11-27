@@ -17,7 +17,7 @@ module.exports = function (grunt) {
     yeoman: {
       // configurable paths
       app: require('./bower.json').appPath || 'app',
-      dist: 'dist'
+      dist: 'src/main/webapp/dist'
     },
     watch: {
       compass: {
@@ -184,7 +184,7 @@ module.exports = function (grunt) {
             '<%%= yeoman.dist %>/scripts/{,*/}*.js',
             '<%%= yeoman.dist %>/styles/{,*/}*.css',
             '<%%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-            '<%%= yeoman.dist %>/styles/fonts/*'
+            '<%%= yeoman.dist %>/fonts/*'
           ]
         }
       }

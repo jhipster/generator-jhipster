@@ -9,13 +9,13 @@
 
     <profiles>
         <profile>
-            <id>development</id>
+            <id>dev</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
                 <!-- Spring profile to use -->
-                <spring.profiles.active>development</spring.profiles.active>
+                <spring.profiles.active>dev</spring.profiles.active>
                 <!-- i18n resource files reloading -->
                 <message.reloading.enabled>true</message.reloading.enabled>
                 <!-- log configuration -->
@@ -61,10 +61,10 @@
             </dependencies>
         </profile>
         <profile>
-            <id>production</id>
+            <id>prod</id>
             <properties>
                 <!-- Spring profile to use -->
-                <spring.profiles.active>production</spring.profiles.active>
+                <spring.profiles.active>prod</spring.profiles.active>
                 <!-- i18n resource files reloading -->
                 <message.reloading.enabled>false</message.reloading.enabled>
                 <!-- log configuration -->
@@ -501,19 +501,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>2.3</version>
-                <configuration>
-                    <webResources>
-                        <resource>
-                            <directory>src/main/webapp/WEB-INF</directory>
-                            <targetPath>WEB-INF</targetPath>
-                            <includes>
-                                <include>web.xml</include>
-                            </includes>
-                            <filtering>true</filtering>
-                        </resource>
-                    </webResources>
-                </configuration>
+                <version>2.4</version>
             </plugin>
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
@@ -530,7 +518,7 @@
                         </systemProperty>
                         <systemProperty>
                             <name>spring.profiles.active</name>
-                            <value>development</value>
+                            <value><%= _.unescape('\$\{spring.profiles.active}')%></value>
                         </systemProperty>
                     </systemProperties>
                     <jvmArgs>-javaagent:spring_loaded/springloaded-1.1.4.jar -noverify</jvmArgs>
@@ -548,7 +536,7 @@
                     <contextReloadable>true</contextReloadable>
                     <protocol>org.apache.coyote.http11.Http11NioProtocol</protocol>
                     <systemProperties>
-                        <spring.profiles.active>development</spring.profiles.active>
+                        <spring.profiles.active><%= _.unescape('\$\{spring.profiles.active}')%></spring.profiles.active>
                     </systemProperties>
                 </configuration>
             </plugin>

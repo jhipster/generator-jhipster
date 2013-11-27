@@ -14,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
@@ -38,9 +37,6 @@ import java.util.List;
 public class DispatcherServletConfiguration extends WebMvcConfigurerAdapter {
 
     private static final Logger log = LoggerFactory.getLogger(DispatcherServletConfiguration.class);
-
-    // Cache for 1 month
-    private static final int CACHE_PERIOD = 60 * 60 * 24 * 30;
 
     // 10 Mo max file size
     private static final int MAX_UPLOAD_SIZE = 10 * 1000 * 1000;
@@ -109,19 +105,6 @@ public class DispatcherServletConfiguration extends WebMvcConfigurerAdapter {
         Object[] interceptors = {localeChangeInterceptor()};
         requestMappingHandlerMapping.setInterceptors(interceptors);
         return requestMappingHandlerMapping;
-    }
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        log.debug("Adding static resource handlers");
-
-        registry.addResourceHandler("/scripts/**")
-                .addResourceLocations("/scripts/")
-                .setCachePeriod(CACHE_PERIOD);
-
-        registry.addResourceHandler("/styles/**")
-                .addResourceLocations("/styles/")
-                .setCachePeriod(CACHE_PERIOD);
     }
 
     @Override

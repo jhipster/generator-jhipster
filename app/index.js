@@ -184,6 +184,10 @@ JhipsterGenerator.prototype.app = function app() {
   this.template('src/main/java/package/web/controller/_package-info.java', javaDir + 'web/controller/package-info.java');
   this.template('src/main/java/package/web/controller/_HomeController.java', javaDir + 'web/controller/HomeController.java');  
 
+  this.template('src/main/java/package/web/filter/_package-info.java', javaDir + 'web/filter/package-info.java');
+  this.template('src/main/java/package/web/filter/_CachingHttpHeadersFilter.java', javaDir + 'web/filter/CachingHttpHeadersFilter.java');
+  this.template('src/main/java/package/web/filter/_StaticResourcesProductionFilter.java', javaDir + 'web/filter/StaticResourcesProductionFilter.java');
+
   this.template('src/main/java/package/web/rest/_package-info.java', javaDir + 'web/rest/package-info.java'); 
   this.template('src/main/java/package/web/rest/_UserResource.java', javaDir + 'web/rest/UserResource.java'); 
   this.template('src/main/java/package/web/rest/_AccountResource.java', javaDir + 'web/rest/AccountResource.java');
@@ -246,11 +250,6 @@ JhipsterGenerator.prototype.app = function app() {
   this.template(webappDir + 'scripts/_app.js', webappDir + 'scripts/app.js');
   this.template(webappDir + 'scripts/_controllers.js', webappDir + 'scripts/controllers.js');
   this.template(webappDir + 'scripts/_services.js', webappDir + 'scripts/services.js');
-  this.indexFile = this.appendScripts(this.indexFile, 'scripts/main.js', [
-    'scripts/app.js',
-    'scripts/controllers.js',
-    'scripts/services.js'
-  ]);
 
   // CSS
   this.copy(webappDir + 'styles/documentation.css', webappDir + 'styles/documentation.css'); 
@@ -258,7 +257,20 @@ JhipsterGenerator.prototype.app = function app() {
   // Images
   this.copy(webappDir + 'images/hipster.jpg', webappDir + 'images/hipster.jpg');
 
-  this.indexFile = this.appendScripts(this.indexFile, 'scripts/plugins.js', [
+  this.indexFile = this.appendScripts(this.indexFile, 'scripts/scripts.js', [
+    'bower_components/modernizr/modernizr.js',
+
+    'bower_components/jquery/jquery.js',
+    'bower_components/angular/angular.js',
+    'bower_components/angular-route/angular-route.js',
+    'bower_components/angular-resource/angular-resource.js',
+    'bower_components/angular-cookies/angular-cookies.js',
+    'bower_components/angular-sanitize/angular-sanitize.js',
+
+    'scripts/app.js',
+    'scripts/controllers.js',
+    'scripts/services.js',
+
     'bower_components/sass-bootstrap/js/affix.js',
     'bower_components/sass-bootstrap/js/alert.js',
     'bower_components/sass-bootstrap/js/dropdown.js',

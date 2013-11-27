@@ -8,3 +8,4 @@ node_modules
 .tmp
 .merge_file*
 .DS_Store
+src/main/webapp/dist
