@@ -47,6 +47,7 @@
                 <mail.password></mail.password>
                 <mail.tls></mail.tls>
                 <mail.from>jhipster@localhost</mail.from>
+                <jetty-maven-plugin.scan-interval-seconds>1</jetty-maven-plugin.scan-interval-seconds>
             </properties>
             <dependencies>
                 <dependency>
@@ -94,6 +95,7 @@
                 <mail.password></mail.password>
                 <mail.tls></mail.tls>
                 <mail.from>jhipster@localhost</mail.from>
+                <jetty-maven-plugin.scan-interval-seconds>0</jetty-maven-plugin.scan-interval-seconds>
             </properties>
             <dependencies>
                 <dependency>
@@ -104,6 +106,27 @@
                     <version>9.2-1003-jdbc4</version><% } %>
                 </dependency>
             </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.trecloux</groupId>
+                        <artifactId>yeoman-maven-plugin</artifactId>
+                        <version>0.1</version>
+                        <configuration>
+                            <yeomanProjectDirectory><%= _.unescape('\$\{project.basedir}')%></yeomanProjectDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>run-grunt</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>        
     </profiles>
     
@@ -508,7 +531,7 @@
     			<artifactId>jetty-maven-plugin</artifactId>
     			<version>9.1.0.v20131115</version>
                 <configuration>
-                    <scanIntervalSeconds>1</scanIntervalSeconds>
+                    <scanIntervalSeconds><%= _.unescape('\$\{jetty-maven-plugin.scan-interval-seconds}')%></scanIntervalSeconds>
                     <stopKey>stop-jetty</stopKey>
                     <stopPort>9999</stopPort>
                     <systemProperties>

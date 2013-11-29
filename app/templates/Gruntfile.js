@@ -19,12 +19,12 @@ module.exports = function (grunt) {
       app: require('./bower.json').appPath || 'app',
       dist: 'src/main/webapp/dist'
     },
-    watch: {
+    watch: {<% if (useCompass) { %>
       compass: {
         files: ['src/main/webapp/styles/{,*/}*.{scss,sass}'],
         tasks: ['compass:server', 'autoprefixer']
-      },
-      styles: {
+      },<% } %>
+    styles: {
         files: ['src/main/webapp/styles/{,*/}*.css'],
         tasks: ['copy:styles', 'autoprefixer']
       },
@@ -150,7 +150,7 @@ module.exports = function (grunt) {
           ext: '.js'
         }]
       }
-    },
+    },<% if (useCompass) { %>
     compass: {
       options: {
         sassDir: 'src/main/scss',
@@ -171,7 +171,7 @@ module.exports = function (grunt) {
           debugInfo: true
         }
       }
-    },
+    },<% } %>
     // not used since Uglify task does concat,
     // but still available if needed
     /*concat: {
@@ -288,27 +288,21 @@ module.exports = function (grunt) {
       }
     },
     concurrent: {
-      server: [
-        'compass:server',
+      server: [<% if (useCompass) { %>
+        'compass:server',<% } %>
         'copy:styles'
       ],
-      test: [
-        'compass',
+      test: [<% if (useCompass) { %>
+        'compass',<% } %>
         'copy:styles'
       ],
-      dist: [
-        'compass:dist',
+      dist: [<% if (useCompass) { %>
+        'compass:dist',<% } %>
         'copy:styles',
         'imagemin',
         'svgmin',
         'htmlmin'
       ]
-    },
-    karma: {
-      unit: {
-        configFile: 'karma.conf.js',
-        singleRun: true
-      }
     },
     cdnify: {
       dist: {
@@ -355,8 +349,7 @@ module.exports = function (grunt) {
     'clean:server',
     'concurrent:test',
     'autoprefixer',
-    'connect:test',
-    'karma'
+    'connect:test'
   ]);
 
   grunt.registerTask('build', [
@@ -366,7 +359,6 @@ module.exports = function (grunt) {
     'autoprefixer',
     'concat',
     'copy:dist',
-    'cdnify',
     'ngmin',
     'cssmin',
     'uglify',
@@ -375,7 +367,6 @@ module.exports = function (grunt) {
   ]);
 
   grunt.registerTask('default', [
-    'jshint',
     'test',
     'build'
   ]);
