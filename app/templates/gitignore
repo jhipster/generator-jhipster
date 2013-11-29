@@ -7,5 +7,6 @@ node_modules
 .settings
 .tmp
 .merge_file*
+.sass-cache
 .DS_Store
 src/main/webapp/dist
