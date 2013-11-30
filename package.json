@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster",
-  "version": "0.0.28",
+  "version": "0.0.29",
   "description": "Java + Spring + JPA + AngularJS complete dev stack",
   "keywords": [
     "yeoman-generator",
@@ -12,8 +12,8 @@
     "AngularJS",
     "Twitter Bootstrap"
   ],
-  "homepage": "https://github.com/jdubois/generator-jhipster",
-  "bugs": "https://github.com/jdubois/generator-jhipster/issues",
+  "homepage": "http://jhipster.github.io/",
+  "bugs": "https://github.com/jhipster/generator-jhipster/issues",
   "author": {
     "name": "Julien Dubois",
     "email": "",
@@ -22,7 +22,7 @@
   "main": "app/index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/jdubois/generator-jhipster.git"
+    "url": "git://github.com/jhipster/generator-jhipster.git"
   },
   "scripts": {
     "test": "mocha"
