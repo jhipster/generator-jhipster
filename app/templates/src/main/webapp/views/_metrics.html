@@ -1,15 +1,15 @@
 <div ng-controller="MetricsController" data-ng-init="init()">
 
-    <h2>Application Metrics</h2>
+    <h2 translate="metrics.title">Application Metrics</h2>
     <p>
-        <button type="button" class="btn btn-primary" ng-click="init()"><span class="glyphicon glyphicon-refresh"></span> Refresh</button>
+        <button type="button" class="btn btn-primary" ng-click="init()" translate="metrics.refresh.button"><span class="glyphicon glyphicon-refresh"></span> Refresh</button>
     </p>
 
-    <h3>JVM Metrics</h3>
+    <h3 translate="metrics.jvm.title">JVM Metrics</h3>
     <div class="row">
         <div class="col-md-4">
-            <b>Memory</b>
-            <p>Total Memory ({{metrics.gauges["jvm.memory.total.used"].value / 1000000 | number:0}}M / {{metrics.gauges["jvm.memory.total.max"].value / 1000000 | number:0}}M)</p>
+            <b translate="metrics.jvm.memory.title">Memory</b>
+            <p>{{'metrics.jvm.memory.total' | translate}} ({{metrics.gauges["jvm.memory.total.used"].value / 1000000 | number:0}}M / {{metrics.gauges["jvm.memory.total.max"].value / 1000000 | number:0}}M)</p>
             <div class="progress progress-striped">
                 <div class="progress-bar progress-bar-success" role="progressbar"
                      aria-valuenow='{{metrics.gauges["jvm.memory.total.used"].value / 1000000 | number:0}}'
@@ -19,7 +19,7 @@
                     {{metrics.gauges["jvm.memory.total.used"].value * 100 / metrics.gauges["jvm.memory.total.max"].value  | number:0}}%
                 </div>
             </div>
-            <p>Heap Memory ({{metrics.gauges["jvm.memory.heap.used"].value / 1000000 | number:0}}M / {{metrics.gauges["jvm.memory.heap.max"].value / 1000000 | number:0}}M)</p>
+            <p>{{'metrics.jvm.memory.heap' | translate}} ({{metrics.gauges["jvm.memory.heap.used"].value / 1000000 | number:0}}M / {{metrics.gauges["jvm.memory.heap.max"].value / 1000000 | number:0}}M)</p>
             <div class="progress progress-striped">
                 <div class="progress-bar progress-bar-success" role="progressbar"
                      aria-valuenow='{{metrics.gauges["jvm.memory.heap.used"].value / 1000000 | number:0}}'
@@ -29,7 +29,7 @@
                     {{(metrics.gauges["jvm.memory.heap.usage"].value * 100 | number:0)}}%
                 </div>
             </div>
-            <p>Non-heap Memory ({{metrics.gauges["jvm.memory.non-heap.used"].value / 1000000 | number:0}}M / {{metrics.gauges["jvm.memory.non-heap.max"].value / 1000000 | number:0}}M)</p>
+            <p>{{'metrics.jvm.memory.nonheap' | translate}} ({{metrics.gauges["jvm.memory.non-heap.used"].value / 1000000 | number:0}}M / {{metrics.gauges["jvm.memory.non-heap.max"].value / 1000000 | number:0}}M)</p>
             <div class="progress progress-striped">
                 <div class="progress-bar progress-bar-success" role="progressbar"
                      aria-valuenow='{{metrics.gauges["jvm.memory.non-heap.used"].value / 1000000 | number:0}}'
@@ -41,8 +41,8 @@
             </div>
         </div>
         <div class="col-md-4">
-            <b>Threads</b> (Total: {{metrics.gauges["jvm.threads.count"].value}})
-            <p>Runnable {{metrics.gauges["jvm.threads.runnable.count"].value}}</p>
+            <b translate="metrics.jvm.threads.title">Threads</b> (Total: {{metrics.gauges["jvm.threads.count"].value}})
+            <p>{{'metrics.jvm.threads.runnable' | translate}} {{metrics.gauges["jvm.threads.runnable.count"].value}}</p>
             <div class="progress progress-striped">
                 <div class="progress-bar progress-bar-success" role="progressbar"
                      aria-valuenow='{{metrics.gauges["jvm.threads.runnable.count"].value}}'
@@ -52,7 +52,7 @@
                     {{metrics.gauges["jvm.threads.runnable.count"].value * 100 / metrics.gauges["jvm.threads.count"].value | number:0}}%
                 </div>
             </div>
-            <p>Timed waiting ({{metrics.gauges["jvm.threads.timed_waiting.count"].value}})</p>
+            <p>{{'metrics.jvm.threads.timewaiting' | translate}} ({{metrics.gauges["jvm.threads.timed_waiting.count"].value}})</p>
             <div class="progress progress-striped">
                 <div class="progress-bar progress-bar-warning" role="progressbar"
                      aria-valuenow='{{metrics.gauges["jvm.threads.timed_waiting.count"].value}}'
@@ -62,7 +62,7 @@
                     {{metrics.gauges["jvm.threads.timed_waiting.count"].value * 100 / metrics.gauges["jvm.threads.count"].value | number:0}}%
                 </div>
             </div>
-            <p>Waiting ({{metrics.gauges["jvm.threads.waiting.count"].value}})</p>
+            <p>{{'metrics.jvm.threads.waiting' | translate}} ({{metrics.gauges["jvm.threads.waiting.count"].value}})</p>
             <div class="progress progress-striped">
                 <div class="progress-bar progress-bar-warning" role="progressbar"
                      aria-valuenow='{{metrics.gauges["jvm.threads.waiting.count"].value}}'
@@ -72,7 +72,7 @@
                     {{metrics.gauges["jvm.threads.waiting.count"].value * 100 / metrics.gauges["jvm.threads.count"].value | number:0}}%
                 </div>
             </div>
-            <p>Blocked ({{metrics.gauges["jvm.threads.blocked.count"].value}})</p>
+            <p>{{'metrics.jvm.threads.blocked' | translate}}  ({{metrics.gauges["jvm.threads.blocked.count"].value}})</p>
             <div class="progress progress-striped">
                 <div class="progress-bar progress-bar-danger" role="progressbar"
                      aria-valuenow='{{metrics.gauges["jvm.threads.blocked.count"].value}}'
@@ -84,43 +84,43 @@
             </div>
         </div>
         <div class="col-md-4">
-            <b>Garbage collections</b>
+            <b translate="metrics.jvm.gc.title">Garbage collections</b>
             <div class="row">
-                <div class="col-md-9">Mark Sweep count</div>
+                <div class="col-md-9" translate="metrics.jvm.gc.marksweepcount">Mark Sweep count</div>
                 <div class="col-md-3">{{metrics.gauges["jvm.garbage.PS-MarkSweep.count"].value}}</div>
             </div>
             <div class="row">
-                <div class="col-md-9">Mark Sweep time</div>
+                <div class="col-md-9" translate="metrics.jvm.gc.marksweeptime">Mark Sweep time</div>
                 <div class="col-md-3">{{metrics.gauges["jvm.garbage.PS-MarkSweep.time"].value}}ms</div>
             </div>
             <div class="row">
-                <div class="col-md-9">Scavenge count</div>
+                <div class="col-md-9" translate="metrics.jvm.gc.scavengecount">Scavenge count</div>
                 <div class="col-md-3">{{metrics.gauges["jvm.garbage.PS-Scavenge.count"].value}}</div>
             </div>
             <div class="row">
-                <div class="col-md-9">Scavenge time</div>
+                <div class="col-md-9" translate="metrics.jvm.gc.scavengetime">Scavenge time</div>
                 <div class="col-md-3">{{metrics.gauges["jvm.garbage.PS-Scavenge.time"].value}}ms</div>
             </div>
         </div>
     </div>
 
-    <h3>HTTP requests (events per second)</h3>
-    <p>Active requests: <b>{{metrics.counters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.activeRequests"].count | number:0}}</b> - Total requests: <b>{{metrics.timers["com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests"].count | number:0}}</b></p>
+    <h3 translate="metrics.jvm.http.title">HTTP requests (events per second)</h3>
+    <p>{{'metrics.jvm.http.active' | translate}} <b>{{metrics.counters["com.codahale.metrics.servlet.AbstractInstrumentedFilter.activeRequests"].count | number:0}}</b> - {{'metrics.jvm.http.total' | translate}} <b>{{metrics.timers["com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests"].count | number:0}}</b></p>
     <div class="table-responsive">
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>Code</th>
-            <th>Count</th>
-            <th>Mean</th>
-            <th>Average (1 min)</th>
-            <th>Average (5 min)</th>
-            <th>Average (15 min)</th>
+            <th translate="metrics.jvm.http.table.code">Code</th>
+            <th translate="metrics.jvm.http.table.count">Count</th>
+            <th translate="metrics.jvm.http.table.mean">Mean</th>
+            <th>{{'metrics.jvm.http.table.average' | translate}} (1 min)</th>
+            <th>{{'metrics.jvm.http.table.average' | translate}} (5 min)</th>
+            <th>{{'metrics.jvm.http.table.average' | translate}} (15 min)</th>
         </tr>
         </thead>
         <tbody>
         <tr>
-            <td>OK</td>
+            <td translate="metrics.jvm.http.code.ok">OK</td>
             <td>
                 <div class="progress progress-striped">
                     <div class="progress-bar progress-bar-success" role="progressbar"
@@ -144,7 +144,7 @@
             </td>
         </tr>
         <tr>
-            <td>Not Found</td>
+            <td translate="metrics.jvm.http.code.notfound">Not Found</td>
             <td>
                 <div class="progress progress-striped">
                     <div class="progress-bar progress-bar-warning" role="progressbar"
@@ -170,7 +170,7 @@
             </td>
         </tr>
         <tr>
-            <td>Server error</td>
+            <td translate="metrics.jvm.http.code.servererror">Server error</td>
             <td>
                 <div class="progress progress-striped">
                     <div class="progress-bar progress-bar-danger" role="progressbar"
@@ -199,20 +199,20 @@
     </table>
 </div>
 
-<h3>Services statistics (time in millisecond)</h3>
+<h3 translate="metrics.servicesstats.title">Services statistics (time in millisecond)</h3>
 <div class="table-responsive">
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>Service name</th>
-            <th>Count</th>
-            <th>Mean</th>
-            <th>Min</th>
-            <th>p50</th>
-            <th>p75</th>
-            <th>p95</th>
-            <th>p99</th>
-            <th>Max</th>
+            <th translate="metrics.servicesstats.table.name">Service name</th>
+            <th translate="metrics.servicesstats.table.count">Count</th>
+            <th translate="metrics.servicesstats.table.mean">Mean</th>
+            <th translate="metrics.servicesstats.table.min">Min</th>
+            <th translate="metrics.servicesstats.table.p50">p50</th>
+            <th translate="metrics.servicesstats.table.p75">p75</th>
+            <th translate="metrics.servicesstats.table.p95">p95</th>
+            <th translate="metrics.servicesstats.table.p99">p99</th>
+            <th translate="metrics.servicesstats.table.max">Max</th>
         </tr>
         </thead>
         <tbody>
@@ -308,17 +308,17 @@
     </table>
 </div>
 
-<h3>Ehcache statistics</h3>
+<h3 translate="metrics.ehcache.title">Ehcache statistics</h3>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Cache name</th>
-                    <th>Objects</th>
-                    <th>Hits</th>
-                    <th>Misses</th>
-                    <th>Eviction count</th>
-                    <th>Mean get time (ms)</th>
+                    <th translate="metrics.ehcache.cachename">Cache name</th>
+                    <th translate="metrics.ehcache.objects">Objects</th>
+                    <th translate="metrics.ehcache.hits">Hits</th>
+                    <th translate="metrics.ehcache.misses">Misses</th>
+                    <th translate="metrics.ehcache.evictioncount">Eviction count</th>
+                    <th translate="metrics.ehcache.mean">Mean get time (ms)</th>
                 </tr>
             </thead>
             <tbody>

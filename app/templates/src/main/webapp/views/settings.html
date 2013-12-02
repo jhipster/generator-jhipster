@@ -2,12 +2,12 @@
     <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-8">
-            <h2>User settings for [<b>{{settingsAccount.login}}</b>]</h2>
+            <h2 translate="settings.title" translate-values="{username: '{{account.login}}'}">User settings for [<b>{{settingsAccount.login}}</b>]</h2>
 
-            <div class="alert alert-success" ng-show="success">
+            <div class="alert alert-success" ng-show="success" translate="settings.messages.success">
                 <strong>Settings saved!</strong>
             </div>
-            <div class="alert alert-danger" ng-show="error">
+            <div class="alert alert-danger" ng-show="error" translate="settings.messages.error">
                 <strong>An error has occured!</strong> Settings could not be saved.
             </div>
 
@@ -16,71 +16,71 @@
                   ng-submit="save()">
 
                 <div class="form-group">
-                    <label>First Name</label>
-                    <input type="text" class="form-control" name="firstName" placeholder="Your first name"
+                    <label translate="settings.form.firstname">First Name</label>
+                    <input type="text" class="form-control" name="firstName" placeholder="{{'settings.form.firstname.placeholder' | translate}}"
                            ng-model="settingsAccount.firstName" ng-minlength=1 ng-maxlength=50 required>
                     <div class="error"
                          ng-show="form.firstName.$dirty && form.firstName.$invalid">
                         <small class="error"
-                               ng-show="form.firstName.$error.required">
+                               ng-show="form.firstName.$error.required" translate="settings.messages.validate.firstname.required">
                             Your first name is required.
                         </small>
                         <small class="error"
-                               ng-show="form.firstName.$error.minlength">
+                               ng-show="form.firstName.$error.minlength" translate="settings.messages.validate.firstname.minlength">
                             Your first name is required to be at least 1 character
                         </small>
                         <small class="error"
-                               ng-show="form.firstName.$error.maxlength">
+                               ng-show="form.firstName.$error.maxlength" translate="settings.messages.validate.firstname.maxlength">
                             Your first name cannot be longer than 50 characters
                         </small>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>Last Name</label>
-                    <input type="text" class="form-control" name="lastName" placeholder="Your last name"
+                    <label translate="settings.form.lastname">Last Name</label>
+                    <input type="text" class="form-control" name="lastName" placeholder="{{'settings.form.lastname.placeholder' | translate}}"
                            ng-model="settingsAccount.lastName" ng-minlength=1 ng-maxlength=50 required>
                     <div class="error"
                          ng-show="form.lastName.$dirty && form.lastName.$invalid">
                         <small class="error"
-                               ng-show="form.lastName.$error.required">
+                               ng-show="form.lastName.$error.required" translate="settings.messages.validate.firstname.required">
                             Your last name is required.
                         </small>
                         <small class="error"
-                               ng-show="form.lastName.$error.minlength">
+                               ng-show="form.lastName.$error.minlength" translate="settings.messages.validate.firstname.minlength">
                             Your last name is required to be at least 1 character
                         </small>
                         <small class="error"
-                               ng-show="form.lastName.$error.maxlength">
+                               ng-show="form.lastName.$error.maxlength" translate="settings.messages.validate.firstname.maxlength">
                             Your last name cannot be longer than 50 characters
                         </small>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>E-mail</label>
-                    <input type="email" class="form-control" name="email" placeholder="Your e-mail"
+                    <label translate="settings.form.email">E-mail</label>
+                    <input type="email" class="form-control" name="email" placeholder="{{'settings.form.email.placeholder' | translate}}"
                            ng-model="settingsAccount.email" ng-minlength=5 ng-maxlength=100 required>
                     <div class="error"
                          ng-show="form.email.$dirty && form.email.$invalid">
                         <small class="error"
-                               ng-show="form.email.$error.required">
+                               ng-show="form.email.$error.required" translate="settings.messages.validate.email.required">
                             Your e-mail is required.
                         </small>
                         <small class="error"
-                               ng-show="form.email.$error.email">
+                               ng-show="form.email.$error.email" translate="settings.messages.validate.email.invalid">
                             Your e-mail is invalid.
                         </small>
                         <small class="error"
-                               ng-show="form.email.$error.minlength">
+                               ng-show="form.email.$error.minlength" translate="settings.messages.validate.email.minlength">
                             Your e-mail is required to be at least 5 characters
                         </small>
                         <small class="error"
-                               ng-show="form.email.$error.maxlength">
+                               ng-show="form.email.$error.maxlength" translate="settings.messages.validate.email.maxlength">
                             Your e-mail cannot be longer than 100 characters
                         </small>
                     </div>
                 </div>
 
-                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary">Save</button>
+                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary" translate="settings.form.button">Save</button>
             </form>
         </div>
         <div class="col-md-2"></div>

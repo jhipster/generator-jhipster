@@ -1,0 +1,207 @@
+{
+    "global": {
+        "title": "jhipster",
+        "browsehappy": "You are using an <strong>outdated</strong> browser. Please <a href=\"http://browsehappy.com/\">upgrade your browser</a> to improve your experience.",
+        "menu": {
+            "home": "Home",
+            "account": {
+                "main": "Account",
+                "settings": "Settings",
+                "password": "Password",
+                "sessions": "Sessions",
+                "metrics": "Metrics",
+                "logs": "Logs",
+                "login": "Authenticate",
+                "logout": "Log out"
+            },
+            "language": "Language"
+        },
+        "language": {
+            "en": "English",
+            "fr": "French"
+        }
+    },
+    "main": {
+        "title": "Welcome, Java Hipster!",
+        "subtitle": "This is your homepage",
+        "logged": {
+            "message": "You are logged in as user \"{{username}}\".",
+            "authenticated": "If you want to <a href=\"#/login\">authenticate</a>, you can try the default login=\"admin\" and password=\"admin\"."
+        },
+        "question": "If you have any question on JHipster:",
+        "link": {
+            "homepage": "JHipster homepage",
+            "bugtracker": "JHipster bug tracker",
+            "contact": "contact @java_hipster on Twitter"
+        },
+        "like": "If you like JHipster, don't forget to give us a star on",
+        "github": "Github"
+    },
+    "login": {
+        "title": "Authentication",
+        "form": {
+            "username": "Login",
+            "username.placeholder": "Your login",
+            "password": "Password",
+            "password.placeholder": "Your password",
+            "rememberme": "Automatic Login",
+            "button": "Authenticate"
+        },
+        "messages": {
+            "authentication": "<strong>Authentication failed!</strong> Please check your credentials and try again."
+        }
+    },
+    "settings": {
+        "title": "User settings for [<b>{{username}}</b>]",
+        "form": {
+            "firstname": "First Name",
+            "firstname.placeholder": "Your first name",
+            "lastname": "Last Name",
+            "lastname.placeholder": "Your last name",
+            "email": "E-mail",
+            "email.placeholder": "Your e-mail",
+            "button": "Save"
+        },
+        "messages": {
+            "error": "<strong>An error has occured!</strong> Settings could not be saved.",
+            "success": "<strong>Settings saved!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "Your first name is required.",
+                    "minlength": "Your first name is required to be at least 1 character",
+                    "maxlength": "Your first name cannot be longer than 50 characters"
+                },
+                "lastname": {
+                    "required": "Your last name is required.",
+                    "minlength": "Your last name is required to be at least 1 character",
+                    "maxlength": "Your last name cannot be longer than 50 characters"
+                },
+                "email": {
+                    "required": "Your e-mail is required.",
+                    "invalid": "Your e-mail is invalid.",
+                    "minlength": "Your e-mail is required to be at least 1 character",
+                    "maxlength": "Your e-mail cannot be longer than 50 characters"
+                }
+            }
+        }
+    },
+    "password": {
+        "title": "Password for [<b>{{username}}</b>]",
+        "form": {
+            "newpassword": "New password",
+            "newpassword.placeholder": "New password",
+            "confirmpassword": "New password confirmation",
+            "confirmpassword.placeholder": "Confirm the new password",
+            "button": "Save"
+        },
+        "messages": {
+            "error": {
+                "global": "<strong>An error has occured!</strong> The password could not be changed.",
+                "dontmatch" : "The password and its confirmation do not match!"
+            },
+            "success": "<strong>Password changed!</strong>",
+            "validate": {
+                "newpassword": {
+                    "required": "Your password is required.",
+                    "minlength": "Your password is required to be at least 5 characters",
+                    "maxlength": "Your first name cannot be longer than 20 characters"
+                },
+                "confirmpassword": {
+                    "required": "Your confirm password is required.",
+                    "minlength": "Your confirm password is required to be at least 5 character",
+                    "maxlength": "Your confirm password cannot be longer than 20 characters"
+                }
+            }
+        }
+    },
+    "sessions": {
+        "title": "Active sessions for [<b>{{username}}</b>]",
+        "table": {
+            "ipaddress": "IP address",
+            "useragent": "User Agent",
+            "date": "Date",
+            "button": "Invalidate"
+        },
+        "messages": {
+            "success": "<strong>Session invalidated!</strong>",
+            "error": "<strong>An error has occured!</strong> The session could not be invalidated."
+        }
+
+    },
+    "metrics": {
+        "title": "Application Metrics",
+        "refresh.button": "Refresh",
+        "jvm": {
+            "title": "JVM Metrics",
+            "memory": {
+                "title": "Memory",
+                "total": "Total Memory",
+                "heap": "Heap Memory",
+                "nonheap": "Non-Heap Memory"
+            },
+            "threads": {
+                "title": "Threads",
+                "runnable": "Runnable",
+                "timewaiting": "Timed waiting",
+                "waiting": "Waiting",
+                "blocked": "Blocked"
+            },
+            "gc": {
+                "title": "Garbage collections",
+                "marksweepcount": "Mark Sweep count",
+                "marksweeptime": "Mark Sweep time",
+                "scavengecount": "Scavenge count",
+                "scavengetime": "Scavenge time"
+            },
+            "http": {
+                "title": "HTTP requests (events per second)",
+                "active": "Active requests:",
+                "total": "Total requests:",
+                "table": {
+                    "code": "Code",
+                    "count": "Count",
+                    "mean": "Mean",
+                    "average": "Average"
+                },
+                "code": {
+                    "ok": "Ok",
+                    "notfound": "Not found",
+                    "servererror": "Server Error"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Services statistics (time in millisecond)",
+            "table": {
+                "name": "Service name",
+                "count": "Count",
+                "mean": "Mean",
+                "min": "Min",
+                "max": "Max",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "ehcache": {
+            "title": "Ehcache statistics",
+            "cachename": "Cache name",
+            "objects": "Objects",
+            "hits": "Hits",
+            "misses": "Misses",
+            "evictioncount": "Eviction count",
+            "mean": "Mean get time (ms)"
+        }
+    },
+    "logs": {
+        "title": "Logs",
+        "nbloggers": "There are {{ total }} loggers.",
+        "filter": "Filter",
+        "table": {
+            "name": "Name",
+            "level": "Level"
+        }
+    },
+    "footer": "This is your footer"
+}

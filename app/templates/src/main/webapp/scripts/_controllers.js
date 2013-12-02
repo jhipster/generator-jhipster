@@ -2,9 +2,17 @@
 
 /* Controllers */
 
-<%= angularAppName %>.controller('MainController', ['$scope',
-    function ($scope) {
+<%= angularAppName %>.controller('MainController', ['$scope', '$translate',
+    function ($scope, $translate) {
+        $scope.changeLanguage = function (langKey) {
+            $translate.uses(langKey);
+        };
 
+        $scope.applyLanguageClass = function (langKey) {
+            if ($translate.preferredLanguage() == 'en') {
+                return 'active'
+            }
+        }
     }]);
 
 <%= angularAppName %>.controller('MenuController', ['$rootScope', '$scope', '$location', 'Account',

@@ -2,27 +2,27 @@
     <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-4">
-            <h1>Authentication</h1>
+            <h1 translate="login.title">Authentication</h1>
 
-            <div class="alert alert-danger" ng-show="authenticationError">
+            <div class="alert alert-danger" ng-show="authenticationError" translate="login.messages.error.authentication">
                 <strong>Authentication failed!</strong> Please check your credentials and try again.
             </div>
             <form class="form" role="form">
                 <div class="form-group">
-                    <label for="username">Login</label>
-                    <input type="text" class="form-control" id="username" placeholder="Your login" ng-model="username">
+                    <label for="username" translate="login.form.username">Login</label>
+                    <input type="text" class="form-control" id="username" placeholder="{{'login.form.username.placeholder' | translate}}" ng-model="username">
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="Your password"
+                    <label for="password" translate="login.form.password">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="{{'login.form.password.placeholder' | translate}}"
                            ng-model="password">
                 </div>
                 <div class="form-group">
-                    <label for="rememberMe">Automatic login</label>
+                    <label for="rememberMe" translate="login.form.rememberme">Automatic login</label>
                     <input type="checkbox" class="form-control" id="rememberMe"
                            ng-model="rememberMe" checked>
                 </div>
-                <button type="submit" class="btn btn-primary" ng-click="login()">Authenticate</button>
+                <button type="submit" class="btn btn-primary" ng-click="login()" translate="login.form.button">Authenticate</button>
             </form>
         </div>
         <div class="col-md-4"></div>

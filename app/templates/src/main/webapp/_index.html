@@ -23,31 +23,43 @@
         <div class="container">
             <div class="header">
                 <ul class="nav nav-pills pull-right">
-                    <li class="active"><a href="#"><span class="glyphicon glyphicon-home"></span> <span>Home</span></a></li>
+                    <li>
+                        <a href="#">
+                            <span class="glyphicon glyphicon-home"></span>
+                            <span translate="global.menu.home">Home</span>
+                        </a>
+                    </li>
                     <li class="dropdown pointer">
                         <a class="dropdown-toggle" data-toggle="dropdown">
                                 <span>
                                     <span class="glyphicon glyphicon-user"></span>
-                                    <span class="hidden-tablet">
+                                    <span class="hidden-tablet" translate="global.menu.account.main">
                                         Account
                                     </span>
                                     <b class="caret"></b>
                                 </span>
                         </a>
                         <ul class="dropdown-menu" ng-controller="MenuController">
-                            <li ng-show="authenticated"><a href="#/settings"><span class="glyphicon glyphicon-wrench"></span>
+                            <li ng-show="authenticated"><a href="#/settings" translate="global.menu.account.settings"><span class="glyphicon glyphicon-wrench"></span>
                                 Settings</a></li>
-                            <li ng-show="authenticated"><a href="#/password"><span class="glyphicon glyphicon-lock"></span>
+                            <li ng-show="authenticated"><a href="#/password" translate="global.menu.account.password"><span class="glyphicon glyphicon-lock"></span>
                                 Password</a></li>
-                            <li ng-show="authenticated"><a href="#/sessions"><span class="glyphicon glyphicon-cloud"></span>
+                            <li ng-show="authenticated"><a href="#/sessions" translate="global.menu.account.sessions"><span class="glyphicon glyphicon-cloud"></span>
                                 Sessions</a></li>
-                            <li ng-show="authenticated"><a href="#/metrics"><span class="glyphicon glyphicon-dashboard"></span>
+                            <li ng-show="authenticated"><a href="#/metrics" translate="global.menu.account.metrics"><span class="glyphicon glyphicon-dashboard"></span>
                                 Metrics</a></li>
-                            <li ng-show="authenticated"><a href="#/logs"><span class="glyphicon glyphicon-tasks"></span>
+                            <li ng-show="authenticated"><a href="#/logs" translate="global.menu.account.logs"><span class="glyphicon glyphicon-tasks"></span>
                                 Logs</a></li>
-                            <li ng-show="authenticated"><a href="#/logout"><span class="glyphicon glyphicon-log-out"></span>
+                            <li ng-show="authenticated"><a href="#/logout" translate="global.menu.account.logout"><span class="glyphicon glyphicon-log-out"></span>
                                 Log out</a></li>
-                            <li ng-hide="authenticated"><a href="#/login"><span class="glyphicon glyphicon-log-in"> Authenticate</span></a></li>
+                            <li ng-hide="authenticated"><a href="#/login" translate="global.menu.account.login"><span class="glyphicon glyphicon-log-in"> Authenticate</span></a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown pointer" ng-controller="MainController">
+                        <a  data-toggle="dropdown" translate="global.menu.language"><i class="glyphicon glyphicon-align-justify"></i>Language</a>
+                        <ul class="dropdown-menu">
+                            <li active-menu="en"><a href="#" ng-click="changeLanguage('en')" translate="global.language.en">English</a></li>
+                            <li active-menu="fr"><a href="#" ng-click="changeLanguage('fr')" translate="global.language.fr">French</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -58,7 +70,7 @@
             <div class="well" ng-view></div>
 
             <div class="footer">
-                <p>This is your footer</p>
+                <p translate="footer">This is your footer</p>
             </div>
 
         </div>

@@ -1,0 +1,206 @@
+{
+    "global": {
+        "title": "jhipster",
+        "browsehappy": "Vous utilisez un <strong>ancien</strong> navigateur. Veuillez <a href=\"http://browsehappy.com/\">mettre à jour votre navigateur</a> pour une meilleure expérience.",
+        "menu": {
+            "home": "Accueil",
+            "account": {
+                "main": "Compte",
+                "settings": "Profil",
+                "password": "Mot de passe",
+                "sessions": "Sessions",
+                "metrics": "Métriques",
+                "logs": "Logs",
+                "login": "S'authentifier",
+                "logout": "Déconnexion"
+            },
+            "language": "Langue"
+        },
+        "language": {
+            "en": "Anglais",
+            "fr": "Français"
+        }
+    },
+    "index": {
+        "title": "index"
+    },
+    "main": {
+        "title": "Bienvenue, Java Hipster!",
+        "subtitle": "C'est votre page d'accueil",
+        "logged": {
+            "message": "Vous êtes connectés en tant que \"{{username}}\".",
+            "authenticated": "Si vous voulez vous <a href=\"#/login\">connecter</a>, vous pouvez utiliser les informations suivantes: <br/> nom d'utilisateur=\"admin\" et mot de passe =\"admin\"."
+        },
+        "question": "Si vous avez des questions à propos de Jhispter:",
+        "link": {
+            "homepage": "Page d'accueil de JHipster",
+            "bugtracker": "JHipster bug tracker",
+            "contact": "Contactez nous sur Twitter @java_hipster"
+        },
+        "like": "Si vous aimez JHipster, donnez nous une <span class=\"glyphicon glyphicon-star\"></span> sur",
+        "github": "Github"
+    },
+    "login": {
+        "title": "S'authentifier",
+        "form": {
+            "username": "Nom d'utilisateur",
+            "username.placeholder": "Votre nom d'utilisateur",
+            "password": "Mot de passe",
+            "password.placeholder": "Votre mot de passe",
+            "rememberme": "Garder ma connexion ouverte",
+            "button": "Connexion"
+        }
+    },
+    "settings": {
+        "title": "Profil de l'utilisateur [{{username}}]",
+        "form": {
+            "firstname": "Prénom",
+            "firstname.placeholder": "Votre prénom",
+            "lastname": "Nom",
+            "lastname.placeholder": "Votre nom",
+            "email": "Email",
+            "email.placeholder": "Votre email",
+            "button": "Sauvegarder"
+        },
+        "messages" : {
+            "error": "<strong>Une erreur est survenue!</strong> Votre profil ne peut pas être sauvegardé.",
+            "success": "<strong>Votre profil a été sauvegardé!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "Votre prénom est requis.",
+                    "minlength": "Votre prénom doit comporter au moins un caractère",
+                    "maxlength": "Votre prénom ne doit pas comporter plus de 50 caractères"
+                },
+                "lastname": {
+                    "required": "Votre nom est requis.",
+                    "minlength": "Votre nom doit comporter au moins un caractère",
+                    "maxlength": "Votre nom ne doit pas comporter plus de 50 caractères"
+                },
+                "email": {
+                    "required": "Votre email est requis.",
+                    "minlength": "Votre email doit comporter au moins un caractère",
+                    "maxlength": "Votre email ne doit pas comporter plus de 50 caractères",
+                    "invalid": "Votre email n'est pas valide."
+                }
+            }
+        }
+    },
+    "password": {
+        "title": "Changer le mot de passe pour [<b>{{username}}</b>]",
+        "form": {
+            "newpassword": "Nouveau mot de passe",
+            "newpassword.placeholder": "Nouveau mot de passe",
+            "confirmpassword": "Confirmation du nouveau mot de passe",
+            "confirmpassword.placeholder": "Confirmation du nouveau mot de passe",
+            "button": "Sauvegarder"
+        },
+        "messages": {
+            "error": {
+                "global": "<strong>Une erreur est survenue!</strong> Le mot de passe n'a pas pu être modifié.",
+                "dontmatch" : "Le nouveau mot de passe et sa confirmation ne sont pas égaux!"
+            },
+            "success": "<strong>La mot de passe a été modifié!</strong>",
+            "validate": {
+                "newpassword": {
+                    "required": "Votre mot de passe est requis.",
+                    "minlength": "Votre mot de passe doit comporter au moins 5 caractères",
+                    "maxlength": "Votre mot de passe ne doit pas comporter plus de 20 caractères"
+                },
+                "confirmpassword": {
+                    "required": "Votre confirmation du mot de passe est requis.",
+                    "minlength": "Votre confirmation du mot de passe doit comporter au moins 5 caractères",
+                    "maxlength": "Votre confirmation du mot de passe ne doit pas comporter plus de 20 caractères"
+                }
+            }
+        }
+    },
+    "sessions": {
+        "title": "Sessions actives de [<b>{{username}}</b>]",
+        "table": {
+            "ipaddress": "Adresse IP",
+            "useragent": "User Agent",
+            "date": "Date",
+            "button": "Invalider"
+        },
+        "messages": {
+            "success": "<strong>Session a été invalidée!</strong>",
+            "error": "<strong>Une erreur est survenue!</strong> La session ne peut pas être invalidée."
+        }
+    },
+    "metrics": {
+        "title": "Métriques de l'application",
+        "refresh.button": "Rafraichir",
+        "jvm": {
+            "title": "Métriques de la JVM",
+            "memory": {
+                "title": "Mémoire",
+                "total": "Mémoire totale",
+                "heap": "Mémoire \"Heap\"",
+                "nonheap": "Mémoire \"Non-Heap\""
+            },
+            "threads": {
+                "title": "Threads",
+                "runnable": "Executable",
+                "timewaiting": "Temps d'attente",
+                "waiting": "En attente",
+                "blocked": "Bloqué"
+            },
+            "gc": {
+                "title": "Garbage collections",
+                "marksweepcount": "Total de \"Mark Sweep\"",
+                "marksweeptime": "Temps \"Mark Sweep\"",
+                "scavengecount": "Total \"Scavenge\"",
+                "scavengetime": "Temps \"Scavenge\""
+            },
+            "http": {
+                "title": "Requêtes HTTP requests (évènements par seconde)",
+                "active": "Requêtes actives :",
+                "total": "Requêtes totales :",
+                "table": {
+                    "code": "Code",
+                    "count": "Total",
+                    "mean": "Médian",
+                    "average": "Moyenne"
+                },
+                "code": {
+                    "ok": "Ok",
+                    "notfound": "Not found",
+                    "servererror": "Server Error"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Statistiques des services (Temps en milliseconde)",
+            "table": {
+                "name": "Nom du server",
+                "count": "Total",
+                "mean": "Médian",
+                "min": "Min",
+                "max": "Max",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "ehcache": {
+            "title": "Statistiques Ehcache",
+            "cachename": "Nom de la cache",
+            "objects": "Objets",
+            "hits": "Données existantes",
+            "misses": "Données non existantes",
+            "evictioncount": "Nombre de suppressions",
+            "mean": "Temps de réponse (ms)"
+        }
+    },
+    "logs": {
+        "title": "Logs",
+        "nbloggers": "Total de {{ total }} \"loggers\".",
+        "filter": "Filtrer",
+        "table": {
+            "name": "Nom",
+            "level": "Niveau"
+        }
+    },
+    "footer": "C'est votre pied de page"
+}
