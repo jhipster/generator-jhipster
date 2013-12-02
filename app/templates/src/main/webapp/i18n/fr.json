@@ -35,9 +35,9 @@
         "link": {
             "homepage": "Page d'accueil de JHipster",
             "bugtracker": "JHipster bug tracker",
-            "contact": "Contactez nous sur Twitter @java_hipster"
+            "contact": "Contactez-nous sur Twitter @java_hipster"
         },
-        "like": "Si vous aimez JHipster, donnez nous une <span class=\"glyphicon glyphicon-star\"></span> sur",
+        "like": "Si vous aimez JHipster, donnez nous une étoile sur",
         "github": "Github"
     },
     "login": {
