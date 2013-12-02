@@ -17,7 +17,7 @@ public class JavaMailHealthCheck extends HealthCheck {
     }
 
     @Override
-    public Result check() throws Exception {
+    public Result check() {
         try {
             javaMailSender.getSession().getTransport().connect();
             return Result.healthy();
