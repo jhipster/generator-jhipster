@@ -66,7 +66,7 @@ public class CustomPersistentRememberMeServices extends
     private SecureRandom random;
 
     @Inject
-    private PersistentTokenRepository tokenRepository;
+    private PersistentTokenRepository persistentTokenRepository;
 
     @Inject
     private UserRepository userRepository;
@@ -91,7 +91,7 @@ public class CustomPersistentRememberMeServices extends
         token.setIpAddress(request.getRemoteAddr());
         token.setUserAgent(request.getHeader("User-Agent"));
         try {
-            tokenRepository.saveAndFlush(token);
+            persistentTokenRepository.saveAndFlush(token);
             addCookie(token, request, response);
         } catch (DataAccessException e) {
             log.error("Failed to update token: ", e);
@@ -115,7 +115,7 @@ public class CustomPersistentRememberMeServices extends
         token.setIpAddress(request.getRemoteAddr());
         token.setUserAgent(request.getHeader("User-Agent"));
         try {
-            tokenRepository.saveAndFlush(token);
+            persistentTokenRepository.saveAndFlush(token);
             addCookie(token, request, response);
         } catch (DataAccessException e) {
             log.error("Failed to save persistent token ", e);
@@ -136,7 +136,7 @@ public class CustomPersistentRememberMeServices extends
             try {
                 String[] cookieTokens = decodeCookie(rememberMeCookie);
                 PersistentToken token = getPersistentToken(cookieTokens);
-                tokenRepository.delete(token);
+                persistentTokenRepository.delete(token);
             } catch (InvalidCookieException ice) {
                 log.info("Invalid cookie, no persistent token could be deleted");
             } catch (RememberMeAuthenticationException rmae) {
@@ -158,7 +158,7 @@ public class CustomPersistentRememberMeServices extends
         final String presentedSeries = cookieTokens[0];
         final String presentedToken = cookieTokens[1];
 
-        PersistentToken token = tokenRepository.findOne(presentedSeries);
+        PersistentToken token = persistentTokenRepository.findOne(presentedSeries);
 
         if (token == null) {
             // No series match, so we can't authenticate using this cookie
@@ -169,12 +169,12 @@ public class CustomPersistentRememberMeServices extends
         log.info("presentedToken={} / tokenValue={}", presentedToken, token.getTokenValue());
         if (!presentedToken.equals(token.getTokenValue())) {
             // Token doesn't match series value. Delete this session and throw an exception.
-            tokenRepository.delete(token);
+            persistentTokenRepository.delete(token);
             throw new CookieTheftException("Invalid remember-me token (Series/token) mismatch. Implies previous cookie theft attack.");
         }
 
         if (token.getTokenDate().plusDays(TOKEN_VALIDITY_DAYS).isBefore(LocalDate.now())) {
-            tokenRepository.delete(token);
+            persistentTokenRepository.delete(token);
             throw new RememberMeAuthenticationException("Remember-me login has expired");
         }
         return token;
