@@ -199,6 +199,7 @@ JhipsterGenerator.prototype.app = function app() {
   var testResourceDir = 'src/test/resources/';
   this.mkdir(testDir);
   this.template('src/test/java/package/test/_ApplicationTestConfiguration.java', testDir + 'test/ApplicationTestConfiguration.java');
+  this.template('src/test/java/package/service/_UserServiceTest.java', testDir + 'service/UserServiceTest.java'); 
   this.template('src/test/java/package/web/rest/_UserResourceTest.java', testDir + 'web/rest/UserResourceTest.java'); 
   this.template(testResourceDir + 'META-INF/spring/_applicationContext-database.xml', testResourceDir + 'META-INF/spring/applicationContext-database.xml');
   this.template(testResourceDir + 'META-INF/spring/_applicationContext-security.xml', testResourceDir + 'META-INF/spring/applicationContext-security.xml');
