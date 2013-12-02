@@ -232,6 +232,10 @@ JhipsterGenerator.prototype.app = function app() {
   this.copy(webappDir + 'robots.txt', webappDir + 'robots.txt');
   this.copy(webappDir + 'htaccess.txt', webappDir + '.htaccess');
 
+  // i18n
+  this.copy(webappDir + '/i18n/en.json', webappDir + '/i18n/en.json');
+  this.copy(webappDir + '/i18n/fr.json', webappDir + '/i18n/fr.json');
+
   // Angular JS views
   this.angularAppName = _s.camelize(this.baseName) + 'App';
   this.copy(webappDir + '/views/main.html', webappDir + '/views/main.html');
@@ -250,6 +254,7 @@ JhipsterGenerator.prototype.app = function app() {
   this.template(webappDir + 'scripts/_app.js', webappDir + 'scripts/app.js');
   this.template(webappDir + 'scripts/_controllers.js', webappDir + 'scripts/controllers.js');
   this.template(webappDir + 'scripts/_services.js', webappDir + 'scripts/services.js');
+  this.template(webappDir + 'scripts/_directives.js', webappDir + 'scripts/directives.js');
 
   // CSS
   this.copy(webappDir + 'styles/documentation.css', webappDir + 'styles/documentation.css'); 
@@ -266,10 +271,14 @@ JhipsterGenerator.prototype.app = function app() {
     'bower_components/angular-resource/angular-resource.js',
     'bower_components/angular-cookies/angular-cookies.js',
     'bower_components/angular-sanitize/angular-sanitize.js',
+    'bower_components/angular-translate/angular-translate.js',
+    'bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
+    'bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
 
     'scripts/app.js',
     'scripts/controllers.js',
     'scripts/services.js',
+    'scripts/directives.js',
 
     'bower_components/sass-bootstrap/js/affix.js',
     'bower_components/sass-bootstrap/js/alert.js',

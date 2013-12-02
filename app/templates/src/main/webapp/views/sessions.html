@@ -1,11 +1,11 @@
 <div ng-controller="SessionsController">
 
-    <h2>Active sessions for [<b>{{account.login}}</b>]</h2>
+    <h2 translate="sessions.title" translate-values="{username: '{{account.login}}'}">Active sessions for [<b>{{account.login}}</b>]</h2>
 
-    <div class="alert alert-success" ng-show="success">
+    <div class="alert alert-success" ng-show="success" translate="sessions.messages.success">
         <strong>Session invalidated!</strong>
     </div>
-    <div class="alert alert-danger" ng-show="error">
+    <div class="alert alert-danger" ng-show="error" translate="sessions.messages.error">
         <strong>An error has occured!</strong> The session could not be invalidated.
     </div>
 
@@ -13,9 +13,9 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>IP Address</th>
-                    <th>User agent</th>
-                    <th>Date</th>
+                    <th translate="sessions.table.ipaddress">IP Address</th>
+                    <th translate="sessions.table.useragent">User agent</th>
+                    <th translate="sessions.table.date">Date</th>
                     <th></th>
                 </tr>
             </thead>
@@ -27,7 +27,7 @@
                     <td>
                         <button type="submit"
                                 class="btn btn-primary"
-                                ng-click="invalidate(session.series)">
+                                ng-click="invalidate(session.series)" translate="sessions.table.button">
                                  Invalidate
                         </button>
                     </td>
