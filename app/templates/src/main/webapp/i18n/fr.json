@@ -1,6 +1,6 @@
 {
     "global": {
-        "title": "jhipster",
+        "title": "JHipster",
         "browsehappy": "Vous utilisez un <strong>ancien</strong> navigateur. Veuillez <a href=\"http://browsehappy.com/\">mettre à jour votre navigateur</a> pour une meilleure expérience.",
         "menu": {
             "home": "Accueil",
@@ -25,11 +25,11 @@
         "title": "index"
     },
     "main": {
-        "title": "Bienvenue, Java Hipster!",
-        "subtitle": "C'est votre page d'accueil",
+        "title": "Bienvenue, Java Hipster !",
+        "subtitle": "Ceci est votre page d'accueil",
         "logged": {
-            "message": "Vous êtes connectés en tant que \"{{username}}\".",
-            "authenticated": "Si vous voulez vous <a href=\"#/login\">connecter</a>, vous pouvez utiliser les informations suivantes: <br/> nom d'utilisateur=\"admin\" et mot de passe =\"admin\"."
+            "message": "Vous êtes connecté en tant que \"{{username}}\".",
+            "authenticated": "Si vous voulez vous <a href=\"#/login\">connecter</a>, vous pouvez utiliser les identifiants par défaut : <br/> nom d'utilisateur=\"admin\" et mot de passe =\"admin\"."
         },
         "question": "Si vous avez des questions à propos de Jhispter:",
         "link": {
@@ -202,5 +202,5 @@
             "level": "Niveau"
         }
     },
-    "footer": "C'est votre pied de page"
+    "footer": "Ceci est votre pied de page"
 }
