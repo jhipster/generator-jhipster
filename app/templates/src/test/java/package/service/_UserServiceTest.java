@@ -5,7 +5,6 @@ import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.PersistentTokenRepository;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.test.ApplicationTestConfiguration;
-import junit.framework.TestCase;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,7 +15,8 @@ import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.inject.Inject;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test class for the UserResource REST controller.
@@ -38,7 +38,7 @@ public class UserServiceTest {
 
     @Inject
     private UserRepository userRepository;
-    
+
     @Inject
     private UserService userService;
 
