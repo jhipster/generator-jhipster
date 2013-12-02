@@ -12,7 +12,6 @@ import com.ryantenney.metrics.spring.config.annotation.EnableMetrics;
 import com.ryantenney.metrics.spring.config.annotation.MetricsConfigurerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -41,9 +40,6 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
 
     @Inject
     private JavaMailSenderImpl javaMailSender;
-
-    @Inject
-    private CacheManager cacheManager;
 
     @Override
     public MetricRegistry getMetricRegistry() {
