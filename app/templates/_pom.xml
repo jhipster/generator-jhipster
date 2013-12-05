@@ -501,10 +501,12 @@
                         <configuration>
                             <rules>
                                 <requireMavenVersion>
+                                    <message>You are running an older version of Maven. JHipster requires at least Maven 3.0</message>
                                     <version>[3.0.0,)</version>
                                 </requireMavenVersion>
                                 <requireJavaVersion>
-                                    <version>[1.6.0,)</version>
+                                    <message>You are running an older version of Java. JHipster requires at least JDK 1.7</message>
+                                    <version>[1.7.0,)</version>
                                 </requireJavaVersion>
                             </rules>
                         </configuration>
