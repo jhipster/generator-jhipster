@@ -48,7 +48,9 @@
             "button": "Authenticate"
         },
         "messages": {
-            "authentication": "<strong>Authentication failed!</strong> Please check your credentials and try again."
+            "error": {
+                "authentication": "<strong>Authentication failed!</strong> Please check your credentials and try again."
+            }
         }
     },
     "settings": {
