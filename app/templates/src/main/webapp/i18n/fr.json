@@ -190,7 +190,7 @@
         },
         "ehcache": {
             "title": "Statistiques Ehcache",
-            "cachename": "Nom de la cache",
+            "cachename": "Nom du cache",
             "objects": "Objets",
             "hits": "Données existantes",
             "misses": "Données non existantes",
