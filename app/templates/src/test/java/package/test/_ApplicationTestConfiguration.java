@@ -2,6 +2,7 @@ package <%=packageName%>.test;
 
 import <%=packageName%>.conf.AsyncConfiguration;
 import <%=packageName%>.conf.CacheConfiguration;
+import <%=packageName%>.conf.DatabaseConfiguration;
 import <%=packageName%>.conf.MailConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,7 @@ import java.io.IOException;
 @Import(value = {
         AsyncConfiguration.class,
         CacheConfiguration.class,
+        DatabaseConfiguration.class,
         MailConfiguration.class})
 @ImportResource("classpath:/META-INF/spring/applicationContext-*.xml")
 public class ApplicationTestConfiguration {

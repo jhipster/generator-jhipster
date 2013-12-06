@@ -132,13 +132,11 @@ JhipsterGenerator.prototype.app = function app() {
   this.template(resourceDir + '_ehcache.xml', resourceDir + 'ehcache.xml');
   this.template(resourceDir + '_logback.xml', resourceDir + 'logback.xml');
 
-  this.copy(resourceDir + '/META-INF/persistence.xml', resourceDir + 'META-INF/persistence.xml');
   this.copy(resourceDir + '/META-INF/application/application.properties', resourceDir + 'META-INF/' + this.baseName + '/' + this.baseName + '.properties');
   this.copy(resourceDir + '/META-INF/liquibase/db-changelog.xml', resourceDir + 'META-INF/liquibase/db-changelog.xml');
   this.copy(resourceDir + '/META-INF/liquibase/users.csv', resourceDir + 'META-INF/liquibase/users.csv');
   this.copy(resourceDir + '/META-INF/liquibase/authorities.csv', resourceDir + 'META-INF/liquibase/authorities.csv');
   this.copy(resourceDir + '/META-INF/liquibase/users_authorities.csv', resourceDir + 'META-INF/liquibase/users_authorities.csv');
-  this.template(resourceDir + '/META-INF/spring/_applicationContext-database.xml', resourceDir + 'META-INF/spring/applicationContext-database.xml');
   this.template(resourceDir + '/META-INF/spring/_applicationContext-security.xml', resourceDir + 'META-INF/spring/applicationContext-security.xml');
  
   // Create Java files
@@ -148,6 +146,7 @@ JhipsterGenerator.prototype.app = function app() {
   this.template('src/main/java/package/conf/_ApplicationConfiguration.java', javaDir + 'conf/ApplicationConfiguration.java');
   this.template('src/main/java/package/conf/_AsyncConfiguration.java', javaDir + 'conf/AsyncConfiguration.java');
   this.template('src/main/java/package/conf/_CacheConfiguration.java', javaDir + 'conf/CacheConfiguration.java');
+  this.template('src/main/java/package/conf/_DatabaseConfiguration.java', javaDir + 'conf/DatabaseConfiguration.java');
   this.template('src/main/java/package/conf/_MailConfiguration.java', javaDir + 'conf/MailConfiguration.java');
   this.template('src/main/java/package/conf/_MetricsConfiguration.java', javaDir + 'conf/MetricsConfiguration.java');
   this.template('src/main/java/package/conf/_Constants.java', javaDir + 'conf/Constants.java');
@@ -201,7 +200,6 @@ JhipsterGenerator.prototype.app = function app() {
   this.template('src/test/java/package/test/_ApplicationTestConfiguration.java', testDir + 'test/ApplicationTestConfiguration.java');
   this.template('src/test/java/package/service/_UserServiceTest.java', testDir + 'service/UserServiceTest.java'); 
   this.template('src/test/java/package/web/rest/_UserResourceTest.java', testDir + 'web/rest/UserResourceTest.java'); 
-  this.template(testResourceDir + 'META-INF/spring/_applicationContext-database.xml', testResourceDir + 'META-INF/spring/applicationContext-database.xml');
   this.template(testResourceDir + 'META-INF/spring/_applicationContext-security.xml', testResourceDir + 'META-INF/spring/applicationContext-security.xml');
   this.template(testResourceDir + '_logback.xml', testResourceDir + 'logback.xml');
   this.template(testResourceDir + '_ehcache.xml', testResourceDir + 'ehcache.xml');
