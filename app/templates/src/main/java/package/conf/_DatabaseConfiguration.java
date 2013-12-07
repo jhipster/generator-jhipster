@@ -74,7 +74,7 @@ public class DatabaseConfiguration {
 
         lcemfb.setJpaProperties(jpaProperties);
 
-        lcemfb.setPackagesToScan("com.mycompany.myapp.domain");
+        lcemfb.setPackagesToScan("<%=packageName%>.domain");
         lcemfb.afterPropertiesSet();
         return lcemfb.getObject();
     }
