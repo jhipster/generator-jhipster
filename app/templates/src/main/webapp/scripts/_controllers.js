@@ -55,19 +55,18 @@
         });
     }]);
 
-<%= angularAppName %>.controller('SettingsController', ['$scope', 'Account',
-    function ($scope, Account) {
+<%= angularAppName %>.controller('SettingsController', ['$scope', 'resolvedAccount', 'Account',
+    function ($scope, resolvedAccount, Account) {
         $scope.success = null;
         $scope.error = null;
-        $scope.init = function () {
-            $scope.settingsAccount = Account.get();
-        };
+        $scope.settingsAccount = resolvedAccount;
+
         $scope.save = function () {
             Account.save($scope.settingsAccount,
                 function (value, responseHeaders) {
                     $scope.error = null;
                     $scope.success = 'OK';
-                    $scope.init();
+                    $scope.settingsAccount = Account.get();
                 },
                 function (httpResponse) {
                     $scope.success = null;
@@ -99,11 +98,11 @@
         };
     }]);
 
-<%= angularAppName %>.controller('SessionsController', ['$scope', 'Sessions',
-    function ($scope, Sessions) {
+<%= angularAppName %>.controller('SessionsController', ['$scope', 'resolvedSessions', 'Sessions',
+    function ($scope, resolvedSessions, Sessions) {
         $scope.success = null;
         $scope.error = null;
-        $scope.sessions = Sessions.get();
+        $scope.sessions = resolvedSessions;
         $scope.invalidate = function (series) {
             Sessions.delete({series: encodeURIComponent(series)},
                 function (value, responseHeaders) {
@@ -118,16 +117,14 @@
         };
     }]);
 
-<%= angularAppName %>.controller('MetricsController', ['$scope', 'Metrics',
-    function ($scope, Metrics) {
-        $scope.init = function () {
-            $scope.metrics = Metrics.get();
-        };
+<%= angularAppName %>.controller('MetricsController', ['$scope', 'resolvedMetrics',
+    function ($scope, resolvedMetrics) {
+        $scope.metrics = resolvedMetrics;
     }]);
 
-<%= angularAppName %>.controller('LogsController', ['$scope', 'LogsService',
-    function ($scope, LogsService) {
-        $scope.loggers = LogsService.findAll();
+<%= angularAppName %>.controller('LogsController', ['$scope', 'resolvedLogs', 'LogsService',
+    function ($scope, resolvedLogs, LogsService) {
+        $scope.loggers = resolvedLogs;
 
         $scope.changeLevel = function (name, level) {
             LogsService.changeLevel({name: name, level: level}, function () {

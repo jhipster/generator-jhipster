@@ -14,7 +14,12 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['ngResource
                 })
                 .when('/settings', {
                     templateUrl: 'views/settings.html',
-                    controller: 'SettingsController'
+                    controller: 'SettingsController',
+                    resolve:{
+                        resolvedAccount:['Account', function (Account) {
+                            return Account.get();
+                        }]
+                    }
                 })
                 .when('/password', {
                     templateUrl: 'views/password.html',
@@ -22,15 +27,30 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['ngResource
                 })
                 .when('/sessions', {
                     templateUrl: 'views/sessions.html',
-                    controller: 'SessionsController'
+                    controller: 'SessionsController',
+                    resolve:{
+                        resolvedSessions:['Sessions', function (Sessions) {
+                            return Sessions.get();
+                        }]
+                    }
                 })
                 .when('/metrics', {
                     templateUrl: 'views/metrics.html',
-                    controller: 'MetricsController'
+                    controller: 'MetricsController',
+                    resolve:{
+                        resolvedMetrics:['Metrics', function (Metrics) {
+                            return Metrics.get();
+                        }]
+                    }
                 })
                 .when('/logs', {
                     templateUrl: 'views/logs.html',
-                    controller: 'LogsController'
+                    controller: 'LogsController',
+                    resolve:{
+                        resolvedLogs:['LogsService', function (LogsService) {
+                            return LogsService.findAll();
+                        }]
+                    }
                 })
                 .when('/logout', {
                     templateUrl: 'views/main.html',
