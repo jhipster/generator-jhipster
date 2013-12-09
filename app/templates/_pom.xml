@@ -111,18 +111,30 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>com.github.trecloux</groupId>
-                        <artifactId>yeoman-maven-plugin</artifactId>
-                        <version>0.1</version>
-                        <configuration>
-                            <yeomanProjectDirectory><%= _.unescape('\$\{project.basedir}')%></yeomanProjectDirectory>
-                        </configuration>
+                        <groupId>com.github.eirslett</groupId>
+                        <artifactId>frontend-maven-plugin</artifactId>
+                        <version>0.0.9</version>
                         <executions>
                             <execution>
-                                <id>run-grunt</id>
-                                <phase>generate-resources</phase>
+                                <id>install node and npm</id>
                                 <goals>
-                                    <goal>build</goal>
+                                    <goal>install-node-and-npm</goal>
+                                </goals>
+                                <configuration>
+                                    <nodeVersion>v0.10.22</nodeVersion>
+                                    <npmVersion>1.3.14</npmVersion>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>npm install</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>grunt build</id>
+                                <goals>
+                                    <goal>grunt</goal>
                                 </goals>
                             </execution>
                         </executions>
