@@ -1,0 +1,8 @@
+Description:
+    Creates a new JHipster entity: JPA entity, Spring MVC REST controller, AngularJS controller and view, all wired up together
+
+Example:
+    yo jhipster:entity Foo
+
+    This will create:
+        app/scripts/controllers/thing-ctrl.js

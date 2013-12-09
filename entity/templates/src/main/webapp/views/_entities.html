@@ -1,0 +1,26 @@
+<div>
+
+    <h2><%= entityClass %>s</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="<%= entityInstance %> in <%= entityInstance %>s">
+                    <td>{{<%= entityInstance %>.id}}</td>
+                    <td>
+                        <button type="submit"
+                                class="btn btn-primary">
+                                 Update
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

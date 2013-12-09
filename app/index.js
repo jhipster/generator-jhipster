@@ -296,6 +296,7 @@ JhipsterGenerator.prototype.app = function app() {
 
   this.config.set('packageName', this.packageName);
   this.config.set('packageFolder', packageFolder);
+  this.config.set('baseName', this.baseName);
 };
 
 JhipsterGenerator.prototype.projectfiles = function projectfiles() {
