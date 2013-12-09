@@ -31,6 +31,7 @@
         "question": "If you have any question on JHipster:",
         "link": {
             "homepage": "JHipster homepage",
+            "stackoverflow": "JHipster on Stack Overflow",
             "bugtracker": "JHipster bug tracker",
             "contact": "contact @java_hipster on Twitter"
         },

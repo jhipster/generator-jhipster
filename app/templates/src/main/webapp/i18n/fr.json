@@ -31,9 +31,10 @@
             "message": "Vous êtes connecté en tant que \"{{username}}\".",
             "authenticated": "Si vous voulez vous <a href=\"#/login\">connecter</a>, vous pouvez utiliser les identifiants par défaut : <br/> nom d'utilisateur=\"admin\" et mot de passe =\"admin\"."
         },
-        "question": "Si vous avez des questions à propos de Jhispter:",
+        "question": "Si vous avez des questions à propos de JHipster:",
         "link": {
             "homepage": "Page d'accueil de JHipster",
+            "stackoverflow": "JHipster sur Stack Overflow",
             "bugtracker": "JHipster bug tracker",
             "contact": "Contactez-nous sur Twitter @java_hipster"
         },
