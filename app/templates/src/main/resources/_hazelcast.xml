@@ -41,15 +41,15 @@
             then all entries of the map will be copied to another JVM for
             fail-safety. Valid numbers are 0 (no backup), 1, 2, 3.
         -->
-        <backup-count>1</backup-count>
+        <backup-count>0</backup-count>
         <!--
             Valid values are:
             NONE (no eviction),
             LRU (Least Recently Used),
-            LFU (Least Frequiently Used).
+            LFU (Least Frequently Used).
             NONE is the default.
         -->
-        <eviction-policy>NONE</eviction-policy>
+        <eviction-policy>LRU</eviction-policy>
         <!--
             Maximum size of the map. When max size is reached,
             map is evicted based on the policy defined.
@@ -71,6 +71,7 @@
     </map>
 
     <map name="my-sessions">
+        <backup-count>1</backup-count>
         <time-to-live-seconds>3600</time-to-live-seconds>
     </map>
 </hazelcast>

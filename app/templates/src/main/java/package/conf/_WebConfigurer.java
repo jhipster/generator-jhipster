@@ -7,11 +7,9 @@ import com.codahale.metrics.servlets.AdminServlet;
 import com.codahale.metrics.servlets.HealthCheckServlet;
 import com.codahale.metrics.servlets.MetricsServlet;
 import <%=packageName%>.web.filter.CachingHttpHeadersFilter;
-import <%=packageName%>.web.filter.StaticResourcesProductionFilter;
-<% if (clusteredHttpSession == 'hazelcast') { %>
+import <%=packageName%>.web.filter.StaticResourcesProductionFilter;<% if (clusteredHttpSession == 'hazelcast') { %>
 import com.hazelcast.web.SessionListener;
-import com.hazelcast.web.WebFilter;
-<% } %>
+import com.hazelcast.web.WebFilter;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -22,11 +20,9 @@ import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.*;
-import java.util.EnumSet;
-<% if (clusteredHttpSession == 'hazelcast') { %>
+import java.util.EnumSet;<% if (clusteredHttpSession == 'hazelcast') { %>
 import java.util.HashMap;
-import java.util.Map;
-<% } %>
+import java.util.Map;<% } %>
 
 /**
  * Configuration of web application with Servlet 3.0 APIs.
@@ -53,8 +49,8 @@ public class WebConfigurer implements ServletContextListener {
 
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
 
-        initSpring(servletContext, rootContext);
-        initClusteredHttpSessionFilter(servletContext, disps);
+        initSpring(servletContext, rootContext);<% if (clusteredHttpSession == 'hazelcast') { %>
+        initClusteredHttpSessionFilter(servletContext, disps);<% } %>
         initSpringSecurity(servletContext, disps);
         initMetrics(servletContext, disps);
         initGzipFilter(servletContext, disps);
@@ -71,63 +67,58 @@ public class WebConfigurer implements ServletContextListener {
         log.debug("Web application fully configured");
     }
 
-    /**
+    <% if (clusteredHttpSession == 'hazelcast') { %>/**
      * Initializes the Clustered Http Session filter
      */
     private void initClusteredHttpSessionFilter(ServletContext servletContext, EnumSet<DispatcherType> disps) {
-        <% if (clusteredHttpSession == 'hazelcast') { %>
-            log.debug("Registering Clustered Http Session Filter");
+        log.debug("Registering Clustered Http Session Filter");
 
-            disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC, DispatcherType.INCLUDE);
+        disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC, DispatcherType.INCLUDE);
+        servletContext.addListener(new SessionListener());
+        final FilterRegistration.Dynamic hazelcastWebFilter = servletContext.addFilter("hazelcastWebFilter",
+                new WebFilter());
 
-            servletContext.addListener(new SessionListener());
+        Map<String, String> parameters = new HashMap<String, String>();
+        // Name of the distributed map storing your web session objects
+        parameters.put("map-name", "clustered-http-sessions");
 
-            final FilterRegistration.Dynamic hazelcastWebFilter = servletContext.addFilter("hazelcastWebFilter",
-                    new WebFilter());
+        // How is your load -balancer configured ?
+        // sticky-session means all requests of a session
+        // is routed to the node where the session is first created.
+        // This is excellent for performance.
+        // If sticky-session is set to false, when a session is updated
+        // on a node, entry for this session on all other nodes is invalidated.
+        // You have to know how your load -balancer is configured before
+        // setting this parameter. Default is true.
+        parameters.put("sticky-session", "true");
 
-            Map<String, String> parameters = new HashMap<String, String>();
-            // Name of the distributed map storing your web session objects
-            parameters.put("map-name", "clustered-http-sessions");
+        // Name of session id cookie
+        parameters.put("cookie-name", "hazelcast.sessionId");
 
-            // How is your load -balancer configured ?
-            // stick - session means all requests of a session
-            // is routed to the node where the session is first created.
-            // This is excellent for performance.
-            // If sticky - session is set to false, when a session is updated
-            // on a node, entry for this session on all other nodes is invalidated.
-            // You have to know how your load -balancer is configured before
-            // setting this parameter.Default is true.
-            parameters.put("sticky-session", "false");
+        // Are you debugging? Default is false.
+        if (WebApplicationContextUtils
+                .getRequiredWebApplicationContext(servletContext)
+                .getBean(Environment.class)
+                .acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
+            parameters.put("debug", "false");
+        } else {
+            parameters.put("debug", "true");
+        }
 
-            // Name of session id cookie
-            parameters.put("cookie-name", "hazelcast.sessionId");
+        // Do you want to shutdown HazelcastInstance during
+        // web application undeploy process?
+        // Default is true.
+        parameters.put("shutdown-on-destroy", "true");
 
-            // Are you debugging? Default is false.
-            if (WebApplicationContextUtils
-                    .getRequiredWebApplicationContext(servletContext)
-                    .getBean(Environment.class)
-                    .acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
-                parameters.put("debug", "false");
-            } else {
-                parameters.put("debug", "true");
-            }
-
-            // Do you want to shutdown HazelcastInstance during
-            // web application undeploy process?
-            // Default is true.
-            parameters.put("shutdown-on-destroy", "true");
-
-            hazelcastWebFilter.setInitParameters(parameters);
-            hazelcastWebFilter.addMappingForUrlPatterns(disps, false, "/*");
-            hazelcastWebFilter.setAsyncSupported(true);
-        <% } %>
-    }
+        hazelcastWebFilter.setInitParameters(parameters);
+        hazelcastWebFilter.addMappingForUrlPatterns(disps, false, "/*");
+        hazelcastWebFilter.setAsyncSupported(true);
+    }<% } %>
 
     /**
      * Initializes the GZip filter.
      */
-    private void initGzipFilter(ServletContext servletContext, EnumSet<DispatcherType> disps) {
-        <% if (hibernateCache == 'ehcache') { %>
+    private void initGzipFilter(ServletContext servletContext, EnumSet<DispatcherType> disps) {<% if (hibernateCache == 'ehcache') { %>
         log.debug("Registering GZip Filter");
         FilterRegistration.Dynamic gzipFilter = servletContext.addFilter("gzipFilter",
                 new net.sf.ehcache.constructs.web.filter.GzipFilter());
@@ -139,10 +130,8 @@ public class WebConfigurer implements ServletContextListener {
         gzipFilter.addMappingForUrlPatterns(disps, true, "/scripts/*");
         gzipFilter.addMappingForUrlPatterns(disps, true, "/styles/*");
         gzipFilter.addMappingForUrlPatterns(disps, true, "/views/*");
-        gzipFilter.setAsyncSupported(true);
-        <% } else { %>
-        log.debug("No GZip filter implementation without enabled");
-        <% } %>
+        gzipFilter.setAsyncSupported(true);<% } else { %>
+        log.debug("No GZip filter implementation enabled");<% } %>
     }
 
     /**

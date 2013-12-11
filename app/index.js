@@ -82,7 +82,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                     name: 'Yes, with HazelCast (distributed cache, for multiple nodes)'
                 }
             ],
-            default: 2
+            default: 1
         },
         {
             type: 'list',
@@ -98,7 +98,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                     name: 'Yes, with HazelCast'
                 }
             ],
-            default: 1
+            default: 0
         },
         {
             type: 'list',
@@ -292,18 +292,18 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(webappDir + 'htaccess.txt', webappDir + '.htaccess');
 
     // i18n
-    this.template(webappDir + '/i18n/_en.json', webappDir + '/i18n/en.json');
-    this.template(webappDir + '/i18n/_fr.json', webappDir + '/i18n/fr.json');
+    this.template(webappDir + '/i18n/_en.json', webappDir + 'i18n/en.json');
+    this.template(webappDir + '/i18n/_fr.json', webappDir + 'i18n/fr.json');
 
     // Angular JS views
     this.angularAppName = _s.camelize(this.baseName) + 'App';
-    this.copy(webappDir + '/views/main.html', webappDir + '/views/main.html');
-    this.copy(webappDir + '/views/login.html', webappDir + '/views/login.html');
-    this.copy(webappDir + '/views/logs.html', webappDir + '/views/logs.html');
-    this.copy(webappDir + '/views/password.html', webappDir + '/views/password.html');
-    this.copy(webappDir + '/views/settings.html', webappDir + '/views/settings.html');
-    this.copy(webappDir + '/views/sessions.html', webappDir + '/views/sessions.html');
-    this.template(webappDir + '/views/_metrics.html', webappDir + '/views/metrics.html');
+    this.copy(webappDir + '/views/main.html', webappDir + 'views/main.html');
+    this.copy(webappDir + '/views/login.html', webappDir + 'views/login.html');
+    this.copy(webappDir + '/views/logs.html', webappDir + 'views/logs.html');
+    this.copy(webappDir + '/views/password.html', webappDir + 'views/password.html');
+    this.copy(webappDir + '/views/settings.html', webappDir + 'views/settings.html');
+    this.copy(webappDir + '/views/sessions.html', webappDir + 'views/sessions.html');
+    this.template(webappDir + '/views/_metrics.html', webappDir + 'views/metrics.html');
 
     // Index page
     this.indexFile = this.readFileAsString(path.join(this.sourceRoot(), webappDir + '_index.html'));
