@@ -37,6 +37,18 @@ public class AccountResource {
     private PersistentTokenRepository persistentTokenRepository;
 
     /**
+     * GET  /rest/authenticate -> check if the user is authenticated.
+     */
+    @RequestMapping(value = "/rest/authenticate",
+            method = RequestMethod.GET,
+            produces = "application/json")
+    @ResponseBody
+    public String isAuthenticated() {
+        log.debug("REST request to check if the current user is authenticated");
+        return "OK";
+    }
+
+    /**
      * GET  /rest/account -> get the current user.
      */
     @RequestMapping(value = "/rest/account",

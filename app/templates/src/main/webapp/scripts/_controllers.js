@@ -13,22 +13,8 @@
         };
     }]);
 
-<%= angularAppName %>.controller('MenuController', ['$rootScope', '$scope', '$location', 'Account',
-    function ($rootScope, $scope, $location, Account) {
-        $scope.init = function () {
-            $rootScope.account = Account.get({}, function () {
-                $rootScope.authenticated = true;
-            }, function (response) {
-                if (response.status === 401) {
-                    $rootScope.authenticated = false;
-                    $location.path('');
-                }
-            });
-        };
-        $scope.$on('authenticationEvent', function () {
-            $scope.init();
-        });
-        $scope.init();
+<%= angularAppName %>.controller('MenuController', ['$scope',
+    function ($scope) {
     }]);
 
 <%= angularAppName %>.controller('LoginController', ['$scope', '$location', 'AuthenticationSharedService',
