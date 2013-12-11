@@ -2,7 +2,7 @@
 
 /* App Module */
 
-var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['ngResource', 'ngRoute', 'ngCookies', 'pascalprecht.translate']);
+var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-interceptor', 'ngResource', 'ngRoute', 'ngCookies', 'pascalprecht.translate']);
 
 <%= angularAppName %>
     .config(['$routeProvider', '$httpProvider', '$translateProvider',
@@ -61,26 +61,6 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['ngResource
                     controller: 'MainController'
                 })
 
-            // Handle the 401 error
-            var unauthorizedInterceptor = ['$rootScope', '$q', '$location', function (scope, $q, $location) {
-                function success(response) {
-                    return response;
-                }
-
-                function error(response) {
-                    var status = response.status;
-                    if (status == 401) {
-                        $location.path('/login').replace();
-                    }
-                    return $q.reject(response);
-                }
-
-                return function (promise) {
-                    return promise.then(success, error);
-                }
-            }];
-            $httpProvider.responseInterceptors.push(unauthorizedInterceptor);
-
             // Initialize angular-translate
             $translateProvider.useStaticFilesLoader({
                 prefix: '/i18n/',
@@ -91,4 +71,46 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['ngResource
 
             // remember language
             $translateProvider.useCookieStorage();
+        }])
+        .run(['$rootScope', '$location', 'authService', 'AuthenticationSharedService', 'Account',
+            function($rootScope, $location, authService, AuthenticationSharedService, Account) {
+            $rootScope.$on("$routeChangeStart", function(event, next, current) {
+                // Check if the status of the user. Is it authenticated or not?
+                AuthenticationSharedService.authenticate({}, function() {
+                    $rootScope.authenticated = true;
+                });
+            });
+
+            // Call when the 401 response is returned by the client
+            $rootScope.$on('event:auth-loginRequired', function(rejection) {
+                $rootScope.authenticated = false;
+                if ($location.path() !== "/" && $location.path() !== "") {
+                    $location.path('/login').replace();
+                }
+            });
+
+            // Call when the custome is authenticated
+           $rootScope.$on('event:auth-authConfirmed', function() {
+               $rootScope.authenticated = true;
+               $rootScope.account = Account.get();
+
+               // If the login page has been requested and the customer is already logged-in
+               // the customer is redirected to the home page
+               if ($location.path() === "/login") {
+                   $location.path('/').replace();
+               }
+            });
+
+            // Call when the customer logs in
+            $rootScope.$on('event:auth-loginConfirmed', function() {
+                $rootScope.authenticated = true;
+                $rootScope.account = Account.get();
+                $location.path('').replace();
+            });
+
+            // Call when the customer logs out
+            $rootScope.$on('event:auth-loginCancelled', function() {
+                $rootScope.authenticated = false;
+                $location.path('');
+            });
         }]);

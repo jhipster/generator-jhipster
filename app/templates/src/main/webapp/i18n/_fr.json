@@ -188,7 +188,7 @@
                 "p95": "p95",
                 "p99": "p99"
             }
-        },
+        }<% if (hibernateCache == 'ehcache') { %>,
         "ehcache": {
             "title": "Statistiques Ehcache",
             "cachename": "Nom du cache",
@@ -197,7 +197,7 @@
             "misses": "Données non existantes",
             "evictioncount": "Nombre de suppressions",
             "mean": "Temps de réponse (ms)"
-        }
+        }<% } %>
     },
     "logs": {
         "title": "Logs",

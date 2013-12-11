@@ -68,10 +68,15 @@ public class DatabaseConfiguration {
         jpaProperties.put("hibernate.cache.use_query_cache", false);
         jpaProperties.put("hibernate.generate_statistics",
                 env.getProperty("hibernate.generate_statistics", Boolean.class));
-
+        <% if (hibernateCache == 'ehcache') { %>
         jpaProperties.put("hibernate.cache.region.factory_class",
                 "org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory");
-
+        <% } else if (hibernateCache == 'hazelcast') { %>
+        jpaProperties.put("hibernate.cache.use_minimal_puts", true);
+        jpaProperties.put("hibernate.cache.hazelcast.use_lite_member", true);
+        jpaProperties.put("hibernate.cache.region.factory_class",
+                "com.hazelcast.hibernate.HazelcastCacheRegionFactory");
+        <% } %>
         lcemfb.setJpaProperties(jpaProperties);
 
         lcemfb.setPackagesToScan("<%=packageName%>.domain");

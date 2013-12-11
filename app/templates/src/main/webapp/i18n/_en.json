@@ -186,7 +186,7 @@
                 "p95": "p95",
                 "p99": "p99"
             }
-        },
+        }<% if (hibernateCache == 'ehcache') { %>,
         "ehcache": {
             "title": "Ehcache statistics",
             "cachename": "Cache name",
@@ -195,7 +195,7 @@
             "misses": "Misses",
             "evictioncount": "Eviction count",
             "mean": "Mean get time (ms)"
-        }
+        }<% } %>
     },
     "logs": {
         "title": "Logs",

@@ -37,4 +37,6 @@ angular.module('<%= angularAppName %>')
             }
         };
     }]);
+
+
     
