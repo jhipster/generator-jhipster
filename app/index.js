@@ -38,36 +38,19 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'input',
             name: 'baseName',
-            message: '(1/8) What is the base name of your application?',
+            message: '(1/7) What is the base name of your application?',
             default: 'jhipster'
         },
         {
             type: 'input',
             name: 'packageName',
-            message: '(2/8) What is your default package name?',
+            message: '(2/7) What is your default package name?',
             default: 'com.mycompany.myapp'
         },
         {
             type: 'list',
-            name: 'springVersion',
-            message: '(3/6) Which version of the Spring Framework would you like to use?',
-            choices: [
-                {
-                    value: 'spring32',
-                    name: 'Spring 3.2 (stable)',
-                    checked: true
-                },
-                {
-                    value: 'spring4',
-                    name: 'Spring 4.0 (release candidate)',
-                    checked: false
-                }
-            ]
-        },
-        {
-            type: 'list',
             name: 'hibernateCache',
-            message: '(4/8) Do you want to use Hibernate 2nd level cache?',
+            message: '(3/7) Do you want to use Hibernate 2nd level cache?',
             choices: [
                 {
                     value: 'no',
@@ -87,7 +70,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'clusteredHttpSession',
-            message: '(5/8) Do you want to use clustered HTTP sessions?',
+            message: '(4/7) Do you want to use clustered HTTP sessions?',
             choices: [
                 {
                     value: 'no',
@@ -103,7 +86,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'prodDatabaseType',
-            message: '(6/8) Which *production* database would you like to use?',
+            message: '(5/7) Which *production* database would you like to use?',
             choices: [
                 {
                     value: 'mysql',
@@ -119,7 +102,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'devDatabaseType',
-            message: '(7/8) Which *development* database would you like to use?',
+            message: '(6/7) Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'hsqldbMemory',
@@ -139,7 +122,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'confirm',
             name: 'useCompass',
-            message: '(8/8) Would you like to use the Compass CSS Authoring Framework?',
+            message: '(7/7) Would you like to use the Compass CSS Authoring Framework?',
             default: false
         }
     ];
