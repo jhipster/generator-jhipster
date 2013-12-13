@@ -10,6 +10,7 @@ import <%=packageName%>.web.filter.CachingHttpHeadersFilter;
 import <%=packageName%>.web.filter.StaticResourcesProductionFilter;<% if (clusteredHttpSession == 'hazelcast') { %>
 import com.hazelcast.web.SessionListener;
 import com.hazelcast.web.WebFilter;<% } %>
+import com.planetj.servlet.filter.compression.CompressingFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -18,8 +19,6 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
-
-import com.planetj.servlet.filter.compression.CompressingFilter;
 
 import javax.servlet.*;
 import java.util.EnumSet;
