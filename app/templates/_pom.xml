@@ -112,7 +112,7 @@
                 <dependency>
                     <% if (prodDatabaseType == 'mysql') { %><groupId>mysql</groupId>
                     <artifactId>mysql-connector-java</artifactId>
-                    <version>5.1.26</version><% } else if (prodDatabaseType == 'postgresql') { %><groupId>org.postgresql</groupId>
+                    <version>5.1.27</version><% } else if (prodDatabaseType == 'postgresql') { %><groupId>org.postgresql</groupId>
                     <artifactId>postgresql</artifactId>
                     <version>9.3-1100-jdbc41</version><% } %>
                 </dependency>
@@ -367,7 +367,7 @@
         <dependency>
             <groupId>org.jadira.usertype</groupId>
             <artifactId>usertype.core</artifactId>
-            <version>3.1.0.CR8</version>
+            <version>3.1.0.CR10</version>
         </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>

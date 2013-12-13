@@ -28,12 +28,12 @@
     "test": "mocha"
   },
   "dependencies": {
-    "yeoman-generator": "~0.13.1",
-    "chalk": "~0.2.1",
+    "yeoman-generator": "~0.14.2",
+    "chalk": "~0.3.0",
     "underscore.string": "~2.3.3"
   },
   "devDependencies": {
-    "mocha": "~1.12.0"
+    "mocha": "~1.15.1"
   },
   "peerDependencies": {
     "yo": ">=1.0.0-rc.1"
