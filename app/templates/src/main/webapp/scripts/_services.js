@@ -42,7 +42,7 @@
             authenticate: function() {
                 $http.get('/app/rest/authenticate')
                     .success(function (data, status, headers, config) {
-                        $rootScope.$broadcast('event:auth-authConfirmed');
+                        $rootScope.$broadcast('event:auth-auth-confirmed');
                     })
             },
             login: function (param) {
@@ -52,17 +52,18 @@
                         "Content-Type": "application/x-www-form-urlencoded"
                     }
                 }).success(function (data, status, headers, config) {
-                        $rootScope.authenticationError = false;
-                        authService.loginConfirmed();
-                        if(param.success){
-                            param.success(data, status, headers, config);
-                        }
-                    }).error(function (data, status, headers, config) {
-                        $rootScope.authenticationError = true;
-                        if(param.error){
-                            param.error(data, status, headers, config);
-                        }
-                    });
+                    $rootScope.authenticationError = false;
+                    authService.loginConfirmed();
+                    if(param.success){
+                        param.success(data, status, headers, config);
+                    }
+                }).error(function (data, status, headers, config) {
+                    console.log("auth error");
+                    $rootScope.authenticationError = true;
+                    if(param.error){
+                        param.error(data, status, headers, config);
+                    }
+                });
             },
             logout: function () {
                 $rootScope.authenticationError = false;

@@ -72,8 +72,8 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
             // remember language
             $translateProvider.useCookieStorage();
         }])
-        .run(['$rootScope', '$location', 'authService', 'AuthenticationSharedService', 'Account',
-            function($rootScope, $location, authService, AuthenticationSharedService, Account) {
+        .run(['$rootScope', '$location', 'AuthenticationSharedService', 'Account',
+            function($rootScope, $location, AuthenticationSharedService, Account) {
             $rootScope.$on("$routeChangeStart", function(event, next, current) {
                 // Check if the status of the user. Is it authenticated or not?
                 AuthenticationSharedService.authenticate({}, function() {
@@ -82,34 +82,34 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
             });
 
             // Call when the 401 response is returned by the client
-            $rootScope.$on('event:auth-loginRequired', function(rejection) {
+            $rootScope.$on('event:auth-login-required', function(rejection) {
                 $rootScope.authenticated = false;
                 if ($location.path() !== "/" && $location.path() !== "") {
                     $location.path('/login').replace();
                 }
             });
 
-            // Call when the custome is authenticated
-           $rootScope.$on('event:auth-authConfirmed', function() {
+            // Call when the user is authenticated
+           $rootScope.$on('event:auth-auth-confirmed', function() {
                $rootScope.authenticated = true;
                $rootScope.account = Account.get();
 
-               // If the login page has been requested and the customer is already logged-in
-               // the customer is redirected to the home page
+               // If the login page has been requested and the user is already logged in
+               // the user is redirected to the home page
                if ($location.path() === "/login") {
                    $location.path('/').replace();
                }
             });
 
-            // Call when the customer logs in
-            $rootScope.$on('event:auth-loginConfirmed', function() {
+            // Call when the user logs in
+            $rootScope.$on('event:auth-login-confirmed', function() {
                 $rootScope.authenticated = true;
                 $rootScope.account = Account.get();
                 $location.path('').replace();
             });
 
-            // Call when the customer logs out
-            $rootScope.$on('event:auth-loginCancelled', function() {
+            // Call when the user logs out
+            $rootScope.$on('event:auth-login-cancelled', function() {
                 $rootScope.authenticated = false;
                 $location.path('');
             });

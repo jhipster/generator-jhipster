@@ -310,7 +310,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.indexFile = this.engine(this.indexFile, this);
 
     // JavaScript
-    this.copy(webappDir + 'modules/http-auth-interceptor.js', webappDir + 'modules/http-auth-interceptor.js');
+    this.copy(webappDir + 'scripts/http-auth-interceptor.js', webappDir + 'scripts/http-auth-interceptor.js');
     this.template(webappDir + 'scripts/_app.js', webappDir + 'scripts/app.js');
     this.template(webappDir + 'scripts/_controllers.js', webappDir + 'scripts/controllers.js');
     this.template(webappDir + 'scripts/_services.js', webappDir + 'scripts/services.js');
@@ -335,7 +335,7 @@ JhipsterGenerator.prototype.app = function app() {
         'bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
         'bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
 
-        'modules/http-auth-interceptor.js',
+        'scripts/http-auth-interceptor.js',
 
         'scripts/app.js',
         'scripts/controllers.js',
