@@ -8,9 +8,10 @@ var util = require('util'),
 var EntityGenerator = module.exports = function EntityGenerator(args, options, config) {
   yeoman.generators.NamedBase.apply(this, arguments);
   console.log('The entity ' + this.name + ' is being created.');
+  this.baseName = this.config.get('baseName');
   this.packageName = this.config.get('packageName');
   this.packageFolder = this.config.get('packageFolder');
-  this.baseName = this.config.get('baseName');
+  this.hibernateCache = this.config.get('hibernateCache');
   this.angularAppName = _s.camelize(this.baseName) + 'App';
 };
 
@@ -38,6 +39,7 @@ EntityGenerator.prototype.files = function files() {
 
   this.template('src/main/webapp/scripts/_entity-service.js', 
     'src/main/webapp/scripts/' +  this.entityInstance + '-service.js');
+
 };
 
 

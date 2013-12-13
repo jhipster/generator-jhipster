@@ -1,7 +1,8 @@
 package <%=packageName%>.domain;
 
+<% if (hibernateCache != 'no') { %>
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,8 +15,8 @@ import java.io.Serializable;
  * A <%= entityClass %>.
  */
 @Entity
-@Table(name = "T_<%= name.toUpperCase() %>")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Table(name = "T_<%= name.toUpperCase() %>")<% if (hibernateCache != 'no') { %>
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
 public class <%= entityClass %> implements Serializable {
 
     @NotNull
