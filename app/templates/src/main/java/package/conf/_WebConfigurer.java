@@ -21,12 +21,12 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import com.planetj.servlet.filter.compression.CompressingFilter;
+
 import javax.servlet.*;
 import java.util.EnumSet;
-<% if (clusteredHttpSession == 'hazelcast') { %>
 import java.util.HashMap;
 import java.util.Map;
-<% } %>
 
 /**
  * Configuration of web application with Servlet 3.0 APIs.
@@ -127,22 +127,17 @@ public class WebConfigurer implements ServletContextListener {
      * Initializes the GZip filter.
      */
     private void initGzipFilter(ServletContext servletContext, EnumSet<DispatcherType> disps) {
-        <% if (hibernateCache == 'ehcache') { %>
-        log.debug("Registering GZip Filter");
-        FilterRegistration.Dynamic gzipFilter = servletContext.addFilter("gzipFilter",
-                new net.sf.ehcache.constructs.web.filter.GzipFilter());
+        log.debug("Registering GZip filter");
 
-        gzipFilter.addMappingForServletNames(disps, true, "dispatcher");
-        gzipFilter.addMappingForUrlPatterns(disps, true, "/");
-        gzipFilter.addMappingForUrlPatterns(disps, true, "/bower_components/*");
-        gzipFilter.addMappingForUrlPatterns(disps, true, "/fonts/*");
-        gzipFilter.addMappingForUrlPatterns(disps, true, "/scripts/*");
-        gzipFilter.addMappingForUrlPatterns(disps, true, "/styles/*");
-        gzipFilter.addMappingForUrlPatterns(disps, true, "/views/*");
-        gzipFilter.setAsyncSupported(true);
-        <% } else { %>
-        log.debug("No GZip filter implementation without enabled");
-        <% } %>
+        final FilterRegistration.Dynamic compressingFilter = servletContext.addFilter("gzipFilter", new CompressingFilter());
+
+        Map<String, String> parameters = new HashMap<String, String>();
+        parameters.put("includeContentTypes", "application/json");
+        parameters.put("includePathPatterns", ".*\\.js,.*\\.css,.*\\.json,.*\\.html");
+
+        compressingFilter.setInitParameters(parameters);
+        compressingFilter.addMappingForUrlPatterns(disps, false, "/*");
+        compressingFilter.setAsyncSupported(true);
     }
 
     /**
