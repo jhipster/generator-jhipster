@@ -10,7 +10,7 @@ import <%=packageName%>.web.filter.CachingHttpHeadersFilter;
 import <%=packageName%>.web.filter.StaticResourcesProductionFilter;<% if (clusteredHttpSession == 'hazelcast') { %>
 import com.hazelcast.web.SessionListener;
 import com.hazelcast.web.WebFilter;<% } %>
-import com.mycompany.myapp.web.filter.gzip.GZipServletFilter;
+import <%=packageName%>.web.filter.gzip.GZipServletFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
