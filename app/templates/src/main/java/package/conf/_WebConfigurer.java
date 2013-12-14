@@ -54,7 +54,6 @@ public class WebConfigurer implements ServletContextListener {
         initClusteredHttpSessionFilter(servletContext, disps);<% } %>
         initSpringSecurity(servletContext, disps);
         initMetrics(servletContext, disps);
-        initGzipFilter(servletContext, disps);
 
         if (WebApplicationContextUtils
                 .getRequiredWebApplicationContext(servletContext)
@@ -64,6 +63,8 @@ public class WebConfigurer implements ServletContextListener {
             initStaticResourcesProductionFilter(servletContext, disps);
             initCachingHttpHeadersFilter(servletContext, disps);
         }
+
+        initGzipFilter(servletContext, disps);
 
         log.debug("Web application fully configured");
     }
@@ -126,10 +127,13 @@ public class WebConfigurer implements ServletContextListener {
         Map<String, String> parameters = new HashMap<String, String>();
 
         compressingFilter.setInitParameters(parameters);
-        compressingFilter.addMappingForUrlPatterns(disps, false, "*.css");
-        compressingFilter.addMappingForUrlPatterns(disps, false, "*.json");
-        compressingFilter.addMappingForUrlPatterns(disps, false, "*.html");
-        compressingFilter.addMappingForUrlPatterns(disps, false, "*.js");
+        compressingFilter.addMappingForUrlPatterns(disps, true, "*.css");
+        compressingFilter.addMappingForUrlPatterns(disps, true, "*.json");
+        compressingFilter.addMappingForUrlPatterns(disps, true, "*.html");
+        compressingFilter.addMappingForUrlPatterns(disps, true, "*.js");
+        compressingFilter.addMappingForUrlPatterns(disps, true, "/app/rest/*");
+        compressingFilter.addMappingForUrlPatterns(disps, true, "/metrics/*");
+
         compressingFilter.setAsyncSupported(true);
     }
 
