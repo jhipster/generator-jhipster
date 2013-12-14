@@ -126,6 +126,7 @@ public class WebConfigurer implements ServletContextListener {
         Map<String, String> parameters = new HashMap<String, String>();
 
         compressingFilter.setInitParameters(parameters);
+        compressingFilter.addMappingForUrlPatterns(disps, false, "/app/rest/*");
         compressingFilter.addMappingForUrlPatterns(disps, false, "*.css");
         compressingFilter.addMappingForUrlPatterns(disps, false, "*.json");
         compressingFilter.addMappingForUrlPatterns(disps, false, "*.html");

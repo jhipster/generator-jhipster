@@ -10,15 +10,16 @@ import java.io.PrintWriter;
 class GZipServletResponseWrapper extends HttpServletResponseWrapper {
 
     private GZipServletOutputStream gzipOutputStream = null;
-    private PrintWriter             printWriter      = null;
+
+    private PrintWriter printWriter      = null;
 
     public GZipServletResponseWrapper(HttpServletResponse response)
             throws IOException {
+
         super(response);
     }
 
     public void close() throws IOException {
-
         //PrintWriter.close does not throw exceptions. Thus, the call does not need
         //be inside a try-catch block.
         if (this.printWriter != null) {
@@ -30,13 +31,10 @@ class GZipServletResponseWrapper extends HttpServletResponseWrapper {
         }
     }
 
-
     /**
-     * Flush OutputStream or PrintWriter
-     *
+     * Flush OutputStream or PrintWriter.
      * @throws IOException
      */
-
     @Override
     public void flushBuffer() throws IOException {
 
@@ -95,11 +93,10 @@ class GZipServletResponseWrapper extends HttpServletResponseWrapper {
 
 
     @Override
-    public void setContentLength(int len) {
+    public void setContentLength(int length) {
         //ignore, since content length of zipped content
         //does not match content length of unzipped content.
     }
-
 }
 
 
