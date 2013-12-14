@@ -10,7 +10,7 @@ import <%=packageName%>.web.filter.CachingHttpHeadersFilter;
 import <%=packageName%>.web.filter.StaticResourcesProductionFilter;<% if (clusteredHttpSession == 'hazelcast') { %>
 import com.hazelcast.web.SessionListener;
 import com.hazelcast.web.WebFilter;<% } %>
-import com.planetj.servlet.filter.compression.CompressingFilter;
+import <%=packageName%>.web.filter.gzip.GZipServletFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -122,13 +122,14 @@ public class WebConfigurer implements ServletContextListener {
     private void initGzipFilter(ServletContext servletContext, EnumSet<DispatcherType> disps) {
         log.debug("Registering GZip Filter");
 
-        FilterRegistration.Dynamic compressingFilter = servletContext.addFilter("gzipFilter", new CompressingFilter());
+        FilterRegistration.Dynamic compressingFilter = servletContext.addFilter("gzipFilter", new GZipServletFilter());
         Map<String, String> parameters = new HashMap<String, String>();
-        parameters.put("includeContentTypes", "application/json,text/html");
-        parameters.put("includePathPatterns", ".*\\.js,.*\\.css,.*\\.json,.*\\.html");
 
         compressingFilter.setInitParameters(parameters);
-        compressingFilter.addMappingForUrlPatterns(disps, false, "/*");
+        compressingFilter.addMappingForUrlPatterns(disps, false, "*.css");
+        compressingFilter.addMappingForUrlPatterns(disps, false, "*.json");
+        compressingFilter.addMappingForUrlPatterns(disps, false, "*.html");
+        compressingFilter.addMappingForUrlPatterns(disps, false, "*.js");
         compressingFilter.setAsyncSupported(true);
     }
 

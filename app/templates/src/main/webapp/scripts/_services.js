@@ -50,7 +50,8 @@
                 $http.post('/app/authentication', data, {
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
-                    }
+                    },
+                    ignoreAuthModule: 'ignoreAuthModule'
                 }).success(function (data, status, headers, config) {
                     $rootScope.authenticationError = false;
                     authService.loginConfirmed();
