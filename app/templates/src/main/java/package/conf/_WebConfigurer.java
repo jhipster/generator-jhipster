@@ -91,7 +91,7 @@ public class WebConfigurer implements ServletContextListener {
         // on a node, entry for this session on all other nodes is invalidated.
         // You have to know how your load -balancer is configured before
         // setting this parameter. Default is true.
-        parameters.put("sticky-session", "true");
+        parameters.put("sticky-session", "false");
 
         // Name of session id cookie
         parameters.put("cookie-name", "hazelcast.sessionId");
