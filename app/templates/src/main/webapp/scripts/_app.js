@@ -82,7 +82,7 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
             });
 
             // Call when the 401 response is returned by the client
-            $rootScope.$on('event:auth-login-required', function(rejection) {
+            $rootScope.$on('event:auth-loginRequired', function(rejection) {
                 $rootScope.authenticated = false;
                 if ($location.path() !== "/" && $location.path() !== "") {
                     $location.path('/login').replace();
@@ -90,7 +90,7 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
             });
 
             // Call when the user is authenticated
-           $rootScope.$on('event:auth-auth-confirmed', function() {
+           $rootScope.$on('event:auth-authConfirmed', function() {
                $rootScope.authenticated = true;
                $rootScope.account = Account.get();
 
@@ -102,14 +102,14 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
             });
 
             // Call when the user logs in
-            $rootScope.$on('event:auth-login-confirmed', function() {
+            $rootScope.$on('event:auth-loginConfirmed', function() {
                 $rootScope.authenticated = true;
                 $rootScope.account = Account.get();
                 $location.path('').replace();
             });
 
             // Call when the user logs out
-            $rootScope.$on('event:auth-login-cancelled', function() {
+            $rootScope.$on('event:auth-loginCancelled', function() {
                 $rootScope.authenticated = false;
                 $location.path('');
             });
