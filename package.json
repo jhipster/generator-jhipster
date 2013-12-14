@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "yeoman-generator": "~0.14.2",
-    "chalk": "~0.3.0",
+    "chalk": "~0.4.0",
     "underscore.string": "~2.3.3"
   },
   "devDependencies": {
