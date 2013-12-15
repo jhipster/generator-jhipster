@@ -4,50 +4,48 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.zip.GZIPOutputStream;
 
 class GZipServletOutputStream extends ServletOutputStream {
-    private GZIPOutputStream gzipOutputStream = null;
+  private OutputStream stream;
 
-    public GZipServletOutputStream(OutputStream output)
-            throws IOException {
-                
-        super();
-        this.gzipOutputStream = new GZIPOutputStream(output);
-    }
+  public GZipServletOutputStream(OutputStream output)
+      throws IOException {
+    super();
+    this.stream = output;
+  }
 
-    @Override
-    public void close() throws IOException {
-        this.gzipOutputStream.close();
-    }
+  @Override
+  public void close() throws IOException {
+    this.stream.close();
+  }
 
-    @Override
-    public void flush() throws IOException {
-        this.gzipOutputStream.flush();
-    }
+  @Override
+  public void flush() throws IOException {
+    this.stream.flush();
+  }
 
-    @Override
-    public void write(byte b[]) throws IOException {
-        this.gzipOutputStream.write(b);
-    }
+  @Override
+  public void write(byte b[]) throws IOException {
+    this.stream.write(b);
+  }
 
-    @Override
-    public void write(byte b[], int off, int len) throws IOException {
-        this.gzipOutputStream.write(b, off, len);
-    }
+  @Override
+  public void write(byte b[], int off, int len) throws IOException {
+    this.stream.write(b, off, len);
+  }
 
-    @Override
-    public void write(int b) throws IOException {
-        this.gzipOutputStream.write(b);
-    }
+  @Override
+  public void write(int b) throws IOException {
+    this.stream.write(b);
+  }
 
-    @Override
-    public boolean isReady() {
-        return true;
-    }
+  @Override
+  public boolean isReady() {
+    return false;
+  }
 
-    @Override
-    public void setWriteListener(WriteListener writeListener) {
+  @Override
+  public void setWriteListener(WriteListener writeListener) {
 
-    }
+  }
 }
