@@ -34,6 +34,9 @@ EntityGenerator.prototype.files = function files() {
   this.template('src/main/webapp/views/_entities.html', 
     'src/main/webapp/views/' +  this.entityInstance + 's.html');
 
+  this.template('src/main/webapp/scripts/_entity-router.js', 
+    'src/main/webapp/scripts/' +  this.entityInstance + '-router.js');
+
   this.template('src/main/webapp/scripts/_entity-controller.js', 
     'src/main/webapp/scripts/' +  this.entityInstance + '-controller.js');
 
