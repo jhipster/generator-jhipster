@@ -21,6 +21,7 @@ import org.springframework.core.env.Environment;
 import javax.inject.Inject;
 import javax.annotation.PostConstruct;<% } %>
 import javax.annotation.PreDestroy;
+import java.util.SortedSet;
 
 @Configuration
 @EnableCaching
@@ -37,16 +38,17 @@ public class CacheConfiguration {
     private net.sf.ehcache.CacheManager cacheManager; <% } else { %>
     private CacheManager cacheManager;
     <% } %>
-    @PostConstruct
+    @PreDestroy
     public void destroy() {
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                log.info("Closing Cache manager");<% if (hibernateCache == 'ehcache') { %>
-                cacheManager.shutdown();<% } %><% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
-                Hazelcast.shutdownAll();<% } %>
-            }
-        }));
+        log.info("Remove caching metrics");
+        final SortedSet<String> names = WebConfigurer.METRIC_REGISTRY.getNames();
+        for (String name : names) {
+            WebConfigurer.METRIC_REGISTRY.remove(name);
+        }
+
+        log.info("Closing Cache manager");<% if (hibernateCache == 'ehcache') { %>
+        cacheManager.shutdown();<% } %><% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
+        Hazelcast.shutdownAll();<% } %>
     }
 
     @Bean
