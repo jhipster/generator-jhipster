@@ -162,10 +162,6 @@ JhipsterGenerator.prototype.app = function app() {
         this.template(resourceDir + '_ehcache.xml', resourceDir + 'ehcache.xml');
     }
 
-    if (this.hibernateCache == "hazelcast") {
-        this.template(resourceDir + '_hazelcast.xml', resourceDir + 'hazelcast.xml');
-    }
-
     this.template(resourceDir + '_logback.xml', resourceDir + 'logback.xml');
 
     this.template(resourceDir + '/META-INF/application/_application.properties', resourceDir + 'META-INF/' + this.baseName + '/' + this.baseName + '.properties');
@@ -197,6 +193,12 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/domain/_Authority.java', javaDir + 'domain/Authority.java');
     this.template('src/main/java/package/domain/_PersistentToken.java', javaDir + 'domain/PersistentToken.java');
     this.template('src/main/java/package/domain/_User.java', javaDir + 'domain/User.java');
+
+    if (this.hibernateCache == "hazelcast" || this.clusteredHttpSession == 'hazelcast') {
+      this.template('src/main/java/package/hazelcast/_package-info.java', javaDir + 'hazelcast/package-info.java');
+      this.template('src/main/java/package/hazelcast/hibernate/_HazelcastCacheRegionFactory.java', javaDir + 'hazelcast/hibernate/HazelcastCacheRegionFactory.java');
+      this.template('src/main/java/package/hazelcast/hibernate/_package-info.java', javaDir + 'hazelcast/hibernate/package-info.java');
+    }
 
     this.template('src/main/java/package/repository/_package-info.java', javaDir + 'repository/package-info.java');
     this.template('src/main/java/package/repository/_UserRepository.java', javaDir + 'repository/UserRepository.java');
