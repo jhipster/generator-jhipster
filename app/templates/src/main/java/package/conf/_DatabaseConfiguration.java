@@ -75,7 +75,7 @@ public class DatabaseConfiguration {
         jpaProperties.put("hibernate.cache.use_minimal_puts", true);
         jpaProperties.put("hibernate.cache.hazelcast.use_lite_member", true);
         jpaProperties.put("hibernate.cache.region.factory_class",
-                "com.hazelcast.hibernate.HazelcastCacheRegionFactory");
+                "<%=packageName%>.conf.hazelcast.HazelcastCacheRegionFactory");
         <% } %>
         lcemfb.setJpaProperties(jpaProperties);
 

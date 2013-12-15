@@ -25,8 +25,8 @@
                 <ehcache.maxBytesLocalHeap>64M</ehcache.maxBytesLocalHeap>
                 <% } %>
                 <% if (hibernateCache == 'hazelcast' ||  clusteredHttpSession == 'hazelcast') { %>
-                <!-- hazelcast configuration -->
-                <hazelcastcache.maxBytesLocalHeap>64M</hazelcastcache.maxBytesLocalHeap>
+                <!-- hazelcast configuration in MB -->
+                <hazelcastcache.maxBytesLocalHeap>65536</hazelcastcache.maxBytesLocalHeap>
                 <% } %>
                 <!-- development database configuration -->
                 <% if (devDatabaseType == 'mysql') { %><datasource.datasourceclassname>com.mysql.jdbc.jdbc2.optional.MysqlDataSource</datasource.datasourceclassname>
@@ -82,8 +82,8 @@
                 <!-- ehcache configuration -->
                 <ehcache.maxBytesLocalHeap>256M</ehcache.maxBytesLocalHeap>
                 <% } %><% if (hibernateCache == 'hazelcast' ||  clusteredHttpSession == 'hazelcast') { %>
-                <!-- hazelcast configuration -->
-                <hazelcastcache.maxBytesLocalHeap>256M</hazelcastcache.maxBytesLocalHeap><% } %>
+                <!-- hazelcast configuration in MB -->
+                <hazelcastcache.maxBytesLocalHeap>262144</hazelcastcache.maxBytesLocalHeap><% } %>
                 <!-- production database configuration -->
                 <% if (prodDatabaseType == 'mysql') { %><datasource.datasourceclassname>com.mysql.jdbc.jdbc2.optional.MysqlDataSource</datasource.datasourceclassname>
                 <datasource.url>jdbc:mysql://localhost:3306/<%= baseName %></datasource.url>
@@ -302,6 +302,11 @@
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spring</artifactId>
             <version><%= _.unescape('\$\{hazelcastcache.version}')%></version>
+        </dependency><% } %><% if (clusteredHttpSession == 'hazelcast' && hibernateCache != 'hazelcast') { %>
+        <dependency>
+          <groupId>com.hazelcast</groupId>
+          <artifactId>hazelcast</artifactId>
+          <version><%= _.unescape('\$\{hazelcastcache.version}')%></version>
         </dependency><% } %><% if (clusteredHttpSession == 'hazelcast') { %>
         <dependency>
             <groupId>com.hazelcast</groupId>
