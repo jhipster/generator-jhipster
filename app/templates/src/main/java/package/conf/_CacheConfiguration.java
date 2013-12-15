@@ -26,22 +26,21 @@ import java.util.SortedSet;
 @Configuration
 @EnableCaching
 public class CacheConfiguration {
-    <% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
-    private static HazelcastInstance hazelcastInstance;
+
+    private static final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
+    
+    <% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>private static HazelcastInstance hazelcastInstance;
 
     @Inject
     private Environment env;
-    <% } %>
 
-    private static final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
-    <% if (hibernateCache == 'ehcache') { %>
-    private net.sf.ehcache.CacheManager cacheManager; <% } else { %>
-    private CacheManager cacheManager;
+    <% } %><% if (hibernateCache == 'ehcache') { %>private net.sf.ehcache.CacheManager cacheManager; 
+    <% } else { %>private CacheManager cacheManager;
     <% } %>
     @PreDestroy
     public void destroy() {
         log.info("Remove caching metrics");
-        final SortedSet<String> names = WebConfigurer.METRIC_REGISTRY.getNames();
+        SortedSet<String> names = WebConfigurer.METRIC_REGISTRY.getNames();
         for (String name : names) {
             WebConfigurer.METRIC_REGISTRY.remove(name);
         }
@@ -80,8 +79,7 @@ public class CacheConfiguration {
         return cacheManager;<% } %>
     }
 
-    <% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
-    @PostConstruct
+    <% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>@PostConstruct
     private HazelcastInstance hazelcastInstance() {
         final Config config = new Config();
         config.setInstanceName("<%=baseName%>");
@@ -103,8 +101,7 @@ public class CacheConfiguration {
         hazelcastInstance = HazelcastInstanceFactory.newHazelcastInstance(config);
 
         return hazelcastInstance;
-    }<% } %>
-    <% if (hibernateCache == 'hazelcast') { %>
+    }<% } %><% if (hibernateCache == 'hazelcast') { %>
     private MapConfig initializeDefaultMapConfig() {
         final MapConfig mapConfig = new MapConfig();
 
@@ -149,23 +146,20 @@ public class CacheConfiguration {
 
         mapConfig.setTimeToLiveSeconds(3600);
         return mapConfig;
-    }<% } %>
-    <% if (clusteredHttpSession == 'hazelcast') { %>
+    }
+    <% } %><% if (clusteredHttpSession == 'hazelcast') { %>
     private MapConfig initializeClusteredSession() {
         MapConfig mapConfig = new MapConfig();
 
         mapConfig.setBackupCount(1);
         mapConfig.setTimeToLiveSeconds(3600);
         return mapConfig;
-    }
-    <% } %>
-    <% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
+    }<% } %><% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
+    
     /**
-    * @return the unique instance
+    * @return the unique instance.
     */
     public static HazelcastInstance getHazelcastInstance() {
         return hazelcastInstance;
-    }
-    <% } %>
-
+    }<% } %>
 }
