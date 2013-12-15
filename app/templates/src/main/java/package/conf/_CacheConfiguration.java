@@ -90,7 +90,7 @@ public class CacheConfiguration {
     }
     <% if (hibernateCache == 'hazelcast') { %>
     config.getMapConfigs().put("default", initializeDefaultMapConfig());
-    config.getMapConfigs().put("com.mycompany.myapp.domain.*", initializeDomainMapConfig());<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
+    config.getMapConfigs().put("<%=packageName%>.domain.*", initializeDomainMapConfig());<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
     config.getMapConfigs().put("my-sessions", initializeClusteredSession());<% } %>
 
     hazelcastInstance = HazelcastInstanceFactory.newHazelcastInstance(config);

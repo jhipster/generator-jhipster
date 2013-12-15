@@ -252,10 +252,6 @@ JhipsterGenerator.prototype.app = function app() {
         this.template(testResourceDir + '_ehcache.xml', testResourceDir + 'ehcache.xml');
     }
 
-    if (this.hibernateCache == "hazelcast") {
-        this.template(testResourceDir + '_hazelcast.xml', testResourceDir + 'hazelcast.xml');
-    }
-
     // Create Webapp
     var webappDir = 'src/main/webapp/';
     this.mkdir(webappDir);

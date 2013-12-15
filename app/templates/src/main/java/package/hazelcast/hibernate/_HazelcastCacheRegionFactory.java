@@ -7,7 +7,7 @@ import com.hazelcast.hibernate.local.CleanupService;
 import com.hazelcast.hibernate.local.LocalRegionCache;
 import com.hazelcast.hibernate.local.TimestampsRegionCache;
 import com.hazelcast.hibernate.region.*;
-import com.mycompany.myapp.conf.CacheConfiguration;
+import <%=packageName%>.conf.CacheConfiguration;
 import org.hibernate.cache.CacheException;
 import org.hibernate.cache.spi.*;
 import org.hibernate.cache.spi.access.AccessType;
