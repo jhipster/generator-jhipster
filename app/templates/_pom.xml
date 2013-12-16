@@ -55,7 +55,6 @@
                 <mail.password></mail.password>
                 <mail.tls></mail.tls>
                 <mail.from>jhipster@localhost</mail.from>
-                <jetty-maven-plugin.scan-interval-seconds>1</jetty-maven-plugin.scan-interval-seconds>
             </properties>
             <dependencies>
                 <dependency>
@@ -106,7 +105,6 @@
                 <mail.password></mail.password>
                 <mail.tls></mail.tls>
                 <mail.from>jhipster@localhost</mail.from>
-                <jetty-maven-plugin.scan-interval-seconds>0</jetty-maven-plugin.scan-interval-seconds>
             </properties>
             <dependencies>
                 <dependency>
@@ -148,26 +146,8 @@
                                 </goals>
                                 <phase>package</phase>
                                 <configuration>
-                                    <!-- optional only if you want to use a preconfigured server.xml file -->
-                                    <!--
-                                    <serverXml>src/main/tomcatconf/server.xml</serverXml>
-                                    -->
-                                    <warRunDependencies>
-                                        <warRunDependency>
-                                            <dependency>
-                                                <groupId>a groupId</groupId>
-                                                <artifactId>and artifactId</artifactId>
-                                                <version>version</version>
-                                                <type>war</type>
-                                            </dependency>
-                                            <contextPath>/</contextPath>
-                                        </warRunDependency>
-                                    </warRunDependencies>
-                                    <!-- naming is disabled by default so use true to enable it -->
-                                    <enableNaming>true</enableNaming>
-                                    <!-- extra dependencies to add jdbc driver, mail jars, etc. -->
-                                    <extraDependencies>
-                                    </extraDependencies>
+                                    <path>/</path>
+                                    <protocol>org.apache.coyote.http11.Http11NioProtocol</protocol>
                                 </configuration>
                             </execution>
                         </executions>
@@ -217,14 +197,12 @@
             <groupId>com.codahale.metrics</groupId>
             <artifactId>metrics-core</artifactId>
             <version><%= _.unescape('\$\{codahale.metrics.version}')%></version>
-        </dependency>
-        <% if (hibernateCache == 'ehcache') { %>
+        </dependency><% if (hibernateCache == 'ehcache') { %>
         <dependency>
             <groupId>com.codahale.metrics</groupId>
             <artifactId>metrics-ehcache</artifactId>
             <version><%= _.unescape('\$\{codahale.metrics.version}')%></version>
-        </dependency>
-        <% } %>
+        </dependency><% } %>
         <dependency>
             <groupId>com.codahale.metrics</groupId>
             <artifactId>metrics-graphite</artifactId>
@@ -598,30 +576,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.4</version>
-            </plugin>
-            <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-    			<artifactId>jetty-maven-plugin</artifactId>
-    			<version>9.1.0.v20131115</version>
-                <configuration>
-                    <scanIntervalSeconds><%= _.unescape('\$\{jetty-maven-plugin.scan-interval-seconds}')%></scanIntervalSeconds>
-                    <stopKey>stop-jetty</stopKey>
-                    <stopPort>9999</stopPort>
-                    <systemProperties>
-                        <systemProperty>
-                            <name>jetty.port</name>
-                            <value>8080</value>
-                        </systemProperty>
-                        <systemProperty>
-                            <name>spring.profiles.active</name>
-                            <value><%= _.unescape('\$\{spring.profiles.active}')%></value>
-                        </systemProperty>
-                    </systemProperties>
-                    <jvmArgs>-javaagent:spring_loaded/springloaded-1.1.4.jar -noverify</jvmArgs>
-                    <webApp>
-                        <contextPath>/</contextPath>
-                    </webApp>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>

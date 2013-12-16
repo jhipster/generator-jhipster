@@ -245,6 +245,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/test/java/package/service/_UserServiceTest.java', testDir + 'service/UserServiceTest.java');
     this.template('src/test/java/package/web/rest/_UserResourceTest.java', testDir + 'web/rest/UserResourceTest.java');
     this.template(testResourceDir + 'META-INF/spring/_applicationContext-security.xml', testResourceDir + 'META-INF/spring/applicationContext-security.xml');
+    this.template(testResourceDir + 'META-INF/application/_application.properties', testResourceDir + 'META-INF/' + this.baseName + '/' + this.baseName + '.properties');
     this.template(testResourceDir + '_logback.xml', testResourceDir + 'logback.xml');
 
     if (this.hibernateCache == "ehcache") {

@@ -67,9 +67,9 @@ public class WebConfigurer implements ServletContextListener {
         initGzipFilter(servletContext, disps);
 
         log.debug("Web application fully configured");
-    }
+    }<% if (clusteredHttpSession == 'hazelcast') { %>
 
-    <% if (clusteredHttpSession == 'hazelcast') { %>/**
+    /**
      * Initializes the Clustered Http Session filter
      */
     private void initClusteredHttpSessionFilter(ServletContext servletContext, EnumSet<DispatcherType> disps) {
@@ -150,6 +150,7 @@ public class WebConfigurer implements ServletContextListener {
                         new StaticResourcesProductionFilter());
 
         staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/");
+        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/index.html");
         staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/fonts/*");
         staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/scripts/*");
         staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/styles/*");
