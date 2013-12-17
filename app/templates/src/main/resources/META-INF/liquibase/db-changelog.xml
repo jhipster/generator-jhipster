@@ -39,6 +39,11 @@
             <column name="user_agent" type="varchar(255)"/>
         </createTable>
 
+        <createTable tableName="HIBERNATE_SEQUENCES">
+            <column name="sequence_name" type="varchar(255)"/>
+            <column name="sequence_next_hi_value" type="integer"/>
+        </createTable>
+
         <createIndex indexName="idx_user_authority"
                      tableName="T_USER_AUTHORITY"
                      unique="true">
@@ -80,5 +85,18 @@
                   tableName="T_USER_AUTHORITY"/>
 
     </changeSet>
+
+    <!-- Sample changeSet for creating a new Entity with the entity sub-generator -->
+    <!-- 
+    <changeSet id="2" author="jdubois">
+        <createTable tableName="T_FOO">
+            <column name="id" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="sampleTextAttribute" type="varchar(50)"/>
+            <column name="sampleDateAttribute" type="date"/>
+        </createTable>
+    </changeSet>
+    -->
 
 </databaseChangeLog>

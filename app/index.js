@@ -194,6 +194,8 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/domain/_PersistentToken.java', javaDir + 'domain/PersistentToken.java');
     this.template('src/main/java/package/domain/_User.java', javaDir + 'domain/User.java');
 
+    this.template('src/main/java/package/domain/util/_CustomLocalDateSerializer.java', javaDir + 'domain/util/CustomLocalDateSerializer.java');
+
     if (this.hibernateCache == "hazelcast" || this.clusteredHttpSession == 'hazelcast') {
       this.template('src/main/java/package/conf/hazelcast/_HazelcastCacheRegionFactory.java', javaDir + 'conf/hazelcast/HazelcastCacheRegionFactory.java');
       this.template('src/main/java/package/conf/hazelcast/_package-info.java', javaDir + 'conf/hazelcast/package-info.java');

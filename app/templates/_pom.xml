@@ -605,7 +605,7 @@
                         </systemProperty>
                         <systemProperty>
                             <name>spring.profiles.active</name>
-                            <value>${spring.profiles.active}</value>
+                            <value><%= _.unescape('\$\{spring.profiles.active}')%></value>
                         </systemProperty>
                     </systemProperties>
                     <jvmArgs>-javaagent:spring_loaded/springloaded-1.1.4.jar -noverify</jvmArgs>

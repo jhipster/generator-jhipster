@@ -40,8 +40,8 @@ public final class GZipResponseUtil {
 
         //Check for 0 length body
         if (compressedBytes.length == EMPTY_GZIPPED_CONTENT_SIZE) {
-            if (log.isDebugEnabled()) {
-                log.debug(request.getRequestURL() + " resulted in an empty response.");
+            if (log.isTraceEnabled()) {
+                log.trace(request.getRequestURL() + " resulted in an empty response.");
             }
             return true;
         } else {

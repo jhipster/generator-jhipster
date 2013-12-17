@@ -3,6 +3,7 @@
 <%= angularAppName %>.factory('<%= entityClass %>', ['$resource',
     function ($resource) {
         return $resource('app/rest/<%= entityInstance %>s/:id', {}, {
-            'get': { method: 'GET', isArray: true}
+            'query': { method: 'GET', isArray: true},
+            'get': { method: 'GET'}
         });
     }]);

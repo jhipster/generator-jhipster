@@ -8,8 +8,8 @@
                     templateUrl: 'views/<%= entityInstance %>s.html',
                     controller: '<%= entityClass %>Controller',
                     resolve:{
-                        resolved<%= entityClass %>:['<%= entityClass %>', function (<%= entityClass %>) {
-                            return <%= entityClass %>.get();
+                        resolved<%= entityClass %>: ['<%= entityClass %>', function (<%= entityClass %>) {
+                            return <%= entityClass %>.query();
                         }]
                     }
                 })

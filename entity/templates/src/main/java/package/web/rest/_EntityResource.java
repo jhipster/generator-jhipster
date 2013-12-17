@@ -6,10 +6,7 @@ import <%=packageName%>.repository.<%= entityClass %>Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +23,18 @@ public class <%= entityClass %>Resource {
     @Inject
     private <%= entityClass %>Repository <%= entityInstance %>Repository;
 
+/**
+     * POST  /rest/<%= entityInstance %>s -> Create a new <%= entityInstance %>.
+     */
+    @RequestMapping(value = "/rest/<%= entityInstance %>s",
+            method = RequestMethod.POST,
+            produces = "application/json")
+    @ResponseBody
+    @Timed
+    public void create(@RequestBody <%= entityClass %> <%= entityInstance %>) {
+        <%= entityInstance %>Repository.save(<%= entityInstance %>);
+    }
+
     /**
      * GET  /rest/<%= entityInstance %>s -> get all the <%= entityInstance %>s.
      */
@@ -34,7 +43,7 @@ public class <%= entityClass %>Resource {
             produces = "application/json")
     @ResponseBody
     @Timed
-    public List<<%= entityClass %>> getAll() {
+    public List<Foo> getAll() {
         return <%= entityInstance %>Repository.findAll();
     }
 
@@ -46,12 +55,24 @@ public class <%= entityClass %>Resource {
             produces = "application/json")
     @ResponseBody
     @Timed
-    public <%= entityClass %> get<%= entityClass %>(@PathVariable String id, HttpServletResponse response) {
+    public <%= entityClass %> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get <%= entityClass %> : {}", id);
         <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Repository.findOne(id);
         if (<%= entityInstance %> == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
         return <%= entityInstance %>;
+    }
+
+    /**
+     * DELETE  /rest/<%= entityInstance %>s/:id -> delete the "id" <%= entityInstance %>.
+     */
+    @RequestMapping(value = "/rest/<%= entityInstance %>s/{id}",
+            method = RequestMethod.DELETE,
+            produces = "application/json")
+    @ResponseBody
+    @Timed
+    public void delete(@PathVariable Long id, HttpServletResponse response) {
+        <%= entityInstance %>Repository.delete(id);
     }
 }

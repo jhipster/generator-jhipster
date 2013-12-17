@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * Spring Data JPA repository for the <%= entityClass %> entity.
  */
-public interface <%= entityClass %>Repository extends JpaRepository<<%= entityClass %>, String> {
+public interface <%= entityClass %>Repository extends JpaRepository<<%= entityClass %>, Long> {
 
 }

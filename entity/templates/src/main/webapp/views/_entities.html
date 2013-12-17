@@ -2,24 +2,78 @@
 
     <h2><%= entityClass %>s</h2>
 
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#save<%= entityClass %>Modal">
+        <span class="glyphicon glyphicon-flash"></span> Create a new <%= entityClass %>
+    </button>
+    <div class="modal fade" id="save<%= entityClass %>Modal" tabindex="-1" role="dialog" aria-labelledby="my<%= entityClass %>Label"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="form" role="form" novalidate
+                      class="ng-scope ng-invalid ng-invalid-required ng-dirty ng-valid-minlength"
+                      ng-submit="create()">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" id="my<%= entityClass %>Label">Create or edit a <%= entityClass %></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>ID</label>
+                            <input type="text" class="form-control" name="id"
+                                   ng-model="<%= entityInstance %>.id" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Sample text attribute</label>
+                            <input type="text" class="form-control" name="test"
+                                   ng-model="<%= entityInstance %>.sampleTextAttribute" ng-minlength=1 ng-maxlength=50 required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Sample date attribute</label>
+                            <input type="date" class="form-control" name="test"
+                                   ng-model="<%= entityInstance %>.sampleDateAttribute" required>
+                        </div>
+                    </div>
+                    <div class="modal-<%= entityInstance %>ter">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">Cancel
+                        </button>
+                        <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
-                <tr>
-                    <th>ID</th>
-                    <th></th>
-                </tr>
+            <tr>
+                <th>ID</th>
+                <th>Sample text</th>
+                <th>Sample date</th>
+            </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="<%= entityInstance %> in <%= entityInstance %>s">
-                    <td>{{<%= entityInstance %>.id}}</td>
-                    <td>
-                        <button type="submit"
-                                class="btn btn-primary">
-                                 Update
-                        </button>
-                    </td>
-                </tr>
+            <tr ng-repeat="<%= entityInstance %> in <%= entityInstance %>s">
+                <td>{{<%= entityInstance %>.id}}</td>
+                <td>{{<%= entityInstance %>.sampleTextAttribute}}</td>
+                <td>{{<%= entityInstance %>.sampleDateAttribute}}</td>
+                <td>
+                    <button type="submit"
+                            ng-click="update(<%= entityInstance %>.id)"
+                            class="btn">
+                        <span class="glyphicon glyphicon-pencil"></span> Edit
+                    </button>
+                    <button type="submit"
+                            ng-click="delete(<%= entityInstance %>.id)"
+                            class="btn btn-danger">
+                        <span class="glyphicon glyphicon-remove-circle"></span> Delete
+                    </button>
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>

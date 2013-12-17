@@ -1,12 +1,15 @@
 package <%=packageName%>.domain;
 
-<% if (hibernateCache != 'no') { %>
-import org.hibernate.annotations.Cache;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.joda.deser.LocalDateDeserializer;
+import <%=packageName%>.domain.util.CustomLocalDateSerializer;
+<% if (hibernateCache != 'no') { %>import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
+import org.hibernate.annotations.Type;
+import org.joda.time.LocalDate;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -19,46 +22,66 @@ import java.io.Serializable;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
 public class <%= entityClass %> implements Serializable {
 
-    @NotNull
-    @Size(min = 0, max = 50)
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.TABLE)
+    private long id;
 
-    public String getId() {
+    @Size(min = 1, max = 50)
+    private String sampleTextAttribute;
+
+    @NotNull
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = CustomLocalDateSerializer.class)
+    private LocalDate sampleDateAttribute;
+
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
+    }
+
+    public String getSampleTextAttribute() {
+        return sampleTextAttribute;
+    }
+
+    public void setSampleTextAttribute(String sampleTextAttribute) {
+        this.sampleTextAttribute = sampleTextAttribute;
+    }
+
+    public LocalDate getSampleDateAttribute() {
+        return sampleDateAttribute;
+    }
+
+    public void setSampleDateAttribute(LocalDate sampleDateAttribute) {
+        this.sampleDateAttribute = sampleDateAttribute;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-        <%= entityClass %> <%= entityInstance %> = (<%=entityClass %>) o;
+        <%= entityClass %> <%= entityInstance %> = (<%= entityClass %>) o;
 
-        if (!id.equals(<%= entityInstance %>.id)) {
-            return false;
-        }
+        if (id != <%= entityInstance %>.id) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return (int) (id ^ (id >>> 32));
     }
 
     @Override
     public String toString() {
         return "<%= entityClass %>{" +
-                "id='" + id + '\'' +
-                "}";
+                "id=" + id +
+                ", sampleTextAttribute='" + sampleTextAttribute + '\'' +
+                ", sampleDateAttribute=" + sampleDateAttribute +
+                '}';
     }
 }
