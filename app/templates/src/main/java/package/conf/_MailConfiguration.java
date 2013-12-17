@@ -23,7 +23,7 @@ public class MailConfiguration {
         log.debug("Configuring mail server");
         String host = env.getProperty("mail.host");
         int port = 0;
-        if (!env.getProperty("mail.port").equals("")) {
+        if (env.getProperty("mail.port")!= null && !env.getProperty("mail.port").equals("")) {
             port = env.getProperty("mail.port", Integer.class);
         }
         String user = env.getProperty("mail.user");
