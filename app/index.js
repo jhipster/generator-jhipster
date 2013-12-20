@@ -148,6 +148,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('_bower.json', 'bower.json');
     this.template('bowerrc', '.bowerrc');
     this.template('Gruntfile.js', 'Gruntfile.js');
+    this.template('karma.conf.js', 'karma.conf.js');
     this.copy('gitignore', '.gitignore');
     this.copy('spring_loaded/springloaded-1.1.4.jar', 'spring_loaded/springloaded-1.1.4.jar');
 
@@ -254,6 +255,7 @@ JhipsterGenerator.prototype.app = function app() {
         this.template(testResourceDir + '_ehcache.xml', testResourceDir + 'ehcache.xml');
     }
 
+
     // Create Webapp
     var webappDir = 'src/main/webapp/';
     this.mkdir(webappDir);
@@ -305,6 +307,13 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + 'scripts/_controllers.js', webappDir + 'scripts/controllers.js');
     this.template(webappDir + 'scripts/_services.js', webappDir + 'scripts/services.js');
     this.template(webappDir + 'scripts/_directives.js', webappDir + 'scripts/directives.js');
+
+    // Create Test Javascript files
+    var testJsDir = 'src/test/javascript/spec/';
+    this.mkdir(testJsDir);
+    this.template('src/test/javascript/spec/_controllersSpec.js', testJsDir + 'controllersSpec.js');
+    this.template('src/test/javascript/spec/_servicesSpec.js', testJsDir + 'servicesSpec.js');
+
 
     // CSS
     this.copy(webappDir + 'styles/documentation.css', webappDir + 'styles/documentation.css');

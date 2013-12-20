@@ -26,7 +26,15 @@
     "grunt-svgmin": "~0.3.0",
     "grunt-usemin": "~2.0.2",
     "load-grunt-tasks": "~0.2.0",
-    "time-grunt": "0.2.3" 
+    "time-grunt": "0.2.3" ,
+    "karma-script-launcher": "~0.1.0",
+    "karma-chrome-launcher": "~0.1.0",
+    "karma-html2js-preprocessor": "~0.1.0",
+    "karma-jasmine": "~0.1.3",
+    "karma-requirejs": "~0.1.0",
+    "karma-phantomjs-launcher": "~0.1.0",
+    "karma": "~0.10.5",
+    "grunt-karma": "~0.6.2"
   },
   "engines": {
     "node": ">=0.8.0"
