@@ -133,7 +133,6 @@
                                     </goals>
                               </execution>
                           </executions>
-                    </plugin>cutions>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.tomcat.maven</groupId>
