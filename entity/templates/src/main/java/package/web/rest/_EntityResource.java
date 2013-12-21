@@ -43,7 +43,7 @@ public class <%= entityClass %>Resource {
             produces = "application/json")
     @ResponseBody
     @Timed
-    public List<Foo> getAll() {
+    public List<<%= entityClass %>> getAll() {
         return <%= entityInstance %>Repository.findAll();
     }
 
