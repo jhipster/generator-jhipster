@@ -26,7 +26,7 @@
                 <% } %>
                 <% if (hibernateCache == 'hazelcast' ||  clusteredHttpSession == 'hazelcast') { %>
                 <!-- hazelcast configuration in MB -->
-                <hazelcastcache.maxBytesLocalHeap>65536</hazelcastcache.maxBytesLocalHeap>
+                <hazelcastcache.maxBytesLocalHeap>64</hazelcastcache.maxBytesLocalHeap>
                 <% } %>
                 <!-- development database configuration -->
                 <% if (devDatabaseType == 'mysql') { %><datasource.datasourceclassname>com.mysql.jdbc.jdbc2.optional.MysqlDataSource</datasource.datasourceclassname>
@@ -82,7 +82,7 @@
                 <ehcache.maxBytesLocalHeap>256M</ehcache.maxBytesLocalHeap>
                 <% } %><% if (hibernateCache == 'hazelcast' ||  clusteredHttpSession == 'hazelcast') { %>
                 <!-- hazelcast configuration in MB -->
-                <hazelcastcache.maxBytesLocalHeap>262144</hazelcastcache.maxBytesLocalHeap><% } %>
+                <hazelcastcache.maxBytesLocalHeap>256</hazelcastcache.maxBytesLocalHeap><% } %>
                 <!-- production database configuration -->
                 <% if (prodDatabaseType == 'mysql') { %><datasource.datasourceclassname>com.mysql.jdbc.jdbc2.optional.MysqlDataSource</datasource.datasourceclassname>
                 <datasource.url>jdbc:mysql://localhost:3306/<%= baseName %></datasource.url>
