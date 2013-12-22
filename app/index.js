@@ -169,7 +169,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(resourceDir + '/META-INF/liquibase/users.csv', resourceDir + 'META-INF/liquibase/users.csv');
     this.copy(resourceDir + '/META-INF/liquibase/authorities.csv', resourceDir + 'META-INF/liquibase/authorities.csv');
     this.copy(resourceDir + '/META-INF/liquibase/users_authorities.csv', resourceDir + 'META-INF/liquibase/users_authorities.csv');
-    this.template(resourceDir + '/META-INF/spring/_applicationContext-security.xml', resourceDir + 'META-INF/spring/applicationContext-security.xml');
 
     // Create Java files
     var javaDir = 'src/main/java/' + packageFolder + '/';
@@ -184,6 +183,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/conf/_Constants.java', javaDir + 'conf/Constants.java');
     this.template('src/main/java/package/conf/_DispatcherServletConfiguration.java', javaDir + 'conf/DispatcherServletConfiguration.java');
     this.template('src/main/java/package/conf/_WebConfigurer.java', javaDir + 'conf/WebConfigurer.java');
+    this.template('src/main/java/package/conf/_SecurityConfiguration.java', javaDir + 'conf/SecurityConfiguration.java');
 
     this.template('src/main/java/package/conf/metrics/_package-info.java', javaDir + 'conf/metrics/package-info.java');
     this.template('src/main/java/package/conf/metrics/_DatabaseHealthCheck.java', javaDir + 'conf/metrics/DatabaseHealthCheck.java');
@@ -246,7 +246,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/test/java/package/test/_ApplicationTestConfiguration.java', testDir + 'test/ApplicationTestConfiguration.java');
     this.template('src/test/java/package/service/_UserServiceTest.java', testDir + 'service/UserServiceTest.java');
     this.template('src/test/java/package/web/rest/_UserResourceTest.java', testDir + 'web/rest/UserResourceTest.java');
-    this.template(testResourceDir + 'META-INF/spring/_applicationContext-security.xml', testResourceDir + 'META-INF/spring/applicationContext-security.xml');
     this.template(testResourceDir + 'META-INF/application/_application.properties', testResourceDir + 'META-INF/' + this.baseName + '/' + this.baseName + '.properties');
     this.template(testResourceDir + '_logback.xml', testResourceDir + 'logback.xml');
 
