@@ -21,7 +21,7 @@ module.exports = function (grunt) {
     },
     watch: {<% if (useCompass) { %>
       compass: {
-        files: ['src/main/webapp/styles/{,*/}*.{scss,sass}'],
+        files: ['src/main/scss/{,*/}*.{scss,sass}'],
         tasks: ['compass:server', 'autoprefixer']
       },<% } %>
     styles: {
