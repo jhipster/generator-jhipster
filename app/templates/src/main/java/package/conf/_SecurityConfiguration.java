@@ -1,7 +1,6 @@
 package <%=packageName%>.conf;
 
 import <%=packageName%>.security.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -11,6 +10,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,9 +20,15 @@ import org.springframework.security.web.authentication.RememberMeServices;
 import javax.inject.Inject;
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableWebSecurity
+@EnableGlobalMethodSecurity
 @Order(Ordered.LOWEST_PRECEDENCE - 20)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Inject
+    public void registerGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+    }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -36,15 +42,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/view/**");
     }
 
-
     @Bean
     public RememberMeServices rememberMeServices() {
         return new CustomPersistentRememberMeServices(userDetailsService());
-    }
-
-    @Autowired
-    public void registerGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
     }
 
     @Bean
@@ -62,9 +62,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new <%=packageName%>.security.UserDetailsService();
     }
 
-
-
     @Configuration
+    @EnableWebSecurity
     @Order(Ordered.LOWEST_PRECEDENCE - 30)
     public static class ApiWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
 
@@ -88,6 +87,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Configuration
+    @EnableWebSecurity
     @Order(Ordered.LOWEST_PRECEDENCE - 40)
     public static class FormLoginWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
 
@@ -102,8 +102,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         @Inject
         private AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler;
-
-
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
