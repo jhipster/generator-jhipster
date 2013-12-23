@@ -9,7 +9,6 @@ import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -22,7 +21,7 @@ import java.util.List;
 /**
  * REST controller for managing the current user's account.
  */
-@Controller
+@RestController
 public class AccountResource {
 
     private static final Logger log = LoggerFactory.getLogger(AccountResource.class);
@@ -42,7 +41,6 @@ public class AccountResource {
     @RequestMapping(value = "/rest/authenticate",
             method = RequestMethod.GET,
             produces = "application/json")
-    @ResponseBody
     @Timed
     public String isAuthenticated() {
         log.debug("REST request to check if the current user is authenticated");
@@ -55,7 +53,6 @@ public class AccountResource {
     @RequestMapping(value = "/rest/account",
             method = RequestMethod.GET,
             produces = "application/json")
-    @ResponseBody
     @Timed
     public User getAccount(HttpServletResponse response) {
         User user = userRepository.findOne(SecurityUtils.getCurrentLogin());
@@ -71,7 +68,6 @@ public class AccountResource {
     @RequestMapping(value = "/rest/account",
             method = RequestMethod.POST,
             produces = "application/json")
-    @ResponseBody
     @Timed
     public void saveAccount(@RequestBody User user) throws IOException {
         userService.updateUserInformation(user);
@@ -83,7 +79,6 @@ public class AccountResource {
     @RequestMapping(value = "/rest/account/change_password",
             method = RequestMethod.POST,
             produces = "application/json")
-    @ResponseBody
     @Timed
     public void changePassword(@RequestBody String password, HttpServletResponse response) throws IOException {
         if (password == null || password.equals("")) {
@@ -99,7 +94,6 @@ public class AccountResource {
     @RequestMapping(value = "/rest/account/sessions",
             method = RequestMethod.GET,
             produces = "application/json")
-    @ResponseBody
     @Timed
     public List<PersistentToken> getCurrentSessions(HttpServletResponse response) {
         User user = userRepository.findOne(SecurityUtils.getCurrentLogin());
@@ -116,7 +110,6 @@ public class AccountResource {
     @RequestMapping(value = "/rest/account/sessions/{series}",
             method = RequestMethod.DELETE)
     @ResponseBody
-    @Timed
     public void invalidateSession(@PathVariable String series) throws UnsupportedEncodingException {
         String decodedSeries = URLDecoder.decode(series, "UTF-8");
         persistentTokenRepository.delete(decodedSeries);

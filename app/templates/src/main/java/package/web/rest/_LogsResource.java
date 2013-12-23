@@ -7,7 +7,6 @@ import <%=packageName%>.web.rest.dto.LoggerDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ import java.util.List;
 /**
  * Controller for view and managing Log Level at runtime.
  */
-@Controller
+@RestController
 public class LogsResource {
 
     private static final Logger log = LoggerFactory.getLogger(LogsResource.class);
@@ -24,7 +23,6 @@ public class LogsResource {
     @RequestMapping(value = "/rest/logs",
             method = RequestMethod.GET,
             produces = "application/json")
-    @ResponseBody
     @Timed
     public List<LoggerDTO> getList() {
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
