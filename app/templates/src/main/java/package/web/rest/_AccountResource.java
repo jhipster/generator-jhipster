@@ -109,7 +109,7 @@ public class AccountResource {
      */
     @RequestMapping(value = "/rest/account/sessions/{series}",
             method = RequestMethod.DELETE)
-    @ResponseBody
+    @Timed
     public void invalidateSession(@PathVariable String series) throws UnsupportedEncodingException {
         String decodedSeries = URLDecoder.decode(series, "UTF-8");
         persistentTokenRepository.delete(decodedSeries);
