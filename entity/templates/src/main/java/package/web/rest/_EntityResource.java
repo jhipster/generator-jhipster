@@ -23,7 +23,7 @@ public class <%= entityClass %>Resource {
     @Inject
     private <%= entityClass %>Repository <%= entityInstance %>Repository;
 
-/**
+    /**
      * POST  /rest/<%= entityInstance %>s -> Create a new <%= entityInstance %>.
      */
     @RequestMapping(value = "/rest/<%= entityInstance %>s",
