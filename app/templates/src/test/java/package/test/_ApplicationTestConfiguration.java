@@ -1,9 +1,6 @@
 package <%=packageName%>.test;
 
-import <%=packageName%>.conf.AsyncConfiguration;
-import <%=packageName%>.conf.CacheConfiguration;
-import <%=packageName%>.conf.DatabaseConfiguration;
-import <%=packageName%>.conf.MailConfiguration;
+import <%=packageName%>.conf.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.*;
@@ -19,11 +16,11 @@ import java.io.IOException;
         "<%=packageName%>.service",
         "<%=packageName%>.security"})
 @Import(value = {
+        SecurityConfiguration.class,
         AsyncConfiguration.class,
         CacheConfiguration.class,
         DatabaseConfiguration.class,
         MailConfiguration.class})
-@ImportResource("classpath:/META-INF/spring/applicationContext-*.xml")
 public class ApplicationTestConfiguration {
 
     private static final Logger log = LoggerFactory.getLogger(ApplicationTestConfiguration.class);
