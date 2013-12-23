@@ -5,4 +5,10 @@ Example:
     yo jhipster:entity Foo
 
     This will create:
-        app/scripts/controllers/thing-ctrl.js
+        src/main/java/package/domain/Foo.java
+        src/main/java/package/repository/FooRepository.java
+        src/main/java/package/web/rest/FooResource.java
+        src/main/webapp/scripts/foo-router.js
+        src/main/webapp/scripts/foo-controller.js
+        src/main/webapp/scripts/foo-service.js
+        src/main/webapp/views/foos.html
