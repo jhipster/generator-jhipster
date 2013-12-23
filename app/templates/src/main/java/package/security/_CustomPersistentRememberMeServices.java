@@ -7,6 +7,7 @@ import <%=packageName%>.repository.UserRepository;
 import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -72,8 +73,10 @@ public class CustomPersistentRememberMeServices extends
     private UserRepository userRepository;
 
     @Inject
-    public CustomPersistentRememberMeServices(org.springframework.security.core.userdetails.UserDetailsService userDetailsService) {
-        super("jhipsterKey", userDetailsService);
+    public CustomPersistentRememberMeServices(Environment env, 
+            org.springframework.security.core.userdetails.UserDetailsService userDetailsService) {
+        
+        super(env.getProperty("security.rememberme.key"), userDetailsService);
         random = new SecureRandom();
     }
 

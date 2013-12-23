@@ -3,8 +3,7 @@ package <%=packageName%>.conf;
 import <%=packageName%>.security.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.RememberMeAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -22,9 +21,11 @@ import javax.inject.Inject;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-@Order(Ordered.LOWEST_PRECEDENCE - 20)
+@EnableGlobalMethodSecurity(prePostEnabled = true, jsr250Enabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Inject
+    private Environment env;
 
     @Inject
     private AjaxAuthenticationSuccessHandler ajaxAuthenticationSuccessHandler;
@@ -40,7 +41,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public RememberMeServices rememberMeServices() {
-        return new CustomPersistentRememberMeServices(userDetailsService());
+        return new CustomPersistentRememberMeServices(env, userDetailsService());
     }
 
     @Override
@@ -72,7 +73,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("/*")
                 .antMatchers("/bower_components/**")
                 .antMatchers("/fonts/**")
                 .antMatchers("/images/**")
@@ -89,6 +89,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .and()
                 .rememberMe()
                     .rememberMeServices(rememberMeServices())
+                    .key(env.getProperty("security.rememberme.key"))
                     .and()
                 .formLogin()
                     .loginProcessingUrl("/app/authentication")
@@ -107,6 +108,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf()
                     .disable()
                 .authorizeRequests()
+                    .antMatchers("/*").permitAll()
                     .antMatchers("/app/**").authenticated()
                     .antMatchers("/metrics/**").hasRole("ADMIN")
                     .antMatchers("/logs/**").hasRole("ADMIN");
