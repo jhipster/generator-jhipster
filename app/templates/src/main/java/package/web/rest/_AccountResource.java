@@ -43,6 +43,7 @@ public class AccountResource {
             method = RequestMethod.GET,
             produces = "application/json")
     @ResponseBody
+    @Timed
     public String isAuthenticated() {
         log.debug("REST request to check if the current user is authenticated");
         return "OK";
