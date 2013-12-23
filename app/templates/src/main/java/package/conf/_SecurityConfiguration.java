@@ -26,7 +26,6 @@ import javax.inject.Inject;
 @Order(Ordered.LOWEST_PRECEDENCE - 20)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-
     @Inject
     private AjaxAuthenticationSuccessHandler ajaxAuthenticationSuccessHandler;
 
