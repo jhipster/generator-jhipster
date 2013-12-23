@@ -5,7 +5,6 @@ import <%=packageName%>.domain.<%= entityClass %>;
 import <%=packageName%>.repository.<%= entityClass %>Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -15,7 +14,7 @@ import java.util.List;
 /**
  * REST controller for managing <%= entityClass %>.
  */
-@Controller
+@RestController
 public class <%= entityClass %>Resource {
 
     private static final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
@@ -29,7 +28,6 @@ public class <%= entityClass %>Resource {
     @RequestMapping(value = "/rest/<%= entityInstance %>s",
             method = RequestMethod.POST,
             produces = "application/json")
-    @ResponseBody
     @Timed
     public void create(@RequestBody <%= entityClass %> <%= entityInstance %>) {
         <%= entityInstance %>Repository.save(<%= entityInstance %>);
@@ -41,7 +39,6 @@ public class <%= entityClass %>Resource {
     @RequestMapping(value = "/rest/<%= entityInstance %>s",
             method = RequestMethod.GET,
             produces = "application/json")
-    @ResponseBody
     @Timed
     public List<<%= entityClass %>> getAll() {
         return <%= entityInstance %>Repository.findAll();
@@ -53,7 +50,6 @@ public class <%= entityClass %>Resource {
     @RequestMapping(value = "/rest/<%= entityInstance %>s/{id}",
             method = RequestMethod.GET,
             produces = "application/json")
-    @ResponseBody
     @Timed
     public <%= entityClass %> get(@PathVariable Long id, HttpServletResponse response) {
         log.debug("REST request to get <%= entityClass %> : {}", id);
@@ -70,7 +66,6 @@ public class <%= entityClass %>Resource {
     @RequestMapping(value = "/rest/<%= entityInstance %>s/{id}",
             method = RequestMethod.DELETE,
             produces = "application/json")
-    @ResponseBody
     @Timed
     public void delete(@PathVariable Long id, HttpServletResponse response) {
         <%= entityInstance %>Repository.delete(id);
