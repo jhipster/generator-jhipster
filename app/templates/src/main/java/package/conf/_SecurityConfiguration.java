@@ -44,11 +44,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new CustomPersistentRememberMeServices(env, userDetailsService());
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
-    }
-
     @Bean
     public RememberMeAuthenticationProvider rememberMeAuthenticationProvider() {
         return new RememberMeAuthenticationProvider("jhipsterKey");
@@ -69,6 +64,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new  <%=packageName%>.security.UserDetailsService();
     }
 
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+    }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
