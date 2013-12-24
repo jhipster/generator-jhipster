@@ -18,6 +18,12 @@ public class CachingHttpHeadersFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        // Nothing to initialize
+    }
+    
+    @Override
+    public void destroy() {
+        // Nothing to destroy
     }
 
     @Override
@@ -29,9 +35,5 @@ public class CachingHttpHeadersFilter implements Filter {
 
         // Setting the Last-Modified header, for browser caching
         httpResponse.setDateHeader("Last-Modified", LAST_MODIFIED);
-    }
-
-    @Override
-    public void destroy() {
     }
 }

@@ -12,7 +12,7 @@ import java.util.zip.GZIPOutputStream;
 
 public class GZipServletFilter implements Filter {
 
-  private static Logger logger = LoggerFactory.getLogger(GZipServletFilter.class);
+  private static Logger log = LoggerFactory.getLogger(GZipServletFilter.class);
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {
@@ -32,8 +32,8 @@ public class GZipServletFilter implements Filter {
 
     if (!isIncluded(httpRequest) && acceptsGZipEncoding(httpRequest) && !response.isCommitted()) {
       // Client accepts zipped content
-      if (logger.isTraceEnabled()) {
-        logger.trace("{} Written with gzip compression", httpRequest.getRequestURL());
+      if (log.isTraceEnabled()) {
+        log.trace("{} Written with gzip compression", httpRequest.getRequestURL());
       }
 
       // Create a gzip stream
@@ -83,8 +83,8 @@ public class GZipServletFilter implements Filter {
 
     } else {
       // Client does not accept zipped content - don't bother zipping
-      if (logger.isTraceEnabled()) {
-        logger.trace("{} Writien without gzip compression because the request does not accept gzip", httpRequest.getRequestURL());
+      if (log.isTraceEnabled()) {
+        log.trace("{} Writien without gzip compression because the request does not accept gzip", httpRequest.getRequestURL());
       }
       chain.doFilter(request, response);
     }
@@ -97,8 +97,8 @@ public class GZipServletFilter implements Filter {
     final String uri = (String) request.getAttribute("javax.servlet.include.request_uri");
     final boolean includeRequest = !(uri == null);
 
-    if (includeRequest && logger.isDebugEnabled()) {
-      logger.debug("{} resulted in an include request. This is unusable, because"
+    if (includeRequest && log.isDebugEnabled()) {
+      log.debug("{} resulted in an include request. This is unusable, because"
           + "the response will be assembled into the overrall response. Not gzipping.",
           request.getRequestURL());
     }

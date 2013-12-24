@@ -103,7 +103,6 @@ public class AccountResource {
         return persistentTokenRepository.findByUser(user);
     }
 
-
     /**
      * DELETE  /rest/account/sessions?series={series} -> invalidate an existing session.
      */

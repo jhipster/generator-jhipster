@@ -16,6 +16,12 @@ public class StaticResourcesProductionFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        // Nothing to initialize
+    }
+
+    @Override
+    public void destroy() {
+        // Nothing to destroy
     }
 
     @Override
@@ -24,9 +30,5 @@ public class StaticResourcesProductionFilter implements Filter {
         String requestURI = httpRequest.getRequestURI();
         String newURI = "/dist" + requestURI;
         request.getRequestDispatcher(newURI).forward(request, response);
-    }
-
-    @Override
-    public void destroy() {
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class <%= serviceClass %>Service {
 
-	private static final Logger log = LoggerFactory.getLogger(<%= serviceClass %>Service.class);
+    private static final Logger log = LoggerFactory.getLogger(<%= serviceClass %>Service.class);
 
 }<% } else  { %>public interface <%= serviceClass %>Service {
 

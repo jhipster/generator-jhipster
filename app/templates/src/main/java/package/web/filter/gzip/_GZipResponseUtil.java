@@ -25,7 +25,7 @@ public final class GZipResponseUtil {
      * Utility class. No public constructor.
      */
     private GZipResponseUtil() {
-        //noop
+        // noop
     }
 
     /**

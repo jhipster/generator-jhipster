@@ -19,7 +19,7 @@ public class CustomLocalDateSerializer extends JsonSerializer<LocalDate> {
 
     @Override
     public void serialize(LocalDate value, JsonGenerator generator,
-                          SerializerProvider arg2)
+                          SerializerProvider serializerProvider)
             throws IOException {
 
         generator.writeString(formatter.print(value));
