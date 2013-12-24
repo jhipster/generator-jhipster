@@ -12,7 +12,7 @@ import java.util.zip.GZIPOutputStream;
 
 public class GZipServletFilter implements Filter {
 
-  private static Logger log = LoggerFactory.getLogger(GZipServletFilter.class);
+  private Logger log  = LoggerFactory.getLogger(GZipServletFilter.class);
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {

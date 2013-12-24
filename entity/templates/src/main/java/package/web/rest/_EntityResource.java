@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 public class <%= entityClass %>Resource {
 
-    private static final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
+    private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
 
     @Inject
     private <%= entityClass %>Repository <%= entityInstance %>Repository;

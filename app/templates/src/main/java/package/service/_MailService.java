@@ -22,7 +22,7 @@ import javax.inject.Inject;
 @Service
 public class MailService {
 
-    private static final Logger log = LoggerFactory.getLogger(MailService.class);
+    private final Logger log = LoggerFactory.getLogger(MailService.class);
 
     @Inject
     private Environment env;

@@ -12,7 +12,7 @@ import javax.sql.DataSource;
  */
 public class DatabaseHealthCheck extends HealthCheck {
 
-    private static final Logger log = LoggerFactory.getLogger(HealthCheck.class);
+    private final Logger log = LoggerFactory.getLogger(HealthCheck.class);
 
     private JdbcTemplate jdbcTemplate;
 

@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 public class UserResource {
 
-    private static final Logger log = LoggerFactory.getLogger(UserResource.class);
+    private final Logger log = LoggerFactory.getLogger(UserResource.class);
 
     @Inject
     private UserRepository userRepository;

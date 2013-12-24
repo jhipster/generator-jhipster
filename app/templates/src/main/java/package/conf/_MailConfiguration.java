@@ -13,7 +13,7 @@ import java.util.Properties;
 @Configuration
 public class MailConfiguration {
 
-    private static final Logger log = LoggerFactory.getLogger(MailConfiguration.class);
+    private final Logger log = LoggerFactory.getLogger(MailConfiguration.class);
 
     @Inject
     private Environment env;

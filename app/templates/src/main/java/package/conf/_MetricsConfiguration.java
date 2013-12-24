@@ -30,7 +30,7 @@ import static <%=packageName%>.conf.WebConfigurer.METRIC_REGISTRY;
 @EnableMetrics(proxyTargetClass = true)
 public class MetricsConfiguration extends MetricsConfigurerAdapter {
 
-    private static final Logger log = LoggerFactory.getLogger(MetricsConfiguration.class);
+    private final Logger log = LoggerFactory.getLogger(MetricsConfiguration.class);
 
     @Inject
     private Environment env;

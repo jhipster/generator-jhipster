@@ -22,7 +22,7 @@ import java.util.Collection;
 @Component("userDetailsService")
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
 
-    private static final Logger log = LoggerFactory.getLogger(UserDetailsService.class);
+    private final Logger log = LoggerFactory.getLogger(UserDetailsService.class);
 
     @Inject
     private UserRepository userRepository;

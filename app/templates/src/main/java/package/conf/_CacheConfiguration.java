@@ -27,7 +27,7 @@ import java.util.SortedSet;
 @EnableCaching
 public class CacheConfiguration {
 
-    private static final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
+    private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
     
     <% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>private static HazelcastInstance hazelcastInstance;
 

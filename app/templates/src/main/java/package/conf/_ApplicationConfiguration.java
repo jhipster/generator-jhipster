@@ -22,7 +22,7 @@ import java.io.IOException;
         MailConfiguration.class})
 public class ApplicationConfiguration {
 
-    private static final Logger log = LoggerFactory.getLogger(ApplicationConfiguration.class);
+    private final Logger log = LoggerFactory.getLogger(ApplicationConfiguration.class);
 
     @Inject
     private Environment env;

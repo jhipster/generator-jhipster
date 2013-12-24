@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public final class GZipResponseUtil {
 
-    private static final Logger log = LoggerFactory.getLogger(GZipResponseUtil.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GZipResponseUtil.class);
 
     /**
      * Gzipping an empty file or stream always results in a 20 byte output
@@ -40,8 +40,8 @@ public final class GZipResponseUtil {
 
         //Check for 0 length body
         if (compressedBytes.length == EMPTY_GZIPPED_CONTENT_SIZE) {
-            if (log.isTraceEnabled()) {
-                log.trace(request.getRequestURL() + " resulted in an empty response.");
+            if (LOG.isTraceEnabled()) {
+                LOG.trace("{} resulted in an empty response.", request.getRequestURL());
             }
             return true;
         } else {
@@ -66,18 +66,18 @@ public final class GZipResponseUtil {
 
         //Check for NO_CONTENT
         if (responseStatus == HttpServletResponse.SC_NO_CONTENT) {
-            if (log.isDebugEnabled()) {
-                log.debug(request.getRequestURL() + " resulted in a " + HttpServletResponse.SC_NO_CONTENT
-                        + " response. Removing message body in accordance with RFC2616.");
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("{} resulted in a {} response. Removing message body in accordance with RFC2616.", 
+                    request.getRequestURL(), HttpServletResponse.SC_NO_CONTENT);
             }
             return true;
         }
 
         //Check for NOT_MODIFIED
         if (responseStatus == HttpServletResponse.SC_NOT_MODIFIED) {
-            if (log.isDebugEnabled()) {
-                log.debug(request.getRequestURL() + " resulted in a " + HttpServletResponse.SC_NOT_MODIFIED
-                        + " response. Removing message body in accordance with RFC2616.");
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("{} resulted in a {} response. Removing message body in accordance with RFC2616.",
+                        request.getRequestURL(), HttpServletResponse.SC_NOT_MODIFIED);
             }
             return true;
         }

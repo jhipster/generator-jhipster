@@ -30,7 +30,7 @@ import java.util.Map;
  */
 public class WebConfigurer implements ServletContextListener {
 
-    private static final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
+    private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
 
     public static final MetricRegistry METRIC_REGISTRY = new MetricRegistry();
 

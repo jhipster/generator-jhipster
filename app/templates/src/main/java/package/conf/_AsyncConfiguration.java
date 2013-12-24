@@ -15,7 +15,7 @@ import java.util.concurrent.Executor;
 @EnableScheduling
 public class AsyncConfiguration implements AsyncConfigurer {
 
-    private static final Logger log = LoggerFactory.getLogger(AsyncConfiguration.class);
+    private final Logger log = LoggerFactory.getLogger(AsyncConfiguration.class);
 
     @Override
     public Executor getAsyncExecutor() {

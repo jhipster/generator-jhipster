@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 public class LogsResource {
 
-    private static final Logger log = LoggerFactory.getLogger(LogsResource.class);
+    private final Logger log = LoggerFactory.getLogger(LogsResource.class);
 
     @RequestMapping(value = "/rest/logs",
             method = RequestMethod.GET,

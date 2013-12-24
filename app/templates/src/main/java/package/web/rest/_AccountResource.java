@@ -24,7 +24,7 @@ import java.util.List;
 @RestController
 public class AccountResource {
 
-    private static final Logger log = LoggerFactory.getLogger(AccountResource.class);
+    private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
     @Inject
     private UserRepository userRepository;

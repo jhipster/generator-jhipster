@@ -18,7 +18,7 @@ import java.util.Properties;
 
 public class HazelcastCacheRegionFactory implements RegionFactory {
 
-    private static Logger logger = LoggerFactory.getLogger(HazelcastCacheRegionFactory.class);
+    private Logger log = LoggerFactory.getLogger(HazelcastCacheRegionFactory.class);
 
     private HazelcastInstance hazelcastInstance;
 
@@ -76,7 +76,7 @@ public class HazelcastCacheRegionFactory implements RegionFactory {
 
     public void start(final Settings settings, final Properties properties) throws CacheException {
         // Do nothing the hazelcalst hazelcastInstance is injected
-        logger.info("Starting up " + getClass().getSimpleName());
+        log.info("Starting up {}", getClass().getSimpleName());
 
         if (hazelcastInstance == null) {
             throw new IllegalArgumentException("Hazelcast hazelcastInstance must not be null");
@@ -86,7 +86,7 @@ public class HazelcastCacheRegionFactory implements RegionFactory {
 
     public void stop() {
         // Do nothing the hazelcalst instance is managed globally
-        logger.info("Shutting down " + getClass().getSimpleName());
+        log.info("Shutting down {}", getClass().getSimpleName());
         cleanupService.stop();
     }
 

@@ -36,7 +36,7 @@ import java.util.List;
 @Import(value = {MetricsConfiguration.class})
 public class DispatcherServletConfiguration extends WebMvcConfigurerAdapter {
 
-    private static final Logger log = LoggerFactory.getLogger(DispatcherServletConfiguration.class);
+    private final Logger log = LoggerFactory.getLogger(DispatcherServletConfiguration.class);
 
     // 10 Mo max file size
     private static final int MAX_UPLOAD_SIZE = 10 * 1000 * 1000;

@@ -10,6 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class <%= serviceClass %>ServiceImpl implements <%= serviceClass %>Service {
 
-    private static final Logger log = LoggerFactory.getLogger(<%= serviceClass %>ServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(<%= serviceClass %>ServiceImpl.class);
 
 }

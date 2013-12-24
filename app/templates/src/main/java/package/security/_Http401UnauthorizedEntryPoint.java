@@ -17,7 +17,7 @@ import java.io.IOException;
 @Component
 public class Http401UnauthorizedEntryPoint implements AuthenticationEntryPoint {
 
-    private static final Logger log = LoggerFactory.getLogger(Http401UnauthorizedEntryPoint.class);
+    private final Logger log = LoggerFactory.getLogger(Http401UnauthorizedEntryPoint.class);
 
     /**
      * Always returns a 401 error code to the client.

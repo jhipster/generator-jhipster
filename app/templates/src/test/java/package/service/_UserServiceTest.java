@@ -33,7 +33,7 @@ import static org.junit.Assert.assertEquals;
 @DirtiesContext(classMode= DirtiesContext.ClassMode.AFTER_CLASS)
 public class UserServiceTest {
 
-    private static final Logger log = LoggerFactory.getLogger(UserServiceTest.class);
+    private final Logger log = LoggerFactory.getLogger(UserServiceTest.class);
 
     @Inject
     private PersistentTokenRepository persistentTokenRepository;
