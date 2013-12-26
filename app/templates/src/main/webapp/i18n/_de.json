@@ -10,7 +10,7 @@
                 "password": "Passwort",
                 "sessions": "Sitzungen",
                 "metrics": "Metriken",
-                "logs": "Logs",
+                "logs": "Protokoll",
                 "login": "Anmelden",
                 "logout": "Abmelden"
             },
@@ -29,12 +29,12 @@
             "message": "Sie sind als Benutzer \"{{username}}\" angemeldet.",
             "authenticated": "Wenn Sie sich <a href=\"#/login\">anmelden</a> möchten, versuchen Sie es mit Name=\"admin\" und Passwort=\"admin\"."
         },
-        "question": "Wenn Sie eine Frage zu JHipster haben:",
+        "question": "Wenn Sie Fragen zu JHipster haben:",
         "link": {
             "homepage": "JHipster Hauptseite",
             "stackoverflow": "JHipster auf Stack Overflow",
-            "bugtracker": "JHipster bug tracker",
-            "contact": "kontaktieren Sie @java_hipster auf Twitter"
+            "bugtracker": "JHipster Fehlereinträge",
+            "contact": "folgen Sie @java_hipster auf Twitter"
         },
         "like": "Wenn Sie JHipster mögen, vergessen Sie nicht uns einen Stern zu geben auf",
         "github": "Github"
@@ -51,12 +51,12 @@
         },
         "messages": {
             "error": {
-                "authentication": "<strong>Anmeldung fehlgeschlagen!</strong> Überprüfen Sie bitte Ihre Angaben und versuchen es erneut."
+                "authentication": "<strong>Anmeldung fehlgeschlagen!</strong> Überprüfen Sie bitte Ihre Angaben und versuchen Sie es erneut."
             }
         }
     },
     "settings": {
-        "title": "Einstellungen für Benutzer: [<b>{{username}}</b>]",
+        "title": "Einstellungen für Benutzer [<b>{{username}}</b>]",
         "form": {
             "firstname": "Vorname",
             "firstname.placeholder": "Ihr Vorname",
@@ -106,9 +106,9 @@
             "success": "<strong>Passwort wurde geändert!</strong>",
             "validate": {
                 "newpassword": {
-                    "required": "Ihr Passwort wird benötigt.",
-                    "minlength": "Ihr Passwort muss mindestens 5 Zeichen lang sein",
-                    "maxlength": "Ihr Passwort darf nicht länger als 20 Zeichen sein"
+                    "required": "Ein neues Passwort wird benötigt.",
+                    "minlength": "Das neue Passwort muss mindestens 5 Zeichen lang sein",
+                    "maxlength": "Das neue Passwort darf nicht länger als 20 Zeichen sein"
                 },
                 "confirmpassword": {
                     "required": "Sie müssen das Passwort bestätigen.",
@@ -146,7 +146,7 @@
             "threads": {
                 "title": "Threads",
                 "runnable": "Runnable",
-                "timewaiting": "Wartezeiten",
+                "timewaiting": "Wartezeit",
                 "waiting": "Wartend",
                 "blocked": "Geblockt"
             },
@@ -199,7 +199,7 @@
         }<% } %>
     },
     "logs": {
-        "title": "Logs",
+        "title": "Protokolle",
         "nbloggers": "Es existieren {{ total }} Logger.",
         "filter": "Filter",
         "table": {
@@ -207,5 +207,5 @@
             "level": "Stufe"
         }
     },
-    "footer": "Dies ist Ihre Fusszeile"
+    "footer": "Dies ist Ihre Fußzeile"
 }
