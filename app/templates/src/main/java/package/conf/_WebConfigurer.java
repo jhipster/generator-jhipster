@@ -202,7 +202,6 @@ public class WebConfigurer implements ServletContextListener {
         FilterRegistration.Dynamic springSecurityFilter = servletContext.addFilter("springSecurityFilterChain",
                 new DelegatingFilterProxy());
 
-        springSecurityFilter.setAsyncSupported(true);
         springSecurityFilter.addMappingForUrlPatterns(disps, false, "/*");
         springSecurityFilter.setAsyncSupported(true);
     }
@@ -224,6 +223,7 @@ public class WebConfigurer implements ServletContextListener {
                 new InstrumentedFilter());
 
         metricsFilter.addMappingForUrlPatterns(disps, true, "/*");
+        metricsFilter.setAsyncSupported(true);
 
         log.debug("Registering Metrics Admin Servlet");
         ServletRegistration.Dynamic metricsAdminServlet =
