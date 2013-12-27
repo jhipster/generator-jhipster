@@ -1,0 +1,49 @@
+server:
+    port: 10344
+    address: localhost
+
+
+# security configuration (this key should be unique for your application, and kept secret)
+security.rememberme.key: jhipster
+
+async:
+    corePoolSize: 2
+    maxPoolSize: 50
+    queueCapacity: 10000
+
+spring:
+  mail:
+    host: localhost
+    port: 25
+    user:
+    password:
+    tls: false
+
+spring:
+  datasource:
+    dataSourceClassName: org.hsqldb.jdbc.JDBCDataSource
+    url: jdbc:hsqldb:mem:jhipster
+    databaseName: 
+    serverName: 
+    username: 
+    password:
+
+  jpa:
+    database-platform: org.hibernate.dialect.HSQLDialect
+    database: HSQL
+    openInView: false
+    show_sql: true
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+      naming-strategy: org.hibernate.cfg.EJB3NamingStrategy
+    properties:
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: true
+
+metrics:
+    jmx.enabled: true
+
+
+
