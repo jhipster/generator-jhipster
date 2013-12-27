@@ -108,8 +108,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .disable()
                 .authorizeRequests()
                     .antMatchers("/*").permitAll()
+                    .antMatchers("/app/rest/logs/**").hasRole("ADMIN")
                     .antMatchers("/app/**").authenticated()
-                    .antMatchers("/metrics/**").hasRole("ADMIN")
-                    .antMatchers("/logs/**").hasRole("ADMIN");
+                    .antMatchers("/metrics/**").hasRole("ADMIN");
     }
 }
