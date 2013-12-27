@@ -315,9 +315,11 @@ JhipsterGenerator.prototype.app = function app() {
 
     // CSS
     this.copy(webappDir + 'styles/documentation.css', webappDir + 'styles/documentation.css');
+    this.copy(webappDir + 'styles/famfamfam_flags.css', webappDir + 'styles/famfamfam_flags.css');
 
     // Images
     this.copy(webappDir + 'images/hipster.jpg', webappDir + 'images/hipster.jpg');
+    this.copy(webappDir + 'images/famfamfam-flags.png', webappDir + 'images/famfamfam-flags.png');
 
     this.indexFile = this.appendScripts(this.indexFile, 'scripts/scripts.js', [
         'bower_components/modernizr/modernizr.js',

@@ -13,6 +13,7 @@
         <!-- build:css(.tmp) styles/main.css -->
         <% if (!useCompass) { %><link rel="stylesheet" href="styles/bootstrap.css">
         <% } %><link rel="stylesheet" href="styles/main.css">
+        <link rel="stylesheet" href="styles/famfamfam_flags.css">
         <!-- endbuild -->
     </head>
     <body ng-app="<%= angularAppName %>">
@@ -65,9 +66,18 @@
                             </span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li active-menu="en"><a href="#" ng-click="changeLanguage(&apos;en&apos;)" translate="global.language.en">English</a></li>
-                            <li active-menu="fr"><a href="#" ng-click="changeLanguage(&apos;fr&apos;)" translate="global.language.fr">French</a></li>
-                            <li active-menu="de"><a href="#" ng-click="changeLanguage(&apos;de&apos;)" translate="global.language.de">German</a></li>
+                            <li active-menu="en">
+                                <a href="#" ng-click="changeLanguage(&apos;en&apos;)"><i class="famfamfam-flag-gb"></i>
+                                    &nbsp;<span translate="global.language.en">English</span></a>
+                            </li>
+                            <li active-menu="fr">
+                                <a href="#" ng-click="changeLanguage(&apos;fr&apos;)"><i class="famfamfam-flag-fr"></i>
+                                    &nbsp;<span translate="global.language.fr">French</span></a>
+                            </li>
+                            <li active-menu="de">
+                                <a href="#" ng-click="changeLanguage(&apos;de&apos;)"><i class="famfamfam-flag-de"></i>
+                                    &nbsp;<span translate="global.language.de">German</span></a>
+                            </li>
                         </ul>
                     </li>
                 </ul>
