@@ -4,7 +4,7 @@ server:
 
 
 # security configuration (this key should be unique for your application, and kept secret)
-security.rememberme.key: jhipster
+security.rememberme.key: <%= baseName %>
 
 async:
     corePoolSize: 2
@@ -22,7 +22,7 @@ spring:
 spring:
   datasource:
     dataSourceClassName: org.hsqldb.jdbc.JDBCDataSource
-    url: jdbc:hsqldb:mem:jhipster
+    url: jdbc:hsqldb:mem:<%= baseName %>
     databaseName: 
     serverName: 
     username: 
@@ -43,7 +43,4 @@ spring:
       hibernate.generate_statistics: true
 
 metrics:
-    jmx.enabled: true
-
-
-
+    jmx.enabled: false

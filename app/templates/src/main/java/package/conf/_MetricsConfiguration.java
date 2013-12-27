@@ -36,7 +36,6 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
     private static final MetricRegistry METRIC_REGISTRY = new MetricRegistry();
     private static final HealthCheckRegistry HEALTH_CHECK_REGISTRY = new HealthCheckRegistry();
 
-
     private RelaxedPropertyResolver env;
 
     @Override
@@ -44,13 +43,11 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
         this.env = new RelaxedPropertyResolver(environment, "metrics.");
     }
 
-
     @Inject
     private DataSource dataSource;
 
     @Inject
     private JavaMailSenderImpl javaMailSender;
-
 
     @Override
     @Bean
@@ -87,7 +84,6 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
         }
     }
 
-
     @Configuration
     @ConditionalOnClass(Graphite.class)
     public static class GraphiteRegistry implements EnvironmentAware {
@@ -100,7 +96,6 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
         public void setEnvironment(Environment environment) {
             this.env = new RelaxedPropertyResolver(environment, "metrics.graphite");
         }
-
 
         @PostConstruct
         private void init() {
