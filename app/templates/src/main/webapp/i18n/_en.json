@@ -18,7 +18,8 @@
         },
         "language": {
             "en": "English",
-            "fr": "French"
+            "fr": "French",
+            "de": "German"
         }
     },
     "main": {

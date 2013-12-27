@@ -284,6 +284,7 @@ JhipsterGenerator.prototype.app = function app() {
     // i18n
     this.template(webappDir + '/i18n/_en.json', webappDir + 'i18n/en.json');
     this.template(webappDir + '/i18n/_fr.json', webappDir + 'i18n/fr.json');
+    this.template(webappDir + '/i18n/_de.json', webappDir + 'i18n/de.json');
 
     // Angular JS views
     this.angularAppName = _s.camelize(this.baseName) + 'App';
@@ -314,9 +315,11 @@ JhipsterGenerator.prototype.app = function app() {
 
     // CSS
     this.copy(webappDir + 'styles/documentation.css', webappDir + 'styles/documentation.css');
+    this.copy(webappDir + 'styles/famfamfam_flags.css', webappDir + 'styles/famfamfam_flags.css');
 
     // Images
     this.copy(webappDir + 'images/hipster.jpg', webappDir + 'images/hipster.jpg');
+    this.copy(webappDir + 'images/famfamfam-flags.png', webappDir + 'images/famfamfam-flags.png');
 
     this.indexFile = this.appendScripts(this.indexFile, 'scripts/scripts.js', [
         'bower_components/modernizr/modernizr.js',
