@@ -46,7 +46,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public RememberMeAuthenticationProvider rememberMeAuthenticationProvider() {
-        return new RememberMeAuthenticationProvider("jhipsterKey");
+        return new RememberMeAuthenticationProvider(env.getProperty("security.rememberme.key"));
     }
 
     @Bean
