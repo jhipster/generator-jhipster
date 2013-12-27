@@ -16,6 +16,7 @@ import java.util.List;
  * Controller for view and managing Log Level at runtime.
  */
 @RestController
+@RequestMapping("/app")
 public class LogsResource {
 
     private final Logger log = LoggerFactory.getLogger(LogsResource.class);

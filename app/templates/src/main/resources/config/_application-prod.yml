@@ -1,0 +1,49 @@
+server:
+    port: 8080
+    address: localhost
+
+spring:
+  profiles: prod
+  datasource:
+    dataSourceClassName: <% if (prodDatabaseType == 'mysql') { %>com.mysql.jdbc.jdbc2.optional.MysqlDataSource<% } else if (prodDatabaseType == 'postgresql') { %>org.postgresql.ds.PGSimpleDataSource<% } else { %>org.hsqldb.jdbc.JDBCDataSource<% } %>
+    url: <% if (prodDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (prodDatabaseType == 'postgresql') { %>org.postgresql.ds.PGSimpleDataSource<% } else { %>jdbc:hsqldb:mem:<%= baseName %><% } %>
+    databaseName: <% if (prodDatabaseType == 'postgresql') { %><%= baseName %><% } %>
+    serverName: <% if (prodDatabaseType == 'postgresql') { %>localhost<% } %>
+    username: <% if (prodDatabaseType == 'mysql') { %>root<% } else if (prodDatabaseType == 'postgresql') { %><%= baseName %><% } %>
+    password:
+
+  jpa:
+    database-platform: <% if (prodDatabaseType == 'mysql') { %>org.hibernate.dialect.MySQLInnoDBDialect<% } else if (prodDatabaseType == 'postgresql') { %>org.hibernate.dialect.PostgreSQLDialect<% } else { %>org.hibernate.dialect.HSQLDialect<% } %>
+    database: <% if (prodDatabaseType == 'mysql') { %>MYSQL<% } else if (prodDatabaseType == 'postgresql') { %>POSTGRESQL<% } else { %>HSQL<% } %>
+    openInView: false
+    show_sql: false
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+      naming-strategy: org.hibernate.cfg.EJB3NamingStrategy
+    properties:
+      hibernate.cache.use_second_level_cache: <% if (hibernateCache == 'ehcache' || hibernateCache == 'hazelcast') { %>true<% } else { %>false<% } %>
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+      <% if (hibernateCache == 'ehcache') { %>hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory<% } else if (hibernateCache == 'hazelcast') { %>hibernate.cache.region.factory_class: <%=packageName%>.conf.hazelcast.HazelcastCacheRegionFactory<% } %>
+      <% if (hibernateCache == 'hazelcast') { %>hibernate.cache.use_minimal_puts: true
+      hibernate.cache.hazelcast.use_lite_member: true<% } %>
+
+metrics:
+    jmx.enabled: true
+    graphite:
+      enabled: false
+      host:
+      port:
+
+
+<% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast' || hibernateCache == 'ehcache') {%>cache:
+    timeTiLiveSeconds: 3600<% } if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') {%>
+    hazelcast:
+        debug: false
+        stickySession: false
+        backupCount: 1<% } if (hibernateCache == 'ehcache') { %>
+    ehcache:
+        maxBytesLocalHeap: 256M
+        path: java.io.tmpdir<% } %>
+

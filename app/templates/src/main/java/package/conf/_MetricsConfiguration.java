@@ -12,6 +12,10 @@ import com.ryantenney.metrics.spring.config.annotation.EnableMetrics;
 import com.ryantenney.metrics.spring.config.annotation.MetricsConfigurerAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.bind.RelaxedPropertyResolver;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -23,17 +27,23 @@ import java.lang.management.ManagementFactory;
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 
-import static <%=packageName%>.conf.WebConfigurer.HEALTH_CHECK_REGISTRY;
-import static <%=packageName%>.conf.WebConfigurer.METRIC_REGISTRY;
-
 @Configuration
 @EnableMetrics(proxyTargetClass = true)
-public class MetricsConfiguration extends MetricsConfigurerAdapter {
+public class MetricsConfiguration extends MetricsConfigurerAdapter implements EnvironmentAware {
 
     private final Logger log = LoggerFactory.getLogger(MetricsConfiguration.class);
 
-    @Inject
-    private Environment env;
+    private static final MetricRegistry METRIC_REGISTRY = new MetricRegistry();
+    private static final HealthCheckRegistry HEALTH_CHECK_REGISTRY = new HealthCheckRegistry();
+
+
+    private RelaxedPropertyResolver env;
+
+    @Override
+    public void setEnvironment(Environment environment) {
+        this.env = new RelaxedPropertyResolver(environment, "metrics.");
+    }
+
 
     @Inject
     private DataSource dataSource;
@@ -41,12 +51,15 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
     @Inject
     private JavaMailSenderImpl javaMailSender;
 
+
     @Override
+    @Bean
     public MetricRegistry getMetricRegistry() {
         return METRIC_REGISTRY;
     }
 
     @Override
+    @Bean
     public HealthCheckRegistry getHealthCheckRegistry() {
         return HEALTH_CHECK_REGISTRY;
     }
@@ -67,16 +80,37 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
 
     @Override
     public void configureReporters(MetricRegistry metricRegistry) {
-        log.info("Initializing Metrics JMX reporting");
-        final JmxReporter jmxReporter = JmxReporter.forRegistry(METRIC_REGISTRY).build();
-        jmxReporter.start();
-        if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
-            String graphiteHost = env.getProperty("metrics.graphite.host");
-            if (graphiteHost != null) {
+        if (env.getProperty("jmx.enabled", Boolean.class, false)) {
+            log.info("Initializing Metrics JMX reporting");
+            final JmxReporter jmxReporter = JmxReporter.forRegistry(metricRegistry).build();
+            jmxReporter.start();
+        }
+    }
+
+
+    @Configuration
+    @ConditionalOnClass(Graphite.class)
+    public static class GraphiteRegistry implements EnvironmentAware {
+        @Inject
+        private MetricRegistry metricRegistry;
+
+        private RelaxedPropertyResolver env;
+
+        @Override
+        public void setEnvironment(Environment environment) {
+            this.env = new RelaxedPropertyResolver(environment, "metrics.graphite");
+        }
+
+
+        @PostConstruct
+        private void init() {
+            Boolean graphiteEnabled = env.getProperty("enabled", Boolean.class, false);
+            if (graphiteEnabled) {
                 log.info("Initializing Metrics Graphite reporting");
-                Integer graphitePort = env.getProperty("metrics.graphite.port", Integer.class);
+                String graphiteHost = env.getRequiredProperty("host");
+                Integer graphitePort = env.getRequiredProperty("port", Integer.class);
                 Graphite graphite = new Graphite(new InetSocketAddress(graphiteHost, graphitePort));
-                GraphiteReporter graphiteReporter = GraphiteReporter.forRegistry(METRIC_REGISTRY)
+                GraphiteReporter graphiteReporter = GraphiteReporter.forRegistry(metricRegistry)
                         .convertRatesTo(TimeUnit.SECONDS)
                         .convertDurationsTo(TimeUnit.MILLISECONDS)
                         .build(graphite);

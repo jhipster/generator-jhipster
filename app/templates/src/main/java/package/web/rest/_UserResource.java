@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
  * REST controller for managing users.
  */
 @RestController
+@RequestMapping("/app")
 public class UserResource {
 
     private final Logger log = LoggerFactory.getLogger(UserResource.class);

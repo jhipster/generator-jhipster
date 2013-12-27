@@ -1,0 +1,18 @@
+
+# security configuration (this key should be unique for your application, and kept secret)
+security.rememberme.key: <%= baseName %>
+
+async:
+    corePoolSize: 2
+    maxPoolSize: 50
+    queueCapacity: 10000
+
+spring:
+  mail:
+    host: localhost
+    port: 25
+    user:
+    password:
+    tls: false
+
+

@@ -15,6 +15,7 @@ import java.util.List;
  * REST controller for managing <%= entityClass %>.
  */
 @RestController
+@RequestMapping("/app")
 public class <%= entityClass %>Resource {
 
     private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
