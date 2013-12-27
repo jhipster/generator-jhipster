@@ -180,7 +180,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/conf/_CacheConfiguration.java', javaDir + 'conf/CacheConfiguration.java');
     this.template('src/main/java/package/conf/_Constants.java', javaDir + 'conf/Constants.java');
     this.template('src/main/java/package/conf/_DatabaseConfiguration.java', javaDir + 'conf/DatabaseConfiguration.java');
-//    this.template('src/main/java/package/conf/_FilterConfiguration.java', javaDir + 'conf/FilterConfiguration.java');
     this.template('src/main/java/package/conf/_MailConfiguration.java', javaDir + 'conf/MailConfiguration.java');
     this.template('src/main/java/package/conf/_MetricsConfiguration.java', javaDir + 'conf/MetricsConfiguration.java');
     this.template('src/main/java/package/conf/_SecurityConfiguration.java', javaDir + 'conf/SecurityConfiguration.java');
@@ -242,7 +241,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/test/java/package/service/_UserServiceTest.java', testDir + 'service/UserServiceTest.java');
     this.template('src/test/java/package/web/rest/_UserResourceTest.java', testDir + 'web/rest/UserResourceTest.java');
 
-    this.copy(testResourceDir + 'config/application.yml', testResourceDir + 'config/application.yml');
+    this.template(testResourceDir + 'config/_application.yml', testResourceDir + 'config/application.yml');
 
     this.template(testResourceDir + '_logback.xml', testResourceDir + 'logback.xml');
 

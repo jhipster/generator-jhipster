@@ -26,7 +26,6 @@ public class Application {
         SpringApplication app = new SpringApplication(Application.class);
         app.setShowBanner(false);
 
-
         final SimpleCommandLinePropertySource source = new SimpleCommandLinePropertySource(args);
 
         // Check if the selected profile has been set as argument.
@@ -47,7 +46,6 @@ public class Application {
             app.setAdditionalProfiles(Arrays.asList("prod"));
         }
     }
-
 
     /**
      * Set the liquibases.scan.packages to avoid an exception from ServiceLocator

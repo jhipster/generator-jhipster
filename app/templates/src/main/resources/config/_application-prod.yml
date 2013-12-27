@@ -46,4 +46,3 @@ metrics:
     ehcache:
         maxBytesLocalHeap: 256M
         path: java.io.tmpdir<% } %>
-

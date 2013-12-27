@@ -99,7 +99,6 @@ public class CacheConfiguration {
         ehCacheConfig.monitoring(net.sf.ehcache.config.Configuration.Monitoring.AUTODETECT);
         ehCacheConfig.setMaxBytesLocalHeap(env.getProperty("cache.ehcache.maxBytesLocalHeap"));
 
-
         final net.sf.ehcache.config.DiskStoreConfiguration diskStoreConfiguration = new net.sf.ehcache.config.DiskStoreConfiguration();
         diskStoreConfiguration.setPath(env.getProperty("cache.ehcache.path"));
         ehCacheConfig.addDiskStore(diskStoreConfiguration);

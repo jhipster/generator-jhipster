@@ -14,5 +14,3 @@ spring:
     user:
     password:
     tls: false
-
-
