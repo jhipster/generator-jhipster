@@ -29,6 +29,8 @@ public class CachingHttpHeadersFilter implements Filter {
 
         // Setting the Last-Modified header, for browser caching
         httpResponse.setDateHeader("Last-Modified", LAST_MODIFIED);
+
+        chain.doFilter(request, response);
     }
 
     @Override

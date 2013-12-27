@@ -22,6 +22,7 @@ import java.util.List;
  * REST controller for managing the current user's account.
  */
 @RestController
+@RequestMapping("/app")
 public class AccountResource {
 
     private static final Logger log = LoggerFactory.getLogger(AccountResource.class);
@@ -42,9 +43,8 @@ public class AccountResource {
             method = RequestMethod.GET,
             produces = "application/json")
     @Timed
-    public String isAuthenticated() {
-        log.debug("REST request to check if the current user is authenticated");
-        return "OK";
+    public Boolean isAuthenticated() {
+        return SecurityUtils.isAuthenticated();
     }
 
     /**

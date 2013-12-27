@@ -42,7 +42,11 @@
             authenticate: function() {
                 $http.get('/app/rest/authenticate')
                     .success(function (data, status, headers, config) {
-                        $rootScope.$broadcast('event:auth-authConfirmed');
+                        if (data === 'false') {
+                            $rootScope.$broadcast('event:auth-loginRequired');
+                        } else {
+                            $rootScope.$broadcast('event:auth-authConfirmed');
+                        }
                     })
             },
             login: function (param) {

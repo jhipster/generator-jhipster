@@ -6,29 +6,31 @@ import com.codahale.metrics.servlet.InstrumentedFilter;
 import com.codahale.metrics.servlets.AdminServlet;
 import com.codahale.metrics.servlets.HealthCheckServlet;
 import com.codahale.metrics.servlets.MetricsServlet;
-import <%=packageName%>.web.filter.CachingHttpHeadersFilter;
-import <%=packageName%>.web.filter.StaticResourcesProductionFilter;<% if (clusteredHttpSession == 'hazelcast') { %>
+import <%=packageName%>.web.filter.CachingHttpHeadersFilter;<% if (clusteredHttpSession == 'hazelcast') { %>
+import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.web.SessionListener;
 import com.hazelcast.web.WebFilter;<% } %>
 import <%=packageName%>.web.filter.gzip.GZipServletFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.context.embedded.ServletContextInitializer;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-import org.springframework.web.filter.DelegatingFilterProxy;
-import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.*;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.Map;<% if (clusteredHttpSession == 'hazelcast') { %>
+import java.util.Properties;<% } %>
 
 /**
  * Configuration of web application with Servlet 3.0 APIs.
  */
-public class WebConfigurer implements ServletContextListener {
+@Configuration
+@AutoConfigureAfter(CacheConfiguration.class)
+public class WebConfigurer implements ServletContextInitializer {
 
     private static final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
 
@@ -37,22 +39,12 @@ public class WebConfigurer implements ServletContextListener {
     public static final HealthCheckRegistry HEALTH_CHECK_REGISTRY = new HealthCheckRegistry();
 
     @Override
-    public void contextInitialized(ServletContextEvent sce) {
-        ServletContext servletContext = sce.getServletContext();
+    public void onStartup(ServletContext servletContext) throws ServletException {
         log.info("Web application configuration");
 
-        log.debug("Configuring Spring root application context");
-        AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
-        rootContext.register(ApplicationConfiguration.class);
-        rootContext.refresh();
-
-        servletContext.setAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE, rootContext);
-
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
-
-        initSpring(servletContext, rootContext);<% if (clusteredHttpSession == 'hazelcast') { %>
+        <% if (clusteredHttpSession == 'hazelcast') { %>
         initClusteredHttpSessionFilter(servletContext, disps);<% } %>
-        initSpringSecurity(servletContext, disps);
         initMetrics(servletContext, disps);
 
         if (WebApplicationContextUtils
@@ -60,7 +52,6 @@ public class WebConfigurer implements ServletContextListener {
                 .getBean(Environment.class)
                 .acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
 
-            initStaticResourcesProductionFilter(servletContext, disps);
             initCachingHttpHeadersFilter(servletContext, disps);
         }
 
@@ -77,8 +68,15 @@ public class WebConfigurer implements ServletContextListener {
 
         disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC, DispatcherType.INCLUDE);
         servletContext.addListener(new SessionListener());
-        final FilterRegistration.Dynamic hazelcastWebFilter = servletContext.addFilter("hazelcastWebFilter",
-                new WebFilter());
+
+        WebFilter webFilter = new WebFilter() {
+            @Override
+            protected HazelcastInstance getInstance(Properties properties) throws ServletException {
+                return CacheConfiguration.getHazelcastInstance();
+            }
+        };
+
+        final FilterRegistration.Dynamic hazelcastWebFilter = servletContext.addFilter("hazelcastWebFilter", webFilter);
 
         Map<String, String> parameters = new HashMap<String, String>();
         // Name of the distributed map storing your web session objects
@@ -139,26 +137,6 @@ public class WebConfigurer implements ServletContextListener {
     }
 
     /**
-     * Initializes the static resources production Filter.
-     */
-    private void initStaticResourcesProductionFilter(ServletContext servletContext,
-                                                     EnumSet<DispatcherType> disps) {
-
-        log.debug("Registering static resources production Filter");
-        FilterRegistration.Dynamic staticResourcesProductionFilter =
-                servletContext.addFilter("staticResourcesProductionFilter",
-                        new StaticResourcesProductionFilter());
-
-        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/");
-        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/index.html");
-        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/fonts/*");
-        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/scripts/*");
-        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/styles/*");
-        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/views/*");
-        staticResourcesProductionFilter.setAsyncSupported(true);
-    }
-
-    /**
      * Initializes the cachig HTTP Headers Filter.
      */
     private void initCachingHttpHeadersFilter(ServletContext servletContext,
@@ -175,37 +153,6 @@ public class WebConfigurer implements ServletContextListener {
         cachingHttpHeadersFilter.setAsyncSupported(true);
     }
 
-
-    /**
-     * Initializes Spring and Spring MVC.
-     */
-    private ServletRegistration.Dynamic initSpring(ServletContext servletContext, AnnotationConfigWebApplicationContext rootContext) {
-        log.debug("Configuring Spring Web application context");
-        AnnotationConfigWebApplicationContext dispatcherServletConfiguration = new AnnotationConfigWebApplicationContext();
-        dispatcherServletConfiguration.setParent(rootContext);
-        dispatcherServletConfiguration.register(DispatcherServletConfiguration.class);
-
-        log.debug("Registering Spring MVC Servlet");
-        ServletRegistration.Dynamic dispatcherServlet = servletContext.addServlet("dispatcher", new DispatcherServlet(
-                dispatcherServletConfiguration));
-        dispatcherServlet.addMapping("/app/*");
-        dispatcherServlet.setLoadOnStartup(1);
-        dispatcherServlet.setAsyncSupported(true);
-        return dispatcherServlet;
-    }
-
-    /**
-     * Initializes Spring Security.
-     */
-    private void initSpringSecurity(ServletContext servletContext, EnumSet<DispatcherType> disps) {
-        log.debug("Registering Spring Security Filter");
-        FilterRegistration.Dynamic springSecurityFilter = servletContext.addFilter("springSecurityFilterChain",
-                new DelegatingFilterProxy());
-
-        springSecurityFilter.setAsyncSupported(true);
-        springSecurityFilter.addMappingForUrlPatterns(disps, false, "/*");
-        springSecurityFilter.setAsyncSupported(true);
-    }
 
     /**
      * Initializes Metrics.
@@ -231,14 +178,5 @@ public class WebConfigurer implements ServletContextListener {
 
         metricsAdminServlet.addMapping("/metrics/*");
         metricsAdminServlet.setLoadOnStartup(2);
-    }
-
-    @Override
-    public void contextDestroyed(ServletContextEvent sce) {
-        log.info("Destroying Web application");
-        WebApplicationContext ac = WebApplicationContextUtils.getRequiredWebApplicationContext(sce.getServletContext());
-        AnnotationConfigWebApplicationContext gwac = (AnnotationConfigWebApplicationContext) ac;
-        gwac.close();
-        log.debug("Web application destroyed");
     }
 }
