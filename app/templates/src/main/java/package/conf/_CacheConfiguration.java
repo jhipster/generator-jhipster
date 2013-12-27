@@ -40,7 +40,7 @@ public class CacheConfiguration {
     @PersistenceContext
     private EntityManager entityManager;<% } %>
 
-    <% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>@Inject
+    <% if (hibernateCache == 'ehcache' || hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>@Inject
     private Environment env;<% } %>
 
 
