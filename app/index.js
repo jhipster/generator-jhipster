@@ -242,6 +242,8 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/test/java/package/service/_UserServiceTest.java', testDir + 'service/UserServiceTest.java');
     this.template('src/test/java/package/web/rest/_UserResourceTest.java', testDir + 'web/rest/UserResourceTest.java');
 
+    this.copy(testResourceDir + 'config/application.yml', testResourceDir + 'config/application.yml');
+
     this.template(testResourceDir + '_logback.xml', testResourceDir + 'logback.xml');
 
     // Create Webapp
