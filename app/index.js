@@ -174,6 +174,7 @@ JhipsterGenerator.prototype.app = function app() {
     var javaDir = 'src/main/java/' + packageFolder + '/';
 
     this.template('src/main/java/package/_Application.java', javaDir + '/Application.java');
+    this.template('src/main/java/package/_ApplicationWebXml.java', javaDir + '/ApplicationWebXml.java');
 
     this.template('src/main/java/package/conf/_package-info.java', javaDir + 'conf/package-info.java');
     this.template('src/main/java/package/conf/_AsyncConfiguration.java', javaDir + 'conf/AsyncConfiguration.java');
