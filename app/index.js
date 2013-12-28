@@ -164,67 +164,67 @@ JhipsterGenerator.prototype.app = function app() {
 
     this.template(resourceDir + '_logback.xml', resourceDir + 'logback.xml');
 
-    this.template(resourceDir + '/META-INF/application/_application.properties', resourceDir + 'META-INF/' + this.baseName + '/' + this.baseName + '.properties');
+    this.template(resourceDir + '/config/_application.yml', resourceDir + 'config/application.yml');
+    this.template(resourceDir + '/config/_application-dev.yml', resourceDir + 'config/application-dev.yml');
+    this.template(resourceDir + '/config/_application-prod.yml', resourceDir + 'config/application-prod.yml');
+
     this.copy(resourceDir + '/META-INF/liquibase/db-changelog.xml', resourceDir + 'META-INF/liquibase/db-changelog.xml');
     this.copy(resourceDir + '/META-INF/liquibase/users.csv', resourceDir + 'META-INF/liquibase/users.csv');
     this.copy(resourceDir + '/META-INF/liquibase/authorities.csv', resourceDir + 'META-INF/liquibase/authorities.csv');
     this.copy(resourceDir + '/META-INF/liquibase/users_authorities.csv', resourceDir + 'META-INF/liquibase/users_authorities.csv');
+    this.copy(resourceDir + '/META-INF/master.xml', resourceDir + 'META-INF/master.xml');
 
     // Create Java files
     var javaDir = 'src/main/java/' + packageFolder + '/';
 
+    this.template('src/main/java/package/_Application.java', javaDir + '/Application.java');
+    this.template('src/main/java/package/_ApplicationWebXml.java', javaDir + '/ApplicationWebXml.java');
+
     this.template('src/main/java/package/conf/_package-info.java', javaDir + 'conf/package-info.java');
-    this.template('src/main/java/package/conf/_ApplicationConfiguration.java', javaDir + 'conf/ApplicationConfiguration.java');
     this.template('src/main/java/package/conf/_AsyncConfiguration.java', javaDir + 'conf/AsyncConfiguration.java');
     this.template('src/main/java/package/conf/_CacheConfiguration.java', javaDir + 'conf/CacheConfiguration.java');
+    this.template('src/main/java/package/conf/_Constants.java', javaDir + 'conf/Constants.java');
     this.template('src/main/java/package/conf/_DatabaseConfiguration.java', javaDir + 'conf/DatabaseConfiguration.java');
     this.template('src/main/java/package/conf/_MailConfiguration.java', javaDir + 'conf/MailConfiguration.java');
     this.template('src/main/java/package/conf/_MetricsConfiguration.java', javaDir + 'conf/MetricsConfiguration.java');
-    this.template('src/main/java/package/conf/_Constants.java', javaDir + 'conf/Constants.java');
-    this.template('src/main/java/package/conf/_DispatcherServletConfiguration.java', javaDir + 'conf/DispatcherServletConfiguration.java');
-    this.template('src/main/java/package/conf/_WebConfigurer.java', javaDir + 'conf/WebConfigurer.java');
     this.template('src/main/java/package/conf/_SecurityConfiguration.java', javaDir + 'conf/SecurityConfiguration.java');
+    this.template('src/main/java/package/conf/_WebConfigurer.java', javaDir + 'conf/WebConfigurer.java');
 
     this.template('src/main/java/package/conf/metrics/_package-info.java', javaDir + 'conf/metrics/package-info.java');
     this.template('src/main/java/package/conf/metrics/_DatabaseHealthCheck.java', javaDir + 'conf/metrics/DatabaseHealthCheck.java');
     this.template('src/main/java/package/conf/metrics/_JavaMailHealthCheck.java', javaDir + 'conf/metrics/JavaMailHealthCheck.java');
 
+    if (this.hibernateCache == "hazelcast") {
+        this.template('src/main/java/package/conf/hazelcast/_HazelcastCacheRegionFactory.java', javaDir + 'conf/hazelcast/HazelcastCacheRegionFactory.java');
+        this.template('src/main/java/package/conf/hazelcast/_package-info.java', javaDir + 'conf/hazelcast/package-info.java');
+    }
+
     this.template('src/main/java/package/domain/_package-info.java', javaDir + 'domain/package-info.java');
     this.template('src/main/java/package/domain/_Authority.java', javaDir + 'domain/Authority.java');
     this.template('src/main/java/package/domain/_PersistentToken.java', javaDir + 'domain/PersistentToken.java');
     this.template('src/main/java/package/domain/_User.java', javaDir + 'domain/User.java');
-
     this.template('src/main/java/package/domain/util/_CustomLocalDateSerializer.java', javaDir + 'domain/util/CustomLocalDateSerializer.java');
-
-    if (this.hibernateCache == "hazelcast" || this.clusteredHttpSession == 'hazelcast') {
-      this.template('src/main/java/package/conf/hazelcast/_HazelcastCacheRegionFactory.java', javaDir + 'conf/hazelcast/HazelcastCacheRegionFactory.java');
-      this.template('src/main/java/package/conf/hazelcast/_package-info.java', javaDir + 'conf/hazelcast/package-info.java');
-    }
 
     this.template('src/main/java/package/repository/_package-info.java', javaDir + 'repository/package-info.java');
     this.template('src/main/java/package/repository/_UserRepository.java', javaDir + 'repository/UserRepository.java');
     this.template('src/main/java/package/repository/_PersistentTokenRepository.java', javaDir + 'repository/PersistentTokenRepository.java');
 
     this.template('src/main/java/package/security/_package-info.java', javaDir + 'security/package-info.java');
-    this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java');
-    this.template('src/main/java/package/security/_AuthoritiesConstants.java', javaDir + 'security/AuthoritiesConstants.java');
-    this.template('src/main/java/package/security/_Http401UnauthorizedEntryPoint.java', javaDir + 'security/Http401UnauthorizedEntryPoint.java');
     this.template('src/main/java/package/security/_AjaxAuthenticationFailureHandler.java', javaDir + 'security/AjaxAuthenticationFailureHandler.java');
     this.template('src/main/java/package/security/_AjaxAuthenticationSuccessHandler.java', javaDir + 'security/AjaxAuthenticationSuccessHandler.java');
     this.template('src/main/java/package/security/_AjaxLogoutSuccessHandler.java', javaDir + 'security/AjaxLogoutSuccessHandler.java');
+    this.template('src/main/java/package/security/_AuthoritiesConstants.java', javaDir + 'security/AuthoritiesConstants.java');
     this.template('src/main/java/package/security/_CustomPersistentRememberMeServices.java', javaDir + 'security/CustomPersistentRememberMeServices.java');
+    this.template('src/main/java/package/security/_Http401UnauthorizedEntryPoint.java', javaDir + 'security/Http401UnauthorizedEntryPoint.java');
     this.template('src/main/java/package/security/_SecurityUtils.java', javaDir + 'security/SecurityUtils.java');
+    this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java');
 
     this.template('src/main/java/package/service/_package-info.java', javaDir + 'service/package-info.java');
     this.template('src/main/java/package/service/_UserService.java', javaDir + 'service/UserService.java');
     this.template('src/main/java/package/service/_MailService.java', javaDir + 'service/MailService.java');
 
-    this.template('src/main/java/package/web/controller/_package-info.java', javaDir + 'web/controller/package-info.java');
-    this.template('src/main/java/package/web/controller/_HomeController.java', javaDir + 'web/controller/HomeController.java');
-
     this.template('src/main/java/package/web/filter/_package-info.java', javaDir + 'web/filter/package-info.java');
     this.template('src/main/java/package/web/filter/_CachingHttpHeadersFilter.java', javaDir + 'web/filter/CachingHttpHeadersFilter.java');
-    this.template('src/main/java/package/web/filter/_StaticResourcesProductionFilter.java', javaDir + 'web/filter/StaticResourcesProductionFilter.java');
 
     this.template('src/main/java/package/web/filter/gzip/_package-info.java', javaDir + 'web/filter/gzip/package-info.java');
     this.template('src/main/java/package/web/filter/gzip/_GzipResponseHeadersNotModifiableException.java', javaDir + 'web/filter/gzip/GzipResponseHeadersNotModifiableException.java');
@@ -233,32 +233,29 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/web/filter/gzip/_GZipServletOutputStream.java', javaDir + 'web/filter/gzip/GZipServletOutputStream.java');
     this.template('src/main/java/package/web/filter/gzip/_GZipServletResponseWrapper.java', javaDir + 'web/filter/gzip/GZipServletResponseWrapper.java');
 
+    this.template('src/main/java/package/web/rest/dto/_LoggerDTO.java', javaDir + 'web/rest/dto/LoggerDTO.java');
     this.template('src/main/java/package/web/rest/_package-info.java', javaDir + 'web/rest/package-info.java');
-    this.template('src/main/java/package/web/rest/_UserResource.java', javaDir + 'web/rest/UserResource.java');
     this.template('src/main/java/package/web/rest/_AccountResource.java', javaDir + 'web/rest/AccountResource.java');
     this.template('src/main/java/package/web/rest/_LogsResource.java', javaDir + 'web/rest/LogsResource.java');
-    this.template('src/main/java/package/web/rest/dto/_LoggerDTO.java', javaDir + 'web/rest/dto/LoggerDTO.java');
+    this.template('src/main/java/package/web/rest/_UserResource.java', javaDir + 'web/rest/UserResource.java');
 
     // Create Test Java files
     var testDir = 'src/test/java/' + packageFolder + '/';
     var testResourceDir = 'src/test/resources/';
     this.mkdir(testDir);
-    this.template('src/test/java/package/test/_ApplicationTestConfiguration.java', testDir + 'test/ApplicationTestConfiguration.java');
     this.template('src/test/java/package/service/_UserServiceTest.java', testDir + 'service/UserServiceTest.java');
     this.template('src/test/java/package/web/rest/_UserResourceTest.java', testDir + 'web/rest/UserResourceTest.java');
-    this.template(testResourceDir + 'META-INF/application/_application.properties', testResourceDir + 'META-INF/' + this.baseName + '/' + this.baseName + '.properties');
+
+    this.template(testResourceDir + 'config/_application.yml', testResourceDir + 'config/application.yml');
     this.template(testResourceDir + '_logback.xml', testResourceDir + 'logback.xml');
 
     if (this.hibernateCache == "ehcache") {
         this.template(testResourceDir + '_ehcache.xml', testResourceDir + 'ehcache.xml');
     }
 
-
     // Create Webapp
     var webappDir = 'src/main/webapp/';
     this.mkdir(webappDir);
-    this.mkdir(webappDir + 'WEB-INF');
-    this.template(webappDir + 'WEB-INF/_web.xml', webappDir + 'WEB-INF/web.xml');
 
     // normal CSS or SCSS?
     if (this.useCompass) {

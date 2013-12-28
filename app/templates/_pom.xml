@@ -5,7 +5,12 @@
     <artifactId><%= _.slugify(baseName) %></artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>war</packaging>
-    <description></description>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>0.5.0.M7</version>
+    </parent>
 
     <profiles>
         <profile>
@@ -16,105 +21,38 @@
             <properties>
                 <!-- Spring profile to use -->
                 <spring.profiles.active>dev</spring.profiles.active>
-                <!-- i18n resource files reloading -->
-                <message.reloading.enabled>true</message.reloading.enabled>
                 <!-- log configuration -->
-                <logback.loglevel>DEBUG</logback.loglevel>
-                <% if (hibernateCache == 'ehcache') { %>
+                <logback.loglevel>DEBUG</logback.loglevel><% if (hibernateCache == 'ehcache') { %>
                 <!-- ehcache configuration -->
                 <ehcache.maxBytesLocalHeap>64M</ehcache.maxBytesLocalHeap>
                 <% } %>
-                <% if (hibernateCache == 'hazelcast' ||  clusteredHttpSession == 'hazelcast') { %>
-                <!-- hazelcast configuration in MB -->
-                <hazelcastcache.maxBytesLocalHeap>64</hazelcastcache.maxBytesLocalHeap>
-                <% } %>
-                <!-- development database configuration -->
-                <% if (devDatabaseType == 'mysql') { %><datasource.datasourceclassname>com.mysql.jdbc.jdbc2.optional.MysqlDataSource</datasource.datasourceclassname>
-                <datasource.url>jdbc:mysql://localhost:3306/<%= baseName %></datasource.url>
-                <datasource.databaseName></datasource.databaseName>
-                <datasource.serverName></datasource.serverName>
-                <datasource.username>root</datasource.username>
-                <datasource.password></datasource.password><% } else if (devDatabaseType == 'postgresql') { %><datasource.datasourceclassname>org.postgresql.ds.PGSimpleDataSource</datasource.datasourceclassname>
-                <datasource.url></datasource.url>
-                <datasource.databaseName><%= baseName %></datasource.databaseName>
-                <datasource.serverName>localhost</datasource.serverName>
-                <datasource.username><%= baseName %></datasource.username>
-                <datasource.password></datasource.password><% } else { %><datasource.datasourceclassname>org.hsqldb.jdbc.JDBCDataSource</datasource.datasourceclassname>
-                <datasource.url>jdbc:hsqldb:mem:<%= baseName %></datasource.url>
-                <datasource.databaseName></datasource.databaseName>
-                <datasource.serverName></datasource.serverName>
-                <datasource.username></datasource.username>
-                <datasource.password></datasource.password><% } %>
-                <% if (devDatabaseType == 'mysql') { %><hibernate.dialect>org.hibernate.dialect.MySQLInnoDBDialect</hibernate.dialect><% } else if (devDatabaseType == 'postgresql') { %><hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect><% } else { %><hibernate.dialect>org.hibernate.dialect.HSQLDialect</hibernate.dialect><% } %>
-                <hibernate.show_sql>true</hibernate.show_sql>
-                <hibernate.generate_statistics>true</hibernate.generate_statistics>
-                <!-- email configuration -->
-                <mail.host>localhost</mail.host>
-                <mail.port>25</mail.port>
-                <mail.user></mail.user>
-                <mail.password></mail.password>
-                <mail.tls></mail.tls>
-                <mail.from>jhipster@localhost</mail.from>
             </properties>
-            <dependencies>
-                <dependency>
-                    <% if (devDatabaseType == 'mysql') { %><groupId>mysql</groupId>
-                    <artifactId>mysql-connector-java</artifactId>
-                    <version>5.1.27</version><% } else if (devDatabaseType == 'postgresql') { %><groupId>org.postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
-                    <version>9.3-1100-jdbc41</version><% } else { %><groupId>org.hsqldb</groupId>
-                    <artifactId>hsqldb</artifactId>
-                    <version>2.3.1</version><% } %>
-                </dependency>
-            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <arguments>
+                                <argument>--spring.profiles.active=dev</argument>
+                            </arguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
         <profile>
             <id>prod</id>
             <properties>
                 <!-- Spring profile to use -->
                 <spring.profiles.active>prod</spring.profiles.active>
-                <!-- i18n resource files reloading -->
-                <message.reloading.enabled>false</message.reloading.enabled>
                 <!-- log configuration -->
-                <logback.loglevel>WARN</logback.loglevel>
+                <logback.loglevel>INFO</logback.loglevel>
                 <logback.appender>CONSOLE</logback.appender><% if (hibernateCache == 'ehcache') { %>
                 <!-- ehcache configuration -->
                 <ehcache.maxBytesLocalHeap>256M</ehcache.maxBytesLocalHeap>
-                <% } %><% if (hibernateCache == 'hazelcast' ||  clusteredHttpSession == 'hazelcast') { %>
-                <!-- hazelcast configuration in MB -->
-                <hazelcastcache.maxBytesLocalHeap>256</hazelcastcache.maxBytesLocalHeap><% } %>
-                <!-- production database configuration -->
-                <% if (prodDatabaseType == 'mysql') { %><datasource.datasourceclassname>com.mysql.jdbc.jdbc2.optional.MysqlDataSource</datasource.datasourceclassname>
-                <datasource.url>jdbc:mysql://localhost:3306/<%= baseName %></datasource.url>
-                <datasource.databaseName></datasource.databaseName>
-                <datasource.serverName></datasource.serverName>
-                <datasource.username>root</datasource.username>
-                <datasource.password></datasource.password><% } else if (prodDatabaseType == 'postgresql') { %><datasource.datasourceclassname>org.postgresql.ds.PGSimpleDataSource</datasource.datasourceclassname>
-                <datasource.url></datasource.url>
-                <datasource.databaseName><%= baseName %></datasource.databaseName>
-                <datasource.serverName>localhost</datasource.serverName>
-                <datasource.username><%= baseName %></datasource.username>
-                <datasource.password></datasource.password><% } %>
-                <% if (prodDatabaseType == 'mysql') { %><hibernate.dialect>org.hibernate.dialect.MySQLInnoDBDialect</hibernate.dialect><% } else if (prodDatabaseType == 'postgresql') { %><hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect><% } %>
-                <hibernate.show_sql>false</hibernate.show_sql>
-                <hibernate.generate_statistics>false</hibernate.generate_statistics>
-                <!-- email configuration -->
-                <mail.host>localhost</mail.host>
-                <mail.port>25</mail.port>
-                <mail.user></mail.user>
-                <mail.password></mail.password>
-                <mail.tls></mail.tls>
-                <mail.from>jhipster@localhost</mail.from>
+                <% } %>
             </properties>
-            <dependencies>
-                <dependency>
-                    <% if (prodDatabaseType == 'mysql') { %><groupId>mysql</groupId>
-                    <artifactId>mysql-connector-java</artifactId>
-                    <version>5.1.27</version><% } else if (prodDatabaseType == 'postgresql') { %><groupId>org.postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
-                    <version>9.3-1100-jdbc41</version><% } %>
-                </dependency>
-            </dependencies>
             <build>
                 <plugins>
                     <plugin>
@@ -135,22 +73,41 @@
                           </executions>
                     </plugin>
                     <plugin>
-                        <groupId>org.apache.tomcat.maven</groupId>
-                        <artifactId>tomcat7-maven-plugin</artifactId>
-                        <version>2.1</version>
-                        <executions>
-                            <execution>
-                                <id>tomcat-run</id>
-                                <goals>
-                                    <goal>exec-war-only</goal>
-                                </goals>
-                                <phase>package</phase>
-                                <configuration>
-                                    <path>/</path>
-                                    <protocol>org.apache.coyote.http11.Http11NioProtocol</protocol>
-                                </configuration>
-                            </execution>
-                        </executions>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>2.4</version>
+                        <configuration>
+                            <webResources>
+                                <resource>
+                                    <directory>dist</directory>
+                                </resource>
+                            </webResources>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <version>2.5</version>
+                        <configuration>
+                            <filesets>
+                                <fileset>
+                                    <directory>dist</directory>
+                                </fileset>
+                                <fileset>
+                                    <directory>.tmp</directory>
+                                </fileset>
+                                <fileset>
+                                    <directory>node_modules</directory>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <arguments>
+                                <argument>--spring.profiles.active=prod</argument>
+                            </arguments>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
@@ -159,39 +116,85 @@
     
     <properties>
         <!-- Maven build properties -->
-    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.7</java.version>
 
+        <!-- Override spring boot librairies version -->
+        <spring.version>4.0.0.RELEASE</spring.version>
+        <spring-data-jpa.version>1.4.2.RELEASE</spring-data-jpa.version>
+        <hibernate-validator.version>5.0.1.Final</hibernate-validator.version>
+        <spring-security.version>3.2.0.RELEASE</spring-security.version>
+
         <!-- Librairies versions -->
-        <spring.version>4.0.0.RELEASE </spring.version>
-        <spring.security.version>3.2.0.RELEASE</spring.security.version>
-        <hibernate.version>4.2.7.Final</hibernate.version>
-        <codahale.metrics.version>3.0.1</codahale.metrics.version>
-        <% if (hibernateCache == 'hazelcast' ||  clusteredHttpSession == 'hazelcast') { %>
+        <codahale.metrics.version>3.0.1</codahale.metrics.version><% if (hibernateCache == 'hazelcast' ||  clusteredHttpSession == 'hazelcast') { %>
         <hazelcastcache.version>3.1.3</hazelcastcache.version><% } %>
     </properties>
 
     <repositories>
         <repository>
-            <id>sonatype-releases</id>
-            <name>Sonatype Releases Repository</name>
-            <url>http://oss.sonatype.org/content/repositories/releases/</url>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>http://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>org.jboss.repository.releases</id>
+            <name>JBoss Maven Release Repository</name>
+            <url>https://repository.jboss.org/nexus/content/repositories/releases</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
         </repository>
     </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-snapshots</id>
+            <url>http://repo.spring.io/libs-snapshot</url>
+            <snapshots><enabled>true</enabled></snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
     <prerequisites>
         <maven>3.0.0</maven>
     </prerequisites>
 
     <dependencies>
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>1.0.13</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.0.13</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-loader-tools</artifactId>
+            <version><%= _.unescape('\$\{spring-boot.version}')%></version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version><%= _.unescape('\$\{spring-boot.version}')%></version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
         </dependency>
         <dependency>
             <groupId>com.codahale.metrics</groupId>
@@ -256,45 +259,9 @@
         </dependency>
         -->
         <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
-            <version>1.3</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.4</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.annotation</groupId>
-            <artifactId>jsr250-api</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
             <version>1</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-            <version>1.2</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <version>1.1.0.Final</version>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
@@ -332,46 +299,21 @@
             <artifactId>hazelcast-wm</artifactId>
             <version><%= _.unescape('\$\{hazelcastcache.version}')%></version>
         </dependency><% } %>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>1.7.4</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>1.7.4</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.geronimo.javamail</groupId>
-            <artifactId>geronimo-javamail_1.4_mail</artifactId>
-            <version>1.8.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version><%= _.unescape('\$\{hibernate.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version><%= _.unescape('\$\{hibernate.version}')%></version>
-        </dependency>
         <% if (hibernateCache == 'ehcache') { %>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-ehcache</artifactId>
-            <version><%= _.unescape('\$\{hibernate.version}')%></version>
+            <version><%= _.unescape('\$\{hibernate-entitymanager.version}')%></version>
         </dependency>
         <% } %>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>5.0.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.geronimo.javamail</groupId>
+            <artifactId>geronimo-javamail_1.4_mail</artifactId>
+            <version>1.8.3</version>
         </dependency>
         <dependency>
             <groupId>org.jadira.usertype</groupId>
@@ -383,109 +325,36 @@
             <artifactId>liquibase-core</artifactId>
             <version>3.0.7</version>
         </dependency>
+
+        <!-- Database dependencies-->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.5</version>
+            <% if (devDatabaseType == 'mysql') { %><groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.27</version><% } else if (devDatabaseType == 'postgresql') { %><groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.3-1100-jdbc41</version><% } else { %><groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.3.1</version><% } %>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>1.7.5</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aop</artifactId>
-            <version><%= _.unescape('\$\{spring.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version><%= _.unescape('\$\{spring.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version><%= _.unescape('\$\{spring.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-            <version><%= _.unescape('\$\{spring.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version><%= _.unescape('\$\{spring.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-expression</artifactId>
-            <version><%= _.unescape('\$\{spring.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-orm</artifactId>
-            <version><%= _.unescape('\$\{spring.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <version><%= _.unescape('\$\{spring.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version><%= _.unescape('\$\{spring.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version><%= _.unescape('\$\{spring.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-jpa</artifactId>
-            <version>1.4.2.RELEASE</version>
-         </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
-            <version><%= _.unescape('\$\{spring.security.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-            <version><%= _.unescape('\$\{spring.security.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-crypto</artifactId>
-            <version><%= _.unescape('\$\{spring.security.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-web</artifactId>
-            <version><%= _.unescape('\$\{spring.security.version}')%></version>
+            <% if (prodDatabaseType == 'mysql') { %><groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.27</version><% } else if (prodDatabaseType == 'postgresql') { %><groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.3-1100-jdbc41</version><% } %>
         </dependency>
 
         <!-- Test dependencies -->
         <dependency>
-              <groupId>com.jayway.awaitility</groupId>
-              <artifactId>awaitility</artifactId>
-              <version>1.4.0</version>
-              <scope>test</scope>
+            <groupId>com.jayway.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>1.4.0</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
             <version>0.9.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.11</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -501,26 +370,17 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <version>2.3.1</version>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.9.5</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version><%= _.unescape('\$\{spring.version}')%></version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
-        <finalName>root</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -531,15 +391,6 @@
             </resource>
         </resources>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
@@ -579,48 +430,6 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.4</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.1</version>
-                <configuration>
-                    <path>/</path>
-                    <contextReloadable>true</contextReloadable>
-                    <protocol>org.apache.coyote.http11.Http11NioProtocol</protocol>
-                    <systemProperties>
-                        <spring.profiles.active><%= _.unescape('\$\{spring.profiles.active}')%></spring.profiles.active>
-                    </systemProperties>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>9.1.0.v20131115</version>
-                <configuration>
-                    <scanIntervalSeconds>1</scanIntervalSeconds>
-                    <stopKey>stop-jetty</stopKey>
-                    <stopPort>9999</stopPort>
-                    <systemProperties>
-                        <systemProperty>
-                            <name>jetty.port</name>
-                            <value>8080</value>
-                        </systemProperty>
-                        <systemProperty>
-                            <name>spring.profiles.active</name>
-                            <value><%= _.unescape('\$\{spring.profiles.active}')%></value>
-                        </systemProperty>
-                    </systemProperties>
-                    <jvmArgs>-javaagent:spring_loaded/springloaded-1.1.4.jar -noverify</jvmArgs>
-                    <webApp>
-                        <contextPath>/</contextPath>
-                    </webApp>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
                 <version>2.9</version>
                 <configuration>
@@ -632,6 +441,10 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>2.2</version>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

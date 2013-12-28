@@ -1,48 +1,61 @@
 package <%=packageName%>.conf;
 
-<% if (hibernateCache == 'ehcache') { %>import com.codahale.metrics.ehcache.InstrumentedEhcache;
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.Ehcache; <% } %><% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
+import com.codahale.metrics.MetricRegistry;<% if (hibernateCache == 'ehcache') { %>
+import com.codahale.metrics.ehcache.InstrumentedEhcache;<% } %><% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
 import com.hazelcast.config.Config;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.instance.HazelcastInstanceFactory;
-import com.hazelcast.config.MapConfig;<%} %><% if (hibernateCache == 'hazelcast') { %>
+import com.hazelcast.config.MapConfig;<% } %><% if (hibernateCache == 'hazelcast') { %>
 import com.hazelcast.config.MaxSizeConfig;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;<% if (hibernateCache == 'no') { %>
 import org.springframework.cache.support.NoOpCacheManager; <% } %><% if (hibernateCache == 'ehcache') { %>
-import org.springframework.cache.ehcache.EhCacheCacheManager;<% } %><% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
-import org.springframework.core.env.Environment;
-import javax.inject.Inject;
+import org.springframework.cache.ehcache.EhCacheCacheManager;<% } %><% if (hibernateCache == 'hazelcast' || hibernateCache == 'ehcache' || clusteredHttpSession == 'hazelcast') { %>
+import org.springframework.core.env.Environment;<% } %><% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
 import javax.annotation.PostConstruct;<% } %>
+import javax.inject.Inject;
 import javax.annotation.PreDestroy;
-import java.util.SortedSet;
+import java.util.SortedSet;<% if (hibernateCache == 'ehcache') { %>
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.metamodel.EntityType;
+import java.util.Set;<% } %>
 
 @Configuration
 @EnableCaching
+@AutoConfigureAfter(MetricsConfiguration.class)
 public class CacheConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);
     
-    <% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>private static HazelcastInstance hazelcastInstance;
+    <% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>private static HazelcastInstance hazelcastInstance;<% } %>
+
+    <% if (hibernateCache == 'ehcache') { %>
+    @PersistenceContext
+    private EntityManager entityManager;<% } %>
+
+    <% if (hibernateCache == 'ehcache' || hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>@Inject
+    private Environment env;<% } %>
+
 
     @Inject
-    private Environment env;
+    private MetricRegistry metricRegistry;
 
-    <% } %><% if (hibernateCache == 'ehcache') { %>private net.sf.ehcache.CacheManager cacheManager; 
+    <% if (hibernateCache == 'ehcache') { %>private net.sf.ehcache.CacheManager cacheManager;
     <% } else { %>private CacheManager cacheManager;
     <% } %>
     @PreDestroy
     public void destroy() {
         log.info("Remove caching metrics");
-        SortedSet<String> names = WebConfigurer.METRIC_REGISTRY.getNames();
+        SortedSet<String> names = metricRegistry.getNames();
         for (String name : names) {
-            WebConfigurer.METRIC_REGISTRY.remove(name);
+            metricRegistry.remove(name);
         }
 
         log.info("Closing Cache manager");<% if (hibernateCache == 'ehcache') { %>
@@ -56,17 +69,15 @@ public class CacheConfiguration {
         cacheManager = net.sf.ehcache.CacheManager.create();
 
         log.debug("Registring Ehcache Metrics gauges");
-        Cache userCache = cacheManager.getCache("<%=packageName%>.domain.User");
-        Ehcache decoratedStatusCache = InstrumentedEhcache.instrument(WebConfigurer.METRIC_REGISTRY, userCache);
-        cacheManager.replaceCacheWithDecoratedCache(userCache, decoratedStatusCache);
+        final Set<EntityType<?>> entities = entityManager.getMetamodel().getEntities();
 
-        Cache authoritiesCache = cacheManager.getCache("<%=packageName%>.domain.Authority");
-        Ehcache decoratedAuthoritiesCache = InstrumentedEhcache.instrument(WebConfigurer.METRIC_REGISTRY, authoritiesCache);
-        cacheManager.replaceCacheWithDecoratedCache(authoritiesCache, decoratedAuthoritiesCache);
-
-        Cache persistentTokenCache = cacheManager.getCache("<%=packageName%>.domain.PersistentToken");
-        Ehcache decoratedPersistentTokenCache = InstrumentedEhcache.instrument(WebConfigurer.METRIC_REGISTRY, persistentTokenCache);
-        cacheManager.replaceCacheWithDecoratedCache(persistentTokenCache, decoratedPersistentTokenCache);
+        for (EntityType<?> entity : entities) {
+            String name = entity.getJavaType().getName();
+            net.sf.ehcache.Cache cache = cacheManager.getCache(name);
+            cache.getCacheConfiguration().setTimeToLiveSeconds(env.getProperty("cache.timeTiLiveSeconds", Integer.class, 3600));
+            net.sf.ehcache.Ehcache decoratedCache = InstrumentedEhcache.instrument(metricRegistry, cache);
+            cacheManager.replaceCacheWithDecoratedCache(cache, decoratedCache);
+        }
 
         EhCacheCacheManager ehCacheManager = new EhCacheCacheManager();
         ehCacheManager.setCacheManager(cacheManager);
@@ -127,8 +138,7 @@ public class CacheConfiguration {
             Any integer between 0 and Integer.MAX_VALUE. 0 means
             Integer.MAX_VALUE. Default is 0.
          */
-        mapConfig.setMaxSizeConfig(new MaxSizeConfig(Integer.parseInt(env.getProperty("hazelcastcache.maxBytesLocalHeap"))
-            , MaxSizeConfig.MaxSizePolicy.USED_HEAP_SIZE));
+            mapConfig.setMaxSizeConfig(new MaxSizeConfig(0, MaxSizeConfig.MaxSizePolicy.USED_HEAP_SIZE));
 
         /*
             When max. size is reached, specified percentage of
@@ -144,15 +154,15 @@ public class CacheConfiguration {
     private MapConfig initializeDomainMapConfig() {
         MapConfig mapConfig = new MapConfig();
 
-        mapConfig.setTimeToLiveSeconds(3600);
+        mapConfig.setTimeToLiveSeconds(env.getProperty("cache.timeTiLiveSeconds", Integer.class, 3600));
         return mapConfig;
     }
     <% } %><% if (clusteredHttpSession == 'hazelcast') { %>
     private MapConfig initializeClusteredSession() {
         MapConfig mapConfig = new MapConfig();
 
-        mapConfig.setBackupCount(1);
-        mapConfig.setTimeToLiveSeconds(3600);
+        mapConfig.setBackupCount(env.getProperty("cache.hazelcast.backupCount", Integer.class, 1));
+        mapConfig.setTimeToLiveSeconds(env.getProperty("cache.timeTiLiveSeconds", Integer.class, 3600));
         return mapConfig;
     }<% } %><% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
     
