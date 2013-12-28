@@ -24,17 +24,19 @@
                 <!-- log configuration -->
                 <logback.loglevel>DEBUG</logback.loglevel>
             </properties>
-            <dependencies>
-                <dependency>
-                    <% if (devDatabaseType == 'mysql') { %><groupId>mysql</groupId>
-                    <artifactId>mysql-connector-java</artifactId>
-                    <version>5.1.27</version><% } else if (devDatabaseType == 'postgresql') { %><groupId>org.postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
-                    <version>9.3-1100-jdbc41</version><% } else { %><groupId>org.hsqldb</groupId>
-                    <artifactId>hsqldb</artifactId>
-                    <version>2.3.1</version><% } %>
-                </dependency>
-            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <arguments>
+                                <argument>--spring.profiles.active=dev</argument>
+                            </arguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
         <profile>
             <id>prod</id>
@@ -42,18 +44,9 @@
                 <!-- Spring profile to use -->
                 <spring.profiles.active>prod</spring.profiles.active>
                 <!-- log configuration -->
-                <logback.loglevel>WARN</logback.loglevel>
+                <logback.loglevel>INFO</logback.loglevel>
                 <logback.appender>CONSOLE</logback.appender>
             </properties>
-            <dependencies>
-                <dependency>
-                    <% if (prodDatabaseType == 'mysql') { %><groupId>mysql</groupId>
-                    <artifactId>mysql-connector-java</artifactId>
-                    <version>5.1.27</version><% } else if (prodDatabaseType == 'postgresql') { %><groupId>org.postgresql</groupId>
-                    <artifactId>postgresql</artifactId>
-                    <version>9.3-1100-jdbc41</version><% } %>
-                </dependency>
-            </dependencies>
             <build>
                 <plugins>
                     <plugin>
@@ -99,6 +92,15 @@
                                     <directory>node_modules</directory>
                                 </fileset>
                             </filesets>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <arguments>
+                                <argument>--spring.profiles.active=prod</argument>
+                            </arguments>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -318,6 +320,24 @@
             <version>3.0.7</version>
         </dependency>
 
+        <!-- Database dependencies-->
+        <dependency>
+            <% if (devDatabaseType == 'mysql') { %><groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.27</version><% } else if (devDatabaseType == 'postgresql') { %><groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.3-1100-jdbc41</version><% } else { %><groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.3.1</version><% } %>
+        </dependency>
+        <dependency>
+            <% if (prodDatabaseType == 'mysql') { %><groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.27</version><% } else if (prodDatabaseType == 'postgresql') { %><groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.3-1100-jdbc41</version><% } %>
+        </dependency>
+
         <!-- Test dependencies -->
         <dependency>
             <groupId>com.jayway.awaitility</groupId>
@@ -356,7 +376,6 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>root</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>

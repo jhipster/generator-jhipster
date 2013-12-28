@@ -108,6 +108,15 @@ public class CacheConfiguration {
 
         ehCacheConfig.setDefaultCacheConfiguration(defaultCacheConfiguration);
 
+        final Set<EntityType<?>> entities = entityManager.getMetamodel().getEntities();
+
+        for (EntityType<?> entity : entities) {
+            String name = entity.getJavaType().getName();
+            final net.sf.ehcache.config.CacheConfiguration cacheConfiguration = new net.sf.ehcache.config.CacheConfiguration();
+            cacheConfiguration.setName(name);
+            ehCacheConfig.addCache(cacheConfiguration);
+        }
+
         return ehCacheConfig;
     }<% } %>
 

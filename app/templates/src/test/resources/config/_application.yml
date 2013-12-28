@@ -21,16 +21,16 @@ spring:
 
 spring:
   datasource:
-    dataSourceClassName: org.hsqldb.jdbc.JDBCDataSource
-    url: jdbc:hsqldb:mem:<%= baseName %>
-    databaseName: 
-    serverName: 
-    username: 
+    dataSourceClassName: org.h2.jdbcx.JdbcDataSource
+    url: jdbc:h2:mem:<%= baseName %>
+    databaseName:
+    serverName:
+    username:
     password:
 
   jpa:
-    database-platform: org.hibernate.dialect.HSQLDialect
-    database: HSQL
+    database-platform: org.hibernate.dialect.H2Dialect
+    database: H2
     openInView: false
     show_sql: true
     generate-ddl: false

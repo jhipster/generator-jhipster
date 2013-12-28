@@ -43,7 +43,7 @@ public class Application {
      */
     private static void addDefaultProfile(SpringApplication app, SimpleCommandLinePropertySource source) {
         if (!source.containsProperty("spring.profiles.active")) {
-            app.setAdditionalProfiles(Arrays.asList("prod"));
+            app.setAdditionalProfiles(Arrays.asList("dev"));
         }
     }
 
