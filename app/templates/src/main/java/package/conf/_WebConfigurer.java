@@ -180,6 +180,7 @@ public class WebConfigurer implements ServletContextInitializer {
                 servletContext.addServlet("metricsAdminServlet", new AdminServlet());
 
         metricsAdminServlet.addMapping("/metrics/*");
+        metricsAdminServlet.setAsyncSupported(true);
         metricsAdminServlet.setLoadOnStartup(2);
     }
 }
