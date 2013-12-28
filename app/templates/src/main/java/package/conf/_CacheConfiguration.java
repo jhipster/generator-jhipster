@@ -66,7 +66,7 @@ public class CacheConfiguration {
     @Bean
     public CacheManager cacheManager() {<% if (hibernateCache == 'ehcache') { %>
         log.debug("Starting Ehcache");
-        cacheManager = net.sf.ehcache.CacheManager.create(createCacheConfiguration());
+        cacheManager = net.sf.ehcache.CacheManager.create();
 
         log.debug("Registring Ehcache Metrics gauges");
         final Set<EntityType<?>> entities = entityManager.getMetamodel().getEntities();
@@ -89,36 +89,6 @@ public class CacheConfiguration {
         cacheManager = new NoOpCacheManager();
         return cacheManager;<% } %>
     }
-
-    <% if (hibernateCache == 'ehcache') { %>
-    private net.sf.ehcache.config.Configuration createCacheConfiguration() {
-        // Initialization of the cache. This replace the ehCache.xml
-        net.sf.ehcache.config.Configuration ehCacheConfig = new net.sf.ehcache.config.Configuration();
-        ehCacheConfig.name("CM1");
-        ehCacheConfig.updateCheck(false);
-        ehCacheConfig.monitoring(net.sf.ehcache.config.Configuration.Monitoring.AUTODETECT);
-        ehCacheConfig.setMaxBytesLocalHeap(env.getProperty("cache.ehcache.maxBytesLocalHeap"));
-
-        final net.sf.ehcache.config.DiskStoreConfiguration diskStoreConfiguration = new net.sf.ehcache.config.DiskStoreConfiguration();
-        diskStoreConfiguration.setPath(env.getProperty("cache.ehcache.path"));
-        ehCacheConfig.addDiskStore(diskStoreConfiguration);
-
-        net.sf.ehcache.config.CacheConfiguration defaultCacheConfiguration = new net.sf.ehcache.config.CacheConfiguration();
-        defaultCacheConfiguration.setEternal(false);
-
-        ehCacheConfig.setDefaultCacheConfiguration(defaultCacheConfiguration);
-
-        final Set<EntityType<?>> entities = entityManager.getMetamodel().getEntities();
-
-        for (EntityType<?> entity : entities) {
-            String name = entity.getJavaType().getName();
-            final net.sf.ehcache.config.CacheConfiguration cacheConfiguration = new net.sf.ehcache.config.CacheConfiguration();
-            cacheConfiguration.setName(name);
-            ehCacheConfig.addCache(cacheConfiguration);
-        }
-
-        return ehCacheConfig;
-    }<% } %>
 
     <% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>@PostConstruct
     private HazelcastInstance hazelcastInstance() {

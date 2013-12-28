@@ -158,6 +158,10 @@ JhipsterGenerator.prototype.app = function app() {
     var resourceDir = 'src/main/resources/';
     this.mkdir(resourceDir);
 
+    if (this.hibernateCache == "ehcache") {
+        this.template(resourceDir + '_ehcache.xml', resourceDir + 'ehcache.xml');
+    }
+
     this.template(resourceDir + '_logback.xml', resourceDir + 'logback.xml');
 
     this.template(resourceDir + '/config/_application.yml', resourceDir + 'config/application.yml');
@@ -243,8 +247,11 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/test/java/package/web/rest/_UserResourceTest.java', testDir + 'web/rest/UserResourceTest.java');
 
     this.template(testResourceDir + 'config/_application.yml', testResourceDir + 'config/application.yml');
-
     this.template(testResourceDir + '_logback.xml', testResourceDir + 'logback.xml');
+
+    if (this.hibernateCache == "ehcache") {
+        this.template(testResourceDir + '_ehcache.xml', testResourceDir + 'ehcache.xml');
+    }
 
     // Create Webapp
     var webappDir = 'src/main/webapp/';

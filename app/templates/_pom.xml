@@ -22,7 +22,10 @@
                 <!-- Spring profile to use -->
                 <spring.profiles.active>dev</spring.profiles.active>
                 <!-- log configuration -->
-                <logback.loglevel>DEBUG</logback.loglevel>
+                <logback.loglevel>DEBUG</logback.loglevel><% if (hibernateCache == 'ehcache') { %>
+                <!-- ehcache configuration -->
+                <ehcache.maxBytesLocalHeap>64M</ehcache.maxBytesLocalHeap>
+                <% } %>
             </properties>
             <build>
                 <plugins>
@@ -45,7 +48,10 @@
                 <spring.profiles.active>prod</spring.profiles.active>
                 <!-- log configuration -->
                 <logback.loglevel>INFO</logback.loglevel>
-                <logback.appender>CONSOLE</logback.appender>
+                <logback.appender>CONSOLE</logback.appender><% if (hibernateCache == 'ehcache') { %>
+                <!-- ehcache configuration -->
+                <ehcache.maxBytesLocalHeap>256M</ehcache.maxBytesLocalHeap>
+                <% } %>
             </properties>
             <build>
                 <plugins>
