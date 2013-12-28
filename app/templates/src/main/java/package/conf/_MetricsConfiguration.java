@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
 @EnableMetrics(proxyTargetClass = true)
 public class MetricsConfiguration extends MetricsConfigurerAdapter implements EnvironmentAware {
 
-    private final Logger log = LoggerFactory.getLogger(MetricsConfiguration.class);
+    private static final Logger log = LoggerFactory.getLogger(MetricsConfiguration.class);
 
     private static final MetricRegistry METRIC_REGISTRY = new MetricRegistry();
     private static final HealthCheckRegistry HEALTH_CHECK_REGISTRY = new HealthCheckRegistry();

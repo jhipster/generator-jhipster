@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import javax.inject.Inject;
 import javax.servlet.*;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -34,9 +35,11 @@ public class WebConfigurer implements ServletContextInitializer {
 
     private static final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
 
-    public static final MetricRegistry METRIC_REGISTRY = new MetricRegistry();
+    @Inject
+    private MetricRegistry metricRegistry;
 
-    public static final HealthCheckRegistry HEALTH_CHECK_REGISTRY = new HealthCheckRegistry();
+    @Inject
+    private HealthCheckRegistry healthCheckRegistry;
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
@@ -159,11 +162,11 @@ public class WebConfigurer implements ServletContextInitializer {
     private void initMetrics(ServletContext servletContext, EnumSet<DispatcherType> disps) {
         log.debug("Initializing Metrics registries");
         servletContext.setAttribute(InstrumentedFilter.REGISTRY_ATTRIBUTE,
-                METRIC_REGISTRY);
+                metricRegistry);
         servletContext.setAttribute(MetricsServlet.METRICS_REGISTRY,
-                METRIC_REGISTRY);
+                metricRegistry);
         servletContext.setAttribute(HealthCheckServlet.HEALTH_CHECK_REGISTRY,
-                HEALTH_CHECK_REGISTRY);
+                healthCheckRegistry);
 
         log.debug("Registering Metrics Filter");
         FilterRegistration.Dynamic metricsFilter = servletContext.addFilter("webappMetricsFilter",
