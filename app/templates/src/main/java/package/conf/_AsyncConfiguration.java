@@ -27,6 +27,13 @@ public class AsyncConfiguration implements AsyncConfigurer, EnvironmentAware  {
         this.env = new RelaxedPropertyResolver(environment, "async.");
     }
 
+    private RelaxedPropertyResolver env;
+
+    @Override
+    public void setEnvironment(Environment environment) {
+        this.env = new RelaxedPropertyResolver(environment, "async.");
+    }
+
     @Override
     public Executor getAsyncExecutor() {
         log.debug("Creating Async Task Executor");
