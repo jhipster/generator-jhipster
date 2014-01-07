@@ -123,7 +123,6 @@
                         <version>0.1</version>
                         <configuration>
                             <yeomanProjectDirectory><%= _.unescape('\$\{project.basedir}')%></yeomanProjectDirectory>
-                            <bowerInstallArgs>install --no-color --allow-root</bowerInstallArgs>
                         </configuration>
                         <executions>
                             <execution>
