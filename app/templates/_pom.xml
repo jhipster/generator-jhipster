@@ -138,6 +138,10 @@
                         <groupId>org.apache.tomcat.maven</groupId>
                         <artifactId>tomcat7-maven-plugin</artifactId>
                         <version>2.1</version>
+                        <configuration>
+                           <path>/</path>
+                           <protocol>org.apache.coyote.http11.Http11NioProtocol</protocol>
+                        </configuration>
                         <executions>
                             <execution>
                                 <id>tomcat-run</id>
@@ -145,10 +149,6 @@
                                     <goal>exec-war-only</goal>
                                 </goals>
                                 <phase>package</phase>
-                                <configuration>
-                                    <path>/</path>
-                                    <protocol>org.apache.coyote.http11.Http11NioProtocol</protocol>
-                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
