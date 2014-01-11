@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -36,15 +37,15 @@ public class AccountResource {
     private PersistentTokenRepository persistentTokenRepository;
 
     /**
-     * GET  /rest/authenticate -> check if the user is authenticated.
+     * GET  /rest/authenticate -> check if the user is authenticated, and return its login.
      */
     @RequestMapping(value = "/rest/authenticate",
             method = RequestMethod.GET,
             produces = "application/json")
     @Timed
-    public String isAuthenticated() {
+    public String isAuthenticated(HttpServletRequest request) {
         log.debug("REST request to check if the current user is authenticated");
-        return "OK";
+        return request.getRemoteUser();
     }
 
     /**

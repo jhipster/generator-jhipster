@@ -239,6 +239,11 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/web/rest/_LogsResource.java', javaDir + 'web/rest/LogsResource.java');
     this.template('src/main/java/package/web/rest/dto/_LoggerDTO.java', javaDir + 'web/rest/dto/LoggerDTO.java');
 
+    this.template('src/main/java/package/web/websocket/_ActivityService.java', javaDir + 'web/websocket/ActivityService.java');
+    this.template('src/main/java/package/web/websocket/_TrackerService.java', javaDir + 'web/websocket/TrackerService.java');
+    this.template('src/main/java/package/web/websocket/dto/_ActivityDTO.java', javaDir + 'web/websocket/dto/ActivityDTO.java');
+    this.template('src/main/java/package/web/websocket/dto/_ActivityDTOJacksonDecoder.java', javaDir + 'web/websocket/dto/ActivityDTOJacksonDecoder.java');
+
     // Create Test Java files
     var testDir = 'src/test/java/' + packageFolder + '/';
     var testResourceDir = 'src/test/resources/';
@@ -294,6 +299,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(webappDir + '/views/password.html', webappDir + 'views/password.html');
     this.copy(webappDir + '/views/settings.html', webappDir + 'views/settings.html');
     this.copy(webappDir + '/views/sessions.html', webappDir + 'views/sessions.html');
+    this.copy(webappDir + '/views/tracker.html', webappDir + 'views/tracker.html');
     this.template(webappDir + '/views/_metrics.html', webappDir + 'views/metrics.html');
 
     // Index page
@@ -341,6 +347,8 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/services.js',
         'scripts/directives.js',
 
+        'bower_components/atmosphere/atmosphere.js',
+        'bower_components/jquery-atmosphere/jquery.atmosphere.js',
         'bower_components/sass-bootstrap/js/affix.js',
         'bower_components/sass-bootstrap/js/alert.js',
         'bower_components/sass-bootstrap/js/dropdown.js',

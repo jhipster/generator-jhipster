@@ -42,6 +42,7 @@
             authenticate: function() {
                 $http.get('/app/rest/authenticate')
                     .success(function (data, status, headers, config) {
+                        $rootScope.login = data;
                         $rootScope.$broadcast('event:auth-authConfirmed');
                     })
             },
@@ -70,6 +71,7 @@
                 $rootScope.authenticationError = false;
                 $http.get('/app/logout')
                     .success(function (data, status, headers, config) {
+                        $rootScope.login = null;
                         authService.loginCancelled();
                     });
             }

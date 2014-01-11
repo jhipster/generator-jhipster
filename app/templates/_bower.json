@@ -2,6 +2,8 @@
   "name": "<%= _.camelize(baseName) %>",
   "version": "0.0.0",
   "dependencies": {
+    "atmosphere": "~2.1.2",
+    "jquery-atmosphere": "~2.1.2",
     "sass-bootstrap": "~3.0.0",
     "modernizr": "~2.7.0",
     "jquery": "~1.10.2",

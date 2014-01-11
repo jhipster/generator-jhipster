@@ -110,6 +110,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .antMatchers("/*").permitAll()
                     .antMatchers("/app/rest/logs/**").hasRole("ADMIN")
                     .antMatchers("/app/**").authenticated()
+                    .antMatchers("/websocket/tracker").hasRole("ADMIN")
+                    .antMatchers("/websocket/**").permitAll()
                     .antMatchers("/metrics/**").hasRole("ADMIN");
     }
 }

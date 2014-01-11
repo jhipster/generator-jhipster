@@ -9,11 +9,13 @@
                 "settings": "Einstellungen",
                 "password": "Passwort",
                 "sessions": "Sitzungen",
+                "tracker": "User tracker",
                 "metrics": "Metriken",
                 "logs": "Protokoll",
                 "login": "Anmelden",
                 "logout": "Abmelden"
             },
+            "admin": "Administration",
             "language": "Sprache"
         },
         "language": {
@@ -132,6 +134,16 @@
         }
 
     },
+    "tracker": {
+        "title": "Real-time user activities",
+        "table": {
+            "userlogin": "User",
+            "ipaddress": "IP Address",
+            "userAgent": "User agent",
+            "page": "Current page",
+            "time": "Time"
+        }
+    },
     "metrics": {
         "title": "Anwendungs-Metriken",
         "refresh.button": "Aktualisieren",
@@ -187,7 +199,7 @@
                 "p95": "p95",
                 "p99": "p99"
             }
-        }<% if (hibernateCache == 'ehcache') { %>,
+        },
         "ehcache": {
             "title": "Ehcache Statistiken",
             "cachename": "Cache Name",
@@ -196,7 +208,7 @@
             "misses": "Keine Treffer",
             "evictioncount": "Anzahl entfernter Objekte",
             "mean": "Durchschnittliche Zugriffszeit (ms)"
-        }<% } %>
+        }
     },
     "logs": {
         "title": "Protokolle",

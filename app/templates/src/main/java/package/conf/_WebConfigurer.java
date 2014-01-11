@@ -5,12 +5,14 @@ import com.codahale.metrics.health.HealthCheckRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
 import com.codahale.metrics.servlets.AdminServlet;
 import com.codahale.metrics.servlets.HealthCheckServlet;
-import com.codahale.metrics.servlets.MetricsServlet;
-import <%=packageName%>.web.filter.CachingHttpHeadersFilter;
-import <%=packageName%>.web.filter.StaticResourcesProductionFilter;<% if (clusteredHttpSession == 'hazelcast') { %>
+import com.codahale.metrics.servlets.MetricsServlet;<% if (clusteredHttpSession == 'hazelcast') { %>
 import com.hazelcast.web.SessionListener;
 import com.hazelcast.web.WebFilter;<% } %>
+import <%=packageName%>.web.filter.CachingHttpHeadersFilter;
+import <%=packageName%>.web.filter.StaticResourcesProductionFilter;
 import <%=packageName%>.web.filter.gzip.GZipServletFilter;
+import org.atmosphere.cache.UUIDBroadcasterCache;
+import org.atmosphere.cpr.AtmosphereServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -50,10 +52,9 @@ public class WebConfigurer implements ServletContextListener {
 
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
 
-        initSpring(servletContext, rootContext);<% if (clusteredHttpSession == 'hazelcast') { %>
-        initClusteredHttpSessionFilter(servletContext, disps);<% } %>
-        initSpringSecurity(servletContext, disps);
+        initSpring(servletContext, rootContext);
         initMetrics(servletContext, disps);
+        initAtmosphereServlet(servletContext);
 
         if (WebApplicationContextUtils
                 .getRequiredWebApplicationContext(servletContext)
@@ -64,6 +65,7 @@ public class WebConfigurer implements ServletContextListener {
             initCachingHttpHeadersFilter(servletContext, disps);
         }
 
+        initSpringSecurity(servletContext, disps);
         initGzipFilter(servletContext, disps);
 
         log.debug("Web application fully configured");
@@ -233,6 +235,25 @@ public class WebConfigurer implements ServletContextListener {
 
         metricsAdminServlet.addMapping("/metrics/*");
         metricsAdminServlet.setLoadOnStartup(2);
+    }
+
+    /**
+     * Initializes Atmosphere.
+     */
+    private void initAtmosphereServlet(ServletContext servletContext) {
+        log.debug("Registering Atmosphere Servlet");
+        ServletRegistration.Dynamic atmosphereServlet =
+                servletContext.addServlet("atmosphereServlet", new AtmosphereServlet());
+
+        atmosphereServlet.setInitParameter("org.atmosphere.cpr.packages", "com.mycompany.myapp.web.websocket");
+        atmosphereServlet.setInitParameter("org.atmosphere.cpr.broadcasterCacheClass", UUIDBroadcasterCache.class.getName());
+        atmosphereServlet.setInitParameter("org.atmosphere.cpr.broadcaster.shareableThreadPool", "true");
+        atmosphereServlet.setInitParameter("org.atmosphere.cpr.broadcaster.maxProcessingThreads", "10");
+        atmosphereServlet.setInitParameter("org.atmosphere.cpr.broadcaster.maxAsyncWriteThreads", "10");
+
+        atmosphereServlet.addMapping("/websocket/*");
+        atmosphereServlet.setLoadOnStartup(3);
+        atmosphereServlet.setAsyncSupported(true);
     }
 
     @Override
