@@ -316,6 +316,7 @@ JhipsterGenerator.prototype.app = function app() {
     // Create Test Javascript files
     var testJsDir = 'src/test/javascript/';
     this.copy('src/test/javascript/karma.conf.js', testJsDir + 'karma.conf.js');
+    this.copy('src/test/javascript/mock/atmosphere.mock.js', testJsDir + 'mock/atmosphere.mock.js');
     this.template('src/test/javascript/spec/_controllersSpec.js', testJsDir + 'spec/controllersSpec.js');
     this.template('src/test/javascript/spec/_servicesSpec.js', testJsDir + 'spec/servicesSpec.js');
 
