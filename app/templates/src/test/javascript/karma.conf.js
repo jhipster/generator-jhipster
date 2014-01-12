@@ -24,6 +24,7 @@ module.exports = function (config) {
             'src/main/webapp/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
             'src/main/webapp/scripts/*.js',
             'src/main/webapp/scripts/**/*.js',
+            'src/test/javascript/mock/*.js',
             'src/test/javascript/spec/**/*.js'
         ],
 
