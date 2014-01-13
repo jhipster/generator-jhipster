@@ -109,6 +109,9 @@
 
 <%= angularAppName %>.controller('TrackerController', ['$scope',
     function ($scope) {
+        // This controller uses the Atmosphere framework to keep a Websocket connection opened, and receive
+        // user activities in real-time.
+
         $scope.activities = [];
         $scope.trackerSocket = atmosphere;
         $scope.trackerSubSocket;
