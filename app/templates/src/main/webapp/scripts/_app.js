@@ -120,6 +120,10 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
         }])
         .run(['$rootScope', '$route',
             function($rootScope, $route) {
+                // This uses the Atmoshpere framework to do a Websocket connection with the server, in order to send
+                // user activities each time a route changes.
+                // The user activities can then be monitored by an administrator, see the views/tracker.html Angular view.
+
                 $rootScope.websocketSocket = atmosphere;
                 $rootScope.websocketSubSocket;
                 $rootScope.websocketTransport = 'websocket';
