@@ -15,7 +15,6 @@ describe('Services Tests ', function () {
             authServiceSpied = authService;
             //Request on app init
             httpBackend.expectGET('/i18n/en.json').respond(200, '');
-            httpBackend.expectGET('/app/rest/authenticate').respond(400, '');
         }));
         //make sure no expectations were missed in your tests.
         //(e.g. expectGET or expectPOST)
@@ -31,8 +30,8 @@ describe('Services Tests ', function () {
             //expectGET to make sure this is called once.
             httpBackend.expectGET('/app/logout').respond(returnData);
             // Redirect to the login page
-            httpBackend.expectGET('views/main.html').respond(200, '');
             httpBackend.expectGET('/app/rest/authenticate').respond(400, '');
+            httpBackend.expectGET('views/main.html').respond(200, '');         
 
             //Set spy
             spyOn(authServiceSpied, 'loginCancelled');
