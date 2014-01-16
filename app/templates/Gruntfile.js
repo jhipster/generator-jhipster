@@ -17,7 +17,7 @@ module.exports = function (grunt) {
     yeoman: {
       // configurable paths
       app: require('./bower.json').appPath || 'app',
-      dist: 'src/main/webapp/dist'
+      dist: 'dist'
     },
     watch: {<% if (useCompass) { %>
       compass: {

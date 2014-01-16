@@ -23,6 +23,7 @@ import java.util.List;
  * REST controller for managing the current user's account.
  */
 @RestController
+@RequestMapping("/app")
 public class AccountResource {
 
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);

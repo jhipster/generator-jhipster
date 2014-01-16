@@ -3,7 +3,12 @@
          xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
          name="CM1"
          updateCheck="false"
-         maxBytesLocalHeap="<%= _.unescape('\$\{ehcache.maxBytesLocalHeap}')%>">
+         maxBytesLocalHeap="16M">
+
+    <!-- 
+      This is a default configuration, it is re-configured by the CacheConfiguration Spring Bean, using the
+      properties from the resources/config/*.yml files.
+    -->
 
     <diskStore path="java.io.tmpdir"/>
 

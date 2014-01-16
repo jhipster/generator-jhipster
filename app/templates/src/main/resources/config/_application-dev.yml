@@ -1,0 +1,44 @@
+server:
+    port: 8080
+    address: localhost
+
+spring:
+  profiles: dev
+  datasource:
+    dataSourceClassName: <% if (devDatabaseType == 'mysql') { %>com.mysql.jdbc.jdbc2.optional.MysqlDataSource<% } else if (devDatabaseType == 'postgresql') { %>org.postgresql.ds.PGSimpleDataSource<% } else { %>org.hsqldb.jdbc.JDBCDataSource<% } %>
+    url: <% if (devDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType == 'postgresql') { %>org.postgresql.ds.PGSimpleDataSource<% } else { %>jdbc:hsqldb:mem:<%= baseName %><% } %>
+    databaseName: <% if (devDatabaseType == 'postgresql') { %><%= baseName %><% } %>
+    serverName: <% if (devDatabaseType == 'postgresql') { %><%= localhost %><% } %>
+    username: <% if (devDatabaseType == 'mysql') { %>root<% } else if (devDatabaseType == 'postgresql') { %><%= baseName %><% } %>
+    password:
+
+  jpa:
+    database-platform: <% if (devDatabaseType == 'mysql') { %>org.hibernate.dialect.MySQLInnoDBDialect<% } else if (devDatabaseType == 'postgresql') { %>org.hibernate.dialect.PostgreSQLDialect<% } else { %>org.hibernate.dialect.HSQLDialect<% } %>
+    database: <% if (devDatabaseType == 'mysql') { %>MYSQL<% } else if (devDatabaseType == 'postgresql') { %>POSTGRESQL<% } else { %>HSQL<% } %>
+    openInView: false
+    show_sql: true
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+      naming-strategy: org.hibernate.cfg.EJB3NamingStrategy
+    properties:
+      hibernate.cache.use_second_level_cache: true
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: true<% if (hibernateCache == 'ehcache') { %>
+      hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory<% } else if (hibernateCache == 'hazelcast') { %>
+      hibernate.cache.region.factory_class: <%=packageName%>.conf.hazelcast.HazelcastCacheRegionFactory<% } %><% if (hibernateCache == 'hazelcast') { %>
+      hibernate.cache.use_minimal_puts: true
+      hibernate.cache.hazelcast.use_lite_member: true<% } %>
+
+metrics:
+    jmx.enabled: true
+
+<% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast' || hibernateCache == 'ehcache') { %>cache:
+    timeToLiveSeconds: 3600<% } if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
+    hazelcast:
+        debug: true
+        stickySession: false
+        backupCount: 1<% } if (hibernateCache == 'ehcache') { %>
+    ehcache:
+        maxBytesLocalHeap: 16M<% } %>
+        

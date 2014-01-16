@@ -1,4 +1,4 @@
-package <%=packageName%>.conf;
+package <%=packageName%>.config;
 
 import <%=packageName%>.security.*;
 import org.springframework.context.annotation.Bean;
@@ -108,6 +108,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .disable()
                 .authorizeRequests()
                     .antMatchers("/*").permitAll()
+                    .antMatchers("/app/rest/authenticate").permitAll()
                     .antMatchers("/app/rest/logs/**").hasRole("ADMIN")
                     .antMatchers("/app/**").authenticated()
                     .antMatchers("/websocket/tracker").hasRole("ADMIN")

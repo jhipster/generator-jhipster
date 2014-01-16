@@ -1,4 +1,4 @@
-package <%=packageName%>.conf.hazelcast;
+package <%=packageName%>.config.hazelcast;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.hibernate.HazelcastTimestamper;
@@ -6,7 +6,7 @@ import com.hazelcast.hibernate.local.CleanupService;
 import com.hazelcast.hibernate.local.LocalRegionCache;
 import com.hazelcast.hibernate.local.TimestampsRegionCache;
 import com.hazelcast.hibernate.region.*;
-import <%=packageName%>.conf.CacheConfiguration;
+import <%=packageName%>.config.CacheConfiguration;
 import org.hibernate.cache.CacheException;
 import org.hibernate.cache.spi.*;
 import org.hibernate.cache.spi.access.AccessType;

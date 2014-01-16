@@ -1,4 +1,4 @@
-package <%=packageName%>.conf;
+package <%=packageName%>.config;
 
 /**
  * Application constants.

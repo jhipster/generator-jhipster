@@ -43,7 +43,11 @@
                 $http.get('/app/rest/authenticate')
                     .success(function (data, status, headers, config) {
                         $rootScope.login = data;
-                        $rootScope.$broadcast('event:auth-authConfirmed');
+                        if (data == '') {
+                            $rootScope.$broadcast('event:auth-loginRequired');
+                        } else {
+                            $rootScope.$broadcast('event:auth-authConfirmed');
+                        }
                     })
             },
             login: function (param) {
