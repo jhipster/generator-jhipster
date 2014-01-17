@@ -146,6 +146,7 @@ JhipsterGenerator.prototype.app = function app() {
 
     this.template('_package.json', 'package.json');
     this.template('_bower.json', 'bower.json');
+    this.template('_README.md', 'README.md');
     this.template('bowerrc', '.bowerrc');
     this.template('Gruntfile.js', 'Gruntfile.js');
     this.copy('gitignore', '.gitignore');
