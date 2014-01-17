@@ -8,10 +8,10 @@ async:
     queueCapacity: 10000
 
 spring:
-  mail:
-    host: localhost
-    port: 25
-    user:
-    password:
-    tls: false
+    mail:
+      host: localhost
+      port: 25
+      user:
+      password:
+      tls: false
     
