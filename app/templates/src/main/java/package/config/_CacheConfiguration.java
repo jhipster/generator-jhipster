@@ -70,9 +70,11 @@ public class CacheConfiguration {
         for (EntityType<?> entity : entities) {
             String name = entity.getJavaType().getName();
             net.sf.ehcache.Cache cache = cacheManager.getCache(name);
-            cache.getCacheConfiguration().setTimeToLiveSeconds(env.getProperty("cache.timeToLiveSeconds", Integer.class, 3600));
-            net.sf.ehcache.Ehcache decoratedCache = InstrumentedEhcache.instrument(metricRegistry, cache);
-            cacheManager.replaceCacheWithDecoratedCache(cache, decoratedCache);
+            if (cache != null) {
+                cache.getCacheConfiguration().setTimeToLiveSeconds(env.getProperty("cache.timeToLiveSeconds", Integer.class, 3600));
+                net.sf.ehcache.Ehcache decoratedCache = InstrumentedEhcache.instrument(metricRegistry, cache);
+                cacheManager.replaceCacheWithDecoratedCache(cache, decoratedCache);
+            }
         }
         EhCacheCacheManager ehCacheManager = new EhCacheCacheManager();
         ehCacheManager.setCacheManager(cacheManager);
