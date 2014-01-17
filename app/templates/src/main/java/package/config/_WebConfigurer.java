@@ -10,6 +10,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.web.SessionListener;
 import com.hazelcast.web.WebFilter;<% } %>
 import <%=packageName%>.web.filter.CachingHttpHeadersFilter;
+import <%=packageName%>.web.filter.StaticResourcesProductionFilter;
 import <%=packageName%>.web.filter.gzip.GZipServletFilter;
 import org.atmosphere.cache.UUIDBroadcasterCache;
 import org.atmosphere.cpr.AtmosphereServlet;
@@ -56,6 +57,7 @@ public class WebConfigurer implements ServletContextInitializer {
                 .getBean(Environment.class)
                 .acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
 
+            initStaticResourcesProductionFilter(servletContext, disps);
             initCachingHttpHeadersFilter(servletContext, disps);
         }
         initGzipFilter(servletContext, disps);
@@ -137,6 +139,27 @@ public class WebConfigurer implements ServletContextInitializer {
         compressingFilter.addMappingForUrlPatterns(disps, true, "/metrics/*");
 
         compressingFilter.setAsyncSupported(true);
+    }
+
+    /**
+     * Initializes the static resources production Filter.
+     */
+    private void initStaticResourcesProductionFilter(ServletContext servletContext,
+                                                     EnumSet<DispatcherType> disps) {
+
+        log.debug("Registering static resources production Filter");
+        FilterRegistration.Dynamic staticResourcesProductionFilter =
+                servletContext.addFilter("staticResourcesProductionFilter",
+                        new StaticResourcesProductionFilter());
+
+        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/");
+        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/index.html");
+        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/images/*");
+        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/fonts/*");
+        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/scripts/*");
+        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/styles/*");
+        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/views/*");
+        staticResourcesProductionFilter.setAsyncSupported(true);
     }
 
     /**

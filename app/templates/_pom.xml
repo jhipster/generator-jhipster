@@ -89,13 +89,6 @@
                     <plugin>
                         <artifactId>maven-war-plugin</artifactId>
                         <version>2.4</version>
-                        <configuration>
-                            <webResources>
-                                <resource>
-                                    <directory>dist</directory>
-                                </resource>
-                            </webResources>
-                        </configuration>
                     </plugin>
                     <plugin>
                         <artifactId>maven-clean-plugin</artifactId>
