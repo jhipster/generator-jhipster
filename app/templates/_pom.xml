@@ -134,8 +134,6 @@
         <spring-security.version>3.2.0.RELEASE</spring-security.version>
 
         <!-- Librairies versions -->
-        <spring.version>4.0.0.RELEASE </spring.version>
-        <spring.security.version>3.2.0.RELEASE</spring.security.version>
         <hibernate.version>4.3.0.Final</hibernate.version>
         <codahale.metrics.version>3.0.1</codahale.metrics.version><% if (hibernateCache == 'hazelcast' ||  clusteredHttpSession == 'hazelcast') { %>
         <hazelcastcache.version>3.1.3</hazelcastcache.version><% } %>
