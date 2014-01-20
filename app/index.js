@@ -366,6 +366,7 @@ JhipsterGenerator.prototype.app = function app() {
     ]);
     this.write(webappDir + 'index.html', this.indexFile);
 
+    this.config.set('baseName', this.baseName);
     this.config.set('packageName', this.packageName);
     this.config.set('packageFolder', packageFolder);
     this.config.set('hibernateCache', this.hibernateCache);
