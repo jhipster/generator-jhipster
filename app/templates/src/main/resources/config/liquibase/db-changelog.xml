@@ -70,17 +70,17 @@
                                  referencedTableName="T_USER"/>
 
         <loadData encoding="UTF-8"
-                  file="META-INF/liquibase/users.csv"
+                  file="config/liquibase/users.csv"
                   separator=";"
                   tableName="T_USER"/>
 
         <loadData encoding="UTF-8"
-                  file="META-INF/liquibase/authorities.csv"
+                  file="config/liquibase/authorities.csv"
                   separator=";"
                   tableName="T_AUTHORITY"/>
 
         <loadData encoding="UTF-8"
-                  file="META-INF/liquibase/users_authorities.csv"
+                  file="config/liquibase/users_authorities.csv"
                   separator=";"
                   tableName="T_USER_AUTHORITY"/>
 

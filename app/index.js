@@ -169,11 +169,10 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(resourceDir + '/config/_application-dev.yml', resourceDir + 'config/application-dev.yml');
     this.template(resourceDir + '/config/_application-prod.yml', resourceDir + 'config/application-prod.yml');
 
-    this.copy(resourceDir + '/META-INF/liquibase/db-changelog.xml', resourceDir + 'META-INF/liquibase/db-changelog.xml');
-    this.copy(resourceDir + '/META-INF/liquibase/users.csv', resourceDir + 'META-INF/liquibase/users.csv');
-    this.copy(resourceDir + '/META-INF/liquibase/authorities.csv', resourceDir + 'META-INF/liquibase/authorities.csv');
-    this.copy(resourceDir + '/META-INF/liquibase/users_authorities.csv', resourceDir + 'META-INF/liquibase/users_authorities.csv');
-    this.copy(resourceDir + '/META-INF/master.xml', resourceDir + 'META-INF/master.xml');
+    this.copy(resourceDir + '/config/liquibase/db-changelog.xml', resourceDir + 'config/liquibase/db-changelog.xml');
+    this.copy(resourceDir + '/config/liquibase/users.csv', resourceDir + 'config/liquibase/users.csv');
+    this.copy(resourceDir + '/config/liquibase/authorities.csv', resourceDir + 'config/liquibase/authorities.csv');
+    this.copy(resourceDir + '/config/liquibase/users_authorities.csv', resourceDir + 'config/liquibase/users_authorities.csv');
 
     // Create Java files
     var javaDir = 'src/main/java/' + packageFolder + '/';
