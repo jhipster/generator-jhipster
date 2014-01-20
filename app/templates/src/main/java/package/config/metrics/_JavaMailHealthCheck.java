@@ -17,22 +17,22 @@ import javax.inject.Inject;
 @AutoConfigureAfter(MetricsConfiguration.class)
 public class JavaMailHealthCheck extends HealthCheck {
 
-  private final Logger log = LoggerFactory.getLogger(JavaMailHealthCheck.class);
+    private final Logger log = LoggerFactory.getLogger(JavaMailHealthCheck.class);
 
-  @Inject
-  private JavaMailSenderImpl javaMailSender;
+    @Inject
+    private JavaMailSenderImpl javaMailSender;
 
-  public JavaMailHealthCheck() {
-  }
-
-  @Override
-  public Result check() {
-    try {
-      javaMailSender.getSession().getTransport().connect();
-      return Result.healthy();
-    } catch (Exception e) {
-      log.debug("Cannot connect to e-mail server: {}", e);
-      return Result.unhealthy("Cannot connect to e-mail server");
+    public JavaMailHealthCheck() {
     }
-  }
+
+    @Override
+    public Result check() {
+        try {
+            javaMailSender.getSession().getTransport().connect();
+            return Result.healthy();
+        } catch (Exception e) {
+            log.debug("Cannot connect to e-mail server: {}", e);
+            return Result.unhealthy("Cannot connect to e-mail server");
+        }
+    }
 }

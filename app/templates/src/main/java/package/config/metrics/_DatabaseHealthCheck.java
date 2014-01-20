@@ -26,66 +26,66 @@ import java.util.Map;
 @AutoConfigureAfter(MetricsConfiguration.class)
 public class DatabaseHealthCheck extends HealthCheck {
 
-  private final Logger log = LoggerFactory.getLogger(HealthCheck.class);
+    private final Logger log = LoggerFactory.getLogger(HealthCheck.class);
 
-  private static Map<String, String> queries = new HashMap<String, String>();
+    private static Map<String, String> queries = new HashMap<String, String>();
 
-  static {
-    queries.put("HSQL Database Engine",
-        "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SYSTEM_USERS");
-    queries.put("Oracle", "SELECT 'Hello' from DUAL");
-    queries.put("Apache Derby", "SELECT 1 FROM SYSIBM.SYSDUMMY1");
-    queries.put("MySQL", "SELECT 1");
-    queries.put("PostgreSQL", "SELECT 1");
-    queries.put("Microsoft SQL Server", "SELECT 1");
-  }
+    static {
+        queries.put("HSQL Database Engine",
+                "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SYSTEM_USERS");
+        queries.put("Oracle", "SELECT 'Hello' from DUAL");
+        queries.put("Apache Derby", "SELECT 1 FROM SYSIBM.SYSDUMMY1");
+        queries.put("MySQL", "SELECT 1");
+        queries.put("PostgreSQL", "SELECT 1");
+        queries.put("Microsoft SQL Server", "SELECT 1");
+    }
 
-  private static String DEFAULT_QUERY = "SELECT 'Hello'";
+    private static String DEFAULT_QUERY = "SELECT 'Hello'";
 
-  private JdbcTemplate jdbcTemplate;
-  private String query = null;
+    private JdbcTemplate jdbcTemplate;
+    private String query = null;
 
-  @Inject
-  private DataSource dataSource;
+    @Inject
+    private DataSource dataSource;
 
-  public DatabaseHealthCheck() {
-  }
+    public DatabaseHealthCheck() {
+    }
 
-  @PostConstruct
-  private void init() {
-    log.debug("Initializing Database Metrics healthcheck");
-    jdbcTemplate = new JdbcTemplate(dataSource);
-  }
+    @PostConstruct
+    private void init() {
+        log.debug("Initializing Database Metrics healthcheck");
+        jdbcTemplate = new JdbcTemplate(dataSource);
+    }
 
-  @Override
-  public Result check() {
-    try {
-      String dataBaseProductName = this.jdbcTemplate.execute(new ConnectionCallback<String>() {
-        @Override
-        public String doInConnection(Connection connection)
-            throws SQLException, DataAccessException {
-          return connection.getMetaData().getDatabaseProductName();
+    @Override
+    public Result check() {
+        try {
+            String dataBaseProductName = this.jdbcTemplate.execute(new ConnectionCallback<String>() {
+                @Override
+                public String doInConnection(Connection connection)
+                        throws SQLException, DataAccessException {
+                    return connection.getMetaData().getDatabaseProductName();
+                }
+            });
+
+            query = detectQuery(dataBaseProductName);
+
+            return Result.healthy(dataBaseProductName);
+        } catch (Exception e) {
+            log.debug("Cannot connect to Database: {}", e);
+            return Result.unhealthy("Cannot connect to Database : " + e.getMessage());
         }
-      });
-
-      query = detectQuery(dataBaseProductName);
-
-      return Result.healthy(dataBaseProductName);
-    } catch (Exception e) {
-      log.debug("Cannot connect to Database: {}", e);
-      return Result.unhealthy("Cannot connect to Database : " + e.getMessage());
     }
-  }
 
-  protected String detectQuery(String product) {
-    String query = this.query;
-    if (!StringUtils.hasText(query)) {
-      query = queries.get(product);
+    protected String detectQuery(String product) {
+        String query = this.query;
+        if (!StringUtils.hasText(query)) {
+            query = queries.get(product);
+        }
+        if (!StringUtils.hasText(query)) {
+            query = DEFAULT_QUERY;
+        }
+        return query;
     }
-    if (!StringUtils.hasText(query)) {
-      query = DEFAULT_QUERY;
-    }
-    return query;
-  }
 
 }
