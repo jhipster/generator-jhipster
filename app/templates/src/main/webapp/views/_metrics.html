@@ -5,6 +5,22 @@
     <button type="button" class="btn btn-primary" ng-click="init()" translate="metrics.refresh.button"><span class="glyphicon glyphicon-refresh"></span> Refresh</button>
 </p>
 
+<h3 translate="metrics.health.title">Health Checks</h3>
+<div class="row">
+    <div class="col-md-3" ng-show="healthCheck.database.healthy">
+        <div class="alert alert-success"><strong translate="metrics.health.database">Database: </strong>OK</div>
+    </div>
+    <div class="col-md-4" ng-show="!healthCheck.database.healthy">
+        <div class="alert alert-danger"><strong translate="metrics.health.database">Database: </strong>{{healthCheck.database.message}}</div>
+    </div>
+    <div class="col-md-3" ng-show="healthCheck.email.healthy" >
+        <div class="alert alert-success"><strong translate="metrics.health.email">Email: </strong>OK</div>
+    </div>
+    <div class="col-md-4" ng-show="!healthCheck.email.healthy">
+        <div class="alert alert-danger"><strong translate="metrics.health.email">Email: </strong>{{healthCheck.email.message}}</div>
+    </div>
+</div>
+
 <h3 translate="metrics.jvm.title">JVM Metrics</h3>
 <div class="row">
     <div class="col-md-4">
@@ -213,93 +229,16 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>AccountResource.changePassword</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.changePassword'].count}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.changePassword'].mean * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.changePassword'].min * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.changePassword'].p50 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.changePassword'].p75 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.changePassword'].p95 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.changePassword'].p99 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.changePassword'].max * 1000 | number:0}}</td>
-        </tr>
-        <tr>
-            <td>AccountResource.getAccount</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.getAccount'].count}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.getAccount'].mean * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.getAccount'].min * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.getAccount'].p50 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.getAccount'].p75 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.getAccount'].p95 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.getAccount'].p99 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.getAccount'].max * 1000 | number:0}}</td>
-        </tr>
-        <tr>
-            <td>AccountResource.getCurrentSessions</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.getCurrentSessions'].count}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.getCurrentSessions'].mean * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.getCurrentSessions'].min * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.getCurrentSessions'].p50 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.getCurrentSessions'].p75 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.getCurrentSessions'].p95 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.getCurrentSessions'].p99 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.getCurrentSessions'].max * 1000 | number:0}}</td>
-        </tr>
-        <tr>
-            <td>AccountResource.invalidateSession</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.invalidateSession'].count}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.invalidateSession'].mean * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.invalidateSession'].min * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.invalidateSession'].p50 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.invalidateSession'].p75 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.invalidateSession'].p95 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.invalidateSession'].p99 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.invalidateSession'].max * 1000 | number:0}}</td>
-        </tr>
-        <tr>
-            <td>AccountResource.saveAccount</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.saveAccount'].count}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.saveAccount'].mean * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.saveAccount'].min * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.saveAccount'].p50 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.saveAccount'].p75 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.saveAccount'].p95 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.saveAccount'].p99 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.AccountResource.saveAccount'].max * 1000 | number:0}}</td>
-        </tr>
-        <tr>
-            <td>UserResource.getUser</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.UserResource.getUser'].count}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.UserResource.getUser'].mean * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.UserResource.getUser'].min * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.UserResource.getUser'].p50 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.UserResource.getUser'].p75 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.UserResource.getUser'].p95 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.UserResource.getUser'].p99 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.UserResource.getUser'].max * 1000 | number:0}}</td>
-        </tr>
-        <tr>
-            <td>LogsResource.getList</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.LogsResource.getList'].count}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.LogsResource.getList'].mean * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.LogsResource.getList'].min * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.LogsResource.getList'].p50 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.LogsResource.getList'].p75 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.LogsResource.getList'].p95 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.LogsResource.getList'].p99 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.LogsResource.getList'].max * 1000 | number:0}}</td>
-        </tr>
-        <tr>
-            <td>LogsResource.changeLevel</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.LogsResource.changeLevel'].count}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.LogsResource.changeLevel'].mean * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.LogsResource.changeLevel'].min * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.LogsResource.changeLevel'].p50 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.LogsResource.changeLevel'].p75 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.LogsResource.changeLevel'].p95 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.LogsResource.changeLevel'].p99 * 1000 | number:0}}</td>
-            <td>{{metrics.timers['<%=packageName%>.web.rest.LogsResource.changeLevel'].max * 1000 | number:0}}</td>
+        <tr ng-repeat="(k, v) in servicesStats">
+            <td>{{k}}</td>
+            <td>{{v.count}}</td>
+            <td>{{v.mean * 1000 | number:0}}</td>
+            <td>{{v.min * 1000 | number:0}}</td>
+            <td>{{v.p50 * 1000 | number:0}}</td>
+            <td>{{v.p75 * 1000 | number:0}}</td>
+            <td>{{v.p95 * 1000 | number:0}}</td>
+            <td>{{v.p99 * 1000 | number:0}}</td>
+            <td>{{v.max * 1000 | number:0}}</td>
         </tr>
         </tbody>
     </table>
@@ -319,29 +258,13 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>User</td>
-            <td>{{metrics.gauges['net.sf.ehcache.Cache.<%=packageName%>.domain.User.objects'].value}}</td>
-            <td>{{metrics.gauges['net.sf.ehcache.Cache.<%=packageName%>.domain.User.hits'].value}}</td>
-            <td>{{metrics.gauges['net.sf.ehcache.Cache.<%=packageName%>.domain.User.misses'].value}}</td>
-            <td>{{metrics.gauges['net.sf.ehcache.Cache.<%=packageName%>.domain.User.eviction-count'].value}}</td>
-            <td>{{metrics.gauges['net.sf.ehcache.Cache.<%=packageName%>.domain.User.mean-get-time'].value | number:2}}</td>
-        </tr>
-        <tr>
-            <td>Authority</td>
-            <td>{{metrics.gauges['net.sf.ehcache.Cache.<%=packageName%>.domain.Authority.objects'].value}}</td>
-            <td>{{metrics.gauges['net.sf.ehcache.Cache.<%=packageName%>.domain.Authority.hits'].value}}</td>
-            <td>{{metrics.gauges['net.sf.ehcache.Cache.<%=packageName%>.domain.Authority.misses'].value}}</td>
-            <td>{{metrics.gauges['net.sf.ehcache.Cache.<%=packageName%>.domain.Authority.eviction-count'].value}}</td>
-            <td>{{metrics.gauges['net.sf.ehcache.Cache.<%=packageName%>.domain.Authority.mean-get-time'].value | number:2}}</td>
-        </tr>
-        <tr>
-            <td>PersistentToken</td>
-            <td>{{metrics.gauges['net.sf.ehcache.Cache.<%=packageName%>.domain.PersistentToken.objects'].value}}</td>
-            <td>{{metrics.gauges['net.sf.ehcache.Cache.<%=packageName%>.domain.PersistentToken.hits'].value}}</td>
-            <td>{{metrics.gauges['net.sf.ehcache.Cache.<%=packageName%>.domain.PersistentToken.misses'].value}}</td>
-            <td>{{metrics.gauges['net.sf.ehcache.Cache.<%=packageName%>.domain.PersistentToken.eviction-count'].value}}</td>
-            <td>{{metrics.gauges['net.sf.ehcache.Cache.<%=packageName%>.domain.PersistentToken.mean-get-time'].value | number:2}}</td>
+        <tr ng-repeat="(k, v) in cachesStats" ng-once>
+            <td>{{v.name}}</td>
+            <td>{{metrics.gauges[k + '.objects'].value}}</td>
+            <td>{{metrics.gauges[k + '.hits'].value}}</td>
+            <td>{{metrics.gauges[k + '.misses'].value}}</td>
+            <td>{{metrics.gauges[k + '.eviction-count'].value}}</td>
+            <td>{{metrics.gauges[k + '.mean-get-time'].value | number:2}}</td>
         </tr>
         </tbody>
     </table>

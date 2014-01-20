@@ -76,7 +76,7 @@ public class CustomPersistentRememberMeServices extends
     public CustomPersistentRememberMeServices(Environment env, 
             org.springframework.security.core.userdetails.UserDetailsService userDetailsService) {
         
-        super(env.getProperty("security.rememberme.key"), userDetailsService);
+        super(env.getProperty("jhipster.security.rememberme.key"), userDetailsService);
         random = new SecureRandom();
     }
 

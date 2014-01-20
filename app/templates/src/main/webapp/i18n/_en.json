@@ -147,6 +147,11 @@
     "metrics": {
         "title": "Application Metrics",
         "refresh.button": "Refresh",
+        "health": {
+            "title": "Heath checks",
+            "database": "Database: ",
+            "email": "Email: "
+        },
         "jvm": {
             "title": "JVM Metrics",
             "memory": {
