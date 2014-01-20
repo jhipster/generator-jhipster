@@ -77,6 +77,6 @@ public class Application {
                 "liquibase.serializer" + "," + "liquibase.sqlgenerator" + "," + "liquibase.executor" + "," +
                 "liquibase.snapshot" + "," + "liquibase.logging" + "," + "liquibase.diff" + "," +
                 "liquibase.structure" + "," + "liquibase.structurecompare" + "," + "liquibase.lockservice" + "," +
-                "liquibase.ext" + ",");
+                "liquibase.ext" + "," + "liquibase.changelog");
     }
 }

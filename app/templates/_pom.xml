@@ -112,7 +112,7 @@
         <spring-data-jpa.version>1.4.2.RELEASE</spring-data-jpa.version>
         <hibernate-validator.version>5.0.1.Final</hibernate-validator.version>
         <spring-security.version>3.2.0.RELEASE</spring-security.version>
-        <liquibase.version>3.1.0</liquibase.version>
+        <liquibase.version>3.1.1</liquibase.version>
         <codahale-metrics.version>3.0.1</codahale-metrics.version>
         <jackson.version>2.3.1</jackson.version>
     </properties>
