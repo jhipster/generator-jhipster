@@ -46,7 +46,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Bean
     public RememberMeAuthenticationProvider rememberMeAuthenticationProvider() {
-        return new RememberMeAuthenticationProvider(env.getProperty("security.rememberme.key"));
+        return new RememberMeAuthenticationProvider(env.getProperty("jhipster.security.rememberme.key"));
     }
 
     @Bean
@@ -88,7 +88,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .and()
                 .rememberMe()
                     .rememberMeServices(rememberMeServices())
-                    .key(env.getProperty("security.rememberme.key"))
+                    .key(env.getProperty("jhipster.security.rememberme.key"))
                     .and()
                 .formLogin()
                     .loginProcessingUrl("/app/authentication")

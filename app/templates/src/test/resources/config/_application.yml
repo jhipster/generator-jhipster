@@ -12,14 +12,7 @@ async:
     queueCapacity: 10000
 
 spring:
-  mail:
-    host: localhost
-    port: 25
-    user:
-    password:
-    tls: false
-
-spring:
+  profiles: dev
   datasource:
     dataSourceClassName: org.h2.jdbcx.JdbcDataSource
     url: jdbc:h2:mem:<%= baseName %>
@@ -41,6 +34,14 @@ spring:
       hibernate.cache.use_second_level_cache: false
       hibernate.cache.use_query_cache: false
       hibernate.generate_statistics: true
+
+  mail:
+    host: localhost
+    port: 25
+    user:
+    password:
+    protocol: smtp
+    tls: false
 
 metrics:
     jmx.enabled: false

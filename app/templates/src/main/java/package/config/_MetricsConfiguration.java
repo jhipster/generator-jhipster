@@ -6,8 +6,6 @@ import com.codahale.metrics.graphite.Graphite;
 import com.codahale.metrics.graphite.GraphiteReporter;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.codahale.metrics.jvm.*;
-import <%=packageName%>.config.metrics.DatabaseHealthCheck;
-import <%=packageName%>.config.metrics.JavaMailHealthCheck;
 import com.ryantenney.metrics.spring.config.annotation.EnableMetrics;
 import com.ryantenney.metrics.spring.config.annotation.MetricsConfigurerAdapter;
 import org.slf4j.Logger;
@@ -18,11 +16,9 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.sql.DataSource;
 import java.lang.management.ManagementFactory;
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
@@ -42,12 +38,6 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
     public void setEnvironment(Environment environment) {
         this.env = new RelaxedPropertyResolver(environment, "metrics.");
     }
-
-    @Inject
-    private DataSource dataSource;
-
-    @Inject
-    private JavaMailSenderImpl javaMailSender;
 
     @Override
     @Bean
@@ -69,10 +59,6 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
         METRIC_REGISTRY.register("jvm.threads", new ThreadStatesGaugeSet());
         METRIC_REGISTRY.register("jvm.files", new FileDescriptorRatioGauge());
         METRIC_REGISTRY.register("jvm.buffers", new BufferPoolMetricSet(ManagementFactory.getPlatformMBeanServer()));
-
-        log.debug("Initializing Metrics healthchecks");
-        HEALTH_CHECK_REGISTRY.register("database", new DatabaseHealthCheck(dataSource));
-        HEALTH_CHECK_REGISTRY.register("email", new JavaMailHealthCheck(javaMailSender));
     }
 
     @Override

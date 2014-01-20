@@ -3,6 +3,8 @@ package <%=packageName%>;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.autoconfigure.MetricFilterAutoConfiguration;
+import org.springframework.boot.actuate.autoconfigure.MetricRepositoryAutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
@@ -14,10 +16,10 @@ import java.io.IOException;
 import java.util.Arrays;
 
 @ComponentScan
-@EnableAutoConfiguration
+@EnableAutoConfiguration(exclude = {MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class})
 public class Application {
 
-    private final Logger log = LoggerFactory.getLogger(Application.class);
+    private static final Logger log = LoggerFactory.getLogger(Application.class);
 
     @Inject
     private Environment env;
@@ -49,6 +51,9 @@ public class Application {
         // if not the development profile will be added
         addDefaultProfile(app, source);
 
+        // Fallback to set the list of liquibase package list .
+        addLiquibaseScanPackages();
+
         app.run(args);
     }
 
@@ -59,5 +64,19 @@ public class Application {
         if (!source.containsProperty("spring.profiles.active")) {
             app.setAdditionalProfiles(Arrays.asList("dev"));
         }
+    }
+
+    /**
+     * Set the liquibases.scan.packages to avoid an exception from ServiceLocator
+     * <p/>
+     * See the following JIRA issue https://liquibase.jira.com/browse/CORE-677
+     */
+    private static void addLiquibaseScanPackages() {
+        System.setProperty("liquibase.scan.packages", "liquibase.change" + "," + "liquibase.database" + "," +
+                "liquibase.parser" + "," + "liquibase.precondition" + "," + "liquibase.datatype" + "," +
+                "liquibase.serializer" + "," + "liquibase.sqlgenerator" + "," + "liquibase.executor" + "," +
+                "liquibase.snapshot" + "," + "liquibase.logging" + "," + "liquibase.diff" + "," +
+                "liquibase.structure" + "," + "liquibase.structurecompare" + "," + "liquibase.lockservice" + "," +
+                "liquibase.ext" + "," + "liquibase.changelog");
     }
 }

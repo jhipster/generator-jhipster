@@ -66,15 +66,12 @@ class GZipServletResponseWrapper extends HttpServletResponseWrapper {
       throw new IllegalStateException(
           "PrintWriter obtained already - cannot get OutputStream");
     }
+
     return this.gzipOutputStream;
   }
 
   @Override
   public PrintWriter getWriter() throws IOException {
-    if (this.printWriter == null && this.gzipOutputStream != null) {
-      throw new IllegalStateException(
-          "OutputStream obtained already - cannot get PrintWriter");
-    }
     if (this.printWriter == null) {
       this.gzipOutputStream = new GZipServletOutputStream(
           getResponse().getOutputStream());
@@ -100,7 +97,10 @@ class GZipServletResponseWrapper extends HttpServletResponseWrapper {
     if (printWriter != null) {
       printWriter.flush();
     }
-    gzipOutputStream.flush();
+
+    if (gzipOutputStream != null) {
+      gzipOutputStream.flush();
+    }
   }
 
   /**

@@ -3,8 +3,6 @@ package <%=packageName%>.config;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
-import com.codahale.metrics.servlets.AdminServlet;
-import com.codahale.metrics.servlets.HealthCheckServlet;
 import com.codahale.metrics.servlets.MetricsServlet;<% if (clusteredHttpSession == 'hazelcast') { %>
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.web.SessionListener;
@@ -12,6 +10,7 @@ import com.hazelcast.web.WebFilter;<% } %>
 import <%=packageName%>.web.filter.CachingHttpHeadersFilter;
 import <%=packageName%>.web.filter.StaticResourcesProductionFilter;
 import <%=packageName%>.web.filter.gzip.GZipServletFilter;
+import <%=packageName%>.web.servlet.HealthCheckServlet;
 import org.atmosphere.cache.UUIDBroadcasterCache;
 import org.atmosphere.cpr.AtmosphereServlet;
 import org.slf4j.Logger;
@@ -198,13 +197,21 @@ public class WebConfigurer implements ServletContextInitializer {
         metricsFilter.addMappingForUrlPatterns(disps, true, "/*");
         metricsFilter.setAsyncSupported(true);
 
-        log.debug("Registering Metrics Admin Servlet");
+        log.debug("Registering Metrics Servlet");
         ServletRegistration.Dynamic metricsAdminServlet =
-                servletContext.addServlet("metricsAdminServlet", new AdminServlet());
+                servletContext.addServlet("metricsServlet", new MetricsServlet());
 
-        metricsAdminServlet.addMapping("/metrics/*");
+        metricsAdminServlet.addMapping("/metrics/metrics/*");
         metricsAdminServlet.setAsyncSupported(true);
         metricsAdminServlet.setLoadOnStartup(2);
+
+        log.debug("Registering HealthCheck Servlet");
+        ServletRegistration.Dynamic healthCheckServlet =
+                servletContext.addServlet("healthCheckServlet", new HealthCheckServlet());
+
+        healthCheckServlet.addMapping("/metrics/healthcheck/*");
+        healthCheckServlet.setAsyncSupported(true);
+        healthCheckServlet.setLoadOnStartup(2);
     }
 
     /**

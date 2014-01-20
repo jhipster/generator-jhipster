@@ -28,6 +28,21 @@
         });
     }]);
 
+<%= angularAppName %>.factory('HealthCheckService', ['$rootScope', '$http',
+    function ($rootScope, $http) {
+        return {
+            check: function() {
+                $http.get('/metrics/healthcheck')
+                    .success(function(data, status, headers, config) {
+                        $rootScope.healthCheck = data;
+                    })
+                    .error(function(data, status, headers, config) {
+                        $rootScope.healthCheck = data;
+                    })
+            }
+        };
+    }]);
+
 <%= angularAppName %>.factory('LogsService', ['$resource',
     function ($resource) {
         return $resource('app/rest/logs', {}, {
