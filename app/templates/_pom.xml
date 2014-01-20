@@ -35,6 +35,32 @@
                             </arguments>
                         </configuration>
                     </plugin>
+                    <plugin>
+                        <groupId>org.apache.tomcat.maven</groupId>
+                        <artifactId>tomcat7-maven-plugin</artifactId>
+                        <version>2.2</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.springframework.boot</groupId>
+                                <artifactId>spring-boot-starter-web</artifactId>
+                                <version><%= _.unescape('\$\{spring-boot.version}')%></version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>org.springframework.boot</groupId>
+                                        <artifactId>spring-boot-starter-tomcat</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <path>/</path>
+                            <contextReloadable>true</contextReloadable>
+                            <protocol>org.apache.coyote.http11.Http11NioProtocol</protocol>
+                            <systemProperties>
+                                <spring.profiles.active>dev</spring.profiles.active>
+                            </systemProperties>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
