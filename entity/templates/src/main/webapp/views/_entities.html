@@ -50,30 +50,31 @@
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
-            <tr>
-                <th>ID</th>
-                <th>Sample text</th>
-                <th>Sample date</th>
-            </tr>
+                <tr>
+                    <th>ID</th>
+                    <th>Sample text</th>
+                    <th>Sample date</th>
+                    <th></th>
+                </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="<%= entityInstance %> in <%= entityInstance %>s">
-                <td>{{<%= entityInstance %>.id}}</td>
-                <td>{{<%= entityInstance %>.sampleTextAttribute}}</td>
-                <td>{{<%= entityInstance %>.sampleDateAttribute}}</td>
-                <td>
-                    <button type="submit"
-                            ng-click="update(<%= entityInstance %>.id)"
-                            class="btn">
-                        <span class="glyphicon glyphicon-pencil"></span> Edit
-                    </button>
-                    <button type="submit"
-                            ng-click="delete(<%= entityInstance %>.id)"
-                            class="btn btn-danger">
-                        <span class="glyphicon glyphicon-remove-circle"></span> Delete
-                    </button>
-                </td>
-            </tr>
+                <tr ng-repeat="<%= entityInstance %> in <%= entityInstance %>s">
+                    <td>{{<%= entityInstance %>.id}}</td>
+                    <td>{{<%= entityInstance %>.sampleTextAttribute}}</td>
+                    <td>{{<%= entityInstance %>.sampleDateAttribute}}</td>
+                    <td>
+                        <button type="submit"
+                                ng-click="update(<%= entityInstance %>.id)"
+                                class="btn">
+                            <span class="glyphicon glyphicon-pencil"></span> Edit
+                        </button>
+                        <button type="submit"
+                                ng-click="delete(<%= entityInstance %>.id)"
+                                class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span> Delete
+                        </button>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
