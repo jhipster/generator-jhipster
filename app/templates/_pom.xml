@@ -35,32 +35,6 @@
                             </arguments>
                         </configuration>
                     </plugin>
-                    <plugin>
-                        <groupId>org.apache.tomcat.maven</groupId>
-                        <artifactId>tomcat7-maven-plugin</artifactId>
-                        <version>2.2</version>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.springframework.boot</groupId>
-                                <artifactId>spring-boot-starter-web</artifactId>
-                                <version><%= _.unescape('\$\{spring-boot.version}')%></version>
-                                <exclusions>
-                                    <exclusion>
-                                        <groupId>org.springframework.boot</groupId>
-                                        <artifactId>spring-boot-starter-tomcat</artifactId>
-                                    </exclusion>
-                                </exclusions>
-                            </dependency>
-                        </dependencies>
-                        <configuration>
-                            <path>/</path>
-                            <contextReloadable>true</contextReloadable>
-                            <protocol>org.apache.coyote.http11.Http11NioProtocol</protocol>
-                            <systemProperties>
-                                <spring.profiles.active>dev</spring.profiles.active>
-                            </systemProperties>
-                        </configuration>
-                    </plugin>
                 </plugins>
             </build>
         </profile>
@@ -124,7 +98,114 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile>        
+        </profile>
+        <profile>
+            <id>Tomcat</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-web</artifactId>
+                    <version><%= _.unescape('\$\{spring-boot.version}')%></version>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.tomcat.maven</groupId>
+                        <artifactId>tomcat7-maven-plugin</artifactId>
+                        <version>2.2</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.springframework.boot</groupId>
+                                <artifactId>spring-boot-starter-web</artifactId>
+                                <version><%= _.unescape('\$\{spring-boot.version}')%></version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>org.springframework.boot</groupId>
+                                        <artifactId>spring-boot-starter-tomcat</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <path>/</path>
+                            <contextReloadable>true</contextReloadable>
+                            <protocol>org.apache.coyote.http11.Http11NioProtocol</protocol>
+                            <systemProperties>
+                                <spring.profiles.active><%= _.unescape('\$\{${spring.profiles.active}')%></spring.profiles.active>
+                            </systemProperties>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>Jetty</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-web</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-starter-tomcat</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-jetty</artifactId>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.eclipse.jetty</groupId>
+                        <artifactId>jetty-maven-plugin</artifactId>
+                        <version>9.1.0.v20131115</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.springframework.boot</groupId>
+                                <artifactId>spring-boot-starter-jetty</artifactId>
+                                <version><%= _.unescape('\$\{spring-boot.version}')%></version>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.springframework.boot</groupId>
+                                <artifactId>spring-boot-starter-web</artifactId>
+                                <version><%= _.unescape('\$\{spring-boot.version}')%></version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>org.springframework.boot</groupId>
+                                        <artifactId>spring-boot-starter-tomcat</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <scanIntervalSeconds>-1</scanIntervalSeconds>
+                            <stopKey>stop-jetty</stopKey>
+                            <stopPort>9999</stopPort>
+                            <systemProperties>
+                                <systemProperty>
+                                    <name>jetty.port</name>
+                                    <value>8080</value>
+                                </systemProperty>
+                                <systemProperty>
+                                    <name>spring.profiles.active</name>
+                                    <value><%= _.unescape('\$\{${spring.profiles.active}')%></value>
+                                </systemProperty>
+                            </systemProperties>
+                            <webApp>
+                                <contextPath>/</contextPath>
+                            </webApp>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
     
     <properties>
@@ -185,10 +266,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
