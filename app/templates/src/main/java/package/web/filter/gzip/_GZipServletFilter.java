@@ -84,7 +84,7 @@ public class GZipServletFilter implements Filter {
     } else {
       // Client does not accept zipped content - don't bother zipping
       if (log.isTraceEnabled()) {
-        log.trace("{} Writien without gzip compression because the request does not accept gzip", httpRequest.getRequestURL());
+        log.trace("{} Written without gzip compression because the request does not accept gzip", httpRequest.getRequestURL());
       }
       chain.doFilter(request, response);
     }
