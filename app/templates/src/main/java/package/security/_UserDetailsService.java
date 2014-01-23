@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Finds a User in the database.
+ * Authenticate a user from the database.
  */
 @Component("userDetailsService")
 public class UserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
