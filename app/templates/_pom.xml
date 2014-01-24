@@ -341,22 +341,21 @@
         </dependency>
 
         <!-- Database dependencies-->
-        <dependency><% if (devDatabaseType == 'mysql') { %>
+        <% if (devDatabaseType == 'mysql' || prodDatabaseType == 'mysql') { %><dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.27</version><% } else if (devDatabaseType == 'postgresql') { %><groupId>org.postgresql</groupId>
+            <version>5.1.27</version>
+        </dependency>
+        <% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %><dependency>
+            <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>9.3-1100-jdbc41</version><% } else { %><groupId>org.hsqldb</groupId>
+            <version>9.3-1100-jdbc41</version>
+        </dependency>
+        <% } %><% if (devDatabaseType != 'mysql' && devDatabaseType != 'postgresql') { %><dependency>
+            <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
-            <version>2.3.1</version><% } %>
-        </dependency>
-        <dependency>
-            <% if (prodDatabaseType == 'mysql') { %><groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.27</version><% } else if (prodDatabaseType == 'postgresql') { %><groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>9.3-1100-jdbc41</version><% } %>
-        </dependency>
+            <version>2.3.1</version>
+        </dependency><% } %>
 
         <!-- Test dependencies -->
         <dependency>
