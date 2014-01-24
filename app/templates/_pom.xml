@@ -107,6 +107,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.7</java.version>
 
+        <% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %><hazelcast.version>3.1.5</hazelcast.version>
+        <% } %>
         <!-- Override spring boot librairies version -->
         <spring.version>4.0.0.RELEASE</spring.version>
         <spring-data-jpa.version>1.4.2.RELEASE</spring-data-jpa.version>
@@ -278,27 +280,27 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
-            <version><%= _.unescape('\$\{hazelcastcache.version}')%></version>
+            <version><%= _.unescape('\$\{hazelcast.version}')%></version>
         </dependency>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-hibernate4</artifactId>
-            <version><%= _.unescape('\$\{hazelcastcache.version}')%></version>
+            <version><%= _.unescape('\$\{hazelcast.version}')%></version>
         </dependency>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spring</artifactId>
-            <version><%= _.unescape('\$\{hazelcastcache.version}')%></version>
+            <version><%= _.unescape('\$\{hazelcast.version}')%></version>
         </dependency><% } %><% if (clusteredHttpSession == 'hazelcast' && hibernateCache != 'hazelcast') { %>
         <dependency>
           <groupId>com.hazelcast</groupId>
           <artifactId>hazelcast</artifactId>
-          <version><%= _.unescape('\$\{hazelcastcache.version}')%></version>
+          <version><%= _.unescape('\$\{hazelcast.version}')%></version>
         </dependency><% } %><% if (clusteredHttpSession == 'hazelcast') { %>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-wm</artifactId>
-            <version><%= _.unescape('\$\{hazelcastcache.version}')%></version>
+            <version><%= _.unescape('\$\{hazelcast.version}')%></version>
         </dependency><% } %>
         <dependency>
             <groupId>org.apache.geronimo.javamail</groupId>
