@@ -1,5 +1,6 @@
 package <%=packageName%>;
 
+import <%=packageName%>.config.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -25,7 +26,7 @@ public class Application {
     private Environment env;
 
     /**
-     * Initializes JHipster.
+     * Initializes <%= baseName %>.
      * <p/>
      * Spring profiles can be configured with a program arguments --spring.profiles.active=your-active-profile
      * <p/>
@@ -62,7 +63,7 @@ public class Application {
      */
     private static void addDefaultProfile(SpringApplication app, SimpleCommandLinePropertySource source) {
         if (!source.containsProperty("spring.profiles.active")) {
-            app.setAdditionalProfiles(Arrays.asList("dev"));
+            app.setAdditionalProfiles(Arrays.asList(Constants.SPRING_PROFILE_DEVELOPMENT));
         }
     }
 
