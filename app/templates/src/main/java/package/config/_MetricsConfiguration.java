@@ -30,13 +30,14 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
     private static final Logger log = LoggerFactory.getLogger(MetricsConfiguration.class);
 
     private static final MetricRegistry METRIC_REGISTRY = new MetricRegistry();
+    
     private static final HealthCheckRegistry HEALTH_CHECK_REGISTRY = new HealthCheckRegistry();
 
-    private RelaxedPropertyResolver env;
+    private RelaxedPropertyResolver propertyResolver;
 
     @Override
     public void setEnvironment(Environment environment) {
-        this.env = new RelaxedPropertyResolver(environment, "metrics.");
+        this.propertyResolver = new RelaxedPropertyResolver(environment, "metrics.");
     }
 
     @Override
@@ -63,7 +64,7 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
 
     @Override
     public void configureReporters(MetricRegistry metricRegistry) {
-        if (env.getProperty("jmx.enabled", Boolean.class, false)) {
+        if (propertyResolver.getProperty("jmx.enabled", Boolean.class, false)) {
             log.info("Initializing Metrics JMX reporting");
             final JmxReporter jmxReporter = JmxReporter.forRegistry(metricRegistry).build();
             jmxReporter.start();
@@ -76,20 +77,20 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
         @Inject
         private MetricRegistry metricRegistry;
 
-        private RelaxedPropertyResolver env;
+        private RelaxedPropertyResolver propertyResolver;
 
         @Override
         public void setEnvironment(Environment environment) {
-            this.env = new RelaxedPropertyResolver(environment, "metrics.graphite");
+            this.propertyResolver = new RelaxedPropertyResolver(environment, "metrics.graphite");
         }
 
         @PostConstruct
         private void init() {
-            Boolean graphiteEnabled = env.getProperty("enabled", Boolean.class, false);
+            Boolean graphiteEnabled = propertyResolver.getProperty("enabled", Boolean.class, false);
             if (graphiteEnabled) {
                 log.info("Initializing Metrics Graphite reporting");
-                String graphiteHost = env.getRequiredProperty("host");
-                Integer graphitePort = env.getRequiredProperty("port", Integer.class);
+                String graphiteHost = propertyResolver.getRequiredProperty("host");
+                Integer graphitePort = propertyResolver.getRequiredProperty("port", Integer.class);
                 Graphite graphite = new Graphite(new InetSocketAddress(graphiteHost, graphitePort));
                 GraphiteReporter graphiteReporter = GraphiteReporter.forRegistry(metricRegistry)
                         .convertRatesTo(TimeUnit.SECONDS)

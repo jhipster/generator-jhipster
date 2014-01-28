@@ -20,20 +20,20 @@ public class AsyncConfiguration implements AsyncConfigurer, EnvironmentAware  {
 
     private final Logger log = LoggerFactory.getLogger(AsyncConfiguration.class);
 
-    private RelaxedPropertyResolver env;
+    private RelaxedPropertyResolver propertyResolver;
 
     @Override
     public void setEnvironment(Environment environment) {
-        this.env = new RelaxedPropertyResolver(environment, "async.");
+        this.propertyResolver = new RelaxedPropertyResolver(environment, "async.");
     }
 
     @Override
     public Executor getAsyncExecutor() {
         log.debug("Creating Async Task Executor");
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(env.getProperty("corePoolSize", Integer.class, 2));
-        executor.setMaxPoolSize(env.getProperty("corePoolSize", Integer.class, 50));
-        executor.setQueueCapacity(env.getProperty("corePoolSize", Integer.class, 10000));
+        executor.setCorePoolSize(propertyResolver.getProperty("corePoolSize", Integer.class, 2));
+        executor.setMaxPoolSize(propertyResolver.getProperty("corePoolSize", Integer.class, 50));
+        executor.setQueueCapacity(propertyResolver.getProperty("corePoolSize", Integer.class, 10000));
         executor.setThreadNamePrefix("<%= _.slugify(baseName) %>-Executor-");
         executor.initialize();
         return executor;
