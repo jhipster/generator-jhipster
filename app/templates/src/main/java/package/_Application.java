@@ -34,10 +34,10 @@ public class Application {
     @PostConstruct
     public void initApplication() throws IOException {
         if (env.getActiveProfiles().length == 0) {
-            log.debug("No Spring profile configured, running with default configuration");
+            log.warn("No Spring profile configured, running with default configuration");
         } else {
             for (String profile : env.getActiveProfiles()) {
-                log.debug("Running with Spring profile(s) : {}", profile);
+                log.info("Running with Spring profile(s) : {}", profile);
             }
         }
     }

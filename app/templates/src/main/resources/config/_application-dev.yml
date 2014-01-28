@@ -2,7 +2,7 @@ server:
     port: 8080
     address: localhost
 
-management.port: 9001
+management.port: 
 
 spring:
     profiles: dev

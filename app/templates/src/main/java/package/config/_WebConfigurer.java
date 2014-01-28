@@ -38,6 +38,9 @@ public class WebConfigurer implements ServletContextInitializer {
     private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
 
     @Inject
+    private Environment env;
+
+    @Inject
     private MetricRegistry metricRegistry;
 
     @Inject
@@ -45,23 +48,19 @@ public class WebConfigurer implements ServletContextInitializer {
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
-        log.info("Web application configuration");
+        log.info("Web application configuration, using profiles: {}", env.getActiveProfiles());
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
         <% if (clusteredHttpSession == 'hazelcast') { %>
         initClusteredHttpSessionFilter(servletContext, disps);<% } %>
         initMetrics(servletContext, disps);
         initAtmosphereServlet(servletContext);
-        if (WebApplicationContextUtils
-                .getRequiredWebApplicationContext(servletContext)
-                .getBean(Environment.class)
-                .acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
-
+        if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
             initStaticResourcesProductionFilter(servletContext, disps);
             initCachingHttpHeadersFilter(servletContext, disps);
         }
         initGzipFilter(servletContext, disps);
 
-        log.debug("Web application fully configured");
+        log.info("Web application fully configured");
     }<% if (clusteredHttpSession == 'hazelcast') { %>
 
     /**
