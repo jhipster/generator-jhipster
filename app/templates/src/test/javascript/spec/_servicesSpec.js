@@ -14,7 +14,7 @@ describe('Services Tests ', function () {
             httpBackend = $httpBackend;
             authServiceSpied = authService;
             //Request on app init
-            httpBackend.expectGET('/i18n/en.json').respond(200, '');
+            httpBackend.expectGET('../i18n/en.json').respond(200, '');
         }));
         //make sure no expectations were missed in your tests.
         //(e.g. expectGET or expectPOST)

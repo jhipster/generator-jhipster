@@ -67,7 +67,7 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
 
             // Initialize angular-translate
             $translateProvider.useStaticFilesLoader({
-                prefix: '/i18n/',
+                prefix: '../i18n/',
                 suffix: '.json'
             });
 
