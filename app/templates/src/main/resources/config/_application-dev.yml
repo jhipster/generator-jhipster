@@ -2,8 +2,6 @@ server:
     port: 8080
     address: localhost
 
-management.port: 
-
 spring:
     profiles: dev
     datasource:
