@@ -327,6 +327,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(webappDir + 'styles/famfamfam-flags.css', webappDir + 'styles/famfamfam-flags.css');
 
     // Images
+    this.copy(webappDir + 'images/development_ribbon.png', webappDir + 'images/development_ribbon.png');
     this.copy(webappDir + 'images/hipster.jpg', webappDir + 'images/hipster.jpg');
     this.copy(webappDir + 'images/famfamfam-flags.png', webappDir + 'images/famfamfam-flags.png');
 

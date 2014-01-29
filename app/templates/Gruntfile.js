@@ -324,6 +324,16 @@ module.exports = function (grunt) {
         }]
       }
     },
+    replace: {
+      dist: {
+        src: ['<%%= yeoman.dist %>/index.html'],
+          overwrite: true,                 // overwrite matched source files
+          replacements: [{
+            from: '<div class="development"></div>',
+            to: ''
+          }]
+        }
+      },
     uglify: {
       dist: {
         files: {
@@ -367,6 +377,7 @@ module.exports = function (grunt) {
     'copy:dist',
     'ngmin',
     'cssmin',
+    'replace',
     'uglify',
     'rev',
     'usemin'

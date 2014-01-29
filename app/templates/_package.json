@@ -25,6 +25,7 @@
     "grunt-ngmin": "~0.0.3",
     "grunt-rev": "~0.1.0",
     "grunt-svgmin": "~0.3.0",
+    "grunt-text-replace": "~0.3.10",
     "grunt-usemin": "~2.0.2",
     "load-grunt-tasks": "~0.3.0",
     "time-grunt": "0.2.7" ,
