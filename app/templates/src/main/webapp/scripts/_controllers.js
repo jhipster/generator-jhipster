@@ -117,7 +117,7 @@
         $scope.trackerSubSocket;
         $scope.trackerTransport = 'websocket';
 
-        $scope.trackerRequest = { url: '/websocket/tracker',
+        $scope.trackerRequest = { url: 'websocket/tracker',
             contentType : "application/json",
             transport : $scope.trackerTransport ,
             trackMessageLength : true,
