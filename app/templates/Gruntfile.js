@@ -190,7 +190,7 @@ module.exports = function (grunt) {
       }
     },
     useminPrepare: {
-      html: 'src/main/webapp/index.html',
+      html: 'src/main/webapp/{,*/}*.html',
       options: {
         dest: '<%%= yeoman.dist %>'
       }
