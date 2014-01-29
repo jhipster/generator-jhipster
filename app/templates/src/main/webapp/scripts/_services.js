@@ -23,7 +23,7 @@
 
 <%= angularAppName %>.factory('Metrics', ['$resource',
     function ($resource) {
-        return $resource('/metrics/metrics', {}, {
+        return $resource('metrics/metrics', {}, {
             'get': { method: 'GET'}
         });
     }]);
@@ -32,7 +32,7 @@
     function ($rootScope, $http) {
         return {
             check: function() {
-                $http.get('/metrics/healthcheck')
+                $http.get('metrics/healthcheck')
                     .success(function(data, status, headers, config) {
                         $rootScope.healthCheck = data;
                     })
@@ -55,7 +55,7 @@
     function ($rootScope, $http, authService) {
         return {
             authenticate: function() {
-                $http.get('/app/rest/authenticate')
+                $http.get('app/rest/authenticate')
                     .success(function (data, status, headers, config) {
                         $rootScope.login = data;
                         if (data == '') {
@@ -67,7 +67,7 @@
             },
             login: function (param) {
                 var data ="j_username=" + param.username +"&j_password=" + param.password +"&_spring_security_remember_me=" + param.rememberMe +"&submit=Login";
-                $http.post('/app/authentication', data, {
+                $http.post('app/authentication', data, {
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
                     },
@@ -88,7 +88,7 @@
             },
             logout: function () {
                 $rootScope.authenticationError = false;
-                $http.get('/app/logout')
+                $http.get('app/logout')
                     .success(function (data, status, headers, config) {
                         $rootScope.login = null;
                         authService.loginCancelled();
