@@ -143,6 +143,11 @@
             <url>http://repo.spring.io/libs-snapshot</url>
             <snapshots><enabled>true</enabled></snapshots>
         </pluginRepository>
+        <pluginRepository>
+            <id>spring-milestones</id>
+            <url>http://repo.spring.io/milestone</url>
+            <snapshots><enabled>true</enabled></snapshots>
+        </pluginRepository>
     </pluginRepositories>
 
     <prerequisites>
