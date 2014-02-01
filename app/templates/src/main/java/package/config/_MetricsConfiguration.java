@@ -60,13 +60,9 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
         METRIC_REGISTRY.register("jvm.threads", new ThreadStatesGaugeSet());
         METRIC_REGISTRY.register("jvm.files", new FileDescriptorRatioGauge());
         METRIC_REGISTRY.register("jvm.buffers", new BufferPoolMetricSet(ManagementFactory.getPlatformMBeanServer()));
-    }
-
-    @Override
-    public void configureReporters(MetricRegistry metricRegistry) {
         if (propertyResolver.getProperty("jmx.enabled", Boolean.class, false)) {
             log.info("Initializing Metrics JMX reporting");
-            final JmxReporter jmxReporter = JmxReporter.forRegistry(metricRegistry).build();
+            final JmxReporter jmxReporter = JmxReporter.forRegistry(METRIC_REGISTRY).build();
             jmxReporter.start();
         }
     }
