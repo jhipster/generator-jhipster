@@ -33,7 +33,7 @@ import java.util.Set;<% } %>
 public class CacheConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);<% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>  
-    
+
     private static HazelcastInstance hazelcastInstance;<% } else if (hibernateCache == 'ehcache') { %>
     
     @PersistenceContext
@@ -45,9 +45,9 @@ public class CacheConfiguration {
     @Inject
     private MetricRegistry metricRegistry;
 
-    <% if (hibernateCache == 'ehcache') { %>private net.sf.ehcache.CacheManager cacheManager;
-    <% } else { %>private CacheManager cacheManager;
-    <% } %>
+<% if (hibernateCache == 'ehcache') { %>    private net.sf.ehcache.CacheManager cacheManager;
+<% } else { %>    private CacheManager cacheManager;
+<% } %>
     @PreDestroy
     public void destroy() {
         log.info("Remove Cache Manager metrics");

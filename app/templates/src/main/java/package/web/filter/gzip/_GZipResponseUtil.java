@@ -58,8 +58,8 @@ public final class GZipResponseUtil {
      * to contain anything. See http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.3.5
      * </ol>
      *
-     * @param request         the client HTTP request
-     * @param responseStatus         the responseStatus
+     * @param request        the client HTTP request
+     * @param responseStatus the responseStatus
      * @return true if the response should be 0, even if it is isn't.
      */
     public static boolean shouldBodyBeZero(HttpServletRequest request, int responseStatus) {
@@ -67,8 +67,8 @@ public final class GZipResponseUtil {
         //Check for NO_CONTENT
         if (responseStatus == HttpServletResponse.SC_NO_CONTENT) {
             if (LOG.isDebugEnabled()) {
-                LOG.debug("{} resulted in a {} response. Removing message body in accordance with RFC2616.", 
-                    request.getRequestURL(), HttpServletResponse.SC_NO_CONTENT);
+                LOG.debug("{} resulted in a {} response. Removing message body in accordance with RFC2616.",
+                        request.getRequestURL(), HttpServletResponse.SC_NO_CONTENT);
             }
             return true;
         }
@@ -85,12 +85,16 @@ public final class GZipResponseUtil {
     }
 
     /**
-     * Adds the gzip HTTP header to the response. This is need when a gzipped body is returned so that browsers can properly decompress it.
-     * <p/>
+     * Adds the gzip HTTP header to the response.
+     *
+     * <p>
+     *   This is need when a gzipped body is returned so that browsers can properly decompress it.
+     * </p>
+     *
      * @param response the response which will have a header added to it. I.e this method changes its parameter
-     * @throws net.sf.ehcache.constructs.web.ResponseHeadersNotModifiableException Either the response is committed or we were called using the include method
+     * @throws GzipResponseHeadersNotModifiableException Either the response is committed or we were called using the include method
      * from a {@link javax.servlet.RequestDispatcher#include(javax.servlet.ServletRequest, javax.servlet.ServletResponse)}
-     * method and the set set header is ignored.
+     * method and the set header is ignored.
      */
     public static void addGzipHeader(final HttpServletResponse response) throws GzipResponseHeadersNotModifiableException {
         response.setHeader("Content-Encoding", "gzip");

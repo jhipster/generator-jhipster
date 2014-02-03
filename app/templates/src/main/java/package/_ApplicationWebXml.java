@@ -7,7 +7,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.SpringBootServletInitializer;
 
 /**
- * This is an helper Java class that provides an alternative to creating a web.xml
+ * This is an helper Java class that provides an alternative to creating a web.xml.
  */
 public class ApplicationWebXml extends SpringBootServletInitializer {
 
@@ -21,9 +21,11 @@ public class ApplicationWebXml extends SpringBootServletInitializer {
     }
 
     /**
-     * Set a default profile if it has not been set
+     * Set a default profile if it has not been set.
      *
+     * <p>
      * Please use -Dspring.active.profile=dev
+     * </p>
      */
     private String addDefaultProfile() {
         String profile = System.getProperty("spring.active.profile");

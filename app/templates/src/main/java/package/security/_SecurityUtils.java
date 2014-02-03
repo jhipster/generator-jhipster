@@ -28,7 +28,8 @@ public final class SecurityUtils {
     }
 
     /**
-     * Check if a user is authenticated
+     * Check if a user is authenticated.
+     *
      * @return true if the user is authenticated, false otherwise
      */
     public static boolean isAuthenticated() {

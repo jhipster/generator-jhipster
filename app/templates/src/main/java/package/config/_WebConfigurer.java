@@ -20,7 +20,6 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.util.ReflectionUtils;
 
 import javax.inject.Inject;
@@ -53,8 +52,8 @@ public class WebConfigurer implements ServletContextInitializer {
     public void onStartup(ServletContext servletContext) throws ServletException {
         log.info("Web application configuration, using profiles: {}", env.getActiveProfiles());
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
-        <% if (clusteredHttpSession == 'hazelcast') { %>
-        initClusteredHttpSessionFilter(servletContext, disps);<% } %>
+        
+<% if (clusteredHttpSession == 'hazelcast') { %>        initClusteredHttpSessionFilter(servletContext, disps);<% } %>
         initMetrics(servletContext, disps);
         initAtmosphereServlet(servletContext);
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {

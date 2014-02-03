@@ -16,7 +16,7 @@ import java.util.concurrent.Executor;
 @Configuration
 @EnableAsync
 @EnableScheduling
-public class AsyncConfiguration implements AsyncConfigurer, EnvironmentAware  {
+public class AsyncConfiguration implements AsyncConfigurer, EnvironmentAware {
 
     private final Logger log = LoggerFactory.getLogger(AsyncConfiguration.class);
 

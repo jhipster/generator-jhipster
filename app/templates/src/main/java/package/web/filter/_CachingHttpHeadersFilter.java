@@ -20,7 +20,7 @@ public class CachingHttpHeadersFilter implements Filter {
     public void init(FilterConfig filterConfig) throws ServletException {
         // Nothing to initialize
     }
-    
+
     @Override
     public void destroy() {
         // Nothing to destroy
