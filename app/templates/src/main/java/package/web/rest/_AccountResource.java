@@ -7,8 +7,10 @@ import <%=packageName%>.repository.PersistentTokenRepository;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.UserService;
+import <%=packageName%>.web.rest.dto.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -56,11 +58,12 @@ public class AccountResource {
             method = RequestMethod.GET,
             produces = "application/json")
     @Timed
-    public User getAccount(HttpServletResponse response) {
-        User user = userRepository.findOne(SecurityUtils.getCurrentLogin());
+    public UserDTO getAccount(HttpServletResponse response) {
+        UserDTO user = userService.getCurrentUser();
         if (user == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
+
         return user;
     }
 
@@ -97,6 +100,7 @@ public class AccountResource {
             method = RequestMethod.GET,
             produces = "application/json")
     @Timed
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public List<PersistentToken> getCurrentSessions(HttpServletResponse response) {
         User user = userRepository.findOne(SecurityUtils.getCurrentLogin());
         if (user == null) {
@@ -111,6 +115,7 @@ public class AccountResource {
     @RequestMapping(value = "/rest/account/sessions/{series}",
             method = RequestMethod.DELETE)
     @Timed
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public void invalidateSession(@PathVariable String series) throws UnsupportedEncodingException {
         String decodedSeries = URLDecoder.decode(series, "UTF-8");
         persistentTokenRepository.delete(decodedSeries);
