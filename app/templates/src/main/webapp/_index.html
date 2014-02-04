@@ -22,7 +22,7 @@
         <![endif]-->
         <div class="development"></div>
         <div class="container">
-            <div class="header">
+            <div class="header" ng-switch="authenticated">
                 <ul class="nav nav-pills pull-right">
                     <li>
                         <a href="#">
@@ -41,19 +41,19 @@
                             </span>
                         </a>
                         <ul class="dropdown-menu" ng-controller="MenuController">
-                            <li ng-show="authenticated"><a href="#/settings"><span class="glyphicon glyphicon-wrench"></span>
+                            <li ng-switch-when="true"><a href="#/settings"><span class="glyphicon glyphicon-wrench"></span>
                                 &nbsp;<span translate="global.menu.account.settings">Settings</span></a></li>
-                            <li ng-show="authenticated"><a href="#/password"><span class="glyphicon glyphicon-lock"></span>
+                            <li ng-switch-when="true"><a href="#/password"><span class="glyphicon glyphicon-lock"></span>
                                 &nbsp;<span translate="global.menu.account.password">Password</span></a></li>
-                            <li ng-show="authenticated"><a href="#/sessions"><span class="glyphicon glyphicon-cloud"></span>
+                            <li ng-switch-when="true" ng-show="hasRole('ROLE_ADMIN')"><a href="#/sessions"><span class="glyphicon glyphicon-cloud"></span>
                                 &nbsp;<span translate="global.menu.account.sessions">Sessions</span></a></li>
-                            <li ng-show="authenticated"><a href="#/logout"><span class="glyphicon glyphicon-log-out"></span>
+                            <li ng-switch-when="true"><a href="#/logout"><span class="glyphicon glyphicon-log-out"></span>
                                 &nbsp;<span translate="global.menu.account.logout">Log out</span></a></li>
-                            <li ng-hide="authenticated"><a href="#/login"><span class="glyphicon glyphicon-log-in"></span>
+                            <li ng-switch-when="false"><a href="#/login"><span class="glyphicon glyphicon-log-in"></span>
                                 &nbsp;<span translate="global.menu.account.login">Authenticate</span></a></li>
                         </ul>
                     </li>
-                    <li ng-show="authenticated" class="dropdown pointer" ng-controller="AdminController">
+                    <li ng-switch-when="true" ng-show="hasRole('ROLE_ADMIN')" class="dropdown pointer" ng-controller="AdminController">
                         <a class="dropdown-toggle" data-toggle="dropdown">
                             <span>
                                 <span class="glyphicon glyphicon-tower"></span>
@@ -62,11 +62,11 @@
                             </span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li ng-show="authenticated"><a href="#/tracker"><span class="glyphicon glyphicon-eye-open"></span>
+                            <li><a href="#/tracker"><span class="glyphicon glyphicon-eye-open"></span>
                                 &nbsp;<span translate="global.menu.account.tracker">User tracking</span></a></li>
-                            <li ng-show="authenticated"><a href="#/metrics"><span class="glyphicon glyphicon-dashboard"></span>
+                            <li><a href="#/metrics"><span class="glyphicon glyphicon-dashboard"></span>
                                 &nbsp;<span translate="global.menu.account.metrics">Metrics</span></a></li>
-                            <li ng-show="authenticated"><a href="#/logs"><span class="glyphicon glyphicon-tasks"></span>
+                            <li><a href="#/logs"><span class="glyphicon glyphicon-tasks"></span>
                                 &nbsp;<span translate="global.menu.account.logs">Logs</span></a></li>
                         </ul>
                     </li>

@@ -78,6 +78,18 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
         }])
         .run(['$rootScope', '$location', 'AuthenticationSharedService', 'Account',
             function($rootScope, $location, AuthenticationSharedService, Account) {
+            $rootScope.hasRole = function(role) {
+                if ($rootScope.account === undefined) {
+                    return false;
+                }
+
+                if ($rootScope.account.roles[role] === undefined) {
+                    return false;
+                }
+
+                return $rootScope.account.roles[role];
+            };
+
             $rootScope.$on("$routeChangeStart", function(event, next, current) {
                 // Check if the status of the user. Is it authenticated or not?
                 AuthenticationSharedService.authenticate({}, function() {

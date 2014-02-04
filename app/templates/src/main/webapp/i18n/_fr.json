@@ -32,7 +32,7 @@
         "subtitle": "Ceci est votre page d'accueil",
         "logged": {
             "message": "Vous êtes connecté en tant que \"{{username}}\".",
-            "authenticated": "Si vous voulez vous <a href=\"#/login\">connecter</a>, vous pouvez utiliser les identifiants par défaut : <br/> nom d'utilisateur=\"admin\" et mot de passe =\"admin\"."
+            "authenticated": "Si vous voulez vous <a href=\"#/login\">connecter</a>, vous pouvez utiliser les identifiants par défaut : <br/> ROLE_ADMIN - nom d'utilisateur=\"admin\" et mot de passe =\"admin\" <br/> ROLE_USER - nom d'utilisateur=\"user\" et mot de passe =\"user\"."
         },
         "question": "Si vous avez des questions à propos de JHipster:",
         "link": {
