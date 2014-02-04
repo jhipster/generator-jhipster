@@ -24,19 +24,6 @@
                 <!-- log configuration -->
                 <logback.loglevel>DEBUG</logback.loglevel>
             </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-maven-plugin</artifactId>
-                        <configuration>
-                            <arguments>
-                                <argument>--spring.profiles.active=dev</argument>
-                            </arguments>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
         </profile>
         <profile>
             <id>prod</id>
@@ -65,10 +52,6 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>
-                    <plugin>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <version>2.4</version>
                     </plugin>
                     <plugin>
                         <artifactId>maven-clean-plugin</artifactId>
@@ -100,15 +83,14 @@
             </build>
         </profile>
     </profiles>
-    
+
     <properties>
         <!-- Maven build properties -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.7</java.version>
+<% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>        <hazelcast.version>3.1.5</hazelcast.version><% } %>
 
-        <% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %><hazelcast.version>3.1.5</hazelcast.version>
-        <% } %>
     </properties>
 
     <repositories>
@@ -184,6 +166,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -428,6 +414,14 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <packagingExcludes>WEB-INF/lib/tomcat-*.jar</packagingExcludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
                 <configuration>
                     <downloadSources>true</downloadSources>
@@ -442,19 +436,11 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-starter-web</artifactId>
-                        <version><%= _.unescape('\$\{spring-boot.version}')%></version>
-                        <exclusions>
-                            <exclusion>
-                                <groupId>org.springframework.boot</groupId>
-                                <artifactId>spring-boot-starter-tomcat</artifactId>
-                            </exclusion>
-                        </exclusions>
-                    </dependency>
-                </dependencies>
+                <configuration>
+                    <arguments>
+                        <argument>--spring.profiles.active=dev</argument>
+                    </arguments>
+                </configuration>
             </plugin>
         </plugins>
     </build>
