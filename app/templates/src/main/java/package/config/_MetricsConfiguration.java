@@ -93,8 +93,6 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
                         .convertDurationsTo(TimeUnit.MILLISECONDS)
                         .build(graphite);
                 graphiteReporter.start(1, TimeUnit.MINUTES);
-            } else {
-                log.warn("Graphite server is not configured, unable to send any data to Graphite");
             }
         }
     }
