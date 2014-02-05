@@ -88,13 +88,13 @@ public class WebConfigurer implements ServletContextInitializer {
         // Name of the distributed map storing your web session objects
         parameters.put("map-name", "clustered-http-sessions");
 
-        // How is your load -balancer configured ?
-        // sticky-session means all requests of a session
-        // is routed to the node where the session is first created.
+        // How is your load-balancer configured?
+        // Setting "sticky-session" to "true" means all requests of a session
+        // are routed to the node where the session is first created.
         // This is excellent for performance.
-        // If sticky-session is set to false, when a session is updated
-        // on a node, entry for this session on all other nodes is invalidated.
-        // You have to know how your load -balancer is configured before
+        // If "sticky-session" is set to "false", then when a session is updated
+        // on a node, entries for this session on all other nodes are invalidated.
+        // You have to know how your load-balancer is configured before
         // setting this parameter. Default is true.
         parameters.put("sticky-session", "false");
 
