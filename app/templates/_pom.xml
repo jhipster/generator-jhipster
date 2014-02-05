@@ -286,12 +286,12 @@
             <groupId>org.apache.geronimo.javamail</groupId>
             <artifactId>geronimo-javamail_1.4_mail</artifactId>
             <version>1.8.3</version>
-        </dependency>
+        </dependency><% if (websocket == 'atmosphere') { %>
         <dependency>
             <groupId>org.atmosphere</groupId>
             <artifactId>atmosphere-spring</artifactId>
             <version>2.1.0</version>
-        </dependency>
+        </dependency><% } %>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>

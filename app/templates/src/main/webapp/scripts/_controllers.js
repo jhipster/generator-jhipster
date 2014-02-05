@@ -107,7 +107,7 @@
         };
     }]);
 
-<%= angularAppName %>.controller('TrackerController', ['$scope',
+ <% if (websocket == 'atmosphere') { %><%= angularAppName %>.controller('TrackerController', ['$scope',
     function ($scope) {
         // This controller uses the Atmosphere framework to keep a Websocket connection opened, and receive
         // user activities in real-time.
@@ -153,7 +153,7 @@
         $scope.trackerSubSocket = $scope.trackerSocket.subscribe($scope.trackerRequest);
     }]);
 
-<%= angularAppName %>.controller('MetricsController', ['$scope', 'resolvedMetrics', 'HealthCheckService',
+<% } %><%= angularAppName %>.controller('MetricsController', ['$scope', 'resolvedMetrics', 'HealthCheckService',
     function ($scope, resolvedMetrics, HealthCheckService) {
         $scope.metrics = resolvedMetrics;
         HealthCheckService.check();

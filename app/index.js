@@ -38,19 +38,19 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'input',
             name: 'baseName',
-            message: '(1/7) What is the base name of your application?',
+            message: '(1/8) What is the base name of your application?',
             default: 'jhipster'
         },
         {
             type: 'input',
             name: 'packageName',
-            message: '(2/7) What is your default package name?',
+            message: '(2/8) What is your default package name?',
             default: 'com.mycompany.myapp'
         },
         {
             type: 'list',
             name: 'hibernateCache',
-            message: '(3/7) Do you want to use Hibernate 2nd level cache?',
+            message: '(3/8) Do you want to use Hibernate 2nd level cache?',
             choices: [
                 {
                     value: 'no',
@@ -70,7 +70,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'clusteredHttpSession',
-            message: '(4/7) Do you want to use clustered HTTP sessions?',
+            message: '(4/8) Do you want to use clustered HTTP sessions?',
             choices: [
                 {
                     value: 'no',
@@ -85,8 +85,24 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             type: 'list',
+            name: 'websocket',
+            message: '(5/8) Do you want to use WebSockets?',
+            choices: [
+                {
+                    value: 'no',
+                    name: 'No'
+                },
+                {
+                    value: 'atmosphere',
+                    name: 'Yes, with Atmosphere'
+                }
+            ],
+            default: 0
+        },
+        {
+            type: 'list',
             name: 'prodDatabaseType',
-            message: '(5/7) Which *production* database would you like to use?',
+            message: '(6/8) Which *production* database would you like to use?',
             choices: [
                 {
                     value: 'mysql',
@@ -102,7 +118,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'devDatabaseType',
-            message: '(6/7) Which *development* database would you like to use?',
+            message: '(7/8) Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'hsqldbMemory',
@@ -122,7 +138,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'confirm',
             name: 'useCompass',
-            message: '(7/7) Would you like to use the Compass CSS Authoring Framework?',
+            message: '(8/8) Would you like to use the Compass CSS Authoring Framework?',
             default: false
         }
     ];
@@ -134,6 +150,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         this.baseName = props.baseName;
         this.hibernateCache = props.hibernateCache;
         this.clusteredHttpSession = props.clusteredHttpSession;
+        this.websocket = props.websocket;
         this.devDatabaseType = props.devDatabaseType;
         this.prodDatabaseType = props.prodDatabaseType;
         this.useCompass = props.useCompass;
@@ -244,10 +261,12 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/web/servlet/_package-info.java', javaDir + 'web/servlet/package-info.java');
     this.template('src/main/java/package/web/servlet/_HealthCheckServlet.java', javaDir + 'web/servlet/HealthCheckServlet.java');
 
-    this.template('src/main/java/package/web/websocket/_ActivityService.java', javaDir + 'web/websocket/ActivityService.java');
-    this.template('src/main/java/package/web/websocket/_TrackerService.java', javaDir + 'web/websocket/TrackerService.java');
-    this.template('src/main/java/package/web/websocket/dto/_ActivityDTO.java', javaDir + 'web/websocket/dto/ActivityDTO.java');
-    this.template('src/main/java/package/web/websocket/dto/_ActivityDTOJacksonDecoder.java', javaDir + 'web/websocket/dto/ActivityDTOJacksonDecoder.java');
+    if (this.websocket == 'atmosphere') {
+        this.template('src/main/java/package/web/websocket/_ActivityService.java', javaDir + 'web/websocket/ActivityService.java');
+        this.template('src/main/java/package/web/websocket/_TrackerService.java', javaDir + 'web/websocket/TrackerService.java');
+        this.template('src/main/java/package/web/websocket/dto/_ActivityDTO.java', javaDir + 'web/websocket/dto/ActivityDTO.java');
+        this.template('src/main/java/package/web/websocket/dto/_ActivityDTOJacksonDecoder.java', javaDir + 'web/websocket/dto/ActivityDTOJacksonDecoder.java');
+    }
 
     // Create Test Java files
     var testDir = 'src/test/java/' + packageFolder + '/';
@@ -301,7 +320,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(webappDir + '/views/password.html', webappDir + 'views/password.html');
     this.copy(webappDir + '/views/settings.html', webappDir + 'views/settings.html');
     this.copy(webappDir + '/views/sessions.html', webappDir + 'views/sessions.html');
-    this.copy(webappDir + '/views/tracker.html', webappDir + 'views/tracker.html');
+    if (this.websocket == 'atmosphere') {
+        this.copy(webappDir + '/views/tracker.html', webappDir + 'views/tracker.html');
+    }
     this.template(webappDir + '/views/_metrics.html', webappDir + 'views/metrics.html');
 
     // Index page
@@ -318,7 +339,9 @@ JhipsterGenerator.prototype.app = function app() {
     // Create Test Javascript files
     var testJsDir = 'src/test/javascript/';
     this.copy('src/test/javascript/karma.conf.js', testJsDir + 'karma.conf.js');
-    this.copy('src/test/javascript/mock/atmosphere.mock.js', testJsDir + 'mock/atmosphere.mock.js');
+    if (this.websocket == 'atmosphere') {
+        this.copy('src/test/javascript/mock/atmosphere.mock.js', testJsDir + 'mock/atmosphere.mock.js');
+    }
     this.template('src/test/javascript/spec/_controllersSpec.js', testJsDir + 'spec/controllersSpec.js');
     this.template('src/test/javascript/spec/_servicesSpec.js', testJsDir + 'spec/servicesSpec.js');
 
@@ -331,7 +354,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(webappDir + 'images/hipster.jpg', webappDir + 'images/hipster.jpg');
     this.copy(webappDir + 'images/famfamfam-flags.png', webappDir + 'images/famfamfam-flags.png');
 
-    this.indexFile = this.appendScripts(this.indexFile, 'scripts/scripts.js', [
+    var indexScripts = [
         'bower_components/modernizr/modernizr.js',
 
         'bower_components/jquery/jquery.js',
@@ -349,10 +372,15 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/app.js',
         'scripts/controllers.js',
         'scripts/services.js',
-        'scripts/directives.js',
+        'scripts/directives.js'];
 
-        'bower_components/atmosphere/atmosphere.js',
-        'bower_components/jquery-atmosphere/jquery.atmosphere.js',
+    if (this.websocket == 'atmosphere') {
+        indexScripts = indexScripts.concat([
+            'bower_components/atmosphere/atmosphere.js',
+            'bower_components/jquery-atmosphere/jquery.atmosphere.js']);
+    }   
+
+    indexScripts = indexScripts.concat([
         'bower_components/sass-bootstrap/js/affix.js',
         'bower_components/sass-bootstrap/js/alert.js',
         'bower_components/sass-bootstrap/js/dropdown.js',
@@ -364,8 +392,9 @@ JhipsterGenerator.prototype.app = function app() {
         'bower_components/sass-bootstrap/js/carousel.js',
         'bower_components/sass-bootstrap/js/scrollspy.js',
         'bower_components/sass-bootstrap/js/collapse.js',
-        'bower_components/sass-bootstrap/js/tab.js'
-    ]);
+        'bower_components/sass-bootstrap/js/tab.js']);    
+
+    this.indexFile = this.appendScripts(this.indexFile, 'scripts/scripts.js', indexScripts);
     this.write(webappDir + 'index.html', this.indexFile);
 
     this.config.set('baseName', this.baseName);

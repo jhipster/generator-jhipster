@@ -10,17 +10,18 @@ import com.hazelcast.web.WebFilter;<% } %>
 import <%=packageName%>.web.filter.CachingHttpHeadersFilter;
 import <%=packageName%>.web.filter.StaticResourcesProductionFilter;
 import <%=packageName%>.web.filter.gzip.GZipServletFilter;
-import <%=packageName%>.web.servlet.HealthCheckServlet;
+import <%=packageName%>.web.servlet.HealthCheckServlet;<% if (websocket == 'atmosphere') { %>
 import org.atmosphere.cache.UUIDBroadcasterCache;
 import org.atmosphere.cpr.AtmosphereFramework;
-import org.atmosphere.cpr.AtmosphereServlet;
+import org.atmosphere.cpr.AtmosphereServlet;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.util.ReflectionUtils;
+import org.springframework.util.ReflectionUtils;<% if (clusteredHttpSession == 'hazelcast') { %>
+import org.springframework.web.context.support.WebApplicationContextUtils;<% } %>
 
 import javax.inject.Inject;
 import javax.servlet.*;
@@ -52,10 +53,10 @@ public class WebConfigurer implements ServletContextInitializer {
     public void onStartup(ServletContext servletContext) throws ServletException {
         log.info("Web application configuration, using profiles: {}", env.getActiveProfiles());
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
-        
-<% if (clusteredHttpSession == 'hazelcast') { %>        initClusteredHttpSessionFilter(servletContext, disps);<% } %>
-        initMetrics(servletContext, disps);
-        initAtmosphereServlet(servletContext);
+<% if (clusteredHttpSession == 'hazelcast') { %>
+        initClusteredHttpSessionFilter(servletContext, disps);<% } %>
+        initMetrics(servletContext, disps);<% if (websocket == 'atmosphere') { %>
+        initAtmosphereServlet(servletContext);<% } %>
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
             initStaticResourcesProductionFilter(servletContext, disps);
             initCachingHttpHeadersFilter(servletContext, disps);
@@ -213,7 +214,7 @@ public class WebConfigurer implements ServletContextInitializer {
         healthCheckServlet.addMapping("/metrics/healthcheck/*");
         healthCheckServlet.setAsyncSupported(true);
         healthCheckServlet.setLoadOnStartup(2);
-    }
+    }<% if (websocket == 'atmosphere') { %>
 
     /**
      * Initializes Atmosphere.
@@ -254,5 +255,5 @@ public class WebConfigurer implements ServletContextInitializer {
         protected void analytics() {
             // noop
         }
-    }
+    }<% } %>
 }

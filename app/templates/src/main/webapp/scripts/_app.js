@@ -34,11 +34,11 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                         }]
                     }
                 })
-                .when('/tracker', {
+<% if (websocket == 'atmosphere') { %>                .when('/tracker', {
                     templateUrl: 'views/tracker.html',
                     controller: 'TrackerController'
                 })
-                .when('/metrics', {
+<% } %>                .when('/metrics', {
                     templateUrl: 'views/metrics.html',
                     controller: 'MetricsController',
                     resolve:{
@@ -117,7 +117,7 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                 $rootScope.authenticated = false;
                 $location.path('');
             });
-        }])
+        }])<% if (websocket == 'atmosphere') { %>
         .run(['$rootScope', '$route',
             function($rootScope, $route) {
                 // This uses the Atmoshpere framework to do a Websocket connection with the server, in order to send
@@ -169,4 +169,4 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                     $rootScope.websocketRequest.sendMessage();
                 });
             }
-        ]);
+        ])<% } %>;
