@@ -6,7 +6,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <changeSet id="1" author="jdubois">
+    <changeSet id="1" author="jhipster">
         <createTable tableName="T_USER">
             <column name="login" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
@@ -88,7 +88,7 @@
 
     <!-- Sample changeSet for creating a new Entity with the entity sub-generator -->
     <!-- 
-    <changeSet id="2" author="jdubois">
+    <changeSet id="2" author="jhipster">
         <createTable tableName="T_FOO">
             <column name="id" type="varchar(255)">
                 <constraints primaryKey="true" nullable="false"/>
