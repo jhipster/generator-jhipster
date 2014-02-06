@@ -1,6 +1,7 @@
 package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import <%=packageName%>.domain.Authority;
 import <%=packageName%>.domain.PersistentToken;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.PersistentTokenRepository;
@@ -19,7 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * REST controller for managing the current user's account.
@@ -59,12 +62,20 @@ public class AccountResource {
             produces = "application/json")
     @Timed
     public UserDTO getAccount(HttpServletResponse response) {
-        UserDTO user = userService.getCurrentUser();
+        User user = userService.getUserWithAuthorities();
         if (user == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return null;
         }
 
-        return user;
+        Map<String, Boolean> roles = new HashMap<>();
+
+        for (Authority authority : user.getAuthorities()) {
+            roles.put(authority.getName(), Boolean.TRUE);
+        }
+
+        return new UserDTO(user.getLogin(), user.getFirstName(), user.getLastName(),
+                user.getEmail(), roles);
     }
 
     /**

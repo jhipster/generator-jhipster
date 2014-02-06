@@ -83,6 +83,10 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                     return false;
                 }
 
+                if ($rootScope.account.roles === undefined) {
+                    return false;
+                }
+
                 if ($rootScope.account.roles[role] === undefined) {
                     return false;
                 }

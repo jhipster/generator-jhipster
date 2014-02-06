@@ -6,7 +6,6 @@ import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.PersistentTokenRepository;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.SecurityUtils;
-import <%=packageName%>.web.rest.dto.UserDTO;
 import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Service class for managing users.
@@ -55,21 +52,14 @@ public class UserService {
         log.debug("Changed password for User: {}", currentUser);
     }
 
-    public UserDTO getCurrentUser() {
+    public User getUserWithAuthorities() {
         User currentUser = userRepository.findOne(SecurityUtils.getCurrentLogin());
 
         if (currentUser == null) {
             return null;
         }
 
-        Map<String, Boolean> roles = new HashMap<String, Boolean>();
-
-        for (Authority authority : currentUser.getAuthorities()) {
-            roles.put(authority.getName(), Boolean.TRUE);
-        }
-
-        return new UserDTO(currentUser.getLogin(), currentUser.getFirstName(), currentUser.getLastName(),
-                currentUser.getEmail(), roles);
+        return currentUser;
     }
 
     /**

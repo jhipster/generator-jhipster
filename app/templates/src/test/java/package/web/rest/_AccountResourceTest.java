@@ -1,10 +1,11 @@
 package <%=packageName%>.web.rest;
 
 import <%=packageName%>.Application;
+import <%=packageName%>.domain.Authority;
+import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.UserService;
-import <%=packageName%>.web.rest.dto.UserDTO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +24,8 @@ import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import javax.inject.Inject;
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -85,10 +87,18 @@ public class AccountResourceTest {
 
     @Test
     public void testGetExistingAccount() throws Exception {
-        final HashMap<String, Boolean> roles = new HashMap<>();
-        roles.put(AuthoritiesConstants.ADMIN, true);
-        UserDTO userDTO = new UserDTO("test", "john", "doe", "john.doe@jhipter.com", roles);
-        when(userService.getCurrentUser()).thenReturn(userDTO);
+        Set<Authority> authorities = new HashSet<>();
+        Authority authority = new Authority();
+        authority.setName(AuthoritiesConstants.ADMIN);
+        authorities.add(authority);
+
+        User user = new User();
+        user.setLogin("test");
+        user.setFirstName("john");
+        user.setLastName("doe");
+        user.setEmail("john.doe@jhipter.com");
+        user.setAuthorities(authorities);
+        when(userService.getUserWithAuthorities()).thenReturn(user);
 
         restUserMockMvc.perform(get("/app/rest/account")
                 .accept(MediaType.APPLICATION_JSON))
@@ -103,7 +113,7 @@ public class AccountResourceTest {
 
     @Test
     public void testGetUnknownAccount() throws Exception {
-        when(userService.getCurrentUser()).thenReturn(null);
+        when(userService.getUserWithAuthorities()).thenReturn(null);
 
         restUserMockMvc.perform(get("/app/rest/account")
                 .accept(MediaType.APPLICATION_JSON))
