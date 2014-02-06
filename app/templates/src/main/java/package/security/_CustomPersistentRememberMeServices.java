@@ -75,7 +75,7 @@ public class CustomPersistentRememberMeServices extends
     @Inject
     public CustomPersistentRememberMeServices(Environment env,
                                               org.springframework.security.core.userdetails.UserDetailsService userDetailsService) {
-        
+    
         super(env.getProperty("jhipster.security.rememberme.key"), userDetailsService);
         random = new SecureRandom();
     }

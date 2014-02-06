@@ -19,13 +19,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-import org.springframework.util.ReflectionUtils;<% if (clusteredHttpSession == 'hazelcast') { %>
+import org.springframework.core.env.Environment;<% if (websocket == 'atmosphere') { %>
+import org.springframework.util.ReflectionUtils;<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
 import org.springframework.web.context.support.WebApplicationContextUtils;<% } %>
 
 import javax.inject.Inject;
-import javax.servlet.*;
-import java.lang.reflect.Field;
+import javax.servlet.*;<% if (websocket == 'atmosphere') { %>
+import java.lang.reflect.Field;<% } %>
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;

@@ -29,7 +29,7 @@
         "subtitle": "This is your homepage",
         "logged": {
             "message": "You are logged in as user \"{{username}}\".",
-            "authenticated": "If you want to <a href=\"#/login\">authenticate</a>, you can try the default <br/>ROLE_ADMIN - login=\"admin\" and password=\"admin\" <br/> ROLE_USER - login=\"user\" and password=\"user\"."
+            "authenticated": "If you want to <a href=\"#/login\">authenticate</a>, you can try the default accounts:<br/>- Admnistrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\")."
         },
         "question": "If you have any question on JHipster:",
         "link": {

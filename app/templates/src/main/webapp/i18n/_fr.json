@@ -32,7 +32,7 @@
         "subtitle": "Ceci est votre page d'accueil",
         "logged": {
             "message": "Vous êtes connecté en tant que \"{{username}}\".",
-            "authenticated": "Si vous voulez vous <a href=\"#/login\">connecter</a>, vous pouvez utiliser les identifiants par défaut : <br/> ROLE_ADMIN - nom d'utilisateur=\"admin\" et mot de passe =\"admin\" <br/> ROLE_USER - nom d'utilisateur=\"user\" et mot de passe =\"user\"."
+            "authenticated": "Si vous voulez vous <a href=\"#/login\">connecter</a>, vous pouvez utiliser les comptes par défaut : <br/> - Administrateur (nom d'utilisateur=\"admin\" et mot de passe =\"admin\") <br/> - Utilisateur (nom d'utilisateur=\"user\" et mot de passe =\"user\")."
         },
         "question": "Si vous avez des questions à propos de JHipster:",
         "link": {
@@ -45,13 +45,13 @@
         "github": "Github"
     },
     "login": {
-        "title": "S'authentifier",
+        "title": "Authentification",
         "form": {
             "username": "Nom d'utilisateur",
             "username.placeholder": "Votre nom d'utilisateur",
             "password": "Mot de passe",
             "password.placeholder": "Votre mot de passe",
-            "rememberme": "Garder ma connexion ouverte",
+            "rememberme": "Garder la session ouverte",
             "button": "Connexion"
         },
         "messages": {

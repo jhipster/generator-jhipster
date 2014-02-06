@@ -67,13 +67,10 @@ public class AccountResource {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return null;
         }
-
         Map<String, Boolean> roles = new HashMap<>();
-
         for (Authority authority : user.getAuthorities()) {
             roles.put(authority.getName(), Boolean.TRUE);
         }
-
         return new UserDTO(user.getLogin(), user.getFirstName(), user.getLastName(),
                 user.getEmail(), roles);
     }

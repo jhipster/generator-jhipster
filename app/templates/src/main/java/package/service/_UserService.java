@@ -1,6 +1,5 @@
 package <%=packageName%>.service;
 
-import <%=packageName%>.domain.Authority;
 import <%=packageName%>.domain.PersistentToken;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.PersistentTokenRepository;
@@ -52,13 +51,10 @@ public class UserService {
         log.debug("Changed password for User: {}", currentUser);
     }
 
+    @Transactional(readOnly = true)
     public User getUserWithAuthorities() {
         User currentUser = userRepository.findOne(SecurityUtils.getCurrentLogin());
-
-        if (currentUser == null) {
-            return null;
-        }
-
+        currentUser.getAuthorities();
         return currentUser;
     }
 

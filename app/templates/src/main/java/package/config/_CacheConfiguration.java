@@ -17,15 +17,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;<% if (hibernateCache == 'no') { %>
 import org.springframework.cache.support.NoOpCacheManager; <% } %><% if (hibernateCache == 'ehcache') { %>
 import org.springframework.cache.ehcache.EhCacheCacheManager;<% } %><% if (hibernateCache == 'hazelcast' || hibernateCache == 'ehcache' || clusteredHttpSession == 'hazelcast') { %>
-import org.springframework.core.env.Environment;<% } %><% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
+import org.springframework.core.env.Environment;<% } %>
+<% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
 import javax.annotation.PostConstruct;<% } %>
 import javax.inject.Inject;
-import javax.annotation.PreDestroy;
-import java.util.SortedSet;<% if (hibernateCache == 'ehcache') { %>
+import javax.annotation.PreDestroy;<% if (hibernateCache == 'ehcache') { %>
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.metamodel.EntityType;
 import java.util.Set;<% } %>
+import java.util.SortedSet;
 
 @Configuration
 @EnableCaching
@@ -35,7 +36,7 @@ public class CacheConfiguration {
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);<% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>  
 
     private static HazelcastInstance hazelcastInstance;<% } else if (hibernateCache == 'ehcache') { %>
-    
+
     @PersistenceContext
     private EntityManager entityManager;<% } %><% if (hibernateCache == 'ehcache' || hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
 
