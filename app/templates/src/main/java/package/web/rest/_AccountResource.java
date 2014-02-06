@@ -1,23 +1,28 @@
 package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import <%=packageName%>.domain.Authority;
 import <%=packageName%>.domain.PersistentToken;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.PersistentTokenRepository;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.UserService;
+import <%=packageName%>.web.rest.dto.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * REST controller for managing the current user's account.
@@ -56,12 +61,21 @@ public class AccountResource {
             method = RequestMethod.GET,
             produces = "application/json")
     @Timed
-    public User getAccount(HttpServletResponse response) {
-        User user = userRepository.findOne(SecurityUtils.getCurrentLogin());
+    public UserDTO getAccount(HttpServletResponse response) {
+        User user = userService.getUserWithAuthorities();
         if (user == null) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return null;
         }
-        return user;
+
+        Map<String, Boolean> roles = new HashMap<>();
+
+        for (Authority authority : user.getAuthorities()) {
+            roles.put(authority.getName(), Boolean.TRUE);
+        }
+
+        return new UserDTO(user.getLogin(), user.getFirstName(), user.getLastName(),
+                user.getEmail(), roles);
     }
 
     /**
@@ -97,6 +111,7 @@ public class AccountResource {
             method = RequestMethod.GET,
             produces = "application/json")
     @Timed
+    @RolesAllowed("hasAnyRole('ROLE_ADMIN')")
     public List<PersistentToken> getCurrentSessions(HttpServletResponse response) {
         User user = userRepository.findOne(SecurityUtils.getCurrentLogin());
         if (user == null) {
@@ -111,6 +126,7 @@ public class AccountResource {
     @RequestMapping(value = "/rest/account/sessions/{series}",
             method = RequestMethod.DELETE)
     @Timed
+    @RolesAllowed("hasAnyRole('ROLE_ADMIN')")
     public void invalidateSession(@PathVariable String series) throws UnsupportedEncodingException {
         String decodedSeries = URLDecoder.decode(series, "UTF-8");
         persistentTokenRepository.delete(decodedSeries);

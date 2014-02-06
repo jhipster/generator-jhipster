@@ -1,5 +1,6 @@
 package <%=packageName%>.service;
 
+import <%=packageName%>.domain.Authority;
 import <%=packageName%>.domain.PersistentToken;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.PersistentTokenRepository;
@@ -49,6 +50,16 @@ public class UserService {
         currentUser.setPassword(encryptedPassword);
         userRepository.save(currentUser);
         log.debug("Changed password for User: {}", currentUser);
+    }
+
+    public User getUserWithAuthorities() {
+        User currentUser = userRepository.findOne(SecurityUtils.getCurrentLogin());
+
+        if (currentUser == null) {
+            return null;
+        }
+
+        return currentUser;
     }
 
     /**

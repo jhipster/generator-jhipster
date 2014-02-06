@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -42,7 +43,7 @@ public class DatabaseConfiguration implements EnvironmentAware {
         if (propertyResolver.getProperty("url") == null && propertyResolver.getProperty("databaseName") == null) {
             log.error("Your database connection pool configuration is incorrect! The application" +
                     "cannot start. Please check your Spring profile, current profiles are: {}",
-                    env.getActiveProfiles());
+                    Arrays.toString(env.getActiveProfiles()));
 
             throw new ApplicationContextException("Database connection pool is not configured correctly");
         }
@@ -61,7 +62,7 @@ public class DatabaseConfiguration implements EnvironmentAware {
 
     @Bean(name = {"org.springframework.boot.autoconfigure.AutoConfigurationUtils.basePackages"})
     public List<String> getBasePackages() {
-        List<String> basePackages = new ArrayList<String>();
+        List<String> basePackages = new ArrayList<>();
         basePackages.add("<%=packageName%>.domain");
         return basePackages;
     }
