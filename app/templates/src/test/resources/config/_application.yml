@@ -42,6 +42,7 @@ spring:
     password:
     protocol: smtp
     tls: false
+    auth: false
 
 metrics:
     jmx.enabled: false
