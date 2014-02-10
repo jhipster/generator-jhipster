@@ -20,3 +20,4 @@ spring:
         password:
         protocol: smtp
         tls: false
+        auth: false
