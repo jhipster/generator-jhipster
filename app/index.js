@@ -216,6 +216,9 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/main/java/package/config/hazelcast/_package-info.java', javaDir + 'config/hazelcast/package-info.java');
     }
 
+    this.template('src/main/java/package/config/reload/_package-info.java', javaDir + 'config/reload/package-info.java');
+    this.template('src/main/java/package/config/reload/_JHipsterPluginManagerReloadPlugin.java', javaDir + 'config/reload/JHipsterPluginManagerReloadPlugin.java');
+
     this.template('src/main/java/package/domain/_package-info.java', javaDir + 'domain/package-info.java');
     this.template('src/main/java/package/domain/_Authority.java', javaDir + 'domain/Authority.java');
     this.template('src/main/java/package/domain/_PersistentToken.java', javaDir + 'domain/PersistentToken.java');
