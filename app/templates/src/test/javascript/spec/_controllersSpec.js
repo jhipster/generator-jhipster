@@ -58,4 +58,66 @@ describe('Controllers Tests ', function () {
             expect($scope.success).toBe('OK');
         });
     });
+
+    describe('SettingsController', function () {
+        var $scope, AccountService;
+
+        beforeEach(inject(function ($rootScope, $controller, Account) {
+            $scope = $rootScope.$new();
+
+            AccountService = Account;
+            $controller('SettingsController',{$scope:$scope, resolvedAccount:AccountService, Account:AccountService});
+        }));
+
+        it('should save account', function () {
+            //GIVEN
+            $scope.settingsAccount = {firstName: "John", lastName: "Doe"};
+
+            //SET SPY
+            spyOn(AccountService, 'save');
+
+            //WHEN
+            $scope.save();
+
+            //THEN
+            expect(AccountService.save).toHaveBeenCalled();
+            expect(AccountService.save.mostRecentCall.args[0]).toEqual({firstName: "John", lastName: "Doe"});
+
+            //SIMULATE SUCCESS CALLBACK CALL FROM SERVICE
+            AccountService.save.mostRecentCall.args[1]();
+            expect($scope.error).toBeNull();
+            expect($scope.success).toBe('OK');
+        });
+    });
+
+    describe('SessionsController', function () {
+        var $scope, SessionsService;
+
+        beforeEach(inject(function ($rootScope, $controller, Sessions) {
+            $scope = $rootScope.$new();
+
+            SessionsService = Sessions;
+            $controller('SessionsController',{$scope:$scope, resolvedSessions:SessionsService, Sessions:SessionsService});
+        }));
+
+        it('should invalidate session', function () {
+            //GIVEN
+            $scope.series = "123456789";
+
+            //SET SPY
+            spyOn(SessionsService, 'delete');
+
+            //WHEN
+            $scope.invalidate($scope.series);
+
+            //THEN
+            expect(SessionsService.delete).toHaveBeenCalled();
+            expect(SessionsService.delete.mostRecentCall.args[0]).toEqual({series: "123456789"});
+
+            //SIMULATE SUCCESS CALLBACK CALL FROM SERVICE
+            SessionsService.delete.mostRecentCall.args[1]();
+            expect($scope.error).toBeNull();
+            expect($scope.success).toBe('OK');
+        });
+    });
 });
