@@ -12,6 +12,7 @@
                 "tracker": "User tracker",
                 "metrics": "Metriken",
                 "logs": "Protokoll",
+                "audits": "Audits",
                 "login": "Anmelden",
                 "logout": "Abmelden"
             },
@@ -222,6 +223,31 @@
         "table": {
             "name": "Name",
             "level": "Stufe"
+        }
+    },
+    "audits": {
+        "title": "Audits",
+        "filter": {
+            "title": "Nach Datum filtern",
+            "from": "aus",
+            "to": "zu",
+            "button": {
+                "weeks": "Wochen",
+                "today": "heute",
+                "clear": "löschen",
+                "close": "abschließen"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Benutzer",
+                "date": "Datum",
+                "status": "Stand",
+                "data": "Extrainformationen"
+            },
+            "data": {
+                "remoteAddress": "Remote-Adresse:"
+            }
         }
     },
     "footer": "Dies ist Ihre Fußzeile"

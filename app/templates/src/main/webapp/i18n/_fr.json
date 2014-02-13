@@ -12,6 +12,7 @@
                 "tracker": "Suivi des utilisateurs",
                 "metrics": "Métriques",
                 "logs": "Logs",
+                "audits": "Audits",
                 "login": "S'authentifier",
                 "logout": "Déconnexion"
             },
@@ -224,6 +225,31 @@
         "table": {
             "name": "Nom",
             "level": "Niveau"
+        }
+    },
+    "audits": {
+        "title": "Audits",
+        "filter": {
+            "title": "Filtrer par date",
+            "from": "De",
+            "to": "à",
+            "button": {
+                "weeks": "Semaines",
+                "today": "Aujourd'hui",
+                "clear": "Effacer",
+                "close": "Fermer"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Utilisateur",
+                "date": "Date",
+                "status": "Status",
+                "data": "Autres données"
+            },
+            "data": {
+                "remoteAddress": "Adresse Distante :"
+            }
         }
     },
     "footer": "Ceci est votre pied de page"

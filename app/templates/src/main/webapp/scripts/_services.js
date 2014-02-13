@@ -51,6 +51,13 @@
         });
     }]);
 
+<%= angularAppName %>.factory('AuditsService', ['$resource',
+    function ($resource) {
+        return $resource('app/rest/audits', {}, {
+            'findAll': { method: 'GET', isArray: true}
+        });
+    }]);
+
 <%= angularAppName %>.factory('AuthenticationSharedService', ['$rootScope', '$http', 'authService',
     function ($rootScope, $http, authService) {
         return {

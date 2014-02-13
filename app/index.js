@@ -199,6 +199,7 @@ JhipsterGenerator.prototype.app = function app() {
 
     this.template('src/main/java/package/config/_package-info.java', javaDir + 'config/package-info.java');
     this.template('src/main/java/package/config/_AsyncConfiguration.java', javaDir + 'config/AsyncConfiguration.java');
+    this.template('src/main/java/package/config/_AuditEventConfiguration.java', javaDir + 'config/AuditEventConfiguration.java');
     this.template('src/main/java/package/config/_CacheConfiguration.java', javaDir + 'config/CacheConfiguration.java');
     this.template('src/main/java/package/config/_Constants.java', javaDir + 'config/Constants.java');
     this.template('src/main/java/package/config/_DatabaseConfiguration.java', javaDir + 'config/DatabaseConfiguration.java');
@@ -206,6 +207,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/_MetricsConfiguration.java', javaDir + 'config/MetricsConfiguration.java');
     this.template('src/main/java/package/config/_SecurityConfiguration.java', javaDir + 'config/SecurityConfiguration.java');
     this.template('src/main/java/package/config/_WebConfigurer.java', javaDir + 'config/WebConfigurer.java');
+
+    this.template('src/main/java/package/config/audit/_package-info.java', javaDir + 'config/audit/package-info.java');
+    this.template('src/main/java/package/config/audit/_AuditEventConverter.java', javaDir + 'config/audit/AuditEventConverter.java');
 
     this.template('src/main/java/package/config/metrics/_package-info.java', javaDir + 'config/metrics/package-info.java');
     this.template('src/main/java/package/config/metrics/_DatabaseHealthCheck.java', javaDir + 'config/metrics/DatabaseHealthCheck.java');
@@ -223,6 +227,7 @@ JhipsterGenerator.prototype.app = function app() {
 
     this.template('src/main/java/package/domain/_package-info.java', javaDir + 'domain/package-info.java');
     this.template('src/main/java/package/domain/_Authority.java', javaDir + 'domain/Authority.java');
+    this.template('src/main/java/package/domain/_PersistentAuditEvent.java', javaDir + 'domain/PersistentAuditEvent.java');
     this.template('src/main/java/package/domain/_PersistentToken.java', javaDir + 'domain/PersistentToken.java');
     this.template('src/main/java/package/domain/_User.java', javaDir + 'domain/User.java');
     this.template('src/main/java/package/domain/util/_CustomLocalDateSerializer.java', javaDir + 'domain/util/CustomLocalDateSerializer.java');
@@ -231,6 +236,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/repository/_AuthorityRepository.java', javaDir + 'repository/AuthorityRepository.java');
     this.template('src/main/java/package/repository/_UserRepository.java', javaDir + 'repository/UserRepository.java');
     this.template('src/main/java/package/repository/_PersistentTokenRepository.java', javaDir + 'repository/PersistentTokenRepository.java');
+    this.template('src/main/java/package/repository/_PersistenceAuditEventRepository.java', javaDir + 'repository/PersistenceAuditEventRepository.java');
 
     this.template('src/main/java/package/security/_package-info.java', javaDir + 'security/package-info.java');
     this.template('src/main/java/package/security/_AjaxAuthenticationFailureHandler.java', javaDir + 'security/AjaxAuthenticationFailureHandler.java');
@@ -243,6 +249,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java');
 
     this.template('src/main/java/package/service/_package-info.java', javaDir + 'service/package-info.java');
+    this.template('src/main/java/package/service/_AuditEventService.java', javaDir + 'service/AuditEventService.java');
     this.template('src/main/java/package/service/_UserService.java', javaDir + 'service/UserService.java');
     this.template('src/main/java/package/service/_MailService.java', javaDir + 'service/MailService.java');
 
@@ -261,6 +268,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/web/rest/dto/_UserDTO.java', javaDir + 'web/rest/dto/UserDTO.java');
     this.template('src/main/java/package/web/rest/_package-info.java', javaDir + 'web/rest/package-info.java');
     this.template('src/main/java/package/web/rest/_AccountResource.java', javaDir + 'web/rest/AccountResource.java');
+    this.template('src/main/java/package/web/rest/_AuditResource.java', javaDir + 'web/rest/AuditResource.java');
     this.template('src/main/java/package/web/rest/_LogsResource.java', javaDir + 'web/rest/LogsResource.java');
     this.template('src/main/java/package/web/rest/_UserResource.java', javaDir + 'web/rest/UserResource.java');
 
@@ -321,6 +329,7 @@ JhipsterGenerator.prototype.app = function app() {
 
     // Angular JS views
     this.angularAppName = _s.camelize(this.baseName) + 'App';
+    this.copy(webappDir + '/views/audits.html', webappDir + 'views/audits.html');
     this.copy(webappDir + '/views/main.html', webappDir + 'views/main.html');
     this.copy(webappDir + '/views/login.html', webappDir + 'views/login.html');
     this.copy(webappDir + '/views/logs.html', webappDir + 'views/logs.html');
@@ -366,6 +375,8 @@ JhipsterGenerator.prototype.app = function app() {
 
         'bower_components/jquery/jquery.js',
         'bower_components/angular/angular.js',
+        'bower_components/angular-bootstrap/ui-bootstrap.min.js',
+        'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
         'bower_components/angular-route/angular-route.js',
         'bower_components/angular-resource/angular-resource.js',
         'bower_components/angular-cookies/angular-cookies.js',
@@ -373,6 +384,7 @@ JhipsterGenerator.prototype.app = function app() {
         'bower_components/angular-translate/angular-translate.js',
         'bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
         'bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
+        'bower_components/angular-dynamic-locale/src/tmhDinamicLocale.js',
 
         'scripts/http-auth-interceptor.js',
 
