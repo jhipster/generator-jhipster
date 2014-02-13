@@ -218,6 +218,8 @@ JhipsterGenerator.prototype.app = function app() {
 
     this.template('src/main/java/package/config/reload/_package-info.java', javaDir + 'config/reload/package-info.java');
     this.template('src/main/java/package/config/reload/_JHipsterPluginManagerReloadPlugin.java', javaDir + 'config/reload/JHipsterPluginManagerReloadPlugin.java');
+    this.template('src/main/java/package/config/reload/_SpringReloader.java', javaDir + 'config/reload/SpringReloader.java');
+    this.template('src/main/java/package/config/reload/_JacksonReloader.java', javaDir + 'config/reload/JacksonReloader.java');
 
     this.template('src/main/java/package/domain/_package-info.java', javaDir + 'domain/package-info.java');
     this.template('src/main/java/package/domain/_Authority.java', javaDir + 'domain/Authority.java');
