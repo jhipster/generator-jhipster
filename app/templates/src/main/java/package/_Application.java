@@ -17,7 +17,6 @@ import org.springsource.loaded.agent.SpringLoadedAgent;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.io.IOException;
-import java.util.Arrays;
 
 @ComponentScan
 @EnableAutoConfiguration(exclude = {MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class})
@@ -59,10 +58,9 @@ public class Application {
         addLiquibaseScanPackages();
 
         ConfigurableApplicationContext applicationContext = app.run(args);
-
         try {
             SpringLoadedAgent.getInstrumentation();
-            log.info("Spring Loaded is running, registering Spring beans hot reloading");
+            log.info("Spring Loaded is running, registering hot reloading features");
             JHipsterPluginManagerReloadPlugin.register(applicationContext);
         } catch (UnsupportedOperationException uoe) {
             log.info("Spring Loaded is not running, hot reloading is not enabled");
@@ -74,7 +72,7 @@ public class Application {
      */
     private static void addDefaultProfile(SpringApplication app, SimpleCommandLinePropertySource source) {
         if (!source.containsProperty("spring.profiles.active")) {
-            app.setAdditionalProfiles(Arrays.asList(Constants.SPRING_PROFILE_DEVELOPMENT));
+            app.setAdditionalProfiles(Constants.SPRING_PROFILE_DEVELOPMENT);
         }
     }
 
