@@ -18,10 +18,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;<% if (websocket == 'atmosphere') { %>
 import org.springframework.util.ReflectionUtils;<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
 import org.springframework.web.context.support.WebApplicationContextUtils;<% } %>
+import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.view.JstlView;
 
 import javax.inject.Inject;
 import javax.servlet.*;<% if (websocket == 'atmosphere') { %>
@@ -49,6 +52,11 @@ public class WebConfigurer implements ServletContextInitializer {
 
     @Inject
     private HealthCheckRegistry healthCheckRegistry;
+
+    @Bean(name = "error")
+    public View defaultErrorView() {
+        return new JstlView("/500.html");
+    }
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
