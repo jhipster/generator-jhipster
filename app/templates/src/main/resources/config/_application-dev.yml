@@ -30,6 +30,10 @@ spring:
             hibernate.cache.use_minimal_puts: true
             hibernate.cache.hazelcast.use_lite_member: true<% } %>
 
+    thymeleaf:
+        mode: XHTML
+        cache: false
+
 metrics:
     jmx.enabled: true
 
