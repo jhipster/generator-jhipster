@@ -29,6 +29,11 @@ spring:
             <% if (hibernateCache == 'hazelcast') { %>hibernate.cache.use_minimal_puts: true
             hibernate.cache.hazelcast.use_lite_member: true<% } %>
 
+    thymeleaf:
+        mode: XHTML
+        cache: true
+
+
 metrics:
     jmx.enabled: true
     graphite:

@@ -180,6 +180,14 @@ JhipsterGenerator.prototype.app = function app() {
         this.template(resourceDir + '_ehcache.xml', resourceDir + 'ehcache.xml');
     }
 
+    // i18n resources used by thymeleaf
+    this.copy(resourceDir + '/i18n/messages_en.properties', resourceDir + 'i18n/messages_en.properties');
+    this.copy(resourceDir + '/i18n/messages_fr.properties', resourceDir + 'i18n/messages_fr.properties');
+    this.copy(resourceDir + '/i18n/messages_de.properties', resourceDir + 'i18n/messages_de.properties');
+
+    // Thymeleaf templates
+    this.copy(resourceDir + '/templates/error.html', resourceDir + 'templates/error.html');
+
     this.template(resourceDir + '_logback.xml', resourceDir + 'logback.xml');
 
     this.template(resourceDir + '/config/_application.yml', resourceDir + 'config/application.yml');
@@ -203,13 +211,18 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/_CacheConfiguration.java', javaDir + 'config/CacheConfiguration.java');
     this.template('src/main/java/package/config/_Constants.java', javaDir + 'config/Constants.java');
     this.template('src/main/java/package/config/_DatabaseConfiguration.java', javaDir + 'config/DatabaseConfiguration.java');
+    this.template('src/main/java/package/config/_LocaleConfiguration.java', javaDir + 'config/LocaleConfiguration.java');
     this.template('src/main/java/package/config/_MailConfiguration.java', javaDir + 'config/MailConfiguration.java');
     this.template('src/main/java/package/config/_MetricsConfiguration.java', javaDir + 'config/MetricsConfiguration.java');
     this.template('src/main/java/package/config/_SecurityConfiguration.java', javaDir + 'config/SecurityConfiguration.java');
+    this.template('src/main/java/package/config/_ThymeleafConfiguration.java', javaDir + 'config/ThymeleafConfiguration.java');
     this.template('src/main/java/package/config/_WebConfigurer.java', javaDir + 'config/WebConfigurer.java');
 
     this.template('src/main/java/package/config/audit/_package-info.java', javaDir + 'config/audit/package-info.java');
     this.template('src/main/java/package/config/audit/_AuditEventConverter.java', javaDir + 'config/audit/AuditEventConverter.java');
+
+    this.template('src/main/java/package/config/locale/_package-info.java', javaDir + 'config/locale/package-info.java');
+    this.template('src/main/java/package/config/locale/_AngularCookieLocaleResolver.java', javaDir + 'config/locale/AngularCookieLocaleResolver.java');
 
     this.template('src/main/java/package/config/metrics/_package-info.java', javaDir + 'config/metrics/package-info.java');
     this.template('src/main/java/package/config/metrics/_DatabaseHealthCheck.java', javaDir + 'config/metrics/DatabaseHealthCheck.java');
@@ -317,8 +330,6 @@ JhipsterGenerator.prototype.app = function app() {
 
     // HTML5 BoilerPlate
     this.copy(webappDir + 'favicon.ico', webappDir + 'favicon.ico');
-    this.copy(webappDir + '404.html', webappDir + '404.html');
-    this.copy(webappDir + '500.html', webappDir + '500.html');
     this.copy(webappDir + 'robots.txt', webappDir + 'robots.txt');
     this.copy(webappDir + 'htaccess.txt', webappDir + '.htaccess');
 
