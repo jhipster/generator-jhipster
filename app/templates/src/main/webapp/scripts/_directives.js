@@ -8,7 +8,7 @@ angular.module('<%= angularAppName %>')
                 var language = attrs.activeMenu;
 
                 scope.$watch(function() {
-                    return $translate.uses();
+                    return $translate.use();
                 }, function(selectedLanguage) {
                     if (language === selectedLanguage) {
                         element.addClass('active');
