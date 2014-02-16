@@ -60,11 +60,6 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                 .when('/audits', {
                     templateUrl: 'views/audits.html',
                     controller: 'AuditsController',
-                    resolve:{
-                        resolvedAudits:['AuditsService', function (AuditsService) {
-                            return AuditsService.findAll();
-                        }]
-                    }
                 })
                 .when('/logout', {
                     templateUrl: 'views/main.html',

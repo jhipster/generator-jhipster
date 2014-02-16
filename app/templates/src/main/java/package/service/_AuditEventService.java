@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,42 +28,15 @@ public class AuditEventService {
     @Inject
     private AuditEventConverter auditEventConverter;
 
-    public List<AuditEvent> find(String principal, Date after) {
-        List<AuditEvent> auditEvents = new ArrayList<>();
-
-        final List<PersistentAuditEvent> persistentAuditEvents;
-        if (principal == null && after == null) {
-            persistentAuditEvents = persistenceAuditEventRepository.findAll();
-        } else if (after == null) {
-            persistentAuditEvents = persistenceAuditEventRepository.findByPrincipal(principal);
-        } else {
-            persistentAuditEvents = persistenceAuditEventRepository.findByPrincipalAndAuditEventDateGreaterThan(principal, new LocalDateTime(after));
-        }
-
-        if (persistentAuditEvents != null) {
-            for (PersistentAuditEvent persistentAuditEvent : persistentAuditEvents) {
-                AuditEvent auditEvent = new AuditEvent(persistentAuditEvent.getAuditEventDate().toDate(), persistentAuditEvent.getPrincipal(),
-                        persistentAuditEvent.getAuditEventType(), auditEventConverter.convertDataToObjects(persistentAuditEvent.getData()));
-                auditEvents.add(auditEvent);
-            }
-        }
-
-        return auditEvents;
+    public List<AuditEvent> findAll() {
+        return auditEventConverter.convertToAuditEvent(persistenceAuditEventRepository.findAll());
     }
 
-    public List<AuditEvent> findBetweenDate(Date fromDate, Date toDate) {
-        List<AuditEvent> auditEvents = new ArrayList<>();
-
+    public List<AuditEvent> findBetweenDates(LocalDateTime fromDate, LocalDateTime toDate) {
         final List<PersistentAuditEvent> persistentAuditEvents =
-                persistenceAuditEventRepository.findByAuditEventDateBetween(new LocalDateTime(fromDate), new LocalDateTime(toDate));
-        if (persistentAuditEvents != null) {
-            for (PersistentAuditEvent persistentAuditEvent : persistentAuditEvents) {
-                AuditEvent auditEvent = new AuditEvent(persistentAuditEvent.getAuditEventDate().toDate(), persistentAuditEvent.getPrincipal(),
-                        persistentAuditEvent.getAuditEventType(), auditEventConverter.convertDataToObjects(persistentAuditEvent.getData()));
-                auditEvents.add(auditEvent);
-            }
-        }
+                persistenceAuditEventRepository.findByAuditEventDateBetween(fromDate, toDate);
 
-        return auditEvents;
+        return auditEventConverter.convertToAuditEvent(persistentAuditEvents);
     }
+
 }

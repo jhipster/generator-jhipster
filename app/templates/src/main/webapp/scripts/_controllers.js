@@ -194,14 +194,17 @@
         }
     }]);
 
-<%= angularAppName %>.controller('AuditsController', ['$scope', '$translate', 'resolvedAudits', '$templateCache', 'AuditsService',
-    function ($scope, $translate, resolvedAudits, $templateCache, AuditsService) {
-        $scope.audits = resolvedAudits;
+<%= angularAppName %>.controller('AuditsController', ['$scope', '$translate', '$templateCache', 'AuditsService',
+    function ($scope, $translate, $templateCache, AuditsService) {
+        AuditsService.findAll().then(function(data) {
+            $scope.audits = data;
+        });
 
         //
         $scope.onChangeDate = function() {
-            $scope.audits = AuditsService.findAll({fromDate: $scope.fromDate.toLocaleDateString(),
-                toDate: $scope.toDate.toLocaleDateString()});
+            AuditsService.findByDates($scope.fromDate.toLocaleDateString(), $scope.toDate.toLocaleDateString()).then(function(data){
+                $scope.audits = data;
+            });
         };
 
         // Date picker configuration

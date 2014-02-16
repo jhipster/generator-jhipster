@@ -1,14 +1,15 @@
 package <%=packageName%>.web.rest;
 
+import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.AuditEventService;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
+import <%=packageName%>.web.propertyeditors.LocaleDateTimeEditor;
+import org.joda.time.LocalDateTime;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,27 +24,23 @@ public class AuditResource {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+        binder.registerCustomEditor(LocalDateTime.class, new LocaleDateTimeEditor("MM/dd/yyyy", false));
     }
 
-    @RequestMapping(value = "/rest/audits",
+    @RequestMapping(value = "/rest/audits/all",
             method = RequestMethod.GET,
             produces = "application/json")
-    public List<AuditEvent> getList(@RequestParam(value = "fromDate", required = false) Date fromDate,
-                                    @RequestParam(value = "toDate", required = false) Date toDate) {
-        if (fromDate == null && toDate == null) {
-            return auditEventService.find(null, null);
-        }
-
-        return auditEventService.findBetweenDate(fromDate, toDate);
+    @RolesAllowed(AuthoritiesConstants.ADMIN)
+    public List<AuditEvent> findAll() {
+        return auditEventService.findAll();
     }
 
-    @RequestMapping(value = "/rest/audits/{principal}",
+    @RequestMapping(value = "/rest/audits/byDates",
             method = RequestMethod.GET,
             produces = "application/json")
-    public List<AuditEvent> getList(@PathVariable String principal,
-                                    @RequestParam(value = "after", required = false) Date after) {
-        return auditEventService.find(principal, after);
+    @RolesAllowed(AuthoritiesConstants.ADMIN)
+    public List<AuditEvent> findByDates(@RequestParam(value = "fromDate") LocalDateTime fromDate,
+                                    @RequestParam(value = "toDate") LocalDateTime toDate) {
+        return auditEventService.findBetweenDates(fromDate, toDate);
     }
 }

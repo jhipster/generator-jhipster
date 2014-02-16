@@ -21,3 +21,7 @@ spring:
         protocol: smtp
         tls: false
         auth: false
+
+    messageSource:
+        cacheSeconds: 1
+

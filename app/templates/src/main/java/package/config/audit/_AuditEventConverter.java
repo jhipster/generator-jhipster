@@ -1,11 +1,35 @@
 package <%=packageName%>.config.audit;
 
+import <%=packageName%>.domain.PersistentAuditEvent;
+import org.springframework.boot.actuate.audit.AuditEvent;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
+@Configuration
 public class AuditEventConverter {
+
+    /**
+     * Convert a list of PersistentAuditEvent to a list of AuditEvent
+     * @param persistentAuditEvents the list to convert
+     * @return the converted list.
+     */
+    public List<AuditEvent> convertToAuditEvent(List<PersistentAuditEvent> persistentAuditEvents) {
+        if (persistentAuditEvents == null) {
+            return Collections.emptyList();
+        }
+
+        List<AuditEvent> auditEvents = new ArrayList<>();
+
+        for (PersistentAuditEvent persistentAuditEvent : persistentAuditEvents) {
+            AuditEvent auditEvent = new AuditEvent(persistentAuditEvent.getAuditEventDate().toDate(), persistentAuditEvent.getPrincipal(),
+                    persistentAuditEvent.getAuditEventType(), convertDataToObjects(persistentAuditEvent.getData()));
+            auditEvents.add(auditEvent);
+        }
+
+        return auditEvents;
+    }
 
     /**
      * Internal conversion. This is needed to support the current SpringBoot actuator AuditEventRepository interface
