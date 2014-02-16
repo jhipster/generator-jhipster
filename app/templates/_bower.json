@@ -6,7 +6,7 @@
     "jquery-atmosphere": "~2.1.2",
     "sass-bootstrap": "~3.0.0",
     "modernizr": "~2.7.0",
-    "jquery": "~2.1.0",
+    "jquery": "2.0.3",
     "angular": "~1.2.12",
     "json3": "~3.3.0",
     "angular-route": "~1.2.12",
