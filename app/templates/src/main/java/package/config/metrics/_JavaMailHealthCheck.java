@@ -28,7 +28,9 @@ public class JavaMailHealthCheck extends HealthCheck {
     @Override
     public Result check() {
         try {
-            javaMailSender.getSession().getTransport().connect();
+            javaMailSender.getSession().getTransport().connect(javaMailSender.getHost(),
+        			javaMailSender.getUsername(),
+        			javaMailSender.getPassword());
             return Result.healthy();
         } catch (Exception e) {
             log.debug("Cannot connect to e-mail server: {}", e);
