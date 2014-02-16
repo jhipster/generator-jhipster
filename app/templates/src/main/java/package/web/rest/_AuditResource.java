@@ -24,7 +24,7 @@ public class AuditResource {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(LocalDateTime.class, new LocaleDateTimeEditor("MM/dd/yyyy", false));
+        binder.registerCustomEditor(LocalDateTime.class, new LocaleDateTimeEditor("MM/dd/yyyy hh:mm:ss a", false));
     }
 
     @RequestMapping(value = "/rest/audits/all",
