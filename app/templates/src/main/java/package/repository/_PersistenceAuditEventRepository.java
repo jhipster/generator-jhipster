@@ -15,5 +15,6 @@ public interface PersistenceAuditEventRepository extends JpaRepository<Persisten
 
     List<PersistentAuditEvent> findByPrincipalAndAuditEventDateGreaterThan(String principal, LocalDateTime after);
 
-    List<PersistentAuditEvent> findByAuditEventDateBetween(LocalDateTime fromDate, LocalDateTime toDate);
+    @Query("select p from PersistentAuditEvent p where p.auditEventDate >= ?1 and p.auditEventDate <= ?2")
+    List<PersistentAuditEvent> findByDates(LocalDateTime fromDate, LocalDateTime toDate);
 }
