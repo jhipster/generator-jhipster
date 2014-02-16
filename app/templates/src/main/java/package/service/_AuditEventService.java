@@ -34,7 +34,7 @@ public class AuditEventService {
 
     public List<AuditEvent> findBetweenDates(LocalDateTime fromDate, LocalDateTime toDate) {
         final List<PersistentAuditEvent> persistentAuditEvents =
-                persistenceAuditEventRepository.findByAuditEventDateBetween(fromDate, toDate);
+                persistenceAuditEventRepository.findByDates(fromDate, toDate);
 
         return auditEventConverter.convertToAuditEvent(persistentAuditEvents);
     }
