@@ -196,13 +196,8 @@
 
 <%= angularAppName %>.controller('AuditsController', ['$scope', '$translate', '$templateCache', 'AuditsService',
     function ($scope, $translate, $templateCache, AuditsService) {
-        AuditsService.findAll().then(function(data) {
-            $scope.audits = data;
-        });
-
-        //
         $scope.onChangeDate = function() {
-            AuditsService.findByDates($scope.fromDate.toLocaleDateString(), $scope.toDate.toLocaleDateString()).then(function(data){
+            AuditsService.findByDates($scope.fromDate.toLocaleString(), $scope.toDate.toLocaleString()).then(function(data){
                 $scope.audits = data;
             });
         };
@@ -223,6 +218,11 @@
 
         $scope.today();
         $scope.previousMonth();
+        
+        AuditsService.findByDates($scope.fromDate.toLocaleString(), $scope.toDate.toLocaleString()).then(function(data){
+            $scope.audits = data;
+        });
+
 
         $scope.showWeeks = false;
 
