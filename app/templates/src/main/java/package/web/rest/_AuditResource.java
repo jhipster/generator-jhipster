@@ -41,6 +41,6 @@ public class AuditResource {
     @RolesAllowed(AuthoritiesConstants.ADMIN)
     public List<AuditEvent> findByDates(@RequestParam(value = "fromDate") LocalDateTime fromDate,
                                     @RequestParam(value = "toDate") LocalDateTime toDate) {
-        return auditEventService.findBetweenDates(fromDate, toDate);
+        return auditEventService.findByDates(fromDate, toDate);
     }
 }
