@@ -16,6 +16,11 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                 .when('/settings', {
                     templateUrl: 'views/settings.html',
                     controller: 'SettingsController',
+                    resolve:{
+                        resolvedAccount:['Account', function (Account) {
+                            return Account.get();
+                        }]
+                    }
                 })
                 .when('/password', {
                     templateUrl: 'views/password.html',
@@ -54,7 +59,7 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                 })
                 .when('/audits', {
                     templateUrl: 'views/audits.html',
-                    controller: 'AuditsController',
+                    controller: 'AuditsController'
                 })
                 .when('/logout', {
                     templateUrl: 'views/main.html',
