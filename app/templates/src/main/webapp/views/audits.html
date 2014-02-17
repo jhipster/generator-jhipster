@@ -6,21 +6,9 @@
             <h4 translate="audits.filter.title">Filter by date</h4>
             <p class="input-group">
                 <span class="input-group-addon" translate="audits.filter.from">from</span>
-                <input type="text" class="input-sm form-control" name="start"
-                       datepicker-popup="{{format}}"
-                       ng-model="fromDate" is-open="fromOpened" min-date="minDate" show-weeks="false"
-                       datepicker-options="dateOptions" close-text="{{'audits.filter.button.close' | translate}}"
-                       current-text="{{'audits.filter.button.today' | translate}}" clear-text="{{'audits.filter.button.clear' | translate}}"
-                       ng-change="onChangeDate()"
-                        />
+                <input type="date" class="input-sm form-control" name="start" ng-model="fromDate" ng-change="onChangeDate()" required/>
                 <span class="input-group-addon" translate="audits.filter.to">to</span>
-                <input type="text" class="input-sm form-control" name="end"
-                       datepicker-popup="{{format}}"
-                       ng-model="toDate" is-open="toOpened" min-date="minDate" show-weeks="false"
-                       datepicker-options="dateOptions" close-text="{{'audits.filter.button.close' | translate}}"
-                       current-text="{{'audits.filter.button.today' | translate}}" clear-text="{{'audits.filter.button.clear' | translate}}"
-                       ng-change="onChangeDate()"
-                        />
+                <input type="date" class="input-sm form-control" name="end" ng-model="toDate" ng-change="onChangeDate()" required/>
             </p>
         </div>
     </div>
