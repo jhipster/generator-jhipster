@@ -39,7 +39,7 @@ public class AngularCookieLocaleResolver extends CookieLocaleResolver {
             public TimeZone getTimeZone() {
                 return (TimeZone) request.getAttribute(TIME_ZONE_REQUEST_ATTRIBUTE_NAME);
             }
-        }
+        };
     }
 
     @Override

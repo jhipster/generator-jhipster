@@ -53,6 +53,6 @@ public class CustomAuditEventRepository {
 
                 persistenceAuditEventRepository.save(persistentAuditEvent);
             }
-        }
+        };
     }
 }
