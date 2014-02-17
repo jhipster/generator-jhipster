@@ -12,6 +12,9 @@ import javax.inject.Inject;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Wraps an implementation of Spring Boot's AuditEventRepository.
+ */
 @Repository
 public class CustomAuditEventRepository {
 
