@@ -2,30 +2,25 @@
   "name": "<%= _.camelize(baseName) %>",
   "version": "0.0.0",
   "dependencies": {
-    "atmosphere": "~2.1.2",
-    "jquery-atmosphere": "~2.1.2",
-    "sass-bootstrap": "~3.0.0",
-    "modernizr": "~2.7.0",
+    "atmosphere": "2.1.2",
+    "jquery-atmosphere": "2.1.2",
+    "sass-bootstrap": "3.0.2",
+    "modernizr": "2.7.1",
     "jquery": "2.0.3",
-    "angular": "~1.2.12",
-    "json3": "~3.3.0",
-    "angular-route": "~1.2.12",
-    "angular-resource": "~1.2.12",
-    "angular-cookies": "~1.2.12",
-    "angular-sanitize": "~1.2.12",
-    "angular-translate": "~2.0.0",
-    "angular-translate-storage-cookie": "~0.1.6",
-    "angular-translate-loader-static-files": "~0.1.6",
-    "angular-i18n": "~1.2.12",
-    "angular-dynamic-locale": "~0.1.1",
-    "angular-bootstrap": "~0.10.0"
+    "angular": "1.2.13",
+    "json3": "3.3.0",
+    "angular-route": "1.2.13",
+    "angular-resource": "1.2.13",
+    "angular-cookies": "1.2.13",
+    "angular-sanitize": "1.2.13",
+    "angular-translate": "2.0.0",
+    "angular-translate-storage-cookie": "2.0.0",
+    "angular-translate-loader-static-files": "2.0.0",
+    "angular-dynamic-locale": "0.1.1",
+    "angular-i18n": "1.2.5"
   },
   "devDependencies": {
-    "angular-mocks": "~1.2.12",
-    "angular-scenario": "~1.2.12"
-  },
-  "resolutions": {
-    "angular": "~1.2.12",
-    "angular-cookies": "~1.2.12"
+    "angular-mocks": "1.2.13",
+    "angular-scenario": "1.2.13"
   }
 }
