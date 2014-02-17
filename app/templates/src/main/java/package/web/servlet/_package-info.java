@@ -1,4 +1,4 @@
 /**
- * Servlet .
+ * Servlets.
  */
 package <%=packageName%>.web.servlet;
