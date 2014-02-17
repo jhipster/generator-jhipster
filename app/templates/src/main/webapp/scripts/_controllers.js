@@ -193,3 +193,58 @@
             });
         }
     }]);
+
+<%= angularAppName %>.controller('AuditsController', ['$scope', '$translate', '$templateCache', 'AuditsService',
+    function ($scope, $translate, $templateCache, AuditsService) {
+        $scope.onChangeDate = function() {
+            AuditsService.findByDates($scope.fromDate.toLocaleString(), $scope.toDate.toLocaleString()).then(function(data){
+                $scope.audits = data;
+            });
+        };
+
+        // Date picker configuration
+        $scope.today = function() {
+            $scope.toDate = new Date();
+        };
+
+        $scope.previousMonth = function() {
+            $scope.fromDate = new Date();
+            if ($scope.fromDate.getMonth() == 0) {
+                $scope.fromDate = new Date($scope.fromDate.getFullYear() - 1, 0, $scope.fromDate.getDate());
+            } else {
+                $scope.fromDate = new Date($scope.fromDate.getFullYear(), $scope.fromDate.getMonth() - 1, $scope.fromDate.getDate());
+            }
+        };
+
+        $scope.today();
+        $scope.previousMonth();
+        
+        AuditsService.findByDates($scope.fromDate.toLocaleString(), $scope.toDate.toLocaleString()).then(function(data){
+            $scope.audits = data;
+        });
+
+
+        $scope.showWeeks = false;
+
+        $scope.dateOptions = {
+            formatYear: 'yy',
+            startingDay: 1
+        };
+
+        $scope.format = 'longDate';
+
+        // Overwrite the template to remove unused buttons
+        $templateCache.put("template/datepicker/popup.html",
+            "<ul class=\"dropdown-menu\" ng-style=\"{display: (isOpen && 'block') || 'none', top: position.top+'px', left: position.left+'px'}\">\n" +
+                "	<li ng-transclude></li>\n" +
+                "	<li ng-show=\"showButtonBar\" style=\"padding:10px 9px 2px\">\n" +
+                "		<span class=\"btn-group\">\n" +
+                "			<button type=\"button\" class=\"btn btn-sm btn-info\" ng-click=\"today()\">{{currentText}}</button>\n" +
+                "			<button type=\"button\" class=\"btn btn-sm btn-danger\" ng-click=\"clear()\">{{clearText}}</button>\n" +
+                "		</span>\n" +
+                "		<button type=\"button\" class=\"btn btn-sm btn-success pull-right\" ng-click=\"isOpen = false\">{{closeText}}</button>\n" +
+                "	</li>\n" +
+                "</ul>\n" +
+                "");
+    }]);
+

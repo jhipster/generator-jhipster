@@ -15,7 +15,10 @@
     "angular-sanitize": "~1.2.12",
     "angular-translate": "~2.0.0",
     "angular-translate-storage-cookie": "~0.1.6",
-    "angular-translate-loader-static-files": "~0.1.6"
+    "angular-translate-loader-static-files": "~0.1.6",
+    "angular-i18n": "~1.2.12",
+    "angular-dynamic-locale": "~0.1.1",
+    "angular-bootstrap": "~0.10.0"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.12",

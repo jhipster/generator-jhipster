@@ -2,11 +2,12 @@
 
 /* App Module */
 
-var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-interceptor', 'ngResource', 'ngRoute', 'ngCookies', 'pascalprecht.translate']);
+var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-interceptor', 'tmh.dynamicLocale', 'ui.bootstrap',
+    'ngResource', 'ngRoute', 'ngCookies', 'pascalprecht.translate']);
 
 <%= angularAppName %>
-    .config(['$routeProvider', '$httpProvider', '$translateProvider',
-        function ($routeProvider, $httpProvider, $translateProvider) {
+    .config(['$routeProvider', '$httpProvider', '$translateProvider',  'tmhDynamicLocaleProvider',
+        function ($routeProvider, $httpProvider, $translateProvider, tmhDynamicLocaleProvider) {
             $routeProvider
                 .when('/login', {
                     templateUrl: 'views/login.html',
@@ -56,6 +57,10 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                         }]
                     }
                 })
+                .when('/audits', {
+                    templateUrl: 'views/audits.html',
+                    controller: 'AuditsController',
+                })
                 .when('/logout', {
                     templateUrl: 'views/main.html',
                     controller: 'LogoutController'
@@ -73,8 +78,10 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
 
             $translateProvider.preferredLanguage('en');
 
-            // remember language
             $translateProvider.useCookieStorage();
+
+            tmhDynamicLocaleProvider.localeLocationPattern('bower_components/angular-i18n/angular-locale_{{locale}}.js')
+            tmhDynamicLocaleProvider.useCookieStorage('NG_TRANSLATE_LANG_KEY');
         }])
         .run(['$rootScope', '$location', 'AuthenticationSharedService', 'Account',
             function($rootScope, $location, AuthenticationSharedService, Account) {

@@ -53,11 +53,6 @@ public class WebConfigurer implements ServletContextInitializer {
     @Inject
     private HealthCheckRegistry healthCheckRegistry;
 
-    @Bean(name = "error")
-    public View defaultErrorView() {
-        return new JstlView("/500.html");
-    }
-
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         log.info("Web application configuration, using profiles: {}", Arrays.toString(env.getActiveProfiles()));
