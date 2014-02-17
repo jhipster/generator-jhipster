@@ -34,11 +34,11 @@ public class UserService {
     @Inject
     private PersistentTokenRepository persistentTokenRepository;
 
-    public void updateUserInformation(User user) {
+    public void updateUserInformation(String firstName, String lastName, String email) {
         User currentUser = userRepository.findOne(SecurityUtils.getCurrentLogin());
-        currentUser.setFirstName(user.getFirstName());
-        currentUser.setLastName(user.getLastName());
-        currentUser.setEmail(user.getEmail());
+        currentUser.setFirstName(firstName);
+        currentUser.setLastName(lastName);
+        currentUser.setEmail(email);
         userRepository.save(currentUser);
         log.debug("Changed Information for User: {}", currentUser);
     }

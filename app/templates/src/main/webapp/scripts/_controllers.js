@@ -45,11 +45,11 @@
         });
     }]);
 
-<%= angularAppName %>.controller('SettingsController', ['$scope', 'resolvedAccount', 'Account',
-    function ($scope, resolvedAccount, Account) {
+<%= angularAppName %>.controller('SettingsController', ['$scope', 'Account',
+    function ($scope, Account) {
         $scope.success = null;
         $scope.error = null;
-        $scope.settingsAccount = resolvedAccount;
+        $scope.settingsAccount = Account.get();
 
         $scope.save = function () {
             Account.save($scope.settingsAccount,

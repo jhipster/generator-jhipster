@@ -15,12 +15,7 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                 })
                 .when('/settings', {
                     templateUrl: 'views/settings.html',
-                    controller: 'SettingsController',
-                    resolve:{
-                        resolvedAccount:['Account', function (Account) {
-                            return Account.get();
-                        }]
-                    }
+                    controller: 'SettingsController'
                 })
                 .when('/password', {
                     templateUrl: 'views/password.html',
