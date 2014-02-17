@@ -1,4 +1,4 @@
 /**
- * Property Editors
+ * Property Editors.
  */
 package <%=packageName%>.web.propertyeditors;

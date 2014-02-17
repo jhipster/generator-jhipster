@@ -12,7 +12,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 /**
- * Service for managing audit event.
+ * Service for managing audit events.
  * <p/>
  * <p>
  * This is the default implementation to support SpringBoot Actuator AuditEventRepository
@@ -38,5 +38,4 @@ public class AuditEventService {
 
         return auditEventConverter.convertToAuditEvent(persistentAuditEvents);
     }
-
 }

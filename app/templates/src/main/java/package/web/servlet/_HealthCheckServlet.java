@@ -19,5 +19,4 @@ public class HealthCheckServlet extends com.codahale.metrics.servlets.HealthChec
         // or 500 Internal Service Error if one or more fail.
         resp.setStatus(HttpServletResponse.SC_OK);
     }
-
 }

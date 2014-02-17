@@ -10,13 +10,13 @@ import java.util.Date;
 
 /**
  * Custom PropertyEditorSupport to convert from String to
- * Date using JODA (http://www.joda.org/joda-time/).
+ * Date using JodaTime (http://www.joda.org/joda-time/).
  */
 public class LocaleDateTimeEditor extends PropertyEditorSupport {
 
     private final DateTimeFormatter formatter;
-    private final boolean allowEmpty;
 
+    private final boolean allowEmpty;
 
     /**
      * Create a new LocaleDateTimeEditor instance, using the given format for

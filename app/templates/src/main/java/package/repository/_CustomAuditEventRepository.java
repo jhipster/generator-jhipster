@@ -40,7 +40,6 @@ public class CustomAuditEventRepository {
                 return auditEventConverter.convertToAuditEvent(persistentAuditEvents);
             }
 
-
             @Override
             public void add(AuditEvent event) {
                 PersistentAuditEvent persistentAuditEvent = new PersistentAuditEvent();
@@ -51,6 +50,6 @@ public class CustomAuditEventRepository {
 
                 persistenceAuditEventRepository.save(persistentAuditEvent);
             }
-        };
+        }
     }
 }
