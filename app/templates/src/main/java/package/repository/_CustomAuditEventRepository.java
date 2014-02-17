@@ -6,13 +6,13 @@ import org.joda.time.LocalDateTime;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.boot.actuate.audit.AuditEventRepository;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
 import java.util.Date;
 import java.util.List;
 
-@Service
+@Repository
 public class CustomAuditEventRepository {
 
     @Inject
