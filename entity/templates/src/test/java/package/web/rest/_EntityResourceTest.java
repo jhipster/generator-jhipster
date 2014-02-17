@@ -57,7 +57,7 @@ public class <%= entityClass %>ResourceTest {
 
     private MockMvc rest<%= entityClass %>MockMvc;
     
-    private <%= entityClass %> <%= entityInstance %> = new <%= entityClass %>();
+    private <%= entityClass %> <%= entityInstance %>;
 
     @Before
     public void setup() {
@@ -67,6 +67,7 @@ public class <%= entityClass %>ResourceTest {
 
         this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource).build();
 
+        <%= entityInstance %> = new <%= entityClass %>();
         <%= entityInstance %>.setId(DEFAULT_ID);
     	<%= entityInstance %>.setSampleDateAttribute(DEFAULT_SAMPLE_DATE_ATTR);
     	<%= entityInstance %>.setSampleTextAttribute(DEFAULT_SAMPLE_TEXT_ATTR);
