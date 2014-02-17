@@ -38,9 +38,7 @@ public class Application {
         if (env.getActiveProfiles().length == 0) {
             log.warn("No Spring profile configured, running with default configuration");
         } else {
-            for (String profile : env.getActiveProfiles()) {
-                log.info("Running with Spring profile(s) : {}", profile);
-            }
+            log.info("Running with Spring profile(s) : {}", env.getActiveProfiles());
         }
     }
 
@@ -54,7 +52,7 @@ public class Application {
         // if not the development profile will be added
         addDefaultProfile(app, source);
 
-        // Fallback to set the list of liquibase package list .
+        // Fallback to set the list of liquibase package list
         addLiquibaseScanPackages();
 
         ConfigurableApplicationContext applicationContext = app.run(args);
