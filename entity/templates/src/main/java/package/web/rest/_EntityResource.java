@@ -31,6 +31,7 @@ public class <%= entityClass %>Resource {
             produces = "application/json")
     @Timed
     public void create(@RequestBody <%= entityClass %> <%= entityInstance %>) {
+        log.debug("REST request to save <%= entityClass %> : {}", <%= entityInstance %>);
         <%= entityInstance %>Repository.save(<%= entityInstance %>);
     }
 
@@ -42,6 +43,7 @@ public class <%= entityClass %>Resource {
             produces = "application/json")
     @Timed
     public List<<%= entityClass %>> getAll() {
+        log.debug("REST request to get all <%= entityClass %>s");
         return <%= entityInstance %>Repository.findAll();
     }
 
@@ -69,6 +71,7 @@ public class <%= entityClass %>Resource {
             produces = "application/json")
     @Timed
     public void delete(@PathVariable Long id, HttpServletResponse response) {
+        log.debug("REST request to delete <%= entityClass %> : {}", id);
         <%= entityInstance %>Repository.delete(id);
     }
 }
