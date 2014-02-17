@@ -32,13 +32,10 @@
     function ($rootScope, $http) {
         return {
             check: function() {
-                $http.get('metrics/healthcheck')
-                    .success(function(data, status, headers, config) {
-                        $rootScope.healthCheck = data;
-                    })
-                    .error(function(data, status, headers, config) {
-                        $rootScope.healthCheck = data;
-                    })
+                var promise = $http.get('metrics/healthcheck').then(function(response){
+                    return response.data;
+                });
+                return promise;
             }
         };
     }]);
@@ -73,15 +70,11 @@
     function ($rootScope, $http, authService) {
         return {
             authenticate: function() {
-                $http.get('app/rest/authenticate')
-                    .success(function (data, status, headers, config) {
-                        $rootScope.login = data;
-                        if (data == '') {
-                            $rootScope.$broadcast('event:auth-loginRequired');
-                        } else {
-                            $rootScope.$broadcast('event:auth-authConfirmed');
-                        }
-                    })
+               var promise = $http.get('app/rest/authenticate')
+                    .success(function (response) {
+                        return response.data;
+                    });
+                return promise;
             },
             login: function (param) {
                 var data ="j_username=" + param.username +"&j_password=" + param.password +"&_spring_security_remember_me=" + param.rememberMe +"&submit=Login";
@@ -92,12 +85,10 @@
                     ignoreAuthModule: 'ignoreAuthModule'
                 }).success(function (data, status, headers, config) {
                     $rootScope.authenticationError = false;
-                    authService.loginConfirmed();
                     if(param.success){
                         param.success(data, status, headers, config);
                     }
                 }).error(function (data, status, headers, config) {
-                    console.log("auth error");
                     $rootScope.authenticationError = true;
                     if(param.error){
                         param.error(data, status, headers, config);
@@ -108,7 +99,6 @@
                 $rootScope.authenticationError = false;
                 $http.get('app/logout')
                     .success(function (data, status, headers, config) {
-                        $rootScope.login = null;
                         authService.loginCancelled();
                     });
             }

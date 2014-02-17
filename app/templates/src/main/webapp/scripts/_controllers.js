@@ -156,8 +156,10 @@
 <% } %><%= angularAppName %>.controller('MetricsController', ['$scope', 'resolvedMetrics', 'HealthCheckService',
     function ($scope, resolvedMetrics, HealthCheckService) {
         $scope.metrics = resolvedMetrics;
-        HealthCheckService.check();
 
+        HealthCheckService.check().then(function(data) {
+            $scope.healthCheck = data;
+        });
 
         resolvedMetrics.$get({}, function(items) {
             $scope.servicesStats = {};
