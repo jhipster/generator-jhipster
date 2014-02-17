@@ -81,8 +81,8 @@ public class AccountResource {
             method = RequestMethod.POST,
             produces = "application/json")
     @Timed
-    public void saveAccount(@RequestBody User user) throws IOException {
-        userService.updateUserInformation(user);
+    public void saveAccount(@RequestBody UserDTO userDTO) throws IOException {
+        userService.updateUserInformation(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail());
     }
 
     /**
