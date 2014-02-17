@@ -1,7 +1,7 @@
 package <%=packageName%>.repository;
 
-import com.mycompany.myapp.config.audit.AuditEventConverter;
-import com.mycompany.myapp.domain.PersistentAuditEvent;
+import <%=packageName%>.config.audit.AuditEventConverter;
+import <%=packageName%>.domain.PersistentAuditEvent;
 import org.joda.time.LocalDateTime;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.boot.actuate.audit.AuditEventRepository;
