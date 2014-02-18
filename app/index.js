@@ -304,6 +304,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.mkdir(testDir);
     this.template('src/test/java/package/service/_UserServiceTest.java', testDir + 'service/UserServiceTest.java');
     this.template('src/test/java/package/web/rest/_AccountResourceTest.java', testDir + 'web/rest/AccountResourceTest.java');
+    this.template('src/test/java/package/web/rest/_TestUtil.java', testDir + 'web/rest/TestUtil.java');
     this.template('src/test/java/package/web/rest/_UserResourceTest.java', testDir + 'web/rest/UserResourceTest.java');
 
     this.template(testResourceDir + 'config/_application.yml', testResourceDir + 'config/application.yml');
