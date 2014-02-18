@@ -43,6 +43,9 @@ EntityGenerator.prototype.files = function files() {
   this.template('src/main/webapp/scripts/_entity-service.js', 
     'src/main/webapp/scripts/' +  this.entityInstance + '-service.js');
 
+  this.template('src/test/java/package/web/rest/_EntityResourceTest.java', 
+  	'src/test/java/' + this.packageFolder + '/web/rest/' +  this.entityClass + 'ResourceTest.java');
+
 };
 
 
