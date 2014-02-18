@@ -49,4 +49,3 @@ metrics:
         backupCount: 1<% } if (hibernateCache == 'ehcache') { %>
     ehcache:
         maxBytesLocalHeap: 256M<% } %>
-        

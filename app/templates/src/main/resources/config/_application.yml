@@ -25,4 +25,3 @@ spring:
 
     messageSource:
         cacheSeconds: 1
-
