@@ -23,15 +23,14 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 
 /**
  * A watcher for the target class folder.
- *
- * <p/>
+ * 
  * The watcher will monitor all folders and sub-folders to check if a new class
  * is created. If so, the new class will be loaded and managed by Spring-Loaded.
  */
 public class JHipsterFileSystemWatcher implements Runnable {
 
     public static final String TARGET_CLASSES_FOLDER = "targetClassFolder";
-    
+
     private static Logger logger = LoggerFactory.getLogger(JHipsterFileSystemWatcher.class);
 
     public static boolean isStarted;
@@ -120,8 +119,7 @@ public class JHipsterFileSystemWatcher implements Runnable {
 
     /**
      * Process all events for keys queued to the watcher.
-     *
-     * <p/>
+     * 
      * When the event is a ENTRY_CREATE, the folders will be added to the watcher,
      * the classes will be loaded by SpringLoaded
      */
@@ -223,19 +221,18 @@ public class JHipsterFileSystemWatcher implements Runnable {
 
     /**
      * This custom class loader is mandatory to call the defineClass method.
-     *
-     * <p/>
+     * 
      * Once the new class is defined, the JVM calls the agent to instrument the new
      * class that has been created
      */
-    public class NewFileClassLoader extends ClassLoader{
+    public class NewFileClassLoader extends ClassLoader {
 
         ProtectionDomain protectionDomain;
 
         public NewFileClassLoader(ClassLoader parent, Path classesFolder) throws MalformedURLException {
             super(parent);
-           CodeSource codeSource = new CodeSource(classesFolder.toFile().toURI().toURL(), (CodeSigner[]) null);
-           protectionDomain = new ProtectionDomain(codeSource, null, parent, null);
+            CodeSource codeSource = new CodeSource(classesFolder.toFile().toURI().toURL(), (CodeSigner[]) null);
+            protectionDomain = new ProtectionDomain(codeSource, null, parent, null);
         }
 
         public Class loadClass(String dottedClassName, byte[] classData) throws ClassNotFoundException {
