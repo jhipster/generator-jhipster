@@ -22,12 +22,16 @@ import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 
 /**
- * A watcher for the target class folder. The watcher will monitor all folders and sub-folders to check if a new class
- * is created. If so, the new class will be loaded and managed by SpringLoaded
+ * A watcher for the target class folder.
+ *
+ * <p/>
+ * The watcher will monitor all folders and sub-folders to check if a new class
+ * is created. If so, the new class will be loaded and managed by Spring-Loaded.
  */
 public class JHipsterFileSystemWatcher implements Runnable {
 
     public static final String TARGET_CLASSES_FOLDER = "targetClassFolder";
+    
     private static Logger logger = LoggerFactory.getLogger(JHipsterFileSystemWatcher.class);
 
     public static boolean isStarted;
@@ -54,9 +58,9 @@ public class JHipsterFileSystemWatcher implements Runnable {
     }
 
     /**
-     * Register the classLoader and start a thread that will be used to monitor folders where classes can be created
+     * Register the classLoader and start a thread that will be used to monitor folders where classes can be created.
      *
-     * @param classLoader the classLoader of the app
+     * @param classLoader the classLoader of the application
      */
     public static void register(ClassLoader classLoader) {
         try {
@@ -103,7 +107,7 @@ public class JHipsterFileSystemWatcher implements Runnable {
     }
 
     /**
-     * Register the given directory with the WatchService
+     * Register the given directory with the WatchService.
      */
     private void register(Path dir) throws IOException {
         WatchKey key = dir.register(watcher, ENTRY_CREATE);
@@ -115,7 +119,9 @@ public class JHipsterFileSystemWatcher implements Runnable {
     }
 
     /**
-     * Process all events for keys queued to the watcher
+     * Process all events for keys queued to the watcher.
+     *
+     * <p/>
      * When the event is a ENTRY_CREATE, the folders will be added to the watcher,
      * the classes will be loaded by SpringLoaded
      */
@@ -189,15 +195,15 @@ public class JHipsterFileSystemWatcher implements Runnable {
                                         typeRegistry.fireReloadEvent(rtype, versionstamp);
                                     }
 
-                                    logger.debug("New class : '" + dottedClassName + "' has been loaded");
+                                    logger.debug("New class : '{}' has been loaded", dottedClassName);
                                 }
                             } catch (Exception e) {
-                                logger.error("Failed to load the class named " + name.toString(), e);
+                                logger.error("Failed to load the class named {}", name.toString(), e);
                             }
 
                         }
                     } catch (IOException x) {
-                        logger.error("Failed to load the class named " + name.toString(), x);
+                        logger.error("Failed to load the class named {}", name.toString(), x);
                     }
                 }
             }
@@ -217,6 +223,8 @@ public class JHipsterFileSystemWatcher implements Runnable {
 
     /**
      * This custom class loader is mandatory to call the defineClass method.
+     *
+     * <p/>
      * Once the new class is defined, the JVM calls the agent to instrument the new
      * class that has been created
      */
