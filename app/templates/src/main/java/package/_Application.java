@@ -17,6 +17,7 @@ import org.springsource.loaded.agent.SpringLoadedAgent;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.io.IOException;
+import java.util.Arrays;
 
 @ComponentScan
 @EnableAutoConfiguration(exclude = {MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class})
@@ -38,7 +39,7 @@ public class Application {
         if (env.getActiveProfiles().length == 0) {
             log.warn("No Spring profile configured, running with default configuration");
         } else {
-            log.info("Running with Spring profile(s) : {}", env.getActiveProfiles());
+            log.info("Running with Spring profile(s) : {}", Arrays.toString(env.getActiveProfiles()));
         }
     }
 
@@ -59,7 +60,7 @@ public class Application {
         try {
             SpringLoadedAgent.getInstrumentation();
             log.info("Spring Loaded is running, registering hot reloading features");
-            JHipsterPluginManagerReloadPlugin.register(applicationContext);
+            JHipsterPluginManagerReloadPlugin.register(applicationContext, app.getClassLoader());
         } catch (UnsupportedOperationException uoe) {
             log.info("Spring Loaded is not running, hot reloading is not enabled");
         }

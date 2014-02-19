@@ -18,7 +18,7 @@ import org.springsource.loaded.ReloadEventProcessorPlugin;
  * </p>
  * <p>
  *   To have Spring Loaded working, run your Application class with these VM options: 
- *   "-javaagent:spring_loaded/springloaded-1.1.5-dev.jar -noverify" 
+ *   "-javaagent:spring_loaded/springloaded-1.1.5-dev.jar -noverify -DtargetClassFolder=<TARGET_CLASS_FOLDER>"
  * </p>
  */
 public class JHipsterPluginManagerReloadPlugin implements ReloadEventProcessorPlugin {
@@ -47,8 +47,10 @@ public class JHipsterPluginManagerReloadPlugin implements ReloadEventProcessorPl
         jacksonReloader.reloadEvent(typename, clazz);
     }
 
-    public static void register(ConfigurableApplicationContext ctx) {
+    public static void register(ConfigurableApplicationContext ctx, ClassLoader classLoader) {
         log.trace("Registering JHipster hot reloading plugin");
+
+        JHipsterFileSystemWatcher.register(classLoader);
         springReloader = new SpringReloader(ctx);
         jacksonReloader = new JacksonReloader(ctx);
         Plugins.registerGlobalPlugin(new JHipsterPluginManagerReloadPlugin());
