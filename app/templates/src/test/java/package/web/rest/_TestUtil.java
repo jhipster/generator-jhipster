@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
- * Utility class for testing purposes.
+ * Utility class for testing REST controllers.
  */
 public class TestUtil {
 
@@ -32,5 +32,4 @@ public class TestUtil {
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         return mapper.writeValueAsBytes(object);
     }
-
 }

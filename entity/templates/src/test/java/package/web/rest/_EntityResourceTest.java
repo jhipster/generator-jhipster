@@ -46,11 +46,15 @@ import <%=packageName%>.repository.<%= entityClass %>Repository;
 @ActiveProfiles("dev")
 public class <%= entityClass %>ResourceTest {
 	
-	private static final Long DEFAULT_ID = new Long(1L);
-	private static final LocalDate DEFAULT_SAMPLE_DATE_ATTR = new LocalDate(0L);
-	private static final LocalDate UPD_SAMPLE_DATE_ATTR = new LocalDate();
-	private static final String DEFAULT_SAMPLE_TEXT_ATTR = "sampleTextAttribute";
-	private static final String UPD_SAMPLE_TEXT_ATTR = "sampleTextAttributeUpt";
+    private static final Long DEFAULT_ID = new Long(1L);
+
+    private static final LocalDate DEFAULT_SAMPLE_DATE_ATTR = new LocalDate(0L);
+
+    private static final LocalDate UPD_SAMPLE_DATE_ATTR = new LocalDate();
+
+    private static final String DEFAULT_SAMPLE_TEXT_ATTR = "sampleTextAttribute";
+
+    private static final String UPD_SAMPLE_TEXT_ATTR = "sampleTextAttributeUpt";
 
     @Inject
     private <%= entityClass %>Repository <%= entityInstance %>Repository;
@@ -116,6 +120,6 @@ public class <%= entityClass %>ResourceTest {
     	rest<%= entityClass %>MockMvc.perform(get("/app/rest/<%= entityInstance %>s/{id}", DEFAULT_ID)
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isNotFound());
-    }
 
+    }
 }
