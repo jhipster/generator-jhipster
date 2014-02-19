@@ -77,7 +77,7 @@ public class JHipsterFileSystemWatcher implements Runnable {
                     try {
                         thread.join();
                     } catch (InterruptedException e) {
-                        logger.error("Failed during the JVM shitdown", e);
+                        logger.error("Failed during the JVM shutdown", e);
                     }
                 }
             });
