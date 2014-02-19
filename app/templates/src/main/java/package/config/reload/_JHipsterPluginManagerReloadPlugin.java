@@ -49,7 +49,6 @@ public class JHipsterPluginManagerReloadPlugin implements ReloadEventProcessorPl
 
     public static void register(ConfigurableApplicationContext ctx, ClassLoader classLoader) {
         log.trace("Registering JHipster hot reloading plugin");
-
         JHipsterFileSystemWatcher.register(classLoader);
         springReloader = new SpringReloader(ctx);
         jacksonReloader = new JacksonReloader(ctx);

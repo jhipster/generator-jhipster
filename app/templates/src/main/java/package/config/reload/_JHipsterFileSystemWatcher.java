@@ -192,13 +192,11 @@ public class JHipsterFileSystemWatcher implements Runnable {
                                         rtype = typeRegistry.getReloadableType(slashedClassName);
                                         typeRegistry.fireReloadEvent(rtype, versionstamp);
                                     }
-
                                     logger.debug("New class : '{}' has been loaded", dottedClassName);
                                 }
                             } catch (Exception e) {
                                 logger.error("Failed to load the class named {}", name.toString(), e);
                             }
-
                         }
                     } catch (IOException x) {
                         logger.error("Failed to load the class named {}", name.toString(), x);
@@ -238,6 +236,5 @@ public class JHipsterFileSystemWatcher implements Runnable {
         public Class loadClass(String dottedClassName, byte[] classData) throws ClassNotFoundException {
             return super.defineClass(dottedClassName, classData, 0, classData.length, protectionDomain);
         }
-
     }
 }
