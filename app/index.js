@@ -167,7 +167,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('bowerrc', '.bowerrc');
     this.template('Gruntfile.js', 'Gruntfile.js');
     this.copy('gitignore', '.gitignore');
-    this.copy('spring_loaded/springloaded-1.1.5-dev.jar', 'spring_loaded/springloaded-1.1.5-dev.jar');
+    this.copy('spring_loaded/springloaded-1.2.0-dev.jar', 'spring_loaded/springloaded-1.2.0-dev.jar');
 
     var packageFolder = this.packageName.replace(/\./g, '/');
     this.template('_pom.xml', 'pom.xml');
