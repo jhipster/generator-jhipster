@@ -31,7 +31,7 @@ public class JHipsterFileSystemWatcher implements Runnable {
 
     public static final String TARGET_CLASSES_FOLDER = "targetClassFolder";
 
-    private static Logger logger = LoggerFactory.getLogger(JHipsterFileSystemWatcher.class);
+    private static Logger log = LoggerFactory.getLogger(JHipsterFileSystemWatcher.class);
 
     public static boolean isStarted;
 
@@ -66,7 +66,7 @@ public class JHipsterFileSystemWatcher implements Runnable {
             final String targetClassesFolder = System.getProperty(TARGET_CLASSES_FOLDER);
 
             if (StringUtils.isEmpty(targetClassesFolder)) {
-                logger.warn("SpringLoaded - Unable to load new classes. The -DtargetClassFolder property must be set.");
+                log.warn("SpringLoaded - Unable to load new classes. The -DtargetClassFolder property must be set.");
                 return;
             }
 
@@ -80,12 +80,12 @@ public class JHipsterFileSystemWatcher implements Runnable {
                     try {
                         thread.join();
                     } catch (InterruptedException e) {
-                        logger.error("Failed during the JVM shutdown", e);
+                        log.error("Failed during the JVM shutdown", e);
                     }
                 }
             });
         } catch (Exception e) {
-            logger.error("Failed to start the watcher. New class will not be loaded.", e);
+            log.error("Failed to start the watcher. New class will not be loaded.", e);
         }
     }
 
@@ -112,7 +112,7 @@ public class JHipsterFileSystemWatcher implements Runnable {
         WatchKey key = dir.register(watcher, ENTRY_CREATE);
         Path prev = keys.get(key);
         if (prev == null) {
-            logger.debug("Directory : '{}' will be monitored for changes", dir);
+            log.debug("Directory : '{}' will be monitored for changes", dir);
         }
         keys.put(key, dir);
     }
@@ -192,14 +192,14 @@ public class JHipsterFileSystemWatcher implements Runnable {
                                         rtype = typeRegistry.getReloadableType(slashedClassName);
                                         typeRegistry.fireReloadEvent(rtype, versionstamp);
                                     }
-                                    logger.debug("New class : '{}' has been loaded", dottedClassName);
+                                    log.debug("New class : '{}' has been loaded", dottedClassName);
                                 }
                             } catch (Exception e) {
-                                logger.error("Failed to load the class named {}", name.toString(), e);
+                                log.error("Failed to load the class named {}", name.toString(), e);
                             }
                         }
                     } catch (IOException x) {
-                        logger.error("Failed to load the class named {}", name.toString(), x);
+                        log.error("Failed to load the class named {}", name.toString(), x);
                     }
                 }
             }
