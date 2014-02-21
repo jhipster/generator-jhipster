@@ -21,6 +21,8 @@ public class JHipsterReloaderThread implements Runnable {
 
     private static Logger log = LoggerFactory.getLogger(JHipsterReloaderThread.class);
 
+    private static Object lock = new Object();
+
     public static boolean isStarted;
 
     private static boolean hotReloadTriggered = false;
@@ -85,35 +87,37 @@ public class JHipsterReloaderThread implements Runnable {
     }
 
     public void reloadEvent(String typename, Class<?> clazz) {
-        log.trace("Hot reloading - checking if this is a Spring bean: {}", typename);
+        synchronized (lock) {
+            log.trace("Hot reloading - checking if this is a Spring bean: {}", typename);
 
-        if (AnnotationUtils.findAnnotation(clazz, Repository.class) != null) {
-            // TODO find also interfaces which extends JpaRepository (for Spring Data JPA)
-            log.trace("{} is a Spring Repository", typename);
-            repositories.add(clazz);
-        } else if (AnnotationUtils.findAnnotation(clazz, Service.class) != null) {
-            log.trace("{} is a Spring Service", typename);
-            services.add(clazz);
-        } else if (AnnotationUtils.findAnnotation(clazz, Controller.class) != null ||
-                AnnotationUtils.findAnnotation(clazz, RestController.class) != null) {
+            if (AnnotationUtils.findAnnotation(clazz, Repository.class) != null) {
+                // TODO find also interfaces which extends JpaRepository (for Spring Data JPA)
+                log.trace("{} is a Spring Repository", typename);
+                repositories.add(clazz);
+            } else if (AnnotationUtils.findAnnotation(clazz, Service.class) != null) {
+                log.trace("{} is a Spring Service", typename);
+                services.add(clazz);
+            } else if (AnnotationUtils.findAnnotation(clazz, Controller.class) != null ||
+                    AnnotationUtils.findAnnotation(clazz, RestController.class) != null) {
 
-            log.trace("{} is a Spring Controller", typename);
-            controllers.add(clazz);
-        } else if (AnnotationUtils.findAnnotation(clazz, Component.class) != null) {
-            log.trace("{} is a Spring Component", typename);
-            components.add(clazz);
-        } else if (typename.startsWith("<%=packageName%>.domain")) {
-            log.trace("{} is in the JPA package, checking if it is an entity", typename);
-            if (AnnotationUtils.findAnnotation(clazz, Entity.class) != null) {
-                log.trace("{} is a JPA Entity", typename);
-                entities.add(clazz);
+                log.trace("{} is a Spring Controller", typename);
+                controllers.add(clazz);
+            } else if (AnnotationUtils.findAnnotation(clazz, Component.class) != null) {
+                log.trace("{} is a Spring Component", typename);
+                components.add(clazz);
+            } else if (typename.startsWith("<%=packageName%>.domain")) {
+                log.trace("{} is in the JPA package, checking if it is an entity", typename);
+                if (AnnotationUtils.findAnnotation(clazz, Entity.class) != null) {
+                    log.trace("{} is a JPA Entity", typename);
+                    entities.add(clazz);
+                }
+            } else if (typename.startsWith("<%=packageName%>.web.rest.dto")) {
+                log.debug("{}  is a REST DTO", typename);
+                dtos.add(clazz);
             }
-        } else if (typename.startsWith("<%=packageName%>.web.rest.dto")) {
-            log.debug("{}  is a REST DTO", typename);
-            dtos.add(clazz);
+            hotReloadTriggered = true;
+            isWaitingForNewClasses = true;
         }
-        hotReloadTriggered = true;
-        isWaitingForNewClasses = true;
     }
 
     public void run() {
@@ -138,17 +142,19 @@ public class JHipsterReloaderThread implements Runnable {
     }
 
     private void batchReload() {
-        log.info("Batch reload in progress...");
-        if (entities.size() > 0 || dtos.size() > 0) {
-            log.debug("There are {} entities and {} dtos updated, invalidating Jackson cache",
-                    entities.size(), dtos.size());
+        synchronized (lock) {
+            log.info("Batch reload in progress...");
+            if (entities.size() > 0 || dtos.size() > 0) {
+                log.debug("There are {} entities and {} dtos updated, invalidating Jackson cache",
+                        entities.size(), dtos.size());
 
-            jacksonReloader.reloadEvent();
+                jacksonReloader.reloadEvent();
+            }
+            reloadSpringBeans("repositories", repositories);
+            reloadSpringBeans("services", services);
+            reloadSpringBeans("components", components);
+            reloadSpringBeans("controllers", controllers);
         }
-        reloadSpringBeans("repositories", repositories);
-        reloadSpringBeans("services", services);
-        reloadSpringBeans("components", components);
-        reloadSpringBeans("controllers", controllers);
     }
 
     private void reloadSpringBeans(String type, List<Class> list) {
