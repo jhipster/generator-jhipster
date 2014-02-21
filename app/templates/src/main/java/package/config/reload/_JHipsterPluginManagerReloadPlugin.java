@@ -25,9 +25,7 @@ public class JHipsterPluginManagerReloadPlugin implements ReloadEventProcessorPl
 
     private static final Logger log = LoggerFactory.getLogger(JHipsterPluginManagerReloadPlugin.class);
 
-    private static SpringReloader springReloader;
-
-    private static JacksonReloader jacksonReloader;
+    private static JHipsterReloaderThread jHipsterReloaderThread;
 
     @Override
     public boolean shouldRerunStaticInitializer(String typename, Class<?> aClass, String encodedTimestamp) {
@@ -43,15 +41,14 @@ public class JHipsterPluginManagerReloadPlugin implements ReloadEventProcessorPl
             log.trace("This is a CGLIB proxy, nothing to do");
             return;
         }
-        springReloader.reloadEvent(typename, clazz);
-        jacksonReloader.reloadEvent(typename, clazz);
+        jHipsterReloaderThread.reloadEvent(typename, clazz);
     }
 
     public static void register(ConfigurableApplicationContext ctx, ClassLoader classLoader) {
         log.trace("Registering JHipster hot reloading plugin");
+        jHipsterReloaderThread = new JHipsterReloaderThread(ctx);
+        JHipsterReloaderThread.register(jHipsterReloaderThread);
         JHipsterFileSystemWatcher.register(classLoader);
-        springReloader = new SpringReloader(ctx);
-        jacksonReloader = new JacksonReloader(ctx);
         Plugins.registerGlobalPlugin(new JHipsterPluginManagerReloadPlugin());
     }
 }
