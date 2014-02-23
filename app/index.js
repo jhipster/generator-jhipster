@@ -233,11 +233,15 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     this.template('src/main/java/package/config/reload/_package-info.java', javaDir + 'config/reload/package-info.java');
+    this.template('src/main/java/package/config/reload/_JHipsterReloaderConfiguration.java', javaDir + 'config/reload/JHipsterReloaderConfiguration.java');
     this.template('src/main/java/package/config/reload/_JHipsterFileSystemWatcher.java', javaDir + 'config/reload/JHipsterFileSystemWatcher.java');
     this.template('src/main/java/package/config/reload/_JHipsterPluginManagerReloadPlugin.java', javaDir + 'config/reload/JHipsterPluginManagerReloadPlugin.java');
     this.template('src/main/java/package/config/reload/_JHipsterReloaderThread.java', javaDir + 'config/reload/JHipsterReloaderThread.java');
     this.template('src/main/java/package/config/reload/_SpringReloader.java', javaDir + 'config/reload/SpringReloader.java');
     this.template('src/main/java/package/config/reload/_JacksonReloader.java', javaDir + 'config/reload/JacksonReloader.java');
+    this.template('src/main/java/package/config/reload/listener/_package-info.java', javaDir + 'config/reload/listener/package-info.java');
+    this.template('src/main/java/package/config/reload/listener/_JHipsterHandlerMappingListener.java', javaDir + 'config/reload/listener/JHipsterHandlerMappingListener.java');
+    this.template('src/main/java/package/config/reload/listener/_SpringReloadListener.java', javaDir + 'config/reload/listener/SpringReloadListener.java');
 
     this.template('src/main/java/package/domain/_package-info.java', javaDir + 'domain/package-info.java');
     this.template('src/main/java/package/domain/_Authority.java', javaDir + 'domain/Authority.java');

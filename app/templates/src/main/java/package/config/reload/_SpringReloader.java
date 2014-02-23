@@ -1,24 +1,31 @@
 package <%=packageName%>.config.reload;
 
+import <%=packageName%>.config.reload.listener.JHipsterHandlerMappingListener;
+import <%=packageName%>.config.reload.listener.SpringReloadListener;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.Advised;
 import org.springframework.aop.support.AopUtils;
-import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.util.*;
 
 /**
  * Reloads Spring Beans.
@@ -27,121 +34,152 @@ public class SpringReloader {
 
     private static final Logger log = LoggerFactory.getLogger(SpringReloader.class);
 
-    private ConfigurableApplicationContext applicationContext;
+    private final ConfigurableApplicationContext applicationContext;
+    private final List<SpringReloadListener> springReloadListeners = new ArrayList<>();
+
+    private Set<Class<?>> toReloadBeans = new LinkedHashSet<>();
 
     public SpringReloader(ConfigurableApplicationContext applicationContext) {
         log.debug("Hot reloading Spring Beans enabled");
         this.applicationContext = applicationContext;
+
+        // register listeners
+        registerListeners();
     }
 
     public void reloadEvent(Class<?> clazz) {
-        log.trace("Hot reloading Spring bean: {}", clazz.toString());
+        toReloadBeans.add(clazz);
+    }
+
+    public boolean hasBeansToReload() {
+        return toReloadBeans.size() > 0;
+    }
+
+    public void start() {
         try {
-            Object beanInstance;
+            DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) applicationContext.getBeanFactory();
 
-            // The definition of the bean has changed so we need to reload it
-            beanInstance = registerBeanDefinition(clazz);
-            log.debug("'{}' has been updated, autowiring fields", clazz.getName());
+            List<Class> newSpringBeans = new ArrayList<>();
+            List<Class> existingSpringBeans = new ArrayList<>();
 
-            if (AopUtils.isCglibProxy(beanInstance)) {
-                log.trace("This is a CGLIB proxy, getting the real object");
-                beanInstance = ((Advised) beanInstance).getTargetSource().getTarget();
-            } else if (AopUtils.isJdkDynamicProxy(beanInstance)) {
-                log.trace("This is a JDK proxy, getting the real object");
-                beanInstance = ((Advised) beanInstance).getTargetSource().getTarget();
+            //1) Split between new/existing beans
+            for (Class toReloadBean : toReloadBeans) {
+                log.trace("Hot reloading Spring bean: {}", toReloadBean.getName());
+                Annotation annotation = getSpringClassAnnotation(toReloadBean);
+                String beanName = constructBeanName(annotation, toReloadBean);
+                if (!beanFactory.containsBeanDefinition(beanName)) {
+                    newSpringBeans.add(toReloadBean);
+                } else {
+                    existingSpringBeans.add(toReloadBean);
+                }
             }
-            Field[] fields = beanInstance.getClass().getDeclaredFields();
-            for (Field field : fields) {
-                if (AnnotationUtils.getAnnotation(field, Inject.class) != null ||
-                        AnnotationUtils.getAnnotation(field, Autowired.class) != null) {
-                    log.debug("@Inject annotation found on field {}", field.getName());
-                    Object beanToInject;
 
-                    // Doesn't exist - so register the new bean
-                    if (!applicationContext.containsBean(field.getName())) {
-                        beanToInject = registerBeanDefinition(field.getType());
-                    } else {
-                        beanToInject = applicationContext.getBean(field.getName());
-                    }
+            //2) Declare new beans prior to instanciation for cross bean references
+            for (Class clazz : newSpringBeans) {
+                Annotation annotation = getSpringClassAnnotation(clazz);
+                String beanName = constructBeanName(annotation, clazz);
+                String scope = getScope(clazz);
+                RootBeanDefinition bd = new RootBeanDefinition(clazz, AbstractBeanDefinition.AUTOWIRE_BY_TYPE, true);
+                bd.setScope(scope);
+                beanFactory.registerBeanDefinition(beanName, bd);
+            }
 
-                    if (beanToInject != null) {
+            //3) Instanciate new beans
+            for (Class clazz : newSpringBeans) {
+                Annotation annotation = getSpringClassAnnotation(clazz);
+                String beanName = constructBeanName(annotation, clazz);
+                try {
+                    beanFactory.getBean(beanName);
+                    processListener(clazz, true);
+                    toReloadBeans.remove(clazz);
+                } catch (BeansException e) {
+                    //buggy bean, try later
+                    log.error("The Spring bean can't be loaded at this time. Keep it to reload it later", e);
+                    toReloadBeans.add(clazz);
+                }
+            }
+
+            //4) Resolve deps for existing beans
+            for (Class clazz : existingSpringBeans) {
+                Object beanInstance = applicationContext.getBean(clazz);
+
+                log.debug("Existing bean, autowiring fields"); // We only support autowiring on fields
+                if (AopUtils.isCglibProxy(beanInstance)) {
+                    log.trace("This is a CGLIB proxy, getting the real object");
+                    beanInstance = ((Advised) beanInstance).getTargetSource().getTarget();
+                } else if (AopUtils.isJdkDynamicProxy(beanInstance)) {
+                    log.trace("This is a JDK proxy, getting the real object");
+                    beanInstance = ((Advised) beanInstance).getTargetSource().getTarget();
+                }
+                Field[] fields = beanInstance.getClass().getDeclaredFields();
+                for (Field field : fields) {
+                    if (AnnotationUtils.getAnnotation(field, Autowired.class) != null) {
+                        log.debug("@Inject annotation found on field {}", field.getName());
+                        Object beanToInject = applicationContext.getBean(field.getType());
                         ReflectionUtils.makeAccessible(field);
                         ReflectionUtils.setField(field, beanInstance, beanToInject);
                     }
                 }
+                toReloadBeans.remove(clazz);
+                processListener(clazz, false);
             }
-            // TODO check aspects, at least @Transactional and @RolesAllowed
-            // aspects already work at the class level, ie @Transactional at the class level works
 
-            Method[] methods = beanInstance.getClass().getDeclaredMethods();
-            for (Method method : methods) {
-                final String methodName = method.getName();
-
-                if (AnnotationUtils.getAnnotation(method, PostConstruct.class) != null) {
-                    log.debug("@PostConstruct annotation found on method {}", methodName);
-                    method.invoke(beanInstance);
-                }
-
-                if (AnnotationUtils.getAnnotation(method, Bean.class) != null) {
-                    log.debug("@Bean annotation found on method {}", methodName);
-                    DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) applicationContext.getBeanFactory();
-
-                    // check if the bean is already registered
-                    if (beanFactory.containsSingleton(methodName)) {
-                        // 1- unregister the bean
-                        beanFactory.destroySingleton(methodName);
-                    }
-
-                    // 2- create the instance
-                    Object beanObject = method.invoke(beanInstance);
-
-                    // 3- apply post processors
-                    beanObject = beanFactory.applyBeanPostProcessorsBeforeInitialization(beanObject, methodName);
-
-                    // 4- register it
-                    beanFactory.registerSingleton(methodName, beanObject);
-                }
+            for (SpringReloadListener springReloadListener : springReloadListeners) {
+                springReloadListener.execute();
             }
-            log.debug("Spring bean reloaded: {}", beanInstance.getClass());
-        } catch (NoUniqueBeanDefinitionException nbde) {
-            log.warn("There are several instances of {}, reloading is not yet supported for non-unique beans", clazz.toString());
         } catch (Exception e) {
-            log.warn("Could not hot reload Spring bean!");
-            e.printStackTrace();
+            log.warn("Could not hot reload Spring bean!", e);
         }
     }
 
-    /**
-     * Register the Spring bean definition of the class
-     * If an existing bean registration exists, the bean registration will be first deleted
-     * and a new one will be created
-     *
-     * @param clazz the class to register
-     * @return the created bean
-     */
-    private Object registerBeanDefinition(Class<?> clazz) {
-        if (clazz.isInterface()) {
-            log.debug("Hot reload. Unable to register an interface of the type: {}", clazz);
-            return null;
+    private void processListener(Class<?> clazz, boolean isNewClass) {
+        for (SpringReloadListener springReloadListener : springReloadListeners) {
+            if (springReloadListener.support(clazz)) {
+                springReloadListener.process(clazz, isNewClass);
+            }
+        }
+    }
+
+    private Annotation getSpringClassAnnotation(Class clazz) {
+        Annotation classAnnotation = AnnotationUtils.findAnnotation(clazz, Component.class);
+
+        if (classAnnotation == null) {
+            classAnnotation = AnnotationUtils.findAnnotation(clazz, Controller.class);
+        }
+        if (classAnnotation == null) {
+            classAnnotation = AnnotationUtils.findAnnotation(clazz, RestController.class);
+        }
+        if (classAnnotation == null) {
+            classAnnotation = AnnotationUtils.findAnnotation(clazz, Service.class);
+        }
+        if (classAnnotation == null) {
+            classAnnotation = AnnotationUtils.findAnnotation(clazz, Repository.class);
         }
 
-        // The name of the bean will be only the name of the class
-        String beanName = StringUtils.uncapitalize(clazz.getSimpleName());
+        return classAnnotation;
+    }
 
-        DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) applicationContext.getBeanFactory();
-
-        // 1- Check if the beanDefinition exists - if so remove it
-        if (beanFactory.containsBeanDefinition(beanName)) {
-            beanFactory.removeBeanDefinition(beanName);
+    private String getScope(Class clazz) {
+        String scope = ConfigurableBeanFactory.SCOPE_SINGLETON;
+        Annotation scopeAnnotation = AnnotationUtils.findAnnotation(clazz, Scope.class);
+        if (scopeAnnotation != null) {
+            scope = (String) AnnotationUtils.getValue(scopeAnnotation);
         }
+        return scope;
+    }
 
-        // 2- Register the beanDefinition
-        RootBeanDefinition bd = new RootBeanDefinition(beanName);
-        bd.setBeanClass(clazz);
-        bd.setScope(BeanDefinition.SCOPE_SINGLETON);
-        beanFactory.registerBeanDefinition(beanName, bd);
+    private String constructBeanName(Annotation annotation, Class clazz) {
+        String beanName = (String) AnnotationUtils.getValue(annotation);
+        if (beanName == null || beanName.isEmpty()) {
+            beanName = StringUtils.uncapitalize(clazz.getSimpleName());
+        }
+        return beanName;
+    }
 
-        // 3- Return the bean
-        return beanFactory.getBean(beanName);
+    private void registerListeners() {
+        // Handler Mapping
+        JHipsterHandlerMappingListener hipsterHandlerMappingListener = new JHipsterHandlerMappingListener();
+        hipsterHandlerMappingListener.register(applicationContext);
+        springReloadListeners.add(hipsterHandlerMappingListener);
     }
 }
