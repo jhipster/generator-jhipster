@@ -25,36 +25,36 @@ import java.lang.reflect.Method;
  */
 public class SpringReloader {
 
-    private static final Logger log = LoggerFactory.getLogger(SpringReloader.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SpringReloader.class);
 
     private ConfigurableApplicationContext applicationContext;
 
     public SpringReloader(ConfigurableApplicationContext applicationContext) {
-        log.debug("Hot reloading Spring Beans enabled");
+        LOGGER.debug("Hot reloading Spring Beans enabled");
         this.applicationContext = applicationContext;
     }
 
     public void reloadEvent(Class<?> clazz) {
-        log.trace("Hot reloading Spring bean: {}", clazz.toString());
+        LOGGER.trace("Hot reloading Spring bean: {}", clazz.toString());
         try {
             Object beanInstance;
 
             // The definition of the bean has changed so we need to reload it
             beanInstance = registerBeanDefinition(clazz);
-            log.debug("'{}' has been updated, autowiring fields", clazz.getName());
+            LOGGER.debug("'{}' has been updated, autowiring fields", clazz.getName());
 
             if (AopUtils.isCglibProxy(beanInstance)) {
-                log.trace("This is a CGLIB proxy, getting the real object");
+                LOGGER.trace("This is a CGLIB proxy, getting the real object");
                 beanInstance = ((Advised) beanInstance).getTargetSource().getTarget();
             } else if (AopUtils.isJdkDynamicProxy(beanInstance)) {
-                log.trace("This is a JDK proxy, getting the real object");
+                LOGGER.trace("This is a JDK proxy, getting the real object");
                 beanInstance = ((Advised) beanInstance).getTargetSource().getTarget();
             }
             Field[] fields = beanInstance.getClass().getDeclaredFields();
             for (Field field : fields) {
                 if (AnnotationUtils.getAnnotation(field, Inject.class) != null ||
                         AnnotationUtils.getAnnotation(field, Autowired.class) != null) {
-                    log.debug("@Inject annotation found on field {}", field.getName());
+                    LOGGER.debug("@Inject annotation found on field {}", field.getName());
                     Object beanToInject;
 
                     // Doesn't exist - so register the new bean
@@ -78,12 +78,12 @@ public class SpringReloader {
                 final String methodName = method.getName();
 
                 if (AnnotationUtils.getAnnotation(method, PostConstruct.class) != null) {
-                    log.debug("@PostConstruct annotation found on method {}", methodName);
+                    LOGGER.debug("@PostConstruct annotation found on method {}", methodName);
                     method.invoke(beanInstance);
                 }
 
                 if (AnnotationUtils.getAnnotation(method, Bean.class) != null) {
-                    log.debug("@Bean annotation found on method {}", methodName);
+                    LOGGER.debug("@Bean annotation found on method {}", methodName);
                     DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) applicationContext.getBeanFactory();
 
                     // check if the bean is already registered
@@ -102,11 +102,11 @@ public class SpringReloader {
                     beanFactory.registerSingleton(methodName, beanObject);
                 }
             }
-            log.debug("Spring bean reloaded: {}", beanInstance.getClass());
+            LOGGER.debug("Spring bean reloaded: {}", beanInstance.getClass());
         } catch (NoUniqueBeanDefinitionException nbde) {
-            log.warn("There are several instances of {}, reloading is not yet supported for non-unique beans", clazz.toString());
+            LOGGER.warn("There are several instances of {}, reloading is not yet supported for non-unique beans", clazz.toString());
         } catch (Exception e) {
-            log.warn("Could not hot reload Spring bean!");
+            LOGGER.warn("Could not hot reload Spring bean!");
             e.printStackTrace();
         }
     }
@@ -121,7 +121,7 @@ public class SpringReloader {
      */
     private Object registerBeanDefinition(Class<?> clazz) {
         if (clazz.isInterface()) {
-            log.debug("Hot reload. Unable to register an interface of the type: {}", clazz);
+            LOGGER.debug("Hot reload. Unable to register an interface of the type: {}", clazz);
             return null;
         }
 

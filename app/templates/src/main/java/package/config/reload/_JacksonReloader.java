@@ -24,17 +24,17 @@ import java.util.Collection;
  */
 public class JacksonReloader {
 
-    private static final Logger log = LoggerFactory.getLogger(JacksonReloader.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JacksonReloader.class);
 
     private ConfigurableApplicationContext applicationContext;
 
     public JacksonReloader(ConfigurableApplicationContext applicationContext) {
-        log.debug("Hot reloading Jackson enabled");
+        LOGGER.debug("Hot reloading Jackson enabled");
         this.applicationContext = applicationContext;
     }
 
     public void reloadEvent() {
-        log.debug("Hot reloading Jackson classes");
+        LOGGER.debug("Hot reloading Jackson classes");
         try {
             ConfigurableListableBeanFactory beanFactory = applicationContext.getBeanFactory();
             Collection<ObjectMapper> mappers = BeanFactoryUtils
@@ -42,7 +42,7 @@ public class JacksonReloader {
                     .values();
 
             for (ObjectMapper mapper : mappers) {
-                log.trace("Flushing Jackson serializer cache");
+                LOGGER.trace("Flushing Jackson serializer cache");
                 SerializerProvider serializerProvider = mapper.getSerializerProvider();
                 Field serializerCacheField = serializerProvider.getClass().getSuperclass().getSuperclass().getDeclaredField("_serializerCache");
                 ReflectionUtils.makeAccessible(serializerCacheField);
@@ -50,7 +50,7 @@ public class JacksonReloader {
                 Method serializerCacheFlushMethod = SerializerCache.class.getDeclaredMethod("flush");
                 serializerCacheFlushMethod.invoke(serializerCache);
 
-                log.trace("Flushing Jackson deserializer cache");
+                LOGGER.trace("Flushing Jackson deserializer cache");
                 DeserializationContext deserializationContext = mapper.getDeserializationContext();
                 Field deSerializerCacheField = deserializationContext.getClass().getSuperclass().getSuperclass().getDeclaredField("_cache");
                 ReflectionUtils.makeAccessible(deSerializerCacheField);
@@ -59,7 +59,7 @@ public class JacksonReloader {
                 deSerializerCacheFlushMethod.invoke(deSerializerCache);
             }
         } catch (Exception e) {
-            log.warn("Could not hot reload Jackson class!");
+            LOGGER.warn("Could not hot reload Jackson class!");
             e.printStackTrace();
         }
     }

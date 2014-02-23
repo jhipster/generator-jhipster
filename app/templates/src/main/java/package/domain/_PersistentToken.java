@@ -25,7 +25,8 @@ import java.io.Serializable;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
 public class PersistentToken implements Serializable {
 
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("d MMMM yyyy");
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("d MMMM yyyy");
+    private static final int MAX_USER_AGENT_LEN = 255;
 
     @Id
     private String series;
@@ -78,7 +79,7 @@ public class PersistentToken implements Serializable {
 
     @JsonGetter
     public String getFormattedTokenDate() {
-        return dateTimeFormatter.print(this.tokenDate);
+        return DATE_TIME_FORMATTER.print(this.tokenDate);
     }
 
     public String getIpAddress() {
@@ -94,8 +95,8 @@ public class PersistentToken implements Serializable {
     }
 
     public void setUserAgent(String userAgent) {
-        if (userAgent.length() >= 255) {
-            this.userAgent = userAgent.substring(0, 254);
+        if (userAgent.length() >= MAX_USER_AGENT_LEN) {
+            this.userAgent = userAgent.substring(0, MAX_USER_AGENT_LEN - 1);
         } else {
             this.userAgent = userAgent;
         }
