@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 @EnableMetrics(proxyTargetClass = true)
 public class MetricsConfiguration extends MetricsConfigurerAdapter implements EnvironmentAware {
 
-    private static final Logger log = LoggerFactory.getLogger(MetricsConfiguration.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MetricsConfiguration.class);
 
     private static final MetricRegistry METRIC_REGISTRY = new MetricRegistry();
 
@@ -54,14 +54,14 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
 
     @PostConstruct
     public void init() {
-        log.debug("Registring JVM gauges");
+        LOGGER.debug("Registring JVM gauges");
         METRIC_REGISTRY.register("jvm.memory", new MemoryUsageGaugeSet());
         METRIC_REGISTRY.register("jvm.garbage", new GarbageCollectorMetricSet());
         METRIC_REGISTRY.register("jvm.threads", new ThreadStatesGaugeSet());
         METRIC_REGISTRY.register("jvm.files", new FileDescriptorRatioGauge());
         METRIC_REGISTRY.register("jvm.buffers", new BufferPoolMetricSet(ManagementFactory.getPlatformMBeanServer()));
         if (propertyResolver.getProperty("jmx.enabled", Boolean.class, false)) {
-            log.info("Initializing Metrics JMX reporting");
+            LOGGER.info("Initializing Metrics JMX reporting");
             final JmxReporter jmxReporter = JmxReporter.forRegistry(METRIC_REGISTRY).build();
             jmxReporter.start();
         }
@@ -84,7 +84,7 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
         private void init() {
             Boolean graphiteEnabled = propertyResolver.getProperty("enabled", Boolean.class, false);
             if (graphiteEnabled) {
-                log.info("Initializing Metrics Graphite reporting");
+                LOGGER.info("Initializing Metrics Graphite reporting");
                 String graphiteHost = propertyResolver.getRequiredProperty("host");
                 Integer graphitePort = propertyResolver.getRequiredProperty("port", Integer.class);
                 Graphite graphite = new Graphite(new InetSocketAddress(graphiteHost, graphitePort));

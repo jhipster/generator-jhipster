@@ -23,7 +23,7 @@ import org.springsource.loaded.ReloadEventProcessorPlugin;
  */
 public class JHipsterPluginManagerReloadPlugin implements ReloadEventProcessorPlugin {
 
-    private static final Logger log = LoggerFactory.getLogger(JHipsterPluginManagerReloadPlugin.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JHipsterPluginManagerReloadPlugin.class);
 
     private static JHipsterReloaderThread jHipsterReloaderThread;
 
@@ -34,18 +34,18 @@ public class JHipsterPluginManagerReloadPlugin implements ReloadEventProcessorPl
 
     public void reloadEvent(String typename, Class<?> clazz, String encodedTimestamp) {
         if (!typename.startsWith("<%=packageName%>")) {
-            log.trace("This class is not in the application package, nothing to do");
+            LOGGER.trace("This class is not in the application package, nothing to do");
             return;
         }
         if (typename.contains("$$EnhancerByCGLIB$$") || typename.contains("$$FastClassByCGLIB$$")) {
-            log.trace("This is a CGLIB proxy, nothing to do");
+            LOGGER.trace("This is a CGLIB proxy, nothing to do");
             return;
         }
         jHipsterReloaderThread.reloadEvent(typename, clazz);
     }
 
     public static void register(ConfigurableApplicationContext ctx, ClassLoader classLoader) {
-        log.trace("Registering JHipster hot reloading plugin");
+        LOGGER.trace("Registering JHipster hot reloading plugin");
         jHipsterReloaderThread = new JHipsterReloaderThread(ctx);
         JHipsterReloaderThread.register(jHipsterReloaderThread);
         JHipsterFileSystemWatcher.register(classLoader);

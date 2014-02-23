@@ -61,12 +61,18 @@ public class <%= entityClass %> implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         <%= entityClass %> <%= entityInstance %> = (<%= entityClass %>) o;
 
-        if (id != <%= entityInstance %>.id) return false;
+        if (id != <%= entityInstance %>.id) {
+            return false;
+        }
 
         return true;
     }

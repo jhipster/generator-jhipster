@@ -23,7 +23,7 @@ import java.util.Arrays;
 @EnableAutoConfiguration(exclude = {MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class})
 public class Application {
 
-    private static final Logger log = LoggerFactory.getLogger(Application.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
     @Inject
     private Environment env;
@@ -37,9 +37,9 @@ public class Application {
     @PostConstruct
     public void initApplication() throws IOException {
         if (env.getActiveProfiles().length == 0) {
-            log.warn("No Spring profile configured, running with default configuration");
+            LOGGER.warn("No Spring profile configured, running with default configuration");
         } else {
-            log.info("Running with Spring profile(s) : {}", Arrays.toString(env.getActiveProfiles()));
+            LOGGER.info("Running with Spring profile(s) : {}", Arrays.toString(env.getActiveProfiles()));
         }
     }
 
@@ -59,10 +59,10 @@ public class Application {
         ConfigurableApplicationContext applicationContext = app.run(args);
         try {
             SpringLoadedAgent.getInstrumentation();
-            log.info("Spring Loaded is running, registering hot reloading features");
+            LOGGER.info("Spring Loaded is running, registering hot reloading features");
             JHipsterPluginManagerReloadPlugin.register(applicationContext, app.getClassLoader());
         } catch (UnsupportedOperationException uoe) {
-            log.info("Spring Loaded is not running, hot reloading is not enabled");
+            LOGGER.info("Spring Loaded is not running, hot reloading is not enabled");
         }
     }
 
