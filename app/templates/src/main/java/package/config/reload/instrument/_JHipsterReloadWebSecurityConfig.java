@@ -38,6 +38,7 @@ import java.util.List;
 @ConditionalOnClass(SpringLoadedAgent.class)
 @EnableGlobalMethodSecurity
 public class JHipsterReloadWebSecurityConfig extends GlobalMethodSecurityConfiguration {
+    
     private final Logger log = LoggerFactory.getLogger(JHipsterReloadWebSecurityConfig.class);
 
     /**
