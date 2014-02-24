@@ -24,7 +24,7 @@ import java.util.Collection;
  */
 public class JacksonReloader {
 
-    private static final Logger log = LoggerFactory.getLogger(JacksonReloader.class);
+    private final Logger log = LoggerFactory.getLogger(JacksonReloader.class);
 
     private ConfigurableApplicationContext applicationContext;
 

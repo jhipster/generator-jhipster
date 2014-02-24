@@ -11,7 +11,7 @@ import org.springframework.boot.context.web.SpringBootServletInitializer;
  */
 public class ApplicationWebXml extends SpringBootServletInitializer {
 
-    private static final Logger log = LoggerFactory.getLogger(Application.class);
+    private final Logger log = LoggerFactory.getLogger(ApplicationWebXml.class);
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {

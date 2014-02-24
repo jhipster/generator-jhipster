@@ -23,7 +23,7 @@ import org.springsource.loaded.ReloadEventProcessorPlugin;
  */
 public class JHipsterPluginManagerReloadPlugin implements ReloadEventProcessorPlugin {
 
-    private static final Logger log = LoggerFactory.getLogger(JHipsterPluginManagerReloadPlugin.class);
+    private final Logger log = LoggerFactory.getLogger(JHipsterPluginManagerReloadPlugin.class);
 
     private static JHipsterReloaderThread jHipsterReloaderThread;
 
@@ -45,7 +45,6 @@ public class JHipsterPluginManagerReloadPlugin implements ReloadEventProcessorPl
     }
 
     public static void register(ConfigurableApplicationContext ctx, ClassLoader classLoader) {
-        log.trace("Registering JHipster hot reloading plugin");
         jHipsterReloaderThread = new JHipsterReloaderThread(ctx);
         JHipsterReloaderThread.register(jHipsterReloaderThread);
         JHipsterFileSystemWatcher.register(classLoader);

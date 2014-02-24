@@ -32,9 +32,10 @@ import java.util.*;
  */
 public class SpringReloader {
 
-    private static final Logger log = LoggerFactory.getLogger(SpringReloader.class);
+    private final Logger log = LoggerFactory.getLogger(SpringReloader.class);
 
     private final ConfigurableApplicationContext applicationContext;
+
     private final List<SpringReloadListener> springReloadListeners = new ArrayList<>();
 
     private Set<Class<?>> toReloadBeans = new LinkedHashSet<>();
@@ -42,7 +43,6 @@ public class SpringReloader {
     public SpringReloader(ConfigurableApplicationContext applicationContext) {
         log.debug("Hot reloading Spring Beans enabled");
         this.applicationContext = applicationContext;
-
         // register listeners
         registerListeners();
     }

@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 @EnableMetrics(proxyTargetClass = true)
 public class MetricsConfiguration extends MetricsConfigurerAdapter implements EnvironmentAware {
 
-    private static final Logger log = LoggerFactory.getLogger(MetricsConfiguration.class);
+    private final Logger log = LoggerFactory.getLogger(MetricsConfiguration.class);
 
     private static final MetricRegistry METRIC_REGISTRY = new MetricRegistry();
 
@@ -70,6 +70,9 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
     @Configuration
     @ConditionalOnClass(Graphite.class)
     public static class GraphiteRegistry implements EnvironmentAware {
+
+        private final Logger log = LoggerFactory.getLogger(GraphiteRegistry.class);
+
         @Inject
         private MetricRegistry metricRegistry;
 

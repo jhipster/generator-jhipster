@@ -20,7 +20,7 @@ import java.util.Arrays;
 @EnableAutoConfiguration(exclude = {MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class})
 public class Application {
 
-    private static final Logger log = LoggerFactory.getLogger(Application.class);
+    private final Logger log = LoggerFactory.getLogger(Application.class);
 
     @Inject
     private Environment env;
