@@ -1,18 +1,15 @@
 package <%=packageName%>;
 
 import <%=packageName%>.config.Constants;
-import <%=packageName%>.config.reload.JHipsterPluginManagerReloadPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.autoconfigure.MetricFilterAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.MetricRepositoryAutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.SimpleCommandLinePropertySource;
-import org.springsource.loaded.agent.SpringLoadedAgent;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -56,14 +53,7 @@ public class Application {
         // Fallback to set the list of liquibase package list
         addLiquibaseScanPackages();
 
-        ConfigurableApplicationContext applicationContext = app.run(args);
-        try {
-            SpringLoadedAgent.getInstrumentation();
-            log.info("Spring Loaded is running, registering hot reloading features");
-            JHipsterPluginManagerReloadPlugin.register(applicationContext, app.getClassLoader());
-        } catch (UnsupportedOperationException uoe) {
-            log.info("Spring Loaded is not running, hot reloading is not enabled");
-        }
+        app.run(args);
     }
 
     /**

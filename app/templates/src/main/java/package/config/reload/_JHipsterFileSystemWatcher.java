@@ -1,6 +1,5 @@
 package <%=packageName%>.config.reload;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,13 +7,12 @@ import org.springsource.loaded.ReloadableType;
 import org.springsource.loaded.TypeRegistry;
 import org.springsource.loaded.Utils;
 
+import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.security.CodeSigner;
-import java.security.CodeSource;
-import java.security.ProtectionDomain;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,23 +34,21 @@ public class JHipsterFileSystemWatcher implements Runnable {
     public static boolean isStarted;
 
     private final WatchService watcher;
-    private final Map<WatchKey, Path> keys;
+    private final Map<WatchKey, Path> keys = new HashMap<>();
+    private ClassLoader parentClassLoader;
     private String classesFolder;
-    private ClassLoader mainClassLoader;
-    private NewFileClassLoader classLoader;
+    private URLClassLoader urlClassLoader;
 
     public JHipsterFileSystemWatcher(String classesFolder, ClassLoader classLoader) throws Exception {
-        isStarted = true;
-
         final Path classesFolderPath = FileSystems.getDefault().getPath(classesFolder);
 
+        this.parentClassLoader = classLoader;
         this.classesFolder = classesFolder;
-        this.mainClassLoader = classLoader;
-        this.classLoader = new NewFileClassLoader(classLoader, classesFolderPath);
+        urlClassLoader = new URLClassLoader(new URL[] {new File(classesFolder).toURI().toURL()}, classLoader);
 
+        isStarted = true;
         watcher = FileSystems.getDefault().newWatchService();
 
-        this.keys = new HashMap<>();
         registerAll(classesFolderPath);
     }
 
@@ -63,14 +59,14 @@ public class JHipsterFileSystemWatcher implements Runnable {
      */
     public static void register(ClassLoader classLoader) {
         try {
-            final String targetClassesFolder = System.getProperty(TARGET_CLASSES_FOLDER);
+            String targetClassFolder = System.getProperty(TARGET_CLASSES_FOLDER);
 
-            if (StringUtils.isEmpty(targetClassesFolder)) {
-                log.warn("SpringLoaded - Unable to load new classes. The -DtargetClassFolder property must be set.");
-                return;
+            if (StringUtils.isEmpty(targetClassFolder)) {
+                log.warn("SpringLoaded - The -DtargetClassFolder VM option is not set. We will use the default target/classes");
+                targetClassFolder = "target/classes";
             }
 
-            final Thread thread = new Thread(new JHipsterFileSystemWatcher(targetClassesFolder, classLoader));
+            final Thread thread = new Thread(new JHipsterFileSystemWatcher(targetClassFolder, classLoader));
             thread.setDaemon(true);
             thread.start();
 
@@ -171,7 +167,7 @@ public class JHipsterFileSystemWatcher implements Runnable {
 
                                 // Retrieve the Spring Loaded registry.
                                 // We will use to validate the class has not been already loaded
-                                TypeRegistry typeRegistry = TypeRegistry.getTypeRegistryFor(classLoader);
+                                TypeRegistry typeRegistry = TypeRegistry.getTypeRegistryFor(parentClassLoader);
 
                                 ReloadableType rtype = null;
                                 // Check if the class has already loaded by the agent
@@ -180,11 +176,8 @@ public class JHipsterFileSystemWatcher implements Runnable {
                                 }
 
                                 if (rtype == null) {
-                                    // Load the new class with the class loader.
-                                    classLoader.loadClass(dottedClassName, IOUtils.toByteArray(child.toUri()));
-
-                                    // Now we can retrieve the TypeRegistry
-                                    typeRegistry = TypeRegistry.getTypeRegistryFor(classLoader);
+                                    // Load the class
+                                    urlClassLoader.loadClass(dottedClassName);
 
                                     // Force SpringLoaded to instrument the class
                                     if (typeRegistry != null) {
@@ -195,11 +188,11 @@ public class JHipsterFileSystemWatcher implements Runnable {
                                     log.debug("New class : '{}' has been loaded", dottedClassName);
                                 }
                             } catch (Exception e) {
-                                log.error("Failed to load the class named {}", name.toString(), e);
+                                log.error("Failed to load the class named: " + name.toString(), e);
                             }
                         }
-                    } catch (IOException x) {
-                        log.error("Failed to load the class named {}", name.toString(), x);
+                    } catch (IOException e) {
+                        log.error("Failed to load the class named: " + name.toString(), e);
                     }
                 }
             }
@@ -214,27 +207,6 @@ public class JHipsterFileSystemWatcher implements Runnable {
                     break;
                 }
             }
-        }
-    }
-
-    /**
-     * This custom class loader is mandatory to call the defineClass method.
-     * 
-     * Once the new class is defined, the JVM calls the agent to instrument the new
-     * class that has been created
-     */
-    public class NewFileClassLoader extends ClassLoader {
-
-        ProtectionDomain protectionDomain;
-
-        public NewFileClassLoader(ClassLoader parent, Path classesFolder) throws MalformedURLException {
-            super(parent);
-            CodeSource codeSource = new CodeSource(classesFolder.toFile().toURI().toURL(), (CodeSigner[]) null);
-            protectionDomain = new ProtectionDomain(codeSource, null, parent, null);
-        }
-
-        public Class loadClass(String dottedClassName, byte[] classData) throws ClassNotFoundException {
-            return super.defineClass(dottedClassName, classData, 0, classData.length, protectionDomain);
         }
     }
 }

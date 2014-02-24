@@ -336,6 +336,7 @@
             <groupId>org.springsource.loaded</groupId>
             <artifactId>springloaded</artifactId>
             <version>1.2.0.BUILD-20140214.165636-1</version>
+            <scope>provided</scope>
         </dependency>       
 
         <!-- Database dependencies-->

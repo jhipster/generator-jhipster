@@ -35,11 +35,6 @@ public class JHipsterReloaderThread implements Runnable {
     private static final int BATCH_DELAY = 250;
 
     /**
-     * The Spring application context.
-     */
-    private ConfigurableApplicationContext applicationContext;
-
-    /**
      * Reloads Spring beans.
      */
     private static SpringReloader springReloader;
@@ -81,7 +76,6 @@ public class JHipsterReloaderThread implements Runnable {
 
     public JHipsterReloaderThread(ConfigurableApplicationContext applicationContext) {
         isStarted = true;
-        this.applicationContext = applicationContext;
         springReloader = new SpringReloader(applicationContext);
         jacksonReloader = new JacksonReloader(applicationContext);
     }
@@ -99,7 +93,6 @@ public class JHipsterReloaderThread implements Runnable {
                 services.add(clazz);
             } else if (AnnotationUtils.findAnnotation(clazz, Controller.class) != null ||
                     AnnotationUtils.findAnnotation(clazz, RestController.class) != null) {
-
                 log.trace("{} is a Spring Controller", typename);
                 controllers.add(clazz);
             } else if (AnnotationUtils.findAnnotation(clazz, Component.class) != null) {
@@ -130,7 +123,7 @@ public class JHipsterReloaderThread implements Runnable {
                         isWaitingForNewClasses = false;
                     } else {
                         batchReload();
-                        hotReloadTriggered = false;
+                        hotReloadTriggered = springReloader.hasBeansToReload();
                     }
                 } else {
                     log.trace("Waiting for batch reload");
@@ -154,6 +147,11 @@ public class JHipsterReloaderThread implements Runnable {
             reloadSpringBeans("services", services);
             reloadSpringBeans("components", components);
             reloadSpringBeans("controllers", controllers);
+
+            // Start to reload all Spring beans
+            if (springReloader.hasBeansToReload()) {
+                springReloader.start();
+            }
         }
     }
 
