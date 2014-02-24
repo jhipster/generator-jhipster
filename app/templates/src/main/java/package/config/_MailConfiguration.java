@@ -10,6 +10,9 @@ import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
+import javax.mail.Authenticator;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
 
 @Configuration
 public class MailConfiguration implements EnvironmentAware {
@@ -27,6 +30,8 @@ public class MailConfiguration implements EnvironmentAware {
     private static final String PROP_SMTP_AUTH = "mail.smtp.auth";
     private static final String PROP_STARTTLS = "mail.smtp.starttls.enable";
     private static final String PROP_TRANSPORT_PROTO = "mail.transport.protocol";
+    private static final String PROP_SMTP_HOST = "mail.smtp.host";
+    private static final String PROP_SMTP_PORT = "mail.smtp.port";
 
     private final Logger log = LoggerFactory.getLogger(MailConfiguration.class);
 
@@ -60,14 +65,26 @@ public class MailConfiguration implements EnvironmentAware {
             sender.setHost(DEFAULT_HOST);
         }
         sender.setPort(port);
-        sender.setUsername(user);
-        sender.setPassword(password);
+        if (auth) {
+            sender.setUsername(user);
+            sender.setPassword(password);
+        }
 
         Properties sendProperties = new Properties();
         sendProperties.setProperty(PROP_SMTP_AUTH, auth.toString());
         sendProperties.setProperty(PROP_STARTTLS, tls.toString());
         sendProperties.setProperty(PROP_TRANSPORT_PROTO, protocol);
+        sendProperties.setProperty(PROP_SMTP_HOST, host);
+        sendProperties.setProperty(PROP_SMTP_PORT, String.valueOf(port));
         sender.setJavaMailProperties(sendProperties);
+        
+        Session session = Session.getInstance(sendProperties, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(user, password);
+            }
+        });
+        sender.setSession(session);
         return sender;
     }
 }
