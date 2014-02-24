@@ -429,6 +429,9 @@
                     <reuseForks>false</reuseForks>
                     <!-- Force alphabetical order to have a reproducible build -->
                     <runOrder>alphabetical</runOrder>
+                    <classpathDependencyExcludes>
+                        <classpathDependencyExclude>org.springsource.loaded:springloaded</classpathDependencyExclude>
+                    </classpathDependencyExcludes>
                 </configuration>
             </plugin>
             <plugin>
