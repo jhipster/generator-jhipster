@@ -38,7 +38,7 @@ import java.util.List;
 @ConditionalOnClass(SpringLoadedAgent.class)
 @EnableGlobalMethodSecurity
 public class JHipsterReloadWebSecurityConfig extends GlobalMethodSecurityConfiguration {
-    
+
     private final Logger log = LoggerFactory.getLogger(JHipsterReloadWebSecurityConfig.class);
 
     /**
@@ -79,6 +79,7 @@ public class JHipsterReloadWebSecurityConfig extends GlobalMethodSecurityConfigu
                 @Override
                 public Object invoke(Object self, Method overridden, Method forwarder,
                                      Object[] args) throws Throwable {
+                    
                     if (StringUtils.equals("getAttributes", overridden.getName())) {
                         Collection<ConfigAttribute> attributes = null;
                         for (MethodSecurityMetadataSource s : sources) {
@@ -98,9 +99,9 @@ public class JHipsterReloadWebSecurityConfig extends GlobalMethodSecurityConfigu
             ((ProxyObject) delegatingMethodSecurityMetadataSource).setHandler(handler);
             return (MethodSecurityMetadataSource) delegatingMethodSecurityMetadataSource;
         } catch (Exception e) {
-            log.error("Failed to instanciate the DelegatingMethodSecurityMetadataSource class");
+            log.error("Failed to instantiate the DelegatingMethodSecurityMetadataSource class");
         }
 
-        throw new IllegalStateException("Failed to instanciate the DelegatingMethodSecurityMetadataSource class");
+        throw new IllegalStateException("Failed to instantiate the DelegatingMethodSecurityMetadataSource class");
     }
 }
