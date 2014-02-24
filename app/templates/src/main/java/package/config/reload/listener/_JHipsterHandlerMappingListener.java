@@ -31,7 +31,7 @@ public class JHipsterHandlerMappingListener extends RequestMappingHandlerMapping
 
     private final Logger log = LoggerFactory.getLogger(JHipsterHandlerMappingListener.class);
 
-    private List<Class<?>> newCcontrollers = new ArrayList<>();
+    private List<Class<?>> newControllers = new ArrayList<>();
 
     private ConfigurableApplicationContext applicationContext;
 
@@ -62,16 +62,16 @@ public class JHipsterHandlerMappingListener extends RequestMappingHandlerMapping
 
         // Register only new classes - existing classes will be handled by the default RequestMappingHandlerMapping class
         if (newClass) {
-            newCcontrollers.add(ClassUtils.getUserClass(clazz));
+            newControllers.add(ClassUtils.getUserClass(clazz));
         } else { // remove the class from the current list because now the class is managed by the default handler mapping
-            newCcontrollers.remove(ClassUtils.getUserClass(clazz));
+            newControllers.remove(ClassUtils.getUserClass(clazz));
         }
     }
 
     @Override
     public boolean execute() {
         // Re-map the methods
-        for (Class<?> clazz : newCcontrollers) {
+        for (Class<?> clazz : newControllers) {
             final Class<?> userType = clazz;
 
             Set<Method> methods = HandlerMethodSelector.selectMethods(userType, new ReflectionUtils.MethodFilter() {
@@ -87,7 +87,7 @@ public class JHipsterHandlerMappingListener extends RequestMappingHandlerMapping
                     Object handler = applicationContext.getBean(clazz);
                     registerHandlerMethod(handler, method, mapping);
                 } catch (Exception e) {
-                    logger.info("Failed to register the method. " + e.getMessage());
+                    logger.warn("Failed to register the method", e);
                 }
             }
         }

@@ -143,10 +143,10 @@ public class JHipsterReloaderThread implements Runnable {
 
                 jacksonReloader.reloadEvent();
             }
-            reloadSpringBeans("repositories", repositories);
-            reloadSpringBeans("services", services);
-            reloadSpringBeans("components", components);
-            reloadSpringBeans("controllers", controllers);
+            addSpringBeans("repositories", repositories);
+            addSpringBeans("services", services);
+            addSpringBeans("components", components);
+            addSpringBeans("controllers", controllers);
 
             // Start to reload all Spring beans
             if (springReloader.hasBeansToReload()) {
@@ -155,9 +155,9 @@ public class JHipsterReloaderThread implements Runnable {
         }
     }
 
-    private void reloadSpringBeans(String type, List<Class> list) {
+    private void addSpringBeans(String type, List<Class> list) {
         if (list.size() > 0) {
-            log.debug("There are {} Spring {} updated, reloading them", list.size(), type);
+            log.debug("There are {} Spring {} updated, adding them to be reloaded", list.size(), type);
             for (Class clazz : list) {
                 springReloader.reloadEvent(clazz);
             }
