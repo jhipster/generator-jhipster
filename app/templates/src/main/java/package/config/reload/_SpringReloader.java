@@ -39,6 +39,7 @@ public class SpringReloader {
     private final List<SpringReloadListener> springReloadListeners = new ArrayList<>();
 
     private Set<Class<?>> toReloadBeans = new LinkedHashSet<>();
+    private Map<String, Integer> nbTries = new HashMap<>();
 
     public SpringReloader(ConfigurableApplicationContext applicationContext) {
         log.debug("Hot reloading Spring Beans enabled");
@@ -94,8 +95,15 @@ public class SpringReloader {
                     toReloadBeans.remove(clazz);
                 } catch (BeansException e) {
                     //buggy bean, try later
-                    log.error("The Spring bean can't be loaded at this time. Keep it to reload it later", e);
-                    toReloadBeans.add(clazz);
+                    // Try 3 times to load the class. If can't, a message will be logged
+                    // and the class will be removed from the list
+                    if (nbTries.containsKey(beanName) && nbTries.get(beanName) < 3) {
+                        log.error("The Spring bean can't be loaded at this time. Keep it to reload it later", e);
+                        toReloadBeans.add(clazz);
+                    } else {
+                        log.error("Unable to load the Spring bean. Please check the logs.", e);
+                        toReloadBeans.remove(clazz);
+                    }
                 }
             }
 

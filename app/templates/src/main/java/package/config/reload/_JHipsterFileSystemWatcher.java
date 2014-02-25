@@ -1,5 +1,6 @@
 package <%=packageName%>.config.reload;
 
+import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,7 @@ import org.springsource.loaded.TypeRegistry;
 import org.springsource.loaded.Utils;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -149,47 +151,14 @@ public class JHipsterFileSystemWatcher implements Runnable {
                     try {
                         if (Files.isDirectory(child, NOFOLLOW_LINKS)) {
                             registerAll(child);
-                        } else {
-                            // A class has been added, so it needs to be added to the classloader
-                            try {
-                                // Try to load the new class
-                                // First we need to remove the global classesFolder from the child path
-                                String slashedClassPath = StringUtils.substringAfter(dir.toString(), classesFolder);
-                                if (slashedClassPath.startsWith("/")) {
-                                    slashedClassPath = slashedClassPath.substring(1);
-                                }
-
-                                // Replace / by . to create the dottedClassName
-                                String dottedClassPath = slashedClassPath.replace("/", ".");
-
-                                String slashedClassName = slashedClassPath + "/" + StringUtils.substringBefore(name.toString(), ".");
-                                String dottedClassName = dottedClassPath + "." + StringUtils.substringBefore(name.toString(), ".");
-
-                                // Retrieve the Spring Loaded registry.
-                                // We will use to validate the class has not been already loaded
-                                TypeRegistry typeRegistry = TypeRegistry.getTypeRegistryFor(parentClassLoader);
-
-                                ReloadableType rtype = null;
-                                // Check if the class has already loaded by the agent
-                                if (typeRegistry != null) {
-                                    rtype = typeRegistry.getReloadableType(slashedClassName);
-                                }
-
-                                if (rtype == null) {
-                                    // Load the class
-                                    urlClassLoader.loadClass(dottedClassName);
-
-                                    // Force SpringLoaded to instrument the class
-                                    if (typeRegistry != null) {
-                                        String versionstamp = Utils.encode(child.toFile().lastModified());
-                                        rtype = typeRegistry.getReloadableType(slashedClassName);
-                                        typeRegistry.fireReloadEvent(rtype, versionstamp);
-                                    }
-                                    log.debug("New class : '{}' has been loaded", dottedClassName);
-                                }
-                            } catch (Exception e) {
-                                log.error("Failed to load the class named: " + name.toString(), e);
+                            // load the classes that have been copied
+                            final File[] classes = child.toFile().listFiles((FileFilter) new SuffixFileFilter(".class"));
+                            for (File aFile : classes) {
+                                final String parentFolder = aFile.getParent();
+                                loadClassFromPath(parentFolder, aFile.getName(), aFile);
                             }
+                        } else {
+                            loadClassFromPath(dir.toString(), name.toString(), child.toFile());
                         }
                     } catch (IOException e) {
                         log.error("Failed to load the class named: " + name.toString(), e);
@@ -207,6 +176,49 @@ public class JHipsterFileSystemWatcher implements Runnable {
                     break;
                 }
             }
+        }
+    }
+
+    private void loadClassFromPath(String dir, String fileName, File theFile) {
+        // A class has been added, so it needs to be added to the classloader
+        try {
+            // Try to load the new class
+            // First we need to remove the global classesFolder from the child path
+            String slashedClassPath = StringUtils.substringAfter(dir, classesFolder);
+            if (slashedClassPath.startsWith("/")) {
+                slashedClassPath = slashedClassPath.substring(1);
+            }
+
+            // Replace / by . to create the dottedClassName
+            String dottedClassPath = slashedClassPath.replace("/", ".");
+
+            String slashedClassName = slashedClassPath + "/" + StringUtils.substringBefore(fileName, ".");
+            String dottedClassName = dottedClassPath + "." + StringUtils.substringBefore(fileName, ".");
+
+            // Retrieve the Spring Loaded registry.
+            // We will use to validate the class has not been already loaded
+            TypeRegistry typeRegistry = TypeRegistry.getTypeRegistryFor(parentClassLoader);
+
+            ReloadableType rtype = null;
+            // Check if the class has already loaded by the agent
+            if (typeRegistry != null) {
+                rtype = typeRegistry.getReloadableType(slashedClassName);
+            }
+
+            if (rtype == null) {
+                // Load the class
+                urlClassLoader.loadClass(dottedClassName);
+
+                // Force SpringLoaded to instrument the class
+                if (typeRegistry != null) {
+                    String versionstamp = Utils.encode(theFile.lastModified());
+                    rtype = typeRegistry.getReloadableType(slashedClassName);
+                    typeRegistry.fireReloadEvent(rtype, versionstamp);
+                }
+                log.debug("New class : '{}' has been loaded", dottedClassName);
+            }
+        } catch (Exception e) {
+            log.error("Failed to load the class named: " + fileName, e);
         }
     }
 }
