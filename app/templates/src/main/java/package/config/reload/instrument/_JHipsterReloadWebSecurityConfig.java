@@ -99,7 +99,7 @@ public class JHipsterReloadWebSecurityConfig extends GlobalMethodSecurityConfigu
             ((ProxyObject) delegatingMethodSecurityMetadataSource).setHandler(handler);
             return (MethodSecurityMetadataSource) delegatingMethodSecurityMetadataSource;
         } catch (Exception e) {
-            log.error("Failed to instantiate the DelegatingMethodSecurityMetadataSource class");
+            log.error("Failed to instantiate the DelegatingMethodSecurityMetadataSource class", e);
         }
 
         throw new IllegalStateException("Failed to instantiate the DelegatingMethodSecurityMetadataSource class");
