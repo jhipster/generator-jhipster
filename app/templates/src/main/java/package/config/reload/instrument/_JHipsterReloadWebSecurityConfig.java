@@ -99,9 +99,9 @@ public class JHipsterReloadWebSecurityConfig extends GlobalMethodSecurityConfigu
             ((ProxyObject) delegatingMethodSecurityMetadataSource).setHandler(handler);
             return (MethodSecurityMetadataSource) delegatingMethodSecurityMetadataSource;
         } catch (Exception e) {
-            log.error("Failed to instantiate the DelegatingMethodSecurityMetadataSource class", e);
+            log.error("Failed to overwrite the method getAttributes of the class DelegatingMethodSecurityMetadataSource. " +
+                    "Reloading AOP annotation will not work.", e);
         }
-
-        throw new IllegalStateException("Failed to instantiate the DelegatingMethodSecurityMetadataSource class");
+        return super.methodSecurityMetadataSource();
     }
 }
