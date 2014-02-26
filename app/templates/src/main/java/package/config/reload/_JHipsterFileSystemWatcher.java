@@ -16,6 +16,7 @@ import java.net.URLClassLoader;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
@@ -29,46 +30,46 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
  */
 public class JHipsterFileSystemWatcher implements Runnable {
 
-    public static final String TARGET_CLASSES_FOLDER = "targetClassFolder";
-
     private static Logger log = LoggerFactory.getLogger(JHipsterFileSystemWatcher.class);
 
-    public static boolean isStarted;
-
+    private static boolean isStarted;
     private final WatchService watcher;
     private final Map<WatchKey, Path> keys = new HashMap<>();
     private ClassLoader parentClassLoader;
-    private String classesFolder;
-    private URLClassLoader urlClassLoader;
+    private Map<String, URLClassLoader> urlClassLoaderMap = new HashMap<>();
 
-    public JHipsterFileSystemWatcher(String classesFolder, ClassLoader classLoader) throws Exception {
-        final Path classesFolderPath = FileSystems.getDefault().getPath(classesFolder);
-
+    public JHipsterFileSystemWatcher(List<String> watchFolders, ClassLoader classLoader) throws Exception {
         this.parentClassLoader = classLoader;
-        this.classesFolder = classesFolder;
-        urlClassLoader = new URLClassLoader(new URL[] {new File(classesFolder).toURI().toURL()}, classLoader);
 
-        isStarted = true;
         watcher = FileSystems.getDefault().newWatchService();
 
-        registerAll(classesFolderPath);
+        // Register all folders
+        for (String watchFolder : watchFolders) {
+            URLClassLoader urlClassLoader = new URLClassLoader(new URL[] {new File(watchFolder).toURI().toURL()}, classLoader);
+            urlClassLoaderMap.put(watchFolder, urlClassLoader);
+
+            final Path classesFolderPath = FileSystems.getDefault().getPath(watchFolder);
+            registerAll(classesFolderPath);
+        }
+
+        isStarted = true;
     }
 
     /**
      * Register the classLoader and start a thread that will be used to monitor folders where classes can be created.
      *
      * @param classLoader the classLoader of the application
+     * @param watchFolders the list of folders to watch
      */
-    public static void register(ClassLoader classLoader) {
+    public static void register(ClassLoader classLoader, List<String> watchFolders) {
         try {
-            String targetClassFolder = System.getProperty(TARGET_CLASSES_FOLDER);
-
-            if (StringUtils.isEmpty(targetClassFolder)) {
-                log.warn("SpringLoaded - The -DtargetClassFolder VM option is not set. We will use the default target/classes");
-                targetClassFolder = "target/classes";
+            if (watchFolders.size() == 0) {
+                log.warn("SpringLoaded - No watch folders have been defined in the application-{profile}.yml. " +
+                        "We will use the default target/classes");
+                watchFolders.add("target/classes");
             }
 
-            final Thread thread = new Thread(new JHipsterFileSystemWatcher(targetClassFolder, classLoader));
+            final Thread thread = new Thread(new JHipsterFileSystemWatcher(watchFolders, classLoader));
             thread.setDaemon(true);
             thread.start();
 
@@ -182,6 +183,17 @@ public class JHipsterFileSystemWatcher implements Runnable {
     private void loadClassFromPath(String dir, String fileName, File theFile) {
         // A class has been added, so it needs to be added to the classloader
         try {
+            Map.Entry<String, URLClassLoader> urlLoaderEntry = selectUrlLoaderEntry(dir);
+
+            if (urlLoaderEntry == null) {
+                log.error("Failed to find a watched folder for the directory: " + dir);
+                return;
+            }
+
+            final String classesFolder = urlLoaderEntry.getKey();
+            final URLClassLoader urlClassLoader = urlLoaderEntry.getValue();
+
+
             // Try to load the new class
             // First we need to remove the global classesFolder from the child path
             String slashedClassPath = StringUtils.substringAfter(dir, classesFolder);
@@ -220,5 +232,18 @@ public class JHipsterFileSystemWatcher implements Runnable {
         } catch (Exception e) {
             log.error("Failed to load the class named: " + fileName, e);
         }
+    }
+
+    private Map.Entry<String, URLClassLoader> selectUrlLoaderEntry(String dir) {
+
+        for (Map.Entry<String, URLClassLoader> urlClassLoaderEntry : urlClassLoaderMap.entrySet()) {
+            final String key = urlClassLoaderEntry.getKey();
+
+            if (StringUtils.contains(dir, key)) {
+                return urlClassLoaderEntry;
+            }
+        }
+
+        return null;
     }
 }

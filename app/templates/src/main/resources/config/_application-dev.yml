@@ -45,3 +45,10 @@ metrics:
         backupCount: 1<% } if (hibernateCache == 'ehcache') { %>
     ehcache:
         maxBytesLocalHeap: 16M<% } %>
+
+# You can add as many as folders to watch
+# You just need to add a dash + the directory to watch
+hotReload:
+  enabled: true
+  watchdir:
+    - target/classes

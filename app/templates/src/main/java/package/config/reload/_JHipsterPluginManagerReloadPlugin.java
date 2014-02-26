@@ -3,8 +3,12 @@ package <%=packageName%>.config.reload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springsource.loaded.Plugins;
 import org.springsource.loaded.ReloadEventProcessorPlugin;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Automatically re-configures classes when Spring Loaded triggers a hot reload event.
@@ -45,9 +49,43 @@ public class JHipsterPluginManagerReloadPlugin implements ReloadEventProcessorPl
     }
 
     public static void register(ConfigurableApplicationContext ctx, ClassLoader classLoader) {
-        jHipsterReloaderThread = new JHipsterReloaderThread(ctx);
-        JHipsterReloaderThread.register(jHipsterReloaderThread);
-        JHipsterFileSystemWatcher.register(classLoader);
-        Plugins.registerGlobalPlugin(new JHipsterPluginManagerReloadPlugin());
+        Environment env = ctx.getEnvironment();
+
+        if (env.getProperty("hotReload.enabled", Boolean.class, false)) {
+            // Load from env the list of folders to watch
+            List<String> watchFolders = getWatchFolders(env);
+
+            jHipsterReloaderThread = new JHipsterReloaderThread(ctx);
+            JHipsterReloaderThread.register(jHipsterReloaderThread);
+            JHipsterFileSystemWatcher.register(classLoader, watchFolders);
+            Plugins.registerGlobalPlugin(new JHipsterPluginManagerReloadPlugin());
+        }
+    }
+
+    /**
+     * The definition of the folders to watch must be defined in the application-dev.yml as follow
+     *   hotReload:
+     *     enabled: true
+     *     watchdir:
+     *        - /Users/jhipster/demo-jhipster/target/classes
+     *        - /Users/jhipster/demo-jhipster/target/classes1
+
+     * @param env the environment used to retrieve the list of folders
+     * @return the list of folders
+     */
+    private static List<String> getWatchFolders(Environment env) {
+        List<String> results = new ArrayList<>();
+
+        int i=0;
+
+        String folder = env.getProperty("hotReload.watchdir[" + i + "]");
+
+        while(folder != null) {
+            results.add(folder);
+            i++;
+            folder = env.getProperty("hotReload.watchdir[" + i + "]");
+        }
+
+        return results;
     }
 }
