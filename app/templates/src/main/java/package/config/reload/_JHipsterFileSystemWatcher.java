@@ -211,24 +211,16 @@ public class JHipsterFileSystemWatcher implements Runnable {
             // We will use to validate the class has not been already loaded
             TypeRegistry typeRegistry = TypeRegistry.getTypeRegistryFor(parentClassLoader);
 
-            ReloadableType rtype = null;
-            // Check if the class has already loaded by the agent
+            // Load the class
+            urlClassLoader.loadClass(dottedClassName);
+
+            // Force SpringLoaded to instrument the class
             if (typeRegistry != null) {
-                rtype = typeRegistry.getReloadableType(slashedClassName);
+                String versionstamp = Utils.encode(theFile.lastModified());
+                ReloadableType  rtype = typeRegistry.getReloadableType(slashedClassName);
+                typeRegistry.fireReloadEvent(rtype, versionstamp);
             }
-
-            if (rtype == null) {
-                // Load the class
-                urlClassLoader.loadClass(dottedClassName);
-
-                // Force SpringLoaded to instrument the class
-                if (typeRegistry != null) {
-                    String versionstamp = Utils.encode(theFile.lastModified());
-                    rtype = typeRegistry.getReloadableType(slashedClassName);
-                    typeRegistry.fireReloadEvent(rtype, versionstamp);
-                }
-                log.debug("New class : '{}' has been loaded", dottedClassName);
-            }
+            log.debug("New class : '{}' has been loaded", dottedClassName);
         } catch (Exception e) {
             log.error("Failed to load the class named: " + fileName, e);
         }

@@ -121,6 +121,7 @@ public class SpringReloader {
                     log.debug("This is a JDK proxy, getting the real object");
                     beanInstance = ((Advised) beanInstance).getTargetSource().getTarget();
                 }
+                boolean failedToUpdate = false;
                 Field[] fields = beanInstance.getClass().getDeclaredFields();
                 for (Field field : fields) {
                     if (AnnotationUtils.getAnnotation(field, Inject.class) != null ||
@@ -137,12 +138,15 @@ public class SpringReloader {
                             ReflectionUtils.setField(field, beanInstance, beanToInject);
                             } catch (NoSuchBeanDefinitionException bsbde) {
                                 log.warn("Spring bean {} does not exist, could not inject field", field.getType());
+                                failedToUpdate = true;
                             }
                         }
                     }
                 }
-                toReloadBeans.remove(clazz);
-                processListener(clazz, false);
+                if (!failedToUpdate) {
+                    toReloadBeans.remove(clazz);
+                    processListener(clazz, false);
+                }
             }
 
             for (SpringReloadListener springReloadListener : springReloadListeners) {
