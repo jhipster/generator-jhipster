@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.Advised;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -113,19 +115,30 @@ public class SpringReloader {
 
                 log.debug("Existing bean, autowiring fields"); // We only support autowiring on fields
                 if (AopUtils.isCglibProxy(beanInstance)) {
-                    log.trace("This is a CGLIB proxy, getting the real object");
+                    log.debug("This is a CGLIB proxy, getting the real object");
                     beanInstance = ((Advised) beanInstance).getTargetSource().getTarget();
                 } else if (AopUtils.isJdkDynamicProxy(beanInstance)) {
-                    log.trace("This is a JDK proxy, getting the real object");
+                    log.debug("This is a JDK proxy, getting the real object");
                     beanInstance = ((Advised) beanInstance).getTargetSource().getTarget();
                 }
                 Field[] fields = beanInstance.getClass().getDeclaredFields();
                 for (Field field : fields) {
-                    if (AnnotationUtils.getAnnotation(field, Autowired.class) != null) {
-                        log.debug("@Inject annotation found on field {}", field.getName());
-                        Object beanToInject = applicationContext.getBean(field.getType());
+                    if (AnnotationUtils.getAnnotation(field, Inject.class) != null ||
+                            AnnotationUtils.getAnnotation(field, Autowired.class) != null) {
+
+                        log.debug("@Inject/@Autowired annotation found on field {}", field.getName());
                         ReflectionUtils.makeAccessible(field);
-                        ReflectionUtils.setField(field, beanInstance, beanToInject);
+                        if (ReflectionUtils.getField(field, beanInstance) != null) {
+                            log.debug("Field is already injected, not doing anything");
+                        } else {
+                            log.debug("Field is null, injecting a Spring bean");
+                            try {
+                            Object beanToInject = applicationContext.getBean(field.getType());
+                            ReflectionUtils.setField(field, beanInstance, beanToInject);
+                            } catch (NoSuchBeanDefinitionException bsbde) {
+                                log.warn("Spring bean {} does not exist, could not inject field", field.getType());
+                            }
+                        }
                     }
                 }
                 toReloadBeans.remove(clazz);
