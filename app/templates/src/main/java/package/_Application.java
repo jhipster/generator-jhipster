@@ -40,6 +40,12 @@ public class Application {
         }
     }
 
+    /**
+     * Main method, used to run the application.
+     *
+     * To run the application with hot reload enabled, add the following arguments to your JVM:
+     * -javaagent:spring_loaded/springloaded-1.2.0-dev.jar -noverify -Dspringloaded=plugins=com.mycompany.myapp.config.reload.instrument.JHipsterLoadtimeInstrumentationPlugin
+     */
     public static void main(String[] args) {
         SpringApplication app = new SpringApplication(Application.class);
         app.setShowBanner(false);
