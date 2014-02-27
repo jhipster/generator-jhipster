@@ -64,7 +64,7 @@ public class JHipsterFileSystemWatcher implements Runnable {
     public static void register(ClassLoader classLoader, List<String> watchFolders) {
         try {
             if (watchFolders.size() == 0) {
-                log.warn("SpringLoaded - No watch folders have been defined in the application-{profile}.yml. " +
+                log.warn("SpringLoaded - No watched folders have been defined in the application-{profile}.yml. " +
                         "We will use the default target/classes");
                 watchFolders.add("target/classes");
             }
