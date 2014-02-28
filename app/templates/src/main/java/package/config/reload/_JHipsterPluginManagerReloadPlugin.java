@@ -22,7 +22,7 @@ import java.util.List;
  * </p>
  * <p>
  *   To have Spring Loaded working, run your Application class with these VM options: 
- *   "-javaagent:spring_loaded/springloaded-1.1.5-dev.jar -noverify -DtargetClassFolder=<TARGET_CLASS_FOLDER>"
+ *   "-javaagent:spring_loaded/springloaded.jar -noverify -Dspringloaded=plugins=com.mycompany.myapp.config.reload.instrument.JHipsterLoadtimeInstrumentationPlugin"
  * </p>
  */
 public class JHipsterPluginManagerReloadPlugin implements ReloadEventProcessorPlugin {
