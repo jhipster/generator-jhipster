@@ -131,16 +131,15 @@ public class SpringReloader {
                 Object beanInstance = applicationContext.getBean(clazz);
 
                 log.trace("Existing bean, autowiring fields");
-                final Advised advised = (Advised) beanInstance;
                 if (AopUtils.isCglibProxy(beanInstance)) {
                     log.trace("This is a CGLIB proxy, getting the real object");
+                    addAdvisorIfNeeded(clazz, beanInstance);
                     beanInstance = advised.getTargetSource().getTarget();
                 } else if (AopUtils.isJdkDynamicProxy(beanInstance)) {
                     log.trace("This is a JDK proxy, getting the real object");
+                    addAdvisorIfNeeded(clazz, beanInstance);
                     beanInstance = advised.getTargetSource().getTarget();
                 }
-                // Check Advisor to see if a new one needs to be added
-                addAdvisorIfNeeded(clazz, advised);
                 boolean failedToUpdate = false;
                 Field[] fields = beanInstance.getClass().getDeclaredFields();
                 for (Field field : fields) {
@@ -182,7 +181,8 @@ public class SpringReloader {
     /**
      * AOP uses advisor to intercept any annotations
      */
-    private void addAdvisorIfNeeded(Class clazz, Advised advised) {
+    private void addAdvisorIfNeeded(Class clazz, Object beanInstance) {
+        final Advised advised = (Advised) beanInstance;
         final List<Advisor> candidateAdvisors = this.beanFactoryAdvisorRetrievalHelper.findAdvisorBeans();
 
         final List<Advisor> advisorsThatCanApply = AopUtils.findAdvisorsThatCanApply(candidateAdvisors, clazz);
