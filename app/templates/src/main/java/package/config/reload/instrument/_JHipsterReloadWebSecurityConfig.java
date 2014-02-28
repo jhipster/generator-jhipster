@@ -9,12 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.annotation.Jsr250MethodSecurityMetadataSource;
 import org.springframework.security.access.annotation.SecuredAnnotationSecurityMetadataSource;
 import org.springframework.security.access.expression.method.ExpressionBasedAnnotationAttributeFactory;
-import org.springframework.security.access.intercept.aopalliance.MethodSecurityMetadataSourceAdvisor;
 import org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource;
 import org.springframework.security.access.method.MethodSecurityMetadataSource;
 import org.springframework.security.access.prepost.PrePostAnnotationSecurityMetadataSource;
@@ -40,20 +38,6 @@ import java.util.List;
 public class JHipsterReloadWebSecurityConfig extends GlobalMethodSecurityConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(JHipsterReloadWebSecurityConfig.class);
-
-    /**
-     * Obtains the {@link org.springframework.security.access.intercept.aopalliance.MethodSecurityMetadataSourceAdvisor} to be used.
-     *
-     * @return
-     */
-    @Bean(name = "methodSecurityMetadataSourceAdvisor")
-    public MethodSecurityMetadataSourceAdvisor metaDataSourceAdvisor() {
-        MethodSecurityMetadataSourceAdvisor methodAdvisor = new MethodSecurityMetadataSourceAdvisor(
-                "methodSecurityInterceptor", methodSecurityMetadataSource(),
-                "methodSecurityMetadataSource");
-        methodAdvisor.setOrder(Ordered.LOWEST_PRECEDENCE);
-        return methodAdvisor;
-    }
 
     /**
      * Used by method advice
