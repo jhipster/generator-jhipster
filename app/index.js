@@ -243,6 +243,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/reload/listener/_JHipsterHandlerMappingListener.java', javaDir + 'config/reload/listener/JHipsterHandlerMappingListener.java');
     this.template('src/main/java/package/config/reload/listener/_SpringReloadListener.java', javaDir + 'config/reload/listener/SpringReloadListener.java');
     this.template('src/main/java/package/config/reload/instrument/_package-info.java', javaDir + 'config/reload/instrument/package-info.java');
+    this.template('src/main/java/package/config/reload/instrument/_JHipsterAdvisedSupport.java', javaDir + 'config/reload/instrument/JHipsterAdvisedSupport.java');
     this.template('src/main/java/package/config/reload/instrument/_JHipsterLoadtimeInstrumentationPlugin.java', javaDir + 'config/reload/instrument/JHipsterLoadtimeInstrumentationPlugin.java');
     this.template('src/main/java/package/config/reload/instrument/_JHipsterReloadWebSecurityConfig.java', javaDir + 'config/reload/instrument/JHipsterReloadWebSecurityConfig.java');
 

@@ -21,7 +21,8 @@ public class JHipsterLoadtimeInstrumentationPlugin implements LoadtimeInstrument
 
     @Override
     public boolean accept(String slashedTypeName, ClassLoader classLoader, ProtectionDomain protectionDomain, byte[] bytes) {
-        return StringUtils.equals(slashedTypeName, "org/springframework/security/access/method/DelegatingMethodSecurityMetadataSource");
+        return StringUtils.equals(slashedTypeName, "org/springframework/security/access/method/DelegatingMethodSecurityMetadataSource") ||
+               StringUtils.equals(slashedTypeName, "org/springframework/aop/framework/ProxyCreatorSupport");
     }
 
     @Override
@@ -35,6 +36,15 @@ public class JHipsterLoadtimeInstrumentationPlugin implements LoadtimeInstrument
                 CtClass ctClass = classPool.get("org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource");
                 ctClass.setModifiers(Modifier.PUBLIC);
 
+                return ctClass.toBytecode();
+            }
+
+            // Change the super class from ProxyCreator to JHipsterProxyCreator.
+            // By default the AdvisedSupport class uses caching See ProxyCreator.methodCache variable
+            // The JHipsterProxyCreator class will just clear the caching
+            if (StringUtils.equals(slashedClassName, "org/springframework/aop/framework/ProxyCreatorSupport")) {
+                CtClass ctClass = classPool.get("org.springframework.aop.framework.ProxyCreatorSupport");
+                ctClass.setSuperclass(classPool.get("com.mycompany.myapp.config.reload.instrument.JHipsterAdvisedSupport"));
                 return ctClass.toBytecode();
             }
         } catch (Exception e) {

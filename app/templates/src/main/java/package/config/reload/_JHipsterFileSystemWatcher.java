@@ -220,7 +220,6 @@ public class JHipsterFileSystemWatcher implements Runnable {
                 ReloadableType  rtype = typeRegistry.getReloadableType(slashedClassName);
                 typeRegistry.fireReloadEvent(rtype, versionstamp);
             }
-            log.debug("New class : '{}' has been loaded", dottedClassName);
         } catch (Exception e) {
             log.error("Failed to load the class named: " + fileName, e);
         }

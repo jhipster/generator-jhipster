@@ -5,7 +5,9 @@ import <%=packageName%>.config.reload.listener.SpringReloadListener;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.Advisor;
 import org.springframework.aop.framework.Advised;
+import org.springframework.aop.framework.autoproxy.BeanFactoryAdvisorRetrievalHelper;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -37,15 +39,19 @@ public class SpringReloader {
     private final Logger log = LoggerFactory.getLogger(SpringReloader.class);
 
     private final ConfigurableApplicationContext applicationContext;
+    private final BeanFactoryAdvisorRetrievalHelper beanFactoryAdvisorRetrievalHelper;
 
     private final List<SpringReloadListener> springReloadListeners = new ArrayList<>();
 
     private Set<Class<?>> toReloadBeans = new LinkedHashSet<>();
+    private Map<String, Class<?>> toWaitFromBeans = new HashMap<>();
     private Map<String, Integer> nbTries = new HashMap<>();
 
     public SpringReloader(ConfigurableApplicationContext applicationContext) {
         log.debug("Hot reloading Spring Beans enabled");
         this.applicationContext = applicationContext;
+        this.beanFactoryAdvisorRetrievalHelper = new BeanFactoryAdvisorRetrievalHelper(applicationContext.getBeanFactory());
+
         // register listeners
         registerListeners();
     }
@@ -72,6 +78,12 @@ public class SpringReloader {
                 String beanName = constructBeanName(annotation, toReloadBean);
                 if (!beanFactory.containsBeanDefinition(beanName)) {
                     newSpringBeans.add(toReloadBean);
+                    // Check if this new class is a dependent class.
+                    // If so add this dependent class to the newSpringBeans list
+                    if (toWaitFromBeans.containsKey(toReloadBean.getName())) {
+                        existingSpringBeans.add(toWaitFromBeans.get(toReloadBean.getName()));
+                        toWaitFromBeans.remove(toReloadBean.getName());
+                    }
                 } else {
                     existingSpringBeans.add(toReloadBean);
                 }
@@ -95,58 +107,68 @@ public class SpringReloader {
                     beanFactory.getBean(beanName);
                     processListener(clazz, true);
                     toReloadBeans.remove(clazz);
+                    nbTries.remove(beanName);
                 } catch (BeansException e) {
                     //buggy bean, try later
                     // Try 3 times to load the class. If can't, a message will be logged
                     // and the class will be removed from the list
                     if (nbTries.containsKey(beanName) && nbTries.get(beanName) < 3) {
-                        log.error("The Spring bean can't be loaded at this time. Keep it to reload it later", e);
+                        log.trace("The Spring bean can't be loaded at this time. Keep it to reload it later", e);
+                        // remove the registration bean to treat this class as new class
+                        beanFactory.removeBeanDefinition(beanName);
                         toReloadBeans.add(clazz);
+                        nbTries.put(beanName, nbTries.get(beanName) + 1);
                     } else {
                         log.error("Unable to load the Spring bean. Please check the logs.", e);
                         toReloadBeans.remove(clazz);
                     }
                 }
+                log.debug("JHipster reload - New Spring bean '{}' has been reloaded.", clazz);
             }
 
             //4) Resolve deps for existing beans
             for (Class clazz : existingSpringBeans) {
                 Object beanInstance = applicationContext.getBean(clazz);
 
-                log.debug("Existing bean, autowiring fields"); // We only support autowiring on fields
+                log.trace("Existing bean, autowiring fields");
+                final Advised advised = (Advised) beanInstance;
                 if (AopUtils.isCglibProxy(beanInstance)) {
-                    log.debug("This is a CGLIB proxy, getting the real object");
-                    beanInstance = ((Advised) beanInstance).getTargetSource().getTarget();
+                    log.trace("This is a CGLIB proxy, getting the real object");
+                    beanInstance = advised.getTargetSource().getTarget();
                 } else if (AopUtils.isJdkDynamicProxy(beanInstance)) {
-                    log.debug("This is a JDK proxy, getting the real object");
-                    beanInstance = ((Advised) beanInstance).getTargetSource().getTarget();
+                    log.trace("This is a JDK proxy, getting the real object");
+                    beanInstance = advised.getTargetSource().getTarget();
                 }
+                // Check Advisor to see if a new one needs to be added
+                addAdvisorIfNeeded(clazz, advised);
                 boolean failedToUpdate = false;
                 Field[] fields = beanInstance.getClass().getDeclaredFields();
                 for (Field field : fields) {
                     if (AnnotationUtils.getAnnotation(field, Inject.class) != null ||
                             AnnotationUtils.getAnnotation(field, Autowired.class) != null) {
-
-                        log.debug("@Inject/@Autowired annotation found on field {}", field.getName());
+                        log.trace("@Inject/@Autowired annotation found on field {}", field.getName());
                         ReflectionUtils.makeAccessible(field);
                         if (ReflectionUtils.getField(field, beanInstance) != null) {
-                            log.debug("Field is already injected, not doing anything");
+                            log.trace("Field is already injected, not doing anything");
                         } else {
-                            log.debug("Field is null, injecting a Spring bean");
+                            log.trace("Field is null, injecting a Spring bean");
                             try {
                             Object beanToInject = applicationContext.getBean(field.getType());
                             ReflectionUtils.setField(field, beanInstance, beanToInject);
                             } catch (NoSuchBeanDefinitionException bsbde) {
-                                log.warn("Spring bean {} does not exist, could not inject field", field.getType());
+                                log.debug("JHipster reload - Spring bean '{}' does not exist, " +
+                                        "wait until this class will be available.", field.getType());
                                 failedToUpdate = true;
+                                toWaitFromBeans.put(field.getType().getName(), clazz);
                             }
                         }
                     }
                 }
+                toReloadBeans.remove(clazz);
                 if (!failedToUpdate) {
-                    toReloadBeans.remove(clazz);
                     processListener(clazz, false);
                 }
+                log.debug("JHipster reload - Existing Spring bean '{}' has been reloaded.", clazz);
             }
 
             for (SpringReloadListener springReloadListener : springReloadListeners) {
@@ -154,6 +176,22 @@ public class SpringReloader {
             }
         } catch (Exception e) {
             log.warn("Could not hot reload Spring bean!", e);
+        }
+    }
+
+    /**
+     * AOP uses advisor to intercept any annotations
+     */
+    private void addAdvisorIfNeeded(Class clazz, Advised advised) {
+        final List<Advisor> candidateAdvisors = this.beanFactoryAdvisorRetrievalHelper.findAdvisorBeans();
+
+        final List<Advisor> advisorsThatCanApply = AopUtils.findAdvisorsThatCanApply(candidateAdvisors, clazz);
+
+        for (Advisor advisor : advisorsThatCanApply) {
+            // Add the advisor to the advised if it doesn't exist
+            if (advised.indexOf(advisor) == -1) {
+                advised.addAdvisor(advisor);
+            }
         }
     }
 
