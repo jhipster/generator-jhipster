@@ -109,7 +109,7 @@ public class SpringReloader {
                     toReloadBeans.remove(clazz);
                     nbTries.remove(beanName);
                 } catch (BeansException e) {
-                    //buggy bean, try later
+                    // buggy bean, try later
                     // Try 3 times to load the class. If can't, a message will be logged
                     // and the class will be removed from the list
                     if (nbTries.containsKey(beanName) && nbTries.get(beanName) < 3) {
@@ -126,7 +126,7 @@ public class SpringReloader {
                 log.debug("JHipster reload - New Spring bean '{}' has been reloaded.", clazz);
             }
 
-            //4) Resolve deps for existing beans
+            //4) Resolve dependencies for existing beans
             for (Class clazz : existingSpringBeans) {
                 Object beanInstance = applicationContext.getBean(clazz);
 
@@ -134,11 +134,15 @@ public class SpringReloader {
                 if (AopUtils.isCglibProxy(beanInstance)) {
                     log.trace("This is a CGLIB proxy, getting the real object");
                     addAdvisorIfNeeded(clazz, beanInstance);
+                    final Advised advised = (Advised) beanInstance;
                     beanInstance = advised.getTargetSource().getTarget();
                 } else if (AopUtils.isJdkDynamicProxy(beanInstance)) {
                     log.trace("This is a JDK proxy, getting the real object");
                     addAdvisorIfNeeded(clazz, beanInstance);
+                    final Advised advised = (Advised) beanInstance;
                     beanInstance = advised.getTargetSource().getTarget();
+                } else {
+                    log.trace("This is a normal Java object");
                 }
                 boolean failedToUpdate = false;
                 Field[] fields = beanInstance.getClass().getDeclaredFields();
@@ -179,7 +183,7 @@ public class SpringReloader {
     }
 
     /**
-     * AOP uses advisor to intercept any annotations
+     * AOP uses advisor to intercept any annotations.
      */
     private void addAdvisorIfNeeded(Class clazz, Object beanInstance) {
         final Advised advised = (Advised) beanInstance;
