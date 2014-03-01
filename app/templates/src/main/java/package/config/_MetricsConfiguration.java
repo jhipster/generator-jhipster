@@ -27,6 +27,18 @@ import java.util.concurrent.TimeUnit;
 @EnableMetrics(proxyTargetClass = true)
 public class MetricsConfiguration extends MetricsConfigurerAdapter implements EnvironmentAware {
 
+    private static final String ENV_METRICS = "metrics.";
+    private static final String ENV_METRICS_GRAPHITE = "metrics.graphite.";
+    private static final String PROP_JMX_ENABLED = "jmx.enabled";
+    private static final String PROP_GRAPHITE_ENABLED = "enabled";
+    private static final String PROP_PORT = "port";
+    private static final String PROP_HOST = "host";
+    private static final String PROP_METRIC_REG_JVM_MEMORY = "jvm.memory";
+    private static final String PROP_METRIC_REG_JVM_GARBAGE = "jvm.garbage";
+    private static final String PROP_METRIC_REG_JVM_THREADS = "jvm.threads";
+    private static final String PROP_METRIC_REG_JVM_FILES = "jvm.files";
+    private static final String PROP_METRIC_REG_JVM_BUFFERS = "jvm.buffers";
+
     private final Logger log = LoggerFactory.getLogger(MetricsConfiguration.class);
 
     private static final MetricRegistry METRIC_REGISTRY = new MetricRegistry();
@@ -37,7 +49,7 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
 
     @Override
     public void setEnvironment(Environment environment) {
-        this.propertyResolver = new RelaxedPropertyResolver(environment, "metrics.");
+        this.propertyResolver = new RelaxedPropertyResolver(environment, ENV_METRICS);
     }
 
     @Override
@@ -55,12 +67,12 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
     @PostConstruct
     public void init() {
         log.debug("Registring JVM gauges");
-        METRIC_REGISTRY.register("jvm.memory", new MemoryUsageGaugeSet());
-        METRIC_REGISTRY.register("jvm.garbage", new GarbageCollectorMetricSet());
-        METRIC_REGISTRY.register("jvm.threads", new ThreadStatesGaugeSet());
-        METRIC_REGISTRY.register("jvm.files", new FileDescriptorRatioGauge());
-        METRIC_REGISTRY.register("jvm.buffers", new BufferPoolMetricSet(ManagementFactory.getPlatformMBeanServer()));
-        if (propertyResolver.getProperty("jmx.enabled", Boolean.class, false)) {
+        METRIC_REGISTRY.register(PROP_METRIC_REG_JVM_MEMORY, new MemoryUsageGaugeSet());
+        METRIC_REGISTRY.register(PROP_METRIC_REG_JVM_GARBAGE, new GarbageCollectorMetricSet());
+        METRIC_REGISTRY.register(PROP_METRIC_REG_JVM_THREADS, new ThreadStatesGaugeSet());
+        METRIC_REGISTRY.register(PROP_METRIC_REG_JVM_FILES, new FileDescriptorRatioGauge());
+        METRIC_REGISTRY.register(PROP_METRIC_REG_JVM_BUFFERS, new BufferPoolMetricSet(ManagementFactory.getPlatformMBeanServer()));
+        if (propertyResolver.getProperty(PROP_JMX_ENABLED, Boolean.class, false)) {
             log.info("Initializing Metrics JMX reporting");
             final JmxReporter jmxReporter = JmxReporter.forRegistry(METRIC_REGISTRY).build();
             jmxReporter.start();
@@ -80,16 +92,16 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
 
         @Override
         public void setEnvironment(Environment environment) {
-            this.propertyResolver = new RelaxedPropertyResolver(environment, "metrics.graphite");
+            this.propertyResolver = new RelaxedPropertyResolver(environment, ENV_METRICS_GRAPHITE);
         }
 
         @PostConstruct
         private void init() {
-            Boolean graphiteEnabled = propertyResolver.getProperty("enabled", Boolean.class, false);
+            Boolean graphiteEnabled = propertyResolver.getProperty(PROP_GRAPHITE_ENABLED, Boolean.class, false);
             if (graphiteEnabled) {
                 log.info("Initializing Metrics Graphite reporting");
-                String graphiteHost = propertyResolver.getRequiredProperty("host");
-                Integer graphitePort = propertyResolver.getRequiredProperty("port", Integer.class);
+                String graphiteHost = propertyResolver.getRequiredProperty(PROP_HOST);
+                Integer graphitePort = propertyResolver.getRequiredProperty(PROP_PORT, Integer.class);
                 Graphite graphite = new Graphite(new InetSocketAddress(graphiteHost, graphitePort));
                 GraphiteReporter graphiteReporter = GraphiteReporter.forRegistry(metricRegistry)
                         .convertRatesTo(TimeUnit.SECONDS)
