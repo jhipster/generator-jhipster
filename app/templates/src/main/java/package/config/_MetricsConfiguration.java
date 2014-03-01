@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 public class MetricsConfiguration extends MetricsConfigurerAdapter implements EnvironmentAware {
 
     private static final String ENV_METRICS = "metrics.";
-    private static final String ENV_METRICS_GRAPHITE = "metrics.graphite";
+    private static final String ENV_METRICS_GRAPHITE = "metrics.graphite.";
     private static final String PROP_JMX_ENABLED = "jmx.enabled";
     private static final String PROP_GRAPHITE_ENABLED = "enabled";
     private static final String PROP_PORT = "port";
@@ -49,7 +49,7 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
 
     @Override
     public void setEnvironment(Environment environment) {
-        this.propertyResolver = new RelaxedPropertyResolver(environment, "metrics.");
+        this.propertyResolver = new RelaxedPropertyResolver(environment, ENV_METRICS);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
 
         @Override
         public void setEnvironment(Environment environment) {
-            this.propertyResolver = new RelaxedPropertyResolver(environment, "metrics.graphite");
+            this.propertyResolver = new RelaxedPropertyResolver(environment, ENV_METRICS_GRAPHITE);
         }
 
         @PostConstruct
