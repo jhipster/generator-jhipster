@@ -1,4 +1,4 @@
-package com.mycompany.myapp.config.reload.instrument;
+package <%=packageName%>.config.reload.instrument;
 
 import org.springframework.aop.framework.AdvisedSupport;
 
