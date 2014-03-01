@@ -36,6 +36,10 @@ spring:
 
 metrics:
     jmx.enabled: true
+    graphite:
+        enabled: false
+        host:
+        port:
 
 <% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast' || hibernateCache == 'ehcache') { %>cache:
     timeToLiveSeconds: 3600<% } if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
