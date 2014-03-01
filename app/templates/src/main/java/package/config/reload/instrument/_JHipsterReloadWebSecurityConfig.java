@@ -1,12 +1,12 @@
 package <%=packageName%>.config.reload.instrument;
 
+import <%=packageName%>.config.reload.condition.ConditionalOnSpringLoaded;
 import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
 import javassist.util.proxy.ProxyObject;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.ConfigAttribute;
@@ -18,7 +18,6 @@ import org.springframework.security.access.method.MethodSecurityMetadataSource;
 import org.springframework.security.access.prepost.PrePostAnnotationSecurityMetadataSource;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
-import org.springsource.loaded.agent.SpringLoadedAgent;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -33,7 +32,7 @@ import java.util.List;
  * This class will create a Proxy to change the behavior of the getAttributes method to remove the caching.
  */
 @Configuration
-@ConditionalOnClass(SpringLoadedAgent.class)
+@ConditionalOnSpringLoaded
 @EnableGlobalMethodSecurity
 public class JHipsterReloadWebSecurityConfig extends GlobalMethodSecurityConfiguration {
 
@@ -86,6 +85,7 @@ public class JHipsterReloadWebSecurityConfig extends GlobalMethodSecurityConfigu
             log.debug("Failed to overwrite the method getAttributes of the class DelegatingMethodSecurityMetadataSource. " +
                     "Reloading AOP annotation will not work.");
         }
-        return super.methodSecurityMetadataSource();
+        throw new IllegalStateException("Failed to instantiate the DelegatingMethodSecurityMetadataSource class. " +
+                "Check if the springloaded JVM property has been set");
     }
 }
