@@ -246,6 +246,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/reload/instrument/_JHipsterAdvisedSupport.java', javaDir + 'config/reload/instrument/JHipsterAdvisedSupport.java');
     this.template('src/main/java/package/config/reload/instrument/_JHipsterLoadtimeInstrumentationPlugin.java', javaDir + 'config/reload/instrument/JHipsterLoadtimeInstrumentationPlugin.java');
     this.template('src/main/java/package/config/reload/instrument/_JHipsterReloadWebSecurityConfig.java', javaDir + 'config/reload/instrument/JHipsterReloadWebSecurityConfig.java');
+    this.template('src/main/java/package/config/reload/condition/_ConditionalOnSpringLoaded.java', javaDir + 'config/reload/condition/ConditionalOnSpringLoaded.java');
+    this.template('src/main/java/package/config/reload/condition/_OnSpringLoadedCondition.java', javaDir + 'config/reload/condition/OnSpringLoadedCondition.java');
+    this.template('src/main/java/package/config/reload/condition/_package-info.java', javaDir + 'config/reload/condition/package-info.java');
 
     this.template('src/main/java/package/domain/_package-info.java', javaDir + 'domain/package-info.java');
     this.template('src/main/java/package/domain/_Authority.java', javaDir + 'domain/Authority.java');

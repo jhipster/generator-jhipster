@@ -1,9 +1,9 @@
 package <%=packageName%>.config.reload;
 
+import <%=packageName%>.config.reload.condition.ConditionalOnSpringLoaded;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springsource.loaded.agent.SpringLoadedAgent;
 
 @Configuration
-@ConditionalOnClass(SpringLoadedAgent.class)
+@ConditionalOnSpringLoaded
 public class JHipsterReloaderConfiguration implements ApplicationContextAware {
 
     private final Logger log = LoggerFactory.getLogger(JHipsterReloaderConfiguration.class);
