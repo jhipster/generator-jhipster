@@ -44,7 +44,7 @@ public class JHipsterLoadtimeInstrumentationPlugin implements LoadtimeInstrument
             // The JHipsterProxyCreator class will just clear the caching
             if (StringUtils.equals(slashedClassName, "org/springframework/aop/framework/ProxyCreatorSupport")) {
                 CtClass ctClass = classPool.get("org.springframework.aop.framework.ProxyCreatorSupport");
-                ctClass.setSuperclass(classPool.get("com.mycompany.myapp.config.reload.instrument.JHipsterAdvisedSupport"));
+                ctClass.setSuperclass(classPool.get("<%=packageName%>.config.reload.instrument.JHipsterAdvisedSupport"));
                 return ctClass.toBytecode();
             }
         } catch (Exception e) {
