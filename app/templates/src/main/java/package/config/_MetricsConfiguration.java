@@ -39,7 +39,7 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
     private static final String PROP_METRIC_REG_JVM_FILES = "jvm.files";
     private static final String PROP_METRIC_REG_JVM_BUFFERS = "jvm.buffers";
 
-    private static final Logger LOG = LoggerFactory.getLogger(MetricsConfiguration.class);
+    private final Logger log = LoggerFactory.getLogger(MetricsConfiguration.class);
 
     private static final MetricRegistry METRIC_REGISTRY = new MetricRegistry();
 
@@ -66,14 +66,14 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
 
     @PostConstruct
     public void init() {
-        LOG.debug("Registring JVM gauges");
+        log.debug("Registring JVM gauges");
         METRIC_REGISTRY.register(PROP_METRIC_REG_JVM_MEMORY, new MemoryUsageGaugeSet());
         METRIC_REGISTRY.register(PROP_METRIC_REG_JVM_GARBAGE, new GarbageCollectorMetricSet());
         METRIC_REGISTRY.register(PROP_METRIC_REG_JVM_THREADS, new ThreadStatesGaugeSet());
         METRIC_REGISTRY.register(PROP_METRIC_REG_JVM_FILES, new FileDescriptorRatioGauge());
         METRIC_REGISTRY.register(PROP_METRIC_REG_JVM_BUFFERS, new BufferPoolMetricSet(ManagementFactory.getPlatformMBeanServer()));
         if (propertyResolver.getProperty(PROP_JMX_ENABLED, Boolean.class, false)) {
-            LOG.info("Initializing Metrics JMX reporting");
+            log.info("Initializing Metrics JMX reporting");
             final JmxReporter jmxReporter = JmxReporter.forRegistry(METRIC_REGISTRY).build();
             jmxReporter.start();
         }
@@ -99,7 +99,7 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
         private void init() {
             Boolean graphiteEnabled = propertyResolver.getProperty(PROP_GRAPHITE_ENABLED, Boolean.class, false);
             if (graphiteEnabled) {
-                LOG.info("Initializing Metrics Graphite reporting");
+                log.info("Initializing Metrics Graphite reporting");
                 String graphiteHost = propertyResolver.getRequiredProperty(PROP_HOST);
                 Integer graphitePort = propertyResolver.getRequiredProperty(PROP_PORT, Integer.class);
                 Graphite graphite = new Graphite(new InetSocketAddress(graphiteHost, graphitePort));
