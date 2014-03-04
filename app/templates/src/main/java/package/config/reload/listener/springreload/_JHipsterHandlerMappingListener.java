@@ -1,4 +1,4 @@
-package <%=packageName%>.config.reload.listener;
+package <%=packageName%>.config.reload.listener.springreload;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -69,7 +69,7 @@ public class JHipsterHandlerMappingListener extends RequestMappingHandlerMapping
     }
 
     @Override
-    public boolean execute() {
+    public void execute() {
         // Re-map the methods
         for (Class<?> clazz : newControllers) {
             final Class<?> userType = clazz;
@@ -91,7 +91,6 @@ public class JHipsterHandlerMappingListener extends RequestMappingHandlerMapping
                 }
             }
         }
-        return true;
     }
 
     /**

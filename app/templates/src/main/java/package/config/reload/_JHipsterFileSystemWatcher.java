@@ -1,26 +1,26 @@
 package <%=packageName%>.config.reload;
 
+import <%=packageName%>.config.reload.listener.filewatcher.FileWatcherListener;
+import <%=packageName%>.config.reload.listener.filewatcher.NewClassLoaderListener;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springsource.loaded.ReloadableType;
-import org.springsource.loaded.TypeRegistry;
-import org.springsource.loaded.Utils;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.Environment;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 
 /**
  * A watcher for the target class folder.
@@ -28,29 +28,32 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
  * The watcher will monitor all folders and sub-folders to check if a new class
  * is created. If so, the new class will be loaded and managed by Spring-Loaded.
  */
-public class JHipsterFileSystemWatcher implements Runnable {
+public class JHipsterFileSystemWatcher implements FileSystemWatcher, Runnable {
 
     private static Logger log = LoggerFactory.getLogger(JHipsterFileSystemWatcher.class);
 
     private static boolean isStarted;
     private final WatchService watcher;
     private final Map<WatchKey, Path> keys = new HashMap<>();
-    private ClassLoader parentClassLoader;
-    private Map<String, URLClassLoader> urlClassLoaderMap = new HashMap<>();
+    private final List<FileWatcherListener> fileWatcherListeners = new ArrayList<>();
+    private final List<String> watchFolders;
+    private final ConfigurableApplicationContext ctx;
+    private final ClassLoader classLoader;
 
-    public JHipsterFileSystemWatcher(List<String> watchFolders, ClassLoader classLoader) throws Exception {
-        this.parentClassLoader = classLoader;
 
+    public JHipsterFileSystemWatcher(List<String> watchFolders, ConfigurableApplicationContext ctx, ClassLoader classLoader) throws Exception {
+        this.watchFolders = watchFolders;
+        this.ctx = ctx;
+        this.classLoader = classLoader;
         watcher = FileSystems.getDefault().newWatchService();
 
         // Register all folders
         for (String watchFolder : watchFolders) {
-            URLClassLoader urlClassLoader = new URLClassLoader(new URL[] {new File(watchFolder).toURI().toURL()}, classLoader);
-            urlClassLoaderMap.put(watchFolder, urlClassLoader);
-
             final Path classesFolderPath = FileSystems.getDefault().getPath(watchFolder);
-            registerAll(classesFolderPath);
+            watchDirectory(classesFolderPath);
         }
+
+        registerFileWatcherListeners();
 
         isStarted = true;
     }
@@ -59,17 +62,22 @@ public class JHipsterFileSystemWatcher implements Runnable {
      * Register the classLoader and start a thread that will be used to monitor folders where classes can be created.
      *
      * @param classLoader the classLoader of the application
-     * @param watchFolders the list of folders to watch
+     * @param ctx the spring application context
      */
-    public static void register(ClassLoader classLoader, List<String> watchFolders) {
+    public static void register(ClassLoader classLoader, ConfigurableApplicationContext ctx) {
         try {
+            Environment env = ctx.getEnvironment();
+
+            // Load from env the list of folders to watch
+            List<String> watchFolders = getWatchFolders(env);
+
             if (watchFolders.size() == 0) {
                 log.warn("SpringLoaded - No watched folders have been defined in the application-{profile}.yml. " +
                         "We will use the default target/classes");
                 watchFolders.add("target/classes");
             }
 
-            final Thread thread = new Thread(new JHipsterFileSystemWatcher(watchFolders, classLoader));
+            final Thread thread = new Thread(new JHipsterFileSystemWatcher(watchFolders, ctx, classLoader));
             thread.setDaemon(true);
             thread.start();
 
@@ -88,27 +96,46 @@ public class JHipsterFileSystemWatcher implements Runnable {
         }
     }
 
+    @Override
+    public ClassLoader getClassLoader() {
+        return classLoader;
+    }
+
+    @Override
+    public ConfigurableApplicationContext getConfigurableApplicationContext() {
+        return ctx;
+    }
+
+    @Override
+    public List<String> getWatchFolders() {
+        return watchFolders;
+    }
+
     /**
      * Register the given directory, and all its sub-directories, with the
      * WatchService.
      */
-    private void registerAll(final Path start) throws IOException {
+    public void watchDirectory(final Path start) {
         // register directory and sub-directories
-        Files.walkFileTree(start, new SimpleFileVisitor<Path>() {
-            @Override
-            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
-                    throws IOException {
-                register(dir);
-                return FileVisitResult.CONTINUE;
-            }
-        });
+        try {
+            Files.walkFileTree(start, new SimpleFileVisitor<Path>() {
+                @Override
+                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs)
+                        throws IOException {
+                    register(dir);
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+        } catch (IOException e) {
+            log.error("Failed to register the directory '{}'", start);
+        }
     }
 
     /**
      * Register the given directory with the WatchService.
      */
     private void register(Path dir) throws IOException {
-        WatchKey key = dir.register(watcher, ENTRY_CREATE);
+        WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_MODIFY);
         Path prev = keys.get(key);
         if (prev == null) {
             log.debug("Directory : '{}' will be monitored for changes", dir);
@@ -119,7 +146,7 @@ public class JHipsterFileSystemWatcher implements Runnable {
     /**
      * Process all events for keys queued to the watcher.
      * 
-     * When the event is a ENTRY_CREATE, the folders will be added to the watcher,
+     * When the event is a ENTRY_CREATE or ENTRY_MODIFY, the folders will be added to the watcher,
      * the classes will be loaded by SpringLoaded
      */
     public void run() {
@@ -146,24 +173,20 @@ public class JHipsterFileSystemWatcher implements Runnable {
                 Path name = ev.context();
                 Path child = dir.resolve(name);
 
+                System.out.println(child.toFile().getAbsolutePath());
+
                 // if directory is created, and watching recursively, then
                 // register it and its sub-directories
-                if (kind == ENTRY_CREATE) {
-                    try {
-                        if (Files.isDirectory(child, NOFOLLOW_LINKS)) {
-                            registerAll(child);
-                            // load the classes that have been copied
-                            final File[] classes = child.toFile().listFiles((FileFilter) new SuffixFileFilter(".class"));
-                            for (File aFile : classes) {
-                                final String parentFolder = aFile.getParent();
-                                loadClassFromPath(parentFolder, aFile.getName(), aFile);
-                            }
-                        } else {
-                            loadClassFromPath(dir.toString(), name.toString(), child.toFile());
-                        }
-                    } catch (IOException e) {
-                        log.error("Failed to load the class named: " + name.toString(), e);
+                if (Files.isDirectory(child, NOFOLLOW_LINKS)) {
+                    watchDirectory(child);
+                    // load the classes that have been copied
+                    final File[] classes = child.toFile().listFiles((FileFilter) new SuffixFileFilter(".class"));
+                    for (File aFile : classes) {
+                        final String parentFolder = aFile.getParent();
+                        callFileWatcherListerners(parentFolder, aFile.toPath(), kind);
                     }
+                } else {
+                    callFileWatcherListerners(dir.toString(), child, kind);
                 }
             }
 
@@ -180,61 +203,53 @@ public class JHipsterFileSystemWatcher implements Runnable {
         }
     }
 
-    private void loadClassFromPath(String dir, String fileName, File theFile) {
-        // A class has been added, so it needs to be added to the classloader
-        try {
-            Map.Entry<String, URLClassLoader> urlLoaderEntry = selectUrlLoaderEntry(dir);
+    /**
+     * The definition of the folders to watch must be defined in the application-dev.yml as follow
+     *   hotReload:
+     *     enabled: true
+     *     watchdir:
+     *        - /Users/jhipster/demo-jhipster/target/classes
+     *        - /Users/jhipster/demo-jhipster/target/classes1
 
-            if (urlLoaderEntry == null) {
-                log.error("Failed to find a watched folder for the directory: " + dir);
-                return;
-            }
+     * @param env the environment used to retrieve the list of folders
+     * @return the list of folders
+     */
+    private static List<String> getWatchFolders(Environment env) {
+        List<String> results = new ArrayList<>();
 
-            final String classesFolder = urlLoaderEntry.getKey();
-            final URLClassLoader urlClassLoader = urlLoaderEntry.getValue();
+        int i=0;
+
+        String folder = env.getProperty("hotReload.watchdir[" + i + "]");
+
+        while(folder != null) {
+            results.add(folder);
+            i++;
+            folder = env.getProperty("hotReload.watchdir[" + i + "]");
+        }
+
+        return results;
+    }
 
 
-            // Try to load the new class
-            // First we need to remove the global classesFolder from the child path
-            String slashedClassPath = StringUtils.substringAfter(dir, classesFolder);
-            if (slashedClassPath.startsWith("/")) {
-                slashedClassPath = slashedClassPath.substring(1);
-            }
+    /**
+     * Register the list of listeners
+     */
+    private void registerFileWatcherListeners() {
+        fileWatcherListeners.add(new NewClassLoaderListener());
 
-            // Replace / by . to create the dottedClassName
-            String dottedClassPath = slashedClassPath.replace("/", ".");
-
-            String slashedClassName = slashedClassPath + "/" + StringUtils.substringBefore(fileName, ".");
-            String dottedClassName = dottedClassPath + "." + StringUtils.substringBefore(fileName, ".");
-
-            // Retrieve the Spring Loaded registry.
-            // We will use to validate the class has not been already loaded
-            TypeRegistry typeRegistry = TypeRegistry.getTypeRegistryFor(parentClassLoader);
-
-            // Load the class
-            urlClassLoader.loadClass(dottedClassName);
-
-            // Force SpringLoaded to instrument the class
-            if (typeRegistry != null) {
-                String versionstamp = Utils.encode(theFile.lastModified());
-                ReloadableType  rtype = typeRegistry.getReloadableType(slashedClassName);
-                typeRegistry.fireReloadEvent(rtype, versionstamp);
-            }
-        } catch (Exception e) {
-            log.error("Failed to load the class named: " + fileName, e);
+        for (FileWatcherListener fileWatcherListener : fileWatcherListeners) {
+            fileWatcherListener.setFileSystemWatcher(this);
         }
     }
 
-    private Map.Entry<String, URLClassLoader> selectUrlLoaderEntry(String dir) {
-
-        for (Map.Entry<String, URLClassLoader> urlClassLoaderEntry : urlClassLoaderMap.entrySet()) {
-            final String key = urlClassLoaderEntry.getKey();
-
-            if (StringUtils.contains(dir, key)) {
-                return urlClassLoaderEntry;
+    /**
+     * Call all listeners on changed file
+     */
+    private void callFileWatcherListerners(String parentFolder, Path child, WatchEvent.Kind kind) {
+        for (FileWatcherListener fileWatcherListener : fileWatcherListeners) {
+            if (fileWatcherListener.support(child, kind)) {
+                fileWatcherListener.onChange(parentFolder, child, kind);
             }
         }
-
-        return null;
     }
 }

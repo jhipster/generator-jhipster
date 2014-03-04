@@ -1,5 +1,9 @@
 package <%=packageName%>.config.reload;
 
+import <%=packageName%>.config.reload.reloader.JacksonReloader;
+import <%=packageName%>.config.reload.reloader.LiquibaseReloader;
+import <%=packageName%>.config.reload.reloader.SpringReloader;
+import org.apache.commons.lang.ClassUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -45,6 +49,11 @@ public class JHipsterReloaderThread implements Runnable {
     private static JacksonReloader jacksonReloader;
 
     /**
+     * Reloads Database, Entity and Hibernate Factory
+     */
+    private static LiquibaseReloader liquibaseReloader;
+
+    /**
      * Stores the Spring controllers reloaded in the batch.
      */
     private List<Class> controllers = new ArrayList<>();
@@ -77,39 +86,51 @@ public class JHipsterReloaderThread implements Runnable {
     public JHipsterReloaderThread(ConfigurableApplicationContext applicationContext) {
         isStarted = true;
         springReloader = new SpringReloader(applicationContext);
+        springReloader.afterPropertiesSet();
         jacksonReloader = new JacksonReloader(applicationContext);
+        liquibaseReloader = new LiquibaseReloader(applicationContext);
     }
 
     public void reloadEvent(String typename, Class<?> clazz) {
         synchronized (lock) {
             log.trace("Hot reloading - checking if this is a Spring bean: {}", typename);
 
-            if (AnnotationUtils.findAnnotation(clazz, Repository.class) != null) {
-                // TODO find also interfaces which extends JpaRepository (for Spring Data JPA)
+            boolean startReloading = false;
+            if (AnnotationUtils.findAnnotation(clazz, Repository.class) != null ||
+                    ClassUtils.isAssignable(clazz, org.springframework.data.repository.Repository.class)) {
                 log.trace("{} is a Spring Repository", typename);
                 repositories.add(clazz);
+                startReloading = true;
             } else if (AnnotationUtils.findAnnotation(clazz, Service.class) != null) {
                 log.trace("{} is a Spring Service", typename);
                 services.add(clazz);
+                startReloading = true;
             } else if (AnnotationUtils.findAnnotation(clazz, Controller.class) != null ||
                     AnnotationUtils.findAnnotation(clazz, RestController.class) != null) {
                 log.trace("{} is a Spring Controller", typename);
                 controllers.add(clazz);
+                startReloading = true;
             } else if (AnnotationUtils.findAnnotation(clazz, Component.class) != null) {
                 log.trace("{} is a Spring Component", typename);
                 components.add(clazz);
+                startReloading = true;
             } else if (typename.startsWith("<%=packageName%>.domain")) {
                 log.trace("{} is in the JPA package, checking if it is an entity", typename);
                 if (AnnotationUtils.findAnnotation(clazz, Entity.class) != null) {
                     log.trace("{} is a JPA Entity", typename);
                     entities.add(clazz);
+                    startReloading = true;
                 }
             } else if (typename.startsWith("<%=packageName%>.web.rest.dto")) {
                 log.debug("{}  is a REST DTO", typename);
                 dtos.add(clazz);
+                startReloading = true;
             }
-            hotReloadTriggered = true;
-            isWaitingForNewClasses = true;
+
+            if (startReloading) {
+                hotReloadTriggered = true;
+                isWaitingForNewClasses = true;
+            }
         }
     }
 
@@ -142,6 +163,12 @@ public class JHipsterReloaderThread implements Runnable {
                         entities.size(), dtos.size());
 
                 jacksonReloader.reloadEvent();
+
+                if (entities.size() > 0) {
+                    liquibaseReloader.reloadEvent(entities);
+                    springReloader.hasNewEntityBean();
+                    entities.clear();
+                }
             }
             addSpringBeans("repositories", repositories);
             addSpringBeans("services", services);

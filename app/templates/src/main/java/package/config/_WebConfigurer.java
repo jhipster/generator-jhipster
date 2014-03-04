@@ -232,7 +232,7 @@ public class WebConfigurer implements ServletContextInitializer {
         ServletRegistration.Dynamic atmosphereServlet =
                 servletContext.addServlet("atmosphereServlet", servlet);
 
-        atmosphereServlet.setInitParameter("org.atmosphere.cpr.packages", "com.mycompany.myapp.web.websocket");
+        atmosphereServlet.setInitParameter("org.atmosphere.cpr.packages", "<%=packageName%>.web.websocket");
         atmosphereServlet.setInitParameter("org.atmosphere.cpr.broadcasterCacheClass", UUIDBroadcasterCache.class.getName());
         atmosphereServlet.setInitParameter("org.atmosphere.cpr.broadcaster.shareableThreadPool", "true");
         atmosphereServlet.setInitParameter("org.atmosphere.cpr.broadcaster.maxProcessingThreads", "10");

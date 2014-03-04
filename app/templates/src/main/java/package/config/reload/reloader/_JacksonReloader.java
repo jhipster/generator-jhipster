@@ -1,4 +1,4 @@
-package <%=packageName%>.config.reload;
+package <%=packageName%>.config.reload.reloader;
 
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.ObjectMapper;

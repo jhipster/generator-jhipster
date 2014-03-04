@@ -1,7 +1,8 @@
-package <%=packageName%>.config.reload;
+package <%=packageName%>.config.reload.reloader;
 
-import <%=packageName%>.config.reload.listener.JHipsterHandlerMappingListener;
-import <%=packageName%>.config.reload.listener.SpringReloadListener;
+import <%=packageName%>.config.reload.listener.springreload.JHipsterHandlerMappingListener;
+import <%=packageName%>.config.reload.listener.springreload.SpringReloadListener;
+import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +10,8 @@ import org.springframework.aop.Advisor;
 import org.springframework.aop.framework.Advised;
 import org.springframework.aop.framework.autoproxy.BeanFactoryAdvisorRetrievalHelper;
 import org.springframework.aop.support.AopUtils;
-import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -19,6 +21,9 @@ import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;
+import org.springframework.data.repository.core.support.RepositoryProxyPostProcessor;
+import org.springframework.data.repository.util.TxUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
@@ -27,25 +32,33 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
+import javax.persistence.Entity;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.*;
 
 /**
  * Reloads Spring Beans.
  */
-public class SpringReloader {
+public class SpringReloader implements InitializingBean {
 
     private final Logger log = LoggerFactory.getLogger(SpringReloader.class);
 
     private final ConfigurableApplicationContext applicationContext;
     private final BeanFactoryAdvisorRetrievalHelper beanFactoryAdvisorRetrievalHelper;
+    private JpaRepositoryFactory jpaRepositoryFactory;
 
     private final List<SpringReloadListener> springReloadListeners = new ArrayList<>();
 
     private Set<Class<?>> toReloadBeans = new LinkedHashSet<>();
-    private Map<String, Class<?>> toWaitFromBeans = new HashMap<>();
-    private Map<String, Integer> nbTries = new HashMap<>();
+    private List<Class<?>> newToWaitFromBeans = new ArrayList<>();
+    private Map<String, Class<?>> existingToWaitFromBeans = new HashMap<>();
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public SpringReloader(ConfigurableApplicationContext applicationContext) {
         log.debug("Hot reloading Spring Beans enabled");
@@ -60,16 +73,34 @@ public class SpringReloader {
         toReloadBeans.add(clazz);
     }
 
+    /**
+     * Call when an entity bean is loaded
+     * Perhaps new or existing bean are waiting for the entity
+     */
+    public void hasNewEntityBean() {
+        List<Class> newSpringBeans = new ArrayList<>();
+        List<Class> existingSpringBeans = new ArrayList<>();
+
+        newSpringBeans.addAll(newToWaitFromBeans);
+        existingSpringBeans.addAll(existingToWaitFromBeans.values());
+
+        start(newSpringBeans, existingSpringBeans);
+    }
+
     public boolean hasBeansToReload() {
         return toReloadBeans.size() > 0;
     }
 
     public void start() {
+        List<Class> newSpringBeans = new ArrayList<>();
+        List<Class> existingSpringBeans = new ArrayList<>();
+
+        start(newSpringBeans, existingSpringBeans);
+    }
+
+    private void start(List<Class> newSpringBeans, List<Class> existingSpringBeans) {
         try {
             DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) applicationContext.getBeanFactory();
-
-            List<Class> newSpringBeans = new ArrayList<>();
-            List<Class> existingSpringBeans = new ArrayList<>();
 
             //1) Split between new/existing beans
             for (Class toReloadBean : toReloadBeans) {
@@ -80,12 +111,16 @@ public class SpringReloader {
                     newSpringBeans.add(toReloadBean);
                     // Check if this new class is a dependent class.
                     // If so add this dependent class to the newSpringBeans list
-                    if (toWaitFromBeans.containsKey(toReloadBean.getName())) {
-                        existingSpringBeans.add(toWaitFromBeans.get(toReloadBean.getName()));
-                        toWaitFromBeans.remove(toReloadBean.getName());
+                    if (newToWaitFromBeans.size() > 0) {
+                        newSpringBeans.addAll(newToWaitFromBeans);
+                        newToWaitFromBeans.clear();
                     }
                 } else {
                     existingSpringBeans.add(toReloadBean);
+                    if (existingToWaitFromBeans.containsKey(toReloadBean.getName())) {
+                        existingSpringBeans.add(existingToWaitFromBeans.get(toReloadBean.getName()));
+                        existingToWaitFromBeans.remove(toReloadBean.getName());
+                    }
                 }
             }
 
@@ -104,26 +139,23 @@ public class SpringReloader {
                 Annotation annotation = getSpringClassAnnotation(clazz);
                 String beanName = constructBeanName(annotation, clazz);
                 try {
-                    beanFactory.getBean(beanName);
+                    // This is a spring data interface
+                    if (ClassUtils.isAssignable(clazz, org.springframework.data.repository.Repository.class)) {
+                        final Object repository = jpaRepositoryFactory.getRepository(clazz);
+                        beanFactory.registerSingleton(beanName, repository);
+                    } else {
+                        beanFactory.getBean(beanName);
+                    }
                     processListener(clazz, true);
                     toReloadBeans.remove(clazz);
-                    nbTries.remove(beanName);
-                } catch (BeansException e) {
-                    // buggy bean, try later
-                    // Try 3 times to load the class. If can't, a message will be logged
-                    // and the class will be removed from the list
-                    if (nbTries.containsKey(beanName) && nbTries.get(beanName) < 3) {
-                        log.trace("The Spring bean can't be loaded at this time. Keep it to reload it later", e);
-                        // remove the registration bean to treat this class as new class
-                        beanFactory.removeBeanDefinition(beanName);
-                        toReloadBeans.add(clazz);
-                        nbTries.put(beanName, nbTries.get(beanName) + 1);
-                    } else {
-                        log.error("Unable to load the Spring bean. Please check the logs.", e);
-                        toReloadBeans.remove(clazz);
-                    }
+                    log.debug("JHipster reload - New Spring bean '{}' has been reloaded.", clazz);
+                } catch (Exception e) {
+                    log.trace("The Spring bean can't be loaded at this time. Keep it to reload it later", e);
+                    // remove the registration bean to treat this class as new class
+                    beanFactory.removeBeanDefinition(beanName);
+                    newToWaitFromBeans.add(clazz);
+                    toReloadBeans.remove(clazz);
                 }
-                log.debug("JHipster reload - New Spring bean '{}' has been reloaded.", clazz);
             }
 
             //4) Resolve dependencies for existing beans
@@ -162,7 +194,7 @@ public class SpringReloader {
                                 log.debug("JHipster reload - Spring bean '{}' does not exist, " +
                                         "wait until this class will be available.", field.getType());
                                 failedToUpdate = true;
-                                toWaitFromBeans.put(field.getType().getName(), clazz);
+                                existingToWaitFromBeans.put(field.getType().getName(), clazz);
                             }
                         }
                     }
@@ -244,9 +276,27 @@ public class SpringReloader {
     }
 
     private void registerListeners() {
-        // Handler Mapping
-        JHipsterHandlerMappingListener hipsterHandlerMappingListener = new JHipsterHandlerMappingListener();
-        hipsterHandlerMappingListener.register(applicationContext);
-        springReloadListeners.add(hipsterHandlerMappingListener);
+        springReloadListeners.add(new JHipsterHandlerMappingListener());
+
+        for (SpringReloadListener springReloadListener : springReloadListeners) {
+            springReloadListener.register(applicationContext);
+        }
     }
+
+    @Override
+    public void afterPropertiesSet() {
+        applicationContext.getAutowireCapableBeanFactory().autowireBean(this);
+        this.jpaRepositoryFactory = new JpaRepositoryFactory(entityManager);
+        try {
+            // Make sure calls to the repository instance are intercepted for annotated transactions
+            Class transactionalRepositoryProxyPostProcessor = Class.forName("org.springframework.data.repository.core.support.TransactionalRepositoryProxyPostProcessor");
+            final Constructor constructor = transactionalRepositoryProxyPostProcessor.getConstructor(ListableBeanFactory.class, String.class);
+            final RepositoryProxyPostProcessor repositoryProxyPostProcessor = (RepositoryProxyPostProcessor)
+                    constructor.newInstance(applicationContext.getBeanFactory(), TxUtils.DEFAULT_TRANSACTION_MANAGER);
+            jpaRepositoryFactory.addRepositoryProxyPostProcessor(repositoryProxyPostProcessor);
+        } catch (Exception e) {
+            log.error("Failed to initialize the TransactionalRepositoryProxyPostProcessor class", e);
+        }
+    }
+
 }
