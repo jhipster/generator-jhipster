@@ -21,7 +21,6 @@ public class JHipsterEntityManagerFactoryWrapper implements EntityManagerFactory
     private EntityManagerFactory entityManagerFactory;
     private static JHipsterEntityManagerFactoryWrapper instance;
 
-
     public JHipsterEntityManagerFactoryWrapper(PersistenceUnitInfo info, Map properties) {
         this.info = info;
         this.properties = properties;
@@ -41,12 +40,10 @@ public class JHipsterEntityManagerFactoryWrapper implements EntityManagerFactory
         // Add new entities if not exists
         if (entities != null) {
             MutablePersistenceUnitInfo mutablePersistenceUnitInfo = (MutablePersistenceUnitInfo) info;
-
             for (Class entity : entities) {
                 mutablePersistenceUnitInfo.addManagedClassName(entity.getName());
             }
         }
-
         entityManagerFactory = Bootstrap.getEntityManagerFactoryBuilder(info, properties).build();
     }
 

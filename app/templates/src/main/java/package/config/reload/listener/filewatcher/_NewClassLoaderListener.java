@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Support only new class
- * The class will be loaded from the fileSystem and let springLoaded to handle it.
+ * Support only new class.
+ * The class will be loaded from the fileSystem and let Spring Loaded to handle it.
  */
 public class NewClassLoaderListener implements FileWatcherListener {
 
@@ -64,21 +64,17 @@ public class NewClassLoaderListener implements FileWatcherListener {
             Map.Entry<String, URLClassLoader> urlLoaderEntry = selectUrlLoaderEntry(parentDir);
 
             if (urlLoaderEntry == null) {
-                log.error("Failed to find a watched folder for the directory: " + parentDir);
+                log.error("Failed to find a watched folder for the directory: {}", parentDir);
                 return;
             }
-
             final String classesFolder = urlLoaderEntry.getKey();
             final URLClassLoader urlClassLoader = urlLoaderEntry.getValue();
-
-
             // Try to load the new class
             // First we need to remove the global classesFolder from the child path
             String slashedClassPath = StringUtils.substringAfter(parentDir, classesFolder);
             if (slashedClassPath.startsWith("/")) {
                 slashedClassPath = slashedClassPath.substring(1);
             }
-
             // Replace / by . to create the dottedClassName
             String dottedClassPath = slashedClassPath.replace("/", ".");
 
@@ -99,20 +95,17 @@ public class NewClassLoaderListener implements FileWatcherListener {
                 typeRegistry.fireReloadEvent(rtype, versionstamp);
             }
         } catch (Exception e) {
-            log.error("Failed to load the class named: " + fileName, e);
+            log.error("Failed to load the class named: {}", fileName, e);
         }
     }
 
     private Map.Entry<String, URLClassLoader> selectUrlLoaderEntry(String dir) {
-
         for (Map.Entry<String, URLClassLoader> urlClassLoaderEntry : urlClassLoaderMap.entrySet()) {
             final String key = urlClassLoaderEntry.getKey();
-
             if (StringUtils.contains(dir, key)) {
                 return urlClassLoaderEntry;
             }
         }
-
         return null;
     }
 }

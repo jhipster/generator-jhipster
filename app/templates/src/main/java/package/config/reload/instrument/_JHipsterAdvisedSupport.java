@@ -6,7 +6,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 /**
- * The AdvisedSupport is in charge to manage the advised associated to a method
+ * The AdvisedSupport is in charge to manage the advised associated to a method.
  * By default, it used a cache which avoid to reload any advises like @RolesAllowed, @Timed etc...
  * The call to the method adviceChanged will clear the cache
  */

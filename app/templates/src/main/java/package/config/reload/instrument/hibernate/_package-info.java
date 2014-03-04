@@ -1,4 +1,4 @@
 /**
- * Hot reloading hibernate instrumentation with Spring Loaded.
+ * Hot reloading Hibernate instrumentation with Spring Loaded.
  */
 package <%=packageName%>.config.reload.instrument.hibernate;

@@ -46,8 +46,9 @@ import java.util.Set;
  */
 public class LiquibaseReloader {
 
-    public static final String CHANGELOG_FOLER = "src/main/resources/config/liquibase/changelog/";
     private final Logger log = LoggerFactory.getLogger(LiquibaseReloader.class);
+
+    public static final String CHANGELOG_FOLER = "src/main/resources/config/liquibase/changelog/";
 
     private ConfigurableApplicationContext applicationContext;
     private CompareControl compareControl;
@@ -77,7 +78,7 @@ public class LiquibaseReloader {
                     String[] packagesToScan = connection.getPath().split(",");
 
                     for (String packageName : packagesToScan) {
-                        LOG.info("Found package "+packageName);
+                        log.info("Found package {}", packageName);
                     }
 
                     DefaultPersistenceUnitManager internalPersistenceUnitManager = new DefaultPersistenceUnitManager();
@@ -88,7 +89,7 @@ public class LiquibaseReloader {
                     if (dialectName == null) {
                         throw new IllegalArgumentException("A 'dialect' has to be specified.");
                     }
-                    LOG.info("Found dialect "+dialectName);
+                    log.info("Found dialect {}", dialectName);
 
                     internalPersistenceUnitManager.preparePersistenceUnitInfos();
                     PersistenceUnitInfo persistenceUnitInfo = internalPersistenceUnitManager.obtainDefaultPersistenceUnitInfo();
@@ -104,6 +105,7 @@ public class LiquibaseReloader {
 
                     EntityManagerFactoryBuilderImpl builder = (EntityManagerFactoryBuilderImpl) Bootstrap.getEntityManagerFactoryBuilder(persistenceUnitInfo,
                             jpaPropertyMap);
+					
                     ServiceRegistry serviceRegistry = builder.buildServiceRegistry();
                     return builder.buildHibernateConfiguration(serviceRegistry);
                 }
@@ -163,101 +165,130 @@ public class LiquibaseReloader {
 
     private void ignoreDatabaseChangeLogTable(DiffResult diffResult)
             throws Exception {
+				
         Set<Table> unexpectedTables = diffResult
                 .getUnexpectedObjects(Table.class);
+		
         for (Table table : unexpectedTables) {
             if ("DATABASECHANGELOGLOCK".equalsIgnoreCase(table.getName())
-                    || "DATABASECHANGELOG".equalsIgnoreCase(table.getName()))
+                    || "DATABASECHANGELOG".equalsIgnoreCase(table.getName())) {
+						
                 diffResult.getUnexpectedObjects().remove(table);
+			}
         }
         Set<Table> missingTables = diffResult
                 .getMissingObjects(Table.class);
+		
         for (Table table : missingTables) {
             if ("DATABASECHANGELOGLOCK".equalsIgnoreCase(table.getName())
-                    || "DATABASECHANGELOG".equalsIgnoreCase(table.getName()))
+                    || "DATABASECHANGELOG".equalsIgnoreCase(table.getName())) {
+						
                 diffResult.getMissingObjects().remove(table);
+			}
         }
         Set<Column> unexpectedColumns = diffResult.getUnexpectedObjects(Column.class);
         for (Column column : unexpectedColumns) {
             if ("DATABASECHANGELOGLOCK".equalsIgnoreCase(column.getRelation().getName())
-                    || "DATABASECHANGELOG".equalsIgnoreCase(column.getRelation().getName()))
+                    || "DATABASECHANGELOG".equalsIgnoreCase(column.getRelation().getName())) {
+						
                 diffResult.getUnexpectedObjects().remove(column);
+			}
         }
         Set<Column> missingColumns = diffResult.getMissingObjects(Column.class);
         for (Column column : missingColumns) {
             if ("DATABASECHANGELOGLOCK".equalsIgnoreCase(column.getRelation().getName())
-                    || "DATABASECHANGELOG".equalsIgnoreCase(column.getRelation().getName()))
+                    || "DATABASECHANGELOG".equalsIgnoreCase(column.getRelation().getName())) {
                 diffResult.getMissingObjects().remove(column);
+			}
         }
         Set<Index> unexpectedIndexes = diffResult.getUnexpectedObjects(Index.class);
         for (Index index : unexpectedIndexes) {
             if ("DATABASECHANGELOGLOCK".equalsIgnoreCase(index.getTable().getName())
-                    || "DATABASECHANGELOG".equalsIgnoreCase(index.getTable().getName()))
+                    || "DATABASECHANGELOG".equalsIgnoreCase(index.getTable().getName())) {
+						
                 diffResult.getUnexpectedObjects().remove(index);
+			}
         }
         Set<Index> missingIndexes = diffResult.getMissingObjects(Index.class);
         for (Index index : missingIndexes) {
             if ("DATABASECHANGELOGLOCK".equalsIgnoreCase(index.getTable().getName())
-                    || "DATABASECHANGELOG".equalsIgnoreCase(index.getTable().getName()))
+                    || "DATABASECHANGELOG".equalsIgnoreCase(index.getTable().getName())) {
+						
                 diffResult.getMissingObjects().remove(index);
+			}
         }
         Set<PrimaryKey> unexpectedPrimaryKeys = diffResult.getUnexpectedObjects(PrimaryKey.class);
         for (PrimaryKey primaryKey : unexpectedPrimaryKeys) {
             if ("DATABASECHANGELOGLOCK".equalsIgnoreCase(primaryKey.getTable().getName())
-                    || "DATABASECHANGELOG".equalsIgnoreCase(primaryKey.getTable().getName()))
+                    || "DATABASECHANGELOG".equalsIgnoreCase(primaryKey.getTable().getName())) {
+						
                 diffResult.getUnexpectedObjects().remove(primaryKey);
+			}
         }
         Set<PrimaryKey> missingPrimaryKeys = diffResult.getMissingObjects(PrimaryKey.class);
         for (PrimaryKey primaryKey : missingPrimaryKeys) {
             if ("DATABASECHANGELOGLOCK".equalsIgnoreCase(primaryKey.getTable().getName())
-                    || "DATABASECHANGELOG".equalsIgnoreCase(primaryKey.getTable().getName()))
+                    || "DATABASECHANGELOG".equalsIgnoreCase(primaryKey.getTable().getName())) {
+						
                 diffResult.getMissingObjects().remove(primaryKey);
+			}
         }
     }
 
     private void ignoreDatabaseHibernateSequences(DiffResult diffResult)
             throws Exception {
+				
         Set<Table> unexpectedTables = diffResult
                 .getUnexpectedObjects(Table.class);
+		
         for (Table table : unexpectedTables) {
-            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(table.getName()))
+            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(table.getName())) {
                 diffResult.getUnexpectedObjects().remove(table);
+			}
         }
         Set<Table> missingTables = diffResult
                 .getMissingObjects(Table.class);
+		
         for (Table table : missingTables) {
-            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(table.getName()))
+            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(table.getName())) {
                 diffResult.getMissingObjects().remove(table);
+			}
         }
         Set<Column> unexpectedColumns = diffResult.getUnexpectedObjects(Column.class);
         for (Column column : unexpectedColumns) {
-            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(column.getRelation().getName()))
+            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(column.getRelation().getName())) {
                 diffResult.getUnexpectedObjects().remove(column);
+			}
         }
         Set<Column> missingColumns = diffResult.getMissingObjects(Column.class);
         for (Column column : missingColumns) {
-            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(column.getRelation().getName()))
+            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(column.getRelation().getName())) {
                 diffResult.getMissingObjects().remove(column);
+			}
         }
         Set<Index> unexpectedIndexes = diffResult.getUnexpectedObjects(Index.class);
         for (Index index : unexpectedIndexes) {
-            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(index.getTable().getName()))
+            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(index.getTable().getName())) {
                 diffResult.getUnexpectedObjects().remove(index);
+			}
         }
         Set<Index> missingIndexes = diffResult.getMissingObjects(Index.class);
         for (Index index : missingIndexes) {
-            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(index.getTable().getName()))
+            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(index.getTable().getName())) {
                 diffResult.getMissingObjects().remove(index);
+			}
         }
         Set<PrimaryKey> unexpectedPrimaryKeys = diffResult.getUnexpectedObjects(PrimaryKey.class);
         for (PrimaryKey primaryKey : unexpectedPrimaryKeys) {
-            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(primaryKey.getTable().getName()))
+            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(primaryKey.getTable().getName())) {
                 diffResult.getUnexpectedObjects().remove(primaryKey);
+			}
         }
         Set<PrimaryKey> missingPrimaryKeys = diffResult.getMissingObjects(PrimaryKey.class);
         for (PrimaryKey primaryKey : missingPrimaryKeys) {
-            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(primaryKey.getTable().getName()))
+            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(primaryKey.getTable().getName())) {
                 diffResult.getMissingObjects().remove(primaryKey);
+			}
         }
     }
 
@@ -289,7 +320,7 @@ public class LiquibaseReloader {
     }
 
     /**
-     * Calculate the next sequence used to generate the db-changelog file
+     * Calculate the next sequence used to generate the db-changelog file.
      *
      * The sequence is formatted as follow:
      *    leftpad with 0 + number
@@ -305,17 +336,12 @@ public class LiquibaseReloader {
         for (File changelog : allChangelogs) {
             String fileName = FilenameUtils.getBaseName(changelog.getName());
             String currentSequence = StringUtils.substringAfterLast(fileName, "-");
-
             int cpt = Integer.parseInt(currentSequence);
-
             if (cpt > sequence) {
                 sequence = cpt;
             }
         }
-
         sequence++;
-
-
         return StringUtils.leftPad(sequence.toString(), 3, "0");
     }
 
@@ -326,6 +352,5 @@ public class LiquibaseReloader {
         <% if (devDatabaseType == 'mysql') { %>return new liquibase.database.core.MySQLDatabase();<% } %>
         <% if (devDatabaseType == 'postgresql') { %>new return new liquibase.database.core.PostgresDatabase();<% } %>
         <% if (devDatabaseType != 'mysql' && devDatabaseType != 'postgresql') { %>return new liquibase.database.core.HsqlDatabase();<% } %>
-    }
-
+    }	
 }

@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.WatchEvent;
 
 /**
- *  All classes that implement this class will be called when a file changes (create or new)
+ *  All classes that implement this class will be called when a file changes (create or new).
  */
 public interface FileWatcherListener {
 

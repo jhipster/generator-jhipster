@@ -78,7 +78,6 @@ public class JHipsterLoadtimeInstrumentationPlugin implements LoadtimeInstrument
         } catch (Exception e) {
             log.error("Failed to modify the DelegatingMethodSecurityMetadataSource class", e);
         }
-
         return bytes;
     }
 }

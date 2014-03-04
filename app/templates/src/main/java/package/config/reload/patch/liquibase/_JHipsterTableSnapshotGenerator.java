@@ -182,8 +182,6 @@ public class JHipsterTableSnapshotGenerator extends HibernateSnapshotGenerator {
 				break;
 			}
 		}
-
 		return retVal;
 	}
-
 }
