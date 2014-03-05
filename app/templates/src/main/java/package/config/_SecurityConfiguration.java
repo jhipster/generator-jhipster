@@ -78,7 +78,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/images/**")
             .antMatchers("/scripts/**")
             .antMatchers("/styles/**")
-            .antMatchers("/view/**");
+            .antMatchers("/view/**")<% if (devDatabaseType != 'h2Memory') { %>;<% } else { %>
+            .antMatchers("/console/**");<% } %>
     }
 
     @Override

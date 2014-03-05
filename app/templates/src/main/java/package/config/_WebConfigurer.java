@@ -65,7 +65,8 @@ public class WebConfigurer implements ServletContextInitializer {
             initStaticResourcesProductionFilter(servletContext, disps);
             initCachingHttpHeadersFilter(servletContext, disps);
         }
-        initGzipFilter(servletContext, disps);
+        initGzipFilter(servletContext, disps);<% if (devDatabaseType == 'h2Memory') { %>
+        initH2Console(servletContext);<% } %>
 
         log.info("Web application fully configured");
     }<% if (clusteredHttpSession == 'hazelcast') { %>
@@ -259,5 +260,16 @@ public class WebConfigurer implements ServletContextInitializer {
         protected void analytics() {
             // noop
         }
+    }<% } %><% if (devDatabaseType == 'h2Memory') { %>
+    /**
+     * Initializes H2 console
+     */
+    private void initH2Console(ServletContext servletContext) {
+        log.debug("Initialize H2 console");
+        ServletRegistration.Dynamic h2ConsoleServlet = servletContext.addServlet("H2Console", new org.h2.server.web.WebServlet());
+        h2ConsoleServlet.addMapping("/console/*");
+        h2ConsoleServlet.setLoadOnStartup(1);
     }<% } %>
+
+
 }

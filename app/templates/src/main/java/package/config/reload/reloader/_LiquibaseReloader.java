@@ -351,6 +351,7 @@ public class LiquibaseReloader {
     private Database getDatabaseSource() {
         <% if (devDatabaseType == 'mysql') { %>return new liquibase.database.core.MySQLDatabase();<% } %>
         <% if (devDatabaseType == 'postgresql') { %>new return new liquibase.database.core.PostgresDatabase();<% } %>
-        <% if (devDatabaseType != 'mysql' && devDatabaseType != 'postgresql') { %>return new liquibase.database.core.HsqlDatabase();<% } %>
-    }	
+        <% if (devDatabaseType == 'hsqldbMemory') { %>return new liquibase.database.core.HsqlDatabase();<% } %>
+        <% if (devDatabaseType == 'h2Memory') { %>return new liquibase.database.core.H2Database();<% } %>
+    }
 }
