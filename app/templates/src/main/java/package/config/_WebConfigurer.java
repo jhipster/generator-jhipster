@@ -238,6 +238,7 @@ public class WebConfigurer implements ServletContextInitializer {
         atmosphereServlet.setInitParameter("org.atmosphere.cpr.broadcaster.shareableThreadPool", "true");
         atmosphereServlet.setInitParameter("org.atmosphere.cpr.broadcaster.maxProcessingThreads", "10");
         atmosphereServlet.setInitParameter("org.atmosphere.cpr.broadcaster.maxAsyncWriteThreads", "10");
+        servletContext.addListener(new org.atmosphere.cpr.SessionSupport());
 
         atmosphereServlet.addMapping("/websocket/*");
         atmosphereServlet.setLoadOnStartup(3);
