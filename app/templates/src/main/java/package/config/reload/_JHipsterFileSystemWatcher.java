@@ -2,6 +2,7 @@ package <%=packageName%>.config.reload;
 
 import <%=packageName%>.config.reload.listener.filewatcher.FileWatcherListener;
 import <%=packageName%>.config.reload.listener.filewatcher.NewClassLoaderListener;
+import com.sun.nio.file.SensitivityWatchEventModifier;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -135,7 +136,7 @@ public class JHipsterFileSystemWatcher implements FileSystemWatcher, Runnable {
      * Register the given directory with the WatchService.
      */
     private void register(Path dir) throws IOException {
-        WatchKey key = dir.register(watcher, ENTRY_CREATE, ENTRY_MODIFY);
+        WatchKey key = dir.register(watcher, new WatchEvent.Kind[]{ENTRY_CREATE, ENTRY_MODIFY}, SensitivityWatchEventModifier.HIGH);
         Path prev = keys.get(key);
         if (prev == null) {
             log.debug("Directory : '{}' will be monitored for changes", dir);
@@ -172,8 +173,6 @@ public class JHipsterFileSystemWatcher implements FileSystemWatcher, Runnable {
                 WatchEvent<Path> ev = (WatchEvent<Path>) event;
                 Path name = ev.context();
                 Path child = dir.resolve(name);
-
-                System.out.println(child.toFile().getAbsolutePath());
 
                 // if directory is created, and watching recursively, then
                 // register it and its sub-directories
