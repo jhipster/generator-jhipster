@@ -125,6 +125,10 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                     name: 'HSQLDB in-memory'
                 },
                 {
+                    value: 'h2Memory',
+                    name: 'H2 in-memory with web console'
+                },
+                {
                     value: 'mysql',
                     name: 'MySQL'
                 },
