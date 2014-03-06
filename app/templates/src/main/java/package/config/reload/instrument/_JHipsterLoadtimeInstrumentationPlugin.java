@@ -34,8 +34,8 @@ public class JHipsterLoadtimeInstrumentationPlugin implements LoadtimeInstrument
             // Remove final from a class definition to be able to proxy it. @See JHipsterReloadWebSecurityConfig class
             if (StringUtils.equals(slashedClassName, "org/springframework/security/access/method/DelegatingMethodSecurityMetadataSource")) {
                 CtClass ctClass = classPool.get("org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource");
-                ctClass.setModifiers(Modifier.PUBLIC);
-
+                CtMethod ctMethod = ctClass.getDeclaredMethod("getAttributes");
+                ctMethod.insertBefore("{synchronized (attributeCache) { attributeCache.clear();} }");
                 return ctClass.toBytecode();
             }
 
