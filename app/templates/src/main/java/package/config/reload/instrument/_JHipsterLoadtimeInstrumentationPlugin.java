@@ -19,7 +19,7 @@ public class JHipsterLoadtimeInstrumentationPlugin implements LoadtimeInstrument
     @Override
     public boolean accept(String slashedTypeName, ClassLoader classLoader, ProtectionDomain protectionDomain, byte[] bytes) {
         return StringUtils.equals(slashedTypeName, "org/springframework/security/access/method/DelegatingMethodSecurityMetadataSource") ||
-               StringUtils.equals(slashedTypeName, "org/springframework/aop/framework/ProxyCreatorSupport") ||
+               StringUtils.equals(slashedTypeName, "org/springframework/aop/framework/AdvisedSupport") ||
                StringUtils.equals(slashedTypeName, "liquibase/ext/hibernate/snapshot/TableSnapshotGenerator") ||
                StringUtils.equals(slashedTypeName, "org/hibernate/jpa/HibernatePersistenceProvider") ||
                StringUtils.equals(slashedTypeName, "org/springframework/data/repository/core/support/TransactionalRepositoryProxyPostProcessor");
@@ -39,14 +39,18 @@ public class JHipsterLoadtimeInstrumentationPlugin implements LoadtimeInstrument
                 return ctClass.toBytecode();
             }
 
-            // Change the super class from ProxyCreator to JHipsterProxyCreator.
-            // By default the AdvisedSupport class uses caching See ProxyCreator.methodCache variable
-            // The JHipsterProxyCreator class will just clear the caching
-            if (StringUtils.equals(slashedClassName, "org/springframework/aop/framework/ProxyCreatorSupport")) {
-                CtClass ctClass = classPool.get("org.springframework.aop.framework.ProxyCreatorSupport");
-                ctClass.setSuperclass(classPool.get("<%=packageName%>.config.reload.instrument.JHipsterAdvisedSupport"));
+            // The AdvisedSupport is in charge to manage the advised associated to a method.
+            // By default, it used a cache which avoid to reload any advises like @RolesAllowed, @Timed etc...
+            // So if a method has @Timed when the application is started and wants to add a @RolesAllowed,
+            // the last added annotation is not advised because the cache is used.
+            // The call to the method adviceChanged will clear the cache
+            if (StringUtils.equals(slashedClassName, "org/springframework/aop/framework/AdvisedSupport")) {
+                CtClass ctClass = classPool.get("org.springframework.aop.framework.AdvisedSupport");
+                CtMethod ctMethod = ctClass.getDeclaredMethod("getInterceptorsAndDynamicInterceptionAdvice");
+                ctMethod.insertBefore("{ adviceChanged(); }");
                 return ctClass.toBytecode();
             }
+
 
             // Change the super class from TableSnapshotGenerator to JHipsterTableSnapshotGenerator.
             // Quick fix for a NPE. @see JHipsterTableSnapshotGenerator
