@@ -137,7 +137,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @EnableGlobalMethodSecurity(prePostEnabled = true, jsr250Enabled = true)
-    @ConditionalOnSpringLoaded(value = "false")
     private static class GlobalSecurityConfiguration extends GlobalMethodSecurityConfiguration {
     }
 }
