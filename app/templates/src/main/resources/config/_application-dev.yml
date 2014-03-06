@@ -5,16 +5,16 @@ server:
 spring:
     profiles: dev
     datasource:
-        dataSourceClassName: <% if (devDatabaseType == 'mysql') { %>com.mysql.jdbc.jdbc2.optional.MysqlDataSource<% } else if (devDatabaseType == 'postgresql') { %>org.postgresql.ds.PGSimpleDataSource<% } else if (devDatabaseType == 'hsqldbMemory') { %>org.hsqldb.jdbc.JDBCDataSource<% } else { %>org.h2.jdbcx.JdbcDataSource<% } %>
-        url: <% if (devDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType == 'postgresql') { %><% } else if (devDatabaseType == 'hsqldbMemory') { %>jdbc:hsqldb:mem:<%= baseName %><% } else { %>jdbc:h2:mem:jhipster<% } %>
+        dataSourceClassName: <% if (devDatabaseType == 'mysql') { %>com.mysql.jdbc.jdbc2.optional.MysqlDataSource<% } else if (devDatabaseType == 'postgresql') { %>org.postgresql.ds.PGSimpleDataSource<% } else { %>org.h2.jdbcx.JdbcDataSource<% } %>
+        url: <% if (devDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType == 'postgresql') { %><% } else { %>jdbc:h2:mem:jhipster<% } %>
         databaseName: <% if (devDatabaseType == 'postgresql') { %><%= baseName %><% } %>
         serverName: <% if (devDatabaseType == 'postgresql') { %>localhost<% } %>
         username: <% if (devDatabaseType == 'mysql') { %>root<% } else if (devDatabaseType == 'postgresql') { %><%= baseName %><% } %>
         password:
 
     jpa:
-        database-platform: <% if (devDatabaseType == 'mysql') { %>org.hibernate.dialect.MySQLInnoDBDialect<% } else if (devDatabaseType == 'postgresql') { %>org.hibernate.dialect.PostgreSQLDialect<% } else if (devDatabaseType == 'hsqldbMemory') { %>org.hibernate.dialect.HSQLDialect<% } else { %>org.hibernate.dialect.H2Dialect<% } %>
-        database: <% if (devDatabaseType == 'mysql') { %>MYSQL<% } else if (devDatabaseType == 'postgresql') { %>POSTGRESQL<% } else if (devDatabaseType == 'hsqldbMemory') { %>HSQL<% } else { %>H2<% } %>
+        database-platform: <% if (devDatabaseType == 'mysql') { %>org.hibernate.dialect.MySQLInnoDBDialect<% } else if (devDatabaseType == 'postgresql') { %>org.hibernate.dialect.PostgreSQLDialect<% } else { %>org.hibernate.dialect.H2Dialect<% } %>
+        database: <% if (devDatabaseType == 'mysql') { %>MYSQL<% } else if (devDatabaseType == 'postgresql') { %>POSTGRESQL<% } else { %>H2<% } %>
         openInView: false
         show_sql: true
         generate-ddl: false
