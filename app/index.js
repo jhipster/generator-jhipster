@@ -121,10 +121,6 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             message: '(7/8) Which *development* database would you like to use?',
             choices: [
                 {
-                    value: 'hsqldbMemory',
-                    name: 'HSQLDB in-memory'
-                },
-                {
                     value: 'h2Memory',
                     name: 'H2 in-memory with web console'
                 },

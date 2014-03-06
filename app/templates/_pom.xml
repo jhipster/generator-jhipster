@@ -370,10 +370,6 @@
             <artifactId>postgresql</artifactId>
             <version>9.3-1100-jdbc41</version>
         </dependency>
-        <% } %><% if (devDatabaseType == 'hsqldbMemory') { %><dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-        </dependency>
         <% } %><% if (devDatabaseType == 'h2Memory') { %><dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
