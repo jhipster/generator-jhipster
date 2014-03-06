@@ -124,15 +124,15 @@ public class LiquibaseReloader {
             // Build the changelogs if any changes
             DiffToChangeLog diffToChangeLog = new DiffToChangeLog(diffResult, new DiffOutputControl());
 
+            // Ignore the database changeLog table
+            ignoreDatabaseChangeLogTable(diffResult);
+            ignoreDatabaseHibernateSequences(diffResult);
+
             // If no changes do nothing
             if (diffToChangeLog.generateChangeSets().size() == 0) {
                 log.debug("JHipster reload - No database change");
                 return;
             }
-
-            // Ignore the database changeLog table
-            ignoreDatabaseChangeLogTable(diffResult);
-            ignoreDatabaseHibernateSequences(diffResult);
 
             // Write the db-changelog-[SEQUENCE].xml file
             String changeLogString = toChangeLog(diffToChangeLog);
