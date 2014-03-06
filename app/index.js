@@ -246,9 +246,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/reload/instrument/hibernate/_JHipsterEntityManagerFactoryWrapper.java', javaDir + 'config/reload/instrument/hibernate/JHipsterEntityManagerFactoryWrapper.java');
     this.template('src/main/java/package/config/reload/instrument/hibernate/_JHipsterPersistenceProvider.java', javaDir + 'config/reload/instrument/hibernate/JHipsterPersistenceProvider.java');
     this.template('src/main/java/package/config/reload/instrument/_package-info.java', javaDir + 'config/reload/instrument/package-info.java');
-    this.template('src/main/java/package/config/reload/instrument/_JHipsterAdvisedSupport.java', javaDir + 'config/reload/instrument/JHipsterAdvisedSupport.java');
     this.template('src/main/java/package/config/reload/instrument/_JHipsterLoadtimeInstrumentationPlugin.java', javaDir + 'config/reload/instrument/JHipsterLoadtimeInstrumentationPlugin.java');
-    this.template('src/main/java/package/config/reload/instrument/_JHipsterReloadWebSecurityConfig.java', javaDir + 'config/reload/instrument/JHipsterReloadWebSecurityConfig.java');
     this.template('src/main/java/package/config/reload/listener/filewatcher/_package-info.java', javaDir + 'config/reload/listener/filewatcher/package-info.java');
     this.template('src/main/java/package/config/reload/listener/filewatcher/_FileWatcherListener.java', javaDir + 'config/reload/listener/filewatcher/FileWatcherListener.java');
     this.template('src/main/java/package/config/reload/listener/filewatcher/_NewClassLoaderListener.java', javaDir + 'config/reload/listener/filewatcher/NewClassLoaderListener.java');
