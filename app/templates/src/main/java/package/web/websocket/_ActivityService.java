@@ -33,7 +33,7 @@ public class ActivityService {
         log.debug("Browser {} disconnected", event.getResource().uuid());
         AtmosphereRequest request = event.getResource().getRequest();
         ActivityDTO activityDTO = new ActivityDTO();
-        activityDTO.setSessionId(request.getSession().getId());
+        activityDTO.setUuid(event.getResource().uuid());
         activityDTO.setPage("logout");
         String json = jsonMapper.writeValueAsString(activityDTO);
         for (AtmosphereResource trackerResource : b.getAtmosphereResources()) {
@@ -44,7 +44,7 @@ public class ActivityService {
     @Message(decoders = {ActivityDTOJacksonDecoder.class})
     public void onMessage(AtmosphereResource atmosphereResource, ActivityDTO activityDTO) throws IOException {
         AtmosphereRequest request = atmosphereResource.getRequest();
-        activityDTO.setSessionId(request.getSession().getId());
+        activityDTO.setUuid(atmosphereResource.uuid());
         activityDTO.setIpAddress(request.getRemoteAddr());
         activityDTO.setTime(dateTimeFormatter.print(Calendar.getInstance().getTimeInMillis()));
         String json = jsonMapper.writeValueAsString(activityDTO);

@@ -5,7 +5,7 @@ package <%=packageName%>.web.websocket.dto;
  */
 public class ActivityDTO {
 
-    private String sessionId;
+    private String uuid;
 
     private String userLogin;
 
@@ -15,12 +15,12 @@ public class ActivityDTO {
 
     private String time;
 
-    public String getSessionId() {
-        return sessionId;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getUserLogin() {
@@ -62,13 +62,13 @@ public class ActivityDTO {
 
         ActivityDTO that = (ActivityDTO) o;
 
-        if (sessionId != null ? !sessionId.equals(that.sessionId) : that.sessionId != null) return false;
+        if (uuid != null ? !uuid.equals(that.uuid) : that.uuid != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return sessionId != null ? sessionId.hashCode() : 0;
+        return uuid != null ? uuid.hashCode() : 0;
     }
 }
