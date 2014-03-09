@@ -51,9 +51,9 @@ describe('Controllers Tests ', function () {
 
             //THEN
             expect(PasswordService.save).toHaveBeenCalled();
-            expect(PasswordService.save.mostRecentCall.args[0]).toBe(pass);
+            expect(PasswordService.save).toHaveBeenCalledWith(pass, jasmine.any(Function), jasmine.any(Function));
             //SIMULATE SUCCESS CALLBACK CALL FROM SERVICE
-            PasswordService.save.mostRecentCall.args[1]();
+            PasswordService.save.calls.mostRecent().args[1]();
             expect($scope.error).toBeNull();
             expect($scope.success).toBe('OK');
         });
@@ -81,10 +81,10 @@ describe('Controllers Tests ', function () {
 
             //THEN
             expect(AccountService.save).toHaveBeenCalled();
-            expect(AccountService.save.mostRecentCall.args[0]).toEqual({firstName: "John", lastName: "Doe"});
+                        expect(AccountService.save).toHaveBeenCalledWith({firstName: "John", lastName: "Doe"}, jasmine.any(Function), jasmine.any(Function));
 
             //SIMULATE SUCCESS CALLBACK CALL FROM SERVICE
-            AccountService.save.mostRecentCall.args[1]();
+            AccountService.save.calls.mostRecent().args[1]();
             expect($scope.error).toBeNull();
             expect($scope.success).toBe('OK');
         });
@@ -112,10 +112,10 @@ describe('Controllers Tests ', function () {
 
             //THEN
             expect(SessionsService.delete).toHaveBeenCalled();
-            expect(SessionsService.delete.mostRecentCall.args[0]).toEqual({series: "123456789"});
+            expect(SessionsService.delete).toHaveBeenCalledWith({series: "123456789"}, jasmine.any(Function), jasmine.any(Function));
 
             //SIMULATE SUCCESS CALLBACK CALL FROM SERVICE
-            SessionsService.delete.mostRecentCall.args[1]();
+            SessionsService.delete.calls.mostRecent().args[1]();
             expect($scope.error).toBeNull();
             expect($scope.success).toBe('OK');
         });
