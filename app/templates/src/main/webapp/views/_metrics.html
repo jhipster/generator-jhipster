@@ -57,7 +57,7 @@
         </div>
     </div>
     <div class="col-md-4">
-        <b translate="metrics.jvm.threads.title">Threads</b> (Total: {{metrics.gauges['jvm.threads.count'].value}})
+        <b translate="metrics.jvm.threads.title">Threads</b> (Total: {{metrics.gauges['jvm.threads.count'].value}}) <a class="hand" ng-click="threadDump()" data-toggle="modal" data-target="#threadDump"><i class="glyphicon glyphicon-eye-open"></i></a>
         <p>{{'metrics.jvm.threads.runnable' | translate}} {{metrics.gauges['jvm.threads.runnable.count'].value}}</p>
         <div class="progress progress-striped">
             <div class="progress-bar progress-bar-success" role="progressbar"
@@ -68,7 +68,7 @@
                 {{metrics.gauges['jvm.threads.runnable.count'].value * 100 / metrics.gauges['jvm.threads.count'].value | number:0}}%
             </div>
         </div>
-        <p>{{'metrics.jvm.threads.timewaiting' | translate}} ({{metrics.gauges['jvm.threads.timed_waiting.count'].value}})</p>
+        <p>{{'metrics.jvm.threads.timedwaiting' | translate}} ({{metrics.gauges['jvm.threads.timed_waiting.count'].value}})</p>
         <div class="progress progress-striped">
             <div class="progress-bar progress-bar-warning" role="progressbar"
                  aria-valuenow="{{metrics.gauges['jvm.threads.timed_waiting.count'].value}}"
@@ -271,3 +271,68 @@
 </div>
 <% } %>
 </div>
+<!-- Modal used to display the threads dump -->
+<div id="threadDump" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel" translate="metrics.jvm.threads.dump.title">Threads dump</h4>
+            </div>
+            <div class="modal-body well">
+                <span class="label label-primary" ng-click="threadDumpFilter = {}">{{'metrics.jvm.threads.all' | translate}}&nbsp;<span class="badge">{{threadDumpAll}}</span></span>&nbsp;
+                <span class="label label-success" ng-click="threadDumpFilter = {threadState: 'RUNNABLE'}">{{'metrics.jvm.threads.waiting' | translate}}&nbsp;<span class="badge">{{threadDumpRunnable}}</span></span>&nbsp;
+                <span class="label label-info" ng-click="threadDumpFilter = {threadState: 'WAITING'}">{{'metrics.jvm.threads.waiting' | translate}}&nbsp;<span class="badge">{{threadDumpWaiting}}</span></span>&nbsp;
+                <span class="label label-warning" ng-click="threadDumpFilter = {threadState: 'TIMED_WAITING'}">{{'metrics.jvm.threads.timedwaiting' | translate}}&nbsp;<span class="badge">{{threadDumpTimedWaiting}}</span></span>&nbsp;
+                <span class="label label-danger" ng-click="threadDumpFilter = {threadState: 'BLOCKED'}">{{'metrics.jvm.threads.blocked' | translate}}&nbsp;<span class="badge">{{threadDumpBlocked}}</span></span>&nbsp;
+                <div class="voffset2">&nbsp;</div>
+                <div class="row" ng-repeat="(k, v) in threadDump | filter:threadDumpFilter">
+                    <h5><span class="label" ng-class="getLabelClass(v.threadState)">&nbsp;</span>&nbsp;{{v.threadName}} ({{'metrics.jvm.threads.dump.id' | translate}} {{v.threadId}})</h5>
+                    <table class="table table-condensed">
+                        <thead>
+                        <tr>
+                            <th translate="metrics.jvm.threads.dump.blockedtime">Blocked Time</th>
+                            <th translate="metrics.jvm.threads.dump.blockedcount">Blocked Count</th>
+                            <th translate="metrics.jvm.threads.dump.waitedtime">Waited Time</th>
+                            <th translate="metrics.jvm.threads.dump.waitedcount">Waited Count</th>
+                            <th translate="metrics.jvm.threads.dump.lockname">Lock Name</th>
+                            <th translate="metrics.jvm.threads.dump.stacktrace">StackTrace</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>{{v.blockedTime}}</td>
+                            <td>{{v.blockedCount}}</td>
+                            <td>{{v.waitedTime}}</td>
+                            <td>{{v.waitedCount}}</td>
+                            <td>{{v.lockName}}</td>
+                            <td>
+                                <a ng-click="show = !show" data-placement="left" >
+                                    <span ng-show="!show" translate="metrics.jvm.threads.dump.show">show</span>
+                                    <span ng-show="show" translate="metrics.jvm.threads.dump.hide">hide</span>
+                                </a>
+                                <div class="popover left" ng-show="show">
+                                    <div class="popover-title">
+                                        <h4>{{'metrics.jvm.threads.dump.stacktrace' | translate}}<button type="button" class="close" ng-click="show = !show">×</button></h4>
+                                    </div>
+                                    <div class="popover-content">
+                                        <div ng-repeat="(stK, stV) in v.stackTrace">
+                                            {{stV.className}}.{{stV.methodName}}({{stV.fileName}}:{{stV.lineNumber}})
+                                            <span class="voffset1"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+

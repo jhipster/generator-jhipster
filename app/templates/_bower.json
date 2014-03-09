@@ -4,7 +4,7 @@
   "dependencies": {
     "atmosphere": "2.1.2",
     "jquery-atmosphere": "2.1.2",
-    "sass-bootstrap": "3.0.2",
+    "bootstrap-sass": "twbs/bootstrap-sass#~3.1.1",
     "modernizr": "2.7.1",
     "jquery": "2.0.3",
     "angular": "1.2.13",

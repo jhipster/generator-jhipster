@@ -36,12 +36,7 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                 })
 <% } %>                .when('/metrics', {
                     templateUrl: 'views/metrics.html',
-                    controller: 'MetricsController',
-                    resolve:{
-                        resolvedMetrics:['Metrics', function (Metrics) {
-                            return Metrics.get();
-                        }]
-                    }
+                    controller: 'MetricsController'
                 })
                 .when('/logs', {
                     templateUrl: 'views/logs.html',
