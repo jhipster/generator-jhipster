@@ -163,10 +163,23 @@
             },
             "threads": {
                 "title": "Threads",
+                "all": "All",
                 "runnable": "Runnable",
-                "timewaiting": "Timed waiting",
+                "timedwaiting": "Timed waiting",
                 "waiting": "Waiting",
-                "blocked": "Blocked"
+                "blocked": "Blocked",
+                "dump": {
+                    "title": "Threads dump",
+                    "id": "Id: ",
+                    "blockedtime": "Blocked Time",
+                    "blockedcount": "Blocked Count",
+                    "waitedtime": "Waited Time",
+                    "waitedcount": "Waited Count",
+                    "lockname": "Lock name",
+                    "stacktrace": "Stacktrace",
+                    "show": "Show",
+                    "hide": "Hide"
+                }
             },
             "gc": {
                 "title": "Garbage collections",

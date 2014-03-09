@@ -165,10 +165,23 @@
             },
             "threads": {
                 "title": "Threads",
+                "all": "Tous",
                 "runnable": "Executable",
-                "timewaiting": "Temps d'attente",
+                "timedwaiting": "Temps d'attente",
                 "waiting": "En attente",
-                "blocked": "Bloqué"
+                "blocked": "Bloqué",
+                "dump": {
+                    "title": "Threads dump",
+                    "id": "Id :",
+                    "blockedtime": "Temps bloqué",
+                    "blockedcount": "Nb fois bloqué",
+                    "waitedtime": "Temps d'attente",
+                    "waitedcount": "Nb fois en attente",
+                    "lockname": "Nom du process bloquant",
+                    "stacktrace": "Stacktrace",
+                    "show": "Afficher",
+                    "hide": "Cacher"
+                }
             },
             "gc": {
                 "title": "Garbage collections",

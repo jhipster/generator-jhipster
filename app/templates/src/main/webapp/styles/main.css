@@ -48,6 +48,17 @@ body {
   background-repeat: no-repeat;
 }
 
+.hand {
+    cursor: pointer;
+}
+
+#threadDump  .popover {
+    top: inherit;
+    display: block;
+    font-size: 10px;
+    max-width: 1024px;
+}
+
 .voffset  { margin-top: 2px; }
 .voffset1 { margin-top: 5px; }
 .voffset2 { margin-top: 10px; }

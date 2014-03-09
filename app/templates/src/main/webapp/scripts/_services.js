@@ -21,11 +21,23 @@
         });
     }]);
 
-<%= angularAppName %>.factory('Metrics', ['$resource',
+<%= angularAppName %>.factory('MetricsService', ['$resource',
     function ($resource) {
         return $resource('metrics/metrics', {}, {
             'get': { method: 'GET'}
         });
+    }]);
+
+<%= angularAppName %>.factory('ThreadDumpService', ['$http',
+    function ($http) {
+        return {
+            dump: function() {
+                var promise = $http.get('dump').then(function(response){
+                    return response.data;
+                });
+                return promise;
+            }
+        };
     }]);
 
 <%= angularAppName %>.factory('HealthCheckService', ['$rootScope', '$http',

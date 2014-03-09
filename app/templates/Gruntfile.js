@@ -66,6 +66,13 @@ module.exports = function (grunt) {
           port: 8080,
           https: false,
           changeOrigin: false
+        },
+        {
+        context: '/dump',
+        host: 'localhost',
+        port: 8080,
+        https: false,
+        changeOrigin: false
         }<% if (devDatabaseType == 'h2Memory') { %>,
         {
           context: '/console',

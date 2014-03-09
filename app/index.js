@@ -441,18 +441,18 @@ JhipsterGenerator.prototype.app = function app() {
     }   
 
     indexScripts = indexScripts.concat([
-        'bower_components/sass-bootstrap/js/affix.js',
-        'bower_components/sass-bootstrap/js/alert.js',
-        'bower_components/sass-bootstrap/js/dropdown.js',
-        'bower_components/sass-bootstrap/js/tooltip.js',
-        'bower_components/sass-bootstrap/js/modal.js',
-        'bower_components/sass-bootstrap/js/transition.js',
-        'bower_components/sass-bootstrap/js/button.js',
-        'bower_components/sass-bootstrap/js/popover.js',
-        'bower_components/sass-bootstrap/js/carousel.js',
-        'bower_components/sass-bootstrap/js/scrollspy.js',
-        'bower_components/sass-bootstrap/js/collapse.js',
-        'bower_components/sass-bootstrap/js/tab.js']);    
+        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/affix.js',
+        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/alert.js',
+        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/dropdown.js',
+        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/tooltip.js',
+        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/modal.js',
+        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/transition.js',
+        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/button.js',
+        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/popover.js',
+        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/carousel.js',
+        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/scrollspy.js',
+        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/collapse.js',
+        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/tab.js']);
 
     this.indexFile = this.appendScripts(this.indexFile, 'scripts/scripts.js', indexScripts);
     this.write(webappDir + 'index.html', this.indexFile);
