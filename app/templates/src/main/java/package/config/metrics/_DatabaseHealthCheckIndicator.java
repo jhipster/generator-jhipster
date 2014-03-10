@@ -1,18 +1,12 @@
 package <%=packageName%>.config.metrics;
 
-import com.codahale.metrics.health.HealthCheck;
-import <%=packageName%>.config.MetricsConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -20,15 +14,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Metrics HealthCheck for the Database.
+ * SpringBoot Actuator HealthIndicator check for the Database.
  */
-@Configuration("database")
-@AutoConfigureAfter(MetricsConfiguration.class)
-public class DatabaseHealthCheck extends HealthCheck {
+public class DatabaseHealthCheckIndicator extends HealthCheckIndicator {
 
-    private final Logger log = LoggerFactory.getLogger(HealthCheck.class);
+    public static final String DATABASE_HEALTH_INDICATOR = "database";
+    private final Logger log = LoggerFactory.getLogger(DatabaseHealthCheckIndicator.class);
 
-    private static Map<String, String> queries = new HashMap<String, String>();
+    private static Map<String, String> queries = new HashMap<>();
 
     static {
         queries.put("HSQL Database Engine",
@@ -45,22 +38,24 @@ public class DatabaseHealthCheck extends HealthCheck {
     private JdbcTemplate jdbcTemplate;
     private String query = null;
 
-    @Inject
-    private DataSource dataSource;
-
-    public DatabaseHealthCheck() {
+    public DatabaseHealthCheckIndicator() {
     }
 
-    @PostConstruct
-    private void init() {
-        log.debug("Initializing Database Metrics healthcheck");
-        jdbcTemplate = new JdbcTemplate(dataSource);
+    public void setDataSource(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     @Override
-    public Result check() {
+    protected String getHealthCheckIndicatorName() {
+        return DATABASE_HEALTH_INDICATOR;
+    }
+
+    @Override
+    protected Result check() throws Exception {
+        log.debug("Initializing Database health indicator");
+
         try {
-            String dataBaseProductName = this.jdbcTemplate.execute(new ConnectionCallback<String>() {
+            String dataBaseProductName = jdbcTemplate.execute(new ConnectionCallback<String>() {
                 @Override
                 public String doInConnection(Connection connection)
                         throws SQLException, DataAccessException {
@@ -69,11 +64,10 @@ public class DatabaseHealthCheck extends HealthCheck {
             });
 
             query = detectQuery(dataBaseProductName);
-
-            return Result.healthy(dataBaseProductName);
+            return healthy();
         } catch (Exception e) {
-            log.debug("Cannot connect to Database: {}", e);
-            return Result.unhealthy("Cannot connect to Database : " + e.getMessage());
+            log.debug("Cannot connect to Database.", e);
+            return unhealthy("Cannot connect to database.", e);
         }
     }
 

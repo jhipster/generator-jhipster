@@ -44,7 +44,7 @@
     function ($rootScope, $http) {
         return {
             check: function() {
-                var promise = $http.get('metrics/healthcheck').then(function(response){
+                var promise = $http.get('health').then(function(response){
                     return response.data;
                 });
                 return promise;

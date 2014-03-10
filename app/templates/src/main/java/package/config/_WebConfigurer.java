@@ -10,7 +10,7 @@ import com.hazelcast.web.WebFilter;<% } %>
 import <%=packageName%>.web.filter.CachingHttpHeadersFilter;
 import <%=packageName%>.web.filter.StaticResourcesProductionFilter;
 import <%=packageName%>.web.filter.gzip.GZipServletFilter;
-import <%=packageName%>.web.servlet.HealthCheckServlet;<% if (websocket == 'atmosphere') { %>
+<% if (websocket == 'atmosphere') { %>
 import org.atmosphere.cache.UUIDBroadcasterCache;
 import org.atmosphere.cpr.AtmosphereFramework;
 import org.atmosphere.cpr.AtmosphereServlet;<% } %>
@@ -191,8 +191,6 @@ public class WebConfigurer implements ServletContextInitializer {
                 metricRegistry);
         servletContext.setAttribute(MetricsServlet.METRICS_REGISTRY,
                 metricRegistry);
-        servletContext.setAttribute(HealthCheckServlet.HEALTH_CHECK_REGISTRY,
-                healthCheckRegistry);
 
         log.debug("Registering Metrics Filter");
         FilterRegistration.Dynamic metricsFilter = servletContext.addFilter("webappMetricsFilter",
@@ -208,14 +206,6 @@ public class WebConfigurer implements ServletContextInitializer {
         metricsAdminServlet.addMapping("/metrics/metrics/*");
         metricsAdminServlet.setAsyncSupported(true);
         metricsAdminServlet.setLoadOnStartup(2);
-
-        log.debug("Registering HealthCheck Servlet");
-        ServletRegistration.Dynamic healthCheckServlet =
-                servletContext.addServlet("healthCheckServlet", new HealthCheckServlet());
-
-        healthCheckServlet.addMapping("/metrics/healthcheck/*");
-        healthCheckServlet.setAsyncSupported(true);
-        healthCheckServlet.setLoadOnStartup(2);
     }<% if (websocket == 'atmosphere') { %>
 
     /**

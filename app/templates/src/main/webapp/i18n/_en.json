@@ -151,7 +151,8 @@
         "health": {
             "title": "Heath checks",
             "database": "Database: ",
-            "email": "Email: "
+            "email": "Email: ",
+            "stacktrace": "Stacktrace"
         },
         "jvm": {
             "title": "JVM Metrics",

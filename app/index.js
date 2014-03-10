@@ -3,7 +3,8 @@ var util = require('util'),
     path = require('path'),
     yeoman = require('yeoman-generator'),
     chalk = require('chalk'),
-    _s = require('underscore.string');
+    _s = require('underscore.string'),
+    shelljs = require('shelljs');
 
 var JhipsterGenerator = module.exports = function JhipsterGenerator(args, options, config) {
     yeoman.generators.Base.apply(this, arguments);
@@ -170,6 +171,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy('spring_loaded/springloaded.jar', 'spring_loaded/springloaded.jar');
 
     var packageFolder = this.packageName.replace(/\./g, '/');
+
     this.template('_pom.xml', 'pom.xml');
 
     // Create Java resource files
@@ -203,6 +205,12 @@ JhipsterGenerator.prototype.app = function app() {
     // Create Java files
     var javaDir = 'src/main/java/' + packageFolder + '/';
 
+    // Remove old files
+    shelljs.rm(javaDir + '/web/servlet/HealthCheckServlet.java');
+    shelljs.rm(javaDir + '/config/metrics/JavaMailHealthCheck.java')
+    shelljs.rm(javaDir + '/config/reload/instrument/JHipsterAdvisedSupport.java')
+    shelljs.rm(javaDir + '/config/reload/instrument/JHipsterReloadWebSecurityConfig.java')
+
     this.template('src/main/java/package/_Application.java', javaDir + '/Application.java');
     this.template('src/main/java/package/_ApplicationWebXml.java', javaDir + '/ApplicationWebXml.java');
 
@@ -225,8 +233,10 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/locale/_AngularCookieLocaleResolver.java', javaDir + 'config/locale/AngularCookieLocaleResolver.java');
 
     this.template('src/main/java/package/config/metrics/_package-info.java', javaDir + 'config/metrics/package-info.java');
-    this.template('src/main/java/package/config/metrics/_DatabaseHealthCheck.java', javaDir + 'config/metrics/DatabaseHealthCheck.java');
-    this.template('src/main/java/package/config/metrics/_JavaMailHealthCheck.java', javaDir + 'config/metrics/JavaMailHealthCheck.java');
+    this.template('src/main/java/package/config/metrics/_DatabaseHealthCheckIndicator.java', javaDir + 'config/metrics/DatabaseHealthCheckIndicator.java');
+    this.template('src/main/java/package/config/metrics/_HealthCheckIndicator.java', javaDir + 'config/metrics/HealthCheckIndicator.java');
+    this.template('src/main/java/package/config/metrics/_JavaMailHealthCheckIndicator.java', javaDir + 'config/metrics/JavaMailHealthCheckIndicator.java');
+    this.template('src/main/java/package/config/metrics/_JHipsterHealthIndicatorConfiguration.java', javaDir + 'config/metrics/JHipsterHealthIndicatorConfiguration.java');
 
     if (this.hibernateCache == "hazelcast") {
         this.template('src/main/java/package/config/hazelcast/_HazelcastCacheRegionFactory.java', javaDir + 'config/hazelcast/HazelcastCacheRegionFactory.java');
@@ -313,9 +323,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/web/rest/_AuditResource.java', javaDir + 'web/rest/AuditResource.java');
     this.template('src/main/java/package/web/rest/_LogsResource.java', javaDir + 'web/rest/LogsResource.java');
     this.template('src/main/java/package/web/rest/_UserResource.java', javaDir + 'web/rest/UserResource.java');
-
-    this.template('src/main/java/package/web/servlet/_package-info.java', javaDir + 'web/servlet/package-info.java');
-    this.template('src/main/java/package/web/servlet/_HealthCheckServlet.java', javaDir + 'web/servlet/HealthCheckServlet.java');
 
     if (this.websocket == 'atmosphere') {
         this.template('src/main/java/package/web/websocket/_package-info.java', javaDir + 'web/websocket/package-info.java');
@@ -467,3 +474,4 @@ JhipsterGenerator.prototype.projectfiles = function projectfiles() {
     this.copy('editorconfig', '.editorconfig');
     this.copy('jshintrc', '.jshintrc');
 };
+

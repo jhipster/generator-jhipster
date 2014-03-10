@@ -31,7 +31,8 @@
     "yeoman-generator": "~0.16.0",
     "cheerio": "~0.13.0",
     "chalk": "~0.4.0",
-    "underscore.string": "~2.3.3"
+    "underscore.string": "~2.3.3",
+    "shelljs": "~0.2.6"
   },
   "devDependencies": {
     "mocha": "~1.17.0"

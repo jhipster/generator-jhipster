@@ -52,11 +52,19 @@ body {
     cursor: pointer;
 }
 
-#threadDump  .popover {
+#threadDump .popover, #healthCheck .popover {
     top: inherit;
     display: block;
     font-size: 10px;
     max-width: 1024px;
+}
+
+#healthCheck .popover {
+    margin-left: -50px;
+}
+
+.alert .popover pre {
+    font-size: 10px;
 }
 
 .voffset  { margin-top: 2px; }
