@@ -306,6 +306,12 @@
             <groupId>org.liquibase.ext</groupId>
             <artifactId>liquibase-hibernate4</artifactId>
             <version>3.3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hibernate.javax.persistence</groupId>
+                    <artifactId>hibernate-jpa-2.0-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
