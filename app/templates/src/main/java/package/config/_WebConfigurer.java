@@ -9,8 +9,7 @@ import com.hazelcast.web.SessionListener;
 import com.hazelcast.web.WebFilter;<% } %>
 import <%=packageName%>.web.filter.CachingHttpHeadersFilter;
 import <%=packageName%>.web.filter.StaticResourcesProductionFilter;
-import <%=packageName%>.web.filter.gzip.GZipServletFilter;
-<% if (websocket == 'atmosphere') { %>
+import <%=packageName%>.web.filter.gzip.GZipServletFilter;<% if (websocket == 'atmosphere') { %>
 import org.atmosphere.cache.UUIDBroadcasterCache;
 import org.atmosphere.cpr.AtmosphereFramework;
 import org.atmosphere.cpr.AtmosphereServlet;<% } %>

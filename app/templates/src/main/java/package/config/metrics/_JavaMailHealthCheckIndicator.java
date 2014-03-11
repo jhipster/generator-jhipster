@@ -12,6 +12,7 @@ import javax.mail.MessagingException;
 public class JavaMailHealthCheckIndicator extends HealthCheckIndicator {
 
     public static final String EMAIL_HEALTH_INDICATOR = "email";
+	
     private final Logger log = LoggerFactory.getLogger(JavaMailHealthCheckIndicator.class);
 
     private JavaMailSenderImpl javaMailSender;

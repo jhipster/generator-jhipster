@@ -19,6 +19,7 @@ import java.util.Map;
 public class DatabaseHealthCheckIndicator extends HealthCheckIndicator {
 
     public static final String DATABASE_HEALTH_INDICATOR = "database";
+	
     private final Logger log = LoggerFactory.getLogger(DatabaseHealthCheckIndicator.class);
 
     private static Map<String, String> queries = new HashMap<>();
@@ -53,7 +54,6 @@ public class DatabaseHealthCheckIndicator extends HealthCheckIndicator {
     @Override
     protected Result check() throws Exception {
         log.debug("Initializing Database health indicator");
-
         try {
             String dataBaseProductName = jdbcTemplate.execute(new ConnectionCallback<String>() {
                 @Override
@@ -62,7 +62,6 @@ public class DatabaseHealthCheckIndicator extends HealthCheckIndicator {
                     return connection.getMetaData().getDatabaseProductName();
                 }
             });
-
             query = detectQuery(dataBaseProductName);
             return healthy();
         } catch (Exception e) {
@@ -81,5 +80,4 @@ public class DatabaseHealthCheckIndicator extends HealthCheckIndicator {
         }
         return query;
     }
-
 }

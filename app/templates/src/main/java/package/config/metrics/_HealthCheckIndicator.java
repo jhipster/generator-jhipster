@@ -31,13 +31,11 @@ public abstract class HealthCheckIndicator implements HealthIndicator<Map<String
     @Override
     final public Map<String, Result> health() {
         Map<String, Result> results = new LinkedHashMap<>();
-
         try {
             results.put(getHealthCheckIndicatorName(), check());
         } catch (Exception e) {
             results.put(getHealthCheckIndicatorName(), unhealthy(e));
         }
-
         return results;
     }
 
@@ -116,6 +114,4 @@ public abstract class HealthCheckIndicator implements HealthIndicator<Map<String
             return ExceptionUtils.getFullStackTrace(exception);
         }
     }
-
-
 }
