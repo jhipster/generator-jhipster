@@ -4,6 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
+    <!-- JHipster core -->
     <changeSet id="1" author="jhipster">
         <createTable tableName="T_USER">
             <column name="login" type="varchar(50)">
@@ -42,26 +43,6 @@
             <column name="user_agent" type="varchar(255)"/>
         </createTable>
 
-        <createTable tableName="T_PERSISTENT_AUDIT_EVENT">
-            <column name="event_id" type="bigint" autoIncrement="true">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="principal" type="varchar(50)"/>
-            <column name="event_date" type="date"/>
-            <column name="event_type" type="varchar(50)"/>
-        </createTable>
-
-        <createTable tableName="T_PERSISTENT_AUDIT_EVENT_DATA">
-            <column name="event_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="name" type="varchar(50)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="value" type="varchar(255)"/>
-        </createTable>
-        <addPrimaryKey columnNames="event_id, name" tableName="T_PERSISTENT_AUDIT_EVENT_DATA"/>
-
         <createTable tableName="HIBERNATE_SEQUENCES">
             <column name="sequence_name" type="varchar(255)"/>
             <column name="sequence_next_hi_value" type="integer"/>
@@ -72,19 +53,6 @@
                      unique="true">
             <column name="login" type="varchar(50)"/>
             <column name="name" type="varchar(255)"/>
-        </createIndex>
-
-        <createIndex indexName="idx_persistent_audit_event"
-                     tableName="T_PERSISTENT_AUDIT_EVENT"
-                     unique="false">
-            <column name="principal" type="varchar(50)"/>
-            <column name="event_date" type="timestamp"/>
-        </createIndex>
-
-        <createIndex indexName="idx_persistent_audit_event_data"
-                     tableName="T_PERSISTENT_AUDIT_EVENT_DATA"
-                     unique="false">
-            <column name="event_id" type="bigint"/>
         </createIndex>
 
         <addForeignKeyConstraint baseColumnNames="name"
@@ -105,12 +73,6 @@
                                  referencedColumnNames="login"
                                  referencedTableName="T_USER"/>
 
-        <addForeignKeyConstraint baseColumnNames="event_id"
-                                 baseTableName="T_PERSISTENT_AUDIT_EVENT_DATA"
-                                 constraintName="FK_event_persistent_audit_event_data"
-                                 referencedColumnNames="event_id"
-                                 referencedTableName="T_PERSISTENT_AUDIT_EVENT"/>
-
         <loadData encoding="UTF-8"
                   file="config/liquibase/users.csv"
                   separator=";"
@@ -125,6 +87,47 @@
                   file="config/liquibase/users_authorities.csv"
                   separator=";"
                   tableName="T_USER_AUTHORITY"/>
+    </changeSet>
 
+    <!-- Manage the new Springboot actuator Audit event -->
+    <changeSet id="2" author="jhipster">
+        <createTable tableName="T_PERSISTENT_AUDIT_EVENT">
+            <column name="event_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="principal" type="varchar(50)"/>
+            <column name="event_date" type="date"/>
+            <column name="event_type" type="varchar(50)"/>
+        </createTable>
+
+        <createTable tableName="T_PERSISTENT_AUDIT_EVENT_DATA">
+            <column name="event_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="varchar(255)"/>
+        </createTable>
+        <addPrimaryKey columnNames="event_id, name" tableName="T_PERSISTENT_AUDIT_EVENT_DATA"/>
+
+        <createIndex indexName="idx_persistent_audit_event"
+                     tableName="T_PERSISTENT_AUDIT_EVENT"
+                     unique="false">
+            <column name="principal" type="varchar(50)"/>
+            <column name="event_date" type="timestamp"/>
+        </createIndex>
+
+        <createIndex indexName="idx_persistent_audit_event_data"
+                     tableName="T_PERSISTENT_AUDIT_EVENT_DATA"
+                     unique="false">
+            <column name="event_id" type="bigint"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="event_id"
+                                 baseTableName="T_PERSISTENT_AUDIT_EVENT_DATA"
+                                 constraintName="FK_event_persistent_audit_event_data"
+                                 referencedColumnNames="event_id"
+                                 referencedTableName="T_PERSISTENT_AUDIT_EVENT"/>
     </changeSet>
 </databaseChangeLog>

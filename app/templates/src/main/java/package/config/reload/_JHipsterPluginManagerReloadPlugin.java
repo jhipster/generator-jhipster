@@ -38,7 +38,7 @@ public class JHipsterPluginManagerReloadPlugin implements ReloadEventProcessorPl
             log.trace("This class is not in the application package, nothing to do");
             return;
         }
-        if (typename.contains("$$EnhancerByCGLIB$$") || typename.contains("$$FastClassByCGLIB$$")) {
+        if (typename.contains("$$EnhancerBy") || typename.contains("$$FastClassBy")) {
             log.trace("This is a CGLIB proxy, nothing to do");
             return;
         }

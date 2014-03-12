@@ -34,11 +34,8 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import javax.persistence.spi.PersistenceUnitInfo;
 import javax.sql.DataSource;
 import java.io.*;
-import java.nio.file.FileSystems;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.nio.file.*;
+import java.util.*;
 
 /**
  * Compare the Hibernate Entity JPA and the current database.
@@ -48,7 +45,9 @@ public class LiquibaseReloader {
 
     private final Logger log = LoggerFactory.getLogger(LiquibaseReloader.class);
 
+    public static final String MASTER_FILE = "src/main/resources/config/liquibase/master.xml";
     public static final String CHANGELOG_FOLER = "src/main/resources/config/liquibase/changelog/";
+    public static final String RELATIVE_CHANGELOG_FOLER = "classpath:config/liquibase/changelog/";
 
     private ConfigurableApplicationContext applicationContext;
     private CompareControl compareControl;
@@ -110,7 +109,7 @@ public class LiquibaseReloader {
                     return builder.buildHibernateConfiguration(serviceRegistry);
                 }
             };
-            hibernateDatabase.setDefaultSchemaName("PUBLIC");
+            hibernateDatabase.setDefaultSchemaName("");
             hibernateDatabase.setDefaultCatalogName("");
             hibernateDatabase.setConnection(new JdbcConnection(
                     new HibernateConnection("hibernate:spring:" + packagesToScan + "?dialect=" + applicationContext.getEnvironment().getProperty("spring.jpa.database-platform"))));
@@ -126,7 +125,7 @@ public class LiquibaseReloader {
 
             // Ignore the database changeLog table
             ignoreDatabaseChangeLogTable(diffResult);
-            ignoreDatabaseHibernateSequences(diffResult);
+            ignoreDatabaseJHipsterTables(diffResult);
 
             // If no changes do nothing
             if (diffToChangeLog.generateChangeSets().size() == 0) {
@@ -142,6 +141,9 @@ public class LiquibaseReloader {
             IOUtils.write(changeLogString, out);
             IOUtils.closeQuietly(out);
             log.debug("JHipster reload - the db-changelog file '{}' has been generated", changelogFile.getAbsolutePath());
+
+            // Re-write the master.xml files
+            rewriteMasterFiles();
 
             // Execute the new changelog on the database
             SpringLiquibase springLiquibase = new SpringLiquibase();
@@ -235,14 +237,17 @@ public class LiquibaseReloader {
         }
     }
 
-    private void ignoreDatabaseHibernateSequences(DiffResult diffResult)
+    private void ignoreDatabaseJHipsterTables(DiffResult diffResult)
             throws Exception {
-				
+
+        List<String> IGNORE_JHIPSTER = Arrays.asList("HIBERNATE_SEQUENCES", "T_AUTHORITY",
+                "T_PERSISTENT_AUDIT_EVENT", "T_PERSISTENT_AUDIT_EVENT_DATA", "T_PERSISTENT_TOKEN", "T_USER", "T_USER_AUTHORITY");
+
         Set<Table> unexpectedTables = diffResult
                 .getUnexpectedObjects(Table.class);
 		
         for (Table table : unexpectedTables) {
-            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(table.getName())) {
+            if (IGNORE_JHIPSTER.contains(table.getName())) {
                 diffResult.getUnexpectedObjects().remove(table);
 			}
         }
@@ -250,45 +255,57 @@ public class LiquibaseReloader {
                 .getMissingObjects(Table.class);
 		
         for (Table table : missingTables) {
-            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(table.getName())) {
+            if (IGNORE_JHIPSTER.contains(table.getName())) {
                 diffResult.getMissingObjects().remove(table);
 			}
         }
         Set<Column> unexpectedColumns = diffResult.getUnexpectedObjects(Column.class);
         for (Column column : unexpectedColumns) {
-            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(column.getRelation().getName())) {
+            if (IGNORE_JHIPSTER.contains(column.getRelation().getName())) {
                 diffResult.getUnexpectedObjects().remove(column);
 			}
         }
         Set<Column> missingColumns = diffResult.getMissingObjects(Column.class);
         for (Column column : missingColumns) {
-            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(column.getRelation().getName())) {
+            if (IGNORE_JHIPSTER.contains(column.getRelation().getName())) {
                 diffResult.getMissingObjects().remove(column);
 			}
         }
         Set<Index> unexpectedIndexes = diffResult.getUnexpectedObjects(Index.class);
         for (Index index : unexpectedIndexes) {
-            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(index.getTable().getName())) {
+            if (IGNORE_JHIPSTER.contains(index.getTable().getName())) {
                 diffResult.getUnexpectedObjects().remove(index);
 			}
         }
         Set<Index> missingIndexes = diffResult.getMissingObjects(Index.class);
         for (Index index : missingIndexes) {
-            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(index.getTable().getName())) {
+            if (IGNORE_JHIPSTER.contains(index.getTable().getName())) {
                 diffResult.getMissingObjects().remove(index);
 			}
         }
         Set<PrimaryKey> unexpectedPrimaryKeys = diffResult.getUnexpectedObjects(PrimaryKey.class);
         for (PrimaryKey primaryKey : unexpectedPrimaryKeys) {
-            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(primaryKey.getTable().getName())) {
+            if (IGNORE_JHIPSTER.contains(primaryKey.getTable().getName())) {
                 diffResult.getUnexpectedObjects().remove(primaryKey);
 			}
         }
         Set<PrimaryKey> missingPrimaryKeys = diffResult.getMissingObjects(PrimaryKey.class);
         for (PrimaryKey primaryKey : missingPrimaryKeys) {
-            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(primaryKey.getTable().getName())) {
+            if (IGNORE_JHIPSTER.contains(primaryKey.getTable().getName())) {
                 diffResult.getMissingObjects().remove(primaryKey);
 			}
+        }
+        Set<ForeignKey> unexpectedForeignKeys = diffResult.getUnexpectedObjects(ForeignKey.class);
+        for (ForeignKey foreignKey : unexpectedForeignKeys) {
+            if (IGNORE_JHIPSTER.contains(foreignKey.getForeignKeyTable().getName())) {
+                diffResult.getUnexpectedObjects().remove(foreignKey);
+			}
+        }
+        Set<ForeignKey> missingForeignKeys = diffResult.getMissingObjects(ForeignKey.class);
+        for (ForeignKey foreignKey : missingForeignKeys) {
+            if (IGNORE_JHIPSTER.contains(foreignKey.getForeignKeyTable().getName())) {
+                diffResult.getMissingObjects().remove(foreignKey);
+            }
         }
     }
 
@@ -350,5 +367,45 @@ public class LiquibaseReloader {
      */
     private Database getDatabaseSource() {
         <% if (devDatabaseType == 'mysql') { %>return new liquibase.database.core.MySQLDatabase();<% } %><% if (devDatabaseType == 'postgresql') { %>return new liquibase.database.core.PostgresDatabase();<% } %><% if (devDatabaseType == 'h2Memory') { %>return new liquibase.database.core.H2Database();<% } %>
+    }
+
+    /**
+     * The master.xml file will be rewritten to include the new changelogs
+     */
+    private void rewriteMasterFiles() {
+        try {
+            File masterFile = FileSystems.getDefault().getPath(MASTER_FILE).toFile();
+            FileOutputStream fileOutputStream = new FileOutputStream(masterFile);
+
+            final File changeLogFolder = FileSystems.getDefault().getPath(CHANGELOG_FOLER).toFile();
+
+            final File[] allChangelogs = changeLogFolder.listFiles((FileFilter) new SuffixFileFilter(".xml"));
+
+            String begin = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                    "<databaseChangeLog\n" +
+                    "        xmlns=\"http://www.liquibase.org/xml/ns/dbchangelog\"\n" +
+                    "        xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
+                    "        xsi:schemaLocation=\"http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd\">\n\r";
+            String end = "</databaseChangeLog>";
+
+            IOUtils.write(begin, fileOutputStream);
+
+            // Writer the changelogs
+            StringBuffer sb = new StringBuffer();
+
+            for (File allChangelog : allChangelogs) {
+                String fileName = allChangelog.getName();
+                sb.append("\t<include file=\"" + RELATIVE_CHANGELOG_FOLER).append(fileName).append("\" relativeToChangelogFile=\"false\"/>").append("\r\n");
+            }
+
+            IOUtils.write(sb.toString(), fileOutputStream);
+            IOUtils.write(end, fileOutputStream);
+            IOUtils.closeQuietly(fileOutputStream);
+
+            log.debug("The file '{}' has been updated", MASTER_FILE);
+        } catch (Exception e) {
+            log.error("Failed to write the master.xml file. This file must be updated manually");
+
+        }
     }
 }
