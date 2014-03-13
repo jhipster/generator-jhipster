@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Configuration;<% if (hibernateCach
 import org.springframework.cache.support.NoOpCacheManager; <% } %><% if (hibernateCache == 'ehcache') { %>
 import org.springframework.cache.ehcache.EhCacheCacheManager;<% } %><% if (hibernateCache == 'hazelcast' || hibernateCache == 'ehcache' || clusteredHttpSession == 'hazelcast') { %>
 import org.springframework.core.env.Environment;<% } %>
+import org.springframework.util.Assert;
 <% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
 import javax.annotation.PostConstruct;<% } %>
 import javax.inject.Inject;
