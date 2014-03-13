@@ -22,7 +22,8 @@ public class JHipsterLoadtimeInstrumentationPlugin implements LoadtimeInstrument
                StringUtils.equals(slashedTypeName, "org/springframework/aop/framework/AdvisedSupport") ||
                StringUtils.equals(slashedTypeName, "liquibase/ext/hibernate/snapshot/TableSnapshotGenerator") ||
                StringUtils.equals(slashedTypeName, "org/hibernate/jpa/HibernatePersistenceProvider") ||
-               StringUtils.equals(slashedTypeName, "org/springframework/data/repository/core/support/TransactionalRepositoryProxyPostProcessor");
+               StringUtils.equals(slashedTypeName, "org/springframework/data/repository/core/support/TransactionalRepositoryProxyPostProcessor") ||
+               StringUtils.equals(slashedTypeName, "org/springframework/core/LocalVariableTableParameterNameDiscoverer");
     }
 
     @Override
@@ -77,6 +78,18 @@ public class JHipsterLoadtimeInstrumentationPlugin implements LoadtimeInstrument
             if (StringUtils.equals(slashedClassName, "org/springframework/data/repository/core/support/TransactionalRepositoryProxyPostProcessor")) {
                 CtClass ctClass = classPool.get("org.springframework.data.repository.core.support.TransactionalRepositoryProxyPostProcessor");
                 ctClass.setModifiers(Modifier.PUBLIC);
+                return ctClass.toBytecode();
+            }
+
+            // The parameters are cached and when a class is reloaded, the map used for the caching is not able to
+            // return the cached parameters for a class or a method or a constructor.
+            // So the cache will be clear everytime the getParameterNames method is called
+            if (StringUtils.equals(slashedClassName, "org/springframework/core/LocalVariableTableParameterNameDiscoverer")) {
+                CtClass ctClass = classPool.get("org.springframework.core.LocalVariableTableParameterNameDiscoverer");
+                CtMethod ctMethod = ctClass.getDeclaredMethod("getParameterNames", new CtClass[]{classPool.get("java.lang.reflect.Method")});
+                ctMethod.insertBefore("{ this.parameterNamesCache.clear(); }");
+                ctMethod = ctClass.getDeclaredMethod("getParameterNames", new CtClass[]{classPool.get("java.lang.reflect.Constructor")});
+                ctMethod.insertBefore("{ this.parameterNamesCache.clear(); }");
                 return ctClass.toBytecode();
             }
         } catch (Exception e) {
