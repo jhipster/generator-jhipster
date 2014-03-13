@@ -206,10 +206,10 @@ JhipsterGenerator.prototype.app = function app() {
     var javaDir = 'src/main/java/' + packageFolder + '/';
 
     // Remove old files
-    shelljs.rm(javaDir + '/web/servlet/HealthCheckServlet.java');
-    shelljs.rm(javaDir + '/config/metrics/JavaMailHealthCheck.java')
-    shelljs.rm(javaDir + '/config/reload/instrument/JHipsterAdvisedSupport.java')
-    shelljs.rm(javaDir + '/config/reload/instrument/JHipsterReloadWebSecurityConfig.java')
+    removefile(javaDir + '/web/servlet/HealthCheckServlet.java');
+    removefile(javaDir + '/config/metrics/JavaMailHealthCheck.java')
+    removefile(javaDir + '/config/reload/instrument/JHipsterAdvisedSupport.java')
+    removefile(javaDir + '/config/reload/instrument/JHipsterReloadWebSecurityConfig.java')
 
     this.template('src/main/java/package/_Application.java', javaDir + '/Application.java');
     this.template('src/main/java/package/_ApplicationWebXml.java', javaDir + '/ApplicationWebXml.java');
@@ -474,4 +474,10 @@ JhipsterGenerator.prototype.projectfiles = function projectfiles() {
     this.copy('editorconfig', '.editorconfig');
     this.copy('jshintrc', '.jshintrc');
 };
+
+function removefile(file) {
+    if (shelljs.test('-f', file)) {
+        shelljs.rm(file);
+    }
+}
 
