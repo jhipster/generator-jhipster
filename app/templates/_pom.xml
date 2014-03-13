@@ -91,7 +91,7 @@
         <java.version>1.7</java.version>
 <% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>        <hazelcast.version>3.1.5</hazelcast.version><% } %>
         <metrics-spring.version>3.0.0-RC4</metrics-spring.version>
-        <HikariCP.version>1.3.0</HikariCP.version>
+        <HikariCP.version>1.3.3</HikariCP.version>
         <commons-lang.version>2.6</commons-lang.version>
         <commons-io.version>2.4</commons-io.version>
         <javax.inject.version>1</javax.inject.version>
