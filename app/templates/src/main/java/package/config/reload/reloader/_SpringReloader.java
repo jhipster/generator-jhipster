@@ -32,7 +32,6 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
-import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.lang.annotation.Annotation;
@@ -148,7 +147,7 @@ public class SpringReloader implements InitializingBean {
                     }
                     processListener(clazz, true);
                     toReloadBeans.remove(clazz);
-                    log.debug("JHipster reload - New Spring bean '{}' has been reloaded.", clazz);
+                    log.info("JHipster reload - New Spring bean '{}' has been reloaded.", clazz);
                 } catch (Exception e) {
                     log.trace("The Spring bean can't be loaded at this time. Keep it to reload it later", e);
                     // remove the registration bean to treat this class as new class
@@ -203,7 +202,7 @@ public class SpringReloader implements InitializingBean {
                 if (!failedToUpdate) {
                     processListener(clazz, false);
                 }
-                log.debug("JHipster reload - Existing Spring bean '{}' has been reloaded.", clazz);
+                log.info("JHipster reload - Existing Spring bean '{}' has been reloaded.", clazz);
             }
 
             for (SpringReloadListener springReloadListener : springReloadListeners) {
