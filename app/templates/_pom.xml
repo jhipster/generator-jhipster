@@ -375,16 +375,9 @@
             <artifactId>spring-context-support</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springsource.loaded</groupId>
-            <artifactId>springloaded</artifactId>
-            <version><%= _.unescape('\${springloaded.version}')%></version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>com.jhipster.loaded</groupId>
             <artifactId>reloader</artifactId>
             <version><%= _.unescape('\${jhipsterloaded.version}')%></version>
-            <scope>provided</scope>
         </dependency>
 
         <!-- Database dependencies-->
