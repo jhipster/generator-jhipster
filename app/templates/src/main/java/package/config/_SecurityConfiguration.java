@@ -1,6 +1,5 @@
 package <%=packageName%>.config;
 
-import <%=packageName%>.config.reload.condition.ConditionalOnSpringLoaded;
 import <%=packageName%>.security.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
