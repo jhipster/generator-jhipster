@@ -376,7 +376,7 @@
         </dependency>
         <dependency>
             <groupId>com.jhipster.loaded</groupId>
-            <artifactId>reloader</artifactId>
+            <artifactId>core</artifactId>
             <version><%= _.unescape('\${jhipsterloaded.version}')%></version>
         </dependency>
 
