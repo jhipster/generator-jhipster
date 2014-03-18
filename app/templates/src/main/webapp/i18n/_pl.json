@@ -70,43 +70,43 @@
             "button": "Zapisz"
         },
         "messages": {
-            "error": "<strong>An error has occured!</strong> Settings could not be saved.",
-            "success": "<strong>Settings saved!</strong>",
+            "error": "<strong>Wystąpi błąd!</strong> Ustawienia nie zostały zapisane.",
+            "success": "<strong>Ustawienia zapisane!</strong>",
             "validate": {
                 "firstname": {
-                    "required": "Your first name is required.",
-                    "minlength": "Your first name is required to be at least 1 character",
-                    "maxlength": "Your first name cannot be longer than 50 characters"
+                    "required": "Twoje imie jest wymagane.",
+                    "minlength": "Twoje imię musi mieć przynajmniej 1 literę",
+                    "maxlength": "Twoje imię nie może być dłuższe niż 50 liter"
                 },
                 "lastname": {
-                    "required": "Your last name is required.",
-                    "minlength": "Your last name is required to be at least 1 character",
-                    "maxlength": "Your last name cannot be longer than 50 characters"
+                    "required": "Twoje nazwisko jest wymagane.",
+                    "minlength": "Twoje nazwisko musi mieć przynajmniej 1 literę",
+                    "maxlength": "Twoje nazwisko nie może być dłuższe niż 50 liter"
                 },
                 "email": {
-                    "required": "Your e-mail is required.",
-                    "invalid": "Your e-mail is invalid.",
-                    "minlength": "Your e-mail is required to be at least 1 character",
-                    "maxlength": "Your e-mail cannot be longer than 50 characters"
+                    "required": "Twój e-mail jest wymagany.",
+                    "invalid": "Twój e-mail jest błędny.",
+                    "minlength": "Twój e-mail musi mieć przynajmniej 1 literę",
+                    "maxlength": "Your e-mail nie może być dłuższe niż 50 liter"
                 }
             }
         }
     },
     "password": {
-        "title": "Password for [<b>{{username}}</b>]",
+        "title": "Hasło dla [<b>{{username}}</b>]",
         "form": {
-            "newpassword": "New password",
-            "newpassword.placeholder": "New password",
-            "confirmpassword": "New password confirmation",
-            "confirmpassword.placeholder": "Confirm the new password",
-            "button": "Save"
+            "newpassword": "Nowe hasło",
+            "newpassword.placeholder": "Nowe hasło",
+            "confirmpassword": "Potwierdź nowe hasło",
+            "confirmpassword.placeholder": "Potwierdź nowe hasło",
+            "button": "Zapisz"
         },
         "messages": {
             "error": {
-                "global": "<strong>An error has occured!</strong> The password could not be changed.",
-                "dontmatch" : "The password and its confirmation do not match!"
+                "global": "<strong>Wystąpił błąd!</strong> Hasło nie zostało zmienione.",
+                "dontmatch" : "Hasło i potwierdzenie nie zgadzają się!"
             },
-            "success": "<strong>Password changed!</strong>",
+            "success": "<strong>Hasło zostało zmienione!</strong>",
             "validate": {
                 "newpassword": {
                     "required": "Your password is required.",
@@ -197,20 +197,20 @@
                     "code": "Code",
                     "count": "Count",
                     "mean": "Mean",
-                    "average": "Average"
+                    "average": "Średnia"
                 },
                 "code": {
                     "ok": "Ok",
-                    "notfound": "Not found",
-                    "servererror": "Server Error"
+                    "notfound": "Nie znaleziono",
+                    "servererror": "Błąd servera"
                 }
             }
         },
         "servicesstats": {
             "title": "Services statistics (time in millisecond)",
             "table": {
-                "name": "Service name",
-                "count": "Count",
+                "name": "Nazwa usługi",
+                "count": "Licznik",
                 "mean": "Mean",
                 "min": "Min",
                 "max": "Max",
@@ -221,9 +221,9 @@
             }
         },
         "ehcache": {
-            "title": "Ehcache statistics",
-            "cachename": "Cache name",
-            "objects": "Objects",
+            "title": "Statystyki Ehcache",
+            "cachename": "Nazwa cache",
+            "objects": "Obiekty",
             "hits": "Hits",
             "misses": "Misses",
             "evictioncount": "Eviction count",
@@ -231,39 +231,39 @@
         }
     },
     "logs": {
-        "title": "Logs",
-        "nbloggers": "There are {{ total }} loggers.",
-        "filter": "Filter",
+        "title": "Logi",
+        "nbloggers": "Jest {{ total }} loggerów.",
+        "filter": "Filtr",
         "table": {
-            "name": "Name",
-            "level": "Level"
+            "name": "Nazwa",
+            "level": "Poziom"
         }
     },
     "audits": {
-        "title": "Audits",
+        "title": "Audyty",
         "filter": {
             "title": "Filter per date",
-            "from": "from",
-            "to": "to",
+            "from": "od",
+            "to": "do",
             "button": {
                 "weeks": "Weeks",
                 "today": "today",
                 "clear": "clear",
-                "close": "close"
+                "close": "zamknij"
             }
         },
         "table": {
             "header": {
-                "principal": "User",
-                "date": "Date",
-                "status": "State",
-                "data": "Extra data"
+                "principal": "Użytkownik",
+                "date": "Data",
+                "status": "Status",
+                "data": "Dodatkowe dane"
             },
             "data": {
-                "remoteAddress": "Remote Address:"
+                "remoteAddress": "Zdalny address:"
             }
         }
 
     },
-    "footer": "This is your footer"
+    "footer": "To jest stopka"
 }
