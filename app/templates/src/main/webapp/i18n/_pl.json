@@ -122,42 +122,42 @@
         }
     },
     "sessions": {
-        "title": "Active sessions for [<b>{{username}}</b>]",
+        "title": "Aktywne sesje dla użytkownika [<b>{{username}}</b>]",
         "table": {
-            "ipaddress": "IP address",
-            "useragent": "User Agent",
-            "date": "Date",
-            "button": "Invalidate"
+            "ipaddress": "Address IP",
+            "useragent": "Agent użytkownika",
+            "date": "Data",
+            "button": "Unieważnij"
         },
         "messages": {
             "success": "<strong>Session invalidated!</strong>",
-            "error": "<strong>An error has occured!</strong> The session could not be invalidated."
+            "error": "<strong>Wystąpił błąd!</strong> Sesja nie mogła być unieważniona."
         }
 
     },
     "tracker": {
         "title": "Real-time user activities",
         "table": {
-            "userlogin": "User",
+            "userlogin": "Użytkownik",
             "ipaddress": "IP Address",
-            "userAgent": "User agent",
+            "userAgent": "Agent użytkownika",
             "page": "Current page",
             "time": "Time"
         }
     },
     "metrics": {
         "title": "Application Metrics",
-        "refresh.button": "Refresh",
+        "refresh.button": "Odśwież",
         "health": {
             "title": "Heath checks",
-            "database": "Database: ",
+            "database": "Baza danych: ",
             "email": "Email: ",
             "stacktrace": "Stacktrace"
         },
         "jvm": {
             "title": "JVM Metrics",
             "memory": {
-                "title": "Memory",
+                "title": "Pamięć",
                 "total": "Total Memory",
                 "heap": "Heap Memory",
                 "nonheap": "Non-Heap Memory"
@@ -177,9 +177,9 @@
                     "waitedtime": "Waited Time",
                     "waitedcount": "Waited Count",
                     "lockname": "Lock name",
-                    "stacktrace": "Stacktrace",
-                    "show": "Show",
-                    "hide": "Hide"
+                    "stacktrace": "Stos wywołań",
+                    "show": "Pokaż",
+                    "hide": "Ukryj"
                 }
             },
             "gc": {
