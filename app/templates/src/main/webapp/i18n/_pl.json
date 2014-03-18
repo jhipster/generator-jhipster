@@ -1,73 +1,73 @@
 {
     "global": {
         "title": "JHipster",
-        "browsehappy": "You are using an <strong>outdated</strong> browser. Please <a href=\"http://browsehappy.com/\">upgrade your browser</a> to improve your experience.",
+        "browsehappy": "Używasz <strong>przestarzałej</strong> przeglądarki. Proszę <a href=\"http://browsehappy.com/\">uaktualnij swoją przeglądarkę</a> aby polepszyć doświadczenie użytkownika.",
         "menu": {
-            "home": "Home",
+            "home": "Strona domowa",
             "account": {
-                "main": "Account",
-                "settings": "Settings",
-                "password": "Password",
-                "sessions": "Sessions",
-                "tracker": "User tracker",
-                "metrics": "Metrics",
-                "logs": "Logs",
-                "audits": "Audits",
-                "login": "Authenticate",
-                "logout": "Log out"
+                "main": "Konto",
+                "settings": "Ustawienia",
+                "password": "Hasło",
+                "sessions": "Sesje",
+                "tracker": "Śledzenie użytkownika",
+                "metrics": "Metryki",
+                "logs": "Logi",
+                "audits": "Audyty",
+                "login": "Autorzacja",
+                "logout": "Wyloguj"
             },
-            "admin": "Administration",
-            "language": "Language"
+            "admin": "Administracja",
+            "language": "Język"
         },
         "language": {
-            "en": "English",
-            "fr": "French",
-            "de": "German"
+            "en": "Angielski",
+            "fr": "Francuski",
+            "de": "Niemiecki"
         }
     },
     "main": {
-        "title": "Welcome, Java Hipster!",
-        "subtitle": "This is your homepage",
+        "title": "Witamy, Java Hipstera!",
+        "subtitle": "To jest twoja strona domowa",
         "logged": {
-            "message": "You are logged in as user \"{{username}}\".",
-            "authenticated": "If you want to <a href=\"#/login\">authenticate</a>, you can try the default accounts:<br/>- Admnistrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\")."
+            "message": "Jesteś zalogowany jako użytkownik \"{{username}}\".",
+            "authenticated": "Jeśli chcek <a href=\"#/login\">zalogować się</a>, możesz spróbować domyślnego konta:<br/>- Admnistrator (login=\"admin\" i hasło=\"admin\") <br/>- Użytkownik (login=\"user\" i hasło=\"user\")."
         },
-        "question": "If you have any question on JHipster:",
+        "question": "Jeśli masz jakiekolwiek pytania na temat JHipster:",
         "link": {
-            "homepage": "JHipster homepage",
-            "stackoverflow": "JHipster on Stack Overflow",
+            "homepage": "Strona domowa JHipster",
+            "stackoverflow": "JHipster na Stack Overflow",
             "bugtracker": "JHipster bug tracker",
-            "contact": "contact @java_hipster on Twitter"
+            "contact": "kontakt @java_hipster na Twitter"
         },
-        "like": "If you like JHipster, don't forget to give us a star on",
+        "like": "Jeśli lubisz JHipster, nie zapomnij dać nam gwiazdki",
         "github": "Github"
     },
     "login": {
-        "title": "Authentication",
+        "title": "Autoryzacja",
         "form": {
             "username": "Login",
-            "username.placeholder": "Your login",
-            "password": "Password",
-            "password.placeholder": "Your password",
-            "rememberme": "Automatic Login",
-            "button": "Authenticate"
+            "username.placeholder": "Twój login",
+            "password": "Hasło",
+            "password.placeholder": "Twoje hasło",
+            "rememberme": "Automatyczny login",
+            "button": "Autoryzacja"
         },
         "messages": {
             "error": {
-                "authentication": "<strong>Authentication failed!</strong> Please check your credentials and try again."
+                "authentication": "<strong>Nieudane logowanie!</strong> Sprawdź swoje dane logowania i spróbuj ponownie."
             }
         }
     },
     "settings": {
-        "title": "User settings for [<b>{{username}}</b>]",
+        "title": "Ustawienie dla użytkownika [<b>{{username}}</b>]",
         "form": {
-            "firstname": "First Name",
-            "firstname.placeholder": "Your first name",
-            "lastname": "Last Name",
-            "lastname.placeholder": "Your last name",
+            "firstname": "Imię",
+            "firstname.placeholder": "Twoje imię",
+            "lastname": "Nazwisko",
+            "lastname.placeholder": "Twoje nazwisko",
             "email": "E-mail",
-            "email.placeholder": "Your e-mail",
-            "button": "Save"
+            "email.placeholder": "Twój e-mail",
+            "button": "Zapisz"
         },
         "messages": {
             "error": "<strong>An error has occured!</strong> Settings could not be saved.",
