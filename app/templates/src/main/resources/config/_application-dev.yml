@@ -54,9 +54,5 @@ metrics:
 # You just need to add a dash + the directory to watch
 hotReload:
   enabled: true
-  package:
-    project: <%=packageName%>
-    domain: <%=packageName%>.domain
-    restdto: <%=packageName%>.web.rest.dto
   watchdir:
     - target/classes
