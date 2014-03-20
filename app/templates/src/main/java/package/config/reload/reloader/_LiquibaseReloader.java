@@ -109,8 +109,8 @@ public class LiquibaseReloader {
                     return builder.buildHibernateConfiguration(serviceRegistry);
                 }
             };
-            hibernateDatabase.setDefaultSchemaName("");
-            hibernateDatabase.setDefaultCatalogName("");
+            hibernateDatabase.setDefaultSchemaName(getDefaultSchemaName());
+            hibernateDatabase.setDefaultCatalogName(getDefaultCatalogName());
             hibernateDatabase.setConnection(new JdbcConnection(
                     new HibernateConnection("hibernate:spring:" + packagesToScan + "?dialect=" + applicationContext.getEnvironment().getProperty("spring.jpa.database-platform"))));
 
@@ -240,71 +240,56 @@ public class LiquibaseReloader {
     private void ignoreDatabaseJHipsterTables(DiffResult diffResult)
             throws Exception {
 
-        List<String> IGNORE_JHIPSTER = Arrays.asList("HIBERNATE_SEQUENCES", "T_AUTHORITY",
-                "T_PERSISTENT_AUDIT_EVENT", "T_PERSISTENT_AUDIT_EVENT_DATA", "T_PERSISTENT_TOKEN", "T_USER", "T_USER_AUTHORITY");
-
         Set<Table> unexpectedTables = diffResult
                 .getUnexpectedObjects(Table.class);
-		
+
         for (Table table : unexpectedTables) {
-            if (IGNORE_JHIPSTER.contains(table.getName())) {
+            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(table.getName())) {
                 diffResult.getUnexpectedObjects().remove(table);
-			}
+            }
         }
         Set<Table> missingTables = diffResult
                 .getMissingObjects(Table.class);
-		
+
         for (Table table : missingTables) {
-            if (IGNORE_JHIPSTER.contains(table.getName())) {
+            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(table.getName())) {
                 diffResult.getMissingObjects().remove(table);
-			}
+            }
         }
         Set<Column> unexpectedColumns = diffResult.getUnexpectedObjects(Column.class);
         for (Column column : unexpectedColumns) {
-            if (IGNORE_JHIPSTER.contains(column.getRelation().getName())) {
+            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(column.getRelation().getName())) {
                 diffResult.getUnexpectedObjects().remove(column);
-			}
+            }
         }
         Set<Column> missingColumns = diffResult.getMissingObjects(Column.class);
         for (Column column : missingColumns) {
-            if (IGNORE_JHIPSTER.contains(column.getRelation().getName())) {
+            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(column.getRelation().getName())) {
                 diffResult.getMissingObjects().remove(column);
-			}
+            }
         }
         Set<Index> unexpectedIndexes = diffResult.getUnexpectedObjects(Index.class);
         for (Index index : unexpectedIndexes) {
-            if (IGNORE_JHIPSTER.contains(index.getTable().getName())) {
+            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(index.getTable().getName())) {
                 diffResult.getUnexpectedObjects().remove(index);
-			}
+            }
         }
         Set<Index> missingIndexes = diffResult.getMissingObjects(Index.class);
         for (Index index : missingIndexes) {
-            if (IGNORE_JHIPSTER.contains(index.getTable().getName())) {
+            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(index.getTable().getName())) {
                 diffResult.getMissingObjects().remove(index);
-			}
+            }
         }
         Set<PrimaryKey> unexpectedPrimaryKeys = diffResult.getUnexpectedObjects(PrimaryKey.class);
         for (PrimaryKey primaryKey : unexpectedPrimaryKeys) {
-            if (IGNORE_JHIPSTER.contains(primaryKey.getTable().getName())) {
+            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(primaryKey.getTable().getName())) {
                 diffResult.getUnexpectedObjects().remove(primaryKey);
-			}
+            }
         }
         Set<PrimaryKey> missingPrimaryKeys = diffResult.getMissingObjects(PrimaryKey.class);
         for (PrimaryKey primaryKey : missingPrimaryKeys) {
-            if (IGNORE_JHIPSTER.contains(primaryKey.getTable().getName())) {
+            if ("HIBERNATE_SEQUENCES".equalsIgnoreCase(primaryKey.getTable().getName())) {
                 diffResult.getMissingObjects().remove(primaryKey);
-			}
-        }
-        Set<ForeignKey> unexpectedForeignKeys = diffResult.getUnexpectedObjects(ForeignKey.class);
-        for (ForeignKey foreignKey : unexpectedForeignKeys) {
-            if (IGNORE_JHIPSTER.contains(foreignKey.getForeignKeyTable().getName())) {
-                diffResult.getUnexpectedObjects().remove(foreignKey);
-			}
-        }
-        Set<ForeignKey> missingForeignKeys = diffResult.getMissingObjects(ForeignKey.class);
-        for (ForeignKey foreignKey : missingForeignKeys) {
-            if (IGNORE_JHIPSTER.contains(foreignKey.getForeignKeyTable().getName())) {
-                diffResult.getMissingObjects().remove(foreignKey);
             }
         }
     }
@@ -369,6 +354,14 @@ public class LiquibaseReloader {
         <% if (devDatabaseType == 'mysql') { %>return new liquibase.database.core.MySQLDatabase();<% } %><% if (devDatabaseType == 'postgresql') { %>return new liquibase.database.core.PostgresDatabase();<% } %><% if (devDatabaseType == 'h2Memory') { %>return new liquibase.database.core.H2Database();<% } %>
     }
 
+    private String getDefaultSchemaName() {
+        return applicationContext.getEnvironment().getProperty("hotReload.liquibase.defaultSchema", "");
+    }
+
+    private String getDefaultCatalogName() {
+        return applicationContext.getEnvironment().getProperty("hotReload.liquibase.defaultCatalogName", "");
+    }
+
     /**
      * The master.xml file will be rewritten to include the new changelogs
      */
@@ -380,6 +373,7 @@ public class LiquibaseReloader {
             final File changeLogFolder = FileSystems.getDefault().getPath(CHANGELOG_FOLER).toFile();
 
             final File[] allChangelogs = changeLogFolder.listFiles((FileFilter) new SuffixFileFilter(".xml"));
+            Arrays.sort(allChangelogs);
 
             String begin = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                     "<databaseChangeLog\n" +
