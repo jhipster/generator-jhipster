@@ -375,7 +375,7 @@
             <artifactId>spring-context-support</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.jhipster.loaded</groupId>
+            <groupId>io.github.jhipster.loaded</groupId>
             <artifactId>core</artifactId>
             <version><%= _.unescape('\${jhipsterloaded.version}')%></version>
         </dependency>
@@ -518,7 +518,7 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>com.jhipster.loaded</groupId>
+                                    <groupId>io.github.jhipster.loaded</groupId>
                                     <artifactId>agent</artifactId>
                                     <version><%= _.unescape('\${jhipsterloaded.version}')%></version>
                                     <type>jar</type>

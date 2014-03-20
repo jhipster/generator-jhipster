@@ -27,12 +27,14 @@ public class <%= entityClass %> implements Serializable {
     private long id;
 
     @Size(min = 1, max = 50)
+    @Column(name = "sample_text_attribute")
     private String sampleTextAttribute;
 
     @NotNull
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = CustomLocalDateSerializer.class)
+    @Column(name = "sample_date_attribute")
     private LocalDate sampleDateAttribute;
 
     public long getId() {

@@ -92,7 +92,7 @@
     <!-- Manage the new Springboot actuator Audit event -->
     <changeSet id="2" author="jhipster">
         <createTable tableName="T_PERSISTENT_AUDIT_EVENT">
-            <column name="event_id" type="bigint" autoIncrement="true">
+            <column name="event_id" type="bigint" >
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="principal" type="varchar(50)"/>
