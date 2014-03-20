@@ -53,6 +53,9 @@ metrics:
 # You can add as many as folders to watch
 # You just need to add a dash + the directory to watch
 hotReload:
-  enabled: true
-  watchdir:
-    - target/classes
+    enabled: true
+    liquibase:
+        defaultCatalogName: <% if (devDatabaseType == 'mysql') { %>baseName<% } %>
+        defaultSchema: <% if (devDatabaseType == 'mysql') { %>baseName<% } %><% if (devDatabaseType == 'postgresql') { %>public<% } %><% if (devDatabaseType == 'h2Memory') { %>public<% } %>
+    watchdir:
+        - target/classes
