@@ -13,7 +13,7 @@
                 "metrics": "Metryki",
                 "logs": "Logi",
                 "audits": "Audyty",
-                "login": "Autorzacja",
+                "login": "Autoryzacja",
                 "logout": "Wyloguj"
             },
             "admin": "Administracja",
@@ -22,7 +22,8 @@
         "language": {
             "en": "Angielski",
             "fr": "Francuski",
-            "de": "Niemiecki"
+            "de": "Niemiecki",
+            "pl": "Polski"
         }
     },
     "main": {
@@ -74,7 +75,7 @@
             "success": "<strong>Ustawienia zapisane!</strong>",
             "validate": {
                 "firstname": {
-                    "required": "Twoje imie jest wymagane.",
+                    "required": "Twoje imię jest wymagane.",
                     "minlength": "Twoje imię musi mieć przynajmniej 1 literę",
                     "maxlength": "Twoje imię nie może być dłuższe niż 50 liter"
                 },
@@ -109,14 +110,14 @@
             "success": "<strong>Hasło zostało zmienione!</strong>",
             "validate": {
                 "newpassword": {
-                    "required": "Your password is required.",
-                    "minlength": "Your password is required to be at least 5 characters",
-                    "maxlength": "Your first name cannot be longer than 20 characters"
+                    "required": "Twoje hasło jest wymagane.",
+                    "minlength": "Twoje hasło powinno mieć minimum 5 znaków",
+                    "maxlength": "Twoje hasło nie może być dłuższe niż 20 znaków"
                 },
                 "confirmpassword": {
-                    "required": "Your confirm password is required.",
-                    "minlength": "Your confirm password is required to be at least 5 character",
-                    "maxlength": "Your confirm password cannot be longer than 20 characters"
+                    "required": "Twoje hasło potwierdzające jest wymagane.",
+                    "minlength": "Twoje hasło potwierdzające powinno mieć minimum 5 character",
+                    "maxlength": "Twoje hasło potwierdzające nie powinno być dłuższe niż 20 znaków"
                 }
             }
         }
@@ -142,7 +143,7 @@
             "ipaddress": "IP Address",
             "userAgent": "Agent użytkownika",
             "page": "Current page",
-            "time": "Time"
+            "time": "Czas"
         }
     },
     "metrics": {
@@ -152,51 +153,51 @@
             "title": "Heath checks",
             "database": "Baza danych: ",
             "email": "Email: ",
-            "stacktrace": "Stacktrace"
+            "stacktrace": "Stos wywołań"
         },
         "jvm": {
             "title": "JVM Metrics",
             "memory": {
                 "title": "Pamięć",
-                "total": "Total Memory",
-                "heap": "Heap Memory",
-                "nonheap": "Non-Heap Memory"
+                "total": "Całkowita Pamięć",
+                "heap": "Heap Pamięć",
+                "nonheap": "Non-Heap Pamięć"
             },
             "threads": {
-                "title": "Threads",
-                "all": "All",
+                "title": "Wątki",
+                "all": "Wszystkie",
                 "runnable": "Runnable",
-                "timedwaiting": "Timed waiting",
-                "waiting": "Waiting",
-                "blocked": "Blocked",
+                "timedwaiting": "Czasowo oczekujące",
+                "waiting": "Oczekujące",
+                "blocked": "Zablokowane",
                 "dump": {
                     "title": "Threads dump",
                     "id": "Id: ",
-                    "blockedtime": "Blocked Time",
-                    "blockedcount": "Blocked Count",
-                    "waitedtime": "Waited Time",
-                    "waitedcount": "Waited Count",
-                    "lockname": "Lock name",
+                    "blockedtime": "Czas zablokowanych",
+                    "blockedcount": "Liczba zablokowanych",
+                    "waitedtime": "Oczekiwany czas",
+                    "waitedcount": "Liczba oczekiwanych",
+                    "lockname": "Nazwa blokady",
                     "stacktrace": "Stos wywołań",
                     "show": "Pokaż",
                     "hide": "Ukryj"
                 }
             },
             "gc": {
-                "title": "Garbage collections",
+                "title": "Odśmiecanie pamięci",
                 "marksweepcount": "Mark Sweep count",
                 "marksweeptime": "Mark Sweep time",
                 "scavengecount": "Scavenge count",
                 "scavengetime": "Scavenge time"
             },
             "http": {
-                "title": "HTTP requests (events per second)",
-                "active": "Active requests:",
-                "total": "Total requests:",
+                "title": "Zapytania HTTP  (zdarzenia na sekundę)",
+                "active": "Aktywne zapytania:",
+                "total": "Całkowita libcza zapytań:",
                 "table": {
-                    "code": "Code",
-                    "count": "Count",
-                    "mean": "Mean",
+                    "code": "Kod",
+                    "count": "Liczba",
+                    "mean": "Średnia",
                     "average": "Średnia"
                 },
                 "code": {
@@ -211,7 +212,7 @@
             "table": {
                 "name": "Nazwa usługi",
                 "count": "Licznik",
-                "mean": "Mean",
+                "mean": "Średnia",
                 "min": "Min",
                 "max": "Max",
                 "p50": "p50",
@@ -224,10 +225,10 @@
             "title": "Statystyki Ehcache",
             "cachename": "Nazwa cache",
             "objects": "Obiekty",
-            "hits": "Hits",
-            "misses": "Misses",
-            "evictioncount": "Eviction count",
-            "mean": "Mean get time (ms)"
+            "hits": "Odsłon",
+            "misses": "Nie trafionych",
+            "evictioncount": "Liczba wyeksmitowanych",
+            "mean": "Średni czas pobrania (ms)"
         }
     },
     "logs": {
@@ -242,13 +243,13 @@
     "audits": {
         "title": "Audyty",
         "filter": {
-            "title": "Filter per date",
+            "title": "Fitry przez datę",
             "from": "od",
             "to": "do",
             "button": {
-                "weeks": "Weeks",
-                "today": "today",
-                "clear": "clear",
+                "weeks": "Tygodnie",
+                "today": "dziś",
+                "clear": "wyczyść",
                 "close": "zamknij"
             }
         },
