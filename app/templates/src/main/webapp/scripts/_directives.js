@@ -41,7 +41,7 @@ angular.module('<%= angularAppName %>')
    
     return {
         replace: false,
-        restrict: 'EACM',
+        restrict: 'A',
         link: function (scope, iElement) {
 
             var strength = {
