@@ -111,7 +111,8 @@
                 "newpassword": {
                     "required": "Your password is required.",
                     "minlength": "Your password is required to be at least 5 characters",
-                    "maxlength": "Your first name cannot be longer than 20 characters"
+                    "maxlength": "Your first name cannot be longer than 20 characters",
+                    "strength": "Password strength:"
                 },
                 "confirmpassword": {
                     "required": "Your confirm password is required.",
