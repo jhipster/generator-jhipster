@@ -1,6 +1,6 @@
-$icon-font-path: "/bower_components/bootstrap-saas/vendor/assets/fonts/";
+$icon-font-path: "../bower_components/bootstrap-sass/vendor/assets/fonts/bootstrap/";
 
-@import 'bootstrap-saas/vendor/assets/javascripts/bootstrap';
+@import './bootstrap-sass/vendor/assets/stylesheets/bootstrap.scss';
 
 body {
     background: #fafafa;

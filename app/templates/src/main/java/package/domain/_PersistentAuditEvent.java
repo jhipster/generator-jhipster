@@ -21,7 +21,7 @@ import java.util.Map;
 public class PersistentAuditEvent  {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(name = "event_id")
     private long id;
 
