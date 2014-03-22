@@ -114,7 +114,8 @@
                 "newpassword": {
                     "required": "Votre mot de passe est requis.",
                     "minlength": "Votre mot de passe doit comporter au moins 5 caractères",
-                    "maxlength": "Votre mot de passe ne doit pas comporter plus de 20 caractères"
+                    "maxlength": "Votre mot de passe ne doit pas comporter plus de 20 caractères",
+                    "strength": "Robustesse du mot de passe:"
                 },
                 "confirmpassword": {
                     "required": "Votre confirmation du mot de passe est requis.",
