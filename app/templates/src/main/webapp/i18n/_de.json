@@ -81,7 +81,8 @@
                 "lastname": {
                     "required": "Ihr Nachname wird benötigt.",
                     "minlength": "Ihr Nachname muss mindestens 1 Zeichen lang sein",
-                    "maxlength": "Ihr Nachname darf nicht länger als 50 Zeichen sein"
+                    "maxlength": "Ihr Nachname darf nicht länger als 50 Zeichen sein",
+                    "strength": "Passwort Stärke:"
                 },
                 "email": {
                     "required": "Ihre E-Mail Adresse wird benötigt.",
