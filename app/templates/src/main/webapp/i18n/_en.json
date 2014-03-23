@@ -22,7 +22,8 @@
         "language": {
             "en": "English",
             "fr": "French",
-            "de": "German"
+            "de": "German",
+            "pl": "Polish"
         }
     },
     "main": {
