@@ -98,7 +98,6 @@
         <joda-time-hibernate.version>1.3</joda-time-hibernate.version>
         <geronimo-javamail_1.4_mail.version>1.8.3</geronimo-javamail_1.4_mail.version>
         <usertype.core.version>3.1.0.CR10</usertype.core.version>
-        <springloaded.version>1.2.0.BUILD-20140214.165636-1</springloaded.version>
         <awaitility.version>1.4.0</awaitility.version>
         <json-path.version>0.9.1</json-path.version>
         <assertj-core.version>1.5.0</assertj-core.version>
