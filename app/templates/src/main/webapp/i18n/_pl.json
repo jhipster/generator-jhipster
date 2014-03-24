@@ -137,17 +137,17 @@
 
     },
     "tracker": {
-        "title": "Real-time user activities",
+        "title": "Aktywność użytkownika w czasie rzeczywistym",
         "table": {
             "userlogin": "Użytkownik",
             "ipaddress": "IP Address",
             "userAgent": "Agent użytkownika",
-            "page": "Current page",
+            "page": "Aktualna strona",
             "time": "Czas"
         }
     },
     "metrics": {
-        "title": "Application Metrics",
+        "title": "Metryki aplikacji",
         "refresh.button": "Odśwież",
         "health": {
             "title": "Heath checks",
@@ -156,7 +156,7 @@
             "stacktrace": "Stos wywołań"
         },
         "jvm": {
-            "title": "JVM Metrics",
+            "title": "Metryki JVM",
             "memory": {
                 "title": "Pamięć",
                 "total": "Całkowita Pamięć",
@@ -166,12 +166,12 @@
             "threads": {
                 "title": "Wątki",
                 "all": "Wszystkie",
-                "runnable": "Runnable",
+                "runnable": "Uruchamialne",
                 "timedwaiting": "Czasowo oczekujące",
                 "waiting": "Oczekujące",
                 "blocked": "Zablokowane",
                 "dump": {
-                    "title": "Threads dump",
+                    "title": "Zrzut wątków",
                     "id": "Id: ",
                     "blockedtime": "Czas zablokowanych",
                     "blockedcount": "Liczba zablokowanych",
@@ -185,10 +185,10 @@
             },
             "gc": {
                 "title": "Odśmiecanie pamięci",
-                "marksweepcount": "Mark Sweep count",
-                "marksweeptime": "Mark Sweep time",
-                "scavengecount": "Scavenge count",
-                "scavengetime": "Scavenge time"
+                "marksweepcount": "Licznik Mark Sweep",
+                "marksweeptime": "Czas Mark Sweep",
+                "scavengecount": "Licznik Scavenge",
+                "scavengetime": "Czas Scavenge"
             },
             "http": {
                 "title": "Zapytania HTTP  (zdarzenia na sekundę)",
