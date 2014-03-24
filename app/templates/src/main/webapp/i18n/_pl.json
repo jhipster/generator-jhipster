@@ -160,8 +160,8 @@
             "memory": {
                 "title": "Pamięć",
                 "total": "Całkowita Pamięć",
-                "heap": "Heap Pamięć",
-                "nonheap": "Non-Heap Pamięć"
+                "heap": "Pamięć stogu",
+                "nonheap": "Pozostała Pamięć"
             },
             "threads": {
                 "title": "Wątki",
