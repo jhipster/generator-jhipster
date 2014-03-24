@@ -112,7 +112,8 @@
                 "newpassword": {
                     "required": "Twoje hasło jest wymagane.",
                     "minlength": "Twoje hasło powinno mieć minimum 5 znaków",
-                    "maxlength": "Twoje hasło nie może być dłuższe niż 20 znaków"
+                    "maxlength": "Twoje hasło nie może być dłuższe niż 20 znaków",
+                    "strength": "Siła hasła:"
                 },
                 "confirmpassword": {
                     "required": "Twoje hasło potwierdzające jest wymagane.",
@@ -228,7 +229,7 @@
             "hits": "Odsłon",
             "misses": "Nie trafionych",
             "evictioncount": "Liczba wyeksmitowanych",
-            "mean": "Średni czas pobrania (ms)"
+            "mean": "Średni czas pobierania (ms)"
         }
     },
     "logs": {
