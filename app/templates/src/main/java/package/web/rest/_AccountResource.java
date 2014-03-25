@@ -9,8 +9,10 @@ import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.UserService;
 import <%=packageName%>.web.rest.dto.UserDTO;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -120,8 +122,21 @@ public class AccountResource {
     @RequestMapping(value = "/rest/account/sessions/{series}",
             method = RequestMethod.DELETE)
     @Timed
-    public void invalidateSession(@PathVariable String series) throws UnsupportedEncodingException {
+    public void invalidateSession(@PathVariable String series, HttpServletRequest request) throws UnsupportedEncodingException {
         String decodedSeries = URLDecoder.decode(series, "UTF-8");
+
+        // Check if the session to invalidate if the current user session.
+        // If so, the security session will be invalidated too
+        User user = userRepository.findOne(SecurityUtils.getCurrentLogin());
+        final List<PersistentToken> persistentTokens = persistentTokenRepository.findByUser(user);
+
+        for (PersistentToken persistentToken : persistentTokens) {
+            if (StringUtils.equals(persistentToken.getSeries(), decodedSeries)) {
+                request.getSession().invalidate();
+                SecurityContextHolder.clearContext();
+            }
+        }
+
         persistentTokenRepository.delete(decodedSeries);
     }
 }
