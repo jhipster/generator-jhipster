@@ -19,9 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * REST controller for managing the current user's account.
@@ -66,9 +65,9 @@ public class AccountResource {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return null;
         }
-        Map<String, Boolean> roles = new HashMap<>();
+        List<String> roles = new ArrayList<>();
         for (Authority authority : user.getAuthorities()) {
-            roles.put(authority.getName(), Boolean.TRUE);
+            roles.add(authority.getName());
         }
         return new UserDTO(user.getLogin(), user.getFirstName(), user.getLastName(),
                 user.getEmail(), roles);

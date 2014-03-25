@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="styles/famfamfam-flags.css">
         <!-- endbuild -->
     </head>
-    <body ng-app="<%= angularAppName %>">
+    <body ng-app="<%= angularAppName %>" ng-controller="MainController">
         <!--[if lt IE 10]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -53,7 +53,7 @@
                                 &nbsp;<span translate="global.menu.account.login">Authenticate</span></a></li>
                         </ul>
                     </li>
-                    <li ng-switch-when="true" ng-show="hasRole('ROLE_ADMIN')" class="dropdown pointer" ng-controller="AdminController">
+                    <li ng-switch-when="true" ng-show="isAuthorized(userRoles.admin)" class="dropdown pointer" ng-controller="AdminController">
                         <a class="dropdown-toggle" data-toggle="dropdown">
                             <span>
                                 <span class="glyphicon glyphicon-tower"></span>

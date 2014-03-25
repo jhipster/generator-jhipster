@@ -54,7 +54,6 @@ metrics:
 # You just need to add a dash + the directory to watch
 hotReload:
     enabled: true
-<<<<<<< HEAD
     package:
       project: <%=packageName%>
       domain: <%=packageName%>.domain
@@ -64,10 +63,3 @@ hotReload:
       defaultSchema: <% if (devDatabaseType == 'mysql') { %>baseName<% } %><% if (devDatabaseType == 'postgresql') { %>public<% } %><% if (devDatabaseType == 'h2Memory') { %>public<% } %>
     watchdir:
       - target/classes
-=======
-    liquibase:
-        defaultCatalogName: <% if (devDatabaseType == 'mysql') { %>baseName<% } %>
-        defaultSchema: <% if (devDatabaseType == 'mysql') { %>baseName<% } %><% if (devDatabaseType == 'postgresql') { %>public<% } %><% if (devDatabaseType == 'h2Memory') { %>public<% } %>
-    watchdir:
-        - target/classes
->>>>>>> master

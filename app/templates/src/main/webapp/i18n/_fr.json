@@ -267,5 +267,9 @@
             }
         }
     },
+    "errors": {
+        "title": "Page d'erreur!",
+        "403": "Vous n'avez pas les droits pour accéder à cette page."
+    },
     "footer": "Ceci est votre pied de page"
 }
