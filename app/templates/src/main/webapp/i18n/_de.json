@@ -22,7 +22,7 @@
         "language": {
             "en": "Englisch",
             "fr": "Französisch",
-            "de": "Deutsch"            
+            "de": "Deutsch"
         }
     },
     "main": {
@@ -266,8 +266,8 @@
         }
     },
     "errors": {
-        "title": "Error page!",
-        "403": "You are not authorized to access the page."
+        "title": "Fehlerseite!",
+        "403": "Sie haben nicht die nötigen Berechtigungen diese Seite anzuzeigen."
     },
     "footer": "Dies ist Ihre Fußzeile"
 }
