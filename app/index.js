@@ -351,7 +351,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/i18n/_de.json', webappDir + 'i18n/de.json');
 
     // Angular JS views
-    this.angularAppName = _s.camelize(_s.slugify(_s.humanize(this.baseName))) + 'App';
+    this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
     this.copy(webappDir + '/views/audits.html', webappDir + 'views/audits.html');
     this.copy(webappDir + '/views/error.html', webappDir + 'views/error.html');
     this.copy(webappDir + '/views/main.html', webappDir + 'views/main.html');
