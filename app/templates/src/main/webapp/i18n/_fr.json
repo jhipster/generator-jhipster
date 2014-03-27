@@ -115,13 +115,13 @@
                 "newpassword": {
                     "required": "Votre mot de passe est requis.",
                     "minlength": "Votre mot de passe doit comporter au moins 5 caractères",
-                    "maxlength": "Votre mot de passe ne doit pas comporter plus de 20 caractères",
+                    "maxlength": "Votre mot de passe ne doit pas comporter plus de 50 caractères",
                     "strength": "Robustesse du mot de passe:"
                 },
                 "confirmpassword": {
                     "required": "Votre confirmation du mot de passe est requis.",
                     "minlength": "Votre confirmation du mot de passe doit comporter au moins 5 caractères",
-                    "maxlength": "Votre confirmation du mot de passe ne doit pas comporter plus de 20 caractères"
+                    "maxlength": "Votre confirmation du mot de passe ne doit pas comporter plus de 50 caractères"
                 }
             }
         }
@@ -267,6 +267,10 @@
                 "remoteAddress": "Adresse Distante :"
             }
         }
+    },
+    "errors": {
+        "title": "Page d'erreur!",
+        "403": "Vous n'avez pas les droits pour accéder à cette page."
     },
     "footer": "Ceci est votre pied de page"
 }

@@ -168,7 +168,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('bowerrc', '.bowerrc');
     this.template('Gruntfile.js', 'Gruntfile.js');
     this.copy('gitignore', '.gitignore');
-    this.copy('spring_loaded/springloaded.jar', 'spring_loaded/springloaded.jar');
 
     var packageFolder = this.packageName.replace(/\./g, '/');
 
@@ -207,12 +206,14 @@ JhipsterGenerator.prototype.app = function app() {
 
     // Remove old files
     removefile(javaDir + '/web/servlet/HealthCheckServlet.java');
-    removefile(javaDir + '/config/metrics/JavaMailHealthCheck.java')
-    removefile(javaDir + '/config/reload/instrument/JHipsterAdvisedSupport.java')
-    removefile(javaDir + '/config/reload/instrument/JHipsterReloadWebSecurityConfig.java')
+    removefile(javaDir + '/config/metrics/JavaMailHealthCheck.java');
+    removefile('spring_loaded/springloaded.jar');
+    removefolder(javaDir + '/config/reload');
 
     this.template('src/main/java/package/_Application.java', javaDir + '/Application.java');
     this.template('src/main/java/package/_ApplicationWebXml.java', javaDir + '/ApplicationWebXml.java');
+
+    this.template('src/main/java/package/aop/logging/_LoggingAspect.java', javaDir + 'aop/logging/LoggingAspect.java');
 
     this.template('src/main/java/package/config/_package-info.java', javaDir + 'config/package-info.java');
     this.template('src/main/java/package/config/_AsyncConfiguration.java', javaDir + 'config/AsyncConfiguration.java');
@@ -220,6 +221,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/_Constants.java', javaDir + 'config/Constants.java');
     this.template('src/main/java/package/config/_DatabaseConfiguration.java', javaDir + 'config/DatabaseConfiguration.java');
     this.template('src/main/java/package/config/_LocaleConfiguration.java', javaDir + 'config/LocaleConfiguration.java');
+    this.template('src/main/java/package/config/_LoggingAspectConfiguration.java', javaDir + 'config/LoggingAspectConfiguration.java');
     this.template('src/main/java/package/config/_MailConfiguration.java', javaDir + 'config/MailConfiguration.java');
     this.template('src/main/java/package/config/_MetricsConfiguration.java', javaDir + 'config/MetricsConfiguration.java');
     this.template('src/main/java/package/config/_SecurityConfiguration.java', javaDir + 'config/SecurityConfiguration.java');
@@ -242,35 +244,6 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/main/java/package/config/hazelcast/_HazelcastCacheRegionFactory.java', javaDir + 'config/hazelcast/HazelcastCacheRegionFactory.java');
         this.template('src/main/java/package/config/hazelcast/_package-info.java', javaDir + 'config/hazelcast/package-info.java');
     }
-
-    this.template('src/main/java/package/config/reload/_package-info.java', javaDir + 'config/reload/package-info.java');
-    this.template('src/main/java/package/config/reload/_FileSystemWatcher.java', javaDir + 'config/reload/FileSystemWatcher.java');
-    this.template('src/main/java/package/config/reload/_JHipsterFileSystemWatcher.java', javaDir + 'config/reload/JHipsterFileSystemWatcher.java');
-    this.template('src/main/java/package/config/reload/_JHipsterPluginManagerReloadPlugin.java', javaDir + 'config/reload/JHipsterPluginManagerReloadPlugin.java');
-    this.template('src/main/java/package/config/reload/_JHipsterReloaderConfiguration.java', javaDir + 'config/reload/JHipsterReloaderConfiguration.java');
-    this.template('src/main/java/package/config/reload/_JHipsterReloaderThread.java', javaDir + 'config/reload/JHipsterReloaderThread.java');
-    this.template('src/main/java/package/config/reload/condition/_ConditionalOnSpringLoaded.java', javaDir + 'config/reload/condition/ConditionalOnSpringLoaded.java');
-    this.template('src/main/java/package/config/reload/condition/_OnSpringLoadedCondition.java', javaDir + 'config/reload/condition/OnSpringLoadedCondition.java');
-    this.template('src/main/java/package/config/reload/condition/_package-info.java', javaDir + 'config/reload/condition/package-info.java');
-    this.template('src/main/java/package/config/reload/instrument/hibernate/_package-info.java', javaDir + 'config/reload/instrument/hibernate/package-info.java');
-    this.template('src/main/java/package/config/reload/instrument/hibernate/_JHipsterEntityManagerFactoryWrapper.java', javaDir + 'config/reload/instrument/hibernate/JHipsterEntityManagerFactoryWrapper.java');
-    this.template('src/main/java/package/config/reload/instrument/hibernate/_JHipsterPersistenceProvider.java', javaDir + 'config/reload/instrument/hibernate/JHipsterPersistenceProvider.java');
-    this.template('src/main/java/package/config/reload/instrument/_package-info.java', javaDir + 'config/reload/instrument/package-info.java');
-    this.template('src/main/java/package/config/reload/instrument/_JHipsterLoadtimeInstrumentationPlugin.java', javaDir + 'config/reload/instrument/JHipsterLoadtimeInstrumentationPlugin.java');
-    this.template('src/main/java/package/config/reload/listener/filewatcher/_package-info.java', javaDir + 'config/reload/listener/filewatcher/package-info.java');
-    this.template('src/main/java/package/config/reload/listener/filewatcher/_FileWatcherListener.java', javaDir + 'config/reload/listener/filewatcher/FileWatcherListener.java');
-    this.template('src/main/java/package/config/reload/listener/filewatcher/_NewClassLoaderListener.java', javaDir + 'config/reload/listener/filewatcher/NewClassLoaderListener.java');
-    this.template('src/main/java/package/config/reload/listener/springreload/_package-info.java', javaDir + 'config/reload/listener/springreload/package-info.java');
-    this.template('src/main/java/package/config/reload/listener/springreload/_JHipsterHandlerMappingListener.java', javaDir + 'config/reload/listener/springreload/JHipsterHandlerMappingListener.java');
-    this.template('src/main/java/package/config/reload/listener/springreload/_SpringReloadListener.java', javaDir + 'config/reload/listener/springreload/SpringReloadListener.java');
-    this.template('src/main/java/package/config/reload/listener/_package-info.java', javaDir + 'config/reload/listener/package-info.java');
-    this.template('src/main/java/package/config/reload/patch/liquibase/_JHipsterTableSnapshotGenerator.java', javaDir + 'config/reload/patch/liquibase/JHipsterTableSnapshotGenerator.java');
-    this.template('src/main/java/package/config/reload/patch/liquibase/_package-info.java', javaDir + 'config/reload/patch/liquibase/package-info.java');
-    this.template('src/main/java/package/config/reload/patch/_package-info.java', javaDir + 'config/reload/patch/package-info.java');
-    this.template('src/main/java/package/config/reload/reloader/_JacksonReloader.java', javaDir + 'config/reload/reloader/JacksonReloader.java');
-    this.template('src/main/java/package/config/reload/reloader/_LiquibaseReloader.java', javaDir + 'config/reload/reloader/LiquibaseReloader.java');
-    this.template('src/main/java/package/config/reload/reloader/_SpringReloader.java', javaDir + 'config/reload/reloader/SpringReloader.java');
-    this.template('src/main/java/package/config/reload/reloader/_package-info.java', javaDir + 'config/reload/reloader/package-info.java');
 
     this.template('src/main/java/package/domain/_package-info.java', javaDir + 'domain/package-info.java');
     this.template('src/main/java/package/domain/_Authority.java', javaDir + 'domain/Authority.java');
@@ -379,8 +352,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/i18n/_pl.json', webappDir + 'i18n/pl.json');
 
     // Angular JS views
-    this.angularAppName = _s.camelize(this.baseName) + 'App';
+    this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
     this.copy(webappDir + '/views/audits.html', webappDir + 'views/audits.html');
+    this.copy(webappDir + '/views/error.html', webappDir + 'views/error.html');
     this.copy(webappDir + '/views/main.html', webappDir + 'views/main.html');
     this.copy(webappDir + '/views/login.html', webappDir + 'views/login.html');
     this.copy(webappDir + '/views/logs.html', webappDir + 'views/logs.html');
@@ -479,6 +453,12 @@ JhipsterGenerator.prototype.projectfiles = function projectfiles() {
 function removefile(file) {
     if (shelljs.test('-f', file)) {
         shelljs.rm(file);
+    }
+}
+
+function removefolder(folder) {
+    if (shelljs.test('-d', folder)) {
+        shelljs.rm("-rf", folder);
     }
 }
 

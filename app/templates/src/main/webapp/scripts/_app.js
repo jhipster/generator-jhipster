@@ -6,20 +6,35 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
     'ngResource', 'ngRoute', 'ngCookies', 'pascalprecht.translate']);
 
 <%= angularAppName %>
-    .config(['$routeProvider', '$httpProvider', '$translateProvider',  'tmhDynamicLocaleProvider',
-        function ($routeProvider, $httpProvider, $translateProvider, tmhDynamicLocaleProvider) {
+    .config(['$routeProvider', '$httpProvider', '$translateProvider',  'tmhDynamicLocaleProvider', 'USER_ROLES',
+        function ($routeProvider, $httpProvider, $translateProvider, tmhDynamicLocaleProvider, USER_ROLES) {
             $routeProvider
                 .when('/login', {
                     templateUrl: 'views/login.html',
-                    controller: 'LoginController'
+                    controller: 'LoginController',
+                    access: {
+                        authorizedRoles: [USER_ROLES.all]
+                    }
+                })
+                .when('/error', {
+                    templateUrl: 'views/error.html',
+                    access: {
+                        authorizedRoles: [USER_ROLES.all]
+                    }
                 })
                 .when('/settings', {
                     templateUrl: 'views/settings.html',
-                    controller: 'SettingsController'
+                    controller: 'SettingsController',
+                    access: {
+                        authorizedRoles: [USER_ROLES.all]
+                    }
                 })
                 .when('/password', {
                     templateUrl: 'views/password.html',
-                    controller: 'PasswordController'
+                    controller: 'PasswordController',
+                    access: {
+                        authorizedRoles: [USER_ROLES.all]
+                    }
                 })
                 .when('/sessions', {
                     templateUrl: 'views/sessions.html',
@@ -28,15 +43,24 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                         resolvedSessions:['Sessions', function (Sessions) {
                             return Sessions.get();
                         }]
+                    },
+                    access: {
+                        authorizedRoles: [USER_ROLES.all]
                     }
                 })
 <% if (websocket == 'atmosphere') { %>                .when('/tracker', {
                     templateUrl: 'views/tracker.html',
-                    controller: 'TrackerController'
+                    controller: 'TrackerController',
+                    access: {
+                        authorizedRoles: [USER_ROLES.admin]
+                    }
                 })
 <% } %>                .when('/metrics', {
                     templateUrl: 'views/metrics.html',
-                    controller: 'MetricsController'
+                    controller: 'MetricsController',
+                    access: {
+                        authorizedRoles: [USER_ROLES.admin]
+                    }
                 })
                 .when('/logs', {
                     templateUrl: 'views/logs.html',
@@ -45,20 +69,32 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                         resolvedLogs:['LogsService', function (LogsService) {
                             return LogsService.findAll();
                         }]
+                    },
+                    access: {
+                        authorizedRoles: [USER_ROLES.admin]
                     }
                 })
                 .when('/audits', {
                     templateUrl: 'views/audits.html',
-                    controller: 'AuditsController'
+                    controller: 'AuditsController',
+                    access: {
+                        authorizedRoles: [USER_ROLES.admin]
+                    }
                 })
                 .when('/logout', {
                     templateUrl: 'views/main.html',
-                    controller: 'LogoutController'
+                    controller: 'LogoutController',
+                    access: {
+                        authorizedRoles: [USER_ROLES.all]
+                    }
                 })
                 .otherwise({
                     templateUrl: 'views/main.html',
-                    controller: 'MainController'
-                })
+                    controller: 'MainController',
+                    access: {
+                        authorizedRoles: [USER_ROLES.all]
+                    }
+                });
 
             // Initialize angular-translate
             $translateProvider.useStaticFilesLoader({
@@ -73,57 +109,52 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
             tmhDynamicLocaleProvider.localeLocationPattern('bower_components/angular-i18n/angular-locale_{{locale}}.js')
             tmhDynamicLocaleProvider.useCookieStorage('NG_TRANSLATE_LANG_KEY');
         }])
-        .run(['$rootScope', '$location', 'AuthenticationSharedService', 'Account',
-            function($rootScope, $location, AuthenticationSharedService, Account) {
-            $rootScope.hasRole = function(role) {
-                if ($rootScope.account === undefined) {
-                    return false;
-                }
+        .run(['$rootScope', '$location', 'AuthenticationSharedService', 'Session', 'USER_ROLES',
+            function($rootScope, $location, AuthenticationSharedService, Session, USER_ROLES) {
+                $rootScope.$on('$routeChangeStart', function (event, next) {
+                    $rootScope.authenticated = AuthenticationSharedService.isAuthenticated();
+                    $rootScope.isAuthorized = AuthenticationSharedService.isAuthorized;
+                    $rootScope.userRoles = USER_ROLES;
+                    $rootScope.account = Session;
 
-                if ($rootScope.account.roles === undefined) {
-                    return false;
-                }
-
-                if ($rootScope.account.roles[role] === undefined) {
-                    return false;
-                }
-
-                return $rootScope.account.roles[role];
-            };
-
-            $rootScope.$on("$routeChangeStart", function(event, next, current) {
-                // Check if the status of the user. Is it authenticated or not?
-                AuthenticationSharedService.authenticate().then(function(response) {
-                    if (response.data == '') {
-                        $rootScope.$broadcast('event:auth-loginRequired');
-                    } else {
-                        $rootScope.authenticated = true;
-                        $rootScope.login = response.data;
-                        $rootScope.account = Account.get();
-
-                        // If the login page has been requested and the user is already logged in
-                        // the user is redirected to the home page
-                        if ($location.path() === "/login") {
-                            $location.path('/').replace();
+                    var authorizedRoles = next.access.authorizedRoles;
+                    if (!AuthenticationSharedService.isAuthorized(authorizedRoles)) {
+                        event.preventDefault();
+                        if (AuthenticationSharedService.isAuthenticated()) {
+                            // user is not allowed
+                            $rootScope.$broadcast("event:auth-notAuthorized");
+                        } else {
+                            // user is not logged in
+                            $rootScope.$broadcast("event:auth-loginRequired");
                         }
                     }
                 });
-            });
 
-            // Call when the 401 response is returned by the client
-            $rootScope.$on('event:auth-loginRequired', function(rejection) {
-                $rootScope.authenticated = false;
-                if ($location.path() !== "/" && $location.path() !== "") {
-                    $location.path('/login').replace();
-                }
-            });
+                // Call when the the client is confirmed
+                $rootScope.$on('event:auth-loginConfirmed', function(data) {
+                    if ($location.path() === "/login") {
+                        $location.path('/').replace();
+                    }
+                });
 
-            // Call when the user logs out
-            $rootScope.$on('event:auth-loginCancelled', function() {
-                $rootScope.login = null;
-                $rootScope.authenticated = false;
-                $location.path('');
-            });
+                // Call when the 401 response is returned by the server
+                $rootScope.$on('event:auth-loginRequired', function(rejection) {
+                    Session.destroy();
+                    if ($location.path() !== "/" && $location.path() !== "") {
+                        $location.path('/login').replace();
+                    }
+                });
+
+                // Call when the 403 response is returned by the server
+                $rootScope.$on('event:auth-notAuthorized', function(rejection) {
+                    $rootScope.errorMessage = 'errors.403';
+                    $location.path('/error').replace();
+                });
+
+                // Call when the user logs out
+                $rootScope.$on('event:auth-loginCancelled', function() {
+                    $location.path('');
+                });
         }])<% if (websocket == 'atmosphere') { %>
         .run(['$rootScope', '$route',
             function($rootScope, $route) {
