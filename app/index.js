@@ -185,6 +185,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(resourceDir + '/i18n/messages_en.properties', resourceDir + 'i18n/messages_en.properties');
     this.copy(resourceDir + '/i18n/messages_fr.properties', resourceDir + 'i18n/messages_fr.properties');
     this.copy(resourceDir + '/i18n/messages_de.properties', resourceDir + 'i18n/messages_de.properties');
+    this.copy(resourceDir + '/i18n/messages_pl.properties', resourceDir + 'i18n/messages_pl.properties');
 
     // Thymeleaf templates
     this.copy(resourceDir + '/templates/error.html', resourceDir + 'templates/error.html');
