@@ -113,12 +113,12 @@
                 "newpassword": {
                     "required": "Ein neues Passwort wird benötigt.",
                     "minlength": "Das neue Passwort muss mindestens 5 Zeichen lang sein",
-                    "maxlength": "Das neue Passwort darf nicht länger als 20 Zeichen sein"
+                    "maxlength": "Das neue Passwort darf nicht länger als 50 Zeichen sein"
                 },
                 "confirmpassword": {
                     "required": "Sie müssen das Passwort bestätigen.",
                     "minlength": "Das bestätigte Passwort muss mindestens 5 Zeichen lang sein",
-                    "maxlength": "Das bestätigte Passwort darf nicht länger als 20 Zeichen sein"
+                    "maxlength": "Das bestätigte Passwort darf nicht länger als 50 Zeichen sein"
                 }
             }
         }
@@ -267,8 +267,8 @@
         }
     },
     "errors": {
-            "title": "Fehlerseite!",
-            "403": "Sie haben nicht die nötigen Berechtigungen diese Seite anzuzeigen."
+        "title": "Fehlerseite!",
+        "403": "Sie haben nicht die nötigen Berechtigungen diese Seite anzuzeigen."
     },
     "footer": "Dies ist Ihre Fußzeile"
 }
