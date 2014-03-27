@@ -112,13 +112,13 @@
                 "newpassword": {
                     "required": "Twoje hasło jest wymagane.",
                     "minlength": "Twoje hasło powinno mieć minimum 5 znaków",
-                    "maxlength": "Twoje hasło nie może być dłuższe niż 20 znaków",
+                    "maxlength": "Twoje hasło nie może być dłuższe niż 50 znaków",
                     "strength": "Siła hasła:"
                 },
                 "confirmpassword": {
                     "required": "Twoje hasło potwierdzające jest wymagane.",
                     "minlength": "Twoje hasło potwierdzające powinno mieć minimum 5 character",
-                    "maxlength": "Twoje hasło potwierdzające nie powinno być dłuższe niż 20 znaków"
+                    "maxlength": "Twoje hasło potwierdzające nie powinno być dłuższe niż 50 znaków"
                 }
             }
         }
