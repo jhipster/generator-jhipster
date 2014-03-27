@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.0.0.RC4</version>
+        <version>1.0.0.RC5</version>
     </parent>
 
     <profiles>
@@ -85,6 +85,10 @@
     </profiles>
 
     <properties>
+        <!-- Bug fix spring security issue (https://github.com/spring-projects/spring-security/issues/78) -
+        will be removed once a new version of spring boot will be released-->
+        <spring-security.version>3.2.3.RELEASE</spring-security.version>
+
         <!-- Maven build properties -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
