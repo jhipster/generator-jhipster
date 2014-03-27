@@ -16,7 +16,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.inject.Inject;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Test class for the UserResource REST controller.
@@ -41,14 +41,14 @@ public class UserServiceTest {
 
     @Test
     public void testRemoveOldPersistentTokens() {
-        assertEquals(0, persistentTokenRepository.findAll().size());
+        assertThat(persistentTokenRepository.findAll()).isEmpty();
         User admin = userRepository.findOne("admin");
         generateUserToken(admin, "1111-1111", new LocalDate());
         LocalDate now = new LocalDate();
         generateUserToken(admin, "2222-2222", now.minusDays(32));
-        assertEquals(2, persistentTokenRepository.findAll().size());
+        assertThat(persistentTokenRepository.findAll()).hasSize(2);
         userService.removeOldPersistentTokens();
-        assertEquals(1, persistentTokenRepository.findAll().size());
+        assertThat(persistentTokenRepository.findAll()).hasSize(1);
     }
 
     private void generateUserToken(User user, String tokenSeries, LocalDate localDate) {
