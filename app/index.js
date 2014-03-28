@@ -137,10 +137,24 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             default: 0
         },
         {
-            type: 'confirm',
-            name: 'useCompass',
-            message: '(8/8) Would you like to use the Compass CSS Authoring Framework?',
-            default: false
+            type: 'list',
+            name: 'sass',
+            message: '(8/8) Do you want to use a SASS plugin/framework?',
+            choices: [
+              {
+                value: 'no',
+                name: 'No'
+              },
+              {
+                value: 'compass',
+                name: 'Compass CSS Authoring Framework'
+              },
+              {
+                value: 'maven',
+                name: 'SASS Maven Plugin'
+              }
+            ],
+            default: 0
         }
     ];
 
@@ -154,7 +168,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         this.websocket = props.websocket;
         this.devDatabaseType = props.devDatabaseType;
         this.prodDatabaseType = props.prodDatabaseType;
-        this.useCompass = props.useCompass;
+        this.sass = props.sass;
 
         cb();
     }.bind(this));
@@ -327,17 +341,17 @@ JhipsterGenerator.prototype.app = function app() {
     this.mkdir(webappDir);
 
     // normal CSS or SCSS?
-    if (this.useCompass) {
-        this.copy('src/main/scss/main.scss', 'src/main/scss/main.scss');
+    if (this.sass == "no") {
+      this.copy('src/main/webapp/images/glyphicons-halflings.png', 'src/main/webapp/images/glyphicons-halflings.png');
+      this.copy('src/main/webapp/images/glyphicons-halflings-white.png', 'src/main/webapp/images/glyphicons-halflings-white.png');
+      this.copy('src/main/webapp/styles/bootstrap.css', 'src/main/webapp/styles/bootstrap.css');
+      this.copy('src/main/webapp/styles/main.css', 'src/main/webapp/styles/main.css');
+      this.copy('src/main/webapp/fonts/glyphicons-halflings-regular.eot', 'src/main/webapp/fonts/glyphicons-halflings-regular.eot');
+      this.copy('src/main/webapp/fonts/glyphicons-halflings-regular.svg', 'src/main/webapp/fonts/glyphicons-halflings-regular.svg');
+      this.copy('src/main/webapp/fonts/glyphicons-halflings-regular.ttf', 'src/main/webapp/fonts/glyphicons-halflings-regular.ttf');
+      this.copy('src/main/webapp/fonts/glyphicons-halflings-regular.woff', 'src/main/webapp/fonts/glyphicons-halflings-regular.woff');
     } else {
-        this.copy('src/main/webapp/images/glyphicons-halflings.png', 'src/main/webapp/images/glyphicons-halflings.png');
-        this.copy('src/main/webapp/images/glyphicons-halflings-white.png', 'src/main/webapp/images/glyphicons-halflings-white.png');
-        this.copy('src/main/webapp/styles/bootstrap.css', 'src/main/webapp/styles/bootstrap.css');
-        this.copy('src/main/webapp/styles/main.css', 'src/main/webapp/styles/main.css');
-        this.copy('src/main/webapp/fonts/glyphicons-halflings-regular.eot', 'src/main/webapp/fonts/glyphicons-halflings-regular.eot');
-        this.copy('src/main/webapp/fonts/glyphicons-halflings-regular.svg', 'src/main/webapp/fonts/glyphicons-halflings-regular.svg');
-        this.copy('src/main/webapp/fonts/glyphicons-halflings-regular.ttf', 'src/main/webapp/fonts/glyphicons-halflings-regular.ttf');
-        this.copy('src/main/webapp/fonts/glyphicons-halflings-regular.woff', 'src/main/webapp/fonts/glyphicons-halflings-regular.woff');
+      this.copy('src/main/scss/main.scss', 'src/main/scss/main.scss');
     }
 
     // HTML5 BoilerPlate

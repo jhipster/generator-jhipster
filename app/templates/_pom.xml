@@ -109,7 +109,8 @@
         <sonar-maven-plugin.version>2.2</sonar-maven-plugin.version>
         <jhipsterloaded.version>0.3</jhipsterloaded.version><% if (websocket == 'atmosphere') { %>
         <atmosphere-spring.version>2.1.0</atmosphere-spring.version><% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
-        <postgresql.version>9.3-1100-jdbc41</postgresql.version><% } %>
+        <postgresql.version>9.3-1100-jdbc41</postgresql.version><% } %><% if (sass == 'maven') { %>
+        <sass-plugin.version>1.1.1</sass-plugin.version><% } %>
     </properties>
 
     <repositories>
@@ -547,7 +548,31 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin><% if (sass == 'maven') { %>
+            <plugin>
+              <groupId>org.jasig.maven</groupId>
+              <artifactId>sass-maven-plugin</artifactId>
+              <version><%= _.unescape('\${sass-plugin.version}')%></version>
+              <executions>
+                <execution>
+                  <id>package</id>
+                  <phase>generate-resources</phase>
+                  <goals>
+                    <goal>update-stylesheets</goal>
+                  </goals>
+                </execution>
+              </executions>
+              <configuration>
+                <resources>
+                  <resource>
+                    <source>
+                      <directory><%= _.unescape('\${basedir}')%>/src/main/scss</directory>
+                    </source>
+                    <destination><%= _.unescape('\${project.basedir}')%>/src/main/webapp/styles</destination>
+                  </resource>
+                </resources>
+              </configuration>
+            </plugin><% } %>
         </plugins>
     </build>
 </project>
