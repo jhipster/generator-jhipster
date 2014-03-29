@@ -115,8 +115,8 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
             tmhDynamicLocaleProvider.localeLocationPattern('bower_components/angular-i18n/angular-locale_{{locale}}.js')
             tmhDynamicLocaleProvider.useCookieStorage('NG_TRANSLATE_LANG_KEY');
         }])
-        .run(['$rootScope', '$location', 'AuthenticationSharedService', 'Session', 'USER_ROLES',
-            function($rootScope, $location, AuthenticationSharedService, Session, USER_ROLES) {
+        .run(['$rootScope', '$location', '$http', 'AuthenticationSharedService', 'Session', 'USER_ROLES',
+            function($rootScope, $location, $http, AuthenticationSharedService, Session, USER_ROLES) {
                 $rootScope.$on('$routeChangeStart', function (event, next) {
                     $rootScope.authenticated = AuthenticationSharedService.isAuthenticated();
                     $rootScope.isAuthorized = AuthenticationSharedService.isAuthorized;
@@ -133,6 +133,16 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                             // user is not logged in
                             $rootScope.$broadcast("event:auth-loginRequired");
                         }
+                    } else {
+                        // Check if the customer is still authenticated on the server
+                        // Try to load a protected 1 pixel image.
+                        $http({method: 'GET', url: '/protected/transparent.gif'}).
+                            error(function(response) {
+                            // Not authorized
+                                if (response.status === 401) {
+                                    $rootScope.$broadcast("event:auth-notAuthorized");
+                                }
+                            })
                     }
                 });
 

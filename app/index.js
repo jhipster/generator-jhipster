@@ -371,6 +371,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/i18n/_fr.json', webappDir + 'i18n/fr.json');
     this.template(webappDir + '/i18n/_de.json', webappDir + 'i18n/de.json');
 
+    // Protected resources - used to check if a customer is still connected
+    this.copy(webappDir + '/protected/transparent.gif', webappDir + 'transparent.gif');
+
     // Swagger-ui for Jhipster
     this.copy(webappDir + '/swagger-ui/index.html', webappDir + 'swagger-ui/index.html');
 
