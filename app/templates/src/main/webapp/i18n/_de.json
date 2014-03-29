@@ -14,7 +14,8 @@
                 "logs": "Protokoll",
                 "audits": "Audits",
                 "login": "Anmelden",
-                "logout": "Abmelden"
+                "logout": "Abmelden",
+                "apidocs": "Dokumentationen"
             },
             "admin": "Administration",
             "language": "Sprache"

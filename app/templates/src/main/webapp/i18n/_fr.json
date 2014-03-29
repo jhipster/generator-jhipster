@@ -14,7 +14,8 @@
                 "logs": "Logs",
                 "audits": "Audits",
                 "login": "S'authentifier",
-                "logout": "Déconnexion"
+                "logout": "Déconnexion",
+                "apidocs": "Documentations"
             },
             "admin": "Administration",
             "language": "Langue"
