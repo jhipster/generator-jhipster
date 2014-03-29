@@ -30,10 +30,9 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         '                            |_|   \\_\\_/ |_| \\                            \n' +
         '              _    __    _       __        ___   ____  _      __        \n' +
         '             | |  / /\\  \\ \\  /  / /\\      | | \\ | |_  \\ \\  / ( (`       \n' +
-        '           \\_|_| /_/--\\  \\_\\/  /_/--\\     |_|_/ |_|__  \\_\\/  _)_)       \n' +
-        '\n'));
+        '           \\_|_| /_/--\\  \\_\\/  /_/--\\     |_|_/ |_|__  \\_\\/  _)_)       \n'));
 
-    console.log('\nWelcome to the Jhipster Generator\n\n');
+    console.log('\nWelcome to the JHipster Generator\n');
 
     var prompts = [
         {
@@ -143,21 +142,43 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             default: false
         }
     ];
+	
+    this.baseName = this.config.get('baseName');
+    this.packageName = this.config.get('packageName');
+    this.hibernateCache = this.config.get('hibernateCache');
+    this.clusteredHttpSession = this.config.get('clusteredHttpSession');
+    this.websocket = this.config.get('websocket');
+    this.devDatabaseType = this.config.get('devDatabaseType');
+    this.prodDatabaseType = this.config.get('prodDatabaseType');
+    this.useCompass = this.config.get('useCompass');
+	
+	if (this.baseName != null &&
+	    this.packageName != null &&
+		this.hibernateCache != null &&
+		this.clusteredHttpSession != null &&
+		this.websocket != null &&
+		this.devDatabaseType != null &&
+		this.prodDatabaseType != null &&
+		this.useCompass != null) {
+	
+	    console.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
+			'to re-generate the project...\n'));
+			
+		cb();	
+	} else {
+    	this.prompt(prompts, function (props) {
+			this.baseName = props.baseName;
+        	this.packageName = props.packageName;
+        	this.hibernateCache = props.hibernateCache;
+        	this.clusteredHttpSession = props.clusteredHttpSession;
+        	this.websocket = props.websocket;
+        	this.devDatabaseType = props.devDatabaseType;
+        	this.prodDatabaseType = props.prodDatabaseType;
+        	this.useCompass = props.useCompass;
 
-    this.prompt(prompts, function (props) {
-        this.springVersion = props.springVersion;
-        this.springSecurityVersion = props.springSecurityVersion;
-        this.packageName = props.packageName;
-        this.baseName = props.baseName;
-        this.hibernateCache = props.hibernateCache;
-        this.clusteredHttpSession = props.clusteredHttpSession;
-        this.websocket = props.websocket;
-        this.devDatabaseType = props.devDatabaseType;
-        this.prodDatabaseType = props.prodDatabaseType;
-        this.useCompass = props.useCompass;
-
-        cb();
-    }.bind(this));
+        	cb();
+    	}.bind(this));
+	}
 };
 
 JhipsterGenerator.prototype.app = function app() {
@@ -446,6 +467,11 @@ JhipsterGenerator.prototype.app = function app() {
     this.config.set('packageName', this.packageName);
     this.config.set('packageFolder', packageFolder);
     this.config.set('hibernateCache', this.hibernateCache);
+	this.config.set('clusteredHttpSession', this.clusteredHttpSession);
+	this.config.set('websocket', this.websocket);
+	this.config.set('devDatabaseType', this.devDatabaseType);
+	this.config.set('prodDatabaseType', this.prodDatabaseType);
+	this.config.set('useCompass', this.useCompass);
 };
 
 JhipsterGenerator.prototype.projectfiles = function projectfiles() {
