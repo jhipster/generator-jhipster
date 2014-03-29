@@ -396,6 +396,11 @@
             <artifactId>core</artifactId>
             <version><%= _.unescape('\${jhipsterloaded.version}')%></version>
         </dependency>
+        <dependency>
+            <groupId>com.mangofactory</groupId>
+            <artifactId>swagger-springmvc</artifactId>
+            <version>0.8.2</version>
+        </dependency>
 
         <!-- Database dependencies-->
         <% if (devDatabaseType == 'mysql' || prodDatabaseType == 'mysql') { %><dependency>
