@@ -7,6 +7,4 @@ node_modules
 .project
 .settings
 .merge_file*
-.DS_Store
 src/main/webapp/dist
-src/main/webapp/bower_components
