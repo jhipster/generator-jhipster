@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.0.0.RC4</version>
+        <version>1.0.0.RC5</version>
     </parent>
 
     <profiles>
@@ -39,7 +39,7 @@
                     <plugin>
                         <groupId>com.github.trecloux</groupId>
                         <artifactId>yeoman-maven-plugin</artifactId>
-                        <version>0.1</version>
+                        <version>0.2</version>
                         <configuration>
                             <yeomanProjectDirectory><%= _.unescape('\$\{project.basedir}')%></yeomanProjectDirectory>
                         </configuration>
@@ -85,6 +85,10 @@
     </profiles>
 
     <properties>
+        <!-- Bug fix spring security issue (https://github.com/spring-projects/spring-security/issues/78) -
+        will be removed once a new version of spring boot will be released-->
+        <spring-security.version>3.2.3.RELEASE</spring-security.version>
+
         <!-- Maven build properties -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -98,15 +102,14 @@
         <joda-time-hibernate.version>1.3</joda-time-hibernate.version>
         <geronimo-javamail_1.4_mail.version>1.8.3</geronimo-javamail_1.4_mail.version>
         <usertype.core.version>3.1.0.CR10</usertype.core.version>
-        <springloaded.version>1.2.0.BUILD-20140214.165636-1</springloaded.version>
         <awaitility.version>1.4.0</awaitility.version>
         <json-path.version>0.9.1</json-path.version>
         <assertj-core.version>1.5.0</assertj-core.version>
         <maven-enforcer-plugin.version>1.3.1</maven-enforcer-plugin.version>
         <sonar-maven-plugin.version>2.2</sonar-maven-plugin.version>
-        <jhipsterloaded.version>0.2-SNAPSHOT</jhipsterloaded.version>
-<% if (websocket == 'atmosphere') { %>        <atmosphere-spring.version>2.1.0</atmosphere-spring.version><% } %>
-<% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>        <postgresql.version>9.3-1100-jdbc41</postgresql.version><% } %>
+        <jhipsterloaded.version>0.3</jhipsterloaded.version><% if (websocket == 'atmosphere') { %>
+        <atmosphere-spring.version>2.1.0</atmosphere-spring.version><% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
+        <postgresql.version>9.3-1100-jdbc41</postgresql.version><% } %>
     </properties>
 
     <repositories>
@@ -135,8 +138,19 @@
             </snapshots>
         </repository>
         <repository>
-            <id>OSSRH-snapshot</id>
-            <name>OSSRH Snapshots</name>
+            <id>OSSRH-releases</id>
+            <name>OSSRH Releases</name>
+            <url>https://oss.sonatype.org/content/repositories/releases</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>OSSRH-snapshots</id>
+            <name>OSSRH Releases</name>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
             <releases>
                 <enabled>false</enabled>
@@ -381,6 +395,11 @@
             <groupId>io.github.jhipster.loaded</groupId>
             <artifactId>core</artifactId>
             <version><%= _.unescape('\${jhipsterloaded.version}')%></version>
+        </dependency>
+        <dependency>
+            <groupId>com.mangofactory</groupId>
+            <artifactId>swagger-springmvc</artifactId>
+            <version>0.8.2</version>
         </dependency>
 
         <!-- Database dependencies-->

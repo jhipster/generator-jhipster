@@ -25,3 +25,12 @@ spring:
 
     messageSource:
         cacheSeconds: 1
+
+swagger:
+    apiDocsLocation: http://localhost:8080
+    title: <%=baseName%> API
+    description: <%=baseName%> applications and beyond!
+    termsOfServiceUrl: http://jhipster.github.io/
+    contact:
+    license: Apache 2.0
+    licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.html

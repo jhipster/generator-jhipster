@@ -1,7 +1,7 @@
 {
     "global": {
         "title": "JHipster",
-        "browsehappy": "Sie benutzen einen <strong>veralteten</strong> Browser. Bitte <a href=\"http://browsehappy.com/\">aktualisieren Sie Ihren Browser</a>, um die Benutzerfreundlichkeit zu erhöhen.",
+        "browsehappy": "Sie benutzen einen <strong>veralteten</strong> Browser. Bitte <a href=\"http://browsehappy.com/?locale=de/\">aktualisieren Sie Ihren Browser</a>, um die Benutzerfreundlichkeit zu erhöhen.",
         "menu": {
             "home": "Startseite",
             "account": {
@@ -14,7 +14,8 @@
                 "logs": "Protokoll",
                 "audits": "Audits",
                 "login": "Anmelden",
-                "logout": "Abmelden"
+                "logout": "Abmelden",
+                "apidocs": "Dokumentationen"
             },
             "admin": "Administration",
             "language": "Sprache"
@@ -22,7 +23,8 @@
         "language": {
             "en": "Englisch",
             "fr": "Französisch",
-            "de": "Deutsch"
+            "de": "Deutsch",
+            "pl": "Polnisch"
         }
     },
     "main": {

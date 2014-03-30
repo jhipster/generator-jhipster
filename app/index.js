@@ -30,10 +30,9 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         '                            |_|   \\_\\_/ |_| \\                            \n' +
         '              _    __    _       __        ___   ____  _      __        \n' +
         '             | |  / /\\  \\ \\  /  / /\\      | | \\ | |_  \\ \\  / ( (`       \n' +
-        '           \\_|_| /_/--\\  \\_\\/  /_/--\\     |_|_/ |_|__  \\_\\/  _)_)       \n' +
-        '\n'));
+        '           \\_|_| /_/--\\  \\_\\/  /_/--\\     |_|_/ |_|__  \\_\\/  _)_)       \n'));
 
-    console.log('\nWelcome to the Jhipster Generator\n\n');
+    console.log('\nWelcome to the JHipster Generator\n');
 
     var prompts = [
         {
@@ -143,21 +142,43 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             default: false
         }
     ];
+	
+    this.baseName = this.config.get('baseName');
+    this.packageName = this.config.get('packageName');
+    this.hibernateCache = this.config.get('hibernateCache');
+    this.clusteredHttpSession = this.config.get('clusteredHttpSession');
+    this.websocket = this.config.get('websocket');
+    this.devDatabaseType = this.config.get('devDatabaseType');
+    this.prodDatabaseType = this.config.get('prodDatabaseType');
+    this.useCompass = this.config.get('useCompass');
+	
+	if (this.baseName != null &&
+	    this.packageName != null &&
+		this.hibernateCache != null &&
+		this.clusteredHttpSession != null &&
+		this.websocket != null &&
+		this.devDatabaseType != null &&
+		this.prodDatabaseType != null &&
+		this.useCompass != null) {
+	
+	    console.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
+			'to re-generate the project...\n'));
+			
+		cb();	
+	} else {
+    	this.prompt(prompts, function (props) {
+			this.baseName = props.baseName;
+        	this.packageName = props.packageName;
+        	this.hibernateCache = props.hibernateCache;
+        	this.clusteredHttpSession = props.clusteredHttpSession;
+        	this.websocket = props.websocket;
+        	this.devDatabaseType = props.devDatabaseType;
+        	this.prodDatabaseType = props.prodDatabaseType;
+        	this.useCompass = props.useCompass;
 
-    this.prompt(prompts, function (props) {
-        this.springVersion = props.springVersion;
-        this.springSecurityVersion = props.springSecurityVersion;
-        this.packageName = props.packageName;
-        this.baseName = props.baseName;
-        this.hibernateCache = props.hibernateCache;
-        this.clusteredHttpSession = props.clusteredHttpSession;
-        this.websocket = props.websocket;
-        this.devDatabaseType = props.devDatabaseType;
-        this.prodDatabaseType = props.prodDatabaseType;
-        this.useCompass = props.useCompass;
-
-        cb();
-    }.bind(this));
+        	cb();
+    	}.bind(this));
+	}
 };
 
 JhipsterGenerator.prototype.app = function app() {
@@ -185,6 +206,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(resourceDir + '/i18n/messages_en.properties', resourceDir + 'i18n/messages_en.properties');
     this.copy(resourceDir + '/i18n/messages_fr.properties', resourceDir + 'i18n/messages_fr.properties');
     this.copy(resourceDir + '/i18n/messages_de.properties', resourceDir + 'i18n/messages_de.properties');
+    this.copy(resourceDir + '/i18n/messages_pl.properties', resourceDir + 'i18n/messages_pl.properties');
 
     // Thymeleaf templates
     this.copy(resourceDir + '/templates/error.html', resourceDir + 'templates/error.html');
@@ -349,14 +371,22 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/i18n/_en.json', webappDir + 'i18n/en.json');
     this.template(webappDir + '/i18n/_fr.json', webappDir + 'i18n/fr.json');
     this.template(webappDir + '/i18n/_de.json', webappDir + 'i18n/de.json');
+    this.template(webappDir + '/i18n/_pl.json', webappDir + 'i18n/pl.json');
+
+    // Protected resources - used to check if a customer is still connected
+    this.copy(webappDir + '/protected/transparent.gif', webappDir + 'transparent.gif');
+
+    // Swagger-ui for Jhipster
+    this.copy(webappDir + '/swagger-ui/index.html', webappDir + 'swagger-ui/index.html');
 
     // Angular JS views
     this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
     this.copy(webappDir + '/views/audits.html', webappDir + 'views/audits.html');
+    this.copy(webappDir + '/views/docs.html', webappDir + 'views/docs.html');
     this.copy(webappDir + '/views/error.html', webappDir + 'views/error.html');
-    this.copy(webappDir + '/views/main.html', webappDir + 'views/main.html');
     this.copy(webappDir + '/views/login.html', webappDir + 'views/login.html');
     this.copy(webappDir + '/views/logs.html', webappDir + 'views/logs.html');
+    this.copy(webappDir + '/views/main.html', webappDir + 'views/main.html');
     this.copy(webappDir + '/views/password.html', webappDir + 'views/password.html');
     this.copy(webappDir + '/views/settings.html', webappDir + 'views/settings.html');
     this.copy(webappDir + '/views/sessions.html', webappDir + 'views/sessions.html');
@@ -442,6 +472,11 @@ JhipsterGenerator.prototype.app = function app() {
     this.config.set('packageName', this.packageName);
     this.config.set('packageFolder', packageFolder);
     this.config.set('hibernateCache', this.hibernateCache);
+	this.config.set('clusteredHttpSession', this.clusteredHttpSession);
+	this.config.set('websocket', this.websocket);
+	this.config.set('devDatabaseType', this.devDatabaseType);
+	this.config.set('prodDatabaseType', this.prodDatabaseType);
+	this.config.set('useCompass', this.useCompass);
 };
 
 JhipsterGenerator.prototype.projectfiles = function projectfiles() {
