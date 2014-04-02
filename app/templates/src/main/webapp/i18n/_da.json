@@ -1,0 +1,271 @@
+{
+    "global": {
+        "title": "JHipster",
+        "browsehappy": "Du bruger en <strong>forældet</strong> browser. <a href=\"http://browsehappy.com/\">Opgrader din browser</a> og få gavn af hele den tilgængelige funktionalitet.",
+        "menu": {
+            "home": "Forsiden",
+            "account": {
+                "main": "Konto",
+                "settings": "Indstillinger",
+                "password": "Kodeord",
+                "sessions": "Sessions",
+                "tracker": "Brugersporing",
+                "metrics": "Målinger",
+                "logs": "Logs",
+                "audits": "Revisioner",
+                "login": "Log ind",
+                "logout": "Log ud"
+            },
+            "admin": "Administration",
+            "language": "Sprog"
+        },
+        "language": {
+            "da": "Danish",
+            "en": "English",
+            "fr": "French",
+            "de": "German"
+        }
+    },
+    "main": {
+        "title": "Velkommen, Java Hipster!",
+        "subtitle": "Dette er din startside",
+        "logged": {
+            "message": "Du er logget ind som bruger \"{{username}}\".",
+            "authenticated": "Hvis du ønsker at <a href=\"#/login\">logge ind</a>, så kan du prøve det med:<br/>- Admnistrator (brugernavn=\"admin\" and kodeord=\"admin\") <br/>- User (brugernavn=\"user\" and kodeord=\"user\")."
+        },
+        "question": "Hvis du har spørgsmål om JHipster:",
+        "link": {
+            "homepage": "JHipster homepage",
+            "stackoverflow": "JHipster på Stack Overflow",
+            "bugtracker": "JHipster bug tracker",
+            "contact": "Kontakt @java_hipster på Twitter"
+        },
+        "like": "Hvis du kan lide JHipster, så glem ikke at give os en stjerne på",
+        "github": "Github"
+    },
+    "login": {
+        "title": "Autentifikation",
+        "form": {
+            "username": "Brugernavn",
+            "username.placeholder": "Dit brugernavn",
+            "password": "Kodeord",
+            "password.placeholder": "Dit Kodeord",
+            "rememberme": "Husk mig",
+            "button": "Log ind"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Autentifikation mislykkedes!</strong> Kontroller venligst brugernavn og kodeord og prøv igen."
+            }
+        }
+    },
+    "settings": {
+        "title": "User settings for [<b>{{username}}</b>]",
+        "form": {
+            "firstname": "First Name",
+            "firstname.placeholder": "Your first name",
+            "lastname": "Last Name",
+            "lastname.placeholder": "Your last name",
+            "email": "E-mail",
+            "email.placeholder": "Your e-mail",
+            "button": "Save"
+        },
+        "messages": {
+            "error": "<strong>An error has occured!</strong> Settings could not be saved.",
+            "success": "<strong>Settings saved!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "Your first name is required.",
+                    "minlength": "Your first name is required to be at least 1 character",
+                    "maxlength": "Your first name cannot be longer than 50 characters"
+                },
+                "lastname": {
+                    "required": "Your last name is required.",
+                    "minlength": "Your last name is required to be at least 1 character",
+                    "maxlength": "Your last name cannot be longer than 50 characters"
+                },
+                "email": {
+                    "required": "Your e-mail is required.",
+                    "invalid": "Your e-mail is invalid.",
+                    "minlength": "Your e-mail is required to be at least 1 character",
+                    "maxlength": "Your e-mail cannot be longer than 50 characters"
+                }
+            }
+        }
+    },
+    "password": {
+        "title": "Password for [<b>{{username}}</b>]",
+        "form": {
+            "newpassword": "New password",
+            "newpassword.placeholder": "New password",
+            "confirmpassword": "New password confirmation",
+            "confirmpassword.placeholder": "Confirm the new password",
+            "button": "Save"
+        },
+        "messages": {
+            "error": {
+                "global": "<strong>An error has occured!</strong> The password could not be changed.",
+                "dontmatch" : "The password and its confirmation do not match!"
+            },
+            "success": "<strong>Password changed!</strong>",
+            "validate": {
+                "newpassword": {
+                    "required": "Your password is required.",
+                    "minlength": "Your password is required to be at least 5 characters",
+                    "maxlength": "Your first name cannot be longer than 20 characters",
+                    "strength": "Password strength:"
+                },
+                "confirmpassword": {
+                    "required": "Your confirm password is required.",
+                    "minlength": "Your confirm password is required to be at least 5 character",
+                    "maxlength": "Your confirm password cannot be longer than 20 characters"
+                }
+            }
+        }
+    },
+    "sessions": {
+        "title": "Active sessions for [<b>{{username}}</b>]",
+        "table": {
+            "ipaddress": "IP address",
+            "useragent": "User Agent",
+            "date": "Date",
+            "button": "Invalidate"
+        },
+        "messages": {
+            "success": "<strong>Session invalidated!</strong>",
+            "error": "<strong>An error has occured!</strong> The session could not be invalidated."
+        }
+
+    },
+    "tracker": {
+        "title": "Real-time user activities",
+        "table": {
+            "userlogin": "User",
+            "ipaddress": "IP Address",
+            "userAgent": "User agent",
+            "page": "Current page",
+            "time": "Time"
+        }
+    },
+    "metrics": {
+        "title": "Application Metrics",
+        "refresh.button": "Refresh",
+        "health": {
+            "title": "Heath checks",
+            "database": "Database: ",
+            "email": "Email: ",
+            "stacktrace": "Stacktrace"
+        },
+        "jvm": {
+            "title": "JVM Metrics",
+            "memory": {
+                "title": "Memory",
+                "total": "Total Memory",
+                "heap": "Heap Memory",
+                "nonheap": "Non-Heap Memory"
+            },
+            "threads": {
+                "title": "Threads",
+                "all": "All",
+                "runnable": "Runnable",
+                "timedwaiting": "Timed waiting",
+                "waiting": "Waiting",
+                "blocked": "Blocked",
+                "dump": {
+                    "title": "Threads dump",
+                    "id": "Id: ",
+                    "blockedtime": "Blocked Time",
+                    "blockedcount": "Blocked Count",
+                    "waitedtime": "Waited Time",
+                    "waitedcount": "Waited Count",
+                    "lockname": "Lock name",
+                    "stacktrace": "Stacktrace",
+                    "show": "Show",
+                    "hide": "Hide"
+                }
+            },
+            "gc": {
+                "title": "Garbage collections",
+                "marksweepcount": "Mark Sweep count",
+                "marksweeptime": "Mark Sweep time",
+                "scavengecount": "Scavenge count",
+                "scavengetime": "Scavenge time"
+            },
+            "http": {
+                "title": "HTTP forespørgsler (events per second)",
+                "active": "Active requests:",
+                "total": "Total requests:",
+                "table": {
+                    "code": "Kode",
+                    "count": "Antal",
+                    "mean": "Mean",
+                    "average": "Gennemsnit"
+                },
+                "code": {
+                    "ok": "Ok",
+                    "notfound": "Ikke fundet",
+                    "servererror": "Serverfejl"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Service statistik (tid i millisekunder)",
+            "table": {
+                "name": "Servicenavn",
+                "count": "Antal",
+                "mean": "Mean",
+                "min": "Min",
+                "max": "Max",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "ehcache": {
+            "title": "Ehcache statistik",
+            "cachename": "Cache navn",
+            "objects": "Objekter",
+            "hits": "Hits",
+            "misses": "Misses",
+            "evictioncount": "Eviction count",
+            "mean": "Mean get time (ms)"
+        }
+    },
+    "logs": {
+        "title": "Logs",
+        "nbloggers": "Der findes {{ total }} logger.",
+        "filter": "Filter",
+        "table": {
+            "name": "Navn",
+            "level": "Niveau"
+        }
+    },
+    "audits": {
+        "title": "Revisioner",
+        "filter": {
+            "title": "Filtrer på dato",
+            "from": "fra",
+            "to": "til",
+            "button": {
+                "weeks": "uger",
+                "today": "idag",
+                "clear": "ryd",
+                "close": "luk"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Bruger",
+                "date": "Dato",
+                "status": "Tilstand",
+                "data": "Ekstra data"
+            },
+            "data": {
+                "remoteAddress": "Remote Address:"
+            }
+        }
+
+    },
+    "footer": "This is your footer"
+}
