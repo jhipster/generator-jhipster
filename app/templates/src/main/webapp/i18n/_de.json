@@ -15,12 +15,13 @@
                 "audits": "Audits",
                 "login": "Anmelden",
                 "logout": "Abmelden",
-                "apidocs": "Dokumentationen"
+                "apidocs": "Dokumentation"
             },
             "admin": "Administration",
             "language": "Sprache"
         },
         "language": {
+            "da": "Dänisch",
             "en": "Englisch",
             "fr": "Französisch",
             "de": "Deutsch",
