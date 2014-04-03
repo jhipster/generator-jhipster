@@ -110,6 +110,7 @@
         <jhipsterloaded.version>0.3</jhipsterloaded.version><% if (websocket == 'atmosphere') { %>
         <atmosphere-spring.version>2.1.0</atmosphere-spring.version><% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
         <postgresql.version>9.3-1100-jdbc41</postgresql.version><% } %>
+        <liquibase-slf4j.version>1.2.1</liquibase-slf4j.version>
     </properties>
 
     <repositories>
@@ -445,6 +446,11 @@
             <artifactId>assertj-core</artifactId>
             <version><%= _.unescape('\${assertj-core.version}')%></version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mattbertolini</groupId>
+            <artifactId>liquibase-slf4j</artifactId>
+            <version><%= _.unescape('\${liquibase-slf4j.version}')%></version>
         </dependency>
     </dependencies>
     <build>

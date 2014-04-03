@@ -24,6 +24,7 @@
     <logger name="org.springframework.security" level="WARN"/>
     <logger name="org.springframework.cache" level="WARN"/>
     <logger name="org.thymeleaf" level="WARN"/>
+    <logger name="liquibase" level="warn"/>
 
     <root level="<%= _.unescape('\$\{logback.loglevel}')%>">
         <appender-ref ref="CONSOLE"/>
