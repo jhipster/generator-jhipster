@@ -136,13 +136,7 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                     } else {
                         // Check if the customer is still authenticated on the server
                         // Try to load a protected 1 pixel image.
-                        $http({method: 'GET', url: '/protected/transparent.gif'}).
-                            error(function(response) {
-                            // Not authorized
-                                if (response.status === 401) {
-                                    $rootScope.$broadcast("event:auth-notAuthorized");
-                                }
-                            })
+                        $http({method: 'GET', url: '/protected/transparent.gif'});
                     }
                 });
 
@@ -156,6 +150,7 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                 // Call when the 401 response is returned by the server
                 $rootScope.$on('event:auth-loginRequired', function(rejection) {
                     Session.destroy();
+                    $rootScope.authenticated = false;
                     if ($location.path() !== "/" && $location.path() !== "") {
                         $location.path('/login').replace();
                     }
