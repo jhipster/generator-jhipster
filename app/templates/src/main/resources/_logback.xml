@@ -25,6 +25,10 @@
     <logger name="org.springframework.cache" level="WARN"/>
     <logger name="org.thymeleaf" level="WARN"/>
 
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
+
     <root level="<%= _.unescape('\$\{logback.loglevel}')%>">
         <appender-ref ref="CONSOLE"/>
     </root>
