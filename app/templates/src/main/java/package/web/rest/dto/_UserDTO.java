@@ -1,6 +1,6 @@
 package <%=packageName%>.web.rest.dto;
 
-import java.util.Map;
+import java.util.List;
 
 public class UserDTO {
 
@@ -12,9 +12,9 @@ public class UserDTO {
     
     private final String email;
 
-    private final Map<String, Boolean> roles;
+    private final List<String> roles;
 
-    public UserDTO(String login, String firstName, String lastName, String email, Map<String, Boolean> roles) {
+    public UserDTO(String login, String firstName, String lastName, String email, List<String> roles) {
         this.login = login;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -38,17 +38,19 @@ public class UserDTO {
         return email;
     }
 
-    public Map<String, Boolean> getRoles() {
+    public List<String> getRoles() {
         return roles;
     }
 
     @Override
     public String toString() {
-        return "UserDTO{" +
-                "email='" + email + '\'' +
-                ", login='" + login + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                '}';
+        final StringBuilder sb = new StringBuilder("UserDTO{");
+        sb.append("login='").append(login).append('\'');
+        sb.append(", firstName='").append(firstName).append('\'');
+        sb.append(", lastName='").append(lastName).append('\'');
+        sb.append(", email='").append(email).append('\'');
+        sb.append(", roles=").append(roles);
+        sb.append('}');
+        return sb.toString();
     }
 }

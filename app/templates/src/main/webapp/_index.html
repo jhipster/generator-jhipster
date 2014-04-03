@@ -16,7 +16,7 @@
         <link rel="stylesheet" href="styles/famfamfam-flags.css">
         <!-- endbuild -->
     </head>
-    <body ng-app="<%= angularAppName %>">
+    <body ng-app="<%= angularAppName %>" ng-controller="MainController">
         <!--[if lt IE 10]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -53,7 +53,7 @@
                                 &nbsp;<span translate="global.menu.account.login">Authenticate</span></a></li>
                         </ul>
                     </li>
-                    <li ng-switch-when="true" ng-show="hasRole('ROLE_ADMIN')" class="dropdown pointer" ng-controller="AdminController">
+                    <li ng-switch-when="true" ng-show="isAuthorized(userRoles.admin)" class="dropdown pointer" ng-controller="AdminController">
                         <a class="dropdown-toggle" data-toggle="dropdown">
                             <span>
                                 <span class="glyphicon glyphicon-tower"></span>
@@ -70,6 +70,8 @@
                                 &nbsp;<span translate="global.menu.account.audits">Audits</span></a></li>
                             <li><a href="#/logs"><span class="glyphicon glyphicon-tasks"></span>
                                 &nbsp;<span translate="global.menu.account.logs">Logs</span></a></li>
+                            <li><a href="#/docs"><span class="glyphicon glyphicon-book"></span>
+                                &nbsp;<span translate="global.menu.account.apidocs">API Docs</span></a></li>
                         </ul>
                     </li>
                     <li class="dropdown pointer" ng-controller="LanguageController">
@@ -92,6 +94,10 @@
                             <li active-menu="de">
                                 <a href="#" ng-click="changeLanguage('de')"><span class="famfamfam-flag-de"></span>
                                     &nbsp;<span translate="global.language.de">German</span></a>
+                            </li>
+                            <li active-menu="pl">
+                                <a href="#" ng-click="changeLanguage('pl')"><span class="famfamfam-flag-pl"></span>
+                                    &nbsp;<span translate="global.language.pl">Polish</span></a>
                             </li>
                         </ul>
                     </li>

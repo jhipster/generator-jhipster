@@ -30,10 +30,9 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         '                            |_|   \\_\\_/ |_| \\                            \n' +
         '              _    __    _       __        ___   ____  _      __        \n' +
         '             | |  / /\\  \\ \\  /  / /\\      | | \\ | |_  \\ \\  / ( (`       \n' +
-        '           \\_|_| /_/--\\  \\_\\/  /_/--\\     |_|_/ |_|__  \\_\\/  _)_)       \n' +
-        '\n'));
+        '           \\_|_| /_/--\\  \\_\\/  /_/--\\     |_|_/ |_|__  \\_\\/  _)_)       \n'));
 
-    console.log('\nWelcome to the Jhipster Generator\n\n');
+    console.log('\nWelcome to the JHipster Generator\n');
 
     var prompts = [
         {
@@ -143,21 +142,43 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             default: false
         }
     ];
+	
+    this.baseName = this.config.get('baseName');
+    this.packageName = this.config.get('packageName');
+    this.hibernateCache = this.config.get('hibernateCache');
+    this.clusteredHttpSession = this.config.get('clusteredHttpSession');
+    this.websocket = this.config.get('websocket');
+    this.devDatabaseType = this.config.get('devDatabaseType');
+    this.prodDatabaseType = this.config.get('prodDatabaseType');
+    this.useCompass = this.config.get('useCompass');
+	
+	if (this.baseName != null &&
+	    this.packageName != null &&
+		this.hibernateCache != null &&
+		this.clusteredHttpSession != null &&
+		this.websocket != null &&
+		this.devDatabaseType != null &&
+		this.prodDatabaseType != null &&
+		this.useCompass != null) {
+	
+	    console.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
+			'to re-generate the project...\n'));
+			
+		cb();	
+	} else {
+    	this.prompt(prompts, function (props) {
+			this.baseName = props.baseName;
+        	this.packageName = props.packageName;
+        	this.hibernateCache = props.hibernateCache;
+        	this.clusteredHttpSession = props.clusteredHttpSession;
+        	this.websocket = props.websocket;
+        	this.devDatabaseType = props.devDatabaseType;
+        	this.prodDatabaseType = props.prodDatabaseType;
+        	this.useCompass = props.useCompass;
 
-    this.prompt(prompts, function (props) {
-        this.springVersion = props.springVersion;
-        this.springSecurityVersion = props.springSecurityVersion;
-        this.packageName = props.packageName;
-        this.baseName = props.baseName;
-        this.hibernateCache = props.hibernateCache;
-        this.clusteredHttpSession = props.clusteredHttpSession;
-        this.websocket = props.websocket;
-        this.devDatabaseType = props.devDatabaseType;
-        this.prodDatabaseType = props.prodDatabaseType;
-        this.useCompass = props.useCompass;
-
-        cb();
-    }.bind(this));
+        	cb();
+    	}.bind(this));
+	}
 };
 
 JhipsterGenerator.prototype.app = function app() {
@@ -168,7 +189,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('bowerrc', '.bowerrc');
     this.template('Gruntfile.js', 'Gruntfile.js');
     this.copy('gitignore', '.gitignore');
-    this.copy('spring_loaded/springloaded.jar', 'spring_loaded/springloaded.jar');
 
     var packageFolder = this.packageName.replace(/\./g, '/');
 
@@ -186,6 +206,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(resourceDir + '/i18n/messages_en.properties', resourceDir + 'i18n/messages_en.properties');
     this.copy(resourceDir + '/i18n/messages_fr.properties', resourceDir + 'i18n/messages_fr.properties');
     this.copy(resourceDir + '/i18n/messages_de.properties', resourceDir + 'i18n/messages_de.properties');
+    this.copy(resourceDir + '/i18n/messages_pl.properties', resourceDir + 'i18n/messages_pl.properties');
 
     // Thymeleaf templates
     this.copy(resourceDir + '/templates/error.html', resourceDir + 'templates/error.html');
@@ -207,12 +228,14 @@ JhipsterGenerator.prototype.app = function app() {
 
     // Remove old files
     removefile(javaDir + '/web/servlet/HealthCheckServlet.java');
-    removefile(javaDir + '/config/metrics/JavaMailHealthCheck.java')
-    removefile(javaDir + '/config/reload/instrument/JHipsterAdvisedSupport.java')
-    removefile(javaDir + '/config/reload/instrument/JHipsterReloadWebSecurityConfig.java')
+    removefile(javaDir + '/config/metrics/JavaMailHealthCheck.java');
+    removefile('spring_loaded/springloaded.jar');
+    removefolder(javaDir + '/config/reload');
 
     this.template('src/main/java/package/_Application.java', javaDir + '/Application.java');
     this.template('src/main/java/package/_ApplicationWebXml.java', javaDir + '/ApplicationWebXml.java');
+
+    this.template('src/main/java/package/aop/logging/_LoggingAspect.java', javaDir + 'aop/logging/LoggingAspect.java');
 
     this.template('src/main/java/package/config/_package-info.java', javaDir + 'config/package-info.java');
     this.template('src/main/java/package/config/_AsyncConfiguration.java', javaDir + 'config/AsyncConfiguration.java');
@@ -220,6 +243,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/_Constants.java', javaDir + 'config/Constants.java');
     this.template('src/main/java/package/config/_DatabaseConfiguration.java', javaDir + 'config/DatabaseConfiguration.java');
     this.template('src/main/java/package/config/_LocaleConfiguration.java', javaDir + 'config/LocaleConfiguration.java');
+    this.template('src/main/java/package/config/_LoggingAspectConfiguration.java', javaDir + 'config/LoggingAspectConfiguration.java');
     this.template('src/main/java/package/config/_MailConfiguration.java', javaDir + 'config/MailConfiguration.java');
     this.template('src/main/java/package/config/_MetricsConfiguration.java', javaDir + 'config/MetricsConfiguration.java');
     this.template('src/main/java/package/config/_SecurityConfiguration.java', javaDir + 'config/SecurityConfiguration.java');
@@ -242,35 +266,6 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/main/java/package/config/hazelcast/_HazelcastCacheRegionFactory.java', javaDir + 'config/hazelcast/HazelcastCacheRegionFactory.java');
         this.template('src/main/java/package/config/hazelcast/_package-info.java', javaDir + 'config/hazelcast/package-info.java');
     }
-
-    this.template('src/main/java/package/config/reload/_package-info.java', javaDir + 'config/reload/package-info.java');
-    this.template('src/main/java/package/config/reload/_FileSystemWatcher.java', javaDir + 'config/reload/FileSystemWatcher.java');
-    this.template('src/main/java/package/config/reload/_JHipsterFileSystemWatcher.java', javaDir + 'config/reload/JHipsterFileSystemWatcher.java');
-    this.template('src/main/java/package/config/reload/_JHipsterPluginManagerReloadPlugin.java', javaDir + 'config/reload/JHipsterPluginManagerReloadPlugin.java');
-    this.template('src/main/java/package/config/reload/_JHipsterReloaderConfiguration.java', javaDir + 'config/reload/JHipsterReloaderConfiguration.java');
-    this.template('src/main/java/package/config/reload/_JHipsterReloaderThread.java', javaDir + 'config/reload/JHipsterReloaderThread.java');
-    this.template('src/main/java/package/config/reload/condition/_ConditionalOnSpringLoaded.java', javaDir + 'config/reload/condition/ConditionalOnSpringLoaded.java');
-    this.template('src/main/java/package/config/reload/condition/_OnSpringLoadedCondition.java', javaDir + 'config/reload/condition/OnSpringLoadedCondition.java');
-    this.template('src/main/java/package/config/reload/condition/_package-info.java', javaDir + 'config/reload/condition/package-info.java');
-    this.template('src/main/java/package/config/reload/instrument/hibernate/_package-info.java', javaDir + 'config/reload/instrument/hibernate/package-info.java');
-    this.template('src/main/java/package/config/reload/instrument/hibernate/_JHipsterEntityManagerFactoryWrapper.java', javaDir + 'config/reload/instrument/hibernate/JHipsterEntityManagerFactoryWrapper.java');
-    this.template('src/main/java/package/config/reload/instrument/hibernate/_JHipsterPersistenceProvider.java', javaDir + 'config/reload/instrument/hibernate/JHipsterPersistenceProvider.java');
-    this.template('src/main/java/package/config/reload/instrument/_package-info.java', javaDir + 'config/reload/instrument/package-info.java');
-    this.template('src/main/java/package/config/reload/instrument/_JHipsterLoadtimeInstrumentationPlugin.java', javaDir + 'config/reload/instrument/JHipsterLoadtimeInstrumentationPlugin.java');
-    this.template('src/main/java/package/config/reload/listener/filewatcher/_package-info.java', javaDir + 'config/reload/listener/filewatcher/package-info.java');
-    this.template('src/main/java/package/config/reload/listener/filewatcher/_FileWatcherListener.java', javaDir + 'config/reload/listener/filewatcher/FileWatcherListener.java');
-    this.template('src/main/java/package/config/reload/listener/filewatcher/_NewClassLoaderListener.java', javaDir + 'config/reload/listener/filewatcher/NewClassLoaderListener.java');
-    this.template('src/main/java/package/config/reload/listener/springreload/_package-info.java', javaDir + 'config/reload/listener/springreload/package-info.java');
-    this.template('src/main/java/package/config/reload/listener/springreload/_JHipsterHandlerMappingListener.java', javaDir + 'config/reload/listener/springreload/JHipsterHandlerMappingListener.java');
-    this.template('src/main/java/package/config/reload/listener/springreload/_SpringReloadListener.java', javaDir + 'config/reload/listener/springreload/SpringReloadListener.java');
-    this.template('src/main/java/package/config/reload/listener/_package-info.java', javaDir + 'config/reload/listener/package-info.java');
-    this.template('src/main/java/package/config/reload/patch/liquibase/_JHipsterTableSnapshotGenerator.java', javaDir + 'config/reload/patch/liquibase/JHipsterTableSnapshotGenerator.java');
-    this.template('src/main/java/package/config/reload/patch/liquibase/_package-info.java', javaDir + 'config/reload/patch/liquibase/package-info.java');
-    this.template('src/main/java/package/config/reload/patch/_package-info.java', javaDir + 'config/reload/patch/package-info.java');
-    this.template('src/main/java/package/config/reload/reloader/_JacksonReloader.java', javaDir + 'config/reload/reloader/JacksonReloader.java');
-    this.template('src/main/java/package/config/reload/reloader/_LiquibaseReloader.java', javaDir + 'config/reload/reloader/LiquibaseReloader.java');
-    this.template('src/main/java/package/config/reload/reloader/_SpringReloader.java', javaDir + 'config/reload/reloader/SpringReloader.java');
-    this.template('src/main/java/package/config/reload/reloader/_package-info.java', javaDir + 'config/reload/reloader/package-info.java');
 
     this.template('src/main/java/package/domain/_package-info.java', javaDir + 'domain/package-info.java');
     this.template('src/main/java/package/domain/_Authority.java', javaDir + 'domain/Authority.java');
@@ -376,13 +371,22 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/i18n/_en.json', webappDir + 'i18n/en.json');
     this.template(webappDir + '/i18n/_fr.json', webappDir + 'i18n/fr.json');
     this.template(webappDir + '/i18n/_de.json', webappDir + 'i18n/de.json');
+    this.template(webappDir + '/i18n/_pl.json', webappDir + 'i18n/pl.json');
+
+    // Protected resources - used to check if a customer is still connected
+    this.copy(webappDir + '/protected/transparent.gif', webappDir + 'transparent.gif');
+
+    // Swagger-ui for Jhipster
+    this.copy(webappDir + '/swagger-ui/index.html', webappDir + 'swagger-ui/index.html');
 
     // Angular JS views
-    this.angularAppName = _s.camelize(this.baseName) + 'App';
+    this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
     this.copy(webappDir + '/views/audits.html', webappDir + 'views/audits.html');
-    this.copy(webappDir + '/views/main.html', webappDir + 'views/main.html');
+    this.copy(webappDir + '/views/docs.html', webappDir + 'views/docs.html');
+    this.copy(webappDir + '/views/error.html', webappDir + 'views/error.html');
     this.copy(webappDir + '/views/login.html', webappDir + 'views/login.html');
     this.copy(webappDir + '/views/logs.html', webappDir + 'views/logs.html');
+    this.copy(webappDir + '/views/main.html', webappDir + 'views/main.html');
     this.copy(webappDir + '/views/password.html', webappDir + 'views/password.html');
     this.copy(webappDir + '/views/settings.html', webappDir + 'views/settings.html');
     this.copy(webappDir + '/views/sessions.html', webappDir + 'views/sessions.html');
@@ -468,6 +472,11 @@ JhipsterGenerator.prototype.app = function app() {
     this.config.set('packageName', this.packageName);
     this.config.set('packageFolder', packageFolder);
     this.config.set('hibernateCache', this.hibernateCache);
+	this.config.set('clusteredHttpSession', this.clusteredHttpSession);
+	this.config.set('websocket', this.websocket);
+	this.config.set('devDatabaseType', this.devDatabaseType);
+	this.config.set('prodDatabaseType', this.prodDatabaseType);
+	this.config.set('useCompass', this.useCompass);
 };
 
 JhipsterGenerator.prototype.projectfiles = function projectfiles() {
@@ -478,6 +487,12 @@ JhipsterGenerator.prototype.projectfiles = function projectfiles() {
 function removefile(file) {
     if (shelljs.test('-f', file)) {
         shelljs.rm(file);
+    }
+}
+
+function removefolder(folder) {
+    if (shelljs.test('-d', folder)) {
+        shelljs.rm("-rf", folder);
     }
 }
 

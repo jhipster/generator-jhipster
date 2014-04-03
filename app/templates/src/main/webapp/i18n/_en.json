@@ -1,7 +1,7 @@
 {
     "global": {
         "title": "JHipster",
-        "browsehappy": "You are using an <strong>outdated</strong> browser. Please <a href=\"http://browsehappy.com/\">upgrade your browser</a> to improve your experience.",
+        "browsehappy": "You are using an <strong>outdated</strong> browser. Please <a href=\"http://browsehappy.com/?locale=en\">upgrade your browser</a> to improve your experience.",
         "menu": {
             "home": "Home",
             "account": {
@@ -14,7 +14,8 @@
                 "logs": "Logs",
                 "audits": "Audits",
                 "login": "Authenticate",
-                "logout": "Log out"
+                "logout": "Log out",
+                "apidocs": "Documentations"
             },
             "admin": "Administration",
             "language": "Language"
@@ -22,7 +23,8 @@
         "language": {
             "en": "English",
             "fr": "French",
-            "de": "German"
+            "de": "German",
+            "pl": "Polish"
         }
     },
     "main": {
@@ -111,13 +113,13 @@
                 "newpassword": {
                     "required": "Your password is required.",
                     "minlength": "Your password is required to be at least 5 characters",
-                    "maxlength": "Your first name cannot be longer than 20 characters",
+                    "maxlength": "Your password cannot be longer than 50 characters",
                     "strength": "Password strength:"
                 },
                 "confirmpassword": {
                     "required": "Your confirm password is required.",
                     "minlength": "Your confirm password is required to be at least 5 character",
-                    "maxlength": "Your confirm password cannot be longer than 20 characters"
+                    "maxlength": "Your confirm password cannot be longer than 50 characters"
                 }
             }
         }
@@ -265,6 +267,10 @@
             }
         }
 
+    },
+    "errors": {
+        "title": "Error page!",
+        "403": "You are not authorized to access the page."
     },
     "footer": "This is your footer"
 }

@@ -36,7 +36,7 @@ public class CacheConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);<% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>  
 
-    private static HazelcastInstance hazelcastInstance;<% } else if (hibernateCache == 'ehcache') { %>
+    private static HazelcastInstance hazelcastInstance;<% } if (hibernateCache == 'ehcache') { %>
 
     @PersistenceContext
     private EntityManager entityManager;<% } %><% if (hibernateCache == 'ehcache' || hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>

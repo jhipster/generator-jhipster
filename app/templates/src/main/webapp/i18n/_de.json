@@ -1,7 +1,7 @@
 {
     "global": {
         "title": "JHipster",
-        "browsehappy": "Sie benutzen einen <strong>veralteten</strong> Browser. Bitte <a href=\"http://browsehappy.com/\">aktualisieren Sie Ihren Browser</a>, um die Benutzerfreundlichkeit zu erhöhen.",
+        "browsehappy": "Sie benutzen einen <strong>veralteten</strong> Browser. Bitte <a href=\"http://browsehappy.com/?locale=de/\">aktualisieren Sie Ihren Browser</a>, um die Benutzerfreundlichkeit zu erhöhen.",
         "menu": {
             "home": "Startseite",
             "account": {
@@ -14,7 +14,8 @@
                 "logs": "Protokoll",
                 "audits": "Audits",
                 "login": "Anmelden",
-                "logout": "Abmelden"
+                "logout": "Abmelden",
+                "apidocs": "Dokumentationen"
             },
             "admin": "Administration",
             "language": "Sprache"
@@ -22,7 +23,8 @@
         "language": {
             "en": "Englisch",
             "fr": "Französisch",
-            "de": "Deutsch"            
+            "de": "Deutsch",
+            "pl": "Polnisch"
         }
     },
     "main": {
@@ -112,12 +114,12 @@
                 "newpassword": {
                     "required": "Ein neues Passwort wird benötigt.",
                     "minlength": "Das neue Passwort muss mindestens 5 Zeichen lang sein",
-                    "maxlength": "Das neue Passwort darf nicht länger als 20 Zeichen sein"
+                    "maxlength": "Das neue Passwort darf nicht länger als 50 Zeichen sein"
                 },
                 "confirmpassword": {
                     "required": "Sie müssen das Passwort bestätigen.",
                     "minlength": "Das bestätigte Passwort muss mindestens 5 Zeichen lang sein",
-                    "maxlength": "Das bestätigte Passwort darf nicht länger als 20 Zeichen sein"
+                    "maxlength": "Das bestätigte Passwort darf nicht länger als 50 Zeichen sein"
                 }
             }
         }
@@ -264,6 +266,10 @@
                 "remoteAddress": "Remote-Adresse:"
             }
         }
+    },
+    "errors": {
+        "title": "Fehlerseite!",
+        "403": "Sie haben nicht die nötigen Berechtigungen diese Seite anzuzeigen."
     },
     "footer": "Dies ist Ihre Fußzeile"
 }

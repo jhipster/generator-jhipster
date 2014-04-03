@@ -1,7 +1,7 @@
 {
     "global": {
         "title": "JHipster",
-        "browsehappy": "Vous utilisez un <strong>ancien</strong> navigateur. Veuillez <a href=\"http://browsehappy.com/\">mettre à jour votre navigateur</a> pour une meilleure expérience.",
+        "browsehappy": "Vous utilisez un <strong>ancien</strong> navigateur. Veuillez <a href=\"http://browsehappy.com/?locale=fr\">mettre à jour votre navigateur</a> pour une meilleure expérience.",
         "menu": {
             "home": "Accueil",
             "account": {
@@ -14,7 +14,8 @@
                 "logs": "Logs",
                 "audits": "Audits",
                 "login": "S'authentifier",
-                "logout": "Déconnexion"
+                "logout": "Déconnexion",
+                "apidocs": "Documentations"
             },
             "admin": "Administration",
             "language": "Langue"
@@ -22,7 +23,8 @@
         "language": {
             "en": "Anglais",
             "fr": "Français",
-            "de": "Allemand"
+            "de": "Allemand",
+            "pl": "Polonais"
         }
     },
     "index": {
@@ -114,13 +116,13 @@
                 "newpassword": {
                     "required": "Votre mot de passe est requis.",
                     "minlength": "Votre mot de passe doit comporter au moins 5 caractères",
-                    "maxlength": "Votre mot de passe ne doit pas comporter plus de 20 caractères",
+                    "maxlength": "Votre mot de passe ne doit pas comporter plus de 50 caractères",
                     "strength": "Robustesse du mot de passe:"
                 },
                 "confirmpassword": {
                     "required": "Votre confirmation du mot de passe est requis.",
                     "minlength": "Votre confirmation du mot de passe doit comporter au moins 5 caractères",
-                    "maxlength": "Votre confirmation du mot de passe ne doit pas comporter plus de 20 caractères"
+                    "maxlength": "Votre confirmation du mot de passe ne doit pas comporter plus de 50 caractères"
                 }
             }
         }
@@ -266,6 +268,10 @@
                 "remoteAddress": "Adresse Distante :"
             }
         }
+    },
+    "errors": {
+        "title": "Page d'erreur!",
+        "403": "Vous n'avez pas les droits pour accéder à cette page."
     },
     "footer": "Ceci est votre pied de page"
 }

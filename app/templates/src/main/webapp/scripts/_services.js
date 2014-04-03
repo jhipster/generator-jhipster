@@ -78,16 +78,35 @@
         }
     }]);
 
-<%= angularAppName %>.factory('AuthenticationSharedService', ['$rootScope', '$http', 'authService',
-    function ($rootScope, $http, authService) {
+<%= angularAppName %>.factory('Session', ['$cookieStore',
+    function ($cookieStore) {
+        this.create = function (login, firstName, lastName, email, userRoles) {
+            this.login = login;
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.email = email;
+            this.userRoles = userRoles;
+        };
+        this.destroy = function () {
+            this.login = null;
+            this.firstName = null;
+            this.lastName = null;
+            this.email = null;
+            this.roles = null;
+            $cookieStore.remove('account');
+        };
+        return this;
+    }]);
+
+<%= angularAppName %>.constant('USER_ROLES', {
+        all: '*',
+        admin: 'ROLE_ADMIN',
+        user: 'ROLE_USER'
+    });
+
+<%= angularAppName %>.factory('AuthenticationSharedService', ['$rootScope', '$http', '$cookieStore', 'authService', 'Session', 'Account',
+    function ($rootScope, $http, $cookieStore, authService, Session, Account) {
         return {
-            authenticate: function() {
-               var promise = $http.get('app/rest/authenticate')
-                    .success(function (response) {
-                        return response.data;
-                    });
-                return promise;
-            },
             login: function (param) {
                 var data ="j_username=" + param.username +"&j_password=" + param.password +"&_spring_security_remember_me=" + param.rememberMe +"&submit=Login";
                 $http.post('app/authentication', data, {
@@ -96,21 +115,54 @@
                     },
                     ignoreAuthModule: 'ignoreAuthModule'
                 }).success(function (data, status, headers, config) {
-                    $rootScope.authenticationError = false;
-                    if(param.success){
-                        param.success(data, status, headers, config);
-                    }
+                    Account.get(function(data) {
+                        Session.create(data.login, data.firstName, data.lastName, data.email, data.roles);
+                        $cookieStore.put('account', JSON.stringify(Session));
+                        authService.loginConfirmed(data);
+                    });
                 }).error(function (data, status, headers, config) {
-                    $rootScope.authenticationError = true;
-                    if(param.error){
-                        param.error(data, status, headers, config);
+                    Session.destroy();
+                });
+            },
+            isAuthenticated: function () {
+                if (!Session.login) {
+                    // check if the user has a cookie
+                    if ($cookieStore.get('account') != null) {
+                        var account = JSON.parse($cookieStore.get('account'));
+                        Session.create(account.login, account.firstName, account.lastName,
+                            account.email, account.userRoles);
+                        $rootScope.account = Session;
+                    }
+                }
+                return !!Session.login;
+            },
+            isAuthorized: function (authorizedRoles) {
+                if (!angular.isArray(authorizedRoles)) {
+                    if (authorizedRoles == '*') {
+                        return true;
+                    }
+
+                    authorizedRoles = [authorizedRoles];
+                }
+
+                var isAuthorized = false;
+
+                angular.forEach(authorizedRoles, function(authorizedRole) {
+                    var authorized = (!!Session.login &&
+                        Session.userRoles.indexOf(authorizedRole) !== -1);
+
+                    if (authorized || authorizedRole == '*') {
+                        isAuthorized = true;
                     }
                 });
+
+                return isAuthorized;
             },
             logout: function () {
                 $rootScope.authenticationError = false;
                 $http.get('app/logout')
                     .success(function (data, status, headers, config) {
+                        Session.destroy();
                         authService.loginCancelled();
                     });
             }
