@@ -12,7 +12,7 @@
                 "tracker": "Brugersporing",
                 "metrics": "Målinger",
                 "logs": "Logs",
-                "audits": "Revisioner",
+                "audits": "Audits",
                 "login": "Log ind",
                 "logout": "Log ud",
                 "apidocs": "Dokumentation"
