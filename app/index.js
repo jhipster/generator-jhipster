@@ -38,19 +38,35 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'input',
             name: 'baseName',
-            message: '(1/8) What is the base name of your application?',
+            message: '(1/9) What is the base name of your application?',
             default: 'jhipster'
         },
         {
             type: 'input',
             name: 'packageName',
-            message: '(2/8) What is your default Java package name?',
+            message: '(2/9) What is your default Java package name?',
             default: 'com.mycompany.myapp'
         },
         {
             type: 'list',
+            name: 'javaVersion',
+            message: '(3/9) Do you want to use Java 8?',
+            choices: [
+                {
+                    value: '7',
+                    name: 'No (use Java 7)'
+                },
+                {
+                    value: '8',
+                    name: 'Yes'
+                }
+            ],
+            default: 0
+        },
+        {
+            type: 'list',
             name: 'hibernateCache',
-            message: '(3/8) Do you want to use Hibernate 2nd level cache?',
+            message: '(4/9) Do you want to use Hibernate 2nd level cache?',
             choices: [
                 {
                     value: 'no',
@@ -70,7 +86,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'clusteredHttpSession',
-            message: '(4/8) Do you want to use clustered HTTP sessions?',
+            message: '(5/9) Do you want to use clustered HTTP sessions?',
             choices: [
                 {
                     value: 'no',
@@ -86,7 +102,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'websocket',
-            message: '(5/8) Do you want to use WebSockets?',
+            message: '(6/9) Do you want to use WebSockets?',
             choices: [
                 {
                     value: 'no',
@@ -102,7 +118,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'prodDatabaseType',
-            message: '(6/8) Which *production* database would you like to use?',
+            message: '(7/9) Which *production* database would you like to use?',
             choices: [
                 {
                     value: 'mysql',
@@ -118,7 +134,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'devDatabaseType',
-            message: '(7/8) Which *development* database would you like to use?',
+            message: '(8/9) Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'h2Memory',
@@ -138,7 +154,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'confirm',
             name: 'useCompass',
-            message: '(8/8) Would you like to use the Compass CSS Authoring Framework?',
+            message: '(9/9) Would you like to use the Compass CSS Authoring Framework?',
             default: false
         }
     ];
@@ -151,6 +167,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     this.devDatabaseType = this.config.get('devDatabaseType');
     this.prodDatabaseType = this.config.get('prodDatabaseType');
     this.useCompass = this.config.get('useCompass');
+	this.javaVersion = this.config.get('javaVersion');
 	
 	if (this.baseName != null &&
 	    this.packageName != null &&
@@ -159,7 +176,8 @@ JhipsterGenerator.prototype.askFor = function askFor() {
 		this.websocket != null &&
 		this.devDatabaseType != null &&
 		this.prodDatabaseType != null &&
-		this.useCompass != null) {
+		this.useCompass != null &&
+	    this.javaVersion != null) {
 	
 	    console.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
 			'to re-generate the project...\n'));
@@ -175,6 +193,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         	this.devDatabaseType = props.devDatabaseType;
         	this.prodDatabaseType = props.prodDatabaseType;
         	this.useCompass = props.useCompass;
+			this.javaVersion = props.javaVersion;
 
         	cb();
     	}.bind(this));
@@ -477,6 +496,7 @@ JhipsterGenerator.prototype.app = function app() {
 	this.config.set('devDatabaseType', this.devDatabaseType);
 	this.config.set('prodDatabaseType', this.prodDatabaseType);
 	this.config.set('useCompass', this.useCompass);
+	this.config.set('javaVersion', this.javaVersion);
 };
 
 JhipsterGenerator.prototype.projectfiles = function projectfiles() {
