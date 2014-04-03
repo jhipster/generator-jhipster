@@ -1,7 +1,7 @@
 {
     "global": {
         "title": "JHipster",
-        "browsehappy": "Du bruger en <strong>forældet</strong> browser. <a href=\"http://browsehappy.com/\">Opgrader din browser</a> og få gavn af hele den tilgængelige funktionalitet.",
+        "browsehappy": "Du bruger en <strong>forældet</strong> browser. <a href=\"http://browsehappy.com/?locale=da\">Opgrader din browser</a> og få gavn af hele den tilgængelige funktionalitet.",
         "menu": {
             "home": "Forsiden",
             "account": {
@@ -14,16 +14,18 @@
                 "logs": "Logs",
                 "audits": "Revisioner",
                 "login": "Log ind",
-                "logout": "Log ud"
+                "logout": "Log ud",
+                "apidocs": "Dokumentation"
             },
             "admin": "Administration",
             "language": "Sprog"
         },
         "language": {
-            "da": "Danish",
-            "en": "English",
-            "fr": "French",
-            "de": "German"
+            "da": "Dansk",
+            "en": "Engelsk",
+            "fr": "Fransk",
+            "de": "Tysk",
+            "pl": "Polsk"
         }
     },
     "main": {
@@ -40,7 +42,7 @@
             "bugtracker": "JHipster bug tracker",
             "contact": "Kontakt @java_hipster på Twitter"
         },
-        "like": "Hvis du kan lide JHipster, så glem ikke at give os en stjerne på",
+        "like": "Hvis du kan lide JHipster, så husk at give os en stjerne på",
         "github": "Github"
     },
     "login": {
@@ -60,80 +62,80 @@
         }
     },
     "settings": {
-        "title": "User settings for [<b>{{username}}</b>]",
+        "title": "Brugerindstillinger for [<b>{{username}}</b>]",
         "form": {
-            "firstname": "First Name",
-            "firstname.placeholder": "Your first name",
-            "lastname": "Last Name",
-            "lastname.placeholder": "Your last name",
+            "firstname": "Fornavn",
+            "firstname.placeholder": "Dit fornavn",
+            "lastname": "Efternavn",
+            "lastname.placeholder": "Dit efternavn",
             "email": "E-mail",
-            "email.placeholder": "Your e-mail",
-            "button": "Save"
+            "email.placeholder": "Din e-mail adresse",
+            "button": "Gem"
         },
         "messages": {
-            "error": "<strong>An error has occured!</strong> Settings could not be saved.",
-            "success": "<strong>Settings saved!</strong>",
+            "error": "<strong>Der opstod en fejl!</strong> Brugerindstillingerne kunne ikke gemmes.",
+            "success": "<strong>Brugerindstillinger gemt!</strong>",
             "validate": {
                 "firstname": {
-                    "required": "Your first name is required.",
-                    "minlength": "Your first name is required to be at least 1 character",
-                    "maxlength": "Your first name cannot be longer than 50 characters"
+                    "required": "Dit fornavn er påkrævet.",
+                    "minlength": "Dit fornavn skal som minimum være på 1 tegn",
+                    "maxlength": "Dit fornavn må ikke overskride 50 tegn!"
                 },
                 "lastname": {
-                    "required": "Your last name is required.",
-                    "minlength": "Your last name is required to be at least 1 character",
-                    "maxlength": "Your last name cannot be longer than 50 characters"
+                    "required": "Dit efternavn er påkrævet.",
+                    "minlength": "Dit efternavn skal som minimum være på 1 tegn",
+                    "maxlength": "Dit efternavn må ikke overskride 50 tegn"
                 },
                 "email": {
-                    "required": "Your e-mail is required.",
-                    "invalid": "Your e-mail is invalid.",
-                    "minlength": "Your e-mail is required to be at least 1 character",
-                    "maxlength": "Your e-mail cannot be longer than 50 characters"
+                    "required": "Din e-mail adresse er påkrævet.",
+                    "invalid": "Din e-mail adresse er ugyldig!",
+                    "minlength": "Din e-mail adresse skal som minimum være på 5 tegn",
+                    "maxlength": "Din e-mail adresse må ikke overskride 50 tegn"
                 }
             }
         }
     },
     "password": {
-        "title": "Password for [<b>{{username}}</b>]",
+        "title": "Kodeord for [<b>{{username}}</b>]",
         "form": {
-            "newpassword": "New password",
-            "newpassword.placeholder": "New password",
-            "confirmpassword": "New password confirmation",
-            "confirmpassword.placeholder": "Confirm the new password",
-            "button": "Save"
+            "newpassword": "Nyt kodeord",
+            "newpassword.placeholder": "Indtast det nye kodeord",
+            "confirmpassword": "Bekræft det nye kodeordet",
+            "confirmpassword.placeholder": "Bekræft det nye kodeord",
+            "button": "Gem"
         },
         "messages": {
             "error": {
-                "global": "<strong>An error has occured!</strong> The password could not be changed.",
-                "dontmatch" : "The password and its confirmation do not match!"
+                "global": "<strong>Der opstod en fejl!</strong> Kodeordet kunne ikke ændres.",
+                "dontmatch" : "Kodeordet og dets bekræftelse matcher ikke!"
             },
-            "success": "<strong>Password changed!</strong>",
+            "success": "<strong>Kodeord er blevet ændret!</strong>",
             "validate": {
                 "newpassword": {
-                    "required": "Your password is required.",
-                    "minlength": "Your password is required to be at least 5 characters",
-                    "maxlength": "Your first name cannot be longer than 20 characters",
-                    "strength": "Password strength:"
+                    "required": "Kodeord skal indtastes.",
+                    "minlength": "Kodeordet skal som minimum være på 5 tegn!",
+                    "maxlength": "Kodeordet må ikke overskride 20 tegn!",
+                    "strength": "Kodeord strength:"
                 },
                 "confirmpassword": {
-                    "required": "Your confirm password is required.",
-                    "minlength": "Your confirm password is required to be at least 5 character",
-                    "maxlength": "Your confirm password cannot be longer than 20 characters"
+                    "required": "Kodeordet skal bekræftes",
+                    "minlength": "Kodeordet skal som minimum være på 5 tegn!",
+                    "maxlength": "Kodeordet må ikke overskride 20 tegn!"
                 }
             }
         }
     },
     "sessions": {
-        "title": "Active sessions for [<b>{{username}}</b>]",
+        "title": "Aktive sessioner for [<b>{{username}}</b>]",
         "table": {
-            "ipaddress": "IP address",
+            "ipaddress": "IP-adresse",
             "useragent": "User Agent",
-            "date": "Date",
-            "button": "Invalidate"
+            "date": "Dato",
+            "button": "Luk"
         },
         "messages": {
-            "success": "<strong>Session invalidated!</strong>",
-            "error": "<strong>An error has occured!</strong> The session could not be invalidated."
+            "success": "<strong>Session lukket!</strong>",
+            "error": "<strong>Der opstod en fejl!</strong> Sessionen kunne ikke lukkes."
         }
 
     },
@@ -148,29 +150,29 @@
         }
     },
     "metrics": {
-        "title": "Application Metrics",
-        "refresh.button": "Refresh",
+        "title": "Program målinger",
+        "refresh.button": "Opdatér",
         "health": {
-            "title": "Heath checks",
+            "title": "Sundhedskontroller",
             "database": "Database: ",
             "email": "Email: ",
             "stacktrace": "Stacktrace"
         },
         "jvm": {
-            "title": "JVM Metrics",
+            "title": "JVM målinger",
             "memory": {
-                "title": "Memory",
-                "total": "Total Memory",
-                "heap": "Heap Memory",
-                "nonheap": "Non-Heap Memory"
+                "title": "Hukommelse",
+                "total": "Total Hukommelse",
+                "heap": "Heap Hukommelse",
+                "nonheap": "Non-Heap Hukommelse"
             },
             "threads": {
-                "title": "Threads",
-                "all": "All",
+                "title": "Tråde",
+                "all": "Alle",
                 "runnable": "Runnable",
-                "timedwaiting": "Timed waiting",
-                "waiting": "Waiting",
-                "blocked": "Blocked",
+                "timedwaiting": "Ventede tidsbestemt",
+                "waiting": "Ventede",
+                "blocked": "Blokeret",
                 "dump": {
                     "title": "Threads dump",
                     "id": "Id: ",
@@ -185,20 +187,20 @@
                 }
             },
             "gc": {
-                "title": "Garbage collections",
-                "marksweepcount": "Mark Sweep count",
-                "marksweeptime": "Mark Sweep time",
-                "scavengecount": "Scavenge count",
-                "scavengetime": "Scavenge time"
+                "title": "Garbage collections (GC)",
+                "marksweepcount": "Antal markeringer (Mark Sweep)",
+                "marksweeptime": "Markeringstid (Mark Sweep)",
+                "scavengecount": "Antal oprydninger (Scavenge)",
+                "scavengetime": "Oprydningstid (Scavenge)"
             },
             "http": {
-                "title": "HTTP forespørgsler (events per second)",
-                "active": "Active requests:",
-                "total": "Total requests:",
+                "title": "HTTP forespørgsler (hændelser per sekund)",
+                "active": "Aktive forespørgsler:",
+                "total": "Alle forespørgsler:",
                 "table": {
                     "code": "Kode",
                     "count": "Antal",
-                    "mean": "Mean",
+                    "mean": "Middel",
                     "average": "Gennemsnit"
                 },
                 "code": {
@@ -213,7 +215,7 @@
             "table": {
                 "name": "Servicenavn",
                 "count": "Antal",
-                "mean": "Mean",
+                "mean": "Middel",
                 "min": "Min",
                 "max": "Max",
                 "p50": "p50",
@@ -228,8 +230,8 @@
             "objects": "Objekter",
             "hits": "Hits",
             "misses": "Misses",
-            "evictioncount": "Eviction count",
-            "mean": "Mean get time (ms)"
+            "evictioncount": "Antal udsættelser",
+            "mean": "Middel get time (ms)"
         }
     },
     "logs": {
@@ -267,5 +269,9 @@
         }
 
     },
-    "footer": "This is your footer"
+    "errors": {
+        "title": "Fejlside!",
+        "403": "Du er ikke autoriseret til at få adgang til siden."
+    },
+    "footer": "Det her er sidefoden"
 }
