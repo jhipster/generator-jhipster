@@ -58,7 +58,9 @@ public class WebConfigurer implements ServletContextInitializer {
             initCachingHttpHeadersFilter(servletContext, disps);
         }
         initGzipFilter(servletContext, disps);<% if (devDatabaseType == 'h2Memory') { %>
-        initH2Console(servletContext);<% } %>
+        if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
+            initH2Console(servletContext);
+        }<% } %>
 
         log.info("Web application fully configured");
     }<% if (clusteredHttpSession == 'hazelcast') { %>

@@ -4,15 +4,18 @@ import java.util.List;
 
 public class UserDTO {
 
-    private final String login;
+    private String login;
     
-    private final String firstName;
+    private String firstName;
     
-    private final String lastName;
+    private String lastName;
     
-    private final String email;
+    private String email;
 
-    private final List<String> roles;
+    private List<String> roles;
+
+    public UserDTO() {
+    }
 
     public UserDTO(String login, String firstName, String lastName, String email, List<String> roles) {
         this.login = login;

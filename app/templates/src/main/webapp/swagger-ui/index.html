@@ -20,8 +20,8 @@
     <script type="text/javascript">
         $(function () {
             var apiUrl = window.location.protocol + "//" + window.location.host;
-            if (window.location.pathname.indexOf('/api') > 0) {
-                apiUrl += window.location.pathname.substring(0, window.location.pathname.indexOf('/api'))
+            if (window.location.pathname.indexOf('/swagger-ui/index.html') > 0) {
+                apiUrl += window.location.pathname.substring(0, window.location.pathname.indexOf('/swagger-ui/index.html'))
             }
             apiUrl += "/api-docs/";
             log('API URL: ' + apiUrl);

@@ -14,7 +14,8 @@
                 "logs": "Logi",
                 "audits": "Audyty",
                 "login": "Autoryzacja",
-                "logout": "Wyloguj"
+                "logout": "Wyloguj",
+                "apidocs": "API"
             },
             "admin": "Administracja",
             "language": "Język"
