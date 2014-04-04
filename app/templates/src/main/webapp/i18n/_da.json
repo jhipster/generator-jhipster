@@ -170,8 +170,8 @@
                 "title": "Tråde",
                 "all": "Alle",
                 "runnable": "Runnable",
-                "timedwaiting": "Ventede tidsbestemt",
-                "waiting": "Ventede",
+                "timedwaiting": "Ventende tidsbestemt",
+                "waiting": "Ventende",
                 "blocked": "Blokeret",
                 "dump": {
                     "title": "Threads dump",
