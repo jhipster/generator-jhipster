@@ -34,8 +34,8 @@ public class AsyncConfiguration implements AsyncConfigurer, EnvironmentAware {
         log.debug("Creating Async Task Executor");
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(propertyResolver.getProperty("corePoolSize", Integer.class, 2));
-        executor.setMaxPoolSize(propertyResolver.getProperty("corePoolSize", Integer.class, 50));
-        executor.setQueueCapacity(propertyResolver.getProperty("corePoolSize", Integer.class, 10000));
+        executor.setMaxPoolSize(propertyResolver.getProperty("maxPoolSize", Integer.class, 50));
+        executor.setQueueCapacity(propertyResolver.getProperty("queueCapacity", Integer.class, 10000));
         executor.setThreadNamePrefix("<%= _.slugify(baseName) %>-Executor-");
         return executor;
     }
