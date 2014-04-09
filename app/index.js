@@ -224,6 +224,7 @@ JhipsterGenerator.prototype.app = function app() {
     // i18n resources used by thymeleaf
     this.copy(resourceDir + '/i18n/messages_en.properties', resourceDir + 'i18n/messages_en.properties');
     this.copy(resourceDir + '/i18n/messages_fr.properties', resourceDir + 'i18n/messages_fr.properties');
+    this.copy(resourceDir + '/i18n/messages_da.properties', resourceDir + 'i18n/messages_da.properties');
     this.copy(resourceDir + '/i18n/messages_de.properties', resourceDir + 'i18n/messages_de.properties');
     this.copy(resourceDir + '/i18n/messages_pl.properties', resourceDir + 'i18n/messages_pl.properties');
 
@@ -393,6 +394,7 @@ JhipsterGenerator.prototype.app = function app() {
     // i18n
     this.template(webappDir + '/i18n/_en.json', webappDir + 'i18n/en.json');
     this.template(webappDir + '/i18n/_fr.json', webappDir + 'i18n/fr.json');
+    this.template(webappDir + '/i18n/_da.json', webappDir + 'i18n/da.json');
     this.template(webappDir + '/i18n/_de.json', webappDir + 'i18n/de.json');
     this.template(webappDir + '/i18n/_pl.json', webappDir + 'i18n/pl.json');
 
