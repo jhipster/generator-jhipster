@@ -2,7 +2,7 @@
 
     <h2><%= entityClass %>s</h2>
 
-    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#save<%= entityClass %>Modal">
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#save<%= entityClass %>Modal" ng-click="clear()">
         <span class="glyphicon glyphicon-flash"></span> Create a new <%= entityClass %>
     </button>
     <div class="modal fade" id="save<%= entityClass %>Modal" tabindex="-1" role="dialog" aria-labelledby="my<%= entityClass %>Label"
