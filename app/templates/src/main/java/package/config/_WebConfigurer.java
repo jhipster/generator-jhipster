@@ -101,10 +101,7 @@ public class WebConfigurer implements ServletContextInitializer {
         parameters.put("cookie-name", "hazelcast.sessionId");
 
         // Are you debugging? Default is false.
-        if (WebApplicationContextUtils
-                .getRequiredWebApplicationContext(servletContext)
-                .getBean(Environment.class)
-                .acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
+        if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
             parameters.put("debug", "false");
         } else {
             parameters.put("debug", "true");
