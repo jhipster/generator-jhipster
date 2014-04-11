@@ -72,7 +72,7 @@ public class CacheConfiguration {
         for (EntityType<?> entity : entities) {
             
             String name = entity.getName();
-            if ( name == null ) {
+            if (name == null || entity.getJavaType() != null) {
                 name = entity.getJavaType().getName();
             }
             Assert.notNull(name, "entity cannot exist without a identifier");
