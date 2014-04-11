@@ -18,6 +18,7 @@
     "angular-translate-loader-static-files": "2.0.0",
     "angular-dynamic-locale": "0.1.1",
     "angular-i18n": "1.2.5",
+    "angular-truncate": "sparkalow/angular-truncate#*",
     "swagger-ui": "2.0.14"
   },
   "devDependencies": {
