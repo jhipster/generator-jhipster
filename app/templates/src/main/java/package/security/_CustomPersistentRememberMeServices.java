@@ -98,7 +98,7 @@ public class CustomPersistentRememberMeServices extends
             addCookie(token, request, response);
         } catch (DataAccessException e) {
             log.error("Failed to update token: ", e);
-            throw new RememberMeAuthenticationException("Autologin failed due to data access problem: " + e.getMessage());
+            throw new RememberMeAuthenticationException("Autologin failed due to data access problem", e);
         }
         return getUserDetailsService().loadUserByUsername(login);
     }
