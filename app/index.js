@@ -251,15 +251,16 @@ JhipsterGenerator.prototype.app = function app() {
     removefile(javaDir + '/config/metrics/JavaMailHealthCheck.java');
     removefile('spring_loaded/springloaded.jar');
     removefolder(javaDir + '/config/reload');
+    removefolder(javaDir + '/apidoc');
 
     this.template('src/main/java/package/_Application.java', javaDir + '/Application.java');
     this.template('src/main/java/package/_ApplicationWebXml.java', javaDir + '/ApplicationWebXml.java');
 
     this.template('src/main/java/package/aop/logging/_LoggingAspect.java', javaDir + 'aop/logging/LoggingAspect.java');
 
-    this.template('src/main/java/package/config/apidoc/_package-info.java', javaDir + 'apidoc/package-info.java');
-    this.template('src/main/java/package/config/apidoc/_ApiPathProvider.java', javaDir + 'apidoc/ApiPathProvider.java');
-    this.template('src/main/java/package/config/apidoc/_SwaggerConfiguration.java', javaDir + 'apidoc/SwaggerConfiguration.java');
+    this.template('src/main/java/package/config/apidoc/_package-info.java', javaDir + 'config/apidoc/package-info.java');
+    this.template('src/main/java/package/config/apidoc/_ApiPathProvider.java', javaDir + 'config/apidoc/ApiPathProvider.java');
+    this.template('src/main/java/package/config/apidoc/_SwaggerConfiguration.java', javaDir + 'config/apidoc/SwaggerConfiguration.java');
 
     this.template('src/main/java/package/config/_package-info.java', javaDir + 'config/package-info.java');
     this.template('src/main/java/package/config/_AsyncConfiguration.java', javaDir + 'config/AsyncConfiguration.java');
