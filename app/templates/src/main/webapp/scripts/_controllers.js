@@ -168,7 +168,7 @@
                 $scope.servicesStats = {};
                 $scope.cachesStats = {};
                 angular.forEach(items.timers, function(value, key) {
-                    if (key.indexOf("web.rest") != -1) {
+                    if (key.indexOf("web.rest") != -1 || key.indexOf("service") != -1) {
                         $scope.servicesStats[key] = value;
                     }
 
