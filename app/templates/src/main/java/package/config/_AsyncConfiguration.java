@@ -14,6 +14,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Executor;
 
+import <%=packageName%>.async.ExceptionHandlingAsyncTaskExecutor;
+
 @Configuration
 @EnableAsync
 @EnableScheduling
@@ -37,6 +39,6 @@ public class AsyncConfiguration implements AsyncConfigurer, EnvironmentAware {
         executor.setMaxPoolSize(propertyResolver.getProperty("maxPoolSize", Integer.class, 50));
         executor.setQueueCapacity(propertyResolver.getProperty("queueCapacity", Integer.class, 10000));
         executor.setThreadNamePrefix("<%= _.slugify(baseName) %>-Executor-");
-        return executor;
+        return new ExceptionHandlingAsyncTaskExecutor(executor);
     }
 }

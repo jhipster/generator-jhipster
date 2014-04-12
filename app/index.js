@@ -262,6 +262,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/apidoc/_ApiPathProvider.java', javaDir + 'config/apidoc/ApiPathProvider.java');
     this.template('src/main/java/package/config/apidoc/_SwaggerConfiguration.java', javaDir + 'config/apidoc/SwaggerConfiguration.java');
 
+    this.template('src/main/java/package/async/_package-info.java', javaDir + 'async/package-info.java');
+    this.template('src/main/java/package/async/_ExceptionHandlingAsyncTaskExecutor.java', javaDir + 'async/ExceptionHandlingAsyncTaskExecutor.java');
+
     this.template('src/main/java/package/config/_package-info.java', javaDir + 'config/package-info.java');
     this.template('src/main/java/package/config/_AsyncConfiguration.java', javaDir + 'config/AsyncConfiguration.java');
     this.template('src/main/java/package/config/_CacheConfiguration.java', javaDir + 'config/CacheConfiguration.java');
