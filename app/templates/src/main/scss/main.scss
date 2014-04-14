@@ -52,6 +52,11 @@ body {
   background-repeat: no-repeat;
 }
 
+/* make sure browsers use the pointer cursor for anchors, even with no href */
+a:hover {
+  cursor: pointer;
+}
+
 
 /* start Password strength bar style */
 ul#strength {
