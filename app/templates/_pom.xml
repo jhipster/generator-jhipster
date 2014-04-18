@@ -200,6 +200,11 @@
         </dependency>
         <dependency>
             <groupId>com.codahale.metrics</groupId>
+            <artifactId>metrics-json</artifactId>
+            <version><%= _.unescape('\$\{codahale-metrics.version}')%></version>
+        </dependency>
+        <dependency>
+            <groupId>com.codahale.metrics</groupId>
             <artifactId>metrics-servlets</artifactId>
             <exclusions>
                 <exclusion>
