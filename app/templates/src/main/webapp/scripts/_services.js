@@ -121,6 +121,7 @@
                         authService.loginConfirmed(data);
                     });
                 }).error(function (data, status, headers, config) {
+                    $rootScope.authenticationError = data.message;
                     Session.destroy();
                 });
             },
