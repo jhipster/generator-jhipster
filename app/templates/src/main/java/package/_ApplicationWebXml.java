@@ -28,7 +28,7 @@ public class ApplicationWebXml extends SpringBootServletInitializer {
      * </p>
      */
     private String addDefaultProfile() {
-        String profile = System.getProperty("spring.active.profile");
+        String profile = System.getProperty("spring.profiles.active");
         if (profile != null) {
             log.info("Running with Spring profile(s) : {}", profile);
             return profile;
