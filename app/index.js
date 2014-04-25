@@ -438,6 +438,7 @@ JhipsterGenerator.prototype.app = function app() {
 
     // JavaScript
     this.copy(webappDir + 'scripts/http-auth-interceptor.js', webappDir + 'scripts/http-auth-interceptor.js');
+    this.copy(webappDir + 'scripts/truncate.js', webappDir + 'scripts/truncate.js');
     this.template(webappDir + 'scripts/_app.js', webappDir + 'scripts/app.js');
     this.template(webappDir + 'scripts/_controllers.js', webappDir + 'scripts/controllers.js');
     this.template(webappDir + 'scripts/_services.js', webappDir + 'scripts/services.js');
