@@ -6,16 +6,22 @@ var gulp = require('gulp'),
   minifyCss = require('gulp-minify-css'),
   usemin = require('gulp-usemin'),
   uglify = require('gulp-uglify'),<% if(useCompass) { %>
-  sass = require('gulp-ruby-sass'),<% } %>
+  compass = require('gulp-compass'),<% } %>
   minifyHtml = require('gulp-minify-html'),
+  livereload = require('gulp-livereload'),
+  imagemin = require('gulp-imagemin'),
+  ngmin = require('gulp-ngmin'),
   jshint = require('gulp-jshint'),
   rev = require('gulp-rev'),
   connect = require('gulp-connect'),
-  proxy = require('proxy-middleware');
+  proxy = require('proxy-middleware'),
+  es = require('event-stream'),
+  flatten = require('gulp-flatten'),
+  replace = require('gulp-replace');
 
 var yeoman = {
     app: 'src/main/webapp/',//require('./bower.json').appPath || 'app',
-    dist: 'src/main/webapp/dist',
+    dist: 'src/main/webapp/dist/',
     tmp: '.tmp/'<% if(useCompass) { %>,
     scss: 'src/main/scss/'<% } %>
 }
@@ -23,20 +29,44 @@ var yeoman = {
 gulp.task('clean', function(){});
 gulp.task('test', function(){});
 
+gulp.task('copy', function(){
+  return es.merge(gulp.src(yeoman.app + 'i18n/**').
+                    pipe(gulp.dest(yeoman.dist + 'i18n/')),
+                 gulp.src(yeoman.app + '**/*.{woff,svg,ttf,eot}').
+                    pipe(flatten()).
+                    pipe(gulp.dest(yeoman.dist + 'fonts/')));
+});
+
+gulp.task('images', function(){
+    return gulp.src(yeoman.app + 'images/**')
+    .pipe(imagemin({optimizationLevel: 5}))
+    .pipe(gulp.dest(yeoman.dist + 'images'));
+});
+
 <% if(useCompass) { %>
-gulp.task('sass', function() {
+gulp.task('compass', function() {
   return gulp.src(yeoman.scss + '{,*/}*.scss').
-    pipe(sass({loadPath: [yeoman.app + 'bower_components']})).
+    pipe(compass({
+        project: __dirname,
+        sass: 'src/main/scss',
+        css: 'src/main/webapp/styles',
+        generated_images: '.tmp/images/generated',
+        image: 'src/main/webapp/images',
+        javascript: 'src/main/webapp/scripts',
+        font: 'src/main/webapp/styles/fonts',
+        import_path: 'src/main/webapp/bower_components',
+        relative: false
+    })).
     pipe(gulp.dest(yeoman.tmp + 'styles'));
 });
 <% } %>
 
-gulp.task('styles', [<% if(useCompass) { %> 'sass'<% } %>], function() {
+gulp.task('styles', [<% if(useCompass) { %> 'compass'<% } %>], function() {
   return gulp.src(yeoman.app + '{,*/}*.css').
     pipe(gulp.dest(yeoman.tmp));
 });
 
-gulp.task('connect', [<% if(useCompass) { %> 'sass'<% } %>], function() {
+gulp.task('server', ['watch'<% if(useCompass) { %>, 'compass'<% } %>], function() {
   connect.server(
     {
       root: [yeoman.app, yeoman.tmp],
@@ -78,26 +108,77 @@ gulp.task('connect', [<% if(useCompass) { %> 'sass'<% } %>], function() {
   );
 });
 
-gulp.task('build', ['clean'], function() {
+gulp.task('watch', function() {
+  gulp.watch(yeoman.app + 'scripts/**', ['browserify']);<% if(useCompass) { %>
+  gulp.watch(yeoman.scss, ['compass']); <% } %>
+  gulp.watch('src/images/**', ['images']);
+  livereload();
+});
+
+gulp.task('serverdist', ['build'], function() {
+  connect.server(
+    {
+      root: [yeoman.dist],
+      port: 9000,
+      livereload: true,
+      middleware: function(connect, o) {
+	return [
+	  (function() {
+	    var url = require('url');
+	    var proxy = require('proxy-middleware');
+	    var options = url.parse('http://localhost:8080/app');
+	    options.route = '/app';
+	    return proxy(options);
+	  })(),
+	  (function() {
+	    var url = require('url');
+	    var proxy = require('proxy-middleware');
+	    var options = url.parse('http://localhost:8080/metrics');
+	    options.route = '/metrics';
+	    return proxy(options);
+	  })(),
+	  (function() {
+	    var url = require('url');
+	    var proxy = require('proxy-middleware');
+	    var options = url.parse('http://localhost:8080/dump');
+	    options.route = '/dump';
+	    return proxy(options);
+	  })()<% if (devDatabaseType == 'h2Memory') { %>,
+	  (function() {
+	    var url = require('url');
+	    var proxy = require('proxy-middleware');
+	    var options = url.parse('http://localhost:8080/console');
+	    options.route = '/console';
+	    return proxy(options);
+	  })()<% } %>
+	];
+      }
+    }
+  );
+});
+
+gulp.task('build', ['clean', 'copy'], function() {
   gulp.run('usemin');
 });
 
-gulp.task('usemin', ['styles'], function(){
+gulp.task('usemin', ['images', 'styles'], function(){
   return gulp.src(yeoman.app + '{,*/}*.html').
     pipe(usemin({
       css: [
-	prefix.apply(),
-	minifyCss(),
-	rev(),
-	'concat'
+        prefix.apply(),
+        replace(/[0-9a-zA-Z\-_\s\.\/]*\/([a-zA-Z\-_\.0-9]*\.(woff|eot|ttf|svg))/g, '/fonts/$1'),
+        minifyCss(),
+        rev(),
+        'concat'
       ],
       html: [
-	minifyHtml({empty: true, conditionals:true})
+        minifyHtml({empty: true, conditionals:true})
       ],
       js: [
-	uglify(),
-	rev(),
-	'concat'
+        ngmin(),
+        uglify(),
+        rev(),
+        'concat'
       ]
     })).
     pipe(gulp.dest(yeoman.dist));
