@@ -1,11 +1,14 @@
+// Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= pkg.name %> <%= pkg.version %>
+'use strict';
+
 var gulp = require('gulp'),
   prefix = require('gulp-autoprefixer'),
   minifyCss = require('gulp-minify-css'),
   usemin = require('gulp-usemin'),
-  uglify = require('gulp-uglify'),
-  sass = require('gulp-ruby-sass'),
+  uglify = require('gulp-uglify'),<% if(useCompass) { %>
+  sass = require('gulp-ruby-sass'),<% } %>
   minifyHtml = require('gulp-minify-html'),
-  jshint = require('gulp-jshint');
+  jshint = require('gulp-jshint'),
   rev = require('gulp-rev'),
   connect = require('gulp-connect'),
   proxy = require('proxy-middleware');
@@ -17,26 +20,27 @@ var yeoman = {
     scss: 'src/main/scss/'<% } %>
 }
 
-gulp.task('clean', function(){})
-gulp.task('test', function(){})
+gulp.task('clean', function(){});
+gulp.task('test', function(){});
 
 <% if(useCompass) { %>
 gulp.task('sass', function() {
-	gulp.src(yeoman.scss + '{,*/}*.scss').
-	  pipe(sass({loadPath: [yeoman.app + 'bower_components']})).
-	  pipe(gulp.dest(yeoman.tmp + 'styles'));
+  return gulp.src(yeoman.scss + '{,*/}*.scss').
+    pipe(sass({loadPath: [yeoman.app + 'bower_components']})).
+    pipe(gulp.dest(yeoman.tmp + 'styles'));
 });
 <% } %>
 
-gulp.task('styles',<% if(useCompass) { %> ['sass'],<% } %> function() {
-    return gulp.src(yeoman.app + '{,*/}*.css').
-	pipe(gulp.dest(yeoman.tmp));
+gulp.task('styles', [<% if(useCompass) { %> 'sass'<% } %>], function() {
+  return gulp.src(yeoman.app + '{,*/}*.css').
+    pipe(gulp.dest(yeoman.tmp));
 });
 
-gulp.task('connect', ['styles'], function() {
+gulp.task('connect', [<% if(useCompass) { %> 'sass'<% } %>], function() {
   connect.server(
     {
-      root: [app, tmp],
+      root: [yeoman.app, yeoman.tmp],
+      port: 9000,
       livereload: true,
       middleware: function(connect, o) {
 	return [
@@ -74,30 +78,32 @@ gulp.task('connect', ['styles'], function() {
   );
 });
 
-gulp.task('build', ['clean', 'usemin']);
+gulp.task('build', ['clean'], function() {
+  gulp.run('usemin');
+});
 
 gulp.task('usemin', ['styles'], function(){
-    gulp.src(yeoman.app + '{,*/}*.html')
-        .pipe(usemin({
-            css: [
-                prefix.apply(),
-                minifyCss(),
-                rev(),
-                'concat'
-            ],
-            html: [
-                minifyHtml({empty: true, conditionals:true})
-            ],
-            js: [
-                uglify(),
-                rev(),
-                'concat'
-            ]
-        }))
-        .pipe(gulp.dest(yeoman.dist));
+  return gulp.src(yeoman.app + '{,*/}*.html').
+    pipe(usemin({
+      css: [
+	prefix.apply(),
+	minifyCss(),
+	rev(),
+	'concat'
+      ],
+      html: [
+	minifyHtml({empty: true, conditionals:true})
+      ],
+      js: [
+	uglify(),
+	rev(),
+	'concat'
+      ]
+    })).
+    pipe(gulp.dest(yeoman.dist));
 });
 
 gulp.task('default', function() {
-    gulp.run('test');
-    gulp.run('build');
+  gulp.run('test');
+  gulp.run('build');
 });
