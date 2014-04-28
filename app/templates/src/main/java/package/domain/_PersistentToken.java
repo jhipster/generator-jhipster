@@ -1,15 +1,18 @@
 package <%=packageName%>.domain;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;<% if (hibernateCache != 'no') { %>
+import com.fasterxml.jackson.annotation.JsonIgnore;<% if (hibernateCache != 'no' && databaseType == 'sql') { %>
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (databaseType == 'sql') { %>
+import org.hibernate.annotations.Type;<% } %>
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormatter;<% if (databaseType == 'nosql') { %>
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;<% } %>
 
-import javax.persistence.*;
+<% if (databaseType == 'sql') { %>import javax.persistence.*;<% } %>
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -20,9 +23,10 @@ import java.io.Serializable;
  *
  * @see <%=packageName%>.security.CustomPersistentRememberMeServices
  */
-@Entity
-@Table(name = "T_PERSISTENT_TOKEN")<% if (hibernateCache != 'no') { %>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
+<% if (databaseType == 'sql') { %>@Entity
+@Table(name = "T_PERSISTENT_TOKEN")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'nosql') { %>
+@Document(collection = "T_PERSISTENT_TOKEN")<% } %>
 public class PersistentToken implements Serializable {
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("d MMMM yyyy");
@@ -33,25 +37,26 @@ public class PersistentToken implements Serializable {
     private String series;
 
     @JsonIgnore
-    @NotNull
-    @Column(name = "token_value")
+    @NotNull<% if (databaseType == 'sql') { %>
+    @Column(name = "token_value")<% } %>
     private String tokenValue;
 
-    @JsonIgnore
+    @JsonIgnore<% if (databaseType == 'sql') { %>
     @Column(name = "token_date")
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")<% } %>
     private LocalDate tokenDate;
 
     //an IPV6 address max length is 39 characters
-    @Size(min = 0, max = 39)
-    @Column(name = "ip_address")
+    @Size(min = 0, max = 39)<% if (databaseType == 'sql') { %>
+    @Column(name = "ip_address")<% } %>
     private String ipAddress;
 
-    @Column(name = "user_agent")
+    <% if (databaseType == 'sql') { %>@Column(name = "user_agent")<% } %>
     private String userAgent;
 
     @JsonIgnore
-    @ManyToOne
+    <% if (databaseType == 'sql') { %>@ManyToOne<% } %><% if (databaseType == 'nosql') { %>
+    @DBRef<% } %>
     private User user;
 
     public String getSeries() {

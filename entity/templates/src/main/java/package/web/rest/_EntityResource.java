@@ -54,7 +54,7 @@ public class <%= entityClass %>Resource {
             method = RequestMethod.GET,
             produces = "application/json")
     @Timed
-    public <%= entityClass %> get(@PathVariable Long id, HttpServletResponse response) {
+    public <%= entityClass %> get(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> id, HttpServletResponse response) {
         log.debug("REST request to get <%= entityClass %> : {}", id);
         <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Repository.findOne(id);
         if (<%= entityInstance %> == null) {
@@ -70,7 +70,7 @@ public class <%= entityClass %>Resource {
             method = RequestMethod.DELETE,
             produces = "application/json")
     @Timed
-    public void delete(@PathVariable Long id, HttpServletResponse response) {
+    public void delete(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> id, HttpServletResponse response) {
         log.debug("REST request to delete <%= entityClass %> : {}", id);
         <%= entityInstance %>Repository.delete(id);
     }

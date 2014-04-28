@@ -45,8 +45,9 @@ import <%=packageName%>.repository.<%= entityClass %>Repository;
     TransactionalTestExecutionListener.class })
 @ActiveProfiles("dev")
 public class <%= entityClass %>ResourceTest {
-	
-    private static final Long DEFAULT_ID = new Long(1L);
+    <% if (databaseType == 'sql') { %>
+    private static final Long DEFAULT_ID = new Long(1L);<% } %><% if (databaseType == 'nosql') { %>
+    private static final String DEFAULT_ID = "1";<% } %>
 
     private static final LocalDate DEFAULT_SAMPLE_DATE_ATTR = new LocalDate(0L);
 
@@ -89,8 +90,9 @@ public class <%= entityClass %>ResourceTest {
     	// Read <%= entityClass %>
     	rest<%= entityClass %>MockMvc.perform(get("/app/rest/<%= entityInstance %>s/{id}", DEFAULT_ID))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(DEFAULT_ID.intValue()))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
+                .andExpect(jsonPath("$.id").value(DEFAULT_ID.intValue()))<% } %><% if (databaseType == 'nosql') { %>
+                .andExpect(jsonPath("$.id").value(DEFAULT_ID))<% } %>
     			.andExpect(jsonPath("$.sampleDateAttribute").value(DEFAULT_SAMPLE_DATE_ATTR.toString()))
     			.andExpect(jsonPath("$.sampleTextAttribute").value(DEFAULT_SAMPLE_TEXT_ATTR));
 
@@ -106,8 +108,9 @@ public class <%= entityClass %>ResourceTest {
     	// Read updated <%= entityClass %>
     	rest<%= entityClass %>MockMvc.perform(get("/app/rest/<%= entityInstance %>s/{id}", DEFAULT_ID))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value(DEFAULT_ID.intValue()))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
+                .andExpect(jsonPath("$.id").value(DEFAULT_ID.intValue()))<% } %><% if (databaseType == 'nosql') { %>
+                .andExpect(jsonPath("$.id").value(DEFAULT_ID))<% } %>
     			.andExpect(jsonPath("$.sampleDateAttribute").value(UPD_SAMPLE_DATE_ATTR.toString()))
     			.andExpect(jsonPath("$.sampleTextAttribute").value(UPD_SAMPLE_TEXT_ATTR));
 

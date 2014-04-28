@@ -42,7 +42,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 if((input.indexOf('<')<0) && (input.indexOf('>')<0)) return true;
                 return 'Your application name contains either <, > or both.';
             },
-            message: '(1/9) What is the base name of your application?',
+            message: '(1/10) What is the base name of your application?',
             default: 'jhipster'
         },
         {
@@ -52,13 +52,13 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 if(/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)) return true;
                 return 'The package name you have provided is not a valid Java package name.';
             },
-            message: '(2/9) What is your default Java package name?',
+            message: '(2/10) What is your default Java package name?',
             default: 'com.mycompany.myapp'
         },
         {
             type: 'list',
             name: 'javaVersion',
-            message: '(3/9) Do you want to use Java 8?',
+            message: '(3/10) Do you want to use Java 8?',
             choices: [
                 {
                     value: '7',
@@ -73,8 +73,27 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             type: 'list',
+            name: 'databaseType',
+            message: '(4/10) Why *type* of database would you like to use? ',
+            choices: [
+                {
+                    value: 'sql',
+                    name: 'SQL (H2, MySQL, PostgreSQL)'
+                },
+                {
+                    value: 'nosql',
+                    name: 'NoSQL (MongoDB)'
+                }
+            ],
+            default: 0
+        },
+        {
+            when: function (response) {
+                return response.databaseType == 'sql';
+            },
+            type: 'list',
             name: 'hibernateCache',
-            message: '(4/9) Do you want to use Hibernate 2nd level cache?',
+            message: '(5/10) Do you want to use Hibernate 2nd level cache?',
             choices: [
                 {
                     value: 'no',
@@ -92,9 +111,32 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             default: 1
         },
         {
+            when: function (response) {
+                return response.databaseType == 'nosql';
+            },
+            type: 'list',
+            name: 'hibernateCache',
+            message: '(5/10) Do you want to use cache?',
+            choices: [
+                {
+                    value: 'no',
+                    name: 'No'
+                },
+                {
+                    value: 'ehcache',
+                    name: 'Yes, with ehcache (local cache, for a single node)'
+                },
+                {
+                    value: 'hazelcast',
+                    name: 'Yes, with HazelCast (distributed cache, for multiple nodes)'
+                }
+            ],
+            default: 0
+        },
+        {
             type: 'list',
             name: 'clusteredHttpSession',
-            message: '(5/9) Do you want to use clustered HTTP sessions?',
+            message: '(6/10) Do you want to use clustered HTTP sessions?',
             choices: [
                 {
                     value: 'no',
@@ -110,7 +152,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'websocket',
-            message: '(6/9) Do you want to use WebSockets?',
+            message: '(7/10) Do you want to use WebSockets?',
             choices: [
                 {
                     value: 'no',
@@ -124,9 +166,12 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             default: 0
         },
         {
+            when: function (response) {
+                return response.databaseType == 'sql';
+            },
             type: 'list',
             name: 'prodDatabaseType',
-            message: '(7/9) Which *production* database would you like to use?',
+            message: '(8/10) Which *production* database would you like to use?',
             choices: [
                 {
                     value: 'mysql',
@@ -140,9 +185,27 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             default: 0
         },
         {
+            when: function (response) {
+                return response.databaseType == 'nosql';
+            },
+            type: 'list',
+            name: 'prodDatabaseType',
+            message: '(8/10) Which *production* database would you like to use?',
+            choices: [
+                {
+                    value: 'mongodb',
+                    name: 'MongoDB'
+                }
+            ],
+            default: 0
+        },
+        {
+            when: function (response) {
+                return response.databaseType == 'sql';
+            },
             type: 'list',
             name: 'devDatabaseType',
-            message: '(8/9) Which *development* database would you like to use?',
+            message: '(9/10) Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'h2Memory',
@@ -160,9 +223,24 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             default: 0
         },
         {
+            when: function (response) {
+                return response.databaseType == 'nosql';
+            },
+            type: 'list',
+            name: 'devDatabaseType',
+            message: '(9/10) Which *development* database would you like to use?',
+            choices: [
+                {
+                    value: 'mongodb',
+                    name: 'MongoDB'
+                }
+            ],
+            default: 0
+        },
+        {
             type: 'confirm',
             name: 'useCompass',
-            message: '(9/9) Would you like to use the Compass CSS Authoring Framework?',
+            message: '(10/10) Would you like to use the Compass CSS Authoring Framework?',
             default: false
         }
     ];
@@ -172,6 +250,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     this.hibernateCache = this.config.get('hibernateCache');
     this.clusteredHttpSession = this.config.get('clusteredHttpSession');
     this.websocket = this.config.get('websocket');
+    this.databaseType = this.config.get('databaseType');
     this.devDatabaseType = this.config.get('devDatabaseType');
     this.prodDatabaseType = this.config.get('prodDatabaseType');
     this.useCompass = this.config.get('useCompass');
@@ -182,6 +261,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
 		this.hibernateCache != null &&
 		this.clusteredHttpSession != null &&
 		this.websocket != null &&
+        this.databaseType != null &&
 		this.devDatabaseType != null &&
 		this.prodDatabaseType != null &&
 		this.useCompass != null &&
@@ -198,6 +278,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         	this.hibernateCache = props.hibernateCache;
         	this.clusteredHttpSession = props.clusteredHttpSession;
         	this.websocket = props.websocket;
+        	this.databaseType = props.databaseType;
         	this.devDatabaseType = props.devDatabaseType;
         	this.prodDatabaseType = props.prodDatabaseType;
         	this.useCompass = props.useCompass;
@@ -245,11 +326,19 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(resourceDir + '/config/_application-dev.yml', resourceDir + 'config/application-dev.yml');
     this.template(resourceDir + '/config/_application-prod.yml', resourceDir + 'config/application-prod.yml');
 
-    this.copy(resourceDir + '/config/liquibase/changelog/db-changelog-001.xml', resourceDir + 'config/liquibase/changelog/db-changelog-001.xml');
-    this.copy(resourceDir + '/config/liquibase/master.xml', resourceDir + 'config/liquibase/master.xml');
-    this.copy(resourceDir + '/config/liquibase/users.csv', resourceDir + 'config/liquibase/users.csv');
-    this.copy(resourceDir + '/config/liquibase/authorities.csv', resourceDir + 'config/liquibase/authorities.csv');
-    this.copy(resourceDir + '/config/liquibase/users_authorities.csv', resourceDir + 'config/liquibase/users_authorities.csv');
+    if (this.databaseType == "sql") {
+        this.copy(resourceDir + '/config/liquibase/changelog/db-changelog-001.xml', resourceDir + 'config/liquibase/changelog/db-changelog-001.xml');
+        this.copy(resourceDir + '/config/liquibase/master.xml', resourceDir + 'config/liquibase/master.xml');
+        this.copy(resourceDir + '/config/liquibase/users.csv', resourceDir + 'config/liquibase/users.csv');
+        this.copy(resourceDir + '/config/liquibase/authorities.csv', resourceDir + 'config/liquibase/authorities.csv');
+        this.copy(resourceDir + '/config/liquibase/users_authorities.csv', resourceDir + 'config/liquibase/users_authorities.csv');
+    }
+
+    if (this.databaseType == "nosql") {
+        this.copy(resourceDir + '/config/mongeez/authorities.xml', resourceDir + 'config/mongeez/authorities.xml');
+        this.copy(resourceDir + '/config/mongeez/master.xml', resourceDir + 'config/mongeez/master.xml');
+        this.copy(resourceDir + '/config/mongeez/users.xml', resourceDir + 'config/mongeez/users.xml');
+    }
 
     // Create Java files
     var javaDir = 'src/main/java/' + packageFolder + '/';
@@ -368,6 +457,11 @@ JhipsterGenerator.prototype.app = function app() {
     var testDir = 'src/test/java/' + packageFolder + '/';
     var testResourceDir = 'src/test/resources/';
     this.mkdir(testDir);
+
+    if (this.databaseType == "nosql") {
+        this.template('src/test/java/package/config/_MongoConfiguration.java', testDir + 'config/MongoConfiguration.java');
+    }
+
     this.template('src/test/java/package/service/_UserServiceTest.java', testDir + 'service/UserServiceTest.java');
     this.template('src/test/java/package/web/rest/_AccountResourceTest.java', testDir + 'web/rest/AccountResourceTest.java');
     this.template('src/test/java/package/web/rest/_TestUtil.java', testDir + 'web/rest/TestUtil.java');
@@ -411,7 +505,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/i18n/_pl.json', webappDir + 'i18n/pl.json');
 
     // Protected resources - used to check if a customer is still connected
-    this.copy(webappDir + '/protected/transparent.gif', webappDir + 'transparent.gif');
+    this.copy(webappDir + '/protected/transparent.gif', webappDir + '/protected/transparent.gif');
 
     // Swagger-ui for Jhipster
     this.copy(webappDir + '/swagger-ui/index.html', webappDir + 'swagger-ui/index.html');
@@ -513,6 +607,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.config.set('hibernateCache', this.hibernateCache);
 	this.config.set('clusteredHttpSession', this.clusteredHttpSession);
 	this.config.set('websocket', this.websocket);
+	this.config.set('databaseType', this.databaseType);
 	this.config.set('devDatabaseType', this.devDatabaseType);
 	this.config.set('prodDatabaseType', this.prodDatabaseType);
 	this.config.set('useCompass', this.useCompass);

@@ -1,12 +1,12 @@
 package <%=packageName%>.domain;
 
-<% if (hibernateCache != 'no') { %>
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
-
+<% if (hibernateCache != 'no' && databaseType == 'sql') { %>import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (databaseType == 'nosql') { %>
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;<% } %><% if (databaseType == 'sql') { %>
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.Table;<% } %>
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -14,9 +14,10 @@ import java.io.Serializable;
 /**
  * An authority (a security role) used by Spring Security.
  */
-@Entity
+<% if (databaseType == 'sql') { %>@Entity
 @Table(name = "T_AUTHORITY")<% if (hibernateCache != 'no') { %>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType == 'nosql') { %>
+@Document(collection = "T_AUTHORITY")<% } %>
 public class Authority implements Serializable {
 
     @NotNull

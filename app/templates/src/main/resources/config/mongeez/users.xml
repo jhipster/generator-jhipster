@@ -1,0 +1,22 @@
+<mongoChangeLog>
+    <changeSet changeId="ChangeSet-2" author="jhipster">
+        <script>
+            db.T_USER.insert(
+            {
+                "_id" : "admin", "password" : "b8f57d6d6ec0a60dfe2e20182d4615b12e321cad9e2979e0b9f81e0d6eda78ad9b6dcfe53e4e22d1",
+                "first_name": "",
+                "last_name": "Administrator",
+                "email": "",
+                "authorities": [{"_id": "ROLE_ADMIN"}, {"_id": "ROLE_USER"}]
+            });
+            db.T_USER.insert(
+            {
+                "_id" : "user", "password" : "4f54479f8290dfd503b72a654faf5d70593eab443993d87a79e14e5f7cda3eb7988423aa99090c9b",
+                "first_name": "",
+                "last_name": "User",
+                "email": "",
+                "authorities": [{"_id": "ROLE_USER"}]
+            });
+        </script>
+    </changeSet>
+</mongoChangeLog>

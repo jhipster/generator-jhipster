@@ -71,9 +71,9 @@ public class UserService {
         LocalDate now = new LocalDate();
         List<PersistentToken> tokens = persistentTokenRepository.findByTokenDateBefore(now.minusMonths(1));
         for (PersistentToken token : tokens) {
-            log.debug("Deleting token {}", token.getSeries());
+            log.debug("Deleting token {}", token.getSeries());<% if (databaseType == 'sql') { %>
             User user = token.getUser();
-            user.getPersistentTokens().remove(token);
+            user.getPersistentTokens().remove(token);<% } %>
             persistentTokenRepository.delete(token);
         }
     }

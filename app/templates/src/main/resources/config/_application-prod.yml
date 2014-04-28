@@ -3,7 +3,13 @@ server:
     address: localhost
 
 spring:
-    profiles: prod
+    profiles: prod<% if (databaseType == 'nosql') { %>
+    data:
+        mongodb:
+            host: localhost
+            port: 27017
+            databaseName: <%= baseName %><% } %>
+    <% if (databaseType == 'sql') { %>
     datasource:
         dataSourceClassName: <% if (prodDatabaseType == 'mysql') { %>com.mysql.jdbc.jdbc2.optional.MysqlDataSource<% } else if (prodDatabaseType == 'postgresql') { %>org.postgresql.ds.PGSimpleDataSource<% } else { %>org.hsqldb.jdbc.JDBCDataSource<% } %>
         url: <% if (prodDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (prodDatabaseType == 'postgresql') { %><% } else { %>jdbc:hsqldb:mem:<%= baseName %><% } %>
@@ -27,7 +33,7 @@ spring:
             hibernate.generate_statistics: false
             <% if (hibernateCache == 'ehcache') { %>hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory<% } else if (hibernateCache == 'hazelcast') { %>hibernate.cache.region.factory_class: <%=packageName%>.config.hazelcast.HazelcastCacheRegionFactory<% } %>
             <% if (hibernateCache == 'hazelcast') { %>hibernate.cache.use_minimal_puts: true
-            hibernate.cache.hazelcast.use_lite_member: true<% } %>
+            hibernate.cache.hazelcast.use_lite_member: true<% } %><% } %>
 
     thymeleaf:
         mode: XHTML

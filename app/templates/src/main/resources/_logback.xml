@@ -7,6 +7,7 @@
             <Pattern>[%p] %c - %m%n</Pattern>
         </encoder>
     </appender>
+    <logger name="javax.activation" level="warn"/>
     <logger name="<%=packageName%>" level="<%= _.unescape('\$\{logback.loglevel}')%>"/>
     <logger name="ch.qos.logback" level="WARN"/>
     <logger name="com.codahale.metrics" level="WARN"/>

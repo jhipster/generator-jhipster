@@ -1,6 +1,7 @@
 package <%=packageName%>.service;
 
-import <%=packageName%>.Application;
+import <%=packageName%>.Application;<% if (databaseType == 'nosql') { %>
+import <%=packageName%>.config.MongoConfiguration;<% } %>
 import <%=packageName%>.domain.PersistentToken;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.PersistentTokenRepository;
@@ -8,7 +9,8 @@ import <%=packageName%>.repository.UserRepository;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.SpringApplicationConfiguration;<% if (databaseType == 'nosql') { %>
+import org.springframework.context.annotation.Import;<% } %>
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -27,7 +29,8 @@ import static org.assertj.core.api.Assertions.*;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @DirtiesContext(classMode= DirtiesContext.ClassMode.AFTER_CLASS)
-@ActiveProfiles("dev")
+@ActiveProfiles("dev")<% if (databaseType == 'nosql') { %>
+@Import(MongoConfiguration.class)<% } %>
 public class UserServiceTest {
 
     @Inject
@@ -58,7 +61,8 @@ public class UserServiceTest {
         token.setTokenValue(tokenSeries + "-data");
         token.setTokenDate(localDate);
         token.setIpAddress("127.0.0.1");
-        token.setUserAgent("Test agent");
-        persistentTokenRepository.saveAndFlush(token);
+        token.setUserAgent("Test agent");<% if (databaseType == 'sql') { %>
+        persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'nosql') { %>
+        persistentTokenRepository.save(token);<% } %>
     }
 }

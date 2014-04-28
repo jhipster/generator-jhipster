@@ -14,6 +14,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
   this.packageName = this.config.get('packageName');
   this.packageFolder = this.config.get('packageFolder');
   this.hibernateCache = this.config.get('hibernateCache');
+  this.databaseType = this.config.get('databaseType');
   this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
 };
 

@@ -1,6 +1,7 @@
 package <%=packageName%>.web.rest;
 
-import <%=packageName%>.Application;
+import <%=packageName%>.Application;<% if (databaseType == 'nosql') { %>
+import <%=packageName%>.config.MongoConfiguration;<% } %>
 import <%=packageName%>.domain.Authority;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.UserRepository;
@@ -11,7 +12,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.SpringApplicationConfiguration;<% if (databaseType == 'nosql') { %>
+import org.springframework.context.annotation.Import;<% } %>
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -42,7 +44,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-@ActiveProfiles("dev")
+@ActiveProfiles("dev")<% if (databaseType == 'nosql') { %>
+@Import(MongoConfiguration.class)<% } %>
 public class AccountResourceTest {
 
     @Inject

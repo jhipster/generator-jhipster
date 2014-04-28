@@ -1,6 +1,6 @@
 package <%=packageName%>.config;
 
-import com.codahale.metrics.MetricRegistry;<% if (hibernateCache == 'ehcache') { %>
+import com.codahale.metrics.MetricRegistry;<% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
 import com.codahale.metrics.ehcache.InstrumentedEhcache;<% } %><% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
 import com.hazelcast.config.Config;
 import com.hazelcast.core.HazelcastInstance;
@@ -15,14 +15,14 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;<% if (hibernateCache == 'no') { %>
-import org.springframework.cache.support.NoOpCacheManager; <% } %><% if (hibernateCache == 'ehcache') { %>
+import org.springframework.cache.support.NoOpCacheManager; <% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
 import org.springframework.cache.ehcache.EhCacheCacheManager;<% } %><% if (hibernateCache == 'hazelcast' || hibernateCache == 'ehcache' || clusteredHttpSession == 'hazelcast') { %>
-import org.springframework.core.env.Environment;<% } %>
-import org.springframework.util.Assert;
+import org.springframework.core.env.Environment;<% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
+import org.springframework.util.Assert;<% } %>
 <% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
 import javax.annotation.PostConstruct;<% } %>
-import javax.inject.Inject;
-import javax.annotation.PreDestroy;<% if (hibernateCache == 'ehcache') { %>
+import javax.annotation.PreDestroy;
+import javax.inject.Inject;<% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.metamodel.EntityType;
@@ -39,7 +39,7 @@ public class CacheConfiguration {
     private static HazelcastInstance hazelcastInstance;<% } if (hibernateCache == 'ehcache') { %>
 
     @PersistenceContext
-    private EntityManager entityManager;<% } %><% if (hibernateCache == 'ehcache' || hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
+    private EntityManager entityManager;<% } %><% if ((hibernateCache == 'ehcache' && databaseType == 'sql') || hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
 
     @Inject
     private Environment env;<% } %>
@@ -67,7 +67,7 @@ public class CacheConfiguration {
         log.debug("Starting Ehcache");
         cacheManager = net.sf.ehcache.CacheManager.create();
         cacheManager.getConfiguration().setMaxBytesLocalHeap(env.getProperty("cache.ehcache.maxBytesLocalHeap", String.class, "16M"));
-        log.debug("Registring Ehcache Metrics gauges");
+        log.debug("Registring Ehcache Metrics gauges");<% if (databaseType == 'sql') { %>
         Set<EntityType<?>> entities = entityManager.getMetamodel().getEntities();
         for (EntityType<?> entity : entities) {
             
@@ -83,7 +83,7 @@ public class CacheConfiguration {
                 net.sf.ehcache.Ehcache decoratedCache = InstrumentedEhcache.instrument(metricRegistry, cache);
                 cacheManager.replaceCacheWithDecoratedCache(cache, decoratedCache);
             }
-        }
+        }<% } %>
         EhCacheCacheManager ehCacheManager = new EhCacheCacheManager();
         ehCacheManager.setCacheManager(cacheManager);
         return ehCacheManager;<% } else if (hibernateCache == 'hazelcast') { %>

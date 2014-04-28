@@ -27,6 +27,6 @@
         };
 
         $scope.clear = function () {
-            $scope.<%= entityInstance %> = {id: "", sampleTextAttribute: "", sampleDateAttribute: ""};
+            $scope.<%= entityInstance %> = {id: null, sampleTextAttribute: null, sampleDateAttribute: null};
         };
     }]);
