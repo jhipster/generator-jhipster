@@ -38,12 +38,20 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'input',
             name: 'baseName',
+            validate: function(input) {
+                if((input.indexOf('<')<0) && (input.indexOf('>')<0)) return true;
+                return 'Your application name contains either <, > or both.';
+            },
             message: '(1/9) What is the base name of your application?',
             default: 'jhipster'
         },
         {
             type: 'input',
             name: 'packageName',
+            validate: function(input) {
+                if(/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)) return true;
+                return 'The package name you have provided is not a valid Java package name.';
+            },
             message: '(2/9) What is your default Java package name?',
             default: 'com.mycompany.myapp'
         },
