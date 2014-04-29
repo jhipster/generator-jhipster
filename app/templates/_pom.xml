@@ -59,7 +59,7 @@
                         <configuration>
                             <filesets>
                                 <fileset>
-                                    <directory>dist</directory>
+                                    <directory>src/main/webapp/dist</directory>
                                 </fileset>
                                 <fileset>
                                     <directory>.tmp</directory>
