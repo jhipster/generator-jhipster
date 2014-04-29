@@ -17,19 +17,34 @@ var gulp = require('gulp'),
   proxy = require('proxy-middleware'),
   es = require('event-stream'),
   flatten = require('gulp-flatten'),
+  clean = require('gulp-clean'),
   replace = require('gulp-replace');
+                                                     
+var karma = require('gulp-karma')({configFile: 'src/test/javascript/karma.conf.js'});
 
 var yeoman = {
-    app: 'src/main/webapp/',//require('./bower.json').appPath || 'app',
-    dist: 'src/main/webapp/dist/',
-    tmp: '.tmp/'<% if(useCompass) { %>,
-    scss: 'src/main/scss/'<% } %>
+  app: 'src/main/webapp/',//require('./bower.json').appPath || 'app',
+  dist: 'src/main/webapp/dist/',
+  test: 'src/test/javascript/spec/',
+  tmp: '.tmp/'<% if(useCompass) { %>,
+  scss: 'src/main/scss/'<% } %>
 }
 
-gulp.task('clean', function(){});
-gulp.task('test', function(){});
+gulp.task('clean', function(){
+  return gulp.src(yeoman.dist, {read: false}).
+    pipe(clean());
+});
 
-gulp.task('copy', function(){
+gulp.task('clean:tmp', function(){
+  return gulp.src(yeoman.tmp, {read: false}).
+    pipe(clean());
+});
+                  
+gulp.task('test', function(){
+  karma.once();
+});
+
+gulp.task('copy', ['clean'], function(){
   return es.merge(gulp.src(yeoman.app + 'i18n/**').
                     pipe(gulp.dest(yeoman.dist + 'i18n/')),
                  gulp.src(yeoman.app + '**/*.{woff,svg,ttf,eot}').
@@ -38,9 +53,9 @@ gulp.task('copy', function(){
 });
 
 gulp.task('images', function(){
-    return gulp.src(yeoman.app + 'images/**')
-    .pipe(imagemin({optimizationLevel: 5}))
-    .pipe(gulp.dest(yeoman.dist + 'images'));
+    return gulp.src(yeoman.app + 'images/**').
+      pipe(imagemin({optimizationLevel: 5})).
+      pipe(gulp.dest(yeoman.dist + 'images'));
 });
 
 <% if(useCompass) { %>
@@ -73,36 +88,36 @@ gulp.task('server', ['watch'<% if(useCompass) { %>, 'compass'<% } %>], function(
       port: 9000,
       livereload: true,
       middleware: function(connect, o) {
-	return [
-	  (function() {
-	    var url = require('url');
-	    var proxy = require('proxy-middleware');
-	    var options = url.parse('http://localhost:8080/app');
-	    options.route = '/app';
-	    return proxy(options);
-	  })(),
-	  (function() {
-	    var url = require('url');
-	    var proxy = require('proxy-middleware');
-	    var options = url.parse('http://localhost:8080/metrics');
-	    options.route = '/metrics';
-	    return proxy(options);
-	  })(),
-	  (function() {
-	    var url = require('url');
-	    var proxy = require('proxy-middleware');
-	    var options = url.parse('http://localhost:8080/dump');
-	    options.route = '/dump';
-	    return proxy(options);
-	  })()<% if (devDatabaseType == 'h2Memory') { %>,
-	  (function() {
-	    var url = require('url');
-	    var proxy = require('proxy-middleware');
-	    var options = url.parse('http://localhost:8080/console');
-	    options.route = '/console';
-	    return proxy(options);
-	  })()<% } %>
-	];
+        return [
+          (function() {
+            var url = require('url');
+            var proxy = require('proxy-middleware');
+            var options = url.parse('http://localhost:8080/app');
+            options.route = '/app';
+            return proxy(options);
+          })(),
+          (function() {
+            var url = require('url');
+            var proxy = require('proxy-middleware');
+            var options = url.parse('http://localhost:8080/metrics');
+            options.route = '/metrics';
+            return proxy(options);
+          })(),
+          (function() {
+            var url = require('url');
+            var proxy = require('proxy-middleware');
+            var options = url.parse('http://localhost:8080/dump');
+            options.route = '/dump';
+            return proxy(options);
+          })()<% if (devDatabaseType == 'h2Memory') { %>,
+          (function() {
+            var url = require('url');
+            var proxy = require('proxy-middleware');
+            var options = url.parse('http://localhost:8080/console');
+            options.route = '/console';
+            return proxy(options);
+          })()<% } %>
+        ];
       }
     }
   );
@@ -115,43 +130,43 @@ gulp.task('watch', function() {
   livereload();
 });
 
-gulp.task('serverdist', ['build'], function() {
+gulp.task('server:dist', ['build'], function() {
   connect.server(
     {
       root: [yeoman.dist],
       port: 9000,
-      livereload: true,
+      //livereload: true,
       middleware: function(connect, o) {
-	return [
-	  (function() {
-	    var url = require('url');
-	    var proxy = require('proxy-middleware');
-	    var options = url.parse('http://localhost:8080/app');
-	    options.route = '/app';
-	    return proxy(options);
-	  })(),
-	  (function() {
-	    var url = require('url');
-	    var proxy = require('proxy-middleware');
-	    var options = url.parse('http://localhost:8080/metrics');
-	    options.route = '/metrics';
-	    return proxy(options);
-	  })(),
-	  (function() {
-	    var url = require('url');
-	    var proxy = require('proxy-middleware');
-	    var options = url.parse('http://localhost:8080/dump');
-	    options.route = '/dump';
-	    return proxy(options);
-	  })()<% if (devDatabaseType == 'h2Memory') { %>,
-	  (function() {
-	    var url = require('url');
-	    var proxy = require('proxy-middleware');
-	    var options = url.parse('http://localhost:8080/console');
-	    options.route = '/console';
-	    return proxy(options);
-	  })()<% } %>
-	];
+        return [
+          (function() {
+            var url = require('url');
+            var proxy = require('proxy-middleware');
+            var options = url.parse('http://localhost:8080/app');
+            options.route = '/app';
+            return proxy(options);
+          })(),
+          (function() {
+            var url = require('url');
+            var proxy = require('proxy-middleware');
+            var options = url.parse('http://localhost:8080/metrics');
+            options.route = '/metrics';
+            return proxy(options);
+          })(),
+          (function() {
+            var url = require('url');
+            var proxy = require('proxy-middleware');
+            var options = url.parse('http://localhost:8080/dump');
+            options.route = '/dump';
+            return proxy(options);
+          })()<% if (devDatabaseType == 'h2Memory') { %>,
+          (function() {
+            var url = require('url');
+            var proxy = require('proxy-middleware');
+            var options = url.parse('http://localhost:8080/console');
+            options.route = '/console';
+            return proxy(options);
+          })()<% } %>
+        ];
       }
     }
   );
