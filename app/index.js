@@ -74,7 +74,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'databaseType',
-            message: '(4/10) Why *type* of database would you like to use? ',
+            message: '(4/10) Which *type* of database would you like to use?',
             choices: [
                 {
                     value: 'sql',
