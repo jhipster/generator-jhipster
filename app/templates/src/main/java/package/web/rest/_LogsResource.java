@@ -7,9 +7,10 @@ import <%=packageName%>.web.rest.dto.LoggerDTO;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
+<% if (javaVersion != '8') { %>
+import java.util.ArrayList;<% } %>
+import java.util.List;<% if (javaVersion == '8') { %>
+import java.util.stream.Collectors;<% } %>
 
 /**
  * Controller for view and managing Log Level at runtime.
@@ -23,13 +24,17 @@ public class LogsResource {
             produces = "application/json")
     @Timed
     public List<LoggerDTO> getList() {
-        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
-
+        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();<% if (javaVersion == '8') { %>
+	    return context.getLoggerList()
+	        .stream()
+	        .map(logger -> new LoggerDTO(logger))
+	        .collect(Collectors.toList());
+        <% } else { %>
         List<LoggerDTO> loggers = new ArrayList<LoggerDTO>();
         for (ch.qos.logback.classic.Logger logger : context.getLoggerList()) {
             loggers.add(new LoggerDTO(logger));
         }
-        return loggers;
+        return loggers;<% } %>
     }
 
     @RequestMapping(value = "/rest/logs",
