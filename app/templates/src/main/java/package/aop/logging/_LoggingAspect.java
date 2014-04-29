@@ -1,5 +1,6 @@
 package <%=packageName%>.aop.logging;
 
+import com.mycompany.myapp.config.Constants;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -8,7 +9,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 
+import javax.inject.Inject;
 import java.util.Arrays;
 
 /**
@@ -19,14 +22,21 @@ public class LoggingAspect {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+    @Inject
+    private Environment env;
+
     @Pointcut("within(<%=packageName%>.repository..*) || within(<%=packageName%>.service..*)")
     public void loggingPoincut() {}
 
     @AfterThrowing(pointcut = "loggingPoincut()", throwing = "e")
     public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
-        log.error("Exception in {}.{}() with cause = {}", joinPoint.getSignature().getDeclaringTypeName(),
-                joinPoint.getSignature().getName(), e.getCause());
-
+        if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
+            log.error("Exception in {}.{}() with cause = {}", joinPoint.getSignature().getDeclaringTypeName(),
+                    joinPoint.getSignature().getName(), e.getCause(), e);
+        } else {
+            log.error("Exception in {}.{}() with cause = {}", joinPoint.getSignature().getDeclaringTypeName(),
+                    joinPoint.getSignature().getName(), e.getCause());
+        }
     }
 
     @Around("loggingPoincut()")
