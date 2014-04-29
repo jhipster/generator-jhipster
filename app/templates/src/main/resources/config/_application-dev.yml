@@ -1,6 +1,5 @@
 server:
     port: 8080
-    address: localhost
 
 spring:
     profiles: dev<% if (databaseType == 'nosql') { %>
