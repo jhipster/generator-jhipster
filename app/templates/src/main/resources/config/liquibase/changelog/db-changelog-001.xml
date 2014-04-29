@@ -43,7 +43,7 @@
             <column name="user_agent" type="varchar(255)"/>
         </createTable>
 
-        <createTable tableName="HIBERNATE_SEQUENCES">
+        <createTable tableName="hibernate_sequences">
             <column name="sequence_name" type="varchar(255)"/>
             <column name="sequence_next_hi_value" type="integer"/>
         </createTable>
