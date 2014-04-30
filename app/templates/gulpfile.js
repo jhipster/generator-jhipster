@@ -182,7 +182,7 @@ gulp.task('usemin', ['images', 'styles'], function(){
       css: [
         prefix.apply(),
         replace(/[0-9a-zA-Z\-_\s\.\/]*\/([a-zA-Z\-_\.0-9]*\.(woff|eot|ttf|svg))/g, '/fonts/$1'),
-        minifyCss(),
+        //minifyCss(),
         rev(),
         'concat'
       ],
