@@ -118,6 +118,7 @@
                     Account.get(function(data) {
                         Session.create(data.login, data.firstName, data.lastName, data.email, data.roles);
                         $cookieStore.put('account', JSON.stringify(Session));
+                        $rootScope.account = Session;
                         authService.loginConfirmed(data);
                     });
                 }).error(function (data, status, headers, config) {
