@@ -46,6 +46,22 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             default: 'jhipster'
         },
         {
+            type: 'list',
+            name: 'buildTool',
+            message: '(2/10) Would you like to use Maven or Gradle?',
+            choices: [
+                {
+                    value: 'maven',
+                    name: 'Maven'
+                },
+                {
+                    value: 'gradle',
+                    name: 'Gradle'
+                }
+            ],
+            default: 'maven'
+        },
+        {
             type: 'input',
             name: 'packageName',
             validate: function(input) {
@@ -255,7 +271,8 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     this.prodDatabaseType = this.config.get('prodDatabaseType');
     this.useCompass = this.config.get('useCompass');
 	this.javaVersion = this.config.get('javaVersion');
-	
+	this.buildTool = this.config.get('buildTool');
+
 	if (this.baseName != null &&
 	    this.packageName != null &&
 		this.hibernateCache != null &&
@@ -265,6 +282,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
 		this.devDatabaseType != null &&
 		this.prodDatabaseType != null &&
 		this.useCompass != null &&
+		this.buildTool != null &&
 	    this.javaVersion != null) {
 	
 	    console.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
@@ -282,6 +300,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         	this.devDatabaseType = props.devDatabaseType;
         	this.prodDatabaseType = props.prodDatabaseType;
         	this.useCompass = props.useCompass;
+        	this.buildTool = props.buildTool;
 			this.javaVersion = props.javaVersion;
 
         	cb();
@@ -300,7 +319,15 @@ JhipsterGenerator.prototype.app = function app() {
 
     var packageFolder = this.packageName.replace(/\./g, '/');
 
-    this.template('_pom.xml', 'pom.xml');
+    switch(this.buildTool) {
+        case 'gradle':
+            this.template('_build.gradle', 'build.gradle');
+            this.template('_settings.gradle', 'settings.gradle');
+            break
+        case 'maven':
+        default :
+            this.template('_pom.xml', 'pom.xml');
+    }
 
     // Create Java resource files
     var resourceDir = 'src/main/resources/';
@@ -611,6 +638,7 @@ JhipsterGenerator.prototype.app = function app() {
 	this.config.set('devDatabaseType', this.devDatabaseType);
 	this.config.set('prodDatabaseType', this.prodDatabaseType);
 	this.config.set('useCompass', this.useCompass);
+	this.config.set('buildTool', this.buildTool);
 	this.config.set('javaVersion', this.javaVersion);
 };
 
