@@ -91,8 +91,8 @@
         <!-- Maven build properties -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.${javaVersion}</java.version>
-        <% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %><hazelcast.version>3.1.5</hazelcast.version><% } %>
+        <java.version>1.${javaVersion}</java.version><% if (authenticationType == 'token') { %>
+        <spring-security-oauth2.version>2.0.0.RC2</spring-security-oauth2.version><% } %><% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %><hazelcast.version>3.1.5</hazelcast.version><% } %>
         <metrics-spring.version>3.0.0-RC4</metrics-spring.version>
         <HikariCP.version>1.3.3</HikariCP.version>
         <commons-lang.version>2.6</commons-lang.version>
@@ -399,7 +399,12 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
-        </dependency><% if (databaseType == 'nosql') { %>
+        </dependency><% if (authenticationType == 'token') { %>
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+            <version><%= _.unescape('\${spring-security-oauth2.version}')%></version>
+        </dependency><% } %><% if (databaseType == 'nosql') { %>
         <dependency>
             <groupId>org.mongeez</groupId>
             <artifactId>mongeez</artifactId>

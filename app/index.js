@@ -42,7 +42,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 if((input.indexOf('<')<0) && (input.indexOf('>')<0)) return true;
                 return 'Your application name contains either <, > or both.';
             },
-            message: '(1/10) What is the base name of your application?',
+            message: '(1/11) What is the base name of your application?',
             default: 'jhipster'
         },
         {
@@ -52,13 +52,13 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 if(/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)) return true;
                 return 'The package name you have provided is not a valid Java package name.';
             },
-            message: '(2/10) What is your default Java package name?',
+            message: '(2/11) What is your default Java package name?',
             default: 'com.mycompany.myapp'
         },
         {
             type: 'list',
             name: 'javaVersion',
-            message: '(3/10) Do you want to use Java 8?',
+            message: '(3/11) Do you want to use Java 8?',
             choices: [
                 {
                     value: '7',
@@ -73,8 +73,24 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             type: 'list',
+            name: 'authenticationType',
+            message: '(4/11) Which *type* of authentication would you like to use?',
+            choices: [
+                {
+                    value: 'cookie',
+                    name: 'Cookie-Based Authentication (Session)'
+                },
+                {
+                    value: 'token',
+                    name: 'Token-Based Authentication (Oauth2)'
+                }
+            ],
+            default: 0
+        },
+        {
+            type: 'list',
             name: 'databaseType',
-            message: '(4/10) Which *type* of database would you like to use?',
+            message: '(5/11) Which *type* of database would you like to use?',
             choices: [
                 {
                     value: 'sql',
@@ -93,7 +109,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'hibernateCache',
-            message: '(5/10) Do you want to use Hibernate 2nd level cache?',
+            message: '(6/11) Do you want to use Hibernate 2nd level cache?',
             choices: [
                 {
                     value: 'no',
@@ -116,7 +132,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'hibernateCache',
-            message: '(5/10) Do you want to use cache?',
+            message: '(6/11) Do you want to use cache?',
             choices: [
                 {
                     value: 'no',
@@ -136,7 +152,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'clusteredHttpSession',
-            message: '(6/10) Do you want to use clustered HTTP sessions?',
+            message: '(7/11) Do you want to use clustered HTTP sessions?',
             choices: [
                 {
                     value: 'no',
@@ -152,7 +168,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'websocket',
-            message: '(7/10) Do you want to use WebSockets?',
+            message: '(8/11) Do you want to use WebSockets?',
             choices: [
                 {
                     value: 'no',
@@ -171,7 +187,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'prodDatabaseType',
-            message: '(8/10) Which *production* database would you like to use?',
+            message: '(9/11) Which *production* database would you like to use?',
             choices: [
                 {
                     value: 'mysql',
@@ -190,7 +206,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'prodDatabaseType',
-            message: '(8/10) Which *production* database would you like to use?',
+            message: '(9/11) Which *production* database would you like to use?',
             choices: [
                 {
                     value: 'mongodb',
@@ -205,7 +221,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'devDatabaseType',
-            message: '(9/10) Which *development* database would you like to use?',
+            message: '(10/11) Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'h2Memory',
@@ -228,7 +244,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'devDatabaseType',
-            message: '(9/10) Which *development* database would you like to use?',
+            message: '(10/11) Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'mongodb',
@@ -240,13 +256,14 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'confirm',
             name: 'useCompass',
-            message: '(10/10) Would you like to use the Compass CSS Authoring Framework?',
+            message: '(11/11) Would you like to use the Compass CSS Authoring Framework?',
             default: false
         }
     ];
 	
     this.baseName = this.config.get('baseName');
     this.packageName = this.config.get('packageName');
+    this.authenticationType = this.config.get('authenticationType')
     this.hibernateCache = this.config.get('hibernateCache');
     this.clusteredHttpSession = this.config.get('clusteredHttpSession');
     this.websocket = this.config.get('websocket');
@@ -258,6 +275,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
 	
 	if (this.baseName != null &&
 	    this.packageName != null &&
+        this.authenticationType != null &&
 		this.hibernateCache != null &&
 		this.clusteredHttpSession != null &&
 		this.websocket != null &&
@@ -275,7 +293,8 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     	this.prompt(prompts, function (props) {
 			this.baseName = props.baseName;
         	this.packageName = props.packageName;
-        	this.hibernateCache = props.hibernateCache;
+            this.authenticationType = props.authenticationType;
+            this.hibernateCache = props.hibernateCache;
         	this.clusteredHttpSession = props.clusteredHttpSession;
         	this.websocket = props.websocket;
         	this.databaseType = props.databaseType;
@@ -371,6 +390,11 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/_LoggingAspectConfiguration.java', javaDir + 'config/LoggingAspectConfiguration.java');
     this.template('src/main/java/package/config/_MailConfiguration.java', javaDir + 'config/MailConfiguration.java');
     this.template('src/main/java/package/config/_MetricsConfiguration.java', javaDir + 'config/MetricsConfiguration.java');
+
+    if (this.authenticationType == 'token') {
+        this.template('src/main/java/package/config/_OAuth2ServerConfiguration.java', javaDir + 'config/OAuth2ServerConfiguration.java');
+    }
+
     this.template('src/main/java/package/config/_SecurityConfiguration.java', javaDir + 'config/SecurityConfiguration.java');
     this.template('src/main/java/package/config/_ThymeleafConfiguration.java', javaDir + 'config/ThymeleafConfiguration.java');
     this.template('src/main/java/package/config/_WebConfigurer.java', javaDir + 'config/WebConfigurer.java');
@@ -604,6 +628,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.config.set('baseName', this.baseName);
     this.config.set('packageName', this.packageName);
     this.config.set('packageFolder', packageFolder);
+    this.config.set('authenticationType', this.authenticationType);
     this.config.set('hibernateCache', this.hibernateCache);
 	this.config.set('clusteredHttpSession', this.clusteredHttpSession);
 	this.config.set('websocket', this.websocket);

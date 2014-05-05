@@ -26,6 +26,12 @@ spring:
     messageSource:
         cacheSeconds: 1
 
+
+authentication:
+    oauth:
+        clientid: <%= baseName %>app
+        secret: mySecretOAuthSecret
+
 swagger:
     apiDocsLocation: http://localhost:8080
     title: <%=baseName%> API

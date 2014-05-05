@@ -1,6 +1,7 @@
 'use strict';
 
-/* App Module */
+/* App Module */<% if (authenticationType == 'token') { %>
+var httpHeaders;<% } %>
 
 var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-interceptor', 'tmh.dynamicLocale',
     'ngResource', 'ngRoute', 'ngCookies', 'pascalprecht.translate', 'truncate']);
@@ -114,34 +115,21 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
 
             tmhDynamicLocaleProvider.localeLocationPattern('bower_components/angular-i18n/angular-locale_{{locale}}.js')
             tmhDynamicLocaleProvider.useCookieStorage('NG_TRANSLATE_LANG_KEY');
+            <% if (authenticationType == 'token') { %>
+            httpHeaders = $httpProvider.defaults.headers;<% } %>
         }])
         .run(['$rootScope', '$location', '$http', 'AuthenticationSharedService', 'Session', 'USER_ROLES',
             function($rootScope, $location, $http, AuthenticationSharedService, Session, USER_ROLES) {
                 $rootScope.$on('$routeChangeStart', function (event, next) {
-                    $rootScope.authenticated = AuthenticationSharedService.isAuthenticated();
                     $rootScope.isAuthorized = AuthenticationSharedService.isAuthorized;
                     $rootScope.userRoles = USER_ROLES;
-                    $rootScope.account = Session;
-
                     var authorizedRoles = next.access.authorizedRoles;
-                    if (!AuthenticationSharedService.isAuthorized(authorizedRoles)) {
-                        event.preventDefault();
-                        if (AuthenticationSharedService.isAuthenticated()) {
-                            // user is not allowed
-                            $rootScope.$broadcast("event:auth-notAuthorized");
-                        } else {
-                            // user is not logged in
-                            $rootScope.$broadcast("event:auth-loginRequired");
-                        }
-                    } else {
-                        // Check if the customer is still authenticated on the server
-                        // Try to load a protected 1 pixel image.
-                        $http({method: 'GET', url: 'protected/transparent.gif'});
-                    }
+                    AuthenticationSharedService.valid(AuthenticationSharedService.isAuthorized(authorizedRoles));
                 });
 
                 // Call when the the client is confirmed
                 $rootScope.$on('event:auth-loginConfirmed', function(data) {
+                    $rootScope.authenticated = true;
                     if ($location.path() === "/login") {
                         $location.path('/').replace();
                     }
@@ -149,7 +137,7 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
 
                 // Call when the 401 response is returned by the server
                 $rootScope.$on('event:auth-loginRequired', function(rejection) {
-                    Session.destroy();
+                    Session.invalidate();
                     $rootScope.authenticated = false;
                     if ($location.path() !== "/" && $location.path() !== "") {
                         $location.path('/login').replace();

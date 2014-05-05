@@ -78,8 +78,8 @@
         }
     }]);
 
-<%= angularAppName %>.factory('Session', ['$cookieStore',
-    function ($cookieStore) {
+<%= angularAppName %>.factory('Session', [
+    function () {
         this.create = function (login, firstName, lastName, email, userRoles) {
             this.login = login;
             this.firstName = firstName;
@@ -87,13 +87,12 @@
             this.email = email;
             this.userRoles = userRoles;
         };
-        this.destroy = function () {
+        this.invalidate = function () {
             this.login = null;
             this.firstName = null;
             this.lastName = null;
             this.email = null;
             this.roles = null;
-            $cookieStore.remove('account');
         };
         return this;
     }]);
@@ -104,10 +103,10 @@
         user: 'ROLE_USER'
     });
 
-<%= angularAppName %>.factory('AuthenticationSharedService', ['$rootScope', '$http', '$cookieStore', 'authService', 'Session', 'Account',
-    function ($rootScope, $http, $cookieStore, authService, Session, Account) {
+<%= angularAppName %>.factory('AuthenticationSharedService', ['$rootScope', '$http', '$cookieStore', 'authService', 'Session', 'Account'<% if (authenticationType == 'token') { %>, 'Base64Service', <% } %>
+    function ($rootScope, $http, $cookieStore, authService, Session, Account<% if (authenticationType == 'token') { %>, Base64Service<% } %>) {
         return {
-            login: function (param) {
+            login: function (param) {<% if (authenticationType == 'cookie') { %>
                 var data ="j_username=" + param.username +"&j_password=" + param.password +"&_spring_security_remember_me=" + param.rememberMe +"&submit=Login";
                 $http.post('app/authentication', data, {
                     headers: {
@@ -117,26 +116,63 @@
                 }).success(function (data, status, headers, config) {
                     Account.get(function(data) {
                         Session.create(data.login, data.firstName, data.lastName, data.email, data.roles);
-                        $cookieStore.put('account', JSON.stringify(Session));
                         $rootScope.account = Session;
                         authService.loginConfirmed(data);
                     });
                 }).error(function (data, status, headers, config) {
                     $rootScope.authenticationError = true;
-                    Session.destroy();
-                });
-            },
-            isAuthenticated: function () {
-                if (!Session.login) {
-                    // check if the user has a cookie
-                    if ($cookieStore.get('account') != null) {
-                        var account = JSON.parse($cookieStore.get('account'));
-                        Session.create(account.login, account.firstName, account.lastName,
-                            account.email, account.userRoles);
+                    Session.invalidate();
+                });<% } %><% if (authenticationType == 'token') { %>
+                var data = "username=" + param.username + "&password=" + param.password + "&grant_type=password&scope=read%20write&client_secret=mySecretOAuthSecret&client_id=jhipsterapp";
+                $http.post('oauth/token', data, {
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "Accept": "application/json",
+                        "Authorization": "Basic " + Base64Service.encode("jhipsterapp" + ':' + "mySecretOAuthSecret")
+                    },
+                    ignoreAuthModule: 'ignoreAuthModule'
+                }).success(function (data, status, headers, config) {
+                    httpHeaders.common['Authorization'] = 'Bearer ' + data.access_token;
+                    $cookieStore.put('accesstoken', data.access_token);
+
+                    Account.get(function(data) {
+                        Session.create(data.login, data.firstName, data.lastName, data.email, data.roles);
                         $rootScope.account = Session;
+                        authService.loginConfirmed(data);
+                    });
+                }).error(function (data, status, headers, config) {
+                    $rootScope.authenticationError = true;
+                    Session.invalidate();
+                });<% } %>
+            },
+            valid: function (isAuthorized) {<% if (authenticationType == 'token') { %>
+                httpHeaders.common['Authorization'] = 'Bearer ' + $cookieStore.get('accesstoken');<% } %>
+
+                $http.get('protected/transparent.gif', {
+                    ignoreAuthModule: 'ignoreAuthModule'
+                }).success(function (data, status, headers, config) {
+                    if (!Session.login<% if (authenticationType == 'token') { %> || $cookieStore.get('accesstoken') != undefined<% } %>) {<% if (authenticationType == 'token') { %>
+                        if ($cookieStore.get('accesstoken') == undefined) {
+                            $rootScope.authenticated = false
+                            return;
+                        }<% } %>
+                        Account.get(function(data) {
+                            Session.create(data.login, data.firstName, data.lastName, data.email, data.roles);
+                            $rootScope.account = Session;
+
+                            if (!isAuthorized) {
+                                event.preventDefault();
+                                // user is not allowed
+                                $rootScope.$broadcast("event:auth-notAuthorized");
+                            }
+
+                            $rootScope.authenticated = true;
+                        });
                     }
-                }
-                return !!Session.login;
+                    $rootScope.authenticated = !!Session.login;
+                }).error(function (data, status, headers, config) {
+                    $rootScope.authenticated = false;
+                });
             },
             isAuthorized: function (authorizedRoles) {
                 if (!angular.isArray(authorizedRoles)) {
@@ -148,7 +184,6 @@
                 }
 
                 var isAuthorized = false;
-
                 angular.forEach(authorizedRoles, function(authorizedRole) {
                     var authorized = (!!Session.login &&
                         Session.userRoles.indexOf(authorizedRole) !== -1);
@@ -162,11 +197,88 @@
             },
             logout: function () {
                 $rootScope.authenticationError = false;
-                $http.get('app/logout')
-                    .success(function (data, status, headers, config) {
-                        Session.destroy();
-                        authService.loginCancelled();
-                    });
+                $rootScope.authenticated = false;
+                $rootScope.account = null;
+                $cookieStore.remove('accesstoken');
+
+                $http.get('app/logout');
+                Session.invalidate();<% if (authenticationType == 'token') { %>
+                httpHeaders.common['Authorization'] = null;<% } %>
+                authService.loginCancelled();
             }
         };
     }]);
+<% if (authenticationType == 'token') { %>
+<%= angularAppName %>.service('Base64Service', function () {
+    var keyStr = "ABCDEFGHIJKLMNOP" +
+        "QRSTUVWXYZabcdef" +
+        "ghijklmnopqrstuv" +
+        "wxyz0123456789+/" +
+        "=";
+    this.encode = function (input) {
+        var output = "",
+            chr1, chr2, chr3 = "",
+            enc1, enc2, enc3, enc4 = "",
+            i = 0;
+
+        while (i < input.length) {
+            chr1 = input.charCodeAt(i++);
+            chr2 = input.charCodeAt(i++);
+            chr3 = input.charCodeAt(i++);
+
+            enc1 = chr1 >> 2;
+            enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+            enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+            enc4 = chr3 & 63;
+
+            if (isNaN(chr2)) {
+                enc3 = enc4 = 64;
+            } else if (isNaN(chr3)) {
+                enc4 = 64;
+            }
+
+            output = output +
+                keyStr.charAt(enc1) +
+                keyStr.charAt(enc2) +
+                keyStr.charAt(enc3) +
+                keyStr.charAt(enc4);
+            chr1 = chr2 = chr3 = "";
+            enc1 = enc2 = enc3 = enc4 = "";
+        }
+
+        return output;
+    };
+
+    this.decode = function (input) {
+        var output = "",
+            chr1, chr2, chr3 = "",
+            enc1, enc2, enc3, enc4 = "",
+            i = 0;
+
+        // remove all characters that are not A-Z, a-z, 0-9, +, /, or =
+        input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+
+        while (i < input.length) {
+            enc1 = keyStr.indexOf(input.charAt(i++));
+            enc2 = keyStr.indexOf(input.charAt(i++));
+            enc3 = keyStr.indexOf(input.charAt(i++));
+            enc4 = keyStr.indexOf(input.charAt(i++));
+
+            chr1 = (enc1 << 2) | (enc2 >> 4);
+            chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+            chr3 = ((enc3 & 3) << 6) | enc4;
+
+            output = output + String.fromCharCode(chr1);
+
+            if (enc3 != 64) {
+                output = output + String.fromCharCode(chr2);
+            }
+            if (enc4 != 64) {
+                output = output + String.fromCharCode(chr3);
+            }
+
+            chr1 = chr2 = chr3 = "";
+            enc1 = enc2 = enc3 = enc4 = "";
+        }
+    };
+});<% } %>
