@@ -103,7 +103,7 @@
         user: 'ROLE_USER'
     });
 
-<%= angularAppName %>.factory('AuthenticationSharedService', ['$rootScope', '$http', '$cookieStore', 'authService', 'Session', 'Account'<% if (authenticationType == 'token') { %>, 'Base64Service', <% } %>
+<%= angularAppName %>.factory('AuthenticationSharedService', ['$rootScope', '$http', '$cookieStore', 'authService', 'Session', 'Account',<% if (authenticationType == 'token') { %> 'Base64Service', <% } %>
     function ($rootScope, $http, $cookieStore, authService, Session, Account<% if (authenticationType == 'token') { %>, Base64Service<% } %>) {
         return {
             login: function (param) {<% if (authenticationType == 'cookie') { %>
