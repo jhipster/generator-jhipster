@@ -1,8 +1,8 @@
 package <%=packageName%>.config;
 
-import com.mycompany.myapp.security.AjaxLogoutSuccessHandler;
-import com.mycompany.myapp.security.AuthoritiesConstants;
-import com.mycompany.myapp.security.Http401UnauthorizedEntryPoint;
+import <%=packageName%>.security.AjaxLogoutSuccessHandler;
+import <%=packageName%>.security.AuthoritiesConstants;
+import <%=packageName%>.security.Http401UnauthorizedEntryPoint;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
