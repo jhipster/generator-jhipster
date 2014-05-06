@@ -11,8 +11,9 @@ import <%=packageName%>.service.UserService;
 import <%=packageName%>.web.rest.dto.UserDTO;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.slf4j.LoggerFactory;<% if (javaVersion == '8') { %>
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;<% } %>
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -20,9 +21,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.ArrayList;
+import java.net.URLDecoder;<% if (javaVersion != '8') { %>
+import java.util.ArrayList;<% } %>
 import java.util.List;<% if (javaVersion == '8') { %>
+import java.util.Optional;
 import java.util.stream.Collectors;<% } %>
 
 /**
@@ -61,21 +63,34 @@ public class AccountResource {
     @RequestMapping(value = "/rest/account",
             method = RequestMethod.GET,
             produces = "application/json")
-    @Timed
+    @Timed<% if (javaVersion == '8') { %>
+    public ResponseEntity<UserDTO> getAccount() {
+        return Optional.ofNullable(userService.getUserWithAuthorities())
+            .map(user -> new ResponseEntity<>(
+                new UserDTO(
+                    user.getLogin(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toList()))
+                , HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else { %>
     public UserDTO getAccount(HttpServletResponse response) {
         User user = userService.getUserWithAuthorities();
-        if (user == null) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            return null;
-        }<% if (javaVersion == '8') { %>
-		List<String> roles = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toList());<% } else { %>
-		List<String> roles = new ArrayList<>();
-		for (Authority authority : user.getAuthorities()) {
-		    roles.add(authority.getName());
-		}<% } %>
-
-        return new UserDTO(user.getLogin(), user.getFirstName(), user.getLastName(),
-                user.getEmail(), roles);
+            if (user == null) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+	            return null;
+	        }
+			List<String> roles = new ArrayList<>();
+			for (Authority authority : user.getAuthorities()) {
+			    roles.add(authority.getName());
+			}
+	        return new UserDTO(
+                user.getLogin(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                roles);<% } %>	
     }
 
     /**
