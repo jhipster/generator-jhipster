@@ -77,20 +77,20 @@ public class AccountResource {
             .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else { %>
     public UserDTO getAccount(HttpServletResponse response) {
         User user = userService.getUserWithAuthorities();
-            if (user == null) {
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-	            return null;
-	        }
-			List<String> roles = new ArrayList<>();
-			for (Authority authority : user.getAuthorities()) {
-			    roles.add(authority.getName());
-			}
-	        return new UserDTO(
-                user.getLogin(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                roles);<% } %>	
+        if (user == null) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return null;
+        }
+        List<String> roles = new ArrayList<>();
+        for (Authority authority : user.getAuthorities()) {
+            roles.add(authority.getName());
+        }
+        return new UserDTO(
+            user.getLogin(),
+            user.getFirstName(),
+            user.getLastName(),
+            user.getEmail(),
+            roles);<% } %>	
     }
 
     /**
