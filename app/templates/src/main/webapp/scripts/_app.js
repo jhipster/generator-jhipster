@@ -4,7 +4,7 @@
 var httpHeaders;<% } %>
 
 var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-interceptor', 'tmh.dynamicLocale',
-    'ngResource', 'ngRoute', 'ngCookies', 'pascalprecht.translate', 'truncate']);
+    'ngResource', 'ngRoute', 'ngCookies', '<%= angularAppName %>Utils', 'pascalprecht.translate', 'truncate']);
 
 <%= angularAppName %>
     .config(['$routeProvider', '$httpProvider', '$translateProvider',  'tmhDynamicLocaleProvider', 'USER_ROLES',
@@ -123,8 +123,7 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                 $rootScope.$on('$routeChangeStart', function (event, next) {
                     $rootScope.isAuthorized = AuthenticationSharedService.isAuthorized;
                     $rootScope.userRoles = USER_ROLES;
-                    var authorizedRoles = next.access.authorizedRoles;
-                    AuthenticationSharedService.valid(AuthenticationSharedService.isAuthorized(authorizedRoles));
+                    AuthenticationSharedService.valid(next.access.authorizedRoles);
                 });
 
                 // Call when the the client is confirmed

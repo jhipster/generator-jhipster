@@ -532,7 +532,8 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(webappDir + '/protected/transparent.gif', webappDir + '/protected/transparent.gif');
 
     // Swagger-ui for Jhipster
-    this.copy(webappDir + '/swagger-ui/index.html', webappDir + 'swagger-ui/index.html');
+    this.template(webappDir + '/swagger-ui/_index.html', webappDir + 'swagger-ui/index.html');
+    this.copy(webappDir + '/swagger-ui/images/throbber.gif', webappDir + 'swagger-ui/images/throbber.gif');
 
     // Angular JS views
     this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
@@ -561,6 +562,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + 'scripts/_controllers.js', webappDir + 'scripts/controllers.js');
     this.template(webappDir + 'scripts/_services.js', webappDir + 'scripts/services.js');
     this.template(webappDir + 'scripts/_directives.js', webappDir + 'scripts/directives.js');
+    this.template(webappDir + 'scripts/_utils.js', webappDir + 'scripts/utils.js');
 
     // Create Test Javascript files
     var testJsDir = 'src/test/javascript/';
@@ -596,7 +598,7 @@ JhipsterGenerator.prototype.app = function app() {
 
         'scripts/http-auth-interceptor.js',
         'scripts/truncate.js',
-
+        'scripts/utils.js',
         'scripts/app.js',
         'scripts/controllers.js',
         'scripts/services.js',
