@@ -73,7 +73,21 @@ module.exports = function (grunt) {
         port: 8080,
         https: false,
         changeOrigin: false
-        }<% if (devDatabaseType == 'h2Memory') { %>,
+        },
+        {
+        context: '/api-docs',
+        host: 'localhost',
+        port: 8080,
+        https: false,
+        changeOrigin: false
+        }<% if (authenticationType == 'token') { %>,
+        {
+          context: '/oauth/token',
+          host: 'localhost',
+          port: 8080,
+          https: false,
+          changeOrigin: false
+        }<% } %><% if (devDatabaseType == 'h2Memory') { %>,
         {
           context: '/console',
           host: 'localhost',
