@@ -603,7 +603,7 @@
                                             maven-dependency-plugin
                                         </artifactId>
                                         <versionRange>
-                                            [,)
+                                            [1.0,)
                                         </versionRange>
                                         <goals>
                                             <goal>copy</goal>
