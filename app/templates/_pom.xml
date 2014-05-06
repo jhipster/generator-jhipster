@@ -93,23 +93,24 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.${javaVersion}</java.version><% if (authenticationType == 'token') { %>
         <spring-security-oauth2.version>2.0.0.RC2</spring-security-oauth2.version><% } %><% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %><hazelcast.version>3.1.5</hazelcast.version><% } %>
-        <metrics-spring.version>3.0.0-RC4</metrics-spring.version>
-        <HikariCP.version>1.3.3</HikariCP.version>
+        <metrics-spring.version>3.0.0</metrics-spring.version>
+        <HikariCP.version>1.3.8</HikariCP.version>
         <commons-lang.version>2.6</commons-lang.version>
         <commons-io.version>2.4</commons-io.version>
         <javax.inject.version>1</javax.inject.version><% if (databaseType == 'sql') { %>
         <joda-time-hibernate.version>1.3</joda-time-hibernate.version><% } %>
         <geronimo-javamail_1.4_mail.version>1.8.3</geronimo-javamail_1.4_mail.version>
-        <usertype.core.version>3.1.0.CR10</usertype.core.version>
+        <usertype.core.version>3.2.0.GA</usertype.core.version>
         <awaitility.version>1.4.0</awaitility.version>
         <json-path.version>0.9.1</json-path.version>
-        <assertj-core.version>1.5.0</assertj-core.version>
+        <assertj-core.version>1.6.0</assertj-core.version>
         <maven-enforcer-plugin.version>1.3.1</maven-enforcer-plugin.version>
         <sonar-maven-plugin.version>2.2</sonar-maven-plugin.version>
         <jhipsterloaded.version>0.6</jhipsterloaded.version><% if (websocket == 'atmosphere') { %>
         <atmosphere-spring.version>2.1.0</atmosphere-spring.version><% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
         <postgresql.version>9.3-1100-jdbc41</postgresql.version><% } %><% if (databaseType == 'sql') { %>
         <liquibase-slf4j.version>1.2.1</liquibase-slf4j.version><% } %>
+        <swagger-springmvc.version>0.8.2</swagger-springmvc.version>
     </properties>
 
     <repositories>
@@ -275,7 +276,7 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP-agent</artifactId>
-            <version>1.3.0</version>
+            <version><%= _.unescape('\${HikariCP.version}')%></version>
         </dependency>
         -->
         <dependency>
@@ -418,7 +419,7 @@
         <dependency>
             <groupId>com.mangofactory</groupId>
             <artifactId>swagger-springmvc</artifactId>
-            <version>0.8.2</version>
+            <version><%= _.unescape('\${swagger-springmvc.version}')%></version>
         </dependency>
 
         <!-- Database dependencies-->
