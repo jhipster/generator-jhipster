@@ -93,9 +93,10 @@ public class OAuth2ServerConfiguration {
     @EnableAuthorizationServer
     protected static class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter implements EnvironmentAware {
 
-        public static final String ENV_OAUTH = "authentication.oauth.";
-        public static final String PROP_CLIENTID = "clientid";
-        public static final String PROP_SECRET = "secret";
+        private static final String ENV_OAUTH = "authentication.oauth.";
+        private static final String PROP_CLIENTID = "clientid";
+        private static final String PROP_SECRET = "secret";
+        private static final String PROP_TOKEN_VALIDITY_SECONDS = "tokenValidityInSeconds";
 
         private RelaxedPropertyResolver propertyResolver;
 
@@ -126,7 +127,8 @@ public class OAuth2ServerConfiguration {
                     .scopes("read", "write")
                     .authorities(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER)
                     .authorizedGrantTypes("password")
-                    .secret(propertyResolver.getProperty(PROP_SECRET));
+                    .secret(propertyResolver.getProperty(PROP_SECRET))
+                    .accessTokenValiditySeconds(propertyResolver.getProperty(PROP_TOKEN_VALIDITY_SECONDS, Integer.class, 1800));
         }
 
         @Override

@@ -31,6 +31,8 @@ authentication:
     oauth:
         clientid: <%= baseName %>app
         secret: mySecretOAuthSecret
+        # Token is valid 30 minutes
+        tokenValidityInSeconds: 1800
 
 swagger:
     apiDocsLocation: http://localhost:8080

@@ -126,14 +126,14 @@ angular.module('<%= angularAppName %>Utils', [])
             };
 
             service.expired = function() {
-                return (token && token.expires_at && token.expires_at < new Date())
+                return (token && token.expires_at && token.expires_at < new Date().getTime())
             };
 
             var setExpiresAt = function(oauthResponse) {
                 if (token) {
-                    var expires_at = new Date();
-                    expires_at.setSeconds(expires_at.getSeconds() + parseInt(oauthResponse.expires_in) - 60);
-                    token.expires_at = expires_at;
+                    var now = new Date();
+                    var minutes = parseInt(oauthResponse.expires_in) / 60;
+                    token.expires_at = new Date(now.getTime() + minutes*60000).getTime()
                 }
             };
 
