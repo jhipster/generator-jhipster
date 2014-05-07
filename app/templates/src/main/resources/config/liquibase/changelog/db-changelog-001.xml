@@ -130,4 +130,60 @@
                                  referencedColumnNames="event_id"
                                  referencedTableName="T_PERSISTENT_AUDIT_EVENT"/>
     </changeSet>
+
+    <!-- Manage the OAuth authentication -->
+    <changeSet id="3" author="jhipster">
+        <createTable tableName="oauth_client_details">
+            <column name="client_id" type="VARCHAR(256)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="resource_ids" type="VARCHAR(256)"/>
+            <column name="client_secret" type="VARCHAR(256)"/>
+            <column name="scope" type="VARCHAR(256)"/>
+            <column name="authorized_grant_types" type="VARCHAR(256)"/>
+            <column name="web_server_redirect_uri" type="VARCHAR(256)"/>
+            <column name="authorities" type="VARCHAR(256)"/>
+            <column name="access_token_validity" type="INT"/>
+            <column name="refresh_token_validity" type="INT"/>
+            <column name="additional_information" type="VARCHAR(4096)"/>
+            <column name="autoapprove" type="VARCHAR(4096)"/>
+        </createTable>
+
+        <createTable tableName="oauth_client_token">
+            <column name="token_id" type="VARCHAR(256)"/>
+            <column name="token" type="BLOB"/>
+            <column name="authentication_id" type="VARCHAR(256)"/>
+            <column name="user_name" type="VARCHAR(256)"/>
+            <column name="client_id" type="VARCHAR(256)"/>
+        </createTable>
+
+        <createTable tableName="oauth_access_token">
+            <column name="token_id" type="VARCHAR(256)"/>
+            <column name="token" type="BLOB"/>
+            <column name="authentication_id" type="VARCHAR(256)"/>
+            <column name="user_name" type="VARCHAR(256)"/>
+            <column name="client_id" type="VARCHAR(256)"/>
+            <column name="authentication" type="BLOB"/>
+            <column name="refresh_token" type="VARCHAR(256)"/>
+        </createTable>
+
+        <createTable tableName="oauth_refresh_token">
+            <column name="token_id" type="VARCHAR(256)"/>
+            <column name="token" type="BLOB"/>
+            <column name="authentication" type="BLOB"/>
+        </createTable>
+
+        <createTable tableName="oauth_code">
+            <column name="code" type="VARCHAR(256)"/>
+        </createTable>
+
+        <createTable tableName="oauth_approvals">
+            <column name="userId" type="VARCHAR(256)"/>
+            <column name="clientId" type="VARCHAR(256)"/>
+            <column name="scope" type="VARCHAR(256)"/>
+            <column name="status" type="VARCHAR(256)"/>
+            <column name="expiresAt" type="timestamp"/>
+            <column name="lastModifiedAt" type="timestamp"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

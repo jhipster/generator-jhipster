@@ -18,9 +18,11 @@
                            ng-model="password">
                 </div>
                 <div class="form-group">
-                    <label for="rememberMe" translate="login.form.rememberme">Automatic login</label>
-                    <input type="checkbox" class="form-control" id="rememberMe"
-                           ng-model="rememberMe" checked>
+                    <label for="rememberMe">
+                        {{"login.form.rememberme" | translate}}
+                        <input type="checkbox" class="checkbox inline_class" id="rememberMe"
+                               ng-model="rememberMe" checked>
+                    </label>
                 </div>
                 <button type="submit" class="btn btn-primary" ng-click="login()" translate="login.form.button">Authenticate</button>
             </form>
