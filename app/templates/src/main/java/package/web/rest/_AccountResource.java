@@ -132,9 +132,9 @@ public class AccountResource {
             .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else { %>
         User user = userRepository.findOne(SecurityUtils.getCurrentLogin());
         if (user == null) {
-            return new ResponseEntity<List<PersistentToken>>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<List<PersistentToken>>(
+        return new ResponseEntity<>(
             persistentTokenRepository.findByUser(user),
             HttpStatus.OK);<% } %>
     }
