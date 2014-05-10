@@ -30,7 +30,7 @@ public class LogsResource {
 	        .map(logger -> new LoggerDTO(logger))
 	        .collect(Collectors.toList());
         <% } else { %>
-        List<LoggerDTO> loggers = new ArrayList<LoggerDTO>();
+        List<LoggerDTO> loggers = new ArrayList<>();
         for (ch.qos.logback.classic.Logger logger : context.getLoggerList()) {
             loggers.add(new LoggerDTO(logger));
         }
