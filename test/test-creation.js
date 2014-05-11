@@ -22,7 +22,7 @@ describe('jhipster generator', function () {
   it('creates expected files', function (done) {
 
     var resourceDir = 'src/main/resources/';
-    var webappDir = 'src/main/webapp/'
+    var webappDir = 'src/main/webapp/';
 
     var expected = [
       // add files you expect to exist here.
