@@ -33,6 +33,8 @@ describe('jhipster generator', function () {
 
   var resourceDir = 'src/main/resources/';
   var webappDir = 'src/main/webapp/';
+  var javaSrcDir = 'src/main/java/';
+  var javaPackageDir = javaSrcDir + 'com/mycompany/myapp/';
 
   it('creates expected files', function (done) {
 
