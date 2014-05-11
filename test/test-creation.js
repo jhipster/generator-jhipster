@@ -19,13 +19,7 @@ describe('jhipster generator', function () {
     }.bind(this));
   });
 
-  it('creates expected files', function (done) {
-
-    var resourceDir = 'src/main/resources/';
-    var webappDir = 'src/main/webapp/';
-
-    var expected = [
-      // add files you expect to exist here.
+  var defaultFiles = [
       '.jshintrc',
       '.editorconfig',
       'bower.json',
@@ -34,7 +28,15 @@ describe('jhipster generator', function () {
       '.bowerrc',
       '.gitignore',
       'README.md',
-      '.yo-rc.json',
+      '.yo-rc.json'
+    ];
+
+  var resourceDir = 'src/main/resources/';
+  var webappDir = 'src/main/webapp/';
+
+  it('creates expected files', function (done) {
+
+    var expectedAdditionalFiles = [
       resourceDir + 'config/liquibase/changelog/db-changelog-001.xml',
       resourceDir + 'config/liquibase/master.xml',
       resourceDir + 'config/liquibase/users.csv',
@@ -49,6 +51,8 @@ describe('jhipster generator', function () {
       webappDir + 'fonts/glyphicons-halflings-regular.ttf',
       webappDir + 'fonts/glyphicons-halflings-regular.woff'
     ];
+
+    var expected = defaultFiles.concat(expectedAdditionalFiles);
 
     helpers.mockPrompt(this.app, {
       'baseName': 'jhipster',
