@@ -115,7 +115,8 @@
                 "newpassword": {
                     "required": "Ein neues Passwort wird benötigt.",
                     "minlength": "Das neue Passwort muss mindestens 5 Zeichen lang sein",
-                    "maxlength": "Das neue Passwort darf nicht länger als 50 Zeichen sein"
+                    "maxlength": "Das neue Passwort darf nicht länger als 50 Zeichen sein",
+                    "strength": "Passwortstärke:"
                 },
                 "confirmpassword": {
                     "required": "Sie müssen das Passwort bestätigen.",
