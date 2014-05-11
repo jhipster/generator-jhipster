@@ -44,7 +44,7 @@
                             <yeomanProjectDirectory><%= _.unescape('\$\{project.basedir}')%></yeomanProjectDirectory>
                         </configuration>
                         <executions>
-                            <execution>
+                            <% if(frontendBuilder == 'grunt') { %><execution>
                                 <id>run-grunt</id>
                                 <phase>generate-resources</phase>
                                 <goals>
@@ -53,7 +53,7 @@
                                 <configuration>
                                     <gruntBuildArgs>--force</gruntBuildArgs>
                                 </configuration>
-                            </execution>
+                            </execution><% } %>
                         </executions>
                     </plugin>
                     <plugin>
@@ -84,7 +84,31 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile><% if(frontendBuilder == 'gulp') { %>
+        <profile>
+            <id>Windows</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <runner>cmd</runner>
+                <runprefix>/C</runprefix>
+            </properties>
         </profile>
+        <profile>
+            <id>*nix</id>
+            <activation>
+                <os>
+                    <family>!windows</family>
+                </os>
+            </activation>
+            <properties>
+                <runner>sh</runner>
+                <runprefix>-c</runprefix>
+            </properties>
+        </profile><% } %>
     </profiles>
 
     <properties>
@@ -582,7 +606,43 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin><% if(frontendBuilder == 'gulp') { %>
+            <plugin>
+                <artifactId>exec-maven-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <executions>
+                    <execution>
+                        <id>Build Frontend with Gulp.JS</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable><%= _.unescape('\$\{runner\}') %></executable>
+                            <workingDirectory><%= _.unescape('\$\{project.basedir}')%></workingDirectory>
+                            <arguments>
+                                <argument><%= _.unescape('\$\{runprefix\}') %></argument>
+                                <argument>gulp</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>Test Frontend with Gulp.JS</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable><%= _.unescape('\$\{runner\}') %></executable>
+                            <workingDirectory><%= _.unescape('\$\{project.basedir}')%></workingDirectory>
+                            <arguments>
+                                <argument><%= _.unescape('\$\{runprefix\}') %></argument>
+                                <argument>gulp test</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin><% } %>
         </plugins>
         <pluginManagement>
             <plugins>

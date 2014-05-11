@@ -42,7 +42,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 if((input.indexOf('<')<0) && (input.indexOf('>')<0)) return true;
                 return 'Your application name contains either <, > or both.';
             },
-            message: '(1/11) What is the base name of your application?',
+            message: '(1/12) What is the base name of your application?',
             default: 'jhipster'
         },
         {
@@ -52,13 +52,13 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 if(/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)) return true;
                 return 'The package name you have provided is not a valid Java package name.';
             },
-            message: '(2/11) What is your default Java package name?',
+            message: '(2/12) What is your default Java package name?',
             default: 'com.mycompany.myapp'
         },
         {
             type: 'list',
             name: 'javaVersion',
-            message: '(3/11) Do you want to use Java 8?',
+            message: '(3/12) Do you want to use Java 8?',
             choices: [
                 {
                     value: '7',
@@ -74,7 +74,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'authenticationType',
-            message: '(4/11) Which *type* of authentication would you like to use?',
+            message: '(4/12) Which *type* of authentication would you like to use?',
             choices: [
                 {
                     value: 'cookie',
@@ -90,7 +90,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'databaseType',
-            message: '(5/11) Which *type* of database would you like to use?',
+            message: '(5/12) Which *type* of database would you like to use?',
             choices: [
                 {
                     value: 'sql',
@@ -109,7 +109,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'hibernateCache',
-            message: '(6/11) Do you want to use Hibernate 2nd level cache?',
+            message: '(6/12) Do you want to use Hibernate 2nd level cache?',
             choices: [
                 {
                     value: 'no',
@@ -132,7 +132,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'hibernateCache',
-            message: '(6/11) Do you want to use cache?',
+            message: '(6/12) Do you want to use cache?',
             choices: [
                 {
                     value: 'no',
@@ -152,7 +152,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'clusteredHttpSession',
-            message: '(7/11) Do you want to use clustered HTTP sessions?',
+            message: '(7/12) Do you want to use clustered HTTP sessions?',
             choices: [
                 {
                     value: 'no',
@@ -168,7 +168,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'websocket',
-            message: '(8/11) Do you want to use WebSockets?',
+            message: '(8/12) Do you want to use WebSockets?',
             choices: [
                 {
                     value: 'no',
@@ -187,7 +187,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'prodDatabaseType',
-            message: '(9/11) Which *production* database would you like to use?',
+            message: '(9/12) Which *production* database would you like to use?',
             choices: [
                 {
                     value: 'mysql',
@@ -206,7 +206,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'prodDatabaseType',
-            message: '(9/11) Which *production* database would you like to use?',
+            message: '(9/12) Which *production* database would you like to use?',
             choices: [
                 {
                     value: 'mongodb',
@@ -221,7 +221,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'devDatabaseType',
-            message: '(10/11) Which *development* database would you like to use?',
+            message: '(10/12) Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'h2Memory',
@@ -244,7 +244,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'devDatabaseType',
-            message: '(10/11) Which *development* database would you like to use?',
+            message: '(10/12) Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'mongodb',
@@ -254,9 +254,25 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             default: 0
         },
         {
+            type: 'list',
+            name: 'frontendBuilder',
+            choices: [
+                {
+                    value: 'grunt',
+                    name: 'Grunt'
+                },
+                {
+                    value: 'gulp',
+                    name: 'Gulp.JS'
+                }
+            ],
+            message: '(11/12) Would you like to use Grunt or Gulp.Js for building the frontend?',
+            default: 'grunt'
+        },
+        {
             type: 'confirm',
             name: 'useCompass',
-            message: '(11/11) Would you like to use the Compass CSS Authoring Framework?',
+            message: '(12/12) Would you like to use the Compass CSS Authoring Framework?',
             default: false
         }
     ];
@@ -272,6 +288,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     this.prodDatabaseType = this.config.get('prodDatabaseType');
     this.useCompass = this.config.get('useCompass');
 	this.javaVersion = this.config.get('javaVersion');
+	this.frontendBuilder = this.config.get('frontendBuilder');
 	
 	if (this.baseName != null &&
 	    this.packageName != null &&
@@ -283,6 +300,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
 		this.devDatabaseType != null &&
 		this.prodDatabaseType != null &&
 		this.useCompass != null &&
+		this.frontendBuilder != null &&
 	    this.javaVersion != null) {
 	
 	    console.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
@@ -301,6 +319,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         	this.devDatabaseType = props.devDatabaseType;
         	this.prodDatabaseType = props.prodDatabaseType;
         	this.useCompass = props.useCompass;
+        	this.frontendBuilder = props.frontendBuilder;
 			this.javaVersion = props.javaVersion;
 
         	cb();
@@ -314,8 +333,16 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('_bower.json', 'bower.json');
     this.template('_README.md', 'README.md');
     this.template('bowerrc', '.bowerrc');
-    this.template('Gruntfile.js', 'Gruntfile.js');
     this.copy('gitignore', '.gitignore');
+    
+    switch(this.frontendBuilder) {
+        case 'gulp':
+            this.template('gulpfile.js', 'gulpfile.js');
+            break;
+        case 'grunt':
+        default:
+            this.template('Gruntfile.js', 'Gruntfile.js');
+    }
 
     var packageFolder = this.packageName.replace(/\./g, '/');
 
@@ -640,6 +667,7 @@ JhipsterGenerator.prototype.app = function app() {
 	this.config.set('devDatabaseType', this.devDatabaseType);
 	this.config.set('prodDatabaseType', this.prodDatabaseType);
 	this.config.set('useCompass', this.useCompass);
+	this.config.set('frontendBuilder', this.frontendBuilder);
 	this.config.set('javaVersion', this.javaVersion);
 };
 
