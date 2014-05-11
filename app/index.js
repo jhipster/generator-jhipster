@@ -263,10 +263,10 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 },
                 {
                     value: 'gulp',
-                    name: 'Gulp.JS'
+                    name: 'Gulp.js'
                 }
             ],
-            message: '(11/12) Would you like to use Grunt or Gulp.Js for building the frontend?',
+            message: '(11/12) Would you like to use Grunt or Gulp.js for building the frontend?',
             default: 'grunt'
         },
         {
