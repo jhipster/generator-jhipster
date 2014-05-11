@@ -28,10 +28,10 @@ public class JHipsterHealthIndicatorConfiguration implements InitializingBean {
     private DatabaseHealthCheckIndicator databaseHealthCheckIndicator = new DatabaseHealthCheckIndicator();
 
     @Bean
-    public HealthIndicator healthIndicator() {
-        return new HealthIndicator() {
+    public HealthIndicator<Map<String, HealthCheckIndicator.Result>> healthIndicator() {
+        return new HealthIndicator<Map<String, HealthCheckIndicator.Result>>() {
             @Override
-            public Object health() {
+            public Map<String, HealthCheckIndicator.Result> health() {
                 Map<String, HealthCheckIndicator.Result> healths = new LinkedHashMap<>();
 
                 healths.putAll(javaMailHealthCheckIndicator.health());
