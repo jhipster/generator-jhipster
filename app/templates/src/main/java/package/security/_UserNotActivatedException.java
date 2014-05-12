@@ -1,4 +1,4 @@
-package <%=packageName%.security;
+package <%=packageName%>.security;
 
 import org.springframework.security.core.AuthenticationException;
 

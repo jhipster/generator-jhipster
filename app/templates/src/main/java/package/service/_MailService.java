@@ -15,6 +15,9 @@ import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * Service for sending e-mails.

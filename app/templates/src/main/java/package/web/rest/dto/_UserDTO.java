@@ -52,6 +52,10 @@ public class UserDTO {
         return email;
     }
 
+    public String getLangKey() {
+        return langKey;
+    }
+
     public List<String> getRoles() {
         return roles;
     }

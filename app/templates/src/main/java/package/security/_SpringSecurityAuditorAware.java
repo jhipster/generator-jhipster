@@ -1,6 +1,6 @@
-package <%=packageName%.security;
+package <%=packageName%>.security;
 
-import <%=packageName%.config.Constants;
+import <%=packageName%>.config.Constants;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
 
