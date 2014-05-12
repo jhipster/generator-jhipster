@@ -5,11 +5,14 @@ import <%=packageName%>.domain.<%= entityClass %>;
 import <%=packageName%>.repository.<%= entityClass %>Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
+import javax.inject.Inject;<% if (javaVersion == '7') { %>
+import javax.servlet.http.HttpServletResponse;<% } %>
+import java.util.List;<% if (javaVersion == '8') { %>
+import java.util.Optional;<% } %>
 
 /**
  * REST controller for managing <%= entityClass %>.
@@ -54,13 +57,18 @@ public class <%= entityClass %>Resource {
             method = RequestMethod.GET,
             produces = "application/json")
     @Timed
-    public <%= entityClass %> get(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> id, HttpServletResponse response) {
-        log.debug("REST request to get <%= entityClass %> : {}", id);
+    public ResponseEntity<<%= entityClass %>> get(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> id<% if (javaVersion == '7') { %>, HttpServletResponse response<% } %>) {
+        log.debug("REST request to get <%= entityClass %> : {}", id);<% if (javaVersion == '8') { %>		
+        return Optional.ofNullable(<%= entityInstance %>Repository.findOne(id))
+            .map(<%= entityInstance %> -> new ResponseEntity<>(
+                <%= entityInstance %>,
+                HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));<% } else { %>
         <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Repository.findOne(id);
         if (<%= entityInstance %> == null) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            response.setStatus(HttpStatus.NOT_FOUND.value());
         }
-        return <%= entityInstance %>;
+        return new ResponseEntity<>(<%= entityInstance %>, HttpStatus.OK);<% } %>
     }
 
     /**
@@ -70,7 +78,7 @@ public class <%= entityClass %>Resource {
             method = RequestMethod.DELETE,
             produces = "application/json")
     @Timed
-    public void delete(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> id, HttpServletResponse response) {
+    public void delete(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> id) {
         log.debug("REST request to delete <%= entityClass %> : {}", id);
         <%= entityInstance %>Repository.delete(id);
     }
