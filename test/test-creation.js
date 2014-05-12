@@ -19,15 +19,182 @@ describe('jhipster generator', function () {
     }.bind(this));
   });
 
-  it('creates expected files', function (done) {
-    var expected = [
-      // add files you expect to exist here.
+  var defaultFiles = [
       '.jshintrc',
-      '.editorconfig'
+      '.editorconfig',
+      'bower.json',
+      'package.json',
+      'pom.xml',
+      '.bowerrc',
+      '.gitignore',
+      'README.md',
+      '.yo-rc.json'
     ];
 
+  var resourceDir = 'src/main/resources/';
+  var testResourceDir = 'src/test/resources/';
+  var webappDir = 'src/main/webapp/';
+  var javaSrcDir = 'src/main/java/';
+  var javaTestDir = 'src/test/java/';
+  var javaPackageDir = javaSrcDir + 'com/mycompany/myapp/';
+
+  it('creates expected files', function (done) {
+
+    var expectedAdditionalFiles = [
+      resourceDir + 'config/liquibase/changelog/db-changelog-001.xml',
+      resourceDir + 'config/liquibase/master.xml',
+      resourceDir + 'config/liquibase/users.csv',
+      resourceDir + 'config/liquibase/authorities.csv',
+      resourceDir + 'config/liquibase/users_authorities.csv',
+      webappDir + 'images/glyphicons-halflings.png', 
+      webappDir + 'images/glyphicons-halflings-white.png', 
+      webappDir + 'styles/bootstrap.css', 
+      webappDir + 'styles/main.css', 
+      webappDir + 'fonts/glyphicons-halflings-regular.eot',
+      webappDir + 'fonts/glyphicons-halflings-regular.svg',
+      webappDir + 'fonts/glyphicons-halflings-regular.ttf',
+      webappDir + 'fonts/glyphicons-halflings-regular.woff'
+    ];
+
+    var expected = defaultFiles.concat(expectedAdditionalFiles);
+
     helpers.mockPrompt(this.app, {
-      'someOption': true
+      'baseName': 'jhipster',
+      'packageName': 'com.mycompany.myapp',
+      'javaVersion': '7',
+      'authenticationType': 'cookie',
+      'databaseType': 'sql',
+      'hibernateCache': 'no',
+      'clusteredHttpSession': 'no',
+      'websocket': 'no',
+      'prodDatabaseType': 'mysql',
+      'devDatabaseType': 'h2Memory',
+      'useCompass': false
+    });
+    this.app.options['skip-install'] = true;
+    this.app.run({}, function () {
+      helpers.assertFiles(expected);
+      done();
+    });
+  });
+
+  it('creates expected files with authenticationType "token"', function (done) {
+
+    var expectedAdditionalFiles = [
+      resourceDir + 'config/liquibase/changelog/db-changelog-001.xml',
+      resourceDir + 'config/liquibase/master.xml',
+      resourceDir + 'config/liquibase/users.csv',
+      resourceDir + 'config/liquibase/authorities.csv',
+      resourceDir + 'config/liquibase/users_authorities.csv',
+      webappDir + 'images/glyphicons-halflings.png', 
+      webappDir + 'images/glyphicons-halflings-white.png', 
+      webappDir + 'styles/bootstrap.css', 
+      webappDir + 'styles/main.css', 
+      webappDir + 'fonts/glyphicons-halflings-regular.eot',
+      webappDir + 'fonts/glyphicons-halflings-regular.svg',
+      webappDir + 'fonts/glyphicons-halflings-regular.ttf',
+      webappDir + 'fonts/glyphicons-halflings-regular.woff',
+      javaPackageDir + 'config/OAuth2ServerConfiguration.java'
+    ];
+
+    var expected = defaultFiles.concat(expectedAdditionalFiles);
+
+    helpers.mockPrompt(this.app, {
+      'baseName': 'jhipster',
+      'packageName': 'com.mycompany.myapp',
+      'javaVersion': '7',
+      'authenticationType': 'token',
+      'databaseType': 'sql',
+      'hibernateCache': 'no',
+      'clusteredHttpSession': 'no',
+      'websocket': 'no',
+      'prodDatabaseType': 'mysql',
+      'devDatabaseType': 'h2Memory',
+      'useCompass': false
+    });
+    this.app.options['skip-install'] = true;
+    this.app.run({}, function () {
+      helpers.assertFiles(expected);
+      done();
+    });
+  });
+
+  it('creates expected files with hibernateCache "ehcache"', function (done) {
+
+    var expectedAdditionalFiles = [
+      resourceDir + 'config/liquibase/changelog/db-changelog-001.xml',
+      resourceDir + 'config/liquibase/master.xml',
+      resourceDir + 'config/liquibase/users.csv',
+      resourceDir + 'config/liquibase/authorities.csv',
+      resourceDir + 'config/liquibase/users_authorities.csv',
+      webappDir + 'images/glyphicons-halflings.png',
+      webappDir + 'images/glyphicons-halflings-white.png',
+      webappDir + 'styles/bootstrap.css',
+      webappDir + 'styles/main.css',
+      webappDir + 'fonts/glyphicons-halflings-regular.eot',
+      webappDir + 'fonts/glyphicons-halflings-regular.svg',
+      webappDir + 'fonts/glyphicons-halflings-regular.ttf',
+      webappDir + 'fonts/glyphicons-halflings-regular.woff',
+      resourceDir + 'ehcache.xml',
+      testResourceDir + 'ehcache.xml'
+    ];
+
+    var expected = defaultFiles.concat(expectedAdditionalFiles);
+
+    helpers.mockPrompt(this.app, {
+      'baseName': 'jhipster',
+      'packageName': 'com.mycompany.myapp',
+      'javaVersion': '7',
+      'authenticationType': 'token',
+      'databaseType': 'sql',
+      'hibernateCache': 'ehcache',
+      'clusteredHttpSession': 'no',
+      'websocket': 'no',
+      'prodDatabaseType': 'mysql',
+      'devDatabaseType': 'h2Memory',
+      'useCompass': false
+    });
+    this.app.options['skip-install'] = true;
+    this.app.run({}, function () {
+      helpers.assertFiles(expected);
+      done();
+    });
+  });
+
+  it('creates expected files with hibernateCache "hazelcast"', function (done) {
+
+    var expectedAdditionalFiles = [
+      resourceDir + 'config/liquibase/changelog/db-changelog-001.xml',
+      resourceDir + 'config/liquibase/master.xml',
+      resourceDir + 'config/liquibase/users.csv',
+      resourceDir + 'config/liquibase/authorities.csv',
+      resourceDir + 'config/liquibase/users_authorities.csv',
+      webappDir + 'images/glyphicons-halflings.png',
+      webappDir + 'images/glyphicons-halflings-white.png',
+      webappDir + 'styles/bootstrap.css',
+      webappDir + 'styles/main.css',
+      webappDir + 'fonts/glyphicons-halflings-regular.eot',
+      webappDir + 'fonts/glyphicons-halflings-regular.svg',
+      webappDir + 'fonts/glyphicons-halflings-regular.ttf',
+      webappDir + 'fonts/glyphicons-halflings-regular.woff',
+      javaPackageDir + 'config/hazelcast/HazelcastCacheRegionFactory.java',
+      javaPackageDir + 'config/hazelcast/package-info.java'
+    ];
+
+    var expected = defaultFiles.concat(expectedAdditionalFiles);
+
+    helpers.mockPrompt(this.app, {
+      'baseName': 'jhipster',
+      'packageName': 'com.mycompany.myapp',
+      'javaVersion': '7',
+      'authenticationType': 'token',
+      'databaseType': 'sql',
+      'hibernateCache': 'hazelcast',
+      'clusteredHttpSession': 'no',
+      'websocket': 'no',
+      'prodDatabaseType': 'mysql',
+      'devDatabaseType': 'h2Memory',
+      'useCompass': false
     });
     this.app.options['skip-install'] = true;
     this.app.run({}, function () {

@@ -38,7 +38,7 @@ public class UserDetailsService implements org.springframework.security.core.use
             throw new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database");
         }
 
-        Collection<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
+        Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         for (Authority authority : userFromDatabase.getAuthorities()) {
             GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(authority.getName());
             grantedAuthorities.add(grantedAuthority);

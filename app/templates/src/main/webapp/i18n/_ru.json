@@ -1,0 +1,278 @@
+{
+    "global": {
+        "title": "JHipster",
+        "browsehappy": "Ваш браузер <strong>устарел</strong>. Пожалуйста <a href=\"http://browsehappy.com/?locale=en\">обновите ваш браузер</a>.",
+        "menu": {
+            "home": "Главная",
+            "account": {
+                "main": "Профиль",
+                "settings": "Настройки",
+                "password": "Пароль",
+                "sessions": "Сессии",
+                "tracker": "Трекер польз.",
+                "metrics": "Метрики",
+                "logs": "Логи",
+                "audits": "Аудит",
+                "login": "Authenticate",
+                "logout": "Выйти",
+                "apidocs": "API"
+            },
+            "admin": "Администрирование",
+            "language": "Язык"
+        },
+        "language": {
+            "da": "Датский",
+            "en": "Английский",
+            "fr": "Французский",
+            "de": "Немецкий",
+            "pl": "Польский",
+            "ru": "Русский"
+        }
+    },
+    "main": {
+        "title": "Добро пожаловать, Java Hipster!",
+        "subtitle": "Это ваша домашняя страница",
+        "logged": {
+            "message": "Вы вошли как пользователь \"{{username}}\".",
+            "authenticated": "Если вы хотите <a href=\"#/login\">авторизироваться</a>, вы можете попробовать аккаунты поумолчанию:<br/>- Администратор (логин=\"admin\" и пароль=\"admin\") <br/>- Пользователь (логин=\"user\" и пароль=\"user\")."
+        },
+        "question": "Если у Вас возникли вопросы по JHipster:",
+        "link": {
+            "homepage": "JHipster домашняя страница",
+            "stackoverflow": "JHipster на Stack Overflow",
+            "bugtracker": "JHipster баг трекер",
+            "contact": "пользователь @java_hipster в Twitter"
+        },
+        "like": "Если вам нравится JHipster, не забудьте дать нам звёздочку на",
+        "github": "Github"
+    },
+    "login": {
+        "title": "Авторизация",
+        "form": {
+            "username": "Логин",
+            "username.placeholder": "Ваш логин",
+            "password": "Пароль",
+            "password.placeholder": "Ваш пароль",
+            "rememberme": "Входить автоматический",
+            "button": "Войти"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Не удалось войти!</strong> Пожалуйста, проверьте ваши учетные данные и попробуйте еще раз."
+            }
+        }
+    },
+    "settings": {
+        "title": "Настройки пользователя для [<b>{{username}}</b>]",
+        "form": {
+            "firstname": "Имя",
+            "firstname.placeholder": "Ваше имя",
+            "lastname": "Фамилия",
+            "lastname.placeholder": "Ваша фамилия",
+            "email": "E-mail",
+            "email.placeholder": "Ваш e-mail",
+            "button": "Сохранить"
+        },
+        "messages": {
+            "error": "<strong>Произошла ошибка!</strong> Настройки не могут быть сохранены.",
+            "success": "<strong>Настройки сохранены!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "Имя должно быть указано.",
+                    "minlength": "Длина имени должна быть хотя-бы 1 символ",
+                    "maxlength": "Имя не может быть длиннее чем 50 символов"
+                },
+                "lastname": {
+                    "required": "Фамилия должна быть указана.",
+                    "minlength": "Длина фамилии должна быть хотя-бы 1 символ",
+                    "maxlength": "Фамилия не может быть длиннее чем 50 символов"
+                },
+                "email": {
+                    "required": "E-mail должен быть указан.",
+                    "invalid": "E-mail не верен.",
+                    "minlength": "Длина e-mail должна быть хотя-бы 1 символ",
+                    "maxlength": "E-mail не может быть длиннее чем 50 символов"
+                }
+            }
+        }
+    },
+    "password": {
+        "title": "Пароль для [<b>{{username}}</b>]",
+        "form": {
+            "newpassword": "Новый пароль",
+            "newpassword.placeholder": "Новый пароль",
+            "confirmpassword": "Подтверждение нового пароля",
+            "confirmpassword.placeholder": "Подтвердите новый пароль",
+            "button": "Сохранить"
+        },
+        "messages": {
+            "error": {
+                "global": "<strong>Произошла ошибка!</strong> Не удалось изменить пароль.",
+                "dontmatch" : "Пароль и его подтверждение не совпадают!"
+            },
+            "success": "<strong>Пароль изменен!</strong>",
+            "validate": {
+                "newpassword": {
+                    "required": "Пароль должен быть указан.",
+                    "minlength": "Длина пароля должна быть хотя-бы 5 символов",
+                    "maxlength": "Пароль не может быть длиннее чем 50 символов",
+                    "strength": "Сложность пароля:"
+                },
+                "confirmpassword": {
+                    "required": "подтверждение пароля должно быть указано.",
+                    "minlength": "Длина подтверждения пароля должна быть хотя-бы 5 символов",
+                    "maxlength": "Подтверждение пароля не может быть больше чем 50 символов"
+                }
+            }
+        }
+    },
+    "sessions": {
+        "title": "Активные сессии для [<b>{{username}}</b>]",
+        "table": {
+            "ipaddress": "IP адрес",
+            "useragent": "User Agent",
+            "date": "Дата",
+            "button": "Завершить"
+        },
+        "messages": {
+            "success": "<strong>Сессия истекла!</strong>",
+            "error": "<strong>Произошла ошибка!</strong> Сессия не может быть завершена."
+        }
+
+    },
+    "tracker": {
+        "title": "Активность пользователей в реальном времени",
+        "table": {
+            "userlogin": "Пользователь",
+            "ipaddress": "IP Адрес",
+            "userAgent": "User agent",
+            "page": "Текущая страница",
+            "time": "Время"
+        }
+    },
+    "metrics": {
+        "title": "Метрики приложения",
+        "refresh.button": "Обновить",
+        "health": {
+            "title": "Состояние",
+            "database": "База данных: ",
+            "email": "Email: ",
+            "stacktrace": "Stacktrace"
+        },
+        "jvm": {
+            "title": "JVM Метрики",
+            "memory": {
+                "title": "Память",
+                "total": "Всего памяти",
+                "heap": "Куча",
+                "nonheap": "Не куча"
+            },
+            "threads": {
+                "title": "Потоки",
+                "all": "Все",
+                "runnable": "Активные",
+                "timedwaiting": "Временное ожидание",
+                "waiting": "Ожидание",
+                "blocked": "Заблокированные",
+                "dump": {
+                    "title": "Дамп потоков",
+                    "id": "Id: ",
+                    "blockedtime": "Заблокированные Время",
+                    "blockedcount": "Заблокированные Количество",
+                    "waitedtime": "Ожидающие Время",
+                    "waitedcount": "Ожидающие Количество",
+                    "lockname": "Название блокировки",
+                    "stacktrace": "Stacktrace",
+                    "show": "Показать",
+                    "hide": "Скрыть"
+                }
+            },
+            "gc": {
+                "title": "Сборщики мусора",
+                "marksweepcount": "Mark Sweep количество",
+                "marksweeptime": "Mark Sweep время",
+                "scavengecount": "Сборка мусора количество",
+                "scavengetime": "Сборка мусора время"
+            },
+            "http": {
+                "title": "HTTP запросы (событий в секунду)",
+                "active": "Активные запросы:",
+                "total": "Всего запросов:",
+                "table": {
+                    "code": "Код",
+                    "count": "Количество",
+                    "mean": "Среднее",
+                    "average": "Среднее"
+                },
+                "code": {
+                    "ok": "Ок",
+                    "notfound": "Не найдено",
+                    "servererror": "Ошибка сервера"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Статистика сервисов (время в милисекундах)",
+            "table": {
+                "name": "Название сервиса",
+                "count": "Количество",
+                "mean": "Среднее",
+                "min": "Мин",
+                "max": "Макс",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "ehcache": {
+            "title": "Ehcache статистика",
+            "cachename": "Название кеша",
+            "objects": "Объектов",
+            "hits": "Попаданий",
+            "misses": "Промахов",
+            "evictioncount": "Количество очисток",
+            "mean": "Среднее по времени (мс)"
+        }
+    },
+    "logs": {
+        "title": "Логи",
+        "nbloggers": "Есть {{ total }} логгеров.",
+        "filter": "Фильтр",
+        "table": {
+            "name": "Название",
+            "level": "Уровень"
+        }
+    },
+    "audits": {
+        "title": "Аудит",
+        "filter": {
+            "title": "Фильтр по дате",
+            "from": "от",
+            "to": "до",
+            "button": {
+                "weeks": "Недель",
+                "today": "сегодня",
+                "clear": "очистить",
+                "close": "закрыть"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Пользователь",
+                "date": "Дата",
+                "status": "Состояние",
+                "data": "Доп. инф."
+            },
+            "data": {
+                "remoteAddress": "Удалённый адрес:"
+            }
+        }
+
+    },
+    "errors": {
+        "title": "Ошибка!",
+        "403": "Вы не авторизованы для доступа к странице"
+    },
+    "footer": "Это ваш футтер"
+}

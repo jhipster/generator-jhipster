@@ -75,13 +75,13 @@ public class AccountResource {
             .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else { %>
         User user = userService.getUserWithAuthorities();
         if (user == null) {
-			return new ResponseEntity<UserDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         List<String> roles = new ArrayList<>();
         for (Authority authority : user.getAuthorities()) {
             roles.add(authority.getName());
         }
-        return new ResponseEntity<UserDTO>(
+        return new ResponseEntity<>(
             new UserDTO(
                 user.getLogin(),
                 user.getFirstName(),
@@ -109,7 +109,7 @@ public class AccountResource {
             method = RequestMethod.POST,
             produces = "application/json")
     @Timed
-    public ResponseEntity changePassword(@RequestBody String password) {
+    public ResponseEntity<?> changePassword(@RequestBody String password) {
         if (StringUtils.isEmpty(password)) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
@@ -132,9 +132,9 @@ public class AccountResource {
             .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else { %>
         User user = userRepository.findOne(SecurityUtils.getCurrentLogin());
         if (user == null) {
-            return new ResponseEntity<List<PersistentToken>>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<List<PersistentToken>>(
+        return new ResponseEntity<>(
             persistentTokenRepository.findByUser(user),
             HttpStatus.OK);<% } %>
     }
