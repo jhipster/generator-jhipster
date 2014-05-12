@@ -1,6 +1,6 @@
 {
     "global": {
-        "title": "<%= baseName %>",
+        "title": "jhipster",
         "browsehappy": "Vous utilisez un <strong>ancien</strong> navigateur. Veuillez <a href=\"http://browsehappy.com/?locale=fr\">mettre à jour votre navigateur</a> pour une meilleure expérience.",
         "menu": {
             "home": "Accueil",
@@ -15,7 +15,8 @@
                 "audits": "Audits",
                 "login": "S'authentifier",
                 "logout": "Déconnexion",
-                "apidocs": "API"
+                "apidocs": "API",
+                "register": "Register"
             },
             "admin": "Administration",
             "language": "Langue"
@@ -27,17 +28,51 @@
             "de": "Allemand",
             "pl": "Polonais",
             "pl": "Russe"
+        },
+        "form": {
+            "username": "Nom d'utilisateur",
+            "username.placeholder": "Votre nom d'utilisateur",
+            "newpassword": "Nouveau mot de passe",
+            "newpassword.placeholder": "Nouveau mot de passe",
+            "confirmpassword": "Confirmation du nouveau mot de passe",
+            "confirmpassword.placeholder": "Confirmation du nouveau mot de passe",
+            "email": "Email",
+            "email.placeholder": "Votre email"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Si vous voulez vous <a href=\"#/login\">connecter</a>, vous pouvez utiliser les comptes par défaut : <br/> - Administrateur (nom d'utilisateur=\"admin\" et mot de passe =\"admin\") <br/> - Utilisateur (nom d'utilisateur=\"user\" et mot de passe =\"user\").",
+                "register": "Don't have an account? <a href=\"#/register\">Register</a>"
+            },
+            "error": {
+                "dontmatch": "Le nouveau mot de passe et sa confirmation ne sont pas égaux!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Votre mot de passe est requis.",
+                    "minlength": "Votre mot de passe doit comporter au moins 5 caractères",
+                    "maxlength": "Votre mot de passe ne doit pas comporter plus de 50 caractères",
+                    "strength": "Robustesse du mot de passe:"
+                },
+                "confirmpassword": {
+                    "required": "Votre confirmation du mot de passe est requis.",
+                    "minlength": "Votre confirmation du mot de passe doit comporter au moins 5 caractères",
+                    "maxlength": "Votre confirmation du mot de passe ne doit pas comporter plus de 50 caractères"
+                },
+                "email": {
+                    "required": "Votre email est requis.",
+                    "minlength": "Votre email doit comporter au moins un caractère",
+                    "maxlength": "Votre email ne doit pas comporter plus de 50 caractères",
+                    "invalid": "Votre email n'est pas valide."
+                }
+            }
         }
-    },
-    "index": {
-        "title": "index"
     },
     "main": {
         "title": "Bienvenue, Java Hipster !",
         "subtitle": "Ceci est votre page d'accueil",
         "logged": {
-            "message": "Vous êtes connecté en tant que \"{{username}}\".",
-            "authenticated": "Si vous voulez vous <a href=\"#/login\">connecter</a>, vous pouvez utiliser les comptes par défaut : <br/> - Administrateur (nom d'utilisateur=\"admin\" et mot de passe =\"admin\") <br/> - Utilisateur (nom d'utilisateur=\"user\" et mot de passe =\"user\")."
+            "message": "Vous êtes connecté en tant que \"{{username}}\"."
         },
         "question": "Si vous avez des questions à propos de JHipster:",
         "link": {
@@ -49,11 +84,36 @@
         "like": "Si vous aimez JHipster, donnez nous une étoile sur",
         "github": "Github"
     },
+    "activate": {
+        "title": "Activation",
+        "messages": {
+            "success": "<strong>Your user has been activated.</strong> Please <a href=\"#/login\">authenticate</a>.",
+            "error": "<strong>Your user could not be activated.</strong> Please use the registration form to sign up."
+        }
+    },
+    "register": {
+        "title": "Registration",
+        "form": {
+            "button": "Register"
+        },
+        "messages": {
+            "validate": {
+                "login": {
+                    "required": "Your login is required.",
+                    "minlength": "Your login is required to be at least 1 character",
+                    "maxlength": "Your login cannot be longer than 50 characters"
+                }
+            },
+            "success": "<strong>Registration saved!</strong> Please check your email for confirmation.",
+            "error": {
+                "fail": "<strong>Registration failed!</strong> Please try again later.",
+                "userexists": "<strong>Login name already registered!</strong> Please choose another one."
+            }
+        }
+    },
     "login": {
         "title": "Authentification",
         "form": {
-            "username": "Nom d'utilisateur",
-            "username.placeholder": "Votre nom d'utilisateur",
             "password": "Mot de passe",
             "password.placeholder": "Votre mot de passe",
             "rememberme": "Garder la session ouverte",
@@ -72,11 +132,9 @@
             "firstname.placeholder": "Votre prénom",
             "lastname": "Nom",
             "lastname.placeholder": "Votre nom",
-            "email": "Email",
-            "email.placeholder": "Votre email",
             "button": "Sauvegarder"
         },
-        "messages" : {
+        "messages": {
             "error": "<strong>Une erreur est survenue!</strong> Votre profil ne peut pas être sauvegardé.",
             "success": "<strong>Votre profil a été sauvegardé!</strong>",
             "validate": {
@@ -89,12 +147,6 @@
                     "required": "Votre nom est requis.",
                     "minlength": "Votre nom doit comporter au moins un caractère",
                     "maxlength": "Votre nom ne doit pas comporter plus de 50 caractères"
-                },
-                "email": {
-                    "required": "Votre email est requis.",
-                    "minlength": "Votre email doit comporter au moins un caractère",
-                    "maxlength": "Votre email ne doit pas comporter plus de 50 caractères",
-                    "invalid": "Votre email n'est pas valide."
                 }
             }
         }
@@ -102,31 +154,11 @@
     "password": {
         "title": "Changer le mot de passe pour [<b>{{username}}</b>]",
         "form": {
-            "newpassword": "Nouveau mot de passe",
-            "newpassword.placeholder": "Nouveau mot de passe",
-            "confirmpassword": "Confirmation du nouveau mot de passe",
-            "confirmpassword.placeholder": "Confirmation du nouveau mot de passe",
             "button": "Sauvegarder"
         },
         "messages": {
-            "error": {
-                "global": "<strong>Une erreur est survenue!</strong> Le mot de passe n'a pas pu être modifié.",
-                "dontmatch" : "Le nouveau mot de passe et sa confirmation ne sont pas égaux!"
-            },
-            "success": "<strong>La mot de passe a été modifié!</strong>",
-            "validate": {
-                "newpassword": {
-                    "required": "Votre mot de passe est requis.",
-                    "minlength": "Votre mot de passe doit comporter au moins 5 caractères",
-                    "maxlength": "Votre mot de passe ne doit pas comporter plus de 50 caractères",
-                    "strength": "Robustesse du mot de passe:"
-                },
-                "confirmpassword": {
-                    "required": "Votre confirmation du mot de passe est requis.",
-                    "minlength": "Votre confirmation du mot de passe doit comporter au moins 5 caractères",
-                    "maxlength": "Votre confirmation du mot de passe ne doit pas comporter plus de 50 caractères"
-                }
-            }
+            "error": "<strong>Une erreur est survenue!</strong> Le mot de passe n'a pas pu être modifié.",
+            "success": "<strong>La mot de passe a été modifié!</strong>"
         }
     },
     "sessions": {

@@ -20,6 +20,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;<% } %><% if (databaseType == 'sql') { %>
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -31,7 +32,8 @@ import javax.inject.Inject;<% } %>
 
 @Configuration<% if (databaseType == 'sql') { %>
 @EnableJpaRepositories("<%=packageName%>.repository")
-@EnableTransactionManagement<% } %><% if (databaseType == 'nosql') { %>
+@EnableTransactionManagement
+@EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")<% } %><% if (databaseType == 'nosql') { %>
 @EnableMongoRepositories("<%=packageName%>.repository")
 @Import(value = MongoAutoConfiguration.class)<% } %>
 public class DatabaseConfiguration implements EnvironmentAware {

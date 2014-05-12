@@ -25,7 +25,7 @@ public class LoggingAspect {
     @Inject
     private Environment env;
 
-    @Pointcut("within(<%=packageName%>.repository..*) || within(<%=packageName%>.service..*)")
+    @Pointcut("within(<%=packageName%>.repository..*) || within(<%=packageName%>.service..*) || within(com.generic.app.web.rest..*)")
     public void loggingPoincut() {}
 
     @AfterThrowing(pointcut = "loggingPoincut()", throwing = "e")

@@ -4,6 +4,9 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
+    <property name="now" value="now()" dbms="mysql,h2"/>
+    <property name="now" value="SYSDATE" dbms="postgresql"/>
+
     <!-- JHipster core -->
     <changeSet id="1" author="jhipster">
         <createTable tableName="T_USER">
@@ -14,6 +17,19 @@
             <column name="first_name" type="varchar(50)"/>
             <column name="last_name" type="varchar(50)"/>
             <column name="email" type="varchar(100)"/>
+            <column name="activated" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lang_key" type="varchar(5)"/>
+            <column name="activation_key" type="varchar(20)"/>
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
         </createTable>
 
         <createTable tableName="T_AUTHORITY">
@@ -92,7 +108,7 @@
     <!-- Manage the new Springboot actuator Audit event -->
     <changeSet id="2" author="jhipster">
         <createTable tableName="T_PERSISTENT_AUDIT_EVENT">
-            <column name="event_id" type="bigint" >
+            <column name="event_id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="principal" type="varchar(50)"/>

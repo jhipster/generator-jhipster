@@ -1,5 +1,6 @@
 package <%=packageName%>.security;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,11 +21,18 @@ public final class SecurityUtils {
      */
     public static String getCurrentLogin() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
-        UserDetails springSecurityUser =
-                (UserDetails) securityContext
-                        .getAuthentication().getPrincipal();
+        Authentication authentication = securityContext.getAuthentication();
+        UserDetails springSecurityUser = null;
+        String userName = null;
 
-        return springSecurityUser.getUsername();
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            springSecurityUser = (UserDetails) authentication.getPrincipal();
+            userName = springSecurityUser.getUsername();
+        } else if (authentication.getPrincipal() instanceof String) {
+            userName = (String) authentication.getPrincipal();
+        }
+
+        return userName;
     }
 
     /**

@@ -1,14 +1,21 @@
 package <%=packageName%>.config;
 
+import org.apache.commons.lang.CharEncoding;
+import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.EnvironmentAware;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.ui.velocity.VelocityEngineFactoryBean;
 
+import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.util.Properties;
 
 @Configuration
@@ -70,4 +77,38 @@ public class MailConfiguration implements EnvironmentAware {
         sender.setJavaMailProperties(sendProperties);
         return sender;
     }
+
+    @Bean
+    public VelocityEngine velocityEngine() throws IOException {
+        log.debug("Starting Velocity Engine");
+        VelocityEngineFactoryBean factory = new VelocityEngineFactoryBean();
+        Properties props = new Properties();
+
+        props.put("resource.loader", "class");
+        props.put("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+
+        // necessary to get logs on templates's error
+        props.put("runtime.log.logsystem.class", "org.apache.velocity.runtime.log.Log4JLogChute");
+        props.put("runtime.log.error.stacktrace", "true");
+        props.put("runtime.log.warn.stacktrace", "true");
+        props.put("runtime.log.info.stacktrace", "true");
+        props.put("runtime.log.invalid.reference", "true");
+        // TODO : FileResourceLoader could be used to externalize templates
+
+        // enable relative includes
+        props.put("eventhandler.include.class", "org.apache.velocity.app.event.implement.IncludeRelativePath");
+
+        factory.setVelocityProperties(props);
+        return factory.createVelocityEngine();
+    }
+
+    @Bean
+    public MessageSource mailMessageSource() {
+        log.info("loading non-reloadable mail messages resources");
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasename("classpath:/mails/messages/messages");
+        messageSource.setDefaultEncoding(CharEncoding.UTF_8);
+        return messageSource;
+    }
+
 }

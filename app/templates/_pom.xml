@@ -135,6 +135,7 @@
         <postgresql.version>9.3-1100-jdbc41</postgresql.version><% } %><% if (databaseType == 'sql') { %>
         <liquibase-slf4j.version>1.2.1</liquibase-slf4j.version><% } %>
         <swagger-springmvc.version>0.8.2</swagger-springmvc.version>
+        <velocity.version>1.7</velocity.version>
     </properties>
 
     <repositories>
@@ -445,6 +446,11 @@
             <artifactId>swagger-springmvc</artifactId>
             <version><%= _.unescape('\${swagger-springmvc.version}')%></version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version><%= _.unescape('\${velocity.version}')%></version>
+        </dependency>
 
         <!-- Database dependencies-->
         <% if (devDatabaseType == 'mysql' || prodDatabaseType == 'mysql') { %><dependency>
@@ -671,7 +677,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <execute />
+                                        <execute/>
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -686,7 +692,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <execute />
+                                        <execute/>
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>

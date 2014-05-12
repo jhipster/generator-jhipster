@@ -3,10 +3,35 @@
         <script>
             db.T_USER.insert(
             {
+                "_id" : "system", "password" : "b8f57d6d6ec0a60dfe2e20182d4615b12e321cad9e2979e0b9f81e0d6eda78ad9b6dcfe53e4e22d1",
+                "first_name": "",
+                "last_name": "System",
+                "email": "",
+                activated: "true",
+                lang_key: "en",
+                created_by: "system",
+                "authorities": [{"_id": "ROLE_ADMIN"}, {"_id": "ROLE_USER"}]
+            });
+            db.T_USER.insert(
+            {
+                "_id" : "anonymousUser", "password" : "4f54479f8290dfd503b72a654faf5d70593eab443993d87a79e14e5f7cda3eb7988423aa99090c9b",
+                "first_name": "Anonymous",
+                "last_name": "User",
+                "email": "",
+                activated: "true",
+                lang_key: "en",
+                created_by: "system",
+                "authorities": []
+            });
+            db.T_USER.insert(
+            {
                 "_id" : "admin", "password" : "b8f57d6d6ec0a60dfe2e20182d4615b12e321cad9e2979e0b9f81e0d6eda78ad9b6dcfe53e4e22d1",
                 "first_name": "",
                 "last_name": "Administrator",
                 "email": "",
+                activated: "true",
+                lang_key: "en",
+                created_by: "system",
                 "authorities": [{"_id": "ROLE_ADMIN"}, {"_id": "ROLE_USER"}]
             });
             db.T_USER.insert(
@@ -15,6 +40,9 @@
                 "first_name": "",
                 "last_name": "User",
                 "email": "",
+                activated: "true",
+                lang_key: "en",
+                created_by: "system",
                 "authorities": [{"_id": "ROLE_USER"}]
             });
         </script>

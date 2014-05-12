@@ -10,6 +10,20 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
     .config(['$routeProvider', '$httpProvider', '$translateProvider',  'tmhDynamicLocaleProvider', 'USER_ROLES',
         function ($routeProvider, $httpProvider, $translateProvider, tmhDynamicLocaleProvider, USER_ROLES) {
             $routeProvider
+                .when('/register', {
+                    templateUrl: 'views/register.html',
+                    controller: 'RegisterController',
+                    access: {
+                        authorizedRoles: [USER_ROLES.all]
+                    }
+                })
+                .when('/activate', {
+                    templateUrl: 'views/activate.html',
+                    controller: 'ActivationController',
+                    access: {
+                        authorizedRoles: [USER_ROLES.all]
+                    }
+                })
                 .when('/login', {
                     templateUrl: 'views/login.html',
                     controller: 'LoginController',
@@ -138,7 +152,8 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                 $rootScope.$on('event:auth-loginRequired', function(rejection) {
                     Session.invalidate();
                     $rootScope.authenticated = false;
-                    if ($location.path() !== "/" && $location.path() !== "") {
+                    if ($location.path() !== "/" && $location.path() !== "" && $location.path() !== "/register" &&
+                            $location.path() !== "/activate") {
                         $location.path('/login').replace();
                     }
                 });

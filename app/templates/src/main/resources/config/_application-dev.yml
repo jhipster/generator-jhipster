@@ -35,6 +35,9 @@ spring:
             hibernate.cache.use_minimal_puts: true
             hibernate.cache.hazelcast.use_lite_member: true<% } %><% } %>
 
+    mail:
+        baseUrl: http://localhost:8080
+
     thymeleaf:
         mode: XHTML
         cache: false

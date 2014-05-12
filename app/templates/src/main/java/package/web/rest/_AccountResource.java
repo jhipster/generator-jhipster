@@ -7,6 +7,7 @@ import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.PersistentTokenRepository;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.SecurityUtils;
+import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.UserService;
 import <%=packageName%>.web.rest.dto.UserDTO;
 import org.apache.commons.lang.StringUtils;
@@ -43,6 +44,42 @@ public class AccountResource {
     @Inject
     private PersistentTokenRepository persistentTokenRepository;
 
+    @Inject
+    private MailService mailService;
+
+    /**
+     * POST  /rest/register -> register the user.
+     */
+    @RequestMapping(value = "/rest/register",
+            method = RequestMethod.POST,
+            produces = "application/json")
+    @Timed
+    public ResponseEntity<?> registerAccount(@RequestBody UserDTO userDTO) {
+        User user = userRepository.findOne(userDTO.getLogin());
+        if (user != null) {
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        } else {
+            user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(), userDTO.getFirstName(),
+                    userDTO.getLastName(), userDTO.getEmail().toLowerCase(), userDTO.getLangKey());
+            mailService.sendActivationEmail(user);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
+    }
+    /**
+     * GET  /rest/account -> get the current user.
+     */
+    @RequestMapping(value = "/rest/activate",
+            method = RequestMethod.GET,
+            produces = "application/json")
+    @Timed
+    public ResponseEntity<String> activateAccount(@RequestParam(value = "key") String key) {
+        User user = userService.activateRegistration(key);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<String>(user.getLogin(), HttpStatus.OK);
+    }
+
     /**
      * GET  /rest/authenticate -> check if the user is authenticated, and return its login.
      */
@@ -67,9 +104,11 @@ public class AccountResource {
             .map(user -> new ResponseEntity<>(
                 new UserDTO(
                     user.getLogin(),
+                    user.getPassword(),
                     user.getFirstName(),
                     user.getLastName(),
                     user.getEmail(),
+                    user.getLangKey(),
                     user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toList())),
                 HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else { %>
@@ -84,9 +123,11 @@ public class AccountResource {
         return new ResponseEntity<>(
             new UserDTO(
                 user.getLogin(),
+                user.getPassword(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
+                user.getLangKey(),
                 roles),
             HttpStatus.OK);<% } %>
     }
