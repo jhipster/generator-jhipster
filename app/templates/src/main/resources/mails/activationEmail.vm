@@ -1,0 +1,11 @@
+#parse("./common.vm")
+#msg("activation.greeting") ${user.Login},
+
+#msg("activation.text1")
+
+${activationUrl}
+
+#msg("activation.text2")
+
+#msg("email.signature")
+
