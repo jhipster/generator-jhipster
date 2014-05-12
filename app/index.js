@@ -334,6 +334,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('_README.md', 'README.md');
     this.template('bowerrc', '.bowerrc');
     this.copy('gitignore', '.gitignore');
+    this.copy('gitattributes', '.gitattributes');
     
     switch(this.frontendBuilder) {
         case 'gulp':
@@ -613,7 +614,6 @@ JhipsterGenerator.prototype.app = function app() {
 
     var indexScripts = [
         'bower_components/modernizr/modernizr.js',
-
         'bower_components/jquery/jquery.js',
         'bower_components/angular/angular.js',
         'bower_components/angular-route/angular-route.js',
