@@ -1,7 +1,7 @@
 package <%=packageName%>.domain;
 
-import org.hibernate.annotations.Type;
-import org.hibernate.envers.Audited;
+<% if (databaseType == 'sql') { %>import org.hibernate.annotations.Type;
+import org.hibernate.envers.Audited;<% } %>
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -31,14 +31,15 @@ import javax.validation.constraints.NotNull;
 @EntityListeners(AuditingEntityListener.class)<% } %>
 public abstract class AbstractAuditingEntity {
 
-    @CreatedBy<% if (databaseType == 'sql') { %>
+    @CreatedBy
+    @NotNull<% if (databaseType == 'sql') { %>
     @Column(name = "created_by")<% } %><% if (databaseType == 'nosql') { %>
     @Field("created_by")<% } %>
     private String createdBy;
 
     @CreatedDate
-    @NotNull
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")<% if (databaseType == 'sql') { %>
+    @NotNull<% if (databaseType == 'sql') { %>
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(name = "created_date")<% } %><% if (databaseType == 'nosql') { %>
     @Field("created_date")<% } %>
     private DateTime createdDate = DateTime.now();
@@ -48,8 +49,8 @@ public abstract class AbstractAuditingEntity {
     @Field("last_modified_by")<% } %>
     private String lastModifiedBy;
 
-    @LastModifiedDate
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")<% if (databaseType == 'sql') { %>
+    @LastModifiedDate<% if (databaseType == 'sql') { %>
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(name = "last_modified_date")<% } %><% if (databaseType == 'nosql') { %>
     @Field("last_modified_date  ")<% } %>
     private DateTime lastModifiedDate = DateTime.now();

@@ -4,7 +4,8 @@ import <%=packageName%>.domain.User;
 import org.joda.time.LocalDate;<% if (databaseType == 'sql') { %>
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;<% } %><% if (databaseType == 'nosql') { %>
-import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;<% } %>
 
 import java.util.List;
 

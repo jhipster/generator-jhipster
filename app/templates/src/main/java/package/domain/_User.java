@@ -47,8 +47,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private String email;
 
     @NotNull
-    @Column(name="activated")
-    private Boolean activated=false;
+    private Boolean activated = false;
 
     @Size(min = 2, max = 5)<% if (databaseType == 'sql') { %>
     @Column(name = "lang_key")<% } %><% if (databaseType == 'nosql') { %>
