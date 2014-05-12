@@ -12,17 +12,17 @@ import <%=packageName%>.web.rest.dto.UserDTO;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.ArrayList;
+import java.net.URLDecoder;<% if (javaVersion != '8') { %>
+import java.util.ArrayList;<% } %>
 import java.util.List;<% if (javaVersion == '8') { %>
+import java.util.Optional;
 import java.util.stream.Collectors;<% } %>
 
 /**
@@ -62,20 +62,33 @@ public class AccountResource {
             method = RequestMethod.GET,
             produces = "application/json")
     @Timed
-    public UserDTO getAccount(HttpServletResponse response) {
+    public ResponseEntity<UserDTO> getAccount() {<% if (javaVersion == '8') { %>
+        return Optional.ofNullable(userService.getUserWithAuthorities())
+            .map(user -> new ResponseEntity<>(
+                new UserDTO(
+                    user.getLogin(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toList())),
+                HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else { %>
         User user = userService.getUserWithAuthorities();
         if (user == null) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            return null;
-        }<% if (javaVersion == '8') { %>
-		List<String> roles = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toList());<% } else { %>
-		List<String> roles = new ArrayList<>();
-		for (Authority authority : user.getAuthorities()) {
-		    roles.add(authority.getName());
-		}<% } %>
-
-        return new UserDTO(user.getLogin(), user.getFirstName(), user.getLastName(),
-                user.getEmail(), roles);
+			return new ResponseEntity<UserDTO>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        List<String> roles = new ArrayList<>();
+        for (Authority authority : user.getAuthorities()) {
+            roles.add(authority.getName());
+        }
+        return new ResponseEntity<UserDTO>(
+            new UserDTO(
+                user.getLogin(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                roles),
+            HttpStatus.OK);<% } %>
     }
 
     /**
@@ -85,7 +98,7 @@ public class AccountResource {
             method = RequestMethod.POST,
             produces = "application/json")
     @Timed
-    public void saveAccount(@RequestBody UserDTO userDTO) throws IOException {
+    public void saveAccount(@RequestBody UserDTO userDTO) {
         userService.updateUserInformation(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail());
     }
 
@@ -96,12 +109,12 @@ public class AccountResource {
             method = RequestMethod.POST,
             produces = "application/json")
     @Timed
-    public void changePassword(@RequestBody String password, HttpServletResponse response) throws IOException {
-        if (password == null || password.equals("")) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Password should not be empty");
-        } else {
-            userService.changePassword(password);
+    public ResponseEntity changePassword(@RequestBody String password) {
+        if (StringUtils.isEmpty(password)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
+        userService.changePassword(password);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
@@ -111,12 +124,19 @@ public class AccountResource {
             method = RequestMethod.GET,
             produces = "application/json")
     @Timed
-    public List<PersistentToken> getCurrentSessions(HttpServletResponse response) {
+    public ResponseEntity<List<PersistentToken>> getCurrentSessions() {<% if (javaVersion == '8') { %>
+        return Optional.ofNullable(userRepository.findOne(SecurityUtils.getCurrentLogin()))
+            .map(user -> new ResponseEntity<>(
+                persistentTokenRepository.findByUser(user),
+                HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else { %>
         User user = userRepository.findOne(SecurityUtils.getCurrentLogin());
         if (user == null) {
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<List<PersistentToken>>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return persistentTokenRepository.findByUser(user);
+        return new ResponseEntity<List<PersistentToken>>(
+            persistentTokenRepository.findByUser(user),
+            HttpStatus.OK);<% } %>
     }
 
     /**
@@ -135,21 +155,20 @@ public class AccountResource {
     @RequestMapping(value = "/rest/account/sessions/{series}",
             method = RequestMethod.DELETE)
     @Timed
-    public void invalidateSession(@PathVariable String series, HttpServletRequest request) throws UnsupportedEncodingException {
+    public void invalidateSession(@PathVariable String series) throws UnsupportedEncodingException {
         String decodedSeries = URLDecoder.decode(series, "UTF-8");
-
         User user = userRepository.findOne(SecurityUtils.getCurrentLogin());<% if (javaVersion == '8') { %>
-	    if (persistentTokenRepository.findByUser(user).stream()
+        if (persistentTokenRepository.findByUser(user).stream()
 	            .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))
 	            .count() > 0) {
 
-	        persistentTokenRepository.delete(decodedSeries);
+            persistentTokenRepository.delete(decodedSeries);
 	    }<% } else { %>
         List<PersistentToken> persistentTokens = persistentTokenRepository.findByUser(user);
         for (PersistentToken persistentToken : persistentTokens) {
-		    if (StringUtils.equals(persistentToken.getSeries(), decodedSeries)) {
+            if (StringUtils.equals(persistentToken.getSeries(), decodedSeries)) {
                 persistentTokenRepository.delete(decodedSeries);
-			}
+            }
         }<% } %>
     }
 }

@@ -28,21 +28,14 @@
             AuthenticationSharedService.login({
                 username: $scope.username,
                 password: $scope.password,
-                rememberMe: $scope.rememberMe,
-                success: function () {
-                    $location.path('');
-                }
+                rememberMe: $scope.rememberMe
             })
         }
     }]);
 
 <%= angularAppName %>.controller('LogoutController', ['$location', 'AuthenticationSharedService',
     function ($location, AuthenticationSharedService) {
-        AuthenticationSharedService.logout({
-            success: function () {
-                $location.path('');
-            }
-        });
+        AuthenticationSharedService.logout();
     }]);
 
 <%= angularAppName %>.controller('SettingsController', ['$scope', 'Account',

@@ -1,27 +1,29 @@
 package <%=packageName%>.config;
-
-import <%=packageName%>.security.*;
+<% if (authenticationType == 'cookie') { %>
+import <%=packageName%>.security.*;<% } %>
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
+import org.springframework.context.annotation.Configuration;<% if (authenticationType == 'cookie') { %>
+import org.springframework.core.env.Environment;<% } %><% if (authenticationType == 'token') { %>
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;<% } %>
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;<% if (authenticationType == 'cookie') { %>
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;<% } %>
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
-import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;<% if (authenticationType == 'cookie') { %>
+import org.springframework.security.web.authentication.RememberMeServices;<% } %><% if (authenticationType == 'token') { %>
+import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecurityExpressionHandler;<% } %>
 
 import javax.inject.Inject;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
+    <% if (authenticationType == 'cookie') { %>
     @Inject
     private Environment env;
 
@@ -35,13 +37,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler;
 
     @Inject
-    private Http401UnauthorizedEntryPoint authenticationEntryPoint;
+    private Http401UnauthorizedEntryPoint authenticationEntryPoint;<% } %>
 
     @Inject
     private UserDetailsService userDetailsService;
-
+    <% if (authenticationType == 'cookie') { %>
     @Inject
-    private RememberMeServices rememberMeServices;
+    private RememberMeServices rememberMeServices;<% } %>
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -63,10 +65,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/images/**")
             .antMatchers("/scripts/**")
             .antMatchers("/styles/**")
-            .antMatchers("/view/**")<% if (devDatabaseType != 'h2Memory') { %>;<% } else { %>
+            .antMatchers("/views/**")
+            .antMatchers("/swagger-ui/**")<% if (devDatabaseType != 'h2Memory') { %>;<% } else { %>
             .antMatchers("/console/**");<% } %>
     }
-
+    <% if (authenticationType == 'cookie') { %>
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -121,13 +124,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/env/**").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/trace*").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/trace/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/swagger-ui/**").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/protected/**").authenticated();
 
-    }
+    }<% } %>
 
     @EnableGlobalMethodSecurity(prePostEnabled = true, jsr250Enabled = true)
-    private static class GlobalSecurityConfiguration extends GlobalMethodSecurityConfiguration {
+    private static class GlobalSecurityConfiguration extends GlobalMethodSecurityConfiguration {<% if (authenticationType == 'token') { %>
+        @Override
+        protected MethodSecurityExpressionHandler createExpressionHandler() {
+            return new OAuth2MethodSecurityExpressionHandler();
+        }
+        <% } %>
     }
 }
