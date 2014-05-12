@@ -51,7 +51,7 @@ public abstract class AbstractAuditingEntity {
     @LastModifiedDate
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")<% if (databaseType == 'sql') { %>
     @Column(name = "last_modified_date")<% } %><% if (databaseType == 'nosql') { %>
-    @Field("last_modified_date")<% } %>
+    @Field("last_modified_date  ")<% } %>
     private DateTime lastModifiedDate = DateTime.now();
 
     public String getCreatedBy() {

@@ -388,14 +388,14 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     // Create mail templates
-    this.copy(resourceDir + '/config/mails/messages/messages_da.properties', resourceDir + '/config/mails/messages/messages_da.properties');
-    this.copy(resourceDir + '/config/mails/messages/messages_de.properties', resourceDir + '/config/mails/messages/messages_da.properties');
-    this.copy(resourceDir + '/config/mails/messages/messages_en.properties', resourceDir + '/config/mails/messages/messages_da.properties');
-    this.copy(resourceDir + '/config/mails/messages/messages_fr.properties', resourceDir + '/config/mails/messages/messages_da.properties');
-    this.copy(resourceDir + '/config/mails/messages/messages_pl.properties', resourceDir + '/config/mails/messages/messages_da.properties');
-    this.copy(resourceDir + '/config/mails/messages/messages_ru.properties', resourceDir + '/config/mails/messages/messages_da.properties');
-    this.copy(resourceDir + '/config/mails/activationEmail.vm', resourceDir + '/config/mails/activationEmail.vm');
-    this.copy(resourceDir + '/config/mails/common.vm', resourceDir + '/config/mails/common.vm');
+    this.copy(resourceDir + '/mails/messages/messages_da.properties', resourceDir + '/mails/messages/messages_da.properties');
+    this.copy(resourceDir + '/mails/messages/messages_de.properties', resourceDir + '/mails/messages/messages_da.properties');
+    this.copy(resourceDir + '/mails/messages/messages_en.properties', resourceDir + '/mails/messages/messages_da.properties');
+    this.copy(resourceDir + '/mails/messages/messages_fr.properties', resourceDir + '/mails/messages/messages_da.properties');
+    this.copy(resourceDir + '/mails/messages/messages_pl.properties', resourceDir + '/mails/messages/messages_da.properties');
+    this.copy(resourceDir + '/mails/messages/messages_ru.properties', resourceDir + '/mails/messages/messages_da.properties');
+    this.copy(resourceDir + '/mails/activationEmail.vm', resourceDir + '/mails/activationEmail.vm');
+    this.copy(resourceDir + '/mails/common.vm', resourceDir + '/mails/common.vm');
 
     // Create Java files
     var javaDir = 'src/main/java/' + packageFolder + '/';
@@ -476,7 +476,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/security/_CustomPersistentRememberMeServices.java', javaDir + 'security/CustomPersistentRememberMeServices.java');
     this.template('src/main/java/package/security/_Http401UnauthorizedEntryPoint.java', javaDir + 'security/Http401UnauthorizedEntryPoint.java');
     this.template('src/main/java/package/security/_SecurityUtils.java', javaDir + 'security/SecurityUtils.java');
-    this.template('src/main/java/package/security/_SpringSecurityAuditorAware_.java', javaDir + 'security/SpringSecurityAuditorAware.java');
+    this.template('src/main/java/package/security/_SpringSecurityAuditorAware.java', javaDir + 'security/SpringSecurityAuditorAware.java');
     this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java');
     this.template('src/main/java/package/security/_UserNotActivatedException.java', javaDir + 'security/UserNotActivatedException.java');
 
