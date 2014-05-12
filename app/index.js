@@ -334,6 +334,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('_README.md', 'README.md');
     this.template('bowerrc', '.bowerrc');
     this.copy('gitignore', '.gitignore');
+    this.copy('gitattributes', '.gitattributes');
     
     switch(this.frontendBuilder) {
         case 'gulp':
