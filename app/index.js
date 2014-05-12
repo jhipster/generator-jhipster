@@ -389,11 +389,11 @@ JhipsterGenerator.prototype.app = function app() {
 
     // Create mail templates
     this.copy(resourceDir + '/mails/messages/messages_da.properties', resourceDir + 'mails/messages/messages_da.properties');
-    this.copy(resourceDir + '/mails/messages/messages_de.properties', resourceDir + 'mails/messages/messages_da.properties');
-    this.copy(resourceDir + '/mails/messages/messages_en.properties', resourceDir + 'mails/messages/messages_da.properties');
-    this.copy(resourceDir + '/mails/messages/messages_fr.properties', resourceDir + 'mails/messages/messages_da.properties');
-    this.copy(resourceDir + '/mails/messages/messages_pl.properties', resourceDir + 'mails/messages/messages_da.properties');
-    this.copy(resourceDir + '/mails/messages/messages_ru.properties', resourceDir + 'mails/messages/messages_da.properties');
+    this.copy(resourceDir + '/mails/messages/messages_de.properties', resourceDir + 'mails/messages/messages_de.properties');
+    this.copy(resourceDir + '/mails/messages/messages_en.properties', resourceDir + 'mails/messages/messages_en.properties');
+    this.copy(resourceDir + '/mails/messages/messages_fr.properties', resourceDir + 'mails/messages/messages_fr.properties');
+    this.copy(resourceDir + '/mails/messages/messages_pl.properties', resourceDir + 'mails/messages/messages_pl.properties');
+    this.copy(resourceDir + '/mails/messages/messages_ru.properties', resourceDir + 'mails/messages/messages_ru.properties');
     this.copy(resourceDir + '/mails/activationEmail.vm', resourceDir + 'mails/activationEmail.vm');
     this.copy(resourceDir + '/mails/common.vm', resourceDir + 'mails/common.vm');
 
