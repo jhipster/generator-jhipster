@@ -51,6 +51,8 @@
                                 &nbsp;<span translate="global.menu.account.logout">Log out</span></a></li>
                             <li ng-switch-when="false"><a href="#/login"><span class="glyphicon glyphicon-log-in"></span>
                                 &nbsp;<span translate="global.menu.account.login">Authenticate</span></a></li>
+                            <li ng-switch-when="false"><a href="#/register"><span class="glyphicon glyphicon-user"></span>
+                                &nbsp;<span translate="global.menu.account.register">Register</span></a></li>
                         </ul>
                     </li>
                     <li ng-switch-when="true" ng-show="isAuthorized(userRoles.admin)" class="dropdown pointer" ng-controller="AdminController">
