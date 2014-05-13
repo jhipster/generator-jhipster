@@ -130,7 +130,7 @@
                                  referencedColumnNames="event_id"
                                  referencedTableName="T_PERSISTENT_AUDIT_EVENT"/>
     </changeSet>
-
+    <% if (authenticationType == 'token') { %>
     <!-- Manage the OAuth authentication -->
     <changeSet id="3" author="jhipster">
         <createTable tableName="oauth_client_details">
@@ -185,5 +185,5 @@
             <column name="expiresAt" type="timestamp"/>
             <column name="lastModifiedAt" type="timestamp"/>
         </createTable>
-    </changeSet>
+    </changeSet><% } %>
 </databaseChangeLog>

@@ -375,7 +375,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(resourceDir + '/config/_application-prod.yml', resourceDir + 'config/application-prod.yml');
 
     if (this.databaseType == "sql") {
-        this.copy(resourceDir + '/config/liquibase/changelog/db-changelog-001.xml', resourceDir + 'config/liquibase/changelog/db-changelog-001.xml');
+        this.template(resourceDir + '/config/liquibase/changelog/_db-changelog-001.xml', resourceDir + 'config/liquibase/changelog/db-changelog-001.xml');
         this.copy(resourceDir + '/config/liquibase/master.xml', resourceDir + 'config/liquibase/master.xml');
         this.copy(resourceDir + '/config/liquibase/users.csv', resourceDir + 'config/liquibase/users.csv');
         this.copy(resourceDir + '/config/liquibase/authorities.csv', resourceDir + 'config/liquibase/authorities.csv');
