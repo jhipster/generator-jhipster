@@ -7,9 +7,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
-<% if (databaseType == 'nosql') { %>import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
+<% if (databaseType == 'nosql') { %>import org.springframework.data.mongodb.core.mapping.Field;
 <% } %><% if (databaseType == 'sql') { %>
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.Column;
@@ -31,14 +29,14 @@ import javax.validation.constraints.NotNull;
 @EntityListeners(AuditingEntityListener.class)<% } %>
 public abstract class AbstractAuditingEntity {
 
-    @CreatedBy
-    @NotNull<% if (databaseType == 'sql') { %>
+    @CreatedBy<% if (databaseType == 'sql') { %>
+    @NotNull
     @Column(name = "created_by")<% } %><% if (databaseType == 'nosql') { %>
     @Field("created_by")<% } %>
     private String createdBy;
 
-    @CreatedDate
-    @NotNull<% if (databaseType == 'sql') { %>
+    @CreatedDate<% if (databaseType == 'sql') { %>
+    @NotNull
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(name = "created_date")<% } %><% if (databaseType == 'nosql') { %>
     @Field("created_date")<% } %>

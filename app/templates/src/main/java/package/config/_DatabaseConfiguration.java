@@ -35,7 +35,8 @@ import javax.inject.Inject;<% } %>
 @EnableTransactionManagement
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")<% } %><% if (databaseType == 'nosql') { %>
 @EnableMongoRepositories("<%=packageName%>.repository")
-@Import(value = MongoAutoConfiguration.class)<% } %>
+@Import(value = MongoAutoConfiguration.class)
+@EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")<% } %>
 public class DatabaseConfiguration implements EnvironmentAware {
 
     private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);

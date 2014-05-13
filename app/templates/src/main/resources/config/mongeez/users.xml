@@ -7,9 +7,10 @@
                 "first_name": "",
                 "last_name": "System",
                 "email": "",
-                activated: "true",
-                lang_key: "en",
-                created_by: "system",
+                "activated": "true",
+                "lang_key": "en",
+                "created_by": "system",
+                "created_date": new Date(),
                 "authorities": [{"_id": "ROLE_ADMIN"}, {"_id": "ROLE_USER"}]
             });
             db.T_USER.insert(
@@ -18,9 +19,10 @@
                 "first_name": "Anonymous",
                 "last_name": "User",
                 "email": "",
-                activated: "true",
-                lang_key: "en",
-                created_by: "system",
+                "activated": "true",
+                "lang_key": "en",
+                "created_by": "system",
+                "created_date": new Date(),
                 "authorities": []
             });
             db.T_USER.insert(
@@ -29,9 +31,10 @@
                 "first_name": "",
                 "last_name": "Administrator",
                 "email": "",
-                activated: "true",
-                lang_key: "en",
-                created_by: "system",
+                "activated": "true",
+                "lang_key": "en",
+                "created_by": "system",
+                "created_date": new Date(),
                 "authorities": [{"_id": "ROLE_ADMIN"}, {"_id": "ROLE_USER"}]
             });
             db.T_USER.insert(
@@ -40,9 +43,10 @@
                 "first_name": "",
                 "last_name": "User",
                 "email": "",
-                activated: "true",
-                lang_key: "en",
-                created_by: "system",
+                "activated": "true",
+                "lang_key": "en",
+                "created_by": "system",
+                "created_date": new Date(),
                 "authorities": [{"_id": "ROLE_USER"}]
             });
         </script>

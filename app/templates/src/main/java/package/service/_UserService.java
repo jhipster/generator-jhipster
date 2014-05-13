@@ -50,6 +50,7 @@ public class UserService {
         if (user != null) {
             user.setActivated(true);
             user.setActivationKey(null);
+            userRepository.save(user);
             log.debug("Activated user: {}", user);
         }
         return user;
