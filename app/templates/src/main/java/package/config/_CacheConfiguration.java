@@ -15,7 +15,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;<% if (hibernateCache == 'no') { %>
-import org.springframework.cache.support.NoOpCacheManager; <% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
+import org.springframework.cache.support.NoOpCacheManager; <% } %><% if (hibernateCache == 'ehcache') { %>
 import org.springframework.cache.ehcache.EhCacheCacheManager;<% } %><% if (hibernateCache == 'hazelcast' || hibernateCache == 'ehcache' || clusteredHttpSession == 'hazelcast') { %>
 import org.springframework.core.env.Environment;<% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
 import org.springframework.util.Assert;<% } %>
@@ -36,10 +36,10 @@ public class CacheConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);<% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>  
 
-    private static HazelcastInstance hazelcastInstance;<% } if (hibernateCache == 'ehcache') { %>
+    private static HazelcastInstance hazelcastInstance;<% } if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
 
     @PersistenceContext
-    private EntityManager entityManager;<% } %><% if ((hibernateCache == 'ehcache' && databaseType == 'sql') || hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
+    private EntityManager entityManager;<% } %><% if ((hibernateCache == 'ehcache') || hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
 
     @Inject
     private Environment env;<% } %>

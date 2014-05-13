@@ -80,7 +80,7 @@
                 "firstname": {
                     "required": "Dit fornavn er påkrævet.",
                     "minlength": "Dit fornavn skal som minimum være på 1 tegn",
-                    "maxlength": "Dit fornavn må ikke overskride 50 tegn!"
+                    "maxlength": "Dit brugernavn må ikke overskride 50 tegn"
                 },
                 "lastname": {
                     "required": "Dit efternavn er påkrævet.",

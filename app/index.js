@@ -353,6 +353,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('_README.md', 'README.md');
     this.template('bowerrc', '.bowerrc');
     this.copy('gitignore', '.gitignore');
+    this.copy('gitattributes', '.gitattributes');
 
     switch(this.frontendBuilder) {
         case 'gulp':
@@ -402,7 +403,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(resourceDir + '/config/_application-prod.yml', resourceDir + 'config/application-prod.yml');
 
     if (this.databaseType == "sql") {
-        this.copy(resourceDir + '/config/liquibase/changelog/db-changelog-001.xml', resourceDir + 'config/liquibase/changelog/db-changelog-001.xml');
+        this.template(resourceDir + '/config/liquibase/changelog/_db-changelog-001.xml', resourceDir + 'config/liquibase/changelog/db-changelog-001.xml');
         this.copy(resourceDir + '/config/liquibase/master.xml', resourceDir + 'config/liquibase/master.xml');
         this.copy(resourceDir + '/config/liquibase/users.csv', resourceDir + 'config/liquibase/users.csv');
         this.copy(resourceDir + '/config/liquibase/authorities.csv', resourceDir + 'config/liquibase/authorities.csv');
@@ -641,7 +642,6 @@ JhipsterGenerator.prototype.app = function app() {
 
     var indexScripts = [
         'bower_components/modernizr/modernizr.js',
-
         'bower_components/jquery/jquery.js',
         'bower_components/angular/angular.js',
         'bower_components/angular-route/angular-route.js',
