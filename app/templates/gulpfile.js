@@ -165,7 +165,21 @@ gulp.task('server:dist', ['build'], function() {
             var options = url.parse('http://localhost:8080/dump');
             options.route = '/dump';
             return proxy(options);
-          })()<% if (devDatabaseType == 'h2Memory') { %>,
+          })(),
+          (function() {
+            var url = require('url');
+            var proxy = require('proxy-middleware');
+            var options = url.parse('http://localhost:8080/api-docs');
+            options.route = '/api-docs';
+            return proxy(options);
+          })()<% if (authenticationType == 'token') { %>,
+          (function() {
+            var url = require('url');
+            var proxy = require('proxy-middleware');
+            var options = url.parse('http://localhost:8080/oauth/token');
+            options.route = '/oauth/token';
+            return proxy(options);
+          })()<% } %><% if (devDatabaseType == 'h2Memory') { %>,
           (function() {
             var url = require('url');
             var proxy = require('proxy-middleware');
