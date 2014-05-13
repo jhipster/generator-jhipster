@@ -1,0 +1,11 @@
+task buildFrontend(type: Exec) {
+    commandLine 'npm', 'install'
+    commandLine 'bower', 'install'
+    commandLine '<%= frontendBuilder %>', 'build'
+}
+processResources.dependsOn buildFrontend
+
+task testFrontend(type: Exec) {
+    commandLine '<%= frontendBuilder %>', 'test'
+}
+test.dependsOn testFrontend

@@ -1,5 +1,17 @@
+buildscript {
+    repositories {
+        maven { url "http://repo.spring.io/libs-snapshot" }
+        mavenLocal()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.0.2.RELEASE")
+    }
+}
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'spring-boot'
+
+apply from: 'yeoman.gradle'
 
 group = '<%= packageName %>'
 version = '0.1-SNAPSHOT'
@@ -7,6 +19,11 @@ version = '0.1-SNAPSHOT'
 description = """"""
 
 configurations.all {
+}
+
+jar {
+    baseName = 'gs-spring-boot'
+    version =  '0.1.0'
 }
 
 repositories {
@@ -59,7 +76,10 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version:'1.0.2.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version:'1.0.2.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version:'1.0.2.RELEASE'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version:'1.0.2.RELEASE'
+    compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web', version:'1.0.2.RELEASE') {
+        exclude module: "spring-boot-starter-tomcat"
+    }
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-jetty', version: '1.0.2.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version:'1.0.2.RELEASE'
     compile(group: 'org.springframework', name: 'spring-context-support', version:'4.0.3.RELEASE') {
         exclude(module: 'quartz')

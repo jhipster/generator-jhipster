@@ -292,7 +292,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             default: false
         }
     ];
-	
+
     this.baseName = this.config.get('baseName');
     this.packageName = this.config.get('packageName');
     this.authenticationType = this.config.get('authenticationType')
@@ -353,7 +353,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('_README.md', 'README.md');
     this.template('bowerrc', '.bowerrc');
     this.copy('gitignore', '.gitignore');
-    
+
     switch(this.frontendBuilder) {
         case 'gulp':
             this.template('gulpfile.js', 'gulpfile.js');
@@ -369,7 +369,8 @@ JhipsterGenerator.prototype.app = function app() {
         case 'gradle':
             this.template('_build.gradle', 'build.gradle');
             this.template('_settings.gradle', 'settings.gradle');
-            break
+            this.template('_yeoman.gradle', 'yeoman.gradle');
+            break;
         case 'maven':
         default :
             this.template('_pom.xml', 'pom.xml');
@@ -664,7 +665,7 @@ JhipsterGenerator.prototype.app = function app() {
         indexScripts = indexScripts.concat([
             'bower_components/atmosphere/atmosphere.js',
             'bower_components/jquery-atmosphere/jquery.atmosphere.js']);
-    }   
+    }
 
     indexScripts = indexScripts.concat([
         'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/affix.js',
