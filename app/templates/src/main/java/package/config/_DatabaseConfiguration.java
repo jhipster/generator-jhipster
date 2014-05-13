@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;<% if (databaseType 
 import org.springframework.context.annotation.Import;<% } %>
 import org.springframework.core.env.Environment;<% if (databaseType == 'nosql') { %>
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
