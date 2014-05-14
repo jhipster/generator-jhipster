@@ -4,8 +4,6 @@ import org.apache.commons.lang.RandomStringUtils;
 
 /**
  * Utility class for generating random Strings.
- *
- * @author Julien Dubois
  */
 public class RandomUtil {
 
