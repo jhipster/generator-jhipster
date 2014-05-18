@@ -54,7 +54,14 @@ public class AccountResource {
             method = RequestMethod.POST,
             produces = "application/json")
     @Timed
-    public ResponseEntity<?> registerAccount(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> registerAccount(@RequestBody UserDTO userDTO) {<% if (javaVersion == '8') { %>
+        return Optional.ofNullable(userRepository.findOne(userDTO.getLogin()))
+            .map(user -> new ResponseEntity<>(HttpStatus.NOT_MODIFIED))
+            .orElseGet(() -> {
+                User user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(), userDTO.getFirstName(),
+                        userDTO.getLastName(), userDTO.getEmail().toLowerCase(), userDTO.getLangKey());
+                mailService.sendActivationEmail(user);
+                return new ResponseEntity<>(HttpStatus.CREATED);});<% } else { %>
         User user = userRepository.findOne(userDTO.getLogin());
         if (user != null) {
             return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
@@ -63,21 +70,26 @@ public class AccountResource {
                     userDTO.getLastName(), userDTO.getEmail().toLowerCase(), userDTO.getLangKey());
             mailService.sendActivationEmail(user);
             return new ResponseEntity<>(HttpStatus.CREATED);
-        }
+        }<% } %>
     }
     /**
-     * GET  /rest/account -> get the current user.
+     * GET  /rest/activate -> activate the registered user.
      */
     @RequestMapping(value = "/rest/activate",
             method = RequestMethod.GET,
             produces = "application/json")
     @Timed
-    public ResponseEntity<String> activateAccount(@RequestParam(value = "key") String key) {
+    public ResponseEntity<String> activateAccount(@RequestParam(value = "key") String key) {<% if (javaVersion == '8') { %>
+        return Optional.ofNullable(userService.activateRegistration(key))
+            .map(user -> new ResponseEntity<String>(
+                    user.getLogin(),
+                    HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else { %>
         User user = userService.activateRegistration(key);
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<String>(user.getLogin(), HttpStatus.OK);
+        return new ResponseEntity<String>(user.getLogin(), HttpStatus.OK);<% } %>
     }
 
     /**
