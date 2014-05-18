@@ -380,6 +380,8 @@ JhipsterGenerator.prototype.app = function app() {
         this.copy(resourceDir + '/config/liquibase/users.csv', resourceDir + 'config/liquibase/users.csv');
         this.copy(resourceDir + '/config/liquibase/authorities.csv', resourceDir + 'config/liquibase/authorities.csv');
         this.copy(resourceDir + '/config/liquibase/users_authorities.csv', resourceDir + 'config/liquibase/users_authorities.csv');
+        this.copy(resourceDir + '/config/liquibase/users_upd_001.csv', resourceDir + 'config/liquibase/users_upd_001.csv');
+        this.copy(resourceDir + '/config/liquibase/users_authorities_upd_001.csv', resourceDir + 'config/liquibase/users_authorities_upd_001.csv');
     }
 
     if (this.databaseType == "nosql") {
