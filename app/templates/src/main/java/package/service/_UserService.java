@@ -43,7 +43,17 @@ public class UserService {
     private AuthorityRepository authorityRepository;
 
     public User activateRegistration(String key) {
-        log.debug("Activating user for activation key {}", key);
+        log.debug("Activating user for activation key {}", key);<% if (javaVersion == '8') { %>
+        return Optional.ofNullable(userRepository.getUserByActivationKey(key))
+            .map(user -> {
+                // activate given user for the registration key.
+                user.setActivated(true);
+                user.setActivationKey(null);
+                userRepository.save(user);
+                log.debug("Activated user: {}", user);
+                return user;
+            })
+            .orElse(null);<% } else { %>
         User user = userRepository.getUserByActivationKey(key);
 
         // activate given user for the registration key.
@@ -53,7 +63,7 @@ public class UserService {
             userRepository.save(user);
             log.debug("Activated user: {}", user);
         }
-        return user;
+        return user;<% } %>
     }
 
     public User createUserInformation(String login, String password, String firstName, String lastName, String email,
