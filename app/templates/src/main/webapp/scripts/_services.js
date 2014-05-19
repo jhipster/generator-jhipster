@@ -151,7 +151,7 @@
                 $http.get('protected/transparent.gif', {
                     ignoreAuthModule: 'ignoreAuthModule'
                 }).success(function (data, status, headers, config) {
-                    if (!!Session.login<% if (authenticationType == 'token') { %> || AccessToken.get() != undefined<% } %>) {<% if (authenticationType == 'token') { %>
+                    if (!Session.login<% if (authenticationType == 'token') { %> || AccessToken.get() != undefined<% } %>) {<% if (authenticationType == 'token') { %>
                         if (AccessToken.get() == undefined || AccessToken.expired()) {
                             $rootScope.authenticated = false
                             return;
