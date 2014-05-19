@@ -3,11 +3,11 @@ package <%=packageName%>.config.metrics;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;<% if (databaseType == 'nosql') { %>
+import org.springframework.context.annotation.Configuration;<% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.core.MongoTemplate;<% } %>
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
-import javax.inject.Inject;<% if (databaseType == 'sql') { %>
+import javax.inject.Inject;<% if (prodDatabaseType != 'none') { %>
 import javax.sql.DataSource;<% } %>
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -16,10 +16,10 @@ import java.util.Map;
 public class JHipsterHealthIndicatorConfiguration implements InitializingBean {
 
     @Inject
-    private JavaMailSenderImpl javaMailSender;<% if (databaseType == 'sql') { %>
+    private JavaMailSenderImpl javaMailSender;<% if (prodDatabaseType != 'none') { %>
 
     @Inject
-    private DataSource dataSource;<% } %><% if (databaseType == 'nosql') { %>
+    private DataSource dataSource;<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
 
     @Inject
     private MongoTemplate mongoTemplate;<% } %>
@@ -44,8 +44,8 @@ public class JHipsterHealthIndicatorConfiguration implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        javaMailHealthCheckIndicator.setJavaMailSender(javaMailSender);<% if (databaseType == 'sql') { %>
-        databaseHealthCheckIndicator.setDataSource(dataSource);<% } %><% if (databaseType == 'nosql') { %>
+        javaMailHealthCheckIndicator.setJavaMailSender(javaMailSender);<% if (prodDatabaseType != 'none') { %>
+        databaseHealthCheckIndicator.setDataSource(dataSource);<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
         databaseHealthCheckIndicator.setMongoTemplate(mongoTemplate);<% } %>
     }
 }

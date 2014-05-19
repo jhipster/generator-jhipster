@@ -1,8 +1,8 @@
 package <%=packageName%>.service;
 
 import <%=packageName%>.config.audit.AuditEventConverter;
-import <%=packageName%>.domain.PersistentAuditEvent;
-import <%=packageName%>.repository.PersistenceAuditEventRepository;
+import <%=packageName%>.domain<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>.PersistentAuditEvent;
+import <%=packageName%>.repository<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>.PersistenceAuditEventRepository;
 import org.joda.time.LocalDateTime;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.stereotype.Service;

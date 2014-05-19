@@ -12,13 +12,13 @@ async:
     queueCapacity: 10000
 
 spring:
-    profiles: dev<% if (databaseType == 'nosql') { %>
+    profiles: dev<% if (nosqlDatabaseType == 'mongodb') { %>
     data:
         mongodb:
              host: localhost
              port: 27017
              databaseName: <%= baseName %><% } %>
-    <% if (databaseType == 'sql') { %>
+    <% if (prodDatabaseType != 'none') { %>
     datasource:
         dataSourceClassName: org.h2.jdbcx.JdbcDataSource
         url: jdbc:h2:mem:<%= baseName %>

@@ -1,13 +1,13 @@
-package <%=packageName%>.domain;
+package <%=packageName%>.domain<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;<% if (hibernateCache != 'no' && databaseType == 'sql') { %>
+import com.fasterxml.jackson.annotation.JsonIgnore;<% if (hibernateCache != 'no' && prodDatabaseType != 'none') { %>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
 import org.hibernate.validator.constraints.Email;
-<% if (databaseType == 'nosql') { %>import org.springframework.data.annotation.Id;
+<% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-<% } %><% if (databaseType == 'sql') { %>
+<% } %><% if (prodDatabaseType != 'none') { %>
 import javax.persistence.*;<% } %>
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -17,28 +17,28 @@ import java.util.Set;
 /**
  * A user.
  */
-<% if (databaseType == 'sql') { %>@Entity
-@Table(name = "T_USER")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'nosql') { %>
+<% if (prodDatabaseType != 'none') { %>@Entity
+@Table(name = "T_USER")<% } %><% if (hibernateCache != 'no' && prodDatabaseType != 'none') { %>
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
 @Document(collection = "T_USER")<% } %>
 public class User implements Serializable {
 
     @NotNull
-    @Size(min = 0, max = 50)
-    @Id
+    @Size(min = 0, max = 50)<% if(prodDatabaseType != 'none' || nosqlDatabaseType != 'none') { %>
+    @Id<% } %>
     private String login;
 
     @JsonIgnore
     @Size(min = 0, max = 100)
     private String password;
 
-    @Size(min = 0, max = 50)<% if (databaseType == 'sql') { %>
-    @Column(name = "first_name")<% } %><% if (databaseType == 'nosql') { %>
+    @Size(min = 0, max = 50)<% if (prodDatabaseType != 'none') { %>
+    @Column(name = "first_name")<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
     @Field("first_name")<% } %>
     private String firstName;
 
-    @Size(min = 0, max = 50)<% if (databaseType == 'sql') { %>
-    @Column(name = "last_name")<% } %><% if (databaseType == 'nosql') { %>
+    @Size(min = 0, max = 50)<% if (prodDatabaseType != 'none') { %>
+    @Column(name = "last_name")<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
     @Field("last_name")<% } %>
     private String lastName;
 
@@ -46,19 +46,19 @@ public class User implements Serializable {
     @Size(min = 0, max = 100)
     private String email;
 
-    @JsonIgnore<% if (databaseType == 'sql') { %>
+    @JsonIgnore<% if (prodDatabaseType != 'none') { %>
     @ManyToMany
     @JoinTable(
             name = "T_USER_AUTHORITY",
             joinColumns = {@JoinColumn(name = "login", referencedColumnName = "login")},
-            inverseJoinColumns = {@JoinColumn(name = "name", referencedColumnName = "name")})<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
+            inverseJoinColumns = {@JoinColumn(name = "name", referencedColumnName = "name")})<% } %><% if (hibernateCache != 'no' && prodDatabaseType != 'none') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
     private Set<Authority> authorities;
 
-    <% if (databaseType == 'sql') { %>@JsonIgnore
-    @OneToMany(mappedBy = "user")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<PersistentToken> persistentTokens;<% } %>
+    <% if (prodDatabaseType != 'none') { %>@JsonIgnore
+    @OneToMany(mappedBy = "user")<% } %><% if (hibernateCache != 'no' && prodDatabaseType != 'none') { %>
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
+    private Set<PersistentToken> persistentTokens;
 
     public String getLogin() {
         return login;
@@ -107,7 +107,7 @@ public class User implements Serializable {
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
     }
-    <% if (databaseType == 'sql') { %>
+    <% if (prodDatabaseType != 'none') { %>
     public Set<PersistentToken> getPersistentTokens() {
         return persistentTokens;
     }

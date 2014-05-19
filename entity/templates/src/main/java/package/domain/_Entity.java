@@ -1,18 +1,18 @@
-package <%=packageName%>.domain;
+package <%=packageName%>.domain.<%= entityType%>;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.joda.deser.LocalDateDeserializer;
 import <%=packageName%>.domain.util.CustomLocalDateSerializer;
 <% if (hibernateCache != 'no') { %>import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (databaseType == 'sql') { %>
+import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (prodDatabaseType != 'none') { %>
 import org.hibernate.annotations.Type;<% } %>
-import org.joda.time.LocalDate;<% if (databaseType == 'nosql') { %>
+import org.joda.time.LocalDate;<% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;<% } %>
 
-<% if (databaseType == 'sql') { %>
+<% if (prodDatabaseType != 'none') { %>
 import javax.persistence.*;<% } %>
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -21,35 +21,35 @@ import java.io.Serializable;
 /**
  * A <%= entityClass %>.
  */
-<% if (databaseType == 'sql') { %>@Entity
-@Table(name = "T_<%= name.toUpperCase() %>")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'nosql') { %>
+<% if (prodDatabaseType != 'none') { %>@Entity
+@Table(name = "T_<%= name.toUpperCase() %>")<% } %><% if (hibernateCache != 'no' && prodDatabaseType != 'none') { %>
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
 @Document(collection = "T_<%= name.toUpperCase() %>")<% } %>
 public class <%= entityClass %> implements Serializable {
 
-    @Id<% if (databaseType == 'sql') { %>
+    @Id<% if (prodDatabaseType != 'none') { %>
     @GeneratedValue(strategy = GenerationType.TABLE)
-    private long id;<% } %><% if (databaseType == 'nosql') { %>
+    private long id;<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
     private String id;<% } %>
 
-    @Size(min = 1, max = 50)<% if (databaseType == 'sql') { %>
-    @Column(name = "sample_text_attribute")<% } %><% if (databaseType == 'nosql') { %>
+    @Size(min = 1, max = 50)<% if (prodDatabaseType != 'none') { %>
+    @Column(name = "sample_text_attribute")<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
     @Field("sample_text_attribute")<% } %>
     private String sampleTextAttribute;
 
-    @NotNull<% if (databaseType == 'sql') { %>
+    @NotNull<% if (prodDatabaseType != 'none') { %>
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")<% } %>
     @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = CustomLocalDateSerializer.class)<% if (databaseType == 'sql') { %>
-    @Column(name = "sample_date_attribute")<% } %><% if (databaseType == 'nosql') { %>
+    @JsonSerialize(using = CustomLocalDateSerializer.class)<% if (prodDatabaseType != 'none') { %>
+    @Column(name = "sample_date_attribute")<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
     @Field("sample_date_attribute")<% } %>
     private LocalDate sampleDateAttribute;
 
-    public <% if (databaseType == 'sql') { %>long<% } %><% if (databaseType == 'nosql') { %>String<% } %> getId() {
+    public <% if (prodDatabaseType != 'none') { %>long<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>String<% } %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType == 'sql') { %>long<% } %><% if (databaseType == 'nosql') { %>String<% } %> id) {
+    public void setId(<% if (prodDatabaseType != 'none') { %>long<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>String<% } %> id) {
         this.id = id;
     }
 
@@ -80,7 +80,7 @@ public class <%= entityClass %> implements Serializable {
 
         <%= entityClass %> <%= entityInstance %> = (<%= entityClass %>) o;
 
-        if <% if (databaseType == 'sql') { %>(id != <%= entityInstance %>.id)<% } %><% if (databaseType == 'nosql') { %>(!id.equals(pizza.id))<% } %> {
+        if <% if (prodDatabaseType != 'none') { %>(id != <%= entityInstance %>.id)<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>(!id.equals(<%= entityInstance %>.id))<% } %> {
             return false;
         }
 
@@ -89,7 +89,7 @@ public class <%= entityClass %> implements Serializable {
 
     @Override
     public int hashCode() {
-        return <% if (databaseType == 'sql') { %>(int) (id ^ (id >>> 32));<% } %><% if (databaseType == 'nosql') { %>id != null ? id.hashCode() : 0;<% } %>
+        return <% if (prodDatabaseType != 'none') { %>(int) (id ^ (id >>> 32));<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>id != null ? id.hashCode() : 0;<% } %>
     }
 
     @Override

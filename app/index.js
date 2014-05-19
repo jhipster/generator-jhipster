@@ -42,7 +42,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 if((input.indexOf('<')<0) && (input.indexOf('>')<0)) return true;
                 return 'Your application name contains either <, > or both.';
             },
-            message: '(1/11) What is the base name of your application?',
+            message: '(1/10) What is the base name of your application?',
             default: 'jhipster'
         },
         {
@@ -52,13 +52,13 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 if(/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)) return true;
                 return 'The package name you have provided is not a valid Java package name.';
             },
-            message: '(2/11) What is your default Java package name?',
+            message: '(2/10) What is your default Java package name?',
             default: 'com.mycompany.myapp'
         },
         {
             type: 'list',
             name: 'javaVersion',
-            message: '(3/11) Do you want to use Java 8?',
+            message: '(3/10) Do you want to use Java 8?',
             choices: [
                 {
                     value: '7',
@@ -74,7 +74,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'authenticationType',
-            message: '(4/11) Which *type* of authentication would you like to use?',
+            message: '(4/10) Which *type* of authentication would you like to use?',
             choices: [
                 {
                     value: 'cookie',
@@ -89,27 +89,70 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             type: 'list',
-            name: 'databaseType',
-            message: '(5/11) Which *type* of database would you like to use?',
+            name: 'prodDatabaseType',
+            message: '(5/10) Which *production* database would you like to use?',
             choices: [
                 {
-                    value: 'sql',
-                    name: 'SQL (H2, MySQL, PostgreSQL)'
+                    value: 'mysql',
+                    name: 'MySQL'
                 },
                 {
-                    value: 'nosql',
-                    name: 'NoSQL (MongoDB)'
+                    value: 'postgresql',
+                    name: 'PostgreSQL'
+                },
+                {
+                    value: 'none',
+                    name: 'None'
                 }
             ],
             default: 0
         },
         {
             when: function (response) {
-                return response.databaseType == 'sql';
+                return response.prodDatabaseType != 'none';
+            },
+            type: 'list',
+            name: 'devDatabaseType',
+            message: '(5.1/10) Which *development* database would you like to use?',
+            choices: [
+                {
+                    value: 'h2Memory',
+                    name: 'H2 in-memory with web console'
+                },
+                {
+                    value: 'mysql',
+                    name: 'MySQL'
+                },
+                {
+                    value: 'postgresql',
+                    name: 'PostgreSQL'
+                }
+            ],
+            default: 0
+        },
+        {
+            type: 'list',
+            name: 'nosqlDatabaseType',
+            message: '(6/10) Which NoSql database would you like to use?',
+            choices: [
+                {
+                    value: 'none',
+                    name: 'None'
+                },
+                {
+                    value: 'mongodb',
+                    name: 'MongoDB'
+                }
+            ],
+            default: 0
+        },
+        {
+            when: function (response) {
+                return response.prodDatabaseType != 'none';
             },
             type: 'list',
             name: 'hibernateCache',
-            message: '(6/11) Do you want to use Hibernate 2nd level cache?',
+            message: '(7/10) Do you want to use Hibernate 2nd level cache?',
             choices: [
                 {
                     value: 'no',
@@ -128,19 +171,15 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             when: function (response) {
-                return response.databaseType == 'nosql';
+                return response.prodDatabaseType == 'none' && response.nosqlDatabaseType != 'none';
             },
             type: 'list',
             name: 'hibernateCache',
-            message: '(6/11) Do you want to use cache?',
+            message: '(7/10) Do you want to use cache?',
             choices: [
                 {
                     value: 'no',
                     name: 'No'
-                },
-                {
-                    value: 'ehcache',
-                    name: 'Yes, with ehcache (local cache, for a single node)'
                 },
                 {
                     value: 'hazelcast',
@@ -152,7 +191,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'clusteredHttpSession',
-            message: '(7/11) Do you want to use clustered HTTP sessions?',
+            message: '(8/10) Do you want to use clustered HTTP sessions?',
             choices: [
                 {
                     value: 'no',
@@ -168,7 +207,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'websocket',
-            message: '(8/11) Do you want to use WebSockets?',
+            message: '(9/10) Do you want to use WebSockets?',
             choices: [
                 {
                     value: 'no',
@@ -182,81 +221,9 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             default: 0
         },
         {
-            when: function (response) {
-                return response.databaseType == 'sql';
-            },
-            type: 'list',
-            name: 'prodDatabaseType',
-            message: '(9/11) Which *production* database would you like to use?',
-            choices: [
-                {
-                    value: 'mysql',
-                    name: 'MySQL'
-                },
-                {
-                    value: 'postgresql',
-                    name: 'PostgreSQL'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: function (response) {
-                return response.databaseType == 'nosql';
-            },
-            type: 'list',
-            name: 'prodDatabaseType',
-            message: '(9/11) Which *production* database would you like to use?',
-            choices: [
-                {
-                    value: 'mongodb',
-                    name: 'MongoDB'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: function (response) {
-                return response.databaseType == 'sql';
-            },
-            type: 'list',
-            name: 'devDatabaseType',
-            message: '(10/11) Which *development* database would you like to use?',
-            choices: [
-                {
-                    value: 'h2Memory',
-                    name: 'H2 in-memory with web console'
-                },
-                {
-                    value: 'mysql',
-                    name: 'MySQL'
-                },
-                {
-                    value: 'postgresql',
-                    name: 'PostgreSQL'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: function (response) {
-                return response.databaseType == 'nosql';
-            },
-            type: 'list',
-            name: 'devDatabaseType',
-            message: '(10/11) Which *development* database would you like to use?',
-            choices: [
-                {
-                    value: 'mongodb',
-                    name: 'MongoDB'
-                }
-            ],
-            default: 0
-        },
-        {
             type: 'confirm',
             name: 'useCompass',
-            message: '(11/11) Would you like to use the Compass CSS Authoring Framework?',
+            message: '(10/10) Would you like to use the Compass CSS Authoring Framework?',
             default: false
         }
     ];
@@ -267,23 +234,23 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     this.hibernateCache = this.config.get('hibernateCache');
     this.clusteredHttpSession = this.config.get('clusteredHttpSession');
     this.websocket = this.config.get('websocket');
-    this.databaseType = this.config.get('databaseType');
     this.devDatabaseType = this.config.get('devDatabaseType');
     this.prodDatabaseType = this.config.get('prodDatabaseType');
     this.useCompass = this.config.get('useCompass');
 	this.javaVersion = this.config.get('javaVersion');
+	this.nosqlDatabaseType = this.config.get('nosqlDatabaseType');
 	
 	if (this.baseName != null &&
 	    this.packageName != null &&
         this.authenticationType != null &&
-		this.hibernateCache != null &&
+		(this.hibernateCache != null || (this.prodDatabaseType == 'none' && this.nosqlDatabaseType == 'none'))&&
 		this.clusteredHttpSession != null &&
 		this.websocket != null &&
-        this.databaseType != null &&
-		this.devDatabaseType != null &&
+       	(this.devDatabaseType != null || this.prodDatabaseType == 'none') &&
 		this.prodDatabaseType != null &&
 		this.useCompass != null &&
-	    this.javaVersion != null) {
+	    this.javaVersion != null &&
+	    this.nosqlDatabaseType != null) {
 	
 	    console.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
 			'to re-generate the project...\n'));
@@ -297,11 +264,11 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             this.hibernateCache = props.hibernateCache;
         	this.clusteredHttpSession = props.clusteredHttpSession;
         	this.websocket = props.websocket;
-        	this.databaseType = props.databaseType;
         	this.devDatabaseType = props.devDatabaseType;
         	this.prodDatabaseType = props.prodDatabaseType;
         	this.useCompass = props.useCompass;
 			this.javaVersion = props.javaVersion;
+			this.nosqlDatabaseType = props.nosqlDatabaseType;
 
         	cb();
     	}.bind(this));
@@ -345,7 +312,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(resourceDir + '/config/_application-dev.yml', resourceDir + 'config/application-dev.yml');
     this.template(resourceDir + '/config/_application-prod.yml', resourceDir + 'config/application-prod.yml');
 
-    if (this.databaseType == "sql") {
+    if (this.prodDatabaseType != "none") {
         this.copy(resourceDir + '/config/liquibase/changelog/db-changelog-001.xml', resourceDir + 'config/liquibase/changelog/db-changelog-001.xml');
         this.copy(resourceDir + '/config/liquibase/master.xml', resourceDir + 'config/liquibase/master.xml');
         this.copy(resourceDir + '/config/liquibase/users.csv', resourceDir + 'config/liquibase/users.csv');
@@ -353,10 +320,12 @@ JhipsterGenerator.prototype.app = function app() {
         this.copy(resourceDir + '/config/liquibase/users_authorities.csv', resourceDir + 'config/liquibase/users_authorities.csv');
     }
 
-    if (this.databaseType == "nosql") {
-        this.copy(resourceDir + '/config/mongeez/authorities.xml', resourceDir + 'config/mongeez/authorities.xml');
+    if (this.nosqlDatabaseType == "mongodb") {
         this.copy(resourceDir + '/config/mongeez/master.xml', resourceDir + 'config/mongeez/master.xml');
-        this.copy(resourceDir + '/config/mongeez/users.xml', resourceDir + 'config/mongeez/users.xml');
+        if(this.prodDatabaseType == "none") {
+        	this.copy(resourceDir + '/config/mongeez/authorities.xml', resourceDir + 'config/mongeez/authorities.xml');
+        	this.copy(resourceDir + '/config/mongeez/users.xml', resourceDir + 'config/mongeez/users.xml');
+        }
     }
 
     // Create Java files
@@ -385,7 +354,12 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/_AsyncConfiguration.java', javaDir + 'config/AsyncConfiguration.java');
     this.template('src/main/java/package/config/_CacheConfiguration.java', javaDir + 'config/CacheConfiguration.java');
     this.template('src/main/java/package/config/_Constants.java', javaDir + 'config/Constants.java');
-    this.template('src/main/java/package/config/_DatabaseConfiguration.java', javaDir + 'config/DatabaseConfiguration.java');
+    if(this.prodDatabaseType != 'none') {
+    	this.template('src/main/java/package/config/_DatabaseConfigurationJPA.java', javaDir + 'config/DatabaseConfigurationJPA.java');
+    }
+    if(this.nosqlDatabaseType == 'mongodb') {
+    	this.template('src/main/java/package/config/_DatabaseConfigurationMongodb.java', javaDir + 'config/DatabaseConfigurationMongodb.java');
+    }
     this.template('src/main/java/package/config/_LocaleConfiguration.java', javaDir + 'config/LocaleConfiguration.java');
     this.template('src/main/java/package/config/_LoggingAspectConfiguration.java', javaDir + 'config/LoggingAspectConfiguration.java');
     this.template('src/main/java/package/config/_MailConfiguration.java', javaDir + 'config/MailConfiguration.java');
@@ -406,7 +380,10 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/locale/_AngularCookieLocaleResolver.java', javaDir + 'config/locale/AngularCookieLocaleResolver.java');
 
     this.template('src/main/java/package/config/metrics/_package-info.java', javaDir + 'config/metrics/package-info.java');
-    this.template('src/main/java/package/config/metrics/_DatabaseHealthCheckIndicator.java', javaDir + 'config/metrics/DatabaseHealthCheckIndicator.java');
+    
+    if(this.prodDatabaseType != 'none' || this.nosqlDatabaseType != 'none') {
+    	this.template('src/main/java/package/config/metrics/_DatabaseHealthCheckIndicator.java', javaDir + 'config/metrics/DatabaseHealthCheckIndicator.java');
+    }
     this.template('src/main/java/package/config/metrics/_HealthCheckIndicator.java', javaDir + 'config/metrics/HealthCheckIndicator.java');
     this.template('src/main/java/package/config/metrics/_JavaMailHealthCheckIndicator.java', javaDir + 'config/metrics/JavaMailHealthCheckIndicator.java');
     this.template('src/main/java/package/config/metrics/_JHipsterHealthIndicatorConfiguration.java', javaDir + 'config/metrics/JHipsterHealthIndicatorConfiguration.java');
@@ -415,21 +392,35 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/main/java/package/config/hazelcast/_HazelcastCacheRegionFactory.java', javaDir + 'config/hazelcast/HazelcastCacheRegionFactory.java');
         this.template('src/main/java/package/config/hazelcast/_package-info.java', javaDir + 'config/hazelcast/package-info.java');
     }
-
-    this.template('src/main/java/package/domain/_package-info.java', javaDir + 'domain/package-info.java');
-    this.template('src/main/java/package/domain/_Authority.java', javaDir + 'domain/Authority.java');
-    this.template('src/main/java/package/domain/_PersistentAuditEvent.java', javaDir + 'domain/PersistentAuditEvent.java');
-    this.template('src/main/java/package/domain/_PersistentToken.java', javaDir + 'domain/PersistentToken.java');
-    this.template('src/main/java/package/domain/_User.java', javaDir + 'domain/User.java');
+	
+	var javaDomainDir, javaRepositoryDir;
+	if(this.prodDatabaseType != 'none') {
+		javaDomainDir = javaDir + 'domain/jpa/';
+		javaRepositoryDir = javaDir + 'repository/jpa/';
+	} else if(this.prodDatabaseType == 'none' && this.nosqlDatabaseType == 'mongodb') {
+		javaDomainDir = javaDir + 'domain/mongodb/';
+		javaRepositoryDir = javaDir + 'repository/mongodb/';
+	} else {
+		javaDomainDir = javaDir + 'domain/';
+		javaRepositoryDir = javaDir + 'repository/';
+	}
+	
+    this.template('src/main/java/package/domain/_package-info.java', javaDomainDir + 'package-info.java');
+    this.template('src/main/java/package/domain/_Authority.java', javaDomainDir + 'Authority.java');
+    this.template('src/main/java/package/domain/_PersistentAuditEvent.java', javaDomainDir + 'PersistentAuditEvent.java');
+    this.template('src/main/java/package/domain/_PersistentToken.java', javaDomainDir + 'PersistentToken.java');
+    this.template('src/main/java/package/domain/_User.java', javaDomainDir + 'User.java');
     this.template('src/main/java/package/domain/util/_CustomLocalDateSerializer.java', javaDir + 'domain/util/CustomLocalDateSerializer.java');
-
-    this.template('src/main/java/package/repository/_package-info.java', javaDir + 'repository/package-info.java');
-    this.template('src/main/java/package/repository/_AuthorityRepository.java', javaDir + 'repository/AuthorityRepository.java');
-    this.template('src/main/java/package/repository/_CustomAuditEventRepository.java', javaDir + 'repository/CustomAuditEventRepository.java');
-    this.template('src/main/java/package/repository/_UserRepository.java', javaDir + 'repository/UserRepository.java');
-    this.template('src/main/java/package/repository/_PersistentTokenRepository.java', javaDir + 'repository/PersistentTokenRepository.java');
-    this.template('src/main/java/package/repository/_PersistenceAuditEventRepository.java', javaDir + 'repository/PersistenceAuditEventRepository.java');
-
+	
+	if(this.prodDatabaseType != 'none' || this.nosqlDatabaseType != 'none') {
+    	this.template('src/main/java/package/repository/_package-info.java', javaRepositoryDir + 'package-info.java');
+    	this.template('src/main/java/package/repository/_AuthorityRepository.java', javaRepositoryDir + 'AuthorityRepository.java');
+    	this.template('src/main/java/package/repository/_CustomAuditEventRepository.java', javaRepositoryDir + 'CustomAuditEventRepository.java');
+    	this.template('src/main/java/package/repository/_UserRepository.java', javaRepositoryDir + 'UserRepository.java');
+    	this.template('src/main/java/package/repository/_PersistentTokenRepository.java', javaRepositoryDir + 'PersistentTokenRepository.java');
+    	this.template('src/main/java/package/repository/_PersistenceAuditEventRepository.java', javaRepositoryDir + 'PersistenceAuditEventRepository.java');
+	}
+	
     this.template('src/main/java/package/security/_package-info.java', javaDir + 'security/package-info.java');
     this.template('src/main/java/package/security/_AjaxAuthenticationFailureHandler.java', javaDir + 'security/AjaxAuthenticationFailureHandler.java');
     this.template('src/main/java/package/security/_AjaxAuthenticationSuccessHandler.java', javaDir + 'security/AjaxAuthenticationSuccessHandler.java');
@@ -438,8 +429,11 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/security/_CustomPersistentRememberMeServices.java', javaDir + 'security/CustomPersistentRememberMeServices.java');
     this.template('src/main/java/package/security/_Http401UnauthorizedEntryPoint.java', javaDir + 'security/Http401UnauthorizedEntryPoint.java');
     this.template('src/main/java/package/security/_SecurityUtils.java', javaDir + 'security/SecurityUtils.java');
-    this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java');
-
+    
+    if(this.prodDatabaseType != 'none' || this.nosqlDatabaseType != 'none') {
+    	this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java');
+	}
+	
     this.template('src/main/java/package/service/_package-info.java', javaDir + 'service/package-info.java');
     this.template('src/main/java/package/service/_AuditEventService.java', javaDir + 'service/AuditEventService.java');
     this.template('src/main/java/package/service/_UserService.java', javaDir + 'service/UserService.java');
@@ -482,7 +476,7 @@ JhipsterGenerator.prototype.app = function app() {
     var testResourceDir = 'src/test/resources/';
     this.mkdir(testDir);
 
-    if (this.databaseType == "nosql") {
+    if (this.nosqlDatabaseType == "mongodb") {
         this.template('src/test/java/package/config/_MongoConfiguration.java', testDir + 'config/MongoConfiguration.java');
     }
 
@@ -634,11 +628,11 @@ JhipsterGenerator.prototype.app = function app() {
     this.config.set('hibernateCache', this.hibernateCache);
 	this.config.set('clusteredHttpSession', this.clusteredHttpSession);
 	this.config.set('websocket', this.websocket);
-	this.config.set('databaseType', this.databaseType);
 	this.config.set('devDatabaseType', this.devDatabaseType);
 	this.config.set('prodDatabaseType', this.prodDatabaseType);
 	this.config.set('useCompass', this.useCompass);
 	this.config.set('javaVersion', this.javaVersion);
+	this.config.set('nosqlDatabaseType', this.nosqlDatabaseType);
 };
 
 JhipsterGenerator.prototype.projectfiles = function projectfiles() {

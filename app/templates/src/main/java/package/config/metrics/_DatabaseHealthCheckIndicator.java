@@ -2,7 +2,7 @@ package <%=packageName%>.config.metrics;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-<% if (databaseType == 'sql') { %>
+<% if (prodDatabaseType != 'none') { %>
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.Map;<% } %><% if (databaseType == 'nosql') { %>
+import java.util.Map;<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.core.MongoTemplate;<% } %>
 
 /**
@@ -23,7 +23,7 @@ public class DatabaseHealthCheckIndicator extends HealthCheckIndicator {
     public static final String DATABASE_HEALTH_INDICATOR = "database";
 	
     private final Logger log = LoggerFactory.getLogger(DatabaseHealthCheckIndicator.class);
-    <% if (databaseType == 'sql') { %>
+    <% if (prodDatabaseType != 'none') { %>
     private static Map<String, String> queries = new HashMap<>();
 
     static {
@@ -39,15 +39,15 @@ public class DatabaseHealthCheckIndicator extends HealthCheckIndicator {
     private static String DEFAULT_QUERY = "SELECT 'Hello'";
 
     private JdbcTemplate jdbcTemplate;
-    private String query = null;<% } %><% if (databaseType == 'nosql') { %>
+    private String query = null;<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
     private MongoTemplate mongoTemplate;<% } %>
 
     public DatabaseHealthCheckIndicator() {
     }
-    <% if (databaseType == 'sql') { %>
+    <% if (prodDatabaseType != 'none') { %>
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-    }<% } %><% if (databaseType == 'nosql') { %>
+    }<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
     public void setMongoTemplate(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
     }<% } %>
@@ -61,7 +61,7 @@ public class DatabaseHealthCheckIndicator extends HealthCheckIndicator {
     protected Result check() throws Exception {
         log.debug("Initializing Database health indicator");
         try {
-            <% if (databaseType == 'sql') { %>String dataBaseProductName = jdbcTemplate.execute(new ConnectionCallback<String>() {
+            <% if (prodDatabaseType != 'none') { %>String dataBaseProductName = jdbcTemplate.execute(new ConnectionCallback<String>() {
                 @Override
                 public String doInConnection(Connection connection)
                         throws SQLException, DataAccessException {
@@ -69,7 +69,7 @@ public class DatabaseHealthCheckIndicator extends HealthCheckIndicator {
                 }
             });
             query = detectQuery(dataBaseProductName);
-            return healthy();<% } %><% if (databaseType == 'nosql') { %>
+            return healthy();<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
             if (mongoTemplate.getDb().getStats().ok()) {
                 return healthy();
             }
@@ -79,7 +79,7 @@ public class DatabaseHealthCheckIndicator extends HealthCheckIndicator {
             log.debug("Cannot connect to Database.", e);
             return unhealthy("Cannot connect to database.", e);
         }
-    }<% if (databaseType == 'sql') { %>
+    }<% if (prodDatabaseType != 'none') { %>
 
     protected String detectQuery(String product) {
         String query = this.query;

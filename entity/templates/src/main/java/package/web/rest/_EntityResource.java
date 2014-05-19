@@ -1,8 +1,8 @@
 package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import <%=packageName%>.domain.<%= entityClass %>;
-import <%=packageName%>.repository.<%= entityClass %>Repository;
+import <%=packageName%>.domain.<%= entityType%>.<%= entityClass %>;
+import <%=packageName%>.repository.<%= entityType%>.<%= entityClass %>Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -54,7 +54,7 @@ public class <%= entityClass %>Resource {
             method = RequestMethod.GET,
             produces = "application/json")
     @Timed
-    public <%= entityClass %> get(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> id, HttpServletResponse response) {
+    public <%= entityClass %> get(@PathVariable <% if (prodDatabaseType != 'none') { %>Long<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>String<% } %> id, HttpServletResponse response) {
         log.debug("REST request to get <%= entityClass %> : {}", id);
         <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Repository.findOne(id);
         if (<%= entityInstance %> == null) {
@@ -70,7 +70,7 @@ public class <%= entityClass %>Resource {
             method = RequestMethod.DELETE,
             produces = "application/json")
     @Timed
-    public void delete(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> id, HttpServletResponse response) {
+    public void delete(@PathVariable <% if (prodDatabaseType != 'none') { %>Long<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>String<% } %> id, HttpServletResponse response) {
         log.debug("REST request to delete <%= entityClass %> : {}", id);
         <%= entityInstance %>Repository.delete(id);
     }

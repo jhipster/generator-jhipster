@@ -1,4 +1,4 @@
-<changeFiles>
+<changeFiles><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
     <file path="authorities.xml"/>
-    <file path="users.xml"/>
+    <file path="users.xml"/><% } %>
 </changeFiles>

@@ -1,15 +1,15 @@
 package <%=packageName%>.service;
 
-import <%=packageName%>.Application;<% if (databaseType == 'nosql') { %>
+import <%=packageName%>.Application;<% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
 import <%=packageName%>.config.MongoConfiguration;<% } %>
-import <%=packageName%>.domain.PersistentToken;
-import <%=packageName%>.domain.User;
-import <%=packageName%>.repository.PersistentTokenRepository;
-import <%=packageName%>.repository.UserRepository;
+import <%=packageName%>.domain<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>.PersistentToken;
+import <%=packageName%>.domain<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>.User;
+import <%=packageName%>.repository<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>.PersistentTokenRepository;
+import <%=packageName%>.repository<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>.UserRepository;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;<% if (databaseType == 'nosql') { %>
+import org.springframework.boot.test.SpringApplicationConfiguration;<% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
 import org.springframework.context.annotation.Import;<% } %>
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.annotation.DirtiesContext;
@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.*;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @DirtiesContext(classMode= DirtiesContext.ClassMode.AFTER_CLASS)
-@ActiveProfiles("dev")<% if (databaseType == 'nosql') { %>
+@ActiveProfiles("dev")<% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
 @Import(MongoConfiguration.class)<% } %>
 public class UserServiceTest {
 
@@ -61,8 +61,8 @@ public class UserServiceTest {
         token.setTokenValue(tokenSeries + "-data");
         token.setTokenDate(localDate);
         token.setIpAddress("127.0.0.1");
-        token.setUserAgent("Test agent");<% if (databaseType == 'sql') { %>
-        persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'nosql') { %>
+        token.setUserAgent("Test agent");<% if (prodDatabaseType != 'none') { %>
+        persistentTokenRepository.saveAndFlush(token);<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
         persistentTokenRepository.save(token);<% } %>
     }
 }

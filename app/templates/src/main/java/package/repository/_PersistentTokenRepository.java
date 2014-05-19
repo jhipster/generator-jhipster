@@ -1,19 +1,19 @@
-package <%=packageName%>.repository;
+package <%=packageName%>.repository<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>;
 
-import <%=packageName%>.domain.PersistentToken;
-import <%=packageName%>.domain.User;
-import org.joda.time.LocalDate;<% if (databaseType == 'sql') { %>
-import org.springframework.data.jpa.repository.JpaRepository;<% } %><% if (databaseType == 'nosql') { %>
+import <%=packageName%>.domain<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>.PersistentToken;
+import <%=packageName%>.domain<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>.User;
+import org.joda.time.LocalDate;<% if (prodDatabaseType != 'none') { %>
+import org.springframework.data.jpa.repository.JpaRepository;<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
 
 import java.util.List;
 
-<% if (databaseType == 'sql') { %>/**
+<% if (prodDatabaseType != 'none') { %>/**
  * Spring Data JPA repository for the PersistentToken entity.
- */<% } %><% if (databaseType == 'nosql') { %>/**
+ */<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>/**
  * Spring Data MongoDB repository for the PersistentToken entity.
  */<% } %>
-public interface PersistentTokenRepository extends <% if (databaseType == 'sql') { %>JpaRepository<% } %><% if (databaseType == 'nosql') { %>MongoRepository<% } %><PersistentToken, String> {
+public interface PersistentTokenRepository extends <% if (prodDatabaseType != 'none') { %>JpaRepository<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>MongoRepository<% } %><PersistentToken, String> {
 
     List<PersistentToken> findByUser(User user);
 

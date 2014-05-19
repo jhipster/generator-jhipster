@@ -97,7 +97,7 @@
         <HikariCP.version>1.3.3</HikariCP.version>
         <commons-lang.version>2.6</commons-lang.version>
         <commons-io.version>2.4</commons-io.version>
-        <javax.inject.version>1</javax.inject.version><% if (databaseType == 'sql') { %>
+        <javax.inject.version>1</javax.inject.version><% if (prodDatabaseType != 'none') { %>
         <joda-time-hibernate.version>1.3</joda-time-hibernate.version><% } %>
         <geronimo-javamail_1.4_mail.version>1.8.3</geronimo-javamail_1.4_mail.version>
         <usertype.core.version>3.1.0.CR10</usertype.core.version>
@@ -108,7 +108,7 @@
         <sonar-maven-plugin.version>2.2</sonar-maven-plugin.version>
         <jhipsterloaded.version>0.6</jhipsterloaded.version><% if (websocket == 'atmosphere') { %>
         <atmosphere-spring.version>2.1.0</atmosphere-spring.version><% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
-        <postgresql.version>9.3-1100-jdbc41</postgresql.version><% } %><% if (databaseType == 'sql') { %>
+        <postgresql.version>9.3-1100-jdbc41</postgresql.version><% } %><% if (prodDatabaseType != 'none') { %>
         <liquibase-slf4j.version>1.2.1</liquibase-slf4j.version><% } %>
     </properties>
 
@@ -296,7 +296,7 @@
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
-        </dependency><% if (databaseType == 'sql') { %>
+        </dependency><% if (prodDatabaseType != 'none') { %>
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time-hibernate</artifactId>
@@ -311,7 +311,7 @@
             <groupId>org.atmosphere</groupId>
             <artifactId>atmosphere-spring</artifactId>
             <version>2.1.0</version>
-        </dependency><% } %><% if (databaseType == 'sql') { %>
+        </dependency><% } %><% if (prodDatabaseType != 'none') { %>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
@@ -320,7 +320,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-        </dependency><% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
+        </dependency><% } %><% if (hibernateCache == 'ehcache' && prodDatabaseType != 'none') { %>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-ehcache</artifactId>
@@ -329,7 +329,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-        </dependency><% if (databaseType == 'sql') { %>
+        </dependency><% if (prodDatabaseType != 'none') { %>
         <dependency>
             <groupId>org.jadira.usertype</groupId>
             <artifactId>usertype.core</artifactId>
@@ -371,11 +371,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency><% if (databaseType == 'sql') { %>
+        </dependency><% if (prodDatabaseType != 'none') { %>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency><% } %><% if (databaseType == 'nosql') { %>
+        </dependency><% } %><% if (nosqlDatabaseType == 'mongodb') { %>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
@@ -404,7 +404,7 @@
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
             <version><%= _.unescape('\${spring-security-oauth2.version}')%></version>
-        </dependency><% } %><% if (databaseType == 'nosql') { %>
+        </dependency><% } %><% if (nosqlDatabaseType == 'mongodb') { %>
         <dependency>
             <groupId>org.mongeez</groupId>
             <artifactId>mongeez</artifactId>
@@ -464,12 +464,12 @@
             <artifactId>assertj-core</artifactId>
             <version><%= _.unescape('\${assertj-core.version}')%></version>
             <scope>test</scope>
-        </dependency><% if (databaseType == 'sql') { %>
+        </dependency><% if (prodDatabaseType != 'none') { %>
         <dependency>
             <groupId>com.mattbertolini</groupId>
             <artifactId>liquibase-slf4j</artifactId>
             <version><%= _.unescape('\${liquibase-slf4j.version}')%></version>
-        </dependency><% } %><% if (databaseType == 'nosql') { %>
+        </dependency><% } %><% if (nosqlDatabaseType == 'mongodb') { %>
         <dependency>
             <groupId>cz.jirutka.spring</groupId>
             <artifactId>embedmongo-spring</artifactId>

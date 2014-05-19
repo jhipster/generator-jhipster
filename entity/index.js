@@ -14,12 +14,40 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
   this.packageName = this.config.get('packageName');
   this.packageFolder = this.config.get('packageFolder');
   this.hibernateCache = this.config.get('hibernateCache');
-  this.databaseType = this.config.get('databaseType');
+  this.prodDatabaseType = this.config.get('prodDatabaseType');
+  this.nosqlDatabaseType = this.config.get('nosqlDatabaseType');
   this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
 };
 
 util.inherits(EntityGenerator, yeoman.generators.Base);
 util.inherits(EntityGenerator, scriptBase);
+
+EntityGenerator.prototype.askFor = function askFor() {
+    var cb = this.async();
+
+    var prompts = [
+        {
+            type: 'list',
+            name: 'entityType',
+            message: '(1/1) For which *databaseType* do you want to create the entity?',
+            choices: [
+                {
+                    value: 'jpa',
+                    name: 'JPA'
+                },
+                {
+                    value: 'mongodb',
+                    name: 'MongoDB'
+                }
+            ],
+            default: 0
+        }
+    ]
+    this.prompt(prompts, function (props) {
+        this.entityType = props.entityType;
+        cb();
+    }.bind(this));
+};
 
 EntityGenerator.prototype.files = function files() {
 
@@ -27,10 +55,10 @@ EntityGenerator.prototype.files = function files() {
   this.entityInstance = this.name.toLowerCase();
 
   this.template('src/main/java/package/domain/_Entity.java', 
-  	'src/main/java/' + this.packageFolder + '/domain/' +  this.entityClass + '.java');
+  	'src/main/java/' + this.packageFolder + '/domain/' + this.entityType + '/' +  this.entityClass + '.java');
 
   this.template('src/main/java/package/repository/_EntityRepository.java', 
-    'src/main/java/' + this.packageFolder + '/repository/' +  this.entityClass + 'Repository.java');
+    'src/main/java/' + this.packageFolder + '/repository/' + this.entityType + '/' +  this.entityClass + 'Repository.java');
 
   this.template('src/main/java/package/web/rest/_EntityResource.java', 
     'src/main/java/' + this.packageFolder + '/web/rest/' +  this.entityClass + 'Resource.java');

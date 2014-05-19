@@ -1,8 +1,8 @@
 <mongoChangeLog>
     <changeSet changeId="ChangeSet-1" author="jhipster">
-        <script>
+        <script><% if(prodDatabaseType == 'none') {%>
             db.T_AUTHORITY.insert({"_id" : "ROLE_ADMIN"});
-            db.T_AUTHORITY.insert({"_id" : "ROLE_USER"});
+            db.T_AUTHORITY.insert({"_id" : "ROLE_USER"});<% } %>
         </script>
     </changeSet>
 </mongoChangeLog>

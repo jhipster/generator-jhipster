@@ -1,18 +1,18 @@
-package <%=packageName%>.domain;
+package <%=packageName%>.domain<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;<% if (hibernateCache != 'no' && databaseType == 'sql') { %>
+import com.fasterxml.jackson.annotation.JsonIgnore;<% if (hibernateCache != 'no' && prodDatabaseType != 'none') { %>
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (databaseType == 'sql') { %>
+import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (prodDatabaseType != 'none') { %>
 import org.hibernate.annotations.Type;<% } %>
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;<% if (databaseType == 'nosql') { %>
+import org.joda.time.format.DateTimeFormatter;<% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;<% } %>
 
-<% if (databaseType == 'sql') { %>import javax.persistence.*;<% } %>
+<% if (prodDatabaseType != 'none') { %>import javax.persistence.*;<% } %>
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -23,39 +23,39 @@ import java.io.Serializable;
  *
  * @see <%=packageName%>.security.CustomPersistentRememberMeServices
  */
-<% if (databaseType == 'sql') { %>@Entity
-@Table(name = "T_PERSISTENT_TOKEN")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'nosql') { %>
+<% if (prodDatabaseType != 'none') { %>@Entity
+@Table(name = "T_PERSISTENT_TOKEN")<% } %><% if (hibernateCache != 'no' && prodDatabaseType != 'none') { %>
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
 @Document(collection = "T_PERSISTENT_TOKEN")<% } %>
 public class PersistentToken implements Serializable {
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("d MMMM yyyy");
     
     private static final int MAX_USER_AGENT_LEN = 255;
-
-    @Id
+    <% if(prodDatabaseType != 'none' || nosqlDatabaseType != 'none') { %>
+    @Id<% } %>
     private String series;
 
     @JsonIgnore
-    @NotNull<% if (databaseType == 'sql') { %>
+    @NotNull<% if (prodDatabaseType != 'none') { %>
     @Column(name = "token_value")<% } %>
     private String tokenValue;
 
-    @JsonIgnore<% if (databaseType == 'sql') { %>
+    @JsonIgnore<% if (prodDatabaseType != 'none') { %>
     @Column(name = "token_date")
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")<% } %>
     private LocalDate tokenDate;
 
     //an IPV6 address max length is 39 characters
-    @Size(min = 0, max = 39)<% if (databaseType == 'sql') { %>
+    @Size(min = 0, max = 39)<% if (prodDatabaseType != 'none') { %>
     @Column(name = "ip_address")<% } %>
     private String ipAddress;
 
-    <% if (databaseType == 'sql') { %>@Column(name = "user_agent")<% } %>
+    <% if (prodDatabaseType != 'none') { %>@Column(name = "user_agent")<% } %>
     private String userAgent;
 
     @JsonIgnore
-    <% if (databaseType == 'sql') { %>@ManyToOne<% } %><% if (databaseType == 'nosql') { %>
+    <% if (prodDatabaseType != 'none') { %>@ManyToOne<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
     @DBRef<% } %>
     private User user;
 

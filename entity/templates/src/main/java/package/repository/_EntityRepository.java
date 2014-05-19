@@ -1,14 +1,14 @@
-package <%=packageName%>.repository;
+package <%=packageName%>.repository.<%= entityType%>;
 
-import <%=packageName%>.domain.<%= entityClass %>;<% if (databaseType == 'sql') { %>
-        import org.springframework.data.jpa.repository.JpaRepository;<% } %><% if (databaseType == 'nosql') { %>
+import <%=packageName%>.domain.<%= entityType%>.<%= entityClass %>;<% if (entityType == 'jpa') { %>
+        import org.springframework.data.jpa.repository.JpaRepository;<% } %><% if (entityType == 'mongodb') { %>
         import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
 
-<% if (databaseType == 'sql') { %>/**
+<% if (entityType == 'jpa') { %>/**
  * Spring Data JPA repository for the <%= entityClass %> entity.
- */<% } %><% if (databaseType == 'nosql') { %>/**
+ */<% } %><% if (entityType == 'mongodb') { %>/**
  * Spring Data MongoDB repository for the <%= entityClass %> entity.
  */<% } %>
-public interface <%= entityClass %>Repository extends <% if (databaseType == 'sql') { %>JpaRepository<% } %><% if (databaseType == 'nosql') { %>MongoRepository<% } %><<%= entityClass %>, <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %>> {
+public interface <%= entityClass %>Repository extends <% if (entityType == 'jpa') { %>JpaRepository<% } %><% if (entityType == 'mongodb') { %>MongoRepository<% } %><<%= entityClass %>, <% if (entityType == 'jpa') { %>Long<% } %><% if (entityType == 'mongodb') { %>Long<% } %>> {
 
 }

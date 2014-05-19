@@ -17,12 +17,13 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
+import org.springframework.security.oauth2.provider.token.TokenStore;<% if(prodDatabaseType != 'none') { %>
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;<% } %><% if(prodDatabaseType == 'none') { %>
+import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;<% } %>
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import javax.inject.Inject;
-import javax.sql.DataSource;
+import javax.inject.Inject;<% if(prodDatabaseType != 'none') { %>
+import javax.sql.DataSource;<% } %>
 
 @Configuration
 public class OAuth2ServerConfiguration {
@@ -99,13 +100,13 @@ public class OAuth2ServerConfiguration {
         private static final String PROP_TOKEN_VALIDITY_SECONDS = "tokenValidityInSeconds";
 
         private RelaxedPropertyResolver propertyResolver;
-
+		<% if(prodDatabaseType != 'none') { %>
         @Inject
-        private DataSource dataSource;
+        private DataSource dataSource;<% } %>
 
         @Bean
-        public TokenStore tokenStore() {
-            return new JdbcTokenStore(dataSource);
+        public TokenStore tokenStore() {<% if(prodDatabaseType != 'none') { %>
+            return new JdbcTokenStore(dataSource);<% } %><% if(prodDatabaseType == 'none') { %>return new InMemoryTokenStore();<% } %>
         }
 
         @Inject

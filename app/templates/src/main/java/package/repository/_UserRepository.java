@@ -1,14 +1,14 @@
-package <%=packageName%>.repository;
+package <%=packageName%>.repository<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>;
 
-import <%=packageName%>.domain.User;<% if (databaseType == 'sql') { %>
-import org.springframework.data.jpa.repository.JpaRepository;<% } %><% if (databaseType == 'nosql') { %>
+import <%=packageName%>.domain<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>.User;<% if (prodDatabaseType != 'none') { %>
+import org.springframework.data.jpa.repository.JpaRepository;<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
 
-<% if (databaseType == 'sql') { %>/**
+<% if (prodDatabaseType != 'none') { %>/**
  * Spring Data JPA repository for the User entity.
- */<% } %><% if (databaseType == 'nosql') { %>/**
+ */<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>/**
  * Spring Data MongoDB repository for the User entity.
  */<% } %>
-public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRepository<% } %><% if (databaseType == 'nosql') { %>MongoRepository<% } %><User, String> {
+public interface UserRepository extends <% if (prodDatabaseType != 'none') { %>JpaRepository<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>MongoRepository<% } %><User, String> {
 
 }

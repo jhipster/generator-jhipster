@@ -1,10 +1,10 @@
 package <%=packageName%>.web.rest;
 
-import <%=packageName%>.Application;<% if (databaseType == 'nosql') { %>
+import <%=packageName%>.Application;<% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
 import <%=packageName%>.config.MongoConfiguration;<% } %>
-import <%=packageName%>.domain.Authority;
-import <%=packageName%>.domain.User;
-import <%=packageName%>.repository.UserRepository;
+import <%=packageName%>.domain<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>.Authority;
+import <%=packageName%>.domain<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>.User;
+import <%=packageName%>.repository<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>.UserRepository;
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.UserService;
 import org.junit.Before;
@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.SpringApplicationConfiguration;<% if (databaseType == 'nosql') { %>
+import org.springframework.boot.test.SpringApplicationConfiguration;<% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
 import org.springframework.context.annotation.Import;<% } %>
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -44,7 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-@ActiveProfiles("dev")<% if (databaseType == 'nosql') { %>
+@ActiveProfiles("dev")<% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
 @Import(MongoConfiguration.class)<% } %>
 public class AccountResourceTest {
 

@@ -2,13 +2,16 @@ server:
     port: 8080
 
 spring:
-    profiles: prod<% if (databaseType == 'nosql') { %>
+    profiles: prod<% if (nosqlDatabaseType == 'mongodb') { %>
     data:
         mongodb:
             host: localhost
             port: 27017
-            databaseName: <%= baseName %><% } %>
-    <% if (databaseType == 'sql') { %>
+            databaseName: <%= baseName %>
+            uri:
+            username: 
+            password: <% } %>
+    <% if (prodDatabaseType != 'none') { %>
     datasource:
         dataSourceClassName: <% if (prodDatabaseType == 'mysql') { %>com.mysql.jdbc.jdbc2.optional.MysqlDataSource<% } else if (prodDatabaseType == 'postgresql') { %>org.postgresql.ds.PGSimpleDataSource<% } else { %>org.hsqldb.jdbc.JDBCDataSource<% } %>
         url: <% if (prodDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (prodDatabaseType == 'postgresql') { %><% } else { %>jdbc:hsqldb:mem:<%= baseName %><% } %>

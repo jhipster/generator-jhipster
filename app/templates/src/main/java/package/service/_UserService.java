@@ -1,9 +1,9 @@
 package <%=packageName%>.service;
 
-import <%=packageName%>.domain.PersistentToken;
-import <%=packageName%>.domain.User;
-import <%=packageName%>.repository.PersistentTokenRepository;
-import <%=packageName%>.repository.UserRepository;
+import <%=packageName%>.domain<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>.PersistentToken;
+import <%=packageName%>.domain<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>.User;
+import <%=packageName%>.repository<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>.PersistentTokenRepository;
+import <%=packageName%>.repository<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>.UserRepository;
 import <%=packageName%>.security.SecurityUtils;
 import org.joda.time.LocalDate;
 import org.slf4j.Logger;
@@ -71,7 +71,7 @@ public class UserService {
         LocalDate now = new LocalDate();
         List<PersistentToken> tokens = persistentTokenRepository.findByTokenDateBefore(now.minusMonths(1));
         for (PersistentToken token : tokens) {
-            log.debug("Deleting token {}", token.getSeries());<% if (databaseType == 'sql') { %>
+            log.debug("Deleting token {}", token.getSeries());<% if (prodDatabaseType != 'none') { %>
             User user = token.getUser();
             user.getPersistentTokens().remove(token);<% } %>
             persistentTokenRepository.delete(token);

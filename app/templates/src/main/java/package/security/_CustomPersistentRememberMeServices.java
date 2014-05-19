@@ -1,9 +1,9 @@
 package <%=packageName%>.security;
 
-import <%=packageName%>.domain.PersistentToken;
-import <%=packageName%>.domain.User;
-import <%=packageName%>.repository.PersistentTokenRepository;
-import <%=packageName%>.repository.UserRepository;
+import <%=packageName%>.domain<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>.PersistentToken;
+import <%=packageName%>.domain<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>.User;
+import <%=packageName%>.repository<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>.PersistentTokenRepository;
+import <%=packageName%>.repository<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>.UserRepository;
 import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,7 +93,7 @@ public class CustomPersistentRememberMeServices extends
         token.setIpAddress(request.getRemoteAddr());
         token.setUserAgent(request.getHeader("User-Agent"));
         try {
-            <% if (databaseType == 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'nosql') { %>persistentTokenRepository.save(token);<% } %>
+            <% if (prodDatabaseType != 'none') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>persistentTokenRepository.save(token);<% } %>
             addCookie(token, request, response);
         } catch (DataAccessException e) {
             log.error("Failed to update token: ", e);
@@ -117,7 +117,7 @@ public class CustomPersistentRememberMeServices extends
         token.setIpAddress(request.getRemoteAddr());
         token.setUserAgent(request.getHeader("User-Agent"));
         try {
-            <% if (databaseType == 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'nosql') { %>persistentTokenRepository.save(token);<% } %>
+            <% if (prodDatabaseType != 'none') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>persistentTokenRepository.save(token);<% } %>
             addCookie(token, request, response);
         } catch (DataAccessException e) {
             log.error("Failed to save persistent token ", e);

@@ -1,13 +1,13 @@
-package <%=packageName%>.repository;
+package <%=packageName%>.repository<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>;
 
-import <%=packageName%>.domain.Authority;<% if (databaseType == 'sql') { %>
-import org.springframework.data.jpa.repository.JpaRepository;<% } %><% if (databaseType == 'nosql') { %>
+import <%=packageName%>.domain<% if(prodDatabaseType != 'none') { %>.jpa<% } %><% if(prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>.mongodb<% } %>.Authority;<% if (prodDatabaseType != 'none') { %>
+import org.springframework.data.jpa.repository.JpaRepository;<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
 
-<% if (databaseType == 'sql') { %>/**
+<% if (prodDatabaseType != 'none') { %>/**
  * Spring Data JPA repository for the Authority entity.
- */<% } %><% if (databaseType == 'nosql') { %>/**
+ */<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>/**
  * Spring Data MongoDB repository for the Authority entity.
  */<% } %>
-public interface AuthorityRepository extends <% if (databaseType == 'sql') { %>JpaRepository<% } %><% if (databaseType == 'nosql') { %>MongoRepository<% } %><Authority, String> {
+public interface AuthorityRepository extends <% if (prodDatabaseType != 'none') { %>JpaRepository<% } %><% if (prodDatabaseType == 'none' && nosqlDatabaseType == 'mongodb') { %>MongoRepository<% } %><Authority, String> {
 }
