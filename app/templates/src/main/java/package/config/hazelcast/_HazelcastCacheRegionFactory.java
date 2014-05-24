@@ -75,7 +75,7 @@ public class HazelcastCacheRegionFactory implements RegionFactory {
     }
 
     public void start(final Settings settings, final Properties properties) throws CacheException {
-        // Do nothing the hazelcalst hazelcastInstance is injected
+        // Do nothing the hazelcast hazelcastInstance is injected
         log.info("Starting up {}", getClass().getSimpleName());
 
         if (hazelcastInstance == null) {
@@ -85,7 +85,7 @@ public class HazelcastCacheRegionFactory implements RegionFactory {
     }
 
     public void stop() {
-        // Do nothing the hazelcalst instance is managed globally
+        // Do nothing the hazelcast instance is managed globally
         log.info("Shutting down {}", getClass().getSimpleName());
         cleanupService.stop();
     }
