@@ -13,17 +13,22 @@ import <%=packageName%>.web.rest.dto.UserDTO;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.context.IWebContext;
+import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.spring4.context.SpringWebContext;
 
 import javax.inject.Inject;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;<% if (javaVersion != '8') { %>
-import java.util.ArrayList;<% } %>
-import java.util.List;<% if (javaVersion == '8') { %>
-import java.util.Optional;
+import java.net.URLDecoder;
+import java.util.*;<% if (javaVersion == '8') { %>
 import java.util.stream.Collectors;<% } %>
 
 /**
@@ -34,6 +39,15 @@ import java.util.stream.Collectors;<% } %>
 public class AccountResource {
 
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
+
+    @Autowired
+    private ServletContext servletContext;
+
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @Inject
+    private SpringTemplateEngine templateEngine;
 
     @Inject
     private UserRepository userRepository;
@@ -54,13 +68,17 @@ public class AccountResource {
             method = RequestMethod.POST,
             produces = "application/json")
     @Timed
-    public ResponseEntity<?> registerAccount(@RequestBody UserDTO userDTO) {<% if (javaVersion == '8') { %>
+    public ResponseEntity<?> registerAccount(@RequestBody UserDTO userDTO, HttpServletRequest request,
+                                             HttpServletResponse response) {<% if (javaVersion == '8') { %>
         return Optional.ofNullable(userRepository.findOne(userDTO.getLogin()))
             .map(user -> new ResponseEntity<>(HttpStatus.NOT_MODIFIED))
             .orElseGet(() -> {
-                User user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(), userDTO.getFirstName(),
-                        userDTO.getLastName(), userDTO.getEmail().toLowerCase(), userDTO.getLangKey());
-                mailService.sendActivationEmail(user);
+                User user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(),
+                        userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail().toLowerCase(),
+                        userDTO.getLangKey());
+                final Locale locale = Locale.forLanguageTag(user.getLangKey());
+                String content = createHtmlContentFromTemplate(user, locale, request, response);
+                mailService.sendActivationEmail(user.getEmail(), content, locale);
                 return new ResponseEntity<>(HttpStatus.CREATED);});<% } else { %>
         User user = userRepository.findOne(userDTO.getLogin());
         if (user != null) {
@@ -68,7 +86,9 @@ public class AccountResource {
         } else {
             user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(), userDTO.getFirstName(),
                     userDTO.getLastName(), userDTO.getEmail().toLowerCase(), userDTO.getLangKey());
-            mailService.sendActivationEmail(user);
+            final Locale locale = Locale.forLanguageTag(user.getLangKey());
+            String content = createHtmlContentFromTemplate(user, locale, request, response);
+            mailService.sendActivationEmail(user.getEmail(), content, locale);
             return new ResponseEntity<>(HttpStatus.CREATED);
         }<% } %>
     }
@@ -223,5 +243,17 @@ public class AccountResource {
                 persistentTokenRepository.delete(decodedSeries);
             }
         }<% } %>
+    }
+
+    private String createHtmlContentFromTemplate(final User user, final Locale locale, final HttpServletRequest request,
+                                                 final HttpServletResponse response) {
+        Map<String, Object> variables = new HashMap<String, Object>();
+        variables.put("user", user);
+        variables.put("baseUrl", request.getScheme() + "://" +   // "http" + "://
+                                 request.getServerName() +       // "myhost"
+                                 ":" + request.getServerPort());
+        IWebContext context = new SpringWebContext(request, response, servletContext,
+                locale, variables, applicationContext);
+        return templateEngine.process(MailService.EMAIL_ACTIVATION_PREFIX + MailService.TEMPLATE_SUFFIX, context);
     }
 }

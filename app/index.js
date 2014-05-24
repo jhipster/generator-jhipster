@@ -397,8 +397,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(resourceDir + '/mails/messages/messages_fr.properties', resourceDir + 'mails/messages/messages_fr.properties');
     this.copy(resourceDir + '/mails/messages/messages_pl.properties', resourceDir + 'mails/messages/messages_pl.properties');
     this.copy(resourceDir + '/mails/messages/messages_ru.properties', resourceDir + 'mails/messages/messages_ru.properties');
-    this.copy(resourceDir + '/mails/activationEmail.vm', resourceDir + 'mails/activationEmail.vm');
-    this.copy(resourceDir + '/mails/common.vm', resourceDir + 'mails/common.vm');
+    this.copy(resourceDir + '/mails/activationEmail.html', resourceDir + 'mails/activationEmail.html');
 
     // Create Java files
     var javaDir = 'src/main/java/' + packageFolder + '/';

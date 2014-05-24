@@ -1,23 +1,19 @@
 package <%=packageName%>.service;
 
-import <%=packageName%>.domain.User;
-import org.apache.velocity.app.VelocityEngine;
+import org.apache.commons.lang.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.core.env.Environment;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.velocity.VelocityEngineUtils;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import java.util.HashMap;
+import javax.mail.internet.MimeMessage;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * Service for sending e-mails.
@@ -29,9 +25,8 @@ import java.util.Map;
 @Service
 public class MailService {
 
-    // TODO: this can be used for external mail template configuration
-    private static final String TEMPLATE_ROOT = "/mails/";
-    private static final String TEMPLATE_SUFFIX = "Email.vm";
+    public static final String TEMPLATE_SUFFIX = "Email";
+    public static final String EMAIL_ACTIVATION_PREFIX = "activation";
 
     private final Logger log = LoggerFactory.getLogger(MailService.class);
 
@@ -42,68 +37,41 @@ public class MailService {
     private JavaMailSenderImpl javaMailSender;
 
     @Inject
-    private MessageSource mailMessageSource;
-
-    @Inject
-    private VelocityEngine velocityEngine;
+    private MessageSource messageSource;
 
     /**
      * System default email address that sends the e-mails.
      */
     private String from;
 
-    /**
-     * System base url in sent emails.
-     */
-    private String baseUrl;
-
     @PostConstruct
     public void init() {
         this.from = env.getProperty("spring.mail.from");
-        this.baseUrl = env.getProperty("spring.mail.baseUrl");
     }
 
     @Async
-    public void sendEmail(String to, String subject, String text) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setFrom(from);
-        message.setSubject(subject);
-        message.setText(text);
+    public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
+        log.debug("Send e-mail[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
+                isMultipart, isHtml, to, subject, content);
+        // Prepare message using a Spring helper
+        final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
-            javaMailSender.send(message);
+            final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
+            message.setTo(to);
+            message.setFrom(from);
+            message.setSubject(subject);
+            message.setText(content, isHtml);
+            javaMailSender.send(mimeMessage);
             log.debug("Sent e-mail to User '{}'!", to);
-        } catch (MailException me) {
-            log.warn("E-mail could not be sent to user '{}', exception is: {}", to, me.getMessage());
+        } catch (Exception e) {
+            log.warn("E-mail could not be sent to user '{}', exception is: {}", to, e.getMessage());
         }
     }
 
     @Async
-    public void sendActivationEmail(User user) {
-        Locale locale = Locale.forLanguageTag(user.getLangKey());
-        String activationUrl = baseUrl + "/#/activate?key=" + user.getActivationKey();
-        log.debug("Sending activation e-mail to User '{}', Url='{}' " +
-                "with locale : '{}'", user.getLogin(), activationUrl, locale);
-
-        Map<String, Object> model = new HashMap<String, Object>();
-        model.put("user", user);
-        model.put("activationUrl", activationUrl);
-
-        sendTextFromTemplate(user.getLogin(), model, "activation", locale);
-    }
-
-    /**
-     * Generate and send the mail corresponding to the given template.
-     */
-    private void sendTextFromTemplate(String email, Map<String, Object> model, String template, Locale locale) {
-        model.put("messages", mailMessageSource);
-        model.put("locale", locale);
-
-        String subject = mailMessageSource.getMessage(template + ".title", null, locale);
-        String text = VelocityEngineUtils.mergeTemplateIntoString(velocityEngine,
-                TEMPLATE_ROOT + template + TEMPLATE_SUFFIX, "utf-8", model);
-        log.debug("e-mail text  '{}", text);
-
-        sendEmail(email, subject, text);
+    public void sendActivationEmail(final String email, String content, Locale locale) {
+        log.debug("Sending activation e-mail to '{}'", email);
+        final String subject = messageSource.getMessage(EMAIL_ACTIVATION_PREFIX + ".title", null, locale);
+        sendEmail(email, subject, content, false, true);
     }
 }
