@@ -40,16 +40,16 @@ EntityGenerator.prototype.files = function files() {
     'src/main/webapp/views/' +  this.entityInstance + 's.html');
 
   this.template('src/main/webapp/scripts/_entity-router.js', 
-    'src/main/webapp/scripts/' +  this.entityInstance + '/router.js');
-  this.addScriptToIndex(this.entityInstance + '/router.js');
+    'src/main/webapp/scripts/' +  this.entityInstance + '/router_'+this.entityInstance+'.js');
+  this.addScriptToIndex(this.entityInstance + '/router_'+this.entityInstance+'.js');
 
   this.template('src/main/webapp/scripts/_entity-controller.js',
-    'src/main/webapp/scripts/' +  this.entityInstance + '/controller.js');
-  this.addScriptToIndex(this.entityInstance + '/controller.js');
+    'src/main/webapp/scripts/' +  this.entityInstance + '/controller_'+this.entityInstance+'.js');
+  this.addScriptToIndex(this.entityInstance + '/controller_'+this.entityInstance+'.js');
 
   this.template('src/main/webapp/scripts/_entity-service.js',
-    'src/main/webapp/scripts/' +  this.entityInstance + '/service.js');
-  this.addScriptToIndex(this.entityInstance + '/service.js');
+    'src/main/webapp/scripts/' +  this.entityInstance + '/service_'+this.entityInstance+'.js');
+  this.addScriptToIndex(this.entityInstance + '/service_'+this.entityInstance+'.js');
 
   this.template('src/test/java/package/web/rest/_EntityResourceTest.java',
   	'src/test/java/' + this.packageFolder + '/web/rest/' +  this.entityClass + 'ResourceTest.java');

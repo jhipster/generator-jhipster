@@ -102,15 +102,12 @@ public class SwaggerConfiguration implements EnvironmentAware {
         return swaggerApiResourceListing;
     }
 
-
-    @Bean
     /**
      * The ApiListingReferenceScanner does most of the work.
      * Scans the appropriate spring RequestMappingHandlerMappings
      * Applies the correct absolute paths to the generated swagger resources
      */
-
-
+    @Bean
     public ApiListingReferenceScanner apiListingReferenceScanner() {
         ApiListingReferenceScanner apiListingReferenceScanner = new ApiListingReferenceScanner();
 
@@ -120,8 +117,6 @@ public class SwaggerConfiguration implements EnvironmentAware {
 
         //Excludes any controllers with the supplied annotations
         apiListingReferenceScanner.setExcludeAnnotations(springSwaggerConfig.defaultExcludeAnnotations());
-
-        //
 
         apiListingReferenceScanner.setResourceGroupingStrategy(springSwaggerConfig.defaultResourceGroupingStrategy());
 
