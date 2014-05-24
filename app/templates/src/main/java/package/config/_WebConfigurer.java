@@ -83,7 +83,7 @@ public class WebConfigurer implements ServletContextInitializer {
 
         final FilterRegistration.Dynamic hazelcastWebFilter = servletContext.addFilter("hazelcastWebFilter", webFilter);
 
-        Map<String, String> parameters = new HashMap<String, String>();
+        Map<String, String> parameters = new HashMap<>();
         // Name of the distributed map storing your web session objects
         parameters.put("map-name", "clustered-http-sessions");
 
