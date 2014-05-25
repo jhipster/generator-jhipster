@@ -21,7 +21,7 @@ import java.util.Set;
 @Table(name = "T_USER")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'nosql') { %>
 @Document(collection = "T_USER")<% } %>
-public class User implements Serializable {
+public class User extends AbstractAuditingEntity implements Serializable {
 
     @NotNull
     @Size(min = 0, max = 50)
@@ -46,6 +46,19 @@ public class User implements Serializable {
     @Size(min = 0, max = 100)
     private String email;
 
+    @NotNull
+    private Boolean activated = false;
+
+    @Size(min = 2, max = 5)<% if (databaseType == 'sql') { %>
+    @Column(name = "lang_key")<% } %><% if (databaseType == 'nosql') { %>
+    @Field("lang_key")<% } %>
+    private String langKey;
+
+    @Size(min = 0, max = 20)<% if (databaseType == 'sql') { %>
+    @Column(name = "activation_key")<% } %><% if (databaseType == 'nosql') { %>
+    @Field("activation_key")<% } %>
+    private String activationKey;
+
     @JsonIgnore<% if (databaseType == 'sql') { %>
     @ManyToMany
     @JoinTable(
@@ -56,9 +69,9 @@ public class User implements Serializable {
     private Set<Authority> authorities;
 
     <% if (databaseType == 'sql') { %>@JsonIgnore
-    @OneToMany(mappedBy = "user")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<PersistentToken> persistentTokens;<% } %>
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
+    private Set<PersistentToken> persistentTokens;
 
     public String getLogin() {
         return login;
@@ -98,6 +111,30 @@ public class User implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Boolean getActivated() {
+        return activated;
+    }
+
+    public void setActivated(Boolean activated) {
+        this.activated = activated;
+    }
+
+    public String getActivationKey() {
+        return activationKey;
+    }
+
+    public void setActivationKey(String activationKey) {
+        this.activationKey = activationKey;
+    }
+
+    public String getLangKey() {
+        return langKey;
+    }
+
+    public void setLangKey(String langKey) {
+        this.langKey = langKey;
     }
 
     public Set<Authority> getAuthorities() {
@@ -147,6 +184,9 @@ public class User implements Serializable {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
+                ", activated='" + activated + '\'' +
+                ", langKey='" + langKey + '\'' +
+                ", activationKey='" + activationKey + '\'' +
                 "}";
     }
 }

@@ -15,7 +15,8 @@
                 "audits": "Audits",
                 "login": "Authenticate",
                 "logout": "Log out",
-                "apidocs": "API"
+                "apidocs": "API",
+                "register": "Register"
             },
             "admin": "Administration",
             "language": "Language"
@@ -27,14 +28,51 @@
             "de": "German",
             "pl": "Polish",
             "ru": "Russian"
+        },
+        "form": {
+            "username": "Login",
+            "username.placeholder": "Your login",
+            "newpassword": "New password",
+            "newpassword.placeholder": "New password",
+            "confirmpassword": "New password confirmation",
+            "confirmpassword.placeholder": "Confirm the new password",
+            "email": "E-mail",
+            "email.placeholder": "Your e-mail"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "If you want to <a href=\"#/login\">authenticate</a>, you can try the default accounts:<br/>- Admnistrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\").",
+                "register": "You don't have an account yet? <a href=\"#/register\">Register a new account</a>"
+            },
+            "error": {
+                "dontmatch" : "The password and its confirmation do not match!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Your password is required.",
+                    "minlength": "Your password is required to be at least 5 characters",
+                    "maxlength": "Your password cannot be longer than 50 characters",
+                    "strength": "Password strength:"
+                },
+                "confirmpassword": {
+                    "required": "Your confirmation password is required.",
+                    "minlength": "Your confirmation password is required to be at least 5 characters",
+                    "maxlength": "Your confirmation password cannot be longer than 50 characters"
+                },
+                "email": {
+                    "required": "Your e-mail is required.",
+                    "invalid": "Your e-mail is invalid.",
+                    "minlength": "Your e-mail is required to be at least 1 character",
+                    "maxlength": "Your e-mail cannot be longer than 50 characters"
+                }
+            }
         }
     },
     "main": {
         "title": "Welcome, Java Hipster!",
         "subtitle": "This is your homepage",
         "logged": {
-            "message": "You are logged in as user \"{{username}}\".",
-            "authenticated": "If you want to <a href=\"#/login\">authenticate</a>, you can try the default accounts:<br/>- Admnistrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\")."
+            "message": "You are logged in as user \"{{username}}\"."
         },
         "question": "If you have any question on JHipster:",
         "link": {
@@ -46,11 +84,36 @@
         "like": "If you like JHipster, don't forget to give us a star on",
         "github": "Github"
     },
+    "activate": {
+        "title": "Activation",
+        "messages": {
+            "success": "<strong>Your user has been activated.</strong> Please <a href=\"#/login\">authenticate</a>.",
+            "error": "<strong>Your user could not be activated.</strong> Please use the registration form to sign up."
+        }
+    },
+    "register": {
+        "title": "Registration",
+        "form": {
+            "button": "Register"
+        },
+        "messages": {
+            "validate": {
+                "login": {
+                    "required": "Your login is required.",
+                    "minlength": "Your login is required to be at least 1 character",
+                    "maxlength": "Your login cannot be longer than 50 characters"
+                }
+            },
+            "success": "<strong>Registration saved!</strong> Please check your email for confirmation.",
+            "error": {
+                "fail": "<strong>Registration failed!</strong> Please try again later.",
+                "userexists": "<strong>Login name already registered!</strong> Please choose another one."
+            }
+        }
+    },
     "login": {
         "title": "Authentication",
         "form": {
-            "username": "Login",
-            "username.placeholder": "Your login",
             "password": "Password",
             "password.placeholder": "Your password",
             "rememberme": "Automatic Login",
@@ -69,8 +132,6 @@
             "firstname.placeholder": "Your first name",
             "lastname": "Last Name",
             "lastname.placeholder": "Your last name",
-            "email": "E-mail",
-            "email.placeholder": "Your e-mail",
             "button": "Save"
         },
         "messages": {
@@ -86,12 +147,6 @@
                     "required": "Your last name is required.",
                     "minlength": "Your last name is required to be at least 1 character",
                     "maxlength": "Your last name cannot be longer than 50 characters"
-                },
-                "email": {
-                    "required": "Your e-mail is required.",
-                    "invalid": "Your e-mail is invalid.",
-                    "minlength": "Your e-mail is required to be at least 1 character",
-                    "maxlength": "Your e-mail cannot be longer than 50 characters"
                 }
             }
         }
@@ -99,31 +154,11 @@
     "password": {
         "title": "Password for [<b>{{username}}</b>]",
         "form": {
-            "newpassword": "New password",
-            "newpassword.placeholder": "New password",
-            "confirmpassword": "New password confirmation",
-            "confirmpassword.placeholder": "Confirm the new password",
             "button": "Save"
         },
         "messages": {
-            "error": {
-                "global": "<strong>An error has occured!</strong> The password could not be changed.",
-                "dontmatch" : "The password and its confirmation do not match!"
-            },
-            "success": "<strong>Password changed!</strong>",
-            "validate": {
-                "newpassword": {
-                    "required": "Your password is required.",
-                    "minlength": "Your password is required to be at least 5 characters",
-                    "maxlength": "Your password cannot be longer than 50 characters",
-                    "strength": "Password strength:"
-                },
-                "confirmpassword": {
-                    "required": "Your confirm password is required.",
-                    "minlength": "Your confirm password is required to be at least 5 character",
-                    "maxlength": "Your confirm password cannot be longer than 50 characters"
-                }
-            }
+            "error":  "<strong>An error has occured!</strong> The password could not be changed.",
+            "success": "<strong>Password changed!</strong>"
         }
     },
     "sessions": {
@@ -138,7 +173,6 @@
             "success": "<strong>Session invalidated!</strong>",
             "error": "<strong>An error has occured!</strong> The session could not be invalidated."
         }
-
     },
     "tracker": {
         "title": "Real-time user activities",

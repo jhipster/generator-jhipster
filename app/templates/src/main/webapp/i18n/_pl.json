@@ -15,7 +15,8 @@
                 "audits": "Audyty",
                 "login": "Autoryzacja",
                 "logout": "Wyloguj",
-                "apidocs": "API"
+                "apidocs": "API",
+                "register": "Register"
             },
             "admin": "Administracja",
             "language": "Język"
@@ -27,14 +28,51 @@
             "de": "Niemiecki",
             "pl": "Polski",
             "ru": "Rosyjski"
+        },
+        "form": {
+            "username": "Login",
+            "username.placeholder": "Twój login",
+            "newpassword": "Nowe hasło",
+            "newpassword.placeholder": "Nowe hasło",
+            "confirmpassword": "Potwierdź nowe hasło",
+            "confirmpassword.placeholder": "Potwierdź nowe hasło",
+            "email": "E-mail",
+            "email.placeholder": "Twój e-mail"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Jeśli chcek <a href=\"#/login\">zalogować się</a>, możesz spróbować domyślnego konta:<br/>- Admnistrator (login=\"admin\" i hasło=\"admin\") <br/>- Użytkownik (login=\"user\" i hasło=\"user\").",
+                "register": "You don't have an account yet? <a href=\"#/register\">Register a new account</a>"
+            },
+            "error": {
+                "dontmatch": "Hasło i potwierdzenie nie zgadzają się!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Twoje hasło jest wymagane.",
+                    "minlength": "Twoje hasło powinno mieć minimum 5 znaków",
+                    "maxlength": "Twoje hasło nie może być dłuższe niż 50 znaków",
+                    "strength": "Siła hasła:"
+                },
+                "confirmpassword": {
+                    "required": "Twoje hasło potwierdzające jest wymagane.",
+                    "minlength": "Twoje hasło potwierdzające powinno mieć minimum 5 character",
+                    "maxlength": "Twoje hasło potwierdzające nie powinno być dłuższe niż 50 znaków"
+                },
+                "email": {
+                    "required": "Twój e-mail jest wymagany.",
+                    "invalid": "Twój e-mail jest błędny.",
+                    "minlength": "Twój e-mail musi mieć przynajmniej 1 literę",
+                    "maxlength": "Your e-mail nie może być dłuższe niż 50 liter"
+                }
+            }
         }
     },
     "main": {
         "title": "Witamy, Java Hipstera!",
         "subtitle": "To jest twoja strona domowa",
         "logged": {
-            "message": "Jesteś zalogowany jako użytkownik \"{{username}}\".",
-            "authenticated": "Jeśli chcek <a href=\"#/login\">zalogować się</a>, możesz spróbować domyślnego konta:<br/>- Admnistrator (login=\"admin\" i hasło=\"admin\") <br/>- Użytkownik (login=\"user\" i hasło=\"user\")."
+            "message": "Jesteś zalogowany jako użytkownik \"{{username}}\"."
         },
         "question": "Jeśli masz jakiekolwiek pytania na temat JHipster:",
         "link": {
@@ -46,11 +84,36 @@
         "like": "Jeśli lubisz JHipster, nie zapomnij dać nam gwiazdki",
         "github": "Github"
     },
+    "activate": {
+        "title": "Activation",
+        "messages": {
+            "success": "<strong>Your user has been activated.</strong> Please <a href=\"#/login\">authenticate</a>.",
+            "error": "<strong>Your user could not be activated.</strong> Please use the registration form to sign up."
+        }
+    },
+    "register": {
+        "title": "Registration",
+        "form": {
+            "button": "Register"
+        },
+        "messages": {
+            "validate": {
+                "login": {
+                    "required": "Your login is required.",
+                    "minlength": "Your login is required to be at least 1 character",
+                    "maxlength": "Your login cannot be longer than 50 characters"
+                }
+            },
+            "success": "<strong>Registration saved!</strong> Please check your email for confirmation.",
+            "error": {
+                "fail": "<strong>Registration failed!</strong> Please try again later.",
+                "userexists": "<strong>Login name already registered!</strong> Please choose another one."
+            }
+        }
+    },
     "login": {
         "title": "Autoryzacja",
         "form": {
-            "username": "Login",
-            "username.placeholder": "Twój login",
             "password": "Hasło",
             "password.placeholder": "Twoje hasło",
             "rememberme": "Automatyczny login",
@@ -69,8 +132,6 @@
             "firstname.placeholder": "Twoje imię",
             "lastname": "Nazwisko",
             "lastname.placeholder": "Twoje nazwisko",
-            "email": "E-mail",
-            "email.placeholder": "Twój e-mail",
             "button": "Zapisz"
         },
         "messages": {
@@ -86,12 +147,6 @@
                     "required": "Twoje nazwisko jest wymagane.",
                     "minlength": "Twoje nazwisko musi mieć przynajmniej 1 literę",
                     "maxlength": "Twoje nazwisko nie może być dłuższe niż 50 liter"
-                },
-                "email": {
-                    "required": "Twój e-mail jest wymagany.",
-                    "invalid": "Twój e-mail jest błędny.",
-                    "minlength": "Twój e-mail musi mieć przynajmniej 1 literę",
-                    "maxlength": "Your e-mail nie może być dłuższe niż 50 liter"
                 }
             }
         }
@@ -99,31 +154,11 @@
     "password": {
         "title": "Hasło dla [<b>{{username}}</b>]",
         "form": {
-            "newpassword": "Nowe hasło",
-            "newpassword.placeholder": "Nowe hasło",
-            "confirmpassword": "Potwierdź nowe hasło",
-            "confirmpassword.placeholder": "Potwierdź nowe hasło",
             "button": "Zapisz"
         },
         "messages": {
-            "error": {
-                "global": "<strong>Wystąpił błąd!</strong> Hasło nie zostało zmienione.",
-                "dontmatch" : "Hasło i potwierdzenie nie zgadzają się!"
-            },
-            "success": "<strong>Hasło zostało zmienione!</strong>",
-            "validate": {
-                "newpassword": {
-                    "required": "Twoje hasło jest wymagane.",
-                    "minlength": "Twoje hasło powinno mieć minimum 5 znaków",
-                    "maxlength": "Twoje hasło nie może być dłuższe niż 50 znaków",
-                    "strength": "Siła hasła:"
-                },
-                "confirmpassword": {
-                    "required": "Twoje hasło potwierdzające jest wymagane.",
-                    "minlength": "Twoje hasło potwierdzające powinno mieć minimum 5 character",
-                    "maxlength": "Twoje hasło potwierdzające nie powinno być dłuższe niż 50 znaków"
-                }
-            }
+            "error": "<strong>Wystąpił błąd!</strong> Hasło nie zostało zmienione.",
+            "success": "<strong>Hasło zostało zmienione!</strong>"
         }
     },
     "sessions": {
@@ -138,7 +173,6 @@
             "success": "<strong>Session invalidated!</strong>",
             "error": "<strong>Wystąpił błąd!</strong> Sesja nie mogła być unieważniona."
         }
-
     },
     "tracker": {
         "title": "Aktywność użytkownika w czasie rzeczywistym",
@@ -271,8 +305,8 @@
 
     },
     "errors": {
-            "title": "Strona błędu!",
-            "403": "Nie masz praw dostępu do tej storny."
+        "title": "Strona błędu!",
+        "403": "Nie masz praw dostępu do tej storny."
     },
     "footer": "To jest stopka"
 }

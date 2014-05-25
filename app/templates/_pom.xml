@@ -115,26 +115,30 @@
         <!-- Maven build properties -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.${javaVersion}</java.version><% if (authenticationType == 'token') { %>
-        <spring-security-oauth2.version>2.0.0.RC2</spring-security-oauth2.version><% } %><% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %><hazelcast.version>3.1.5</hazelcast.version><% } %>
-        <metrics-spring.version>3.0.0</metrics-spring.version>
-        <HikariCP.version>1.3.8</HikariCP.version>
+        <java.version>1.${javaVersion}</java.version>
+        <!-- Maven plugins versions -->
+        <maven-enforcer-plugin.version>1.3.1</maven-enforcer-plugin.version>
+        <sonar-maven-plugin.version>2.2</sonar-maven-plugin.version>
+		<!-- Librairies versions -->
+        <assertj-core.version>1.6.0</assertj-core.version><% if (websocket == 'atmosphere') { %>
+        <atmosphere-spring.version>2.1.0</atmosphere-spring.version><% } %>
+        <awaitility.version>1.4.0</awaitility.version>
         <commons-lang.version>2.6</commons-lang.version>
         <commons-io.version>2.4</commons-io.version>
         <javax.inject.version>1</javax.inject.version><% if (databaseType == 'sql') { %>
         <joda-time-hibernate.version>1.3</joda-time-hibernate.version><% } %>
-        <geronimo-javamail_1.4_mail.version>1.8.3</geronimo-javamail_1.4_mail.version>
-        <usertype.core.version>3.2.0.GA</usertype.core.version>
-        <awaitility.version>1.4.0</awaitility.version>
         <json-path.version>0.9.1</json-path.version>
-        <assertj-core.version>1.6.0</assertj-core.version>
-        <maven-enforcer-plugin.version>1.3.1</maven-enforcer-plugin.version>
-        <sonar-maven-plugin.version>2.2</sonar-maven-plugin.version>
-        <jhipsterloaded.version>0.7</jhipsterloaded.version><% if (websocket == 'atmosphere') { %>
-        <atmosphere-spring.version>2.1.0</atmosphere-spring.version><% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
-        <postgresql.version>9.3-1100-jdbc41</postgresql.version><% } %><% if (databaseType == 'sql') { %>
+        <geronimo-javamail_1.4_mail.version>1.8.3</geronimo-javamail_1.4_mail.version><% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
+        <hazelcast.version>3.1.5</hazelcast.version><% } %>
+        <hibernate-entitymanager.version>4.3.5.Final</hibernate-entitymanager.version>
+		<HikariCP.version>1.3.8</HikariCP.version>
+        <jhipster-loaded.version>0.7</jhipster-loaded.version><% if (databaseType == 'sql') { %>
         <liquibase-slf4j.version>1.2.1</liquibase-slf4j.version><% } %>
+		<metrics-spring.version>3.0.0</metrics-spring.version><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
+        <postgresql.version>9.3-1100-jdbc41</postgresql.version><% } %><% if (authenticationType == 'token') { %>
+        <spring-security-oauth2.version>2.0.0.RC2</spring-security-oauth2.version><% } %>
         <swagger-springmvc.version>0.8.2</swagger-springmvc.version>
+        <usertype.core.version>3.2.0.GA</usertype.core.version>
     </properties>
 
     <repositories>
@@ -438,7 +442,7 @@
         <dependency>
             <groupId>io.github.jhipster.loaded</groupId>
             <artifactId>core</artifactId>
-            <version><%= _.unescape('\${jhipsterloaded.version}')%></version>
+            <version><%= _.unescape('\${jhipster-loaded.version}')%></version>
         </dependency>
         <dependency>
             <groupId>com.mangofactory</groupId>
@@ -596,7 +600,7 @@
                                 <artifactItem>
                                     <groupId>io.github.jhipster.loaded</groupId>
                                     <artifactId>agent</artifactId>
-                                    <version><%= _.unescape('\${jhipsterloaded.version}')%></version>
+                                    <version><%= _.unescape('\${jhipster-loaded.version}')%></version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>spring_loaded</outputDirectory>

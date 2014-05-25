@@ -9,8 +9,8 @@
             </div>
             <form class="form" role="form">
                 <div class="form-group">
-                    <label for="username" translate="login.form.username">Login</label>
-                    <input type="text" class="form-control" id="username" placeholder="{{'login.form.username.placeholder' | translate}}" ng-model="username">
+                    <label for="username" translate="global.form.username">Login</label>
+                    <input type="text" class="form-control" id="username" placeholder="{{'global.form.username.placeholder' | translate}}" ng-model="username">
                 </div>
                 <div class="form-group">
                     <label for="password" translate="login.form.password">Password</label>
@@ -26,6 +26,10 @@
                 </div>
                 <button type="submit" class="btn btn-primary" ng-click="login()" translate="login.form.button">Authenticate</button>
             </form>
+            <p></p>
+            <div class="alert alert-warning" translate="global.messages.info.register">
+                You don't have an account yet? <a href=\"#/register\">Register a new account</a>
+            </div>
         </div>
         <div class="col-md-4"></div>
     </div>

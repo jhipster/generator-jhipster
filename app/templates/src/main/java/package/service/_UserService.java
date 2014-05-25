@@ -1,10 +1,13 @@
 package <%=packageName%>.service;
 
+import <%=packageName%>.domain.Authority;
 import <%=packageName%>.domain.PersistentToken;
 import <%=packageName%>.domain.User;
+import <%=packageName%>.repository.AuthorityRepository;
 import <%=packageName%>.repository.PersistentTokenRepository;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.SecurityUtils;
+import <%=packageName%>.service.util.RandomUtil;
 import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +17,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.util.List;
+import java.util.HashSet;
+import java.util.List;<% if (javaVersion == '8') { %>
+import java.util.Optional;<% } %>
+import java.util.Set;
 
 /**
  * Service class for managing users.
@@ -33,6 +39,57 @@ public class UserService {
 
     @Inject
     private PersistentTokenRepository persistentTokenRepository;
+
+    @Inject
+    private AuthorityRepository authorityRepository;
+
+    public User activateRegistration(String key) {
+        log.debug("Activating user for activation key {}", key);<% if (javaVersion == '8') { %>
+        return Optional.ofNullable(userRepository.getUserByActivationKey(key))
+            .map(user -> {
+                // activate given user for the registration key.
+                user.setActivated(true);
+                user.setActivationKey(null);
+                userRepository.save(user);
+                log.debug("Activated user: {}", user);
+                return user;
+            })
+            .orElse(null);<% } else { %>
+        User user = userRepository.getUserByActivationKey(key);
+
+        // activate given user for the registration key.
+        if (user != null) {
+            user.setActivated(true);
+            user.setActivationKey(null);
+            userRepository.save(user);
+            log.debug("Activated user: {}", user);
+        }
+        return user;<% } %>
+    }
+
+    public User createUserInformation(String login, String password, String firstName, String lastName, String email,
+                                      String langKey) {
+        User newUser = new User();
+        Authority authority = authorityRepository.findOne("ROLE_USER");
+        Set<Authority> authorities = new HashSet<Authority>();
+        String encryptedPassword = passwordEncoder.encode(password);
+        newUser.setLogin(login);
+        // new user gets initially a generated password
+        newUser.setPassword(encryptedPassword);
+        newUser.setFirstName(firstName);
+        newUser.setLastName(lastName);
+        newUser.setEmail(email);
+        newUser.setLangKey(langKey);
+        // new user is not active
+        newUser.setActivated(false);
+        // new user gets registration key
+        newUser.setActivationKey(RandomUtil.generateActivationKey());
+        authorities.add(authority);
+        newUser.setAuthorities(authorities);
+        userRepository.save(newUser);
+        log.debug("Created Information for User: {}", newUser);
+        return newUser;
+    }
 
     public void updateUserInformation(String firstName, String lastName, String email) {
         User currentUser = userRepository.findOne(SecurityUtils.getCurrentLogin());
@@ -75,6 +132,23 @@ public class UserService {
             User user = token.getUser();
             user.getPersistentTokens().remove(token);<% } %>
             persistentTokenRepository.delete(token);
+        }
+    }
+
+    /**
+     * Not activated users should be automatically deleted after 3 days.
+     * <p/>
+     * <p>
+     * This is scheduled to get fired everyday, at 01:00 (am).
+     * </p>
+     */
+    @Scheduled(cron = "0 0 1 * * ?")
+    public void removeNotActivatedUsers() {
+        LocalDate now = new LocalDate();
+        List<User> users = userRepository.findNotActivatedUsersByCreationDateBefore(now.minusDays(3));
+        for (User user : users) {
+            log.debug("Deleting not activated user {}", user.getLogin());
+            userRepository.delete(user);
         }
     }
 }

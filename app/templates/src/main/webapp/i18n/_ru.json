@@ -1,6 +1,6 @@
 {
     "global": {
-        "title": "JHipster",
+        "title": "<%= baseName %>",
         "browsehappy": "Ваш браузер <strong>устарел</strong>. Пожалуйста <a href=\"http://browsehappy.com/?locale=en\">обновите ваш браузер</a>.",
         "menu": {
             "home": "Главная",
@@ -15,7 +15,8 @@
                 "audits": "Аудит",
                 "login": "Authenticate",
                 "logout": "Выйти",
-                "apidocs": "API"
+                "apidocs": "API",
+                "register": "Register"
             },
             "admin": "Администрирование",
             "language": "Язык"
@@ -27,14 +28,51 @@
             "de": "Немецкий",
             "pl": "Польский",
             "ru": "Русский"
+        },
+        "form": {
+            "username": "Логин",
+            "username.placeholder": "Ваш логин",
+            "newpassword": "Новый пароль",
+            "newpassword.placeholder": "Новый пароль",
+            "confirmpassword": "Подтверждение нового пароля",
+            "confirmpassword.placeholder": "Подтвердите новый пароль",
+            "email": "E-mail",
+            "email.placeholder": "Ваш e-mail"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Если вы хотите <a href=\"#/login\">авторизироваться</a>, вы можете попробовать аккаунты поумолчанию:<br/>- Администратор (логин=\"admin\" и пароль=\"admin\") <br/>- Пользователь (логин=\"user\" и пароль=\"user\").",
+                "register": "You don't have an account yet? <a href=\"#/register\">Register a new account</a>"
+            },
+            "error": {
+                "dontmatch": "Пароль и его подтверждение не совпадают!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Пароль должен быть указан.",
+                    "minlength": "Длина пароля должна быть хотя-бы 5 символов",
+                    "maxlength": "Пароль не может быть длиннее чем 50 символов",
+                    "strength": "Сложность пароля:"
+                },
+                "confirmpassword": {
+                    "required": "подтверждение пароля должно быть указано.",
+                    "minlength": "Длина подтверждения пароля должна быть хотя-бы 5 символов",
+                    "maxlength": "Подтверждение пароля не может быть больше чем 50 символов"
+                },
+                "email": {
+                    "required": "E-mail должен быть указан.",
+                    "invalid": "E-mail не верен.",
+                    "minlength": "Длина e-mail должна быть хотя-бы 1 символ",
+                    "maxlength": "E-mail не может быть длиннее чем 50 символов"
+                }
+            }
         }
     },
     "main": {
         "title": "Добро пожаловать, Java Hipster!",
         "subtitle": "Это ваша домашняя страница",
         "logged": {
-            "message": "Вы вошли как пользователь \"{{username}}\".",
-            "authenticated": "Если вы хотите <a href=\"#/login\">авторизироваться</a>, вы можете попробовать аккаунты поумолчанию:<br/>- Администратор (логин=\"admin\" и пароль=\"admin\") <br/>- Пользователь (логин=\"user\" и пароль=\"user\")."
+            "message": "Вы вошли как пользователь \"{{username}}\"."
         },
         "question": "Если у Вас возникли вопросы по JHipster:",
         "link": {
@@ -46,11 +84,36 @@
         "like": "Если вам нравится JHipster, не забудьте дать нам звёздочку на",
         "github": "Github"
     },
+    "activate": {
+        "title": "Activation",
+        "messages": {
+            "success": "<strong>Your user has been activated.</strong> Please <a href=\"#/login\">authenticate</a>.",
+            "error": "<strong>Your user could not be activated.</strong> Please use the registration form to sign up."
+        }
+    },
+    "register": {
+        "title": "Registration",
+        "form": {
+            "button": "Register"
+        },
+        "messages": {
+            "validate": {
+                "login": {
+                    "required": "Your login is required.",
+                    "minlength": "Your login is required to be at least 1 character",
+                    "maxlength": "Your login cannot be longer than 50 characters"
+                }
+            },
+            "success": "<strong>Registration saved!</strong> Please check your email for confirmation.",
+            "error": {
+                "fail": "<strong>Registration failed!</strong> Please try again later.",
+                "userexists": "<strong>Login name already registered!</strong> Please choose another one."
+            }
+        }
+    },
     "login": {
         "title": "Авторизация",
         "form": {
-            "username": "Логин",
-            "username.placeholder": "Ваш логин",
             "password": "Пароль",
             "password.placeholder": "Ваш пароль",
             "rememberme": "Входить автоматический",
@@ -69,8 +132,6 @@
             "firstname.placeholder": "Ваше имя",
             "lastname": "Фамилия",
             "lastname.placeholder": "Ваша фамилия",
-            "email": "E-mail",
-            "email.placeholder": "Ваш e-mail",
             "button": "Сохранить"
         },
         "messages": {
@@ -86,12 +147,6 @@
                     "required": "Фамилия должна быть указана.",
                     "minlength": "Длина фамилии должна быть хотя-бы 1 символ",
                     "maxlength": "Фамилия не может быть длиннее чем 50 символов"
-                },
-                "email": {
-                    "required": "E-mail должен быть указан.",
-                    "invalid": "E-mail не верен.",
-                    "minlength": "Длина e-mail должна быть хотя-бы 1 символ",
-                    "maxlength": "E-mail не может быть длиннее чем 50 символов"
                 }
             }
         }
@@ -99,31 +154,11 @@
     "password": {
         "title": "Пароль для [<b>{{username}}</b>]",
         "form": {
-            "newpassword": "Новый пароль",
-            "newpassword.placeholder": "Новый пароль",
-            "confirmpassword": "Подтверждение нового пароля",
-            "confirmpassword.placeholder": "Подтвердите новый пароль",
             "button": "Сохранить"
         },
         "messages": {
-            "error": {
-                "global": "<strong>Произошла ошибка!</strong> Не удалось изменить пароль.",
-                "dontmatch" : "Пароль и его подтверждение не совпадают!"
-            },
-            "success": "<strong>Пароль изменен!</strong>",
-            "validate": {
-                "newpassword": {
-                    "required": "Пароль должен быть указан.",
-                    "minlength": "Длина пароля должна быть хотя-бы 5 символов",
-                    "maxlength": "Пароль не может быть длиннее чем 50 символов",
-                    "strength": "Сложность пароля:"
-                },
-                "confirmpassword": {
-                    "required": "подтверждение пароля должно быть указано.",
-                    "minlength": "Длина подтверждения пароля должна быть хотя-бы 5 символов",
-                    "maxlength": "Подтверждение пароля не может быть больше чем 50 символов"
-                }
-            }
+            "error": "<strong>Произошла ошибка!</strong> Не удалось изменить пароль.",
+            "success": "<strong>Пароль изменен!</strong>"
         }
     },
     "sessions": {
@@ -138,7 +173,6 @@
             "success": "<strong>Сессия истекла!</strong>",
             "error": "<strong>Произошла ошибка!</strong> Сессия не может быть завершена."
         }
-
     },
     "tracker": {
         "title": "Активность пользователей в реальном времени",
