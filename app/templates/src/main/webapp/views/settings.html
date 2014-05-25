@@ -56,25 +56,25 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label translate="settings.form.email">E-mail</label>
-                    <input type="email" class="form-control" name="email" placeholder="{{'settings.form.email.placeholder' | translate}}"
+                    <label translate="global.form.email">E-mail</label>
+                    <input type="email" class="form-control" name="email" placeholder="{{'global.form.email.placeholder' | translate}}"
                            ng-model="settingsAccount.email" ng-minlength=5 ng-maxlength=100 required>
                     <div class="error"
                          ng-show="form.email.$dirty && form.email.$invalid">
                         <small class="error"
-                               ng-show="form.email.$error.required" translate="settings.messages.validate.email.required">
+                               ng-show="form.email.$error.required" translate="global.messages.validate.email.required">
                             Your e-mail is required.
                         </small>
                         <small class="error"
-                               ng-show="form.email.$error.email" translate="settings.messages.validate.email.invalid">
+                               ng-show="form.email.$error.email" translate="global.messages.validate.email.invalid">
                             Your e-mail is invalid.
                         </small>
                         <small class="error"
-                               ng-show="form.email.$error.minlength" translate="settings.messages.validate.email.minlength">
+                               ng-show="form.email.$error.minlength" translate="global.messages.validate.email.minlength">
                             Your e-mail is required to be at least 5 characters
                         </small>
                         <small class="error"
-                               ng-show="form.email.$error.maxlength" translate="settings.messages.validate.email.maxlength">
+                               ng-show="form.email.$error.maxlength" translate="global.messages.validate.email.maxlength">
                             Your e-mail cannot be longer than 100 characters
                         </small>
                     </div>

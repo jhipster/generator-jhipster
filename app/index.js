@@ -380,6 +380,8 @@ JhipsterGenerator.prototype.app = function app() {
         this.copy(resourceDir + '/config/liquibase/users.csv', resourceDir + 'config/liquibase/users.csv');
         this.copy(resourceDir + '/config/liquibase/authorities.csv', resourceDir + 'config/liquibase/authorities.csv');
         this.copy(resourceDir + '/config/liquibase/users_authorities.csv', resourceDir + 'config/liquibase/users_authorities.csv');
+        this.copy(resourceDir + '/config/liquibase/users_upd_001.csv', resourceDir + 'config/liquibase/users_upd_001.csv');
+        this.copy(resourceDir + '/config/liquibase/users_authorities_upd_001.csv', resourceDir + 'config/liquibase/users_authorities_upd_001.csv');
     }
 
     if (this.databaseType == "nosql") {
@@ -387,6 +389,15 @@ JhipsterGenerator.prototype.app = function app() {
         this.copy(resourceDir + '/config/mongeez/master.xml', resourceDir + 'config/mongeez/master.xml');
         this.copy(resourceDir + '/config/mongeez/users.xml', resourceDir + 'config/mongeez/users.xml');
     }
+
+    // Create mail templates
+    this.copy(resourceDir + '/mails/messages/messages_da.properties', resourceDir + 'mails/messages/messages_da.properties');
+    this.copy(resourceDir + '/mails/messages/messages_de.properties', resourceDir + 'mails/messages/messages_de.properties');
+    this.copy(resourceDir + '/mails/messages/messages_en.properties', resourceDir + 'mails/messages/messages_en.properties');
+    this.copy(resourceDir + '/mails/messages/messages_fr.properties', resourceDir + 'mails/messages/messages_fr.properties');
+    this.copy(resourceDir + '/mails/messages/messages_pl.properties', resourceDir + 'mails/messages/messages_pl.properties');
+    this.copy(resourceDir + '/mails/messages/messages_ru.properties', resourceDir + 'mails/messages/messages_ru.properties');
+    this.copy(resourceDir + '/mails/activationEmail.html', resourceDir + 'mails/activationEmail.html');
 
     // Create Java files
     var javaDir = 'src/main/java/' + packageFolder + '/';
@@ -446,6 +457,7 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     this.template('src/main/java/package/domain/_package-info.java', javaDir + 'domain/package-info.java');
+    this.template('src/main/java/package/domain/_AbstractAuditingEntity.java', javaDir + 'domain/AbstractAuditingEntity.java');
     this.template('src/main/java/package/domain/_Authority.java', javaDir + 'domain/Authority.java');
     this.template('src/main/java/package/domain/_PersistentAuditEvent.java', javaDir + 'domain/PersistentAuditEvent.java');
     this.template('src/main/java/package/domain/_PersistentToken.java', javaDir + 'domain/PersistentToken.java');
@@ -471,12 +483,15 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/security/_CustomPersistentRememberMeServices.java', javaDir + 'security/CustomPersistentRememberMeServices.java');
     this.template('src/main/java/package/security/_Http401UnauthorizedEntryPoint.java', javaDir + 'security/Http401UnauthorizedEntryPoint.java');
     this.template('src/main/java/package/security/_SecurityUtils.java', javaDir + 'security/SecurityUtils.java');
+    this.template('src/main/java/package/security/_SpringSecurityAuditorAware.java', javaDir + 'security/SpringSecurityAuditorAware.java');
     this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java');
+    this.template('src/main/java/package/security/_UserNotActivatedException.java', javaDir + 'security/UserNotActivatedException.java');
 
     this.template('src/main/java/package/service/_package-info.java', javaDir + 'service/package-info.java');
     this.template('src/main/java/package/service/_AuditEventService.java', javaDir + 'service/AuditEventService.java');
     this.template('src/main/java/package/service/_UserService.java', javaDir + 'service/UserService.java');
     this.template('src/main/java/package/service/_MailService.java', javaDir + 'service/MailService.java');
+    this.template('src/main/java/package/service/util/_RandomUtil.java', javaDir + 'service/util/RandomUtil.java');
 
     this.template('src/main/java/package/web/filter/_package-info.java', javaDir + 'web/filter/package-info.java');
     this.template('src/main/java/package/web/filter/_CachingHttpHeadersFilter.java', javaDir + 'web/filter/CachingHttpHeadersFilter.java');
@@ -571,6 +586,7 @@ JhipsterGenerator.prototype.app = function app() {
 
     // Angular JS views
     this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
+    this.copy(webappDir + '/views/activate.html', webappDir + 'views/activate.html');
     this.copy(webappDir + '/views/audits.html', webappDir + 'views/audits.html');
     this.copy(webappDir + '/views/docs.html', webappDir + 'views/docs.html');
     this.copy(webappDir + '/views/error.html', webappDir + 'views/error.html');
@@ -578,6 +594,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(webappDir + '/views/logs.html', webappDir + 'views/logs.html');
     this.copy(webappDir + '/views/main.html', webappDir + 'views/main.html');
     this.copy(webappDir + '/views/password.html', webappDir + 'views/password.html');
+    this.copy(webappDir + '/views/register.html', webappDir + 'views/register.html');
     this.copy(webappDir + '/views/settings.html', webappDir + 'views/settings.html');
     this.copy(webappDir + '/views/sessions.html', webappDir + 'views/sessions.html');
     if (this.websocket == 'atmosphere') {

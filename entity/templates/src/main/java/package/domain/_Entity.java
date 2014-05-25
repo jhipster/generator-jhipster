@@ -80,7 +80,7 @@ public class <%= entityClass %> implements Serializable {
 
         <%= entityClass %> <%= entityInstance %> = (<%= entityClass %>) o;
 
-        if <% if (databaseType == 'sql') { %>(id != <%= entityInstance %>.id)<% } %><% if (databaseType == 'nosql') { %>(!id.equals(pizza.id))<% } %> {
+        if <% if (databaseType == 'sql') { %>(id != <%= entityInstance %>.id)<% } %><% if (databaseType == 'nosql') { %>(!id.equals(<%= entityInstance %>.id))<% } %> {
             return false;
         }
 

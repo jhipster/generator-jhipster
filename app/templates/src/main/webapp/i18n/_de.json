@@ -15,7 +15,8 @@
                 "audits": "Audits",
                 "login": "Anmelden",
                 "logout": "Abmelden",
-                "apidocs": "API"
+                "apidocs": "API",
+                "register": "Registrierung"
             },
             "admin": "Administration",
             "language": "Sprache"
@@ -27,14 +28,51 @@
             "de": "Deutsch",
             "pl": "Polnisch",
             "ru": "Russisch"
+        },
+        "form": {
+            "username": "Name",
+            "username.placeholder": "Ihr Name",
+            "newpassword": "Neues Passwort",
+            "newpassword.placeholder": "Neues Passwort",
+            "confirmpassword": "Neues Passwort bestätigen",
+            "confirmpassword.placeholder": "Bestätigen Sie ihr neues Passwort",
+            "email": "E-Mail Adresse",
+            "email.placeholder": "Ihre E-Mail Adresse"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Wenn Sie sich <a href=\"#/login\">anmelden</a> möchten, versuchen Sie es mit <br/>- Administrator (Name=\"admin\" und Passwort=\"admin\")<br/>- Benutzer (Name=\"user\" und Passwort=\"user\").",
+                "register": "Sie haben noch keinen Zugang? <a href=\"#/register\">Registrieren Sie sich</a>"
+            },
+            "error": {
+                "dontmatch": "Das bestätigte Passwort entspricht nicht dem neuen Passwort!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Ein neues Passwort wird benötigt.",
+                    "minlength": "Das neue Passwort muss mindestens 5 Zeichen lang sein",
+                    "maxlength": "Das neue Passwort darf nicht länger als 50 Zeichen sein",
+                    "strength": "Passwortstärke:"
+                },
+                "confirmpassword": {
+                    "required": "Sie müssen das Passwort bestätigen.",
+                    "minlength": "Das bestätigte Passwort muss mindestens 5 Zeichen lang sein",
+                    "maxlength": "Das bestätigte Passwort darf nicht länger als 50 Zeichen sein"
+                },
+                "email": {
+                    "required": "Ihre E-Mail Adresse wird benötigt.",
+                    "invalid": "Ihre E-Mail Adresse ist ungültig.",
+                    "minlength": "Ihre E-Mail Adresse muss mindestens 1 Zeichen lang sein",
+                    "maxlength": "Ihre E-Mail Adresse darf nicht länger als 50 Zeichen sein"
+                }
+            }
         }
     },
     "main": {
         "title": "Willkommen, Java Hipster!",
         "subtitle": "Dies ist Ihre Hauptseite",
         "logged": {
-            "message": "Sie sind als Benutzer \"{{username}}\" angemeldet.",
-            "authenticated": "Wenn Sie sich <a href=\"#/login\">anmelden</a> möchten, versuchen Sie es mit <br/>- Administrator (Name=\"admin\" und Passwort=\"admin\")<br/>- Benutzer (Name=\"user\" und Passwort=\"user\")."
+            "message": "Sie sind als Benutzer \"{{username}}\" angemeldet."
         },
         "question": "Wenn Sie Fragen zu JHipster haben:",
         "link": {
@@ -46,11 +84,36 @@
         "like": "Wenn Sie JHipster mögen, vergessen Sie nicht uns einen Stern zu geben auf",
         "github": "Github"
     },
+    "activate": {
+        "title": "Aktivierung",
+        "messages": {
+            "success": "<strong>Ihr Benutzer wurde aktiviert.</strong> Bitte <a href=\"#/login\">anmelden</a>.",
+            "error": "<strong>Ihr Benutzer konnte nicht aktiviert werden.</strong> Bitte benutzen Sie die Registrierungsmaske, um sich zu einzutragen."
+        }
+    },
+    "register": {
+        "title": "Registrierung",
+        "form": {
+            "button": "Registrieren"
+        },
+        "messages": {
+            "validate": {
+                "login": {
+                    "required": "Ihre login wird benötigt.",
+                    "minlength": "Ihr login muss mindestens 1 Zeichen lang sein",
+                    "maxlength": "Ihr login darf nicht länger als 50 Zeichen sein"
+                }
+            },
+            "success": "<strong>Registrierung gespeichert!</strong> Bitte überprüfen Sie ihre E-Mail wegen der Bestätigung.",
+            "error": {
+                "fail": "<strong>Registrierung fehlgeschlagen!</strong> Bitte versuchen Sie es später nocheinmal.",
+                "userexists": "<strong>Loginname bereits vergeben!</strong> Bitte wählen Sie einen anderen aus."
+            }
+        }
+    },
     "login": {
         "title": "Anmeldung",
         "form": {
-            "username": "Name",
-            "username.placeholder": "Ihr Name",
             "password": "Passwort",
             "password.placeholder": "Ihr Passwort",
             "rememberme": "Automatische Anmeldung",
@@ -69,8 +132,6 @@
             "firstname.placeholder": "Ihr Vorname",
             "lastname": "Nachname",
             "lastname.placeholder": "Ihr Nachname",
-            "email": "E-Mail Adresse",
-            "email.placeholder": "Ihre E-Mail Adresse",
             "button": "Speichern"
         },
         "messages": {
@@ -85,14 +146,7 @@
                 "lastname": {
                     "required": "Ihr Nachname wird benötigt.",
                     "minlength": "Ihr Nachname muss mindestens 1 Zeichen lang sein",
-                    "maxlength": "Ihr Nachname darf nicht länger als 50 Zeichen sein",
-                    "strength": "Passwort Stärke:"
-                },
-                "email": {
-                    "required": "Ihre E-Mail Adresse wird benötigt.",
-                    "invalid": "Ihre E-Mail Adresse ist ungültig.",
-                    "minlength": "Ihre E-Mail Adresse muss mindestens 1 Zeichen lang sein",
-                    "maxlength": "Ihre E-Mail Adresse darf nicht länger als 50 Zeichen sein"
+                    "maxlength": "Ihr Nachname darf nicht länger als 50 Zeichen sein"
                 }
             }
         }
@@ -100,31 +154,11 @@
     "password": {
         "title": "Passwort für [<b>{{username}}</b>]",
         "form": {
-            "newpassword": "Neues Passwort",
-            "newpassword.placeholder": "Neues Passwort",
-            "confirmpassword": "Neues Passwort bestätigen",
-            "confirmpassword.placeholder": "Bestätigen Sie neues Passwort",
             "button": "Speichern"
         },
         "messages": {
-            "error": {
-                "global": "<strong>Es ist ein Fehler aufgetreten!</strong> Das Passwort konnte nicht geändert werden.",
-                "dontmatch" : "Das bestätigte Passwort entspricht nicht dem neuen Passwort!"
-            },
-            "success": "<strong>Passwort wurde geändert!</strong>",
-            "validate": {
-                "newpassword": {
-                    "required": "Ein neues Passwort wird benötigt.",
-                    "minlength": "Das neue Passwort muss mindestens 5 Zeichen lang sein",
-                    "maxlength": "Das neue Passwort darf nicht länger als 50 Zeichen sein",
-                    "strength": "Passwortstärke:"
-                },
-                "confirmpassword": {
-                    "required": "Sie müssen das Passwort bestätigen.",
-                    "minlength": "Das bestätigte Passwort muss mindestens 5 Zeichen lang sein",
-                    "maxlength": "Das bestätigte Passwort darf nicht länger als 50 Zeichen sein"
-                }
-            }
+            "error": "<strong>Es ist ein Fehler aufgetreten!</strong> Das Passwort konnte nicht geändert werden.",
+            "success": "<strong>Passwort wurde geändert!</strong>"
         }
     },
     "sessions": {
