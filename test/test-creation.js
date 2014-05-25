@@ -69,6 +69,7 @@ describe('jhipster generator', function () {
       'websocket': 'no',
       'prodDatabaseType': 'mysql',
       'devDatabaseType': 'h2Memory',
+      'frontendBuilder': 'grunt',
       'useCompass': false
     });
     this.app.options['skip-install'] = true;
@@ -110,6 +111,7 @@ describe('jhipster generator', function () {
       'websocket': 'no',
       'prodDatabaseType': 'mysql',
       'devDatabaseType': 'h2Memory',
+      'frontendBuilder': 'grunt',
       'useCompass': false
     });
     this.app.options['skip-install'] = true;
@@ -152,6 +154,7 @@ describe('jhipster generator', function () {
       'websocket': 'no',
       'prodDatabaseType': 'mysql',
       'devDatabaseType': 'h2Memory',
+      'frontendBuilder': 'grunt',
       'useCompass': false
     });
     this.app.options['skip-install'] = true;
@@ -194,6 +197,7 @@ describe('jhipster generator', function () {
       'websocket': 'no',
       'prodDatabaseType': 'mysql',
       'devDatabaseType': 'h2Memory',
+      'frontendBuilder': 'grunt',
       'useCompass': false
     });
     this.app.options['skip-install'] = true;
