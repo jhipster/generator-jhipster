@@ -130,6 +130,7 @@
         <json-path.version>0.9.1</json-path.version>
         <geronimo-javamail_1.4_mail.version>1.8.3</geronimo-javamail_1.4_mail.version><% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
         <hazelcast.version>3.1.5</hazelcast.version><% } %>
+        <hibernate-entitymanager.version>4.3.5.Final</hibernate-entitymanager.version>
 		<HikariCP.version>1.3.8</HikariCP.version>
         <jhipster-loaded.version>0.7</jhipster-loaded.version><% if (databaseType == 'sql') { %>
         <liquibase-slf4j.version>1.2.1</liquibase-slf4j.version><% } %>
