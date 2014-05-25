@@ -15,7 +15,8 @@
                 "audits": "Audits",
                 "login": "Log ind",
                 "logout": "Log ud",
-                "apidocs": "API"
+                "apidocs": "API",
+                "register": "Register"
             },
             "admin": "Administration",
             "language": "Sprog"
@@ -27,14 +28,51 @@
             "de": "Tysk",
             "pl": "Polsk",
             "ru": "Russisk"
+        },
+        "form": {
+            "username": "Brugernavn",
+            "username.placeholder": "Dit brugernavn",
+            "newpassword": "Nyt kodeord",
+            "newpassword.placeholder": "Indtast det nye kodeord",
+            "confirmpassword": "Bekræft det nye kodeordet",
+            "confirmpassword.placeholder": "Bekræft det nye kodeord",
+            "email": "E-mail",
+            "email.placeholder": "Din e-mail adresse"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Hvis du ønsker at <a href=\"#/login\">logge ind</a>, så kan du prøve det med:<br/>- Admnistrator (brugernavn=\"admin\" and kodeord=\"admin\") <br/>- User (brugernavn=\"user\" and kodeord=\"user\").",
+                "register": "You don't have an account yet? <a href=\"#/register\">Register a new account</a>"
+            },
+            "error": {
+                "dontmatch": "Kodeordet og dets bekræftelse matcher ikke!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Kodeord skal indtastes.",
+                    "minlength": "Kodeordet skal som minimum være på 5 tegn!",
+                    "maxlength": "Kodeordet må ikke overskride 20 tegn!",
+                    "strength": "Kodeord strength:"
+                },
+                "confirmpassword": {
+                    "required": "Kodeordet skal bekræftes",
+                    "minlength": "Kodeordet skal som minimum være på 5 tegn!",
+                    "maxlength": "Kodeordet må ikke overskride 20 tegn!"
+                },
+                "email": {
+                    "required": "Din e-mail adresse er påkrævet.",
+                    "invalid": "Din e-mail adresse er ugyldig!",
+                    "minlength": "Din e-mail adresse skal som minimum være på 5 tegn",
+                    "maxlength": "Din e-mail adresse må ikke overskride 50 tegn"
+                }
+            }
         }
     },
     "main": {
         "title": "Velkommen, Java Hipster!",
         "subtitle": "Dette er din startside",
         "logged": {
-            "message": "Du er logget ind som bruger \"{{username}}\".",
-            "authenticated": "Hvis du ønsker at <a href=\"#/login\">logge ind</a>, så kan du prøve det med:<br/>- Admnistrator (brugernavn=\"admin\" and kodeord=\"admin\") <br/>- User (brugernavn=\"user\" and kodeord=\"user\")."
+            "message": "Du er logget ind som bruger \"{{username}}\"."
         },
         "question": "Hvis du har spørgsmål om JHipster:",
         "link": {
@@ -46,11 +84,36 @@
         "like": "Hvis du kan lide JHipster, så husk at give os en stjerne på",
         "github": "Github"
     },
+    "activate": {
+        "title": "Activation",
+        "messages": {
+            "success": "<strong>Your user has been activated.</strong> Please <a href=\"#/login\">authenticate</a>.",
+            "error": "<strong>Your user could not be activated.</strong> Please use the registration form to sign up."
+        }
+    },
+    "register": {
+        "title": "Registration",
+        "form": {
+            "button": "Register"
+        },
+        "messages": {
+            "validate": {
+                "login": {
+                    "required": "Your login is required.",
+                    "minlength": "Your login is required to be at least 1 character",
+                    "maxlength": "Your login cannot be longer than 50 characters"
+                }
+            },
+            "success": "<strong>Registration saved!</strong> Please check your email for confirmation.",
+            "error": {
+                "fail": "<strong>Registration failed!</strong> Please try again later.",
+                "userexists": "<strong>Login name already registered!</strong> Please choose another one."
+            }
+        }
+    },
     "login": {
         "title": "Autentifikation",
         "form": {
-            "username": "Brugernavn",
-            "username.placeholder": "Dit brugernavn",
             "password": "Kodeord",
             "password.placeholder": "Dit Kodeord",
             "rememberme": "Husk mig",
@@ -69,8 +132,6 @@
             "firstname.placeholder": "Dit fornavn",
             "lastname": "Efternavn",
             "lastname.placeholder": "Dit efternavn",
-            "email": "E-mail",
-            "email.placeholder": "Din e-mail adresse",
             "button": "Gem"
         },
         "messages": {
@@ -86,12 +147,6 @@
                     "required": "Dit efternavn er påkrævet.",
                     "minlength": "Dit efternavn skal som minimum være på 1 tegn",
                     "maxlength": "Dit efternavn må ikke overskride 50 tegn"
-                },
-                "email": {
-                    "required": "Din e-mail adresse er påkrævet.",
-                    "invalid": "Din e-mail adresse er ugyldig!",
-                    "minlength": "Din e-mail adresse skal som minimum være på 5 tegn",
-                    "maxlength": "Din e-mail adresse må ikke overskride 50 tegn"
                 }
             }
         }
@@ -99,31 +154,11 @@
     "password": {
         "title": "Kodeord for [<b>{{username}}</b>]",
         "form": {
-            "newpassword": "Nyt kodeord",
-            "newpassword.placeholder": "Indtast det nye kodeord",
-            "confirmpassword": "Bekræft det nye kodeordet",
-            "confirmpassword.placeholder": "Bekræft det nye kodeord",
             "button": "Gem"
         },
         "messages": {
-            "error": {
-                "global": "<strong>Der opstod en fejl!</strong> Kodeordet kunne ikke ændres.",
-                "dontmatch" : "Kodeordet og dets bekræftelse matcher ikke!"
-            },
-            "success": "<strong>Kodeord er blevet ændret!</strong>",
-            "validate": {
-                "newpassword": {
-                    "required": "Kodeord skal indtastes.",
-                    "minlength": "Kodeordet skal som minimum være på 5 tegn!",
-                    "maxlength": "Kodeordet må ikke overskride 20 tegn!",
-                    "strength": "Kodeord strength:"
-                },
-                "confirmpassword": {
-                    "required": "Kodeordet skal bekræftes",
-                    "minlength": "Kodeordet skal som minimum være på 5 tegn!",
-                    "maxlength": "Kodeordet må ikke overskride 20 tegn!"
-                }
-            }
+            "error": "<strong>Der opstod en fejl!</strong> Kodeordet kunne ikke ændres.",
+            "success": "<strong>Kodeord er blevet ændret!</strong>"
         }
     },
     "sessions": {
@@ -138,7 +173,6 @@
             "success": "<strong>Session lukket!</strong>",
             "error": "<strong>Der opstod en fejl!</strong> Sessionen kunne ikke lukkes."
         }
-
     },
     "tracker": {
         "title": "Real-time user activities",

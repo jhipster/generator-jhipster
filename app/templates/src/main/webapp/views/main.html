@@ -13,9 +13,13 @@
                     You are logged in as user "Admin".
                 </div>
 
-                <div class="alert alert-warning" ng-switch-when="false" translate="main.logged.authenticated">
+                <div class="alert alert-warning" ng-switch-when="false" translate="global.messages.info.authenticated">
                     If you want to <a href="#/login">authenticate</a>, you can try the default login="admin" and
                     password="admin".
+                </div>
+
+                <div class="alert alert-warning" ng-switch-when="false" translate="global.messages.info.register">
+                    Don't have an account? <a href=\"#/register\">Register</a>
                 </div>
             </div>
 

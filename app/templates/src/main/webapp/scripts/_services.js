@@ -2,6 +2,19 @@
 
 /* Services */
 
+<%= angularAppName %>.factory('Register', ['$resource',
+    function ($resource) {
+        return $resource('app/rest/register', {}, {
+        });
+    }]);
+
+<%= angularAppName %>.factory('Activate', ['$resource',
+    function ($resource) {
+        return $resource('app/rest/activate', {}, {
+            'get': { method: 'GET', params: {}, isArray: false}
+        });
+    }]);
+
 <%= angularAppName %>.factory('Account', ['$resource',
     function ($resource) {
         return $resource('app/rest/account', {}, {
