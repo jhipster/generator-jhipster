@@ -57,8 +57,8 @@ public class User implements Serializable {
 
     <% if (databaseType == 'sql') { %>@JsonIgnore
     @OneToMany(mappedBy = "user")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<PersistentToken> persistentTokens;<% } %>
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
+    private Set<PersistentToken> persistentTokens;
 
     public String getLogin() {
         return login;
