@@ -371,6 +371,8 @@ JhipsterGenerator.prototype.app = function app() {
             this.template('_build.gradle', 'build.gradle');
             this.template('_settings.gradle', 'settings.gradle');
             this.template('_yeoman.gradle', 'yeoman.gradle');
+            this.template('_profile_dev.gradle', 'profile_dev.gradle');
+            this.template('_profile_prod.gradle', 'profile_prod.gradle');
             break;
         case 'maven':
         default :

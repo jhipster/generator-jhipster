@@ -1,39 +1,48 @@
 buildscript {
     repositories {
-        maven { url "http://repo.spring.io/libs-snapshot" }
+        maven { url 'http://repo.spring.io/libs-snapshot' }
         mavenLocal()
+        jcenter()
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.0.2.RELEASE")
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.0.2.RELEASE')
+        classpath('com.moowork.gradle:gradle-node-plugin:0.4')
+        classpath('com.moowork.gradle:gradle-grunt-plugin:0.5')
+        classpath('be.filipblondeel.gradle:gradle-gulp-plugin:0.1')
     }
 }
+
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'spring-boot'
 
 apply from: 'yeoman.gradle'
 
+profile = hasProperty('profile') ? profile : 'dev'
+if (profile == 'prod')
+    apply from: 'profile_prod.gradle'
+else
+    apply from: 'profile_dev.gradle'
+
 group = '<%= packageName %>'
 version = '0.1-SNAPSHOT'
 
-description = """"""
+description = ''
 
-configurations.all {
-}
 
 jar {
-    baseName = 'gs-spring-boot'
-    version =  '0.1.0'
+    baseName = '<%= _.slugify(baseName) %>'
+    version =  '0.1-SNAPSHOT'
 }
 
 repositories {
 
-    maven { url "http://repo.spring.io/milestone" }
-    maven { url "http://repo.spring.io/snapshot" }
-    maven { url "https://repository.jboss.org/nexus/content/repositories/releases" }
-    maven { url "https://oss.sonatype.org/content/repositories/releases" }
-    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
-    maven { url "http://repo.maven.apache.org/maven2" }
+    maven { url 'http://repo.spring.io/milestone' }
+    maven { url 'http://repo.spring.io/snapshot' }
+    maven { url 'https://repository.jboss.org/nexus/content/repositories/releases' }
+    maven { url 'https://oss.sonatype.org/content/repositories/releases' }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+    maven { url 'http://repo.maven.apache.org/maven2' }
 }
 
 dependencies {
@@ -77,7 +86,7 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version:'1.0.2.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version:'1.0.2.RELEASE'
     compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web', version:'1.0.2.RELEASE') {
-        exclude module: "spring-boot-starter-tomcat"
+        exclude module: 'spring-boot-starter-tomcat'
     }
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-jetty', version: '1.0.2.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version:'1.0.2.RELEASE'
