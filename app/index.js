@@ -537,7 +537,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/test/java/package/web/rest/_UserResourceTest.java', testDir + 'web/rest/UserResourceTest.java');
 
     this.template(testResourceDir + 'config/_application.yml', testResourceDir + 'config/application.yml');
-    this.template(testResourceDir + '_logback.xml', testResourceDir + 'logback.xml');
+    this.template(testResourceDir + '_logback-test.xml', testResourceDir + 'logback-test.xml');
 
     if (this.hibernateCache == "ehcache") {
         this.template(testResourceDir + '_ehcache.xml', testResourceDir + 'ehcache.xml');
