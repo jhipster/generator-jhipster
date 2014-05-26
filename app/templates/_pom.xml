@@ -119,7 +119,7 @@
         <!-- Maven plugins versions -->
         <maven-enforcer-plugin.version>1.3.1</maven-enforcer-plugin.version>
         <sonar-maven-plugin.version>2.2</sonar-maven-plugin.version>
-		<!-- Librairies versions -->
+        <!-- Librairies versions -->
         <assertj-core.version>1.6.0</assertj-core.version><% if (websocket == 'atmosphere') { %>
         <atmosphere-spring.version>2.1.0</atmosphere-spring.version><% } %>
         <awaitility.version>1.4.0</awaitility.version>
@@ -131,10 +131,10 @@
         <geronimo-javamail_1.4_mail.version>1.8.3</geronimo-javamail_1.4_mail.version><% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
         <hazelcast.version>3.1.5</hazelcast.version><% } %>
         <hibernate-entitymanager.version>4.3.5.Final</hibernate-entitymanager.version>
-		<HikariCP.version>1.3.8</HikariCP.version>
+        <HikariCP.version>1.3.8</HikariCP.version>
         <jhipster-loaded.version>0.7</jhipster-loaded.version><% if (databaseType == 'sql') { %>
         <liquibase-slf4j.version>1.2.1</liquibase-slf4j.version><% } %>
-		<metrics-spring.version>3.0.0</metrics-spring.version><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
+        <metrics-spring.version>3.0.0</metrics-spring.version><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
         <postgresql.version>9.3-1100-jdbc41</postgresql.version><% } %><% if (authenticationType == 'token') { %>
         <spring-security-oauth2.version>2.0.0.RC2</spring-security-oauth2.version><% } %>
         <swagger-springmvc.version>0.8.2</swagger-springmvc.version>

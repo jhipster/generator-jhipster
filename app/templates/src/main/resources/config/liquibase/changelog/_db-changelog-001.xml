@@ -193,7 +193,7 @@
     <!-- Manage the new registration facility -->
     <changeSet id="4" author="jhipster">
         <addColumn tableName="T_USER">
-            <column name="activated" type="boolean" defaultValue="false">
+            <column name="activated" type="int" defaultValue="1">
                 <constraints nullable="false"/>
             </column>
             <column name="lang_key" type="varchar(5)"/>
