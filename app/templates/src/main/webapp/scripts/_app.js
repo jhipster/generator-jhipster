@@ -4,7 +4,7 @@
 var httpHeaders;<% } %>
 
 var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-interceptor', 'tmh.dynamicLocale',
-    'ngResource', 'ngRoute', 'ngCookies', '<%= angularAppName %>Utils', 'pascalprecht.translate', 'truncate']);
+    'ngRoute', 'ngCookies', '<%= angularAppName %>Utils', 'pascalprecht.translate', 'truncate', 'restangular']);
 
 <%= angularAppName %>
     .config(['$routeProvider', '$httpProvider', '$translateProvider',  'tmhDynamicLocaleProvider', 'USER_ROLES',
@@ -56,7 +56,7 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                     controller: 'SessionsController',
                     resolve:{
                         resolvedSessions:['Sessions', function (Sessions) {
-                            return Sessions.get();
+                            return Sessions.getAll();
                         }]
                     },
                     access: {

@@ -2,43 +2,52 @@
 
 /* Services */
 
-<%= angularAppName %>.factory('Register', ['$resource',
-    function ($resource) {
-        return $resource('app/rest/register', {}, {
-        });
+<%= angularAppName %>.factory('Api', ['Restangular',
+    function (Restangular) {
+        return Restangular.all('app/rest');
     }]);
 
-<%= angularAppName %>.factory('Activate', ['$resource',
-    function ($resource) {
-        return $resource('app/rest/activate', {}, {
-            'get': { method: 'GET', params: {}, isArray: false}
-        });
+<%= angularAppName %>.factory('Register', ['Api',
+    function (Api) {
+        return Api.one('register');
     }]);
 
-<%= angularAppName %>.factory('Account', ['$resource',
-    function ($resource) {
-        return $resource('app/rest/account', {}, {
-        });
+<%= angularAppName %>.factory('Activate', ['Api',
+    function (Api) {
+        return Api.one('activate');
     }]);
 
-<%= angularAppName %>.factory('Password', ['$resource',
-    function ($resource) {
-        return $resource('app/rest/account/change_password', {}, {
-        });
+<%= angularAppName %>.factory('Account', ['Api',
+    function (Api) {
+        var Account = Api.one('account');
+
+        Account.addRestangularMethod('save', 'post', '');
+
+        return Account;
     }]);
 
-<%= angularAppName %>.factory('Sessions', ['$resource',
-    function ($resource) {
-        return $resource('app/rest/account/sessions/:series', {}, {
-            'get': { method: 'GET', isArray: true}
-        });
+<%= angularAppName %>.factory('Password', ['Api',
+    function (Api) {
+        var Password = Api.one('account/change_password');
+
+        Password.addRestangularMethod('save', 'post', '');
+
+        return Password;
     }]);
 
-<%= angularAppName %>.factory('MetricsService', ['$resource',
-    function ($resource) {
-        return $resource('metrics/metrics', {}, {
-            'get': { method: 'GET'}
-        });
+<%= angularAppName %>.factory('Sessions', ['Account',
+    function (Account) {
+        var Sessions = Account.one('sessions');
+
+        Sessions.addRestangularMethod('invalidate', 'remove', undefined);
+        Sessions.addRestangularMethod('getAll', 'get', '');
+
+        return Sessions;
+    }]);
+
+<%= angularAppName %>.factory('MetricsService', ['Restangular',
+    function (Restangular) {
+        return Restangular.one('metrics/metrics');
     }]);
 
 <%= angularAppName %>.factory('ThreadDumpService', ['$http',
@@ -65,12 +74,14 @@
         };
     }]);
 
-<%= angularAppName %>.factory('LogsService', ['$resource',
-    function ($resource) {
-        return $resource('app/rest/logs', {}, {
-            'findAll': { method: 'GET', isArray: true},
-            'changeLevel':  { method: 'PUT'}
-        });
+<%= angularAppName %>.factory('LogsService', ['Api',
+    function (Api) {
+        var LogsService = Api.all('logs');
+
+        LogsService.addRestangularMethod('findAll', 'get');
+        LogsService.addRestangularMethod('changeLevel', 'put');
+
+        return LogsService;
     }]);
 
 <%= angularAppName %>.factory('AuditsService', ['$http',
@@ -127,11 +138,12 @@
                     },
                     ignoreAuthModule: 'ignoreAuthModule'
                 }).success(function (data, status, headers, config) {
-                    Account.get(function(data) {
-                        Session.create(data.login, data.firstName, data.lastName, data.email, data.roles);
-                        $rootScope.account = Session;
-                        authService.loginConfirmed(data);
-                    });
+                    Account.get()
+                        .then(function(data) {
+                            Session.create(data.login, data.firstName, data.lastName, data.email, data.roles);
+                            $rootScope.account = Session;
+                            authService.loginConfirmed(data);
+                        });
                 }).error(function (data, status, headers, config) {
                     $rootScope.authenticationError = true;
                     Session.invalidate();
@@ -148,11 +160,12 @@
                     httpHeaders.common['Authorization'] = 'Bearer ' + data.access_token;
                     AccessToken.set(data);
 
-                    Account.get(function(data) {
-                        Session.create(data.login, data.firstName, data.lastName, data.email, data.roles);
-                        $rootScope.account = Session;
-                        authService.loginConfirmed(data);
-                    });
+                    Account.get()
+                        .then(function(data) {
+                            Session.create(data.login, data.firstName, data.lastName, data.email, data.roles);
+                            $rootScope.account = Session;
+                            authService.loginConfirmed(data);
+                        });
                 }).error(function (data, status, headers, config) {
                     $rootScope.authenticationError = true;
                     Session.invalidate();
@@ -169,18 +182,19 @@
                             $rootScope.authenticated = false
                             return;
                         }<% } %>
-                        Account.get(function(data) {
-                            Session.create(data.login, data.firstName, data.lastName, data.email, data.roles);
-                            $rootScope.account = Session;
+                        Account.get()
+                            .then(function(data) {
+                                Session.create(data.login, data.firstName, data.lastName, data.email, data.roles);
+                                $rootScope.account = Session;
 
-                            if (!$rootScope.isAuthorized(authorizedRoles)) {
-                                event.preventDefault();
-                                // user is not allowed
-                                $rootScope.$broadcast("event:auth-notAuthorized");
-                            }
+                                if (!$rootScope.isAuthorized(authorizedRoles)) {
+                                    event.preventDefault();
+                                    // user is not allowed
+                                    $rootScope.$broadcast("event:auth-notAuthorized");
+                                }
 
-                            $rootScope.authenticated = true;
-                        });
+                                $rootScope.authenticated = true;
+                            });
                     }
                     $rootScope.authenticated = !!Session.login;
                 }).error(function (data, status, headers, config) {
