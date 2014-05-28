@@ -1,3 +1,0 @@
-rootProject.name = '<%= _.slugify(baseName) %>'
-sourceCompatibility = 1.${javaVersion}
-targetCompatibility = 1.${javaVersion}

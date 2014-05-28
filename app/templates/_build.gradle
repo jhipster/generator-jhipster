@@ -18,7 +18,7 @@ apply plugin: 'spring-boot'
 
 apply from: 'yeoman.gradle'
 
-profile = hasProperty('profile') ? profile : 'dev'
+
 if (profile == 'prod')
     apply from: 'profile_prod.gradle'
 else
@@ -46,63 +46,80 @@ repositories {
 }
 
 dependencies {
-    compile group: 'com.codahale.metrics', name: 'metrics-core', version:'3.0.2'
-    compile group: 'com.codahale.metrics', name: 'metrics-ehcache', version:'3.0.2'
-    compile group: 'com.codahale.metrics', name: 'metrics-graphite', version:'3.0.2'
-    compile group: 'com.codahale.metrics', name: 'metrics-jvm', version:'3.0.2'
-    compile group: 'com.codahale.metrics', name: 'metrics-servlet', version:'3.0.2'
-    compile group: 'com.codahale.metrics', name: 'metrics-json', version:'3.0.2'
-    compile(group: 'com.codahale.metrics', name: 'metrics-servlets', version:'3.0.2') {
+    compile group: 'com.codahale.metrics', name: 'metrics-core', version:'<%= _.unescape('\$\{codahale-metrics.version}')%>'<% if (hibernateCache == 'ehcache') { %>
+    compile group: 'com.codahale.metrics', name: 'metrics-ehcache', version:'<%= _.unescape('\$\{codahale-metrics.version}')%>'<% } %>
+    compile group: 'com.codahale.metrics', name: 'metrics-graphite', version:'<%= _.unescape('\$\{codahale-metrics.version}')%>'
+    compile group: 'com.codahale.metrics', name: 'metrics-jvm', version:'<%= _.unescape('\$\{codahale-metrics.version}')%>'
+    compile group: 'com.codahale.metrics', name: 'metrics-servlet', version:'<%= _.unescape('\$\{codahale-metrics.version}')%>'
+    compile group: 'com.codahale.metrics', name: 'metrics-json', version:'<%= _.unescape('\$\{codahale-metrics.version}')%>'
+    compile(group: 'com.codahale.metrics', name: 'metrics-servlets', version:'<%= _.unescape('\$\{codahale-metrics.version}')%>') {
         exclude(module: 'metrics-healthchecks')
     }
-    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-json-org', version:'2.3.3'
-    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hppc', version:'2.3.3'
-    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-joda', version:'2.3.3'
-    compile group: 'com.ryantenney.metrics', name: 'metrics-spring', version:'3.0.0-RC4'
-    compile(group: 'com.zaxxer', name: 'HikariCP', version:'1.3.3') {
+    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-json-org', version:'<%= _.unescape('\$\{jackson.version}')%>'
+    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hppc', version:'<%= _.unescape('\$\{jackson.version}')%>'
+    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-joda', version:'<%= _.unescape('\$\{jackson.version}')%>'
+    compile group: 'com.ryantenney.metrics', name: 'metrics-spring', version:'3.0.0-RC4'<% if (hibernateCache == 'hazelcast') { %>
+    compile group: 'com.hazelcast', name: 'hazelcast', version:'<%= _.unescape('\$\{hazelcast.version}')%>'
+    compile group: 'com.hazelcast', name: 'hazelcast-hibernate4', version:'<%= _.unescape('\$\{hazelcast.version}')%>'
+    compile group: 'com.hazelcast', name: 'hazelcast-spring', version:'<%= _.unescape('\$\{hazelcast.version}')%>'<% } %><% if (clusteredHttpSession == 'hazelcast' && hibernateCache != 'hazelcast') { %>
+    compile group: 'com.hazelcast', name: 'hazelcast', version:'<%= _.unescape('\$\{hazelcast.version}')%>'<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
+    compile group: 'com.hazelcast', name: 'hazelcast-wm', version:'<%= _.unescape('\$\{hazelcast.version}')%>'<% } %>
+    compile(group: 'com.zaxxer', name: 'HikariCP', version:'<%= _.unescape('\${HikariCP.version}')%>') {
         exclude(module: 'tools')
     }
-    compile group: 'commons-lang', name: 'commons-lang', version:'2.6'
-    compile group: 'commons-io', name: 'commons-io', version:'2.4'
-    compile group: 'javax.inject', name: 'javax.inject', version:'1'
-    compile group: 'joda-time', name: 'joda-time', version:'2.3'
-    compile group: 'joda-time', name: 'joda-time-hibernate', version:'1.3'
-    compile group: 'org.apache.geronimo.javamail', name: 'geronimo-javamail_1.4_mail', version:'1.8.3'
-    compile group: 'org.hibernate', name: 'hibernate-core', version:'4.3.1.Final'
-    compile group: 'org.hibernate', name: 'hibernate-entitymanager', version:'4.3.1.Final'
-    compile group: 'org.hibernate', name: 'hibernate-ehcache', version:'4.3.1.Final'
-    compile group: 'org.hibernate', name: 'hibernate-validator', version:'5.0.3.Final'
-    compile group: 'org.jadira.usertype', name: 'usertype.core', version:'3.1.0.CR10'
-    compile group: 'org.liquibase', name: 'liquibase-core', version:'3.1.1'
-    compile(group: 'org.liquibase.ext', name: 'liquibase-hibernate4', version:'3.3') {
+    /* The HikariCP Java Agent is disabled by default, as it is experimental
+        compile group: 'com.zaxxer', name: 'HikariCP', version:'<%= _.unescape('\${HikariCP.version}')%>'
+     */
+    compile group: 'commons-lang', name: 'commons-lang', version:'<%= _.unescape('\${commons-lang.version}')%>'
+    compile group: 'commons-io', name: 'commons-io', version:'<%= _.unescape('\${commons-io.version}')%>'
+    compile group: 'javax.inject', name: 'javax.inject', version:'<%= _.unescape('\${javax.inject.version}')%>'
+    compile group: 'joda-time', name: 'joda-time', version:'<%= _.unescape('\${joda-time.version}')%>'
+    compile group: 'joda-time', name: 'joda-time-hibernate', version:'<%= _.unescape('\${joda-time-hibernate.version}')%>'
+    compile group: 'org.apache.geronimo.javamail', name: 'geronimo-javamail_1.4_mail', version:'<%= _.unescape('\${geronimo-javamail_1.4_mail.version}')%>'<% if (websocket == 'atmosphere') { %>
+    compile group: 'org.atmosphere', name: 'atmosphere-spring', version: '<%= _.unescape('\${atmosphere-spring.version}')%>'<% } %><% if (databaseType == 'sql') { %>
+    compile group: 'org.hibernate', name: 'hibernate-core', version:'<%= _.unescape('\${hibernate-entitymanager.version}')%>'
+    compile group: 'org.hibernate', name: 'hibernate-entitymanager', version:'<%= _.unescape('\${hibernate-entitymanager.version}')%>'<% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
+    compile group: 'org.hibernate', name: 'hibernate-ehcache', version:'<%= _.unescape('\${hibernate-entitymanager.version}')%>'<% } %>
+    compile group: 'org.hibernate', name: 'hibernate-validator', version:'<%= _.unescape('\${hibernate-validator.version}')%>'<% if (databaseType == 'sql') { %>
+    compile group: 'org.jadira.usertype', name: 'usertype.core', version:'<%= _.unescape('\${usertype.core.version}')%>'
+    compile group: 'org.liquibase', name: 'liquibase-core', version:'<%= _.unescape('\${liquibase-core.version}')%>'
+    compile(group: 'org.liquibase.ext', name: 'liquibase-hibernate4', version:'<%= _.unescape('\${liquibase-hibernate.version}')%>') {
         exclude(module: 'hibernate-jpa-2.0-api')
-    }
-    compile group: 'org.springframework.boot', name: 'spring-boot-actuator', version:'1.0.2.RELEASE'
-    compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version:'1.0.2.RELEASE'
-    compile group: 'org.springframework.boot', name: 'spring-boot-loader-tools', version:'1.0.2.RELEASE'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-logging', version:'1.0.2.RELEASE'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version:'1.0.2.RELEASE'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version:'1.0.2.RELEASE'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version:'1.0.2.RELEASE'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version:'1.0.2.RELEASE'
-    compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web', version:'1.0.2.RELEASE') {
+    }<% } %>
+    compile group: 'org.springframework.boot', name: 'spring-boot-actuator', version:'<%= _.unescape('\${spring-boot.version}')%>'
+    compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version:'<%= _.unescape('\${spring-boot.version}')%>'
+    compile group: 'org.springframework.boot', name: 'spring-boot-loader-tools', version:'<%= _.unescape('\${spring-boot.version}')%>'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-logging', version:'<%= _.unescape('\${spring-boot.version}')%>'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version:'<%= _.unescape('\${spring-boot.version}')%>'<% if (databaseType == 'sql') { %>
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version:'<%= _.unescape('\${spring-boot.version}')%>'<% } %><% if (databaseType == 'nosql') { %>
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb', version:'<%= _.unescape('\${spring-boot.version}')%>'<% } %>
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version:'<%= _.unescape('\${spring-boot.version}')%>'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version:'<%= _.unescape('\${spring-boot.version}')%>'
+    compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web', version:'<%= _.unescape('\${spring-boot.version}')%>') {
         exclude module: 'spring-boot-starter-tomcat'
     }
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-jetty', version: '1.0.2.RELEASE'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version:'1.0.2.RELEASE'
-    compile(group: 'org.springframework', name: 'spring-context-support', version:'4.0.3.RELEASE') {
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-jetty', version: '<%= _.unescape('\${spring-boot.version}')%>'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version:'<%= _.unescape('\${spring-boot.version}')%>'
+    compile(group: 'org.springframework', name: 'spring-context-support', version:'<%= _.unescape('\${spring-context-support.version}')%>') {
         exclude(module: 'quartz')
-    }
-    compile group: 'io.github.jhipster.loaded', name: 'core', version:'0.5'
-    compile group: 'com.mangofactory', name: 'swagger-springmvc', version:'0.8.2'
-    compile group: 'mysql', name: 'mysql-connector-java', version:'5.1.30'
-    compile group: 'com.h2database', name: 'h2', version:'1.3.175'
-    compile group: 'com.mattbertolini', name: 'liquibase-slf4j', version:'1.2.1'
-    testCompile group: 'com.jayway.awaitility', name: 'awaitility', version:'1.4.0'
-    testCompile group: 'com.jayway.jsonpath', name: 'json-path', version:'0.9.1'
-    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version:'1.0.2.RELEASE'
-    testCompile group: 'org.assertj', name: 'assertj-core', version:'1.5.0'
+    }<% if (authenticationType == 'token') { %>
+    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '<%= _.unescape('\${spring-security-oauth2.version}')%>'<% } %><% if (databaseType == 'nosql') { %>
+    compile group: 'org.mongeez', name: 'mongeez', version: '<%= _.unescape('\${mongeez.version}')%>'<% } %>
+    compile group: 'io.github.jhipster.loaded', name: 'core', version: '<%= _.unescape('\${jhipster-loaded.version}')%>'
+    compile group: 'com.mangofactory', name: 'swagger-springmvc', version: '<%= _.unescape('\${swagger-springmvc.version}')%>'<% if (devDatabaseType == 'mysql' || prodDatabaseType == 'mysql') { %>
+    compile group: 'mysql', name: 'mysql-connector-java', version:'<%= _.unescape('\${mysql-connector-java.version}')%>'<% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
+    compile group: 'org.postgresql', name: 'postgresql', version:'<%= _.unescape('\${postgresql.version}')%>'<% } %><% if (devDatabaseType == 'h2Memory') { %>
+    compile group: 'com.h2database', name: 'h2', version:'<%= _.unescape('\${h2.version}')%>'<% } %><% if (databaseType == 'sql') { %>
+    compile group: 'com.mattbertolini', name: 'liquibase-slf4j', version:'<%= _.unescape('\${liquibase-slf4j.version}')%>'<% } %><% if (databaseType == 'nosql') { %>
+    compile group: 'cz.jirutka.spring', name: 'embedmongo-spring'<% } %>
+    testCompile group: 'com.jayway.awaitility', name: 'awaitility', version:'<%= _.unescape('\${awaility,version}')%>'
+    testCompile group: 'com.jayway.jsonpath', name: 'json-path', version:'<%= _.unescape('\${json-path.version}')%>'
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version:'<%= _.unescape('\${spring-boot.version}')%>'
+    testCompile group: 'org.assertj', name: 'assertj-core', version:'<%= _.unescape('\${assertj-core.version}')%>'
     testCompile group: 'junit', name: 'junit', version:'4.11'
-    testCompile group: 'org.mockito', name: 'mockito-core', version:'1.9.5'
+    testCompile group: 'org.mockito', name: 'mockito-core', version:'1.9.5'<% if (devDatabaseType != 'h2Memory') { %>
+    testCompile group: 'com.h2database', name: 'h2', version:'<%= _.unescape('\${h2.version}')%>'<% } %><% if (databaseType == 'sql') { %>
+    testCompile group: 'com.mattbertolini', name: 'liquibase-slf4j', version:'<%= _.unescape('\${liquibase-slf4j.version}')%>'<% } %><% if (databaseType == 'nosql') { %>
+    testCompile group: 'cz.jirutka.spring', name: 'embedmongo-spring'<% } %>
     testCompile group: 'org.hamcrest', name: 'hamcrest-library', version:'1.3'
 }
