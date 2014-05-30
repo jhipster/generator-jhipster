@@ -66,7 +66,7 @@ public class <%= entityClass %>Resource {
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));<% } else { %>
         <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Repository.findOne(id);
         if (<%= entityInstance %> == null) {
-            response.setStatus(HttpStatus.NOT_FOUND.value());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(<%= entityInstance %>, HttpStatus.OK);<% } %>
     }
