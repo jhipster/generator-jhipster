@@ -18,7 +18,6 @@ apply plugin: 'spring-boot'
 
 apply from: 'yeoman.gradle'
 
-
 if (profile == 'prod')
     apply from: 'profile_prod.gradle'
 else
