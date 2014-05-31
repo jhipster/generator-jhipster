@@ -1,0 +1,16 @@
+apply plugin: 'node'<% if(frontendBuilder == 'grunt') {%>
+apply plugin: 'grunt'<% } if(frontendBuilder == 'gulp') {%>
+apply plugin: 'gulp'<% } %>
+
+task bower(dependsOn: 'npmInstall', type: Exec){
+    commandLine "bower", 'install'
+}
+<% if(frontendBuilder == 'grunt') {%>
+grunt_build.dependsOn 'npmInstall'
+grunt_build.dependsOn 'bower'
+processResources.dependsOn grunt_build
+test.dependsOn grunt_test<% }  if(frontendBuilder == 'gulp') {%>
+gulp_build.dependsOn 'npmInstall'
+gulp_build.dependsOn 'bower'
+processResources.dependsOn gulp_build
+test.dependsOn gulp_test<% } %>
