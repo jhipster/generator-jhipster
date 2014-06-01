@@ -108,7 +108,7 @@ dependencies {
     compile group: 'com.h2database', name: 'h2', version: h2_version<% if (databaseType == 'sql') { %>
     compile group: 'com.mattbertolini', name: 'liquibase-slf4j', version: liquibase_slf4j_version<% } %><% if (databaseType == 'nosql') { %>
     compile group: 'cz.jirutka.spring', name: 'embedmongo-spring'<% } %>
-    testCompile group: 'com.jayway.awaitility', name: 'awaitility', version:'<%= _.unescape('\${awaility,version}')%>'
+    testCompile group: 'com.jayway.awaitility', name: 'awaitility', version: awaility_version
     testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: json_path_version
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: spring_boot_version
     testCompile group: 'org.assertj', name: 'assertj-core', version: assertj_core_version
