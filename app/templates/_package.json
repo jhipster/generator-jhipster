@@ -55,7 +55,8 @@
     "karma-jasmine": "0.2.2",
     "karma-requirejs": "0.2.1",
     "karma-phantomjs-launcher": "0.1.2",
-    "karma": "0.12.1"
+    "karma": "0.12.1",
+    "bower": "1.3.3"
   },
   "engines": {
     "node": ">=0.10.0"
