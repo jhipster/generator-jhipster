@@ -136,7 +136,7 @@
                     $rootScope.authenticationError = true;
                     Session.invalidate();
                 });<% } %><% if (authenticationType == 'token') { %>
-                var data = "username=" + param.username + "&password=" + param.password + "&grant_type=password&scope=read%20write&client_secret=mySecretOAuthSecret&client_id=jhipsterapp";
+                var data = "username=" + param.username + "&password=" + param.password + "&grant_type=password&scope=read%20write&client_secret=mySecretOAuthSecret&client_id=<%= baseName%>";
                 $http.post('oauth/token', data, {
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
