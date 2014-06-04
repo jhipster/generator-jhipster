@@ -11,3 +11,5 @@ node_modules
 .sass-cache
 .DS_Store
 src/main/webapp/dist
+.gradle
+build
