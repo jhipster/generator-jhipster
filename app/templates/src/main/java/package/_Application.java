@@ -70,7 +70,7 @@ public class Application {
             app.setAdditionalProfiles(Constants.SPRING_PROFILE_DEVELOPMENT);
         }
     }
-
+    <% if (databaseType == 'sql') { %>
     /**
      * Set the liquibases.scan.packages to avoid an exception from ServiceLocator
      * <p/>
@@ -83,5 +83,5 @@ public class Application {
                 "liquibase.snapshot" + "," + "liquibase.logging" + "," + "liquibase.diff" + "," +
                 "liquibase.structure" + "," + "liquibase.structurecompare" + "," + "liquibase.lockservice" + "," +
                 "liquibase.ext" + "," + "liquibase.changelog");
-    }
+    }<% } %>
 }

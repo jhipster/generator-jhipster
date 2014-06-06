@@ -65,10 +65,10 @@ hotReload:
     package:
       project: <%=packageName%>
       domain: <%=packageName%>.domain
-      restdto: <%=packageName%>.web.rest.dto
+      restdto: <%=packageName%>.web.rest.dto<% if (databaseType == 'sql') { %>
     liquibase:
       defaultCatalogName: <% if (devDatabaseType == 'mysql') { %><%= baseName %><% } %>
       defaultSchema: <% if (devDatabaseType == 'mysql') { %><%= baseName %><% } %><% if (devDatabaseType == 'postgresql') { %>public<% } %><% if (devDatabaseType == 'h2Memory') { %>public<% } %>
-      excludeTables: <% if (authenticationType == 'token') { %>oauth_access_token,oauth_approvals,oauth_client_details,oauth_client_token,oauth_code,oauth_refresh_token<% } %>
+      excludeTables: <% if (authenticationType == 'token') { %>oauth_access_token,oauth_approvals,oauth_client_details,oauth_client_token,oauth_code,oauth_refresh_token<% } %><% } %>
     watchdir:
       - target/classes

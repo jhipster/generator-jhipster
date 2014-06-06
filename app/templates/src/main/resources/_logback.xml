@@ -26,8 +26,8 @@
     <logger name="org.springframework.cache" level="WARN"/>
     <logger name="org.thymeleaf" level="WARN"/>
     <logger name="com.mangofactory.swagger" level="warn"/>
-    <logger name="com.wordnik.swagger" level="warn"/>
-    <logger name="liquibase" level="warn"/>
+    <logger name="com.wordnik.swagger" level="warn"/><% if (databaseType == 'sql') { %>
+    <logger name="liquibase" level="warn"/><% } %>
 
     <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
         <resetJUL>true</resetJUL>
