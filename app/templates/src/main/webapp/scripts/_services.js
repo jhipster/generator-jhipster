@@ -136,12 +136,12 @@
                     $rootScope.authenticationError = true;
                     Session.invalidate();
                 });<% } %><% if (authenticationType == 'token') { %>
-                var data = "username=" + param.username + "&password=" + param.password + "&grant_type=password&scope=read%20write&client_secret=mySecretOAuthSecret&client_id=<%= baseName%>";
+                var data = "username=" + param.username + "&password=" + param.password + "&grant_type=password&scope=read%20write&client_secret=mySecretOAuthSecret&client_id=<%= baseName%>app";
                 $http.post('oauth/token', data, {
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
                         "Accept": "application/json",
-                        "Authorization": "Basic " + Base64Service.encode("jhipsterapp" + ':' + "mySecretOAuthSecret")
+                        "Authorization": "Basic " + Base64Service.encode("<%= baseName%>app" + ':' + "mySecretOAuthSecret")
                     },
                     ignoreAuthModule: 'ignoreAuthModule'
                 }).success(function (data, status, headers, config) {
