@@ -4,7 +4,8 @@ var util = require('util'),
     yeoman = require('yeoman-generator'),
     chalk = require('chalk'),
     _s = require('underscore.string'),
-    shelljs = require('shelljs');
+    shelljs = require('shelljs'),
+    packagejs = require(__dirname + '/../package.json');
 
 var JhipsterGenerator = module.exports = function JhipsterGenerator(args, options, config) {
     yeoman.generators.Base.apply(this, arguments);
@@ -306,6 +307,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
 	this.javaVersion = this.config.get('javaVersion');
 	this.buildTool = this.config.get('buildTool');
 	this.frontendBuilder = this.config.get('frontendBuilder');
+    this.packagejs = packagejs;
 
 	if (this.baseName != null &&
 	    this.packageName != null &&
