@@ -28,7 +28,7 @@ spring:
 <% if (authenticationType == 'token') { %>
 authentication:
     oauth:
-        clientid: <%= baseName %>app
+        clientid: jhipsterapp
         secret: mySecretOAuthSecret
         # Token is valid 30 minutes
         tokenValidityInSeconds: 1800<% } %>
