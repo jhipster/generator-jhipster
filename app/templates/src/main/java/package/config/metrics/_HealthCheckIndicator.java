@@ -1,15 +1,13 @@
 package <%=packageName%>.config.metrics;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 /**
- * A health indicator check for a component of your application
+ * A health indicator check for a component of your application.
  */
-public abstract class HealthCheckIndicator implements HealthIndicator<Map<String, HealthCheckIndicator.Result>> {
+public abstract class HealthCheckIndicator implements HealthIndicator {
 
     private static final Result HEALTHY = new Result(true, null, null);
 
@@ -29,14 +27,12 @@ public abstract class HealthCheckIndicator implements HealthIndicator<Map<String
     protected abstract Result check() throws Exception;
 
     @Override
-    final public Map<String, Result> health() {
-        Map<String, Result> results = new LinkedHashMap<>();
+    public Health health() {
         try {
-            results.put(getHealthCheckIndicatorName(), check());
+            return Health.up().withDetail(getHealthCheckIndicatorName(), check()).build();
         } catch (Exception e) {
-            results.put(getHealthCheckIndicatorName(), unhealthy(e));
+            return Health.down().withDetail(getHealthCheckIndicatorName(), unhealthy(e)).build();
         }
-        return results;
     }
 
     /**

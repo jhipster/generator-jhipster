@@ -9,8 +9,6 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import javax.inject.Inject;<% if (databaseType == 'sql') { %>
 import javax.sql.DataSource;<% } %>
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Configuration
 public class JHipsterHealthIndicatorConfiguration implements InitializingBean {
@@ -25,22 +23,8 @@ public class JHipsterHealthIndicatorConfiguration implements InitializingBean {
     private MongoTemplate mongoTemplate;<% } %>
 
     private JavaMailHealthCheckIndicator javaMailHealthCheckIndicator = new JavaMailHealthCheckIndicator();
+	
     private DatabaseHealthCheckIndicator databaseHealthCheckIndicator = new DatabaseHealthCheckIndicator();
-
-    @Bean
-    public HealthIndicator<Map<String, HealthCheckIndicator.Result>> healthIndicator() {
-        return new HealthIndicator<Map<String, HealthCheckIndicator.Result>>() {
-            @Override
-            public Map<String, HealthCheckIndicator.Result> health() {
-                Map<String, HealthCheckIndicator.Result> healths = new LinkedHashMap<>();
-
-                healths.putAll(javaMailHealthCheckIndicator.health());
-                healths.putAll(databaseHealthCheckIndicator.health());
-
-                return healths;
-            }
-        };
-    }
 
     @Override
     public void afterPropertiesSet() throws Exception {
