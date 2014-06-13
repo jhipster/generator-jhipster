@@ -12,7 +12,7 @@ module.exports = function (config) {
         // list of files / patterns to load in the browser
         files: [
             'src/main/webapp/bower_components/modernizr/modernizr.js',
-            'src/main/webapp/bower_components/jquery/jquery.js',
+            'src/main/webapp/bower_components/jquery/dist/jquery.js',
             'src/main/webapp/bower_components/angular/angular.js',
             'src/main/webapp/bower_components/angular-mocks/angular-mocks.js',
             'src/main/webapp/bower_components/angular-route/angular-route.js',

@@ -665,7 +665,7 @@ JhipsterGenerator.prototype.app = function app() {
 
     var indexScripts = [
         'bower_components/modernizr/modernizr.js',
-        'bower_components/jquery/jquery.js',
+        'bower_components/jquery/dist/jquery.js',
         'bower_components/angular/angular.js',
         'bower_components/angular-route/angular-route.js',
         'bower_components/angular-resource/angular-resource.js',
