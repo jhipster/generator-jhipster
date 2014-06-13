@@ -384,6 +384,7 @@ JhipsterGenerator.prototype.app = function app() {
     // Create Java resource files
     var resourceDir = 'src/main/resources/';
     this.mkdir(resourceDir);
+	this.copy(resourceDir + '/banner.txt', resourceDir + '/banner.txt');
 
     if (this.hibernateCache == "ehcache") {
         this.template(resourceDir + '_ehcache.xml', resourceDir + 'ehcache.xml');
