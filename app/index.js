@@ -413,8 +413,6 @@ JhipsterGenerator.prototype.app = function app() {
         this.copy(resourceDir + '/config/liquibase/users.csv', resourceDir + 'config/liquibase/users.csv');
         this.copy(resourceDir + '/config/liquibase/authorities.csv', resourceDir + 'config/liquibase/authorities.csv');
         this.copy(resourceDir + '/config/liquibase/users_authorities.csv', resourceDir + 'config/liquibase/users_authorities.csv');
-        this.copy(resourceDir + '/config/liquibase/users_upd_001.csv', resourceDir + 'config/liquibase/users_upd_001.csv');
-        this.copy(resourceDir + '/config/liquibase/users_authorities_upd_001.csv', resourceDir + 'config/liquibase/users_authorities_upd_001.csv');
     }
 
     if (this.databaseType == "nosql") {
@@ -436,6 +434,8 @@ JhipsterGenerator.prototype.app = function app() {
     var javaDir = 'src/main/java/' + packageFolder + '/';
 
     // Remove old files
+    removefile(resourceDir + 'config/liquibase/users_upd_001.csv');
+    removefile(resourceDir + 'config/liquibase/users_authorities_upd_001.csv');
     removefile(javaDir + '/web/servlet/HealthCheckServlet.java');
     removefile(javaDir + '/config/metrics/JavaMailHealthCheck.java');
     removefile('spring_loaded/springloaded.jar');

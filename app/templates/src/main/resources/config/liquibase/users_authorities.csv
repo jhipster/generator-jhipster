@@ -1,4 +1,6 @@
 login;name
+system;ROLE_ADMIN
+system;ROLE_USER
 admin;ROLE_ADMIN
 admin;ROLE_USER
 user;ROLE_USER
