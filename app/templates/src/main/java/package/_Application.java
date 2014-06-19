@@ -54,10 +54,10 @@ public class Application {
 
         // Check if the selected profile has been set as argument.
         // if not the development profile will be added
-        addDefaultProfile(app, source);
+        addDefaultProfile(app, source);<% if (databaseType == 'sql') { %>
 
         // Fallback to set the list of liquibase package list
-        addLiquibaseScanPackages();
+        addLiquibaseScanPackages();<% } %>
 
         app.run(args);
     }
