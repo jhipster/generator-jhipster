@@ -69,8 +69,8 @@ dependencies {
     compile group: 'commons-lang', name: 'commons-lang', version: commons_lang_version
     compile group: 'commons-io', name: 'commons-io', version: commons_io_version
     compile group: 'javax.inject', name: 'javax.inject', version: javax_inject_version
-    compile group: 'joda-time', name: 'joda-time', version: joda_time_version
-    compile group: 'joda-time', name: 'joda-time-hibernate', version: joda_time_hibernate_version
+    compile group: 'joda-time', name: 'joda-time', version: joda_time_version<% if (databaseType == 'sql') { %>
+    compile group: 'joda-time', name: 'joda-time-hibernate', version: joda_time_hibernate_version<% } %>
     compile group: 'org.apache.geronimo.javamail', name: 'geronimo-javamail_1.4_mail', version: geronimo_javamail_1_4_mail_version<% if (websocket == 'atmosphere') { %>
     compile group: 'org.atmosphere', name: 'atmosphere-spring', version: atmosphere_spring_version<% } %><% if (databaseType == 'sql') { %>
     compile group: 'org.hibernate', name: 'hibernate-core', version: hibernate_entitymanager_version
@@ -106,8 +106,7 @@ dependencies {
     compile group: 'mysql', name: 'mysql-connector-java', version: mysql_connector_java_version<% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
     compile group: 'org.postgresql', name: 'postgresql', version: postgresql_version<% } %>
     compile group: 'com.h2database', name: 'h2', version: h2_version<% if (databaseType == 'sql') { %>
-    compile group: 'com.mattbertolini', name: 'liquibase-slf4j', version: liquibase_slf4j_version<% } %><% if (databaseType == 'nosql') { %>
-    compile group: 'cz.jirutka.spring', name: 'embedmongo-spring'<% } %>
+    compile group: 'com.mattbertolini', name: 'liquibase-slf4j', version: liquibase_slf4j_version<% } %>
     testCompile group: 'com.jayway.awaitility', name: 'awaitility', version: awaility_version
     testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: json_path_version
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: spring_boot_version
@@ -115,6 +114,6 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version:'4.11'
     testCompile group: 'org.mockito', name: 'mockito-core', version:'1.9.5'<% if (databaseType == 'sql') { %>
     testCompile group: 'com.mattbertolini', name: 'liquibase-slf4j', version: liquibase_slf4j_version<% } %><% if (databaseType == 'nosql') { %>
-    testCompile group: 'cz.jirutka.spring', name: 'embedmongo-spring'<% } %>
+    testCompile group: 'cz.jirutka.spring', name: 'embedmongo-spring', version: embedmongo_spring_version<% } %>
     testCompile group: 'org.hamcrest', name: 'hamcrest-library', version:'1.3'
 }

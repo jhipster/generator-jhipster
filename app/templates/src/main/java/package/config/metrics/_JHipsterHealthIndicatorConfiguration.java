@@ -1,19 +1,16 @@
 package <%=packageName%>.config.metrics;
 
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;<% if (databaseType == 'nosql') { %>
-import org.springframework.data.mongodb.core.MongoTemplate;<% } %>
+import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import javax.inject.Inject;<% if (databaseType == 'sql') { %>
-import javax.sql.DataSource;<% } %>
-import java.util.LinkedHashMap;
-import java.util.Map;
+import javax.sql.DataSource;<% } %><% if (databaseType == 'nosql') { %>
+import org.springframework.data.mongodb.core.MongoTemplate;<% } %>
 
 @Configuration
-public class JHipsterHealthIndicatorConfiguration implements InitializingBean {
+public class JHipsterHealthIndicatorConfiguration {
 
     @Inject
     private JavaMailSenderImpl javaMailSender;<% if (databaseType == 'sql') { %>
@@ -24,28 +21,14 @@ public class JHipsterHealthIndicatorConfiguration implements InitializingBean {
     @Inject
     private MongoTemplate mongoTemplate;<% } %>
 
-    private JavaMailHealthCheckIndicator javaMailHealthCheckIndicator = new JavaMailHealthCheckIndicator();
-    private DatabaseHealthCheckIndicator databaseHealthCheckIndicator = new DatabaseHealthCheckIndicator();
-
     @Bean
-    public HealthIndicator<Map<String, HealthCheckIndicator.Result>> healthIndicator() {
-        return new HealthIndicator<Map<String, HealthCheckIndicator.Result>>() {
-            @Override
-            public Map<String, HealthCheckIndicator.Result> health() {
-                Map<String, HealthCheckIndicator.Result> healths = new LinkedHashMap<>();
-
-                healths.putAll(javaMailHealthCheckIndicator.health());
-                healths.putAll(databaseHealthCheckIndicator.health());
-
-                return healths;
-            }
-        };
+    public HealthIndicator dbHealthIndicator() {<% if (databaseType == 'sql') { %>
+        return new DatabaseHealthIndicator(dataSource);<% } %><% if (databaseType == 'nosql') { %>
+        return new DatabaseHealthIndicator(mongoTemplate);<% } %>
     }
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        javaMailHealthCheckIndicator.setJavaMailSender(javaMailSender);<% if (databaseType == 'sql') { %>
-        databaseHealthCheckIndicator.setDataSource(dataSource);<% } %><% if (databaseType == 'nosql') { %>
-        databaseHealthCheckIndicator.setMongoTemplate(mongoTemplate);<% } %>
+    @Bean
+    public HealthIndicator mailHealthIndicator() {
+        return new JavaMailHealthIndicator(javaMailSender);
     }
 }

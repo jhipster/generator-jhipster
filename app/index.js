@@ -384,6 +384,7 @@ JhipsterGenerator.prototype.app = function app() {
     // Create Java resource files
     var resourceDir = 'src/main/resources/';
     this.mkdir(resourceDir);
+	this.copy(resourceDir + '/banner.txt', resourceDir + '/banner.txt');
 
     if (this.hibernateCache == "ehcache") {
         this.template(resourceDir + '_ehcache.xml', resourceDir + 'ehcache.xml');
@@ -412,8 +413,6 @@ JhipsterGenerator.prototype.app = function app() {
         this.copy(resourceDir + '/config/liquibase/users.csv', resourceDir + 'config/liquibase/users.csv');
         this.copy(resourceDir + '/config/liquibase/authorities.csv', resourceDir + 'config/liquibase/authorities.csv');
         this.copy(resourceDir + '/config/liquibase/users_authorities.csv', resourceDir + 'config/liquibase/users_authorities.csv');
-        this.copy(resourceDir + '/config/liquibase/users_upd_001.csv', resourceDir + 'config/liquibase/users_upd_001.csv');
-        this.copy(resourceDir + '/config/liquibase/users_authorities_upd_001.csv', resourceDir + 'config/liquibase/users_authorities_upd_001.csv');
     }
 
     if (this.databaseType == "nosql") {
@@ -435,8 +434,13 @@ JhipsterGenerator.prototype.app = function app() {
     var javaDir = 'src/main/java/' + packageFolder + '/';
 
     // Remove old files
+    removefile(resourceDir + 'config/liquibase/users_upd_001.csv');
+    removefile(resourceDir + 'config/liquibase/users_authorities_upd_001.csv');
     removefile(javaDir + '/web/servlet/HealthCheckServlet.java');
     removefile(javaDir + '/config/metrics/JavaMailHealthCheck.java');
+    removefile(javaDir + 'config/metrics/HealthCheckIndicator.java');
+    removefile(javaDir + 'config/metrics/DatabaseHealthCheckIndicator.java');
+    removefile(javaDir + 'config/metrics/JavaMailHealthCheckIndicator.java');
     removefile('spring_loaded/springloaded.jar');
     removefolder(javaDir + '/config/reload');
     removefolder(javaDir + '/apidoc');
@@ -478,9 +482,8 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/locale/_AngularCookieLocaleResolver.java', javaDir + 'config/locale/AngularCookieLocaleResolver.java');
 
     this.template('src/main/java/package/config/metrics/_package-info.java', javaDir + 'config/metrics/package-info.java');
-    this.template('src/main/java/package/config/metrics/_DatabaseHealthCheckIndicator.java', javaDir + 'config/metrics/DatabaseHealthCheckIndicator.java');
-    this.template('src/main/java/package/config/metrics/_HealthCheckIndicator.java', javaDir + 'config/metrics/HealthCheckIndicator.java');
-    this.template('src/main/java/package/config/metrics/_JavaMailHealthCheckIndicator.java', javaDir + 'config/metrics/JavaMailHealthCheckIndicator.java');
+    this.template('src/main/java/package/config/metrics/_DatabaseHealthIndicator.java', javaDir + 'config/metrics/DatabaseHealthIndicator.java');
+    this.template('src/main/java/package/config/metrics/_JavaMailHealthIndicator.java', javaDir + 'config/metrics/JavaMailHealthIndicator.java');
     this.template('src/main/java/package/config/metrics/_JHipsterHealthIndicatorConfiguration.java', javaDir + 'config/metrics/JHipsterHealthIndicatorConfiguration.java');
 
     if (this.hibernateCache == "hazelcast") {
@@ -664,7 +667,7 @@ JhipsterGenerator.prototype.app = function app() {
 
     var indexScripts = [
         'bower_components/modernizr/modernizr.js',
-        'bower_components/jquery/jquery.js',
+        'bower_components/jquery/dist/jquery.js',
         'bower_components/angular/angular.js',
         'bower_components/angular-route/angular-route.js',
         'bower_components/angular-resource/angular-resource.js',
