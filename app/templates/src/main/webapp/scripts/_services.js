@@ -159,7 +159,9 @@
                 });<% } %>
             },
             valid: function (authorizedRoles) {<% if (authenticationType == 'token') { %>
-                httpHeaders.common['Authorization'] = 'Bearer ' + AccessToken.get();<% } %>
+                if(AccessToken.get() !== null) {
+                    httpHeaders.common['Authorization'] = 'Bearer ' + AccessToken.get();
+                }<% } %>
 
                 $http.get('protected/transparent.gif', {
                     ignoreAuthModule: 'ignoreAuthModule'
