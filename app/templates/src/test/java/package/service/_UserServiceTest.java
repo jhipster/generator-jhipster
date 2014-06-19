@@ -16,8 +16,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import ca.intelliware.ihtsdo.mlds.domain.User;
-
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
