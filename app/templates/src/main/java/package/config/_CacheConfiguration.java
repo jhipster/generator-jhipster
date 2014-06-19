@@ -169,7 +169,7 @@ public class CacheConfiguration {
         MapConfig mapConfig = new MapConfig();
 
         mapConfig.setBackupCount(env.getProperty("cache.hazelcast.backupCount", Integer.class, 1));
-        mapConfig.setTimeToLiveSeconds(env.getProperty("cache.timeToLiveSeconds", Integer.class, 3600));
+        mapConfig.setTimeToLiveSeconds(env.getProperty("cache.timeToLiveSeconds", Long.class, 3600L));
         return mapConfig;
     }<% } %><% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
     
