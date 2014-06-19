@@ -33,6 +33,7 @@ import static org.assertj.core.api.Assertions.*;
 @WebAppConfiguration
 @ActiveProfiles("dev")<% if (databaseType == 'nosql') { %>
 @Import(MongoConfiguration.class)<% } %>
+@Transactional
 public class UserServiceTest {
 
     @Inject
