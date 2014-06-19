@@ -1,9 +1,11 @@
 'use strict';
 
 <%= angularAppName %>.factory('<%= entityClass %>', ['$resource',
-    function ($resource) {
-        return $resource('app/rest/<%= entityInstance %>s/:id', {}, {
-            'query': { method: 'GET', isArray: true},
-            'get': { method: 'GET'}
-        });
+    function (Api) {
+        var <%= entityInstance %>Service = Api.all('<%= entityInstance %>s/');
+
+        <%= entityClass %>.addRestangularMethod('query', 'get', '');
+        <%= entityClass %>.addRestangularMethod('delete', 'remove');
+
+        return <%= entityClass %>;
     }]);

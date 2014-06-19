@@ -15,13 +15,13 @@
         };
 
         $scope.update = function (id) {
-            $scope.<%= entityInstance %> = <%= entityClass %>.get({id: id});
+            $scope.<%= entityInstance %> = <%= entityClass %>.get(id);
             $('#save<%= entityClass %>Modal').modal('show');
         };
 
         $scope.delete = function (id) {
-            <%= entityClass %>.delete({id: id},
-                function () {
+            <%= entityClass %>.one(id).delete()
+                .then(function () {
                     $scope.<%= entityInstance %>s = <%= entityClass %>.query();
                 });
         };

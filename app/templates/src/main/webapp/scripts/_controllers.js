@@ -45,16 +45,18 @@
         $scope.settingsAccount = Account.get();
 
         $scope.save = function () {
-            Account.save($scope.settingsAccount,
-                function (value, responseHeaders) {
-                    $scope.error = null;
-                    $scope.success = 'OK';
-                    $scope.settingsAccount = Account.get();
-                },
-                function (httpResponse) {
-                    $scope.success = null;
-                    $scope.error = "ERROR";
-                });
+            Account.save($scope.settingsAccount).
+                then(
+                    function (value, responseHeaders) {
+                        $scope.error = null;
+                        $scope.success = 'OK';
+                        $scope.settingsAccount = Account.get();
+                    },
+                    function (httpResponse) {
+                        $scope.success = null;
+                        $scope.error = "ERROR";
+                    }
+                );
         };
     }]);
 
@@ -114,15 +116,17 @@
                 $scope.doNotMatch = "ERROR";
             } else {
                 $scope.doNotMatch = null;
-                Password.save($scope.password,
-                    function (value, responseHeaders) {
-                        $scope.error = null;
-                        $scope.success = 'OK';
-                    },
-                    function (httpResponse) {
-                        $scope.success = null;
-                        $scope.error = "ERROR";
-                    });
+                Password.save($scope.password)
+                    .then(
+                        function (value, responseHeaders) {
+                            $scope.error = null;
+                            $scope.success = 'OK';
+                        },
+                        function (httpResponse) {
+                            $scope.success = null;
+                            $scope.error = "ERROR";
+                        }
+                    );
             }
         };
     }]);
@@ -133,16 +137,21 @@
         $scope.error = null;
         $scope.sessions = resolvedSessions;
         $scope.invalidate = function (series) {
-            Sessions.delete({series: encodeURIComponent(series)},
-                function (value, responseHeaders) {
-                    $scope.error = null;
-                    $scope.success = "OK";
-                    $scope.sessions = Sessions.get();
-                },
-                function (httpResponse) {
-                    $scope.success = null;
-                    $scope.error = "ERROR";
-                });
+            Sessions.one(encodeURIComponent(series)).remove()
+                .then(
+                    function (value, responseHeaders) {
+                        $scope.error = null;
+                        $scope.success = "OK";
+                        Sessions.getAll()
+                            .then(function(sessions) {
+                                $scope.sessions = sessions
+                            })
+                    },
+                    function (httpResponse) {
+                        $scope.success = null;
+                        $scope.error = "ERROR";
+                    }
+                );
         };
     }]);
 
@@ -200,31 +209,29 @@
                 $scope.healthCheck = data;
             });
 
-            $scope.metrics = MetricsService.get();
+            MetricsService.get()
+                .then(function(items) {
+                    $scope.servicesStats = {};
+                    $scope.cachesStats = {};
+                    angular.forEach(items.timers, function(value, key) {
+                        if (key.indexOf("web.rest") != -1 || key.indexOf("service") != -1) {
+                            $scope.servicesStats[key] = value;
+                        }
 
-            $scope.metrics.$get({}, function(items) {
+                        if (key.indexOf("net.sf.ehcache.Cache") != -1) {
+                            // remove gets or puts
+                            var index = key.lastIndexOf(".");
+                            var newKey = key.substr(0, index);
 
-                $scope.servicesStats = {};
-                $scope.cachesStats = {};
-                angular.forEach(items.timers, function(value, key) {
-                    if (key.indexOf("web.rest") != -1 || key.indexOf("service") != -1) {
-                        $scope.servicesStats[key] = value;
-                    }
-
-                    if (key.indexOf("net.sf.ehcache.Cache") != -1) {
-                        // remove gets or puts
-                        var index = key.lastIndexOf(".");
-                        var newKey = key.substr(0, index);
-
-                        // Keep the name of the domain
-                        index = newKey.lastIndexOf(".");
-                        $scope.cachesStats[newKey] = {
-                            'name': newKey.substr(index + 1),
-                            'value': value
-                        };
-                    }
+                            // Keep the name of the domain
+                            index = newKey.lastIndexOf(".");
+                            $scope.cachesStats[newKey] = {
+                                'name': newKey.substr(index + 1),
+                                'value': value
+                            };
+                        }
+                    });
                 });
-            });
         };
 
         $scope.refresh();
@@ -274,9 +281,12 @@
         $scope.loggers = resolvedLogs;
 
         $scope.changeLevel = function (name, level) {
-            LogsService.changeLevel({name: name, level: level}, function () {
-                $scope.loggers = LogsService.findAll();
-            });
+            LogsService.changeLevel({name: name, level: level})
+                .then(function () {
+                    LogsService.findAll().then(function(loggers) {
+                        $scope.loggers = loggers;
+                    });
+                });
         }
     }]);
 
