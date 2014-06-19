@@ -218,7 +218,7 @@
 
                 $http.get('app/logout');
                 Session.invalidate();<% if (authenticationType == 'token') { %>
-                httpHeaders.common['Authorization'] = null;<% } %>
+                delete httpHeaders.common['Authorization'];<% } %>
                 authService.loginCancelled();
             }
         };
