@@ -16,7 +16,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import ca.intelliware.ihtsdo.mlds.domain.User;
+
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -28,7 +31,6 @@ import static org.assertj.core.api.Assertions.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-@DirtiesContext(classMode= DirtiesContext.ClassMode.AFTER_CLASS)
 @ActiveProfiles("dev")<% if (databaseType == 'nosql') { %>
 @Import(MongoConfiguration.class)<% } %>
 public class UserServiceTest {
@@ -44,14 +46,14 @@ public class UserServiceTest {
 
     @Test
     public void testRemoveOldPersistentTokens() {
-        assertThat(persistentTokenRepository.findAll()).isEmpty();
-        User admin = userRepository.findOne("admin");
+    	User admin = userRepository.findOne("admin");
+    	int existingCount = persistentTokenRepository.findByUser(admin).size();
         generateUserToken(admin, "1111-1111", new LocalDate());
         LocalDate now = new LocalDate();
         generateUserToken(admin, "2222-2222", now.minusDays(32));
-        assertThat(persistentTokenRepository.findAll()).hasSize(2);
+        assertThat(persistentTokenRepository.findByUser(admin)).hasSize(existingCount + 2);
         userService.removeOldPersistentTokens();
-        assertThat(persistentTokenRepository.findAll()).hasSize(1);
+        assertThat(persistentTokenRepository.findByUser(admin)).hasSize(existingCount + 1);
     }
 
     private void generateUserToken(User user, String tokenSeries, LocalDate localDate) {
