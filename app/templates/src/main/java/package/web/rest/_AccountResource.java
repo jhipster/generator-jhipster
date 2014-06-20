@@ -136,7 +136,7 @@ public class AccountResource {
             .map(user -> new ResponseEntity<>(
                 new UserDTO(
                     user.getLogin(),
-                    user.getPassword(),
+                    null,
                     user.getFirstName(),
                     user.getLastName(),
                     user.getEmail(),
@@ -155,7 +155,7 @@ public class AccountResource {
         return new ResponseEntity<>(
             new UserDTO(
                 user.getLogin(),
-                user.getPassword(),
+                null,
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),

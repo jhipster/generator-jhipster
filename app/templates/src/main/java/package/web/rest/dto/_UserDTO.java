@@ -64,7 +64,9 @@ public class UserDTO {
     public String toString() {
         final StringBuilder sb = new StringBuilder("UserDTO{");
         sb.append("login='").append(login).append('\'');
-        sb.append(", password='").append(password.length()).append('\'');
+        if(password != null) {
+            sb.append(", password='").append(password.length()).append('\'');
+        }
         sb.append(", firstName='").append(firstName).append('\'');
         sb.append(", lastName='").append(lastName).append('\'');
         sb.append(", email='").append(email).append('\'');
