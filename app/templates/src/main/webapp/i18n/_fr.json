@@ -61,7 +61,7 @@
                 },
                 "email": {
                     "required": "Votre email est requis.",
-                    "minlength": "Votre email doit comporter au moins un caractère",
+                    "minlength": "Votre email doit comporter au moins 5 caractères",
                     "maxlength": "Votre email ne doit pas comporter plus de 50 caractères",
                     "invalid": "Votre email n'est pas valide."
                 }
