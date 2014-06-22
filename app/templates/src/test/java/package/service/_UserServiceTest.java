@@ -12,12 +12,11 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;<% if (databaseType == 'nosql') { %>
 import org.springframework.context.annotation.Import;<% } %>
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import javax.inject.Inject;
-import javax.transaction.Transactional;
+import javax.inject.Inject;<% if (databaseType == 'sql') { %>
+import javax.transaction.Transactional;<% } %>
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -30,8 +29,8 @@ import static org.assertj.core.api.Assertions.*;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @ActiveProfiles("dev")<% if (databaseType == 'nosql') { %>
-@Import(MongoConfiguration.class)<% } %>
-@Transactional
+@Import(MongoConfiguration.class)<% } %><% if (databaseType == 'sql') { %>
+@Transactional<% } %>
 public class UserServiceTest {
 
     @Inject
