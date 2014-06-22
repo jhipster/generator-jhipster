@@ -62,7 +62,7 @@
                 "email": {
                     "required": "Ihre E-Mail Adresse wird benötigt.",
                     "invalid": "Ihre E-Mail Adresse ist ungültig.",
-                    "minlength": "Ihre E-Mail Adresse muss mindestens 1 Zeichen lang sein",
+                    "minlength": "Ihre E-Mail Adresse muss mindestens 5 Zeichen lang sein",
                     "maxlength": "Ihre E-Mail Adresse darf nicht länger als 50 Zeichen sein"
                 }
             }

@@ -62,7 +62,7 @@
                 "email": {
                     "required": "Twój e-mail jest wymagany.",
                     "invalid": "Twój e-mail jest błędny.",
-                    "minlength": "Twój e-mail musi mieć przynajmniej 1 literę",
+                    "minlength": "Twój e-mail musi mieć przynajmniej 5 liter",
                     "maxlength": "Your e-mail nie może być dłuższe niż 50 liter"
                 }
             }
