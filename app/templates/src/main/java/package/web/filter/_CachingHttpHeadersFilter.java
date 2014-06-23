@@ -3,6 +3,7 @@ package <%=packageName%>.web.filter;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * This filter is used in production, to put HTTP cache headers with a long (1 month) expiration time.
@@ -11,7 +12,7 @@ import java.io.IOException;
 public class CachingHttpHeadersFilter implements Filter {
 
     // Cache period is 1 month (in ms)
-    private final static long CACHE_PERIOD = 2678400000L;
+    private final static long CACHE_PERIOD = TimeUnit.DAYS.toMillis(31L);
 
     // We consider the last modified date is the start up time of the server
     private final static long LAST_MODIFIED = System.currentTimeMillis();
