@@ -5,8 +5,8 @@ import <%=packageName%>.domain.PersistentAuditEvent;
 import <%=packageName%>.repository.PersistenceAuditEventRepository;
 import org.joda.time.LocalDateTime;
 import org.springframework.boot.actuate.audit.AuditEvent;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;<% if (databaseType == 'sql') { %>
+import org.springframework.transaction.annotation.Transactional;<% } %>
 
 import javax.inject.Inject;
 import java.util.List;
@@ -18,8 +18,8 @@ import java.util.List;
  * This is the default implementation to support SpringBoot Actuator AuditEventRepository
  * </p>
  */
-@Service
-@Transactional
+@Service<% if (databaseType == 'sql') { %>
+@Transactional<% } %>
 public class AuditEventService {
 
     @Inject

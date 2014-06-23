@@ -10,13 +10,13 @@ import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;<% if (databaseType == 'nosql') { %>
-import org.springframework.context.annotation.Import;<% } %>
+import org.springframework.context.annotation.Import;<% } %><% if (databaseType == 'sql') { %>
+import org.springframework.transaction.annotation.Transactional;<% } %>
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import javax.inject.Inject;<% if (databaseType == 'sql') { %>
-import javax.transaction.Transactional;<% } %>
+import javax.inject.Inject;
 
 import static org.assertj.core.api.Assertions.*;
 

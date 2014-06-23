@@ -13,8 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;<% if (databaseType == 'sql') { %>
+import org.springframework.transaction.annotation.Transactional;<% } %>
 
 import javax.inject.Inject;
 import java.util.HashSet;
@@ -25,8 +25,8 @@ import java.util.Set;
 /**
  * Service class for managing users.
  */
-@Service
-@Transactional
+@Service<% if (databaseType == 'sql') { %>
+@Transactional<% } %>
 public class UserService {
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
@@ -107,8 +107,8 @@ public class UserService {
         userRepository.save(currentUser);
         log.debug("Changed password for User: {}", currentUser);
     }
-
-    @Transactional(readOnly = true)
+<% if (databaseType == 'sql') { %>
+    @Transactional(readOnly = true)<% } %>
     public User getUserWithAuthorities() {
         User currentUser = userRepository.findOne(SecurityUtils.getCurrentLogin());
         currentUser.getAuthorities().size(); // eagerly load the association

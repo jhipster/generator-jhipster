@@ -11,6 +11,7 @@ var ServiceGenerator = module.exports = function ServiceGenerator(args, options,
   this.baseName = this.config.get('baseName');
   this.packageName = this.config.get('packageName');
   this.packageFolder = this.config.get('packageFolder');
+  this.databaseType = this.config.get('databaseType');
 };
 
 util.inherits(ServiceGenerator, yeoman.generators.Base);
