@@ -7,6 +7,7 @@ import <%=packageName%>.security.AuthoritiesConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (javaVersion == '8') { %>
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;<% } %>
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +36,7 @@ public class UserResource {
      */
     @RequestMapping(value = "/rest/users/{login}",
             method = RequestMethod.GET,
-            produces = "application/json")
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @RolesAllowed(AuthoritiesConstants.ADMIN)<% if (javaVersion == '8') { %>
     ResponseEntity<User> getUser(@PathVariable String login) {
