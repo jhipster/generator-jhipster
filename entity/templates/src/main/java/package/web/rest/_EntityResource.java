@@ -6,6 +6,7 @@ import <%=packageName%>.repository.<%= entityClass %>Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +32,7 @@ public class <%= entityClass %>Resource {
      */
     @RequestMapping(value = "/rest/<%= entityInstance %>s",
             method = RequestMethod.POST,
-            produces = "application/json")
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public void create(@RequestBody <%= entityClass %> <%= entityInstance %>) {
         log.debug("REST request to save <%= entityClass %> : {}", <%= entityInstance %>);
@@ -43,7 +44,7 @@ public class <%= entityClass %>Resource {
      */
     @RequestMapping(value = "/rest/<%= entityInstance %>s",
             method = RequestMethod.GET,
-            produces = "application/json")
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public List<<%= entityClass %>> getAll() {
         log.debug("REST request to get all <%= entityClass %>s");
@@ -55,7 +56,7 @@ public class <%= entityClass %>Resource {
      */
     @RequestMapping(value = "/rest/<%= entityInstance %>s/{id}",
             method = RequestMethod.GET,
-            produces = "application/json")
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<<%= entityClass %>> get(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> id<% if (javaVersion == '7') { %>, HttpServletResponse response<% } %>) {
         log.debug("REST request to get <%= entityClass %> : {}", id);<% if (javaVersion == '8') { %>		
@@ -76,7 +77,7 @@ public class <%= entityClass %>Resource {
      */
     @RequestMapping(value = "/rest/<%= entityInstance %>s/{id}",
             method = RequestMethod.DELETE,
-            produces = "application/json")
+            produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public void delete(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> id) {
         log.debug("REST request to delete <%= entityClass %> : {}", id);
