@@ -17,9 +17,7 @@
             <column name="first_name" type="varchar(50)"/>
             <column name="last_name" type="varchar(50)"/>
             <column name="email" type="varchar(100)"/>
-            <column name="activated" type="int" defaultValue="1">
-                <constraints nullable="false"/>
-            </column>
+            <column name="activated" type="boolean" defaultValueBoolean="false" valueBoolean="false"/>
             <column name="lang_key" type="varchar(5)"/>
             <column name="activation_key" type="varchar(20)"/>
             <column name="created_by" type="varchar(50)" defaultValue="system">
@@ -92,7 +90,9 @@
         <loadData encoding="UTF-8"
                   file="config/liquibase/users.csv"
                   separator=";"
-                  tableName="T_USER"/>
+                  tableName="T_USER">
+            <column name="activated" type="boolean"/>
+        </loadData>
 
         <loadData encoding="UTF-8"
                   file="config/liquibase/authorities.csv"
