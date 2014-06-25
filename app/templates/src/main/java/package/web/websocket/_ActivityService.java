@@ -36,9 +36,7 @@ public class ActivityService {
         activityDTO.setUuid(event.getResource().uuid());
         activityDTO.setPage("logout");
         String json = jsonMapper.writeValueAsString(activityDTO);
-        for (AtmosphereResource trackerResource : b.getAtmosphereResources()) {
-            trackerResource.getResponse().write(json);
-        }
+        b.broadcast(json);
     }
 
     @Message(decoders = {ActivityDTOJacksonDecoder.class})
@@ -49,8 +47,6 @@ public class ActivityService {
         activityDTO.setTime(dateTimeFormatter.print(Calendar.getInstance().getTimeInMillis()));
         String json = jsonMapper.writeValueAsString(activityDTO);
         log.debug("Sending user tracking data {}", json);
-        for (AtmosphereResource trackerResource : b.getAtmosphereResources()) {
-            trackerResource.getResponse().write(json);
-        }
+        b.broadcast(json);
     }
 }
