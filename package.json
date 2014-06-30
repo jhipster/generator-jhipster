@@ -28,21 +28,21 @@
     "test": "mocha --reporter spec"
   },
   "dependencies": {
-    "yeoman-generator": "~0.17.0",
-    "cheerio": "~0.17.0",
-    "chalk": "~0.4.0",
-    "underscore.string": "~2.3.3",
-    "shelljs": "~0.3.0"
+    "yeoman-generator": "0.17.0",
+    "cheerio": "0.17.0",
+    "chalk": "0.4.0",
+    "underscore.string": "2.3.3",
+    "shelljs": "0.3.0"
   },
   "devDependencies": {
-    "mocha": "~1.20.1"
+    "mocha": "1.20.1"
   },
   "peerDependencies": {
-    "yo": ">=1.0.0"
+    "yo": ">=1.2.0"
   },
   "engines": {
     "node": ">=0.10.0",
-    "npm": ">=1.2.10"
+    "npm": ">=1.4.0"
   },
   "licenses": [
     {
