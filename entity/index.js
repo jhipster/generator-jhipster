@@ -7,9 +7,9 @@ var util = require('util'),
     scriptBase = require('../script-base');
 
 var EntityGenerator = module.exports = function EntityGenerator(args, options, config) {
-  yeoman.generators.NamedBase.apply(this, arguments);
-  scriptBase.apply(this, arguments);
+  yeoman.generators.NamedBase.apply(this, arguments);	
   console.log('The entity ' + this.name + ' is being created.');
+  this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
   this.baseName = this.config.get('baseName');
   this.packageName = this.config.get('packageName');
   this.packageFolder = this.config.get('packageFolder');
