@@ -132,7 +132,8 @@
         <hazelcast.version>3.1.5</hazelcast.version><% } %>
         <hibernate-entitymanager.version>4.3.5.Final</hibernate-entitymanager.version>
         <HikariCP.version>1.3.8</HikariCP.version>
-        <jhipster-loaded.version>0.8</jhipster-loaded.version><% if (databaseType == 'sql') { %>
+        <jhipster-loaded.version>0.9</jhipster-loaded.version>
+        <liquibase.version>3.2.0</liquibase.version>
         <liquibase_hibernate_version>3.4</liquibase_hibernate_version>
         <liquibase-slf4j.version>1.2.1</liquibase-slf4j.version><% } %>
         <metrics-spring.version>3.0.1</metrics-spring.version><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
@@ -368,6 +369,12 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.jetty</groupId>
+                    <artifactId>jetty-servlet</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.liquibase.ext</groupId>

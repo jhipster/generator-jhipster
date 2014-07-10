@@ -69,6 +69,6 @@ hotReload:
     liquibase:
       defaultCatalogName: <% if (devDatabaseType == 'mysql') { %><%= baseName %><% } %>
       defaultSchema: <% if (devDatabaseType == 'mysql') { %><%= baseName %><% } %><% if (devDatabaseType == 'postgresql') { %>public<% } %><% if (devDatabaseType == 'h2Memory') { %>public<% } %>
-      excludeTables: <% if (authenticationType == 'token') { %>oauth_access_token,oauth_approvals,oauth_client_details,oauth_client_token,oauth_code,oauth_refresh_token<% } %><% } %>
+      excludeTables: T_AUTHORITY,T_PERSISTENT_AUDIT_EVENT,T_PERSISTENT_AUDIT_EVENT_DATA,T_PERSISTENT_TOKEN,T_USER,T_USER_AUTHORITY<% if (authenticationType == 'token') { %>,oauth_access_token,oauth_approvals,oauth_client_details,oauth_client_token,oauth_code,oauth_refresh_token<% } %><% } %>
     watchdir:
       - target/classes
