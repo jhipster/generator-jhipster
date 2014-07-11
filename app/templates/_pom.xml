@@ -256,7 +256,12 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-hppc</artifactId>
             <version><%= _.unescape('\$\{jackson.version}')%></version>
-        </dependency>
+        </dependency><% if (databaseType == 'sql') { %>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-hibernate4</artifactId>
+            <version><%= _.unescape('\$\{jackson.version}')%></version>
+        </dependency><% } %>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-joda</artifactId>
