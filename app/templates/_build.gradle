@@ -102,6 +102,7 @@ dependencies {
     compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: spring_security_oauth2_version<% } %><% if (databaseType == 'nosql') { %>
     compile group: 'org.mongeez', name: 'mongeez', version: mongeez_version<% } %>
     compile group: 'io.github.jhipster.loaded', name: 'core', version: jhipster_loaded_version
+    compile group: 'io.github.jhipster.loaded', name: 'agent', version: jhipster_loaded_version
     compile group: 'com.mangofactory', name: 'swagger-springmvc', version: swagger_springmvc_version<% if (devDatabaseType == 'mysql' || prodDatabaseType == 'mysql') { %>
     compile group: 'mysql', name: 'mysql-connector-java', version: mysql_connector_java_version<% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
     compile group: 'org.postgresql', name: 'postgresql', version: postgresql_version<% } %>
