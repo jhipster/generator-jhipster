@@ -34,6 +34,28 @@ jar {
     version =  '0.1-SNAPSHOT'
 }
 
+task copyLiquibase(dependsOn: classes, type: Copy) {
+    from {
+        configurations.compile.findAll {
+            it.name == "liquibase-slf4j-${liquibase_slf4j_version}.jar"
+        }.collect {
+            zipTree(it)
+        }
+    }
+    from {
+        configurations.compile.findAll {
+            it.name == "liquibase-core-${liquibase_core_version}.jar"
+        }.collect {
+            zipTree(it)
+        }
+    }
+    into sourceSets.main.output.classesDir
+    include 'liquibase/**/*.class'
+}
+
+jar.dependsOn copyLiquibase
+
+
 repositories {
 
     maven { url 'http://repo.spring.io/milestone' }
