@@ -77,6 +77,12 @@
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
+                            <requiresUnpack>
+                                <dependency>
+                                    <groupId>org.atmosphere</groupId>
+                                    <artifactId>atmosphere-runtime</artifactId>
+                                </dependency>
+                            </requiresUnpack>
                             <arguments>
                                 <argument>--spring.profiles.active=prod</argument>
                             </arguments>
