@@ -57,6 +57,7 @@ public class WebConfigurer implements ServletContextInitializer {
             initStaticResourcesProductionFilter(servletContext, disps);
             initCachingHttpHeadersFilter(servletContext, disps);
         }
+        initCrossOriginResourceSharingFilter(servletContext, disps);
         initGzipFilter(servletContext, disps);<% if (devDatabaseType == 'h2Memory') { %>
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
             initH2Console(servletContext);
@@ -136,6 +137,22 @@ public class WebConfigurer implements ServletContextInitializer {
         compressingFilter.addMappingForUrlPatterns(disps, true, "/metrics/*");
 
         compressingFilter.setAsyncSupported(true);
+    }
+
+    /**
+     * Initializes the Cross origin resource sharing filter
+     */
+    private void initCrossOriginResourceSharingFilter(ServletContext servletContext, EnumSet<DispatcherType> disps) {
+        log.debug("Registering Cross Origin Resource Sharing Filter");
+
+        FilterRegistration.Dynamic crossOriginResourceSharingFilter = servletContext.addFilter("crossOriginResourceSharingFilter", new CrossOriginResourceSharingFilter());
+
+        Map<String, String> parameters = new HashMap<>();
+        crossOriginResourceSharingFilter.setInitParameters(parameters);
+
+        crossOriginResourceSharingFilter.addMappingForUrlPatterns(disps, true, "/*");
+
+        crossOriginResourceSharingFilter.setAsyncSupported(true);
     }
 
     /**
