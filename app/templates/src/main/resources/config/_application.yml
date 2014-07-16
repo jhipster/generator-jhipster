@@ -34,7 +34,6 @@ authentication:
         tokenValidityInSeconds: 1800<% } %>
 
 swagger:
-    apiDocsLocation: http://localhost:8080
     title: <%=baseName%> API
     description: <%=baseName%> applications and beyond!
     termsOfServiceUrl: http://jhipster.github.io/
