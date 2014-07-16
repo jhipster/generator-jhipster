@@ -12,7 +12,7 @@
                 "tracker": "사용자 트랙커",
                 "metrics": "메트릭스",
                 "logs": "로그",
-                "audits": "감사",
+                "audits": "Audit",
                 "login": "인증",
                 "logout": "로그아웃",
                 "apidocs": "API",

@@ -27,7 +27,8 @@
             "fr": "Francuski",
             "de": "Niemiecki",
             "pl": "Polski",
-            "ru": "Rosyjski"
+            "ru": "Rosyjski",
+            "kr": "koreański"
         },
         "form": {
             "username": "Login",
