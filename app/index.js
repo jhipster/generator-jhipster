@@ -441,6 +441,7 @@ JhipsterGenerator.prototype.app = function app() {
     removefile(javaDir + 'config/metrics/HealthCheckIndicator.java');
     removefile(javaDir + 'config/metrics/DatabaseHealthCheckIndicator.java');
     removefile(javaDir + 'config/metrics/JavaMailHealthCheckIndicator.java');
+    removefile(javaDir + 'config/apidoc/ApiPathProvider.java');
     removefile('spring_loaded/springloaded.jar');
     removefolder(javaDir + '/config/reload');
     removefolder(javaDir + '/apidoc');
@@ -451,7 +452,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/aop/logging/_LoggingAspect.java', javaDir + 'aop/logging/LoggingAspect.java');
 
     this.template('src/main/java/package/config/apidoc/_package-info.java', javaDir + 'config/apidoc/package-info.java');
-    this.template('src/main/java/package/config/apidoc/_ApiPathProvider.java', javaDir + 'config/apidoc/ApiPathProvider.java');
     this.template('src/main/java/package/config/apidoc/_SwaggerConfiguration.java', javaDir + 'config/apidoc/SwaggerConfiguration.java');
 
     this.template('src/main/java/package/async/_package-info.java', javaDir + 'async/package-info.java');

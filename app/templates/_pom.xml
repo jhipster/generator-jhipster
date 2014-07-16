@@ -145,7 +145,7 @@
         <metrics-spring.version>3.0.1</metrics-spring.version><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
         <postgresql.version>9.3-1100-jdbc41</postgresql.version><% } %><% if (authenticationType == 'token') { %>
         <spring-security-oauth2.version>2.0.0.RC2</spring-security-oauth2.version><% } %>
-        <swagger-springmvc.version>0.8.2</swagger-springmvc.version>
+        <swagger-springmvc.version>0.8.5</swagger-springmvc.version>
         <usertype.core.version>3.2.0.GA</usertype.core.version>
     </properties>
 
