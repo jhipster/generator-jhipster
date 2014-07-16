@@ -7,9 +7,10 @@
     <packaging>war</packaging>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.1.4.RELEASE</version>
+        <groupId>io.spring.platform</groupId>
+        <artifactId>platform-bom</artifactId>
+        <version>1.0.1.RELEASE</version>
+        <relativePath/>
     </parent>
 
     <profiles>
@@ -128,16 +129,10 @@
         <!-- Librairies versions -->
         <assertj-core.version>1.6.0</assertj-core.version><% if (websocket == 'atmosphere') { %>
         <atmosphere-spring.version>2.1.0</atmosphere-spring.version><% } %>
-        <awaitility.version>1.4.0</awaitility.version>
-        <commons-lang.version>2.6</commons-lang.version>
-        <commons-io.version>2.4</commons-io.version>
-        <javax.inject.version>1</javax.inject.version><% if (databaseType == 'sql') { %>
+        <awaitility.version>1.4.0</awaitility.version><% if (databaseType == 'sql') { %>
         <joda-time-hibernate.version>1.3</joda-time-hibernate.version><% } %>
-        <json-path.version>0.9.1</json-path.version>
         <geronimo-javamail_1.4_mail.version>1.8.3</geronimo-javamail_1.4_mail.version><% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
         <hazelcast.version>3.1.5</hazelcast.version><% } %>
-        <hibernate-entitymanager.version>4.3.5.Final</hibernate-entitymanager.version>
-        <HikariCP.version>1.3.8</HikariCP.version>
         <jhipster-loaded.version>0.11</jhipster-loaded.version><% if (databaseType == 'sql') { %>
         <liquibase_hibernate_version>3.3</liquibase_hibernate_version>
         <liquibase-slf4j.version>1.2.1</liquibase-slf4j.version><% } %>
@@ -304,7 +299,6 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version><%= _.unescape('\${HikariCP.version}')%></version>
             <exclusions>
                 <exclusion>
                     <groupId>com.sun</groupId>
@@ -312,27 +306,17 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- The HikariCP Java Agent is disabled by default, as it is experimental
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP-agent</artifactId>
-            <version><%= _.unescape('\${HikariCP.version}')%></version>
-        </dependency>
-        -->
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
-            <version><%= _.unescape('\${commons-lang.version}')%></version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version><%= _.unescape('\${commons-io.version}')%></version>
         </dependency>
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
-            <version><%= _.unescape('\${javax.inject.version}')%></version>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
@@ -356,7 +340,6 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version><%= _.unescape('\$\{hibernate-entitymanager.version}')%></version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -365,7 +348,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-ehcache</artifactId>
-            <version><%= _.unescape('\$\{hibernate-entitymanager.version}')%></version>
+            <version><%= _.unescape('\$\{hibernate.version}')%></version>
         </dependency><% } %>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -409,12 +392,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
-            <version><%= _.unescape('\$\{spring-boot.version}')%></version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-loader-tools</artifactId>
-            <version><%= _.unescape('\$\{spring-boot.version}')%></version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -498,7 +479,6 @@
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
-            <version><%= _.unescape('\${json-path.version}')%></version>
             <scope>test</scope>
         </dependency><% if (devDatabaseType != 'h2Memory') { %>
         <dependency>
