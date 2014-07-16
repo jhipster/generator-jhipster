@@ -28,7 +28,8 @@
             "de": "Tysk",
             "pl": "Polsk",
             "ru": "Russisk",
-            "kr": "koreansk"
+            "kr": "koreansk",
+            "tr": "Tyrkisk"
         },
         "form": {
             "username": "Brugernavn",
