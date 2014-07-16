@@ -37,14 +37,14 @@ jar {
 task copyLiquibase(dependsOn: classes, type: Copy) {
     from {
         configurations.compile.findAll {
-            it.name == "liquibase-slf4j-${liquibase_slf4j_version}.jar"
+            it.name == "liquibase-slf4j-<%= _.unescape('\$\{liquibase_slf4j_version}')%>.jar"
         }.collect {
             zipTree(it)
         }
     }
     from {
         configurations.compile.findAll {
-            it.name == "liquibase-core-${liquibase_core_version}.jar"
+            it.name == "liquibase-core-<%= _.unescape('\$\{liquibase_core_version}')%>.jar"
         }.collect {
             zipTree(it)
         }
