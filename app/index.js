@@ -397,7 +397,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(resourceDir + '/i18n/messages_de.properties', resourceDir + 'i18n/messages_de.properties');
     this.copy(resourceDir + '/i18n/messages_pl.properties', resourceDir + 'i18n/messages_pl.properties');
     this.copy(resourceDir + '/i18n/messages_ru.properties', resourceDir + 'i18n/messages_ru.properties');
-    this.copy(resourceDir + '/i18n/messages_ko.properties', resourceDir + 'i18n/messages_ko.properties');
+    this.copy(resourceDir + '/i18n/messages_kr.properties', resourceDir + 'i18n/messages_kr.properties');
     this.copy(resourceDir + '/i18n/messages_tr.properties', resourceDir + 'i18n/messages_tr.properties');
 
     // Thymeleaf templates
@@ -430,7 +430,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(resourceDir + '/mails/messages/messages_fr.properties', resourceDir + 'mails/messages/messages_fr.properties');
     this.copy(resourceDir + '/mails/messages/messages_pl.properties', resourceDir + 'mails/messages/messages_pl.properties');
     this.copy(resourceDir + '/mails/messages/messages_ru.properties', resourceDir + 'mails/messages/messages_ru.properties');
-    this.copy(resourceDir + '/mails/messages/messages_ko.properties', resourceDir + 'mails/messages/messages_ko.properties');
+    this.copy(resourceDir + '/mails/messages/messages_kr.properties', resourceDir + 'mails/messages/messages_kr.properties');
     this.copy(resourceDir + '/mails/messages/messages_tr.properties', resourceDir + 'mails/messages/messages_tr.properties');
     this.copy(resourceDir + '/mails/activationEmail.html', resourceDir + 'mails/activationEmail.html');
 
@@ -612,7 +612,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/i18n/_de.json', webappDir + 'i18n/de.json');
     this.template(webappDir + '/i18n/_pl.json', webappDir + 'i18n/pl.json');
     this.template(webappDir + '/i18n/_ru.json', webappDir + 'i18n/ru.json');
-    this.template(webappDir + '/i18n/_ko.json', webappDir + 'i18n/ko.json');
+    this.template(webappDir + '/i18n/_kr.json', webappDir + 'i18n/kr.json');
     this.template(webappDir + '/i18n/_tr.json', webappDir + 'i18n/tr.json');
 
     // Protected resources - used to check if a customer is still connected

@@ -15,7 +15,7 @@
         da: 'dk',
         en: 'gb',
         fr: 'fr',
-        ko: 'ko',
+        kr: 'kr',
         de: 'de',
         pl: 'pl',
         ru: 'ru',
