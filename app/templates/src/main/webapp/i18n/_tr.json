@@ -22,13 +22,13 @@
             "language": "Dil"
         },
         "language": {
-            "da": "Danimarkaca",
-            "en": "İngilizce",
-            "fr": "Fransızca",
             "de": "Almanca",
+            "da": "Danimarkaca",
+            "fr": "Fransızca",
+            "en": "İngilizce",
+            "ko": "Korece",
             "pl": "Lehçe",
             "ru": "Rusça",
-            "kr": "Korece",
             "tr": "Türkçe"
         },
         "form": {

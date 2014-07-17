@@ -397,6 +397,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(resourceDir + '/i18n/messages_de.properties', resourceDir + 'i18n/messages_de.properties');
     this.copy(resourceDir + '/i18n/messages_pl.properties', resourceDir + 'i18n/messages_pl.properties');
     this.copy(resourceDir + '/i18n/messages_ru.properties', resourceDir + 'i18n/messages_ru.properties');
+    this.copy(resourceDir + '/i18n/messages_ko.properties', resourceDir + 'i18n/messages_ko.properties');
     this.copy(resourceDir + '/i18n/messages_tr.properties', resourceDir + 'i18n/messages_tr.properties');
 
     // Thymeleaf templates
@@ -429,6 +430,8 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(resourceDir + '/mails/messages/messages_fr.properties', resourceDir + 'mails/messages/messages_fr.properties');
     this.copy(resourceDir + '/mails/messages/messages_pl.properties', resourceDir + 'mails/messages/messages_pl.properties');
     this.copy(resourceDir + '/mails/messages/messages_ru.properties', resourceDir + 'mails/messages/messages_ru.properties');
+    this.copy(resourceDir + '/mails/messages/messages_ko.properties', resourceDir + 'mails/messages/messages_ko.properties');
+    this.copy(resourceDir + '/mails/messages/messages_tr.properties', resourceDir + 'mails/messages/messages_tr.properties');
     this.copy(resourceDir + '/mails/activationEmail.html', resourceDir + 'mails/activationEmail.html');
 
     // Create Java files
@@ -609,6 +612,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/i18n/_de.json', webappDir + 'i18n/de.json');
     this.template(webappDir + '/i18n/_pl.json', webappDir + 'i18n/pl.json');
     this.template(webappDir + '/i18n/_ru.json', webappDir + 'i18n/ru.json');
+    this.template(webappDir + '/i18n/_ko.json', webappDir + 'i18n/ko.json');
     this.template(webappDir + '/i18n/_tr.json', webappDir + 'i18n/tr.json');
 
     // Protected resources - used to check if a customer is still connected
@@ -644,6 +648,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(webappDir + 'scripts/http-auth-interceptor.js', webappDir + 'scripts/http-auth-interceptor.js');
     this.copy(webappDir + 'scripts/truncate.js', webappDir + 'scripts/truncate.js');
     this.template(webappDir + 'scripts/_app.js', webappDir + 'scripts/app.js');
+    this.template(webappDir + 'scripts/_constants.js', webappDir + 'scripts/constants.js');
     this.template(webappDir + 'scripts/_controllers.js', webappDir + 'scripts/controllers.js');
     this.template(webappDir + 'scripts/_services.js', webappDir + 'scripts/services.js');
     this.template(webappDir + 'scripts/_directives.js', webappDir + 'scripts/directives.js');
@@ -684,6 +689,7 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/truncate.js',
         'scripts/utils.js',
         'scripts/app.js',
+        'scripts/constants.js',
         'scripts/controllers.js',
         'scripts/services.js',
         'scripts/directives.js'];

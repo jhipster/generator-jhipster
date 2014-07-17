@@ -25,11 +25,11 @@
             "da": "Dansk",
             "en": "Engelsk",
             "fr": "Fransk",
-            "de": "Tysk",
+            "ko": "Koreansk",
             "pl": "Polsk",
             "ru": "Russisk",
-            "kr": "koreansk",
-            "tr": "Tyrkisk"
+            "tr": "Tyrkisk",
+            "de": "Tysk"
         },
         "form": {
             "username": "Brugernavn",

@@ -22,13 +22,13 @@
             "language": "Język"
         },
         "language": {
-            "da": "Duński",
             "en": "Angielski",
+            "da": "Duński",
             "fr": "Francuski",
+            "ko": "Koreański",
             "de": "Niemiecki",
             "pl": "Polski",
             "ru": "Rosyjski",
-            "kr": "koreański",
             "tr": "Turecki"
         },
         "form": {
