@@ -28,7 +28,8 @@
             "de": "German",
             "pl": "Polish",
             "ru": "Russian",
-            "kr": "Korean"
+            "kr": "Korean",
+            "tr": "Turkish"
         },
         "form": {
             "username": "Login",
