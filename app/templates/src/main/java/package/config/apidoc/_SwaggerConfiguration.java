@@ -9,6 +9,7 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.ResponseEntity;
 
 @Configuration
 @EnableSwagger
@@ -29,6 +30,7 @@ public class SwaggerConfiguration implements EnvironmentAware {
     public SwaggerSpringMvcPlugin swaggerSpringMvcPlugin(SpringSwaggerConfig springSwaggerConfig) {
         return new SwaggerSpringMvcPlugin(springSwaggerConfig)
                 .apiInfo(apiInfo())
+                .genericModelSubstitutes(ResponseEntity.class)
                 .includePatterns(DEFAULT_INCLUDE_PATTERN);
     }
 
