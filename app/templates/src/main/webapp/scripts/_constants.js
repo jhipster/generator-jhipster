@@ -14,6 +14,7 @@
 <%= angularAppName %>.constant('FLAGS', {
         da: 'dk',
         en: 'gb',
+        es: 'es',
         fr: 'fr',
         kr: 'kr',
         de: 'de',
