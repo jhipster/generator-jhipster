@@ -391,13 +391,14 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     // i18n resources used by thymeleaf
-    this.copy(resourceDir + '/i18n/messages_en.properties', resourceDir + 'i18n/messages_en.properties');
-    this.copy(resourceDir + '/i18n/messages_fr.properties', resourceDir + 'i18n/messages_fr.properties');
     this.copy(resourceDir + '/i18n/messages_da.properties', resourceDir + 'i18n/messages_da.properties');
     this.copy(resourceDir + '/i18n/messages_de.properties', resourceDir + 'i18n/messages_de.properties');
+    this.copy(resourceDir + '/i18n/messages_en.properties', resourceDir + 'i18n/messages_en.properties');
+    this.copy(resourceDir + '/i18n/messages_es.properties', resourceDir + 'i18n/messages_es.properties');
+    this.copy(resourceDir + '/i18n/messages_fr.properties', resourceDir + 'i18n/messages_fr.properties');
+    this.copy(resourceDir + '/i18n/messages_kr.properties', resourceDir + 'i18n/messages_kr.properties');
     this.copy(resourceDir + '/i18n/messages_pl.properties', resourceDir + 'i18n/messages_pl.properties');
     this.copy(resourceDir + '/i18n/messages_ru.properties', resourceDir + 'i18n/messages_ru.properties');
-    this.copy(resourceDir + '/i18n/messages_kr.properties', resourceDir + 'i18n/messages_kr.properties');
     this.copy(resourceDir + '/i18n/messages_tr.properties', resourceDir + 'i18n/messages_tr.properties');
 
     // Thymeleaf templates
@@ -427,10 +428,11 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(resourceDir + '/mails/messages/messages_da.properties', resourceDir + 'mails/messages/messages_da.properties');
     this.copy(resourceDir + '/mails/messages/messages_de.properties', resourceDir + 'mails/messages/messages_de.properties');
     this.copy(resourceDir + '/mails/messages/messages_en.properties', resourceDir + 'mails/messages/messages_en.properties');
+    this.copy(resourceDir + '/mails/messages/messages_es.properties', resourceDir + 'mails/messages/messages_es.properties');
     this.copy(resourceDir + '/mails/messages/messages_fr.properties', resourceDir + 'mails/messages/messages_fr.properties');
+    this.copy(resourceDir + '/mails/messages/messages_kr.properties', resourceDir + 'mails/messages/messages_kr.properties');
     this.copy(resourceDir + '/mails/messages/messages_pl.properties', resourceDir + 'mails/messages/messages_pl.properties');
     this.copy(resourceDir + '/mails/messages/messages_ru.properties', resourceDir + 'mails/messages/messages_ru.properties');
-    this.copy(resourceDir + '/mails/messages/messages_kr.properties', resourceDir + 'mails/messages/messages_kr.properties');
     this.copy(resourceDir + '/mails/messages/messages_tr.properties', resourceDir + 'mails/messages/messages_tr.properties');
     this.copy(resourceDir + '/mails/activationEmail.html', resourceDir + 'mails/activationEmail.html');
 
@@ -606,13 +608,14 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(webappDir + 'htaccess.txt', webappDir + '.htaccess');
 
     // i18n
-    this.template(webappDir + '/i18n/_en.json', webappDir + 'i18n/en.json');
-    this.template(webappDir + '/i18n/_fr.json', webappDir + 'i18n/fr.json');
     this.template(webappDir + '/i18n/_da.json', webappDir + 'i18n/da.json');
     this.template(webappDir + '/i18n/_de.json', webappDir + 'i18n/de.json');
+    this.template(webappDir + '/i18n/_en.json', webappDir + 'i18n/en.json');
+    this.template(webappDir + '/i18n/_es.json', webappDir + 'i18n/es.json');
+    this.template(webappDir + '/i18n/_fr.json', webappDir + 'i18n/fr.json');
+    this.template(webappDir + '/i18n/_kr.json', webappDir + 'i18n/kr.json');
     this.template(webappDir + '/i18n/_pl.json', webappDir + 'i18n/pl.json');
     this.template(webappDir + '/i18n/_ru.json', webappDir + 'i18n/ru.json');
-    this.template(webappDir + '/i18n/_kr.json', webappDir + 'i18n/kr.json');
     this.template(webappDir + '/i18n/_tr.json', webappDir + 'i18n/tr.json');
 
     // Protected resources - used to check if a customer is still connected

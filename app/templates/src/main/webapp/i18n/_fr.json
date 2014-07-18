@@ -16,7 +16,7 @@
                 "login": "S'authentifier",
                 "logout": "Déconnexion",
                 "apidocs": "API",
-                "register": "Register"
+                "register": "Créer un compte"
             },
             "admin": "Administration",
             "language": "Langue"
@@ -26,6 +26,7 @@
             "en": "Anglais",
             "kr": "Coréen",
             "da": "Danois",
+            "es": "Espagnol",
             "fr": "Français",
             "pl": "Polonais",
             "ru": "Russe",
