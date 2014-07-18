@@ -397,6 +397,11 @@
                     <artifactId>hibernate-jpa-2.0-api</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.mattbertolini</groupId>
+            <artifactId>liquibase-slf4j</artifactId>
+            <version><%= _.unescape('\${liquibase-slf4j.version}')%></version>
         </dependency><% } %>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -512,12 +517,7 @@
             <artifactId>assertj-core</artifactId>
             <version><%= _.unescape('\${assertj-core.version}')%></version>
             <scope>test</scope>
-        </dependency><% if (databaseType == 'sql') { %>
-        <dependency>
-            <groupId>com.mattbertolini</groupId>
-            <artifactId>liquibase-slf4j</artifactId>
-            <version><%= _.unescape('\${liquibase-slf4j.version}')%></version>
-        </dependency><% } %><% if (databaseType == 'nosql') { %>
+        </dependency><% if (databaseType == 'nosql') { %>
         <dependency>
             <groupId>cz.jirutka.spring</groupId>
             <artifactId>embedmongo-spring</artifactId>
