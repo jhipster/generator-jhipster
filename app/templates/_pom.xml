@@ -496,8 +496,8 @@
             <artifactId>json-path</artifactId>
             <version><%= _.unescape('\${json-path.version}')%></version>
             <scope>test</scope>
-        </dependency>
-        <% if (devDatabaseType != 'h2Memory') { %><dependency>
+        </dependency><% if (devDatabaseType != 'h2Memory') { %>
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>test</scope>
