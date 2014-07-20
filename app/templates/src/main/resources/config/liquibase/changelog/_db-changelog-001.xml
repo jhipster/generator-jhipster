@@ -109,7 +109,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="principal" type="varchar(50)"/>
-            <column name="event_date" type="date"/>
+            <column name="event_date" type="timestamp"/>
             <column name="event_type" type="varchar(50)"/>
         </createTable>
 
