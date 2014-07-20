@@ -22,12 +22,12 @@
             "language": "Idioma"
         },
         "language": {
-            "da": "Danés",
-            "en": "Inglés",
-            "es": "Español ",
-            "fr": "Francés",
             "de": "Alemán",
             "kr": "Coreano",
+            "da": "Danés",
+            "es": "Español ",
+            "fr": "Francés",
+            "en": "Inglés",
             "pl": "Polaco",
             "ru": "Ruso",
             "tr": "Turco"
