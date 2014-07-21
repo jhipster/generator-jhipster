@@ -22,12 +22,12 @@
             "language": "Idioma"
         },
         "language": {
-            "da": "Danés",
-            "en": "Inglés",
-            "es": "Español ",
-            "fr": "Francés",
             "de": "Alemán",
             "kr": "Coreano",
+            "da": "Danés",
+            "es": "Español",
+            "fr": "Francés",
+            "en": "Inglés",
             "pl": "Polaco",
             "ru": "Ruso",
             "tr": "Turco"
@@ -84,7 +84,7 @@
             "bugtracker": "JHipster seguimiento de errores",
             "contact": "contacto @java_hipster en Twitter"
         },
-        "like": "Si te gusta JHipster, danos una estrella en",
+        "like": "Si le gusta JHipster, danos una estrella en",
         "github": "Github"
     },
     "activate": {

@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.0.2.RELEASE')
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.1.4.RELEASE')
         classpath('com.moowork.gradle:gradle-node-plugin:0.4')
         classpath('com.moowork.gradle:gradle-grunt-plugin:0.5')
         classpath('be.filipblondeel.gradle:gradle-gulp-plugin:0.1')
@@ -79,7 +79,8 @@ dependencies {
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-json-org', version: jackson_version
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hppc', version: jackson_version
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-joda', version: jackson_version
-    compile group: 'com.ryantenney.metrics', name: 'metrics-spring', version:'3.0.0-RC4'<% if (hibernateCache == 'hazelcast') { %>
+    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate4', version: jackson_version
+    compile group: 'com.ryantenney.metrics', name: 'metrics-spring', version: metrics_spring_version<% if (hibernateCache == 'hazelcast') { %>
     compile group: 'com.hazelcast', name: 'hazelcast', version: hazelcast_version
     compile group: 'com.hazelcast', name: 'hazelcast-hibernate4', version: hazelcast_version
     compile group: 'com.hazelcast', name: 'hazelcast-spring', version: hazelcast_version<% } %><% if (clusteredHttpSession == 'hazelcast' && hibernateCache != 'hazelcast') { %>

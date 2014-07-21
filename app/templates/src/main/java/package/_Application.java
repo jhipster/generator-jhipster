@@ -54,10 +54,7 @@ public class Application {
 
         // Check if the selected profile has been set as argument.
         // if not the development profile will be added
-        addDefaultProfile(app, source);<% if (databaseType == 'sql') { %>
-
-        // Fallback to set the list of liquibase package list
-        addLiquibaseScanPackages();<% } %>
+        addDefaultProfile(app, source);
 
         app.run(args);
     }
@@ -70,18 +67,4 @@ public class Application {
             app.setAdditionalProfiles(Constants.SPRING_PROFILE_DEVELOPMENT);
         }
     }
-    <% if (databaseType == 'sql') { %>
-    /**
-     * Set the liquibases.scan.packages to avoid an exception from ServiceLocator
-     * <p/>
-     * See the following JIRA issue https://liquibase.jira.com/browse/CORE-677
-     */
-    private static void addLiquibaseScanPackages() {
-        System.setProperty("liquibase.scan.packages", "liquibase.change" + "," + "liquibase.database" + "," +
-                "liquibase.parser" + "," + "liquibase.precondition" + "," + "liquibase.datatype" + "," +
-                "liquibase.serializer" + "," + "liquibase.sqlgenerator" + "," + "liquibase.executor" + "," +
-                "liquibase.snapshot" + "," + "liquibase.logging" + "," + "liquibase.diff" + "," +
-                "liquibase.structure" + "," + "liquibase.structurecompare" + "," + "liquibase.lockservice" + "," +
-                "liquibase.ext" + "," + "liquibase.changelog");
-    }<% } %>
 }
