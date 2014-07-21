@@ -191,7 +191,7 @@
         "title": "Application Metrics",
         "refresh.button": "Refresh",
         "health": {
-            "title": "Heath checks",
+            "title": "Health checks",
             "database": "Database: ",
             "email": "Email: ",
             "stacktrace": "Stacktrace"
