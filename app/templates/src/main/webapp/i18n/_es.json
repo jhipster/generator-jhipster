@@ -25,7 +25,7 @@
             "de": "Alemán",
             "kr": "Coreano",
             "da": "Danés",
-            "es": "Español ",
+            "es": "Español",
             "fr": "Francés",
             "en": "Inglés",
             "pl": "Polaco",
@@ -84,7 +84,7 @@
             "bugtracker": "JHipster seguimiento de errores",
             "contact": "contacto @java_hipster en Twitter"
         },
-        "like": "Si te gusta JHipster, danos una estrella en",
+        "like": "Si le gusta JHipster, danos una estrella en",
         "github": "Github"
     },
     "activate": {
