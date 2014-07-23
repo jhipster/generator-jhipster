@@ -349,7 +349,30 @@ JhipsterGenerator.prototype.askFor = function askFor() {
 };
 
 JhipsterGenerator.prototype.app = function app() {
-
+	
+    // Remove old files
+    removefile(resourceDir + 'config/liquibase/users_upd_001.csv');
+    removefile(resourceDir + 'config/liquibase/users_authorities_upd_001.csv');
+    removefile(javaDir + '/web/servlet/HealthCheckServlet.java');
+    removefile(javaDir + '/config/metrics/JavaMailHealthCheck.java');
+    removefile(javaDir + 'config/metrics/HealthCheckIndicator.java');
+    removefile(javaDir + 'config/metrics/DatabaseHealthCheckIndicator.java');
+    removefile(javaDir + 'config/metrics/JavaMailHealthCheckIndicator.java');
+    removefile(javaDir + 'config/apidoc/ApiPathProvider.java');
+    removefile('spring_loaded/springloaded.jar');
+    removefolder(javaDir + '/config/reload');
+    removefolder(javaDir + '/apidoc');
+    removefile(resourceDir + 'mails/messages/messages_da.properties');
+    removefile(resourceDir + 'mails/messages/messages_de.properties');
+    removefile(resourceDir + 'mails/messages/messages_en.properties');
+    removefile(resourceDir + 'mails/messages/messages_es.properties');
+    removefile(resourceDir + 'mails/messages/messages_fr.properties');
+    removefile(resourceDir + 'mails/messages/messages_kr.properties');
+    removefile(resourceDir + 'mails/messages/messages_pl.properties');
+    removefile(resourceDir + 'mails/messages/messages_ru.properties');
+    removefile(resourceDir + 'mails/messages/messages_tr.properties');
+	
+    // Create application
     this.template('_package.json', 'package.json');
     this.template('_bower.json', 'bower.json');
     this.template('_README.md', 'README.md');
@@ -423,34 +446,12 @@ JhipsterGenerator.prototype.app = function app() {
         this.copy(resourceDir + '/config/mongeez/master.xml', resourceDir + 'config/mongeez/master.xml');
         this.copy(resourceDir + '/config/mongeez/users.xml', resourceDir + 'config/mongeez/users.xml');
     }
-
+	
     // Create mail templates
-    this.copy(resourceDir + '/mails/messages/messages_da.properties', resourceDir + 'mails/messages/messages_da.properties');
-    this.copy(resourceDir + '/mails/messages/messages_de.properties', resourceDir + 'mails/messages/messages_de.properties');
-    this.copy(resourceDir + '/mails/messages/messages_en.properties', resourceDir + 'mails/messages/messages_en.properties');
-    this.copy(resourceDir + '/mails/messages/messages_es.properties', resourceDir + 'mails/messages/messages_es.properties');
-    this.copy(resourceDir + '/mails/messages/messages_fr.properties', resourceDir + 'mails/messages/messages_fr.properties');
-    this.copy(resourceDir + '/mails/messages/messages_kr.properties', resourceDir + 'mails/messages/messages_kr.properties');
-    this.copy(resourceDir + '/mails/messages/messages_pl.properties', resourceDir + 'mails/messages/messages_pl.properties');
-    this.copy(resourceDir + '/mails/messages/messages_ru.properties', resourceDir + 'mails/messages/messages_ru.properties');
-    this.copy(resourceDir + '/mails/messages/messages_tr.properties', resourceDir + 'mails/messages/messages_tr.properties');
     this.copy(resourceDir + '/mails/activationEmail.html', resourceDir + 'mails/activationEmail.html');
-
+	
     // Create Java files
     var javaDir = 'src/main/java/' + packageFolder + '/';
-
-    // Remove old files
-    removefile(resourceDir + 'config/liquibase/users_upd_001.csv');
-    removefile(resourceDir + 'config/liquibase/users_authorities_upd_001.csv');
-    removefile(javaDir + '/web/servlet/HealthCheckServlet.java');
-    removefile(javaDir + '/config/metrics/JavaMailHealthCheck.java');
-    removefile(javaDir + 'config/metrics/HealthCheckIndicator.java');
-    removefile(javaDir + 'config/metrics/DatabaseHealthCheckIndicator.java');
-    removefile(javaDir + 'config/metrics/JavaMailHealthCheckIndicator.java');
-    removefile(javaDir + 'config/apidoc/ApiPathProvider.java');
-    removefile('spring_loaded/springloaded.jar');
-    removefolder(javaDir + '/config/reload');
-    removefolder(javaDir + '/apidoc');
 
     this.template('src/main/java/package/_Application.java', javaDir + '/Application.java');
     this.template('src/main/java/package/_ApplicationWebXml.java', javaDir + '/ApplicationWebXml.java');

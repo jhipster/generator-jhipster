@@ -25,9 +25,6 @@ import java.util.Locale;
 @Service
 public class MailService {
 
-    public static final String TEMPLATE_SUFFIX = "Email";
-    public static final String EMAIL_ACTIVATION_PREFIX = "activation";
-
     private final Logger log = LoggerFactory.getLogger(MailService.class);
 
     @Inject
@@ -53,10 +50,11 @@ public class MailService {
     public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
         log.debug("Send e-mail[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
                 isMultipart, isHtml, to, subject, content);
+        
         // Prepare message using a Spring helper
-        final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
-            final MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
+            MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
             message.setTo(to);
             message.setFrom(from);
             message.setSubject(subject);
@@ -71,7 +69,7 @@ public class MailService {
     @Async
     public void sendActivationEmail(final String email, String content, Locale locale) {
         log.debug("Sending activation e-mail to '{}'", email);
-        final String subject = messageSource.getMessage(EMAIL_ACTIVATION_PREFIX + ".title", null, locale);
+        String subject = messageSource.getMessage("email.activation.title", null, locale);
         sendEmail(email, subject, content, false, true);
     }
 }

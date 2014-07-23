@@ -31,7 +31,7 @@ public class LocaleConfiguration extends WebMvcConfigurerAdapter implements Envi
     }
 
     @Bean
-    public MessageSource i18nMessageSource() {
+    public MessageSource messageSource() {
         final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasename("classpath:/i18n/messages");
         messageSource.setDefaultEncoding("UTF-8");

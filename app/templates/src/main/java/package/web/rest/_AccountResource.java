@@ -255,6 +255,6 @@ public class AccountResource {
                                  ":" + request.getServerPort());
         IWebContext context = new SpringWebContext(request, response, servletContext,
                 locale, variables, applicationContext);
-        return templateEngine.process(MailService.EMAIL_ACTIVATION_PREFIX + MailService.TEMPLATE_SUFFIX, context);
+        return templateEngine.process("activationEmail", context);
     }
 }

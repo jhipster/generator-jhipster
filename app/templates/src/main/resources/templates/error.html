@@ -142,13 +142,13 @@
 </head>
 <body>
 <div class="container">
-    <h1 th:text="#{title}">Your request cannot be processed <span>:(</span></h1>
+    <h1 th:text="#{error.title}">Your request cannot be processed <span>:(</span></h1>
 
-    <p th:text="#{subtitle}">Sorry, an error has occurred.</p>
+    <p th:text="#{error.subtitle}">Sorry, an error has occurred.</p>
 
-    <span th:text="#{status}">Status:</span>&nbsp;<span th:text="${status}"></span>&nbsp;(<span th:text="${error}"></span>)<br/>
+    <span th:text="#{error.status}">Status:</span>&nbsp;<span th:text="${error}"></span>&nbsp;(<span th:text="${error}"></span>)<br/>
     <span th:if="${!#strings.isEmpty(message)}">
-        <span th:text="#{message}">Message:</span>&nbsp;<span th:text="${message}"></span><br/>
+        <span th:text="#{error.message}">Message:</span>&nbsp;<span th:text="${error.message}"></span><br/>
     </span>
 
     <script th:inline="text">
