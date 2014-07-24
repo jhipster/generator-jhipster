@@ -357,11 +357,12 @@ JhipsterGenerator.prototype.app = function app() {
     // Remove old files
     removefile(resourceDir + 'config/liquibase/users_upd_001.csv');
     removefile(resourceDir + 'config/liquibase/users_authorities_upd_001.csv');
-    removefile(javaDir + '/web/servlet/HealthCheckServlet.java');
-    removefile(javaDir + '/config/metrics/JavaMailHealthCheck.java');
+    removefile(javaDir + 'web/servlet/HealthCheckServlet.java');
+    removefile(javaDir + 'config/metrics/JavaMailHealthCheck.java');
     removefile(javaDir + 'config/metrics/HealthCheckIndicator.java');
     removefile(javaDir + 'config/metrics/DatabaseHealthCheckIndicator.java');
     removefile(javaDir + 'config/metrics/JavaMailHealthCheckIndicator.java');
+    removefile(javaDir + 'config/metrics/DatabaseHealthCheck.java');
     removefile(javaDir + 'config/apidoc/ApiPathProvider.java');
     removefile('spring_loaded/springloaded.jar');
     removefolder(javaDir + '/config/reload');
