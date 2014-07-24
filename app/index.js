@@ -349,6 +349,10 @@ JhipsterGenerator.prototype.askFor = function askFor() {
 };
 
 JhipsterGenerator.prototype.app = function app() {
+
+    var packageFolder = this.packageName.replace(/\./g, '/');
+    var javaDir = 'src/main/java/' + packageFolder + '/';
+    var resourceDir = 'src/main/resources/';
 	
     // Remove old files
     removefile(resourceDir + 'config/liquibase/users_upd_001.csv');
@@ -389,8 +393,6 @@ JhipsterGenerator.prototype.app = function app() {
             this.template('Gruntfile.js', 'Gruntfile.js');
     }
 
-    var packageFolder = this.packageName.replace(/\./g, '/');
-
     switch(this.buildTool) {
         case 'gradle':
             this.template('_build.gradle', 'build.gradle');
@@ -405,7 +407,6 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     // Create Java resource files
-    var resourceDir = 'src/main/resources/';
     this.mkdir(resourceDir);
 	this.copy(resourceDir + '/banner.txt', resourceDir + '/banner.txt');
 
@@ -451,8 +452,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(resourceDir + '/mails/activationEmail.html', resourceDir + 'mails/activationEmail.html');
 	
     // Create Java files
-    var javaDir = 'src/main/java/' + packageFolder + '/';
-
     this.template('src/main/java/package/_Application.java', javaDir + '/Application.java');
     this.template('src/main/java/package/_ApplicationWebXml.java', javaDir + '/ApplicationWebXml.java');
 
