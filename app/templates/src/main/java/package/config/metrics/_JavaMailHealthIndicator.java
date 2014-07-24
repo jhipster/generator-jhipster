@@ -28,6 +28,7 @@ public class JavaMailHealthIndicator extends AbstractHealthIndicator {
         log.debug("Initializing JavaMail health indicator");
         try {
             javaMailSender.getSession().getTransport().connect(javaMailSender.getHost(),
+                    javaMailSender.getPort(),
                     javaMailSender.getUsername(),
                     javaMailSender.getPassword());
 
