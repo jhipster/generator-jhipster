@@ -17,6 +17,7 @@ import javax.persistence.*;<% } %>
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * A <%= entityClass %>.
@@ -28,9 +29,8 @@ import java.io.Serializable;
 public class <%= entityClass %> implements Serializable {
 
     @Id<% if (databaseType == 'sql') { %>
-    @GeneratedValue(strategy = GenerationType.TABLE)
-    private long id;<% } %><% if (databaseType == 'nosql') { %>
-    private String id;<% } %>
+    @GeneratedValue(strategy = GenerationType.TABLE)<% } %>
+    private <%= primaryKeyType %> id;
 
     @Size(min = 1, max = 50)<% if (databaseType == 'sql') { %>
     @Column(name = "sample_text_attribute")<% } %><% if (databaseType == 'nosql') { %>
@@ -45,11 +45,11 @@ public class <%= entityClass %> implements Serializable {
     @Field("sample_date_attribute")<% } %>
     private LocalDate sampleDateAttribute;
 
-    public <% if (databaseType == 'sql') { %>long<% } %><% if (databaseType == 'nosql') { %>String<% } %> getId() {
+    public <%= primaryKeyType %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType == 'sql') { %>long<% } %><% if (databaseType == 'nosql') { %>String<% } %> id) {
+    public void setId(<%= primaryKeyType %> id) {
         this.id = id;
     }
 
@@ -80,16 +80,14 @@ public class <%= entityClass %> implements Serializable {
 
         <%= entityClass %> <%= entityInstance %> = (<%= entityClass %>) o;
 
-        if <% if (databaseType == 'sql') { %>(id != <%= entityInstance %>.id)<% } %><% if (databaseType == 'nosql') { %>(!id.equals(<%= entityInstance %>.id))<% } %> {
-            return false;
-        }
-
-        return true;
+        <% if (primaryKeyType == 'long') { %>
+		return id != <%= entityInstance %>.id;<% } else { %>
+		return Objects.equals(id,<%= entityInstance %>.id);<% } %>
     }
 
     @Override
     public int hashCode() {
-        return <% if (databaseType == 'sql') { %>(int) (id ^ (id >>> 32));<% } %><% if (databaseType == 'nosql') { %>id != null ? id.hashCode() : 0;<% } %>
+	return <% if (primaryKeyType == 'long') { %>(int) (id ^ (id >>> 32));<% } else { %>Objects.hashCode(id);<% } %>
     }
 
     @Override

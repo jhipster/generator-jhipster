@@ -9,6 +9,6 @@ import <%=packageName%>.domain.<%= entityClass %>;<% if (databaseType == 'sql') 
  */<% } %><% if (databaseType == 'nosql') { %>/**
  * Spring Data MongoDB repository for the <%= entityClass %> entity.
  */<% } %>
-public interface <%= entityClass %>Repository extends <% if (databaseType == 'sql') { %>JpaRepository<% } %><% if (databaseType == 'nosql') { %>MongoRepository<% } %><<%= entityClass %>, <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %>> {
+public interface <%= entityClass %>Repository extends <% if (databaseType == 'sql') { %>JpaRepository<% } %><% if (databaseType == 'nosql') { %>MongoRepository<% } %><<%= entityClass %>, <%= primaryKeyAsObjectType %>> {
 
 }
