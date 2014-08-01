@@ -17,6 +17,10 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
   this.hibernateCache = this.config.get('hibernateCache');
   this.databaseType = this.config.get('databaseType');
   this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
+  this.primaryKeyType = this.config.get('primaryKeyType') || (this.databaseType == 'sql' ? 'Long' : 'String');
+  this.primaryKeyAsObjectType = (this.primaryKeyType == 'long' ? 'Long' : this.primaryKeyType);
+  this.numberPrimaryKey = (this.primaryKeyType == 'Long' || this.primaryKeyType == 'long');
+  this.stringPrimaryKey = (this.primaryKeyType == 'String');
 };
 
 util.inherits(EntityGenerator, yeoman.generators.Base);
