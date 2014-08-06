@@ -47,7 +47,7 @@
                 username: $scope.username,
                 password: $scope.password,
                 rememberMe: $scope.rememberMe
-            })
+            });
         }
     }]);
 
