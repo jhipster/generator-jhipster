@@ -39,8 +39,8 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'input',
             name: 'baseName',
-            validate: function(input) {
-                if((input.indexOf('<')<0) && (input.indexOf('>')<0)) return true;
+            validate: function (input) {
+                if ((input.indexOf('<') < 0) && (input.indexOf('>') < 0)) return true;
                 return 'Your application name contains either <, > or both.';
             },
             message: '(1/13) What is the base name of your application?',
@@ -65,8 +65,8 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'input',
             name: 'packageName',
-            validate: function(input) {
-                if(/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)) return true;
+            validate: function (input) {
+                if (/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)) return true;
                 return 'The package name you have provided is not a valid Java package name.';
             },
             message: '(3/13) What is your default Java package name?',
@@ -304,48 +304,48 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     this.devDatabaseType = this.config.get('devDatabaseType');
     this.prodDatabaseType = this.config.get('prodDatabaseType');
     this.useCompass = this.config.get('useCompass');
-	this.javaVersion = this.config.get('javaVersion');
-	this.buildTool = this.config.get('buildTool');
-	this.frontendBuilder = this.config.get('frontendBuilder');
+    this.javaVersion = this.config.get('javaVersion');
+    this.buildTool = this.config.get('buildTool');
+    this.frontendBuilder = this.config.get('frontendBuilder');
     this.packagejs = packagejs;
 
-	if (this.baseName != null &&
-	    this.packageName != null &&
+    if (this.baseName != null &&
+        this.packageName != null &&
         this.authenticationType != null &&
-		this.hibernateCache != null &&
-		this.clusteredHttpSession != null &&
-		this.websocket != null &&
+        this.hibernateCache != null &&
+        this.clusteredHttpSession != null &&
+        this.websocket != null &&
         this.databaseType != null &&
-		this.devDatabaseType != null &&
-		this.prodDatabaseType != null &&
-		this.useCompass != null &&
-		this.buildTool != null &&
-		this.frontendBuilder != null &&
-	    this.javaVersion != null) {
+        this.devDatabaseType != null &&
+        this.prodDatabaseType != null &&
+        this.useCompass != null &&
+        this.buildTool != null &&
+        this.frontendBuilder != null &&
+        this.javaVersion != null) {
 
-	    console.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
-			'to re-generate the project...\n'));
+        console.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
+            'to re-generate the project...\n'));
 
-		cb();
-	} else {
-    	this.prompt(prompts, function (props) {
-			this.baseName = props.baseName;
-        	this.packageName = props.packageName;
+        cb();
+    } else {
+        this.prompt(prompts, function (props) {
+            this.baseName = props.baseName;
+            this.packageName = props.packageName;
             this.authenticationType = props.authenticationType;
             this.hibernateCache = props.hibernateCache;
-        	this.clusteredHttpSession = props.clusteredHttpSession;
-        	this.websocket = props.websocket;
-        	this.databaseType = props.databaseType;
-        	this.devDatabaseType = props.devDatabaseType;
-        	this.prodDatabaseType = props.prodDatabaseType;
-        	this.useCompass = props.useCompass;
-        	this.buildTool = props.buildTool;
-        	this.frontendBuilder = props.frontendBuilder;
-			this.javaVersion = props.javaVersion;
+            this.clusteredHttpSession = props.clusteredHttpSession;
+            this.websocket = props.websocket;
+            this.databaseType = props.databaseType;
+            this.devDatabaseType = props.devDatabaseType;
+            this.prodDatabaseType = props.prodDatabaseType;
+            this.useCompass = props.useCompass;
+            this.buildTool = props.buildTool;
+            this.frontendBuilder = props.frontendBuilder;
+            this.javaVersion = props.javaVersion;
 
-        	cb();
-    	}.bind(this));
-	}
+            cb();
+        }.bind(this));
+    }
 };
 
 JhipsterGenerator.prototype.app = function app() {
@@ -353,7 +353,7 @@ JhipsterGenerator.prototype.app = function app() {
     var packageFolder = this.packageName.replace(/\./g, '/');
     var javaDir = 'src/main/java/' + packageFolder + '/';
     var resourceDir = 'src/main/resources/';
-	
+
     // Remove old files
     removefile(resourceDir + 'config/liquibase/users_upd_001.csv');
     removefile(resourceDir + 'config/liquibase/users_authorities_upd_001.csv');
@@ -376,7 +376,7 @@ JhipsterGenerator.prototype.app = function app() {
     removefile(resourceDir + 'mails/messages/messages_pl.properties');
     removefile(resourceDir + 'mails/messages/messages_ru.properties');
     removefile(resourceDir + 'mails/messages/messages_tr.properties');
-	
+
     // Create application
     this.template('_package.json', 'package.json');
     this.template('_bower.json', 'bower.json');
@@ -385,7 +385,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy('gitignore', '.gitignore');
     this.copy('gitattributes', '.gitattributes');
 
-    switch(this.frontendBuilder) {
+    switch (this.frontendBuilder) {
         case 'gulp':
             this.template('gulpfile.js', 'gulpfile.js');
             break;
@@ -394,7 +394,7 @@ JhipsterGenerator.prototype.app = function app() {
             this.template('Gruntfile.js', 'Gruntfile.js');
     }
 
-    switch(this.buildTool) {
+    switch (this.buildTool) {
         case 'gradle':
             this.template('_build.gradle', 'build.gradle');
             this.template('_gradle.properties', 'gradle.properties');
@@ -409,7 +409,7 @@ JhipsterGenerator.prototype.app = function app() {
 
     // Create Java resource files
     this.mkdir(resourceDir);
-	this.copy(resourceDir + '/banner.txt', resourceDir + '/banner.txt');
+    this.copy(resourceDir + '/banner.txt', resourceDir + '/banner.txt');
 
     if (this.hibernateCache == "ehcache") {
         this.template(resourceDir + '_ehcache.xml', resourceDir + 'ehcache.xml');
@@ -448,10 +448,10 @@ JhipsterGenerator.prototype.app = function app() {
         this.copy(resourceDir + '/config/mongeez/master.xml', resourceDir + 'config/mongeez/master.xml');
         this.copy(resourceDir + '/config/mongeez/users.xml', resourceDir + 'config/mongeez/users.xml');
     }
-	
+
     // Create mail templates
     this.copy(resourceDir + '/mails/activationEmail.html', resourceDir + 'mails/activationEmail.html');
-	
+
     // Create Java files
     this.template('src/main/java/package/_Application.java', javaDir + '/Application.java');
     this.template('src/main/java/package/_ApplicationWebXml.java', javaDir + '/ApplicationWebXml.java');
@@ -508,8 +508,8 @@ JhipsterGenerator.prototype.app = function app() {
 
     this.template('src/main/java/package/repository/_package-info.java', javaDir + 'repository/package-info.java');
     this.template('src/main/java/package/repository/_AuthorityRepository.java', javaDir + 'repository/AuthorityRepository.java');
-	this.template('src/main/java/package/repository/_CustomAuditEventRepository.java', javaDir + 'repository/CustomAuditEventRepository.java');
-	
+    this.template('src/main/java/package/repository/_CustomAuditEventRepository.java', javaDir + 'repository/CustomAuditEventRepository.java');
+
     this.template('src/main/java/package/repository/_UserRepository.java', javaDir + 'repository/UserRepository.java');
     this.template('src/main/java/package/repository/_PersistentTokenRepository.java', javaDir + 'repository/PersistentTokenRepository.java');
     this.template('src/main/java/package/repository/_PersistenceAuditEventRepository.java', javaDir + 'repository/PersistenceAuditEventRepository.java');
@@ -726,15 +726,15 @@ JhipsterGenerator.prototype.app = function app() {
     this.config.set('packageFolder', packageFolder);
     this.config.set('authenticationType', this.authenticationType);
     this.config.set('hibernateCache', this.hibernateCache);
-	this.config.set('clusteredHttpSession', this.clusteredHttpSession);
-	this.config.set('websocket', this.websocket);
-	this.config.set('databaseType', this.databaseType);
-	this.config.set('devDatabaseType', this.devDatabaseType);
-	this.config.set('prodDatabaseType', this.prodDatabaseType);
-	this.config.set('useCompass', this.useCompass);
-	this.config.set('buildTool', this.buildTool);
-	this.config.set('frontendBuilder', this.frontendBuilder);
-	this.config.set('javaVersion', this.javaVersion);
+    this.config.set('clusteredHttpSession', this.clusteredHttpSession);
+    this.config.set('websocket', this.websocket);
+    this.config.set('databaseType', this.databaseType);
+    this.config.set('devDatabaseType', this.devDatabaseType);
+    this.config.set('prodDatabaseType', this.prodDatabaseType);
+    this.config.set('useCompass', this.useCompass);
+    this.config.set('buildTool', this.buildTool);
+    this.config.set('frontendBuilder', this.frontendBuilder);
+    this.config.set('javaVersion', this.javaVersion);
 };
 
 JhipsterGenerator.prototype.projectfiles = function projectfiles() {
