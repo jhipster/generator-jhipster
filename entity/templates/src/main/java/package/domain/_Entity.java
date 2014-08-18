@@ -29,7 +29,7 @@ public class <%= entityClass %> implements Serializable {
 
     @Id<% if (databaseType == 'sql') { %>
     @GeneratedValue(strategy = GenerationType.TABLE)
-    private long id;<% } %><% if (databaseType == 'nosql') { %>
+    private Long id;<% } %><% if (databaseType == 'nosql') { %>
     private String id;<% } %>
 
     @Size(min = 1, max = 50)<% if (databaseType == 'sql') { %>
@@ -45,11 +45,11 @@ public class <%= entityClass %> implements Serializable {
     @Field("sample_date_attribute")<% } %>
     private LocalDate sampleDateAttribute;
 
-    public <% if (databaseType == 'sql') { %>long<% } %><% if (databaseType == 'nosql') { %>String<% } %> getId() {
+    public <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType == 'sql') { %>long<% } %><% if (databaseType == 'nosql') { %>String<% } %> id) {
+    public void setId(<% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> id) {
         this.id = id;
     }
 
