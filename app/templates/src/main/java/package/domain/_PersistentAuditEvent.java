@@ -27,7 +27,7 @@ public class PersistentAuditEvent  {
     @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(name = "event_id")<% } %><% if (databaseType == 'nosql') { %>
     @Field("event_id")<% } %>
-    private long id;
+    private Long id;
 
     @NotNull
     private String principal;
@@ -46,11 +46,11 @@ public class PersistentAuditEvent  {
     @CollectionTable(name="T_PERSISTENT_AUDIT_EVENT_DATA", joinColumns=@JoinColumn(name="event_id"))<% } %>
     private Map<String, String> data = new HashMap<>();
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
