@@ -199,7 +199,7 @@ gulp.task('build', ['clean', 'copy'], function() {
 });
 
 gulp.task('usemin', ['images', 'styles'], function(){
-  return gulp.src(yeoman.app + '{,*/}*.html').
+  return gulp.src(yeoman.app + '{,views/}*.html').
     pipe(usemin({
       css: [
         prefix.apply(),
