@@ -2,8 +2,7 @@
 
 /* Services */
 
-<%= angularAppName %>.factory('LanguageService', ['$http', '$translate',
-    function ($http, $translate) {
+<%= angularAppName %>.factory('LanguageService', function ($http, $translate) {
         return {
             getBy: function(language) {
                 if (language == undefined) {
@@ -23,49 +22,42 @@
                 return promise;
             }
         };
-    }]);
+    });
 
-<%= angularAppName %>.factory('Register', ['$resource',
-    function ($resource) {
+<%= angularAppName %>.factory('Register', function ($resource) {
         return $resource('app/rest/register', {}, {
         });
-    }]);
+    });
 
-<%= angularAppName %>.factory('Activate', ['$resource',
-    function ($resource) {
+<%= angularAppName %>.factory('Activate', function ($resource) {
         return $resource('app/rest/activate', {}, {
             'get': { method: 'GET', params: {}, isArray: false}
         });
-    }]);
+    });
 
-<%= angularAppName %>.factory('Account', ['$resource',
-    function ($resource) {
+<%= angularAppName %>.factory('Account', function ($resource) {
         return $resource('app/rest/account', {}, {
         });
-    }]);
+    });
 
-<%= angularAppName %>.factory('Password', ['$resource',
-    function ($resource) {
+<%= angularAppName %>.factory('Password', function ($resource) {
         return $resource('app/rest/account/change_password', {}, {
         });
-    }]);
+    });
 
-<%= angularAppName %>.factory('Sessions', ['$resource',
-    function ($resource) {
+<%= angularAppName %>.factory('Sessions', function ($resource) {
         return $resource('app/rest/account/sessions/:series', {}, {
             'get': { method: 'GET', isArray: true}
         });
-    }]);
+    });
 
-<%= angularAppName %>.factory('MetricsService', ['$resource',
-    function ($resource) {
+<%= angularAppName %>.factory('MetricsService',function ($resource) {
         return $resource('metrics/metrics', {}, {
             'get': { method: 'GET'}
         });
-    }]);
+    });
 
-<%= angularAppName %>.factory('ThreadDumpService', ['$http',
-    function ($http) {
+<%= angularAppName %>.factory('ThreadDumpService', function ($http) {
         return {
             dump: function() {
                 var promise = $http.get('dump').then(function(response){
@@ -74,10 +66,9 @@
                 return promise;
             }
         };
-    }]);
+    });
 
-<%= angularAppName %>.factory('HealthCheckService', ['$rootScope', '$http',
-    function ($rootScope, $http) {
+<%= angularAppName %>.factory('HealthCheckService', function ($rootScope, $http) {
         return {
             check: function() {
                 var promise = $http.get('health').then(function(response){
@@ -86,18 +77,16 @@
                 return promise;
             }
         };
-    }]);
+    });
 
-<%= angularAppName %>.factory('LogsService', ['$resource',
-    function ($resource) {
+<%= angularAppName %>.factory('LogsService', function ($resource) {
         return $resource('app/rest/logs', {}, {
             'findAll': { method: 'GET', isArray: true},
             'changeLevel':  { method: 'PUT'}
         });
-    }]);
+    });
 
-<%= angularAppName %>.factory('AuditsService', ['$http',
-    function ($http) {
+<%= angularAppName %>.factory('AuditsService', function ($http) {
         return {
             findAll: function() {
                 var promise = $http.get('app/rest/audits/all').then(function (response) {
@@ -112,10 +101,9 @@
                 return promise;
             }
         }
-    }]);
+    });
 
-<%= angularAppName %>.factory('Session', [
-    function () {
+<%= angularAppName %>.factory('Session', function () {
         this.create = function (login, firstName, lastName, email, userRoles) {
             this.login = login;
             this.firstName = firstName;
@@ -131,10 +119,9 @@
             this.userRoles = null;
         };
         return this;
-    }]);
+    });
 
-<%= angularAppName %>.factory('AuthenticationSharedService', ['$rootScope', '$http', 'authService', 'Session', 'Account',<% if (authenticationType == 'token') { %> 'Base64Service', 'AccessToken', <% } %>
-    function ($rootScope, $http, authService, Session, Account<% if (authenticationType == 'token') { %>, Base64Service, AccessToken<% } %>) {
+<%= angularAppName %>.factory('AuthenticationSharedService', function ($rootScope, $http, authService, Session, Account<% if (authenticationType == 'token') { %>, Base64Service, AccessToken<% } %>) {
         return {
             login: function (param) {<% if (authenticationType == 'cookie') { %>
                 var data ="j_username=" + param.username +"&j_password=" + param.password +"&_spring_security_remember_me=" + param.rememberMe +"&submit=Login";
@@ -239,4 +226,4 @@
                 authService.loginCancelled();
             }
         };
-    }]);
+    });
