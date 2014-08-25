@@ -204,8 +204,8 @@ gulp.task('usemin', ['images', 'styles'], function(){
         prefix.apply(),
         replace(/[0-9a-zA-Z\-_\s\.\/]*\/([a-zA-Z\-_\.0-9]*\.(woff|eot|ttf|svg))/g, '/fonts/$1'),
         //minifyCss(),
-        rev(),
-        'concat'
+        'concat',
+        rev()
       ],
       html: [
         minifyHtml({empty: true, conditionals:true})
@@ -213,8 +213,8 @@ gulp.task('usemin', ['images', 'styles'], function(){
       js: [
         ngAnnotate(),
         uglify(),
-        rev(),
-        'concat'
+        'concat',
+        rev()
       ]
     })).
     pipe(gulp.dest(yeoman.dist));
