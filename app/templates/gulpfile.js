@@ -10,7 +10,7 @@ var gulp = require('gulp'),
   minifyHtml = require('gulp-minify-html'),
   livereload = require('gulp-livereload'),
   imagemin = require('gulp-imagemin'),
-  ngmin = require('gulp-ngmin'),
+  ngAnnotate = require('gulp-ng-annotate'),
   jshint = require('gulp-jshint'),
   rev = require('gulp-rev'),
   connect = require('gulp-connect'),
@@ -211,7 +211,7 @@ gulp.task('usemin', ['images', 'styles'], function(){
         minifyHtml({empty: true, conditionals:true})
       ],
       js: [
-        ngmin(),
+        ngAnnotate(),
         uglify(),
         rev(),
         'concat'
