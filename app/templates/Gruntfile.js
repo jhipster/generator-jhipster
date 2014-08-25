@@ -266,19 +266,19 @@ module.exports = function (grunt) {
     htmlmin: {
       dist: {
         options: {
-          /*removeCommentsFromCDATA: true,
+          removeCommentsFromCDATA: true,
           // https://github.com/yeoman/grunt-usemin/issues/44
-          //collapseWhitespace: true,
+          collapseWhitespace: true,
           collapseBooleanAttributes: true,
+          conservativeCollapse: true,
           removeAttributeQuotes: true,
           removeRedundantAttributes: true,
           useShortDoctype: true,
           removeEmptyAttributes: true,
-          removeOptionalTags: true*/
         },
         files: [{
           expand: true,
-          cwd: 'src/main/webapp',
+          cwd: '<%%= yeoman.dist %>',
           src: ['*.html', 'views/*.html'],
           dest: '<%%= yeoman.dist %>'
         }]
@@ -293,7 +293,8 @@ module.exports = function (grunt) {
           cwd: 'src/main/webapp',
           dest: '<%%= yeoman.dist %>',
           src: [
-            '*.{ico,png,txt}',
+            '*.{ico,png,txt,html}',
+            'views/*.html',
             '.htaccess',
             'images/{,*/}*.{png,gif,webp}',
             'fonts/*'
@@ -327,8 +328,7 @@ module.exports = function (grunt) {
         'compass:dist',<% } %>
         'copy:styles',
         'imagemin',
-        'svgmin',
-        'htmlmin'
+        'svgmin'
       ]
     },
     karma: {
@@ -408,7 +408,8 @@ module.exports = function (grunt) {
     'replace',
     'uglify',
     'rev',
-    'usemin'
+    'usemin',
+    'htmlmin'
   ]);
 
   grunt.registerTask('default', [
