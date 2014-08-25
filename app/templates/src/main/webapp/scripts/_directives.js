@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%= angularAppName %>')
-    .directive('activeMenu', ['$translate', '$locale', 'tmhDynamicLocale', function($translate, $locale, tmhDynamicLocale) {
+    .directive('activeMenu', function($translate, $locale, tmhDynamicLocale) {
         return {
             restrict: 'A',
             link: function(scope, element, attrs, controller) {
@@ -19,8 +19,8 @@ angular.module('<%= angularAppName %>')
                 });
             }
         };
-    }])
-    .directive('activeLink', ['$location', function(location) {
+    })
+    .directive('activeLink', function(location) {
         return {
             restrict: 'A',
             link: function(scope, element, attrs, controller) {
@@ -37,7 +37,7 @@ angular.module('<%= angularAppName %>')
                 });
             }
         };
-    }]).directive('passwordStrengthBar', function() {
+    }).directive('passwordStrengthBar', function() {
         return {
             replace: true,
             restrict: 'E',

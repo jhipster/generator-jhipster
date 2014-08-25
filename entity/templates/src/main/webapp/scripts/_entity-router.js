@@ -1,8 +1,7 @@
 'use strict';
 
 <%= angularAppName %>
-    .config(['$routeProvider', '$httpProvider', '$translateProvider', 'USER_ROLES',
-        function ($routeProvider, $httpProvider, $translateProvider, USER_ROLES) {
+    .config(function ($routeProvider, $httpProvider, $translateProvider, USER_ROLES) {
             $routeProvider
                 .when('/<%= entityInstance %>', {
                     templateUrl: 'views/<%= entityInstance %>s.html',
@@ -16,4 +15,4 @@
                         authorizedRoles: [USER_ROLES.all]
                     }
                 })
-        }]);
+        });

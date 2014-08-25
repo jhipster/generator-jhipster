@@ -10,7 +10,7 @@
 
     angular.module('http-auth-interceptor', ['http-auth-interceptor-buffer'])
 
-        .factory('authService', ['$rootScope','httpBuffer', function($rootScope, httpBuffer) {
+        .factory('authService', function($rootScope, httpBuffer) {
             return {
                 /**
                  * Call this function to indicate that authentication was successfull and trigger a
@@ -35,14 +35,14 @@
                     $rootScope.$broadcast('event:auth-loginCancelled', data);
                 }
             };
-        }])
+        })
 
     /**
      * $http interceptor.
      * On 401 response (without 'ignoreAuthModule' option) stores the request
      * and broadcasts 'event:angular-auth-loginRequired'.
      */
-        .config(['$httpProvider', function($httpProvider) {
+        .config(function($httpProvider) {
 
             var interceptor = ['$rootScope', '$q', 'httpBuffer', function($rootScope, $q, httpBuffer) {
                 function success(response) {
@@ -68,14 +68,14 @@
 
             }];
             $httpProvider.responseInterceptors.push(interceptor);
-        }]);
+        });
 
     /**
      * Private module, a utility, required internally by 'http-auth-interceptor'.
      */
     angular.module('http-auth-interceptor-buffer', [])
 
-        .factory('httpBuffer', ['$injector', function($injector) {
+        .factory('httpBuffer', function($injector) {
             /** Holds all the requests, so they can be re-requested in future. */
             var buffer = [];
 
@@ -126,5 +126,5 @@
                     buffer = [];
                 }
             };
-        }]);
+        });
 })();

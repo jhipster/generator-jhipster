@@ -7,8 +7,7 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
     'ngResource', 'ngRoute', 'ngCookies', '<%= angularAppName %>Utils', 'pascalprecht.translate', 'truncate']);
 
 <%= angularAppName %>
-    .config(['$routeProvider', '$httpProvider', '$translateProvider',  'tmhDynamicLocaleProvider', 'USER_ROLES',
-        function ($routeProvider, $httpProvider, $translateProvider, tmhDynamicLocaleProvider, USER_ROLES) {
+    .config(function ($routeProvider, $httpProvider, $translateProvider, tmhDynamicLocaleProvider, USER_ROLES) {
             $routeProvider
                 .when('/register', {
                     templateUrl: 'views/register.html',
@@ -131,9 +130,8 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
             tmhDynamicLocaleProvider.useCookieStorage('NG_TRANSLATE_LANG_KEY');
             <% if (authenticationType == 'token') { %>
             httpHeaders = $httpProvider.defaults.headers;<% } %>
-        }])
-        .run(['$rootScope', '$location', '$http', 'AuthenticationSharedService', 'Session', 'USER_ROLES',
-            function($rootScope, $location, $http, AuthenticationSharedService, Session, USER_ROLES) {
+        })
+        .run(function($rootScope, $location, $http, AuthenticationSharedService, Session, USER_ROLES) {
                 $rootScope.$on('$routeChangeStart', function (event, next) {
                     $rootScope.isAuthorized = AuthenticationSharedService.isAuthorized;
                     $rootScope.userRoles = USER_ROLES;
@@ -168,9 +166,8 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                 $rootScope.$on('event:auth-loginCancelled', function() {
                     $location.path('');
                 });
-        }])<% if (websocket == 'atmosphere') { %>
-        .run(['$rootScope', '$route',
-            function($rootScope, $route) {
+        })<% if (websocket == 'atmosphere') { %>
+        .run(function($rootScope, $route) {
                 // This uses the Atmoshpere framework to do a Websocket connection with the server, in order to send
                 // user activities each time a route changes.
                 // The user activities can then be monitored by an administrator, see the views/tracker.html Angular view.
@@ -220,4 +217,4 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                     $rootScope.websocketRequest.sendMessage();
                 });
             }
-        ])<% } %>;
+        )<% } %>;

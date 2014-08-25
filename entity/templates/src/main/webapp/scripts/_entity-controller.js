@@ -1,7 +1,6 @@
 'use strict';
 
-<%= angularAppName %>.controller('<%= entityClass %>Controller', ['$scope', 'resolved<%= entityClass %>', '<%= entityClass %>',
-    function ($scope, resolved<%= entityClass %>, <%= entityClass %>) {
+<%= angularAppName %>.controller('<%= entityClass %>Controller', function ($scope, resolved<%= entityClass %>, <%= entityClass %>) {
 
         $scope.<%= entityInstance %>s = resolved<%= entityClass %>;
 
@@ -29,4 +28,4 @@
         $scope.clear = function () {
             $scope.<%= entityInstance %> = {id: null, sampleTextAttribute: null, sampleDateAttribute: null};
         };
-    }]);
+    });

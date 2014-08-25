@@ -92,8 +92,7 @@ angular.module('<%= angularAppName %>Utils', [])
             }
         };
     })<% if (authenticationType == 'token') { %>
-    .factory('AccessToken', ['$location', '$http', 'StorageService', '$rootScope',
-        function($location, $http, StorageService, $rootScope) {
+    .factory('AccessToken', function($location, $http, StorageService, $rootScope) {
             var TOKEN = 'token';
             var service = {};
             var token = null;
@@ -138,5 +137,5 @@ angular.module('<%= angularAppName %>Utils', [])
             };
 
             return service;
-        }])<% } %>;
+        })<% } %>;
 

@@ -2,16 +2,13 @@
 
 /* Controllers */
 
-<%= angularAppName %>.controller('MainController', ['$scope',
-    function ($scope) {
-    }]);
+<%= angularAppName %>.controller('MainController', function ($scope) {
+    });
 
-<%= angularAppName %>.controller('AdminController', ['$scope',
-    function ($scope) {
-    }]);
+<%= angularAppName %>.controller('AdminController', function ($scope) {
+    });
 
-<%= angularAppName %>.controller('LanguageController', ['$scope', '$translate', 'LanguageService', 'FLAGS',
-    function ($scope, $translate, LanguageService, FLAGS) {
+<%= angularAppName %>.controller('LanguageController', function ($scope, $translate, LanguageService, FLAGS) {
         $scope.getFlagClass = function(language) {
             var selectedFlag = "";
             angular.forEach(FLAGS, function(flag, flagLanguage){
@@ -33,14 +30,12 @@
         LanguageService.getBy().then(function (languages) {
             $scope.languages = languages;
         });
-    }]);
+    });
 
-<%= angularAppName %>.controller('MenuController', ['$scope',
-    function ($scope) {
-    }]);
+<%= angularAppName %>.controller('MenuController', function ($scope) {
+    });
 
-<%= angularAppName %>.controller('LoginController', ['$scope', '$location', 'AuthenticationSharedService',
-    function ($scope, $location, AuthenticationSharedService) {
+<%= angularAppName %>.controller('LoginController', function ($scope, $location, AuthenticationSharedService) {
         $scope.rememberMe = true;
         $scope.login = function () {
             AuthenticationSharedService.login({
@@ -49,15 +44,13 @@
                 rememberMe: $scope.rememberMe
             });
         }
-    }]);
+    });
 
-<%= angularAppName %>.controller('LogoutController', ['$location', 'AuthenticationSharedService',
-    function ($location, AuthenticationSharedService) {
+<%= angularAppName %>.controller('LogoutController', function ($location, AuthenticationSharedService) {
         AuthenticationSharedService.logout();
-    }]);
+    });
 
-<%= angularAppName %>.controller('SettingsController', ['$scope', 'Account',
-    function ($scope, Account) {
+<%= angularAppName %>.controller('SettingsController', function ($scope, Account) {
         $scope.success = null;
         $scope.error = null;
         $scope.settingsAccount = Account.get();
@@ -74,10 +67,9 @@
                     $scope.error = "ERROR";
                 });
         };
-    }]);
+    });
 
-<%= angularAppName %>.controller('RegisterController', ['$scope', '$translate', 'Register',
-    function ($scope, $translate, Register) {
+<%= angularAppName %>.controller('RegisterController', function ($scope, $translate, Register) {
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;
@@ -107,10 +99,9 @@
                     });
             }
         }
-    }]);
+    });
 
-<%= angularAppName %>.controller('ActivationController', ['$scope', '$routeParams', 'Activate',
-    function ($scope, $routeParams, Activate) {
+<%= angularAppName %>.controller('ActivationController', function ($scope, $routeParams, Activate) {
         Activate.get({key: $routeParams.key},
             function (value, responseHeaders) {
                 $scope.error = null;
@@ -120,10 +111,9 @@
                 $scope.success = null;
                 $scope.error = "ERROR";
             });
-    }]);
+    });
 
-<%= angularAppName %>.controller('PasswordController', ['$scope', 'Password',
-    function ($scope, Password) {
+<%= angularAppName %>.controller('PasswordController', function ($scope, Password) {
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;
@@ -143,10 +133,9 @@
                     });
             }
         };
-    }]);
+    });
 
-<%= angularAppName %>.controller('SessionsController', ['$scope', 'resolvedSessions', 'Sessions',
-    function ($scope, resolvedSessions, Sessions) {
+<%= angularAppName %>.controller('SessionsController', function ($scope, resolvedSessions, Sessions) {
         $scope.success = null;
         $scope.error = null;
         $scope.sessions = resolvedSessions;
@@ -162,10 +151,9 @@
                     $scope.error = "ERROR";
                 });
         };
-    }]);
+    });
 
- <% if (websocket == 'atmosphere') { %><%= angularAppName %>.controller('TrackerController', ['$scope',
-    function ($scope) {
+ <% if (websocket == 'atmosphere') { %><%= angularAppName %>.controller('TrackerController', function ($scope) {
         // This controller uses the Atmosphere framework to keep a Websocket connection opened, and receive
         // user activities in real-time.
 
@@ -208,10 +196,9 @@
         };
 
         $scope.trackerSubSocket = $scope.trackerSocket.subscribe($scope.trackerRequest);
-    }]);
+    });
 
-<% } %><%= angularAppName %>.controller('MetricsController', ['$scope', 'MetricsService', 'HealthCheckService', 'ThreadDumpService',
-    function ($scope, MetricsService, HealthCheckService, ThreadDumpService) {
+<% } %><%= angularAppName %>.controller('MetricsController', function ($scope, MetricsService, HealthCheckService, ThreadDumpService) {
 
         $scope.refresh = function() {
             HealthCheckService.check().then(function(data) {
@@ -285,10 +272,9 @@
                 return "label-danger";
             }
         };
-    }]);
+    });
 
-<%= angularAppName %>.controller('LogsController', ['$scope', 'resolvedLogs', 'LogsService',
-    function ($scope, resolvedLogs, LogsService) {
+<%= angularAppName %>.controller('LogsController', function ($scope, resolvedLogs, LogsService) {
         $scope.loggers = resolvedLogs;
 
         $scope.changeLevel = function (name, level) {
@@ -296,10 +282,9 @@
                 $scope.loggers = LogsService.findAll();
             });
         }
-    }]);
+    });
 
-<%= angularAppName %>.controller('AuditsController', ['$scope', '$translate', '$filter', 'AuditsService',
-    function ($scope, $translate, $filter, AuditsService) {
+<%= angularAppName %>.controller('AuditsController', function ($scope, $translate, $filter, AuditsService) {
         $scope.onChangeDate = function() {
             AuditsService.findByDates($scope.fromDate, $scope.toDate).then(function(data){
                 $scope.audits = data;
@@ -332,5 +317,5 @@
         AuditsService.findByDates($scope.fromDate, $scope.toDate).then(function(data){
             $scope.audits = data;
         });
-    }]);
+    });
 
