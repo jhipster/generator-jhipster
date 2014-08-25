@@ -112,7 +112,8 @@ module.exports = function (grunt) {
           middleware: function (connect) {
             return [
               proxySnippet,
-              connect.static(require('path').resolve('src/main/webapp'))
+              connect.static('.tmp'),
+              connect.static('src/main/webapp')
             ];
           }
         }
