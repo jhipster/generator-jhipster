@@ -137,7 +137,6 @@
         <hibernate-entitymanager.version>4.3.6.Final</hibernate-entitymanager.version>
         <HikariCP.version>1.4.0</HikariCP.version>
         <jhipster-loaded.version>0.11</jhipster-loaded.version><% if (databaseType == 'sql') { %>
-        <liquibase-core.version>3.2.2</liquibase-core.version>
         <liquibase-hibernate.version>3.4</liquibase-hibernate.version>
         <liquibase-slf4j.version>1.2.1</liquibase-slf4j.version><% } %>
         <metrics-spring.version>3.0.1</metrics-spring.version><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
@@ -378,7 +377,6 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version><%= _.unescape('\${liquibase-core.version}')%></version>
             <exclusions>
                 <exclusion>
                     <groupId>org.eclipse.jetty</groupId>
