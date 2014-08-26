@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.1.4.RELEASE')
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.1.5.RELEASE')
         classpath('com.moowork.gradle:gradle-node-plugin:0.4')
         classpath('com.moowork.gradle:gradle-grunt-plugin:0.5')
         classpath('be.filipblondeel.gradle:gradle-gulp-plugin:0.1')
@@ -17,7 +17,11 @@ apply plugin: 'maven'
 apply plugin: 'spring-boot'
 
 bootRepackage {
-mainClass = '<%= packageName %>.Application'
+  mainClass = '<%= packageName %>.Application'
+}
+
+springBoot {
+  mainClass = '<%= packageName %>.Application'
 }
 
 apply from: 'yeoman.gradle'
