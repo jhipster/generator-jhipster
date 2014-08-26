@@ -15,7 +15,11 @@ spring:
         databaseName: <% if (devDatabaseType == 'postgresql') { %><%= baseName %><% } %>
         serverName: <% if (devDatabaseType == 'postgresql') { %>localhost<% } %>
         username: <% if (devDatabaseType == 'mysql') { %>root<% } else if (devDatabaseType == 'postgresql') { %><%= baseName %><% } %>
-        password:
+        password: <% if (devDatabaseType == 'mysql') { %>
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true<% } %>
 
     jpa:
         database-platform: <% if (devDatabaseType == 'mysql') { %>org.hibernate.dialect.MySQLInnoDBDialect<% } else if (devDatabaseType == 'postgresql') { %>org.hibernate.dialect.PostgreSQLDialect<% } else { %>org.hibernate.dialect.H2Dialect<% } %>
