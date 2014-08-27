@@ -7,8 +7,25 @@
             <Pattern>[%p] %c - %m%n</Pattern>
         </encoder>
     </appender>
-    <logger name="javax.activation" level="warn"/>
-    <logger name="<%=packageName%>" level="<%= _.unescape('\$\{logback.loglevel}')%>"/>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>90</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>utf-8</charset>
+            <Pattern>%d %-5level [%thread] %logger{0}: %msg%n</Pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>512</queueSize>
+        <appender-ref ref="FILE"/>
+    </appender>
+	
+    <logger name="javax.activation" level="WARN"/>
+    <logger name="<%=packageName%>" level="DEBUG"/>
     <logger name="ch.qos.logback" level="WARN"/>
     <logger name="com.codahale.metrics" level="WARN"/>
     <logger name="com.ryantenney" level="WARN"/>
@@ -33,7 +50,7 @@
         <resetJUL>true</resetJUL>
     </contextListener>
 
-    <root level="<%= _.unescape('\$\{logback.loglevel}')%>">
+    <root level="DEBUG">
         <appender-ref ref="CONSOLE"/>
     </root>
 
