@@ -22,6 +22,7 @@ spring:
         protocol: smtp
         tls: false
         auth: false
+        from: <%= baseName %>@localhost
 
     messageSource:
         cacheSeconds: 1
