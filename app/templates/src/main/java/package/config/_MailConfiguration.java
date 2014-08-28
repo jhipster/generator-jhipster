@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.EnvironmentAware;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -32,9 +31,6 @@ public class MailConfiguration implements EnvironmentAware {
     private final Logger log = LoggerFactory.getLogger(MailConfiguration.class);
 
     private RelaxedPropertyResolver propertyResolver;
-
-    public MailConfiguration() {
-    }
 
     @Override
     public void setEnvironment(Environment environment) {
@@ -71,5 +67,4 @@ public class MailConfiguration implements EnvironmentAware {
         sender.setJavaMailProperties(sendProperties);
         return sender;
     }
-
 }
