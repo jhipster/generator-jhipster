@@ -54,8 +54,8 @@ public class WebConfigurer implements ServletContextInitializer {
         initMetrics(servletContext, disps);<% if (websocket == 'atmosphere') { %>
         initAtmosphereServlet(servletContext);<% } %>
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
-            initStaticResourcesProductionFilter(servletContext, disps);
             initCachingHttpHeadersFilter(servletContext, disps);
+            initStaticResourcesProductionFilter(servletContext, disps);
         }
         initGzipFilter(servletContext, disps);<% if (devDatabaseType == 'h2Memory') { %>
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
