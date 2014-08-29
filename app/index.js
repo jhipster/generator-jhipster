@@ -376,6 +376,7 @@ JhipsterGenerator.prototype.app = function app() {
     removefile(resourceDir + 'mails/messages/messages_pl.properties');
     removefile(resourceDir + 'mails/messages/messages_ru.properties');
     removefile(resourceDir + 'mails/messages/messages_tr.properties');
+	removefile(webappDir + '/protected/transparent.gif');
 
     // Create application
     this.template('_package.json', 'package.json');
@@ -624,7 +625,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/i18n/_tr.json', webappDir + 'i18n/tr.json');
 
     // Protected resources - used to check if a customer is still connected
-    this.copy(webappDir + '/protected/transparent.gif', webappDir + '/protected/transparent.gif');
+    this.copy(webappDir + '/protected/authentication_check.gif', webappDir + '/protected/authentication_check.gif');
 
     // Swagger-ui for Jhipster
     this.template(webappDir + '/swagger-ui/_index.html', webappDir + 'swagger-ui/index.html');

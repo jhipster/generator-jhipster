@@ -167,7 +167,7 @@
                     httpHeaders.common['Authorization'] = 'Bearer ' + AccessToken.get();
                 }<% } %>
 
-                $http.get('protected/transparent.gif', {
+                $http.get('protected/authentication_check.gif', {
                     ignoreAuthModule: 'ignoreAuthModule'
                 }).success(function (data, status, headers, config) {
                     if (!Session.login<% if (authenticationType == 'token') { %> || AccessToken.get() != undefined<% } %>) {<% if (authenticationType == 'token') { %>
