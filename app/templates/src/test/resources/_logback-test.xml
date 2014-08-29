@@ -9,6 +9,7 @@
     </appender>
     <logger name="<%=packageName%>" level="DEBUG"/>
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
+    <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
 
     <root level="WARN">
         <appender-ref ref="CONSOLE"/>
