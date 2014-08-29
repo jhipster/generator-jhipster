@@ -21,6 +21,8 @@
             <properties>
                 <!-- Spring profile to use -->
                 <spring.profiles.active>dev</spring.profiles.active>
+                <!-- log configuration -->
+                <logback.loglevel>DEBUG</logback.loglevel>
             </properties>
         </profile>
         <profile>
@@ -28,6 +30,8 @@
             <properties>
                 <!-- Spring profile to use -->
                 <spring.profiles.active>prod</spring.profiles.active>
+                <!-- log configuration -->
+                <logback.loglevel>INFO</logback.loglevel>
             </properties>
             <build>
                 <plugins>
