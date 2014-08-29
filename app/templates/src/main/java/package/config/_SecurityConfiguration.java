@@ -22,8 +22,10 @@ import javax.inject.Inject;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    <% if (authenticationType == 'cookie') { %>
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (websocket == 'atmosphere' && authenticationType == 'token') { %>
+
+    // WARNING : you have configured the project to use Websockets and OAuth2 authentication, which do not work together: https://github.com/jhipster/generator-jhipster/issues/490
+<% } %><% if (authenticationType == 'cookie') { %>
     @Inject
     private Environment env;
 
@@ -40,8 +42,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private Http401UnauthorizedEntryPoint authenticationEntryPoint;<% } %>
 
     @Inject
-    private UserDetailsService userDetailsService;
-    <% if (authenticationType == 'cookie') { %>
+    private UserDetailsService userDetailsService;<% if (authenticationType == 'cookie') { %>
+
     @Inject
     private RememberMeServices rememberMeServices;<% } %>
 
@@ -126,10 +128,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @EnableGlobalMethodSecurity(prePostEnabled = true, jsr250Enabled = true)
     private static class GlobalSecurityConfiguration extends GlobalMethodSecurityConfiguration {<% if (authenticationType == 'token') { %>
+
         @Override
         protected MethodSecurityExpressionHandler createExpressionHandler() {
             return new OAuth2MethodSecurityExpressionHandler();
-        }
-        <% } %>
+        }<% } %>
     }
 }
