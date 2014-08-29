@@ -50,7 +50,7 @@
         <resetJUL>true</resetJUL>
     </contextListener>
 
-    <root level="DEBUG">
+    <root level="<%= _.unescape('\$\{logback.loglevel}')%>">
         <appender-ref ref="CONSOLE"/>
     </root>
 
