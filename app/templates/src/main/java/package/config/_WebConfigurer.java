@@ -48,8 +48,7 @@ public class WebConfigurer implements ServletContextInitializer {
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         log.info("Web application configuration, using profiles: {}", Arrays.toString(env.getActiveProfiles()));
-        EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);
-<% if (clusteredHttpSession == 'hazelcast') { %>
+        EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);<% if (clusteredHttpSession == 'hazelcast') { %>
         initClusteredHttpSessionFilter(servletContext, disps);<% } %>
         initMetrics(servletContext, disps);<% if (websocket == 'atmosphere') { %>
         initAtmosphereServlet(servletContext);<% } %>
@@ -61,7 +60,6 @@ public class WebConfigurer implements ServletContextInitializer {
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
             initH2Console(servletContext);
         }<% } %>
-
         log.info("Web application fully configured");
     }<% if (clusteredHttpSession == 'hazelcast') { %>
 
@@ -70,10 +68,8 @@ public class WebConfigurer implements ServletContextInitializer {
      */
     private void initClusteredHttpSessionFilter(ServletContext servletContext, EnumSet<DispatcherType> disps) {
         log.debug("Registering Clustered Http Session Filter");
-
         disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC, DispatcherType.INCLUDE);
         servletContext.addListener(new SessionListener());
-
         WebFilter webFilter = new WebFilter() {
             @Override
             protected HazelcastInstance getInstance(Properties properties) throws ServletException {
@@ -81,8 +77,7 @@ public class WebConfigurer implements ServletContextInitializer {
             }
         };
 
-        final FilterRegistration.Dynamic hazelcastWebFilter = servletContext.addFilter("hazelcastWebFilter", webFilter);
-
+        FilterRegistration.Dynamic hazelcastWebFilter = servletContext.addFilter("hazelcastWebFilter", webFilter);
         Map<String, String> parameters = new HashMap<>();
         // Name of the distributed map storing your web session objects
         parameters.put("map-name", "clustered-http-sessions");
@@ -122,19 +117,15 @@ public class WebConfigurer implements ServletContextInitializer {
      */
     private void initGzipFilter(ServletContext servletContext, EnumSet<DispatcherType> disps) {
         log.debug("Registering GZip Filter");
-
         FilterRegistration.Dynamic compressingFilter = servletContext.addFilter("gzipFilter", new GZipServletFilter());
         Map<String, String> parameters = new HashMap<>();
-
         compressingFilter.setInitParameters(parameters);
-
         compressingFilter.addMappingForUrlPatterns(disps, true, "*.css");
         compressingFilter.addMappingForUrlPatterns(disps, true, "*.json");
         compressingFilter.addMappingForUrlPatterns(disps, true, "*.html");
         compressingFilter.addMappingForUrlPatterns(disps, true, "*.js");
         compressingFilter.addMappingForUrlPatterns(disps, true, "/app/rest/*");
         compressingFilter.addMappingForUrlPatterns(disps, true, "/metrics/*");
-
         compressingFilter.setAsyncSupported(true);
     }
 
@@ -243,6 +234,7 @@ public class WebConfigurer implements ServletContextInitializer {
             // noop
         }
     }<% } %><% if (devDatabaseType == 'h2Memory') { %>
+
     /**
      * Initializes H2 console
      */
@@ -252,6 +244,4 @@ public class WebConfigurer implements ServletContextInitializer {
         h2ConsoleServlet.addMapping("/console/*");
         h2ConsoleServlet.setLoadOnStartup(1);
     }<% } %>
-
-
 }
