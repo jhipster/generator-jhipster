@@ -8,6 +8,8 @@
         </encoder>
     </appender>
 
+<!-- The FILE and ASYNC appenders are here as examples for a production configuration -->
+<!--
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
@@ -23,6 +25,7 @@
         <queueSize>512</queueSize>
         <appender-ref ref="FILE"/>
     </appender>
+-->
 	
     <logger name="javax.activation" level="WARN"/>
     <logger name="<%=packageName%>" level="DEBUG"/>
