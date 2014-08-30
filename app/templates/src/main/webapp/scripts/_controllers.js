@@ -201,8 +201,10 @@
 <% } %><%= angularAppName %>.controller('MetricsController', function ($scope, MetricsService, HealthCheckService, ThreadDumpService) {
 
         $scope.refresh = function() {
-            HealthCheckService.check().then(function(data) {
-                $scope.healthCheck = data;
+            HealthCheckService.check().then(function(promise) {
+                $scope.healthCheck = promise.data;
+            },function(promise) {
+                $scope.healthCheck = promise.data;
             });
 
             $scope.metrics = MetricsService.get();
