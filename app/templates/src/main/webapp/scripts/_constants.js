@@ -12,6 +12,7 @@
 // It will be used by the library "http://www.famfamfam.com/lab/icons/flags/"
 // to display the flag
 <%= angularAppName %>.constant('FLAGS', {
+        ca: 'ca',
         da: 'dk',
         en: 'gb',
         es: 'es',

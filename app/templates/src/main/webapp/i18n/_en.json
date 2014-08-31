@@ -22,6 +22,7 @@
             "language": "Language"
         },
         "language": {
+            "ca": "Catalan",
             "da": "Danish",
             "en": "English",
             "fr": "French",
@@ -29,7 +30,6 @@
             "kr": "Korean",
             "pl": "Polish",
             "ru": "Russian",
-            "es": "Spanish",
             "tr": "Turkish"
         },
         "form": {

@@ -367,6 +367,7 @@ JhipsterGenerator.prototype.app = function app() {
     removefile('spring_loaded/springloaded.jar');
     removefolder(javaDir + '/config/reload');
     removefolder(javaDir + '/apidoc');
+    removefile(resourceDir + 'mails/messages/messages_ca.properties');
     removefile(resourceDir + 'mails/messages/messages_da.properties');
     removefile(resourceDir + 'mails/messages/messages_de.properties');
     removefile(resourceDir + 'mails/messages/messages_en.properties');
@@ -421,6 +422,7 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     // i18n resources used by thymeleaf
+    this.copy(resourceDir + '/i18n/messages_ca.properties', resourceDir + 'i18n/messages_ca.properties');
     this.copy(resourceDir + '/i18n/messages_da.properties', resourceDir + 'i18n/messages_da.properties');
     this.copy(resourceDir + '/i18n/messages_de.properties', resourceDir + 'i18n/messages_de.properties');
     this.copy(resourceDir + '/i18n/messages_en.properties', resourceDir + 'i18n/messages_en.properties');
