@@ -30,7 +30,8 @@
             "ru": "Russisk",
             "es": "Spansk",
             "tr": "Tyrkisk",
-            "de": "Tysk"
+            "de": "Tysk",
+            "pt": "Portugisisk"
         },
         "form": {
             "username": "Brugernavn",

@@ -20,5 +20,6 @@
         de: 'de',
         pl: 'pl',
         ru: 'ru',
-        tr: 'tr'
+        tr: 'tr',
+        pt: 'br'
     });

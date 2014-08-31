@@ -30,7 +30,8 @@
             "fr": "Français",
             "pl": "Polonais",
             "ru": "Russe",
-            "tr": "Turc"
+            "tr": "Turc",
+            "pt": "Portugais"
         },
         "form": {
             "username": "Nom d'utilisateur",
