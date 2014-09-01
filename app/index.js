@@ -618,7 +618,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(webappDir + 'htaccess.txt', webappDir + '.htaccess');
 
     // i18n
-	this.template(webappDir + '/i18n/_da.json', webappDir + 'i18n/ca.json');
+    this.template(webappDir + '/i18n/_ca.json', webappDir + 'i18n/ca.json');
     this.template(webappDir + '/i18n/_da.json', webappDir + 'i18n/da.json');
     this.template(webappDir + '/i18n/_de.json', webappDir + 'i18n/de.json');
     this.template(webappDir + '/i18n/_en.json', webappDir + 'i18n/en.json');
