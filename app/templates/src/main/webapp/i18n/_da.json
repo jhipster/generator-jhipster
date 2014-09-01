@@ -21,17 +21,6 @@
             "admin": "Administration",
             "language": "Sprog"
         },
-        "language": {
-            "da": "Dansk",
-            "en": "Engelsk",
-            "fr": "Fransk",
-            "kr": "Koreansk",
-            "pl": "Polsk",
-            "ru": "Russisk",
-            "es": "Spansk",
-            "tr": "Tyrkisk",
-            "de": "Tysk"
-        },
         "form": {
             "username": "Brugernavn",
             "username.placeholder": "Dit brugernavn",

@@ -21,17 +21,6 @@
             "admin": "관리자",
             "language": "언어"
         },
-        "language": {
-            "da": "덴마크어",
-            "en": "영어",
-            "es": "스페인의",
-            "fr": "불어",
-            "de": "독어",
-            "pl": "폴란드어",
-            "ru": "러시아어",
-            "kr": "한국어",
-            "tr": "터키의"
-        },
         "form": {
             "username": "로그인 아이디",
             "username.placeholder": "로그인 아이디",

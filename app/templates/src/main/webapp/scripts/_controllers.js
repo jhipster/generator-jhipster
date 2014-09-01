@@ -8,17 +8,7 @@
 <%= angularAppName %>.controller('AdminController', function ($scope) {
     });
 
-<%= angularAppName %>.controller('LanguageController', function ($scope, $translate, LanguageService, FLAGS) {
-        $scope.getFlagClass = function(language) {
-            var selectedFlag = "";
-            angular.forEach(FLAGS, function(flag, flagLanguage){
-                if (language == flagLanguage) {
-                    selectedFlag = flag;
-                }
-            });
-            return "famfamfam-flag-" + selectedFlag;
-        };
-
+<%= angularAppName %>.controller('LanguageController', function ($scope, $translate, LanguageService) {
         $scope.changeLanguage = function (languageKey) {
             $translate.use(languageKey);
 

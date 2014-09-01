@@ -2,7 +2,7 @@
 
 /* Services */
 
-<%= angularAppName %>.factory('LanguageService', function ($http, $translate) {
+<%= angularAppName %>.factory('LanguageService', function ($http, $translate, LANGUAGES) {
         return {
             getBy: function(language) {
                 if (language == undefined) {
@@ -10,14 +10,7 @@
                 }
 
                 var promise =  $http.get('/i18n/' + language + '.json').then(function(response) {
-
-                    var languages = [];
-
-                    angular.forEach(response.data.global.language, function(value, key) {
-                        languages.push(key);
-                    });
-
-                    return languages;
+                    return LANGUAGES;
                 });
                 return promise;
             }

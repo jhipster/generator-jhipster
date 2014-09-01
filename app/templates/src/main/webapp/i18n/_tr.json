@@ -21,17 +21,6 @@
             "admin": "Yönetim",
             "language": "Dil"
         },
-        "language": {
-            "de": "Almanca",
-            "da": "Danimarkaca",
-            "fr": "Fransızca",
-            "en": "İngilizce",
-            "es": "İspanyolca",
-            "kr": "Korece",
-            "pl": "Lehçe",
-            "ru": "Rusça",
-            "tr": "Türkçe"
-        },
         "form": {
             "username": "Kullanıcı Adı",
             "username.placeholder": "Kullanıcı Adınız",

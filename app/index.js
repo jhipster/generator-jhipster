@@ -353,6 +353,7 @@ JhipsterGenerator.prototype.app = function app() {
     var packageFolder = this.packageName.replace(/\./g, '/');
     var javaDir = 'src/main/java/' + packageFolder + '/';
     var resourceDir = 'src/main/resources/';
+	var webappDir = 'src/main/webapp/';
 
     // Remove old files
     removefile(resourceDir + 'config/liquibase/users_upd_001.csv');
@@ -376,7 +377,9 @@ JhipsterGenerator.prototype.app = function app() {
     removefile(resourceDir + 'mails/messages/messages_pl.properties');
     removefile(resourceDir + 'mails/messages/messages_ru.properties');
     removefile(resourceDir + 'mails/messages/messages_tr.properties');
-	removefile(webappDir + '/protected/transparent.gif');
+	removefile(webappDir + 'protected/transparent.gif');
+	removefile(webappDir + 'styles/famfamfam-flags.css');
+    removefile(webappDir + 'images/famfamfam-flags.png');
 
     // Create application
     this.template('_package.json', 'package.json');
@@ -591,7 +594,6 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     // Create Webapp
-    var webappDir = 'src/main/webapp/';
     this.mkdir(webappDir);
 
     // normal CSS or SCSS?
@@ -674,12 +676,10 @@ JhipsterGenerator.prototype.app = function app() {
 
     // CSS
     this.copy(webappDir + 'styles/documentation.css', webappDir + 'styles/documentation.css');
-    this.copy(webappDir + 'styles/famfamfam-flags.css', webappDir + 'styles/famfamfam-flags.css');
 
     // Images
     this.copy(webappDir + 'images/development_ribbon.png', webappDir + 'images/development_ribbon.png');
     this.copy(webappDir + 'images/hipster.jpg', webappDir + 'images/hipster.jpg');
-    this.copy(webappDir + 'images/famfamfam-flags.png', webappDir + 'images/famfamfam-flags.png');
 
     var indexScripts = [
         'bower_components/modernizr/modernizr.js',

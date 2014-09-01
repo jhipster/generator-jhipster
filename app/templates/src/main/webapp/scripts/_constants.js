@@ -8,17 +8,20 @@
         user: 'ROLE_USER'
     });
 
-// Define for each locale the associated flag
-// It will be used by the library "http://www.famfamfam.com/lab/icons/flags/"
-// to display the flag
-<%= angularAppName %>.constant('FLAGS', {
-        da: 'dk',
-        en: 'gb',
-        es: 'es',
-        fr: 'fr',
-        kr: 'kr',
-        de: 'de',
-        pl: 'pl',
-        ru: 'ru',
-        tr: 'tr'
+/* 
+Languages codes are ISO_639-1 codes, see http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes 
+They are written in English to avoid character encoding issues (not a perfect solution)
+*/
+<%= angularAppName %>.constant('LANGUAGES', {
+        ca: 'Catalan',
+        da: 'Danish',
+        en: 'English',
+        es: 'Spanish',
+        fr: 'French',
+        de: 'German',
+        kr: 'Korean',
+        pl: 'Polish',
+        pt: 'Portuguese',
+        ru: 'Russian',
+        tr: 'Turkish'
     });

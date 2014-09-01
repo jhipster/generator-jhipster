@@ -21,17 +21,6 @@
             "admin": "Administration",
             "language": "Langue"
         },
-        "language": {
-            "de": "Allemand",
-            "en": "Anglais",
-            "kr": "Coréen",
-            "da": "Danois",
-            "es": "Espagnol",
-            "fr": "Français",
-            "pl": "Polonais",
-            "ru": "Russe",
-            "tr": "Turc"
-        },
         "form": {
             "username": "Nom d'utilisateur",
             "username.placeholder": "Votre nom d'utilisateur",
