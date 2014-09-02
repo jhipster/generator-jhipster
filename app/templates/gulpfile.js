@@ -20,7 +20,7 @@ var gulp = require('gulp'),
   clean = require('gulp-clean'),
   replace = require('gulp-replace'),
   browserify = require('gulp-browserify');
-                                                     
+
 var karma = require('gulp-karma')({configFile: 'src/test/javascript/karma.conf.js'});
 
 var yeoman = {
@@ -40,7 +40,7 @@ gulp.task('clean:tmp', function(){
   return gulp.src(yeoman.tmp, {read: false}).
     pipe(clean());
 });
-                  
+
 gulp.task('test', function(){
   karma.once();
 });
