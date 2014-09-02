@@ -305,7 +305,7 @@
 
         $scope.today();
         $scope.previousMonth();
-        
+
         AuditsService.findByDates($scope.fromDate, $scope.toDate).then(function(data){
             $scope.audits = data;
         });
