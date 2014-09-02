@@ -5,15 +5,15 @@ import java.util.List;
 public class UserDTO {
 
     private String login;
-    
+
     private String password;
-    
+
     private String firstName;
-    
+
     private String lastName;
-    
+
     private String email;
-    
+
     private String langKey;
 
     private List<String> roles;
