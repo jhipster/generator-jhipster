@@ -141,7 +141,7 @@
         <liquibase-hibernate.version>3.4</liquibase-hibernate.version>
         <liquibase-slf4j.version>1.2.1</liquibase-slf4j.version><% } %>
         <metrics-spring.version>3.0.1</metrics-spring.version><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
-        <postgresql.version>9.3-1100-jdbc41</postgresql.version><% } %><% if (authenticationType == 'token') { %>
+        <postgresql.version>9.3-1102-jdbc41</postgresql.version><% } %><% if (authenticationType == 'token') { %>
         <spring-security-oauth2.version>2.0.1.RELEASE</spring-security-oauth2.version><% } %>
         <swagger-springmvc.version>0.8.8</swagger-springmvc.version>
         <usertype-core.version>3.2.0.GA</usertype-core.version>
@@ -494,7 +494,7 @@
         <% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %><dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>9.3-1100-jdbc41</version>
+            <version><%= _.unescape('\${postgresql.version}')%></version>
         </dependency>
         <% } %><% if (devDatabaseType == 'h2Memory') { %><dependency>
             <groupId>com.h2database</groupId>
