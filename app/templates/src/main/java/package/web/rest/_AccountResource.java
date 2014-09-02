@@ -146,7 +146,7 @@ public class AccountResource {
             .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else { %>
         User user = userService.getUserWithAuthorities();
         if (user == null) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         List<String> roles = new ArrayList<>();
         for (Authority authority : user.getAuthorities()) {
@@ -232,11 +232,11 @@ public class AccountResource {
         String decodedSeries = URLDecoder.decode(series, "UTF-8");
         User user = userRepository.findOne(SecurityUtils.getCurrentLogin());<% if (javaVersion == '8') { %>
         if (persistentTokenRepository.findByUser(user).stream()
-	            .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))
-	            .count() > 0) {
+                .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))
+                .count() > 0) {
 
             persistentTokenRepository.delete(decodedSeries);
-	    }<% } else { %>
+        }<% } else { %>
         List<PersistentToken> persistentTokens = persistentTokenRepository.findByUser(user);
         for (PersistentToken persistentToken : persistentTokens) {
             if (StringUtils.equals(persistentToken.getSeries(), decodedSeries)) {
