@@ -30,7 +30,7 @@ import java.io.Serializable;
 public class PersistentToken implements Serializable {
 
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("d MMMM yyyy");
-    
+
     private static final int MAX_USER_AGENT_LEN = 255;
 
     @Id
