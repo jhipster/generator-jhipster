@@ -353,7 +353,7 @@ JhipsterGenerator.prototype.app = function app() {
     var packageFolder = this.packageName.replace(/\./g, '/');
     var javaDir = 'src/main/java/' + packageFolder + '/';
     var resourceDir = 'src/main/resources/';
-	var webappDir = 'src/main/webapp/';
+    var webappDir = 'src/main/webapp/';
 
     // Remove old files
     removefile(resourceDir + 'config/liquibase/users_upd_001.csv');
@@ -377,8 +377,8 @@ JhipsterGenerator.prototype.app = function app() {
     removefile(resourceDir + 'mails/messages/messages_pl.properties');
     removefile(resourceDir + 'mails/messages/messages_ru.properties');
     removefile(resourceDir + 'mails/messages/messages_tr.properties');
-	removefile(webappDir + 'protected/transparent.gif');
-	removefile(webappDir + 'styles/famfamfam-flags.css');
+    removefile(webappDir + 'protected/transparent.gif');
+    removefile(webappDir + 'styles/famfamfam-flags.css');
     removefile(webappDir + 'images/famfamfam-flags.png');
 
     // Create application
@@ -405,10 +405,10 @@ JhipsterGenerator.prototype.app = function app() {
             this.template('_yeoman.gradle', 'yeoman.gradle');
             this.template('_profile_dev.gradle', 'profile_dev.gradle');
             this.template('_profile_prod.gradle', 'profile_prod.gradle');
-			this.copy('gradlew', 'gradlew');
-			this.copy('gradlew.bat', 'gradlew.bat');
-			this.copy('gradle/wrapper/gradle-wrapper.jar', 'gradle/wrapper/gradle-wrapper.jar');
-			this.copy('gradle/wrapper/gradle-wrapper.properties', 'gradle/wrapper/gradle-wrapper.properties');
+            this.copy('gradlew', 'gradlew');
+            this.copy('gradlew.bat', 'gradlew.bat');
+            this.copy('gradle/wrapper/gradle-wrapper.jar', 'gradle/wrapper/gradle-wrapper.jar');
+            this.copy('gradle/wrapper/gradle-wrapper.properties', 'gradle/wrapper/gradle-wrapper.properties');
             break;
         case 'maven':
         default :
