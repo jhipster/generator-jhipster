@@ -38,7 +38,7 @@ public class HazelcastCacheRegionFactory implements RegionFactory {
 
     public final QueryResultsRegion buildQueryResultsRegion(final String regionName, final Properties properties)
             throws CacheException {
-                
+
         return new HazelcastQueryResultsRegion(hazelcastInstance, regionName, properties);
     }
 

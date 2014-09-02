@@ -26,10 +26,10 @@ public class LogsResource {
     @Timed
     public List<LoggerDTO> getList() {
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();<% if (javaVersion == '8') { %>
-	    return context.getLoggerList()
-	        .stream()
-	        .map(logger -> new LoggerDTO(logger))
-	        .collect(Collectors.toList());
+        return context.getLoggerList()
+            .stream()
+            .map(logger -> new LoggerDTO(logger))
+            .collect(Collectors.toList());
         <% } else { %>
         List<LoggerDTO> loggers = new ArrayList<>();
         for (ch.qos.logback.classic.Logger logger : context.getLoggerList()) {

@@ -79,7 +79,7 @@ public class AngularCookieLocaleResolver extends CookieLocaleResolver {
             }
             request.setAttribute(LOCALE_REQUEST_ATTRIBUTE_NAME,
                     (locale != null ? locale: determineDefaultLocale(request)));
-            
+
             request.setAttribute(TIME_ZONE_REQUEST_ATTRIBUTE_NAME,
                     (timeZone != null ? timeZone : determineDefaultTimeZone(request)));
         }

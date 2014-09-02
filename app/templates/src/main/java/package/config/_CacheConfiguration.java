@@ -34,7 +34,7 @@ import java.util.SortedSet;
 @AutoConfigureAfter(value = {MetricsConfiguration.class, DatabaseConfiguration.class})
 public class CacheConfiguration {
 
-    private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);<% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>  
+    private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);<% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
 
     private static HazelcastInstance hazelcastInstance;<% } if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
 
@@ -70,13 +70,13 @@ public class CacheConfiguration {
         log.debug("Registring Ehcache Metrics gauges");<% if (databaseType == 'sql') { %>
         Set<EntityType<?>> entities = entityManager.getMetamodel().getEntities();
         for (EntityType<?> entity : entities) {
-            
+
             String name = entity.getName();
             if (name == null || entity.getJavaType() != null) {
                 name = entity.getJavaType().getName();
             }
             Assert.notNull(name, "entity cannot exist without a identifier");
-            
+
             net.sf.ehcache.Cache cache = cacheManager.getCache(name);
             if (cache != null) {
                 cache.getCacheConfiguration().setTimeToLiveSeconds(env.getProperty("cache.timeToLiveSeconds", Long.class, 3600L));
@@ -172,7 +172,7 @@ public class CacheConfiguration {
         mapConfig.setTimeToLiveSeconds(env.getProperty("cache.timeToLiveSeconds", Integer.class, 3600));
         return mapConfig;
     }<% } %><% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
-    
+
     /**
     * @return the unique instance.
     */
