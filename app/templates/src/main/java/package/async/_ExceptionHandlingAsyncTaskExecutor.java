@@ -54,13 +54,13 @@ public class ExceptionHandlingAsyncTaskExecutor implements AsyncTaskExecutor,
     }
 
     private Runnable createWrappedRunnable(final Runnable task) {<% if (javaVersion == '8') { %>
-		return () -> {
-		    try {
-		        task.run();
-		    } catch (Exception e) {
-		        handle(e);
-		    }
-		};<% } else { %>
+        return () -> {
+            try {
+                task.run();
+            } catch (Exception e) {
+                handle(e);
+            }
+        };<% } else { %>
         return new Runnable() {
 
             @Override
