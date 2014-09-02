@@ -31,7 +31,7 @@ describe('Services Tests ', function () {
             httpBackend.expectGET('app/logout').respond(returnData);<% if (websocket == 'atmosphere') { %>
             // WebSocket tries to authenticate after logout
             httpBackend.expectGET('protected/authentication_check.gif').respond(401, '');
-            httpBackend.expectGET('views/main.html').respond(401, '');<% } %>        
+            httpBackend.expectGET('views/main.html').respond(401, '');<% } %>
 
             //Set spy
             spyOn(authServiceSpied, 'loginCancelled');
