@@ -11,7 +11,7 @@ var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
 
 module.exports = function (grunt) {
   require('load-grunt-tasks')(grunt);
-  require('time-grunt')(grunt); 
+  require('time-grunt')(grunt);
 
   grunt.initConfig({
     yeoman: {
