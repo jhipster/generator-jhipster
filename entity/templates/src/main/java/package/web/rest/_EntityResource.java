@@ -59,7 +59,7 @@ public class <%= entityClass %>Resource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<<%= entityClass %>> get(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> id<% if (javaVersion == '7') { %>, HttpServletResponse response<% } %>) {
-        log.debug("REST request to get <%= entityClass %> : {}", id);<% if (javaVersion == '8') { %>		
+        log.debug("REST request to get <%= entityClass %> : {}", id);<% if (javaVersion == '8') { %>
         return Optional.ofNullable(<%= entityInstance %>Repository.findOne(id))
             .map(<%= entityInstance %> -> new ResponseEntity<>(
                 <%= entityInstance %>,
