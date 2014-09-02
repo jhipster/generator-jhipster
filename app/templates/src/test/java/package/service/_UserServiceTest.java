@@ -47,8 +47,8 @@ public class UserServiceTest {
 
     @Test
     public void testRemoveOldPersistentTokens() {
-    	User admin = userRepository.findOne("admin");
-    	int existingCount = persistentTokenRepository.findByUser(admin).size();
+        User admin = userRepository.findOne("admin");
+        int existingCount = persistentTokenRepository.findByUser(admin).size();
         generateUserToken(admin, "1111-1111", new LocalDate());
         LocalDate now = new LocalDate();
         generateUserToken(admin, "2222-2222", now.minusDays(32));
@@ -56,7 +56,7 @@ public class UserServiceTest {
         userService.removeOldPersistentTokens();
         assertThat(persistentTokenRepository.findByUser(admin)).hasSize(existingCount + 1);
     }
-	
+
     @Test
     public void testFindNotActivatedUsersByCreationDateBefore() {
         userService.removeNotActivatedUsers();
