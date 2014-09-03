@@ -8,3 +8,5 @@ Example:
         deploy/heroku/Procfile
 		deploy/heroku/.slugignore
 		deploy/heroku/system.properties
+		
+	And it will copy the "production" code to deploy/heroku

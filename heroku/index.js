@@ -164,7 +164,7 @@ HerokuGenerator.prototype.gitForcePush = function gitForcePush() {
 
   this.log(chalk.bold("\nUploading your initial application code.\n This may take " + chalk.cyan('several minutes') + " depending on your connection speed..."));
 
-  var child = exec('git push -f heroku master', { cwd: 'deploy/heroku' }, function (err, stdout, stderr) {
+  var child = exec('git push -f heroku master', { cwd: 'deploy/heroku', maxBuffer: 500*1024 }, function (err, stdout, stderr) {
 	  console.log(stdout);
     if (err) {
       console.log(chalk.red(err));
