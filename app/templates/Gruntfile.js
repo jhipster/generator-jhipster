@@ -314,7 +314,7 @@ module.exports = function (grunt) {
         dest: '.tmp/styles/',
         src: '{,*/}*.css'
       },
-      deployHeroku: {
+      generateHerokuDirectory: {
 		  expand: true,
           dest: 'deploy/heroku',
           src: [
@@ -433,6 +433,19 @@ module.exports = function (grunt) {
     'rev',
     'usemin',
     'htmlmin'
+  ]);
+
+  grunt.registerTask('buildHeroku', [
+    'test',
+    'build',
+    'copy:generateHerokuDirectory'
+  ]);
+  
+  grunt.registerTask('deployHeroku', [
+    'test',
+    'build',
+    'copy:generateHerokuDirectory',
+	'buildcontrol:heroku'
   ]);
 
   grunt.registerTask('default', [

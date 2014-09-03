@@ -99,19 +99,6 @@ HerokuGenerator.prototype.herokuCreate = function herokuCreate() {
   }.bind(this));
 };
 
-HerokuGenerator.prototype.productionBuild = function productionBuild() {
-  if(this.abort) return;
-  var done = this.async();
-
-  this.log(chalk.bold('\nBuilding in production mode, please wait...'));
-  var child = exec('grunt build', function (err, stdout) {
-    done();
-  }.bind(this));
-  child.stdout.on('data', function(data) {
-    console.log(data.toString());
-  });
-};
-
 HerokuGenerator.prototype.copyHerokuFiles = function copyHerokuFiles() {
   if(this.abort) return;
   var done = this.async();
@@ -120,16 +107,18 @@ HerokuGenerator.prototype.copyHerokuFiles = function copyHerokuFiles() {
   this.copy('slugignore', 'deploy/heroku/.slugignore');
   this.copy('Procfile', 'deploy/heroku/Procfile');
   this.copy('system.properties', 'deploy/heroku/system.properties');
+  this.copy('src/main/resources/config/application-heroku.yml', 'src/main/resources/config/application-heroku.yml')
   this.conflicter.resolve(function (err) {
     done();
   });
 };
 
-HerokuGenerator.prototype.deployHerokuDirectory = function deployHerokuDirectory() {
+HerokuGenerator.prototype.productionBuild = function productionBuild() {
   if(this.abort) return;
   var done = this.async();
-  this.log(chalk.bold('\nCopying build to the deploy/heroku folder'));
-  var child = exec('grunt copy:deployHeroku', function (err, stdout) {
+
+  this.log(chalk.bold('\nBuilding in production mode, and deploying...'));
+  var child = exec('grunt buildHeroku', function (err, stdout) {
     done();
   }.bind(this));
   child.stdout.on('data', function(data) {
@@ -170,9 +159,7 @@ HerokuGenerator.prototype.gitForcePush = function gitForcePush() {
       console.log(chalk.red(err));
     } else {
       console.log(chalk.green('\nYour app should now be live. To view it run\n\t' + chalk.bold('cd deploy/heroku && heroku open')));
-
-      console.log(chalk.yellow('After application modification run\n\t' + chalk.bold('grunt build') +
-      '\nThen deploy with\n\t' + chalk.bold('grunt buildcontrol:heroku')));
+      console.log(chalk.yellow('After application modification, re-deploy it with\n\t' + chalk.bold('grunt deployHeroku')));
     }
     done();
   }.bind(this));
@@ -181,7 +168,7 @@ HerokuGenerator.prototype.gitForcePush = function gitForcePush() {
     console.log(data.toString());
   });
   child.stderr.on('data', function(data) {
-    console.log(chalk.blue(data.toString()));
+    console.log(chalk.white(data.toString()));
   });
 };
 

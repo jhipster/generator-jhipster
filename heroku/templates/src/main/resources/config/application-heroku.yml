@@ -1,0 +1,56 @@
+spring:
+    profiles: heroku
+
+    datasource:
+        dataSourceClassName: org.postgresql.ds.PGSimpleDataSource
+        url: 
+        databaseName:
+        serverName:
+        username: 
+        password: 
+
+    jpa:
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        database: POSTGRESQL
+        openInView: false
+        show_sql: true
+        generate-ddl: false
+        hibernate:
+            ddl-auto: none
+            naming-strategy: org.hibernate.cfg.EJB3NamingStrategy
+        properties:
+            hibernate.cache.use_second_level_cache: false
+            hibernate.cache.use_query_cache: false
+            hibernate.generate_statistics: false
+
+    mail:
+        baseUrl: http://localhost:8080
+
+    thymeleaf:
+        mode: XHTML
+        cache: true
+        viewNames: error
+
+metrics:
+    jmx.enabled: false
+    graphite:
+        enabled: false
+        host: localhost
+        port: 2003
+
+
+
+# You can add as many as folders to watch
+# You just need to add a dash + the directory to watch
+hotReload:
+    enabled: false
+    package:
+      project: com.mycompany.myapp
+      domain: com.mycompany.myapp.domain
+      restdto: com.mycompany.myapp.web.rest.dto
+    liquibase:
+      defaultCatalogName: 
+      defaultSchema: public
+      excludeTables: T_AUTHORITY,T_PERSISTENT_AUDIT_EVENT,T_PERSISTENT_AUDIT_EVENT_DATA,T_PERSISTENT_TOKEN,T_USER,T_USER_AUTHORITY
+    watchdir:
+      - target/classes
