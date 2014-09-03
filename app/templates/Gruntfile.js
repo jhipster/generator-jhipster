@@ -313,6 +313,14 @@ module.exports = function (grunt) {
         cwd: 'src/main/webapp/styles',
         dest: '.tmp/styles/',
         src: '{,*/}*.css'
+      },
+      deployHeroku: {
+		  expand: true,
+          dest: 'deploy/heroku',
+          src: [
+		    'pom.xml',
+            'src/main/**'
+        ]
       }
     },
     concurrent: {
@@ -370,7 +378,22 @@ module.exports = function (grunt) {
           ]
         }
       }
-    }
+    },
+    buildcontrol: {
+      options: {
+        commit: true,
+        push: true,
+        connectCommits: false,
+        message: 'Built %sourceName% from commit %sourceCommit% on branch %sourceBranch%'
+      },
+      heroku: {
+        options: {
+          dir: 'deploy/heroku',
+          remote: 'heroku',
+          branch: 'master'
+        }
+      }
+    },
   });
 
   grunt.registerTask('server', function (target) {

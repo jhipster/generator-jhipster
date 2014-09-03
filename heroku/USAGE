@@ -1,0 +1,10 @@
+Description:
+    Initalizes a heroku app and generates a `deploy/heroku` folder which is ready to push to heroku.
+
+Example:
+    yo jhipster:heroku
+
+    This will create:
+        deploy/heroku/Procfile
+		deploy/heroku/.slugignore
+		deploy/heroku/system.properties
