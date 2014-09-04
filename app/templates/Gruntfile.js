@@ -315,13 +315,13 @@ module.exports = function (grunt) {
         src: '{,*/}*.css'
       },
       generateHerokuDirectory: {
-		  expand: true,
+          expand: true,
           dest: 'deploy/heroku',
           src: [
-		    'pom.xml',
+            'pom.xml',
             'src/main/**'
         ]
-      }
+      },
     },
     concurrent: {
       server: [<% if (useCompass) { %>
@@ -438,14 +438,14 @@ module.exports = function (grunt) {
   grunt.registerTask('buildHeroku', [
     'test',
     'build',
-    'copy:generateHerokuDirectory'
+    'copy:generateHerokuDirectory',
   ]);
-  
+
   grunt.registerTask('deployHeroku', [
     'test',
     'build',
     'copy:generateHerokuDirectory',
-	'buildcontrol:heroku'
+    'buildcontrol:heroku'
   ]);
 
   grunt.registerTask('default', [

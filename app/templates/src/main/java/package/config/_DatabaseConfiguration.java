@@ -7,7 +7,8 @@ import liquibase.integration.spring.SpringLiquibase;<% } %><% if (databaseType =
 import com.mongodb.Mongo;
 import org.mongeez.Mongeez;<% } %>
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;<% if (databaseType == 'nosql') { %>
+import org.slf4j.LoggerFactory;<% if (databaseType == 'sql') { %>
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;<% } %><% if (databaseType == 'nosql') { %>
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;<% } %>
 import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.ApplicationContextException;
@@ -59,6 +60,7 @@ public class DatabaseConfiguration implements EnvironmentAware {
     }<% if (databaseType == 'sql') { %>
 
     @Bean
+    @ConditionalOnMissingClass(name = "<%=packageName%>.config.HerokuDatabaseConfiguration.class")
     public DataSource dataSource() {
         log.debug("Configuring Datasource");
         if (propertyResolver.getProperty("url") == null && propertyResolver.getProperty("databaseName") == null) {
@@ -97,10 +99,10 @@ public class DatabaseConfiguration implements EnvironmentAware {
     }
 
     @Bean
-    public SpringLiquibase liquibase() {
+    public SpringLiquibase liquibase(DataSource dataSource) {
         log.debug("Configuring Liquibase");
         SpringLiquibase liquibase = new SpringLiquibase();
-        liquibase.setDataSource(dataSource());
+        liquibase.setDataSource(dataSource);
         liquibase.setChangeLog("classpath:config/liquibase/master.xml");
         liquibase.setContexts("development, production");
         return liquibase;

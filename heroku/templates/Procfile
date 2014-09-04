@@ -1,1 +1,1 @@
-web:    java -Xmx384m -Xss512k -XX:+UseCompressedOops -jar target/*.war --spring.profiles.active=heroku --server.port=$PORT  --spring.datasource.url=$DATABASE_URL?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory
+web:    java -Xmx384m -Xss512k -XX:+UseCompressedOops -jar target/*.war --spring.profiles.active=prod --server.port=$PORT  --spring.datasource.heroku-url=$DATABASE_URL
