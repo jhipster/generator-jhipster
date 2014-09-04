@@ -31,7 +31,7 @@
         </createTable>
 
         <createTable tableName="T_AUTHORITY">
-            <column name="name" type="varchar(255)">
+            <column name="name" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
         </createTable>
@@ -40,7 +40,7 @@
             <column name="login" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="name" type="varchar(255)">
+            <column name="name" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -66,7 +66,7 @@
                      tableName="T_USER_AUTHORITY"
                      unique="true">
             <column name="login" type="varchar(50)"/>
-            <column name="name" type="varchar(255)"/>
+            <column name="name" type="varchar(50)"/>
         </createIndex>
 
         <addForeignKeyConstraint baseColumnNames="name"
