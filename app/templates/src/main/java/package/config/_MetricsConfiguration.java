@@ -66,7 +66,7 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
 
     @PostConstruct
     public void init() {
-        log.debug("Registring JVM gauges");
+        log.debug("Registering JVM gauges");
         METRIC_REGISTRY.register(PROP_METRIC_REG_JVM_MEMORY, new MemoryUsageGaugeSet());
         METRIC_REGISTRY.register(PROP_METRIC_REG_JVM_GARBAGE, new GarbageCollectorMetricSet());
         METRIC_REGISTRY.register(PROP_METRIC_REG_JVM_THREADS, new ThreadStatesGaugeSet());

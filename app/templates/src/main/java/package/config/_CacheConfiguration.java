@@ -67,7 +67,7 @@ public class CacheConfiguration {
         log.debug("Starting Ehcache");
         cacheManager = net.sf.ehcache.CacheManager.create();
         cacheManager.getConfiguration().setMaxBytesLocalHeap(env.getProperty("cache.ehcache.maxBytesLocalHeap", String.class, "16M"));
-        log.debug("Registring Ehcache Metrics gauges");<% if (databaseType == 'sql') { %>
+        log.debug("Registering Ehcache Metrics gauges");<% if (databaseType == 'sql') { %>
         Set<EntityType<?>> entities = entityManager.getMetamodel().getEntities();
         for (EntityType<?> entity : entities) {
 
