@@ -114,7 +114,7 @@
             </column>
             <column name="principal" type="varchar(50)"/>
             <column name="event_date" type="timestamp"/>
-            <column name="event_type" type="varchar(50)"/>
+            <column name="event_type" type="varchar(255)"/>
         </createTable>
 
         <createTable tableName="T_PERSISTENT_AUDIT_EVENT_DATA">
