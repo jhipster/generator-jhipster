@@ -45,7 +45,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private String lastName;
 
     @Email
-    @Size(min = 0, max = 100)
+    @Size(min = 0, max = 100)<% if (databaseType == 'sql') { %>
+    @Column(length = 100)<% } %>
     private String email;
 
     @NotNull
