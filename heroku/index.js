@@ -107,7 +107,7 @@ HerokuGenerator.prototype.copyHerokuFiles = function copyHerokuFiles() {
   this.copy('slugignore', 'deploy/heroku/.slugignore');
   this.copy('Procfile', 'deploy/heroku/Procfile');
   this.copy('system.properties', 'deploy/heroku/system.properties');
-  this.template('src/main/java/package/config/_HerokuDatabaseConfiguration.java', 'deploy/heroku/src/main/java/' + this.packageFolder + '/config/HerokuDatabaseConfiguration.java')
+  this.template('src/main/java/package/config/_HerokuDatabaseConfiguration.java', 'deploy/heroku/src/main/java/' + this.packageFolder + '/config/HerokuDatabaseConfiguration.java');
   this.conflicter.resolve(function (err) {
     done();
   });
