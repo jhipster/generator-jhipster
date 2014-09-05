@@ -41,7 +41,7 @@ public abstract class AbstractAuditingEntity {
     private DateTime createdDate = DateTime.now();
 
     @LastModifiedBy<% if (databaseType == 'sql') { %>
-    @Column(name = "last_modified_by")<% } %><% if (databaseType == 'nosql') { %>
+    @Column(name = "last_modified_by", length = 50)<% } %><% if (databaseType == 'nosql') { %>
     @Field("last_modified_by")<% } %>
     private String lastModifiedBy;
 
