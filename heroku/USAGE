@@ -1,5 +1,5 @@
 Description:
-    Initalizes a heroku app and generates a `deploy/heroku` folder which is ready to push to heroku.
+    Initalizes a Heroku app and generates a `deploy/heroku` folder which is ready to push to Heroku.
 
 Example:
     yo jhipster:heroku
