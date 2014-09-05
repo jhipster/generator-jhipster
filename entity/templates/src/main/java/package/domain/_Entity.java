@@ -41,7 +41,7 @@ public class <%= entityClass %> implements Serializable {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")<% } %>
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = CustomLocalDateSerializer.class)<% if (databaseType == 'sql') { %>
-    @Column(name = "sample_date_attribute")<% } %><% if (databaseType == 'nosql') { %>
+    @Column(name = "sample_date_attribute", nullable = false)<% } %><% if (databaseType == 'nosql') { %>
     @Field("sample_date_attribute")<% } %>
     private LocalDate sampleDateAttribute;
 
