@@ -38,7 +38,7 @@ public class PersistentToken implements Serializable {
 
     @JsonIgnore
     @NotNull<% if (databaseType == 'sql') { %>
-    @Column(name = "token_value")<% } %>
+    @Column(name = "token_value", nullable = false)<% } %>
     private String tokenValue;
 
     @JsonIgnore<% if (databaseType == 'sql') { %>
