@@ -17,13 +17,15 @@
             <column name="first_name" type="varchar(50)"/>
             <column name="last_name" type="varchar(50)"/>
             <column name="email" type="varchar(100)"/>
-            <column name="activated" type="boolean" defaultValueBoolean="false" valueBoolean="false"/>
+            <column name="activated" type="boolean" defaultValueBoolean="false" valueBoolean="false">
+                <constraints nullable="false" />
+            </column>
             <column name="lang_key" type="varchar(5)"/>
             <column name="activation_key" type="varchar(20)"/>
             <column name="created_by" type="varchar(50)" defaultValue="system">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_date" type="timestamp" defaultValueDate="<%= _.unescape('\${now}')%>">
+            <column name="created_date" type="timestamp" defaultValueDate="<%= _.unescape('\$\{now}')%>">
                 <constraints nullable="false"/>
             </column>
             <column name="last_modified_by" type="varchar(50)"/>
@@ -31,7 +33,7 @@
         </createTable>
 
         <createTable tableName="T_AUTHORITY">
-            <column name="name" type="varchar(255)">
+            <column name="name" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
         </createTable>
@@ -40,7 +42,7 @@
             <column name="login" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="name" type="varchar(255)">
+            <column name="name" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -51,7 +53,9 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="user_login" type="varchar(50)"/>
-            <column name="token_value" type="varchar(255)"/>
+            <column name="token_value" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
             <column name="token_date" type="date"/>
             <column name="ip_address" type="varchar(39)"/>
             <column name="user_agent" type="varchar(255)"/>
@@ -66,7 +70,7 @@
                      tableName="T_USER_AUTHORITY"
                      unique="true">
             <column name="login" type="varchar(50)"/>
-            <column name="name" type="varchar(255)"/>
+            <column name="name" type="varchar(50)"/>
         </createIndex>
 
         <addForeignKeyConstraint baseColumnNames="name"
@@ -110,7 +114,7 @@
             </column>
             <column name="principal" type="varchar(50)"/>
             <column name="event_date" type="timestamp"/>
-            <column name="event_type" type="varchar(50)"/>
+            <column name="event_type" type="varchar(255)"/>
         </createTable>
 
         <createTable tableName="T_PERSISTENT_AUDIT_EVENT_DATA">
