@@ -322,6 +322,14 @@ module.exports = function (grunt) {
             'src/main/**'
         ]
       },
+      generateOpenshiftDirectory: {
+          expand: true,
+          dest: 'deploy/openshift',
+          src: [
+            'pom.xml',
+            'src/main/**'
+        ]
+      },
     },
     concurrent: {
       server: [<% if (useCompass) { %>
@@ -392,6 +400,13 @@ module.exports = function (grunt) {
           remote: 'heroku',
           branch: 'master'
         }
+      },
+      openshift: {
+        options: {
+          dir: 'deploy/openshift',
+          remote: 'openshift',
+          branch: 'master'
+        }
       }
     },
   });
@@ -446,6 +461,19 @@ module.exports = function (grunt) {
     'build',
     'copy:generateHerokuDirectory',
     'buildcontrol:heroku'
+  ]);
+
+  grunt.registerTask('buildOpenshift', [
+    'test',
+    'build',
+    'copy:generateOpenshiftDirectory',
+  ]);
+
+  grunt.registerTask('deployOpenshift', [
+    'test',
+    'build',
+    'copy:generateOpenshiftDirectory',
+    'buildcontrol:openshift'
   ]);
 
   grunt.registerTask('default', [

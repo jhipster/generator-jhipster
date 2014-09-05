@@ -1,0 +1,14 @@
+#! /bin/bash
+
+set -x
+
+jar=$(ls ${OPENSHIFT_REPO_DIR}/target/*.war | head -n1)
+
+nohup java -server \
+     --spring.profiles.active=prod \
+     --server.port=${OPENSHIFT_DIY_PORT} \
+     --spring.datasource.url=$DATABASE_URL jdbc:mysql://${OPENSHIFT_MYSQL_DB_HOST}:${OPENSHIFT_MYSQL_DB_PORT}/${OPENSHIFT_APP_NAME} \
+     --spring.datasource.username=${OPENSHIFT_MYSQL_DB_USERNAME} \
+     --spring.datasource.password=${OPENSHIFT_MYSQL_DB_PASSWORD} \
+     -jar ${jar} &
+

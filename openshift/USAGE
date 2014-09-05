@@ -1,0 +1,8 @@
+Description:
+    Initalizes a OpenShift app and generates a `deploy/openshift` folder which is ready to push to OpenShift.
+
+Example:
+    yo jhipster:openshift
+
+    This will create:
+        a deploy/openshift folder and initialize an OpenShift app
