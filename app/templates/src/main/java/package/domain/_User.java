@@ -25,7 +25,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @NotNull
     @Size(min = 0, max = 50)
-    @Id
+    @Id<% if (databaseType == 'sql') { %>
+    @Column(length = 50)<% } %>
     private String login;
 
     @JsonIgnore
