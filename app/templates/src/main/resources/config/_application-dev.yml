@@ -33,7 +33,8 @@ spring:
         properties:
             hibernate.cache.use_second_level_cache: <% if (hibernateCache == 'ehcache' || hibernateCache == 'hazelcast') { %>true<% } else { %>false<% } %>
             hibernate.cache.use_query_cache: false
-            hibernate.generate_statistics: true<% if (hibernateCache == 'ehcache') { %>
+            hibernate.generate_statistics: true
+            hibernate.hbm2ddl.auto: validate<% if (hibernateCache == 'ehcache') { %>
             hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory<% } else if (hibernateCache == 'hazelcast') { %>
             hibernate.cache.region.factory_class: <%=packageName%>.config.hazelcast.HazelcastCacheRegionFactory<% } %><% if (hibernateCache == 'hazelcast') { %>
             hibernate.cache.use_minimal_puts: true
