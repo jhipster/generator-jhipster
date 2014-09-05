@@ -47,7 +47,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private String email;
 
     @NotNull
-    private Boolean activated = false;
+    private boolean activated = false;
 
     @Size(min = 2, max = 5)<% if (databaseType == 'sql') { %>
     @Column(name = "lang_key")<% } %><% if (databaseType == 'nosql') { %>
@@ -113,11 +113,11 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.email = email;
     }
 
-    public Boolean getActivated() {
+    public boolean getActivated() {
         return activated;
     }
 
-    public void setActivated(Boolean activated) {
+    public void setActivated(boolean activated) {
         this.activated = activated;
     }
 
