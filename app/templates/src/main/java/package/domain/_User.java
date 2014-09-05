@@ -113,11 +113,11 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.email = email;
     }
 
-    public Boolean getActivated() {
+    public boolean getActivated() {
         return activated;
     }
 
-    public void setActivated(Boolean activated) {
+    public void setActivated(boolean activated) {
         this.activated = activated;
     }
 
