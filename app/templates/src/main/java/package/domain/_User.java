@@ -40,7 +40,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private String firstName;
 
     @Size(min = 0, max = 50)<% if (databaseType == 'sql') { %>
-    @Column(name = "last_name")<% } %><% if (databaseType == 'nosql') { %>
+    @Column(name = "last_name", length = 50)<% } %><% if (databaseType == 'nosql') { %>
     @Field("last_name")<% } %>
     private String lastName;
 
