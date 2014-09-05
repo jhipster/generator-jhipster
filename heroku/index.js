@@ -159,7 +159,8 @@ HerokuGenerator.prototype.gitForcePush = function gitForcePush() {
       console.log(chalk.red(err));
     } else {
       console.log(chalk.green('\nYour app should now be live. To view it run\n\t' + chalk.bold('cd deploy/heroku && heroku open')));
-      console.log(chalk.yellow('After application modification, re-deploy it with\n\t' + chalk.bold('grunt deployHeroku')));
+      console.log(chalk.yellow('After application modification, re-deploy it with\n\t' + chalk.bold('grunt deployHeroku') + 
+        ' and then do a \n\t' + chalk.bold('git push') + ' on your Heroku repository.'));
     }
     done();
   }.bind(this));
