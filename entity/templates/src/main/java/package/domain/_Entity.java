@@ -33,7 +33,7 @@ public class <%= entityClass %> implements Serializable {
     private String id;<% } %>
 
     @Size(min = 1, max = 50)<% if (databaseType == 'sql') { %>
-    @Column(name = "sample_text_attribute")<% } %><% if (databaseType == 'nosql') { %>
+    @Column(name = "sample_text_attribute", length = 50)<% } %><% if (databaseType == 'nosql') { %>
     @Field("sample_text_attribute")<% } %>
     private String sampleTextAttribute;
 
