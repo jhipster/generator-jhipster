@@ -36,7 +36,7 @@ public abstract class AbstractAuditingEntity {
     @CreatedDate<% if (databaseType == 'sql') { %>
     @NotNull
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @Column(name = "created_date")<% } %><% if (databaseType == 'nosql') { %>
+    @Column(name = "created_date", nullable = false)<% } %><% if (databaseType == 'nosql') { %>
     @Field("created_date")<% } %>
     private DateTime createdDate = DateTime.now();
 
