@@ -29,7 +29,8 @@ public class PersistentAuditEvent  {
     @Field("event_id")<% } %>
     private Long id;
 
-    @NotNull
+    @NotNull<% if (databaseType == 'sql') { %>
+    @Column(nullable = false)<% } %>
     private String principal;
 
     <% if (databaseType == 'sql') { %>@Column(name = "event_date")
