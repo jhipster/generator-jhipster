@@ -2,13 +2,13 @@
 var util = require('util'),
     path = require('path'),
     yeoman = require('yeoman-generator'),
-	exec = require('child_process').exec,
+    exec = require('child_process').exec,
     chalk = require('chalk'),
     _s = require('underscore.string'),
     scriptBase = require('../script-base');
 
 var HerokuGenerator = module.exports = function HerokuGenerator(args, options, config) {
-	yeoman.generators.Base.apply(this, arguments);
+    yeoman.generators.Base.apply(this, arguments);
     console.log(chalk.bold('Heroku configuration is starting'));
     this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
     this.baseName = this.config.get('baseName');
@@ -154,7 +154,7 @@ HerokuGenerator.prototype.gitForcePush = function gitForcePush() {
   this.log(chalk.bold("\nUploading your initial application code.\n This may take " + chalk.cyan('several minutes') + " depending on your connection speed..."));
 
   var child = exec('git push -f heroku master', { cwd: 'deploy/heroku', maxBuffer: 500*1024 }, function (err, stdout, stderr) {
-	  console.log(stdout);
+    console.log(stdout);
     if (err) {
       console.log(chalk.red(err));
     } else {
