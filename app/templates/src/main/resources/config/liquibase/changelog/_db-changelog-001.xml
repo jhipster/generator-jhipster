@@ -53,7 +53,9 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="user_login" type="varchar(50)"/>
-            <column name="token_value" type="varchar(255)"/>
+            <column name="token_value" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
             <column name="token_date" type="date"/>
             <column name="ip_address" type="varchar(39)"/>
             <column name="user_agent" type="varchar(255)"/>
