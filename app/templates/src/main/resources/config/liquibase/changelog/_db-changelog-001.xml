@@ -123,7 +123,7 @@
             <column name="event_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="name" type="varchar(50)">
+            <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="value" type="varchar(255)"/>
