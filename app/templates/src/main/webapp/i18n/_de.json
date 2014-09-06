@@ -275,8 +275,8 @@
         "title": "Audits",
         "filter": {
             "title": "Nach Datum filtern",
-            "from": "aus",
-            "to": "zu",
+            "from": "von",
+            "to": "bis",
             "button": {
                 "weeks": "Wochen",
                 "today": "heute",
