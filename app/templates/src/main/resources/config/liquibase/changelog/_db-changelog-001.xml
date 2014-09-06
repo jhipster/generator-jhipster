@@ -114,7 +114,7 @@
             </column>
             <column name="principal" type="varchar(255)">
                 <constraints nullable="false" />
-            </column
+            </column>
             <column name="event_date" type="timestamp"/>
             <column name="event_type" type="varchar(255)"/>
         </createTable>
