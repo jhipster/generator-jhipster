@@ -59,7 +59,7 @@ public class DatabaseConfiguration implements EnvironmentAware {
         this.propertyResolver = new RelaxedPropertyResolver(environment, "spring.data.mongodb.");<% } %>
     }<% if (databaseType == 'sql') { %>
 
-    @Bean
+    @Bean(destroyMethod = "shutdown")
     @ConditionalOnMissingClass(name = "<%=packageName%>.config.HerokuDatabaseConfiguration.class")
     public DataSource dataSource() {
         log.debug("Configuring Datasource");
