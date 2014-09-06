@@ -247,7 +247,7 @@ public class AccountResource {
 
     private String createHtmlContentFromTemplate(final User user, final Locale locale, final HttpServletRequest request,
                                                  final HttpServletResponse response) {
-        Map<String, Object> variables = new HashMap<String, Object>();
+        Map<String, Object> variables = new HashMap<>();
         variables.put("user", user);
         variables.put("baseUrl", request.getScheme() + "://" +   // "http" + "://
                                  request.getServerName() +       // "myhost"
