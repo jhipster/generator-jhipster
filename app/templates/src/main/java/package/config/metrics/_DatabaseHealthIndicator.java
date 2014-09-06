@@ -1,15 +1,15 @@
 package <%=packageName%>.config.metrics;
 
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
-import org.springframework.boot.actuate.health.Health;<% if (databaseType == 'sql') { %>
+import org.springframework.boot.actuate.health.Health;<% if (databaseType == 'sql') { %><% if (javaVersion == '7') { %>
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.ConnectionCallback;
+import org.springframework.jdbc.core.ConnectionCallback;<% } %>
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.Connection;<% if (javaVersion == '7') { %>
+import java.sql.SQLException;<% } %>
 import java.util.HashMap;
 import java.util.Map;<% } %><% if (databaseType == 'nosql') { %>
 import org.springframework.data.mongodb.core.MongoTemplate;<% } %>
@@ -65,14 +65,14 @@ public class DatabaseHealthIndicator extends AbstractHealthIndicator {
     }
 
     private String getProduct() {
-        return this.jdbcTemplate.execute(new ConnectionCallback<String>() {
+        return this.jdbcTemplate.execute(<% if (javaVersion == '8') { %>(Connection connection) -> connection.getMetaData().getDatabaseProductName()<% } else { %>new ConnectionCallback<String>() {
             @Override
             public String doInConnection(Connection connection) throws SQLException,
                 DataAccessException {
 
                 return connection.getMetaData().getDatabaseProductName();
             }
-        });
+        }<% } %>);
     }
 
     protected String detectQuery(String product) {
