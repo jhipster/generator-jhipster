@@ -28,7 +28,7 @@ public class LogsResource {
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();<% if (javaVersion == '8') { %>
         return context.getLoggerList()
             .stream()
-            .map(logger -> new LoggerDTO(logger))
+            .map(loggerDTO::new)
             .collect(Collectors.toList());
         <% } else { %>
         List<LoggerDTO> loggers = new ArrayList<>();
