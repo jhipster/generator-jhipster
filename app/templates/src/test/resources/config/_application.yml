@@ -39,7 +39,8 @@ spring:
         properties:
             hibernate.cache.use_second_level_cache: false
             hibernate.cache.use_query_cache: false
-            hibernate.generate_statistics: true<% } %>
+            hibernate.generate_statistics: true
+            hibernate.hbm2ddl.auto: validate<% } %>
 
     mail:
         host: localhost
