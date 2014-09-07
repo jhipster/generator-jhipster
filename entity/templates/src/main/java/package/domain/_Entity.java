@@ -33,7 +33,7 @@ public class <%= entityClass %> implements Serializable {
     private String id;<% } %>
 
     @Size(min = 1, max = 50)<% if (databaseType == 'sql') { %>
-    @Column(name = "sample_text_attribute")<% } %><% if (databaseType == 'nosql') { %>
+    @Column(name = "sample_text_attribute", length = 50)<% } %><% if (databaseType == 'nosql') { %>
     @Field("sample_text_attribute")<% } %>
     private String sampleTextAttribute;
 
@@ -41,7 +41,7 @@ public class <%= entityClass %> implements Serializable {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")<% } %>
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = CustomLocalDateSerializer.class)<% if (databaseType == 'sql') { %>
-    @Column(name = "sample_date_attribute")<% } %><% if (databaseType == 'nosql') { %>
+    @Column(name = "sample_date_attribute", nullable = false)<% } %><% if (databaseType == 'nosql') { %>
     @Field("sample_date_attribute")<% } %>
     private LocalDate sampleDateAttribute;
 

@@ -38,7 +38,7 @@ public class PersistentToken implements Serializable {
 
     @JsonIgnore
     @NotNull<% if (databaseType == 'sql') { %>
-    @Column(name = "token_value")<% } %>
+    @Column(name = "token_value", nullable = false)<% } %>
     private String tokenValue;
 
     @JsonIgnore<% if (databaseType == 'sql') { %>
@@ -48,7 +48,7 @@ public class PersistentToken implements Serializable {
 
     //an IPV6 address max length is 39 characters
     @Size(min = 0, max = 39)<% if (databaseType == 'sql') { %>
-    @Column(name = "ip_address")<% } %>
+    @Column(name = "ip_address", length = 39)<% } %>
     private String ipAddress;
 
     <% if (databaseType == 'sql') { %>@Column(name = "user_agent")<% } %>

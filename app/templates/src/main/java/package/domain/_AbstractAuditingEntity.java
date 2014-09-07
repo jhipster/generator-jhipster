@@ -26,19 +26,19 @@ public abstract class AbstractAuditingEntity {
 
     @CreatedBy<% if (databaseType == 'sql') { %>
     @NotNull
-    @Column(name = "created_by")<% } %><% if (databaseType == 'nosql') { %>
+    @Column(name = "created_by", nullable = false, length = 50)<% } %><% if (databaseType == 'nosql') { %>
     @Field("created_by")<% } %>
     private String createdBy;
 
     @CreatedDate<% if (databaseType == 'sql') { %>
     @NotNull
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @Column(name = "created_date")<% } %><% if (databaseType == 'nosql') { %>
+    @Column(name = "created_date", nullable = false)<% } %><% if (databaseType == 'nosql') { %>
     @Field("created_date")<% } %>
     private DateTime createdDate = DateTime.now();
 
     @LastModifiedBy<% if (databaseType == 'sql') { %>
-    @Column(name = "last_modified_by")<% } %><% if (databaseType == 'nosql') { %>
+    @Column(name = "last_modified_by", length = 50)<% } %><% if (databaseType == 'nosql') { %>
     @Field("last_modified_by")<% } %>
     private String lastModifiedBy;
 

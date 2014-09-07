@@ -6,7 +6,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;<% } %><% if (databaseType == 'sql') { %>
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Table;<% } %>
+import javax.persistence.Table;
+import javax.persistence.Column;<% } %>
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -22,7 +23,8 @@ public class Authority implements Serializable {
 
     @NotNull
     @Size(min = 0, max = 50)
-    @Id
+    @Id<% if (databaseType == 'sql') { %>
+    @Column(length = 50)<% } %>
     private String name;
 
     public String getName() {

@@ -26,36 +26,39 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @NotNull
     @Size(min = 0, max = 50)
-    @Id
+    @Id<% if (databaseType == 'sql') { %>
+    @Column(length = 50)<% } %>
     private String login;
 
     @JsonIgnore
-    @Size(min = 0, max = 100)
+    @Size(min = 0, max = 100)<% if (databaseType == 'sql') { %>
+    @Column(length = 100)<% } %>
     private String password;
 
     @Size(min = 0, max = 50)<% if (databaseType == 'sql') { %>
-    @Column(name = "first_name")<% } %><% if (databaseType == 'nosql') { %>
+    @Column(name = "first_name", length = 50)<% } %><% if (databaseType == 'nosql') { %>
     @Field("first_name")<% } %>
     private String firstName;
 
     @Size(min = 0, max = 50)<% if (databaseType == 'sql') { %>
-    @Column(name = "last_name")<% } %><% if (databaseType == 'nosql') { %>
+    @Column(name = "last_name", length = 50)<% } %><% if (databaseType == 'nosql') { %>
     @Field("last_name")<% } %>
     private String lastName;
 
     @Email
-    @Size(min = 0, max = 100)
+    @Size(min = 0, max = 100)<% if (databaseType == 'sql') { %>
+    @Column(length = 100)<% } %>
     private String email;
 
     private boolean activated = false;
 
     @Size(min = 2, max = 5)<% if (databaseType == 'sql') { %>
-    @Column(name = "lang_key")<% } %><% if (databaseType == 'nosql') { %>
+    @Column(name = "lang_key", length = 5)<% } %><% if (databaseType == 'nosql') { %>
     @Field("lang_key")<% } %>
     private String langKey;
 
     @Size(min = 0, max = 20)<% if (databaseType == 'sql') { %>
-    @Column(name = "activation_key")<% } %><% if (databaseType == 'nosql') { %>
+    @Column(name = "activation_key", length = 20)<% } %><% if (databaseType == 'nosql') { %>
     @Field("activation_key")<% } %>
     private String activationKey;
 
