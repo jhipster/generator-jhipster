@@ -25,9 +25,10 @@ public class PersistentAuditEvent  {
 
     @Id<% if (databaseType == 'sql') { %>
     @GeneratedValue(strategy = GenerationType.TABLE)
-    @Column(name = "event_id")<% } %><% if (databaseType == 'nosql') { %>
-    @Field("event_id")<% } %>
-    private Long id;
+    @Column(name = "event_id")
+    private Long id;<% } else { %>
+    @Field("event_id")
+    private long id;<% } %>
 
     @NotNull<% if (databaseType == 'sql') { %>
     @Column(nullable = false)<% } %>
@@ -46,14 +47,21 @@ public class PersistentAuditEvent  {
     @Column(name="value")
     @CollectionTable(name="T_PERSISTENT_AUDIT_EVENT_DATA", joinColumns=@JoinColumn(name="event_id"))<% } %>
     private Map<String, String> data = new HashMap<>();
-
+<% if (databaseType == 'sql') { %>
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }<% } else { %>
+    public long getId() {
+        return id;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }<% } %>
 
     public String getPrincipal() {
         return principal;
