@@ -2,7 +2,8 @@
   "name": "<%= _.slugify(baseName) %>",
   "version": "0.0.0",
   "description": "Description for <%= baseName %>",
-  "dependencies": {},
+  "dependencies": {
+  },
   "devDependencies": {<% if(frontendBuilder == 'grunt') { %>
     "grunt": "0.4.5",
     "grunt-autoprefixer": "0.7.5",

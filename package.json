@@ -30,11 +30,12 @@
   "dependencies": {
     "yeoman-generator": "0.17.3",
     "cheerio": "0.17.0",
-    "chalk": "0.5.1",
     "underscore.string": "2.3.3",
-    "shelljs": "0.3.0"
+    "shelljs": "0.3.0",
+	"grunt": "0.4.5"
   },
   "devDependencies": {
+    "grunt": "0.4.5",
     "mocha": "1.21.4"
   },
   "peerDependencies": {
