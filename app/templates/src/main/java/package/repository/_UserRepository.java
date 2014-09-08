@@ -21,7 +21,7 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
     User getUserByActivationKey(String activationKey);
     <% if (databaseType == 'sql') { %>
     @Query("select u from User u where u.activated = false and u.createdDate > ?1")<% } %><% if (databaseType == 'nosql') { %>
-    @Query("{activation_key: 'false', createdDate: {$gt: ?0}")<% } %>
+    @Query("{activation_key: 'false', createdDate: {$gt: ?0}}")<% } %>
     List<User> findNotActivatedUsersByCreationDateBefore(DateTime dateTime);
 
 }
