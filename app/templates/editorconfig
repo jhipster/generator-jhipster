@@ -4,7 +4,6 @@
 
 root = true
 
-
 [*]
 
 # Change these settings to your own preference
@@ -19,3 +18,10 @@ insert_final_newline = true
 
 [*.md]
 trim_trailing_whitespace = false
+
+[*.js]
+indent_size = 2
+
+[*.json]
+indent_size = 2
+
