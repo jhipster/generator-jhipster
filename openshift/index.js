@@ -138,7 +138,7 @@ OpenshiftGenerator.prototype.rhcAppCreate = function rhcAppCreate() {
   var done = this.async();
 
   this.log(chalk.bold("\nCreating your Openshift hosting environment, this may take a couple minutes..."));
-  var child = exec('rhc app create '+this.openShiftDeployedName+' diy-0.1 mysql-5.5 -s --noprompt --no-git ', { cwd: 'deploy/openshift' }, function (err, stdout, stderr) {
+  var child = exec('rhc app create ' + this.openShiftDeployedName + ' diy-0.1 mysql-5.5 ', { cwd: 'deploy/openshift' }, function (err, stdout, stderr) {
     var lines = stdout.split('\n');
     this.log(stdout);
     if (stdout.search('Not authenticated') >= 0 || stdout.search('Invalid characters found in login') >= 0) {
@@ -184,16 +184,6 @@ OpenshiftGenerator.prototype.gitRemoteAdd = function gitRemoteAdd() {
   child.stdout.on('data', function(data) {
     this.log(data.toString());
   }.bind(this));
-};
-
-OpenshiftGenerator.prototype.enableOpenshiftHotDeploy = function enableOpenshiftHotDeploy() {
-  if(this.abort || !this.openshift_remote_exists ) return;
-  var done = this.async();
-  this.log(chalk.bold("\nEnabling HotDeploy for Openshift"));
-  this.copy('hot_deploy', 'deploy/openshift/.openshift/markers/hot_deploy');
-  this.conflicter.resolve(function (err) {
-    done();
-  });
 };
 
 OpenshiftGenerator.prototype.copyOpenshiftFiles = function copyOpenshiftFiles() {
