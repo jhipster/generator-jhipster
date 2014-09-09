@@ -17,19 +17,20 @@ apply plugin: 'maven'
 apply plugin: 'spring-boot'
 
 bootRepackage {
-  mainClass = '<%= packageName %>.Application'
+   mainClass = '<%= packageName %>.Application'
 }
 
 springBoot {
-  mainClass = '<%= packageName %>.Application'
+    mainClass = '<%= packageName %>.Application'
 }
 
 apply from: 'yeoman.gradle'
 
-if (profile == 'prod')
+if (profile == 'prod') {
     apply from: 'profile_prod.gradle'
-else
+} else {
     apply from: 'profile_dev.gradle'
+}
 
 group = '<%= packageName %>'
 version = '0.1-SNAPSHOT'

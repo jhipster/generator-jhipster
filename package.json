@@ -1,54 +1,54 @@
 {
-  "name": "generator-jhipster",
-  "version": "1.1.0",
-  "description": "Java + Spring + JPA + AngularJS complete dev stack",
-  "keywords": [
-    "yeoman-generator",
-    "Java",
-    "Spring",
-    "Spring Security",
-    "JPA",
-    "Hibernate",
-    "AngularJS",
-    "Twitter Bootstrap"
-  ],
-  "homepage": "http://jhipster.github.io/",
-  "bugs": "https://github.com/jhipster/generator-jhipster/issues",
-  "author": {
-    "name": "Julien Dubois",
-    "email": "",
-    "url": "https://github.com/jdubois"
-  },
-  "main": "app/index.js",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/jhipster/generator-jhipster.git"
-  },
-  "scripts": {
-    "test": "mocha --reporter spec"
-  },
-  "dependencies": {
-    "yeoman-generator": "0.17.3",
-    "cheerio": "0.17.0",
-    "underscore.string": "2.3.3",
-    "shelljs": "0.3.0",
-    "chalk": "0.5.1",
-	"grunt": "0.4.5"
-  },
-  "devDependencies": {
-    "grunt": "0.4.5",
-    "mocha": "1.21.4"
-  },
-  "peerDependencies": {
-    "yo": ">=1.2.0"
-  },
-  "engines": {
-    "node": ">=0.10.0",
-    "npm": ">=1.4.0"
-  },
-  "licenses": [
-    {
-      "type": "Apache 2.0"
-    }
-  ]
+    "name": "generator-jhipster",
+    "version": "1.1.0",
+    "description": "Java + Spring + JPA + AngularJS complete dev stack",
+    "keywords": [
+        "yeoman-generator",
+        "Java",
+        "Spring",
+        "Spring Security",
+        "JPA",
+        "Hibernate",
+        "AngularJS",
+        "Twitter Bootstrap"
+    ],
+    "homepage": "http://jhipster.github.io/",
+    "bugs": "https://github.com/jhipster/generator-jhipster/issues",
+    "author": {
+        "name": "Julien Dubois",
+        "email": "",
+        "url": "https://github.com/jdubois"
+    },
+    "main": "app/index.js",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/jhipster/generator-jhipster.git"
+    },
+    "scripts": {
+        "test": "mocha --reporter spec"
+    },
+    "dependencies": {
+        "yeoman-generator": "0.17.3",
+        "cheerio": "0.17.0",
+        "underscore.string": "2.3.3",
+        "shelljs": "0.3.0",
+        "chalk": "0.5.1",
+        "grunt": "0.4.5"
+    },
+    "devDependencies": {
+        "grunt": "0.4.5",
+        "mocha": "1.21.4"
+    },
+    "peerDependencies": {
+        "yo": ">=1.2.0"
+    },
+    "engines": {
+        "node": ">=0.10.0",
+        "npm": ">=1.4.0"
+    },
+    "licenses": [
+        {
+            "type": "Apache 2.0"
+        }
+    ]
 }

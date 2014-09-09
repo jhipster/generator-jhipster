@@ -84,204 +84,205 @@ OpenshiftGenerator.prototype.gitRemoteCheck = function gitRemoteCheck() {
                 if(line.search(repo_url_finder) === 0 && dist_repo === '') {
                     var dist_repo_detailed = line.slice(line.match(repo_url_finder)[0].length);
                     dist_repo = dist_repo_detailed.slice(0, dist_repo_detailed.length - 7);
-                }});
-                if (dist_repo !== ''){
+                }
+            });
+            if (dist_repo !== ''){
+                console.log("Found an existing git remote for this app: "+dist_repo);
+                this.dist_repo_url = dist_repo;
+                this.openshift_remote_exists = true;
+            } else {
+                console.log('No existing remote found.');
+            }
+        }
+        done();
+    }.bind(this));
+};
+
+OpenshiftGenerator.prototype.rhcAppShow = function rhcAppShow() {
+    if(this.abort || typeof this.dist_repo_url !== 'undefined') return;
+    var done = this.async();
+
+    this.log(chalk.bold("\nChecking for an existing Openshift hosting environment..."));
+    var child = exec('rhc app show '+this.openShiftDeployedName+' --noprompt', { cwd: 'deploy/openshift' }, function (err, stdout, stderr) {
+        var lines = stdout.split('\n');
+        var dist_repo = '';
+        // Unauthenticated
+        if (stdout.search('Not authenticated') >= 0 || stdout.search('Invalid characters found in login') >= 0) {
+            this.log.error('Error: Not authenticated. Run "rhc setup" to login to your Openshift account and try again.');
+            this.abort = true;
+        }
+        // No remote found
+        else if (stderr.search('not found.') < 0) {
+            console.log('No existing app found.');
+        }
+        // Error
+        else if (err && stderr.search('DL is deprecated') === -1) {
+            this.log.error(err);
+        } else {   // Remote found
+            this.log(stdout);
+            var repo_url_finder = / *Git URL: */;
+            lines.forEach(function(line) {
+                if(line.search(repo_url_finder) === 0) {
+                    dist_repo = line.slice(line.match(repo_url_finder)[0].length);
                     console.log("Found an existing git remote for this app: "+dist_repo);
-                    this.dist_repo_url = dist_repo;
-                    this.openshift_remote_exists = true;
-                } else {
-                    console.log('No existing remote found.');
                 }
-            }
-            done();
-        }.bind(this));
-    };
+            });
+            if (dist_repo !== '') this.dist_repo_url = dist_repo;
+        }
+        done();
+    }.bind(this));
+};
 
-    OpenshiftGenerator.prototype.rhcAppShow = function rhcAppShow() {
-        if(this.abort || typeof this.dist_repo_url !== 'undefined') return;
-        var done = this.async();
+OpenshiftGenerator.prototype.rhcAppCreate = function rhcAppCreate() {
+    if(this.abort || typeof this.dist_repo_url !== 'undefined') return;
+    var done = this.async();
 
-        this.log(chalk.bold("\nChecking for an existing Openshift hosting environment..."));
-        var child = exec('rhc app show '+this.openShiftDeployedName+' --noprompt', { cwd: 'deploy/openshift' }, function (err, stdout, stderr) {
-            var lines = stdout.split('\n');
+    this.log(chalk.bold("\nCreating your Openshift hosting environment, this may take a couple minutes..."));
+    var child = exec('rhc app create ' + this.openShiftDeployedName + ' diy-0.1 mysql-5.5 ', { cwd: 'deploy/openshift' }, function (err, stdout, stderr) {
+        var lines = stdout.split('\n');
+        this.log(stdout);
+        if (stdout.search('Not authenticated') >= 0 || stdout.search('Invalid characters found in login') >= 0) {
+            this.log.error('Error: Not authenticated. Run "rhc setup" to login to your Openshift account and try again.');
+            this.abort = true;
+        } else if (err && stderr.search('DL is deprecated') === -1) {
+            this.log.error(err);
+        } else {
             var dist_repo = '';
-            // Unauthenticated
-            if (stdout.search('Not authenticated') >= 0 || stdout.search('Invalid characters found in login') >= 0) {
-                this.log.error('Error: Not authenticated. Run "rhc setup" to login to your Openshift account and try again.');
-                this.abort = true;
-            }
-            // No remote found
-            else if (stderr.search('not found.') < 0) {
-                console.log('No existing app found.');
-            }
-            // Error
-            else if (err && stderr.search('DL is deprecated') === -1) {
-                this.log.error(err);
-            }
-            // Remote found
-            else {
-                this.log(stdout);
-                var repo_url_finder = / *Git URL: */;
-                lines.forEach(function(line) {
-                    if(line.search(repo_url_finder) === 0) {
-                        dist_repo = line.slice(line.match(repo_url_finder)[0].length);
-                        console.log("Found an existing git remote for this app: "+dist_repo);
-                    }});
-                    if (dist_repo !== '') this.dist_repo_url = dist_repo;
+            var repo_url_finder = / *Git remote: */;
+            lines.forEach(function(line) {
+                if(line.search(repo_url_finder) === 0) {
+                    dist_repo = line.slice(line.match(repo_url_finder)[0].length);
                 }
-                done();
-            }.bind(this));
-        };
+            });
 
-        OpenshiftGenerator.prototype.rhcAppCreate = function rhcAppCreate() {
-            if(this.abort || typeof this.dist_repo_url !== 'undefined') return;
-            var done = this.async();
+            if (dist_repo !== '') this.dist_repo_url = dist_repo;
+            if(this.dist_repo_url !== undefined) {
+                this.log("New remote git repo at: "+this.dist_repo_url);
+            }
+        }
+        done();
+    }.bind(this));
 
-            this.log(chalk.bold("\nCreating your Openshift hosting environment, this may take a couple minutes..."));
-            var child = exec('rhc app create ' + this.openShiftDeployedName + ' diy-0.1 mysql-5.5 ', { cwd: 'deploy/openshift' }, function (err, stdout, stderr) {
-                var lines = stdout.split('\n');
-                this.log(stdout);
-                if (stdout.search('Not authenticated') >= 0 || stdout.search('Invalid characters found in login') >= 0) {
-                    this.log.error('Error: Not authenticated. Run "rhc setup" to login to your Openshift account and try again.');
-                    this.abort = true;
-                } else if (err && stderr.search('DL is deprecated') === -1) {
-                    this.log.error(err);
-                } else {
-                    var dist_repo = '';
-                    var repo_url_finder = / *Git remote: */;
-                    lines.forEach(function(line) {
-                        if(line.search(repo_url_finder) === 0) {
-                            dist_repo = line.slice(line.match(repo_url_finder)[0].length);
-                        }});
+    child.stdout.on('data', function(data) {
+        this.log(data.toString());
+    }.bind(this));
+};
 
-                        if (dist_repo !== '') this.dist_repo_url = dist_repo;
-                        if(this.dist_repo_url !== undefined) {
-                            this.log("New remote git repo at: "+this.dist_repo_url);
-                        }
-                    }
-                    done();
-                }.bind(this));
+OpenshiftGenerator.prototype.gitRemoteAdd = function gitRemoteAdd() {
+    if(this.abort || typeof this.dist_repo_url === 'undefined' || this.openshift_remote_exists) return;
+    var done = this.async();
+    this.log(chalk.bold("\nAdding remote repo url: "+this.dist_repo_url));
 
-                child.stdout.on('data', function(data) {
-                    this.log(data.toString());
-                }.bind(this));
-            };
+    var child = exec('git remote add '+'openshift'+' '+this.dist_repo_url, { cwd: 'deploy/openshift' }, function (err, stdout, stderr) {
+        if (err) {
+            this.log.error(err);
+        } else {
+            this.openshift_remote_exists = true;
+        }
+        done();
+    }.bind(this));
 
-            OpenshiftGenerator.prototype.gitRemoteAdd = function gitRemoteAdd() {
-                if(this.abort || typeof this.dist_repo_url === 'undefined' || this.openshift_remote_exists) return;
-                var done = this.async();
-                this.log(chalk.bold("\nAdding remote repo url: "+this.dist_repo_url));
+    child.stdout.on('data', function(data) {
+        this.log(data.toString());
+    }.bind(this));
+};
 
-                var child = exec('git remote add '+'openshift'+' '+this.dist_repo_url, { cwd: 'deploy/openshift' }, function (err, stdout, stderr) {
-                    if (err) {
-                        this.log.error(err);
-                    } else {
-                        this.openshift_remote_exists = true;
-                    }
-                    done();
-                }.bind(this));
+OpenshiftGenerator.prototype.copyOpenshiftFiles = function copyOpenshiftFiles() {
+    if(this.abort || !this.openshift_remote_exists ) return;
+    var done = this.async();
+    this.log(chalk.bold('\nCreating Openshift deployment files'));
 
-                child.stdout.on('data', function(data) {
-                    this.log(data.toString());
-                }.bind(this));
-            };
+    this.copy('openshift/action_hooks/build', 'deploy/openshift/.openshift/action_hooks/build');
+    this.copy('openshift/action_hooks/start', 'deploy/openshift/.openshift/action_hooks/start');
+    this.copy('openshift/action_hooks/stop', 'deploy/openshift/.openshift/action_hooks/stop');
+    this.conflicter.resolve(function (err) {
+        done();
+    });
+};
 
-            OpenshiftGenerator.prototype.copyOpenshiftFiles = function copyOpenshiftFiles() {
-                if(this.abort || !this.openshift_remote_exists ) return;
-                var done = this.async();
-                this.log(chalk.bold('\nCreating Openshift deployment files'));
+OpenshiftGenerator.prototype.productionBuild = function productionBuild() {
+    if(this.abort || !this.openshift_remote_exists ) return;
+    var done = this.async();
 
-                this.copy('openshift/action_hooks/build', 'deploy/openshift/.openshift/action_hooks/build');
-                this.copy('openshift/action_hooks/start', 'deploy/openshift/.openshift/action_hooks/start');
-                this.copy('openshift/action_hooks/stop', 'deploy/openshift/.openshift/action_hooks/stop');
-                this.conflicter.resolve(function (err) {
-                    done();
-                });
-            };
+    this.log(chalk.bold('\nBuilding deploy/openshift folder, please wait...'));
+    var child = exec('grunt buildOpenshift', function (err, stdout) {
+        if (err) {
+            this.log.error(err);
+        }
+        done();
+    }.bind(this));
 
-            OpenshiftGenerator.prototype.productionBuild = function productionBuild() {
-                if(this.abort || !this.openshift_remote_exists ) return;
-                var done = this.async();
+    child.stdout.on('data', function(data) {
+        this.log(data.toString());
+    }.bind(this));
+};
 
-                this.log(chalk.bold('\nBuilding deploy/openshift folder, please wait...'));
-                var child = exec('grunt buildOpenshift', function (err, stdout) {
-                    if (err) {
-                        this.log.error(err);
-                    }
-                    done();
-                }.bind(this));
+OpenshiftGenerator.prototype.gitCommit = function gitInit() {
+    if(this.abort || !this.openshift_remote_exists ) return;
+    var done = this.async();
 
-                child.stdout.on('data', function(data) {
-                    this.log(data.toString());
-                }.bind(this));
-            };
+    this.log(chalk.bold('\nAdding files for initial commit'));
+    var child = exec('git add -A && git commit -m "Initial commit"', { cwd: 'deploy/openshift' }, function (err, stdout, stderr) {
+        if (stdout.search('nothing to commit') >= 0) {
+            this.log('Re-pushing the existing "deploy/openshift" build...');
+        } else if (err) {
+            this.log.error(err);
+        } else {
+            this.log(chalk.green('Done, without errors.'));
+        }
+        done();
+    }.bind(this));
 
-            OpenshiftGenerator.prototype.gitCommit = function gitInit() {
-                if(this.abort || !this.openshift_remote_exists ) return;
-                var done = this.async();
+    child.stdout.on('data', function(data) {
+        this.log(data.toString());
+    }.bind(this));
+};
 
-                this.log(chalk.bold('\nAdding files for initial commit'));
-                var child = exec('git add -A && git commit -m "Initial commit"', { cwd: 'deploy/openshift' }, function (err, stdout, stderr) {
-                    if (stdout.search('nothing to commit') >= 0) {
-                        this.log('Re-pushing the existing "deploy/openshift" build...');
-                    } else if (err) {
-                        this.log.error(err);
-                    } else {
-                        this.log(chalk.green('Done, without errors.'));
-                    }
-                    done();
-                }.bind(this));
+OpenshiftGenerator.prototype.gitForcePush = function gitForcePush() {
+    if (this.abort || !this.openshift_remote_exists) return;
+    var done = this.async();
+    this.log(chalk.bold("\nUploading your initial application code.\n This may take " + chalk.cyan('several minutes') + " depending on your connection speed..."));
 
-                child.stdout.on('data', function(data) {
-                    this.log(data.toString());
-                }.bind(this));
-            };
+    var push = spawn('git', ['push', '-f', 'openshift', 'master'], {cwd: 'deploy/openshift'});
+    var error = null;
 
-            OpenshiftGenerator.prototype.gitForcePush = function gitForcePush() {
-                if (this.abort || !this.openshift_remote_exists) return;
-                var done = this.async();
-                this.log(chalk.bold("\nUploading your initial application code.\n This may take " + chalk.cyan('several minutes') + " depending on your connection speed..."));
+    push.stderr.on('data', function (data) {
+        var output = data.toString();
+        this.log.error(output);
+    }.bind(this));
 
-                var push = spawn('git', ['push', '-f', 'openshift', 'master'], {cwd: 'deploy/openshift'});
-                var error = null;
+    push.stdout.on('data', function (data) {
+        var output = data.toString();
+        this.log.stdin(output);
+    }.bind(this));
 
-                push.stderr.on('data', function (data) {
-                    var output = data.toString();
-                    this.log.error(output);
-                }.bind(this));
+    push.on('exit', function (code) {
+        if (code !== 0) {
+            this.abort = true;
+            return done();
+        }
+        done();
+    }.bind(this));
+};
 
-                push.stdout.on('data', function (data) {
-                    var output = data.toString();
-                    this.log.stdin(output);
-                }.bind(this));
+OpenshiftGenerator.prototype.restartApp = function restartApp() {
+    if(this.abort || !this.openshift_remote_exists ) return;
+    this.log(chalk.bold("\nRestarting your Openshift app.\n"));
 
-                push.on('exit', function (code) {
-                    if (code !== 0) {
-                        this.abort = true;
-                        return done();
-                    }
-                    done();
-                }.bind(this));
-            };
+    var child = exec('rhc app restart -a ' + this.openShiftDeployedName, function(err, stdout, stderr) {
 
-            OpenshiftGenerator.prototype.restartApp = function restartApp() {
-                if(this.abort || !this.openshift_remote_exists ) return;
-                this.log(chalk.bold("\nRestarting your Openshift app.\n"));
+        var host_url = '';
+        var hasWarning = false;
+        var before_hostname = this.dist_repo_url.indexOf('@') + 1;
+        var after_hostname = this.dist_repo_url.length - ( 'openshift'.length + 12 );
+        host_url = 'http://' + this.dist_repo_url.slice(before_hostname, after_hostname) + 'com';
 
-                var child = exec('rhc app restart -a ' + this.openShiftDeployedName, function(err, stdout, stderr) {
-
-                    var host_url = '';
-                    var hasWarning = false;
-                    var before_hostname = this.dist_repo_url.indexOf('@') + 1;
-                    var after_hostname = this.dist_repo_url.length - ( 'openshift'.length + 12 );
-                    host_url = 'http://' + this.dist_repo_url.slice(before_hostname, after_hostname) + 'com';
-
-                    this.log(chalk.green('\nYour app should now be live at \n\t' + chalk.bold(host_url)));
-                    if(hasWarning) {
-                        this.log(chalk.green('\nYou may need to address the issues mentioned above and restart the server for the app to work correctly \n\t' +
-                        'rhc app-restart -a ' + this.openShiftDeployedName));
-                    }
-                    this.log(chalk.yellow('After application modification, re-deploy it with\n\t' + chalk.bold('grunt deployOpenshift') +
-                    ' and then do a \n\t' + chalk.bold('git push') + ' on your Openshift repository.'));
-                }.bind(this));
-            };
+        this.log(chalk.green('\nYour app should now be live at \n\t' + chalk.bold(host_url)));
+        if(hasWarning) {
+            this.log(chalk.green('\nYou may need to address the issues mentioned above and restart the server for the app to work correctly \n\t' +
+            'rhc app-restart -a ' + this.openShiftDeployedName));
+        }
+        this.log(chalk.yellow('After application modification, re-deploy it with\n\t' + chalk.bold('grunt deployOpenshift') +
+        ' and then do a \n\t' + chalk.bold('git push') + ' on your Openshift repository.'));
+    }.bind(this));
+};
