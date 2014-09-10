@@ -3,6 +3,7 @@ package <%=packageName%>.config;
 import <%=packageName%>.security.AjaxLogoutSuccessHandler;
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.security.Http401UnauthorizedEntryPoint;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
@@ -100,6 +101,7 @@ public class OAuth2ServerConfiguration {
         }
 
         @Inject
+        @Qualifier("authenticationManagerBean")
         private AuthenticationManager authenticationManager;
 
         @Override
