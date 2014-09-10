@@ -15,6 +15,7 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'spring-boot'
+apply plugin: 'war'
 
 bootRepackage {
    mainClass = '<%= packageName %>.Application'
@@ -37,33 +38,14 @@ version = '0.1-SNAPSHOT'
 
 description = ''
 
+configurations {
+    providedRuntime
+}
 
-jar {
+war {
     baseName = '<%= _.slugify(baseName) %>'
     version =  '0.1-SNAPSHOT'
 }
-
-task copyLiquibase(dependsOn: classes, type: Copy) {
-    from {
-        configurations.compile.findAll {
-            it.name == "liquibase-slf4j-<%= _.unescape('\$\{liquibase_slf4j_version}')%>.jar"
-        }.collect {
-            zipTree(it)
-        }
-    }
-    from {
-        configurations.compile.findAll {
-            it.name == "liquibase-core-<%= _.unescape('\$\{liquibase_core_version}')%>.jar"
-        }.collect {
-            zipTree(it)
-        }
-    }
-    into sourceSets.main.output.classesDir
-    include 'liquibase/**/*.class'
-}
-
-jar.dependsOn copyLiquibase
-
 
 repositories {
 
@@ -76,6 +58,7 @@ repositories {
 }
 
 dependencies {
+    
     compile group: 'com.codahale.metrics', name: 'metrics-core', version: codahale_metrics_version<% if (hibernateCache == 'ehcache') { %>
     compile group: 'com.codahale.metrics', name: 'metrics-ehcache', version: codahale_metrics_version<% } %>
     compile group: 'com.codahale.metrics', name: 'metrics-graphite', version: codahale_metrics_version
@@ -113,6 +96,7 @@ dependencies {
     compile group: 'org.liquibase', name: 'liquibase-core', version: liquibase_core_version
     compile(group: 'org.liquibase.ext', name: 'liquibase-hibernate4', version: liquibase_hibernate_version) {
         exclude(module: 'hibernate-jpa-2.0-api')
+        exclude(module: 'liquibase-core')
     }<% } %>
     compile group: 'org.springframework.boot', name: 'spring-boot-actuator', version: spring_boot_version
     compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version: spring_boot_version
@@ -126,7 +110,7 @@ dependencies {
     compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: spring_boot_version) {
         exclude module: 'spring_boot-starter-tomcat'
     }
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-jetty', version: spring_boot_version
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: spring_boot_version
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: spring_boot_version
     compile(group: 'org.springframework', name: 'spring-context-support', version: spring_context_support_version) {
         exclude(module: 'quartz')
