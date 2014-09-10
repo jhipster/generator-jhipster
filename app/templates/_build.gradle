@@ -57,7 +57,7 @@ repositories {
 }
 
 dependencies {
-    providedRuntime group: 'org.springframework.boot', name: 'spring-boot-starter-jetty'
+    
     compile group: 'com.codahale.metrics', name: 'metrics-core', version: codahale_metrics_version<% if (hibernateCache == 'ehcache') { %>
     compile group: 'com.codahale.metrics', name: 'metrics-ehcache', version: codahale_metrics_version<% } %>
     compile group: 'com.codahale.metrics', name: 'metrics-graphite', version: codahale_metrics_version
@@ -109,7 +109,7 @@ dependencies {
     compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: spring_boot_version) {
         exclude module: 'spring_boot-starter-tomcat'
     }
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-jetty', version: spring_boot_version
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: spring_boot_version
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: spring_boot_version
     compile(group: 'org.springframework', name: 'spring-context-support', version: spring_context_support_version) {
         exclude(module: 'quartz')
