@@ -379,7 +379,7 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version><%= _.unescape('\${liquibase.version')%></version>
+            <version><%= _.unescape('\${liquibase.version}')%></version>
             <exclusions>
                 <exclusion>
 		    <groupId>org.eclipse.jetty</groupId>
