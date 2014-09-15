@@ -726,6 +726,22 @@
                                         <execute />
                                     </action>
                                 </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.codehaus.mojo</groupId>
+                                        <artifactId>exec-maven-plugin</artifactId>
+                                        <versionRange>
+                                            [1.2.1,)
+                                        </versionRange>
+                                        <goals>
+                                            <goal>java</goal>
+                                            <goal>exec</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
                             </pluginExecutions>
                         </lifecycleMappingMetadata>
                     </configuration>
