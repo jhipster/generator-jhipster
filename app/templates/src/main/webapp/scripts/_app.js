@@ -132,16 +132,11 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
             httpHeaders = $httpProvider.defaults.headers;<% } %>
         })
         .run(function($rootScope, $location, $http, AuthenticationSharedService, Session, USER_ROLES) {
-                $rootScope.ui = {};
-                $rootScope.ui.loading = false;
                 $rootScope.$on('$routeChangeStart', function (event, next) {
-                    $rootScope.ui.loading = false;
-                    if (!AuthenticationSharedService.isAuthorized(next.access.authorizedRoles)) {
-                        $rootScope.ui.loading = true;
-                        $rootScope.userRoles = USER_ROLES;
-                        AuthenticationSharedService.valid(next.access.authorizedRoles);
-                    }
-                 });
+                    $rootScope.isAuthorized = AuthenticationSharedService.isAuthorized;
+                    $rootScope.userRoles = USER_ROLES;
+                    AuthenticationSharedService.valid(next.access.authorizedRoles);
+                });
 
                 // Call when the the client is confirmed
                 $rootScope.$on('event:auth-loginConfirmed', function(data) {
