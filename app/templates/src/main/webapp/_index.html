@@ -105,7 +105,9 @@
             </div>
         </nav>
         <div class="container">
-            <div class="well" ng-view></div>
+            <div class="well">
+                <div ng-hide="ui.loading" ng-view=""></div>
+            </div>
 
             <div class="footer">
                 <p translate="footer">This is your footer</p>
