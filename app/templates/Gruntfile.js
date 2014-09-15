@@ -21,11 +21,11 @@ module.exports = function (grunt) {
         },
         watch: {<% if (useCompass) { %>
             compass: {
-                files: ['src/main/scss/{,*/}*.{scss,sass}'],
+                files: ['src/main/scss/**/*.{scss,sass}'],
                 tasks: ['compass:server', 'autoprefixer']
             },<% } %>
             styles: {
-                files: ['src/main/webapp/styles/{,*/}*.css'],
+                files: ['src/main/webapp/styles/**/*.css'],
                 tasks: ['copy:styles', 'autoprefixer']
             },
             livereload: {
@@ -34,9 +34,9 @@ module.exports = function (grunt) {
                 },
                 files: [
                     'src/main/webapp/**/*.html',
-                    '.tmp/styles/{,*/}*.css',
-                    '{.tmp/,}src/main/webapp/scripts/{,*/}*.js',
-                    'src/main/webapp/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
+                    '.tmp/styles/**/*.css',
+                    '{.tmp/,}src/main/webapp/scripts/**/*.js',
+                    'src/main/webapp/images/**/*.{png,jpg,jpeg,gif,webp,svg}'
                 ]
             }
         },
@@ -46,7 +46,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: '.tmp/styles/',
-                    src: '{,*/}*.css',
+                    src: '**/*.css',
                     dest: '.tmp/styles/'
                 }]
             }
@@ -165,7 +165,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: 'src/main/webapp/scripts',
-                    src: '{,*/}*.coffee',
+                    src: '**/*.coffee',
                     dest: '.tmp/scripts',
                     ext: '.js'
                 }]
@@ -174,7 +174,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: 'test/spec',
-                    src: '{,*/}*.coffee',
+                    src: '**/*.coffee',
                     dest: '.tmp/spec',
                     ext: '.js'
                 }]
@@ -210,23 +210,23 @@ module.exports = function (grunt) {
             dist: {
                 files: {
                     src: [
-                        '<%%= yeoman.dist %>/scripts/{,*/}*.js',
-                        '<%%= yeoman.dist %>/styles/{,*/}*.css',
-                        '<%%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+                        '<%%= yeoman.dist %>/scripts/**/*.js',
+                        '<%%= yeoman.dist %>/styles/**/*.css',
+                        '<%%= yeoman.dist %>/images/**/*.{png,jpg,jpeg,gif,webp,svg}',
                         '<%%= yeoman.dist %>/fonts/*'
                     ]
                 }
             }
         },
         useminPrepare: {
-            html: 'src/main/webapp/{,*/}*.html',
+            html: 'src/main/webapp/**/*.html',
             options: {
                 dest: '<%%= yeoman.dist %>'
             }
         },
         usemin: {
-            html: ['<%%= yeoman.dist %>/{,*/}*.html'],
-            css: ['<%%= yeoman.dist %>/styles/{,*/}*.css'],
+            html: ['<%%= yeoman.dist %>/**/*.html'],
+            css: ['<%%= yeoman.dist %>/styles/**/*.css'],
             options: {
                 dirs: ['<%%= yeoman.dist %>']
             }
@@ -236,7 +236,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: 'src/main/webapp/images',
-                    src: '{,*/}*.{jpg,jpeg}', // we don't optimize PNG files as it doesn't work on Linux. If you are not on Linux, feel free to use '{,*/}*.{png,jpg,jpeg}'
+                src: '**/*.{jpg,jpeg}', // we don't optimize PNG files as it doesn't work on Linux. If you are not on Linux, feel free to use '{,*/}*.{png,jpg,jpeg}'
                     dest: '<%%= yeoman.dist %>/images'
                 }]
             }
@@ -246,7 +246,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: 'src/main/webapp/images',
-                    src: '{,*/}*.svg',
+                    src: '**/*.svg',
                     dest: '<%%= yeoman.dist %>/images'
                 }]
             }
@@ -280,7 +280,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: '<%%= yeoman.dist %>',
-                    src: ['*.html', 'views/*.html'],
+                    src: ['*.html', 'views/**/*.html'],
                     dest: '<%%= yeoman.dist %>'
                 }]
             }
@@ -296,7 +296,7 @@ module.exports = function (grunt) {
                     src: [
                         '*.html',
                         'views/*.html',
-                        'images/{,*/}*.{png,gif,webp}',
+                        'images/**/*.{png,gif,webp}',
                         'fonts/*'
                     ]
                 }, {
