@@ -18,7 +18,7 @@
                 <div class="form-group">
                     <label translate="settings.form.firstname">First Name</label>
                     <input type="text" class="form-control" name="firstName" placeholder="{{'settings.form.firstname.placeholder' | translate}}"
-                           ng-model="settingsAccount.firstName" ng-minlength=1 ng-maxlength=50 required>
+                           ng-model="settingsAccount.firstName" ng-minlength=1 ng-maxlength=50 required maxlength="50">
                     <div class="error"
                          ng-show="form.firstName.$dirty && form.firstName.$invalid">
                         <small class="error"
@@ -38,7 +38,7 @@
                 <div class="form-group">
                     <label translate="settings.form.lastname">Last Name</label>
                     <input type="text" class="form-control" name="lastName" placeholder="{{'settings.form.lastname.placeholder' | translate}}"
-                           ng-model="settingsAccount.lastName" ng-minlength=1 ng-maxlength=50 required>
+                           ng-model="settingsAccount.lastName" ng-minlength=1 ng-maxlength=50 required maxlength="50">
                     <div class="error"
                          ng-show="form.lastName.$dirty && form.lastName.$invalid">
                         <small class="error"
@@ -58,7 +58,7 @@
                 <div class="form-group">
                     <label translate="global.form.email">E-mail</label>
                     <input type="email" class="form-control" name="email" placeholder="{{'global.form.email.placeholder' | translate}}"
-                           ng-model="settingsAccount.email" ng-minlength=5 ng-maxlength=100 required>
+                           ng-model="settingsAccount.email" ng-minlength=5 ng-maxlength=100 required maxlength="100">
                     <div class="error"
                          ng-show="form.email.$dirty && form.email.$invalid">
                         <small class="error"
