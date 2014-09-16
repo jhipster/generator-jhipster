@@ -1,7 +1,6 @@
 <div>
     <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-8">
+        <div class="col-md-8 col-md-offset-2">
             <h2 translate="settings.title" translate-values="{username: '{{account.login}}'}">User settings for [<b>{{settingsAccount.login}}</b>]</h2>
 
             <div class="alert alert-success" ng-show="success" translate="settings.messages.success">
@@ -83,7 +82,6 @@
                 <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary" translate="settings.form.button">Save</button>
             </form>
         </div>
-        <div class="col-md-2"></div>
     </div>
 
 </div>
