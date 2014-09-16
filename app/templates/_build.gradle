@@ -97,8 +97,8 @@ dependencies {
     }
     compile(group: 'org.liquibase.ext', name: 'liquibase-hibernate4', version: liquibase_hibernate_version) {
         exclude(module: 'hibernate-jpa-2.0-api')
-        exclude(module: 'liquibase-core')
-    }<% } %>
+    }
+    compile group: 'com.mattbertolini', name: 'liquibase-slf4j', version: liquibase_slf4j_version<% } %>
     compile group: 'org.springframework.boot', name: 'spring-boot-actuator', version: spring_boot_version
     compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure', version: spring_boot_version
     compile group: 'org.springframework.boot', name: 'spring-boot-loader-tools', version: spring_boot_version
@@ -126,9 +126,8 @@ dependencies {
         exclude(module: 'scala-compiler')
     }<% if (devDatabaseType == 'mysql' || prodDatabaseType == 'mysql') { %>
     compile group: 'mysql', name: 'mysql-connector-java', version: mysql_connector_java_version<% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
-    compile group: 'org.postgresql', name: 'postgresql', version: postgresql_version<% } %>
-    compile group: 'com.h2database', name: 'h2', version: h2_version<% if (databaseType == 'sql') { %>
-    compile group: 'com.mattbertolini', name: 'liquibase-slf4j', version: liquibase_slf4j_version<% } %>
+    compile group: 'org.postgresql', name: 'postgresql', version: postgresql_version<% } %><% if (devDatabaseType == 'h2Memory') { %>
+    compile group: 'com.h2database', name: 'h2', version: h2_version<% } %>
     testCompile group: 'com.jayway.awaitility', name: 'awaitility', version: awaility_version
     testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: json_path_version
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: spring_boot_version
