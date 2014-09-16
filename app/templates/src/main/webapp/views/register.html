@@ -19,9 +19,7 @@
                 The password and its confirmation do not match!
             </div>
 
-            <form ng-show="!success" name="form" role="form" novalidate
-                  class="ng-scope ng-invalid ng-invalid-required ng-dirty ng-valid-minlength"
-                  ng-submit="register()">
+            <form ng-show="!success" name="form" role="form" novalidate ng-submit="register()" show-validation>
 
                 <div class="form-group">
                     <label translate="global.form.username">Login</label>
