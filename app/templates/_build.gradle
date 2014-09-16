@@ -58,7 +58,6 @@ repositories {
 }
 
 dependencies {
-
     compile group: 'com.codahale.metrics', name: 'metrics-core', version: codahale_metrics_version<% if (hibernateCache == 'ehcache') { %>
     compile group: 'com.codahale.metrics', name: 'metrics-ehcache', version: codahale_metrics_version<% } %>
     compile group: 'com.codahale.metrics', name: 'metrics-graphite', version: codahale_metrics_version
@@ -121,7 +120,11 @@ dependencies {
     compile group: 'org.mongeez', name: 'mongeez', version: mongeez_version<% } %>
     compile group: 'io.github.jhipster.loaded', name: 'core', version: jhipster_loaded_version
     compile group: 'io.github.jhipster.loaded', name: 'agent', version: jhipster_loaded_version
-    compile group: 'com.mangofactory', name: 'swagger-springmvc', version: swagger_springmvc_version<% if (devDatabaseType == 'mysql' || prodDatabaseType == 'mysql') { %>
+    compile(group: 'com.mangofactory', name: 'swagger-springmvc', version: swagger_springmvc_version) {
+        exclude(module: 'jackson-module-scala_2.10')
+        exclude(module: 'scalap')
+        exclude(module: 'scala-compiler')
+    }<% if (devDatabaseType == 'mysql' || prodDatabaseType == 'mysql') { %>
     compile group: 'mysql', name: 'mysql-connector-java', version: mysql_connector_java_version<% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
     compile group: 'org.postgresql', name: 'postgresql', version: postgresql_version<% } %>
     compile group: 'com.h2database', name: 'h2', version: h2_version<% if (databaseType == 'sql') { %>
@@ -139,5 +142,5 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.0'
+    gradleVersion = '2.1'
 }
