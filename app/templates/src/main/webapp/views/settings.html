@@ -10,9 +10,7 @@
                 <strong>An error has occured!</strong> Settings could not be saved.
             </div>
 
-            <form name="form" role="form" novalidate
-                  class="ng-scope ng-invalid ng-invalid-required ng-dirty ng-valid-minlength"
-                  ng-submit="save()">
+            <form name="form" role="form" novalidate ng-submit="save()" show-validation>
 
                 <div class="form-group">
                     <label translate="settings.form.firstname">First Name</label>
