@@ -22,8 +22,8 @@
             "language": "Sprache"
         },
         "form": {
-            "username": "Name",
-            "username.placeholder": "Ihr Name",
+            "username": "Benutzername",
+            "username.placeholder": "Ihr Benutzername",
             "newpassword": "Neues Passwort",
             "newpassword.placeholder": "Neues Passwort",
             "confirmpassword": "Neues Passwort bestätigen",
@@ -80,7 +80,7 @@
         "title": "Aktivierung",
         "messages": {
             "success": "<strong>Ihr Benutzer wurde aktiviert.</strong> Bitte <a href=\"#/login\">anmelden</a>.",
-            "error": "<strong>Ihr Benutzer konnte nicht aktiviert werden.</strong> Bitte benutzen Sie die Registrierungsmaske, um sich zu einzutragen."
+            "error": "<strong>Ihr Benutzer konnte nicht aktiviert werden.</strong> Bitte benutzen Sie die Registrierungsmaske, um sich einzutragen."
         }
     },
     "register": {
@@ -91,14 +91,14 @@
         "messages": {
             "validate": {
                 "login": {
-                    "required": "Ihre login wird benötigt.",
-                    "minlength": "Ihr login muss mindestens 1 Zeichen lang sein",
-                    "maxlength": "Ihr login darf nicht länger als 50 Zeichen sein"
+                    "required": "Ihr Benutzername wird benötigt.",
+                    "minlength": "Ihr Benutzername muss mindestens 1 Zeichen lang sein",
+                    "maxlength": "Ihr Benutzername darf nicht länger als 50 Zeichen sein"
                 }
             },
-            "success": "<strong>Registrierung gespeichert!</strong> Bitte überprüfen Sie ihre E-Mail wegen der Bestätigung.",
+            "success": "<strong>Registrierung gespeichert!</strong> Bitte überprüfen Sie ihre E-Mails für die Bestätigung.",
             "error": {
-                "fail": "<strong>Registrierung fehlgeschlagen!</strong> Bitte versuchen Sie es später nocheinmal.",
+                "fail": "<strong>Registrierung fehlgeschlagen!</strong> Bitte versuchen Sie es später nochmal.",
                 "userexists": "<strong>Loginname bereits vergeben!</strong> Bitte wählen Sie einen anderen aus."
             }
         }
@@ -156,10 +156,10 @@
     "sessions": {
         "title": "Aktive Sitzungen für [<b>{{username}}</b>]",
         "table": {
-            "ipaddress": "IP Addresse",
+            "ipaddress": "IP Adresse",
             "useragent": "User Agent",
             "date": "Datum",
-            "button": "Schliessen"
+            "button": "Schließen"
         },
         "messages": {
             "success": "<strong>Sitzung wurde geschlossen!</strong>",
@@ -168,13 +168,13 @@
 
     },
     "tracker": {
-        "title": "Real-time user activities",
+        "title": "Echtzeit Benutzer-Aktivitäten",
         "table": {
-            "userlogin": "User",
-            "ipaddress": "IP Address",
+            "userlogin": "Benutzer",
+            "ipaddress": "IP Adresse",
             "userAgent": "User agent",
-            "page": "Current page",
-            "time": "Time"
+            "page": "Aktuelle Seite",
+            "time": "Zeit"
         }
     },
     "metrics": {
@@ -182,7 +182,7 @@
         "refresh.button": "Aktualisieren",
         "health": {
             "title": "Heath checks",
-            "database": "Database: ",
+            "database": "Datenbank: ",
             "email": "Email: ",
             "stacktrace": "Stacktrace"
         },
