@@ -138,8 +138,8 @@
         <hibernate-entitymanager.version>4.3.6.Final</hibernate-entitymanager.version>
         <HikariCP.version>1.4.0</HikariCP.version>
         <jhipster-loaded.version>0.12</jhipster-loaded.version><% if (databaseType == 'sql') { %>
-        <liquibase.version>3.2.0</liquibase.version>
-        <liquibase-hibernate.version>3.4</liquibase-hibernate.version>
+        <liquibase.version>3.1.1</liquibase.version>
+        <liquibase-hibernate.version>3.3</liquibase-hibernate.version>
         <liquibase-slf4j.version>1.2.1</liquibase-slf4j.version><% } %>
         <metrics-spring.version>3.0.1</metrics-spring.version><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
         <postgresql.version>9.3-1102-jdbc41</postgresql.version><% } %><% if (authenticationType == 'token') { %>
