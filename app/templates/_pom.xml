@@ -126,7 +126,7 @@
         <run.addResources>false</run.addResources>
         <!-- Libraries versions -->
         <assertj-core.version>1.6.1</assertj-core.version><% if (websocket == 'atmosphere') { %>
-        <atmosphere-spring.version>2.1.0</atmosphere-spring.version><% } %>
+        <atmosphere-spring.version>2.2.0</atmosphere-spring.version><% } %>
         <awaitility.version>1.4.0</awaitility.version>
         <commons-lang.version>2.6</commons-lang.version>
         <commons-io.version>2.4</commons-io.version>
@@ -351,7 +351,7 @@
         <dependency>
             <groupId>org.atmosphere</groupId>
             <artifactId>atmosphere-spring</artifactId>
-            <version>2.1.0</version>
+            <version><%= _.unescape('\${atmosphere-spring.version}')%></version>
         </dependency><% } %><% if (databaseType == 'sql') { %>
         <dependency>
             <groupId>org.hibernate</groupId>

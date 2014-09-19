@@ -201,9 +201,12 @@ public class WebConfigurer implements ServletContextInitializer {
         AtmosphereServlet servlet = new AtmosphereServlet();
         Field frameworkField = ReflectionUtils.findField(AtmosphereServlet.class, "framework");
         ReflectionUtils.makeAccessible(frameworkField);
-        ReflectionUtils.setField(frameworkField, servlet, new NoAnalyticsAtmosphereFramework());
+        NoAnalyticsAtmosphereFramework atmosphereFramework = new NoAnalyticsAtmosphereFramework();
+        ReflectionUtils.setField(frameworkField, servlet, atmosphereFramework);
         ServletRegistration.Dynamic atmosphereServlet =
                 servletContext.addServlet("atmosphereServlet", servlet);
+
+        servletContext.setAttribute("AtmosphereServlet", atmosphereFramework);
 
         atmosphereServlet.setInitParameter("org.atmosphere.cpr.packages", "<%=packageName%>.web.websocket");
         atmosphereServlet.setInitParameter("org.atmosphere.cpr.broadcasterCacheClass", UUIDBroadcasterCache.class.getName());

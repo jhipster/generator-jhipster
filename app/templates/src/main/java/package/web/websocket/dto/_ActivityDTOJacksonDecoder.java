@@ -18,8 +18,8 @@ public class ActivityDTOJacksonDecoder implements Decoder<String, ActivityDTO> {
         try {
             return jsonMapper.readValue(jsonString, ActivityDTO.class);
         } catch (IOException e) {
-            log.error("Error while decoding the String: {}", e.getMessage());
-            throw new RuntimeException(e);
+            log.info("Error while decoding the String: {} - error={}", jsonString, e.getMessage());
+            return new ActivityDTO();
         }
     }
 }

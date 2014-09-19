@@ -202,14 +202,16 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                     }
                 };
 
-                $rootScope.websocketRequest.sendMessage = function() {
+                $rootScope.websocketRequest.sendMessage = function () {
                     if ($rootScope.websocketSubSocket.request.isOpen) {
-                        $rootScope.websocketSubSocket.push(atmosphere.util.stringifyJSON({
-                                userLogin: $rootScope.login,
-                                page: $route.current.templateUrl}
-                        ));
+                        if ($rootScope.account != null) {
+                            $rootScope.websocketSubSocket.push(atmosphere.util.stringifyJSON({
+                                userLogin: $rootScope.account.login,
+                                page: $route.current.templateUrl})
+                            );
+                        }
                     }
-                };
+                }
 
                 $rootScope.websocketSubSocket = $rootScope.websocketSocket.subscribe($rootScope.websocketRequest);
 
