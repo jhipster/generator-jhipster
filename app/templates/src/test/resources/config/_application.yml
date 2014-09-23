@@ -12,7 +12,7 @@ async:
     queueCapacity: 10000
 
 spring:
-    profiles: dev<% if (databaseType == 'nosql') { %>
+    <% if (databaseType == 'nosql') { %>
     data:
         mongodb:
              host: localhost
