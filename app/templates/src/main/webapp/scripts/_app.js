@@ -142,7 +142,12 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                 $rootScope.$on('event:auth-loginConfirmed', function(data) {
                     $rootScope.authenticated = true;
                     if ($location.path() === "/login") {
-                        $location.path('/').replace();
+                        var search = $location.search();
+                        if (search.redirect !== undefined) {
+                            $location.path(search.redirect).search('redirect', null).replace();
+                        } else {
+                            $location.path('/').replace();
+                        }
                     }
                 });
 
@@ -151,8 +156,9 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                     Session.invalidate();
                     $rootScope.authenticated = false;
                     if ($location.path() !== "/" && $location.path() !== "" && $location.path() !== "/register" &&
-                            $location.path() !== "/activate") {
-                        $location.path('/login').replace();
+                            $location.path() !== "/activate" && $location.path() !== "/login") {
+                        var redirect = $location.path();
+                        $location.path('/login').search('redirect', redirect).replace();
                     }
                 });
 
