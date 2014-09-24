@@ -192,7 +192,7 @@
 
         $scope.refresh = function() {
             HealthCheckService.check().then(function(promise) {
-                $scope.healthCheck = promise.data;
+                $scope.healthCheck = promise;
             },function(promise) {
                 $scope.healthCheck = promise.data;
             });
