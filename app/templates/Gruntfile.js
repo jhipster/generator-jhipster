@@ -330,7 +330,7 @@ module.exports = function (grunt) {
                         'pom.xml',
                         'src/main/**'
                 ]
-            },
+            }
         },
         concurrent: {
             server: [<% if (useCompass) { %>
