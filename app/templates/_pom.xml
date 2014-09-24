@@ -1,16 +1,575 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId><%= packageName %></groupId>
-    <artifactId><%= _.slugify(baseName) %></artifactId>
-    <version>0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
+        <groupId>org.springframework.boot</groupId>
         <version>1.1.6.RELEASE</version>
+        <relativePath/>
     </parent>
+
+    <groupId><%= packageName %></groupId>
+    <artifactId><%= _.slugify(baseName) %></artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <name><%= baseName %></name>
+
+    <prerequisites>
+        <maven>3.0.0</maven>
+    </prerequisites>
+
+    <properties>
+        <HikariCP.version>1.4.0</HikariCP.version>
+        <assertj-core.version>1.6.1</assertj-core.version><% if (websocket == 'atmosphere') { %>
+        <atmosphere-spring.version>2.2.0</atmosphere-spring.version><% } %>
+        <awaitility.version>1.4.0</awaitility.version>
+        <commons-io.version>2.4</commons-io.version>
+        <commons-lang.version>2.6</commons-lang.version>
+        <geronimo-javamail_1.4_mail.version>1.8.4</geronimo-javamail_1.4_mail.version><% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
+        <hazelcast.version>3.2.5</hazelcast.version><% } %>
+        <hibernate.version>4.3.6.Final</hibernate.version>
+        <java.version>1.<%= javaVersion %></java.version>
+        <javax.inject.version>1</javax.inject.version>
+        <jhipster-loaded.version>0.12</jhipster-loaded.version><% if (databaseType == 'sql') { %>
+        <joda-time-hibernate.version>1.3</joda-time-hibernate.version><% } %>
+        <json-path.version>0.9.1</json-path.version><% if (databaseType == 'sql') { %>
+        <liquibase-hibernate.version>3.3</liquibase-hibernate.version>
+        <liquibase-slf4j.version>1.2.1</liquibase-slf4j.version>
+        <liquibase.version>3.1.1</liquibase.version><% } %>
+        <maven-enforcer-plugin.version>1.3.1</maven-enforcer-plugin.version>
+        <maven-sortpom-plugin.version>2.3.0</maven-sortpom-plugin.version>
+        <metrics-spring.version>3.0.1</metrics-spring.version><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
+        <postgresql.version>9.3-1102-jdbc41</postgresql.version><% } %>
+        <run.addResources>false</run.addResources>
+        <sonar-maven-plugin.version>2.2</sonar-maven-plugin.version><% if (authenticationType == 'token') { %>
+        <spring-security-oauth2.version>2.0.1.RELEASE</spring-security-oauth2.version><% } %>
+        <swagger-springmvc.version>0.8.8</swagger-springmvc.version>
+        <usertype-core.version>3.2.0.GA</usertype-core.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.codahale.metrics</groupId>
+            <artifactId>metrics-core</artifactId>
+        </dependency><% if (hibernateCache == 'ehcache') { %>
+        <dependency>
+            <groupId>com.codahale.metrics</groupId>
+            <artifactId>metrics-ehcache</artifactId>
+            <version><%= '${codahale-metrics.version}' %></version>
+        </dependency><% } %>
+        <dependency>
+            <groupId>com.codahale.metrics</groupId>
+            <artifactId>metrics-graphite</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.codahale.metrics</groupId>
+            <artifactId>metrics-json</artifactId>
+            <version><%= '${codahale-metrics.version}' %></version>
+        </dependency>
+        <dependency>
+            <groupId>com.codahale.metrics</groupId>
+            <artifactId>metrics-jvm</artifactId>
+            <version><%= '${codahale-metrics.version}' %></version>
+        </dependency>
+        <dependency>
+            <groupId>com.codahale.metrics</groupId>
+            <artifactId>metrics-servlet</artifactId>
+            <version><%= '${codahale-metrics.version}' %></version>
+        </dependency>
+        <dependency>
+            <groupId>com.codahale.metrics</groupId>
+            <artifactId>metrics-servlets</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>metrics-healthchecks</artifactId>
+                    <groupId>com.codahale.metrics</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency><% if (databaseType == 'sql') { %>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-hibernate4</artifactId>
+            <version><%= '${jackson.version}' %></version>
+        </dependency><% } %>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-hppc</artifactId>
+            <version><%= '${jackson.version}' %></version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-joda</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-json-org</artifactId>
+            <version><%= '${jackson.version}' %></version>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId><% if (devDatabaseType != 'h2Memory') { %>
+            <scope>test</scope><% } %>
+        </dependency><% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast</artifactId>
+            <version><%= '${hazelcast.version}' %></version>
+        </dependency><% } %><% if (hibernateCache == 'hazelcast') { %>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-hibernate4</artifactId>
+            <version><%= '${hazelcast.version}' %></version>
+        </dependency>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-spring</artifactId>
+            <version><%= '${hazelcast.version}' %></version>
+        </dependency><% } %><% if (clusteredHttpSession == 'hazelcast') { %>
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-wm</artifactId>
+            <version><%= '${hazelcast.version}' %></version>
+        </dependency><% } %>
+        <dependency>
+            <groupId>com.jayway.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version><%= '${awaitility.version}' %></version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <version><%= '${json-path.version}' %></version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mangofactory</groupId>
+            <artifactId>swagger-springmvc</artifactId>
+            <version><%= '${swagger-springmvc.version}' %></version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jackson-module-scala_2.10</artifactId>
+                    <groupId>com.fasterxml.jackson.module</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>scalap</artifactId>
+                    <groupId>org.scala-lang</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>scala-compiler</artifactId>
+                    <groupId>org.scala-lang</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency><% if (databaseType == 'sql') { %>
+        <dependency>
+            <groupId>com.mattbertolini</groupId>
+            <artifactId>liquibase-slf4j</artifactId>
+            <version><%= '${liquibase-slf4j.version}' %></version>
+        </dependency><% } %>
+        <dependency>
+            <groupId>com.ryantenney.metrics</groupId>
+            <artifactId>metrics-spring</artifactId>
+            <version><%= '${metrics-spring.version}' %></version>
+        </dependency>
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version><%= '${HikariCP.version}' %></version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>tools</artifactId>
+                    <groupId>com.sun</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- The HikariCP Java Agent is disabled by default, as it is experimental
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP-agent</artifactId>
+            <version><%= '${HikariCP.version}' %></version>
+        </dependency>
+        -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version><%= '${commons-io.version}' %></version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version><%= '${commons-lang.version}' %></version>
+        </dependency><% if (databaseType == 'nosql') { %>
+        <dependency>
+            <groupId>cz.jirutka.spring</groupId>
+            <artifactId>embedmongo-spring</artifactId>
+            <version>1.2.1</version>
+            <scope>test</scope>
+        </dependency><% } %>
+        <dependency>
+            <groupId>io.github.jhipster.loaded</groupId>
+            <artifactId>core</artifactId>
+            <version><%= '${jhipster-loaded.version}' %></version>
+        </dependency>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version><%= '${javax.inject.version}' %></version>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+        </dependency><% if (databaseType == 'sql') { %>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time-hibernate</artifactId>
+            <version><%= '${joda-time-hibernate.version}' %></version>
+        </dependency><% } %><% if (devDatabaseType == 'mysql' || prodDatabaseType == 'mysql') { %>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency><% } %>
+        <dependency>
+            <groupId>org.apache.geronimo.javamail</groupId>
+            <artifactId>geronimo-javamail_1.4_mail</artifactId>
+            <version><%= '${geronimo-javamail_1.4_mail.version}' %></version>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version><%= '${assertj-core.version}' %></version>
+            <scope>test</scope>
+        </dependency><% if (websocket == 'atmosphere') { %>
+        <dependency>
+            <groupId>org.atmosphere</groupId>
+            <artifactId>atmosphere-spring</artifactId>
+            <version><%= '${atmosphere-spring.version}' %></version>
+        </dependency><% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-ehcache</artifactId>
+            <version><%= '${hibernate.version}' %></version>
+        </dependency><% } %><% if (databaseType == 'sql') { %>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+        </dependency><% } %>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency><% if (databaseType == 'sql') { %>
+        <dependency>
+            <groupId>org.jadira.usertype</groupId>
+            <artifactId>usertype.core</artifactId>
+            <version><%= '${usertype-core.version}' %></version>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version><%= '${liquibase.version}' %></version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jetty-servlet</artifactId>
+                    <groupId>org.eclipse.jetty</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase.ext</groupId>
+            <artifactId>liquibase-hibernate4</artifactId>
+            <version><%= '${liquibase-hibernate.version}' %></version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>hibernate-jpa-2.0-api</artifactId>
+                    <groupId>org.hibernate.javax.persistence</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency><% } %><% if (databaseType == 'nosql') { %>
+        <dependency>
+            <groupId>org.mongeez</groupId>
+            <artifactId>mongeez</artifactId>
+            <version>0.9.4</version>
+        </dependency><% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version><%= '${postgresql.version}' %></version>
+        </dependency><% } %>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version><%= '${spring-boot.version}' %></version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-loader-tools</artifactId>
+            <version><%= '${spring-boot.version}' %></version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency><% if (databaseType == 'sql') { %>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency><% } %><% if (databaseType == 'nosql') { %>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency><% } %>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency><% if (authenticationType == 'token') { %>
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+            <version><%= '${spring-security-oauth2.version}' %></version>
+        </dependency><% } %>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+        <pluginManagement>
+            <plugins>
+                <!--This plugin's configuration is used to store Eclipse m2e settings 
+                only. It has no influence on the Maven build itself.-->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-dependency-plugin</artifactId>
+                                        <versionRange>[1.0,)</versionRange>
+                                        <goals>
+                                            <goal>copy</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <execute />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-enforcer-plugin</artifactId>
+                                        <versionRange>[1.0,)</versionRange>
+                                        <goals>
+                                            <goal>enforce</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <execute />
+                                    </action>
+                                </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.codehaus.mojo</groupId>
+                                        <artifactId>exec-maven-plugin</artifactId>
+                                        <versionRange>[1.2.1,)</versionRange>
+                                        <goals>
+                                            <goal>java</goal>
+                                            <goal>exec</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>com.google.code.sortpom</groupId>
+                <artifactId>maven-sortpom-plugin</artifactId>
+                <version><%= '${maven-sortpom-plugin.version}' %></version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sort</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sortProperties>true</sortProperties>
+                    <nrOfIndentSpace>4</nrOfIndentSpace>
+                    <sortDependencies>groupId,artifactId</sortDependencies>
+                    <sortPlugins>groupId,artifactId</sortPlugins>
+                    <sortProperties>true</sortProperties>
+                    <keepBlankLines>true</keepBlankLines>
+                    <expandEmptyElements>false</expandEmptyElements>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>io.github.jhipster.loaded</groupId>
+                                    <artifactId>agent</artifactId>
+                                    <version><%= '${jhipster-loaded.version}' %></version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>spring_loaded</outputDirectory>
+                                    <destFileName>springloaded-jhipster.jar</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version><%= '${maven-enforcer-plugin.version}' %></version>
+                <executions>
+                    <execution>
+                        <id>enforce-versions</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <message>You are running an older version of Maven. JHipster requires at least Maven 3.0</message>
+                                    <version>[3.0.0,)</version>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <message>You are running an older version of Java. JHipster requires at least JDK <%= '${java.version}' %></message>
+                                    <version>[1.<%= '${java.version}' %>.0,)</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine><% if (javaVersion == '7') { %>-XX:MaxPermSize=128m <% } %>-Xmx256m</argLine>
+                    <forkCount>1</forkCount>
+                    <reuseForks>false</reuseForks>
+                    <!-- Force alphabetical order to have a reproducible build -->
+                    <runOrder>alphabetical</runOrder>
+                    <classpathDependencyExcludes>
+                        <classpathDependencyExclude>org.springsource.loaded:springloaded</classpathDependencyExclude>
+                    </classpathDependencyExcludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <packagingExcludes>WEB-INF/lib/tomcat-*.jar</packagingExcludes>
+                </configuration>
+            </plugin><% if(frontendBuilder == 'gulp') { %>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>Build Frontend with Gulp.JS</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable><%= '${runner}' %></executable>
+                            <workingDirectory><%= '${project.basedir}' %></workingDirectory>
+                            <arguments>
+                                <argument><%= '${runprefix}' %></argument>
+                                <argument>gulp</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>Test Frontend with Gulp.JS</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable><%= '${runner}' %></executable>
+                            <workingDirectory><%= '${project.basedir}' %></workingDirectory>
+                            <arguments>
+                                <argument><%= '${runprefix}' %></argument>
+                                <argument>gulp test</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin><% } %>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version><%= '${sonar-maven-plugin.version}' %></version>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <jvmArguments>-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005</jvmArguments>
+                    <arguments>
+                        <argument>--spring.profiles.active=dev</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <profiles>
         <profile>
@@ -19,31 +578,22 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <!-- Spring profile to use -->
-                <spring.profiles.active>dev</spring.profiles.active>
                 <!-- log configuration -->
                 <logback.loglevel>DEBUG</logback.loglevel>
+                <!-- Spring profile to use -->
+                <spring.profiles.active>dev</spring.profiles.active>
             </properties>
         </profile>
         <profile>
             <id>prod</id>
-            <properties>
-                <!-- Spring profile to use -->
-                <spring.profiles.active>prod</spring.profiles.active>
-                <!-- log configuration -->
-                <logback.loglevel>INFO</logback.loglevel>
-            </properties>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>com.github.trecloux</groupId>
                         <artifactId>yeoman-maven-plugin</artifactId>
                         <version>0.2</version>
-                        <configuration>
-                            <yeomanProjectDirectory><%= _.unescape('\$\{project.basedir}')%></yeomanProjectDirectory>
-                        </configuration>
-                        <executions>
-                            <% if(frontendBuilder == 'grunt') { %><execution>
+                        <executions><% if(frontendBuilder == 'grunt') { %>
+                            <execution>
                                 <id>run-grunt</id>
                                 <phase>generate-resources</phase>
                                 <goals>
@@ -54,6 +604,9 @@
                                 </configuration>
                             </execution><% } %>
                         </executions>
+                        <configuration>
+                            <yeomanProjectDirectory><%= '${project.basedir}' %></yeomanProjectDirectory>
+                        </configuration>
                     </plugin>
                     <plugin>
                         <artifactId>maven-clean-plugin</artifactId>
@@ -89,6 +642,12 @@
                     </plugin>
                 </plugins>
             </build>
+            <properties>
+                <!-- log configuration -->
+                <logback.loglevel>INFO</logback.loglevel>
+                <!-- Spring profile to use -->
+                <spring.profiles.active>prod</spring.profiles.active>
+            </properties>
         </profile><% if(frontendBuilder == 'gulp') { %>
         <profile>
             <id>Windows</id>
@@ -115,638 +674,4 @@
             </properties>
         </profile><% } %>
     </profiles>
-
-    <properties>
-        <!-- Maven build properties -->
-        <java.version>1.${javaVersion}</java.version>
-        <!-- Maven plugins versions -->
-        <maven-enforcer-plugin.version>1.3.1</maven-enforcer-plugin.version>
-        <sonar-maven-plugin.version>2.2</sonar-maven-plugin.version>
-        <!-- Spring-Boot settings -->
-        <run.addResources>false</run.addResources>
-        <!-- Libraries versions -->
-        <assertj-core.version>1.6.1</assertj-core.version><% if (websocket == 'atmosphere') { %>
-        <atmosphere-spring.version>2.2.0</atmosphere-spring.version><% } %>
-        <awaitility.version>1.4.0</awaitility.version>
-        <commons-lang.version>2.6</commons-lang.version>
-        <commons-io.version>2.4</commons-io.version>
-        <javax.inject.version>1</javax.inject.version><% if (databaseType == 'sql') { %>
-        <joda-time-hibernate.version>1.3</joda-time-hibernate.version><% } %>
-        <json-path.version>0.9.1</json-path.version>
-        <geronimo-javamail_1.4_mail.version>1.8.4</geronimo-javamail_1.4_mail.version><% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
-        <hazelcast.version>3.2.5</hazelcast.version><% } %>
-        <hibernate-entitymanager.version>4.3.6.Final</hibernate-entitymanager.version>
-        <HikariCP.version>1.4.0</HikariCP.version>
-        <jhipster-loaded.version>0.12</jhipster-loaded.version><% if (databaseType == 'sql') { %>
-        <liquibase.version>3.1.1</liquibase.version>
-        <liquibase-hibernate.version>3.3</liquibase-hibernate.version>
-        <liquibase-slf4j.version>1.2.1</liquibase-slf4j.version><% } %>
-        <metrics-spring.version>3.0.1</metrics-spring.version><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
-        <postgresql.version>9.3-1102-jdbc41</postgresql.version><% } %><% if (authenticationType == 'token') { %>
-        <spring-security-oauth2.version>2.0.1.RELEASE</spring-security-oauth2.version><% } %>
-        <swagger-springmvc.version>0.8.8</swagger-springmvc.version>
-        <usertype-core.version>3.2.0.GA</usertype-core.version>
-    </properties>
-
-    <repositories>
-        <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>http://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>spring-snapshots</id>
-            <name>Spring Snapshots</name>
-            <url>http://repo.spring.io/snapshot</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>org.jboss.repository.releases</id>
-            <name>JBoss Maven Release Repository</name>
-            <url>https://repository.jboss.org/nexus/content/repositories/releases</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>OSSRH-releases</id>
-            <name>OSSRH Releases</name>
-            <url>https://oss.sonatype.org/content/repositories/releases</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>OSSRH-snapshots</id>
-            <name>OSSRH Releases</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>spring-snapshots</id>
-            <url>http://repo.spring.io/libs-snapshot</url>
-            <snapshots><enabled>true</enabled></snapshots>
-        </pluginRepository>
-        <pluginRepository>
-            <id>spring-milestones</id>
-            <url>http://repo.spring.io/milestone</url>
-            <snapshots><enabled>true</enabled></snapshots>
-        </pluginRepository>
-    </pluginRepositories>
-
-    <prerequisites>
-        <maven>3.0.0</maven>
-    </prerequisites>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.codahale.metrics</groupId>
-            <artifactId>metrics-core</artifactId>
-        </dependency><% if (hibernateCache == 'ehcache') { %>
-        <dependency>
-            <groupId>com.codahale.metrics</groupId>
-            <artifactId>metrics-ehcache</artifactId>
-            <version><%= _.unescape('\$\{codahale-metrics.version}')%></version>
-        </dependency><% } %>
-        <dependency>
-            <groupId>com.codahale.metrics</groupId>
-            <artifactId>metrics-graphite</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.codahale.metrics</groupId>
-            <artifactId>metrics-jvm</artifactId>
-            <version><%= _.unescape('\$\{codahale-metrics.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>com.codahale.metrics</groupId>
-            <artifactId>metrics-servlet</artifactId>
-            <version><%= _.unescape('\$\{codahale-metrics.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>com.codahale.metrics</groupId>
-            <artifactId>metrics-json</artifactId>
-            <version><%= _.unescape('\$\{codahale-metrics.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>com.codahale.metrics</groupId>
-            <artifactId>metrics-servlets</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.codahale.metrics</groupId>
-                    <artifactId>metrics-healthchecks</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-json-org</artifactId>
-            <version><%= _.unescape('\$\{jackson.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-hppc</artifactId>
-            <version><%= _.unescape('\$\{jackson.version}')%></version>
-        </dependency><% if (databaseType == 'sql') { %>
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-hibernate4</artifactId>
-            <version><%= _.unescape('\$\{jackson.version}')%></version>
-        </dependency><% } %>
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-joda</artifactId>
-        </dependency><% if (hibernateCache == 'hazelcast') { %>
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast</artifactId>
-            <version><%= _.unescape('\$\{hazelcast.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-hibernate4</artifactId>
-            <version><%= _.unescape('\$\{hazelcast.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-spring</artifactId>
-            <version><%= _.unescape('\$\{hazelcast.version}')%></version>
-        </dependency><% } %><% if (clusteredHttpSession == 'hazelcast' && hibernateCache != 'hazelcast') { %>
-        <dependency>
-          <groupId>com.hazelcast</groupId>
-          <artifactId>hazelcast</artifactId>
-          <version><%= _.unescape('\$\{hazelcast.version}')%></version>
-        </dependency><% } %><% if (clusteredHttpSession == 'hazelcast') { %>
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-wm</artifactId>
-            <version><%= _.unescape('\$\{hazelcast.version}')%></version>
-        </dependency><% } %>
-        <dependency>
-            <groupId>com.ryantenney.metrics</groupId>
-            <artifactId>metrics-spring</artifactId>
-            <version><%= _.unescape('\${metrics-spring.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version><%= _.unescape('\${HikariCP.version}')%></version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.sun</groupId>
-                    <artifactId>tools</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!-- The HikariCP Java Agent is disabled by default, as it is experimental
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP-agent</artifactId>
-            <version><%= _.unescape('\${HikariCP.version}')%></version>
-        </dependency>
-        -->
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version><%= _.unescape('\${commons-lang.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version><%= _.unescape('\${commons-io.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
-            <version><%= _.unescape('\${javax.inject.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-        </dependency><% if (databaseType == 'sql') { %>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time-hibernate</artifactId>
-            <version><%= _.unescape('\${joda-time-hibernate.version}')%></version>
-        </dependency><% } %>
-        <dependency>
-            <groupId>org.apache.geronimo.javamail</groupId>
-            <artifactId>geronimo-javamail_1.4_mail</artifactId>
-            <version><%= _.unescape('\${geronimo-javamail_1.4_mail.version}')%></version>
-        </dependency><% if (websocket == 'atmosphere') { %>
-        <dependency>
-            <groupId>org.atmosphere</groupId>
-            <artifactId>atmosphere-spring</artifactId>
-            <version><%= _.unescape('\${atmosphere-spring.version}')%></version>
-        </dependency><% } %><% if (databaseType == 'sql') { %>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version><%= _.unescape('\$\{hibernate-entitymanager.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-        </dependency><% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-ehcache</artifactId>
-            <version><%= _.unescape('\$\{hibernate-entitymanager.version}')%></version>
-        </dependency><% } %>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-        </dependency><% if (databaseType == 'sql') { %>
-        <dependency>
-            <groupId>org.jadira.usertype</groupId>
-            <artifactId>usertype.core</artifactId>
-            <version><%= _.unescape('\${usertype-core.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-core</artifactId>
-            <version><%= _.unescape('\${liquibase.version}')%></version>
-            <exclusions>
-                <exclusion>
-		    <groupId>org.eclipse.jetty</groupId>
-		    <artifactId>jetty-servlet</artifactId>
-	       </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.liquibase.ext</groupId>
-            <artifactId>liquibase-hibernate4</artifactId>
-            <version><%= _.unescape('\${liquibase-hibernate.version}')%></version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.hibernate.javax.persistence</groupId>
-                    <artifactId>hibernate-jpa-2.0-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.mattbertolini</groupId>
-            <artifactId>liquibase-slf4j</artifactId>
-            <version><%= _.unescape('\${liquibase-slf4j.version}')%></version>
-        </dependency><% } %>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-autoconfigure</artifactId>
-            <version><%= _.unescape('\$\{spring-boot.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-loader-tools</artifactId>
-            <version><%= _.unescape('\$\{spring-boot.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-logging</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency><% if (databaseType == 'sql') { %>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency><% } %><% if (databaseType == 'nosql') { %>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
-        </dependency><% } %>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-        </dependency><% if (authenticationType == 'token') { %>
-        <dependency>
-            <groupId>org.springframework.security.oauth</groupId>
-            <artifactId>spring-security-oauth2</artifactId>
-            <version><%= _.unescape('\${spring-security-oauth2.version}')%></version>
-        </dependency><% } %><% if (databaseType == 'nosql') { %>
-        <dependency>
-            <groupId>org.mongeez</groupId>
-            <artifactId>mongeez</artifactId>
-            <version>0.9.4</version>
-        </dependency><% } %>
-        <dependency>
-            <groupId>io.github.jhipster.loaded</groupId>
-            <artifactId>core</artifactId>
-            <version><%= _.unescape('\${jhipster-loaded.version}')%></version>
-        </dependency>
-        <dependency>
-            <groupId>com.mangofactory</groupId>
-            <artifactId>swagger-springmvc</artifactId>
-            <version><%= _.unescape('\${swagger-springmvc.version}')%></version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.fasterxml.jackson.module</groupId>
-                    <artifactId>jackson-module-scala_2.10</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.scala-lang</groupId>
-                    <artifactId>scalap</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.scala-lang</groupId>
-                    <artifactId>scala-compiler</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <!-- Database dependencies-->
-        <% if (devDatabaseType == 'mysql' || prodDatabaseType == 'mysql') { %><dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-        <% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %><dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version><%= _.unescape('\${postgresql.version}')%></version>
-        </dependency>
-        <% } %><% if (devDatabaseType == 'h2Memory') { %><dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-        </dependency><% } %>
-
-        <!-- Test dependencies -->
-        <dependency>
-            <groupId>com.jayway.awaitility</groupId>
-            <artifactId>awaitility</artifactId>
-            <version><%= _.unescape('\${awaitility.version}')%></version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.jayway.jsonpath</groupId>
-            <artifactId>json-path</artifactId>
-            <version><%= _.unescape('\${json-path.version}')%></version>
-            <scope>test</scope>
-        </dependency><% if (devDatabaseType != 'h2Memory') { %>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>test</scope>
-        </dependency><% } %>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <version><%= _.unescape('\${assertj-core.version}')%></version>
-            <scope>test</scope>
-        </dependency><% if (databaseType == 'nosql') { %>
-        <dependency>
-            <groupId>cz.jirutka.spring</groupId>
-            <artifactId>embedmongo-spring</artifactId>
-            <version>1.2.1</version>
-            <scope>test</scope>
-        </dependency><% } %>
-    </dependencies>
-    <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-enforcer-plugin</artifactId>
-                <version><%= _.unescape('\${maven-enforcer-plugin.version}')%></version>
-                <executions>
-                    <execution>
-                        <id>enforce-versions</id>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <requireMavenVersion>
-                                    <message>You are running an older version of Maven. JHipster requires at least Maven 3.0</message>
-                                    <version>[3.0.0,)</version>
-                                </requireMavenVersion>
-                                <requireJavaVersion>
-                                    <message>You are running an older version of Java. JHipster requires at least JDK 1.${javaVersion}</message>
-                                    <version>[1.${javaVersion}.0,)</version>
-                                </requireJavaVersion>
-                            </rules>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <argLine><% if (javaVersion == '7') { %>-XX:MaxPermSize=128m <% } %>-Xmx256m</argLine>
-                    <forkCount>1</forkCount>
-                    <reuseForks>false</reuseForks>
-                    <!-- Force alphabetical order to have a reproducible build -->
-                    <runOrder>alphabetical</runOrder>
-                    <classpathDependencyExcludes>
-                        <classpathDependencyExclude>org.springsource.loaded:springloaded</classpathDependencyExclude>
-                    </classpathDependencyExcludes>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <configuration>
-                    <packagingExcludes>WEB-INF/lib/tomcat-*.jar</packagingExcludes>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <configuration>
-                    <downloadSources>true</downloadSources>
-                    <downloadJavadocs>true</downloadJavadocs>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-                <version><%= _.unescape('\${sonar-maven-plugin.version}')%></version>
-            </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <jvmArguments>
-                        -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
-                    </jvmArguments>
-                    <arguments>
-                        <argument>--spring.profiles.active=dev</argument>
-                    </arguments>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>io.github.jhipster.loaded</groupId>
-                                    <artifactId>agent</artifactId>
-                                    <version><%= _.unescape('\${jhipster-loaded.version}')%></version>
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>spring_loaded</outputDirectory>
-                                    <destFileName>springloaded-jhipster.jar</destFileName>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin><% if(frontendBuilder == 'gulp') { %>
-            <plugin>
-                <artifactId>exec-maven-plugin</artifactId>
-                <groupId>org.codehaus.mojo</groupId>
-                <executions>
-                    <execution>
-                        <id>Build Frontend with Gulp.JS</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable><%= _.unescape('\$\{runner\}') %></executable>
-                            <workingDirectory><%= _.unescape('\$\{project.basedir}')%></workingDirectory>
-                            <arguments>
-                                <argument><%= _.unescape('\$\{runprefix\}') %></argument>
-                                <argument>gulp</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>Test Frontend with Gulp.JS</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable><%= _.unescape('\$\{runner\}') %></executable>
-                            <workingDirectory><%= _.unescape('\$\{project.basedir}')%></workingDirectory>
-                            <arguments>
-                                <argument><%= _.unescape('\$\{runprefix\}') %></argument>
-                                <argument>gulp test</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin><% } %>
-        </plugins>
-        <pluginManagement>
-            <plugins>
-                <!--This plugin's configuration is used to store Eclipse m2e settings only.
-                It has no influence on the Maven build itself.-->
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>
-                                            org.apache.maven.plugins
-                                        </groupId>
-                                        <artifactId>
-                                            maven-dependency-plugin
-                                        </artifactId>
-                                        <versionRange>
-                                            [1.0,)
-                                        </versionRange>
-                                        <goals>
-                                            <goal>copy</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <execute />
-                                    </action>
-                                </pluginExecution>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.apache.maven.plugins</groupId>
-                                        <artifactId>maven-enforcer-plugin</artifactId>
-                                        <versionRange>
-                                            [1.0,)
-                                        </versionRange>
-                                        <goals>
-                                            <goal>enforce</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <execute />
-                                    </action>
-                                </pluginExecution>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.codehaus.mojo</groupId>
-                                        <artifactId>exec-maven-plugin</artifactId>
-                                        <versionRange>
-                                            [1.2.1,)
-                                        </versionRange>
-                                        <goals>
-                                            <goal>java</goal>
-                                            <goal>exec</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore />
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
 </project>
