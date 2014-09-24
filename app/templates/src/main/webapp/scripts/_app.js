@@ -40,14 +40,14 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                     templateUrl: 'views/settings.html',
                     controller: 'SettingsController',
                     access: {
-                        authorizedRoles: [USER_ROLES.all]
+                        authorizedRoles: [USER_ROLES.user]
                     }
                 })
                 .when('/password', {
                     templateUrl: 'views/password.html',
                     controller: 'PasswordController',
                     access: {
-                        authorizedRoles: [USER_ROLES.all]
+                        authorizedRoles: [USER_ROLES.user]
                     }
                 })
                 .when('/sessions', {
@@ -59,7 +59,7 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                         }]
                     },
                     access: {
-                        authorizedRoles: [USER_ROLES.all]
+                        authorizedRoles: [USER_ROLES.user]
                     }
                 })
 <% if (websocket == 'atmosphere') { %>                .when('/tracker', {
