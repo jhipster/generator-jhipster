@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @DirtiesContext(classMode= DirtiesContext.ClassMode.AFTER_CLASS)
-@ActiveProfiles("dev")<% if (databaseType == 'nosql') { %>
+<% if (databaseType == 'nosql') { %>
 @Import(MongoConfiguration.class)<% } %>
 public class UserResourceTest {
 
