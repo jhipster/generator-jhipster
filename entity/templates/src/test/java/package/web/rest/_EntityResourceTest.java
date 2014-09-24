@@ -43,7 +43,6 @@ import <%=packageName%>.repository.<%= entityClass %>Repository;
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
     DirtiesContextTestExecutionListener.class,
     TransactionalTestExecutionListener.class })
-@ActiveProfiles("dev")
 public class <%= entityClass %>ResourceTest {
     <% if (databaseType == 'sql') { %>
     private static final Long DEFAULT_ID = new Long(1L);<% } %><% if (databaseType == 'nosql') { %>
