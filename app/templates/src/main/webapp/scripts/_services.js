@@ -171,20 +171,17 @@
                             $rootScope.authenticated = false
                             return;
                         }<% } %>
-                        if (!$rootScope.isAuthorized(authorizedRoles)) {
-                            Account.get(function(data) {
-                                Session.create(data.login, data.firstName, data.lastName, data.email, data.roles);
-                                $rootScope.account = Session;
-
-                                $rootScope.authenticated = true;
-                            });
-                        }
+                        Account.get(function(data) {
+                            Session.create(data.login, data.firstName, data.lastName, data.email, data.roles);
+                            $rootScope.account = Session;
+                            $rootScope.authenticated = true;
+                        });
                     }
                     $rootScope.authenticated = !!Session.login;
                 }).error(function (data, status, headers, config) {
-                    $rootScope.authenticated = $rootScope.isAuthorized(authorizedRoles);
+                    $rootScope.authenticated = false;
 
-                    if (!$rootScope.authenticated) {
+                    if (!$rootScope.isAuthorized(authorizedRoles)) {
                         $rootScope.$broadcast('event:auth-loginRequired', data);
                     }
                 });
