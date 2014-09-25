@@ -412,7 +412,7 @@ JhipsterGenerator.prototype.app = function app() {
             break;
         case 'maven':
         default :
-            this.template('_pom.xml', 'pom.xml');
+            this.template('_pom.xml', 'pom.xml', null, { 'interpolate': /<%=([\s\S]+?)%>/g });
     }
 
     // Create Java resource files

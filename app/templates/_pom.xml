@@ -57,7 +57,7 @@
         <dependency>
             <groupId>com.codahale.metrics</groupId>
             <artifactId>metrics-ehcache</artifactId>
-            <version><%= '${codahale-metrics.version}' %></version>
+            <version>${codahale-metrics.version}</version>
         </dependency><% } %>
         <dependency>
             <groupId>com.codahale.metrics</groupId>
@@ -66,17 +66,17 @@
         <dependency>
             <groupId>com.codahale.metrics</groupId>
             <artifactId>metrics-json</artifactId>
-            <version><%= '${codahale-metrics.version}' %></version>
+            <version>${codahale-metrics.version}</version>
         </dependency>
         <dependency>
             <groupId>com.codahale.metrics</groupId>
             <artifactId>metrics-jvm</artifactId>
-            <version><%= '${codahale-metrics.version}' %></version>
+            <version>${codahale-metrics.version}</version>
         </dependency>
         <dependency>
             <groupId>com.codahale.metrics</groupId>
             <artifactId>metrics-servlet</artifactId>
-            <version><%= '${codahale-metrics.version}' %></version>
+            <version>${codahale-metrics.version}</version>
         </dependency>
         <dependency>
             <groupId>com.codahale.metrics</groupId>
@@ -91,12 +91,12 @@
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-hibernate4</artifactId>
-            <version><%= '${jackson.version}' %></version>
+            <version>${jackson.version}</version>
         </dependency><% } %>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-hppc</artifactId>
-            <version><%= '${jackson.version}' %></version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
@@ -105,7 +105,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-json-org</artifactId>
-            <version><%= '${jackson.version}' %></version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
@@ -115,39 +115,39 @@
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
-            <version><%= '${hazelcast.version}' %></version>
+            <version>${hazelcast.version}</version>
         </dependency><% } %><% if (hibernateCache == 'hazelcast') { %>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-hibernate4</artifactId>
-            <version><%= '${hazelcast.version}' %></version>
+            <version>${hazelcast.version}</version>
         </dependency>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spring</artifactId>
-            <version><%= '${hazelcast.version}' %></version>
+            <version>${hazelcast.version}</version>
         </dependency><% } %><% if (clusteredHttpSession == 'hazelcast') { %>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-wm</artifactId>
-            <version><%= '${hazelcast.version}' %></version>
+            <version>${hazelcast.version}</version>
         </dependency><% } %>
         <dependency>
             <groupId>com.jayway.awaitility</groupId>
             <artifactId>awaitility</artifactId>
-            <version><%= '${awaitility.version}' %></version>
+            <version>${awaitility.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
-            <version><%= '${json-path.version}' %></version>
+            <version>${json-path.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.mangofactory</groupId>
             <artifactId>swagger-springmvc</artifactId>
-            <version><%= '${swagger-springmvc.version}' %></version>
+            <version>${swagger-springmvc.version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>jackson-module-scala_2.10</artifactId>
@@ -166,17 +166,17 @@
         <dependency>
             <groupId>com.mattbertolini</groupId>
             <artifactId>liquibase-slf4j</artifactId>
-            <version><%= '${liquibase-slf4j.version}' %></version>
+            <version>${liquibase-slf4j.version}</version>
         </dependency><% } %>
         <dependency>
             <groupId>com.ryantenney.metrics</groupId>
             <artifactId>metrics-spring</artifactId>
-            <version><%= '${metrics-spring.version}' %></version>
+            <version>${metrics-spring.version}</version>
         </dependency>
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version><%= '${HikariCP.version}' %></version>
+            <version>${HikariCP.version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>tools</artifactId>
@@ -188,18 +188,18 @@
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP-agent</artifactId>
-            <version><%= '${HikariCP.version}' %></version>
+            <version>${HikariCP.version}</version>
         </dependency>
         -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version><%= '${commons-io.version}' %></version>
+            <version>${commons-io.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
-            <version><%= '${commons-lang.version}' %></version>
+            <version>${commons-lang.version}</version>
         </dependency><% if (databaseType == 'nosql') { %>
         <dependency>
             <groupId>cz.jirutka.spring</groupId>
@@ -210,12 +210,12 @@
         <dependency>
             <groupId>io.github.jhipster.loaded</groupId>
             <artifactId>core</artifactId>
-            <version><%= '${jhipster-loaded.version}' %></version>
+            <version>${jhipster-loaded.version}</version>
         </dependency>
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
-            <version><%= '${javax.inject.version}' %></version>
+            <version>${javax.inject.version}</version>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
@@ -224,7 +224,7 @@
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time-hibernate</artifactId>
-            <version><%= '${joda-time-hibernate.version}' %></version>
+            <version>${joda-time-hibernate.version}</version>
         </dependency><% } %><% if (devDatabaseType == 'mysql' || prodDatabaseType == 'mysql') { %>
         <dependency>
             <groupId>mysql</groupId>
@@ -233,23 +233,23 @@
         <dependency>
             <groupId>org.apache.geronimo.javamail</groupId>
             <artifactId>geronimo-javamail_1.4_mail</artifactId>
-            <version><%= '${geronimo-javamail_1.4_mail.version}' %></version>
+            <version>${geronimo-javamail_1.4_mail.version}</version>
         </dependency>
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version><%= '${assertj-core.version}' %></version>
+            <version>${assertj-core.version}</version>
             <scope>test</scope>
         </dependency><% if (websocket == 'atmosphere') { %>
         <dependency>
             <groupId>org.atmosphere</groupId>
             <artifactId>atmosphere-spring</artifactId>
-            <version><%= '${atmosphere-spring.version}' %></version>
+            <version>${atmosphere-spring.version}</version>
         </dependency><% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-ehcache</artifactId>
-            <version><%= '${hibernate.version}' %></version>
+            <version>${hibernate.version}</version>
         </dependency><% } %><% if (databaseType == 'sql') { %>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -262,12 +262,12 @@
         <dependency>
             <groupId>org.jadira.usertype</groupId>
             <artifactId>usertype.core</artifactId>
-            <version><%= '${usertype-core.version}' %></version>
+            <version>${usertype-core.version}</version>
         </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version><%= '${liquibase.version}' %></version>
+            <version>${liquibase.version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>jetty-servlet</artifactId>
@@ -278,7 +278,7 @@
         <dependency>
             <groupId>org.liquibase.ext</groupId>
             <artifactId>liquibase-hibernate4</artifactId>
-            <version><%= '${liquibase-hibernate.version}' %></version>
+            <version>${liquibase-hibernate.version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>hibernate-jpa-2.0-api</artifactId>
@@ -294,7 +294,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version><%= '${postgresql.version}' %></version>
+            <version>${postgresql.version}</version>
         </dependency><% } %>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -307,12 +307,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
-            <version><%= '${spring-boot.version}' %></version>
+            <version>${spring-boot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-loader-tools</artifactId>
-            <version><%= '${spring-boot.version}' %></version>
+            <version>${spring-boot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -354,7 +354,7 @@
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
-            <version><%= '${spring-security-oauth2.version}' %></version>
+            <version>${spring-security-oauth2.version}</version>
         </dependency><% } %>
     </dependencies>
 
@@ -426,7 +426,7 @@
             <plugin>
                 <groupId>com.google.code.sortpom</groupId>
                 <artifactId>maven-sortpom-plugin</artifactId>
-                <version><%= '${maven-sortpom-plugin.version}' %></version>
+                <version>${maven-sortpom-plugin.version}</version>
                 <executions>
                     <execution>
                         <phase>verify</phase>
@@ -460,7 +460,7 @@
                                 <artifactItem>
                                     <groupId>io.github.jhipster.loaded</groupId>
                                     <artifactId>agent</artifactId>
-                                    <version><%= '${jhipster-loaded.version}' %></version>
+                                    <version>${jhipster-loaded.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
                                     <outputDirectory>spring_loaded</outputDirectory>
@@ -474,7 +474,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version><%= '${maven-enforcer-plugin.version}' %></version>
+                <version>${maven-enforcer-plugin.version}</version>
                 <executions>
                     <execution>
                         <id>enforce-versions</id>
@@ -488,8 +488,8 @@
                                     <version>[3.0.0,)</version>
                                 </requireMavenVersion>
                                 <requireJavaVersion>
-                                    <message>You are running an older version of Java. JHipster requires at least JDK <%= '${java.version}' %></message>
-                                    <version>[1.<%= '${java.version}' %>.0,)</version>
+                                    <message>You are running an older version of Java. JHipster requires at least JDK ${java.version}</message>
+                                    <version>[1.${java.version}.0,)</version>
                                 </requireJavaVersion>
                             </rules>
                         </configuration>
@@ -528,10 +528,10 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable><%= '${runner}' %></executable>
-                            <workingDirectory><%= '${project.basedir}' %></workingDirectory>
+                            <executable>${runner}</executable>
+                            <workingDirectory>${project.basedir}</workingDirectory>
                             <arguments>
-                                <argument><%= '${runprefix}' %></argument>
+                                <argument>${runprefix}</argument>
                                 <argument>gulp</argument>
                             </arguments>
                         </configuration>
@@ -543,10 +543,10 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable><%= '${runner}' %></executable>
-                            <workingDirectory><%= '${project.basedir}' %></workingDirectory>
+                            <executable>${runner}</executable>
+                            <workingDirectory>${project.basedir}</workingDirectory>
                             <arguments>
-                                <argument><%= '${runprefix}' %></argument>
+                                <argument>${runprefix}</argument>
                                 <argument>gulp test</argument>
                             </arguments>
                         </configuration>
@@ -556,7 +556,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
-                <version><%= '${sonar-maven-plugin.version}' %></version>
+                <version>${sonar-maven-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -605,7 +605,7 @@
                             </execution><% } %>
                         </executions>
                         <configuration>
-                            <yeomanProjectDirectory><%= '${project.basedir}' %></yeomanProjectDirectory>
+                            <yeomanProjectDirectory>${project.basedir}</yeomanProjectDirectory>
                         </configuration>
                     </plugin>
                     <plugin>
