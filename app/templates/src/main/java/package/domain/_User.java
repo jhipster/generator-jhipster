@@ -18,36 +18,27 @@ import java.util.Set;
 /**
  * A user.
  */
-<% if (databaseType == 'sql') { %>@Entity
-@Table(name = "T_USER")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
+<% if (databaseType == 'sql') { %>@Entity<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'nosql') { %>
 @Document(collection = "T_USER")<% } %>
 public class User extends AbstractAuditingEntity implements Serializable {
 
     @NotNull
-    @Size(min = 0, max = 50)
-    @Id<% if (databaseType == 'sql') { %>
-    @Column(length = 50)<% } %>
+    @Size(min = 2, max = 50)
     private String login;
 
     @JsonIgnore
-    @Size(min = 0, max = 100)<% if (databaseType == 'sql') { %>
-    @Column(length = 100)<% } %>
+    @Size(min = 0, max = 100)
     private String password;
 
-    @Size(min = 0, max = 50)<% if (databaseType == 'sql') { %>
-    @Column(name = "first_name", length = 50)<% } %><% if (databaseType == 'nosql') { %>
-    @Field("first_name")<% } %>
+    @Size(min = 0, max = 50)
     private String firstName;
 
-    @Size(min = 0, max = 50)<% if (databaseType == 'sql') { %>
-    @Column(name = "last_name", length = 50)<% } %><% if (databaseType == 'nosql') { %>
-    @Field("last_name")<% } %>
+    @Size(min = 0, max = 50)
     private String lastName;
 
     @Email
-    @Size(min = 0, max = 100)<% if (databaseType == 'sql') { %>
-    @Column(length = 100)<% } %>
+    @Size(min = 0, max = 100)
     private String email;
 
     private boolean activated = false;

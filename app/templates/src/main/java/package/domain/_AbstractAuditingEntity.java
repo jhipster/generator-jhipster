@@ -1,53 +1,45 @@
 package <%=packageName%>.domain;
-
-<% if (databaseType == 'sql') { %>import org.hibernate.annotations.Type;
+<% if (databaseType == 'sql') { %>
+import javax.persistence.EntityListeners;
+import javax.persistence.MappedSuperclass;<% } %>
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;<% if (databaseType == 'sql') { %>
 import org.hibernate.envers.Audited;<% } %>
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-<% if (databaseType == 'nosql') { %>import org.springframework.data.mongodb.core.mapping.Field;
-<% } %><% if (databaseType == 'sql') { %>
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import javax.persistence.Column;
-import javax.persistence.EntityListeners;
-import javax.persistence.MappedSuperclass;<% } %>
-import javax.validation.constraints.NotNull;
+import org.springframework.data.annotation.LastModifiedDate;<% if (databaseType == 'sql') { %>
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;<% } %>
 
 /**
  * Base abstract class for entities which will hold definitions for created, last modified by and created,
  * last modified by date.
- */
-<% if (databaseType == 'sql') { %>@MappedSuperclass
+ */<% if (databaseType == 'sql') { %>
+@MappedSuperclass
 @Audited
 @EntityListeners(AuditingEntityListener.class)<% } %>
-public abstract class AbstractAuditingEntity {
-
-    @CreatedBy<% if (databaseType == 'sql') { %>
+public abstract class AbstractAuditingEntity extends AbstractEntity {
+	
+	private static final long serialVersionUID = <%= Math.floor(Math.random() * 0x10000000000000) %>L;
+	
+    @CreatedBy
     @NotNull
-    @Column(name = "created_by", nullable = false, length = 50)<% } %><% if (databaseType == 'nosql') { %>
-    @Field("created_by")<% } %>
+    @Size(min=2, max=50)
     private String createdBy;
 
-    @CreatedDate<% if (databaseType == 'sql') { %>
+    @CreatedDate
     @NotNull
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @Column(name = "created_date", nullable = false)<% } %><% if (databaseType == 'nosql') { %>
-    @Field("created_date")<% } %>
     private DateTime createdDate = DateTime.now();
 
-    @LastModifiedBy<% if (databaseType == 'sql') { %>
-    @Column(name = "last_modified_by", length = 50)<% } %><% if (databaseType == 'nosql') { %>
-    @Field("last_modified_by")<% } %>
+    @LastModifiedBy
+    @Size(min=2, max=50)
     private String lastModifiedBy;
 
-    @LastModifiedDate<% if (databaseType == 'sql') { %>
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @Column(name = "last_modified_date")<% } %><% if (databaseType == 'nosql') { %>
-    @Field("last_modified_date  ")<% } %>
+    @LastModifiedDate
     private DateTime lastModifiedDate = DateTime.now();
 
+    
     public String getCreatedBy() {
         return createdBy;
     }
