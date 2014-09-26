@@ -179,6 +179,7 @@
     "metrics": {
         "title": "애플리케이션 메트릭스",
         "refresh.button": "새로고침",
+        "updating": "업데이트...",
         "health": {
             "title": "상태 확인",
             "database": "데이터베이스: ",

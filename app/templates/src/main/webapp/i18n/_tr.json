@@ -179,6 +179,7 @@
     "metrics": {
         "title": "Uygulama Ölçütleri",
         "refresh.button": "Yenile",
+        "updating": "Güncellenmesi...",
         "health": {
             "title": "Heath checks",
             "database": "Veritabanı: ",

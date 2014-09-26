@@ -179,6 +179,7 @@
     "metrics": {
         "title": "Program målinger",
         "refresh.button": "Opdatér",
+        "updating": "Ajourføring...",
         "health": {
             "title": "Sundhedskontroller",
             "database": "Database: ",
