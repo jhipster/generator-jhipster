@@ -439,7 +439,6 @@
                     <nrOfIndentSpace>4</nrOfIndentSpace>
                     <sortDependencies>groupId,artifactId</sortDependencies>
                     <sortPlugins>groupId,artifactId</sortPlugins>
-                    <sortProperties>true</sortProperties>
                     <keepBlankLines>true</keepBlankLines>
                     <expandEmptyElements>false</expandEmptyElements>
                 </configuration>
