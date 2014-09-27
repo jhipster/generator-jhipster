@@ -192,6 +192,9 @@ OpenshiftGenerator.prototype.copyOpenshiftFiles = function copyOpenshiftFiles() 
     this.copy('openshift/action_hooks/build', 'deploy/openshift/.openshift/action_hooks/build');
     this.copy('openshift/action_hooks/start', 'deploy/openshift/.openshift/action_hooks/start');
     this.copy('openshift/action_hooks/stop', 'deploy/openshift/.openshift/action_hooks/stop');
+    if (this.javaVersion === "8") {
+        this.copy('openshift/action_hooks/pre_build', 'deploy/openshift/.openshift/action_hooks/pre_build');
+    }
     this.conflicter.resolve(function (err) {
         done();
     });
@@ -243,6 +246,7 @@ OpenshiftGenerator.prototype.gitChmod = function gitChmod() {
     var child = exec('git update-index --chmod=+x .openshift/action_hooks/build && '+
         'git update-index --chmod=+x .openshift/action_hooks/start && '+
         'git update-index --chmod=+x .openshift/action_hooks/stop && ' +
+        (this.javaVersion === "8" ? 'git update-index --chmod=+x .openshift/action_hooks/pre_build && ' : '') +
         'git commit -m "Chmod"', { cwd: 'deploy/openshift' }, function (err, stdout, stderr) {
         if (stdout.search('nothing to commit') >= 0) {
             this.log('+x already set');
