@@ -219,7 +219,7 @@ OpenshiftGenerator.prototype.gitCommit = function gitCommit() {
     var done = this.async();
 
     this.log(chalk.bold('\nAdding files for initial commit'));
-    var child = exec('git add -A && git commit -m "Initial commit"', { cwd: 'deploy/openshift' }, function (err, stdout, stderr) {
+    var child = exec('git add -A && git commit -m "Initial commit"', { cwd: 'deploy/openshift', maxBuffer: 1000*1024 }, function (err, stdout, stderr) {
         if (stdout.search('nothing to commit') >= 0) {
             this.log('Re-pushing the existing "deploy/openshift" build...');
         } else if (err) {
