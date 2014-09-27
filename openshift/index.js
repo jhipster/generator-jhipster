@@ -301,7 +301,7 @@ OpenshiftGenerator.prototype.restartApp = function restartApp() {
         var hasWarning = false;
         var before_hostname = this.dist_repo_url.indexOf('@') + 1;
         var after_hostname = this.dist_repo_url.length - ( 'openshift'.length + 12 );
-        host_url = 'http://' + this.dist_repo_url.slice(before_hostname, after_hostname) + 'com';
+        host_url = 'http://' + this.dist_repo_url.slice(before_hostname, after_hostname);
 
         this.log(chalk.green('\nYour app should now be live at \n\t' + chalk.bold(host_url)));
         if(hasWarning) {
