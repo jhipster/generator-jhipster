@@ -214,7 +214,7 @@ OpenshiftGenerator.prototype.productionBuild = function productionBuild() {
     }.bind(this));
 };
 
-OpenshiftGenerator.prototype.gitCommit = function gitInit() {
+OpenshiftGenerator.prototype.gitCommit = function gitCommit() {
     if(this.abort || !this.openshift_remote_exists ) return;
     var done = this.async();
 
