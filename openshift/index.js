@@ -55,16 +55,13 @@ OpenshiftGenerator.prototype.checkInstallation = function checkInstallation() {
     }.bind(this));
 };
 
-OpenshiftGenerator.prototype.gitInit = function gitInit() {
+OpenshiftGenerator.prototype.dirInit = function dirInit() {
     if(this.abort) return;
     var done = this.async();
 
     this.log(chalk.bold('Initializing deployment repo'));
     this.mkdir('deploy/openshift');
-    exec('git init', { cwd: 'deploy/openshift' }, function (err, stdout, stderr) {
-        this.log(stdout);
-        done();
-    }.bind(this));
+    done();
 };
 
 OpenshiftGenerator.prototype.gitRemoteCheck = function gitRemoteCheck() {
