@@ -235,6 +235,30 @@ OpenshiftGenerator.prototype.gitCommit = function gitCommit() {
     }.bind(this));
 };
 
+OpenshiftGenerator.prototype.gitChmod = function gitChmod() {
+    if(this.abort || !this.openshift_remote_exists ) return;
+    var done = this.async();
+
+    this.log(chalk.bold('\nChmod action hooks'));
+    var child = exec('git update-index --chmod=+x .openshift/action_hooks/build && '+
+        'git update-index --chmod=+x .openshift/action_hooks/start && '+
+        'git update-index --chmod=+x .openshift/action_hooks/stop && ' +
+        'git commit -m "Chmod"', { cwd: 'deploy/openshift' }, function (err, stdout, stderr) {
+        if (stdout.search('nothing to commit') >= 0) {
+            this.log('+x already set');
+        } else if (err) {
+            this.log.error(err);
+        } else {
+            this.log(chalk.green('Done, without errors.'));
+        }
+        done();
+    }.bind(this));
+
+    child.stdout.on('data', function(data) {
+        this.log(data.toString());
+    }.bind(this));
+};
+
 OpenshiftGenerator.prototype.gitForcePush = function gitForcePush() {
     if (this.abort || !this.openshift_remote_exists) return;
     var done = this.async();
