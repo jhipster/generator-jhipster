@@ -20,6 +20,7 @@ var OpenshiftGenerator = module.exports = function OpenshiftGenerator() {
     this.javaVersion = this.config.get('javaVersion');
     this.hibernateCache = this.config.get('hibernateCache');
     this.databaseType = this.config.get('databaseType');
+    this.prodDatabaseType = this.config.get('prodDatabaseType');
     this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
 };
 
