@@ -2,7 +2,7 @@
 
 set -x
 
-jar=$(ls ${OPENSHIFT_REPO_DIR}/target/*.war | head -n1)
+jar=$(ls ${OPENSHIFT_REPO_DIR}target/*.war | head -n1)
 
 nohup java -server \
      -jar ${jar} \
