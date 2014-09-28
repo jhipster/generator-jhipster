@@ -136,7 +136,8 @@ OpenshiftGenerator.prototype.rhcAppCreate = function rhcAppCreate() {
     var done = this.async();
 
     this.log(chalk.bold("\nCreating your Openshift hosting environment, this may take a couple minutes..."));
-    var child = exec('rhc app create ' + this.openShiftDeployedName + ' diy-0.1 mysql-5.5 -r ./', { cwd: 'deploy/openshift' }, function (err, stdout, stderr) {
+    var db = this.prodDatabaseType === 'postgresql' ? 'postgresql-9.2' : 'mysql-5.5';
+    var child = exec('rhc app create ' + this.openShiftDeployedName + ' diy-0.1 ' + db + ' -r ./', { cwd: 'deploy/openshift' }, function (err, stdout, stderr) {
         var lines = stdout.split('\n');
         this.log(stdout);
         if (stdout.search('Not authenticated') >= 0 || stdout.search('Invalid characters found in login') >= 0) {
