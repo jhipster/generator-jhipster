@@ -191,8 +191,8 @@ OpenshiftGenerator.prototype.copyOpenshiftFiles = function copyOpenshiftFiles() 
     var done = this.async();
     this.log(chalk.bold('\nCreating Openshift deployment files'));
 
-    this.copy('openshift/action_hooks/start', 'deploy/openshift/.openshift/action_hooks/start');
     this.template('openshift/action_hooks/_build', 'deploy/openshift/.openshift/action_hooks/build', null, { 'interpolate': /<%=([\s\S]+?)%>/g });
+    this.template('openshift/action_hooks/_start', 'deploy/openshift/.openshift/action_hooks/start', null, { 'interpolate': /<%=([\s\S]+?)%>/g });
     this.copy('openshift/action_hooks/stop', 'deploy/openshift/.openshift/action_hooks/stop');
     if (this.javaVersion === "8") {
         this.copy('openshift/action_hooks/pre_build', 'deploy/openshift/.openshift/action_hooks/pre_build');
