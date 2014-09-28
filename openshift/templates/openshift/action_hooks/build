@@ -1,7 +1,0 @@
-#! /bin/bash
-
-set -x
-
-cd ${OPENSHIFT_REPO_DIR}
-
-mvn package -DskipTests=true -Dmaven.repo.local=${OPENSHIFT_DATA_DIR}maven/repository
