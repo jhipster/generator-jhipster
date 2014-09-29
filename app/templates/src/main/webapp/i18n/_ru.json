@@ -179,6 +179,7 @@
     "metrics": {
         "title": "Метрики приложения",
         "refresh.button": "Обновить",
+        "updating": "Обновление...",
         "health": {
             "title": "Состояние",
             "database": "База данных: ",

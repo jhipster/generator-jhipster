@@ -6,7 +6,7 @@
 </p>
 
 <h3 translate="metrics.health.title">Health Checks</h3>
-<div id="healthCheck" class="row">
+<div id="healthCheck" class="row" ng-hide="updatingHealth">
     <div class="col-md-3" ng-show="healthCheck.db.status == 'UP'">
         <div class="alert alert-success"><strong translate="metrics.health.database">Database: </strong>OK</div>
     </div>
@@ -51,9 +51,10 @@
         </div>
     </div>
 </div>
+<div class="well well-lg" ng-show="updatingHealth" translate="metrics.updating">Updating...</div>
 
 <h3 translate="metrics.jvm.title">JVM Metrics</h3>
-<div class="row">
+<div class="row" ng-hide="updatingMetrics">
     <div class="col-md-4">
         <b translate="metrics.jvm.memory.title">Memory</b>
         <p>{{'metrics.jvm.memory.total' | translate}} ({{metrics.gauges['jvm.memory.total.used'].value / 1000000 | number:0}}M / {{metrics.gauges['jvm.memory.total.max'].value / 1000000 | number:0}}M)</p>
@@ -150,6 +151,7 @@
         </div>
     </div>
 </div>
+<div class="well well-lg" ng-show="updatingMetrics" translate="metrics.updating">Updating...</div>
 
 <h3 translate="metrics.jvm.http.title">HTTP requests (events per second)</h3>
 <p>{{'metrics.jvm.http.active' | translate}} <b>{{metrics.counters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.activeRequests'].count | number:0}}</b> - {{'metrics.jvm.http.total' | translate}} <b>{{metrics.timers['com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests'].count | number:0}}</b></p>

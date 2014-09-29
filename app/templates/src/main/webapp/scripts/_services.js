@@ -47,10 +47,15 @@
         });
     });
 
-<%= angularAppName %>.factory('MetricsService',function ($resource) {
-        return $resource('metrics/metrics', {}, {
-            'get': { method: 'GET'}
-        });
+<%= angularAppName %>.factory('MetricsService',function ($http) {
+    		return {
+            get: function() {
+                var promise = $http.get('metrics/metrics').then(function(response){
+                    return response.data;
+                });
+                return promise;
+            }
+        };
     });
 
 <%= angularAppName %>.factory('ThreadDumpService', function ($http) {

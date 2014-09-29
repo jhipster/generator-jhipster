@@ -179,6 +179,7 @@
     "metrics": {
         "title": "Métriques de l'application",
         "refresh.button": "Rafraichir",
+        "updating": "Mise à jour...",
         "health": {
             "title": "Diagnostics",
             "database": "Base de données: ",

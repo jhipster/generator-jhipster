@@ -180,6 +180,7 @@
     "metrics": {
         "title": "Anwendungs-Metriken",
         "refresh.button": "Aktualisieren",
+        "updating": "Aktualisierung...",
         "health": {
             "title": "Heath checks",
             "database": "Datenbank: ",
