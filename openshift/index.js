@@ -20,6 +20,7 @@ var OpenshiftGenerator = module.exports = function OpenshiftGenerator() {
     this.javaVersion = this.config.get('javaVersion');
     this.hibernateCache = this.config.get('hibernateCache');
     this.databaseType = this.config.get('databaseType');
+    this.prodDatabaseType = this.config.get('prodDatabaseType');
     this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
 };
 
@@ -55,16 +56,13 @@ OpenshiftGenerator.prototype.checkInstallation = function checkInstallation() {
     }.bind(this));
 };
 
-OpenshiftGenerator.prototype.gitInit = function gitInit() {
+OpenshiftGenerator.prototype.dirInit = function dirInit() {
     if(this.abort) return;
     var done = this.async();
 
     this.log(chalk.bold('Initializing deployment repo'));
     this.mkdir('deploy/openshift');
-    exec('git init', { cwd: 'deploy/openshift' }, function (err, stdout, stderr) {
-        this.log(stdout);
-        done();
-    }.bind(this));
+    done();
 };
 
 OpenshiftGenerator.prototype.gitRemoteCheck = function gitRemoteCheck() {
@@ -138,7 +136,8 @@ OpenshiftGenerator.prototype.rhcAppCreate = function rhcAppCreate() {
     var done = this.async();
 
     this.log(chalk.bold("\nCreating your Openshift hosting environment, this may take a couple minutes..."));
-    var child = exec('rhc app create ' + this.openShiftDeployedName + ' diy-0.1 mysql-5.5 ', { cwd: 'deploy/openshift' }, function (err, stdout, stderr) {
+    var db = this.prodDatabaseType === 'postgresql' ? 'postgresql-9.2' : 'mysql-5.5';
+    var child = exec('rhc app create ' + this.openShiftDeployedName + ' diy-0.1 ' + db + ' -r ./', { cwd: 'deploy/openshift' }, function (err, stdout, stderr) {
         var lines = stdout.split('\n');
         this.log(stdout);
         if (stdout.search('Not authenticated') >= 0 || stdout.search('Invalid characters found in login') >= 0) {
@@ -192,9 +191,12 @@ OpenshiftGenerator.prototype.copyOpenshiftFiles = function copyOpenshiftFiles() 
     var done = this.async();
     this.log(chalk.bold('\nCreating Openshift deployment files'));
 
-    this.copy('openshift/action_hooks/build', 'deploy/openshift/.openshift/action_hooks/build');
-    this.copy('openshift/action_hooks/start', 'deploy/openshift/.openshift/action_hooks/start');
+    this.template('openshift/action_hooks/_build', 'deploy/openshift/.openshift/action_hooks/build', null, { 'interpolate': /<%=([\s\S]+?)%>/g });
+    this.template('openshift/action_hooks/_start', 'deploy/openshift/.openshift/action_hooks/start', null, { 'interpolate': /<%=([\s\S]+?)%>/g });
     this.copy('openshift/action_hooks/stop', 'deploy/openshift/.openshift/action_hooks/stop');
+    if (this.javaVersion === "8") {
+        this.copy('openshift/action_hooks/pre_build', 'deploy/openshift/.openshift/action_hooks/pre_build');
+    }
     this.conflicter.resolve(function (err) {
         done();
     });
@@ -217,14 +219,39 @@ OpenshiftGenerator.prototype.productionBuild = function productionBuild() {
     }.bind(this));
 };
 
-OpenshiftGenerator.prototype.gitCommit = function gitInit() {
+OpenshiftGenerator.prototype.gitCommit = function gitCommit() {
     if(this.abort || !this.openshift_remote_exists ) return;
     var done = this.async();
 
     this.log(chalk.bold('\nAdding files for initial commit'));
-    var child = exec('git add -A && git commit -m "Initial commit"', { cwd: 'deploy/openshift' }, function (err, stdout, stderr) {
+    var child = exec('git add -A && git commit -m "Initial commit"', { cwd: 'deploy/openshift', maxBuffer: 1000*1024 }, function (err, stdout, stderr) {
         if (stdout.search('nothing to commit') >= 0) {
             this.log('Re-pushing the existing "deploy/openshift" build...');
+        } else if (err) {
+            this.log.error(err);
+        } else {
+            this.log(chalk.green('Done, without errors.'));
+        }
+        done();
+    }.bind(this));
+
+    child.stdout.on('data', function(data) {
+        this.log(data.toString());
+    }.bind(this));
+};
+
+OpenshiftGenerator.prototype.gitChmod = function gitChmod() {
+    if(this.abort || !this.openshift_remote_exists ) return;
+    var done = this.async();
+
+    this.log(chalk.bold('\nChmod action hooks'));
+    var child = exec('git update-index --chmod=+x .openshift/action_hooks/build && '+
+        'git update-index --chmod=+x .openshift/action_hooks/start && '+
+        'git update-index --chmod=+x .openshift/action_hooks/stop && ' +
+        (this.javaVersion === "8" ? 'git update-index --chmod=+x .openshift/action_hooks/pre_build && ' : '') +
+        'git commit -m "Chmod"', { cwd: 'deploy/openshift' }, function (err, stdout, stderr) {
+        if (stdout.search('nothing to commit') >= 0) {
+            this.log('+x already set');
         } else if (err) {
             this.log.error(err);
         } else {
@@ -275,7 +302,7 @@ OpenshiftGenerator.prototype.restartApp = function restartApp() {
         var hasWarning = false;
         var before_hostname = this.dist_repo_url.indexOf('@') + 1;
         var after_hostname = this.dist_repo_url.length - ( 'openshift'.length + 12 );
-        host_url = 'http://' + this.dist_repo_url.slice(before_hostname, after_hostname) + 'com';
+        host_url = 'http://' + this.dist_repo_url.slice(before_hostname, after_hostname);
 
         this.log(chalk.green('\nYour app should now be live at \n\t' + chalk.bold(host_url)));
         if(hasWarning) {
