@@ -1,6 +1,6 @@
 #Contributing to JHipster
 
-Are you ready to contribute to JHipster? We'd love to have you on board, and will help you as much as we can. Here are the guidelines we'd like you to follow:
+Are you ready to contribute to JHipster? We'd love to have you on board, and we will help you as much as we can. Here are the guidelines we'd like you to follow:
 
  - [Issues and Bugs](#issue)
  - [Feature Requests](#feature)
@@ -36,7 +36,7 @@ chances of your issue being dealt with quickly:
 * **JHipster Version(s)** - is it a regression?
 * **Browsers and Operating System** - is this a problem with all browsers or only IE8?
 * **Reproduce the error** - an unambiguous set of steps to reproduce the error. If you have a JavaScript error, maybe you can provide a live example with
-  [JSFiddle](http://jsfiddle.net/))?
+  [JSFiddle](http://jsfiddle.net/)?
 * **Related issues** - has a similar issue been reported before?
 * **Suggest a Fix** - if you can't fix the bug yourself, perhaps you can point to what might be
   causing the problem (line of code or commit)
@@ -56,19 +56,24 @@ Before you submit your pull request consider the following guidelines:
 * Create your patch, **including appropriate test cases**.
 * Follow our [Coding Rules](#rules).
 * Generate a new JHipster project, and ensure that all tests pass
+
      ```shell
      mvn package -Pprod
      ```
+
 * Test that the new project runs correctly:
+
      ```shell
      mvn spring-boot:run
      ```
+
 * Commit your changes using a descriptive commit message that follows our
   [commit message conventions](#commit-message-format).
 
      ```shell
      git commit -a
      ```
+
   Note: the optional commit `-a` command line option will automatically "add" and "rm" edited files.
 
 * Push your branch to GitHub:
