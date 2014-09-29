@@ -1,4 +1,4 @@
-package <%=packageName%>.domain;
+package <%= makePackage(packageName, 'domain', entityPackage) %>;
 
 <% if (relationships.length > 0) { %>import com.fasterxml.jackson.annotation.JsonIgnore;<% } %><% if (fieldsContainLocalDate == true) { %>
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -22,9 +22,9 @@ import java.util.Set;<% } %>
  * A <%= entityClass %>.
  */
 <% if (databaseType == 'sql') { %>@Entity
-@Table(name = "T_<%= name.toUpperCase() %>")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
+@Table(name = "T_<%= entityClass.toUpperCase() %>")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'nosql') { %>
-@Document(collection = "T_<%= name.toUpperCase() %>")<% } %>
+@Document(collection = "T_<%= entityClass.toUpperCase() %>")<% } %>
 public class <%= entityClass %> implements Serializable {
 
     @Id<% if (databaseType == 'sql') { %>
@@ -45,9 +45,9 @@ public class <%= entityClass %> implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "<%= entityInstance %>")
     @JsonIgnore<% if (hibernateCache != 'no') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
-    private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> <%= relationships[relationshipId].otherEntityName %>s = new HashSet<>();<% } else { %>
+    private Set<<%= relationships[relationshipId].otherEntityClass %>> <%= relationships[relationshipId].relationshipName %>s = new HashSet<>();<% } else { %>
     @ManyToOne
-    private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].otherEntityName %>;<% } %>
+    private <%= relationships[relationshipId].otherEntityClass %> <%= relationships[relationshipId].relationshipName %>;<% } %>
 <% } %>
     public <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> getId() {
         return id;
@@ -65,19 +65,19 @@ public class <%= entityClass %> implements Serializable {
         this.<%= fields[fieldId].fieldName %> = <%= fields[fieldId].fieldName %>;
     }
 <% } %><% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'one-to-many') { %>
-    public Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> get<%= relationships[relationshipId].otherEntityNameCapitalized %>s() {
-        return <%= relationships[relationshipId].otherEntityName %>s;
+    public Set<<%= relationships[relationshipId].otherEntityClass %>> get<%= relationships[relationshipId].otherEntityClass %>s() {
+        return <%= relationships[relationshipId].relationshipName %>s;
     }
 
-    public void set<%= relationships[relationshipId].otherEntityNameCapitalized %>s(Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> <%= relationships[relationshipId].otherEntityName %>s) {
-        this.<%= relationships[relationshipId].otherEntityName %>s = <%= relationships[relationshipId].otherEntityName %>s;
+    public void set<%= relationships[relationshipId].otherEntityClass %>s(Set<<%= relationships[relationshipId].otherEntityClass %>> <%= relationships[relationshipId].relationshipName %>s) {
+        this.<%= relationships[relationshipId].relationshipName %>s = <%= relationships[relationshipId].relationshipName %>s;
     }<% } else { %>
-    public <%= relationships[relationshipId].otherEntityNameCapitalized %> get<%= relationships[relationshipId].otherEntityNameCapitalized %>() {
-        return <%= relationships[relationshipId].otherEntityName %>;
+    public <%= relationships[relationshipId].otherEntityClass %> get<%= relationships[relationshipId].otherEntityClass %>() {
+        return <%= relationships[relationshipId].relationshipName %>;
     }
 
-    public void set<%= relationships[relationshipId].otherEntityNameCapitalized %>(<%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].otherEntityName %>) {
-        this.<%= relationships[relationshipId].otherEntityName %> = <%= relationships[relationshipId].otherEntityName %>;
+    public void set<%= relationships[relationshipId].otherEntityClass %>(<%= relationships[relationshipId].otherEntityClass %> <%= relationships[relationshipId].relationshipName %>) {
+        this.<%= relationships[relationshipId].relationshipName %> = <%= relationships[relationshipId].relationshipName %>;
     }<% } %>
 <% } %>
     @Override

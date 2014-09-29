@@ -1,8 +1,8 @@
-package <%=packageName%>.web.rest;
+package <%= packageName %>.web.rest<%= entityPackageSuffix %>;
 
 import com.codahale.metrics.annotation.Timed;
-import <%=packageName%>.domain.<%= entityClass %>;
-import <%=packageName%>.repository.<%= entityClass %>Repository;
+import <%=packageName%>.domain<%= entityPackageSuffix %>.<%= entityClass %>;
+import <%=packageName%>.repository<%= entityPackageSuffix %>.<%= entityClass %>Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

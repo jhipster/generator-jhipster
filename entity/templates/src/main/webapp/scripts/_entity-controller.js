@@ -1,9 +1,9 @@
 'use strict';
 
-<%= angularAppName %>.controller('<%= entityClass %>Controller', function ($scope, resolved<%= entityClass %>, <%= entityClass %><% for (relationshipId in relationships) { %>, resolved<%= relationships[relationshipId].otherEntityNameCapitalized %><% } %>) {
+<%= angularAppName %>.controller('<%= entityClass %>Controller', function ($scope, resolved<%= entityClass %>, <%= entityClass %><% for (relationshipId in relationships) { %>, resolved<%= relationships[relationshipId].otherEntityClass %><% } %>) {
 
         $scope.<%= entityInstance %>s = resolved<%= entityClass %>;<% for (relationshipId in relationships) { %>
-        $scope.<%= relationships[relationshipId].otherEntityName %>s = resolved<%= relationships[relationshipId].otherEntityNameCapitalized %>;<% } %>
+        $scope.<%= relationships[relationshipId].relationshipName %>s = resolved<%= relationships[relationshipId].otherEntityClass %>;<% } %>
 
         $scope.create = function () {
             <%= entityClass %>.save($scope.<%= entityInstance %>,

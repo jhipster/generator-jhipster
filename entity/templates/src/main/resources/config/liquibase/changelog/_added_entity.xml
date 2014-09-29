@@ -21,13 +21,13 @@
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bigint"/><% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="date"/><% } else if (fields[fieldId].fieldType == 'Boolean') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bit"/><% } } %><% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
-            <column name="<%=relationships[relationshipId].otherEntityName.toLowerCase() %>_id" type="bigint"/><% } } %>
+            <column name="<%=relationships[relationshipId].relationshipName.toLowerCase() %>_id" type="bigint"/><% } } %>
         </createTable>
         <% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
-        <addForeignKeyConstraint baseColumnNames="<%= relationships[relationshipId].otherEntityName.toLowerCase() %>_id"
+        <addForeignKeyConstraint baseColumnNames="<%= relationships[relationshipId].relationshipName.toLowerCase() %>_id"
                                  baseTableName="T_<%= name.toUpperCase() %>"
-                                 constraintName="fk_<%= name.toLowerCase() %>_<%= relationships[relationshipId].otherEntityName.toLowerCase() %>_id"
+                                 constraintName="fk_<%= name.toLowerCase() %>_<%= relationships[relationshipId].relationshipName.toLowerCase() %>_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="T_<%= relationships[relationshipId].otherEntityName.toUpperCase() %>"/><% } } %>
+                                 referencedTableName="T_<%= relationships[relationshipId].relationshipName.toUpperCase() %>"/><% } } %>
     </changeSet>
 </databaseChangeLog>

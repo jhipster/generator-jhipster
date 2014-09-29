@@ -10,7 +10,7 @@
                         resolved<%= entityClass %>: ['<%= entityClass %>', function (<%= entityClass %>) {
                             return <%= entityClass %>.query();
                         }]<% for (relationshipId in relationships) {
-                            var relationshipClass = relationships[relationshipId].otherEntityNameCapitalized;%>,
+                            var relationshipClass = relationships[relationshipId].otherEntityClass;%>,
                         resolved<%=relationshipClass%>: ['<%=relationshipClass%>', function (<%=relationshipClass%>) {
                             return <%=relationshipClass%>.query();
                         }]<% } %>

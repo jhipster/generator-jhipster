@@ -1,8 +1,8 @@
-package <%=packageName%>.repository;
+package <%= makePackage(packageName, 'repository', entityPackage) %>;
 
-import <%=packageName%>.domain.<%= entityClass %>;<% if (databaseType == 'sql') { %>
-        import org.springframework.data.jpa.repository.JpaRepository;<% } %><% if (databaseType == 'nosql') { %>
-        import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
+import <%= makePackage(packageName, 'domain', entityPackage, entityClass) %>;<% if (databaseType == 'sql') { %>
+import org.springframework.data.jpa.repository.JpaRepository;<% } %><% if (databaseType == 'nosql') { %>
+import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
 
 <% if (databaseType == 'sql') { %>/**
  * Spring Data JPA repository for the <%= entityClass %> entity.
