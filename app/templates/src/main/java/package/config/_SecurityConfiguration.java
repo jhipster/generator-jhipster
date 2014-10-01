@@ -24,10 +24,8 @@ import javax.inject.Inject;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (websocket == 'atmosphere' && authenticationType == 'token') { %>
-
-    // WARNING : you have configured the project to use Websockets and OAuth2 authentication, which do not work together: https://github.com/jhipster/generator-jhipster/issues/490
-<% } %><% if (authenticationType == 'cookie') { %>
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+    <% if (authenticationType == 'cookie') { %>
     @Inject
     private Environment env;
 
@@ -73,7 +71,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/i18n/**")
             .antMatchers("/swagger-ui/**")<% if (authenticationType == 'token') { %>
             .antMatchers("/app/rest/register")
-            .antMatchers("/app/rest/activate")<% } %><% if (devDatabaseType != 'h2Memory') { %>;<% } else { %>
+            .antMatchers("/app/rest/activate")<% if (websocket == 'atmosphere') { %>
+            .antMatchers("/websocket/activity")<% } %><% } %><% if (devDatabaseType != 'h2Memory') { %>;<% } else { %>
             .antMatchers("/console/**");<% } %>
     }
     <% if (authenticationType == 'cookie') { %>
@@ -110,9 +109,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
                 .antMatchers("/app/rest/activate").permitAll()
                 .antMatchers("/app/rest/authenticate").permitAll()
                 .antMatchers("/app/rest/logs/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/app/**").authenticated()
+                .antMatchers("/app/**").authenticated()<% if (websocket == 'atmosphere') { %>
                 .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/websocket/**").permitAll()
+                .antMatchers("/websocket/**").permitAll()<% } %>
                 .antMatchers("/metrics/**").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/health/**").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/trace/**").hasAuthority(AuthoritiesConstants.ADMIN)
