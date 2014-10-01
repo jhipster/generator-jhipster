@@ -62,9 +62,9 @@ public class OAuth2ServerConfiguration {
                 .antMatchers("/app/rest/authenticate").permitAll()
                 .antMatchers("/app/rest/register").permitAll()
                 .antMatchers("/app/rest/logs/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/app/**").authenticated()
+                .antMatchers("/app/**").authenticated()<% if (websocket == 'atmosphere') { %>
                 .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/websocket/**").permitAll()
+                .antMatchers("/websocket/**").permitAll()<% } %>
                 .antMatchers("/metrics/**").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/health/**").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/trace/**").hasAuthority(AuthoritiesConstants.ADMIN)

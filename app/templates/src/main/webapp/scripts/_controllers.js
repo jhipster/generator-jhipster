@@ -143,7 +143,7 @@
         };
     });
 
- <% if (websocket == 'atmosphere') { %><%= angularAppName %>.controller('TrackerController', function ($scope) {
+ <% if (websocket == 'atmosphere') { %><%= angularAppName %>.controller('TrackerController', <% if (authenticationType == 'token') { %>['AccessToken'], <% } %>function ($scope<% if (authenticationType == 'token') { %>, AccessToken<% } %>) {
         // This controller uses the Atmosphere framework to keep a Websocket connection opened, and receive
         // user activities in real-time.
 
@@ -152,7 +152,7 @@
         $scope.trackerSubSocket;
         $scope.trackerTransport = 'websocket';
 
-        $scope.trackerRequest = { url: 'websocket/tracker',
+        $scope.trackerRequest = { url: 'websocket/tracker<% if (authenticationType == 'token') { %>?access_token=' + AccessToken.get()<% } else { %>'<% } %>,
             contentType : "application/json",
             transport : $scope.trackerTransport ,
             trackMessageLength : true,
