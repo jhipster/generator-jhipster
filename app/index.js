@@ -40,8 +40,8 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             type: 'input',
             name: 'baseName',
             validate: function (input) {
-                if ((input.indexOf('<') < 0) && (input.indexOf('>') < 0)) return true;
-                return 'Your application name contains either <, > or both.';
+                if (/^([a-zA-Z0-9_]*)$/.test(input)) return true;
+                return 'Your application name cannot contain special characters or a blank space, using the default name instead';
             },
             message: '(1/13) What is the base name of your application?',
             default: 'jhipster'
@@ -762,4 +762,3 @@ function removefolder(folder) {
         shelljs.rm("-rf", folder);
     }
 }
-
