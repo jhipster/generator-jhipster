@@ -149,20 +149,12 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'hibernateCache',
-            message: '(7/13) Do you want to use cache?',
+            message: '(7/13) Do you want to use Hibernate 2nd level cache?',
             choices: [
                 {
                     value: 'no',
-                    name: 'No'
+                    name: 'No (this not possible with the NoSQL option)'
                 },
-                {
-                    value: 'ehcache',
-                    name: 'Yes, with ehcache (local cache, for a single node)'
-                },
-                {
-                    value: 'hazelcast',
-                    name: 'Yes, with HazelCast (distributed cache, for multiple nodes)'
-                }
             ],
             default: 0
         },
