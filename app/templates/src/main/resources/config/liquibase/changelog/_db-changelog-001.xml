@@ -210,7 +210,7 @@
     <!--
     <changeSet id="100" author="jhipster">
         <createTable tableName="T_FOO">
-            <column name="id" type="varchar(255)">
+            <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="sample_text_attribute" type="varchar(50)"/>
