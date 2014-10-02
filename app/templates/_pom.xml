@@ -243,6 +243,11 @@
         </dependency><% if (websocket == 'atmosphere') { %>
         <dependency>
             <groupId>org.atmosphere</groupId>
+            <artifactId>atmosphere-runtime</artifactId>
+            <version>2.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.atmosphere</groupId>
             <artifactId>atmosphere-spring</artifactId>
             <version>${atmosphere-spring.version}</version>
         </dependency><% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>

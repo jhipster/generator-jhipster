@@ -86,7 +86,8 @@ dependencies {
     compile group: 'joda-time', name: 'joda-time', version: joda_time_version<% if (databaseType == 'sql') { %>
     compile group: 'joda-time', name: 'joda-time-hibernate', version: joda_time_hibernate_version<% } %>
     compile group: 'org.apache.geronimo.javamail', name: 'geronimo-javamail_1.4_mail', version: geronimo_javamail_1_4_mail_version<% if (websocket == 'atmosphere') { %>
-    compile group: 'org.atmosphere', name: 'atmosphere-spring', version: atmosphere_spring_version<% } %><% if (databaseType == 'sql') { %>
+    compile group: 'org.atmosphere', name: 'atmosphere-spring', version: atmosphere_spring_version
+    compile group: 'org.atmosphere', name: 'atmosphere-runtime', version: '2.2.2'<% } %><% if (databaseType == 'sql') { %>
     compile group: 'org.hibernate', name: 'hibernate-core', version: hibernate_entitymanager_version
     compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: hibernate_entitymanager_version<% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
     compile group: 'org.hibernate', name: 'hibernate-ehcache', version: hibernate_entitymanager_version<% } %>

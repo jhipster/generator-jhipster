@@ -170,7 +170,7 @@
             var activity = atmosphere.util.parseJSON(message);
             var existingActivity = false;
             for (var index = 0; index < $scope.activities.length; index++) {
-                if($scope.activities[index].sessionId == activity.sessionId) {
+                if($scope.activities[index].uuid == activity.uuid) {
                     existingActivity = true;
                     if (activity.page == "logout") {
                         $scope.activities.splice(index, 1);
@@ -193,7 +193,7 @@
         $scope.metrics = {};
 		$scope.updatingHealth = true;
 		$scope.updatingMetrics = true;
- 
+
         $scope.refresh = function() {
 			$scope.updatingHealth = true;
 			$scope.updatingMetrics = true;
@@ -204,7 +204,7 @@
         		$scope.healthCheck = promise.data;
 				$scope.updatingHealth = false;
         	});
-			
+
 			MetricsService.get().then(function(promise) {
         		$scope.metrics = promise;
 				$scope.updatingMetrics = false;
@@ -213,9 +213,9 @@
 				$scope.updatingMetrics = false;
         	});
 
-            
+
         };
-		
+
 		$scope.$watch('metrics', function(newValue, oldValue) {
 			$scope.servicesStats = {};
             $scope.cachesStats = {};
@@ -325,4 +325,3 @@
             $scope.audits = data;
         });
     });
-
