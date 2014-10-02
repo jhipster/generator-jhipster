@@ -179,17 +179,17 @@ Each commit message consists of a **header**, a **body** and a **footer**.
 ```
 
 Any line of the commit message cannot be longer 100 characters! This allows the message to be easier
-to read on github as well as in various git tools.
+to read on Github as well as in various git tools.
 
 ### Header
-The Header contains succinct description of the change:
+The Header contains a succinct description of the change:
 
 * use the imperative, present tense: "change" not "changed" nor "changes"
 * don't capitalize first letter
 * no dot (.) at the end
 
 ###Body
-If you change is simple, the Body is optional.
+If your change is simple, the Body is optional.
 
 Just as in the **Header**, use the imperative, present tense: "change" not "changed" nor "changes"
 The Body should include the motivation for the change and contrast this with previous behavior.
