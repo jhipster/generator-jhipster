@@ -191,7 +191,7 @@ The Header contains a succinct description of the change:
 ###Body
 If your change is simple, the Body is optional.
 
-Just as in the **Header**, use the imperative, present tense: "change" not "changed" nor "changes"
+Just as in the Header, use the imperative, present tense: "change" not "changed" nor "changes".
 The Body should include the motivation for the change and contrast this with previous behavior.
 
 ###Footer
