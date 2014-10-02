@@ -26,7 +26,7 @@ public abstract class AbstractAuditingEntity {
 
     @CreatedBy<% if (databaseType == 'sql') { %>
     @NotNull
-    @Column(name = "created_by", nullable = false, length = 50)<% } %><% if (databaseType == 'nosql') { %>
+    @Column(name = "created_by", nullable = false, length = 50, updatable = false)<% } %><% if (databaseType == 'nosql') { %>
     @Field("created_by")<% } %>
     private String createdBy;
 
