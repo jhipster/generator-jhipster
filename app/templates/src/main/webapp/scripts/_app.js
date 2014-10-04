@@ -76,6 +76,13 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                         authorizedRoles: [USER_ROLES.admin]
                     }
                 })
+                .when('/health', {
+                    templateUrl: 'views/health.html',
+                    controller: 'HealthController',
+                    access: {
+                        authorizedRoles: [USER_ROLES.admin]
+                    }
+                })
                 .when('/logs', {
                     templateUrl: 'views/logs.html',
                     controller: 'LogsController',

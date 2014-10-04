@@ -11,6 +11,7 @@
                 "sessions": "Sessions",
                 "tracker": "Brugersporing",
                 "metrics": "Målinger",
+                "health": "Sundheds",
                 "logs": "Logs",
                 "audits": "Audits",
                 "login": "Log ind",
@@ -180,12 +181,6 @@
         "title": "Program målinger",
         "refresh.button": "Opdatér",
         "updating": "Ajourføring...",
-        "health": {
-            "title": "Sundhedskontroller",
-            "database": "Database: ",
-            "email": "Email: ",
-            "stacktrace": "Stacktrace"
-        },
         "jvm": {
             "title": "JVM målinger",
             "memory": {
@@ -260,6 +255,21 @@
             "misses": "Misses",
             "evictioncount": "Antal udsættelser",
             "mean": "Middel get time (ms)"
+        }
+    },
+    "health": {
+        "title": "Sundhed",
+        "refresh.button": "Opdatér",
+        "db": "Database",
+        "mail": "Email",
+        "stacktrace": "Stacktrace",
+        "table": {
+            "service": "Tjeneste navn",
+            "status": "Status"
+        },
+        "status": {
+            "UP": "OP",
+            "DOWN": "NED"
         }
     },
     "logs": {

@@ -5,53 +5,7 @@
     <button type="button" class="btn btn-primary" ng-click="refresh()"><span class="glyphicon glyphicon-refresh"></span>&nbsp;{{'metrics.refresh.button' | translate}}</button>
 </p>
 
-<h3 translate="metrics.health.title">Health Checks</h3>
-<div id="healthCheck" class="row" ng-hide="updatingHealth">
-    <div class="col-md-3" ng-show="healthCheck.db.status == 'UP'">
-        <div class="alert alert-success"><strong translate="metrics.health.database">Database: </strong>OK</div>
-    </div>
-    <div class="col-md-4" ng-show="healthCheck.db.status != 'UP'">
-        <div class="alert alert-danger">
-            <strong translate="metrics.health.database">Database: </strong>ERROR
-            <span ng-show="healthCheck.db.error">
-                <a class="hand" ng-click="showDatabaseException = !showDatabaseException">
-                    <i class="glyphicon glyphicon-eye-open"></i>
-                </a>
-                <div class="popover" ng-show="showDatabaseException">
-                    <div class="popover-title">
-                        <h4>{{'metrics.health.stacktrace' | translate}}<button type="button" class="close" ng-click="showDatabaseException = !showDatabaseException">x</button></h4>
-                    </div>
-                    <div class="popover-content">
-                        <pre>{{healthCheck.db.error}}</pre>
-                    </div>
-                </div>
-            </span>
-
-        </div>
-    </div>
-    <div class="col-md-3" ng-show="healthCheck.mail.status == 'UP'" >
-        <div class="alert alert-success"><strong translate="metrics.health.email">Email: </strong>OK</div>
-    </div>
-    <div class="col-md-4" ng-show="healthCheck.mail.status != 'UP'">
-        <div class="alert alert-danger">
-            <strong translate="metrics.health.email">Email: </strong>ERROR
-            <span ng-show="healthCheck.mail.error">
-                <a class="hand" ng-click="showEmailException = !showEmailException">
-                    <i class="glyphicon glyphicon-eye-open"></i>
-                </a>
-                <div class="popover" ng-show="showEmailException">
-                    <div class="popover-title">
-                        <h4>{{'metrics.health.stacktrace' | translate}}<button type="button" class="close" ng-click="showEmailException = !showEmailException">x</button></h4>
-                    </div>
-                    <div class="popover-content">
-                        <pre>{{healthCheck.mail.error}}</pre>
-                    </div>
-                </div>
-            </span>
-        </div>
-    </div>
-</div>
-<div class="well well-lg" ng-show="updatingHealth" translate="metrics.updating">Updating...</div>
+<div class="well well-lg" ng-show="updatingMetrics" translate="metrics.updating">Updating...</div>
 
 <h3 translate="metrics.jvm.title">JVM Metrics</h3>
 <div class="row" ng-hide="updatingMetrics">

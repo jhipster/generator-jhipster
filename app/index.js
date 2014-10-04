@@ -635,6 +635,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(webappDir + '/views/audits.html', webappDir + 'views/audits.html');
     this.copy(webappDir + '/views/docs.html', webappDir + 'views/docs.html');
     this.copy(webappDir + '/views/error.html', webappDir + 'views/error.html');
+    this.copy(webappDir + '/views/health.html', webappDir + 'views/health.html');
     this.copy(webappDir + '/views/login.html', webappDir + 'views/login.html');
     this.copy(webappDir + '/views/logs.html', webappDir + 'views/logs.html');
     this.copy(webappDir + '/views/main.html', webappDir + 'views/main.html');

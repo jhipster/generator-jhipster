@@ -11,6 +11,7 @@
                 "sessions": "Oturumlar",
                 "tracker": "Kullanıcı Takip",
                 "metrics": "Ölçümler",
+                "health": "Heath",
                 "logs": "Loglar",
                 "audits": "Denetim",
                 "login": "Giriş",
@@ -180,12 +181,6 @@
         "title": "Uygulama Ölçütleri",
         "refresh.button": "Yenile",
         "updating": "Güncellenmesi...",
-        "health": {
-            "title": "Heath checks",
-            "database": "Veritabanı: ",
-            "email": "E-posta: ",
-            "stacktrace": "Stacktrace"
-        },
         "jvm": {
             "title": "JVM Ölçütleri",
             "memory": {
@@ -260,6 +255,21 @@
             "misses": "Misses",
             "evictioncount": "Eviction count",
             "mean": "Mean get time (ms)"
+        }
+    },
+    "health": {
+        "title": "Heath checks",
+        "refresh.button": "Yenile",
+        "db": "Veritabanı",
+        "mail": "E-posta",
+        "stacktrace": "Stacktrace",
+        "table": {
+            "service": "Hizmetin adı",
+            "status": "Durum"
+        },
+        "status": {
+            "UP": "UP",
+            "DOWN": "DOWN"
         }
     },
     "logs": {

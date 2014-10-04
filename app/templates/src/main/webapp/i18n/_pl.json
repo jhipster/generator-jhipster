@@ -11,6 +11,7 @@
                 "sessions": "Sesje",
                 "tracker": "Śledzenie użytkownika",
                 "metrics": "Metryki",
+                "health": "Heath",
                 "logs": "Logi",
                 "audits": "Audyty",
                 "login": "Autoryzacja",
@@ -180,12 +181,6 @@
         "title": "Metryki aplikacji",
         "refresh.button": "Odśwież",
         "updating": "Aktualizacja...",
-        "health": {
-            "title": "Heath checks",
-            "database": "Baza danych: ",
-            "email": "Email: ",
-            "stacktrace": "Stos wywołań"
-        },
         "jvm": {
             "title": "Metryki JVM",
             "memory": {
@@ -260,6 +255,21 @@
             "misses": "Nie trafionych",
             "evictioncount": "Liczba wyeksmitowanych",
             "mean": "Średni czas pobierania (ms)"
+        }
+    },
+    "health": {
+        "title": "Heath checks",
+        "refresh.button": "Odśwież",
+        "db": "Baza danych",
+        "mail": "Email",
+        "stacktrace": "Stos wywołań",
+        "table": {
+            "service": "Nazwa usługi",
+            "status": "Status"
+        },
+        "status": {
+            "UP": "DOSTĘPNE",
+            "DOWN": "NIE DZIAŁAJĄCY"
         }
     },
     "logs": {

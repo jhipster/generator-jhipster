@@ -11,6 +11,7 @@
                 "sessions": "Сессии",
                 "tracker": "Трекер польз.",
                 "metrics": "Метрики",
+                "health": "Состояние",
                 "logs": "Логи",
                 "audits": "Аудит",
                 "login": "Authenticate",
@@ -180,12 +181,6 @@
         "title": "Метрики приложения",
         "refresh.button": "Обновить",
         "updating": "Обновление...",
-        "health": {
-            "title": "Состояние",
-            "database": "База данных: ",
-            "email": "Email: ",
-            "stacktrace": "Stacktrace"
-        },
         "jvm": {
             "title": "JVM Метрики",
             "memory": {
@@ -260,6 +255,20 @@
             "misses": "Промахов",
             "evictioncount": "Количество очисток",
             "mean": "Среднее по времени (мс)"
+        }
+    },
+    "health": {
+        "title": "Состояние",
+        "db": "База данных",
+        "mail": "Email",
+        "stacktrace": "Stacktrace",
+        "table": {
+            "service": "Название сервисаo",
+            "status": "статус"
+        },
+        "status": {
+            "UP": "UP",
+            "DOWN": "DOWN"
         }
     },
     "logs": {

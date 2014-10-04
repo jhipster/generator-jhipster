@@ -11,6 +11,7 @@
                 "sessions": "Sessions",
                 "tracker": "Suivi des utilisateurs",
                 "metrics": "Métriques",
+                "health": "Diagnostics",
                 "logs": "Logs",
                 "audits": "Audits",
                 "login": "S'authentifier",
@@ -180,12 +181,6 @@
         "title": "Métriques de l'application",
         "refresh.button": "Rafraichir",
         "updating": "Mise à jour...",
-        "health": {
-            "title": "Diagnostics",
-            "database": "Base de données: ",
-            "email": "Email: ",
-            "stacktrace": "Stacktrace"
-        },
         "jvm": {
             "title": "Métriques de la JVM",
             "memory": {
@@ -260,6 +255,21 @@
             "misses": "Données non existantes",
             "evictioncount": "Nombre de suppressions",
             "mean": "Temps de réponse (ms)"
+        }
+    },
+    "health": {
+        "title": "Diagnostics",
+        "refresh.button": "Rafraichir",
+        "db": "Base de données",
+        "mail": "Email",
+        "stacktrace": "Stacktrace",
+        "table": {
+            "service": "Nom du service",
+            "status": "Etat"
+        },
+        "status": {
+            "UP": "DISPONIBLE",
+            "DOWN": "HORS SERVICE"
         }
     },
     "logs": {

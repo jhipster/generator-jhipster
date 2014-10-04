@@ -11,6 +11,7 @@
                 "sessions": "Sessions",
                 "tracker": "User tracker",
                 "metrics": "Metrics",
+                "health": "Health",
                 "logs": "Logs",
                 "audits": "Audits",
                 "login": "Authenticate",
@@ -180,12 +181,6 @@
         "title": "Application Metrics",
         "refresh.button": "Refresh",
         "updating": "Updating...",
-        "health": {
-            "title": "Health checks",
-            "database": "Database: ",
-            "email": "Email: ",
-            "stacktrace": "Stacktrace"
-        },
         "jvm": {
             "title": "JVM Metrics",
             "memory": {
@@ -260,6 +255,21 @@
             "misses": "Misses",
             "evictioncount": "Eviction count",
             "mean": "Mean get time (ms)"
+        }
+    },
+    "health": {
+        "title": "Health checks",
+        "refresh.button": "Refresh",
+        "db": "Database",
+        "mail": "Email",
+        "stacktrace": "Stacktrace",
+        "table": {
+            "service": "Service name",
+            "status": "Status"
+        },
+        "status": {
+            "UP": "UP",
+            "DOWN": "DOWN"
         }
     },
     "logs": {

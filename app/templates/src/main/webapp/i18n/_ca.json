@@ -11,9 +11,10 @@
                 "sessions": "Sessions",
                 "tracker": "User tracker",
                 "metrics": "Mètriques",
+                "health": "Salud",
                 "logs": "Registres",
                 "audits": "Auditories",
-                    "login": "Autenticar",
+                "login": "Autenticar",
                 "logout": "Finalitzar la sessió",
                 "apidocs": "API",
                 "register": "Registre"
@@ -180,12 +181,6 @@
         "title": "Mètriques d'aplicació",
         "refresh.button": "Actualitzar",
         "updating": "Actualització...",
-        "health": {
-            "title": "Revisions de salud",
-            "database": "Base de dades: ",
-            "email": "Compte de correu electrònic: ",
-            "stacktrace": "Traça d'error"
-        },
         "jvm": {
             "title": "Mètriques JVM",
             "memory": {
@@ -260,6 +255,21 @@
             "misses": "Fallos",
             "evictioncount": "Contador d'expulcions",
             "mean": "Temps d'obtenció mig (ms)"
+        }
+    },
+    "health": {
+        "title": "Revisions de salud",
+        "refresh.button": "Actualitzar",
+        "db": "Base de dades",
+        "mail": "Compte de correu electrònic",
+        "stacktrace": "Traça d'error",
+        "table": {
+            "service": "Nom del servei",
+            "status": "Estat"
+        },
+        "status": {
+            "UP": "FINS",
+            "DOWN": "BAIX"
         }
     },
     "logs": {

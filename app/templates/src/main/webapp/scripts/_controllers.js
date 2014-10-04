@@ -188,23 +188,37 @@
         $scope.trackerSubSocket = $scope.trackerSocket.subscribe($scope.trackerRequest);
     });
 
-<% } %><%= angularAppName %>.controller('MetricsController', function ($scope, MetricsService, HealthCheckService, ThreadDumpService) {
+<% } %><%= angularAppName %>.controller('HealthController', function ($scope, HealthCheckService) {
+     $scope.updatingHealth = true;
 
+     $scope.refresh = function() {
+         $scope.updatingHealth = true;
+         HealthCheckService.check().then(function(promise) {
+             $scope.healthCheck = promise;
+             $scope.updatingHealth = false;
+         },function(promise) {
+             $scope.healthCheck = promise.data;
+             $scope.updatingHealth = false;
+         });
+     }
+
+     $scope.refresh();
+
+     $scope.getLabelClass = function(statusState) {
+         if (statusState == 'UP') {
+             return "label-success";
+         } else {
+             return "label-danger";
+         }
+     }
+ });
+
+<%= angularAppName %>.controller('MetricsController', function ($scope, MetricsService, HealthCheckService, ThreadDumpService) {
         $scope.metrics = {};
-		$scope.updatingHealth = true;
 		$scope.updatingMetrics = true;
 
         $scope.refresh = function() {
-			$scope.updatingHealth = true;
 			$scope.updatingMetrics = true;
-        	HealthCheckService.check().then(function(promise) {
-        		$scope.healthCheck = promise;
-				$scope.updatingHealth = false;
-        	},function(promise) {
-        		$scope.healthCheck = promise.data;
-				$scope.updatingHealth = false;
-        	});
-
 			MetricsService.get().then(function(promise) {
         		$scope.metrics = promise;
 				$scope.updatingMetrics = false;
@@ -212,8 +226,6 @@
         		$scope.metrics = promise.data;
 				$scope.updatingMetrics = false;
         	});
-
-
         };
 
 		$scope.$watch('metrics', function(newValue, oldValue) {

@@ -11,6 +11,7 @@
                 "sessions": "Sitzungen",
                 "tracker": "User tracker",
                 "metrics": "Metriken",
+                "health": "Heath",
                 "logs": "Protokoll",
                 "audits": "Audits",
                 "login": "Anmelden",
@@ -181,12 +182,6 @@
         "title": "Anwendungs-Metriken",
         "refresh.button": "Aktualisieren",
         "updating": "Aktualisierung...",
-        "health": {
-            "title": "Heath checks",
-            "database": "Datenbank: ",
-            "email": "Email: ",
-            "stacktrace": "Stacktrace"
-        },
         "jvm": {
             "title": "JVM Metriken",
             "memory": {
@@ -261,6 +256,21 @@
             "misses": "Keine Treffer",
             "evictioncount": "Anzahl entfernter Objekte",
             "mean": "Durchschnittliche Zugriffszeit (ms)"
+        }
+    },
+    "health": {
+        "title": "Heath checks",
+        "refresh.button": "Aktualisieren",
+        "db": "Datenbank",
+        "mail": "Email",
+        "stacktrace": "Stacktrace",
+        "table": {
+            "service": "Dienst Name",
+            "status": "Status"
+        },
+        "status": {
+            "UP": "UP",
+            "DOWN": "DOWN"
         }
     },
     "logs": {
