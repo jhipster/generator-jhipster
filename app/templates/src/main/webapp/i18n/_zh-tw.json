@@ -11,6 +11,7 @@
                 "sessions": "Sessions",
                 "tracker": "追蹤使用者",
                 "metrics": "資源監控",
+                "health": "服務狀態",
                 "logs": "記錄",
                 "audits": "稽核",
                 "login": "登入",
@@ -180,12 +181,6 @@
         "title": "應用程式資源監控",
         "refresh.button": "重整",
         "updating": "更新中...",
-        "health": {
-            "title": "狀況檢查",
-            "database": "資料庫: ",
-            "email": "電子郵件: ",
-            "stacktrace": "堆疊追蹤"
-        },
         "jvm": {
             "title": "JVM 資源監控",
             "memory": {
@@ -260,6 +255,22 @@
             "misses": "快取遺漏計數",
             "evictioncount": "收回計數",
             "mean": "平均讀取時間 (毫秒)"
+        }
+    },
+    "health": {
+        "title": "服務狀態",
+        "refresh.button": "重整",
+        "db": "資料庫",
+        "mail": "電子郵件",
+        "mongo": "MongoDB",
+        "stacktrace": "堆疊追蹤",
+        "table": {
+            "service": "服務名稱",
+            "status": "狀態"
+        },
+        "status": {
+            "UP": "正常",
+            "DOWN": "異常"
         }
     },
     "logs": {
