@@ -260,9 +260,12 @@
     "health": {
         "title": "Heath checks",
         "refresh.button": "Odśwież",
-        "db": "Baza danych",
-        "mail": "Email",
         "stacktrace": "Stos wywołań",
+        "indicator": {
+            "db": "Baza danych",
+            "mail": "Email",
+            "mongo": "Mongo DB"
+        },
         "table": {
             "service": "Nazwa usługi",
             "status": "Status"

@@ -11,8 +11,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;<% if (javaVersion == '7') { %>
 import java.sql.SQLException;<% } %>
 import java.util.HashMap;
-import java.util.Map;<% } %><% if (databaseType == 'nosql') { %>
-import org.springframework.data.mongodb.core.MongoTemplate;<% } %>
+import java.util.Map;<% } %>
 
 /**
  * SpringBoot Actuator HealthIndicator check for the Database.
@@ -37,20 +36,15 @@ public class DatabaseHealthIndicator extends AbstractHealthIndicator {
 
     private static String DEFAULT_QUERY = "SELECT 1";
 
-    private String query = null;<% } %><% if (databaseType == 'nosql') { %>
-    private MongoTemplate mongoTemplate;<% } %>
+    private String query = null;
 
-    <% if (databaseType == 'sql') { %>
     public DatabaseHealthIndicator(DataSource dataSource) {
         this.dataSource = dataSource;
         this.jdbcTemplate = new JdbcTemplate(dataSource);
-    }<% } %><% if (databaseType == 'nosql') { %>
-    public DatabaseHealthIndicator(MongoTemplate mongoTemplate) {
-        this.mongoTemplate = mongoTemplate;
-    }<% } %>
+    }
 
     @Override
-    protected void doHealthCheck(Health.Builder builder) throws Exception {<% if (databaseType == 'sql') { %>
+    protected void doHealthCheck(Health.Builder builder) throws Exception {
         String product = getProduct();
         builder.up().withDetail("database", product);
         String query = detectQuery(product);
@@ -88,15 +82,9 @@ public class DatabaseHealthIndicator extends AbstractHealthIndicator {
 
     public void setQuery(String query) {
         this.query = query;
-    }<% } %><% if (databaseType == 'nosql') { %>
-        try {
-            if (mongoTemplate.getDb().getStats().ok()) {
-                builder.up().withDetail("mongodb", "ok");
-            } else {
-                builder.down().withDetail("mongodb", "error");
-            }
-        } catch (Exception e) {
-            builder.down(e);
-        }
+    }<% } else { %>
+    @Override
+    protected void doHealthCheck(Health.Builder builder) throws Exception {
+        // do nothing
     }<% } %>
 }

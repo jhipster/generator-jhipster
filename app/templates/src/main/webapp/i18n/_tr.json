@@ -260,9 +260,12 @@
     "health": {
         "title": "Heath checks",
         "refresh.button": "Yenile",
-        "db": "Veritabanı",
-        "mail": "E-posta",
         "stacktrace": "Stacktrace",
+        "indicator": {
+            "db": "Veritabanı",
+            "mail": "E-posta",
+            "mongo": "Mongo DB"
+        },
         "table": {
             "service": "Hizmetin adı",
             "status": "Durum"

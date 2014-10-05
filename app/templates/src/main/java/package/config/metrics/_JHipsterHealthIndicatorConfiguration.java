@@ -6,8 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import javax.inject.Inject;<% if (databaseType == 'sql') { %>
-import javax.sql.DataSource;<% } %><% if (databaseType == 'nosql') { %>
-import org.springframework.data.mongodb.core.MongoTemplate;<% } %>
+import javax.sql.DataSource;<% } %>
 
 @Configuration
 public class JHipsterHealthIndicatorConfiguration {
@@ -16,16 +15,12 @@ public class JHipsterHealthIndicatorConfiguration {
     private JavaMailSenderImpl javaMailSender;<% if (databaseType == 'sql') { %>
 
     @Inject
-    private DataSource dataSource;<% } %><% if (databaseType == 'nosql') { %>
-
-    @Inject
-    private MongoTemplate mongoTemplate;<% } %>
+    private DataSource dataSource;
 
     @Bean
-    public HealthIndicator dbHealthIndicator() {<% if (databaseType == 'sql') { %>
-        return new DatabaseHealthIndicator(dataSource);<% } %><% if (databaseType == 'nosql') { %>
-        return new DatabaseHealthIndicator(mongoTemplate);<% } %>
-    }
+    public HealthIndicator dbHealthIndicator() {
+        return new DatabaseHealthIndicator(dataSource);
+    }<% } %>
 
     @Bean
     public HealthIndicator mailHealthIndicator() {

@@ -259,9 +259,12 @@
     },
     "health": {
         "title": "Состояние",
-        "db": "База данных",
-        "mail": "Email",
         "stacktrace": "Stacktrace",
+        "indicator": {
+            "db": "База данных",
+            "mail": "Email",
+            "mongo": "Mongo DB"
+        },
         "table": {
             "service": "Название сервисаo",
             "status": "статус"

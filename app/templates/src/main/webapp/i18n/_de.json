@@ -261,9 +261,12 @@
     "health": {
         "title": "Heath checks",
         "refresh.button": "Aktualisieren",
-        "db": "Datenbank",
-        "mail": "Email",
         "stacktrace": "Stacktrace",
+        "indicator": {
+            "db": "Datenbank",
+            "mail": "Email",
+            "mongo": "Mongo"
+        },
         "table": {
             "service": "Dienst Name",
             "status": "Status"

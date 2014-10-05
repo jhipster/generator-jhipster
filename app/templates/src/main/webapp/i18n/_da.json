@@ -260,9 +260,12 @@
     "health": {
         "title": "Sundhed",
         "refresh.button": "Opdatér",
-        "db": "Database",
-        "mail": "Email",
         "stacktrace": "Stacktrace",
+        "indicator": {
+            "db": "Database",
+            "mail": "Email",
+            "mongo": "Mongo DB"
+        },
         "table": {
             "service": "Tjeneste navn",
             "status": "Status"
