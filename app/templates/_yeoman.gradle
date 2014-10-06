@@ -7,17 +7,6 @@ task bower(dependsOn: 'npmInstall', type: NodeTask){
     args = ['install']
 }
 
-task copyAgent(type: Copy) {
-    from configurations.runtime
-    into 'spring_loaded/'
-    def springloadedjhipsterjar = 'agent-' + jhipster_loaded_version + '.jar'
-
-    include springloadedjhipsterjar
-    rename { String fileName ->
-        fileName.replace(springloadedjhipsterjar, 'springloaded-jhipster.jar')
-    }
-}
-
 <% if(frontendBuilder == 'grunt') {%>
 grunt_build.dependsOn 'npmInstall'
 grunt_build.dependsOn 'bower'
@@ -28,4 +17,3 @@ gulp_build.dependsOn 'bower'
 processResources.dependsOn gulp_build
 test.dependsOn gulp_test
 <% } %>
-build.dependsOn copyAgent
