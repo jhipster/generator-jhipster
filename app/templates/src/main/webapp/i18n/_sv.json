@@ -257,7 +257,7 @@
             "hits": "Träffar",
             "misses": "Missar",
             "evictioncount": "Utkastade",
-            "mean": "Medel tid för get (ms)"
+            "mean": "Medeltid för get (ms)"
         }
     },
     "health": {
