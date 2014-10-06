@@ -33,7 +33,9 @@ public class <%= entityClass %> implements Serializable {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>", nullable = false)<% } else { %>
-    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>")<% }} %><% if (databaseType == 'nosql') { %>
+    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>")<% }} %><% if (databaseType == 'nosql') { %><% if (fields[fieldId].fieldType == 'LocalDate') { %>
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    @JsonSerialize(using = CustomLocalDateSerializer.class)<% } %>
     @Field("<%=fields[fieldId].fieldNameUnderscored %>")<% } %>
     private <%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>;
 <% } %>
