@@ -350,6 +350,7 @@ JhipsterGenerator.prototype.app = function app() {
     var webappDir = 'src/main/webapp/';
 
     // Remove old files
+    removefile(resourceDir + 'config/liquibase/db-changelog-001.xml');
     removefile(resourceDir + 'config/liquibase/users_upd_001.csv');
     removefile(resourceDir + 'config/liquibase/users_authorities_upd_001.csv');
     removefile(javaDir + 'web/servlet/HealthCheckServlet.java');
