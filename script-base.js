@@ -16,7 +16,6 @@ util.inherits(Generator, yeoman.generators.NamedBase);
 Generator.prototype.addScriptToIndex = function (script) {
     try {
         var appPath = this.env.options.appPath;
-        console.log("appPath: " + this.env.options.appPath);
         var fullPath = path.join(appPath, 'index.html');
         jhipsterUtils.rewriteFile({
             file: fullPath,
@@ -27,6 +26,38 @@ Generator.prototype.addScriptToIndex = function (script) {
         });
     } catch (e) {
         console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + script + '.js ' + 'not added.\n'.yellow);
+    }
+};
+
+Generator.prototype.addRouterToMenu = function (entityName) {
+    try {
+        var appPath = this.env.options.appPath;
+        var fullPath = path.join(appPath, 'index.html');
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: '<!-- JHipster will add entities to the menu here -->',
+            splicable: [
+                    '<li ng-switch-when="true"><a href="#/' + entityName + '"><span class="glyphicon glyphicon-asterisk"></span>&nbsp;' + entityName + '</a></li>'
+            ]
+        });
+    } catch (e) {
+        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + entityName + '.js ' + 'not added.\n'.yellow);
+    }
+};
+
+Generator.prototype.addChangelogToLiquibase = function (changelogName) {
+    try {
+        var appPath = this.env.options.appPath;
+        var fullPath = path.join(appPath, '../resources/config/liquibase/master.xml');
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: '<!-- JHipster will add liquibase changelogs here -->',
+            splicable: [
+                    '<include file="classpath:config/liquibase/changelog/' + changelogName + '.xml" relativeToChangelogFile="false"/>'
+            ]
+        });
+    } catch (e) {
+        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + changelogName + '.js ' + 'not added.\n'.yellow);
     }
 };
 

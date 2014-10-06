@@ -4,6 +4,9 @@
         "browsehappy": "Du bruger en <strong>forældet</strong> browser. <a href=\"http://browsehappy.com/?locale=da\">Opgrader din browser</a> og få gavn af hele den tilgængelige funktionalitet.",
         "menu": {
             "home": "Forsiden",
+            "entities": {
+                "main": "Entities"
+            },
             "account": {
                 "main": "Konto",
                 "settings": "Indstillinger",

@@ -39,6 +39,20 @@
                                 <span translate="global.menu.home">Home</span>
                             </a>
                         </li>
+                        <li ng-switch-when="true" class="dropdown pointer">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;">
+                                <span>
+                                    <span class="glyphicon glyphicon-th-list"></span>
+                                    <span class="hidden-tablet" translate="global.menu.entities.main">
+                                        Entities
+                                    </span>
+                                    <b class="caret"></b>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu" ng-controller="MenuController">
+                                <!-- JHipster will add entities to the menu here -->
+                            </ul>
+                        </li>
                         <li class="dropdown pointer">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;">
                                 <span>

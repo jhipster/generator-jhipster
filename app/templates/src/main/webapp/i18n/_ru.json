@@ -4,6 +4,9 @@
         "browsehappy": "Ваш браузер <strong>устарел</strong>. Пожалуйста <a href=\"http://browsehappy.com/?locale=en\">обновите ваш браузер</a>.",
         "menu": {
             "home": "Главная",
+            "entities": {
+                "main": "Entities"
+            },
             "account": {
                 "main": "Профиль",
                 "settings": "Настройки",

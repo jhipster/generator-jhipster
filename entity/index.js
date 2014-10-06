@@ -121,6 +121,8 @@ EntityGenerator.prototype.files = function files() {
         this.changelogDate = this.dateFormatForLiquibase();
         this.template(resourceDir + '/config/liquibase/changelog/_added_entity.xml',
             resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml');
+
+        this.addChangelogToLiquibase(this.changelogDate + '_added_entity_' + this.entityClass);
     }
 
     this.template('src/main/webapp/views/_entities.html',
@@ -129,6 +131,7 @@ EntityGenerator.prototype.files = function files() {
     this.template('src/main/webapp/scripts/_entity-router.js',
         'src/main/webapp/scripts/' +    this.entityInstance + '/router_'+this.entityInstance+'.js');
     this.addScriptToIndex(this.entityInstance + '/router_'+this.entityInstance+'.js');
+    this.addRouterToMenu(this.entityInstance);
 
     this.template('src/main/webapp/scripts/_entity-controller.js',
         'src/main/webapp/scripts/' +    this.entityInstance + '/controller_'+this.entityInstance+'.js');

@@ -4,6 +4,9 @@
         "browsehappy": "<strong>Çok eski</strong> bir tarayıcı kullanıyorsunuz. Lütfen kullanım kalitenizi arttırmak için <a href=\"http://browsehappy.com/?locale=tr\">tarayıcınızı yükseltin</a>.",
         "menu": {
             "home": "Ana Sayfa",
+            "entities": {
+                "main": "Entities"
+            },
             "account": {
                 "main": "Hesap",
                 "settings": "Ayarlar",

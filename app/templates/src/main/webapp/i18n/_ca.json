@@ -4,6 +4,9 @@
         "browsehappy": "Està usant un navegador <strong>des-actualitzat</strong>. Si us plau <a href=\"http://browsehappy.com/?locale=en\">actualitzi el seu navegador</a> per millorar l'experiencia.",
         "menu": {
             "home": "Inici",
+            "entities": {
+                "main": "Entities"
+            },
             "account": {
                 "main": "Compte",
                 "settings": "Ajustos",
