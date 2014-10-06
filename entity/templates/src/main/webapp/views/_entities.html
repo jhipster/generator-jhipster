@@ -24,18 +24,21 @@
                             <input type="text" class="form-control" name="id"
                                    ng-model="<%= entityInstance %>.id" readonly>
                         </div>
-
+<% for (fieldId in fields) {
+    var fieldInputType = 'text';
+    if (fields[fieldId].fieldType == 'Integer' || fields[fieldId].fieldType == 'Long') {
+        fieldInputType = 'number';
+    } else if (fields[fieldId].fieldType == 'LocalDate') {
+        fieldInputType = 'date';
+    } else if (fields[fieldId].fieldType == 'Boolean') {
+        fieldInputType = 'checkbox';
+    }%>
                         <div class="form-group">
-                            <label>Sample text attribute</label>
-                            <input type="text" class="form-control" name="test"
-                                   ng-model="<%= entityInstance %>.sampleTextAttribute" ng-minlength=1 ng-maxlength=50 required>
-                        </div>
+                            <label><%=fields[fieldId].fieldName%></label>
+                            <input type="<%=fieldInputType%>" class="form-control" name="test"
+                                   ng-model="<%= entityInstance %>.<%=fields[fieldId].fieldName%>">
+                        </div><% } %>
 
-                        <div class="form-group">
-                            <label>Sample date attribute</label>
-                            <input type="date" class="form-control" name="test"
-                                   ng-model="<%= entityInstance %>.sampleDateAttribute" required>
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
@@ -54,17 +57,15 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Sample text</th>
-                    <th>Sample date</th>
+                    <th>ID</th><% for (fieldId in fields) { %>
+                    <th><%=fields[fieldId].fieldName%></th><% } %>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="<%= entityInstance %> in <%= entityInstance %>s">
-                    <td>{{<%= entityInstance %>.id}}</td>
-                    <td>{{<%= entityInstance %>.sampleTextAttribute}}</td>
-                    <td>{{<%= entityInstance %>.sampleDateAttribute}}</td>
+                    <td>{{<%= entityInstance %>.id}}</td><% for (fieldId in fields) { %>
+                    <td>{{<%= entityInstance %>.<%=fields[fieldId].fieldName%>}}</td><% } %>
                     <td>
                         <button type="submit"
                                 ng-click="update(<%= entityInstance %>.id)"

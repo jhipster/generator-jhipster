@@ -17,15 +17,96 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.hibernateCache = this.config.get('hibernateCache');
     this.databaseType = this.config.get('databaseType');
     this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
+
+    // Specific Entity sub-generator variables
+    this.fieldId = 0;
+    this.fields = [];
+    this.fieldsContainLocalDate = false;
 };
 
 util.inherits(EntityGenerator, yeoman.generators.Base);
 util.inherits(EntityGenerator, scriptBase);
 
+EntityGenerator.prototype.askFor = function askFor() {
+    var cb = this.async();
+    this.fieldId++;
+    console.log(chalk.green('Generating field #' + this.fieldId));
+    var prompts = [
+        {
+            type: 'input',
+            name: 'fieldName',
+            validate: function (input) {
+                if (/^([a-zA-Z0-9_]*)$/.test(input)) return true;
+                return 'Your field name cannot contain special characters or a blank space';
+            },
+            message: 'What is the name of your field?'
+        },
+        {
+            type: 'list',
+            name: 'fieldType',
+            message: 'What is the type of your field?',
+            choices: [
+                {
+                    value: 'String',
+                    name: 'String'
+                },
+                {
+                    value: 'Integer',
+                    name: 'Integer'
+                },
+                {
+                    value: 'Long',
+                    name: 'Long'
+                },
+                {
+                    value: 'LocalDate',
+                    name: 'LocalDate'
+                },
+                {
+                    value: 'Boolean',
+                    name: 'Boolean'
+                }
+            ],
+            default: 0
+        },
+        {
+            type: 'confirm',
+            name: 'fieldNext',
+            message: 'Do you want to add another field?',
+            default: true
+        }
+    ];
+    this.prompt(prompts, function (props) {
+        var field = {fieldId: this.fieldId,
+            fieldName: props.fieldName,
+            fieldType: props.fieldType,
+            fieldNameCapitalized: _s.capitalize(props.fieldName),
+            fieldNameUnderscored: _s.underscored(props.fieldName)}
+
+        this.fields.push(field);
+        if (props.fieldType == 'LocalDate') {
+            this.fieldsContainLocalDate = true;
+        }
+
+        if (props.fieldNext) {
+            console.log(chalk.red('===========' + _s.capitalize(this.name) + '=============='));
+            for (var id in this.fields) {
+                console.log(chalk.red(this.fields[id].fieldName + ' (' + this.fields[id].fieldType + ')'));
+            }
+            this.askFor();
+        } else {
+            cb();
+        }
+
+    }.bind(this));
+};
+
+
 EntityGenerator.prototype.files = function files() {
 
     this.entityClass = _s.capitalize(this.name);
     this.entityInstance = this.name.toLowerCase();
+    var resourceDir = 'src/main/resources/';
 
     this.template('src/main/java/package/domain/_Entity.java',
         'src/main/java/' + this.packageFolder + '/domain/' +    this.entityClass + '.java');
@@ -35,6 +116,12 @@ EntityGenerator.prototype.files = function files() {
 
     this.template('src/main/java/package/web/rest/_EntityResource.java',
         'src/main/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'Resource.java');
+
+    if (this.databaseType == "sql") {
+        this.changelogDate = this.dateFormatForLiquibase();
+        this.template(resourceDir + '/config/liquibase/changelog/_added_entity.xml',
+            resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml');
+    }
 
     this.template('src/main/webapp/views/_entities.html',
         'src/main/webapp/views/' +    this.entityInstance + 's.html');
@@ -55,4 +142,3 @@ EntityGenerator.prototype.files = function files() {
         'src/test/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'ResourceTest.java');
 
 };
-

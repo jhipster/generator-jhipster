@@ -5,6 +5,7 @@ var util = require('util'),
     chalk = require('chalk'),
     _s = require('underscore.string'),
     shelljs = require('shelljs'),
+    scriptBase = require('../script-base'),
     packagejs = require(__dirname + '/../package.json');
 
 var JhipsterGenerator = module.exports = function JhipsterGenerator(args, options, config) {
@@ -18,6 +19,7 @@ var JhipsterGenerator = module.exports = function JhipsterGenerator(args, option
 };
 
 util.inherits(JhipsterGenerator, yeoman.generators.Base);
+util.inherits(JhipsterGenerator, scriptBase);
 
 JhipsterGenerator.prototype.askFor = function askFor() {
     var cb = this.async();
@@ -438,7 +440,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(resourceDir + '/config/_application-prod.yml', resourceDir + 'config/application-prod.yml');
 
     if (this.databaseType == "sql") {
-        this.template(resourceDir + '/config/liquibase/changelog/_db-changelog-001.xml', resourceDir + 'config/liquibase/changelog/db-changelog-001.xml');
+        this.template(resourceDir + '/config/liquibase/changelog/_initial_schema.xml', resourceDir + 'config/liquibase/changelog/00000000000000_initial_schema.xml');
         this.copy(resourceDir + '/config/liquibase/master.xml', resourceDir + 'config/liquibase/master.xml');
         this.copy(resourceDir + '/config/liquibase/users.csv', resourceDir + 'config/liquibase/users.csv');
         this.copy(resourceDir + '/config/liquibase/authorities.csv', resourceDir + 'config/liquibase/authorities.csv');

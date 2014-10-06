@@ -26,6 +26,6 @@
         };
 
         $scope.clear = function () {
-            $scope.<%= entityInstance %> = {id: null, sampleTextAttribute: null, sampleDateAttribute: null};
+            $scope.<%= entityInstance %> = {<% for (fieldId in fields) { %><%= fields[fieldId].fieldName %>: null, <% } %>id: null};
         };
     });

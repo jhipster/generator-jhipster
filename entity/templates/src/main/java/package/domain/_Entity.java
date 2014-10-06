@@ -1,9 +1,9 @@
 package <%=packageName%>.domain;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+<% if (fieldsContainLocalDate == true) { %>import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.joda.deser.LocalDateDeserializer;
-import <%=packageName%>.domain.util.CustomLocalDateSerializer;
+import <%=packageName%>.domain.util.CustomLocalDateSerializer;<% } %>
 <% if (hibernateCache != 'no') { %>import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (databaseType == 'sql') { %>
 import org.hibernate.annotations.Type;<% } %>
@@ -12,10 +12,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;<% } %>
 
-<% if (databaseType == 'sql') { %>
-import javax.persistence.*;<% } %>
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+<% if (databaseType == 'sql') { %>import javax.persistence.*;<% } %>
 import java.io.Serializable;
 
 /**
@@ -31,20 +28,15 @@ public class <%= entityClass %> implements Serializable {
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;<% } %><% if (databaseType == 'nosql') { %>
     private String id;<% } %>
-
-    @Size(min = 1, max = 50)<% if (databaseType == 'sql') { %>
-    @Column(name = "sample_text_attribute", length = 50)<% } %><% if (databaseType == 'nosql') { %>
-    @Field("sample_text_attribute")<% } %>
-    private String sampleTextAttribute;
-
-    @NotNull<% if (databaseType == 'sql') { %>
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")<% } %>
+<% for (fieldId in fields) { %><% if (databaseType == 'sql') { %><% if (fields[fieldId].fieldType == 'LocalDate') { %>
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     @JsonDeserialize(using = LocalDateDeserializer.class)
-    @JsonSerialize(using = CustomLocalDateSerializer.class)<% if (databaseType == 'sql') { %>
-    @Column(name = "sample_date_attribute", nullable = false)<% } %><% if (databaseType == 'nosql') { %>
-    @Field("sample_date_attribute")<% } %>
-    private LocalDate sampleDateAttribute;
-
+    @JsonSerialize(using = CustomLocalDateSerializer.class)
+    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>", nullable = false)<% } else { %>
+    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>")<% }} %><% if (databaseType == 'nosql') { %>
+    @Field("<%=fields[fieldId].fieldNameUnderscored %>")<% } %>
+    private <%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>;
+<% } %>
     public <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> getId() {
         return id;
     }
@@ -52,23 +44,15 @@ public class <%= entityClass %> implements Serializable {
     public void setId(<% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> id) {
         this.id = id;
     }
-
-    public String getSampleTextAttribute() {
-        return sampleTextAttribute;
+<% for (fieldId in fields) { %>
+    public <%= fields[fieldId].fieldType %> get<%= fields[fieldId].fieldNameCapitalized %>() {
+        return <%= fields[fieldId].fieldName %>;
     }
 
-    public void setSampleTextAttribute(String sampleTextAttribute) {
-        this.sampleTextAttribute = sampleTextAttribute;
+    public void set<%= fields[fieldId].fieldNameCapitalized %>(<%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>) {
+        this.<%= fields[fieldId].fieldName %> = <%= fields[fieldId].fieldName %>;
     }
-
-    public LocalDate getSampleDateAttribute() {
-        return sampleDateAttribute;
-    }
-
-    public void setSampleDateAttribute(LocalDate sampleDateAttribute) {
-        this.sampleDateAttribute = sampleDateAttribute;
-    }
-
+<% } %>
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -93,9 +77,8 @@ public class <%= entityClass %> implements Serializable {
     @Override
     public String toString() {
         return "<%= entityClass %>{" +
-                "id=" + id +
-                ", sampleTextAttribute='" + sampleTextAttribute + '\'' +
-                ", sampleDateAttribute=" + sampleDateAttribute +
+                "id=" + id +<% for (fieldId in fields) { %>
+                ", <%= fields[fieldId].fieldName %>='" + <%= fields[fieldId].fieldName %> + "'" +<% } %>
                 '}';
     }
 }
