@@ -24,6 +24,8 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.fieldsContainLocalDate = false;
 };
 
+var fieldNames = ['id'];
+
 util.inherits(EntityGenerator, yeoman.generators.Base);
 util.inherits(EntityGenerator, scriptBase);
 
@@ -36,8 +38,8 @@ EntityGenerator.prototype.askFor = function askFor() {
             type: 'input',
             name: 'fieldName',
             validate: function (input) {
-                if (/^([a-zA-Z0-9_]*)$/.test(input)) return true;
-                return 'Your field name cannot contain special characters or a blank space';
+                if ((/^([a-zA-Z0-9_]*)$/.test(input)) && input != '' && input != 'id' && fieldNames.indexOf(input) == -1) return true;
+                return 'Your field name cannot contain special characters or use an already existing field name';
             },
             message: 'What is the name of your field?'
         },
@@ -83,6 +85,7 @@ EntityGenerator.prototype.askFor = function askFor() {
             fieldNameCapitalized: _s.capitalize(props.fieldName),
             fieldNameUnderscored: _s.underscored(props.fieldName)}
 
+        fieldNames.push(props.fieldName);
         this.fields.push(field);
         if (props.fieldType == 'LocalDate') {
             this.fieldsContainLocalDate = true;
