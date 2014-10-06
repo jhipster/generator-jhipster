@@ -23,5 +23,6 @@ They are written in English to avoid character encoding issues (not a perfect so
         pl: 'Polish',
         pt: 'Portuguese',
         ru: 'Russian',
+        sv: 'Swedish',
         tr: 'Turkish'
     });

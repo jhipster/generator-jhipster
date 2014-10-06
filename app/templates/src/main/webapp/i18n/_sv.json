@@ -1,0 +1,322 @@
+{
+    "global": {
+        "title": "<%= baseName %>",
+        "browsehappy": "Du använder en <strong>gammal webbläsare</strong>. <a href=\"http://browsehappy.com/?locale=en\">Uppgradera din webbläsare</a> för bästa upplevelse.",
+        "menu": {
+            "home": "Hem",
+            "entities": {
+                "main": "Entiter"
+            },
+            "account": {
+                "main": "Konto",
+                "settings": "Inställningar",
+                "password": "Lösenord",
+                "sessions": "Sessioner",
+                "tracker": "Användarspårning",
+                "metrics": "Mätningar",
+                "logs": "Loggar",
+                "audits": "Granskningar",
+                "health": "Status",
+                "login": "Inloggning",
+                "logout": "Utloggning",
+                "apidocs": "API",
+                "register": "Registrera"
+            },
+            "admin": "Administration",
+            "language": "Språk"
+        },
+        "form": {
+            "username": "Inloggning",
+            "username.placeholder": "Din inloggning",
+            "newpassword": "Nytt lösenord",
+            "newpassword.placeholder": "Nytt lösenord",
+            "confirmpassword": "Konfirmera nytt lösenord",
+            "confirmpassword.placeholder": "Konfirmera det nya lösenordet",
+            "email": "E-post",
+            "email.placeholder": "Din e-post"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Om du vill <a href=\"#/login\">logga in</a> - prova med standard kontot:<br/>- Administratör (användarnamn=\"admin\" och lösenord=\"admin\") <br/>- Användare (login=\"user\" och lösenord=\"user\").",
+                "register": "Har du inget konto? <a href=\"#/register\">Du kan registrera ett konto</a>"
+            },
+            "error": {
+                "dontmatch" : "Lösenorden stämmer inte med varandra!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Ditt lösenord krävs.",
+                    "minlength": "Ditt lösenord måste vara 5 tecken",
+                    "maxlength": "Ditt lösenord kan inte vara längre än 50 tecken",
+                    "strength": "Lösenordsstyrka:"
+                },
+                "confirmpassword": {
+                    "required": "Din konfirmation krävs.",
+                    "minlength": "Ditt konfirmationslösenord måste vara 5 tecken långt",
+                    "maxlength": "Ditt konfirmationslösenord kan inte vara längre än 50 tecken"
+                },
+                "email": {
+                    "required": "Din e-post krävs.",
+                    "invalid": "Din e-post adress är inte giltig.",
+                    "minlength": "Din e-post måste vara minst 5 tecken",
+                    "maxlength": "Din e-post får inte vara längre än 50 tecken"
+                }
+            }
+        }
+    },
+    "main": {
+        "title": "Välkommen Java Hipster!",
+        "subtitle": "Det här är din hemsida",
+        "logged": {
+            "message": "Du är inloggad som \"{{username}}\"."
+        },
+        "question": "Om du har några frågor om JHipster:",
+        "link": {
+            "homepage": "JHipsters hemsida",
+            "stackoverflow": "JHipster på Stack Overflow",
+            "bugtracker": "JHipster bughanterare",
+            "contact": "kontakta @java_hipster på Twitter"
+        },
+        "like": "Om du gillar JHipster, glöm inte att ge oss en stjärna på",
+        "github": "Github"
+    },
+    "activate": {
+        "title": "Aktivering",
+        "messages": {
+            "success": "<strong>Ditt användarnamn har blivit aktiverat.</strong>. Du kan <a href=\"#/login\">logga in</a>.",
+            "error": "<strong>Ditt användarnamn kunde inte aktiveras.</strong> Använd gärna registreringsformuläret."
+        }
+    },
+    "register": {
+        "title": "Registrering",
+        "form": {
+            "button": "Registrera"
+        },
+        "messages": {
+            "validate": {
+                "login": {
+                    "required": "Din inloggning krävs.",
+                    "minlength": "Ditt användarnamn måste vara minst ett tecken",
+                    "maxlength": "Ditt användarnamn kan inte vara längre än 50 tecken"
+                }
+            },
+            "success": "<strong>Användarnamn sparat!</strong> Kontrollera din e-post för konfirmation.",
+            "error": {
+                "fail": "<strong>Registreringen misslyckades!</strong> Prova gärna igen senare.",
+                "userexists": "<strong>Användarnamnet finns redan!</strong> Prova gärna ett annat användarnamn."
+            }
+        }
+    },
+    "login": {
+        "title": "Autentisering",
+        "form": {
+            "password": "Lösenord",
+            "password.placeholder": "Ditt lösenord",
+            "rememberme": "Automatisk inloggning",
+            "button": "Autentisera"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Autentisering misslyckades!</strong> Kontrollera ditt användarnamn och lösenord och prova igen."
+            }
+        }
+    },
+    "settings": {
+        "title": "Användarinställningar för [<b>{{username}}</b>]",
+        "form": {
+            "firstname": "Förnamn",
+            "firstname.placeholder": "Ditt förnamn",
+            "lastname": "Efternamn",
+            "lastname.placeholder": "Ditt efternamn",
+            "button": "Save"
+        },
+        "messages": {
+            "error": "<strong>Det blev fel!</strong> Inställningar kunde inte sparas.",
+            "success": "<strong>Inställningar sparade!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "Ditt förnamn krävs.",
+                    "minlength": "Ditt förnamn måste vara minst 1 tecken",
+                    "maxlength": "Ditt förnamn kan inte vara längre än 50 tecken"
+                },
+                "lastname": {
+                    "required": "Ditt efternamn krävs.",
+                    "minlength": "Ditt efternamn måste vara längre än 1 tecken",
+                    "maxlength": "Ditt efternamn kan inte vara längre än 50 tecken"
+                }
+            }
+        }
+    },
+    "password": {
+        "title": "Lösenord för [<b>{{username}}</b>]",
+        "form": {
+            "button": "Spara"
+        },
+        "messages": {
+            "error":  "<strong>Det blev fel!</strong> Lösenordet kunde inte ändras.",
+            "success": "<strong>Lösenord ändrat!</strong>"
+        }
+    },
+    "sessions": {
+        "title": "Aktiva sessioner för [<b>{{username}}</b>]",
+        "table": {
+            "ipaddress": "IP-adress",
+            "useragent": "User Agent",
+            "date": "Datum",
+            "button": "Logga ut"
+        },
+        "messages": {
+            "success": "<strong>Sessionen utloggad!</strong>",
+            "error": "<strong>Det blev fel!</strong> Sessionen kunde inte loggas ut."
+        }
+    },
+    "tracker": {
+        "title": "Användaraktiviteter i realtid",
+        "table": {
+            "userlogin": "Användarnamn",
+            "ipaddress": "IP-adress",
+            "userAgent": "Användaragent (User-Agent)",
+            "page": "Nuvarande sida",
+            "time": "Tid"
+        }
+    },
+    "metrics": {
+        "title": "Applikationsmätningar",
+        "refresh.button": "Uppdatera",
+        "updating": "Uppdaterar...",        
+        "jvm": {
+            "title": "Mätningar av JVM",
+            "memory": {
+                "title": "Minne",
+                "total": "Totalt minne",
+                "heap": "Heap minne",
+                "nonheap": "Non-Heap minne"
+            },
+            "threads": {
+                "title": "Trådar",
+                "all": "Alla",
+                "runnable": "Körbara",
+                "timedwaiting": "Timed waiting",
+                "waiting": "Waiting",
+                "blocked": "Blocked",
+                "dump": {
+                    "title": "Threads dump",
+                    "id": "Id: ",
+                    "blockedtime": "Blocked Time",
+                    "blockedcount": "Blocked Count",
+                    "waitedtime": "Waited Time",
+                    "waitedcount": "Waited Count",
+                    "lockname": "Lock name",
+                    "stacktrace": "Stacktrace",
+                    "show": "Visa",
+                    "hide": "Göm"
+                }
+            },
+            "gc": {
+                "title": "Garbage collections",
+                "marksweepcount": "Mark Sweep count",
+                "marksweeptime": "Mark Sweep time",
+                "scavengecount": "Scavenge count",
+                "scavengetime": "Scavenge time"
+            },
+            "http": {
+                "title": "HTTP requests (händelser/sekund)",
+                "active": "Aktiva requests:",
+                "total": "Totalt antal requests:",
+                "table": {
+                    "code": "Kod",
+                    "count": "Antal",
+                    "mean": "Medelvärde",
+                    "average": "Genomsnitt"
+                },
+                "code": {
+                    "ok": "Ok",
+                    "notfound": "Not found",
+                    "servererror": "Server Error"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Services statistik (tid i millisekund)",
+            "table": {
+                "name": "Service namn",
+                "count": "Antal",
+                "mean": "Medelvärde",
+                "min": "Min",
+                "max": "Max",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "ehcache": {
+            "title": "Ehcache statistik",
+            "cachename": "Cache namn",
+            "objects": "Objekt",
+            "hits": "Träffar",
+            "misses": "Missar",
+            "evictioncount": "Utkastade",
+            "mean": "Medeltid för GET (ms)"
+        }
+    },
+    "health": {
+        "title": "Statuskontroller",
+        "refresh.button": "Uppdatera",
+        "stacktrace": "Stacktrace",
+        "indicator": {
+            "db": "Databas",
+            "mail": "E-post",
+            "mongo": "Mongo DB"
+        },
+        "table": {
+            "service": "Service namn",
+            "status": "Status"
+        },
+        "status": {
+            "UP": "UPP",
+            "DOWN": "NED"
+        }
+    
+    },
+    "logs": {
+        "title": "Loggar",
+        "nbloggers": "Det finns totalt {{ total }} loggar.",
+        "filter": "Filter",
+        "table": {
+            "name": "Namn",
+            "level": "Nivå"
+        }
+    },
+    "audits": {
+        "title": "Granskningar",
+        "filter": {
+            "title": "Filter per datum",
+            "from": "från",
+            "to": "till",
+            "button": {
+                "weeks": "Veckor",
+                "today": "idag",
+                "clear": "rensa",
+                "close": "stäng"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Användare",
+                "date": "Datum",
+                "status": "Status",
+                "data": "Extra data"
+            },
+            "data": {
+                "remoteAddress": "Fjärradress:"
+            }
+        }
+
+    },
+    "errors": {
+        "title": "Felsida!",
+        "403": "Du är inte autentiserad till sidan."
+    },
+    "footer": "Detta är din footer"
+}
