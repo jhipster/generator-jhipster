@@ -41,7 +41,7 @@ describe('jhipster generator', function () {
   it('creates expected files', function (done) {
 
     var expectedAdditionalFiles = [
-      resourceDir + 'config/liquibase/changelog/db-changelog-001.xml',
+      resourceDir + 'config/liquibase/changelog/00000000000000_initial_schema.xml',
       resourceDir + 'config/liquibase/master.xml',
       resourceDir + 'config/liquibase/users.csv',
       resourceDir + 'config/liquibase/authorities.csv',
