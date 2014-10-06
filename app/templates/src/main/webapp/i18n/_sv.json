@@ -4,6 +4,9 @@
         "browsehappy": "Du använder en <strong>gammal webbläsare</strong>. <a href=\"http://browsehappy.com/?locale=en\">Uppgradera din webbläsare</a> för bästa upplevelse.",
         "menu": {
             "home": "Hem",
+            "entities": {
+                "main": "Entiter"
+            },
             "account": {
                 "main": "Konto",
                 "settings": "Inställningar",
@@ -13,6 +16,7 @@
                 "metrics": "Mätningar",
                 "logs": "Loggar",
                 "audits": "Granskningar",
+                "health": "Status",
                 "login": "Inloggning",
                 "logout": "Utloggning",
                 "apidocs": "API",
@@ -179,15 +183,9 @@
     "metrics": {
         "title": "Applikationsmätningar",
         "refresh.button": "Uppdatera",
-        "updating": "Uppdaterar...",
-        "health": {
-            "title": "Hälsokontroller",
-            "database": "Databas: ",
-            "email": "E-post: ",
-            "stacktrace": "Stacktrace"
-        },
+        "updating": "Uppdaterar...",        
         "jvm": {
-            "title": "JVMMätningar",
+            "title": "Mätningar av JVM",
             "memory": {
                 "title": "Minne",
                 "total": "Totalt minne",
@@ -261,6 +259,25 @@
             "evictioncount": "Utkastade",
             "mean": "Medel tid för get (ms)"
         }
+    },
+    "health": {
+        "title": "Statuskontroller",
+        "refresh.button": "Uppdatera",
+        "stacktrace": "Stacktrace",
+        "indicator": {
+            "db": "Databas",
+            "mail": "E-post",
+            "mongo": "Mongo DB"
+        },
+        "table": {
+            "service": "Service namn",
+            "status": "Status"
+        },
+        "status": {
+            "UP": "UPP",
+            "DOWN": "NED"
+        }
+    
     },
     "logs": {
         "title": "Loggar",
