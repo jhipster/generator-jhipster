@@ -4,6 +4,9 @@
         "browsehappy": "您目前使用<strong>過於老舊</strong>的瀏覽器, 建議您<a href=\"http://browsehappy.com/?locale=en\">升級瀏覽器</a>讓您有更佳的上網體驗.",
         "menu": {
             "home": "首頁",
+            "entities": {
+                "main": "Entities"
+            },
             "account": {
                 "main": "帳號",
                 "settings": "設定",
@@ -260,10 +263,12 @@
     "health": {
         "title": "服務狀態",
         "refresh.button": "重整",
-        "db": "資料庫",
-        "mail": "電子郵件",
-        "mongo": "MongoDB",
         "stacktrace": "堆疊追蹤",
+        "indicator": {
+            "db": "資料庫",
+            "mail": "電子郵件",
+            "mongo": "MongoDB"
+        },
         "table": {
             "service": "服務名稱",
             "status": "狀態"
