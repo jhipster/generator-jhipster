@@ -46,7 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 <% if (databaseType == 'nosql') { %>
 @Import(MongoConfiguration.class)<% } %>
-public class AccountResourceTest {
+public class AccountResourceIT {
 
     @Inject
     private UserRepository userRepository;
