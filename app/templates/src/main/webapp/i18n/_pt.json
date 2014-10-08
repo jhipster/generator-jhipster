@@ -14,7 +14,7 @@
                 "sessions": "Sessões",
                 "tracker": "Rastreamento de usuário",
                 "metrics": "Métricas",
-                "health": "Verificações",
+                "health": "Estado do Sistema",
                 "logs": "Logs",
                 "audits": "Auditorias",
                 "login": "Entrar",
@@ -261,7 +261,7 @@
         }
     },
     "health": {
-        "title": "Verificações",
+        "title": "Estado do Sistema",
         "refresh.button": "Atualizar",
         "stacktrace": "Stacktrace",
         "indicator": {
