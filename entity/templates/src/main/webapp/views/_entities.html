@@ -22,7 +22,7 @@
                         <div class="form-group">
                             <label>ID</label>
                             <input type="text" class="form-control" name="id"
-                                   ng-model="<%= entityInstance %>.id" readonly>
+                                   ng-model="<%=entityInstance %>.id" readonly>
                         </div>
 <% for (fieldId in fields) {
     var fieldInputType = 'text';
@@ -35,9 +35,18 @@
     }%>
                         <div class="form-group">
                             <label><%=fields[fieldId].fieldName%></label>
-                            <input type="<%=fieldInputType%>" class="form-control" name="test"
-                                   ng-model="<%= entityInstance %>.<%=fields[fieldId].fieldName%>">
+                            <input type="<%=fieldInputType%>" class="form-control"
+                                   ng-model="<%=entityInstance %>.<%=fields[fieldId].fieldName%>">
                         </div><% } %>
+<% for (relationshipId in relationships) {
+    if (relationships[relationshipId].relationshipType == 'many-to-one') {
+        var otherEntityName = relationships[relationshipId].otherEntityName;
+                        %>
+                        <div class="form-group">
+                            <label><%=otherEntityName %></label>
+                            <select class="form-control" ng-model="<%=entityInstance %>.<%=otherEntityName %>.id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %> | json for <%=otherEntityName %> in <%=otherEntityName %>s">
+                            </select>
+                        </div><% } } %>
 
                     </div>
                     <div class="modal-footer">
@@ -58,22 +67,26 @@
             <thead>
                 <tr>
                     <th>ID</th><% for (fieldId in fields) { %>
-                    <th><%=fields[fieldId].fieldName%></th><% } %>
+                    <th><%=fields[fieldId].fieldName%></th><% } %><% for (relationshipId in relationships) {
+                        if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
+                    <th><%=relationships[relationshipId].otherEntityName%></th><% } } %>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="<%= entityInstance %> in <%= entityInstance %>s">
-                    <td>{{<%= entityInstance %>.id}}</td><% for (fieldId in fields) { %>
-                    <td>{{<%= entityInstance %>.<%=fields[fieldId].fieldName%>}}</td><% } %>
+                <tr ng-repeat="<%=entityInstance %> in <%=entityInstance %>s">
+                    <td>{{<%=entityInstance %>.id}}</td><% for (fieldId in fields) { %>
+                    <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%>}}</td><% } %><% for (relationshipId in relationships) {
+                        if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
+                    <td>{{<%=entityInstance %>.<%=relationships[relationshipId].otherEntityName%>}}</td><% } } %>
                     <td>
                         <button type="submit"
-                                ng-click="update(<%= entityInstance %>.id)"
+                                ng-click="update(<%=entityInstance %>.id)"
                                 class="btn">
                             <span class="glyphicon glyphicon-pencil"></span> Edit
                         </button>
                         <button type="submit"
-                                ng-click="delete(<%= entityInstance %>.id)"
+                                ng-click="delete(<%=entityInstance %>.id)"
                                 class="btn btn-danger">
                             <span class="glyphicon glyphicon-remove-circle"></span> Delete
                         </button>

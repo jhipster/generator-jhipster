@@ -4,11 +4,12 @@ var util = require('util'),
         yeoman = require('yeoman-generator'),
         chalk = require('chalk'),
         _s = require('underscore.string'),
+        shelljs = require('shelljs'),
         scriptBase = require('../script-base');
 
 var EntityGenerator = module.exports = function EntityGenerator(args, options, config) {
     yeoman.generators.NamedBase.apply(this, arguments);
-    console.log('The entity ' + this.name + ' is being created.');
+    console.log(chalk.red('The entity ' + this.name + ' is being created.'));
     this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
     this.baseName = this.config.get('baseName');
     this.packageName = this.config.get('packageName');
@@ -22,19 +23,31 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.fieldId = 0;
     this.fields = [];
     this.fieldsContainLocalDate = false;
+    this.relationshipId = 0;
+    this.relationships = [];
 };
 
 var fieldNames = ['id'];
+var relationshipNames = [];
 
 util.inherits(EntityGenerator, yeoman.generators.Base);
 util.inherits(EntityGenerator, scriptBase);
 
-EntityGenerator.prototype.askFor = function askFor() {
+EntityGenerator.prototype.askForFields = function askForFields() {
     var cb = this.async();
     this.fieldId++;
     console.log(chalk.green('Generating field #' + this.fieldId));
     var prompts = [
         {
+            type: 'confirm',
+            name: 'fieldAdd',
+            message: 'Do you want to add a field to your entity?',
+            default: true
+        },
+        {
+            when: function (response) {
+                return response.fieldAdd == true;
+            },
             type: 'input',
             name: 'fieldName',
             validate: function (input) {
@@ -44,6 +57,9 @@ EntityGenerator.prototype.askFor = function askFor() {
             message: 'What is the name of your field?'
         },
         {
+            when: function (response) {
+                return response.fieldAdd == true;
+            },
             type: 'list',
             name: 'fieldType',
             message: 'What is the type of your field?',
@@ -70,37 +86,127 @@ EntityGenerator.prototype.askFor = function askFor() {
                 }
             ],
             default: 0
-        },
-        {
-            type: 'confirm',
-            name: 'fieldNext',
-            message: 'Do you want to add another field?',
-            default: true
         }
     ];
     this.prompt(prompts, function (props) {
-        var field = {fieldId: this.fieldId,
-            fieldName: props.fieldName,
-            fieldType: props.fieldType,
-            fieldNameCapitalized: _s.capitalize(props.fieldName),
-            fieldNameUnderscored: _s.underscored(props.fieldName)}
+        if (props.fieldAdd) {
+            var field = {fieldId: this.fieldId,
+                fieldName: props.fieldName,
+                fieldType: props.fieldType,
+                fieldNameCapitalized: _s.capitalize(props.fieldName),
+                fieldNameUnderscored: _s.underscored(props.fieldName)}
 
-        fieldNames.push(props.fieldName);
-        this.fields.push(field);
-        if (props.fieldType == 'LocalDate') {
-            this.fieldsContainLocalDate = true;
-        }
-
-        if (props.fieldNext) {
-            console.log(chalk.red('===========' + _s.capitalize(this.name) + '=============='));
-            for (var id in this.fields) {
-                console.log(chalk.red(this.fields[id].fieldName + ' (' + this.fields[id].fieldType + ')'));
+            fieldNames.push(props.fieldName);
+            this.fields.push(field);
+            if (props.fieldType == 'LocalDate') {
+                this.fieldsContainLocalDate = true;
             }
-            this.askFor();
+        }
+        console.log(chalk.red('===========' + _s.capitalize(this.name) + '=============='));
+        for (var id in this.fields) {
+            console.log(chalk.red(this.fields[id].fieldName + ' (' + this.fields[id].fieldType + ')'));
+        }
+        if (props.fieldAdd) {
+            this.askForFields();
         } else {
             cb();
         }
+    }.bind(this));
+};
 
+EntityGenerator.prototype.askForRelationships = function askForRelationships() {
+    if (this.databaseType == 'nosql') {
+        return;
+    }
+    var packageFolder = this.packageFolder;
+    var cb = this.async();
+    this.relationshipId++;
+    console.log(chalk.green('Generating relationships with other entities'));
+    var prompts = [
+        {
+            type: 'confirm',
+            name: 'relationshipAdd',
+            message: 'Do you want to add a relationship to another entity?',
+            default: true
+        },
+        {
+            when: function (response) {
+                return response.relationshipAdd == true;
+            },
+            type: 'input',
+            name: 'otherEntityName',
+            validate: function (input) {
+                if ((/^([a-zA-Z0-9_]*)$/.test(input)) && input != '' && input != 'id' && fieldNames.indexOf(input) == -1) return true;
+                return 'Your relationship name cannot contain special characters or use an already existing field name';
+            },
+            message: 'What is the name of the other entity?'
+        },
+        {
+            when: function (response) {
+                return response.relationshipAdd == true;
+            },
+            type: 'list',
+            name: 'relationshipType',
+            message: 'What is the type of the relationship?',
+            choices: [
+                {
+                    value: 'one-to-many',
+                    name: 'one-to-many'
+                },
+                {
+                    value: 'many-to-one',
+                    name: 'many-to-one'
+                }
+            ],
+            default: 0
+        },
+        {
+            when: function(response) {
+                return (response.relationshipAdd == true && response.relationshipType == 'many-to-one' && !shelljs.test('-f', 'src/main/java/' + packageFolder + '/domain/' + _s.capitalize(response.otherEntityName) + '.java'))
+            },
+            type: 'confirm',
+            name: 'noOtherEntity',
+            message: 'WARNING! You are trying to generate a many-to-one relationship on an entity that does not exist. This will probably fail, as you will need to create a foreign key on a table that does not exist. We advise you to create the other side of this relationship first (do the one-to-many before the many-to-one relationship). Are you sure you want to continue?',
+            default: false
+        },
+        {
+            when: function (response) {
+                return (response.relationshipAdd == true && response.relationshipType == 'many-to-many');
+            },
+            type: 'confirm',
+            name: 'ownerSide',
+            message: 'Is this entity the owner of the relationship?',
+            default: false
+        }
+    ];
+    this.prompt(prompts, function (props) {
+        if (props.noOtherEntity == false) {
+            console.log(chalk.red('Generation aborted, as requested by the user.'));
+            return;
+        }
+        if (props.relationshipAdd) {
+            var relationship = {relationshipId: this.relationshipId,
+                otherEntityName: props.otherEntityName,
+                relationshipType: props.relationshipType,
+                otherEntityNameCapitalized: _s.capitalize(props.otherEntityName)}
+
+            relationshipNames.push(props.relationshipName);
+            this.relationships.push(relationship);
+        }
+        console.log(chalk.red('===========' + _s.capitalize(this.name) + '=============='));
+        for (var id in this.fields) {
+            console.log(chalk.red(this.fields[id].fieldName + ' (' + this.fields[id].fieldType + ')'));
+        }
+        console.log(chalk.red('-------------------'));
+        for (var id in this.relationships) {
+            console.log(chalk.red(this.relationships[id].otherEntityName + ' (' + this.relationships[id].relationshipType + ')'));
+        }
+        if (props.relationshipAdd) {
+            this.askForRelationships();
+        } else {
+            console.log(chalk.green('Everything is configured, generating the entity...'));
+            cb();
+        }
     }.bind(this));
 };
 
