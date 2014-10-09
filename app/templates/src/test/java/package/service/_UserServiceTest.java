@@ -1,7 +1,6 @@
 package <%=packageName%>.service;
 
-import <%=packageName%>.Application;<% if (databaseType == 'nosql') { %>
-import <%=packageName%>.config.MongoConfiguration;<% } %>
+import <%=packageName%>.Application;
 import <%=packageName%>.domain.PersistentToken;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.PersistentTokenRepository;
@@ -10,8 +9,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;<% if (databaseType == 'nosql') { %>
-import org.springframework.context.annotation.Import;<% } %><% if (databaseType == 'sql') { %>
+import org.springframework.boot.test.SpringApplicationConfiguration;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -30,9 +28,7 @@ import static org.assertj.core.api.Assertions.*;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
-@WebAppConfiguration
-<% if (databaseType == 'nosql') { %>
-@Import(MongoConfiguration.class)<% } %><% if (databaseType == 'sql') { %>
+@WebAppConfiguration<% if (databaseType == 'sql') { %>
 @Transactional<% } %>
 public class UserServiceTest {
 
