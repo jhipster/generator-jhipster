@@ -44,7 +44,7 @@
                         %>
                         <div class="form-group">
                             <label><%=otherEntityName %></label>
-                            <select class="form-control" ng-model="<%=entityInstance %>.<%=otherEntityName %>.id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %> | json for <%=otherEntityName %> in <%=otherEntityName %>s">
+                            <select class="form-control" ng-model="<%=entityInstance %>.<%=otherEntityName %>.id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=relationships[relationshipId].otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName %>s">
                             </select>
                         </div><% } } %>
 
@@ -78,7 +78,7 @@
                     <td>{{<%=entityInstance %>.id}}</td><% for (fieldId in fields) { %>
                     <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%>}}</td><% } %><% for (relationshipId in relationships) {
                         if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
-                    <td>{{<%=entityInstance %>.<%=relationships[relationshipId].otherEntityName%>}}</td><% } } %>
+                    <td>{{<%=entityInstance %>.<%=relationships[relationshipId].otherEntityName%>.<%=relationships[relationshipId].otherEntityField%>}}</td><% } } %>
                     <td>
                         <button type="submit"
                                 ng-click="update(<%=entityInstance %>.id)"

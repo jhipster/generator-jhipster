@@ -171,6 +171,17 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
         },
         {
             when: function (response) {
+                return (response.relationshipAdd == true && response.relationshipType == 'many-to-one');
+            },
+            type: 'input',
+            name: 'otherEntityField',
+            message: function (response) {
+                return 'When you display this relationship with AngularJS, which field from \'' + response.otherEntityName + '\' do you want to use?'
+            },
+            default: 'id'
+        },
+        {
+            when: function (response) {
                 return (response.relationshipAdd == true && response.relationshipType == 'many-to-many');
             },
             type: 'confirm',
@@ -188,7 +199,8 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             var relationship = {relationshipId: this.relationshipId,
                 otherEntityName: props.otherEntityName,
                 relationshipType: props.relationshipType,
-                otherEntityNameCapitalized: _s.capitalize(props.otherEntityName)}
+                otherEntityNameCapitalized: _s.capitalize(props.otherEntityName),
+                otherEntityField: props.otherEntityField}
 
             relationshipNames.push(props.relationshipName);
             this.relationships.push(relationship);
