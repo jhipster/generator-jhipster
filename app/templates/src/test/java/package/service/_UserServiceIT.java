@@ -34,7 +34,7 @@ import static org.assertj.core.api.Assertions.*;
 <% if (databaseType == 'nosql') { %>
 @Import(MongoConfiguration.class)<% } %><% if (databaseType == 'sql') { %>
 @Transactional<% } %>
-public class UserServiceTest {
+public class UserServiceIT {
 
     @Inject
     private PersistentTokenRepository persistentTokenRepository;

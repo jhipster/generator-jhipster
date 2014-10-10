@@ -578,10 +578,10 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/test/java/package/config/_MongoConfiguration.java', testDir + 'config/MongoConfiguration.java');
     }
 
-    this.template('src/test/java/package/service/_UserServiceTest.java', testDir + 'service/UserServiceTest.java');
-    this.template('src/test/java/package/web/rest/_AccountResourceTest.java', testDir + 'web/rest/AccountResourceTest.java');
+    this.template('src/test/java/package/service/_UserServiceIT.java', testDir + 'service/UserServiceIT.java');
+    this.template('src/test/java/package/web/rest/_AccountResourceIT.java', testDir + 'web/rest/AccountResourceIT.java');
     this.template('src/test/java/package/web/rest/_TestUtil.java', testDir + 'web/rest/TestUtil.java');
-    this.template('src/test/java/package/web/rest/_UserResourceTest.java', testDir + 'web/rest/UserResourceTest.java');
+    this.template('src/test/java/package/web/rest/_UserResourceIT.java', testDir + 'web/rest/UserResourceIT.java');
 
     this.template(testResourceDir + 'config/_application.yml', testResourceDir + 'config/application.yml');
     this.template(testResourceDir + '_logback-test.xml', testResourceDir + 'logback-test.xml');
