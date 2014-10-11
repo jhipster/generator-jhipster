@@ -8,7 +8,9 @@ Example:
         src/main/java/package/domain/Foo.java
         src/main/java/package/repository/FooRepository.java
         src/main/java/package/web/rest/FooResource.java
+        src/main/resources/config/liquibase/changelog/20141010195014_added_entity_Foo.xml
+        src/main/webapp/views/foos.html
         src/main/webapp/scripts/foo/router.js
         src/main/webapp/scripts/foo/controller.js
         src/main/webapp/scripts/foo/service.js
-        src/main/webapp/views/foos.html
+        src/test/java/com/mycompany/myapp/web/rest/FooResourceTest.java
