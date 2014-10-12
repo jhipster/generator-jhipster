@@ -1,15 +1,19 @@
 'use strict';
 var util = require('util'),
-        path = require('path'),
-        yeoman = require('yeoman-generator'),
-        chalk = require('chalk'),
-        _s = require('underscore.string'),
-        shelljs = require('shelljs'),
-        scriptBase = require('../script-base');
+    path = require('path'),
+    yeoman = require('yeoman-generator'),
+    chalk = require('chalk'),
+    _s = require('underscore.string'),
+    shelljs = require('shelljs'),
+    scriptBase = require('../script-base');
 
 var EntityGenerator = module.exports = function EntityGenerator(args, options, config) {
     yeoman.generators.NamedBase.apply(this, arguments);
-    console.log(chalk.red('The entity ' + this.name + ' is being created.'));
+    var name = this._qualifiedName(this.name);
+    console.info(name);
+    this.entityPackage = name.packageName;
+    this.entityClass = name.className;
+    
     this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
     this.baseName = this.config.get('baseName');
     this.packageName = this.config.get('packageName');
@@ -20,23 +24,65 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
 
     // Specific Entity sub-generator variables
-    this.fieldId = 0;
     this.fields = [];
     this.fieldsContainLocalDate = false;
-    this.relationshipId = 0;
     this.relationships = [];
+    
+    console.log(chalk.red('The entity ' + this.entityClass + ' is being created' + (this.entityPackage ? ' in package ' + this.entityPackage : '') + '.'));
 };
 
 var fieldNames = ['id'];
-var relationshipNames = [];
 
 util.inherits(EntityGenerator, yeoman.generators.Base);
 util.inherits(EntityGenerator, scriptBase);
 
+EntityGenerator.prototype.qualifiedNameMatcher = /^(?:([a-zA-Z_$][a-zA-Z0-9_$]*(?:\.[a-zA-Z_$][a-zA-Z0-9_$]*)*)\.)?([a-zA-Z_$][a-zA-Z0-9_$]*)$/;
+
+EntityGenerator.prototype._qualifiedName = function _qualifiedName(name) {
+    var match = this.qualifiedNameMatcher.exec(name);
+    return {
+        packageName: match[1],
+        className: match[2]
+    };
+}
+
+EntityGenerator.prototype._printEntity = function _printEntity() {
+    console.log(chalk.red('===========' + this.makePackage(this.entityPackage, this.entityName) + '=============='));
+    for (var id in this.fields) {
+        var item = this.fields[id];
+        console.log(chalk.red(item.fieldName + ' (' + item.fieldType + ')'));
+    }
+    console.log(chalk.red('-------------------'));
+    for (var id in this.relationships) {
+        var item = this.relationships[id];
+        console.log(chalk.red(item.relationshipName + " " + this.makePackage(item.otherEntityPackage, item.otherEntityClass) + ' (' + item.relationshipType + ')'));
+    }
+}
+
+EntityGenerator.prototype.askForPackage = function askForPackage() {
+    if(!this.entityPackage) {
+        console.info(this.entityPackage);
+        var done = this.async();
+        var prompts = [{
+            type: 'input',
+            name: 'entityPackage',
+            validate: function (input) {
+                return /^([a-zA-Z0-9_]*)$/.test(input) || 'Your sub-package name cannot contain special characters';
+            },
+            message: 'What is the name of the sub-package of your entity?',
+            default: ''
+        }];
+        this.prompt(prompts, function (props) {
+            this.entityPackage = props.entityPackage;
+            done();
+        }.bind(this));
+    }
+}
+
 EntityGenerator.prototype.askForFields = function askForFields() {
-    var cb = this.async();
-    this.fieldId++;
-    console.log(chalk.green('Generating field #' + this.fieldId));
+    var done = this.async();
+    var fieldId = this.fields.length + 1;
+    console.log(chalk.green('Generating field #' + fieldId));
     var prompts = [
         {
             type: 'confirm',
@@ -51,10 +97,10 @@ EntityGenerator.prototype.askForFields = function askForFields() {
             type: 'input',
             name: 'fieldName',
             validate: function (input) {
-                if ((/^([a-zA-Z0-9_]*)$/.test(input)) && input != '' && input != 'id' && fieldNames.indexOf(input) == -1) return true;
-                return 'Your field name cannot contain special characters or use an already existing field name';
+                return ((/^([a-zA-Z0-9_]+)$/.test(input)) && input != 'id' && fieldNames.indexOf(input) == -1) ||
+                    'Your field name cannot contain special characters or use an already existing field name';
             },
-            message: 'What is the name of your field?'
+            message: 'What is the name of your field #' + fieldId + '?'
         },
         {
             when: function (response) {
@@ -62,7 +108,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
             },
             type: 'list',
             name: 'fieldType',
-            message: 'What is the type of your field?',
+            message: 'What is the type of your field #' + fieldId + '?',
             choices: [
                 {
                     value: 'String',
@@ -90,11 +136,13 @@ EntityGenerator.prototype.askForFields = function askForFields() {
     ];
     this.prompt(prompts, function (props) {
         if (props.fieldAdd) {
-            var field = {fieldId: this.fieldId,
+            var field = {
+                fieldId: fieldId,
                 fieldName: props.fieldName,
                 fieldType: props.fieldType,
                 fieldNameCapitalized: _s.capitalize(props.fieldName),
-                fieldNameUnderscored: _s.underscored(props.fieldName)}
+                fieldNameUnderscored: _s.underscored(props.fieldName)
+            };
 
             fieldNames.push(props.fieldName);
             this.fields.push(field);
@@ -102,14 +150,11 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 this.fieldsContainLocalDate = true;
             }
         }
-        console.log(chalk.red('===========' + _s.capitalize(this.name) + '=============='));
-        for (var id in this.fields) {
-            console.log(chalk.red(this.fields[id].fieldName + ' (' + this.fields[id].fieldType + ')'));
-        }
+        this._printEntity();
         if (props.fieldAdd) {
             this.askForFields();
         } else {
-            cb();
+            done();
         }
     }.bind(this));
 };
@@ -119,8 +164,8 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
         return;
     }
     var packageFolder = this.packageFolder;
-    var cb = this.async();
-    this.relationshipId++;
+    var done = this.async();
+    var relationshipId =  this.relationships.length + 1;
     console.log(chalk.green('Generating relationships with other entities'));
     var prompts = [
         {
@@ -134,12 +179,28 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
                 return response.relationshipAdd == true;
             },
             type: 'input',
-            name: 'otherEntityName',
+            name: 'otherEntityType',
             validate: function (input) {
-                if ((/^([a-zA-Z0-9_]*)$/.test(input)) && input != '' && input != 'id' && fieldNames.indexOf(input) == -1) return true;
+                if (EntityGenerator.prototype.qualifiedNameMatcher.test(input)) return true;
+                return 'Your class name cannot contain special characters';
+            },
+            message: 'What is the class of the other entity?'
+        },
+        {
+            when: function (response) {
+                return response.relationshipAdd == true;
+            },
+            type: 'input',
+            name: 'relationshipName',
+            validate: function (input) {
+                if ((/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(input)) && input != 'id' && fieldNames.indexOf(input) == -1) return true;
                 return 'Your relationship name cannot contain special characters or use an already existing field name';
             },
-            message: 'What is the name of the other entity?'
+            message: 'What is the name of the relationship?',
+            default : function(response) {
+                var name = EntityGenerator.prototype._qualifiedName(response.otherEntityType);
+                return name.className.charAt(0).toLowerCase() + name.className.slice(1);
+            }
         },
         {
             when: function (response) {
@@ -196,47 +257,43 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             return;
         }
         if (props.relationshipAdd) {
-            var relationship = {relationshipId: this.relationshipId,
-                otherEntityName: props.otherEntityName,
+            var name = this._qualifiedName(props.otherEntityType);
+            var relationship = {
+                relationshipId: relationshipId,
+                relationshipName: props.relationshipName,
                 relationshipType: props.relationshipType,
-                otherEntityNameCapitalized: _s.capitalize(props.otherEntityName),
-                otherEntityField: props.otherEntityField}
-
-            relationshipNames.push(props.relationshipName);
+                otherEntityPackage: name.packageName,
+                otherEntityClass: name.className,
+                otherEntityField: props.otherEntityField
+            }
             this.relationships.push(relationship);
         }
-        console.log(chalk.red('===========' + _s.capitalize(this.name) + '=============='));
-        for (var id in this.fields) {
-            console.log(chalk.red(this.fields[id].fieldName + ' (' + this.fields[id].fieldType + ')'));
-        }
-        console.log(chalk.red('-------------------'));
-        for (var id in this.relationships) {
-            console.log(chalk.red(this.relationships[id].otherEntityName + ' (' + this.relationships[id].relationshipType + ')'));
-        }
+        this._printEntity();
         if (props.relationshipAdd) {
             this.askForRelationships();
         } else {
             console.log(chalk.green('Everything is configured, generating the entity...'));
-            cb();
+            done();
         }
     }.bind(this));
 };
 
-
 EntityGenerator.prototype.files = function files() {
-
-    this.entityClass = _s.capitalize(this.name);
-    this.entityInstance = this.name.toLowerCase();
+    this.entityInstance = this.entityClass.toLowerCase();
+    this.entityPackageSuffix = this.entityPackage ? '.' + this.entityPackage : '';
+    var entityPath = this.entityPackage ? this.entityPackage.replace(/\./g, '/') + '/' : '';
+    var entityFile = entityPath + this.entityClass;
+    var entityFolder = entityPath + this.entityInstance;
     var resourceDir = 'src/main/resources/';
 
     this.template('src/main/java/package/domain/_Entity.java',
-        'src/main/java/' + this.packageFolder + '/domain/' +    this.entityClass + '.java');
+        'src/main/java/' + this.packageFolder + '/domain/' + entityFile + '.java');
 
     this.template('src/main/java/package/repository/_EntityRepository.java',
-        'src/main/java/' + this.packageFolder + '/repository/' +    this.entityClass + 'Repository.java');
+        'src/main/java/' + this.packageFolder + '/repository/' + entityFile + 'Repository.java');
 
     this.template('src/main/java/package/web/rest/_EntityResource.java',
-        'src/main/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'Resource.java');
+        'src/main/java/' + this.packageFolder + '/web/rest/' + entityFile + 'Resource.java');
 
     if (this.databaseType == "sql") {
         this.changelogDate = this.dateFormatForLiquibase();
@@ -247,22 +304,22 @@ EntityGenerator.prototype.files = function files() {
     }
 
     this.template('src/main/webapp/views/_entities.html',
-        'src/main/webapp/views/' +    this.entityInstance + 's.html');
+        'src/main/webapp/views/' + entityFolder + 's.html');
 
     this.template('src/main/webapp/scripts/_entity-router.js',
-        'src/main/webapp/scripts/' +    this.entityInstance + '/router_'+this.entityInstance+'.js');
-    this.addScriptToIndex(this.entityInstance + '/router_'+this.entityInstance+'.js');
+        'src/main/webapp/scripts/' + entityFolder + '/router_' + this.entityInstance+'.js');
+    this.addScriptToIndex(entityFolder + '/router_' + this.entityInstance + '.js');
     this.addRouterToMenu(this.entityInstance);
 
     this.template('src/main/webapp/scripts/_entity-controller.js',
-        'src/main/webapp/scripts/' +    this.entityInstance + '/controller_'+this.entityInstance+'.js');
-    this.addScriptToIndex(this.entityInstance + '/controller_'+this.entityInstance+'.js');
+        'src/main/webapp/scripts/' + entityFolder + '/controller_' + this.entityInstance + '.js');
+    this.addScriptToIndex(entityFolder + '/controller_' + this.entityInstance+'.js');
 
     this.template('src/main/webapp/scripts/_entity-service.js',
-        'src/main/webapp/scripts/' +    this.entityInstance + '/service_'+this.entityInstance+'.js');
-    this.addScriptToIndex(this.entityInstance + '/service_'+this.entityInstance+'.js');
+        'src/main/webapp/scripts' + entityFolder + '/service_' + this.entityInstance+'.js');
+    this.addScriptToIndex(entityFolder + '/service_' + this.entityInstance+'.js');
 
     this.template('src/test/java/package/web/rest/_EntityResourceTest.java',
-        'src/test/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'ResourceTest.java');
-
+        'src/test/java/' + this.packageFolder + '/web/rest/' + entityFile + 'ResourceTest.java');
 };
+

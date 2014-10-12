@@ -45,6 +45,10 @@ Generator.prototype.addRouterToMenu = function (entityName) {
     }
 };
 
+Generator.prototype.makePackage = function() {
+    return Array.prototype.slice.call(arguments, 0).filter(function(e) { return e; }).join('.');
+}
+
 Generator.prototype.addChangelogToLiquibase = function (changelogName) {
     try {
         var appPath = this.env.options.appPath;

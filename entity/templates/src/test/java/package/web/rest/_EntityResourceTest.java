@@ -1,4 +1,4 @@
-package <%=packageName%>.web.rest;
+package <%=packageName%>.web.rest<%= entityPackageSuffix %>;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -27,9 +27,10 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import <%=packageName%>.Application;
-import <%=packageName%>.domain.<%= entityClass %>;
-import <%=packageName%>.repository.<%= entityClass %>Repository;
+import <%= packageName %>.Application;
+import <%= packageName %>.domain<%= entityPackageSuffix %>.<%= entityClass %>;
+import <%= packageName %>.repository<%= entityPackageSuffix %>.<%= entityClass %>Repository;
+import <%= packageName %>.web.rest.TestUtil;
 
 
 /**
