@@ -7,9 +7,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import javax.inject.Inject;
+import javax.inject.Inject;<% if (fieldsContainLocalDate == true) { %>
+import org.joda.time.LocalDate;<% } %><% if (fieldsContainBigDecimal == true) { %>
+import java.math.BigDecimal;<% } %>
 
-import org.joda.time.LocalDate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +31,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import <%=packageName%>.Application;
 import <%=packageName%>.domain.<%= entityClass %>;
 import <%=packageName%>.repository.<%= entityClass %>Repository;
-
 
 /**
  * Test class for the <%= entityClass %>Resource REST controller.
@@ -59,6 +59,9 @@ public class <%= entityClass %>ResourceTest {
         <% } else if (fields[fieldId].fieldType == 'Long') { %>
     private static final Long <%=defaultValueName %> = 0L;
     private static final Long <%=updatedValueName %> = 1L;
+        <% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
+    private static final BigDecimal <%=defaultValueName %> = BigDecimal.ZERO;
+    private static final BigDecimal <%=updatedValueName %> = BigDecimal.ONE;
         <% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
     private static final LocalDate <%=defaultValueName %> = new LocalDate(0L);
     private static final LocalDate <%=updatedValueName %> = new LocalDate();
@@ -101,7 +104,7 @@ public class <%= entityClass %>ResourceTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
                 .andExpect(jsonPath("$.id").value(DEFAULT_ID.intValue()))<% } %><% if (databaseType == 'nosql') { %>
                 .andExpect(jsonPath("$.id").value(DEFAULT_ID))<% } %><% for (fieldId in fields) {%>
-                .andExpect(jsonPath("$.<%=fields[fieldId].fieldName%>").value(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else { %>.toString()<% } %>))<% } %>;
+                .andExpect(jsonPath("$.<%=fields[fieldId].fieldName%>").value(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.doubleValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else { %>.toString()<% } %>))<% } %>;
 
         // Update <%= entityClass %><% for (fieldId in fields) {%>
         <%= entityInstance %>.set<%= fields[fieldId].fieldNameCapitalized %>(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>
@@ -117,7 +120,7 @@ public class <%= entityClass %>ResourceTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
                 .andExpect(jsonPath("$.id").value(DEFAULT_ID.intValue()))<% } %><% if (databaseType == 'nosql') { %>
                 .andExpect(jsonPath("$.id").value(DEFAULT_ID))<% } %><% for (fieldId in fields) {%>
-                .andExpect(jsonPath("$.<%=fields[fieldId].fieldName%>").value(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else { %>.toString()<% } %>))<% } %>;
+                .andExpect(jsonPath("$.<%=fields[fieldId].fieldName%>").value(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.doubleValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else { %>.toString()<% } %>))<% } %>;
 
         // Delete <%= entityClass %>
         rest<%= entityClass %>MockMvc.perform(delete("/app/rest/<%= entityInstance %>s/{id}", DEFAULT_ID)

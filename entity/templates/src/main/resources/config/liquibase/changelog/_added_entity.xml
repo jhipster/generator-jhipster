@@ -18,7 +18,8 @@
             if (fields[fieldId].fieldType == 'String') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="varchar(255)"/><% } else if (fields[fieldId].fieldType == 'Integer') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="integer"/><% } else if (fields[fieldId].fieldType == 'Long') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bigint"/><% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bigint"/><% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="decimal(10,2)"/><% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="date"/><% } else if (fields[fieldId].fieldType == 'Boolean') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bit"/><% } } %><% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
             <column name="<%=relationships[relationshipId].otherEntityName.toLowerCase() %>_id" type="bigint"/><% } } %>

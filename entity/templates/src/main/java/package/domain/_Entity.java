@@ -1,20 +1,21 @@
 package <%=packageName%>.domain;
-
-<% if (relationships.length > 0) { %>import com.fasterxml.jackson.annotation.JsonIgnore;<% } %><% if (fieldsContainLocalDate == true) { %>
+<% if (relationships.length > 0) { %>
+import com.fasterxml.jackson.annotation.JsonIgnore;<% } %><% if (fieldsContainLocalDate == true) { %>
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.joda.deser.LocalDateDeserializer;
-import <%=packageName%>.domain.util.CustomLocalDateSerializer;<% } %>
-<% if (hibernateCache != 'no') { %>import org.hibernate.annotations.Cache;
+import <%=packageName%>.domain.util.CustomLocalDateSerializer;<% } %><% if (hibernateCache != 'no') { %>
+import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (fieldsContainLocalDate == true) { %><% if (databaseType == 'sql') { %>
 import org.hibernate.annotations.Type;<% } %>
 import org.joda.time.LocalDate;<% } %><% if (databaseType == 'nosql') { %>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;<% } %>
-
-<% if (databaseType == 'sql') { %>import javax.persistence.*;<% } %>
-import java.io.Serializable;<% if (relationships.length > 0) { %>
+<% if (databaseType == 'sql') { %>
+import javax.persistence.*;<% } %>
+import java.io.Serializable;<% if (fieldsContainBigDecimal == true) { %>
+import java.math.BigDecimal;<% } %><% if (relationships.length > 0) { %>
 import java.util.HashSet;
 import java.util.Set;<% } %>
 
@@ -35,7 +36,8 @@ public class <%= entityClass %> implements Serializable {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = CustomLocalDateSerializer.class)
-    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>", nullable = false)<% } else { %>
+    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>", nullable = false)<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
+    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>", precision=10, scale=2)<% } else { %>
     @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>")<% }} %><% if (databaseType == 'nosql') { %><% if (fields[fieldId].fieldType == 'LocalDate') { %>
     @JsonDeserialize(using = LocalDateDeserializer.class)
     @JsonSerialize(using = CustomLocalDateSerializer.class)<% } %>

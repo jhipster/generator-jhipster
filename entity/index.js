@@ -23,6 +23,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.fieldId = 0;
     this.fields = [];
     this.fieldsContainLocalDate = false;
+    this.fieldsContainBigDecimal = false;
     this.relationshipId = 0;
     this.relationships = [];
 };
@@ -77,6 +78,10 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     name: 'Long'
                 },
                 {
+                    value: 'BigDecimal',
+                    name: 'BigDecimal'
+                },
+                {
                     value: 'LocalDate',
                     name: 'LocalDate'
                 },
@@ -100,6 +105,9 @@ EntityGenerator.prototype.askForFields = function askForFields() {
             this.fields.push(field);
             if (props.fieldType == 'LocalDate') {
                 this.fieldsContainLocalDate = true;
+            }
+            if (props.fieldType == 'BigDecimal') {
+                this.fieldsContainBigDecimal = true;
             }
         }
         console.log(chalk.red('===========' + _s.capitalize(this.name) + '=============='));
