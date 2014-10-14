@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.1.7.RELEASE')
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.1.8.RELEASE')
         classpath('com.moowork.gradle:gradle-node-plugin:0.4')
         classpath('com.moowork.gradle:gradle-grunt-plugin:0.5')
         classpath('be.filipblondeel.gradle:gradle-gulp-plugin:0.1')
@@ -114,7 +114,7 @@ dependencies {
     }
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: spring_boot_version
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: spring_boot_version
-    compile(group: 'org.springframework', name: 'spring-context-support', version: spring_context_support_version) {
+    compile(group: 'org.springframework', name: 'spring-context-support') {
         exclude(module: 'quartz')
     }<% if (authenticationType == 'token') { %>
     compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: spring_security_oauth2_version<% } %><% if (databaseType == 'nosql') { %>
