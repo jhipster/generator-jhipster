@@ -7,7 +7,7 @@ spring:
         mongodb:
             host: localhost
             port: 27017
-            databaseName: <%= baseName %><% } %>
+            database: <%= baseName %><% } %>
     <% if (databaseType == 'sql') { %>
     datasource:
         dataSourceClassName: <% if (prodDatabaseType == 'mysql') { %>com.mysql.jdbc.jdbc2.optional.MysqlDataSource<% } else if (prodDatabaseType == 'postgresql') { %>org.postgresql.ds.PGSimpleDataSource<% } else { %>org.hsqldb.jdbc.JDBCDataSource<% } %>
