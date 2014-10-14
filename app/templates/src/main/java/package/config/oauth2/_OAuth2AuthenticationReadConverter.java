@@ -29,10 +29,12 @@ public class OAuth2AuthenticationReadConverter implements Converter<DBObject, OA
         OAuth2Request oAuth2Request = new OAuth2Request((Map<String, String>)storedRequest.get("requestParameters"),
                 (String)storedRequest.get("clientId"), null, true, new HashSet((List)storedRequest.get("scope")),
                 null, null, null, null);
+
         DBObject userAuthorization = (DBObject)source.get("userAuthentication");
         Object principal = getPrincipalObject(userAuthorization.get("principal"));
         Authentication userAuthentication = new UsernamePasswordAuthenticationToken(principal,
                 userAuthorization.get("credentials"), getAuthorities((List) userAuthorization.get("authorities")));
+
         return new OAuth2Authentication(oAuth2Request,  userAuthentication );
     }
 
@@ -61,5 +63,4 @@ public class OAuth2AuthenticationReadConverter implements Converter<DBObject, OA
         }
         return grantedAuthorities;
     }
-
 }
