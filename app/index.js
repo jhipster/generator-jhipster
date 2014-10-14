@@ -582,6 +582,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.mkdir(testDir);
 
     if (this.databaseType == "nosql") {
+        this.template('src/test/java/package/config/_MongoFactoryConfiguration.java', testDir + 'config/MongoFactoryConfiguration.java');
         this.template('src/test/java/package/config/_MongoConfiguration.java', testDir + 'config/MongoConfiguration.java');
     }
 
