@@ -1,5 +1,8 @@
 package <%=packageName%>.config;
-
+<% if (databaseType == 'nosql') { %>
+import <%=packageName%>.config.oauth2.MongoDBTokenStore;
+import <%=packageName%>.repository.OAuth2AccessTokenRepository;
+import <%=packageName%>.repository.OAuth2RefreshTokenRepository;<% } %>
 import <%=packageName%>.security.AjaxLogoutSuccessHandler;
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.security.Http401UnauthorizedEntryPoint;
@@ -93,11 +96,17 @@ public class OAuth2ServerConfiguration {
         private RelaxedPropertyResolver propertyResolver;
         <% if (databaseType == 'sql') { %>
         @Inject
-        private DataSource dataSource;<% } %>
+        private DataSource dataSource;<% } %><% if (databaseType == 'nosql') { %>
+
+        @Inject
+        private OAuth2AccessTokenRepository oAuth2AccessTokenRepository;
+
+        @Inject
+        private OAuth2RefreshTokenRepository oAuth2RefreshTokenRepository;<% } %>
 
         @Bean
         public TokenStore tokenStore() {
-            <% if (databaseType == 'sql') { %>return new JdbcTokenStore(dataSource);<% } else { %>return new InMemoryTokenStore();<% } %>
+            return new <% if (databaseType == 'sql') { %>JdbcTokenStore(dataSource);<% } else { %>MongoDBTokenStore(oAuth2AccessTokenRepository, oAuth2RefreshTokenRepository);<% } %>
         }
 
         @Inject
@@ -120,7 +129,7 @@ public class OAuth2ServerConfiguration {
                 .withClient(propertyResolver.getProperty(PROP_CLIENTID))
                 .scopes("read", "write")
                 .authorities(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER)
-                .authorizedGrantTypes("password")
+                .authorizedGrantTypes("password", "refresh_token")
                 .secret(propertyResolver.getProperty(PROP_SECRET))
                 .accessTokenValiditySeconds(propertyResolver.getProperty(PROP_TOKEN_VALIDITY_SECONDS, Integer.class, 1800));
         }

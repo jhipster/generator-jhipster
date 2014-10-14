@@ -173,7 +173,8 @@
                 }).success(function (data, status, headers, config) {
                     if (!Session.login<% if (authenticationType == 'token') { %> || AccessToken.get() != undefined<% } %>) {<% if (authenticationType == 'token') { %>
                         if (AccessToken.get() == undefined || AccessToken.expired()) {
-                            $rootScope.authenticated = false
+                            $rootScope.authenticated = false;
+                            $rootScope.authenticationError = false;
                             return;
                         }<% } %>
                         Account.get(function(data) {

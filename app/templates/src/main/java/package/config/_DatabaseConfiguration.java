@@ -4,22 +4,26 @@ package <%=packageName%>.config;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import liquibase.integration.spring.SpringLiquibase;<% } %><% if (databaseType == 'nosql') { %>
+import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;
 import com.mongodb.Mongo;
 import org.mongeez.Mongeez;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (databaseType == 'sql') { %>
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;<% } %><% if (databaseType == 'nosql') { %>
-import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;<% } %>
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
+import org.springframework.boot.autoconfigure.mongo.MongoProperties;<% } %><% if (databaseType == 'sql') { %>
 import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.ApplicationContextException;
-import org.springframework.context.EnvironmentAware;
+import org.springframework.context.EnvironmentAware;<% } %>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;<% if (databaseType == 'nosql') { %>
-import org.springframework.context.annotation.Import;<% } %>
-import org.springframework.core.env.Environment;<% if (databaseType == 'nosql') { %>
+import org.springframework.context.annotation.Import;<% } %><% if (databaseType == 'sql') { %>
+import org.springframework.core.env.Environment;<% } %><% if (databaseType == 'nosql') { %>
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
-import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.convert.CustomConversions;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;<% } %><% if (databaseType == 'sql') { %>
@@ -31,7 +35,9 @@ import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;<% } %><% if (databaseType == 'nosql') { %>
-import javax.inject.Inject;<% } %>
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;<% } %>
 
 @Configuration<% if (databaseType == 'sql') { %>
 @EnableJpaRepositories("<%=packageName%>.repository")
@@ -40,24 +46,25 @@ import javax.inject.Inject;<% } %>
 @EnableMongoRepositories("<%=packageName%>.repository")
 @Import(value = MongoAutoConfiguration.class)
 @EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")<% } %>
-public class DatabaseConfiguration implements EnvironmentAware {
+public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements EnvironmentAware<% } %><% if (databaseType == 'nosql') { %>extends AbstractMongoConfiguration <% } %> {
 
-    private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
+    private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);<% if (databaseType == 'sql') { %>
 
     private RelaxedPropertyResolver propertyResolver;
 
-    private Environment environment;<% if (databaseType == 'nosql') { %>
+    private Environment environment;<% } %><% if (databaseType == 'nosql') { %>
 
     @Inject
     private Mongo mongo;
-    <% } %>
+
+    @Inject
+    private MongoProperties mongoProperties;<% } %><% if (databaseType == 'sql') { %>
 
     @Override
     public void setEnvironment(Environment environment) {
-        this.environment = environment;<% if (databaseType == 'sql') { %>
-        this.propertyResolver = new RelaxedPropertyResolver(environment, "spring.datasource.");<% } %><% if (databaseType == 'nosql') { %>
-        this.propertyResolver = new RelaxedPropertyResolver(environment, "spring.data.mongodb.");<% } %>
-    }<% if (databaseType == 'sql') { %>
+        this.environment = environment;
+        this.propertyResolver = new RelaxedPropertyResolver(environment, "spring.datasource.");
+    }
 
     @Bean(destroyMethod = "shutdown")
     @ConditionalOnMissingClass(name = "<%=packageName%>.config.HerokuDatabaseConfiguration.class")
@@ -122,10 +129,24 @@ public class DatabaseConfiguration implements EnvironmentAware {
         return new LocalValidatorFactoryBean();
     }
 
-    @Bean
-    public MongoTemplate mongoTemplate() {
-        return new MongoTemplate(mongo, propertyResolver.getProperty("databaseName"));
+    @Override
+    protected String getDatabaseName() {
+        return mongoProperties.getDatabase();
     }
+
+    @Override
+    public Mongo mongo() throws Exception {
+        return mongo;
+    }
+
+    @Bean
+    public CustomConversions customConversions() {
+        List<Converter<?, ?>> converterList = new ArrayList<>();
+        OAuth2AuthenticationReadConverter converter = new OAuth2AuthenticationReadConverter();
+        converterList.add(converter);
+        return new CustomConversions(converterList);
+    }
+
 
     @Bean
     public Mongeez mongeez() {
@@ -134,7 +155,7 @@ public class DatabaseConfiguration implements EnvironmentAware {
 
         mongeez.setFile(new ClassPathResource("/config/mongeez/master.xml"));
         mongeez.setMongo(mongo);
-        mongeez.setDbName(propertyResolver.getProperty("databaseName"));
+        mongeez.setDbName(mongoProperties.getDatabase());
         mongeez.process();
 
         return mongeez;
