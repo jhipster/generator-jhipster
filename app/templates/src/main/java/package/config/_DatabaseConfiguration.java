@@ -98,13 +98,6 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
         return new HikariDataSource(config);
     }
 
-    @Bean(name = {"org.springframework.boot.autoconfigure.AutoConfigurationUtils.basePackages"})
-    public List<String> getBasePackages() {
-        List<String> basePackages = new ArrayList<>();
-        basePackages.add("<%=packageName%>.domain");
-        return basePackages;
-    }
-
     @Bean
     public SpringLiquibase liquibase(DataSource dataSource) {
         log.debug("Configuring Liquibase");
@@ -162,4 +155,3 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
     }
     <% } %>
 }
-
