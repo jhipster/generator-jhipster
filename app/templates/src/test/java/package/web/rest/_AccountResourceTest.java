@@ -43,8 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-<% if (databaseType == 'nosql') { %>
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)<% if (databaseType == 'nosql') { %>
 @Import(MongoConfiguration.class)<% } %>
 public class AccountResourceTest {
 
