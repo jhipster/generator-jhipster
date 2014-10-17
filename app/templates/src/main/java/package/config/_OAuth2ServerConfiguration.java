@@ -24,10 +24,12 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.token.TokenStore;<% if (databaseType == 'sql') { %>
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;<% } %><% if (databaseType == 'nosql') { %>
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;<% } %>
+import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.inject.Inject;<% if (databaseType == 'sql') { %>
 import javax.sql.DataSource;<% } %>
+import java.util.UUID;
 
 @Configuration
 public class OAuth2ServerConfiguration {
@@ -41,6 +43,8 @@ public class OAuth2ServerConfiguration {
 
         @Inject
         private AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler;
+
+        private String anonymousKey = UUID.randomUUID().toString();
 
         @Override
         public void configure(HttpSecurity http) throws Exception {
@@ -59,6 +63,8 @@ public class OAuth2ServerConfiguration {
                 .frameOptions().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .anonymous().key(anonymousKey).authenticationFilter(new AnonymousAuthenticationFilter(anonymousKey))
                 .and()
                 .authorizeRequests()
                 .antMatchers("/views/**").permitAll()
