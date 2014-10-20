@@ -14,15 +14,16 @@ They are written in English to avoid character encoding issues (not a perfect so
 */
 <%= angularAppName %>.constant('LANGUAGES', {
         'ca': 'Catalan',
+        'zh-tw': 'Chinese (traditional)',
         'da': 'Danish',
         'en': 'English',
-        'es': 'Spanish',
         'fr': 'French',
         'de': 'German',
         'kr': 'Korean',
         'pl': 'Polish',
         'pt': 'Portuguese',
         'ru': 'Russian',
-        'tr': 'Turkish',
-        'zh-tw': 'Chinese (traditional)'
+        'es': 'Spanish',
+        'sv': 'Swedish',
+        'tr': 'Turkish'
     });
