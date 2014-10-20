@@ -372,6 +372,7 @@ JhipsterGenerator.prototype.app = function app() {
     removefile(resourceDir + 'mails/messages/messages_pl.properties');
     removefile(resourceDir + 'mails/messages/messages_ru.properties');
     removefile(resourceDir + 'mails/messages/messages_tr.properties');
+    removefile(resourceDir + 'mails/messages/messages_zh_TW.properties');
     removefile(webappDir + 'protected/transparent.gif');
     removefile(webappDir + 'styles/famfamfam-flags.css');
     removefile(webappDir + 'images/famfamfam-flags.png');
@@ -430,6 +431,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(resourceDir + '/i18n/messages_pt.properties', resourceDir + 'i18n/messages_pt.properties');
     this.copy(resourceDir + '/i18n/messages_ru.properties', resourceDir + 'i18n/messages_ru.properties');
     this.copy(resourceDir + '/i18n/messages_tr.properties', resourceDir + 'i18n/messages_tr.properties');
+    this.copy(resourceDir + '/i18n/messages_zh_TW.properties', resourceDir + 'i18n/messages_zh_TW.properties');
 
     // Thymeleaf templates
     this.copy(resourceDir + '/templates/error.html', resourceDir + 'templates/error.html');
@@ -631,6 +633,8 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/i18n/_pt.json', webappDir + 'i18n/pt.json');
     this.template(webappDir + '/i18n/_ru.json', webappDir + 'i18n/ru.json');
     this.template(webappDir + '/i18n/_tr.json', webappDir + 'i18n/tr.json');
+    this.template(webappDir + '/i18n/_zh-tw.json', webappDir + 'i18n/zh-tw.json');
+
 
     // Protected resources - used to check if a customer is still connected
     this.copy(webappDir + '/protected/authentication_check.gif', webappDir + '/protected/authentication_check.gif');

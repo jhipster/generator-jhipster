@@ -68,7 +68,7 @@ public class AngularCookieLocaleResolver extends CookieLocaleResolver {
                     localePart = value.substring(0, spaceIndex);
                     timeZonePart = value.substring(spaceIndex + 1);
                 }
-                locale = (!"-".equals(localePart) ? StringUtils.parseLocaleString(localePart) : null);
+                locale = (!"-".equals(localePart) ? StringUtils.parseLocaleString(localePart.replace('-', '_')) : null);
                 if (timeZonePart != null) {
                     timeZone = StringUtils.parseTimeZoneString(timeZonePart);
                 }
