@@ -24,5 +24,5 @@ They are written in English to avoid character encoding issues (not a perfect so
         'pt': 'Portuguese',
         'ru': 'Russian',
         'tr': 'Turkish',
-        'zh-tw': '正體中文'
+        'zh-tw': 'Chinese (traditional)'
     });

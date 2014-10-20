@@ -372,7 +372,6 @@ JhipsterGenerator.prototype.app = function app() {
     removefile(resourceDir + 'mails/messages/messages_pl.properties');
     removefile(resourceDir + 'mails/messages/messages_ru.properties');
     removefile(resourceDir + 'mails/messages/messages_tr.properties');
-    removefile(resourceDir + 'mails/messages/messages_zh_TW.properties');
     removefile(webappDir + 'protected/transparent.gif');
     removefile(webappDir + 'styles/famfamfam-flags.css');
     removefile(webappDir + 'images/famfamfam-flags.png');
