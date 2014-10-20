@@ -88,8 +88,7 @@ dependencies {
     compile group: 'org.apache.geronimo.javamail', name: 'geronimo-javamail_1.4_mail', version: geronimo_javamail_1_4_mail_version<% if (websocket == 'atmosphere') { %>
     compile group: 'org.atmosphere', name: 'atmosphere-spring', version: atmosphere_spring_version
     compile group: 'org.atmosphere', name: 'atmosphere-runtime', version: '2.2.2'<% } %><% if (databaseType == 'sql') { %>
-    compile group: 'org.hibernate', name: 'hibernate-core', version: hibernate_entitymanager_version
-    compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: hibernate_entitymanager_version<% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
+    compile group: 'org.hibernate', name: 'hibernate-core', version: hibernate_entitymanager_version<% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
     compile group: 'org.hibernate', name: 'hibernate-ehcache', version: hibernate_entitymanager_version<% } %>
     compile group: 'org.hibernate', name: 'hibernate-validator', version: hibernate_validator_version<% if (databaseType == 'sql') { %>
     compile group: 'org.jadira.usertype', name: 'usertype.core', version: usertype_core_version
