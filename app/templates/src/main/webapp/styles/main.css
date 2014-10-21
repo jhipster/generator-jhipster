@@ -40,12 +40,19 @@ body {
 }
 
 .hipster {
-  display: inline-block;
-  width: 463px;
-  height: 640px;
-  background-image: url("../images/hipster.jpg");
-  background-position: center center;
-  background-repeat: no-repeat;
+    display: inline-block;
+    width: 347px;
+    height: 497px;
+    background: url("../images/hipster.png") no-repeat center top;
+    background-size: contain;
+}
+
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+    .hipster {
+        background: url("../images/hipster2x.png") no-repeat center top;
+        background-size: contain;
+    }
 }
 
 .hand {
