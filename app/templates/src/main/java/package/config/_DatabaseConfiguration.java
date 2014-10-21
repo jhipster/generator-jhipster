@@ -3,8 +3,8 @@ package <%=packageName%>.config;
 <% if (databaseType == 'sql') { %>import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import liquibase.integration.spring.SpringLiquibase;<% } %><% if (databaseType == 'nosql') { %>
-import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;
+import liquibase.integration.spring.SpringLiquibase;<% } %><% if (databaseType == 'nosql' && this.authenticationType == 'token') { %>
+import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;<% } %><% if (databaseType == 'nosql') { %>
 import com.mongodb.Mongo;
 import org.mongeez.Mongeez;<% } %>
 import org.slf4j.Logger;
@@ -18,12 +18,12 @@ import org.springframework.context.EnvironmentAware;<% } %>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;<% if (databaseType == 'nosql') { %>
 import org.springframework.context.annotation.Import;<% } %><% if (databaseType == 'sql') { %>
-import org.springframework.core.env.Environment;<% } %><% if (databaseType == 'nosql') { %>
-import org.springframework.core.convert.converter.Converter;
+import org.springframework.core.env.Environment;<% } %><% if (databaseType == 'nosql' && this.authenticationType == 'token') { %>
+import org.springframework.core.convert.converter.Converter;<% } %><% if (databaseType == 'nosql') { %>
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
-import org.springframework.data.mongodb.config.EnableMongoAuditing;
-import org.springframework.data.mongodb.core.convert.CustomConversions;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;<% } %><% if (databaseType == 'nosql' && this.authenticationType == 'token') { %>
+import org.springframework.data.mongodb.core.convert.CustomConversions;<% } %><% if (databaseType == 'nosql') { %>
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;<% } %><% if (databaseType == 'sql') { %>
@@ -35,7 +35,7 @@ import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;<% } %><% if (databaseType == 'nosql') { %>
-import javax.inject.Inject;
+import javax.inject.Inject;<% } %><% if (databaseType == 'nosql' && this.authenticationType == 'token') { %>
 import java.util.ArrayList;
 import java.util.List;<% } %>
 
@@ -130,7 +130,7 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
     @Override
     public Mongo mongo() throws Exception {
         return mongo;
-    }
+    }<% if (this.authenticationType == 'token') { %>
 
     @Bean
     public CustomConversions customConversions() {
@@ -138,7 +138,7 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
         OAuth2AuthenticationReadConverter converter = new OAuth2AuthenticationReadConverter();
         converterList.add(converter);
         return new CustomConversions(converterList);
-    }
+    }<% } %>
 
 
     @Bean

@@ -159,8 +159,14 @@
                         authService.loginConfirmed(data);
                     });
                 }).error(function (data, status, headers, config) {
-                    $rootScope.authenticationError = true;
+                    $rootScope.authenticated = false;
                     Session.invalidate();
+                    AccessToken.remove();
+                    delete httpHeaders.common['Authorization'];
+
+                    if (!$rootScope.isAuthorized(authorizedRoles)) {
+                        $rootScope.$broadcast('event:auth-loginRequired', data);
+                    }
                 });<% } %>
             },
             valid: function (authorizedRoles) {<% if (authenticationType == 'token') { %>
