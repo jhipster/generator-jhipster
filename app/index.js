@@ -696,7 +696,8 @@ JhipsterGenerator.prototype.app = function app() {
 
     // Images
     this.copy(webappDir + 'images/development_ribbon.png', webappDir + 'images/development_ribbon.png');
-    this.copy(webappDir + 'images/hipster.jpg', webappDir + 'images/hipster.jpg');
+    this.copy(webappDir + 'images/hipster.png', webappDir + 'images/hipster.png');
+    this.copy(webappDir + 'images/hipster2x.png', webappDir + 'images/hipster2x.png');
 
     var indexScripts = [
         'bower_components/modernizr/modernizr.js',
