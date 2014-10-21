@@ -28,8 +28,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.relationships = [];
 };
 
-var fieldNames = ['id'];
-var relationshipNames = [];
+var fieldNamesUnderscored = ['id'];
 
 util.inherits(EntityGenerator, yeoman.generators.Base);
 util.inherits(EntityGenerator, scriptBase);
@@ -52,7 +51,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
             type: 'input',
             name: 'fieldName',
             validate: function (input) {
-                if ((/^([a-zA-Z0-9_]*)$/.test(input)) && input != '' && input != 'id' && fieldNames.indexOf(input) == -1) return true;
+                if ((/^([a-zA-Z0-9_]*)$/.test(input)) && input != '' && input != 'id' && fieldNamesUnderscored.indexOf(_s.underscored(input)) == -1) return true;
                 return 'Your field name cannot contain special characters or use an already existing field name';
             },
             message: 'What is the name of your field?'
@@ -101,7 +100,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 fieldNameCapitalized: _s.capitalize(props.fieldName),
                 fieldNameUnderscored: _s.underscored(props.fieldName)}
 
-            fieldNames.push(props.fieldName);
+            fieldNamesUnderscored.push(_s.underscored(props.fieldName));
             this.fields.push(field);
             if (props.fieldType == 'LocalDate') {
                 this.fieldsContainLocalDate = true;
@@ -144,7 +143,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             type: 'input',
             name: 'otherEntityName',
             validate: function (input) {
-                if ((/^([a-zA-Z0-9_]*)$/.test(input)) && input != '' && input != 'id' && fieldNames.indexOf(input) == -1) return true;
+                if ((/^([a-zA-Z0-9_]*)$/.test(input)) && input != '' && input != 'id' && fieldNamesUnderscored.indexOf(_s.underscored(input)) == -1) return true;
                 return 'Your relationship name cannot contain special characters or use an already existing field name';
             },
             message: 'What is the name of the other entity?'
@@ -210,7 +209,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
                 otherEntityNameCapitalized: _s.capitalize(props.otherEntityName),
                 otherEntityField: props.otherEntityField}
 
-            relationshipNames.push(props.relationshipName);
+            fieldNamesUnderscored.push(_s.underscored(props.otherEntityName));
             this.relationships.push(relationship);
         }
         console.log(chalk.red('===========' + _s.capitalize(this.name) + '=============='));
