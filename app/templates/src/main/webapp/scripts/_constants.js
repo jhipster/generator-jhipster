@@ -21,7 +21,7 @@ They are written in English to avoid character encoding issues (not a perfect so
         'de': 'German',
         'kr': 'Korean',
         'pl': 'Polish',
-        'pt': 'Portuguese',
+        'pt-br': 'Portuguese (Brazilian)',
         'ru': 'Russian',
         'es': 'Spanish',
         'sv': 'Swedish',
