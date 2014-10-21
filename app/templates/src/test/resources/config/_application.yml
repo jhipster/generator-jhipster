@@ -17,7 +17,7 @@ spring:
         mongodb:
              host: localhost
              port: 27017
-             databaseName: <%= baseName %><% } %>
+             database: <%= baseName %><% } %>
     <% if (databaseType == 'sql') { %>
     datasource:
         dataSourceClassName: org.h2.jdbcx.JdbcDataSource
