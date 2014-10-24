@@ -117,7 +117,14 @@ gulp.task('server', ['watch'<% if(useCompass) { %>, 'compass'<% } %>], function(
                         var options = url.parse('http://localhost:8080/dump');
                         options.route = '/dump';
                         return proxy(options);
-                    })()<% if (devDatabaseType == 'h2Memory') { %>,
+                    })()<% if (authenticationType == 'token') { %>,
+                    (function() {
+                        var url = require('url');
+                        var proxy = require('proxy-middleware');
+                        var options = url.parse('http://localhost:8080/oauth/token');
+                        options.route = '/oauth/token';
+                        return proxy(options);
+                    })()<% } %><% if (devDatabaseType == 'h2Memory') { %>,
                     (function() {
                         var url = require('url');
                         var proxy = require('proxy-middleware');
