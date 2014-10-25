@@ -28,6 +28,8 @@ import java.util.Set;<% } %>
 @Document(collection = "T_<%= name.toUpperCase() %>")<% } %>
 public class <%= entityClass %> implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id<% if (databaseType == 'sql') { %>
     @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;<% } %><% if (databaseType == 'nosql') { %>
