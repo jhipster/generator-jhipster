@@ -163,6 +163,14 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
                 {
                     value: 'many-to-one',
                     name: 'many-to-one'
+                },
+                {
+                    value: 'many-to-many',
+                    name: 'many-to-many'
+                },
+                {
+                    value: 'one-to-one',
+                    name: 'one-to-one'
                 }
             ],
             default: 0
@@ -178,7 +186,25 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
         },
         {
             when: function (response) {
-                return (response.relationshipAdd == true && response.relationshipType == 'many-to-one');
+                return (response.relationshipAdd == true && (response.relationshipType == 'many-to-many' || response.relationshipType == 'one-to-one'));
+            },
+            type: 'confirm',
+            name: 'ownerSide',
+            message: 'Is this entity the owner of the relationship?',
+            default: false
+        },
+        {
+            when: function(response) {
+                return (response.relationshipAdd == true && response.ownerSide == true && !shelljs.test('-f', 'src/main/java/' + packageFolder + '/domain/' + _s.capitalize(response.otherEntityName) + '.java'))
+            },
+            type: 'confirm',
+            name: 'noOtherEntity2',
+            message: 'WARNING! You have selected that this entity is the owner of a relationship on another entity, that does not exist yet. This will probably fail, as you will need to create a foreign key on a table that does not exist. We advise you to create the other side of this relationship first (do the non-owning side before the owning side). Are you sure you want to continue?',
+            default: false
+        },
+        {
+            when: function (response) {
+                return (response.relationshipAdd == true && (response.relationshipType == 'many-to-one' || (response.relationshipType == 'many-to-many' && response.ownerSide == true)));
             },
             type: 'input',
             name: 'otherEntityField',
@@ -186,19 +212,10 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
                 return 'When you display this relationship with AngularJS, which field from \'' + response.otherEntityName + '\' do you want to use?'
             },
             default: 'id'
-        },
-        {
-            when: function (response) {
-                return (response.relationshipAdd == true && response.relationshipType == 'many-to-many');
-            },
-            type: 'confirm',
-            name: 'ownerSide',
-            message: 'Is this entity the owner of the relationship?',
-            default: false
         }
     ];
     this.prompt(prompts, function (props) {
-        if (props.noOtherEntity == false) {
+        if (props.noOtherEntity == false || props.noOtherEntity2 == false) {
             console.log(chalk.red('Generation aborted, as requested by the user.'));
             return;
         }
@@ -207,7 +224,8 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
                 otherEntityName: props.otherEntityName,
                 relationshipType: props.relationshipType,
                 otherEntityNameCapitalized: _s.capitalize(props.otherEntityName),
-                otherEntityField: props.otherEntityField}
+                otherEntityField: props.otherEntityField,
+                ownerSide: props.ownerSide}
 
             fieldNamesUnderscored.push(_s.underscored(props.otherEntityName));
             this.relationships.push(relationship);

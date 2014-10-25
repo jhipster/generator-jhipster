@@ -21,14 +21,22 @@
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bigint"/><% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="decimal(10,2)"/><% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="date"/><% } else if (fields[fieldId].fieldType == 'Boolean') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bit"/><% } } %><% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bit"/><% } } %><% for (relationshipId in relationships) { %><% if ((relationships[relationshipId].relationshipType == 'many-to-one') || (relationships[relationshipId].ownerSide == true)) { %>
             <column name="<%=relationships[relationshipId].otherEntityName.toLowerCase() %>_id" type="bigint"/><% } } %>
         </createTable>
-        <% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
+        <% for (relationshipId in relationships) { %><% if ((relationships[relationshipId].relationshipType == 'many-to-one') || ((relationships[relationshipId].relationshipType == 'one-to-one')) && (relationships[relationshipId].ownerSide == true)) { %>
         <addForeignKeyConstraint baseColumnNames="<%= relationships[relationshipId].otherEntityName.toLowerCase() %>_id"
                                  baseTableName="T_<%= name.toUpperCase() %>"
                                  constraintName="fk_<%= name.toLowerCase() %>_<%= relationships[relationshipId].otherEntityName.toLowerCase() %>_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="T_<%= relationships[relationshipId].otherEntityName.toUpperCase() %>"/><% } } %>
+                                 referencedTableName="T_<%= relationships[relationshipId].otherEntityName.toUpperCase() %>"/><% } else if ((relationships[relationshipId].relationshipType == 'many-to-many') && (relationships[relationshipId].ownerSide == true)) { %>
+        <createTable tableName="T_<%= name.toUpperCase() %>_T_<%= relationships[relationshipId].otherEntityName.toUpperCase() %>">
+            <column name="<%= relationships[relationshipId].otherEntityName %>s_id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="<%= name %>s_id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable><% } %><% } %>
     </changeSet>
 </databaseChangeLog>
