@@ -32,7 +32,7 @@
     "grunt-karma": "0.8.3",
     "time-grunt": "0.3.2",<% if (useCompass) { %>
     "grunt-contrib-compass": "0.7.2",<% }} if(frontendBuilder == 'gulp') { %>
-    "gulp": "3.6.2",
+    "gulp": "3.8.9",
     "gulp-usemin": "0.3.1",
     "gulp-autoprefixer": "0.0.7",
     "gulp-minify-css": "0.3.3",
@@ -41,11 +41,11 @@
     "gulp-imagemin": "0.5.0",
     "gulp-flatten": "0.0.2",
     "gulp-ng-annotate": "0.3.0",
-    "gulp-connect": "2.0.4",
+    "gulp-connect": "2.0.6",
     "gulp-clean": "0.2.4",
     "gulp-karma": "https://github.com/lazd/gulp-karma/tarball/helper",
     "gulp-replace": "0.2.0",
-    "gulp-livereload": "1.3.1",
+    "gulp-livereload": "2.1.1",
     "gulp-rev": "0.3.2",
     "gulp-jshint": "1.5.5",
     "gulp-browserify": "0.5.0",<% if (useCompass) { %>
