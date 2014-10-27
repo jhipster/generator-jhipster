@@ -28,7 +28,7 @@
     "test": "mocha --reporter spec"
   },
   "dependencies": {
-    "yeoman-generator": "0.17.3",
+    "yeoman-generator": "0.17.6",
     "cheerio": "0.17.0",
     "underscore.string": "2.3.3",
     "shelljs": "0.3.0",
@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "grunt": "0.4.5",
-    "mocha": "1.21.4"
+    "mocha": "1.21.5"
   },
   "peerDependencies": {
     "yo": ">=1.2.0"
