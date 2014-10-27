@@ -60,12 +60,12 @@ public class <%= entityClass %>Resource {
     @Timed
     public ResponseEntity<<%= entityClass %>> get(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> id<% if (javaVersion == '7') { %>, HttpServletResponse response<% } %>) {
         log.debug("REST request to get <%= entityClass %> : {}", id);<% if (javaVersion == '8') { %>
-        return Optional.ofNullable(<%= entityInstance %>Repository.findOne(id))
+        return Optional.ofNullable(<%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findOneWithEagerRelationships<% } else { %>findOne<% } %>(id))
             .map(<%= entityInstance %> -> new ResponseEntity<>(
                 <%= entityInstance %>,
                 HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));<% } else { %>
-        <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Repository.findOne(id);
+        <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findOneWithEagerRelationships<% } else { %>findOne<% } %>(id);
         if (<%= entityInstance %> == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
