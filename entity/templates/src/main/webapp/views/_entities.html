@@ -34,7 +34,7 @@
         fieldInputType = 'checkbox';
     }%>
                         <div class="form-group">
-                            <label><%=fields[fieldId].fieldName%></label>
+                            <label><%=fields[fieldId].fieldNameCapitalized%></label>
                             <input type="<%=fieldInputType%>" class="form-control"
                                    ng-model="<%=entityInstance %>.<%=fields[fieldId].fieldName%>">
                         </div><% } %>
@@ -74,7 +74,7 @@
             <thead>
                 <tr>
                     <th>ID</th><% for (fieldId in fields) { %>
-                    <th><%=fields[fieldId].fieldName%></th><% } %><% for (relationshipId in relationships) {
+                    <th><%=fields[fieldId].fieldNameCapitalized%></th><% } %><% for (relationshipId in relationships) {
                         if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
                     <th><%=relationships[relationshipId].otherEntityName%></th><% } } %>
                     <th></th>
