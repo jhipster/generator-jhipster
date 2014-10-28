@@ -25,6 +25,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.fieldsContainLocalDate = false;
     this.fieldsContainBigDecimal = false;
     this.fieldsContainOwnerManyToMany = false;
+    this.fieldsContainOneToMany = false;
     this.relationshipId = 0;
     this.relationships = [];
 };
@@ -230,6 +231,9 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
 
             if (props.relationshipType == 'many-to-many' && props.ownerSide == true) {
                 this.fieldsContainOwnerManyToMany = true;
+            }
+            if (props.relationshipType == 'one-to-many') {
+                this.fieldsContainOneToMany = true;
             }
             fieldNamesUnderscored.push(_s.underscored(props.otherEntityName));
             this.relationships.push(relationship);
