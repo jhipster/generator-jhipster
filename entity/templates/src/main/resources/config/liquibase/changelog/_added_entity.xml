@@ -37,6 +37,17 @@
             <column name="<%= name %>s_id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-        </createTable><% } %><% } %>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="<%= relationships[relationshipId].otherEntityName %>s_id"
+                                 baseTableName="T_<%= name.toUpperCase() %>_T_<%= relationships[relationshipId].otherEntityName.toUpperCase() %>"
+                                 constraintName="fk_<%= name.toLowerCase() %>_<%= relationships[relationshipId].otherEntityName.toLowerCase() %>_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="T_<%= relationships[relationshipId].otherEntityName.toUpperCase() %>"/>
+        <addForeignKeyConstraint baseColumnNames="<%= name %>s_id"
+                                 baseTableName="T_<%= name.toUpperCase() %>_T_<%= relationships[relationshipId].otherEntityName.toUpperCase() %>"
+                                 constraintName="fk_<%= relationships[relationshipId].otherEntityName.toLowerCase() %>_<%= name.toLowerCase() %>_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="T_<%= name.toUpperCase() %>"/>
+        <% } %><% } %>
     </changeSet>
 </databaseChangeLog>
