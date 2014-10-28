@@ -4,7 +4,10 @@ import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.Application;
 import <%=packageName%>.domain.<%= entityClass %>;
 import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine == 'elasticsearch') { %>
-import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } %>
+import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } %><% if (generateDto == 'yes') { %>
+import <%=packageName%>.web.rest.dto.<%= entityClass %>UpdateDTO;
+import <%=packageName%>.web.rest.mapper.<%= entityClass %>Mapper;
+import <%=packageName%>.web.rest.mapper.<%= entityClass %>DetailMapper;<% } %>
 
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +39,7 @@ import java.util.UUID;<% } %>
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
+<% var objectToSend = generateDto == 'yes' ? entityInstance + 'UpdateDTO' : entityInstance; %>
 /**
  * Test class for the <%= entityClass %>Resource REST controller.
  *
@@ -103,7 +106,15 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     private <%= entityClass %>Repository <%= entityInstance %>Repository;<% if (searchEngine == 'elasticsearch') { %>
 
     @Inject
-    private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;<% } %>
+    private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;<% } %><% if (generateDto == 'yes') { %>
+
+    @Inject
+    private <%= entityClass %>Mapper <%= entityInstance %>Mapper;
+
+    @Inject
+    private <%= entityClass %>DetailMapper <%= entityInstance %>DetailMapper;
+
+    private <%= entityClass %>UpdateDTO <%= objectToSend %>;<% } %>
 
     private MockMvc rest<%= entityClass %>MockMvc;
 
@@ -114,7 +125,10 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
         MockitoAnnotations.initMocks(this);
         <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource();
         ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Repository", <%= entityInstance %>Repository);<% if (searchEngine == 'elasticsearch') { %>
-        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>SearchRepository", <%= entityInstance %>SearchRepository);<% } %>
+        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>SearchRepository", <%= entityInstance %>SearchRepository);<% } %><% if (generateDto == 'yes') { %>
+        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Mapper", <%= entityInstance %>Mapper);
+        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>DetailMapper", <%= entityInstance %>DetailMapper);<% } %>
+
         this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource).build();
     }
 
@@ -122,7 +136,10 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     public void initTest() {<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>
         <%= entityInstance %>Repository.deleteAll();<% } %>
         <%= entityInstance %> = new <%= entityClass %>();<% for (fieldId in fields) { %>
-        <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>
+        <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %><% if (generateDto == 'yes') { %>
+
+        <%= objectToSend %> = new <%= entityClass %>UpdateDTO();<% for (fieldId in fields) { %>
+        <%= objectToSend %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } } %>
     }
 
     @Test<% if (databaseType == 'sql') { %>
@@ -133,7 +150,7 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
         // Create the <%= entityClass %>
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityInstance %>s")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %>)))
+                .content(TestUtil.convertObjectToJsonBytes(<%= objectToSend %>)))
                 .andExpect(status().isCreated());
 
         // Validate the <%= entityClass %> in the database
@@ -212,15 +229,16 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     @Transactional<% } %>
     public void update<%= entityClass %>() throws Exception {
         // Initialize the database
-        <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
+        <%= entityClass %> persisted = <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 
-		int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll().size();
+        int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll().size();
+        <%= objectToSend %>.setId(persisted.getId());
 
-        // Update the <%= entityInstance %><% for (fieldId in fields) { %>
-        <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>
+        // Update the <%= objectToSend %><% for (fieldId in fields) { %>
+        <%= objectToSend %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityInstance %>s")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %>)))
+                .content(TestUtil.convertObjectToJsonBytes(<%= objectToSend %>)))
                 .andExpect(status().isOk());
 
         // Validate the <%= entityClass %> in the database
@@ -237,7 +255,7 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
         // Initialize the database
         <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 
-		int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll().size();
+        int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll().size();
 
         // Get the <%= entityInstance %>
         rest<%= entityClass %>MockMvc.perform(delete("/api/<%= entityInstance %>s/{id}", <%= entityInstance %>.getId())

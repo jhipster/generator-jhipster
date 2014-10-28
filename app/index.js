@@ -680,6 +680,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/service/_UserService.java', javaDir + 'service/UserService.java', this, {});
     this.template('src/main/java/package/service/_MailService.java', javaDir + 'service/MailService.java', this, {});
     this.template('src/main/java/package/service/util/_RandomUtil.java', javaDir + 'service/util/RandomUtil.java', this, {});
+    this.template('src/main/java/package/service/dto/_PageDTO.java', javaDir + 'service/dto/PageDTO.java', this, {});
 
     this.template('src/main/java/package/web/filter/_package-info.java', javaDir + 'web/filter/package-info.java', this, {});
     this.template('src/main/java/package/web/filter/_CachingHttpHeadersFilter.java', javaDir + 'web/filter/CachingHttpHeadersFilter.java', this, {});
@@ -702,6 +703,12 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/web/rest/dto/_LoggerDTO.java', javaDir + 'web/rest/dto/LoggerDTO.java', this, {});
     this.template('src/main/java/package/web/rest/dto/_UserDTO.java', javaDir + 'web/rest/dto/UserDTO.java', this, {});
     this.template('src/main/java/package/web/rest/util/_PaginationUtil.java', javaDir + 'web/rest/util/PaginationUtil.java', this, {});
+    this.template('src/main/java/package/web/rest/dto/_AbstractAuditingDetailsDTO.java', javaDir + 'web/rest/dto/AbstractAuditingDetailsDTO.java', this, {});
+    this.template('src/main/java/package/web/rest/dto/_IdDTO.java', javaDir + 'web/rest/dto/IdDTO.java', this, {});
+    this.template('src/main/java/package/web/rest/mapper/_AbstractMapper.java', javaDir + 'web/rest/mapper/AbstractMapper.java', this, {});
+    this.template('src/main/java/package/web/rest/mapper/_BaseMapper.java', javaDir + 'web/rest/mapper/BaseMapper.java', this, {});
+    this.template('src/main/java/package/web/rest/mapper/_Merger.java', javaDir + 'web/rest/mapper/Merger.java', this, {});
+    
     this.template('src/main/java/package/web/rest/_package-info.java', javaDir + 'web/rest/package-info.java', this, {});
     this.template('src/main/java/package/web/rest/_AccountResource.java', javaDir + 'web/rest/AccountResource.java', this, {});
     if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {

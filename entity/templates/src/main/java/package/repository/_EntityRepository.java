@@ -71,15 +71,20 @@ public class <%= entityClass %>Repository {
         return <%= entityInstance %>s;
     }
 
+    public <%= entityClass %> findOne(String id) {
+        return findOne(UUID.fromString(id));
+    }
+
     public <%= entityClass %> findOne(UUID id) {
         return mapper.get(id);
     }
 
-    public void save(<%= entityClass %> <%= entityInstance %>) {
+    public <%= entityClass %> save(<%= entityClass %> <%= entityInstance %>) {
         if (<%= entityInstance %>.getId() == null) {
             <%= entityInstance %>.setId(UUID.randomUUID());
         }
         mapper.save(<%= entityInstance %>);
+        return <%= entityInstance %>;
     }
 
     public void delete(UUID id) {

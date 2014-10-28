@@ -25,7 +25,9 @@ public class LoggingAspect {
     @Inject
     private Environment env;
 
-    @Pointcut("within(<%=packageName%>.repository..*) || within(<%=packageName%>.service..*) || within(<%=packageName%>.web.rest..*)")
+    // Skip proxying of the mappers, which cause spring exceptions on autowiring
+    @Pointcut("within(<%=packageName%>.repository..*) || within(<%=packageName%>.service..*) || "
+             + "(within(<%=packageName%>.web.rest..*) && !within(<%=packageName%>.web.rest.mapper..*))")
     public void loggingPointcut() {}
 
     @AfterThrowing(pointcut = "loggingPointcut()", throwing = "e")
