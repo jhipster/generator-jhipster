@@ -1,0 +1,9 @@
+---
+path: .
+instances: 1
+services:
+- <%= cloudfoundryDeployedName %>
+applications:
+- name: <%= cloudfoundryDeployedName %>
+  env:
+      spring.profiles.active: prod

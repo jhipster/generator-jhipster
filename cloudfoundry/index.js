@@ -73,21 +73,12 @@ CloudFoundryGenerator.prototype.checkInstallation = function checkInstallation()
     }.bind(this));
 };
 
-CloudFoundryGenerator.prototype.dirInit = function dirInit() {
-    if(this.abort) return;
-    var done = this.async();
-
-    this.log(chalk.bold('Initializing deployment repo'));
-    this.mkdir('deploy/cloudfoundry');
-    done();
-};
-
 CloudFoundryGenerator.prototype.cloudfoundryAppShow = function cloudfoundryAppShow() {
     if(this.abort || typeof this.dist_repo_url !== 'undefined') return;
     var done = this.async();
 
     this.log(chalk.bold("\nChecking for an existing Cloud Foundry hosting environment..."));
-    var child = exec('cf app '+this.cloudfoundryDeployedName+' ', { cwd: 'deploy/cloudfoundry' }, function (err, stdout, stderr) {
+    var child = exec('cf app '+this.cloudfoundryDeployedName+' ', { }, function (err, stdout, stderr) {
         var lines = stdout.split('\n');
         var dist_repo = '';
         // Unauthenticated
@@ -106,7 +97,7 @@ CloudFoundryGenerator.prototype.cloudfoundryAppCreate = function cloudfoundryApp
     this.log(chalk.bold("\nCreating your Cloud Foundry hosting environment, this may take a couple minutes..."));
     this.log(chalk.bold("Creating the database"));
     this.log('cf create-service ' + this.cloudfoundryMysqlServiceName + ' ' + this.cloudfoundryMysqlServicePlan + ' jhipster ');
-    var child = exec('cf create-service ' + this.cloudfoundryMysqlServiceName + ' ' + this.cloudfoundryMysqlServicePlan + ' jhipster ', { cwd: 'deploy/cloudfoundry' }, function (err, stdout, stderr) {
+    var child = exec('cf create-service ' + this.cloudfoundryMysqlServiceName + ' ' + this.cloudfoundryMysqlServicePlan + ' jhipster ', { }, function (err, stdout, stderr) {
         done();
     }.bind(this));
 
@@ -115,12 +106,40 @@ CloudFoundryGenerator.prototype.cloudfoundryAppCreate = function cloudfoundryApp
     }.bind(this));
 };
 
+CloudFoundryGenerator.prototype.copyCloudFoundryFiles = function copyCloudFoundryFiles() {
+    if(this.abort) return;
+    var done = this.async();
+    this.log(chalk.bold('\nCreating Cloud Foundry deployment files'));
+
+    this.template('_manifest.yml', 'deploy/cloudfoundry/manifest.yml');
+    this.conflicter.resolve(function (err) {
+        done();
+    });
+};
+
 CloudFoundryGenerator.prototype.productionBuild = function productionBuild() {
-    if(this.abort || !this.cloudfoundry_remote_exists ) return;
+    if(this.abort) return;
     var done = this.async();
 
-    this.log(chalk.bold('\nBuilding deploy/cloudfoundry folder, please wait...'));
-    var child = exec('grunt buildcloudfoundry', function (err, stdout) {
+    this.log(chalk.bold('\nBuilding the application with the production profile'));
+    var child = exec('mvn package -Pprod -DskipTests', function (err, stdout) {
+        if (err) {
+            this.log.error(err);
+        }
+        done();
+    }.bind(this));
+
+    child.stdout.on('data', function(data) {
+        this.log(data.toString());
+    }.bind(this));
+};
+
+CloudFoundryGenerator.prototype.cloudfoundryPush = function cloudfoundryPush() {
+    if(this.abort) return;
+    var done = this.async();
+
+    this.log(chalk.bold('\nPushing the application to Cloud Foundry'));
+    var child = exec('cf push -f ./deploy/cloudfoundry/manifest.yml -p target/*.war', function (err, stdout) {
         if (err) {
             this.log.error(err);
         }
