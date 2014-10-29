@@ -1,35 +1,31 @@
 package <%=packageName%>.web.rest;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import javax.inject.Inject;<% if (fieldsContainLocalDate == true) { %>
-import org.joda.time.LocalDate;<% } %><% if (fieldsContainBigDecimal == true) { %>
-import java.math.BigDecimal;<% } %>
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;<% if (databaseType == 'sql') { %>
+import org.springframework.transaction.annotation.Transactional;<% } %>
+
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;<% if (fieldsContainLocalDate == true) { %>
+import org.joda.time.LocalDate;<% } %><% if (fieldsContainBigDecimal == true) { %>
+import java.math.BigDecimal;<% } %>
+import java.util.List;
 
 import <%=packageName%>.Application;
 import <%=packageName%>.domain.<%= entityClass %>;
 import <%=packageName%>.repository.<%= entityClass %>Repository;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Test class for the <%= entityClass %>Resource REST controller.
@@ -39,97 +35,142 @@ import <%=packageName%>.repository.<%= entityClass %>Repository;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
-    DirtiesContextTestExecutionListener.class,
-    TransactionalTestExecutionListener.class })
 public class <%= entityClass %>ResourceTest {
-    <% if (databaseType == 'sql') { %>
-    private static final Long DEFAULT_ID = new Long(1L);<% } %><% if (databaseType == 'nosql') { %>
-    private static final String DEFAULT_ID = "1";<% } %>
-    <% for (fieldId in fields) {
-      var defaultValueName = 'DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase();
-      var updatedValueName = 'UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase();
-      if (fields[fieldId].fieldType == 'String') { %>
+<% for (fieldId in fields) {
+    var defaultValueName = 'DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase();
+    var updatedValueName = 'UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase();
+    if (fields[fieldId].fieldType == 'String') { %>
     private static final String <%=defaultValueName %> = "SAMPLE_TEXT";
     private static final String <%=updatedValueName %> = "UPDATED_TEXT";
-        <% } else if (fields[fieldId].fieldType == 'Integer') { %>
+    <% } else if (fields[fieldId].fieldType == 'Integer') { %>
     private static final Integer <%=defaultValueName %> = 0;
     private static final Integer <%=updatedValueName %> = 1;
-        <% } else if (fields[fieldId].fieldType == 'Long') { %>
+    <% } else if (fields[fieldId].fieldType == 'Long') { %>
     private static final Long <%=defaultValueName %> = 0L;
     private static final Long <%=updatedValueName %> = 1L;
-        <% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
+    <% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
     private static final BigDecimal <%=defaultValueName %> = BigDecimal.ZERO;
     private static final BigDecimal <%=updatedValueName %> = BigDecimal.ONE;
-        <% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
+    <% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
     private static final LocalDate <%=defaultValueName %> = new LocalDate(0L);
     private static final LocalDate <%=updatedValueName %> = new LocalDate();
-        <% } else if (fields[fieldId].fieldType == 'Boolean') { %>
-    private static final Boolean <%=defaultValueName %> = false;
-    private static final Boolean <%=updatedValueName %> = true;<% } } %>
-    @Inject
-    private <%= entityClass %>Repository <%= entityInstance %>Repository;
+    <% } else if (fields[fieldId].fieldType == 'Boolean') { %>
+   private static final Boolean <%=defaultValueName %> = false;
+   private static final Boolean <%=updatedValueName %> = true;<% } } %>
 
-    private MockMvc rest<%= entityClass %>MockMvc;
+   @Inject
+   private <%= entityClass %>Repository <%= entityInstance %>Repository;
 
-    private <%= entityClass %> <%= entityInstance %>;
+   private MockMvc rest<%= entityClass %>MockMvc;
 
-    @Before
+   private <%= entityClass %> <%= entityInstance %>;
+
+    @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
         <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource();
         ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Repository", <%= entityInstance %>Repository);
-
         this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource).build();
+    }
 
-        <%= entityInstance %> = new <%= entityClass %>();
-        <%= entityInstance %>.setId(DEFAULT_ID);
-<% for (fieldId in fields) { %>
+    @Before
+    public void initTest() {<% if (databaseType == 'nosql') { %>
+        <%= entityInstance %>Repository.deleteAll();<% } %>
+        <%= entityInstance %> = new <%= entityClass %>();<% for (fieldId in fields) { %>
         <%= entityInstance %>.set<%= fields[fieldId].fieldNameCapitalized %>(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>
     }
 
-    @Test
-    public void testCRUD<%= entityClass %>() throws Exception {
+    @Test<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>
+    public void create<%= entityClass %>() throws Exception {
+        // Validate the database is empty
+        assertThat(<%= entityInstance %>Repository.findAll()).hasSize(0);
 
-        // Create <%= entityClass %>
+        // Create the <%= entityClass %>
         rest<%= entityClass %>MockMvc.perform(post("/app/rest/<%= entityInstance %>s")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %>)))
                 .andExpect(status().isOk());
 
-        // Read <%= entityClass %>
-        rest<%= entityClass %>MockMvc.perform(get("/app/rest/<%= entityInstance %>s/{id}", DEFAULT_ID))
+        // Validate the <%= entityClass %> in the database
+        List<<%= entityClass %>> <%= entityInstance %>s = <%= entityInstance %>Repository.findAll();
+        assertThat(<%= entityInstance %>s).hasSize(1);
+        <%= entityClass %> test<%= entityClass %> = <%= entityInstance %>s.iterator().next();<% for (fieldId in fields) {%>
+        assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldNameCapitalized%>()).isEqualTo(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>;
+    }
+
+    @Test<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>
+    public void getAll<%= entityClass %>s() throws Exception {
+        // Initialize the database
+        <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
+
+        // Get all the <%= entityInstance %>s
+        rest<%= entityClass %>MockMvc.perform(get("/app/rest/<%= entityInstance %>s"))
                 .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
-                .andExpect(jsonPath("$.id").value(DEFAULT_ID.intValue()))<% } %><% if (databaseType == 'nosql') { %>
-                .andExpect(jsonPath("$.id").value(DEFAULT_ID))<% } %><% for (fieldId in fields) {%>
-                .andExpect(jsonPath("$.<%=fields[fieldId].fieldName%>").value(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.doubleValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else { %>.toString()<% } %>))<% } %>;
+                .andExpect(jsonPath("$.[0].id").value(<%= entityInstance %>.getId().intValue()))<% } %><% if (databaseType == 'nosql') { %>
+                .andExpect(jsonPath("$.[0].id").value(<%= entityInstance %>.getId()))<% } %><% for (fieldId in fields) {%>
+                .andExpect(jsonPath("$.[0].<%=fields[fieldId].fieldName%>").value(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else { %>.toString()<% } %>))<% } %>;
+    }
 
-        // Update <%= entityClass %><% for (fieldId in fields) {%>
-        <%= entityInstance %>.set<%= fields[fieldId].fieldNameCapitalized %>(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>
+    @Test<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>
+    public void get<%= entityClass %>() throws Exception {
+        // Initialize the database
+        <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 
-        rest<%= entityClass %>MockMvc.perform(post("/app/rest/<%= entityInstance %>s")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %>)))
-                .andExpect(status().isOk());
+        // Get the <%= entityInstance %>
+        rest<%= entityClass %>MockMvc.perform(get("/app/rest/<%= entityInstance %>s/{id}", <%= entityInstance %>.getId()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
+            .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().intValue()))<% } %><% if (databaseType == 'nosql') { %>
+            .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId()))<% } %><% for (fieldId in fields) {%>
+            .andExpect(jsonPath("$.<%=fields[fieldId].fieldName%>").value(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else { %>.toString()<% } %>))<% } %>;
+    }
 
-        // Read updated <%= entityClass %>
-        rest<%= entityClass %>MockMvc.perform(get("/app/rest/<%= entityInstance %>s/{id}", DEFAULT_ID))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
-                .andExpect(jsonPath("$.id").value(DEFAULT_ID.intValue()))<% } %><% if (databaseType == 'nosql') { %>
-                .andExpect(jsonPath("$.id").value(DEFAULT_ID))<% } %><% for (fieldId in fields) {%>
-                .andExpect(jsonPath("$.<%=fields[fieldId].fieldName%>").value(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.doubleValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else { %>.toString()<% } %>))<% } %>;
-
-        // Delete <%= entityClass %>
-        rest<%= entityClass %>MockMvc.perform(delete("/app/rest/<%= entityInstance %>s/{id}", DEFAULT_ID)
-                .accept(TestUtil.APPLICATION_JSON_UTF8))
-                .andExpect(status().isOk());
-
-        // Read nonexisting <%= entityClass %>
-        rest<%= entityClass %>MockMvc.perform(get("/app/rest/<%= entityInstance %>s/{id}", DEFAULT_ID)
-                .accept(TestUtil.APPLICATION_JSON_UTF8))
+    @Test<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>
+    public void getNonExisting<%= entityClass %>() throws Exception {
+        // Get the <%= entityInstance %>
+        rest<%= entityClass %>MockMvc.perform(get("/app/rest/<%= entityInstance %>s/{id}", 1L))
                 .andExpect(status().isNotFound());
+    }
 
+    @Test<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>
+    public void update<%= entityClass %>() throws Exception {
+        // Initialize the database
+        <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
+
+        // Update the <%= entityInstance %><% for (fieldId in fields) { %>
+        <%= entityInstance %>.set<%= fields[fieldId].fieldNameCapitalized %>(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>
+        rest<%= entityClass %>MockMvc.perform(post("/app/rest/<%= entityInstance %>s")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %>)))
+                .andExpect(status().isOk());
+
+        // Validate the <%= entityClass %> in the database
+        List<<%= entityClass %>> <%= entityInstance %>s = <%= entityInstance %>Repository.findAll();
+        assertThat(<%= entityInstance %>s).hasSize(1);
+        <%= entityClass %> test<%= entityClass %> = <%= entityInstance %>s.iterator().next();<% for (fieldId in fields) {%>
+        assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldNameCapitalized%>()).isEqualTo(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>;
+    }
+
+    @Test<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>
+    public void delete<%= entityClass %>() throws Exception {
+        // Initialize the database
+        <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
+
+        // Get the <%= entityInstance %>
+        rest<%= entityClass %>MockMvc.perform(delete("/app/rest/<%= entityInstance %>s/{id}", <%= entityInstance %>.getId())
+                .accept(TestUtil.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk());
+
+        // Validate the database is empty
+        List<<%= entityClass %>> <%= entityInstance %>s = <%= entityInstance %>Repository.findAll();
+        assertThat(<%= entityInstance %>s).hasSize(0);
     }
 }
