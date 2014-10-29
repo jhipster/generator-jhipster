@@ -1,0 +1,13 @@
+#! /bin/bash
+
+set -x
+
+cd ${OPENSHIFT_REPO_DIR}
+
+<% if (javaVersion === '8') { %>
+export M2=${OPENSHIFT_DATA_DIR}apache-maven-3.2.3/bin
+export JAVA_HOME=${OPENSHIFT_DATA_DIR}jdk1.8.0_20
+export PATH=$JAVA_HOME/bin:$M2:$PATH
+<% } %>
+
+mvn -B package -DskipTests=true -Dmaven.repo.local=${OPENSHIFT_DATA_DIR}maven/repository

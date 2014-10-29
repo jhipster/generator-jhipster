@@ -1,0 +1,23 @@
+#! /bin/bash
+
+set -x
+
+jar=$(ls ${OPENSHIFT_REPO_DIR}target/*.war | head -n1)
+
+<% if (javaVersion === '8') { %>
+export JAVA_HOME=${OPENSHIFT_DATA_DIR}jdk1.8.0_20
+export PATH=$JAVA_HOME/bin:$PATH
+<% } %>
+
+nohup java -server \
+     -jar ${jar} \
+     --spring.profiles.active=prod \
+     --server.address=${OPENSHIFT_DIY_IP} \
+     --server.port=${OPENSHIFT_DIY_PORT} \<% if (prodDatabaseType === 'postgresql') { %>
+     --spring.datasource.url=jdbc:postgresql://${OPENSHIFT_POSTGRESQL_DB_HOST}:${OPENSHIFT_POSTGRESQL_DB_PORT} \
+     --spring.datasource.username=${OPENSHIFT_POSTGRESQL_DB_USERNAME} \
+     --spring.datasource.password=${OPENSHIFT_POSTGRESQL_DB_PASSWORD} > ${OPENSHIFT_LOG_DIR}<%= baseName %>.log 2>&1 &<% } else { %>
+     --spring.datasource.url=jdbc:mysql://${OPENSHIFT_MYSQL_DB_HOST}:${OPENSHIFT_MYSQL_DB_PORT}/${OPENSHIFT_APP_NAME} \
+     --spring.datasource.username=${OPENSHIFT_MYSQL_DB_USERNAME} \
+     --spring.datasource.password=${OPENSHIFT_MYSQL_DB_PASSWORD} > ${OPENSHIFT_LOG_DIR}<%= baseName %>.log 2>&1 &<% } %>
+

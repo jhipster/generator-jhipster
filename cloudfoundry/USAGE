@@ -1,0 +1,8 @@
+Description:
+    Initalizes a Cloud Foundy app and generates a `deploy/cloudfoundry` folder which is ready to push to Cloud Foundry.
+
+Example:
+    yo jhipster:cloudfoundry
+
+    This will create:
+        a deploy/cloudfoundry folder and initialize a Cloud Foundy app

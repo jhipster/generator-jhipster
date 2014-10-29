@@ -1,0 +1,20 @@
+#! /bin/bash
+
+set -x
+
+if [ ! -d ${OPENSHIFT_DATA_DIR}jdk1.8.0_20 ]
+    then
+        cd ${OPENSHIFT_DATA_DIR}
+        wget -nv http://www.java.net/download/jdk8u20/archive/b17/binaries/jdk-8u20-ea-bin-b17-linux-x64-04_jun_2014.tar.gz
+        tar xvf *.tar.gz
+        rm -f *.tar.gz
+fi
+
+if [ ! -d ${OPENSHIFT_DATA_DIR}apache-maven-3.2.3 ]
+    then
+        cd ${OPENSHIFT_DATA_DIR}
+        wget -nv http://mirror.cc.columbia.edu/pub/software/apache/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.tar.gz
+        tar xvf *.tar.gz
+        rm -f *.tar.gz
+fi
+
