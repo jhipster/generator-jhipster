@@ -67,7 +67,7 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
     }
 
     @Bean(destroyMethod = "shutdown")
-    @ConditionalOnMissingClass(name = "<%=packageName%>.config.HerokuDatabaseConfiguration.class")
+    @ConditionalOnMissingClass(name = "<%=packageName%>.config.HerokuDatabaseConfiguration")
     public DataSource dataSource() {
         log.debug("Configuring Datasource");
         if (propertyResolver.getProperty("url") == null && propertyResolver.getProperty("databaseName") == null) {
