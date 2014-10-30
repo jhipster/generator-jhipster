@@ -41,9 +41,25 @@ CloudFoundryGenerator.prototype.askForName = function askForName() {
         default: this.baseName
     },
     {
+        type: 'list',
+        name: 'cloudfoundryProfile',
+        message: 'Which profile do you want to use?',
+        choices: [
+            {
+                value: 'dev',
+                name: 'dev'
+            },
+            {
+                value: 'prod',
+                name: 'prod'
+            }
+        ],
+        default: 0
+    },
+    {
         name: 'cloudfoundryMysqlServiceName',
         message: 'What is the name of your MySQL service?',
-        default: 'mysql'
+        default: 'p-mysql'
     },
     {
         name: 'cloudfoundryMysqlServicePlan',
@@ -53,6 +69,7 @@ CloudFoundryGenerator.prototype.askForName = function askForName() {
 
     this.prompt(prompts, function (props) {
         this.cloudfoundryDeployedName = this._.slugify(props.cloudfoundryDeployedName).split('-').join('');
+        this.cloudfoundryProfile = props.cloudfoundryProfile;
         this.cloudfoundryMysqlServiceName = props.cloudfoundryMysqlServiceName;
         this.cloudfoundryMysqlServicePlan = props.cloudfoundryMysqlServicePlan;
         done();
@@ -122,7 +139,11 @@ CloudFoundryGenerator.prototype.productionBuild = function productionBuild() {
     var done = this.async();
 
     this.log(chalk.bold('\nBuilding the application with the production profile'));
-    var child = exec('mvn package -Pprod -DskipTests', function (err, stdout) {
+    var mavenCommand = 'mvn package -DskipTests';
+    if (this.cloudfoundryProfile == 'prod') {
+        mavenCommand = 'mvn package -Pprod -DskipTests';
+    }
+    var child = exec(mavenCommand, function (err, stdout) {
         if (err) {
             this.log.error(err);
         }

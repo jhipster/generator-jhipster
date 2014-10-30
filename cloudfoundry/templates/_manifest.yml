@@ -4,6 +4,6 @@ instances: 1
 services:
 - <%= cloudfoundryDeployedName %>
 applications:
-- name: <%= cloudfoundryDeployedName %>
+- name: <%= cloudfoundryDeployedName %><% if (cloudfoundryProfile == 'prod') { %>
   env:
-      spring.profiles.active: prod
+      spring.profiles.active: prod<% } %>
