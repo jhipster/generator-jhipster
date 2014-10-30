@@ -40,6 +40,13 @@ public class Application {
         }
     }
 
+	@Override
+	public void customize(ConfigurableEmbeddedServletContainer container) {
+		MimeMappings mappings = new MimeMappings(MimeMappings.DEFAULT);
+		mappings.add("html", "text/html;charset=utf-8");
+		container.setMimeMappings(mappings);
+	}
+	
     /**
      * Main method, used to run the application.
      */
