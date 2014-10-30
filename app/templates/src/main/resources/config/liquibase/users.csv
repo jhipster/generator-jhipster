@@ -1,5 +1,5 @@
 login;password;first_name;last_name;email;activated;lang_key;created_by
-system;572d3b834f32347527d749bc1a41042c920682fc430febd380b4b6a0134f314fd381ce11c9a05abe;NULL;System;NULL;true;en;system
-anonymousUser;4f54479f8290dfd503b72a654faf5d70593eab443993d87a79e14e5f7cda3eb7988423aa99090c9b;Anonymous;User;NULL;true;en;system
-admin;b8f57d6d6ec0a60dfe2e20182d4615b12e321cad9e2979e0b9f81e0d6eda78ad9b6dcfe53e4e22d1;NULL;Administrator;NULL;true;en;system
-user;4f54479f8290dfd503b72a654faf5d70593eab443993d87a79e14e5f7cda3eb7988423aa99090c9b;NULL;User;NULL;true;en;system
+system;$2a$10$mE.qmcV0mFU5NcKh73TZx.z4ueI/.bDWbj0T1BYyqP481kGGarKLG;NULL;System;NULL;true;en;system
+anonymousUser;$2a$10$j8S5d7Sr7.8VTOYNviDPOeWX8KcYILUVJBsYV83Y5NtECayypx9lO;Anonymous;User;NULL;true;en;system
+admin;$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC;NULL;Administrator;NULL;true;en;system
+user;$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K;NULL;User;NULL;true;en;system
