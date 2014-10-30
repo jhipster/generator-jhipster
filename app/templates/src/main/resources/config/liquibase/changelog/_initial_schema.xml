@@ -6,6 +6,7 @@
 
     <property name="now" value="now()" dbms="mysql,h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
+	<property name="now" value="CURRENT_TIMESTAMP" dbms="oracle" />
 
     <!--
         JHipster core tables.
