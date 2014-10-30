@@ -12,7 +12,7 @@
                     language = 'en';
                 }
 
-                var promise =  $http.get('/i18n/' + language + '.json').then(function(response) {
+                var promise =  $http.get('i18n/' + language + '.json').then(function(response) {
                     return LANGUAGES;
                 });
                 return promise;
