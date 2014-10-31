@@ -12,7 +12,7 @@
                     language = 'en';
                 }
 
-                var promise =  $http.get('/i18n/' + language + '.json').then(function(response) {
+                var promise =  $http.get('i18n/' + language + '.json').then(function(response) {
                     return LANGUAGES;
                 });
                 return promise;
@@ -179,20 +179,28 @@
                 }).success(function (data, status, headers, config) {
                     if (!Session.login<% if (authenticationType == 'token') { %> || AccessToken.get() != undefined<% } %>) {<% if (authenticationType == 'token') { %>
                         if (AccessToken.get() == undefined || AccessToken.expired()) {
-                            $rootScope.authenticated = false;
-                            $rootScope.authenticationError = false;
+                            $rootScope.$broadcast("event:auth-loginRequired");
                             return;
                         }<% } %>
                         Account.get(function(data) {
                             Session.create(data.login, data.firstName, data.lastName, data.email, data.roles);
                             $rootScope.account = Session;
-                            $rootScope.authenticated = true;
+                            if (!$rootScope.isAuthorized(authorizedRoles)) {
+                                // user is not allowed
+                               $rootScope.$broadcast("event:auth-notAuthorized");
+                            } else {
+                                $rootScope.$broadcast("event:auth-loginConfirmed");
+                            }
                         });
+                    }else{
+                        if (!$rootScope.isAuthorized(authorizedRoles)) {
+                                // user is not allowed
+                                $rootScope.$broadcast("event:auth-notAuthorized");
+                        } else {
+                                $rootScope.$broadcast("event:auth-loginConfirmed");
+                        }
                     }
-                    $rootScope.authenticated = !!Session.login;
                 }).error(function (data, status, headers, config) {
-                    $rootScope.authenticated = false;
-
                     if (!$rootScope.isAuthorized(authorizedRoles)) {
                         $rootScope.$broadcast('event:auth-loginRequired', data);
                     }

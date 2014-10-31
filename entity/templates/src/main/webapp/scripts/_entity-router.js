@@ -8,11 +8,11 @@
                     controller: '<%= entityClass %>Controller',
                     resolve:{
                         resolved<%= entityClass %>: ['<%= entityClass %>', function (<%= entityClass %>) {
-                            return <%= entityClass %>.query();
+                            return <%= entityClass %>.query().$promise;
                         }]<% for (relationshipId in relationships) {
                             var relationshipClass = relationships[relationshipId].otherEntityNameCapitalized;%>,
                         resolved<%=relationshipClass%>: ['<%=relationshipClass%>', function (<%=relationshipClass%>) {
-                            return <%=relationshipClass%>.query();
+                            return <%=relationshipClass%>.query().$promise;
                         }]<% } %>
                     },
                     access: {
