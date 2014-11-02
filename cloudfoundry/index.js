@@ -76,6 +76,17 @@ CloudFoundryGenerator.prototype.askForName = function askForName() {
     }.bind(this));
 };
 
+CloudFoundryGenerator.prototype.copyCloudFoundryFiles = function copyCloudFoundryFiles() {
+    if(this.abort) return;
+    var done = this.async();
+    this.log(chalk.bold('\nCreating Cloud Foundry deployment files'));
+
+    this.template('_manifest.yml', 'deploy/cloudfoundry/manifest.yml');
+    this.conflicter.resolve(function (err) {
+        done();
+    });
+};
+
 CloudFoundryGenerator.prototype.checkInstallation = function checkInstallation() {
     if(this.abort) return;
     var done = this.async();
@@ -113,25 +124,13 @@ CloudFoundryGenerator.prototype.cloudfoundryAppCreate = function cloudfoundryApp
 
     this.log(chalk.bold("\nCreating your Cloud Foundry hosting environment, this may take a couple minutes..."));
     this.log(chalk.bold("Creating the database"));
-    this.log('cf create-service ' + this.cloudfoundryMysqlServiceName + ' ' + this.cloudfoundryMysqlServicePlan + ' jhipster ');
-    var child = exec('cf create-service ' + this.cloudfoundryMysqlServiceName + ' ' + this.cloudfoundryMysqlServicePlan + ' jhipster ', { }, function (err, stdout, stderr) {
+    var child = exec('cf create-service ' + this.cloudfoundryMysqlServiceName + ' ' + this.cloudfoundryMysqlServicePlan + ' ' + this.cloudfoundryDeployedName, { }, function (err, stdout, stderr) {
         done();
     }.bind(this));
 
     child.stdout.on('data', function(data) {
         this.log(data.toString());
     }.bind(this));
-};
-
-CloudFoundryGenerator.prototype.copyCloudFoundryFiles = function copyCloudFoundryFiles() {
-    if(this.abort) return;
-    var done = this.async();
-    this.log(chalk.bold('\nCreating Cloud Foundry deployment files'));
-
-    this.template('_manifest.yml', 'deploy/cloudfoundry/manifest.yml');
-    this.conflicter.resolve(function (err) {
-        done();
-    });
 };
 
 CloudFoundryGenerator.prototype.productionBuild = function productionBuild() {
