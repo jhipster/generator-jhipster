@@ -131,9 +131,14 @@ CloudFoundryGenerator.prototype.cloudfoundryAppCreate = function cloudfoundryApp
 CloudFoundryGenerator.prototype.productionBuild = function productionBuild() {
     if(this.abort) return;
     var done = this.async();
-
-    this.log(chalk.bold('\nBuilding the application with the production profile'));
-    var child = exec('mvn package -Pprod -DskipTests', function (err, stdout) {
+    var mvn = 'mvn package -Pprod -DskipTests';
+    if (this.cloudfoundryProfile == 'prod') {
+        this.log(chalk.bold('\nBuilding the application with the production profile'));
+    } else {
+        this.log(chalk.bold('\nBuilding the application with the development profile'));
+        mvn = 'mvn package -DskipTests';
+    }
+    var child = exec(mvn, function (err, stdout) {
         if (err) {
             this.log.error(err);
         }
