@@ -16,7 +16,6 @@
                 "metrics": "Метрики",
                 "health": "Состояние",
                 "logs": "Логи",
-                "audits": "Аудит",
                 "login": "Authenticate",
                 "logout": "Выйти",
                 "apidocs": "API",
@@ -285,32 +284,6 @@
             "name": "Название",
             "level": "Уровень"
         }
-    },
-    "audits": {
-        "title": "Аудит",
-        "filter": {
-            "title": "Фильтр по дате",
-            "from": "от",
-            "to": "до",
-            "button": {
-                "weeks": "Недель",
-                "today": "сегодня",
-                "clear": "очистить",
-                "close": "закрыть"
-            }
-        },
-        "table": {
-            "header": {
-                "principal": "Пользователь",
-                "date": "Дата",
-                "status": "Состояние",
-                "data": "Доп. инф."
-            },
-            "data": {
-                "remoteAddress": "Удалённый адрес:"
-            }
-        }
-
     },
     "errors": {
         "title": "Ошибка!",

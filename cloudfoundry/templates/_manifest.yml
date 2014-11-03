@@ -6,4 +6,4 @@ services:
 applications:
 - name: <%= cloudfoundryDeployedName %><% if (cloudfoundryProfile == 'prod') { %>
   env:
-      spring.profiles.active: prod<% } %>
+    SPRING_PROFILES_ACTIVE: prod<% } %>

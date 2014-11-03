@@ -15,7 +15,6 @@
                 "tracker": "Användarspårning",
                 "metrics": "Mätningar",
                 "logs": "Loggar",
-                "audits": "Granskningar",
                 "health": "Status",
                 "login": "Inloggning",
                 "logout": "Utloggning",
@@ -183,7 +182,7 @@
     "metrics": {
         "title": "Applikationsmätningar",
         "refresh.button": "Uppdatera",
-        "updating": "Uppdaterar...",        
+        "updating": "Uppdaterar...",
         "jvm": {
             "title": "Mätningar av JVM",
             "memory": {
@@ -277,7 +276,7 @@
             "UP": "UPP",
             "DOWN": "NED"
         }
-    
+
     },
     "logs": {
         "title": "Loggar",
@@ -287,32 +286,6 @@
             "name": "Namn",
             "level": "Nivå"
         }
-    },
-    "audits": {
-        "title": "Granskningar",
-        "filter": {
-            "title": "Filter per datum",
-            "from": "från",
-            "to": "till",
-            "button": {
-                "weeks": "Veckor",
-                "today": "idag",
-                "clear": "rensa",
-                "close": "stäng"
-            }
-        },
-        "table": {
-            "header": {
-                "principal": "Användare",
-                "date": "Datum",
-                "status": "Status",
-                "data": "Extra data"
-            },
-            "data": {
-                "remoteAddress": "Fjärradress:"
-            }
-        }
-
     },
     "errors": {
         "title": "Felsida!",

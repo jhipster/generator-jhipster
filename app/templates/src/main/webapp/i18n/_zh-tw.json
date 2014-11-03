@@ -16,7 +16,6 @@
                 "metrics": "資源監控",
                 "health": "服務狀態",
                 "logs": "記錄",
-                "audits": "稽核",
                 "login": "登入",
                 "logout": "登出",
                 "apidocs": "API",
@@ -286,32 +285,6 @@
             "name": "名稱",
             "level": "層級"
         }
-    },
-    "audits": {
-        "title": "稽核",
-        "filter": {
-            "title": "依據日期篩選",
-            "from": "從",
-            "to": "至",
-            "button": {
-                "weeks": "週",
-                "today": "今天",
-                "clear": "清除",
-                "close": "關閉"
-            }
-        },
-        "table": {
-            "header": {
-                "principal": "使用者",
-                "date": "日期",
-                "status": "狀態",
-                "data": "額外的資料"
-            },
-            "data": {
-                "remoteAddress": "遠端位址:"
-            }
-        }
-
     },
     "errors": {
         "title": "錯誤頁面!",

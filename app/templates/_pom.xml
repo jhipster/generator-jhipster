@@ -43,7 +43,8 @@
         <metrics-spring.version>3.0.1</metrics-spring.version><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
         <postgresql.version>9.3-1102-jdbc41</postgresql.version><% } %>
         <run.addResources>false</run.addResources>
-        <sonar-maven-plugin.version>2.2</sonar-maven-plugin.version><% if (authenticationType == 'token') { %>
+        <sonar-maven-plugin.version>2.2</sonar-maven-plugin.version>
+        <spring-cloud.version>1.1.0.RELEASE</spring-cloud.version><% if (authenticationType == 'token') { %>
         <spring-security-oauth2.version>2.0.1.RELEASE</spring-security-oauth2.version><% } %>
         <swagger-springmvc.version>0.8.8</swagger-springmvc.version>
         <usertype-core.version>3.2.0.GA</usertype-core.version>
@@ -357,6 +358,22 @@
             <artifactId>spring-security-oauth2</artifactId>
             <version>${spring-security-oauth2.version}</version>
         </dependency><% } %>
+        <!-- Spring Cloud -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-cloudfoundry-connector</artifactId>
+            <version>${spring-cloud.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-spring-service-connector</artifactId>
+            <version>${spring-cloud.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-localconfig-connector</artifactId>
+            <version>${spring-cloud.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <resources>

@@ -20,6 +20,7 @@ var CloudFoundryGenerator = module.exports = function CloudFoundryGenerator() {
     this.javaVersion = this.config.get('javaVersion');
     this.hibernateCache = this.config.get('hibernateCache');
     this.databaseType = this.config.get('databaseType');
+    this.devDatabaseType = this.config.get('devDatabaseType');
     this.prodDatabaseType = this.config.get('prodDatabaseType');
     this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
 };
@@ -29,12 +30,6 @@ util.inherits(CloudFoundryGenerator, scriptBase);
 
 CloudFoundryGenerator.prototype.askForName = function askForName() {
     var done = this.async();
-    if (this.prodDatabaseType != 'mysql') {
-        this.log.error('Error: you can only deploy on CloudFoundry using a MySQL database, and you currently use \'' + this.prodDatabaseType + '\'');
-        this.abort = true;
-        return;
-    }
-
     var prompts = [{
         name: 'cloudfoundryDeployedName',
         message: 'Name to deploy as:',
@@ -43,7 +38,7 @@ CloudFoundryGenerator.prototype.askForName = function askForName() {
     {
         type: 'list',
         name: 'cloudfoundryProfile',
-        message: 'Which profile do you want to use?',
+        message: 'Which profile would you like to use?',
         choices: [
             {
                 value: 'dev',
@@ -57,21 +52,21 @@ CloudFoundryGenerator.prototype.askForName = function askForName() {
         default: 0
     },
     {
-        name: 'cloudfoundryMysqlServiceName',
-        message: 'What is the name of your MySQL service?',
+        name: 'cloudfoundryDatabaseServiceName',
+        message: 'What is the name of your database service?',
         default: 'p-mysql'
     },
     {
-        name: 'cloudfoundryMysqlServicePlan',
-        message: 'What is the name of your MySQL plan?',
+        name: 'cloudfoundryDatabaseServicePlan',
+        message: 'What is the name of your database plan?',
         default: '100mb'
     }];
 
     this.prompt(prompts, function (props) {
         this.cloudfoundryDeployedName = this._.slugify(props.cloudfoundryDeployedName).split('-').join('');
         this.cloudfoundryProfile = props.cloudfoundryProfile;
-        this.cloudfoundryMysqlServiceName = props.cloudfoundryMysqlServiceName;
-        this.cloudfoundryMysqlServicePlan = props.cloudfoundryMysqlServicePlan;
+        this.cloudfoundryDatabaseServiceName = props.cloudfoundryDatabaseServiceName;
+        this.cloudfoundryDatabaseServicePlan = props.cloudfoundryDatabaseServicePlan;
         done();
     }.bind(this));
 };
@@ -124,7 +119,7 @@ CloudFoundryGenerator.prototype.cloudfoundryAppCreate = function cloudfoundryApp
 
     this.log(chalk.bold("\nCreating your Cloud Foundry hosting environment, this may take a couple minutes..."));
     this.log(chalk.bold("Creating the database"));
-    var child = exec('cf create-service ' + this.cloudfoundryMysqlServiceName + ' ' + this.cloudfoundryMysqlServicePlan + ' ' + this.cloudfoundryDeployedName, { }, function (err, stdout, stderr) {
+    var child = exec('cf create-service ' + this.cloudfoundryDatabaseServiceName + ' ' + this.cloudfoundryDatabaseServicePlan + ' ' + this.cloudfoundryDeployedName, { }, function (err, stdout, stderr) {
         done();
     }.bind(this));
 
@@ -138,11 +133,7 @@ CloudFoundryGenerator.prototype.productionBuild = function productionBuild() {
     var done = this.async();
 
     this.log(chalk.bold('\nBuilding the application with the production profile'));
-    var mavenCommand = 'mvn package -DskipTests';
-    if (this.cloudfoundryProfile == 'prod') {
-        mavenCommand = 'mvn package -Pprod -DskipTests';
-    }
-    var child = exec(mavenCommand, function (err, stdout) {
+    var child = exec('mvn package -Pprod -DskipTests', function (err, stdout) {
         if (err) {
             this.log.error(err);
         }
