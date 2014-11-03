@@ -3,7 +3,7 @@
         <script>
             db.T_USER.insert(
             {
-                "_id" : "system", "password" : "b8f57d6d6ec0a60dfe2e20182d4615b12e321cad9e2979e0b9f81e0d6eda78ad9b6dcfe53e4e22d1",
+                "_id" : "system", "password" : "$2a$10$mE.qmcV0mFU5NcKh73TZx.z4ueI/.bDWbj0T1BYyqP481kGGarKLG",
                 "first_name": "",
                 "last_name": "System",
                 "email": "",
@@ -15,7 +15,7 @@
             });
             db.T_USER.insert(
             {
-                "_id" : "anonymousUser", "password" : "4f54479f8290dfd503b72a654faf5d70593eab443993d87a79e14e5f7cda3eb7988423aa99090c9b",
+                "_id" : "anonymousUser", "password" : "$2a$10$j8S5d7Sr7.8VTOYNviDPOeWX8KcYILUVJBsYV83Y5NtECayypx9lO",
                 "first_name": "Anonymous",
                 "last_name": "User",
                 "email": "",
@@ -27,7 +27,7 @@
             });
             db.T_USER.insert(
             {
-                "_id" : "admin", "password" : "b8f57d6d6ec0a60dfe2e20182d4615b12e321cad9e2979e0b9f81e0d6eda78ad9b6dcfe53e4e22d1",
+                "_id" : "admin", "password" : "$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC",
                 "first_name": "",
                 "last_name": "Administrator",
                 "email": "",
@@ -39,7 +39,7 @@
             });
             db.T_USER.insert(
             {
-                "_id" : "user", "password" : "4f54479f8290dfd503b72a654faf5d70593eab443993d87a79e14e5f7cda3eb7988423aa99090c9b",
+                "_id" : "user", "password" : "$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K",
                 "first_name": "",
                 "last_name": "User",
                 "email": "",
