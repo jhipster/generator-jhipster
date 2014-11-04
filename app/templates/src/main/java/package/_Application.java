@@ -51,8 +51,8 @@ public class Application {
 
         // Check if the selected profile has been set as argument.
         // if not the development profile will be added
-        addDefaultProfile(app, source);
-        addLiquibaseScanPackages();
+        addDefaultProfile(app, source);<% if (databaseType == 'sql') { %>
+        addLiquibaseScanPackages();<% } %>
         app.run(args);
     }
 
@@ -63,7 +63,7 @@ public class Application {
         if (!source.containsProperty("spring.profiles.active")) {
             app.setAdditionalProfiles(Constants.SPRING_PROFILE_DEVELOPMENT);
         }
-    }
+    }<% if (databaseType == 'sql') { %>
 
     /**
      * Set the liquibases.scan.packages to avoid an exception from ServiceLocator.
@@ -75,5 +75,5 @@ public class Application {
                 "liquibase.snapshot" + "," + "liquibase.logging" + "," + "liquibase.diff" + "," +
                 "liquibase.structure" + "," + "liquibase.structurecompare" + "," + "liquibase.lockservice" + "," +
                 "liquibase.ext" + "," + "liquibase.changelog");
-    }
+    }<% } %>
 }
