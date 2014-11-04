@@ -110,6 +110,7 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
     public Hibernate4Module hibernate4Module() {
         return new Hibernate4Module();
     }<% } %><% if (databaseType == 'nosql') { %>
+
     @Bean
     public ValidatingMongoEventListener validatingMongoEventListener() {
         return new ValidatingMongoEventListener(validator());
