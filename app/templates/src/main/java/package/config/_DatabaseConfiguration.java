@@ -18,7 +18,8 @@ import org.springframework.context.EnvironmentAware;<% } %>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;<% if (databaseType == 'nosql') { %>
-import org.springframework.context.annotation.Import;<% } %><% if (databaseType == 'sql') { %>
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Profile;<% } %><% if (databaseType == 'sql') { %>
 import org.springframework.core.env.Environment;<% } %><% if (databaseType == 'nosql' && authenticationType == 'token') { %>
 import org.springframework.core.convert.converter.Converter;<% } %><% if (databaseType == 'nosql') { %>
 import org.springframework.core.io.ClassPathResource;
@@ -41,6 +42,7 @@ import java.util.List;<% } %>
 @Configuration<% if (databaseType == 'sql') { %>
 @EnableJpaRepositories("<%=packageName%>.repository")
 @EnableTransactionManagement<% } %><% if (databaseType == 'nosql') { %>
+@Profile("!cloud")
 @EnableMongoRepositories("<%=packageName%>.repository")
 @Import(value = MongoAutoConfiguration.class)<% } %>
 public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements EnvironmentAware<% } %><% if (databaseType == 'nosql') { %>extends AbstractMongoConfiguration <% } %> {
@@ -143,13 +145,10 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
     public Mongeez mongeez() {
         log.debug("Configuring Mongeez");
         Mongeez mongeez = new Mongeez();
-
         mongeez.setFile(new ClassPathResource("/config/mongeez/master.xml"));
         mongeez.setMongo(mongo);
         mongeez.setDbName(mongoProperties.getDatabase());
         mongeez.process();
-
         return mongeez;
-    }
-    <% } %>
+    }<% } %>
 }
