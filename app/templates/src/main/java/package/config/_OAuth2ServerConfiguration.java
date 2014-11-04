@@ -22,8 +22,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;<% if (databaseType == 'sql') { %>
-import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;<% } %><% if (databaseType == 'nosql') { %>
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;<% } %>
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;<% } %>
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.inject.Inject;<% if (databaseType == 'sql') { %>
