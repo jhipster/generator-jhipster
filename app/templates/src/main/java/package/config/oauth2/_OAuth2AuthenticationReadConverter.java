@@ -1,10 +1,6 @@
 package <%=packageName%>.config.oauth2;
 
-import com.mongodb.BasicDBList;
-import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import <%=packageName%>.domain.Authority;
-import <%=packageName%>.domain.User;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.convert.ReadingConverter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,8 +13,8 @@ import org.springframework.security.oauth2.provider.OAuth2Request;
 import java.util.*;
 
 /**
- * Hackery to deserialize back into an OAuth2Authentication Object made necessary because
- * Spring Mongo can't map clientAuthentication to authorizationRequest
+ * Converter to deserialize back into an OAuth2Authentication Object made necessary because
+ * Spring Mongo can't map clientAuthentication to authorizationRequest.
  */
 @ReadingConverter
 public class OAuth2AuthenticationReadConverter implements Converter<DBObject, OAuth2Authentication> {
