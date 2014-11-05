@@ -16,6 +16,7 @@
                 "metrics": "Mètriques",
                 "health": "Salud",
                 "logs": "Registres",
+                "audits": "Auditories",
                 "login": "Autenticar",
                 "logout": "Finalitzar la sessió",
                 "apidocs": "API",
@@ -285,6 +286,32 @@
             "name": "Nom",
             "level": "Nivell"
         }
+    },
+    "audits": {
+        "title": "Auditories",
+        "filter": {
+            "title": "Filtre per data",
+            "from": "de",
+            "to": "a",
+            "button": {
+                "weeks": "Setmanes",
+                "today": "avui",
+                "clear": "netejar",
+                "close": "tancar"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Usuari",
+                "date": "Data",
+                "status": "Estat",
+                "data": "Dades extra"
+            },
+            "data": {
+                "remoteAddress": "Adreça remota:"
+            }
+        }
+
     },
     "errors": {
         "title": "Pàgina d'error!",

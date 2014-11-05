@@ -16,6 +16,7 @@
                 "metrics": "Målinger",
                 "health": "Sundheds",
                 "logs": "Logs",
+                "audits": "Audits",
                 "login": "Log ind",
                 "logout": "Log ud",
                 "apidocs": "API",
@@ -285,6 +286,32 @@
             "name": "Navn",
             "level": "Niveau"
         }
+    },
+    "audits": {
+        "title": "Revisioner",
+        "filter": {
+            "title": "Filtrer på dato",
+            "from": "fra",
+            "to": "til",
+            "button": {
+                "weeks": "uger",
+                "today": "idag",
+                "clear": "ryd",
+                "close": "luk"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Bruger",
+                "date": "Dato",
+                "status": "Tilstand",
+                "data": "Ekstra data"
+            },
+            "data": {
+                "remoteAddress": "Remote Address:"
+            }
+        }
+
     },
     "errors": {
         "title": "Fejlside!",

@@ -16,6 +16,7 @@
                 "metrics": "Métricas",
                 "health": "Heath",
                 "logs": "Logs",
+                "audits": "Auditorías",
                 "login": "Iniciar sesión",
                 "logout": "Cerrar la sesión",
                 "apidocs": "API",
@@ -285,6 +286,32 @@
             "name": "Nombre",
             "level": "Nivel"
         }
+    },
+    "audits": {
+        "title": "Auditorías",
+        "filter": {
+            "title": "Filtrar por fecha",
+            "from": "desde",
+            "to": "a",
+            "button": {
+                "weeks": "Semanas",
+                "today": "hoy",
+                "clear": "limpiar",
+                "close": "cerrar"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Usuario",
+                "date": "Fecha",
+                "status": "Estado",
+                "data": "Datos extra"
+            },
+            "data": {
+                "remoteAddress": "Dirección remota:"
+            }
+        }
+
     },
     "errors": {
         "title": "¡Página de error!",

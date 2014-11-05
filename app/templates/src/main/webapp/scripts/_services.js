@@ -87,6 +87,23 @@
         });
     });
 
+<%= angularAppName %>.factory('AuditsService', function ($http) {
+        return {
+            findAll: function() {
+                var promise = $http.get('app/rest/audits/all').then(function (response) {
+                    return response.data;
+                });
+                return promise;
+            },
+            findByDates: function(fromDate, toDate) {
+                var promise = $http.get('app/rest/audits/byDates', {params: {fromDate: fromDate, toDate: toDate}}).then(function (response) {
+                    return response.data;
+                });
+                return promise;
+            }
+        }
+    });
+
 <%= angularAppName %>.factory('Session', function () {
         this.create = function (login, firstName, lastName, email, userRoles) {
             this.login = login;

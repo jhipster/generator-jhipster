@@ -23,11 +23,13 @@ import org.springframework.context.annotation.Profile;<% } %><% if (databaseType
 import org.springframework.core.env.Environment;<% } %><% if (databaseType == 'nosql' && authenticationType == 'token') { %>
 import org.springframework.core.convert.converter.Converter;<% } %><% if (databaseType == 'nosql') { %>
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.mongodb.config.AbstractMongoConfiguration;<% } %><% if (databaseType == 'nosql' && authenticationType == 'token') { %>
+import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
+import org.springframework.data.mongodb.config.EnableMongoAuditing;<% } %><% if (databaseType == 'nosql' && authenticationType == 'token') { %>
 import org.springframework.data.mongodb.core.convert.CustomConversions;<% } %><% if (databaseType == 'nosql') { %>
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;<% } %><% if (databaseType == 'sql') { %>
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -41,10 +43,12 @@ import java.util.List;<% } %>
 
 @Configuration<% if (databaseType == 'sql') { %>
 @EnableJpaRepositories("<%=packageName%>.repository")
+@EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @EnableTransactionManagement<% } %><% if (databaseType == 'nosql') { %>
 @Profile("!cloud")
 @EnableMongoRepositories("<%=packageName%>.repository")
-@Import(value = MongoAutoConfiguration.class)<% } %>
+@Import(value = MongoAutoConfiguration.class)
+@EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")<% } %>
 public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements EnvironmentAware<% } %><% if (databaseType == 'nosql') { %>extends AbstractMongoConfiguration <% } %> {
 
     private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);<% if (databaseType == 'sql') { %>

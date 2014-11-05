@@ -16,6 +16,7 @@
                 "metrics": "메트릭스",
                 "health": "상태 확인",
                 "logs": "로그",
+                "audits": "Audit",
                 "login": "인증",
                 "logout": "로그아웃",
                 "apidocs": "API",
@@ -285,6 +286,32 @@
             "name": "이름",
             "level": "레벨"
         }
+    },
+    "audits": {
+        "title": "Audits",
+        "filter": {
+            "title": "날짜별 필터",
+            "from": "시작",
+            "to": "종료",
+            "button": {
+                "weeks": "주별",
+                "today": "오늘",
+                "clear": "지우기",
+                "close": "닫기"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "사용자",
+                "date": "날짜",
+                "status": "상태",
+                "data": "특별한 데이터"
+            },
+            "data": {
+                "remoteAddress": "원격 주소:"
+            }
+        }
+
     },
     "errors": {
         "title": "에러 페이지!",

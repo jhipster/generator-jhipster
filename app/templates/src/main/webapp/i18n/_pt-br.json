@@ -16,6 +16,7 @@
                 "metrics": "Métricas",
                 "health": "Estado do Sistema",
                 "logs": "Logs",
+                "audits": "Auditorias",
                 "login": "Entrar",
                 "logout": "Sair",
                 "apidocs": "API",
@@ -285,6 +286,32 @@
             "name": "Nome",
             "level": "Nível"
         }
+    },
+    "audits": {
+        "title": "Auditorias",
+        "filter": {
+            "title": "Filtro por data",
+            "from": "de",
+            "to": "até",
+            "button": {
+                "weeks": "Semanas",
+                "today": "hoje",
+                "clear": "limpar",
+                "close": "fechar"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Usuário",
+                "date": "Data",
+                "status": "Estado",
+                "data": "Informações extras"
+            },
+            "data": {
+                "remoteAddress": "Endereço remoto:"
+            }
+        }
+
     },
     "errors": {
         "title": "Página de erro!",
