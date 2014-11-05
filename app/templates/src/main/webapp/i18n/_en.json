@@ -131,7 +131,7 @@
             "button": "Save"
         },
         "messages": {
-            "error": "<strong>An error has occured!</strong> Settings could not be saved.",
+            "error": "<strong>An error has occurred!</strong> Settings could not be saved.",
             "success": "<strong>Settings saved!</strong>",
             "validate": {
                 "firstname": {
@@ -153,7 +153,7 @@
             "button": "Save"
         },
         "messages": {
-            "error":  "<strong>An error has occured!</strong> The password could not be changed.",
+            "error":  "<strong>An error has occurred!</strong> The password could not be changed.",
             "success": "<strong>Password changed!</strong>"
         }
     },
@@ -167,7 +167,7 @@
         },
         "messages": {
             "success": "<strong>Session invalidated!</strong>",
-            "error": "<strong>An error has occured!</strong> The session could not be invalidated."
+            "error": "<strong>An error has occurred!</strong> The session could not be invalidated."
         }
     },
     "tracker": {
