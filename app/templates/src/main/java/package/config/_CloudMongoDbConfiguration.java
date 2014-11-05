@@ -1,7 +1,7 @@
 package <%=packageName%>.config;
 
-import com.mongodb.Mongo;
-import com.mycompany.myapp.config.oauth2.OAuth2AuthenticationReadConverter;
+import com.mongodb.Mongo;<% if (authenticationType == 'token') { %>
+import com.mycompany.myapp.config.oauth2.OAuth2AuthenticationReadConverter;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -37,7 +37,7 @@ public class CloudMongoDbConfiguration extends AbstractMongoConfiguration  {
     @Bean
     public LocalValidatorFactoryBean validator() {
         return new LocalValidatorFactoryBean();
-    }
+    }<% if (authenticationType == 'token') { %>
 
     @Bean
     public CustomConversions customConversions() {
@@ -45,7 +45,7 @@ public class CloudMongoDbConfiguration extends AbstractMongoConfiguration  {
         OAuth2AuthenticationReadConverter converter = new OAuth2AuthenticationReadConverter();
         converterList.add(converter);
         return new CustomConversions(converterList);
-    }
+    }<% } %>
 
     @Override
     protected String getDatabaseName() {
