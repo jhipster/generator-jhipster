@@ -18,13 +18,13 @@ public class CloudDatabaseConfiguration extends AbstractCloudConfig {
 
     @Bean
     public DataSource dataSource() {
-        log.info("Configuring Cloud Foundry JDBC datasource");
+        log.info("Configuring JDBC datasource from a cloud provider");
         return connectionFactory().dataSource();
     }<% } %><% if (databaseType == 'nosql') { %>
 
     @Bean
     public MongoDbFactory mongoDbFactory() {
-        log.info("Configuring Cloud Foundry MongoDB datasource");
+        log.info("Configuring MongoDB datasource from a cloud provider");
         return connectionFactory().mongoDbFactory();
     }<% } %>
 }
