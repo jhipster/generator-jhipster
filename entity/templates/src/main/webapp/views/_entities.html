@@ -30,6 +30,8 @@
         fieldInputType = 'number';
     } else if (fields[fieldId].fieldType == 'LocalDate') {
         fieldInputType = 'date';
+    } else if (fields[fieldId].fieldType == 'DateTime') {
+        fieldInputType = 'datetime-local';
     } else if (fields[fieldId].fieldType == 'Boolean') {
         fieldInputType = 'checkbox';
     }%>
