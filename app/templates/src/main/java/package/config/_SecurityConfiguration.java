@@ -24,8 +24,8 @@ import javax.inject.Inject;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    <% if (authenticationType == 'cookie') { %>
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (authenticationType == 'cookie') { %>
+
     @Inject
     private Environment env;
 
@@ -74,8 +74,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/app/rest/activate")<% if (websocket == 'atmosphere') { %>
             .antMatchers("/websocket/activity")<% } %><% } %><% if (devDatabaseType != 'h2Memory') { %>;<% } else { %>
             .antMatchers("/console/**");<% } %>
-    }
-    <% if (authenticationType == 'cookie') { %>
+    }<% if (authenticationType == 'cookie') { %>
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -126,15 +126,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/protected/**").authenticated();
 
-    }<% } %>
-    
-    <% if (authenticationType == 'token') { %>
+    }<% } %><% if (authenticationType == 'token') { %>
+
 	@Override
 	@Bean
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManagerBean();
 	}<% } %>
-	
+
     @EnableGlobalMethodSecurity(prePostEnabled = true, jsr250Enabled = true)
     private static class GlobalSecurityConfiguration extends GlobalMethodSecurityConfiguration {<% if (authenticationType == 'token') { %>
 
