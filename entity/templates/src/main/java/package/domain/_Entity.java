@@ -21,8 +21,8 @@ import java.util.Set;<% } %>
 
 /**
  * A <%= entityClass %>.
- */
-<% if (databaseType == 'sql') { %>@Entity
+ */<% if (databaseType == 'sql') { %>
+@Entity
 @Table(name = "T_<%= name.toUpperCase() %>")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'nosql') { %>
 @Document(collection = "T_<%= name.toUpperCase() %>")<% } %>

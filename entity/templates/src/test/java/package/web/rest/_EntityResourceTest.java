@@ -55,15 +55,15 @@ public class <%= entityClass %>ResourceTest {
     private static final LocalDate <%=defaultValueName %> = new LocalDate(0L);
     private static final LocalDate <%=updatedValueName %> = new LocalDate();
     <% } else if (fields[fieldId].fieldType == 'Boolean') { %>
-   private static final Boolean <%=defaultValueName %> = false;
-   private static final Boolean <%=updatedValueName %> = true;<% } } %>
+    private static final Boolean <%=defaultValueName %> = false;
+    private static final Boolean <%=updatedValueName %> = true;<% } } %>
 
-   @Inject
-   private <%= entityClass %>Repository <%= entityInstance %>Repository;
+    @Inject
+    private <%= entityClass %>Repository <%= entityInstance %>Repository;
 
-   private MockMvc rest<%= entityClass %>MockMvc;
+    private MockMvc rest<%= entityClass %>MockMvc;
 
-   private <%= entityClass %> <%= entityInstance %>;
+    private <%= entityClass %> <%= entityInstance %>;
 
     @PostConstruct
     public void setup() {
