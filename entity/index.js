@@ -23,6 +23,8 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.fieldId = 0;
     this.fields = [];
     this.fieldsContainLocalDate = false;
+    this.fieldsContainDateTime = false;
+    this.fieldsContainCustomTime = false;
     this.fieldsContainBigDecimal = false;
     this.fieldsContainOwnerManyToMany = false;
     this.fieldsContainOneToMany = false;
@@ -87,6 +89,10 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     name: 'LocalDate'
                 },
                 {
+                    value: 'DateTime',
+                    name: 'DateTime'
+                },
+                {
                     value: 'Boolean',
                     name: 'Boolean'
                 }
@@ -106,9 +112,14 @@ EntityGenerator.prototype.askForFields = function askForFields() {
             this.fields.push(field);
             if (props.fieldType == 'LocalDate') {
                 this.fieldsContainLocalDate = true;
+                this.fieldsContainCustomTime = true;
             }
             if (props.fieldType == 'BigDecimal') {
                 this.fieldsContainBigDecimal = true;
+            }
+            if (props.fieldType == 'DateTime') {
+                this.fieldsContainDateTime = true;
+                this.fieldsContainCustomTime = true;
             }
         }
         console.log(chalk.red('===========' + _s.capitalize(this.name) + '=============='));
