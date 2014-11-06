@@ -91,8 +91,8 @@ public class OAuth2ServerConfiguration {
         private static final String PROP_SECRET = "secret";
         private static final String PROP_TOKEN_VALIDITY_SECONDS = "tokenValidityInSeconds";
 
-        private RelaxedPropertyResolver propertyResolver;
-        <% if (databaseType == 'sql') { %>
+        private RelaxedPropertyResolver propertyResolver;<% if (databaseType == 'sql') { %>
+
         @Inject
         private DataSource dataSource;<% } %><% if (databaseType == 'nosql') { %>
 
