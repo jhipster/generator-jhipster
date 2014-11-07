@@ -32,7 +32,7 @@ import java.util.Set;<% } %>
 public class <%= entityClass %> implements Serializable {
 
     @Id<% if (databaseType == 'sql') { %>
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;<% } %><% if (databaseType == 'nosql') { %>
     private String id;<% } %>
 <% for (fieldId in fields) { %><% if (databaseType == 'sql') { %><% if (fields[fieldId].fieldType == 'DateTime') { %>

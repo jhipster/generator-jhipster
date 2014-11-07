@@ -24,7 +24,7 @@ import java.util.Map;
 public class PersistentAuditEvent  {
 
     @Id<% if (databaseType == 'sql') { %>
-    @GeneratedValue(strategy = GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "event_id")
     private Long id;<% } else { %>
     @Field("event_id")
