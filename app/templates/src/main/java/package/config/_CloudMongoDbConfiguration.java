@@ -1,7 +1,7 @@
 package <%=packageName%>.config;
 
 import com.mongodb.Mongo;<% if (authenticationType == 'token') { %>
-import com.mycompany.myapp.config.oauth2.OAuth2AuthenticationReadConverter;<% } %>
+import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
