@@ -116,7 +116,7 @@
                   tableName="T_USER_AUTHORITY"/>
 
         <createTable tableName="T_PERSISTENT_AUDIT_EVENT">
-            <column name="event_id" type="bigint">
+            <column name="event_id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="principal" type="varchar(255)">

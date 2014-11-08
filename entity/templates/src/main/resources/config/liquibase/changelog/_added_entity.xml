@@ -12,7 +12,7 @@
     -->
     <changeSet id="<%= changelogDate %>" author="jhipster">
         <createTable tableName="T_<%= name.toUpperCase() %>">
-            <column name="id" type="bigint">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column><% for (fieldId in fields) {
             if (fields[fieldId].fieldType == 'String') { %>
