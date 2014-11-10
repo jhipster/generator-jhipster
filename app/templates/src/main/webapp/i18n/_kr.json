@@ -15,6 +15,7 @@
                 "tracker": "사용자 트랙커",
                 "metrics": "메트릭스",
                 "health": "상태 확인",
+                "configuration": "Configuration",
                 "logs": "로그",
                 "audits": "Audit",
                 "login": "인증",
@@ -276,6 +277,14 @@
         "status": {
             "UP": "사용할 수",
             "DOWN": "서비스 중"
+        }
+    },
+    "configuration": {
+        "title": "Configuration",
+        "filter": "Filter (by prefix)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Properties"
         }
     },
     "logs": {

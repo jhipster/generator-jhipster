@@ -14,7 +14,8 @@
                 "sessions": "Sesje",
                 "tracker": "Śledzenie użytkownika",
                 "metrics": "Metryki",
-                "health": "Heath",
+                "health": "Health",
+                "configuration": "Configuration",
                 "logs": "Logi",
                 "audits": "Audyty",
                 "login": "Autoryzacja",
@@ -276,6 +277,14 @@
         "status": {
             "UP": "DOSTĘPNE",
             "DOWN": "NIE DZIAŁAJĄCY"
+        }
+    },
+    "configuration": {
+        "title": "Configuration",
+        "filter": "Filter (by prefix)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Properties"
         }
     },
     "logs": {

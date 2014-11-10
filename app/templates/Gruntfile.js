@@ -83,6 +83,20 @@ module.exports = function (grunt) {
                     changeOrigin: false
                 },
                 {
+                    context: '/configprops',
+                    host: 'localhost',
+                    port: 8080,
+                    https: false,
+                    changeOrigin: false
+                },
+                {
+                    context: '/beans',
+                    host: 'localhost',
+                    port: 8080,
+                    https: false,
+                    changeOrigin: false
+                },
+                {
                     context: '/api-docs',
                     host: 'localhost',
                     port: 8080,

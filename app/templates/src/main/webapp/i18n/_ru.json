@@ -15,6 +15,7 @@
                 "tracker": "Трекер польз.",
                 "metrics": "Метрики",
                 "health": "Состояние",
+                "configuration": "Configuration",
                 "logs": "Логи",
                 "audits": "Аудит",
                 "login": "Authenticate",
@@ -275,6 +276,14 @@
         "status": {
             "UP": "UP",
             "DOWN": "DOWN"
+        }
+    },
+    "configuration": {
+        "title": "Configuration",
+        "filter": "Filter (by prefix)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Properties"
         }
     },
     "logs": {

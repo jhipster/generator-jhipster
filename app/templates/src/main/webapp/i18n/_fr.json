@@ -15,6 +15,7 @@
                 "tracker": "Suivi des utilisateurs",
                 "metrics": "Métriques",
                 "health": "Diagnostics",
+                "configuration": "Configuration",
                 "logs": "Logs",
                 "audits": "Audits",
                 "login": "S'authentifier",
@@ -276,6 +277,14 @@
         "status": {
             "UP": "DISPONIBLE",
             "DOWN": "HORS SERVICE"
+        }
+    },
+    "configuration": {
+        "title": "Configuration",
+        "filter": "Filtrer (par préfixe)",
+        "table": {
+            "prefix": "Préfixe",
+            "properties": "Propriétés"
         }
     },
     "logs": {

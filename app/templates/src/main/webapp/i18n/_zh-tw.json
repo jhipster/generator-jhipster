@@ -15,6 +15,7 @@
                 "tracker": "追蹤使用者",
                 "metrics": "資源監控",
                 "health": "服務狀態",
+                "configuration": "Configuration",
                 "logs": "記錄",
                 "audits": "稽核",
                 "login": "登入",
@@ -276,6 +277,14 @@
         "status": {
             "UP": "正常",
             "DOWN": "異常"
+        }
+    },
+    "configuration": {
+        "title": "Configuration",
+        "filter": "Filter (by prefix)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Properties"
         }
     },
     "logs": {

@@ -479,7 +479,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/_Constants.java', javaDir + 'config/Constants.java');
     this.template('src/main/java/package/config/_CloudDatabaseConfiguration.java', javaDir + 'config/CloudDatabaseConfiguration.java');
     if (this.databaseType == 'nosql') {
-        this.template('src/main/java/package/config/_CloudMongoDbConfiguration.java', javaDir + 'config/CloudMongoDbConfiguration.java');    
+        this.template('src/main/java/package/config/_CloudMongoDbConfiguration.java', javaDir + 'config/CloudMongoDbConfiguration.java');
     }
     this.template('src/main/java/package/config/_DatabaseConfiguration.java', javaDir + 'config/DatabaseConfiguration.java');
     this.template('src/main/java/package/config/_LocaleConfiguration.java', javaDir + 'config/LocaleConfiguration.java');
@@ -658,6 +658,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
     this.copy(webappDir + '/views/activate.html', webappDir + 'views/activate.html');
     this.copy(webappDir + '/views/audits.html', webappDir + 'views/audits.html');
+    this.copy(webappDir + '/views/configuration.html', webappDir + 'views/configuration.html');
     this.copy(webappDir + '/views/docs.html', webappDir + 'views/docs.html');
     this.copy(webappDir + '/views/error.html', webappDir + 'views/error.html');
     this.copy(webappDir + '/views/health.html', webappDir + 'views/health.html');

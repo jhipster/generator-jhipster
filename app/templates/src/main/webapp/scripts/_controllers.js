@@ -213,6 +213,10 @@
      }
  });
 
+<%= angularAppName %>.controller('ConfigurationController', function ($scope, resolvedConfiguration) {
+    $scope.configuration = resolvedConfiguration;
+});
+
 <%= angularAppName %>.controller('MetricsController', function ($scope, MetricsService, HealthCheckService, ThreadDumpService) {
         $scope.metrics = {};
 		$scope.updatingMetrics = true;

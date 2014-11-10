@@ -15,6 +15,7 @@
                 "tracker": "Rastreamento de usuário",
                 "metrics": "Métricas",
                 "health": "Estado do Sistema",
+                "configuration": "Configuration",
                 "logs": "Logs",
                 "audits": "Auditorias",
                 "login": "Entrar",
@@ -276,6 +277,14 @@
         "status": {
             "UP": "UP",
             "DOWN": "DOWN"
+        }
+    },
+    "configuration": {
+        "title": "Configuration",
+        "filter": "Filter (by prefix)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Properties"
         }
     },
     "logs": {

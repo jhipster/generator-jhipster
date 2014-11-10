@@ -15,6 +15,7 @@
                 "tracker": "Brugersporing",
                 "metrics": "Målinger",
                 "health": "Sundheds",
+                "configuration": "Configuration",
                 "logs": "Logs",
                 "audits": "Audits",
                 "login": "Log ind",
@@ -276,6 +277,14 @@
         "status": {
             "UP": "OP",
             "DOWN": "NED"
+        }
+    },
+    "configuration": {
+        "title": "Configuration",
+        "filter": "Filter (by prefix)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Properties"
         }
     },
     "logs": {

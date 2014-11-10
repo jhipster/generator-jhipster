@@ -14,9 +14,10 @@
                 "sessions": "Sessioner",
                 "tracker": "Användarspårning",
                 "metrics": "Mätningar",
+                "health": "Status",
+                "configuration": "Configuration",
                 "logs": "Loggar",
                 "audits": "Granskningar",
-                "health": "Status",
                 "login": "Inloggning",
                 "logout": "Utloggning",
                 "apidocs": "API",
@@ -277,7 +278,14 @@
             "UP": "UPP",
             "DOWN": "NED"
         }
-
+    },
+    "configuration": {
+        "title": "Configuration",
+        "filter": "Filter (by prefix)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Properties"
+        }
     },
     "logs": {
         "title": "Loggar",

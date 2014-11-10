@@ -15,6 +15,7 @@
                 "tracker": "User tracker",
                 "metrics": "Metriken",
                 "health": "Heath",
+                "configuration": "Configuration",
                 "logs": "Protokoll",
                 "audits": "Audits",
                 "login": "Anmelden",
@@ -277,6 +278,14 @@
         "status": {
             "UP": "UP",
             "DOWN": "DOWN"
+        }
+    },
+    "configuration": {
+        "title": "Configuration",
+        "filter": "Filter (by prefix)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Properties"
         }
     },
     "logs": {

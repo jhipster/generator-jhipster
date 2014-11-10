@@ -15,6 +15,7 @@
                 "tracker": "User tracker",
                 "metrics": "Mètriques",
                 "health": "Salud",
+                "configuration": "Configuration",
                 "logs": "Registres",
                 "audits": "Auditories",
                 "login": "Autenticar",
@@ -276,6 +277,14 @@
         "status": {
             "UP": "FINS",
             "DOWN": "BAIX"
+        }
+    },
+    "configuration": {
+        "title": "Configuration",
+        "filter": "Filter (by prefix)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Properties"
         }
     },
     "logs": {

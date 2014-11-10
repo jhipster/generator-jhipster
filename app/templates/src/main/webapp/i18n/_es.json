@@ -14,7 +14,8 @@
                 "sessions": "Sesiones",
                 "tracker": "Rastreador de los usarios",
                 "metrics": "Métricas",
-                "health": "Heath",
+                "health": "Health",
+                "configuration": "Configuration",
                 "logs": "Logs",
                 "audits": "Auditorías",
                 "login": "Iniciar sesión",
@@ -276,6 +277,14 @@
         "status": {
             "UP": "HASTA",
             "DOWN": "ABAJO"
+        }
+    },
+    "configuration": {
+        "title": "Configuration",
+        "filter": "Filter (by prefix)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Properties"
         }
     },
     "logs": {

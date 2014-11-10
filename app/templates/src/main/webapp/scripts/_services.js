@@ -80,6 +80,21 @@
         };
     });
 
+<%= angularAppName %>.factory('ConfigurationService', function ($rootScope, $http) {
+    return {
+        get: function() {
+            var promise = $http.get('configprops').then(function(response){
+                var properties = [];
+                angular.forEach(response.data, function(data) {
+                    properties.push(data);
+                });
+                return properties;
+            });
+            return promise;
+        }
+    };
+});
+
 <%= angularAppName %>.factory('LogsService', function ($resource) {
         return $resource('app/rest/logs', {}, {
             'findAll': { method: 'GET', isArray: true},
