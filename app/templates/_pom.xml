@@ -176,7 +176,7 @@
         </dependency>
         <dependency>
             <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
+            <artifactId>HikariCP<% if (javaVersion == '7') { %>-java6<% } %></artifactId>
             <version>${HikariCP.version}</version>
             <exclusions>
                 <exclusion>

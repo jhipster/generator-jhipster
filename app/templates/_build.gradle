@@ -77,7 +77,7 @@ dependencies {
     compile group: 'com.hazelcast', name: 'hazelcast-spring', version: hazelcast_version<% } %><% if (clusteredHttpSession == 'hazelcast' && hibernateCache != 'hazelcast') { %>
     compile group: 'com.hazelcast', name: 'hazelcast', version: hazelcast_version<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
     compile group: 'com.hazelcast', name: 'hazelcast-wm', version: hazelcast_version<% } %>
-    compile(group: 'com.zaxxer', name: 'HikariCP', version: HikariCP_version) {
+    compile(group: 'com.zaxxer', name: 'HikariCP<% if (javaVersion == '7') { %>-java6<% } %>', version: HikariCP_version) {
         exclude(module: 'tools')
     }
     compile group: 'commons-lang', name: 'commons-lang', version: commons_lang_version
