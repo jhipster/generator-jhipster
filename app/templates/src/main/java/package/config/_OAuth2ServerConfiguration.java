@@ -72,6 +72,7 @@ public class OAuth2ServerConfiguration {
                 .antMatchers("/dump/**").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/shutdown/**").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/beans/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                .antMatchers("/configprops/**").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/info/**").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/autoconfig/**").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/env/**").hasAuthority(AuthoritiesConstants.ADMIN)
