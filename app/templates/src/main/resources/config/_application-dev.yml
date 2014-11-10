@@ -53,6 +53,7 @@ metrics:
         enabled: false
         host: localhost
         port: 2003
+        prefix: <%= baseName %>
 
 <% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast' || hibernateCache == 'ehcache') { %>cache:
     timeToLiveSeconds: 3600<% } if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
