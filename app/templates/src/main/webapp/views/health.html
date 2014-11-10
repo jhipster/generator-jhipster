@@ -18,7 +18,7 @@
         </thead>
         <tbody>
         <tr ng-repeat="(k, v) in healthCheck" ng-show="k != 'status'">
-            <td>{{'health.' + k | translate}}</td>
+            <td>{{'health.indicator.' + k | translate}}</td>
             <td><span class="label" ng-class="getLabelClass(v.status)">{{'health.status.' + v.status | translate}}</span></td>
             <td>
                 <div id="healthCheck" class="row" ng-show="v.error">
