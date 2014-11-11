@@ -80,7 +80,7 @@
         };
     });
 
-<%= angularAppName %>.factory('ConfigurationService', function ($rootScope, $http) {
+<%= angularAppName %>.factory('ConfigurationService', function ($rootScope, $filter, $http) {
     return {
         get: function() {
             var promise = $http.get('configprops').then(function(response){
@@ -88,7 +88,8 @@
                 angular.forEach(response.data, function(data) {
                     properties.push(data);
                 });
-                return properties;
+                var orderBy = $filter('orderBy');
+                return orderBy(properties, 'prefix');;
             });
             return promise;
         }
