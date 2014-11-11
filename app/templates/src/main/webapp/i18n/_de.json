@@ -260,6 +260,18 @@
             "misses": "Keine Treffer",
             "evictioncount": "Anzahl entfernter Objekte",
             "mean": "Durchschnittliche Zugriffszeit (ms)"
+        },
+        "datasource": {
+            "title": "DataSource statistics (time in millisecond)",
+            "name": "Pool usage",
+            "count": "Count",
+            "mean": "Mean",
+            "min": "Min",
+            "max": "Max",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
         }
     },
     "health": {

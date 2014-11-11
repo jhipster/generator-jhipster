@@ -259,6 +259,18 @@
             "misses": "快取遺漏計數",
             "evictioncount": "收回計數",
             "mean": "平均讀取時間 (毫秒)"
+        },
+        "datasource": {
+            "title": "DataSource statistics (time in millisecond)",
+            "name": "Pool usage",
+            "count": "Count",
+            "mean": "Mean",
+            "min": "Min",
+            "max": "Max",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
         }
     },
     "health": {

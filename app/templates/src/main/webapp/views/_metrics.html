@@ -154,6 +154,7 @@
                          style="width:{{(metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.notFound'].count * 100 / metrics.timers['com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests'].count) | number:0}}%">
                         {{metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.notFound'].count}}
                     </div>
+                </div>
             </td>
             <td>
                 {{metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.notFound'].mean_rate | number:2}}
@@ -179,6 +180,7 @@
                          style="width:{{(metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.serverError'].count * 100 / metrics.timers['com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests'].count) | number:0}}%">
                         {{metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.serverError'].count}}
                     </div>
+                </div>
             </td>
             <td>
                 {{metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.serverError'].mean_rate | number:2}}
@@ -255,6 +257,48 @@
     </table>
 </div>
 <% } %>
+<h3 translate="metrics.datasource.title" ng-show="metrics.gauges['HikariPool-0.pool.TotalConnections'].value > 0">DataSource statistics</h3>
+<div class="table-responsive" ng-show="metrics.gauges['HikariPool-0.pool.TotalConnections'].value > 0">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th translate="metrics.datasource.usage">Usage ({{metrics.gauges['HikariPool-0.pool.ActiveConnections'].value}} / {{metrics.gauges['HikariPool-0.pool.TotalConnections'].value}})</th>
+                <th translate="metrics.datasource.count">Count</th>
+                <th translate="metrics.datasource.mean">Mean</th>
+                <th translate="metrics.datasource.min">Min</th>
+                <th translate="metrics.datasource.p50">p50</th>
+                <th translate="metrics.datasource.p75">p75</th>
+                <th translate="metrics.datasource.p95">p95</th>
+                <th translate="metrics.datasource.p99">p99</th>
+                <th translate="metrics.datasource.max">Max</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div class="progress progress-striped">
+                        <div class="progress-bar progress-bar-success" role="progressbar"
+                             aria-valuenow="{{metrics.gauges['HikariPool-0.pool.ActiveConnections'].value | number:0}}"
+                             aria-valuemin="0"
+                             aria-valuemax="{{metrics.gauges['HikariPool-0.pool.TotalConnections'].value | number:0}}"
+                             style="width: {{metrics.gauges['HikariPool-0.pool.ActiveConnections'].value * 100 / metrics.gauges['HikariPool-0.pool.TotalConnections'].value | number:0}}%">
+                            {{metrics.gauges['HikariPool-0.pool.ActiveConnections'].value * 100 / metrics.gauges['HikariPool-0.pool.TotalConnections'].value  | number:0}}%
+                        </div>
+                    </div>
+                </td>
+                <td>{{metrics.histograms['HikariPool-0.pool.Usage'].count}}</td>
+                <td>{{metrics.histograms['HikariPool-0.pool.Usage'].mean | number:2}}</td>
+                <td>{{metrics.histograms['HikariPool-0.pool.Usage'].min | number:2}}</td>
+                <td>{{metrics.histograms['HikariPool-0.pool.Usage'].p50 | number:2}}</td>
+                <td>{{metrics.histograms['HikariPool-0.pool.Usage'].p75 | number:2}}</td>
+                <td>{{metrics.histograms['HikariPool-0.pool.Usage'].p95 | number:2}}</td>
+                <td>{{metrics.histograms['HikariPool-0.pool.Usage'].p99 | number:2}}</td>
+                <td>{{metrics.histograms['HikariPool-0.pool.Usage'].max | number:2}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
 </div>
 <!-- Modal used to display the threads dump -->
 <div id="threadDump" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

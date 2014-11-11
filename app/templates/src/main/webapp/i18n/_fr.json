@@ -259,6 +259,18 @@
             "misses": "Données non existantes",
             "evictioncount": "Nombre de suppressions",
             "mean": "Temps de réponse (ms)"
+        },
+        "datasource": {
+            "title": "Statistiques du pool de connexions (Temps en milliseconde)",
+            "name": "Utilisation du pool",
+            "count": "Total",
+            "mean": "Médian",
+            "min": "Min",
+            "max": "Max",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
         }
     },
     "health": {
