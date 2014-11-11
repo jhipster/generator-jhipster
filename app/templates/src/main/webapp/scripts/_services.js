@@ -176,13 +176,12 @@
                     });
                 }).error(function (data, status, headers, config) {
                     $rootScope.authenticated = false;
+                    $rootScope.authenticationError = true;
                     Session.invalidate();
                     AccessToken.remove();
                     delete httpHeaders.common['Authorization'];
-
-                    if (!$rootScope.isAuthorized(authorizedRoles)) {
-                        $rootScope.$broadcast('event:auth-loginRequired', data);
-                    }
+                    $rootScope.$broadcast('event:auth-loginRequired', data);
+                    
                 });<% } %>
             },
             valid: function (authorizedRoles) {<% if (authenticationType == 'token') { %>
