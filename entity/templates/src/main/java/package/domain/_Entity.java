@@ -30,12 +30,12 @@ import java.util.Set;<% } %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'nosql') { %>
 @Document(collection = "T_<%= name.toUpperCase() %>")<% } %>
 public class <%= entityClass %> implements Serializable {
-
-    @Id<% if (databaseType == 'sql') { %>
+    <% if (databaseType == 'sql' && pkManagedByJHipster == true) { %>
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;<% } %><% if (databaseType == 'nosql') { %>
-    private String id;<% } %>
-<% for (fieldId in fields) { %><% if (databaseType == 'sql') { %><% if (fields[fieldId].fieldType == 'DateTime') { %>
+    private Long id;<% } %><% if (databaseType == 'nosql') { %>@Id
+    private String id;<% } %><% for (fieldId in fields) { %><% if (databaseType == 'sql') { %><% if (fields[fieldId].isPk == true) { %>
+    @Id<% } %><% if (fields[fieldId].fieldType == 'DateTime') { %>
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     @JsonDeserialize(using = CustomDateTimeDeserializer.class)
@@ -66,6 +66,7 @@ public class <%= entityClass %> implements Serializable {
     @OneToOne<% if (relationships[relationshipId].ownerSide == false) { %>(mappedBy = "<%= entityInstance %>")<% } %>
     private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].otherEntityName %>;<% } %>
 <% } %>
+    <% if (pkManagedByJHipster == true) { %>
     public <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> getId() {
         return id;
     }
@@ -73,6 +74,7 @@ public class <%= entityClass %> implements Serializable {
     public void setId(<% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> id) {
         this.id = id;
     }
+<% } %>
 <% for (fieldId in fields) { %>
     public <%= fields[fieldId].fieldType %> get<%= fields[fieldId].fieldNameCapitalized %>() {
         return <%= fields[fieldId].fieldName %>;
@@ -108,20 +110,23 @@ public class <%= entityClass %> implements Serializable {
 
         <%= entityClass %> <%= entityInstance %> = (<%= entityClass %>) o;
 
+        <% if (pkManagedByJHipster == true) { %>
         if (id != null ? !id.equals(<%= entityInstance %>.id) : <%= entityInstance %>.id != null) return false;
-
-        return true;
+        <% } else { %>if (<%= primaryKeyField.fieldName %> != null ? !<%= primaryKeyField.fieldName %>.equals(<%= entityInstance %>.<%= primaryKeyField.fieldName %>) : <%= entityInstance %>.<%= primaryKeyField.fieldName %> != null) return false;
+        <% } %>return true;
     }
 
     @Override
     public int hashCode() {
+        <% if (pkManagedByJHipster == true) { %>
         return <% if (databaseType == 'sql') { %>(int) (id ^ (id >>> 32));<% } %><% if (databaseType == 'nosql') { %>id != null ? id.hashCode() : 0;<% } %>
+        <% } else { %>return (int) (<%= primaryKeyField.fieldName %>.hashCode() ^ (<%= primaryKeyField.fieldName %>.hashCode() >>> 32));<% } %>
     }
 
     @Override
     public String toString() {
-        return "<%= entityClass %>{" +
-                "id=" + id +<% for (fieldId in fields) { %>
+        return "<%= entityClass %>{" + <% if (pkManagedByJHipster == true) { %>
+                "id=" + id +<% } %><% for (fieldId in fields) { %>
                 ", <%= fields[fieldId].fieldName %>='" + <%= fields[fieldId].fieldName %> + "'" +<% } %>
                 '}';
     }

@@ -117,7 +117,7 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
         rest<%= entityClass %>MockMvc.perform(get("/app/rest/<%= entityInstance %>s"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql' && pkManagedByJHipster == true) { %>
                 .andExpect(jsonPath("$.[0].id").value(<%= entityInstance %>.getId().intValue()))<% } %><% if (databaseType == 'nosql') { %>
                 .andExpect(jsonPath("$.[0].id").value(<%= entityInstance %>.getId()))<% } %><% for (fieldId in fields) {%>
                 .andExpect(jsonPath("$.[0].<%=fields[fieldId].fieldName%>").value(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[fieldId].fieldType == 'DateTime') { %>_STR<% } else { %>.toString()<% } %>))<% } %>;
@@ -130,9 +130,9 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
         <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 
         // Get the <%= entityInstance %>
-        rest<%= entityClass %>MockMvc.perform(get("/app/rest/<%= entityInstance %>s/{id}", <%= entityInstance %>.getId()))
+        rest<%= entityClass %>MockMvc.perform(get("/app/rest/<%= entityInstance %>s/{<%= primaryKeyField.fieldName %>}", <%= entityInstance %>.get<%= primaryKeyField.fieldNameCapitalized %>()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
+            .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql' && pkManagedByJHipster == true) { %>
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().intValue()))<% } %><% if (databaseType == 'nosql') { %>
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId()))<% } %><% for (fieldId in fields) {%>
             .andExpect(jsonPath("$.<%=fields[fieldId].fieldName%>").value(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[fieldId].fieldType == 'DateTime') { %>_STR<% } else { %>.toString()<% } %>))<% } %>;
@@ -142,7 +142,7 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
     @Transactional<% } %>
     public void getNonExisting<%= entityClass %>() throws Exception {
         // Get the <%= entityInstance %>
-        rest<%= entityClass %>MockMvc.perform(get("/app/rest/<%= entityInstance %>s/{id}", 1L))
+        rest<%= entityClass %>MockMvc.perform(get("/app/rest/<%= entityInstance %>s/{<%= primaryKeyField.fieldName %>}", 1L))
                 .andExpect(status().isNotFound());
     }
 
@@ -152,9 +152,9 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
         // Initialize the database
         <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 
-        // Update the <%= entityInstance %><% for (fieldId in fields) { %>
+        // Update the <%= entityInstance %><% for (fieldId in fields) { %><% if (fields[fieldId].isPk == false) { %>
         <%= entityInstance %>.set<%= fields[fieldId].fieldNameCapitalized %>(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>
-        rest<%= entityClass %>MockMvc.perform(post("/app/rest/<%= entityInstance %>s")
+        <% } %>rest<%= entityClass %>MockMvc.perform(post("/app/rest/<%= entityInstance %>s")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %>)))
                 .andExpect(status().isOk());
@@ -162,8 +162,8 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
         // Validate the <%= entityClass %> in the database
         List<<%= entityClass %>> <%= entityInstance %>s = <%= entityInstance %>Repository.findAll();
         assertThat(<%= entityInstance %>s).hasSize(1);
-        <%= entityClass %> test<%= entityClass %> = <%= entityInstance %>s.iterator().next();<% for (fieldId in fields) {%>
-        assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldNameCapitalized%>()).isEqualTo(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>;
+        <%= entityClass %> test<%= entityClass %> = <%= entityInstance %>s.iterator().next();<% for (fieldId in fields) {%><% if (fields[fieldId].isPk == false) { %>
+        assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldNameCapitalized%>()).isEqualTo(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>;<% } %>
     }
 
     @Test<% if (databaseType == 'sql') { %>
@@ -173,7 +173,7 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
         <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 
         // Get the <%= entityInstance %>
-        rest<%= entityClass %>MockMvc.perform(delete("/app/rest/<%= entityInstance %>s/{id}", <%= entityInstance %>.getId())
+        rest<%= entityClass %>MockMvc.perform(delete("/app/rest/<%= entityInstance %>s/{<%= primaryKeyField.fieldName %>}", <%= entityInstance %>.get<%= primaryKeyField.fieldNameCapitalized %>())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
