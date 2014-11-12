@@ -657,65 +657,65 @@ JhipsterGenerator.prototype.app = function app() {
     // Angular JS views
     this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
 
-    this.template(webappDir + '/scripts/client/_app.js', webappDir + 'scripts/client/app.js', this, {});
+    this.template(webappDir + '/client/_app.js', webappDir + 'client/app.js', this, {});
     // Client Components
-    this.template(webappDir + '/scripts/client/components/admin/_audits.service.js', webappDir + 'scripts/client/components/admin/audits.service.js', this, {});
-    this.template(webappDir + '/scripts/client/components/admin/_logs.service.js', webappDir + 'scripts/client/components/admin/logs.service.js', this, {});
-    this.template(webappDir + '/scripts/client/components/admin/_monitoring.service.js', webappDir + 'scripts/client/components/admin/monitoring.service.js', this, {});
-    this.template(webappDir + '/scripts/client/components/auth/_auth.service.js', webappDir + 'scripts/client/components/auth/auth.service.js', this, {});
+    this.template(webappDir + '/client/components/admin/_audits.service.js', webappDir + 'client/components/admin/audits.service.js', this, {});
+    this.template(webappDir + '/client/components/admin/_logs.service.js', webappDir + 'client/components/admin/logs.service.js', this, {});
+    this.template(webappDir + '/client/components/admin/_monitoring.service.js', webappDir + 'client/components/admin/monitoring.service.js', this, {});
+    this.template(webappDir + '/client/components/auth/_auth.service.js', webappDir + 'client/components/auth/auth.service.js', this, {});
     if (this.authenticationType == 'token') {
-        this.template(webappDir + '/scripts/client/components/auth/provider/_auth.oauth2.service.js', webappDir + 'scripts/client/components/auth/provider/auth.oauth2.service.js', this, {});
+        this.template(webappDir + '/client/components/auth/provider/_auth.oauth2.service.js', webappDir + 'client/components/auth/provider/auth.oauth2.service.js', this, {});
     } else {
-        this.template(webappDir + '/scripts/client/components/auth/provider/_auth.session.service.js', webappDir + 'scripts/client/components/auth/provider/auth.session.service.js', this, {});
+        this.template(webappDir + '/client/components/auth/provider/_auth.session.service.js', webappDir + 'client/components/auth/provider/auth.session.service.js', this, {});
     }
-    this.template(webappDir + '/scripts/client/components/auth/services/_account.service.js', webappDir + 'scripts/client/components/auth/services/account.service.js', this, {});
-    this.template(webappDir + '/scripts/client/components/auth/services/_activate.service.js', webappDir + 'scripts/client/components/auth/services/activate.service.js', this, {});
-    this.template(webappDir + '/scripts/client/components/auth/services/_password.service.js', webappDir + 'scripts/client/components/auth/services/password.service.js', this, {});
-    this.template(webappDir + '/scripts/client/components/auth/services/_register.service.js', webappDir + 'scripts/client/components/auth/services/register.service.js', this, {});
-    this.template(webappDir + '/scripts/client/components/auth/services/_role.service.js', webappDir + 'scripts/client/components/auth/services/role.service.js', this, {});
-    this.template(webappDir + '/scripts/client/components/auth/services/_sessions.service.js', webappDir + 'scripts/client/components/auth/services/sessions.service.js', this, {});
-    this.template(webappDir + '/scripts/client/components/form/_form.directive.js', webappDir + 'scripts/client/components/form/form.directive.js', this, {});
-    this.template(webappDir + '/scripts/client/components/language/_language.controller.js', webappDir + 'scripts/client/components/language/language.controller.js', this, {});
-    this.template(webappDir + '/scripts/client/components/language/_language.service.js', webappDir + 'scripts/client/components/language/language.service.js', this, {});
-    this.template(webappDir + '/scripts/client/components/navbar/_navbar.directive.js', webappDir + 'scripts/client/components/navbar/navbar.directive.js', this, {});
-    this.template(webappDir + '/scripts/client/components/util/_base64.service.js', webappDir + 'scripts/client/components/util/base64.service.js', this, {});
-    this.template(webappDir + '/scripts/client/components/util/_truncate.filter.js', webappDir + 'scripts/client/components/util/truncate.filter.js', this, {});
+    this.template(webappDir + '/client/components/auth/services/_account.service.js', webappDir + 'client/components/auth/services/account.service.js', this, {});
+    this.template(webappDir + '/client/components/auth/services/_activate.service.js', webappDir + 'client/components/auth/services/activate.service.js', this, {});
+    this.template(webappDir + '/client/components/auth/services/_password.service.js', webappDir + 'client/components/auth/services/password.service.js', this, {});
+    this.template(webappDir + '/client/components/auth/services/_register.service.js', webappDir + 'client/components/auth/services/register.service.js', this, {});
+    this.template(webappDir + '/client/components/auth/services/_role.service.js', webappDir + 'client/components/auth/services/role.service.js', this, {});
+    this.template(webappDir + '/client/components/auth/services/_sessions.service.js', webappDir + 'client/components/auth/services/sessions.service.js', this, {});
+    this.template(webappDir + '/client/components/form/_form.directive.js', webappDir + 'client/components/form/form.directive.js', this, {});
+    this.template(webappDir + '/client/components/language/_language.controller.js', webappDir + 'client/components/language/language.controller.js', this, {});
+    this.template(webappDir + '/client/components/language/_language.service.js', webappDir + 'client/components/language/language.service.js', this, {});
+    this.template(webappDir + '/client/components/navbar/_navbar.directive.js', webappDir + 'client/components/navbar/navbar.directive.js', this, {});
+    this.copy(webappDir + '/client/components/navbar/navbar.html', webappDir + 'client/components/navbar/navbar.html');
+    this.template(webappDir + '/client/components/navbar/_navbar.controller.js', webappDir + 'client/components/navbar/navbar.controller.js', this, {});
+    this.template(webappDir + '/client/components/util/_base64.service.js', webappDir + 'client/components/util/base64.service.js', this, {});
+    this.template(webappDir + '/client/components/util/_truncate.filter.js', webappDir + 'client/components/util/truncate.filter.js', this, {});
 
     // Client App
-    this.copy(webappDir + '/scripts/client/app/account/activate/activate.html', webappDir + 'scripts/client/app/account/activate/activate.html');
-    this.template(webappDir + '/scripts/client/app/account/activate/_activate.controller.js', webappDir + 'scripts/client/app/account/activate/activate.controller.js', this, {});
-    this.copy(webappDir + '/scripts/client/app/account/login/login.html', webappDir + 'scripts/client/app/account/login/login.html');
-    this.template(webappDir + '/scripts/client/app/account/login/_login.controller.js', webappDir + 'scripts/client/app/account/login/login.controller.js', this, {});
-    this.template(webappDir + '/scripts/client/app/account/logout/_logout.controller.js', webappDir + 'scripts/client/app/account/logout/logout.controller.js', this, {});
-    this.copy(webappDir + '/scripts/client/app/account/password/password.html', webappDir + 'scripts/client/app/account/password/password.html');
-    this.template(webappDir + '/scripts/client/app/account/password/_password.controller.js', webappDir + 'scripts/client/app/account/password/password.controller.js', this, {});
-    this.template(webappDir + '/scripts/client/app/account/password/_password.directive.js', webappDir + 'scripts/client/app/account/password/password.directive.js', this, {});
-    this.copy(webappDir + '/scripts/client/app/account/register/register.html', webappDir + 'scripts/client/app/account/register/register.html');
-    this.template(webappDir + '/scripts/client/app/account/register/_register.controller.js', webappDir + 'scripts/client/app/account/register/register.controller.js', this, {});
-    this.copy(webappDir + '/scripts/client/app/account/sessions/sessions.html', webappDir + 'scripts/client/app/account/sessions/sessions.html');
-    this.template(webappDir + '/scripts/client/app/account/sessions/_sessions.controller.js', webappDir + 'scripts/client/app/account/sessions/sessions.controller.js', this, {});
-    this.copy(webappDir + '/scripts/client/app/account/settings/settings.html', webappDir + 'scripts/client/app/account/settings/settings.html');
-    this.template(webappDir + '/scripts/client/app/account/settings/_settings.controller.js', webappDir + 'scripts/client/app/account/settings/settings.controller.js', this, {});
-    this.copy(webappDir + '/scripts/client/app/admin/audits/audits.html', webappDir + 'scripts/client/app/admin/audits/audits.html');
-    this.template(webappDir + '/scripts/client/app/admin/audits/_audits.controller.js', webappDir + 'scripts/client/app/admin/audits/audits.controller.js', this, {});
-    this.copy(webappDir + '/scripts/client/app/admin/docs/docs.html', webappDir + 'scripts/client/app/admin/docs/docs.html');
-    this.template(webappDir + '/scripts/client/app/admin/docs/_docs.controller.js', webappDir + 'scripts/client/app/admin/docs/docs.controller.js', this, {});
-    this.copy(webappDir + '/scripts/client/app/admin/health/health.html', webappDir + 'scripts/client/app/admin/health/health.html');
-    this.template(webappDir + '/scripts/client/app/admin/health/_health.controller.js', webappDir + 'scripts/client/app/admin/health/health.controller.js', this, {});
-    this.copy(webappDir + '/scripts/client/app/admin/logs/logs.html', webappDir + 'scripts/client/app/admin/logs/logs.html');
-    this.template(webappDir + '/scripts/client/app/admin/logs/_logs.controller.js', webappDir + 'scripts/client/app/admin/logs/logs.controller.js', this, {});
-    this.template(webappDir + '/scripts/client/app/admin/metrics/_metrics.html', webappDir + 'scripts/client/app/admin/metrics/metrics.html', this, {});
-    this.template(webappDir + '/scripts/client/app/admin/metrics/_metrics.controller.js', webappDir + 'scripts/client/app/admin/metrics/metrics.controller.js', this, {});
+    this.copy(webappDir + '/client/app/account/activate/activate.html', webappDir + 'client/app/account/activate/activate.html');
+    this.template(webappDir + '/client/app/account/activate/_activate.controller.js', webappDir + 'client/app/account/activate/activate.controller.js', this, {});
+    this.copy(webappDir + '/client/app/account/login/login.html', webappDir + 'client/app/account/login/login.html');
+    this.template(webappDir + '/client/app/account/login/_login.controller.js', webappDir + 'client/app/account/login/login.controller.js', this, {});
+    this.template(webappDir + '/client/app/account/logout/_logout.controller.js', webappDir + 'client/app/account/logout/logout.controller.js', this, {});
+    this.copy(webappDir + '/client/app/account/password/password.html', webappDir + 'client/app/account/password/password.html');
+    this.template(webappDir + '/client/app/account/password/_password.controller.js', webappDir + 'client/app/account/password/password.controller.js', this, {});
+    this.template(webappDir + '/client/app/account/password/_password.directive.js', webappDir + 'client/app/account/password/password.directive.js', this, {});
+    this.copy(webappDir + '/client/app/account/register/register.html', webappDir + 'client/app/account/register/register.html');
+    this.template(webappDir + '/client/app/account/register/_register.controller.js', webappDir + 'client/app/account/register/register.controller.js', this, {});
+    this.copy(webappDir + '/client/app/account/sessions/sessions.html', webappDir + 'client/app/account/sessions/sessions.html');
+    this.template(webappDir + '/client/app/account/sessions/_sessions.controller.js', webappDir + 'client/app/account/sessions/sessions.controller.js', this, {});
+    this.copy(webappDir + '/client/app/account/settings/settings.html', webappDir + 'client/app/account/settings/settings.html');
+    this.template(webappDir + '/client/app/account/settings/_settings.controller.js', webappDir + 'client/app/account/settings/settings.controller.js', this, {});
+    this.copy(webappDir + '/client/app/admin/audits/audits.html', webappDir + 'client/app/admin/audits/audits.html');
+    this.template(webappDir + '/client/app/admin/audits/_audits.controller.js', webappDir + 'client/app/admin/audits/audits.controller.js', this, {});
+    this.copy(webappDir + '/client/app/admin/docs/docs.html', webappDir + 'client/app/admin/docs/docs.html');
+    this.template(webappDir + '/client/app/admin/docs/_docs.controller.js', webappDir + 'client/app/admin/docs/docs.controller.js', this, {});
+    this.copy(webappDir + '/client/app/admin/health/health.html', webappDir + 'client/app/admin/health/health.html');
+    this.template(webappDir + '/client/app/admin/health/_health.controller.js', webappDir + 'client/app/admin/health/health.controller.js', this, {});
+    this.copy(webappDir + '/client/app/admin/logs/logs.html', webappDir + 'client/app/admin/logs/logs.html');
+    this.template(webappDir + '/client/app/admin/logs/_logs.controller.js', webappDir + 'client/app/admin/logs/logs.controller.js', this, {});
+    this.template(webappDir + '/client/app/admin/metrics/_metrics.html', webappDir + 'client/app/admin/metrics/metrics.html', this, {});
+    this.template(webappDir + '/client/app/admin/metrics/_metrics.controller.js', webappDir + 'client/app/admin/metrics/metrics.controller.js', this, {});
     if (this.websocket == 'atmosphere') {
-        this.copy(webappDir + '/scripts/client/app/admin/tracker/tracker.html', webappDir + 'scripts/client/app/admin/tracker/tracker.html');
-        this.template(webappDir + '/scripts/client/app/admin/tracker/_tracker.controller.js', webappDir + 'scripts/client/app/admin/tracker/tracker.controller.js', this, {});
+        this.copy(webappDir + '/client/app/admin/tracker/tracker.html', webappDir + 'client/app/admin/tracker/tracker.html');
+        this.template(webappDir + '/client/app/admin/tracker/_tracker.controller.js', webappDir + 'client/app/admin/tracker/tracker.controller.js', this, {});
     }
-    this.copy(webappDir + '/scripts/client/app/error/error.html', webappDir + 'scripts/client/app/error/error.html');
-    this.template(webappDir + '/scripts/client/app/error/_error.js', webappDir + 'scripts/client/app/error/error.js', this, {});
-    this.copy(webappDir + '/scripts/client/app/main/main.html', webappDir + 'scripts/client/app/main/main.html');
-    this.template(webappDir + '/scripts/client/app/main/_main.controller.js', webappDir + 'scripts/client/app/main/main.controller.js', this, {});
-    this.copy(webappDir + '/scripts/client/app/navbar/navbar.html', webappDir + 'scripts/client/app/navbar/navbar.html');
-    this.template(webappDir + '/scripts/client/app/navbar/_navbar.controller.js', webappDir + 'scripts/client/app/navbar/navbar.controller.js', this, {});
+    this.copy(webappDir + '/client/app/error/error.html', webappDir + 'client/app/error/error.html');
+    this.template(webappDir + '/client/app/error/_error.js', webappDir + 'client/app/error/error.js', this, {});
+    this.copy(webappDir + '/client/app/main/main.html', webappDir + 'client/app/main/main.html');
+    this.template(webappDir + '/client/app/main/_main.controller.js', webappDir + 'client/app/main/main.controller.js', this, {});
 
 
     // Index page
@@ -753,40 +753,40 @@ JhipsterGenerator.prototype.app = function app() {
         'bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js',
         'bower_components/angular-local-storage/dist/angular-local-storage.min.js',
 
-        'scripts/client/app.js',
-        'scripts/client/app/account/activate/activate.controller.js',
-        'scripts/client/components/auth/auth.service.js',
-        'scripts/client/components/auth/provider/auth.session.service.js',
-        'scripts/client/components/auth/services/account.service.js',
-        'scripts/client/components/auth/services/activate.service.js',
-        'scripts/client/components/auth/services/password.service.js',
-        'scripts/client/components/auth/services/register.service.js',
-        'scripts/client/components/auth/services/role.service.js',
-        'scripts/client/components/auth/services/sessions.service.js',
-        'scripts/client/components/form/form.directive.js',
-        'scripts/client/components/language/language.service.js',
-        'scripts/client/components/language/language.controller.js',
-        'scripts/client/components/admin/audits.service.js',
-        'scripts/client/components/admin/logs.service.js',
-        'scripts/client/components/admin/monitoring.service.js',
-        'scripts/client/components/navbar/navbar.directive.js',
-        'scripts/client/components/util/truncate.filter.js',
-        'scripts/client/components/util/base64.service.js',
-        'scripts/client/app/account/login/login.controller.js',
-        'scripts/client/app/account/logout/logout.controller.js',
-        'scripts/client/app/account/password/password.controller.js',
-        'scripts/client/app/account/password/password.directive.js',
-        'scripts/client/app/account/register/register.controller.js',
-        'scripts/client/app/account/sessions/sessions.controller.js',
-        'scripts/client/app/account/settings/settings.controller.js',
-        'scripts/client/app/admin/audits/audits.controller.js',
-        'scripts/client/app/admin/docs/docs.controller.js',
-        'scripts/client/app/admin/health/health.controller.js',
-        'scripts/client/app/admin/logs/logs.controller.js',
-        'scripts/client/app/admin/metrics/metrics.controller.js',
-        'scripts/client/app/error/error.js',
-        'scripts/client/app/main/main.controller.js',
-        'scripts/client/app/navbar/navbar.controller.js'
+        'client/app.js',
+        'client/app/account/activate/activate.controller.js',
+        'client/components/auth/auth.service.js',
+        'client/components/auth/provider/auth.session.service.js',
+        'client/components/auth/services/account.service.js',
+        'client/components/auth/services/activate.service.js',
+        'client/components/auth/services/password.service.js',
+        'client/components/auth/services/register.service.js',
+        'client/components/auth/services/role.service.js',
+        'client/components/auth/services/sessions.service.js',
+        'client/components/form/form.directive.js',
+        'client/components/language/language.service.js',
+        'client/components/language/language.controller.js',
+        'client/components/admin/audits.service.js',
+        'client/components/admin/logs.service.js',
+        'client/components/admin/monitoring.service.js',
+        'client/components/navbar/navbar.directive.js',
+        'client/components/util/truncate.filter.js',
+        'client/components/util/base64.service.js',
+        'client/app/account/login/login.controller.js',
+        'client/app/account/logout/logout.controller.js',
+        'client/app/account/password/password.controller.js',
+        'client/app/account/password/password.directive.js',
+        'client/app/account/register/register.controller.js',
+        'client/app/account/sessions/sessions.controller.js',
+        'client/app/account/settings/settings.controller.js',
+        'client/app/admin/audits/audits.controller.js',
+        'client/app/admin/docs/docs.controller.js',
+        'client/app/admin/health/health.controller.js',
+        'client/app/admin/logs/logs.controller.js',
+        'client/app/admin/metrics/metrics.controller.js',
+        'client/app/error/error.js',
+        'client/app/main/main.controller.js',
+        'client/app/navbar/navbar.controller.js'
         ];
 
     if (this.websocket == 'atmosphere') {
