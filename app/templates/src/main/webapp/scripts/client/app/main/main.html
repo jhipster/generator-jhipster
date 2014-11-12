@@ -7,7 +7,7 @@
             <h1 translate="main.title">Welcome, Java Hipster!</h1>
             <p class="lead" translate="main.subtitle">This is your homepage</p>
 
-            <div ng-switch="authenticated">
+            <div ng-switch="isLoggedIn()">
                 <div class="alert alert-success" ng-switch-when="true"
                      translate="main.logged.message" translate-values="{username: '{{account.login}}'}">
                     You are logged in as user "Admin".

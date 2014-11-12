@@ -1,4 +1,6 @@
-angular.module('truncate', [])
+'use strict';
+
+angular.module('<%=angularAppName%>')
     .filter('characters', function () {
         return function (input, chars, breakOnWord) {
             if (isNaN(chars)) return input;
