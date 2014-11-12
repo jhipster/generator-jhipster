@@ -71,8 +71,11 @@ public class AccountResource {
     public ResponseEntity<?> registerAccount(@RequestBody UserDTO userDTO, HttpServletRequest request,
                                              HttpServletResponse response) {<% if (javaVersion == '8') { %>
         return Optional.ofNullable(userRepository.findOne(userDTO.getLogin()))
-            .map(user -> new ResponseEntity<>(HttpStatus.NOT_MODIFIED))
+            .map(user -> new ResponseEntity<String>("login already in use", HttpStatus.BAD_REQUEST))
             .orElseGet(() -> {
+                if (userRepository.findOneByEmail(userDTO.getEmail()) != null) {
+                    return new ResponseEntity<String>("e-mail address already in use", HttpStatus.BAD_REQUEST);
+                }
                 User user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(),
                         userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail().toLowerCase(),
                         userDTO.getLangKey());
@@ -82,8 +85,11 @@ public class AccountResource {
                 return new ResponseEntity<>(HttpStatus.CREATED);});<% } else { %>
         User user = userRepository.findOne(userDTO.getLogin());
         if (user != null) {
-            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+            return new ResponseEntity<String>("login already in use", HttpStatus.BAD_REQUEST);
         } else {
+            if (userRepository.findOneByEmail(userDTO.getEmail()) != null) {
+                return new ResponseEntity<String>("e-mail address already in use", HttpStatus.BAD_REQUEST);
+            }
             user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(), userDTO.getFirstName(),
                     userDTO.getLastName(), userDTO.getEmail().toLowerCase(), userDTO.getLangKey());
             final Locale locale = Locale.forLanguageTag(user.getLangKey());
@@ -171,8 +177,13 @@ public class AccountResource {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public void saveAccount(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> saveAccount(@RequestBody UserDTO userDTO) {
+        User userHavingThisEmail = userRepository.findOneByEmail(userDTO.getEmail());
+        if (userHavingThisEmail != null && !userHavingThisEmail.getLogin().equals(SecurityUtils.getCurrentLogin())) {
+            return new ResponseEntity<String>("e-mail address already in use", HttpStatus.BAD_REQUEST);
+        }
         userService.updateUserInformation(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**

@@ -104,7 +104,8 @@
             "success": "<strong>Cadstro salvo com sucesso!</strong> Favor verificar seu e-mail para confirmar a conta.",
             "error": {
                 "fail": "<strong>Erro ao realizar o cadastro!</strong> Favor tentar novamente mais tarde.",
-                "userexists": "<strong>Usuário já registrado!</strong> Favor escolher outro."
+                "userexists": "<strong>Usuário já registrado!</strong> Favor escolher outro.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
             }
         }
     },
@@ -132,7 +133,10 @@
             "button": "Salvar"
         },
         "messages": {
-            "error": "<strong>Ocorreu um erro!</strong> As configurações não foram salvas.",
+            "error": {
+                "fail": "<strong>Ocorreu um erro!</strong> As configurações não foram salvas.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+            },
             "success": "<strong>Configurações salvas com sucesso!</strong>",
             "validate": {
                 "firstname": {

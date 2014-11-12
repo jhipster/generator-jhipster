@@ -104,7 +104,8 @@
             "success": "<strong>註冊成功!</strong> 請檢查您的電子郵件.",
             "error": {
                 "fail": "<strong>註冊失敗!</strong> 請稍後再試.",
-                "userexists": "<strong>帳號已經被註冊!</strong> 請選擇其他帳號."
+                "userexists": "<strong>帳號已經被註冊!</strong> 請選擇其他帳號.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
             }
         }
     },
@@ -132,7 +133,10 @@
             "button": "儲存"
         },
         "messages": {
-            "error": "<strong>發生錯誤!</strong> 設定無法被儲存.",
+            "error": {
+                "fail": "<strong>發生錯誤!</strong> 設定無法被儲存.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+            },
             "success": "<strong>設定儲存成功!</strong>",
             "validate": {
                 "firstname": {

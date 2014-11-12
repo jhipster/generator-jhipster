@@ -104,7 +104,8 @@
             "success": "<strong>¡El registro de la cuenta ha sido guardado!</strong> Por favor revisa su correo electrónico para confirmar.",
             "error": {
                 "fail": "<strong>¡El registro de la cuenta ha fallado!</strong> Por favor intente de nuevo mas tarde.",
-                "userexists": "<strong>¡El nombre del usuario ya esta registrada!</strong> Por favor escoja otro usuario."
+                "userexists": "<strong>¡El nombre del usuario ya esta registrada!</strong> Por favor escoja otro usuario.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
             }
         }
     },
@@ -132,7 +133,10 @@
             "button": "Guardar"
         },
         "messages": {
-            "error": "<strong>¡Ha ocurrido un error!</strong> Ajustes no pudieron guardarse.",
+            "error": {
+                "fail": "<strong>¡Ha ocurrido un error!</strong> Ajustes no pudieron guardarse.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+            },
             "success": "<strong>¡Ajustes guardados!</strong>",
             "validate": {
                 "firstname": {

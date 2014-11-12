@@ -104,7 +104,8 @@
             "success": "<strong>Registre guardat!</strong> Si us plau, consulti el seu compte de correu electrònic per confirmar.",
             "error": {
                 "fail": "<strong>Error en registre!</strong> Si us plau, torni-ho a intentar més tard.",
-                "userexists": "<strong>El nom d'usuari ja existeix!</strong> Si us plau, escolleixi un altre."
+                "userexists": "<strong>El nom d'usuari ja existeix!</strong> Si us plau, escolleixi un altre.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
             }
         }
     },
@@ -132,7 +133,10 @@
             "button": "Guardar"
         },
         "messages": {
-            "error": "<strong>S'ha produït un error!</strong> Els seus ajustos no s'han pogut guardar.",
+            "error": {
+                "fail": "<strong>S'ha produït un error!</strong> Els seus ajustos no s'han pogut guardar.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+            },
             "success": "<strong>Ajustos guardats!</strong>",
             "validate": {
                 "firstname": {

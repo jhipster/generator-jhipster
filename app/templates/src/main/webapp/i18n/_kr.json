@@ -104,7 +104,8 @@
             "success": "<strong>회원가입 내용이 저장되었습니다!</strong> 가입을 완료하기 위해 이메일을 확인해주세요.",
             "error": {
                 "fail": "<strong>회원가입이 실패했습니다!</strong> 다시 시도해 주세요.",
-                "userexists": "<strong>로그인 아이디가 이미 존재합니다!</strong> 다른 아이디로 다시 시도해 주세요."
+                "userexists": "<strong>로그인 아이디가 이미 존재합니다!</strong> 다른 아이디로 다시 시도해 주세요.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
             }
         }
     },
@@ -132,7 +133,10 @@
             "button": "저장"
         },
         "messages": {
-            "error": "<strong>에러가 발생했습니다!</strong> 사용자 설정은 저장되지 않습니다.",
+            "error": {
+                "fail": "<strong>에러가 발생했습니다!</strong> 사용자 설정은 저장되지 않습니다.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+            },
             "success": "<strong>사용자 설정 저장 완료!</strong>",
             "validate": {
                 "firstname": {

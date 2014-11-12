@@ -104,7 +104,8 @@
             "success": "<strong>Registrierung gespeichert!</strong> Bitte überprüfen Sie ihre E-Mails für die Bestätigung.",
             "error": {
                 "fail": "<strong>Registrierung fehlgeschlagen!</strong> Bitte versuchen Sie es später nochmal.",
-                "userexists": "<strong>Loginname bereits vergeben!</strong> Bitte wählen Sie einen anderen aus."
+                "userexists": "<strong>Loginname bereits vergeben!</strong> Bitte wählen Sie einen anderen aus.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
             }
         }
     },
@@ -132,7 +133,10 @@
             "button": "Speichern"
         },
         "messages": {
-            "error": "<strong>Es ist ein Fehler aufgetreten!</strong> Die Einstellungen konnten nicht gespeichert werden.",
+            "error": {
+                "fail": "<strong>Es ist ein Fehler aufgetreten!</strong> Die Einstellungen konnten nicht gespeichert werden.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+            },
             "success": "<strong>Einstellungen wurden gespeichert!</strong>",
             "validate": {
                 "firstname": {

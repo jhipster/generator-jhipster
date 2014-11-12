@@ -104,7 +104,8 @@
             "success": "<strong>Registration saved!</strong> Please check your email for confirmation.",
             "error": {
                 "fail": "<strong>Registration failed!</strong> Please try again later.",
-                "userexists": "<strong>Login name already registered!</strong> Please choose another one."
+                "userexists": "<strong>Login name already registered!</strong> Please choose another one.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
             }
         }
     },
@@ -132,7 +133,10 @@
             "button": "Zapisz"
         },
         "messages": {
-            "error": "<strong>Wystąpi błąd!</strong> Ustawienia nie zostały zapisane.",
+            "error": {
+                "fail": "<strong>Wystąpi błąd!</strong> Ustawienia nie zostały zapisane.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+            },
             "success": "<strong>Ustawienia zapisane!</strong>",
             "validate": {
                 "firstname": {

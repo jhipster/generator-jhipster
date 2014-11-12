@@ -46,6 +46,9 @@
         $scope.settingsAccount = Account.get();
 
         $scope.save = function () {
+            $scope.success = null;
+            $scope.error = null;
+            $scope.errorEmailExists = null;
             Account.save($scope.settingsAccount,
                 function (value, responseHeaders) {
                     $scope.error = null;
@@ -53,8 +56,11 @@
                     $scope.settingsAccount = Account.get();
                 },
                 function (httpResponse) {
-                    $scope.success = null;
-                    $scope.error = "ERROR";
+                    if (httpResponse.status === 400 && httpResponse.data === "e-mail address already in use") {
+                        $scope.errorEmailExists = "ERROR";
+                    } else {
+                        $scope.error = "ERROR";
+                    }
                 });
         };
     });
@@ -70,21 +76,23 @@
             } else {
                 $scope.registerAccount.langKey = $translate.use();
                 $scope.doNotMatch = null;
+                $scope.success = null;
+                $scope.error = null;
+                $scope.errorUserExists = null;
+                $scope.errorEmailExists = null;
                 Register.save($scope.registerAccount,
                     function (value, responseHeaders) {
-                        $scope.error = null;
-                        $scope.errorUserExists = null;
                         $scope.success = 'OK';
                     },
                     function (httpResponse) {
-                        $scope.success = null;
-                        if (httpResponse.status === 304 &&
-                                httpResponse.data.error && httpResponse.data.error === "Not Modified") {
+                        if (httpResponse.status === 400 && httpResponse.data === "login already in use") {
                             $scope.error = null;
                             $scope.errorUserExists = "ERROR";
+                        } else if (httpResponse.status === 400 && httpResponse.data === "e-mail address already in use") {
+                            $scope.error = null;
+                            $scope.errorEmailExists = "ERROR";
                         } else {
                             $scope.error = "ERROR";
-                            $scope.errorUserExists = null;
                         }
                     });
             }

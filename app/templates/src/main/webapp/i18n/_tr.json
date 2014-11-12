@@ -104,7 +104,8 @@
             "success": "<strong>Kayıt işlemi yapıldı!</strong> Lütfen onay için e-posta'nızı kontrol edin.",
             "error": {
                 "fail": "<strong>Kayıt işlemi başarısız oldu!</strong> Lütfen daha sonra tekrar deneyin.",
-                "userexists": "<strong>Girdiğiniz kullanıcı sistemde mevcut!</strong> Lütfen başka bir kullanıcı deneyin."
+                "userexists": "<strong>Girdiğiniz kullanıcı sistemde mevcut!</strong> Lütfen başka bir kullanıcı deneyin.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
             }
         }
     },
@@ -132,7 +133,10 @@
             "button": "Kaydet"
         },
         "messages": {
-            "error": "<strong>Bir hata oluştu!</strong> Ayarlar kaydeilemedi.",
+            "error": {
+                "fail": "<strong>Bir hata oluştu!</strong> Ayarlar kaydeilemedi.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+            },
             "success": "<strong>Ayarlar kaydedildi!</strong>",
             "validate": {
                 "firstname": {

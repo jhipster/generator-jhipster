@@ -104,7 +104,8 @@
             "success": "<strong>Användarnamn sparat!</strong> Kontrollera din e-post för konfirmation.",
             "error": {
                 "fail": "<strong>Registreringen misslyckades!</strong> Prova gärna igen senare.",
-                "userexists": "<strong>Användarnamnet finns redan!</strong> Prova gärna ett annat användarnamn."
+                "userexists": "<strong>Användarnamnet finns redan!</strong> Prova gärna ett annat användarnamn.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
             }
         }
     },
@@ -132,7 +133,10 @@
             "button": "Save"
         },
         "messages": {
-            "error": "<strong>Det blev fel!</strong> Inställningar kunde inte sparas.",
+            "error": {
+                "fail": "<strong>Det blev fel!</strong> Inställningar kunde inte sparas.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+            },
             "success": "<strong>Inställningar sparade!</strong>",
             "validate": {
                 "firstname": {
