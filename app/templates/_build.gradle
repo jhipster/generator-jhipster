@@ -5,7 +5,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.1.8.RELEASE')
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.1.9.RELEASE')
         classpath('com.moowork.gradle:gradle-node-plugin:0.4')
         classpath('com.moowork.gradle:gradle-grunt-plugin:0.5')
         classpath('be.filipblondeel.gradle:gradle-gulp-plugin:0.1')
