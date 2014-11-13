@@ -14,8 +14,10 @@ import javax.inject.Inject;<% if (javaVersion == '7') { %>
 import javax.servlet.http.HttpServletResponse;<% } %>
 import java.util.List;<% if (javaVersion == '8') { %>
 import java.util.Optional;<% } %><% if (primaryKeyField.fieldType == 'LocalDate') { %>
-import org.joda.time.LocalDate;<% } %><% if (primaryKeyField.fieldType == 'DateTime') { %>
-import org.joda.time.DateTime;<% } %><% if (primaryKeyField.fieldType == 'BigDecimal') { %>
+import org.joda.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;<% } %><% if (primaryKeyField.fieldType == 'DateTime') { %>
+import org.joda.time.DateTime;
+import org.springframework.format.annotation.DateTimeFormat;<% } %><% if (primaryKeyField.fieldType == 'BigDecimal') { %>
 import java.math.BigDecimal;<% } %>
 
 /**
@@ -61,7 +63,7 @@ public class <%= entityClass %>Resource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<<%= entityClass %>> get(@PathVariable <% if (databaseType == 'sql') { %><%= primaryKeyField.fieldType %><% } %><% if (databaseType == 'nosql') { %>String<% } %> <%= primaryKeyField.fieldName %><% if (javaVersion == '7') { %>, HttpServletResponse response<% } %>) {
+    public ResponseEntity<<%= entityClass %>> get(@PathVariable <% if (databaseType == 'sql') { %><% if (primaryKeyField.fieldType == 'LocalDate') { %>@DateTimeFormat(pattern="yyyy-MM-dd")<% } %><% if (primaryKeyField.fieldType == 'DateTime') { %>@DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")<% } %><%= primaryKeyField.fieldType %><% } %><% if (databaseType == 'nosql') { %>String<% } %> <%= primaryKeyField.fieldName %><% if (javaVersion == '7') { %>, HttpServletResponse response<% } %>) {
         log.debug("REST request to get <%= entityClass %> : {}", <%= primaryKeyField.fieldName %>);<% if (javaVersion == '8') { %>
         return Optional.ofNullable(<%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findOneWithEagerRelationships<% } else { %>findOne<% } %>(<%= primaryKeyField.fieldName %>))
             .map(<%= entityInstance %> -> new ResponseEntity<>(
@@ -82,7 +84,7 @@ public class <%= entityClass %>Resource {
             method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public void delete(@PathVariable <% if (databaseType == 'sql') { %><%= primaryKeyField.fieldType %><% } %><% if (databaseType == 'nosql') { %>String<% } %> <%= primaryKeyField.fieldName %>) {
+    public void delete(@PathVariable <% if (databaseType == 'sql') { %><% if (primaryKeyField.fieldType == 'LocalDate') { %>@DateTimeFormat(pattern="yyyy-MM-dd")<% } %><% if (primaryKeyField.fieldType == 'DateTime') { %>@DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")<% } %><%= primaryKeyField.fieldType %><% } %><% if (databaseType == 'nosql') { %>String<% } %> <%= primaryKeyField.fieldName %>) {
         log.debug("REST request to delete <%= entityClass %> : {}", <%= primaryKeyField.fieldName %>);
         <%= entityInstance %>Repository.delete(<%= primaryKeyField.fieldName %>);
     }

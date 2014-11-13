@@ -18,12 +18,12 @@
                                 ng-click="clear()">&times;</button>
                         <h4 class="modal-title" id="my<%= entityClass %>Label">Create or edit a <%= entityClass %></h4>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body"><% if (pkManagedByJHipster == true) { %>
                         <div class="form-group">
                             <label>ID</label>
                             <input type="text" class="form-control" name="id"
                                    ng-model="<%=entityInstance %>.id" readonly>
-                        </div>
+                        </div><% } %>
 <% for (fieldId in fields) {
     var fieldInputType = 'text';
     if (fields[fieldId].fieldType == 'Integer' || fields[fieldId].fieldType == 'Long') {
@@ -74,8 +74,8 @@
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
-                <tr>
-                    <th>ID</th><% for (fieldId in fields) { %>
+                <tr><% if (pkManagedByJHipster == true) { %>
+                    <th>ID</th><% } %><% for (fieldId in fields) { %>
                     <th><%=fields[fieldId].fieldNameCapitalized%></th><% } %><% for (relationshipId in relationships) {
                         if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
                     <th><%=relationships[relationshipId].otherEntityName%></th><% } } %>
@@ -83,19 +83,19 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="<%=entityInstance %> in <%=entityInstance %>s">
-                    <td>{{<%=entityInstance %>.id}}</td><% for (fieldId in fields) { %>
+                <tr ng-repeat="<%=entityInstance %> in <%=entityInstance %>s"><% if (pkManagedByJHipster == true) { %>
+                    <td>{{<%=entityInstance %>.id}}</td><% } %><% for (fieldId in fields) { %>
                     <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%>}}</td><% } %><% for (relationshipId in relationships) {
                         if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
                     <td>{{<%=entityInstance %>.<%=relationships[relationshipId].otherEntityName%>.<%=relationships[relationshipId].otherEntityField%>}}</td><% } } %>
                     <td>
                         <button type="submit"
-                                ng-click="update(<%=entityInstance %>.id)"
+                                ng-click="update(<%=entityInstance %>.<%=primaryKeyField.fieldName %>)"
                                 class="btn btn-default">
                             <span class="glyphicon glyphicon-pencil"></span> Edit
                         </button>
                         <button type="submit"
-                                ng-click="delete(<%=entityInstance %>.id)"
+                                ng-click="delete(<%=entityInstance %>.<%=primaryKeyField.fieldName %>)"
                                 class="btn btn-danger">
                             <span class="glyphicon glyphicon-remove-circle"></span> Delete
                         </button>
