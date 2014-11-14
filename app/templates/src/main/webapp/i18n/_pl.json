@@ -283,6 +283,7 @@
         "stacktrace": "Stos wywołań",
         "indicator": {
             "db": "Baza danych",
+            "diskSpace": "Disk space",
             "mail": "Email",
             "mongo": "Mongo DB"
         },

@@ -283,6 +283,7 @@
         "stacktrace": "Traça d'error",
         "indicator": {
             "db": "Base de dades",
+            "diskSpace": "Disk space",
             "mail": "Compte de correu electrònic",
             "mongo": "Mongo DB"
         },

@@ -284,6 +284,7 @@
         "stacktrace": "Stacktrace",
         "indicator": {
             "db": "Datenbank",
+            "diskSpace": "Disk space",
             "mail": "Email",
             "mongo": "Mongo"
         },

@@ -283,6 +283,7 @@
         "stacktrace": "Stacktrace",
         "indicator": {
             "db": "Database",
+            "diskSpace": "Disk space",
             "mail": "Email",
             "mongo": "Mongo DB"
         },

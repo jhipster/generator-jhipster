@@ -282,8 +282,9 @@
         "refresh.button": "Rafraichir",
         "indicator": {
             "db": "Base de données",
+            "diskSpace": "Espace disque",
             "mail": "Email",
-            "mongo": "Mongo DB"
+            "mongo": "MongoDB"
         },
         "stacktrace": "Stacktrace",
         "table": {

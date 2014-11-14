@@ -282,6 +282,7 @@
         "refresh.button": "새로고침",
         "indicator": {
             "db": "데이터베이스",
+            "diskSpace": "Disk space",
             "mail": "이메일",
             "mongo": "Mongo DB"
         },
