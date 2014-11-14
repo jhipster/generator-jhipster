@@ -327,9 +327,9 @@ module.exports = function (grunt) {
             },
             styles: {
                 expand: true,
-                cwd: 'src/main/webapp',
-                dest: '.tmp',
-                src: '**/*.css'
+                cwd: 'src/main/webapp/styles',
+                dest: '.tmp/styles/',
+                src: '{,*/}*.css'
             },
             generateHerokuDirectory: {
                     expand: true,
