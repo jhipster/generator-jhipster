@@ -431,7 +431,7 @@ module.exports = function (grunt) {
                     branch: 'master'
                 }
             }
-        },
+        }
     });
 
     grunt.registerTask('server', function (target) {
