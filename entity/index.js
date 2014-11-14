@@ -5,7 +5,8 @@ var util = require('util'),
         chalk = require('chalk'),
         _s = require('underscore.string'),
         shelljs = require('shelljs'),
-        scriptBase = require('../script-base');
+        scriptBase = require('../script-base'),
+        entityUtils = require('./util.js');
 
 var EntityGenerator = module.exports = function EntityGenerator(args, options, config) {
     yeoman.generators.NamedBase.apply(this, arguments);
@@ -20,6 +21,8 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
 
     // Specific Entity sub-generator variables
+    this.pkManagedByJHipster = false;
+    this.primaryKeyDefined = false;     // Only 1 Primary Key is allowed
     this.fieldId = 0;
     this.fields = [];
     this.fieldsContainLocalDate = false;
@@ -30,6 +33,12 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.fieldsContainOneToMany = false;
     this.relationshipId = 0;
     this.relationships = [];
+    this.primaryKeyField = {fieldId: 0,
+        fieldName: "id",
+        fieldType: "Long",
+        fieldNameCapitalized: _s.capitalize("id"),
+        fieldNameUnderscored: _s.underscored("id"),
+        isPk: true};
 };
 
 var fieldNamesUnderscored = ['id'];
@@ -37,7 +46,29 @@ var fieldNamesUnderscored = ['id'];
 util.inherits(EntityGenerator, yeoman.generators.Base);
 util.inherits(EntityGenerator, scriptBase);
 
+EntityGenerator.prototype.askForCompositePrimaryKey = function askForCompositePrimaryKey() {
+    var cb = this.async();
+    var prompts = [
+        {
+            type: 'confirm',
+            name: 'jHipsterManagePK',
+            message: 'Do you want to let JHipster manage the primary key of your entity?',
+            default: true
+        }
+    ];
+    this.prompt(prompts, function (props) {
+        if (props.jHipsterManagePK == true) {
+            this.pkManagedByJHipster = true;
+        } else {
+            this.pkManagedByJHipster = false;
+        }
+        cb();
+    }.bind(this));
+};
+
 EntityGenerator.prototype.askForFields = function askForFields() {
+    var pkManagedByJHipster = this.pkManagedByJHipster;
+    var primaryKeyDefined = this.primaryKeyDefined;
     var cb = this.async();
     this.fieldId++;
     console.log(chalk.green('Generating field #' + this.fieldId));
@@ -98,15 +129,28 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 }
             ],
             default: 0
+        },
+        {
+            when: function (response) {
+                return response.fieldAdd == true && pkManagedByJHipster == false && primaryKeyDefined == false;
+            },
+            type: 'confirm',
+            name: 'primaryKey',
+            message: 'Is this field your primary key?',
+            default: false
         }
     ];
     this.prompt(prompts, function (props) {
         if (props.fieldAdd) {
+            if (props.primaryKey) {
+                this.primaryKeyDefined = true;
+            }
             var field = {fieldId: this.fieldId,
                 fieldName: props.fieldName,
                 fieldType: props.fieldType,
                 fieldNameCapitalized: _s.capitalize(props.fieldName),
-                fieldNameUnderscored: _s.underscored(props.fieldName)}
+                fieldNameUnderscored: _s.underscored(props.fieldName),
+                isPk: props.primaryKey}
 
             fieldNamesUnderscored.push(_s.underscored(props.fieldName));
             this.fields.push(field);
@@ -124,11 +168,20 @@ EntityGenerator.prototype.askForFields = function askForFields() {
         }
         console.log(chalk.red('===========' + _s.capitalize(this.name) + '=============='));
         for (var id in this.fields) {
-            console.log(chalk.red(this.fields[id].fieldName + ' (' + this.fields[id].fieldType + ')'));
+            var pk = "";
+            if (this.fields[id].isPk == true) {
+                pk = "PK";
+            }
+            console.log(chalk.red(this.fields[id].fieldName + ' (' + this.fields[id].fieldType + ') ' + pk));
         }
         if (props.fieldAdd) {
             this.askForFields();
         } else {
+            if (this.pkManagedByJHipster == false && this.primaryKeyDefined == false) {
+                // No primary key is defined : Error
+                console.log(chalk.red('ERROR : No primary key is defined !!'));
+                return;
+            }
             cb();
         }
     }.bind(this));
@@ -271,6 +324,12 @@ EntityGenerator.prototype.files = function files() {
 
     this.entityClass = _s.capitalize(this.name);
     this.entityInstance = this.name.charAt(0).toLowerCase() + this.name.slice(1);
+    // Resolve the primary key to use
+    if (this.pkManagedByJHipster == false) {
+        // Take the pk defined by the user
+        this.primaryKeyField = entityUtils.getPrimaryKeyField(this.fields);
+    }
+
     var resourceDir = 'src/main/resources/';
 
     this.template('src/main/java/package/domain/_Entity.java',

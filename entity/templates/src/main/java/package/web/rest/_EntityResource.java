@@ -13,7 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;<% if (javaVersion == '7') { %>
 import javax.servlet.http.HttpServletResponse;<% } %>
 import java.util.List;<% if (javaVersion == '8') { %>
-import java.util.Optional;<% } %>
+import java.util.Optional;<% } %><% if (primaryKeyField.fieldType == 'LocalDate') { %>
+import org.joda.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;<% } %><% if (primaryKeyField.fieldType == 'DateTime') { %>
+import org.joda.time.DateTime;
+import org.springframework.format.annotation.DateTimeFormat;<% } %><% if (primaryKeyField.fieldType == 'BigDecimal') { %>
+import java.math.BigDecimal;<% } %>
 
 /**
  * REST controller for managing <%= entityClass %>.
@@ -52,20 +57,20 @@ public class <%= entityClass %>Resource {
     }
 
     /**
-     * GET  /rest/<%= entityInstance %>s/:id -> get the "id" <%= entityInstance %>.
+     * GET  /rest/<%= entityInstance %>s/:<%= primaryKeyField.fieldName %> -> get the "<%= primaryKeyField.fieldName %>" <%= entityInstance %>.
      */
-    @RequestMapping(value = "/rest/<%= entityInstance %>s/{id}",
+    @RequestMapping(value = "/rest/<%= entityInstance %>s/{<%= primaryKeyField.fieldName %>}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<<%= entityClass %>> get(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> id<% if (javaVersion == '7') { %>, HttpServletResponse response<% } %>) {
-        log.debug("REST request to get <%= entityClass %> : {}", id);<% if (javaVersion == '8') { %>
-        return Optional.ofNullable(<%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findOneWithEagerRelationships<% } else { %>findOne<% } %>(id))
+    public ResponseEntity<<%= entityClass %>> get(@PathVariable <% if (databaseType == 'sql') { %><% if (primaryKeyField.fieldType == 'LocalDate') { %>@DateTimeFormat(pattern="yyyy-MM-dd")<% } %><% if (primaryKeyField.fieldType == 'DateTime') { %>@DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")<% } %><%= primaryKeyField.fieldType %><% } %><% if (databaseType == 'nosql') { %>String<% } %> <%= primaryKeyField.fieldName %><% if (javaVersion == '7') { %>, HttpServletResponse response<% } %>) {
+        log.debug("REST request to get <%= entityClass %> : {}", <%= primaryKeyField.fieldName %>);<% if (javaVersion == '8') { %>
+        return Optional.ofNullable(<%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findOneWithEagerRelationships<% } else { %>findOne<% } %>(<%= primaryKeyField.fieldName %>))
             .map(<%= entityInstance %> -> new ResponseEntity<>(
                 <%= entityInstance %>,
                 HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));<% } else { %>
-        <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findOneWithEagerRelationships<% } else { %>findOne<% } %>(id);
+        <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findOneWithEagerRelationships<% } else { %>findOne<% } %>(<%= primaryKeyField.fieldName %>);
         if (<%= entityInstance %> == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -73,14 +78,14 @@ public class <%= entityClass %>Resource {
     }
 
     /**
-     * DELETE  /rest/<%= entityInstance %>s/:id -> delete the "id" <%= entityInstance %>.
+     * DELETE  /rest/<%= entityInstance %>s/:<%= primaryKeyField.fieldName %> -> delete the "<%= primaryKeyField.fieldName %>" <%= entityInstance %>.
      */
-    @RequestMapping(value = "/rest/<%= entityInstance %>s/{id}",
+    @RequestMapping(value = "/rest/<%= entityInstance %>s/{<%= primaryKeyField.fieldName %>}",
             method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public void delete(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> id) {
-        log.debug("REST request to delete <%= entityClass %> : {}", id);
-        <%= entityInstance %>Repository.delete(id);
+    public void delete(@PathVariable <% if (databaseType == 'sql') { %><% if (primaryKeyField.fieldType == 'LocalDate') { %>@DateTimeFormat(pattern="yyyy-MM-dd")<% } %><% if (primaryKeyField.fieldType == 'DateTime') { %>@DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")<% } %><%= primaryKeyField.fieldType %><% } %><% if (databaseType == 'nosql') { %>String<% } %> <%= primaryKeyField.fieldName %>) {
+        log.debug("REST request to delete <%= entityClass %> : {}", <%= primaryKeyField.fieldName %>);
+        <%= entityInstance %>Repository.delete(<%= primaryKeyField.fieldName %>);
     }
 }

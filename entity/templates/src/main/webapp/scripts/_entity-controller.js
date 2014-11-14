@@ -14,19 +14,19 @@
                 });
         };
 
-        $scope.update = function (id) {
-            $scope.<%= entityInstance %> = <%= entityClass %>.get({id: id});
+        $scope.update = function (<%=primaryKeyField.fieldName %>) {
+            $scope.<%= entityInstance %> = <%= entityClass %>.get({<%=primaryKeyField.fieldName %>: <%=primaryKeyField.fieldName %>});
             $('#save<%= entityClass %>Modal').modal('show');
         };
 
-        $scope.delete = function (id) {
-            <%= entityClass %>.delete({id: id},
+        $scope.delete = function (<%=primaryKeyField.fieldName %>) {
+            <%= entityClass %>.delete({<%=primaryKeyField.fieldName %>: <%=primaryKeyField.fieldName %>},
                 function () {
                     $scope.<%= entityInstance %>s = <%= entityClass %>.query();
                 });
         };
 
         $scope.clear = function () {
-            $scope.<%= entityInstance %> = {<% for (fieldId in fields) { %><%= fields[fieldId].fieldName %>: null, <% } %>id: null};
+            $scope.<%= entityInstance %> = {<% for (fieldId in fields) { %><%= fields[fieldId].fieldName %>: null, <% } %><% if (pkManagedByJHipster == true) { %>id: null<% } %>};
         };
     });
