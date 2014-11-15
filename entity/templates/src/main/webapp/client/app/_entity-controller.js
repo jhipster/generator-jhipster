@@ -1,9 +1,17 @@
 'use strict';
 
-<%= angularAppName %>.controller('<%= entityClass %>Controller', function ($scope, resolved<%= entityClass %>, <%= entityClass %><% for (relationshipId in relationships) { %>, resolved<%= relationships[relationshipId].otherEntityNameCapitalized %><% } %>) {
-
-        $scope.<%= entityInstance %>s = resolved<%= entityClass %>;<% for (relationshipId in relationships) { %>
-        $scope.<%= relationships[relationshipId].otherEntityName %>s = resolved<%= relationships[relationshipId].otherEntityNameCapitalized %>;<% } %>
+angular.module('<%=angularAppName%>')
+    .config(function ($routeProvider) {
+        $routeProvider
+            .when('/<%= entityInstance %>', {
+                templateUrl: 'client/app/entities/<%= entityInstance %>/<%= entityInstance %>s.html',
+                controller: '<%= entityClass %>Controller',
+                authenticate: true
+            })
+    })
+    .controller('<%= entityClass %>Controller', function ($scope, <%= entityClass %><% for (relationshipId in relationships) { %>, <%= relationships[relationshipId].otherEntityNameCapitalized %><% } %>) {
+        $scope.<%= entityInstance %>s = <%= entityClass %>.query();<% for (relationshipId in relationships) { %>
+        $scope.<%= relationships[relationshipId].otherEntityName %>s = <%= relationships[relationshipId].otherEntityNameCapitalized %>.query();<% } %>
 
         $scope.create = function () {
             <%= entityClass %>.save($scope.<%= entityInstance %>,

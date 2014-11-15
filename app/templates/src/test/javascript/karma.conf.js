@@ -23,8 +23,9 @@ module.exports = function (config) {
             'src/main/webapp/bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
             'src/main/webapp/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
             'src/main/webapp/bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js',
-            'src/main/webapp/scripts/*.js',
-            'src/main/webapp/scripts/**/*.js',
+            'src/main/webapp/bower_components/angular-local-storage/dist/angular-local-storage.min.js',
+            'src/main/webapp/client/app.js',
+            'src/main/webapp/client/**/*.js',
             'src/test/javascript/**/!(karma.conf).js'
         ],
 

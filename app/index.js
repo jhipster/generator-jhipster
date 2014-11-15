@@ -728,8 +728,12 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.websocket == 'atmosphere') {
         this.copy('src/test/javascript/mock/atmosphere.mock.js', testJsDir + 'mock/atmosphere.mock.js');
     }
-    this.template('src/test/javascript/spec/_controllersSpec.js', testJsDir + 'spec/controllersSpec.js', this, {});
-    this.template('src/test/javascript/spec/_servicesSpec.js', testJsDir + 'spec/servicesSpec.js', this, {});
+    this.template('src/test/javascript/spec/app/account/login/_loginControllerSpec.js', testJsDir + 'spec/app/account/login/loginControllerSpec.js', this, {});
+    this.template('src/test/javascript/spec/app/account/password/_passwordControllerSpec.js', testJsDir + 'spec/app/account/password/passwordControllerSpec.js', this, {});
+    this.template('src/test/javascript/spec/app/account/password/_passwordDirectiveSpec.js', testJsDir + 'spec/app/account/password/passwordDirectiveSpec.js', this, {});
+    this.template('src/test/javascript/spec/app/account/sessions/_sessionsControllerSpec.js', testJsDir + 'spec/app/account/sessions/sessionsControllerSpec.js', this, {});
+    this.template('src/test/javascript/spec/app/account/settings/_settingsControllerSpec.js', testJsDir + 'spec/app/account/settings/settingsControllerSpec.js', this, {});
+    this.template('src/test/javascript/spec/components/auth/_authServiceSpec.js', testJsDir + 'spec/components/auth/authServiceSpec.js', this, {});
 
     // CSS
     this.copy(webappDir + 'styles/documentation.css', webappDir + 'styles/documentation.css');
@@ -770,6 +774,7 @@ JhipsterGenerator.prototype.app = function app() {
         'client/components/admin/logs.service.js',
         'client/components/admin/monitoring.service.js',
         'client/components/navbar/navbar.directive.js',
+        'client/components/navbar/navbar.controller.js'
         'client/components/util/truncate.filter.js',
         'client/components/util/base64.service.js',
         'client/app/account/login/login.controller.js',
@@ -785,8 +790,7 @@ JhipsterGenerator.prototype.app = function app() {
         'client/app/admin/logs/logs.controller.js',
         'client/app/admin/metrics/metrics.controller.js',
         'client/app/error/error.js',
-        'client/app/main/main.controller.js',
-        'client/app/navbar/navbar.controller.js'
+        'client/app/main/main.controller.js'
         ];
 
     if (this.websocket == 'atmosphere') {
