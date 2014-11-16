@@ -21,7 +21,7 @@
     </prerequisites>
 
     <properties>
-        <HikariCP.version>2.2.4</HikariCP.version>
+        <HikariCP.version>2.2.5</HikariCP.version>
         <assertj-core.version>1.6.1</assertj-core.version><% if (websocket == 'atmosphere') { %>
         <atmosphere-spring.version>2.2.0</atmosphere-spring.version><% } %>
         <awaitility.version>1.4.0</awaitility.version>
