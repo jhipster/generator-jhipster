@@ -2,7 +2,8 @@ server:
     port: 8080
 
 spring:
-    profiles: dev<% if (databaseType == 'nosql') { %>
+    profiles:
+        active: dev<% if (databaseType == 'nosql') { %>
     data:
         mongodb:
             host: localhost
