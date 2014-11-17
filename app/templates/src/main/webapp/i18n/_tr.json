@@ -283,6 +283,7 @@
         "stacktrace": "Stacktrace",
         "indicator": {
             "db": "Veritabanı",
+            "diskSpace": "Disk space",
             "mail": "E-posta",
             "mongo": "Mongo DB"
         },

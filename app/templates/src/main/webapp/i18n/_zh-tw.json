@@ -283,6 +283,7 @@
         "stacktrace": "堆疊追蹤",
         "indicator": {
             "db": "資料庫",
+            "diskSpace": "Disk space",
             "mail": "電子郵件",
             "mongo": "MongoDB"
         },

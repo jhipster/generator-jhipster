@@ -106,7 +106,7 @@
 <div class="well well-lg" ng-show="updatingMetrics" translate="metrics.updating">Updating...</div>
 
 <h3 translate="metrics.jvm.http.title">HTTP requests (events per second)</h3>
-<p>{{'metrics.jvm.http.active' | translate}} <b>{{metrics.counters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.activeRequests'].count | number:0}}</b> - {{'metrics.jvm.http.total' | translate}} <b>{{metrics.timers['com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests'].count | number:0}}</b></p>
+<p>{{'metrics.jvm.http.active' | translate}} <b>{{metrics.counters['com.codahale.metrics.servlet.InstrumentedFilter.activeRequests'].count | number:0}}</b> - {{'metrics.jvm.http.total' | translate}} <b>{{metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count | number:0}}</b></p>
 <div class="table-responsive">
     <table class="table table-striped">
         <thead>
@@ -125,22 +125,22 @@
             <td>
                 <div class="progress progress-striped">
                     <div class="progress-bar progress-bar-success" role="progressbar"
-                         aria-valuenow="{{metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.ok'].count * 100 / metrics.timers['com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests'].count}}"
+                         aria-valuenow="{{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].count * 100 / metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count}}"
                          aria-valuemin="0"
-                         aria-valuemax="{{metrics.timers['com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests'].count}}"
-                         style="width: {{(metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.ok'].count * 100 / metrics.timers['com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests'].count) | number:0}}%">
-                        {{metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.ok'].count}}
+                         aria-valuemax="{{metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count}}"
+                         style="width: {{(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].count * 100 / metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count) | number:0}}%">
+                        {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].count}}
                     </div>
             </td>
             <td>
-                {{metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.ok'].mean_rate | number:2}}
+                {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].mean_rate | number:2}}
             </td>
-            <td>{{metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.ok'].m1_rate | number:2}}
+            <td>{{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m1_rate | number:2}}
             </td>
-            <td>{{metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.ok'].m5_rate | number:2}}
+            <td>{{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m5_rate | number:2}}
             </td>
             <td>
-                {{metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.ok'].m15_rate | number:2}}
+                {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m15_rate | number:2}}
             </td>
         </tr>
         <tr>
@@ -148,25 +148,25 @@
             <td>
                 <div class="progress progress-striped">
                     <div class="progress-bar progress-bar-warning" role="progressbar"
-                         aria-valuenow="{{metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.notFound'].count * 100 / metrics.timers['com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests'].count}}"
+                         aria-valuenow="{{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].count * 100 / metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count}}"
                          aria-valuemin="0"
-                         aria-valuemax="{{metrics.timers['com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests'].count}}"
-                         style="width:{{(metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.notFound'].count * 100 / metrics.timers['com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests'].count) | number:0}}%">
-                        {{metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.notFound'].count}}
+                         aria-valuemax="{{metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count}}"
+                         style="width:{{(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].count * 100 / metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count) | number:0}}%">
+                        {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].count}}
                     </div>
                 </div>
             </td>
             <td>
-                {{metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.notFound'].mean_rate | number:2}}
+                {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].mean_rate | number:2}}
             </td>
             <td>
-                {{metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.notFound'].m1_rate | number:2}}
+                {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m1_rate | number:2}}
             </td>
             <td>
-                {{metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.notFound'].m5_rate | number:2}}
+                {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m5_rate | number:2}}
             </td>
             <td>
-                {{metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.notFound'].m15_rate | number:2}}
+                {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m15_rate | number:2}}
             </td>
         </tr>
         <tr>
@@ -174,25 +174,25 @@
             <td>
                 <div class="progress progress-striped">
                     <div class="progress-bar progress-bar-danger" role="progressbar"
-                         aria-valuenow="{{metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.serverError'].count * 100 / metrics.timers['com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests'].count}}"
+                         aria-valuenow="{{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].count * 100 / metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count}}"
                          aria-valuemin="0"
-                         aria-valuemax="{{metrics.timers['com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests'].count}}"
-                         style="width:{{(metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.serverError'].count * 100 / metrics.timers['com.codahale.metrics.servlet.AbstractInstrumentedFilter.requests'].count) | number:0}}%">
-                        {{metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.serverError'].count}}
+                         aria-valuemax="{{metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count}}"
+                         style="width:{{(metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].count * 100 / metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count) | number:0}}%">
+                        {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].count}}
                     </div>
                 </div>
             </td>
             <td>
-                {{metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.serverError'].mean_rate | number:2}}
+                {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].mean_rate | number:2}}
             </td>
             <td>
-                {{metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.serverError'].m1_rate | number:2}}
+                {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m1_rate | number:2}}
             </td>
             <td>
-                {{metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.serverError'].m5_rate | number:2}}
+                {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m5_rate | number:2}}
             </td>
             <td>
-                {{metrics.meters['com.codahale.metrics.servlet.AbstractInstrumentedFilter.responseCodes.serverError'].m15_rate | number:2}}
+                {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m15_rate | number:2}}
             </td>
         </tr>
         </tbody>
