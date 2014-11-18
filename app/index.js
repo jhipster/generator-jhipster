@@ -733,7 +733,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/test/javascript/spec/app/account/password/_passwordDirectiveSpec.js', testJsDir + 'spec/app/account/password/passwordDirectiveSpec.js', this, {});
     this.template('src/test/javascript/spec/app/account/sessions/_sessionsControllerSpec.js', testJsDir + 'spec/app/account/sessions/sessionsControllerSpec.js', this, {});
     this.template('src/test/javascript/spec/app/account/settings/_settingsControllerSpec.js', testJsDir + 'spec/app/account/settings/settingsControllerSpec.js', this, {});
-    this.template('src/test/javascript/spec/components/auth/_authServiceSpec.js', testJsDir + 'spec/components/auth/authServiceSpec.js', this, {});
+    this.template('src/test/javascript/spec/components/auth/_authServicesSpec.js', testJsDir + 'spec/components/auth/authServicesSpec.js', this, {});
 
     // CSS
     this.copy(webappDir + 'styles/documentation.css', webappDir + 'styles/documentation.css');
@@ -774,7 +774,7 @@ JhipsterGenerator.prototype.app = function app() {
         'client/components/admin/logs.service.js',
         'client/components/admin/monitoring.service.js',
         'client/components/navbar/navbar.directive.js',
-        'client/components/navbar/navbar.controller.js'
+        'client/components/navbar/navbar.controller.js',
         'client/components/util/truncate.filter.js',
         'client/components/util/base64.service.js',
         'client/app/account/login/login.controller.js',
