@@ -1,10 +1,10 @@
 package <%=packageName%>.service;
 
-import <%=packageName%>.domain.Authority;
-import <%=packageName%>.domain.PersistentToken;
+import <%=packageName%>.domain.Authority;<% if (authenticationType == 'cookie') { %>
+import <%=packageName%>.domain.PersistentToken;<% } %>
 import <%=packageName%>.domain.User;
-import <%=packageName%>.repository.AuthorityRepository;
-import <%=packageName%>.repository.PersistentTokenRepository;
+import <%=packageName%>.repository.AuthorityRepository;<% if (authenticationType == 'cookie') { %>
+import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.util.RandomUtil;
@@ -36,10 +36,10 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     @Inject
-    private UserRepository userRepository;
+    private UserRepository userRepository;<% if (authenticationType == 'cookie') { %>
 
     @Inject
-    private PersistentTokenRepository persistentTokenRepository;
+    private PersistentTokenRepository persistentTokenRepository;<% } %>
 
     @Inject
     private AuthorityRepository authorityRepository;
@@ -114,7 +114,7 @@ public class UserService {
         User currentUser = userRepository.findOne(SecurityUtils.getCurrentLogin());
         currentUser.getAuthorities().size(); // eagerly load the association
         return currentUser;
-    }
+    }<% if (authenticationType == 'cookie') { %>
 
     /**
      * Persistent Token are used for providing automatic authentication, they should be automatically deleted after
@@ -134,7 +134,7 @@ public class UserService {
             user.getPersistentTokens().remove(token);<% } %>
             persistentTokenRepository.delete(token);
         }
-    }
+    }<% } %>
 
     /**
      * Not activated users should be automatically deleted after 3 days.

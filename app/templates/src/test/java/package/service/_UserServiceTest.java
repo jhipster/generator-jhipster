@@ -1,10 +1,10 @@
 package <%=packageName%>.service;
 
 import <%=packageName%>.Application;<% if (databaseType == 'nosql') { %>
-import <%=packageName%>.config.MongoConfiguration;<% } %>
-import <%=packageName%>.domain.PersistentToken;
-import <%=packageName%>.domain.User;
-import <%=packageName%>.repository.PersistentTokenRepository;
+import <%=packageName%>.config.MongoConfiguration;<% } %><% if (authenticationType == 'cookie') { %>
+import <%=packageName%>.domain.PersistentToken;<% } %>
+import <%=packageName%>.domain.User;<% if (authenticationType == 'cookie') { %>
+import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
 import <%=packageName%>.repository.UserRepository;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -32,16 +32,16 @@ import static org.assertj.core.api.Assertions.*;
 @WebAppConfiguration<% if (databaseType == 'nosql') { %>
 @Import(MongoConfiguration.class)<% } %><% if (databaseType == 'sql') { %>
 @Transactional<% } %>
-public class UserServiceTest {
+public class UserServiceTest {<% if (authenticationType == 'cookie') { %>
 
     @Inject
-    private PersistentTokenRepository persistentTokenRepository;
+    private PersistentTokenRepository persistentTokenRepository;<% } %>
 
     @Inject
     private UserRepository userRepository;
 
     @Inject
-    private UserService userService;
+    private UserService userService;<% if (authenticationType == 'cookie') { %>
 
     @Test
     public void testRemoveOldPersistentTokens() {
@@ -53,7 +53,7 @@ public class UserServiceTest {
         assertThat(persistentTokenRepository.findByUser(admin)).hasSize(existingCount + 2);
         userService.removeOldPersistentTokens();
         assertThat(persistentTokenRepository.findByUser(admin)).hasSize(existingCount + 1);
-    }
+    }<% } %>
 
     @Test
     public void testFindNotActivatedUsersByCreationDateBefore() {
@@ -61,7 +61,7 @@ public class UserServiceTest {
         DateTime now = new DateTime();
         List<User> users = userRepository.findNotActivatedUsersByCreationDateBefore(now.minusDays(3));
         assertThat(users).isEmpty();
-    }
+    }<% if (authenticationType == 'cookie') { %>
 
     private void generateUserToken(User user, String tokenSeries, LocalDate localDate) {
         PersistentToken token = new PersistentToken();
@@ -73,5 +73,5 @@ public class UserServiceTest {
         token.setUserAgent("Test agent");<% if (databaseType == 'sql') { %>
         persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'nosql') { %>
         persistentTokenRepository.save(token);<% } %>
-    }
+    }<% } %>
 }

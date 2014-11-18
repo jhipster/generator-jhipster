@@ -67,9 +67,9 @@
                                 <li ng-switch-when="true"><a href="#/settings"><span class="glyphicon glyphicon-wrench"></span>
                                     &nbsp;<span translate="global.menu.account.settings">Settings</span></a></li>
                                 <li ng-switch-when="true"><a href="#/password"><span class="glyphicon glyphicon-lock"></span>
-                                    &nbsp;<span translate="global.menu.account.password">Password</span></a></li>
+                                    &nbsp;<span translate="global.menu.account.password">Password</span></a></li><% if (authenticationType == 'cookie') { %>
                                 <li ng-switch-when="true"><a href="#/sessions"><span class="glyphicon glyphicon-cloud"></span>
-                                    &nbsp;<span translate="global.menu.account.sessions">Sessions</span></a></li>
+                                    &nbsp;<span translate="global.menu.account.sessions">Sessions</span></a></li><% } %>
                                 <li ng-switch-when="true"><a href="#/logout"><span class="glyphicon glyphicon-log-out"></span>
                                     &nbsp;<span translate="global.menu.account.logout">Log out</span></a></li>
                                 <li ng-switch-when="false"><a href="#/login"><span class="glyphicon glyphicon-log-in"></span>

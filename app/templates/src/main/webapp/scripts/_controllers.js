@@ -30,8 +30,8 @@
         $scope.login = function () {
             AuthenticationSharedService.login({
                 username: $scope.username,
-                password: $scope.password,
-                rememberMe: $scope.rememberMe
+                password: $scope.password<% if (authenticationType == 'cookie') { %>,
+                rememberMe: $scope.rememberMe<% } %>
             });
         }
     });
