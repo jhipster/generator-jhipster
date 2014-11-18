@@ -14,7 +14,8 @@
                 "sessions": "Sesiones",
                 "tracker": "Rastreador de los usarios",
                 "metrics": "Métricas",
-                "health": "Heath",
+                "health": "Health",
+                "configuration": "Configuration",
                 "logs": "Logs",
                 "audits": "Auditorías",
                 "login": "Iniciar sesión",
@@ -103,7 +104,8 @@
             "success": "<strong>¡El registro de la cuenta ha sido guardado!</strong> Por favor revisa su correo electrónico para confirmar.",
             "error": {
                 "fail": "<strong>¡El registro de la cuenta ha fallado!</strong> Por favor intente de nuevo mas tarde.",
-                "userexists": "<strong>¡El nombre del usuario ya esta registrada!</strong> Por favor escoja otro usuario."
+                "userexists": "<strong>¡El nombre del usuario ya esta registrada!</strong> Por favor escoja otro usuario.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
             }
         }
     },
@@ -131,7 +133,10 @@
             "button": "Guardar"
         },
         "messages": {
-            "error": "<strong>¡Ha ocurrido un error!</strong> Ajustes no pudieron guardarse.",
+            "error": {
+                "fail": "<strong>¡Ha ocurrido un error!</strong> Ajustes no pudieron guardarse.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+            },
             "success": "<strong>¡Ajustes guardados!</strong>",
             "validate": {
                 "firstname": {
@@ -258,6 +263,18 @@
             "misses": "Misses",
             "evictioncount": "Eviction count",
             "mean": "Mean get time (ms)"
+        },
+        "datasource": {
+            "title": "DataSource statistics (time in millisecond)",
+            "name": "Pool usage",
+            "count": "Count",
+            "mean": "Mean",
+            "min": "Min",
+            "max": "Max",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
         }
     },
     "health": {
@@ -266,6 +283,7 @@
         "stacktrace": "Stacktrace",
         "indicator": {
             "db": "Database",
+            "diskSpace": "Disk space",
             "mail": "Email",
             "mongo": "Mongo DB"
         },
@@ -276,6 +294,14 @@
         "status": {
             "UP": "HASTA",
             "DOWN": "ABAJO"
+        }
+    },
+    "configuration": {
+        "title": "Configuration",
+        "filter": "Filter (by prefix)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Properties"
         }
     },
     "logs": {

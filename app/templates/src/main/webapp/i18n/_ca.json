@@ -15,6 +15,7 @@
                 "tracker": "User tracker",
                 "metrics": "Mètriques",
                 "health": "Salud",
+                "configuration": "Configuration",
                 "logs": "Registres",
                 "audits": "Auditories",
                 "login": "Autenticar",
@@ -103,7 +104,8 @@
             "success": "<strong>Registre guardat!</strong> Si us plau, consulti el seu compte de correu electrònic per confirmar.",
             "error": {
                 "fail": "<strong>Error en registre!</strong> Si us plau, torni-ho a intentar més tard.",
-                "userexists": "<strong>El nom d'usuari ja existeix!</strong> Si us plau, escolleixi un altre."
+                "userexists": "<strong>El nom d'usuari ja existeix!</strong> Si us plau, escolleixi un altre.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
             }
         }
     },
@@ -131,7 +133,10 @@
             "button": "Guardar"
         },
         "messages": {
-            "error": "<strong>S'ha produït un error!</strong> Els seus ajustos no s'han pogut guardar.",
+            "error": {
+                "fail": "<strong>S'ha produït un error!</strong> Els seus ajustos no s'han pogut guardar.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+            },
             "success": "<strong>Ajustos guardats!</strong>",
             "validate": {
                 "firstname": {
@@ -258,6 +263,18 @@
             "misses": "Fallos",
             "evictioncount": "Contador d'expulcions",
             "mean": "Temps d'obtenció mig (ms)"
+        },
+        "datasource": {
+            "title": "DataSource statistics (time in millisecond)",
+            "name": "Pool usage",
+            "count": "Count",
+            "mean": "Mean",
+            "min": "Min",
+            "max": "Max",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
         }
     },
     "health": {
@@ -266,6 +283,7 @@
         "stacktrace": "Traça d'error",
         "indicator": {
             "db": "Base de dades",
+            "diskSpace": "Disk space",
             "mail": "Compte de correu electrònic",
             "mongo": "Mongo DB"
         },
@@ -276,6 +294,14 @@
         "status": {
             "UP": "FINS",
             "DOWN": "BAIX"
+        }
+    },
+    "configuration": {
+        "title": "Configuration",
+        "filter": "Filter (by prefix)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Properties"
         }
     },
     "logs": {

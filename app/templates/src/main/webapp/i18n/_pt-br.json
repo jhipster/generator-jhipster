@@ -15,6 +15,7 @@
                 "tracker": "Rastreamento de usuário",
                 "metrics": "Métricas",
                 "health": "Estado do Sistema",
+                "configuration": "Configuration",
                 "logs": "Logs",
                 "audits": "Auditorias",
                 "login": "Entrar",
@@ -103,7 +104,8 @@
             "success": "<strong>Cadstro salvo com sucesso!</strong> Favor verificar seu e-mail para confirmar a conta.",
             "error": {
                 "fail": "<strong>Erro ao realizar o cadastro!</strong> Favor tentar novamente mais tarde.",
-                "userexists": "<strong>Usuário já registrado!</strong> Favor escolher outro."
+                "userexists": "<strong>Usuário já registrado!</strong> Favor escolher outro.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
             }
         }
     },
@@ -131,7 +133,10 @@
             "button": "Salvar"
         },
         "messages": {
-            "error": "<strong>Ocorreu um erro!</strong> As configurações não foram salvas.",
+            "error": {
+                "fail": "<strong>Ocorreu um erro!</strong> As configurações não foram salvas.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+            },
             "success": "<strong>Configurações salvas com sucesso!</strong>",
             "validate": {
                 "firstname": {
@@ -258,6 +263,18 @@
             "misses": "Misses",
             "evictioncount": "Número de despejos",
             "mean": "Mediana (ms)"
+        },
+        "datasource": {
+            "title": "DataSource statistics (time in millisecond)",
+            "name": "Pool usage",
+            "count": "Count",
+            "mean": "Mean",
+            "min": "Min",
+            "max": "Max",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
         }
     },
     "health": {
@@ -266,6 +283,7 @@
         "stacktrace": "Stacktrace",
         "indicator": {
             "db": "Banco de dados",
+            "diskSpace": "Disk space",
             "mail": "E-mail",
             "mongo": "Mongo DB"
         },
@@ -276,6 +294,14 @@
         "status": {
             "UP": "UP",
             "DOWN": "DOWN"
+        }
+    },
+    "configuration": {
+        "title": "Configuration",
+        "filter": "Filter (by prefix)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Properties"
         }
     },
     "logs": {

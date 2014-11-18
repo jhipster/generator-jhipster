@@ -31,6 +31,8 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
     private static final String ENV_METRICS_GRAPHITE = "metrics.graphite.";
     private static final String PROP_JMX_ENABLED = "jmx.enabled";
     private static final String PROP_GRAPHITE_ENABLED = "enabled";
+    private static final String PROP_GRAPHITE_PREFIX = "";
+
     private static final String PROP_PORT = "port";
     private static final String PROP_HOST = "host";
     private static final String PROP_METRIC_REG_JVM_MEMORY = "jvm.memory";
@@ -102,10 +104,13 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
                 log.info("Initializing Metrics Graphite reporting");
                 String graphiteHost = propertyResolver.getRequiredProperty(PROP_HOST);
                 Integer graphitePort = propertyResolver.getRequiredProperty(PROP_PORT, Integer.class);
+                String graphitePrefix = propertyResolver.getProperty(PROP_GRAPHITE_PREFIX, String.class, "");
+
                 Graphite graphite = new Graphite(new InetSocketAddress(graphiteHost, graphitePort));
                 GraphiteReporter graphiteReporter = GraphiteReporter.forRegistry(metricRegistry)
                         .convertRatesTo(TimeUnit.SECONDS)
                         .convertDurationsTo(TimeUnit.MILLISECONDS)
+                        .prefixedWith(graphitePrefix)
                         .build(graphite);
                 graphiteReporter.start(1, TimeUnit.MINUTES);
             }

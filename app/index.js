@@ -49,43 +49,27 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             default: 'jhipster'
         },
         {
-            type: 'list',
-            name: 'buildTool',
-            message: '(2/13) Would you like to use Maven or Gradle?',
-            choices: [
-                {
-                    value: 'maven',
-                    name: 'Maven'
-                },
-                {
-                    value: 'gradle',
-                    name: 'Gradle'
-                }
-            ],
-            default: 'maven'
-        },
-        {
             type: 'input',
             name: 'packageName',
             validate: function (input) {
                 if (/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)) return true;
                 return 'The package name you have provided is not a valid Java package name.';
             },
-            message: '(3/13) What is your default Java package name?',
+            message: '(2/13) What is your default Java package name?',
             default: 'com.mycompany.myapp'
         },
         {
             type: 'list',
             name: 'javaVersion',
-            message: '(4/13) Do you want to use Java 8?',
+            message: '(3/13) Do you want to use Java 8?',
             choices: [
+                {
+                    value: '8',
+                    name: 'Yes (use Java 8)'
+                },
                 {
                     value: '7',
                     name: 'No (use Java 7)'
-                },
-                {
-                    value: '8',
-                    name: 'Yes'
                 }
             ],
             default: 0
@@ -93,7 +77,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'authenticationType',
-            message: '(5/13) Which *type* of authentication would you like to use?',
+            message: '(4/13) Which *type* of authentication would you like to use?',
             choices: [
                 {
                     value: 'cookie',
@@ -109,7 +93,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'databaseType',
-            message: '(6/13) Which *type* of database would you like to use?',
+            message: '(5/13) Which *type* of database would you like to use?',
             choices: [
                 {
                     value: 'sql',
@@ -127,78 +111,8 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 return response.databaseType == 'sql';
             },
             type: 'list',
-            name: 'hibernateCache',
-            message: '(7/13) Do you want to use Hibernate 2nd level cache?',
-            choices: [
-                {
-                    value: 'no',
-                    name: 'No'
-                },
-                {
-                    value: 'ehcache',
-                    name: 'Yes, with ehcache (local cache, for a single node)'
-                },
-                {
-                    value: 'hazelcast',
-                    name: 'Yes, with HazelCast (distributed cache, for multiple nodes)'
-                }
-            ],
-            default: 1
-        },
-        {
-            when: function (response) {
-                return response.databaseType == 'nosql';
-            },
-            type: 'list',
-            name: 'hibernateCache',
-            message: '(7/13) Do you want to use Hibernate 2nd level cache?',
-            choices: [
-                {
-                    value: 'no',
-                    name: 'No (this not possible with the NoSQL option)'
-                }
-            ],
-            default: 0
-        },
-        {
-            type: 'list',
-            name: 'clusteredHttpSession',
-            message: '(8/13) Do you want to use clustered HTTP sessions?',
-            choices: [
-                {
-                    value: 'no',
-                    name: 'No'
-                },
-                {
-                    value: 'hazelcast',
-                    name: 'Yes, with HazelCast'
-                }
-            ],
-            default: 0
-        },
-        {
-            type: 'list',
-            name: 'websocket',
-            message: '(9/13) Do you want to use WebSockets?',
-            choices: [
-                {
-                    value: 'no',
-                    name: 'No'
-                },
-                {
-                    value: 'atmosphere',
-                    name: 'Yes, with Atmosphere'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: function (response) {
-                return response.databaseType == 'sql';
-            },
-            type: 'list',
             name: 'prodDatabaseType',
-            message: '(10/13) Which *production* database would you like to use?',
+            message: '(6/13) Which *production* database would you like to use?',
             choices: [
                 {
                     value: 'mysql',
@@ -217,7 +131,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'prodDatabaseType',
-            message: '(10/13) Which *production* database would you like to use?',
+            message: '(6/13) Which *production* database would you like to use?',
             choices: [
                 {
                     value: 'mongodb',
@@ -232,7 +146,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'devDatabaseType',
-            message: '(11/13) Which *development* database would you like to use?',
+            message: '(7/13) Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'h2Memory',
@@ -255,7 +169,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'devDatabaseType',
-            message: '(11/13) Which *development* database would you like to use?',
+            message: '(7/13) Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'mongodb',
@@ -265,12 +179,98 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             default: 0
         },
         {
+            when: function (response) {
+                return response.databaseType == 'sql';
+            },
+            type: 'list',
+            name: 'hibernateCache',
+            message: '(8/13) Do you want to use Hibernate 2nd level cache?',
+            choices: [
+                {
+                    value: 'no',
+                    name: 'No'
+                },
+                {
+                    value: 'ehcache',
+                    name: 'Yes, with ehcache (local cache, for a single node)'
+                },
+                {
+                    value: 'hazelcast',
+                    name: 'Yes, with HazelCast (distributed cache, for multiple nodes)'
+                }
+            ],
+            default: 1
+        },
+        {
+            when: function (response) {
+                return response.databaseType == 'nosql';
+            },
+            type: 'list',
+            name: 'hibernateCache',
+            message: '(8/13) Do you want to use Hibernate 2nd level cache?',
+            choices: [
+                {
+                    value: 'no',
+                    name: 'No (this not possible with the NoSQL option)'
+                },
+            ],
+            default: 0
+        },
+        {
+            type: 'list',
+            name: 'clusteredHttpSession',
+            message: '(9/13) Do you want to use clustered HTTP sessions?',
+            choices: [
+                {
+                    value: 'no',
+                    name: 'No'
+                },
+                {
+                    value: 'hazelcast',
+                    name: 'Yes, with HazelCast'
+                }
+            ],
+            default: 0
+        },
+        {
+            type: 'list',
+            name: 'websocket',
+            message: '(10/13) Do you want to use WebSockets?',
+            choices: [
+                {
+                    value: 'no',
+                    name: 'No'
+                },
+                {
+                    value: 'atmosphere',
+                    name: 'Yes, with Atmosphere'
+                }
+            ],
+            default: 0
+        },
+        {
+            type: 'list',
+            name: 'buildTool',
+            message: '(11/13) Would you like to use Maven or Gradle for building the backend?',
+            choices: [
+                {
+                    value: 'maven',
+                    name: 'Maven (recommended)'
+                },
+                {
+                    value: 'gradle',
+                    name: 'Gradle'
+                }
+            ],
+            default: 'maven'
+        },
+        {
             type: 'list',
             name: 'frontendBuilder',
             choices: [
                 {
                     value: 'grunt',
-                    name: 'Grunt'
+                    name: 'Grunt (recommended)'
                 },
                 {
                     value: 'gulp',
@@ -479,7 +479,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/_Constants.java', javaDir + 'config/Constants.java', this, {});
     this.template('src/main/java/package/config/_CloudDatabaseConfiguration.java', javaDir + 'config/CloudDatabaseConfiguration.java', this, {});
     if (this.databaseType == 'nosql') {
-        this.template('src/main/java/package/config/_CloudMongoDbConfiguration.java', javaDir + 'config/CloudMongoDbConfiguration.java', this, {});
+        this.template('src/main/java/package/config/_CloudMongoDbConfiguration.java', javaDir + 'config/CloudMongoDbConfiguration.java');
     }
     this.template('src/main/java/package/config/_DatabaseConfiguration.java', javaDir + 'config/DatabaseConfiguration.java', this, {});
     this.template('src/main/java/package/config/_LocaleConfiguration.java', javaDir + 'config/LocaleConfiguration.java', this, {});

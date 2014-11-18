@@ -15,6 +15,7 @@
                 "tracker": "Suivi des utilisateurs",
                 "metrics": "Métriques",
                 "health": "Diagnostics",
+                "configuration": "Configuration",
                 "logs": "Logs",
                 "audits": "Audits",
                 "login": "S'authentifier",
@@ -103,7 +104,8 @@
             "success": "<strong>Compte enregistré !</strong> Merci de vérifier votre e-mail de confirmation.",
             "error": {
                 "fail": "<strong>Compte non créé!</strong> Merci d'essayer à nouveau plus tard.",
-                "userexists": "<strong>Ce compte utilisateur existe déjà !</strong> Veuillez en choisir un autre."
+                "userexists": "<strong>Ce compte utilisateur existe déjà !</strong> Veuillez en choisir un autre.",
+                "emailexists": "<strong>Cet E-mail est déjà utilisé!</strong> Veuillez en choisir un autre."
             }
         }
     },
@@ -131,7 +133,10 @@
             "button": "Sauvegarder"
         },
         "messages": {
-            "error": "<strong>Une erreur est survenue!</strong> Votre profil ne peut pas être sauvegardé.",
+            "error": {
+                "fail": "<strong>Une erreur est survenue!</strong> Votre profil n'a pas été sauvegardé.",
+                "emailexists": "<strong>Cet E-mail est déjà utilisé!</strong> Veuillez en choisir un autre."
+            },
             "success": "<strong>Votre profil a été sauvegardé!</strong>",
             "validate": {
                 "firstname": {
@@ -258,6 +263,18 @@
             "misses": "Données non existantes",
             "evictioncount": "Nombre de suppressions",
             "mean": "Temps de réponse (ms)"
+        },
+        "datasource": {
+            "title": "Statistiques du pool de connexions (Temps en milliseconde)",
+            "name": "Utilisation du pool",
+            "count": "Total",
+            "mean": "Médian",
+            "min": "Min",
+            "max": "Max",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
         }
     },
     "health": {
@@ -265,8 +282,9 @@
         "refresh.button": "Rafraichir",
         "indicator": {
             "db": "Base de données",
+            "diskSpace": "Espace disque",
             "mail": "Email",
-            "mongo": "Mongo DB"
+            "mongo": "MongoDB"
         },
         "stacktrace": "Stacktrace",
         "table": {
@@ -276,6 +294,14 @@
         "status": {
             "UP": "DISPONIBLE",
             "DOWN": "HORS SERVICE"
+        }
+    },
+    "configuration": {
+        "title": "Configuration",
+        "filter": "Filtrer (par préfixe)",
+        "table": {
+            "prefix": "Préfixe",
+            "properties": "Propriétés"
         }
     },
     "logs": {

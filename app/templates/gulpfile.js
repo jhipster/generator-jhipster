@@ -99,6 +99,27 @@ gulp.task('server', ['watch'<% if(useCompass) { %>, 'compass'<% } %>], function(
                     (function() {
                         var url = require('url');
                         var proxy = require('proxy-middleware');
+                        var options = url.parse('http://localhost:8080/health');
+                        options.route = '/api-docs';
+                        return proxy(options);
+                    })(),
+                    (function() {
+                        var url = require('url');
+                        var proxy = require('proxy-middleware');
+                        var options = url.parse('http://localhost:8080/configprops');
+                        options.route = '/api-docs';
+                        return proxy(options);
+                    })(),
+                    (function() {
+                        var url = require('url');
+                        var proxy = require('proxy-middleware');
+                        var options = url.parse('http://localhost:8080/beans');
+                        options.route = '/api-docs';
+                        return proxy(options);
+                    })(),
+                    (function() {
+                        var url = require('url');
+                        var proxy = require('proxy-middleware');
                         var options = url.parse('http://localhost:8080/api-docs');
                         options.route = '/api-docs';
                         return proxy(options);

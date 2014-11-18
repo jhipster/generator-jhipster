@@ -1,7 +1,5 @@
 package <%=packageName%>.domain;
-
-<% if (databaseType == 'sql') { %>import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+<% if (databaseType == 'sql') { %>
 import org.hibernate.annotations.Type;<% } %>
 import org.joda.time.LocalDateTime;<% if (databaseType == 'nosql') { %>
 import org.springframework.data.annotation.Id;
@@ -18,8 +16,7 @@ import java.util.Map;
  */
 
 <% if (databaseType == 'sql') { %>@Entity
-@Table(name = "T_PERSISTENT_AUDIT_EVENT")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'nosql') { %>
+@Table(name = "T_PERSISTENT_AUDIT_EVENT")<% } %><% if (databaseType == 'nosql') { %>
 @Document(collection = "T_PERSISTENT_AUDIT_EVENT")<% } %>
 public class PersistentAuditEvent  {
 

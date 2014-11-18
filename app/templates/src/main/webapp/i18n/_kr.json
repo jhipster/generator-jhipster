@@ -15,6 +15,7 @@
                 "tracker": "사용자 트랙커",
                 "metrics": "메트릭스",
                 "health": "상태 확인",
+                "configuration": "Configuration",
                 "logs": "로그",
                 "audits": "Audit",
                 "login": "인증",
@@ -103,7 +104,8 @@
             "success": "<strong>회원가입 내용이 저장되었습니다!</strong> 가입을 완료하기 위해 이메일을 확인해주세요.",
             "error": {
                 "fail": "<strong>회원가입이 실패했습니다!</strong> 다시 시도해 주세요.",
-                "userexists": "<strong>로그인 아이디가 이미 존재합니다!</strong> 다른 아이디로 다시 시도해 주세요."
+                "userexists": "<strong>로그인 아이디가 이미 존재합니다!</strong> 다른 아이디로 다시 시도해 주세요.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
             }
         }
     },
@@ -131,7 +133,10 @@
             "button": "저장"
         },
         "messages": {
-            "error": "<strong>에러가 발생했습니다!</strong> 사용자 설정은 저장되지 않습니다.",
+            "error": {
+                "fail": "<strong>에러가 발생했습니다!</strong> 사용자 설정은 저장되지 않습니다.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+            },
             "success": "<strong>사용자 설정 저장 완료!</strong>",
             "validate": {
                 "firstname": {
@@ -258,6 +263,18 @@
             "misses": "실패(Misses)",
             "evictioncount": "제거(Eviction) 횟수",
             "mean": "평균시간 (밀리초)"
+        },
+        "datasource": {
+            "title": "DataSource statistics (time in millisecond)",
+            "name": "Pool usage",
+            "count": "Count",
+            "mean": "Mean",
+            "min": "Min",
+            "max": "Max",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
         }
     },
     "health": {
@@ -265,6 +282,7 @@
         "refresh.button": "새로고침",
         "indicator": {
             "db": "데이터베이스",
+            "diskSpace": "Disk space",
             "mail": "이메일",
             "mongo": "Mongo DB"
         },
@@ -276,6 +294,14 @@
         "status": {
             "UP": "사용할 수",
             "DOWN": "서비스 중"
+        }
+    },
+    "configuration": {
+        "title": "Configuration",
+        "filter": "Filter (by prefix)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Properties"
         }
     },
     "logs": {

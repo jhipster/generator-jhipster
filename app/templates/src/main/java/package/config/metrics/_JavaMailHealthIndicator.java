@@ -35,7 +35,7 @@ public class JavaMailHealthIndicator extends AbstractHealthIndicator {
             builder.up();
 
         } catch (MessagingException e) {
-            log.debug("Cannot connect to e-mail server.", e);
+            log.debug("Cannot connect to e-mail server. Error: {}", e.getMessage());
             builder.down(e);
         }
     }
