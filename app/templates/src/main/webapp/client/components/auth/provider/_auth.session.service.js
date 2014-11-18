@@ -11,9 +11,9 @@ angular.module('<%=angularAppName%>')
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
                     }
-                }).success(function (data) {
+                }).success(function (response) {
                     localStorageService.set('token', btoa(credentials.username + ':' + credentials.password));
-                    return data;
+                    return response;
                 });
             },
             logout: function() {

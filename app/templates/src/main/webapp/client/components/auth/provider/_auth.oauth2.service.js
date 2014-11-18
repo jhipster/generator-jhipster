@@ -7,15 +7,18 @@ angular.module('<%=angularAppName%>')
                 var data = "username=" + credentials.username + "&password="
                     + credentials.password + "&grant_type=password&scope=read%20write&" +
                     "client_secret=mySecretOAuthSecret&client_id=<%= baseName%>app";
-                $http.post('oauth/token', data, {
+                return $http.post('oauth/token', data, {
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
                         "Accept": "application/json",
                         "Authorization": "Basic " + Base64.encode("<%= baseName%>app" + ':' + "mySecretOAuthSecret")
                     }
-                }).success(function (data) {
-                    localStorageService.set('token', data);
-                    return data;
+                }).success(function (response) {
+                    var expiredAt = new Date();
+                    expiredAt.setSeconds(expiredAt.getSeconds() + response.expires_in);
+                    response.expires_at = expiredAt.getTime();
+                    localStorageService.set('token', response);
+                    return response;
                 });
             },
             logout: function() {
@@ -29,7 +32,7 @@ angular.module('<%=angularAppName%>')
             },
             hasValidToken: function () {
                 var token = this.getToken();
-                return token && token.expires_at && token.expires_at < new Date().getTime();
+                return token && token.expires_at && token.expires_at > new Date().getTime();
             }
         };
     });

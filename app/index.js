@@ -760,7 +760,6 @@ JhipsterGenerator.prototype.app = function app() {
         'client/app.js',
         'client/app/account/activate/activate.controller.js',
         'client/components/auth/auth.service.js',
-        'client/components/auth/provider/auth.session.service.js',
         'client/components/auth/services/account.service.js',
         'client/components/auth/services/activate.service.js',
         'client/components/auth/services/password.service.js',
@@ -792,6 +791,14 @@ JhipsterGenerator.prototype.app = function app() {
         'client/app/error/error.js',
         'client/app/main/main.controller.js'
         ];
+
+    if (this.authenticationType == 'token') {
+        indexScripts = indexScripts.concat([
+            'client/components/auth/provider/auth.oauth2.service.js']);
+    } else {
+        indexScripts = indexScripts.concat([
+            'client/components/auth/provider/auth.session.service.js']);
+    }
 
     if (this.websocket == 'atmosphere') {
         indexScripts = indexScripts.concat([
