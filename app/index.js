@@ -802,6 +802,7 @@ JhipsterGenerator.prototype.app = function app() {
 
     if (this.websocket == 'atmosphere') {
         indexScripts = indexScripts.concat([
+            'client/app/admin/tracker/tracker.controller.js',
             'bower_components/atmosphere/atmosphere.js',
             'bower_components/jquery-atmosphere/jquery.atmosphere.js']);
     }

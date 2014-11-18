@@ -28,11 +28,6 @@ describe('Services Tests ', function () {
             var returnData = { result: 'ok' };
             //expectGET to make sure this is called once.
             httpBackend.expectGET('app/logout').respond(returnData);
-//            TODO: implement atmosphere test
-//            <% if (websocket == 'atmosphere') { %>
-//            // WebSocket tries to authenticate after logout
-//            httpBackend.expectGET('protected/authentication_check.gif').respond(401, '');
-//            httpBackend.expectGET('views/main.html').respond(401, '');<% } %>
 
             //Set spy
             spyOn(spiedAuthServerProvider, 'logout').and.callThrough();
