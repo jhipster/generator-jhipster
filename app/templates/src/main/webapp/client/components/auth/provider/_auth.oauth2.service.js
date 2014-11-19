@@ -22,10 +22,10 @@ angular.module('<%=angularAppName%>')
                 });
             },
             logout: function() {
-                localStorageService.clearAll();
-
                 // logout from the server
-                $http.get('app/logout');
+                $http.get('app/logout').then(function() {
+                    localStorageService.clearAll();
+                });
             },
             getToken: function () {
                 return localStorageService.get('token');

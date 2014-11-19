@@ -660,6 +660,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/client/_app.js', webappDir + 'client/app.js', this, {});
     // Client Components
     this.template(webappDir + '/client/components/admin/_audits.service.js', webappDir + 'client/components/admin/audits.service.js', this, {});
+    this.template(webappDir + '/client/components/admin/_configuration.service.js', webappDir + 'client/components/admin/configuration.service.js', this, {});
     this.template(webappDir + '/client/components/admin/_logs.service.js', webappDir + 'client/components/admin/logs.service.js', this, {});
     this.template(webappDir + '/client/components/admin/_monitoring.service.js', webappDir + 'client/components/admin/monitoring.service.js', this, {});
     this.template(webappDir + '/client/components/auth/_auth.service.js', webappDir + 'client/components/auth/auth.service.js', this, {});
@@ -700,6 +701,8 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/client/app/account/settings/_settings.controller.js', webappDir + 'client/app/account/settings/settings.controller.js', this, {});
     this.copy(webappDir + '/client/app/admin/audits/audits.html', webappDir + 'client/app/admin/audits/audits.html');
     this.template(webappDir + '/client/app/admin/audits/_audits.controller.js', webappDir + 'client/app/admin/audits/audits.controller.js', this, {});
+    this.copy(webappDir + '/client/app/admin/configuration/configuration.html', webappDir + 'client/app/admin/configuration/configuration.html');
+    this.template(webappDir + '/client/app/admin/configuration/_configuration.controller.js', webappDir + 'client/app/admin/configuration/configuration.controller.js', this, {});
     this.copy(webappDir + '/client/app/admin/docs/docs.html', webappDir + 'client/app/admin/docs/docs.html');
     this.template(webappDir + '/client/app/admin/docs/_docs.controller.js', webappDir + 'client/app/admin/docs/docs.controller.js', this, {});
     this.copy(webappDir + '/client/app/admin/health/health.html', webappDir + 'client/app/admin/health/health.html');
@@ -771,6 +774,7 @@ JhipsterGenerator.prototype.app = function app() {
         'client/components/language/language.controller.js',
         'client/components/admin/audits.service.js',
         'client/components/admin/logs.service.js',
+        'client/components/admin/configuration.service.js',
         'client/components/admin/monitoring.service.js',
         'client/components/navbar/navbar.directive.js',
         'client/components/navbar/navbar.controller.js',
@@ -784,6 +788,7 @@ JhipsterGenerator.prototype.app = function app() {
         'client/app/account/sessions/sessions.controller.js',
         'client/app/account/settings/settings.controller.js',
         'client/app/admin/audits/audits.controller.js',
+        'client/app/admin/configuration/configuration.controller.js',
         'client/app/admin/docs/docs.controller.js',
         'client/app/admin/health/health.controller.js',
         'client/app/admin/logs/logs.controller.js',

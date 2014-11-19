@@ -4,10 +4,9 @@ angular.module('<%=angularAppName%>')
     .factory('AuditsService', function ($http) {
         return {
             findAll: function () {
-                var promise = $http.get('app/rest/audits/all').then(function (response) {
+                return $http.get('app/rest/audits/all').then(function (response) {
                     return response.data;
                 });
-                return promise;
             },
             findByDates: function (fromDate, toDate) {
 
@@ -18,10 +17,9 @@ angular.module('<%=angularAppName%>')
                     return dateToFormat;
                 };
 
-                var promise = $http.get('app/rest/audits/byDates', {params: {fromDate: formatDate(fromDate), toDate: formatDate(toDate)}}).then(function (response) {
+                return $http.get('app/rest/audits/byDates', {params: {fromDate: formatDate(fromDate), toDate: formatDate(toDate)}}).then(function (response) {
                     return response.data;
                 });
-                return promise;
             }
         }
     });
