@@ -138,3 +138,15 @@ Generator.prototype.installNewLanguage = function(language) {
         console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + language + 'not added as a new language.\n'.yellow);
     }
 };
+
+Generator.prototype.buildRoleMap = function(names) {
+    var roles = { 'admin' : 'ROLE_ADMIN', 'user': 'ROLE_USER'};
+    var idx;
+    if (names != null) {
+        var nameArray = names.trim().split(/[ ,]/).filter(function(x) { return x.trim().length > 0 });
+        for (idx in nameArray) {
+            roles[nameArray[idx]] = 'ROLE_' + nameArray[idx].toUpperCase();
+        }
+    }
+    return roles;
+};

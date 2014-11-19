@@ -1,0 +1,7 @@
+Description:
+    Set the additional available roles in the system.
+
+Example:
+    yo jhipster:roles
+
+
