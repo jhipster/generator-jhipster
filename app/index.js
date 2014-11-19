@@ -285,7 +285,13 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             name: 'useCompass',
             message: '(13/13) Would you like to use the Compass CSS Authoring Framework?',
             default: false
-        }
+        },
+        {
+            type: 'input',
+            name: 'roleNames',
+            message: '(14/14) What additional roles should be supported (separate the values with space or comma)?',
+            default: ''
+        },
     ];
 
     this.baseName = this.config.get('baseName');
@@ -301,8 +307,23 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     this.javaVersion = this.config.get('javaVersion');
     this.buildTool = this.config.get('buildTool');
     this.frontendBuilder = this.config.get('frontendBuilder');
+    this.roleNames = this.config.get('roleNames');
     this.packagejs = packagejs;
 
+    function buildRoleSet(names) {
+      var roles = { 'admin' : 'ROLE_ADMIN', 'user': 'ROLE_USER'};
+      var idx;
+      if (names != null) {
+        var nameArray = names.trim().split(/[ ,]/).filter(function(x) { return x.trim().length > 0 });
+        for (idx in nameArray) {
+          roles[nameArray[idx]] = 'ROLE_' + nameArray[idx].toUpperCase();
+        }
+      }
+      return roles;
+    };
+    this.roles = buildRoleSet(this.roleNames);
+    
+    
     if (this.baseName != null &&
         this.packageName != null &&
         this.authenticationType != null &&
@@ -315,6 +336,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         this.useCompass != null &&
         this.buildTool != null &&
         this.frontendBuilder != null &&
+        this.roleNames != null &&
         this.javaVersion != null) {
 
         console.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
@@ -336,6 +358,8 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             this.buildTool = props.buildTool;
             this.frontendBuilder = props.frontendBuilder;
             this.javaVersion = props.javaVersion;
+            this.roleNames = props.roleNames;
+            this.roles = buildRoleSet(this.roleNames);
 
             cb();
         }.bind(this));
@@ -775,6 +799,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.config.set('buildTool', this.buildTool);
     this.config.set('frontendBuilder', this.frontendBuilder);
     this.config.set('javaVersion', this.javaVersion);
+    this.config.set('roleNames', this.roleNames);
 };
 
 JhipsterGenerator.prototype.projectfiles = function projectfiles() {
