@@ -15,6 +15,7 @@
                 "tracker": "追蹤使用者",
                 "metrics": "資源監控",
                 "health": "服務狀態",
+                "configuration": "Configuration",
                 "logs": "記錄",
                 "audits": "稽核",
                 "login": "登入",
@@ -103,7 +104,8 @@
             "success": "<strong>註冊成功!</strong> 請檢查您的電子郵件.",
             "error": {
                 "fail": "<strong>註冊失敗!</strong> 請稍後再試.",
-                "userexists": "<strong>帳號已經被註冊!</strong> 請選擇其他帳號."
+                "userexists": "<strong>帳號已經被註冊!</strong> 請選擇其他帳號.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
             }
         }
     },
@@ -131,7 +133,10 @@
             "button": "儲存"
         },
         "messages": {
-            "error": "<strong>發生錯誤!</strong> 設定無法被儲存.",
+            "error": {
+                "fail": "<strong>發生錯誤!</strong> 設定無法被儲存.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+            },
             "success": "<strong>設定儲存成功!</strong>",
             "validate": {
                 "firstname": {
@@ -258,6 +263,18 @@
             "misses": "快取遺漏計數",
             "evictioncount": "收回計數",
             "mean": "平均讀取時間 (毫秒)"
+        },
+        "datasource": {
+            "title": "DataSource statistics (time in millisecond)",
+            "name": "Pool usage",
+            "count": "Count",
+            "mean": "Mean",
+            "min": "Min",
+            "max": "Max",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
         }
     },
     "health": {
@@ -266,6 +283,7 @@
         "stacktrace": "堆疊追蹤",
         "indicator": {
             "db": "資料庫",
+            "diskSpace": "Disk space",
             "mail": "電子郵件",
             "mongo": "MongoDB"
         },
@@ -276,6 +294,14 @@
         "status": {
             "UP": "正常",
             "DOWN": "異常"
+        }
+    },
+    "configuration": {
+        "title": "Configuration",
+        "filter": "Filter (by prefix)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Properties"
         }
     },
     "logs": {

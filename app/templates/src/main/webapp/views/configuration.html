@@ -1,0 +1,24 @@
+<div>
+    <h2 translate="configuration.title">configuration</h2>
+
+    {{'configuration.filter' | translate}} <input type="text" ng-model="filter" class="form-control">
+
+    <table class="table table-condensed table-striped table-bordered table-responsive">
+        <thead>
+        <tr>
+            <th ng-click="predicate = 'prefix'; reverse=!reverse">{{'configuration.table.prefix' | translate}}</th>
+            <th>{{'configuration.table.properties' | translate}}</th>
+        </tr>
+        </thead>
+
+        <tr ng-repeat="entry in configuration | filter:filter | orderBy:predicate:reverse">
+            <td>{{entry.prefix}}</span></td>
+            <td>
+                <div class="row" ng-repeat="(key, value) in entry.properties">
+                    <div class="col-md-6">{{key}}</div>
+                    <div class="col-md-6"><span class="label label-info">{{value}}</span></div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>

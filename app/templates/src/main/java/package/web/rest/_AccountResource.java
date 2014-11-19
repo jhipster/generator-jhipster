@@ -1,10 +1,10 @@
 package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import <%=packageName%>.domain.Authority;
-import <%=packageName%>.domain.PersistentToken;
-import <%=packageName%>.domain.User;
-import <%=packageName%>.repository.PersistentTokenRepository;
+import <%=packageName%>.domain.Authority;<% if (authenticationType == 'cookie') { %>
+import <%=packageName%>.domain.PersistentToken;<% } %>
+import <%=packageName%>.domain.User;<% if (authenticationType == 'cookie') { %>
+import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.MailService;
@@ -53,10 +53,10 @@ public class AccountResource {
     private UserRepository userRepository;
 
     @Inject
-    private UserService userService;
+    private UserService userService;<% if (authenticationType == 'cookie') { %>
 
     @Inject
-    private PersistentTokenRepository persistentTokenRepository;
+    private PersistentTokenRepository persistentTokenRepository;<% } %>
 
     @Inject
     private MailService mailService;
@@ -71,8 +71,11 @@ public class AccountResource {
     public ResponseEntity<?> registerAccount(@RequestBody UserDTO userDTO, HttpServletRequest request,
                                              HttpServletResponse response) {<% if (javaVersion == '8') { %>
         return Optional.ofNullable(userRepository.findOne(userDTO.getLogin()))
-            .map(user -> new ResponseEntity<>(HttpStatus.NOT_MODIFIED))
+            .map(user -> new ResponseEntity<String>("login already in use", HttpStatus.BAD_REQUEST))
             .orElseGet(() -> {
+                if (userRepository.findOneByEmail(userDTO.getEmail()) != null) {
+                    return new ResponseEntity<String>("e-mail address already in use", HttpStatus.BAD_REQUEST);
+                }
                 User user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(),
                         userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail().toLowerCase(),
                         userDTO.getLangKey());
@@ -82,8 +85,11 @@ public class AccountResource {
                 return new ResponseEntity<>(HttpStatus.CREATED);});<% } else { %>
         User user = userRepository.findOne(userDTO.getLogin());
         if (user != null) {
-            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+            return new ResponseEntity<String>("login already in use", HttpStatus.BAD_REQUEST);
         } else {
+            if (userRepository.findOneByEmail(userDTO.getEmail()) != null) {
+                return new ResponseEntity<String>("e-mail address already in use", HttpStatus.BAD_REQUEST);
+            }
             user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(), userDTO.getFirstName(),
                     userDTO.getLastName(), userDTO.getEmail().toLowerCase(), userDTO.getLangKey());
             final Locale locale = Locale.forLanguageTag(user.getLangKey());
@@ -171,8 +177,13 @@ public class AccountResource {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public void saveAccount(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> saveAccount(@RequestBody UserDTO userDTO) {
+        User userHavingThisEmail = userRepository.findOneByEmail(userDTO.getEmail());
+        if (userHavingThisEmail != null && !userHavingThisEmail.getLogin().equals(SecurityUtils.getCurrentLogin())) {
+            return new ResponseEntity<String>("e-mail address already in use", HttpStatus.BAD_REQUEST);
+        }
         userService.updateUserInformation(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
@@ -188,7 +199,7 @@ public class AccountResource {
         }
         userService.changePassword(password);
         return new ResponseEntity<>(HttpStatus.OK);
-    }
+    }<% if (authenticationType == 'cookie') { %>
 
     /**
      * GET  /rest/account/sessions -> get the current open sessions.
@@ -243,7 +254,7 @@ public class AccountResource {
                 persistentTokenRepository.delete(decodedSeries);
             }
         }<% } %>
-    }
+    }<% } %>
 
     private String createHtmlContentFromTemplate(final User user, final Locale locale, final HttpServletRequest request,
                                                  final HttpServletResponse response) {

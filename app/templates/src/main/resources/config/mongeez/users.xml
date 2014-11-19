@@ -1,6 +1,7 @@
 <mongoChangeLog>
     <changeSet changeId="ChangeSet-2" author="jhipster">
         <script>
+            db.T_USER.ensureIndex({"email" : 1});
             db.T_USER.insert(
             {
                 "_id" : "system", "password" : "$2a$10$mE.qmcV0mFU5NcKh73TZx.z4ueI/.bDWbj0T1BYyqP481kGGarKLG",

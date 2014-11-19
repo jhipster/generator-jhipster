@@ -163,7 +163,7 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
         List<<%= entityClass %>> <%= entityInstance %>s = <%= entityInstance %>Repository.findAll();
         assertThat(<%= entityInstance %>s).hasSize(1);
         <%= entityClass %> test<%= entityClass %> = <%= entityInstance %>s.iterator().next();<% for (fieldId in fields) {%>
-        assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldNameCapitalized%>()).isEqualTo(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>;
+        assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldNameCapitalized%>()).isEqualTo(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>
     }
 
     @Test<% if (databaseType == 'sql') { %>

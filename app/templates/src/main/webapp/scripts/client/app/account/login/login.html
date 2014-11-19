@@ -15,14 +15,14 @@
                     <label for="password" translate="login.form.password">Password</label>
                     <input type="password" class="form-control" id="password" placeholder="{{'login.form.password.placeholder' | translate}}"
                            ng-model="password">
-                </div>
+                </div><% if (authenticationType == 'cookie') { %>
                 <div class="form-group">
                     <label for="rememberMe">
                         {{"login.form.rememberme" | translate}}
                         <input type="checkbox" class="checkbox inline_class" id="rememberMe"
                                ng-model="rememberMe" checked>
                     </label>
-                </div>
+                </div><% } %>
                 <button type="submit" class="btn btn-primary" ng-click="login()" translate="login.form.button">Authenticate</button>
             </form>
             <p></p>

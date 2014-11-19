@@ -1,6 +1,7 @@
 package <%=packageName%>.config;
 
-<% if (databaseType == 'sql') { %>import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
+<% if (databaseType == 'sql') { %>import com.codahale.metrics.MetricRegistry;
+import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import liquibase.integration.spring.SpringLiquibase;<% } %><% if (databaseType == 'nosql' && authenticationType == 'token') { %>
@@ -72,7 +73,7 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
     @Bean(destroyMethod = "shutdown")
     @ConditionalOnMissingClass(name = "<%=packageName%>.config.HerokuDatabaseConfiguration")
     @Profile("!cloud")
-    public DataSource dataSource() {
+    public DataSource dataSource(MetricRegistry metricRegistry) {
         log.debug("Configuring Datasource");
         if (propertyResolver.getProperty("url") == null && propertyResolver.getProperty("databaseName") == null) {
             log.error("Your database connection pool configuration is incorrect! The application" +
@@ -99,6 +100,7 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
             config.addDataSourceProperty("prepStmtCacheSqlLimit", propertyResolver.getProperty("prepStmtCacheSqlLimit", "2048"));
             config.addDataSourceProperty("useServerPrepStmts", propertyResolver.getProperty("useServerPrepStmts", "true"));
         }<% } %>
+        config.setMetricRegistry(metricRegistry);
         return new HikariDataSource(config);
     }
 

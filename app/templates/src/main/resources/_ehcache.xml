@@ -36,9 +36,4 @@
     <cache name="<%=packageName%>.domain.User.persistentTokens"
            timeToLiveSeconds="3600">
     </cache>
-
-    <cache name="<%=packageName%>.domain.PersistentAuditEvent"
-           timeToLiveSeconds="3600">
-    </cache>
 </ehcache>
-

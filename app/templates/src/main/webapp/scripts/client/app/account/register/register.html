@@ -15,6 +15,10 @@
                 <strong>Login name already registered!</strong> Please choose another one.
             </div>
 
+            <div class="alert alert-danger" ng-show="errorEmailExists" translate="register.messages.error.emailexists">
+                <strong>E-mail is already in use!</strong> Please choose another one.
+            </div>
+
             <div class="alert alert-danger" ng-show="doNotMatch" translate="global.messages.error.dontmatch">
                 The password and its confirmation do not match!
             </div>

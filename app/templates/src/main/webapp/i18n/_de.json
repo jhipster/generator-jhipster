@@ -5,16 +5,17 @@
         "menu": {
             "home": "Startseite",
             "entities": {
-                "main": "Entities"
+                "main": "Entitäten"
             },
             "account": {
                 "main": "Zugang",
                 "settings": "Einstellungen",
                 "password": "Passwort",
                 "sessions": "Sitzungen",
-                "tracker": "User tracker",
+                "tracker": "Benutzer Aktivitäten",
                 "metrics": "Metriken",
-                "health": "Heath",
+                "health": "Status",
+                "configuration": "Konfiguration",
                 "logs": "Protokoll",
                 "audits": "Audits",
                 "login": "Anmelden",
@@ -103,7 +104,8 @@
             "success": "<strong>Registrierung gespeichert!</strong> Bitte überprüfen Sie ihre E-Mails für die Bestätigung.",
             "error": {
                 "fail": "<strong>Registrierung fehlgeschlagen!</strong> Bitte versuchen Sie es später nochmal.",
-                "userexists": "<strong>Loginname bereits vergeben!</strong> Bitte wählen Sie einen anderen aus."
+                "userexists": "<strong>Loginname bereits vergeben!</strong> Bitte wählen Sie einen anderen aus.",
+                "emailexists": "<strong>E-mail wird bereits verwendet!</strong> Bitte wählen Sie eine andere aus."
             }
         }
     },
@@ -131,7 +133,10 @@
             "button": "Speichern"
         },
         "messages": {
-            "error": "<strong>Es ist ein Fehler aufgetreten!</strong> Die Einstellungen konnten nicht gespeichert werden.",
+            "error": {
+                "fail": "<strong>Es ist ein Fehler aufgetreten!</strong> Die Einstellungen konnten nicht gespeichert werden.",
+                "emailexists": "<strong>E-mail wird bereits verwendet!</strong> Bitte wählen Sie eine andere aus."
+            },
             "success": "<strong>Einstellungen wurden gespeichert!</strong>",
             "validate": {
                 "firstname": {
@@ -259,14 +264,27 @@
             "misses": "Keine Treffer",
             "evictioncount": "Anzahl entfernter Objekte",
             "mean": "Durchschnittliche Zugriffszeit (ms)"
+        },
+        "datasource": {
+            "title": "Datenquelle (Zeit in millisekunden)",
+            "name": "Pool-Auslastung",
+            "count": "Anzahl",
+            "mean": "Mittel",
+            "min": "Min",
+            "max": "Max",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
         }
     },
     "health": {
-        "title": "Heath checks",
+        "title": "Gesundheit ihrer Anwendung",
         "refresh.button": "Aktualisieren",
         "stacktrace": "Stacktrace",
         "indicator": {
             "db": "Datenbank",
+            "diskSpace": "Festplattenspeicher",
             "mail": "Email",
             "mongo": "Mongo"
         },
@@ -277,6 +295,14 @@
         "status": {
             "UP": "UP",
             "DOWN": "DOWN"
+        }
+    },
+    "configuration": {
+        "title": "Konfiguration",
+        "filter": "Filter (nach Prefix)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Eigenschaften"
         }
     },
     "logs": {

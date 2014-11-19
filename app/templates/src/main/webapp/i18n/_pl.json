@@ -14,7 +14,8 @@
                 "sessions": "Sesje",
                 "tracker": "Śledzenie użytkownika",
                 "metrics": "Metryki",
-                "health": "Heath",
+                "health": "Health",
+                "configuration": "Configuration",
                 "logs": "Logi",
                 "audits": "Audyty",
                 "login": "Autoryzacja",
@@ -103,7 +104,8 @@
             "success": "<strong>Registration saved!</strong> Please check your email for confirmation.",
             "error": {
                 "fail": "<strong>Registration failed!</strong> Please try again later.",
-                "userexists": "<strong>Login name already registered!</strong> Please choose another one."
+                "userexists": "<strong>Login name already registered!</strong> Please choose another one.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
             }
         }
     },
@@ -131,7 +133,10 @@
             "button": "Zapisz"
         },
         "messages": {
-            "error": "<strong>Wystąpi błąd!</strong> Ustawienia nie zostały zapisane.",
+            "error": {
+                "fail": "<strong>Wystąpi błąd!</strong> Ustawienia nie zostały zapisane.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+            },
             "success": "<strong>Ustawienia zapisane!</strong>",
             "validate": {
                 "firstname": {
@@ -258,6 +263,18 @@
             "misses": "Nie trafionych",
             "evictioncount": "Liczba wyeksmitowanych",
             "mean": "Średni czas pobierania (ms)"
+        },
+        "datasource": {
+            "title": "DataSource statistics (time in millisecond)",
+            "name": "Pool usage",
+            "count": "Count",
+            "mean": "Mean",
+            "min": "Min",
+            "max": "Max",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
         }
     },
     "health": {
@@ -266,6 +283,7 @@
         "stacktrace": "Stos wywołań",
         "indicator": {
             "db": "Baza danych",
+            "diskSpace": "Disk space",
             "mail": "Email",
             "mongo": "Mongo DB"
         },
@@ -276,6 +294,14 @@
         "status": {
             "UP": "DOSTĘPNE",
             "DOWN": "NIE DZIAŁAJĄCY"
+        }
+    },
+    "configuration": {
+        "title": "Configuration",
+        "filter": "Filter (by prefix)",
+        "table": {
+            "prefix": "Prefix",
+            "properties": "Properties"
         }
     },
     "logs": {
