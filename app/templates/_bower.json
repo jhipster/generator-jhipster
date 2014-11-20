@@ -18,7 +18,8 @@
     "angular-translate-loader-static-files": "2.4.2",
     "angular-dynamic-locale": "0.1.21",
     "angular-i18n": "1.2.26",
-    "swagger-ui": "2.0.18"
+    "swagger-ui": "2.0.18",
+    "angular-cache-buster": "0.4.3"
   },
   "devDependencies": {
     "angular-mocks": "1.2.26",

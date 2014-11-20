@@ -728,6 +728,7 @@ JhipsterGenerator.prototype.app = function app() {
         'bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
         'bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
         'bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js',
+        'bower_components/angular-cache-buster/angular-cache-buster.js',
 
         'scripts/http-auth-interceptor.js',
         'scripts/truncate.js',

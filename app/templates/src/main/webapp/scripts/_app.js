@@ -4,10 +4,14 @@
 var httpHeaders;<% } %>
 
 var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-interceptor', 'tmh.dynamicLocale',
-    'ngResource', 'ngRoute', 'ngCookies', '<%= angularAppName %>Utils', 'pascalprecht.translate', 'truncate']);
+    'ngResource', 'ngRoute', 'ngCookies', '<%= angularAppName %>Utils', 'pascalprecht.translate', 'truncate', 'ngCacheBuster']);
 
 <%= angularAppName %>
-    .config(function ($routeProvider, $httpProvider, $translateProvider, tmhDynamicLocaleProvider, USER_ROLES) {
+    .config(function ($routeProvider, $httpProvider, $translateProvider, tmhDynamicLocaleProvider, httpRequestInterceptorCacheBusterProvider, USER_ROLES) {
+
+            //Cache everything except rest api requests
+            httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*rest.*/],true);
+
             $routeProvider
                 .when('/register', {
                     templateUrl: 'views/register.html',
