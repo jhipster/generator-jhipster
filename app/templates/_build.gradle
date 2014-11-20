@@ -6,8 +6,8 @@ buildscript {
     }
     dependencies {
         classpath('org.springframework.boot:spring-boot-gradle-plugin:1.2.0.RC1')
-        classpath('com.moowork.gradle:gradle-node-plugin:0.4')
-        classpath('com.moowork.gradle:gradle-grunt-plugin:0.5')
+        classpath('com.moowork.gradle:gradle-node-plugin:0.8')
+        classpath('com.moowork.gradle:gradle-grunt-plugin:0.6')
         classpath('be.filipblondeel.gradle:gradle-gulp-plugin:0.1')
     }
 }
@@ -26,6 +26,10 @@ springBoot {
 }
 
 apply from: 'yeoman.gradle'
+
+if (project.hasProperty('prod')) {
+    profile = 'prod'
+}
 
 if (profile == 'prod') {
     apply from: 'profile_prod.gradle'
