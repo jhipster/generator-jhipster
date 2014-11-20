@@ -40,7 +40,7 @@
                             </a>
                         </li>
                         <li ng-switch-when="true" class="dropdown pointer">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="">
                                 <span>
                                     <span class="glyphicon glyphicon-th-list"></span>
                                     <span class="hidden-tablet" translate="global.menu.entities.main">
@@ -80,7 +80,7 @@
                             </ul>
                         </li>
                         <li ng-switch-when="true" ng-show="isAuthorized(userRoles.admin)" class="dropdown pointer" ng-controller="AdminController">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="">
                                 <span>
                                     <span class="glyphicon glyphicon-tower"></span>
                                     <span class="hidden-tablet" translate="global.menu.admin">Admin</span>
@@ -105,7 +105,7 @@
                             </ul>
                         </li>
                         <li class="dropdown pointer" ng-controller="LanguageController">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="">
                                 <span>
                                     <span class="glyphicon glyphicon-flag"></span>
                                     <span class="hidden-tablet" translate="global.menu.language">Language</span>
@@ -114,7 +114,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li active-menu="{{key}}" ng-repeat="(key, language) in languages">
-                                    <a href="javascript:;" ng-click="changeLanguage(key)">{{language}}</a>
+                                    <a href="#" ng-click="changeLanguage(key)">{{language}}</a>
                                 </li>
                             </ul>
                         </li>
