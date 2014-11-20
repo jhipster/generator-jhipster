@@ -419,6 +419,9 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.hibernateCache == "ehcache") {
         this.template(resourceDir + '_ehcache.xml', resourceDir + 'ehcache.xml');
     }
+    if (this.devDatabaseType == "h2Memory") {
+        this.copy(resourceDir + 'h2.server.properties', resourceDir + '.h2.server.properties');
+    }
 
     // i18n resources used by thymeleaf
     this.copy(resourceDir + '/i18n/messages_ca.properties', resourceDir + 'i18n/messages_ca.properties');
