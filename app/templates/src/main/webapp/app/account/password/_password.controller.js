@@ -4,7 +4,7 @@ angular.module('<%=angularAppName%>')
     .config(function ($routeProvider) {
         $routeProvider
             .when('/password', {
-                templateUrl: 'views/password.html',
+                templateUrl: 'app/account/password/password.html',
                 controller: 'PasswordController',
                 authenticate: true
             })
