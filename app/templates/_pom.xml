@@ -48,7 +48,6 @@
         <javax.inject.version>1</javax.inject.version><% if (databaseType == 'sql') { %>
         <joda-time-hibernate.version>1.3</joda-time-hibernate.version><% } %>
         <json-path.version>0.9.1</json-path.version><% if (databaseType == 'sql') { %>
-        <liquibase-hibernate.version>3.3</liquibase-hibernate.version>
         <liquibase-slf4j.version>1.2.1</liquibase-slf4j.version>
         <liquibase.version>3.1.1</liquibase.version><% } %>
         <maven-enforcer-plugin.version>1.3.1</maven-enforcer-plugin.version>
@@ -292,6 +291,10 @@
         </dependency><% } %>
         <dependency>
             <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-envers</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
         </dependency><% if (databaseType == 'sql') { %>
         <dependency>
@@ -307,17 +310,6 @@
                 <exclusion>
                     <artifactId>jetty-servlet</artifactId>
                     <groupId>org.eclipse.jetty</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.liquibase.ext</groupId>
-            <artifactId>liquibase-hibernate4</artifactId>
-            <version>${liquibase-hibernate.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>hibernate-jpa-2.0-api</artifactId>
-                    <groupId>org.hibernate.javax.persistence</groupId>
                 </exclusion>
             </exclusions>
         </dependency><% } %><% if (databaseType == 'nosql') { %>
