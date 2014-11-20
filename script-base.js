@@ -21,7 +21,7 @@ Generator.prototype.addAppScriptToIndex = function (script) {
             file: fullPath,
             needle: '<!-- endbuild -->',
             splicable: [
-                    '<script src="client/app/entities/' + script + '"></script>'
+                    '<script src="app/entities/' + script + '"></script>'
             ]
         });
     } catch (e) {
@@ -37,7 +37,7 @@ Generator.prototype.addComponentsScriptToIndex = function (script) {
             file: fullPath,
             needle: '<!-- endbuild -->',
             splicable: [
-                    '<script src="client/components/entities/' + script + '"></script>'
+                    '<script src="components/entities/' + script + '"></script>'
             ]
         });
     } catch (e) {
@@ -48,7 +48,7 @@ Generator.prototype.addComponentsScriptToIndex = function (script) {
 Generator.prototype.addRouterToMenu = function (entityName) {
     try {
         var appPath = this.env.options.appPath;
-        var fullPath = path.join(appPath, 'client/components/navbar/navbar.html');
+        var fullPath = path.join(appPath, 'components/navbar/navbar.html');
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: '<!-- JHipster will add entities to the menu here -->',

@@ -4,7 +4,7 @@ angular.module('<%=angularAppName%>')
     .config(function ($routeProvider) {
         $routeProvider
             .when('/<%= entityInstance %>', {
-                templateUrl: 'client/app/entities/<%= entityInstance %>/<%= entityInstance %>s.html',
+                templateUrl: 'app/entities/<%= entityInstance %>/<%= entityInstance %>s.html',
                 controller: '<%= entityClass %>Controller',
                 authenticate: true
             })

@@ -290,13 +290,13 @@ EntityGenerator.prototype.files = function files() {
         this.addChangelogToLiquibase(this.changelogDate + '_added_entity_' + this.entityClass);
     }
 
-    this.template('src/main/webapp/client/app/_entities.html',
-        'src/main/webapp/client/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + 's.html', this, {});
+    this.template('src/main/webapp/app/_entities.html',
+        'src/main/webapp/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + 's.html', this, {});
 
     this.addRouterToMenu(this.entityInstance);
 
-    this.template('src/main/webapp/client/app/_entity-controller.js',
-        'src/main/webapp/client/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '.controller' + '.js', this, {});
+    this.template('src/main/webapp/app/_entity-controller.js',
+        'src/main/webapp/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '.controller' + '.js', this, {});
     this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.controller' + '.js');
 
     this.template('src/main/webapp/client/components/_entity-service.js',
