@@ -36,7 +36,6 @@
         fieldInputType = 'checkbox';
     }%>
                         <div class="form-group">
-                            <!--<%=fields[fieldId].fieldType%>-->
                             <label><%=fields[fieldId].fieldNameCapitalized%></label>
                             <input type="<%=fieldInputType%>" class="form-control"
                                    ng-model="<%=entityInstance %>.<%=fields[fieldId].fieldName%>">
