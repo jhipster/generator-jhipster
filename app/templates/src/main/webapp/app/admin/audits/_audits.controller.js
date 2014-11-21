@@ -12,7 +12,11 @@ angular.module('<%=angularAppName%>')
     })
     .controller('AuditsController', function ($scope, $translate, $filter, AuditsService) {
         $scope.onChangeDate = function () {
-            AuditsService.findByDates($scope.fromDate, $scope.toDate).then(function (data) {
+            var dateFormat = "yyyy-MM-dd";
+            var fromDate = $filter('date')($scope.fromDate, dateFormat);
+            var toDate = $filter('date')($scope.toDate, dateFormat);
+
+            AuditsService.findByDates(fromDate, toDate).then(function (data) {
                 $scope.audits = data;
             });
         };
@@ -21,9 +25,7 @@ angular.module('<%=angularAppName%>')
         $scope.today = function () {
             // Today + 1 day - needed if the current day must be included
             var today = new Date();
-            var tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1); // create new increased date
-
-            $scope.toDate = $filter('date')(tomorrow, "yyyy-MM-dd");
+            $scope.toDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
         };
 
         $scope.previousMonth = function () {
@@ -34,13 +36,10 @@ angular.module('<%=angularAppName%>')
                 fromDate = new Date(fromDate.getFullYear(), fromDate.getMonth() - 1, fromDate.getDate());
             }
 
-            $scope.fromDate = $filter('date')(fromDate, "yyyy-MM-dd");
+            $scope.fromDate = fromDate;
         };
 
         $scope.today();
         $scope.previousMonth();
-
-        AuditsService.findByDates($scope.fromDate, $scope.toDate).then(function (data) {
-            $scope.audits = data;
-        });
+        $scope.onChangeDate();
     });
