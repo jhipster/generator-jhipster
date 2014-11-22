@@ -35,9 +35,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;<% } %><% if (databaseType == 'nosql') { %>
+import java.util.Arrays;<% } %><% if (databaseType == 'nosql') { %>
 import javax.inject.Inject;<% } %><% if (databaseType == 'nosql' && authenticationType == 'token') { %>
 import java.util.ArrayList;
 import java.util.List;<% } %>

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale',
-    'ngResource', 'ngRoute', 'ngCookies', 'pascalprecht.translate'])
+    'ngResource', 'ngRoute', 'ngCookies', 'pascalprecht.translate', 'ngCacheBuster'])
 
     .run(function($rootScope, $location, $http, Auth, Role) {
 
@@ -59,7 +59,9 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
         };
     })
 
-    .config(function ($routeProvider, $httpProvider, $locationProvider, $translateProvider, tmhDynamicLocaleProvider) {
+    .config(function ($routeProvider, $httpProvider, $locationProvider, $translateProvider, tmhDynamicLocaleProvider, httpRequestInterceptorCacheBusterProvider) {
+        //Cache everything except rest api requests
+        httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*rest.*/],true);
 
         $routeProvider
             .otherwise({
