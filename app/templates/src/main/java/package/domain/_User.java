@@ -69,12 +69,12 @@ public class User extends AbstractAuditingEntity implements Serializable {
             joinColumns = {@JoinColumn(name = "login", referencedColumnName = "login")},
             inverseJoinColumns = {@JoinColumn(name = "name", referencedColumnName = "name")})<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
-    private Set<Authority> authorities = new HashSet<>();
+    private Set<Authority> authorities = new HashSet<>();<% if (authenticationType == 'cookie') { %><% if (databaseType == 'sql') { %>
 
-    <% if (databaseType == 'sql') { %>@JsonIgnore
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
-    private Set<PersistentToken> persistentTokens = new HashSet<>();
+    private Set<PersistentToken> persistentTokens = new HashSet<>();<% } %>
 
     public String getLogin() {
         return login;
@@ -146,8 +146,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
-    }
-    <% if (databaseType == 'sql') { %>
+    }<% if ((authenticationType == 'cookie') && (databaseType == 'sql')) { %>
+
     public Set<PersistentToken> getPersistentTokens() {
         return persistentTokens;
     }

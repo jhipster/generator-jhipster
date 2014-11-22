@@ -55,7 +55,7 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addPrimaryKey columnNames="login, name" tableName="T_USER_AUTHORITY"/>
+        <addPrimaryKey columnNames="login, name" tableName="T_USER_AUTHORITY"/><% if (authenticationType == 'cookie') { %>
 
         <createTable tableName="T_PERSISTENT_TOKEN">
             <column name="series" type="varchar(255)">
@@ -68,7 +68,7 @@
             <column name="token_date" type="date"/>
             <column name="ip_address" type="varchar(39)"/>
             <column name="user_agent" type="varchar(255)"/>
-        </createTable>
+        </createTable><% } %>
 
         <createTable tableName="hibernate_sequences">
             <column name="sequence_name" type="varchar(255)"/>
@@ -92,13 +92,13 @@
                                  baseTableName="T_USER_AUTHORITY"
                                  constraintName="fk_user_login"
                                  referencedColumnNames="login"
-                                 referencedTableName="T_USER"/>
+                                 referencedTableName="T_USER"/><% if (authenticationType == 'cookie') { %>
 
         <addForeignKeyConstraint baseColumnNames="user_login"
                                  baseTableName="T_PERSISTENT_TOKEN"
                                  constraintName="fk_user_persistent_token"
                                  referencedColumnNames="login"
-                                 referencedTableName="T_USER"/>
+                                 referencedTableName="T_USER"/><% } %>
 
         <loadData encoding="UTF-8"
                   file="config/liquibase/users.csv"
@@ -185,6 +185,12 @@
             <column name="client_id" type="VARCHAR(256)"/>
         </createTable>
 
+        <addForeignKeyConstraint baseColumnNames="user_name"
+            baseTableName="oauth_client_token"
+            constraintName="fk_oauth_client_token_user_name"
+            referencedColumnNames="login"
+            referencedTableName="T_USER"/>
+
         <createTable tableName="oauth_access_token">
             <column name="token_id" type="VARCHAR(256)"/>
             <column name="token" type="BLOB"/>
@@ -194,6 +200,12 @@
             <column name="authentication" type="BLOB"/>
             <column name="refresh_token" type="VARCHAR(256)"/>
         </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="user_name"
+            baseTableName="oauth_client_token"
+            constraintName="fk_oauth_access_token_user_name"
+            referencedColumnNames="login"
+            referencedTableName="T_USER"/>
 
         <createTable tableName="oauth_refresh_token">
             <column name="token_id" type="VARCHAR(256)"/>

@@ -1,10 +1,10 @@
 package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import <%=packageName%>.domain.Authority;
-import <%=packageName%>.domain.PersistentToken;
-import <%=packageName%>.domain.User;
-import <%=packageName%>.repository.PersistentTokenRepository;
+import <%=packageName%>.domain.Authority;<% if (authenticationType == 'cookie') { %>
+import <%=packageName%>.domain.PersistentToken;<% } %>
+import <%=packageName%>.domain.User;<% if (authenticationType == 'cookie') { %>
+import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.MailService;
@@ -53,10 +53,10 @@ public class AccountResource {
     private UserRepository userRepository;
 
     @Inject
-    private UserService userService;
+    private UserService userService;<% if (authenticationType == 'cookie') { %>
 
     @Inject
-    private PersistentTokenRepository persistentTokenRepository;
+    private PersistentTokenRepository persistentTokenRepository;<% } %>
 
     @Inject
     private MailService mailService;
@@ -197,7 +197,7 @@ public class AccountResource {
         }
         userService.changePassword(password);
         return new ResponseEntity<>(HttpStatus.OK);
-    }
+    }<% if (authenticationType == 'cookie') { %>
 
     /**
      * GET  /rest/account/sessions -> get the current open sessions.
@@ -252,7 +252,7 @@ public class AccountResource {
                 persistentTokenRepository.delete(decodedSeries);
             }
         }<% } %>
-    }
+    }<% } %>
 
     private String createHtmlContentFromTemplate(final User user, final Locale locale, final HttpServletRequest request,
                                                  final HttpServletResponse response) {

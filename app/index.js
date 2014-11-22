@@ -419,6 +419,9 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.hibernateCache == "ehcache") {
         this.template(resourceDir + '_ehcache.xml', resourceDir + 'ehcache.xml', this, {});
     }
+    if (this.devDatabaseType == "h2Memory") {
+        this.copy(resourceDir + 'h2.server.properties', resourceDir + '.h2.server.properties');
+    }
 
     // i18n resources used by thymeleaf
     this.copy(resourceDir + '/i18n/messages_ca.properties', resourceDir + 'i18n/messages_ca.properties');
@@ -538,55 +541,60 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/repository/_UserRepository.java', javaDir + 'repository/UserRepository.java', this, {});
     this.template('src/main/java/package/repository/_PersistentTokenRepository.java', javaDir + 'repository/PersistentTokenRepository.java', this, {});
     this.template('src/main/java/package/repository/_PersistenceAuditEventRepository.java', javaDir + 'repository/PersistenceAuditEventRepository.java', this, {});
+    this.template('src/main/java/package/repository/_UserRepository.java', javaDir + 'repository/UserRepository.java', this, {});
+    if (this.authenticationType == 'cookie') {
+        this.template('src/main/java/package/repository/_PersistentTokenRepository.java', javaDir + 'repository/PersistentTokenRepository.java', this, {});
+    }
+    this.template('src/main/java/package/repository/_PersistenceAuditEventRepository.java', javaDir + 'repository/PersistenceAuditEventRepository.java', this, {});
 
-    this.template('src/main/java/package/security/_package-info.java', javaDir + 'security/package-info.java', this, {});
-    this.template('src/main/java/package/security/_AjaxAuthenticationFailureHandler.java', javaDir + 'security/AjaxAuthenticationFailureHandler.java', this, {});
-    this.template('src/main/java/package/security/_AjaxAuthenticationSuccessHandler.java', javaDir + 'security/AjaxAuthenticationSuccessHandler.java', this, {});
-    this.template('src/main/java/package/security/_AjaxLogoutSuccessHandler.java', javaDir + 'security/AjaxLogoutSuccessHandler.java', this, {});
-    this.template('src/main/java/package/security/_AuthoritiesConstants.java', javaDir + 'security/AuthoritiesConstants.java', this, {});
-    this.template('src/main/java/package/security/_CustomPersistentRememberMeServices.java', javaDir + 'security/CustomPersistentRememberMeServices.java', this, {});
-    this.template('src/main/java/package/security/_Http401UnauthorizedEntryPoint.java', javaDir + 'security/Http401UnauthorizedEntryPoint.java', this, {});
-    this.template('src/main/java/package/security/_SecurityUtils.java', javaDir + 'security/SecurityUtils.java', this, {});
-    this.template('src/main/java/package/security/_SpringSecurityAuditorAware.java', javaDir + 'security/SpringSecurityAuditorAware.java', this, {});
-    this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java', this, {});
-    this.template('src/main/java/package/security/_UserNotActivatedException.java', javaDir + 'security/UserNotActivatedException.java', this, {});
+    this.template('src/main/java/package/security/_package-info.java', javaDir + 'security/package-info.java');
+    this.template('src/main/java/package/security/_AjaxAuthenticationFailureHandler.java', javaDir + 'security/AjaxAuthenticationFailureHandler.java');
+    this.template('src/main/java/package/security/_AjaxAuthenticationSuccessHandler.java', javaDir + 'security/AjaxAuthenticationSuccessHandler.java');
+    this.template('src/main/java/package/security/_AjaxLogoutSuccessHandler.java', javaDir + 'security/AjaxLogoutSuccessHandler.java');
+    this.template('src/main/java/package/security/_AuthoritiesConstants.java', javaDir + 'security/AuthoritiesConstants.java');
+    this.template('src/main/java/package/security/_CustomPersistentRememberMeServices.java', javaDir + 'security/CustomPersistentRememberMeServices.java');
+    this.template('src/main/java/package/security/_Http401UnauthorizedEntryPoint.java', javaDir + 'security/Http401UnauthorizedEntryPoint.java');
+    this.template('src/main/java/package/security/_SecurityUtils.java', javaDir + 'security/SecurityUtils.java');
+    this.template('src/main/java/package/security/_SpringSecurityAuditorAware.java', javaDir + 'security/SpringSecurityAuditorAware.java');
+    this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java');
+    this.template('src/main/java/package/security/_UserNotActivatedException.java', javaDir + 'security/UserNotActivatedException.java');
 
-    this.template('src/main/java/package/service/_package-info.java', javaDir + 'service/package-info.java', this, {});
-    this.template('src/main/java/package/service/_AuditEventService.java', javaDir + 'service/AuditEventService.java', this, {});
-    this.template('src/main/java/package/service/_UserService.java', javaDir + 'service/UserService.java', this, {});
-    this.template('src/main/java/package/service/_MailService.java', javaDir + 'service/MailService.java', this, {});
-    this.template('src/main/java/package/service/util/_RandomUtil.java', javaDir + 'service/util/RandomUtil.java', this, {});
+    this.template('src/main/java/package/service/_package-info.java', javaDir + 'service/package-info.java');
+    this.template('src/main/java/package/service/_AuditEventService.java', javaDir + 'service/AuditEventService.java');
+    this.template('src/main/java/package/service/_UserService.java', javaDir + 'service/UserService.java');
+    this.template('src/main/java/package/service/_MailService.java', javaDir + 'service/MailService.java');
+    this.template('src/main/java/package/service/util/_RandomUtil.java', javaDir + 'service/util/RandomUtil.java');
 
-    this.template('src/main/java/package/web/filter/_package-info.java', javaDir + 'web/filter/package-info.java', this, {});
-    this.template('src/main/java/package/web/filter/_CachingHttpHeadersFilter.java', javaDir + 'web/filter/CachingHttpHeadersFilter.java', this, {});
-    this.template('src/main/java/package/web/filter/_StaticResourcesProductionFilter.java', javaDir + 'web/filter/StaticResourcesProductionFilter.java', this, {});
+    this.template('src/main/java/package/web/filter/_package-info.java', javaDir + 'web/filter/package-info.java');
+    this.template('src/main/java/package/web/filter/_CachingHttpHeadersFilter.java', javaDir + 'web/filter/CachingHttpHeadersFilter.java');
+    this.template('src/main/java/package/web/filter/_StaticResourcesProductionFilter.java', javaDir + 'web/filter/StaticResourcesProductionFilter.java');
 
-    this.template('src/main/java/package/web/filter/gzip/_package-info.java', javaDir + 'web/filter/gzip/package-info.java', this, {});
-    this.template('src/main/java/package/web/filter/gzip/_GzipResponseHeadersNotModifiableException.java', javaDir + 'web/filter/gzip/GzipResponseHeadersNotModifiableException.java', this, {});
-    this.template('src/main/java/package/web/filter/gzip/_GZipResponseUtil.java', javaDir + 'web/filter/gzip/GZipResponseUtil.java', this, {});
-    this.template('src/main/java/package/web/filter/gzip/_GZipServletFilter.java', javaDir + 'web/filter/gzip/GZipServletFilter.java', this, {});
-    this.template('src/main/java/package/web/filter/gzip/_GZipServletOutputStream.java', javaDir + 'web/filter/gzip/GZipServletOutputStream.java', this, {});
-    this.template('src/main/java/package/web/filter/gzip/_GZipServletResponseWrapper.java', javaDir + 'web/filter/gzip/GZipServletResponseWrapper.java', this, {});
+    this.template('src/main/java/package/web/filter/gzip/_package-info.java', javaDir + 'web/filter/gzip/package-info.java');
+    this.template('src/main/java/package/web/filter/gzip/_GzipResponseHeadersNotModifiableException.java', javaDir + 'web/filter/gzip/GzipResponseHeadersNotModifiableException.java');
+    this.template('src/main/java/package/web/filter/gzip/_GZipResponseUtil.java', javaDir + 'web/filter/gzip/GZipResponseUtil.java');
+    this.template('src/main/java/package/web/filter/gzip/_GZipServletFilter.java', javaDir + 'web/filter/gzip/GZipServletFilter.java');
+    this.template('src/main/java/package/web/filter/gzip/_GZipServletOutputStream.java', javaDir + 'web/filter/gzip/GZipServletOutputStream.java');
+    this.template('src/main/java/package/web/filter/gzip/_GZipServletResponseWrapper.java', javaDir + 'web/filter/gzip/GZipServletResponseWrapper.java');
 
-    this.template('src/main/java/package/web/propertyeditors/_package-info.java', javaDir + 'web/propertyeditors/package-info.java', this, {});
-    this.template('src/main/java/package/web/propertyeditors/_LocaleDateTimeEditor.java', javaDir + 'web/propertyeditors/LocaleDateTimeEditor.java', this, {});
+    this.template('src/main/java/package/web/propertyeditors/_package-info.java', javaDir + 'web/propertyeditors/package-info.java');
+    this.template('src/main/java/package/web/propertyeditors/_LocaleDateTimeEditor.java', javaDir + 'web/propertyeditors/LocaleDateTimeEditor.java');
 
-    this.template('src/main/java/package/web/rest/dto/_package-info.java', javaDir + 'web/rest/dto/package-info.java', this, {});
-    this.template('src/main/java/package/web/rest/dto/_LoggerDTO.java', javaDir + 'web/rest/dto/LoggerDTO.java', this, {});
-    this.template('src/main/java/package/web/rest/dto/_UserDTO.java', javaDir + 'web/rest/dto/UserDTO.java', this, {});
-    this.template('src/main/java/package/web/rest/_package-info.java', javaDir + 'web/rest/package-info.java', this, {});
-    this.template('src/main/java/package/web/rest/_AccountResource.java', javaDir + 'web/rest/AccountResource.java', this, {});
-    this.template('src/main/java/package/web/rest/_AuditResource.java', javaDir + 'web/rest/AuditResource.java', this, {});
-    this.template('src/main/java/package/web/rest/_LogsResource.java', javaDir + 'web/rest/LogsResource.java', this, {});
-    this.template('src/main/java/package/web/rest/_UserResource.java', javaDir + 'web/rest/UserResource.java', this, {});
+    this.template('src/main/java/package/web/rest/dto/_package-info.java', javaDir + 'web/rest/dto/package-info.java');
+    this.template('src/main/java/package/web/rest/dto/_LoggerDTO.java', javaDir + 'web/rest/dto/LoggerDTO.java');
+    this.template('src/main/java/package/web/rest/dto/_UserDTO.java', javaDir + 'web/rest/dto/UserDTO.java');
+    this.template('src/main/java/package/web/rest/_package-info.java', javaDir + 'web/rest/package-info.java');
+    this.template('src/main/java/package/web/rest/_AccountResource.java', javaDir + 'web/rest/AccountResource.java');
+    this.template('src/main/java/package/web/rest/_AuditResource.java', javaDir + 'web/rest/AuditResource.java');
+    this.template('src/main/java/package/web/rest/_LogsResource.java', javaDir + 'web/rest/LogsResource.java');
+    this.template('src/main/java/package/web/rest/_UserResource.java', javaDir + 'web/rest/UserResource.java');
 
     if (this.websocket == 'atmosphere') {
-        this.template('src/main/java/package/web/websocket/_package-info.java', javaDir + 'web/websocket/package-info.java', this, {});
-        this.template('src/main/java/package/web/websocket/_ActivityService.java', javaDir + 'web/websocket/ActivityService.java', this, {});
-        this.template('src/main/java/package/web/websocket/_TrackerService.java', javaDir + 'web/websocket/TrackerService.java', this, {});
-        this.template('src/main/java/package/web/websocket/dto/_package-info.java', javaDir + 'web/websocket/dto/package-info.java', this, {});
-        this.template('src/main/java/package/web/websocket/dto/_ActivityDTO.java', javaDir + 'web/websocket/dto/ActivityDTO.java', this, {});
-        this.template('src/main/java/package/web/websocket/dto/_ActivityDTOJacksonDecoder.java', javaDir + 'web/websocket/dto/ActivityDTOJacksonDecoder.java', this, {});
+        this.template('src/main/java/package/web/websocket/_package-info.java', javaDir + 'web/websocket/package-info.java');
+        this.template('src/main/java/package/web/websocket/_ActivityService.java', javaDir + 'web/websocket/ActivityService.java');
+        this.template('src/main/java/package/web/websocket/_TrackerService.java', javaDir + 'web/websocket/TrackerService.java');
+        this.template('src/main/java/package/web/websocket/dto/_package-info.java', javaDir + 'web/websocket/dto/package-info.java');
+        this.template('src/main/java/package/web/websocket/dto/_ActivityDTO.java', javaDir + 'web/websocket/dto/ActivityDTO.java');
+        this.template('src/main/java/package/web/websocket/dto/_ActivityDTOJacksonDecoder.java', javaDir + 'web/websocket/dto/ActivityDTOJacksonDecoder.java');
     }
 
     // Create Test Java files
@@ -595,19 +603,19 @@ JhipsterGenerator.prototype.app = function app() {
     this.mkdir(testDir);
 
     if (this.databaseType == "nosql") {
-        this.template('src/test/java/package/config/_MongoConfiguration.java', testDir + 'config/MongoConfiguration.java', this, {});
+        this.template('src/test/java/package/config/_MongoConfiguration.java', testDir + 'config/MongoConfiguration.java');
     }
 
-    this.template('src/test/java/package/service/_UserServiceTest.java', testDir + 'service/UserServiceTest.java', this, {});
-    this.template('src/test/java/package/web/rest/_AccountResourceTest.java', testDir + 'web/rest/AccountResourceTest.java', this, {});
-    this.template('src/test/java/package/web/rest/_TestUtil.java', testDir + 'web/rest/TestUtil.java', this, {});
-    this.template('src/test/java/package/web/rest/_UserResourceTest.java', testDir + 'web/rest/UserResourceTest.java', this, {});
+    this.template('src/test/java/package/service/_UserServiceTest.java', testDir + 'service/UserServiceTest.java');
+    this.template('src/test/java/package/web/rest/_AccountResourceTest.java', testDir + 'web/rest/AccountResourceTest.java');
+    this.template('src/test/java/package/web/rest/_TestUtil.java', testDir + 'web/rest/TestUtil.java');
+    this.template('src/test/java/package/web/rest/_UserResourceTest.java', testDir + 'web/rest/UserResourceTest.java');
 
-    this.template(testResourceDir + 'config/_application.yml', testResourceDir + 'config/application.yml', this, {});
-    this.template(testResourceDir + '_logback-test.xml', testResourceDir + 'logback-test.xml', this, {});
+    this.template(testResourceDir + 'config/_application.yml', testResourceDir + 'config/application.yml');
+    this.template(testResourceDir + '_logback-test.xml', testResourceDir + 'logback-test.xml');
 
     if (this.hibernateCache == "ehcache") {
-        this.template(testResourceDir + '_ehcache.xml', testResourceDir + 'ehcache.xml', this, {});
+        this.template(testResourceDir + '_ehcache.xml', testResourceDir + 'ehcache.xml');
     }
 
     // Create Webapp
@@ -633,98 +641,61 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(webappDir + 'htaccess.txt', webappDir + '.htaccess');
 
     // i18n
-    this.template(webappDir + '/i18n/_ca.json', webappDir + 'i18n/ca.json', this, {});
-    this.template(webappDir + '/i18n/_da.json', webappDir + 'i18n/da.json', this, {});
-    this.template(webappDir + '/i18n/_de.json', webappDir + 'i18n/de.json', this, {});
-    this.template(webappDir + '/i18n/_en.json', webappDir + 'i18n/en.json', this, {});
-    this.template(webappDir + '/i18n/_es.json', webappDir + 'i18n/es.json', this, {});
-    this.template(webappDir + '/i18n/_fr.json', webappDir + 'i18n/fr.json', this, {});
-    this.template(webappDir + '/i18n/_kr.json', webappDir + 'i18n/kr.json', this, {});
-    this.template(webappDir + '/i18n/_pl.json', webappDir + 'i18n/pl.json', this, {});
-    this.template(webappDir + '/i18n/_pt-br.json', webappDir + 'i18n/pt-br.json', this, {});
-    this.template(webappDir + '/i18n/_ru.json', webappDir + 'i18n/ru.json', this, {});
-    this.template(webappDir + '/i18n/_sv.json', webappDir + 'i18n/sv.json', this, {});
-    this.template(webappDir + '/i18n/_tr.json', webappDir + 'i18n/tr.json', this, {});
-    this.template(webappDir + '/i18n/_zh-tw.json', webappDir + 'i18n/zh-tw.json', this, {});
+    this.template(webappDir + '/i18n/_ca.json', webappDir + 'i18n/ca.json');
+    this.template(webappDir + '/i18n/_da.json', webappDir + 'i18n/da.json');
+    this.template(webappDir + '/i18n/_de.json', webappDir + 'i18n/de.json');
+    this.template(webappDir + '/i18n/_en.json', webappDir + 'i18n/en.json');
+    this.template(webappDir + '/i18n/_es.json', webappDir + 'i18n/es.json');
+    this.template(webappDir + '/i18n/_fr.json', webappDir + 'i18n/fr.json');
+    this.template(webappDir + '/i18n/_kr.json', webappDir + 'i18n/kr.json');
+    this.template(webappDir + '/i18n/_pl.json', webappDir + 'i18n/pl.json');
+    this.template(webappDir + '/i18n/_pt-br.json', webappDir + 'i18n/pt-br.json');
+    this.template(webappDir + '/i18n/_ru.json', webappDir + 'i18n/ru.json');
+    this.template(webappDir + '/i18n/_sv.json', webappDir + 'i18n/sv.json');
+    this.template(webappDir + '/i18n/_tr.json', webappDir + 'i18n/tr.json');
+    this.template(webappDir + '/i18n/_zh-tw.json', webappDir + 'i18n/zh-tw.json');
 
 
     // Protected resources - used to check if a customer is still connected
     this.copy(webappDir + '/protected/authentication_check.gif', webappDir + '/protected/authentication_check.gif');
 
     // Swagger-ui for Jhipster
-    this.template(webappDir + '/swagger-ui/_index.html', webappDir + 'swagger-ui/index.html', this, {});
+    this.template(webappDir + '/swagger-ui/_index.html', webappDir + 'swagger-ui/index.html');
     this.copy(webappDir + '/swagger-ui/images/throbber.gif', webappDir + 'swagger-ui/images/throbber.gif');
 
     // Angular JS views
     this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
-
-    this.template(webappDir + '/_app.js', webappDir + 'app.js', this, {});
-    // Client Components
-    this.template(webappDir + '/components/admin/_audits.service.js', webappDir + 'components/admin/audits.service.js', this, {});
-    this.template(webappDir + '/components/admin/_configuration.service.js', webappDir + 'components/admin/configuration.service.js', this, {});
-    this.template(webappDir + '/components/admin/_logs.service.js', webappDir + 'components/admin/logs.service.js', this, {});
-    this.template(webappDir + '/components/admin/_monitoring.service.js', webappDir + 'components/admin/monitoring.service.js', this, {});
-    this.template(webappDir + '/components/auth/_auth.service.js', webappDir + 'components/auth/auth.service.js', this, {});
-    if (this.authenticationType == 'token') {
-        this.template(webappDir + '/components/auth/provider/_auth.oauth2.service.js', webappDir + 'components/auth/provider/auth.oauth2.service.js', this, {});
-    } else {
-        this.template(webappDir + '/components/auth/provider/_auth.session.service.js', webappDir + 'components/auth/provider/auth.session.service.js', this, {});
-    }
-    this.template(webappDir + '/components/auth/services/_account.service.js', webappDir + 'components/auth/services/account.service.js', this, {});
-    this.template(webappDir + '/components/auth/services/_activate.service.js', webappDir + 'components/auth/services/activate.service.js', this, {});
-    this.template(webappDir + '/components/auth/services/_password.service.js', webappDir + 'components/auth/services/password.service.js', this, {});
-    this.template(webappDir + '/components/auth/services/_register.service.js', webappDir + 'components/auth/services/register.service.js', this, {});
-    this.template(webappDir + '/components/auth/services/_role.service.js', webappDir + 'components/auth/services/role.service.js', this, {});
-    this.template(webappDir + '/components/auth/services/_sessions.service.js', webappDir + 'components/auth/services/sessions.service.js', this, {});
-    this.template(webappDir + '/components/form/_form.directive.js', webappDir + 'components/form/form.directive.js', this, {});
-    this.template(webappDir + '/components/language/_language.controller.js', webappDir + 'components/language/language.controller.js', this, {});
-    this.template(webappDir + '/components/language/_language.service.js', webappDir + 'components/language/language.service.js', this, {});
-    this.template(webappDir + '/components/navbar/_navbar.directive.js', webappDir + 'components/navbar/navbar.directive.js', this, {});
-    this.copy(webappDir + '/components/navbar/navbar.html', webappDir + 'components/navbar/navbar.html');
-    this.template(webappDir + '/components/navbar/_navbar.controller.js', webappDir + 'components/navbar/navbar.controller.js', this, {});
-    this.template(webappDir + '/components/util/_base64.service.js', webappDir + 'components/util/base64.service.js', this, {});
-    this.template(webappDir + '/components/util/_truncate.filter.js', webappDir + 'components/util/truncate.filter.js', this, {});
-
-    // Client App
-    this.copy(webappDir + '/app/account/activate/activate.html', webappDir + 'app/account/activate/activate.html');
-    this.template(webappDir + '/app/account/activate/_activate.controller.js', webappDir + 'app/account/activate/activate.controller.js', this, {});
-    this.copy(webappDir + '/app/account/login/login.html', webappDir + 'app/account/login/login.html');
-    this.template(webappDir + '/app/account/login/_login.controller.js', webappDir + 'app/account/login/login.controller.js', this, {});
-    this.template(webappDir + '/app/account/logout/_logout.controller.js', webappDir + 'app/account/logout/logout.controller.js', this, {});
-    this.copy(webappDir + '/app/account/password/password.html', webappDir + 'app/account/password/password.html');
-    this.template(webappDir + '/app/account/password/_password.controller.js', webappDir + 'app/account/password/password.controller.js', this, {});
-    this.template(webappDir + '/app/account/password/_password.directive.js', webappDir + 'app/account/password/password.directive.js', this, {});
-    this.copy(webappDir + '/app/account/register/register.html', webappDir + 'app/account/register/register.html');
-    this.template(webappDir + '/app/account/register/_register.controller.js', webappDir + 'app/account/register/register.controller.js', this, {});
-    this.copy(webappDir + '/app/account/sessions/sessions.html', webappDir + 'app/account/sessions/sessions.html');
-    this.template(webappDir + '/app/account/sessions/_sessions.controller.js', webappDir + 'app/account/sessions/sessions.controller.js', this, {});
-    this.copy(webappDir + '/app/account/settings/settings.html', webappDir + 'app/account/settings/settings.html');
-    this.template(webappDir + '/app/account/settings/_settings.controller.js', webappDir + 'app/account/settings/settings.controller.js', this, {});
-    this.copy(webappDir + '/app/admin/audits/audits.html', webappDir + 'app/admin/audits/audits.html');
-    this.template(webappDir + '/app/admin/audits/_audits.controller.js', webappDir + 'app/admin/audits/audits.controller.js', this, {});
-    this.copy(webappDir + '/app/admin/configuration/configuration.html', webappDir + 'app/admin/configuration/configuration.html');
-    this.template(webappDir + '/app/admin/configuration/_configuration.controller.js', webappDir + 'app/admin/configuration/configuration.controller.js', this, {});
-    this.copy(webappDir + '/app/admin/docs/docs.html', webappDir + 'app/admin/docs/docs.html');
-    this.template(webappDir + '/app/admin/docs/_docs.controller.js', webappDir + 'app/admin/docs/docs.controller.js', this, {});
-    this.copy(webappDir + '/app/admin/health/health.html', webappDir + 'app/admin/health/health.html');
-    this.template(webappDir + '/app/admin/health/_health.controller.js', webappDir + 'app/admin/health/health.controller.js', this, {});
-    this.copy(webappDir + '/app/admin/logs/logs.html', webappDir + 'app/admin/logs/logs.html');
-    this.template(webappDir + '/app/admin/logs/_logs.controller.js', webappDir + 'app/admin/logs/logs.controller.js', this, {});
-    this.template(webappDir + '/app/admin/metrics/_metrics.html', webappDir + 'app/admin/metrics/metrics.html', this, {});
-    this.template(webappDir + '/app/admin/metrics/_metrics.controller.js', webappDir + 'app/admin/metrics/metrics.controller.js', this, {});
+    this.copy(webappDir + '/views/activate.html', webappDir + 'views/activate.html');
+    this.copy(webappDir + '/views/audits.html', webappDir + 'views/audits.html');
+    this.copy(webappDir + '/views/configuration.html', webappDir + 'views/configuration.html');
+    this.copy(webappDir + '/views/docs.html', webappDir + 'views/docs.html');
+    this.copy(webappDir + '/views/error.html', webappDir + 'views/error.html');
+    this.copy(webappDir + '/views/health.html', webappDir + 'views/health.html');
+    this.copy(webappDir + '/views/login.html', webappDir + 'views/login.html');
+    this.copy(webappDir + '/views/logs.html', webappDir + 'views/logs.html');
+    this.copy(webappDir + '/views/main.html', webappDir + 'views/main.html');
+    this.copy(webappDir + '/views/password.html', webappDir + 'views/password.html');
+    this.copy(webappDir + '/views/register.html', webappDir + 'views/register.html');
+    this.copy(webappDir + '/views/settings.html', webappDir + 'views/settings.html');
+    this.copy(webappDir + '/views/sessions.html', webappDir + 'views/sessions.html');
     if (this.websocket == 'atmosphere') {
-        this.copy(webappDir + '/app/admin/tracker/tracker.html', webappDir + 'app/admin/tracker/tracker.html');
-        this.template(webappDir + '/app/admin/tracker/_tracker.controller.js', webappDir + 'app/admin/tracker/tracker.controller.js', this, {});
+        this.copy(webappDir + '/views/tracker.html', webappDir + 'views/tracker.html');
     }
-    this.copy(webappDir + '/app/error/error.html', webappDir + 'app/error/error.html');
-    this.template(webappDir + '/app/error/_error.js', webappDir + 'app/error/error.js', this, {});
-    this.copy(webappDir + '/app/main/main.html', webappDir + 'app/main/main.html');
-    this.template(webappDir + '/app/main/_main.controller.js', webappDir + 'app/main/main.controller.js', this, {});
-
+    this.template(webappDir + '/views/_metrics.html', webappDir + 'views/metrics.html');
 
     // Index page
     this.indexFile = this.readFileAsString(path.join(this.sourceRoot(), webappDir + '_index.html'));
-    this.indexFile = this.engine(this.indexFile, this, {});
+    this.indexFile = this.engine(this.indexFile, this);
+
+    // JavaScript
+    this.copy(webappDir + 'scripts/http-auth-interceptor.js', webappDir + 'scripts/http-auth-interceptor.js');
+    this.copy(webappDir + 'scripts/truncate.js', webappDir + 'scripts/truncate.js');
+    this.template(webappDir + 'scripts/_app.js', webappDir + 'scripts/app.js');
+    this.template(webappDir + 'scripts/_constants.js', webappDir + 'scripts/constants.js');
+    this.template(webappDir + 'scripts/_controllers.js', webappDir + 'scripts/controllers.js');
+    this.template(webappDir + 'scripts/_services.js', webappDir + 'scripts/services.js');
+    this.template(webappDir + 'scripts/_directives.js', webappDir + 'scripts/directives.js');
+    this.template(webappDir + 'scripts/_utils.js', webappDir + 'scripts/utils.js');
 
     // Create Test Javascript files
     var testJsDir = 'src/test/javascript/';
@@ -732,12 +703,8 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.websocket == 'atmosphere') {
         this.copy('src/test/javascript/mock/atmosphere.mock.js', testJsDir + 'mock/atmosphere.mock.js');
     }
-    this.template('src/test/javascript/spec/app/account/login/_loginControllerSpec.js', testJsDir + 'spec/app/account/login/loginControllerSpec.js', this, {});
-    this.template('src/test/javascript/spec/app/account/password/_passwordControllerSpec.js', testJsDir + 'spec/app/account/password/passwordControllerSpec.js', this, {});
-    this.template('src/test/javascript/spec/app/account/password/_passwordDirectiveSpec.js', testJsDir + 'spec/app/account/password/passwordDirectiveSpec.js', this, {});
-    this.template('src/test/javascript/spec/app/account/sessions/_sessionsControllerSpec.js', testJsDir + 'spec/app/account/sessions/sessionsControllerSpec.js', this, {});
-    this.template('src/test/javascript/spec/app/account/settings/_settingsControllerSpec.js', testJsDir + 'spec/app/account/settings/settingsControllerSpec.js', this, {});
-    this.template('src/test/javascript/spec/components/auth/_authServicesSpec.js', testJsDir + 'spec/components/auth/authServicesSpec.js', this, {});
+    this.template('src/test/javascript/spec/_controllersSpec.js', testJsDir + 'spec/controllersSpec.js');
+    this.template('src/test/javascript/spec/_servicesSpec.js', testJsDir + 'spec/servicesSpec.js');
 
     // CSS
     this.copy(webappDir + 'styles/documentation.css', webappDir + 'styles/documentation.css');
@@ -759,56 +726,18 @@ JhipsterGenerator.prototype.app = function app() {
         'bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
         'bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
         'bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js',
-        'bower_components/angular-local-storage/dist/angular-local-storage.min.js',
 
-        'app.js',
-        'app/account/activate/activate.controller.js',
-        'components/auth/auth.service.js',
-        'components/auth/services/account.service.js',
-        'components/auth/services/activate.service.js',
-        'components/auth/services/password.service.js',
-        'components/auth/services/register.service.js',
-        'components/auth/services/role.service.js',
-        'components/auth/services/sessions.service.js',
-        'components/form/form.directive.js',
-        'components/language/language.service.js',
-        'components/language/language.controller.js',
-        'components/admin/audits.service.js',
-        'components/admin/logs.service.js',
-        'components/admin/configuration.service.js',
-        'components/admin/monitoring.service.js',
-        'components/navbar/navbar.directive.js',
-        'components/navbar/navbar.controller.js',
-        'components/util/truncate.filter.js',
-        'components/util/base64.service.js',
-        'app/account/login/login.controller.js',
-        'app/account/logout/logout.controller.js',
-        'app/account/password/password.controller.js',
-        'app/account/password/password.directive.js',
-        'app/account/register/register.controller.js',
-        'app/account/sessions/sessions.controller.js',
-        'app/account/settings/settings.controller.js',
-        'app/admin/audits/audits.controller.js',
-        'app/admin/configuration/configuration.controller.js',
-        'app/admin/docs/docs.controller.js',
-        'app/admin/health/health.controller.js',
-        'app/admin/logs/logs.controller.js',
-        'app/admin/metrics/metrics.controller.js',
-        'app/error/error.js',
-        'app/main/main.controller.js'
-        ];
-
-    if (this.authenticationType == 'token') {
-        indexScripts = indexScripts.concat([
-            'components/auth/provider/auth.oauth2.service.js']);
-    } else {
-        indexScripts = indexScripts.concat([
-            'components/auth/provider/auth.session.service.js']);
-    }
+        'scripts/http-auth-interceptor.js',
+        'scripts/truncate.js',
+        'scripts/utils.js',
+        'scripts/app.js',
+        'scripts/constants.js',
+        'scripts/controllers.js',
+        'scripts/services.js',
+        'scripts/directives.js'];
 
     if (this.websocket == 'atmosphere') {
         indexScripts = indexScripts.concat([
-            'app/admin/tracker/tracker.controller.js',
             'bower_components/atmosphere/atmosphere.js',
             'bower_components/jquery-atmosphere/jquery.atmosphere.js']);
     }

@@ -1,4 +1,4 @@
-apply plugin: 'node'<% if(frontendBuilder == 'grunt') {%>
+apply plugin: 'com.moowork.node'<% if(frontendBuilder == 'grunt') {%>
 apply plugin: 'grunt'<% } if(frontendBuilder == 'gulp') {%>
 apply plugin: 'gulp'<% } %>
 
@@ -8,10 +8,8 @@ task bower(dependsOn: 'npmInstall', type: NodeTask){
 }
 
 <% if(frontendBuilder == 'grunt') {%>
-grunt_build.dependsOn 'npmInstall'
-grunt_build.dependsOn 'bower'
-processResources.dependsOn grunt_build
-test.dependsOn grunt_test<% }  if(frontendBuilder == 'gulp') {%>
+processResources.dependsOn 'bower'
+<% }  if(frontendBuilder == 'gulp') {%>
 gulp_build.dependsOn 'npmInstall'
 gulp_build.dependsOn 'bower'
 processResources.dependsOn gulp_build
