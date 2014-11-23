@@ -1,14 +1,21 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .config(function ($routeProvider) {
-        $routeProvider
-            .when('/metrics', {
-                templateUrl: 'app/admin/metrics/metrics.html',
-                controller: 'MetricsController',
-                authenticate: true,
-                roles: 'ROLE_ADMIN'
-           })
+    .config(function ($stateProvider) {
+        $stateProvider
+            .state('metrics', {
+                parent: 'admin',
+                url: '/metrics',
+                data: {
+                    roles: ['ROLE_ADMIN']
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'app/admin/metrics/metrics.html',
+                        controller: 'MetricsController'
+                    }
+                }
+            });
     })
     .controller('MetricsController', function ($scope, MonitoringService) {
         $scope.metrics = {};

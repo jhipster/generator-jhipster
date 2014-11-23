@@ -1,15 +1,27 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .config(function ($routeProvider) {
-        $routeProvider
-            .when('/password', {
-                templateUrl: 'app/account/password/password.html',
-                controller: 'PasswordController',
-                authenticate: true
-            })
+    .config(function ($stateProvider) {
+        $stateProvider
+            .state('password', {
+                parent: 'account',
+                url: '/password',
+                data: {
+                    roles: ['ROLE_USER']
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'app/account/password/password.html',
+                        controller: 'PasswordController'
+                    }
+                }
+            });
     })
-    .controller('PasswordController', function ($scope, Auth) {
+    .controller('PasswordController', function ($scope, Auth, Principal) {
+        Principal.identity().then(function(account) {
+            $scope.account = account;
+        });
+
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;

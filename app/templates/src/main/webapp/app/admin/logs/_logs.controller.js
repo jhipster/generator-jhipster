@@ -1,14 +1,21 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .config(function ($routeProvider) {
-        $routeProvider
-            .when('/logs', {
-                templateUrl: 'app/admin/logs/logs.html',
-                controller: 'LogsController',
-                authenticate: true,
-                roles: 'ROLE_ADMIN'
-           })
+    .config(function ($stateProvider) {
+        $stateProvider
+            .state('logs', {
+                parent: 'admin',
+                url: '/logs',
+                data: {
+                    roles: ['ROLE_ADMIN']
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'app/admin/logs/logs.html',
+                        controller: 'LogsController'
+                    }
+                }
+            });
     })
     .controller('LogsController', function ($scope, LogsService) {
         $scope.loggers = LogsService.findAll();

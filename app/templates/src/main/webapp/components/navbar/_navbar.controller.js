@@ -1,14 +1,13 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('NavbarController', function ($scope, $location, Auth, Role) {
-        $scope.isLoggedIn = Auth.isLoggedIn;
-        $scope.account = Auth.getCurrentAccount;
-        $scope.hasRole = Role.hasRole;
-        $scope.ROLES = Role.allRoles();
+    .controller('NavbarController', function ($scope, $location, $state, Auth, Principal) {
+        $scope.isLoggedIn = Principal.isAuthenticated;
+        $scope.isInRole = Principal.isInRole;
+        $scope.$state = $state;
 
         $scope.logout = function () {
             Auth.logout();
-            $location.path('/');
+            $state.go('home');
         };
     });

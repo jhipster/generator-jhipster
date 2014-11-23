@@ -2,9 +2,9 @@
 
 describe('Controllers Tests ', function () {
 
-    var $scope, q, Auth, Account;
-
     beforeEach(module('<%= angularAppName %>'));
+
+    var $scope, q, Principal, Auth;
 
     // define the mock Auth service
     beforeEach(function() {
@@ -12,9 +12,11 @@ describe('Controllers Tests ', function () {
             updateAccount: function() {}
         };
 
-        Account = {
-            get: function() {},
-            save: function(Account) {}
+        Principal = {
+            identity: function() {
+                var deferred = q.defer();
+                return deferred.promise;
+            }
         };
     });
 
@@ -24,7 +26,7 @@ describe('Controllers Tests ', function () {
         beforeEach(inject(function ($rootScope, $controller, $q) {
             $scope = $rootScope.$new();
             q = $q;
-            $controller('SettingsController',{$scope:$scope, Account:Account, Auth:Auth});
+            $controller('SettingsController',{$scope:$scope, Principal:Principal, Auth:Auth});
         }));
 
         it('should save account', function () {
@@ -33,11 +35,9 @@ describe('Controllers Tests ', function () {
             $scope.settingsAccount = account;
 
             //SET SPY
-            spyOn(Account, 'get').and.callThrough();
-            spyOn(Account, 'save').and.callThrough();
+            spyOn(Principal, 'identity').and.callThrough();
 
             spyOn(Auth, 'updateAccount').and.returnValue(new function(){
-                Account.save(account);
                 var deferred = q.defer();
                 $scope.error = null;
                 $scope.success = 'OK';
@@ -49,9 +49,6 @@ describe('Controllers Tests ', function () {
             $scope.save();
 
             //THEN
-            expect(Account.save).toHaveBeenCalled();
-            expect(Account.save).toHaveBeenCalledWith(account);
-
             expect($scope.error).toBeNull();
             expect($scope.success).toBe('OK');
         });

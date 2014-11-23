@@ -1,15 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .factory('Auth', function Auth($rootScope, $q, $http, Account, AuthServerProvider, Register, Activate, Password) {
-        if (AuthServerProvider.hasValidToken()) {
-            $rootScope.currentAccount = Account.get();
-            $rootScope.authenticated = true;
-        } else {
-            $rootScope.currentAccount = {};
-            $rootScope.authenticated = false;
-        }
-
+    .factory('Auth', function Auth($rootScope, $state, $q, Principal, AuthServerProvider, Account, Register, Activate, Password) {
         return {
             login: function (credentials, callback) {
                 var cb = callback || angular.noop;
@@ -17,7 +9,7 @@ angular.module('<%=angularAppName%>')
 
                 AuthServerProvider.login(credentials).then(function (data) {
                     // retrieve the logged account information
-                    $rootScope.currentAccount = Account.get();
+                    Principal.identity(true);
                     deferred.resolve(data);
 
                     return cb();
@@ -32,51 +24,28 @@ angular.module('<%=angularAppName%>')
 
             logout: function () {
                 AuthServerProvider.logout();
-                $rootScope.currentAccount = {};
-                $rootScope.authenticated = false;
+                Principal.authenticate(null);
             },
 
-            getCurrentAccount: function () {
-                return $rootScope.currentAccount;
-            },
+            authorize: function() {
+                return Principal.identity()
+                    .then(function() {
+                        var isAuthenticated = Principal.isAuthenticated();
 
-            getRoles: function () {
-                if ($rootScope.currentAccount.hasOwnProperty('roles')) {
-                    return $rootScope.currentAccount.roles;
-                }
-                return {};
-            },
+                        if ($rootScope.toState.data.roles && $rootScope.toState.data.roles.length > 0 && !Principal.isInAnyRole($rootScope.toState.data.roles)) {
+                            if (isAuthenticated) $state.go('accessdenied'); // user is signed in but not authorized for desired state
+                            else {
+                                // user is not authenticated. stow the state they wanted before you
+                                // send them to the signin state, so you can return them when you're done
+                                $rootScope.returnToState = $rootScope.toState;
+                                $rootScope.returnToStateParams = $rootScope.toStateParams;
 
-            isLoggedIn: function () {
-                if (!AuthServerProvider.hasValidToken()) {
-                    return false;
-                }
-
-                return $rootScope.currentAccount.hasOwnProperty('roles');
-            },
-
-            isLoggedInAsync: function (cb) {
-                if (!AuthServerProvider.hasValidToken()) {
-                    cb(false);
-                }
-
-                if ($rootScope.currentAccount.hasOwnProperty('$promise')) {
-                    $rootScope.currentAccount.$promise.then(function () {
-                        cb(true);
-                    }).catch(function () {
-                        cb(false);
+                                // now, send them to the signin state so they can log in
+                                $state.go('login');
+                            }
+                        }
                     });
-                } else if ($rootScope.currentAccount.hasOwnProperty('roles')) {
-                    cb(true);
-                } else {
-                    cb(false);
-                }
             },
-
-            isAuthenticated: function () {
-                return AuthServerProvider.hasValidToken();
-            },
-
             createAccount: function (account, callback) {
                 var cb = callback || angular.noop;
 

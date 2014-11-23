@@ -672,6 +672,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/components/admin/_logs.service.js', webappDir + 'components/admin/logs.service.js', this, {});
     this.template(webappDir + '/components/admin/_monitoring.service.js', webappDir + 'components/admin/monitoring.service.js', this, {});
     this.template(webappDir + '/components/auth/_auth.service.js', webappDir + 'components/auth/auth.service.js', this, {});
+    this.template(webappDir + '/components/auth/_principal.service.js', webappDir + 'components/auth/principal.service.js', this, {});
     if (this.authenticationType == 'token') {
         this.template(webappDir + '/components/auth/provider/_auth.oauth2.service.js', webappDir + 'components/auth/provider/auth.oauth2.service.js', this, {});
     } else {
@@ -681,7 +682,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/components/auth/services/_activate.service.js', webappDir + 'components/auth/services/activate.service.js', this, {});
     this.template(webappDir + '/components/auth/services/_password.service.js', webappDir + 'components/auth/services/password.service.js', this, {});
     this.template(webappDir + '/components/auth/services/_register.service.js', webappDir + 'components/auth/services/register.service.js', this, {});
-    this.template(webappDir + '/components/auth/services/_role.service.js', webappDir + 'components/auth/services/role.service.js', this, {});
     this.template(webappDir + '/components/auth/services/_sessions.service.js', webappDir + 'components/auth/services/sessions.service.js', this, {});
     this.template(webappDir + '/components/form/_form.directive.js', webappDir + 'components/form/form.directive.js', this, {});
     this.template(webappDir + '/components/language/_language.controller.js', webappDir + 'components/language/language.controller.js', this, {});
@@ -693,6 +693,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/components/util/_truncate.filter.js', webappDir + 'components/util/truncate.filter.js', this, {});
 
     // Client App
+    this.template(webappDir + '/app/account/_account.js', webappDir + 'app/account/account.js', this, {});
     this.copy(webappDir + '/app/account/activate/activate.html', webappDir + 'app/account/activate/activate.html');
     this.template(webappDir + '/app/account/activate/_activate.controller.js', webappDir + 'app/account/activate/activate.controller.js', this, {});
     this.copy(webappDir + '/app/account/login/login.html', webappDir + 'app/account/login/login.html');
@@ -707,6 +708,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/app/account/sessions/_sessions.controller.js', webappDir + 'app/account/sessions/sessions.controller.js', this, {});
     this.copy(webappDir + '/app/account/settings/settings.html', webappDir + 'app/account/settings/settings.html');
     this.template(webappDir + '/app/account/settings/_settings.controller.js', webappDir + 'app/account/settings/settings.controller.js', this, {});
+    this.template(webappDir + '/app/admin/_admin.js', webappDir + 'app/admin/admin.js', this, {});
     this.copy(webappDir + '/app/admin/audits/audits.html', webappDir + 'app/admin/audits/audits.html');
     this.template(webappDir + '/app/admin/audits/_audits.controller.js', webappDir + 'app/admin/audits/audits.controller.js', this, {});
     this.copy(webappDir + '/app/admin/configuration/configuration.html', webappDir + 'app/admin/configuration/configuration.html');
@@ -724,6 +726,8 @@ JhipsterGenerator.prototype.app = function app() {
         this.template(webappDir + '/app/admin/tracker/_tracker.controller.js', webappDir + 'app/admin/tracker/tracker.controller.js', this, {});
     }
     this.copy(webappDir + '/app/error/error.html', webappDir + 'app/error/error.html');
+    this.copy(webappDir + '/app/error/accessdenied.html', webappDir + 'app/error/accessdenied.html');
+    this.template(webappDir + '/app/entities/_entity.js', webappDir + 'app/entities/entity.js', this, {});
     this.template(webappDir + '/app/error/_error.js', webappDir + 'app/error/error.js', this, {});
     this.copy(webappDir + '/app/main/main.html', webappDir + 'app/main/main.html');
     this.template(webappDir + '/app/main/_main.controller.js', webappDir + 'app/main/main.controller.js', this, {});
@@ -757,7 +761,7 @@ JhipsterGenerator.prototype.app = function app() {
         'bower_components/modernizr/modernizr.js',
         'bower_components/jquery/dist/jquery.js',
         'bower_components/angular/angular.js',
-        'bower_components/angular-route/angular-route.js',
+        'bower_components/angular-ui-router/release/angular-ui-router.js',
         'bower_components/angular-resource/angular-resource.js',
         'bower_components/angular-cookies/angular-cookies.js',
         'bower_components/angular-sanitize/angular-sanitize.js',
@@ -765,17 +769,16 @@ JhipsterGenerator.prototype.app = function app() {
         'bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
         'bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
         'bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js',
-        'bower_components/angular-local-storage/dist/angular-local-storage.min.js',
+        'bower_components/angular-local-storage/dist/angular-local-storage.js',
         'bower_components/angular-cache-buster/angular-cache-buster.js',
 
         'app.js',
-        'app/account/activate/activate.controller.js',
         'components/auth/auth.service.js',
+        'components/auth/principal.service.js',
         'components/auth/services/account.service.js',
         'components/auth/services/activate.service.js',
         'components/auth/services/password.service.js',
         'components/auth/services/register.service.js',
-        'components/auth/services/role.service.js',
         'components/auth/services/sessions.service.js',
         'components/form/form.directive.js',
         'components/language/language.service.js',
@@ -788,6 +791,8 @@ JhipsterGenerator.prototype.app = function app() {
         'components/navbar/navbar.controller.js',
         'components/util/truncate.filter.js',
         'components/util/base64.service.js',
+        'app/account/account.js',
+        'app/account/activate/activate.controller.js',
         'app/account/login/login.controller.js',
         'app/account/logout/logout.controller.js',
         'app/account/password/password.controller.js',
@@ -795,12 +800,14 @@ JhipsterGenerator.prototype.app = function app() {
         'app/account/register/register.controller.js',
         'app/account/sessions/sessions.controller.js',
         'app/account/settings/settings.controller.js',
+        'app/admin/admin.js',
         'app/admin/audits/audits.controller.js',
         'app/admin/configuration/configuration.controller.js',
         'app/admin/docs/docs.controller.js',
         'app/admin/health/health.controller.js',
         'app/admin/logs/logs.controller.js',
         'app/admin/metrics/metrics.controller.js',
+        'app/entities/entity.js',
         'app/error/error.js',
         'app/main/main.controller.js'
         ];

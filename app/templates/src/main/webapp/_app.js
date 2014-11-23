@@ -1,29 +1,36 @@
 'use strict';
 
 angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale',
-    'ngResource', 'ngRoute', 'ngCookies', 'pascalprecht.translate', 'ngCacheBuster'])
+    'ngResource', 'ui.router', 'ngCookies', 'pascalprecht.translate', 'ngCacheBuster'])
 
-    .run(function($rootScope, $location, $http, Auth, Role) {
+    .run(function ($rootScope, $location, $http, $state, Auth, Principal) {
+        $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
+            $http.get('protected/authentication_check.gif', { ignoreErrors: true })
+                .error(function() {
+                    Auth.logout();
+                    $state.go('login')
+                });
 
-        // Redirect to login if route requires auth and you're not logged in
-        $rootScope.$on('$routeChangeStart', function (event, next) {
-            $http.get('protected/authentication_check.gif');
-            Auth.isLoggedInAsync(function(loggedIn) {
-                if (next.authenticate && (!loggedIn || (next.roles != undefined && !Role.hasRole(next.roles)))) {
-                    $rootScope.errorMessage = 'errors.403';
-                    $location.path('/error');
-                } else if ($location.path() !== "/login") {
-                    var search = $location.search();
-                    if (search.redirect !== undefined) {
-                        $location.path(search.redirect).search('redirect', null).replace();
-                    }
-                }
-            });
+            $rootScope.toState = toState;
+            $rootScope.toStateParams = toStateParams;
+
+            if (Principal.isIdentityResolved()) {
+                Auth.authorize();
+            }
         });
-    })
 
+        $rootScope.$on("$stateChangeSuccess",  function(event, toState, toParams, fromState, fromParams) {
+            $rootScope.previousState_name = fromState.name;
+            $rootScope.previousState_params = fromParams;
+        });
+
+        $rootScope.back = function() {
+            $state.go($rootScope.previousState_name,$rootScope.previousState_params);
+        };
+    })
+    <% if (authenticationType == 'token') { %>
     .factory('authInterceptor', function ($rootScope, $q, $location, localStorageService) {
-        return {<% if (authenticationType == 'token') { %>
+        return {
             // Add authorization token to headers
             request: function (config) {
                 config.headers = config.headers || {};
@@ -32,43 +39,32 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
                     config.headers.Authorization = 'Bearer ' + token.access_token;
                 }
                 return config;
-            },<% } %>
-
-            // Intercept 401s and redirect you to login
-            responseError: function(response) {
-                if(response.status === 401) {
-                    // client and server logout
-                    localStorageService.clearAll();
-                    $rootScope.authenticated = false;
-                    $rootScope.currentAccount = {};
-
-                    if ($location.path() !== "/" && $location.path() !== "" && $location.path() !== "/register" &&
-                        $location.path() !== "/activate" && $location.path() !== "/login") {
-                        var redirect = $location.path();
-                        $location.path('/login').search('redirect', redirect).replace();
-                    }
-
-                    return $q.reject(response);
-                } else if (response.status === 403) {
-                    $rootScope.errorMessage = 'errors.403';
-                    $location.path('/error');
-                }
-
-                return $q.reject(response);
             }
         };
     })
-
-    .config(function ($routeProvider, $httpProvider, $locationProvider, $translateProvider, tmhDynamicLocaleProvider, httpRequestInterceptorCacheBusterProvider) {
+    <% } %>
+    .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, $translateProvider, tmhDynamicLocaleProvider, httpRequestInterceptorCacheBusterProvider) {
         //Cache everything except rest api requests
-        httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*rest.*/],true);
+        httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*rest.*/, /.*protected.*/], true);
 
-        $routeProvider
-            .otherwise({
-                redirectTo: '/#'
-            });
-
-        $httpProvider.interceptors.push('authInterceptor');
+        $urlRouterProvider.otherwise('/');
+        $stateProvider.state('site', {
+            'abstract': true,
+            views: {
+                'navbar@': {
+                    templateUrl: 'components/navbar/navbar.html'
+                }
+            },
+            resolve: {
+                authorize: ['Auth',
+                    function (Auth) {
+                        return Auth.authorize();
+                    }
+                ]
+            }
+        });
+        <% if (authenticationType == 'token') { %>
+        $httpProvider.interceptors.push('authInterceptor');<% } %>
 
         // Initialize angular-translate
         $translateProvider.useStaticFilesLoader({

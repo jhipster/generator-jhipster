@@ -1,9 +1,10 @@
 'use strict';
 
 describe('Controllers Tests ', function () {
-    var $scope, q, Auth;
 
     beforeEach(module('<%= angularAppName %>'));
+
+    var $scope, $httpBackend, q, Auth;
 
     // define the mock Auth service
     beforeEach(function() {
@@ -12,14 +13,17 @@ describe('Controllers Tests ', function () {
         };
     });
 
-    beforeEach(inject(function ($rootScope, $controller, $q) {
+    beforeEach(inject(function ($rootScope, $controller, $q, $injector) {
         $scope = $rootScope.$new();
         q = $q;
+        $httpBackend = $injector.get('$httpBackend');
         $controller('PasswordController', {$scope: $scope, Auth: Auth});
     }));
 
     describe('PasswordController', function () {
         it('should show error if passwords do not match', function () {
+            var expected = new RegExp('protected/authentication_check.gif' + '?cacheBuster=[0-9]+');
+            $httpBackend.expectGET(expected);
             //GIVEN
             $scope.password = 'password1';
             $scope.confirmPassword = 'password2';
@@ -27,7 +31,6 @@ describe('Controllers Tests ', function () {
             $scope.changePassword();
             //THEN
             expect($scope.doNotMatch).toBe('ERROR');
-
         });
         it('should call Service and set OK on Success', function () {
             //GIVEN

@@ -1,12 +1,21 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .config(function ($routeProvider) {
-        $routeProvider
-            .when('/login', {
-                templateUrl: 'app/account/login/login.html',
-                controller: 'LoginController'
-            })
+    .config(function ($stateProvider) {
+        $stateProvider
+            .state('login', {
+                parent: 'account',
+                url: '/login',
+                data: {
+                    roles: []
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'app/account/login/login.html',
+                        controller: 'LoginController'
+                    }
+                }
+            });
     })
     .controller('LoginController', function ($scope, $location, Auth) {
         $scope.user = {};

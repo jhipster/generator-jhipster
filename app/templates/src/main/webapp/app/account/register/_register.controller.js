@@ -1,12 +1,21 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .config(function ($routeProvider) {
-        $routeProvider
-            .when('/register', {
-                templateUrl: 'app/account/register/register.html',
-                controller: 'RegisterController'
-            })
+    .config(function ($stateProvider) {
+        $stateProvider
+            .state('register', {
+                parent: 'account',
+                url: '/register',
+                data: {
+                    roles: []
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'app/account/register/register.html',
+                        controller: 'RegisterController'
+                    }
+                }
+            });
     })
     .controller('RegisterController', function ($scope, $translate, Auth) {
         $scope.success = null;

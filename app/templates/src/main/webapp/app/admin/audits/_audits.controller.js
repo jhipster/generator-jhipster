@@ -1,14 +1,21 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .config(function ($routeProvider) {
-        $routeProvider
-            .when('/audits', {
-                templateUrl: 'app/admin/audits/audits.html',
-                controller: 'AuditsController',
-                authenticate: true,
-                roles: 'ROLE_ADMIN'
-            })
+    .config(function ($stateProvider) {
+        $stateProvider
+            .state('audits', {
+                parent: 'admin',
+                url: '/audits',
+                data: {
+                    roles: ['ROLE_ADMIN']
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'app/admin/audits/audits.html',
+                        controller: 'AuditsController'
+                    }
+                }
+            });
     })
     .controller('AuditsController', function ($scope, $translate, $filter, AuditsService) {
         $scope.onChangeDate = function () {

@@ -1,12 +1,19 @@
 angular.module('<%=angularAppName%>')
-    .config(function ($routeProvider) {
-        $routeProvider
-            .when('/metrics', {
-                templateUrl: 'app/admin/tracker/tracker.html',
-                controller: 'TrackerController',
-                authenticate: true,
-                roles: 'ROLE_ADMIN'
-            })
+    .config(function ($stateProvider) {
+        $stateProvider
+            .state('tracker', {
+                parent: 'admin',
+                url: '/tracker',
+                data: {
+                    roles: ['ROLE_ADMIN']
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'app/admin/tracker/tracker.html',
+                        controller: 'TrackerController'
+                    }
+                }
+            });
     })
     .controller('TrackerController', <% if (authenticationType == 'token') { %>['AccessToken'], <% } %>function ($scope<% if (authenticationType == 'token') { %>, AuthServerProvider<% } %>) {
         // This controller uses the Atmosphere framework to keep a Websocket connection opened, and receive

@@ -1,11 +1,18 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .config(function ($routeProvider) {
-        $routeProvider
-            .when('/docs', {
-                templateUrl: 'app/admin/docs/docs.html',
-                authenticate: true,
-                roles: 'ROLE_ADMIN'
-            })
-    });
+    .config(function ($stateProvider) {
+        $stateProvider
+            .state('docs', {
+                parent: 'admin',
+                url: '/docs',
+                data: {
+                    roles: ['ROLE_ADMIN']
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'app/admin/docs/docs.html'
+                    }
+                }
+            });
+    })

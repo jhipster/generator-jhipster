@@ -4,17 +4,37 @@ describe('Directive Tests ', function () {
 
     beforeEach(module('<%= angularAppName %>'));
 
-    var elm,
-        scope;
+    var elm, scope, $httpBackend;
 
-    beforeEach(inject(function($compile, $rootScope, $sniffer, $httpBackend) {
+    beforeEach(inject(function($compile, $rootScope, $injector) {
+        $httpBackend = $injector.get('$httpBackend');
+
         var html = '<password-strength-bar password-to-check="password"></password-strength-bar>';
         scope = $rootScope.$new();
         elm = angular.element(html);
         $compile(elm)(scope);
         $httpBackend.expectGET('i18n/en.json').respond({});
         $httpBackend.when('GET', 'scripts/i18n/locale-en.json').respond({HEADER: 'Ueberschrift'});
+
+        var req = 'protected/authentication_check.gif';
+        var regex_friendly_req = req.replace(/\//g, '\\/');
+        var expected = new RegExp(regex_friendly_req + '\\?cacheBuster=[0-9]+');
+        $httpBackend.expectGET(expected).respond({});
+
+        req = 'app/rest/account';
+        regex_friendly_req = req.replace(/\//g, '\\/');
+        expected = new RegExp(regex_friendly_req + '\\?cacheBuster=[0-9]+');
+        $httpBackend.expectGET(expected).respond({});
+
+        $httpBackend.expectGET('components/navbar/navbar.html').respond({});
+        $httpBackend.expectGET('app/main/main.html').respond({});
     }));
+
+    afterEach(function() {
+        $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingExpectation();
+        $httpBackend.verifyNoOutstandingRequest();
+    });
 
     describe('Password strength', function () {
         it("Should display the password strength bar", function() {

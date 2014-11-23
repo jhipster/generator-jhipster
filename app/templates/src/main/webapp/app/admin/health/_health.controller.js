@@ -1,14 +1,21 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .config(function ($routeProvider) {
-        $routeProvider
-            .when('/health', {
-                templateUrl: 'app/admin/health/health.html',
-                controller: 'HealthController',
-                authenticate: true,
-                roles: 'ROLE_ADMIN'
-            })
+    .config(function ($stateProvider) {
+        $stateProvider
+            .state('health', {
+                parent: 'admin',
+                url: '/health',
+                data: {
+                    roles: ['ROLE_ADMIN']
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'app/admin/health/health.html',
+                        controller: 'HealthController'
+                    }
+                }
+            });
     })
     .controller('HealthController', function ($scope, MonitoringService) {
         $scope.updatingHealth = true;

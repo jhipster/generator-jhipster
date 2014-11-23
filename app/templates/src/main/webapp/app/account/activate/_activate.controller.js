@@ -1,12 +1,20 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .config(function ($routeProvider) {
-        $routeProvider
-            .when('/activate', {
-                templateUrl: 'app/account/activate/activate.html',
-                controller: 'ActivationController'
-            })
+    .config(function ($stateProvider) {
+        $stateProvider
+            .state('activate', {
+                parent: 'account',
+                data: {
+                    roles: []
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'app/account/activate/activate.html',
+                        controller: 'ActivationController'
+                    }
+                }
+            });
     })
     .controller('ActivationController', function ($scope, $routeParams, Auth) {
         Auth.activateAccount({key: $routeParams.key}).then(function () {

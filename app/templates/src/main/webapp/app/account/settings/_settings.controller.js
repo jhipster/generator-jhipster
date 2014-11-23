@@ -1,28 +1,35 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .config(function ($routeProvider) {
-        $routeProvider
-            .when('/settings', {
-                templateUrl: 'app/account/settings/settings.html',
-                controller: 'SettingsController',
-                authenticate: true,
-                roles: 'ROLE_USER'
-            })
+    .config(function ($stateProvider) {
+        $stateProvider
+            .state('settings', {
+                parent: 'account',
+                url: '/settings',
+                data: {
+                    roles: ['ROLE_USER']
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'app/account/settings/settings.html',
+                        controller: 'SettingsController'
+                    }
+                }
+            });
     })
-    .controller('SettingsController', function ($scope, Account, Auth) {
+    .controller('SettingsController', function ($scope, Principal, Auth) {
         $scope.success = null;
         $scope.error = null;
-        Account.get(function(response) {
-            $scope.settingsAccount = response.data;
+        Principal.identity().then(function(account) {
+            $scope.settingsAccount = account;
         });
 
         $scope.save = function () {
             Auth.updateAccount($scope.settingsAccount).then(function() {
                 $scope.error = null;
                 $scope.success = 'OK';
-                Account.get(function(response) {
-                    $scope.settingsAccount = response.data;
+                Principal.identity().then(function(account) {
+                    $scope.settingsAccount = account;
                 });
             }).catch(function() {
                 $scope.success = null;
