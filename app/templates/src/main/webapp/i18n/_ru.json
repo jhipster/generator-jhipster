@@ -265,6 +265,7 @@
             "mean": "Среднее по времени (мс)"
         },
         "datasource": {
+        	"usage": "Usage",
             "title": "DataSource statistics (time in millisecond)",
             "name": "Pool usage",
             "count": "Count",
