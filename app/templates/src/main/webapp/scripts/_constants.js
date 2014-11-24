@@ -3,9 +3,8 @@
 /* Constants */
 
 <%= angularAppName %>.constant('USER_ROLES', {
-        'all': '*',
-        'admin': 'ROLE_ADMIN',
-        'user': 'ROLE_USER'
+        'all': '*'<% for (idx in roles) { %>,
+        '<%= idx %>': '<%= roles[idx] %>'<% } %>
     });
 
 /*
