@@ -265,6 +265,7 @@
             "mean": "평균시간 (밀리초)"
         },
         "datasource": {
+        	"usage": "Usage",
             "title": "DataSource statistics (time in millisecond)",
             "name": "Pool usage",
             "count": "Count",
