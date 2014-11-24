@@ -266,6 +266,7 @@
             "mean": "Durchschnittliche Zugriffszeit (ms)"
         },
         "datasource": {
+        	"usage": "Usage",
             "title": "Datenquelle (Zeit in millisekunden)",
             "name": "Pool-Auslastung",
             "count": "Anzahl",

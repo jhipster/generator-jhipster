@@ -265,6 +265,7 @@
             "mean": "Temps de réponse (ms)"
         },
         "datasource": {
+        	"usage": "Usage",
             "title": "Statistiques du pool de connexions (Temps en milliseconde)",
             "name": "Utilisation du pool",
             "count": "Total",
