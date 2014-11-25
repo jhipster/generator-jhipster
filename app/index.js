@@ -539,8 +539,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/repository/_CustomAuditEventRepository.java', javaDir + 'repository/CustomAuditEventRepository.java', this, {});
 
     this.template('src/main/java/package/repository/_UserRepository.java', javaDir + 'repository/UserRepository.java', this, {});
-    this.template('src/main/java/package/repository/_PersistenceAuditEventRepository.java', javaDir + 'repository/PersistenceAuditEventRepository.java', this, {});
-    this.template('src/main/java/package/repository/_UserRepository.java', javaDir + 'repository/UserRepository.java', this, {});
     if (this.authenticationType == 'cookie') {
         this.template('src/main/java/package/repository/_PersistentTokenRepository.java', javaDir + 'repository/PersistentTokenRepository.java', this, {});
     }
@@ -551,7 +549,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/security/_AjaxAuthenticationSuccessHandler.java', javaDir + 'security/AjaxAuthenticationSuccessHandler.java', this, {});
     this.template('src/main/java/package/security/_AjaxLogoutSuccessHandler.java', javaDir + 'security/AjaxLogoutSuccessHandler.java', this, {});
     this.template('src/main/java/package/security/_AuthoritiesConstants.java', javaDir + 'security/AuthoritiesConstants.java', this, {});
-    this.template('src/main/java/package/security/_CustomPersistentRememberMeServices.java', javaDir + 'security/CustomPersistentRememberMeServices.java', this, {});
+    if (this.authenticationType == 'cookie') {
+        this.template('src/main/java/package/security/_CustomPersistentRememberMeServices.java', javaDir + 'security/CustomPersistentRememberMeServices.java', this, {});
+    }
     this.template('src/main/java/package/security/_Http401UnauthorizedEntryPoint.java', javaDir + 'security/Http401UnauthorizedEntryPoint.java', this, {});
     this.template('src/main/java/package/security/_SecurityUtils.java', javaDir + 'security/SecurityUtils.java', this, {});
     this.template('src/main/java/package/security/_SpringSecurityAuditorAware.java', javaDir + 'security/SpringSecurityAuditorAware.java', this, {});
@@ -704,8 +704,10 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/app/account/password/_password.directive.js', webappDir + 'app/account/password/password.directive.js', this, {});
     this.copy(webappDir + '/app/account/register/register.html', webappDir + 'app/account/register/register.html');
     this.template(webappDir + '/app/account/register/_register.controller.js', webappDir + 'app/account/register/register.controller.js', this, {});
-    this.copy(webappDir + '/app/account/sessions/sessions.html', webappDir + 'app/account/sessions/sessions.html');
-    this.template(webappDir + '/app/account/sessions/_sessions.controller.js', webappDir + 'app/account/sessions/sessions.controller.js', this, {});
+    if (this.authenticationType == 'cookie') {
+        this.copy(webappDir + '/app/account/sessions/sessions.html', webappDir + 'app/account/sessions/sessions.html');
+        this.template(webappDir + '/app/account/sessions/_sessions.controller.js', webappDir + 'app/account/sessions/sessions.controller.js', this, {});
+    }
     this.copy(webappDir + '/app/account/settings/settings.html', webappDir + 'app/account/settings/settings.html');
     this.template(webappDir + '/app/account/settings/_settings.controller.js', webappDir + 'app/account/settings/settings.controller.js', this, {});
     this.template(webappDir + '/app/admin/_admin.js', webappDir + 'app/admin/admin.js', this, {});
