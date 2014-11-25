@@ -6,55 +6,77 @@ var httpHeaders;<% } %>
 var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-interceptor', 'tmh.dynamicLocale',
     'ngResource', 'ngRoute', 'ngCookies', '<%= angularAppName %>Utils', 'pascalprecht.translate', 'truncate', 'ngCacheBuster']);
 
+<%= angularAppName %>.provider('$secureRoute', function($routeProvider){
+    // Register a route with access validation. It add the AuthenticationSharedService.valid promise to the resolve
+    // array to ensure that upon rejection, the controller and template of the new route would not be instantiated.
+    this.whenAuthenticated = function(path, route){
+        var resolve = route.resolve || {};
+        var isValid = ['AuthenticationSharedService', function(AuthenticationSharedService){
+            return AuthenticationSharedService.valid(route.access.authorizedRoles);
+        }];
+
+        route.resolve = angular.extend(resolve, {isValid: isValid});
+        return this.when(path, route);
+    };
+
+    // We add the $routeProvider methods
+    this.when = $routeProvider.when;
+    this.otherwise = $routeProvider.otherwise;
+
+    // We return the route service unmodified as we only intended to change the provider.
+    // We won't need to use the $secureRoute service in our application as it is the same as the $route service.
+    this.$get = ['$route', function($route){ return $route; }];
+});
+
 <%= angularAppName %>
-    .config(function ($routeProvider, $httpProvider, $translateProvider, tmhDynamicLocaleProvider, httpRequestInterceptorCacheBusterProvider, USER_ROLES) {
+    .config(function ($secureRouteProvider, $httpProvider, $translateProvider, tmhDynamicLocaleProvider, httpRequestInterceptorCacheBusterProvider, USER_ROLES) {
 
             //Cache everything except rest api requests
             httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*rest.*/],true);
 
-            $routeProvider
-                .when('/register', {
+            $secureRouteProvider
+                .whenAuthenticated('/register', {
                     templateUrl: 'views/register.html',
                     controller: 'RegisterController',
                     access: {
                         authorizedRoles: [USER_ROLES.all]
                     }
                 })
-                .when('/activate', {
+                .whenAuthenticated('/activate', {
                     templateUrl: 'views/activate.html',
                     controller: 'ActivationController',
                     access: {
                         authorizedRoles: [USER_ROLES.all]
                     }
                 })
-                .when('/login', {
+                .whenAuthenticated('/login', {
                     templateUrl: 'views/login.html',
                     controller: 'LoginController',
                     access: {
                         authorizedRoles: [USER_ROLES.all]
                     }
                 })
-                .when('/error', {
+                .whenAuthenticated('/error', {
                     templateUrl: 'views/error.html',
                     access: {
                         authorizedRoles: [USER_ROLES.all]
                     }
                 })
-                .when('/settings', {
+                .whenAuthenticated('/settings', {
                     templateUrl: 'views/settings.html',
                     controller: 'SettingsController',
                     access: {
                         authorizedRoles: [USER_ROLES.user]
                     }
                 })
-                .when('/password', {
+                .whenAuthenticated('/password', {
                     templateUrl: 'views/password.html',
                     controller: 'PasswordController',
                     access: {
                         authorizedRoles: [USER_ROLES.user]
                     }
                 })
-                .when('/sessions', {
+                .whenAuthenticated('/sessions', {
                     templateUrl: 'views/sessions.html',
                     controller: 'SessionsController',
                     resolve:{
@@ -66,28 +88,28 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                         authorizedRoles: [USER_ROLES.user]
                     }
                 })
-<% if (websocket == 'atmosphere') { %>                .when('/tracker', {
+<% if (websocket == 'atmosphere') { %>                .whenAuthenticated('/tracker', {
                     templateUrl: 'views/tracker.html',
                     controller: 'TrackerController',
                     access: {
                         authorizedRoles: [USER_ROLES.admin]
                     }
                 })
-<% } %>                .when('/metrics', {
+<% } %>                .whenAuthenticated('/metrics', {
                     templateUrl: 'views/metrics.html',
                     controller: 'MetricsController',
                     access: {
                         authorizedRoles: [USER_ROLES.admin]
                     }
                 })
-                .when('/health', {
+                .whenAuthenticated('/health', {
                     templateUrl: 'views/health.html',
                     controller: 'HealthController',
                     access: {
                         authorizedRoles: [USER_ROLES.admin]
                     }
                 })
-                .when('/configuration', {
+                .whenAuthenticated('/configuration', {
                     templateUrl: 'views/configuration.html',
                     controller: 'ConfigurationController',
                     resolve:{
@@ -99,7 +121,7 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                         authorizedRoles: [USER_ROLES.admin]
                     }
                 })
-                .when('/logs', {
+                .whenAuthenticated('/logs', {
                     templateUrl: 'views/logs.html',
                     controller: 'LogsController',
                     resolve:{
@@ -111,32 +133,35 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                         authorizedRoles: [USER_ROLES.admin]
                     }
                 })
-                .when('/audits', {
+                .whenAuthenticated('/audits', {
                     templateUrl: 'views/audits.html',
                     controller: 'AuditsController',
                     access: {
                         authorizedRoles: [USER_ROLES.admin]
                     }
                 })
-                .when('/logout', {
+                .whenAuthenticated('/logout', {
                     templateUrl: 'views/main.html',
                     controller: 'LogoutController',
                     access: {
                         authorizedRoles: [USER_ROLES.all]
                     }
                 })
-                .when('/docs', {
+                .whenAuthenticated('/docs', {
                     templateUrl: 'views/docs.html',
                     access: {
                         authorizedRoles: [USER_ROLES.admin]
                     }
                 })
-                .otherwise({
+                .whenAuthenticated('/', {
                     templateUrl: 'views/main.html',
                     controller: 'MainController',
                     access: {
                         authorizedRoles: [USER_ROLES.all]
                     }
+                })
+                .otherwise({
+                    redirectTo: '/'
                 });
 
             // Initialize angular-translate
@@ -158,7 +183,6 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
                 $rootScope.$on('$routeChangeStart', function (event, next) {
                     $rootScope.isAuthorized = AuthenticationSharedService.isAuthorized;
                     $rootScope.userRoles = USER_ROLES;
-                    AuthenticationSharedService.valid(next.access.authorizedRoles);
                 });
 
                 // Call when the the client is confirmed

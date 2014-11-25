@@ -138,7 +138,7 @@
         return this;
     });
 
-<%= angularAppName %>.factory('AuthenticationSharedService', function ($rootScope, $http, authService, Session, Account<% if (authenticationType == 'token') { %>, Base64Service, AccessToken<% } %>) {
+<%= angularAppName %>.factory('AuthenticationSharedService', function ($rootScope, $http, $q, authService, Session, Account<% if (authenticationType == 'token') { %>, Base64Service, AccessToken<% } %>) {
         return {
             login: function (param) {<% if (authenticationType == 'cookie') { %>
                 var data ="j_username=" + encodeURIComponent(param.username) +"&j_password=" + encodeURIComponent(param.password) +"&_spring_security_remember_me=" + param.rememberMe +"&submit=Login";
@@ -181,44 +181,69 @@
                     AccessToken.remove();
                     delete httpHeaders.common['Authorization'];
                     $rootScope.$broadcast('event:auth-loginRequired', data);
-                    
+
                 });<% } %>
             },
-            valid: function (authorizedRoles) {<% if (authenticationType == 'token') { %>
+            valid: function (authorizedRoles) {
+                var deferred = $q.defer();
+                <% if (authenticationType == 'token') { %>
                 if(AccessToken.get() !== null) {
                     httpHeaders.common['Authorization'] = 'Bearer ' + AccessToken.get();
                 }<% } %>
-
-                $http.get('protected/authentication_check.gif', {
+                return $http.get('protected/authentication_check.gif', {
                     ignoreAuthModule: 'ignoreAuthModule'
-                }).success(function (data, status, headers, config) {
+                }).then(function () {
                     if (!Session.login<% if (authenticationType == 'token') { %> || AccessToken.get() != undefined<% } %>) {<% if (authenticationType == 'token') { %>
                         if (AccessToken.get() == undefined || AccessToken.expired()) {
                             $rootScope.$broadcast("event:auth-loginRequired");
-                            return;
+                            deferred.reject("event:auth-loginRequired");
+                            return deferred.promise;
                         }<% } %>
-                        Account.get(function(data) {
-                            Session.create(data.login, data.firstName, data.lastName, data.email, data.roles);
+
+                        return $http.get('app/rest/account', {
+                           ignoreAuthModule: 'ignoreAuthModule'
+                        }).then(function(response) {
+                            Session.create(
+                                response.data.login,
+                                response.data.firstName,
+                                response.data.lastName,
+                                response.data.email,
+                                response.data.roles
+                            );
                             $rootScope.account = Session;
+
                             if (!$rootScope.isAuthorized(authorizedRoles)) {
                                 // user is not allowed
                                $rootScope.$broadcast("event:auth-notAuthorized");
+                               deferred.reject("event:auth-notAuthorized");
                             } else {
                                 $rootScope.$broadcast("event:auth-loginConfirmed");
+                                deferred.resolve("event:auth-loginConfirmed");
                             }
+
+                            return deferred.promise;
                         });
                     }else{
                         if (!$rootScope.isAuthorized(authorizedRoles)) {
                                 // user is not allowed
                                 $rootScope.$broadcast("event:auth-notAuthorized");
+                                deferred.reject("event:auth-notAuthorized");
                         } else {
                                 $rootScope.$broadcast("event:auth-loginConfirmed");
+                                deferred.resolve("event:auth-loginConfirmed");
                         }
+
+                        return deferred.promise;
                     }
-                }).error(function (data, status, headers, config) {
+                }).catch(function (data, status, headers, config) {
                     if (!$rootScope.isAuthorized(authorizedRoles)) {
                         $rootScope.$broadcast('event:auth-loginRequired', data);
+                        deferred.reject("event:auth-loginRequired");
+                    }else{
+                        deferred.resolve("");
                     }
+
+                    return deferred.promise;
                 });
             },
             isAuthorized: function (authorizedRoles) {
