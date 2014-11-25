@@ -9,6 +9,19 @@ var util = require('util'),
 
 var EntityGenerator = module.exports = function EntityGenerator(args, options, config) {
     yeoman.generators.NamedBase.apply(this, arguments);
+    this.dataAreValid = true;
+    if (this.name.indexOf('.jhip') !== -1) // if the argument ends with .jhip try to parse a file with this name
+      {this.useFile = true;
+    	    {try {this.fileData = JSON.parse(this.readFileAsString('./' + this.name))}
+    	    catch (err)
+		{console.log(chalk.red('The file ' + this.name + ' is missing or invalid'));
+		this.dataAreValid = false;
+		return;
+		}}
+      this.name = this.name.slice(0,this.name.indexOf('.jhip'));
+      }
+	    else
+       this.useFile =false;
     console.log(chalk.red('The entity ' + this.name + ' is being created.'));
     this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
     this.baseName = this.config.get('baseName');
@@ -38,6 +51,9 @@ util.inherits(EntityGenerator, yeoman.generators.Base);
 util.inherits(EntityGenerator, scriptBase);
 
 EntityGenerator.prototype.askForFields = function askForFields() {
+    if (this.useFile == true) {// don't prompt if data are imported from a file
+        return;
+    }
     var cb = this.async();
     this.fieldId++;
     console.log(chalk.green('Generating field #' + this.fieldId));
@@ -135,6 +151,9 @@ EntityGenerator.prototype.askForFields = function askForFields() {
 };
 
 EntityGenerator.prototype.askForRelationships = function askForRelationships() {
+    if (this.useFile == true) {// don't prompt if data are imported from a file
+        return;
+    }
     if (this.databaseType == 'nosql') {
         return;
     }
@@ -264,11 +283,44 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             cb();
         }
     }.bind(this));
+
 };
 
 
 EntityGenerator.prototype.files = function files() {
-
+        
+    if (this.useFile == false)
+	{// store informations in a file for further use. 
+	// Could be optional.
+ 	// Could store the version of jhipster to avoid incompatibility problems if the data stored change	
+	this.data = {};
+	this.data.relationships = this.relationships;	
+	this.data.fields = this.fields;
+	this.data.fieldNamesUnderscored = this.fieldNamesUnderscored;
+	this.data.fieldsContainOwnerManyToMany = this.fieldsContainOwnerManyToMany;
+	this.data.fieldsContainOneToMany = this.fieldsContainOneToMany;
+	
+	this.data.fieldsContainLocalDate = this.fieldsContainLocalDate;	
+	this.data.fieldsContainCustomTime = this.fieldsContainCustomTime;	
+	this.data.fieldsContainBigDecimal = this.fieldsContainBigDecimal;		
+	this.data.fieldsContainDateTime = this.fieldsContainDateTime;	
+	this.filename = this.name + '.jhip';
+ 	this.write(this.filename, JSON.stringify(this.data, null, 4));
+ 	} else 	{ 	
+	this.relationships = this.fileData.relationships;	
+	this.fields = this.fileData.fields;
+	this.fieldNamesUnderscored = this.fileData.fieldNamesUnderscored;
+	this.fieldsContainOwnerManyToMany = this.fileData.fieldsContainOwnerManyToMany;
+	this.fieldsContainOneToMany = this.fileData.fieldsContainOneToMany;
+	
+	this.fieldsContainLocalDate = this.fileData.fieldsContainLocalDate;	
+	this.fieldsContainCustomTime = this.fileData.fieldsContainCustomTime;	
+	this.fieldsContainBigDecimal = this.fileData.fieldsContainBigDecimal;		
+	this.fieldsContainDateTime = this.fileData.fieldsContainDateTime;	
+ 	}
+     if (this.dataAreValid == false){ // is true when the user entered values manually or the file is valid
+	return;
+     }
     this.entityClass = _s.capitalize(this.name);
     this.entityInstance = this.name.charAt(0).toLowerCase() + this.name.slice(1);
     var resourceDir = 'src/main/resources/';
@@ -308,5 +360,4 @@ EntityGenerator.prototype.files = function files() {
 
     this.template('src/test/java/package/web/rest/_EntityResourceTest.java',
         'src/test/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'ResourceTest.java');
-
 };
