@@ -1,9 +1,9 @@
 'use strict';
 
 <%= angularAppName %>
-    .config(function ($routeProvider, $httpProvider, $translateProvider, USER_ROLES) {
-            $routeProvider
-                .when('/<%= entityInstance %>', {
+    .config(function ($secureRouteProvider, $httpProvider, $translateProvider, USER_ROLES) {
+            $secureRouteProvider
+                .whenAuthenticated('/<%= entityInstance %>', {
                     templateUrl: 'views/<%= entityInstance %>s.html',
                     controller: '<%= entityClass %>Controller',
                     resolve:{
