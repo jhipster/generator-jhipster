@@ -70,11 +70,6 @@
             <column name="user_agent" type="varchar(255)"/>
         </createTable><% } %>
 
-        <createTable tableName="hibernate_sequences">
-            <column name="sequence_name" type="varchar(255)"/>
-            <column name="sequence_next_hi_value" type="integer"/>
-        </createTable>
-
         <createIndex indexName="idx_user_authority"
                      tableName="T_USER_AUTHORITY"
                      unique="true">
