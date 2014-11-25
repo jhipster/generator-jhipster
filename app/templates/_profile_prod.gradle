@@ -16,3 +16,4 @@ grunt_build.dependsOn 'npmInstall'
 grunt_build.dependsOn 'bower'
 processResources.dependsOn grunt_build
 test.dependsOn grunt_test
+bootRun.dependsOn grunt_test
