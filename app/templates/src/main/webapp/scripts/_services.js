@@ -186,12 +186,10 @@
             },
             valid: function (authorizedRoles) {
                 var deferred = $q.defer();
-
                 <% if (authenticationType == 'token') { %>
                 if(AccessToken.get() !== null) {
                     httpHeaders.common['Authorization'] = 'Bearer ' + AccessToken.get();
                 }<% } %>
-
                 return $http.get('protected/authentication_check.gif', {
                     ignoreAuthModule: 'ignoreAuthModule'
                 }).then(function () {
@@ -221,7 +219,7 @@
                             } else {
                                 $rootScope.$broadcast("event:auth-loginConfirmed");
                                 deferred.resolve("event:auth-loginConfirmed");
-                            }https://github.com/tgillieron/jhipster-sample-app.git
+                            }
 
                             return deferred.promise;
                         });
