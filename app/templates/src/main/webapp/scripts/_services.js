@@ -138,7 +138,7 @@
         return this;
     });
 
-<%= angularAppName %>.factory('AuthenticationSharedService', function ($rootScope, $http, authService, Session, Account<% if (authenticationType == 'token') { %>, Base64Service, AccessToken<% } %>) {
+<%= angularAppName %>.factory('AuthenticationSharedService', function ($rootScope, $http, $q, authService, Session, Account<% if (authenticationType == 'token') { %>, Base64Service, AccessToken<% } %>) {
         return {
             login: function (param) {<% if (authenticationType == 'cookie') { %>
                 var data ="j_username=" + encodeURIComponent(param.username) +"&j_password=" + encodeURIComponent(param.password) +"&_spring_security_remember_me=" + param.rememberMe +"&submit=Login";
