@@ -98,7 +98,8 @@
                 "login": {
                     "required": "您的帳號是必填欄位.",
                     "minlength": "您的帳號長度至少要有1個字元",
-                    "maxlength": "您的帳號長度不能超過50個字元"
+                    "maxlength": "您的帳號長度不能超過50個字元",
+                    "pattern": "Your login can only contain lower-case letters and digits"
                 }
             },
             "success": "<strong>註冊成功!</strong> 請檢查您的電子郵件.",

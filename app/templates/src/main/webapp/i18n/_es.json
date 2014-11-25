@@ -98,7 +98,8 @@
                 "login": {
                     "required": "Se requiere que ingrese un usuario.",
                     "minlength": "Se requiere que su usuario tenga por lo menos 1 carácter",
-                    "maxlength": "Su usuario no puede tener mas de 50 carácteres"
+                    "maxlength": "Su usuario no puede tener mas de 50 carácteres",
+                    "pattern": "Your login can only contain lower-case letters and digits"
                 }
             },
             "success": "<strong>¡El registro de la cuenta ha sido guardado!</strong> Por favor revisa su correo electrónico para confirmar.",

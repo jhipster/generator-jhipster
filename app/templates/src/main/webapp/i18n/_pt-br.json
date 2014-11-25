@@ -98,7 +98,8 @@
                 "login": {
                     "required": "O usuário é obrigatório.",
                     "minlength": "O usuário deve ter pelo menos 1 caractere",
-                    "maxlength": "O usuário não pode ter mais de 50 caracteres"
+                    "maxlength": "O usuário não pode ter mais de 50 caracteres",
+                    "pattern": "Your login can only contain lower-case letters and digits"
                 }
             },
             "success": "<strong>Cadstro salvo com sucesso!</strong> Favor verificar seu e-mail para confirmar a conta.",

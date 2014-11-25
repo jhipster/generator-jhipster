@@ -28,7 +28,7 @@
                 <div class="form-group">
                     <label translate="global.form.username">Login</label>
                     <input type="text" class="form-control" name="login" placeholder="{{'global.form.username.placeholder' | translate}}"
-                           ng-model="registerAccount.login" ng-minlength=1 ng-maxlength=50 required>
+                           ng-model="registerAccount.login" ng-minlength=1 ng-maxlength=50 ng-pattern="/^[a-z0-9]*$/" required>
                     <div ng-show="form.login.$dirty && form.login.$invalid">
                         <p class="help-block"
                                ng-show="form.login.$error.required" translate="register.messages.validate.login.required">
@@ -42,6 +42,10 @@
                                ng-show="form.login.$error.maxlength" translate="register.messages.validate.login.maxlength">
                             Your login cannot be longer than 50 characters
                         </p>
+                        <p class="help-block"
+                               ng-show="form.login.$error.pattern" translate="register.messages.validate.login.pattern">
+                            Your login can only contain lower-case letters and digits
+                    </p>
                     </div>
                 </div>
                 <div class="form-group">

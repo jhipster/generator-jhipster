@@ -1,9 +1,11 @@
 package <%=packageName%>.web.rest.dto;
 
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 public class UserDTO {
 
+    @Pattern(regexp = "^[a-z0-9]*$")
     private String login;
 
     private String password;

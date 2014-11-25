@@ -98,7 +98,8 @@
                 "login": {
                     "required": "login 입력이 필요합니다",
                     "minlength": "login은 적어도 1자 이상이어야 합니다",
-                    "maxlength": "login은 최대 50자 까지입니다 "
+                    "maxlength": "login은 최대 50자 까지입니다 ",
+                    "pattern": "Your login can only contain lower-case letters and digits"
                 }
             },
             "success": "<strong>회원가입 내용이 저장되었습니다!</strong> 가입을 완료하기 위해 이메일을 확인해주세요.",
