@@ -8,6 +8,11 @@ endpoints.jolokia.enabled: false
 # security configuration (this key should be unique for your application, and kept secret)
 jhipster.security.rememberme.key: <%= baseName %>
 
+# Disable the check on unknown properties
+spring.jackson.deserialization:
+    FAIL_ON_UNKNOWN_PROPERTIES: false
+
+
 async:
     corePoolSize: 2
     maxPoolSize: 50
