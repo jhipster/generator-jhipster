@@ -5,14 +5,16 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
 
     .run(function ($rootScope, $location, $http, $state, Auth, Principal) {
         $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
-            $http.get('protected/authentication_check.gif', { ignoreErrors: true })
-                .error(function() {
-                    Auth.logout();
-                    $state.go('login')
-                });
-
             $rootScope.toState = toState;
             $rootScope.toStateParams = toStateParams;
+
+            $http.get('protected/authentication_check.gif', { ignoreErrors: true })
+                .error(function() {
+                    if ($rootScope.toState.data.roles.length > 0) {
+                        Auth.logout();
+                        $state.go('login')
+                    }
+                });
 
             if (Principal.isIdentityResolved()) {
                 Auth.authorize();

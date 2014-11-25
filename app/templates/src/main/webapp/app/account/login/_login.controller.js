@@ -17,7 +17,7 @@ angular.module('<%=angularAppName%>')
                 }
             });
     })
-    .controller('LoginController', function ($scope, $location, Auth) {
+    .controller('LoginController', function ($rootScope, $scope, $state, Auth) {
         $scope.user = {};
         $scope.errors = {};
 
@@ -29,9 +29,7 @@ angular.module('<%=angularAppName%>')
                 rememberMe: $scope.rememberMe
             }).then(function () {
                 $scope.authenticationError = false;
-                // Logged in, redirect to home
-                $location.path('/');
-
+                $rootScope.back();
             }).catch(function (err) {
                 $scope.authenticationError = true;
             });
