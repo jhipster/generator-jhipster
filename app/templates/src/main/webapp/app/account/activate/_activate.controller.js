@@ -5,6 +5,7 @@ angular.module('<%=angularAppName%>')
         $stateProvider
             .state('activate', {
                 parent: 'account',
+                url: '/activate?key',
                 data: {
                     roles: []
                 },
@@ -16,12 +17,13 @@ angular.module('<%=angularAppName%>')
                 }
             });
     })
-    .controller('ActivationController', function ($scope, $routeParams, Auth) {
-        Auth.activateAccount({key: $routeParams.key}).then(function () {
+    .controller('ActivationController', function ($scope, $stateParams, Auth) {
+        Auth.activateAccount({key: $stateParams.key}).then(function () {
             $scope.error = null;
             $scope.success = 'OK';
-        }).catch(function (response) {
+        }).catch(function () {
             $scope.success = null;
             $scope.error = "ERROR";
         });
     });
+

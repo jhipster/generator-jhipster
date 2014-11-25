@@ -27,7 +27,11 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
         });
 
         $rootScope.back = function() {
-            $state.go($rootScope.previousState_name,$rootScope.previousState_params);
+            if ($rootScope.previousState_name === 'activate') {
+                $state.go('home');
+            } else {
+                $state.go($rootScope.previousState_name,$rootScope.previousState_params);
+            }
         };
     })
     <% if (authenticationType == 'token') { %>
