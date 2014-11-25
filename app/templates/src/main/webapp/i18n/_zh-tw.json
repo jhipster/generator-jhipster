@@ -265,6 +265,7 @@
             "mean": "平均讀取時間 (毫秒)"
         },
         "datasource": {
+        	"usage": "Usage",
             "title": "DataSource statistics (time in millisecond)",
             "name": "Pool usage",
             "count": "Count",
