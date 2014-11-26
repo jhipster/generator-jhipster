@@ -1,6 +1,6 @@
 package <%=packageName%>.config;
-
-import com.codahale.metrics.MetricRegistry;<% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
+<% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
+import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.ehcache.InstrumentedEhcache;<% } %><% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
 import com.hazelcast.config.Config;
 import com.hazelcast.core.HazelcastInstance;
@@ -26,8 +26,8 @@ import javax.inject.Inject;<% if (hibernateCache == 'ehcache' && databaseType ==
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.metamodel.EntityType;
-import java.util.Set;<% } %>
-import java.util.SortedSet;
+import java.util.Set;
+import java.util.SortedSet;<% } %>
 
 @Configuration
 @EnableCaching
@@ -36,28 +36,29 @@ public class CacheConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);<% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
 
-    private static HazelcastInstance hazelcastInstance;<% } if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
+    private static HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance();<% } if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
 
     @PersistenceContext
     private EntityManager entityManager;<% } %><% if ((hibernateCache == 'ehcache') || hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
 
     @Inject
-    private Environment env;<% } %>
+    private Environment env;<% } %><% if (hibernateCache == 'ehcache') { %>
 
     @Inject
     private MetricRegistry metricRegistry;
 
-<% if (hibernateCache == 'ehcache') { %>    private net.sf.ehcache.CacheManager cacheManager;
-<% } else { %>    private CacheManager cacheManager;
+    private net.sf.ehcache.CacheManager cacheManager;<% } else { %>
+
+    private CacheManager cacheManager;
 <% } %>
     @PreDestroy
-    public void destroy() {
+    public void destroy() {<% if (hibernateCache == 'ehcache') { %>
         log.info("Remove Cache Manager metrics");
         SortedSet<String> names = metricRegistry.getNames();<% if (javaVersion == '8') { %>
         names.forEach(metricRegistry::remove);<% } else { %>
         for (String name : names) {
             metricRegistry.remove(name);
-        }<% } %>
+        }<% } %><% } %>
         log.info("Closing Cache Manager");<% if (hibernateCache == 'ehcache') { %>
         cacheManager.shutdown();<% } %><% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
         Hazelcast.shutdownAll();<% } %>
