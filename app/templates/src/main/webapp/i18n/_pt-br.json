@@ -106,7 +106,7 @@
             "error": {
                 "fail": "<strong>Erro ao realizar o cadastro!</strong> Favor tentar novamente mais tarde.",
                 "userexists": "<strong>Usuário já registrado!</strong> Favor escolher outro.",
-                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+                "emailexists": "<strong>E-mail já está em uso!</strong> Por favor informe outro."
             }
         }
     },
