@@ -741,17 +741,17 @@ JhipsterGenerator.prototype.app = function app() {
     this.indexFile = this.engine(this.indexFile, this, {});
 
     // Create Test Javascript files
-    var testJsDir = 'src/test/javascript/';
-    this.copy('src/test/javascript/karma.conf.js', testJsDir + 'karma.conf.js');
+    var testJsDir = 'src/main/webapp/test/';
+    this.copy(testJsDir + 'karma.conf.js', testJsDir + 'karma.conf.js');
     if (this.websocket == 'atmosphere') {
-        this.copy('src/test/javascript/mock/atmosphere.mock.js', testJsDir + 'mock/atmosphere.mock.js');
+        this.copy(testJsDir + 'mock/atmosphere.mock.js', testJsDir + 'mock/atmosphere.mock.js');
     }
-    this.template('src/test/javascript/spec/app/account/login/_loginControllerSpec.js', testJsDir + 'spec/app/account/login/loginControllerSpec.js', this, {});
-    this.template('src/test/javascript/spec/app/account/password/_passwordControllerSpec.js', testJsDir + 'spec/app/account/password/passwordControllerSpec.js', this, {});
-    this.template('src/test/javascript/spec/app/account/password/_passwordDirectiveSpec.js', testJsDir + 'spec/app/account/password/passwordDirectiveSpec.js', this, {});
-    this.template('src/test/javascript/spec/app/account/sessions/_sessionsControllerSpec.js', testJsDir + 'spec/app/account/sessions/sessionsControllerSpec.js', this, {});
-    this.template('src/test/javascript/spec/app/account/settings/_settingsControllerSpec.js', testJsDir + 'spec/app/account/settings/settingsControllerSpec.js', this, {});
-    this.template('src/test/javascript/spec/components/auth/_authServicesSpec.js', testJsDir + 'spec/components/auth/authServicesSpec.js', this, {});
+    this.template(testJsDir + 'spec/app/account/login/_loginControllerSpec.js', testJsDir + 'spec/app/account/login/loginControllerSpec.js', this, {});
+    this.template(testJsDir + 'spec/app/account/password/_passwordControllerSpec.js', testJsDir + 'spec/app/account/password/passwordControllerSpec.js', this, {});
+    this.template(testJsDir + 'spec/app/account/password/_passwordDirectiveSpec.js', testJsDir + 'spec/app/account/password/passwordDirectiveSpec.js', this, {});
+    this.template(testJsDir + 'spec/app/account/sessions/_sessionsControllerSpec.js', testJsDir + 'spec/app/account/sessions/sessionsControllerSpec.js', this, {});
+    this.template(testJsDir + 'spec/app/account/settings/_settingsControllerSpec.js', testJsDir + 'spec/app/account/settings/settingsControllerSpec.js', this, {});
+    this.template(testJsDir + 'spec/components/auth/_authServicesSpec.js', testJsDir + 'spec/components/auth/authServicesSpec.js', this, {});
 
     // CSS
     this.copy(webappDir + 'styles/documentation.css', webappDir + 'styles/documentation.css');
