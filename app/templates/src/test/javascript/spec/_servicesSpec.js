@@ -27,8 +27,8 @@ describe('Services Tests ', function () {
             //GIVEN
             //set up some data for the http call to return and test later.
             var returnData = { result: 'ok' };
-            //expectGET to make sure this is called once.
-            httpBackend.expectGET('app/logout').respond(returnData);<% if (websocket == 'atmosphere') { %>
+            //expectPOST to make sure this is called once.
+            httpBackend.expectPOST('app/logout').respond(returnData);<% if (websocket == 'atmosphere') { %>
             // WebSocket tries to authenticate after logout
             httpBackend.expectGET('protected/authentication_check.gif').respond(401, '');
             httpBackend.expectGET('views/main.html').respond(401, '');<% } %>
