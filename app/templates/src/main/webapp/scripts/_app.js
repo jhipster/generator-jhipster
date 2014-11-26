@@ -8,6 +8,9 @@ var <%= angularAppName %> = angular.module('<%= angularAppName %>', ['http-auth-
 
 <%= angularAppName %>
     .config(function ($routeProvider, $httpProvider, $translateProvider, tmhDynamicLocaleProvider, httpRequestInterceptorCacheBusterProvider, USER_ROLES) {
+            <% if (authenticationType == 'cookie') { %>//enable CSRF
+            $httpProvider.defaults.xsrfCookieName= 'CSRF-TOKEN';
+            $httpProvider.defaults.xsrfHeaderName= 'X-CSRF-TOKEN';<% } %>
 
             //Cache everything except rest api requests
             httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*rest.*/],true);

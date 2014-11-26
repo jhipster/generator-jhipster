@@ -1,6 +1,7 @@
 package <%=packageName%>.config;
 <% if (authenticationType == 'cookie') { %>
-import <%=packageName%>.security.*;<% } %>
+import <%=packageName%>.security.*;
+import <%=packageName%>.web.filter.CsrfTokenGeneratorFilter;<% } %>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;<% if (authenticationType == 'cookie') { %>
 import org.springframework.core.env.Environment;<% } %><% if (authenticationType == 'token') { %>
@@ -17,7 +18,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;<% if (authenticationType == 'cookie') { %>
-import org.springframework.security.web.authentication.RememberMeServices;<% } %><% if (authenticationType == 'token') { %>
+import org.springframework.security.web.authentication.RememberMeServices;
+import org.springframework.security.web.csrf.CsrfFilter;<% } %><% if (authenticationType == 'token') { %>
 import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecurityExpressionHandler;<% } %>
 
 import javax.inject.Inject;
@@ -79,6 +81,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+            .addFilterAfter(new CsrfTokenGeneratorFilter(), CsrfFilter.class)
             .exceptionHandling()
             .authenticationEntryPoint(authenticationEntryPoint)
         .and()
@@ -100,8 +103,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .deleteCookies("JSESSIONID")
             .permitAll()
         .and()
-            .csrf()
-            .disable()
             .headers()
             .frameOptions()
             .disable()

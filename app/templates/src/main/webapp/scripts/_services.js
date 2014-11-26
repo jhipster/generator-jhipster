@@ -181,7 +181,7 @@
                     AccessToken.remove();
                     delete httpHeaders.common['Authorization'];
                     $rootScope.$broadcast('event:auth-loginRequired', data);
-                    
+
                 });<% } %>
             },
             valid: function (authorizedRoles) {<% if (authenticationType == 'token') { %>
@@ -248,7 +248,7 @@
                 $rootScope.account = null;<% if (authenticationType == 'token') { %>
                 AccessToken.remove();<% } %>
 
-                $http.get('app/logout');
+                $http.post('app/logout');
                 Session.invalidate();<% if (authenticationType == 'token') { %>
                 delete httpHeaders.common['Authorization'];<% } %>
                 authService.loginCancelled();
