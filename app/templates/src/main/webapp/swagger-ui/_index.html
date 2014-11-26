@@ -47,6 +47,17 @@
                 docExpansion: "none"
             });
 
+            <% if (authenticationType == 'cookie') { %>function getCSRF() {
+				var name = "CSRF-TOKEN=";
+				var ca = document.cookie.split(';');
+				for(var i=0; i<ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0)==' ') c = c.substring(1);
+					if (c.indexOf(name) != -1) return c.substring(name.length,c.length);
+				}
+				return "";
+			}
+            window.authorizations.add("key", new ApiKeyAuthorization("X-CSRF-TOKEN", getCSRF(), "header"));<% } %>
             <% if (authenticationType == 'token') { %>var authToken = JSON.parse(localStorage.getItem("token")).access_token;
             window.authorizations.add("key", new ApiKeyAuthorization("Authorization",
                             "Bearer " + authToken, "header"));<% } %>
