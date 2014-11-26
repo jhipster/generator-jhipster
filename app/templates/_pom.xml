@@ -382,10 +382,6 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency><% if (authenticationType == 'token') { %>
         <dependency>
@@ -620,12 +616,48 @@
             <properties>
                 <!-- log configuration -->
                 <logback.loglevel>DEBUG</logback.loglevel>
-                <!-- Spring profile to use -->
-                <spring.profiles.active>dev</spring.profiles.active>
             </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>fast</id>
+            <properties>
+                <!-- log configuration -->
+                <logback.loglevel>DEBUG</logback.loglevel>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-undertow</artifactId>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <arguments>
+                                <argument>--spring.profiles.active=dev,fast</argument>
+                            </arguments>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
         <profile>
             <id>prod</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </dependency>
+            </dependencies>
             <build>
                 <plugins>
                     <plugin>
@@ -685,8 +717,6 @@
             <properties>
                 <!-- log configuration -->
                 <logback.loglevel>INFO</logback.loglevel>
-                <!-- Spring profile to use -->
-                <spring.profiles.active>prod</spring.profiles.active>
             </properties>
         </profile><% if(frontendBuilder == 'gulp') { %>
         <profile>

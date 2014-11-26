@@ -19,8 +19,8 @@ import java.io.IOException;
  */
 @Component
 public class AjaxLogoutSuccessHandler extends AbstractAuthenticationTargetUrlRequestHandler
-        implements LogoutSuccessHandler {
-    <% if (authenticationType == 'token') { %>
+        implements LogoutSuccessHandler {<% if (authenticationType == 'token') { %>
+
     public static final String BEARER_AUTHENTICATION = "Bearer ";
 
     @Inject
@@ -29,8 +29,8 @@ public class AjaxLogoutSuccessHandler extends AbstractAuthenticationTargetUrlReq
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
                                 Authentication authentication)
-            throws IOException, ServletException {
-        <% if (authenticationType == 'token') { %>
+            throws IOException, ServletException {<% if (authenticationType == 'token') { %>
+
         // Request the token
         final String token = request.getHeader("authorization");
 
@@ -40,8 +40,8 @@ public class AjaxLogoutSuccessHandler extends AbstractAuthenticationTargetUrlReq
             if (oAuth2AccessToken != null) {
                 tokenStore.removeAccessToken(oAuth2AccessToken);
             }
-        }<% } %>
-
+        }
+<% } %>
         response.setStatus(HttpServletResponse.SC_OK);
     }
 }

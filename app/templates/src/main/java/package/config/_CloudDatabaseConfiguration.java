@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.MongoDbFactory;<% } %>
 import javax.sql.DataSource;<% } %>
 
 @Configuration
-@Profile("cloud")
+@Profile(Constants.SPRING_PROFILE_CLOUD)
 public class CloudDatabaseConfiguration extends AbstractCloudConfig {
 
     private final Logger log = LoggerFactory.getLogger(CloudDatabaseConfiguration.class);<% if (databaseType == 'sql') { %>

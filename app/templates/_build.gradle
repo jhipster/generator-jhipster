@@ -29,10 +29,14 @@ apply from: 'yeoman.gradle'
 
 if (project.hasProperty('prod')) {
     profile = 'prod'
+} else if (project.hasProperty('fast')) {
+    profile = 'fast'
 }
 
 if (profile == 'prod') {
     apply from: 'profile_prod.gradle'
+} else if (profile == 'fast') {
+    apply from: 'profile_fast.gradle'
 } else {
     apply from: 'profile_dev.gradle'
 }
@@ -52,7 +56,6 @@ war {
 }
 
 repositories {
-
     maven { url 'http://repo.spring.io/milestone' }
     maven { url 'http://repo.spring.io/snapshot' }
     maven { url 'https://repository.jboss.org/nexus/content/repositories/releases' }
@@ -111,11 +114,9 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: spring_boot_version<% } %><% if (databaseType == 'nosql') { %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb', version: spring_boot_version<% } %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: spring_boot_version
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: spring_boot_version
     compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: spring_boot_version) {
         exclude module: 'spring-boot-starter-tomcat'
     }
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: spring_boot_version
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: spring_boot_version
     compile group: 'org.springframework.cloud', name: 'spring-cloud-cloudfoundry-connector', version: spring_cloud_version
     compile group: 'org.springframework.cloud', name: 'spring-cloud-spring-service-connector', version: spring_cloud_version

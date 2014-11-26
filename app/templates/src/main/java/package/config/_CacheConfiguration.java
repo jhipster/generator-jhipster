@@ -14,7 +14,8 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;<% if (hibernateCache == 'no') { %>
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;<% if (hibernateCache == 'no') { %>
 import org.springframework.cache.support.NoOpCacheManager; <% } %><% if (hibernateCache == 'ehcache') { %>
 import org.springframework.cache.ehcache.EhCacheCacheManager;<% } %><% if (hibernateCache == 'hazelcast' || hibernateCache == 'ehcache' || clusteredHttpSession == 'hazelcast') { %>
 import org.springframework.core.env.Environment;<% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
@@ -32,6 +33,7 @@ import java.util.SortedSet;<% } %>
 @Configuration
 @EnableCaching
 @AutoConfigureAfter(value = {MetricsConfiguration.class, DatabaseConfiguration.class})
+@Profile("!" + Constants.SPRING_PROFILE_FAST)
 public class CacheConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);<% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
@@ -49,8 +51,8 @@ public class CacheConfiguration {
 
     private net.sf.ehcache.CacheManager cacheManager;<% } else { %>
 
-    private CacheManager cacheManager;
-<% } %>
+    private CacheManager cacheManager;<% } %>
+
     @PreDestroy
     public void destroy() {<% if (hibernateCache == 'ehcache') { %>
         log.info("Remove Cache Manager metrics");

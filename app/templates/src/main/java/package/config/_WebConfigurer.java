@@ -14,6 +14,7 @@ import org.atmosphere.cpr.AtmosphereFramework;
 import org.atmosphere.cpr.AtmosphereServlet;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
@@ -45,7 +46,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     @Inject
     private Environment env;
 
-    @Inject
+    @Autowired(required = false)
     private MetricRegistry metricRegistry;
 
     @Override
@@ -53,7 +54,9 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         log.info("Web application configuration, using profiles: {}", Arrays.toString(env.getActiveProfiles()));
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);<% if (clusteredHttpSession == 'hazelcast') { %>
         initClusteredHttpSessionFilter(servletContext, disps);<% } %>
-        initMetrics(servletContext, disps);<% if (websocket == 'atmosphere') { %>
+        if (!env.acceptsProfiles(Constants.SPRING_PROFILE_FAST)) {
+            initMetrics(servletContext, disps);
+        }<% if (websocket == 'atmosphere') { %>
         initAtmosphereServlet(servletContext);<% } %>
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
             initCachingHttpHeadersFilter(servletContext, disps);

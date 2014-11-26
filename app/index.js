@@ -402,6 +402,7 @@ JhipsterGenerator.prototype.app = function app() {
             this.template('_yeoman.gradle', 'yeoman.gradle');
             this.template('_profile_dev.gradle', 'profile_dev.gradle');
             this.template('_profile_prod.gradle', 'profile_prod.gradle');
+            this.template('_profile_fast.gradle', 'profile_fast.gradle');
             this.copy('gradlew', 'gradlew');
             this.copy('gradlew.bat', 'gradlew.bat');
             this.copy('gradle/wrapper/gradle-wrapper.jar', 'gradle/wrapper/gradle-wrapper.jar');
