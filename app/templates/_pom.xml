@@ -270,13 +270,19 @@
         </dependency><% if (websocket == 'atmosphere') { %>
         <dependency>
             <groupId>org.atmosphere</groupId>
-            <artifactId>atmosphere-runtime</artifactId>
-            <version>2.2.2</version>
+            <artifactId>atmosphere-runtime-native</artifactId>
+            <version>2.2.3</version>
         </dependency>
         <dependency>
             <groupId>org.atmosphere</groupId>
             <artifactId>atmosphere-spring</artifactId>
             <version>${atmosphere-spring.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.atmosphere</groupId>
+                    <artifactId>atmosphere-runtime</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency><% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
         <dependency>
             <groupId>org.hibernate</groupId>
