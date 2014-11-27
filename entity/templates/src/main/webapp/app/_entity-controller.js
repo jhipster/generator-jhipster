@@ -18,13 +18,19 @@ angular.module('<%=angularAppName%>')
             });
     })
     .controller('<%= entityClass %>Controller', function ($scope, <%= entityClass %><% for (relationshipId in relationships) { %>, <%= relationships[relationshipId].otherEntityNameCapitalized %><% } %>) {
-        $scope.<%= entityInstance %>s = <%= entityClass %>.query();<% for (relationshipId in relationships) { %>
+        $scope.<%= entityInstance %>s = [];<% for (relationshipId in relationships) { %>
         $scope.<%= relationships[relationshipId].otherEntityName %>s = <%= relationships[relationshipId].otherEntityNameCapitalized %>.query();<% } %>
+        $scope.loadAll = function() {
+            <%= entityClass %>.query(function(result) {
+               $scope.<%= entityInstance %>s = result;
+            });
+        };
+        $scope.loadAll();
 
         $scope.create = function () {
             <%= entityClass %>.save($scope.<%= entityInstance %>,
                 function () {
-                    $scope.<%= entityInstance %>s = <%= entityClass %>.query();
+                    $scope.loadAll();
                     $('#save<%= entityClass %>Modal').modal('hide');
                     $scope.clear();
                 });
@@ -36,10 +42,7 @@ angular.module('<%=angularAppName%>')
         };
 
         $scope.delete = function (id) {
-            <%= entityClass %>.delete({id: id},
-                function () {
-                    $scope.<%= entityInstance %>s = <%= entityClass %>.query();
-                });
+            <%= entityClass %>.delete({id: id}, $scope.loadAll);
         };
 
         $scope.clear = function () {
