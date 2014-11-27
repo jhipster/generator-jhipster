@@ -98,7 +98,8 @@
                 "login": {
                     "required": "Kullanıcı adı zorunlu.",
                     "minlength": "Kullanıcı adı en az 1 karakter olmak zorundadır",
-                    "maxlength": "Kullanıcı adı en fazla 50 karakter olabilir"
+                    "maxlength": "Kullanıcı adı en fazla 50 karakter olabilir",
+                    "pattern": "Your login can only contain lower-case letters and digits"
                 }
             },
             "success": "<strong>Kayıt işlemi yapıldı!</strong> Lütfen onay için e-posta'nızı kontrol edin.",
@@ -265,6 +266,7 @@
             "mean": "Mean get time (ms)"
         },
         "datasource": {
+        	"usage": "Usage",
             "title": "DataSource statistics (time in millisecond)",
             "name": "Pool usage",
             "count": "Count",

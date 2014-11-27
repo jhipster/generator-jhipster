@@ -10,6 +10,7 @@ import com.mongodb.Mongo;
 import org.mongeez.Mongeez;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (databaseType == 'sql') { %>
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;<% } %><% if (databaseType == 'nosql') { %>
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoProperties;<% } %><% if (databaseType == 'sql') { %>
@@ -19,8 +20,7 @@ import org.springframework.context.EnvironmentAware;<% } %>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;<% if (databaseType == 'nosql') { %>
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;<% } %><% if (databaseType == 'sql') { %>
+import org.springframework.context.annotation.Import;<% } %><% if (databaseType == 'sql') { %>
 import org.springframework.core.env.Environment;<% } %><% if (databaseType == 'nosql' && authenticationType == 'token') { %>
 import org.springframework.core.convert.converter.Converter;<% } %><% if (databaseType == 'nosql') { %>
 import org.springframework.core.io.ClassPathResource;
@@ -56,7 +56,10 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
 
     private RelaxedPropertyResolver propertyResolver;
 
-    private Environment environment;<% } %><% if (databaseType == 'nosql') { %>
+    private Environment env;
+
+    @Autowired(required = false)
+    private MetricRegistry metricRegistry;<% } %><% if (databaseType == 'nosql') { %>
 
     @Inject
     private Mongo mongo;
@@ -65,20 +68,20 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
     private MongoProperties mongoProperties;<% } %><% if (databaseType == 'sql') { %>
 
     @Override
-    public void setEnvironment(Environment environment) {
-        this.environment = environment;
-        this.propertyResolver = new RelaxedPropertyResolver(environment, "spring.datasource.");
+    public void setEnvironment(Environment env) {
+        this.env = env;
+        this.propertyResolver = new RelaxedPropertyResolver(env, "spring.datasource.");
     }
 
     @Bean(destroyMethod = "shutdown")
     @ConditionalOnMissingClass(name = "<%=packageName%>.config.HerokuDatabaseConfiguration")
-    @Profile("!cloud")
-    public DataSource dataSource(MetricRegistry metricRegistry) {
+    @Profile("!" + Constants.SPRING_PROFILE_CLOUD)
+    public DataSource dataSource() {
         log.debug("Configuring Datasource");
         if (propertyResolver.getProperty("url") == null && propertyResolver.getProperty("databaseName") == null) {
             log.error("Your database connection pool configuration is incorrect! The application" +
                     "cannot start. Please check your Spring profile, current profiles are: {}",
-                    Arrays.toString(environment.getActiveProfiles()));
+                    Arrays.toString(env.getActiveProfiles()));
 
             throw new ApplicationContextException("Database connection pool is not configured correctly");
         }
@@ -100,17 +103,23 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
             config.addDataSourceProperty("prepStmtCacheSqlLimit", propertyResolver.getProperty("prepStmtCacheSqlLimit", "2048"));
             config.addDataSourceProperty("useServerPrepStmts", propertyResolver.getProperty("useServerPrepStmts", "true"));
         }<% } %>
-        config.setMetricRegistry(metricRegistry);
+        if (metricRegistry != null) {
+            config.setMetricRegistry(metricRegistry);
+        }
         return new HikariDataSource(config);
     }
 
     @Bean
     public SpringLiquibase liquibase(DataSource dataSource) {
-        log.debug("Configuring Liquibase");
         SpringLiquibase liquibase = new SpringLiquibase();
         liquibase.setDataSource(dataSource);
         liquibase.setChangeLog("classpath:config/liquibase/master.xml");
         liquibase.setContexts("development, production");
+        if (env.acceptsProfiles(Constants.SPRING_PROFILE_FAST)) {
+            liquibase.setShouldRun(false);
+        } else {
+            log.debug("Configuring Liquibase");
+        }
         return liquibase;
     }
 
@@ -148,6 +157,7 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
     }<% } %>
 
     @Bean
+    @Profile("!" + Constants.SPRING_PROFILE_FAST)
     public Mongeez mongeez() {
         log.debug("Configuring Mongeez");
         Mongeez mongeez = new Mongeez();

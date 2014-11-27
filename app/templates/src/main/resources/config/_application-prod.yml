@@ -12,7 +12,7 @@ spring:
     <% if (databaseType == 'sql') { %>
     datasource:
         dataSourceClassName: <% if (prodDatabaseType == 'mysql') { %>com.mysql.jdbc.jdbc2.optional.MysqlDataSource<% } else if (prodDatabaseType == 'postgresql') { %>org.postgresql.ds.PGSimpleDataSource<% } else { %>org.hsqldb.jdbc.JDBCDataSource<% } %>
-        url: <% if (prodDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (prodDatabaseType == 'postgresql') { %><% } else { %>jdbc:hsqldb:mem:<%= baseName %><% } %>
+        url: <% if (prodDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (prodDatabaseType == 'postgresql') { %><% } %>
         databaseName: <% if (prodDatabaseType == 'postgresql') { %><%= baseName %><% } %>
         serverName: <% if (prodDatabaseType == 'postgresql') { %>localhost<% } %>
         username: <% if (prodDatabaseType == 'mysql') { %>root<% } else if (prodDatabaseType == 'postgresql') { %><%= baseName %><% } %>

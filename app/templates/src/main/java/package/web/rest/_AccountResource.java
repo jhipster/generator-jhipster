@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.*;<% if (javaVersion == '8') { %>
@@ -68,7 +69,7 @@ public class AccountResource {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<?> registerAccount(@RequestBody UserDTO userDTO, HttpServletRequest request,
+    public ResponseEntity<?> registerAccount(@Valid @RequestBody UserDTO userDTO, HttpServletRequest request,
                                              HttpServletResponse response) {<% if (javaVersion == '8') { %>
         return Optional.ofNullable(userRepository.findOne(userDTO.getLogin()))
             .map(user -> new ResponseEntity<String>("login already in use", HttpStatus.BAD_REQUEST))

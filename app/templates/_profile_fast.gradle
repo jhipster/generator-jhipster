@@ -1,0 +1,15 @@
+apply plugin: 'spring-boot'
+
+dependencies {
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-undertow', version: spring_boot_version
+}
+
+bootRun {
+  args = ["--spring.profiles.active=dev,fast"]
+}
+
+task setProdProperties(dependsOn: bootRun) << {
+    doFirst {
+        System.setProperty('spring.profiles.active', 'dev,fast')
+    }
+}

@@ -5,9 +5,9 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.2.0.RC1')
-        classpath('com.moowork.gradle:gradle-node-plugin:0.4')
-        classpath('com.moowork.gradle:gradle-grunt-plugin:0.5')
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.2.0.RC2')
+        classpath('com.moowork.gradle:gradle-node-plugin:0.8')
+        classpath('com.moowork.gradle:gradle-grunt-plugin:0.6')
         classpath('be.filipblondeel.gradle:gradle-gulp-plugin:0.1')
     }
 }
@@ -27,8 +27,16 @@ springBoot {
 
 apply from: 'yeoman.gradle'
 
+if (project.hasProperty('prod')) {
+    profile = 'prod'
+} else if (project.hasProperty('fast')) {
+    profile = 'fast'
+}
+
 if (profile == 'prod') {
     apply from: 'profile_prod.gradle'
+} else if (profile == 'fast') {
+    apply from: 'profile_fast.gradle'
 } else {
     apply from: 'profile_dev.gradle'
 }
@@ -48,7 +56,6 @@ war {
 }
 
 repositories {
-
     maven { url 'http://repo.spring.io/milestone' }
     maven { url 'http://repo.spring.io/snapshot' }
     maven { url 'https://repository.jboss.org/nexus/content/repositories/releases' }
@@ -87,7 +94,9 @@ dependencies {
     compile group: 'joda-time', name: 'joda-time-hibernate', version: joda_time_hibernate_version<% } %>
     compile group: 'org.apache.geronimo.javamail', name: 'geronimo-javamail_1.4_mail', version: geronimo_javamail_1_4_mail_version<% if (websocket == 'atmosphere') { %>
     compile group: 'org.atmosphere', name: 'atmosphere-spring', version: atmosphere_spring_version
-    compile group: 'org.atmosphere', name: 'atmosphere-runtime', version: '2.2.2'<% } %><% if (databaseType == 'sql') { %>
+    compile(group: 'org.atmosphere', name: 'atmosphere-runtime-native', version: '2.2.3'){
+        exclude(module: 'atmosphere-runtime')
+    }<% } %><% if (databaseType == 'sql') { %>
     compile group: 'org.hibernate', name: 'hibernate-core', version: hibernate_entitymanager_version
     compile group: 'org.hibernate', name: 'hibernate-envers', version: hibernate_entitymanager_version<% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
     compile group: 'org.hibernate', name: 'hibernate-ehcache', version: hibernate_entitymanager_version<% } %>
@@ -105,11 +114,9 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: spring_boot_version<% } %><% if (databaseType == 'nosql') { %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb', version: spring_boot_version<% } %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: spring_boot_version
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: spring_boot_version
     compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: spring_boot_version) {
-        exclude module: 'spring_boot-starter-tomcat'
+        exclude module: 'spring-boot-starter-tomcat'
     }
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: spring_boot_version
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: spring_boot_version
     compile group: 'org.springframework.cloud', name: 'spring-cloud-cloudfoundry-connector', version: spring_cloud_version
     compile group: 'org.springframework.cloud', name: 'spring-cloud-spring-service-connector', version: spring_cloud_version

@@ -4,6 +4,9 @@ body {
     color: #333;
 }
 
+/* ==========================================================================
+Browser Upgrade Prompt
+========================================================================== */
 .development {
     position: absolute;
     width: 149px;
@@ -15,6 +18,16 @@ body {
     background-image: url("../images/development_ribbon.png");
     background-position: center center;
     background-repeat: no-repeat;
+}
+
+/* ==========================================================================
+Browser Upgrade Prompt
+========================================================================== */
+.browserupgrade {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
 }
 
 .hero-unit {

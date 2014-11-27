@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-@Profile("cloud")
 @EnableMongoRepositories("<%=packageName%>.repository")
+@Profile(Constants.SPRING_PROFILE_CLOUD)
 public class CloudMongoDbConfiguration extends AbstractMongoConfiguration  {
 
     private final Logger log = LoggerFactory.getLogger(CloudDatabaseConfiguration.class);

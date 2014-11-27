@@ -98,7 +98,8 @@
                 "login": {
                     "required": "Your login is required.",
                     "minlength": "Your login is required to be at least 1 character",
-                    "maxlength": "Your login cannot be longer than 50 characters"
+                    "maxlength": "Your login cannot be longer than 50 characters",
+                    "pattern": "Your login can only contain lower-case letters and digits"
                 }
             },
             "success": "<strong>Registration saved!</strong> Please check your email for confirmation.",
@@ -265,6 +266,7 @@
             "mean": "Mean get time (ms)"
         },
         "datasource": {
+        	"usage": "Usage",
             "title": "DataSource statistics (time in millisecond)",
             "name": "Pool usage",
             "count": "Count",

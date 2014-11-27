@@ -402,6 +402,7 @@ JhipsterGenerator.prototype.app = function app() {
             this.template('_yeoman.gradle', 'yeoman.gradle');
             this.template('_profile_dev.gradle', 'profile_dev.gradle');
             this.template('_profile_prod.gradle', 'profile_prod.gradle');
+            this.template('_profile_fast.gradle', 'profile_fast.gradle');
             this.copy('gradlew', 'gradlew');
             this.copy('gradlew.bat', 'gradlew.bat');
             this.copy('gradle/wrapper/gradle-wrapper.jar', 'gradle/wrapper/gradle-wrapper.jar');
@@ -418,6 +419,9 @@ JhipsterGenerator.prototype.app = function app() {
 
     if (this.hibernateCache == "ehcache") {
         this.template(resourceDir + '_ehcache.xml', resourceDir + 'ehcache.xml');
+    }
+    if (this.devDatabaseType == "h2Memory") {
+        this.copy(resourceDir + 'h2.server.properties', resourceDir + '.h2.server.properties');
     }
 
     // i18n resources used by thymeleaf
@@ -725,6 +729,7 @@ JhipsterGenerator.prototype.app = function app() {
         'bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
         'bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
         'bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js',
+        'bower_components/angular-cache-buster/angular-cache-buster.js',
 
         'scripts/http-auth-interceptor.js',
         'scripts/truncate.js',

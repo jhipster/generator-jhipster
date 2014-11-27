@@ -98,7 +98,8 @@
                 "login": {
                     "required": "Din inloggning krävs.",
                     "minlength": "Ditt användarnamn måste vara minst ett tecken",
-                    "maxlength": "Ditt användarnamn kan inte vara längre än 50 tecken"
+                    "maxlength": "Ditt användarnamn kan inte vara längre än 50 tecken",
+                    "pattern": "Your login can only contain lower-case letters and digits"
                 }
             },
             "success": "<strong>Användarnamn sparat!</strong> Kontrollera din e-post för konfirmation.",
@@ -265,6 +266,7 @@
             "mean": "Medeltid för GET (ms)"
         },
         "datasource": {
+        	"usage": "Usage",
             "title": "DataSource statistics (time in millisecond)",
             "name": "Pool usage",
             "count": "Count",
