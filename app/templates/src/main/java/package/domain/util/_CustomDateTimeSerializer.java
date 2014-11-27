@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 public class CustomDateTimeSerializer extends JsonSerializer<DateTime> {
     
     private static DateTimeFormatter formatter = DateTimeFormat
-            .forPattern("yyyy-MM-dd'T'HH:mm:ss");
+            .forPattern("yyyy/MM/dd'T'HH:mm:ss");
 
     @Override
     public void serialize(DateTime value, JsonGenerator generator,

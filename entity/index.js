@@ -274,39 +274,36 @@ EntityGenerator.prototype.files = function files() {
     var resourceDir = 'src/main/resources/';
 
     this.template('src/main/java/package/domain/_Entity.java',
-        'src/main/java/' + this.packageFolder + '/domain/' +    this.entityClass + '.java');
+        'src/main/java/' + this.packageFolder + '/domain/' +    this.entityClass + '.java', this, {});
 
     this.template('src/main/java/package/repository/_EntityRepository.java',
-        'src/main/java/' + this.packageFolder + '/repository/' +    this.entityClass + 'Repository.java');
+        'src/main/java/' + this.packageFolder + '/repository/' +    this.entityClass + 'Repository.java', this, {});
 
     this.template('src/main/java/package/web/rest/_EntityResource.java',
-        'src/main/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'Resource.java');
+        'src/main/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'Resource.java', this, {});
 
     if (this.databaseType == "sql") {
         this.changelogDate = this.dateFormatForLiquibase();
         this.template(resourceDir + '/config/liquibase/changelog/_added_entity.xml',
-            resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml');
+            resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml', this, {});
 
         this.addChangelogToLiquibase(this.changelogDate + '_added_entity_' + this.entityClass);
     }
 
-    this.template('src/main/webapp/views/_entities.html',
-        'src/main/webapp/views/' +    this.entityInstance + 's.html');
+    this.template('src/main/webapp/app/_entities.html',
+        'src/main/webapp/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + 's.html', this, {});
 
-    this.template('src/main/webapp/scripts/_entity-router.js',
-        'src/main/webapp/scripts/' +    this.entityInstance + '/router_'+this.entityInstance+'.js');
-    this.addScriptToIndex(this.entityInstance + '/router_'+this.entityInstance+'.js');
     this.addRouterToMenu(this.entityInstance);
 
-    this.template('src/main/webapp/scripts/_entity-controller.js',
-        'src/main/webapp/scripts/' +    this.entityInstance + '/controller_'+this.entityInstance+'.js');
-    this.addScriptToIndex(this.entityInstance + '/controller_'+this.entityInstance+'.js');
+    this.template('src/main/webapp/app/_entity-controller.js',
+        'src/main/webapp/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '.controller' + '.js', this, {});
+    this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.controller' + '.js');
 
-    this.template('src/main/webapp/scripts/_entity-service.js',
-        'src/main/webapp/scripts/' +    this.entityInstance + '/service_'+this.entityInstance+'.js');
-    this.addScriptToIndex(this.entityInstance + '/service_'+this.entityInstance+'.js');
+    this.template('src/main/webapp/components/_entity-service.js',
+        'src/main/webapp/components/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js', this, {});
+    this.addComponentsScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.service' + '.js');
 
     this.template('src/test/java/package/web/rest/_EntityResourceTest.java',
-        'src/test/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'ResourceTest.java');
+        'src/test/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'ResourceTest.java', this, {});
 
 };

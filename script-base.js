@@ -13,7 +13,7 @@ function Generator() {
 
 util.inherits(Generator, yeoman.generators.NamedBase);
 
-Generator.prototype.addScriptToIndex = function (script) {
+Generator.prototype.addAppScriptToIndex = function (script) {
     try {
         var appPath = this.env.options.appPath;
         var fullPath = path.join(appPath, 'index.html');
@@ -21,7 +21,23 @@ Generator.prototype.addScriptToIndex = function (script) {
             file: fullPath,
             needle: '<!-- endbuild -->',
             splicable: [
-                    '<script src="scripts/' + script + '"></script>'
+                    '<script src="app/entities/' + script + '"></script>'
+            ]
+        });
+    } catch (e) {
+        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + script + '.js ' + 'not added.\n'.yellow);
+    }
+};
+
+Generator.prototype.addComponentsScriptToIndex = function (script) {
+    try {
+        var appPath = this.env.options.appPath;
+        var fullPath = path.join(appPath, 'index.html');
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: '<!-- endbuild -->',
+            splicable: [
+                    '<script src="components/entities/' + script + '"></script>'
             ]
         });
     } catch (e) {
@@ -32,12 +48,12 @@ Generator.prototype.addScriptToIndex = function (script) {
 Generator.prototype.addRouterToMenu = function (entityName) {
     try {
         var appPath = this.env.options.appPath;
-        var fullPath = path.join(appPath, 'index.html');
+        var fullPath = path.join(appPath, 'components/navbar/navbar.html');
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: '<!-- JHipster will add entities to the menu here -->',
             splicable: [
-                    '<li ng-switch-when="true"><a href="#/' + entityName + '"><span class="glyphicon glyphicon-asterisk"></span>&nbsp;' + entityName + '</a></li>'
+                    '<li><a href="#/' + entityName + '"><span class="glyphicon glyphicon-asterisk"></span>&nbsp;' + entityName + '</a></li>'
             ]
         });
     } catch (e) {
