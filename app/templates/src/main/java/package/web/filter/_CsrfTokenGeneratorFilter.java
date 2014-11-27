@@ -20,14 +20,18 @@ public class CsrfTokenGeneratorFilter extends OncePerRequestFilter {
         // Spring put CSRF token in session attribut _csrf
         CsrfToken token = (CsrfToken) httpServletRequest.getAttribute("_csrf");
 
-        // Session Cookie Based Approach for CSRF token
-        String pCookieName = "CSRF-TOKEN";
-        Cookie cookie = new Cookie(pCookieName, token.getToken());
-        cookie.setMaxAge(-1);
-        cookie.setHttpOnly(false);
-        cookie.setPath("/");
+        // Send a cookie only if the token have changed
+        String oldToken = (String) httpServletRequest.getHeader("X-CSRF-TOKEN");
+        if(oldToken == null || !oldToken.equals(token.getToken())) {
+            // Session Cookie Based Approach for CSRF token
+            String pCookieName = "CSRF-TOKEN";
+            Cookie cookie = new Cookie(pCookieName, token.getToken());
+            cookie.setMaxAge(-1);
+            cookie.setHttpOnly(false);
+            cookie.setPath("/");
 
-        httpServletResponse.addCookie(cookie);
+            httpServletResponse.addCookie(cookie);
+        }
 
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
