@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .factory('AuthServerProvider', function loginService($http, $cookieStore, localStorageService) {
+    .factory('AuthServerProvider', function loginService($http, localStorageService) {
         return {
             login: function(credentials) {
                 var data = "j_username=" + encodeURIComponent(credentials.username) +
@@ -19,8 +19,8 @@ angular.module('<%=angularAppName%>')
             logout: function() {
                 localStorageService.clearAll();
 
-                // logout from the server and remove the CSRF cookie
-                $http.post('app/logout').then( function(){ $cookieStore.remove('CSRF-TOKEN'); } );;
+                // logout from the server
+                $http.post('app/logout');
             },
             getToken: function () {
                 var token = localStorageService.get('token');

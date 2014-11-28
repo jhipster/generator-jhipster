@@ -102,6 +102,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .logoutUrl("/app/logout")
             .logoutSuccessHandler(ajaxLogoutSuccessHandler)
             .deleteCookies("JSESSIONID")
+            .deleteCookies("CSRF-TOKEN")
             .permitAll()
         .and()
             .headers()
