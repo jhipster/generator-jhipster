@@ -568,7 +568,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/web/filter/_CachingHttpHeadersFilter.java', javaDir + 'web/filter/CachingHttpHeadersFilter.java', this, {});
     this.template('src/main/java/package/web/filter/_StaticResourcesProductionFilter.java', javaDir + 'web/filter/StaticResourcesProductionFilter.java', this, {});
     if (this.authenticationType == 'cookie') {
-    this.template('src/main/java/package/web/filter/_CsrfTokenGeneratorFilter.java', javaDir + 'web/filter/CsrfTokenGeneratorFilter.java', this, {});
+        this.template('src/main/java/package/web/filter/_CsrfTokenGeneratorFilter.java', javaDir + 'web/filter/CsrfTokenGeneratorFilter.java', this, {});
     }
 
     this.template('src/main/java/package/web/filter/gzip/_package-info.java', javaDir + 'web/filter/gzip/package-info.java', this, {});
