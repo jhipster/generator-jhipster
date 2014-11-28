@@ -27,7 +27,8 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
         });
 
         $rootScope.back = function() {
-            if ($rootScope.previousState_name === 'activate') {
+            // If previous state is 'activate' or do not exist go to 'home'
+            if ($rootScope.previousState_name === 'activate' || $state.get($rootScope.previousState_name) === null) {
                 $state.go('home');
             } else {
                 $state.go($rootScope.previousState_name,$rootScope.previousState_params);
