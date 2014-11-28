@@ -12,7 +12,7 @@ angular.module('<%=angularAppName%>')
                 views: {
                     'content@': {
                         templateUrl: 'app/entities/<%= entityInstance %>/<%= entityInstance %>s.html',
-                        controller: '<%= entityClass %>Controller',
+                        controller: '<%= entityClass %>Controller'
                     }
                 }
             });
