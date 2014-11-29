@@ -9,6 +9,17 @@ var util = require('util'),
 
 var EntityGenerator = module.exports = function EntityGenerator(args, options, config) {
     yeoman.generators.NamedBase.apply(this, arguments);
+    this.useConfigurationFile =false;
+    if (shelljs.test('-f', '.jhipster.' + this.name)) {
+        console.log(chalk.green('Found the .jhipster.' + this.name + ' configuration file, automatically generating the entity'));
+        try {
+            this.fileData = JSON.parse(this.readFileAsString('.jhipster.' + this.name))
+        } catch (err) {
+            console.log(chalk.red('The configuration file could not be read!'));
+            return;
+        }
+        this.useConfigurationFile = true;
+    }
     console.log(chalk.red('The entity ' + this.name + ' is being created.'));
     this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
     this.baseName = this.config.get('baseName');
@@ -38,6 +49,9 @@ util.inherits(EntityGenerator, yeoman.generators.Base);
 util.inherits(EntityGenerator, scriptBase);
 
 EntityGenerator.prototype.askForFields = function askForFields() {
+    if (this.useConfigurationFile == true) {// don't prompt if data are imported from a file
+        return;
+    }
     var cb = this.async();
     this.fieldId++;
     console.log(chalk.green('Generating field #' + this.fieldId));
@@ -135,6 +149,9 @@ EntityGenerator.prototype.askForFields = function askForFields() {
 };
 
 EntityGenerator.prototype.askForRelationships = function askForRelationships() {
+    if (this.useConfigurationFile == true) {// don't prompt if data are imported from a file
+        return;
+    }
     if (this.databaseType == 'nosql') {
         return;
     }
@@ -264,11 +281,38 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             cb();
         }
     }.bind(this));
+
 };
 
 
 EntityGenerator.prototype.files = function files() {
 
+    if (this.useConfigurationFile == false) { // store informations in a file for further use.
+    	this.data = {};
+    	this.data.relationships = this.relationships;
+    	this.data.fields = this.fields;
+    	this.data.fieldNamesUnderscored = this.fieldNamesUnderscored;
+    	this.data.fieldsContainOwnerManyToMany = this.fieldsContainOwnerManyToMany;
+    	this.data.fieldsContainOneToMany = this.fieldsContainOneToMany;
+
+    	this.data.fieldsContainLocalDate = this.fieldsContainLocalDate;
+    	this.data.fieldsContainCustomTime = this.fieldsContainCustomTime;
+    	this.data.fieldsContainBigDecimal = this.fieldsContainBigDecimal;
+    	this.data.fieldsContainDateTime = this.fieldsContainDateTime;
+    	this.filename = '.jhipster.' + this.name;
+     	this.write(this.filename, JSON.stringify(this.data, null, 4));
+ 	} else 	{
+    	this.relationships = this.fileData.relationships;
+    	this.fields = this.fileData.fields;
+    	this.fieldNamesUnderscored = this.fileData.fieldNamesUnderscored;
+    	this.fieldsContainOwnerManyToMany = this.fileData.fieldsContainOwnerManyToMany;
+    	this.fieldsContainOneToMany = this.fileData.fieldsContainOneToMany;
+
+    	this.fieldsContainLocalDate = this.fileData.fieldsContainLocalDate;
+    	this.fieldsContainCustomTime = this.fileData.fieldsContainCustomTime;
+    	this.fieldsContainBigDecimal = this.fileData.fieldsContainBigDecimal;
+    	this.fieldsContainDateTime = this.fileData.fieldsContainDateTime;
+ 	}
     this.entityClass = _s.capitalize(this.name);
     this.entityInstance = this.name.charAt(0).toLowerCase() + this.name.slice(1);
     var resourceDir = 'src/main/resources/';
@@ -305,5 +349,4 @@ EntityGenerator.prototype.files = function files() {
 
     this.template('src/test/java/package/web/rest/_EntityResourceTest.java',
         'src/test/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'ResourceTest.java', this, {});
-
 };
