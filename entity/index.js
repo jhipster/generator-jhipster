@@ -10,10 +10,10 @@ var util = require('util'),
 var EntityGenerator = module.exports = function EntityGenerator(args, options, config) {
     yeoman.generators.NamedBase.apply(this, arguments);
     this.useConfigurationFile =false;
-    if (shelljs.test('-f', '.jhipster.' + this.name)) {
-        console.log(chalk.green('Found the .jhipster.' + this.name + ' configuration file, automatically generating the entity'));
+    if (shelljs.test('-f', '.jhipster.' + this.name + '.json')) {
+        console.log(chalk.green('Found the .jhipster.' + this.name + '.json configuration file, automatically generating the entity'));
         try {
-            this.fileData = JSON.parse(this.readFileAsString('.jhipster.' + this.name))
+            this.fileData = JSON.parse(this.readFileAsString('.jhipster.' + this.name + '.json'))
         } catch (err) {
             console.log(chalk.red('The configuration file could not be read!'));
             return;
@@ -299,7 +299,7 @@ EntityGenerator.prototype.files = function files() {
     	this.data.fieldsContainCustomTime = this.fieldsContainCustomTime;
     	this.data.fieldsContainBigDecimal = this.fieldsContainBigDecimal;
     	this.data.fieldsContainDateTime = this.fieldsContainDateTime;
-    	this.filename = '.jhipster.' + this.name;
+    	this.filename = '.jhipster.' + this.name + '.json';
      	this.write(this.filename, JSON.stringify(this.data, null, 4));
  	} else 	{
     	this.relationships = this.fileData.relationships;
