@@ -56,9 +56,9 @@ public class AccountResource {
     @Timed
     public ResponseEntity<?> registerAccount(@Valid @RequestBody UserDTO userDTO, HttpServletRequest request) {<% if (javaVersion == '8') { %>
         return Optional.ofNullable(userRepository.findOne(userDTO.getLogin()))
-            .map(user -> new ResponseEntity<String>("login already in use", HttpStatus.BAD_REQUEST))
+            .map(user -> new ResponseEntity<>("login already in use", HttpStatus.BAD_REQUEST))
             .orElseGet(() -> Optional.ofNullable(userRepository.findOneByEmail(userDTO.getEmail()))
-                .map(user -> new ResponseEntity<String>("e-mail address already in use", HttpStatus.BAD_REQUEST))
+                .map(user -> new ResponseEntity<>("e-mail address already in use", HttpStatus.BAD_REQUEST))
                 .orElseGet(() -> {
                     User user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(),
                     userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail().toLowerCase(),
