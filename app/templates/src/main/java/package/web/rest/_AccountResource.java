@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -58,22 +57,23 @@ public class AccountResource {
     public ResponseEntity<?> registerAccount(@Valid @RequestBody UserDTO userDTO, HttpServletRequest request) {<% if (javaVersion == '8') { %>
         return Optional.ofNullable(userRepository.findOne(userDTO.getLogin()))
             .map(user -> new ResponseEntity<String>("login already in use", HttpStatus.BAD_REQUEST))
-            .orElseGet(() -> {
-                if (userRepository.findOneByEmail(userDTO.getEmail()) != null) {
-                    return new ResponseEntity<String>("e-mail address already in use", HttpStatus.BAD_REQUEST);
-                }
-                User user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(),
-                userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail().toLowerCase(),
-                userDTO.getLangKey());
+            .orElseGet(() -> Optional.ofNullable(userRepository.findOneByEmail(userDTO.getEmail()))
+                .map(user -> new ResponseEntity<String>("e-mail address already in use", HttpStatus.BAD_REQUEST))
+                .orElseGet(() -> {
+                    User user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(),
+                    userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail().toLowerCase(),
+                    userDTO.getLangKey());
 
-                String baseUrl = request.getScheme() + // "http"
-                "://" +                            // "://"
-                request.getServerName() +          // "myhost"
-                ":" +                              // ":"
-                request.getServerPort();           // "80"
+                    String baseUrl = request.getScheme() + // "http"
+                    "://" +                                // "://"
+                    request.getServerName() +              // "myhost"
+                    ":" +                                  // ":"
+                    request.getServerPort();               // "80"
 
-                mailService.sendActivationEmail(user, baseUrl);
-                return new ResponseEntity<>(HttpStatus.CREATED);});<% } else { %>
+                    mailService.sendActivationEmail(user, baseUrl);
+                    return new ResponseEntity<>(HttpStatus.CREATED);
+                })
+        );<% } else { %>
         User user = userRepository.findOne(userDTO.getLogin());
         if (user != null) {
             return new ResponseEntity<String>("login already in use", HttpStatus.BAD_REQUEST);
