@@ -13,17 +13,12 @@ import <%=packageName%>.web.rest.dto.UserDTO;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.thymeleaf.context.IWebContext;
-import org.thymeleaf.spring4.SpringTemplateEngine;
-import org.thymeleaf.spring4.context.SpringWebContext;
 
 import javax.inject.Inject;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -40,15 +35,6 @@ import java.util.stream.Collectors;<% } %>
 public class AccountResource {
 
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
-
-    @Inject
-    private ServletContext servletContext;
-
-    @Inject
-    private ApplicationContext applicationContext;
-
-    @Inject
-    private SpringTemplateEngine templateEngine;
 
     @Inject
     private UserRepository userRepository;
@@ -78,11 +64,16 @@ public class AccountResource {
                     return new ResponseEntity<String>("e-mail address already in use", HttpStatus.BAD_REQUEST);
                 }
                 User user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(),
-                        userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail().toLowerCase(),
-                        userDTO.getLangKey());
-                final Locale locale = Locale.forLanguageTag(user.getLangKey());
-                String content = createHtmlContentFromTemplate(user, locale, request, response);
-                mailService.sendActivationEmail(user.getEmail(), content, locale);
+                userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail().toLowerCase(),
+                userDTO.getLangKey());
+
+                String baseUrl = request.getScheme() + // "http"
+                "://" +                            // "://"
+                request.getServerName() +          // "myhost"
+                ":" +                              // ":"
+                request.getServerPort();           // "80"
+
+                mailService.sendActivationEmail(user, baseUrl);
                 return new ResponseEntity<>(HttpStatus.CREATED);});<% } else { %>
         User user = userRepository.findOne(userDTO.getLogin());
         if (user != null) {
@@ -91,11 +82,17 @@ public class AccountResource {
             if (userRepository.findOneByEmail(userDTO.getEmail()) != null) {
                 return new ResponseEntity<String>("e-mail address already in use", HttpStatus.BAD_REQUEST);
             }
-            user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(), userDTO.getFirstName(),
-                    userDTO.getLastName(), userDTO.getEmail().toLowerCase(), userDTO.getLangKey());
-            final Locale locale = Locale.forLanguageTag(user.getLangKey());
-            String content = createHtmlContentFromTemplate(user, locale, request, response);
-            mailService.sendActivationEmail(user.getEmail(), content, locale);
+            User user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(),
+            userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail().toLowerCase(),
+            userDTO.getLangKey());
+
+            String baseUrl = request.getScheme() + // "http"
+            "://" +                            // "://"
+            request.getServerName() +          // "myhost"
+            ":" +                              // ":"
+            request.getServerPort();           // "80"
+
+            mailService.sendActivationEmail(user, baseUrl);
             return new ResponseEntity<>(HttpStatus.CREATED);
         }<% } %>
     }
@@ -254,16 +251,4 @@ public class AccountResource {
             }
         }<% } %>
     }<% } %>
-
-    private String createHtmlContentFromTemplate(final User user, final Locale locale, final HttpServletRequest request,
-                                                 final HttpServletResponse response) {
-        Map<String, Object> variables = new HashMap<>();
-        variables.put("user", user);
-        variables.put("baseUrl", request.getScheme() + "://" +   // "http" + "://
-                                 request.getServerName() +       // "myhost"
-                                 ":" + request.getServerPort());
-        IWebContext context = new SpringWebContext(request, response, servletContext,
-                locale, variables, applicationContext);
-        return templateEngine.process("activationEmail", context);
-    }
 }
