@@ -96,6 +96,11 @@
                             <span class="glyphicon glyphicon-pencil"></span> Edit
                         </button>
                         <button type="submit"
+                                ui-sref="<%= entityInstance %>Details({id:<%= entityInstance %>.id})"
+                                class="btn btn-default">
+                            <span class="glyphicon glyphicon-info-sign"></span> Details
+                        </button>
+                        <button type="submit"
                                 ng-click="delete(<%=entityInstance %>.id)"
                                 class="btn btn-danger">
                             <span class="glyphicon glyphicon-remove-circle"></span> Delete
