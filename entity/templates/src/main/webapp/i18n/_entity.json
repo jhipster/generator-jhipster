@@ -5,5 +5,14 @@
                 "<%= entityInstance%>": "<%= entityClass  %>"
             }
         }
+    },
+    "<%= angularAppName %>": {
+        "<%= entityInstance %>" : {
+            "entityName": "<%= entityClass %>",
+            "createLabel": "Create a new <%= entityClass %>",
+            "createEditLabel" : "Create or edit a <%= entityClass %>"<% for (fieldId in fields) { %>,
+            "<%=fields[fieldId].fieldName%>": "<%=fields[fieldId].fieldNameCapitalized%>"<% } %><% for (relationshipId in relationships) { %>,
+            "<%=relationships[relationshipId].otherEntityName%>": "<%= relationships[relationshipId].otherEntityName %>"<% } %>
+        }
     }
 }

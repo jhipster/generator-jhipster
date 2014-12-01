@@ -1,5 +1,6 @@
+<% var keyPrefix = angularAppName + '.'+ entityInstance; %>
 <div>
-    <h2><%= entityClass %> {{<%= entityInstance %>.id}}</h2>
+    <h2><span translate="<%= keyPrefix %>.entityName"><%= entityClass %></span> {{<%= entityInstance %>.id}}</h2>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -11,7 +12,7 @@
             <tbody><% for (fieldId in fields) { %>
                 <tr>
                     <td>
-                        <span><%=fields[fieldId].fieldNameCapitalized%></span>
+                        <span translate="<%= keyPrefix %>.<%=fields[fieldId].fieldName%>"><%=fields[fieldId].fieldNameCapitalized%></span>
                     </td>
                     <td>
                         <input type="text" class="input-sm form-control" value="{{<%= entityInstance %>.<%=fields[fieldId].fieldName%>}}" readonly>
@@ -21,7 +22,7 @@
                                      var otherEntityName = relationships[relationshipId].otherEntityName; %>
                 <tr>
                     <td>
-                        <span><%=otherEntityName%></span>
+                        <span translate="<%= keyPrefix %>.<%=otherEntityName%>"><%=otherEntityName%></span>
                     </td>
                     <td>
                         <input type="text" class="input-sm form-control" value="{{<%=entityInstance %>.<%=otherEntityName%>.<%=relationships[relationshipId].otherEntityField%>}}" readonly>
