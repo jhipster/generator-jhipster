@@ -337,7 +337,7 @@ EntityGenerator.prototype.files = function files() {
     this.template('src/main/webapp/app/_entities.html',
         'src/main/webapp/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + 's.html', this, {});
 
-    this.addRouterToMenu(this.entityInstance);
+    this.addRouterToMenu(this.entityInstance, this.angularAppName);
 
     this.template('src/main/webapp/app/_entity-controller.js',
         'src/main/webapp/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '.controller' + '.js', this, {});
