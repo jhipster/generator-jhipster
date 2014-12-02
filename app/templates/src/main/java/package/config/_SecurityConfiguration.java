@@ -1,7 +1,7 @@
 package <%=packageName%>.config;
 <% if (authenticationType == 'cookie') { %>
 import <%=packageName%>.security.*;
-import <%=packageName%>.web.filter.CsrfTokenGeneratorFilter;<% } %>
+import <%=packageName%>.web.filter.CsrfCookieGeneratorFilter;<% } %>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;<% if (authenticationType == 'cookie') { %>
 import org.springframework.core.env.Environment;<% } %><% if (authenticationType == 'token') { %>
@@ -82,7 +82,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-            .addFilterAfter(new CsrfTokenGeneratorFilter(), CsrfFilter.class)
+            .addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class)
             .exceptionHandling()
             .authenticationEntryPoint(authenticationEntryPoint)
         .and()
