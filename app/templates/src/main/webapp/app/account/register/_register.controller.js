@@ -37,13 +37,14 @@ angular.module('<%=angularAppName%>')
                     $scope.success = 'OK';
                 }).catch(function (response) {
                     $scope.success = null;
-                    if (response.status === 304 &&
-                        response.data.error && response.data.error === "Not Modified") {
+                    if (response.status === 400 && response.data === "login already in use") {
                         $scope.error = null;
                         $scope.errorUserExists = "ERROR";
+                    } else if (response.status === 400 && response.data === "e-mail address already in use") {
+                        $scope.error = null;
+                        $scope.errorEmailExists = "ERROR";
                     } else {
                         $scope.error = "ERROR";
-                        $scope.errorUserExists = null;
                     }
                 });
             }
