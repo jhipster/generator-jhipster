@@ -81,7 +81,7 @@ public class AccountResource {
             if (userRepository.findOneByEmail(userDTO.getEmail()) != null) {
                 return ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body("e-mail address already in use");
             }
-            User user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(),
+            user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(),
             userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail().toLowerCase(),
             userDTO.getLangKey());
 
