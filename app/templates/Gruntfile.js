@@ -30,7 +30,8 @@ module.exports = function (grunt) {
                     'src/main/webapp/**/*.html',
                     'src/main/webapp/**/*.json',
                     '.tmp/styles/**/*.css',
-                    '{.tmp/,}src/main/webapp/scripts/**/*.js',
+                    '{.tmp/,}src/main/webapp/app/**/*.js',
+                    '{.tmp/,}src/main/webapp/components/**/*.js',
                     'src/main/webapp/images/**/*.{png,jpg,jpeg,gif,webp,svg}'
                 ]
             }
