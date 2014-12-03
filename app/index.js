@@ -540,6 +540,13 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/repository/_CustomAuditEventRepository.java', javaDir + 'repository/CustomAuditEventRepository.java', this, {});
 
     this.template('src/main/java/package/repository/_UserRepository.java', javaDir + 'repository/UserRepository.java', this, {});
+    if (this.databaseType == 'sql') {
+        this.template('src/main/java/package/repository/custom/_Java8JpaRepository.java', javaDir + 'repository/custom/Java8JpaRepository.java', this, {});
+    }
+
+    if (this.databaseType == 'nosql') {
+        this.template('src/main/java/package/repository/custom/_Java8MongoRepository.java', javaDir + 'repository/custom/Java8MongoRepository.java', this, {});
+    }
     if (this.authenticationType == 'cookie') {
         this.template('src/main/java/package/repository/_PersistentTokenRepository.java', javaDir + 'repository/PersistentTokenRepository.java', this, {});
     }

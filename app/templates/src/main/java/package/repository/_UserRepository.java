@@ -2,8 +2,15 @@ package <%=packageName%>.repository;
 
 import <%=packageName%>.domain.User;
 import org.joda.time.DateTime;<% if (databaseType == 'sql') { %>
-import org.springframework.data.jpa.repository.JpaRepository;<% } %><% if (databaseType == 'nosql') { %>
-import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
+
+import org.springframework.data.repository.Repository;
+    import <%=packageName%>.repository.custom.Java8JpaRepository;
+    import java.util.Optional;
+import org.springframework.data.jpa.repository.Query;<% } %><% if (databaseType == 'nosql') { %>
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
+ <% } %>
+
 
 import java.util.List;
 <% if (javaVersion == '8') { %>
@@ -15,17 +22,44 @@ import java.util.List;
  */<% } %><% if (databaseType == 'nosql') { %>/**
  * Spring Data MongoDB repository for the User entity.
  */<% } %>
-public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRepository<% } %><% if (databaseType == 'nosql') { %>MongoRepository<% } %><User, String> {
+
 
 <% if (javaVersion == '8') { %>
-    Optional<User> findOneByActivationKey(String activationKey);
-<%} else {%>
-    User findOneByActivationKey(String activationKey);
-    <%}%>
+    public interface UserRepository extends <% if (databaseType == 'sql') { %>Repository<% } %><% if (databaseType == 'nosql') { %>MongoRepository<% } %><User, String> {
+    <% if (databaseType == 'sql') { %>
+    @Query("select u from User u where u.activationKey = ?1")<% } %><% if (databaseType == 'nosql') { %>
+    @Query("{activationKey: ?0}")<% } %>
+    Optional<User> getUserByActivationKey(String activationKey);
+    <% if (databaseType == 'sql') { %>
+    @Query("select u from User u where u.activated = false and u.createdDate > ?1")<% } %><% if (databaseType == 'nosql') { %>
+    @Query("{activation_key: 'false', createdDate: {$gt: ?0}}")<% } %>
+    List<User> findNotActivatedUsersByCreationDateBefore(DateTime dateTime);
 
-    List<User> findAllByActivatedIsFalseAndCreatedDateBefore(DateTime dateTime);
 
-    User findOneByLogin(String login);
+    Optional<User> findOneByEmail(String email);
 
-    User findOneByEmail(String email);
-}
+    Optional<User> findOne(String id);
+
+    Optional<User> findByLastname(String lastname);
+
+    User save(User t);
+
+    void delete(User t);
+
+
+    }
+<% } else { %>
+    public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRepository<% } %><% if (databaseType == 'nosql') { %>MongoRepository<% } %><User, String> {
+        <% if (databaseType == 'sql') { %>
+        @Query("select u from User u where u.activationKey = ?1")<% } %><% if (databaseType == 'nosql') { %>
+        @Query("{activationKey: ?0}")<% } %>
+        User getUserByActivationKey(String activationKey);
+        <% if (databaseType == 'sql') { %>
+        @Query("select u from User u where u.activated = false and u.createdDate > ?1")<% } %><% if (databaseType == 'nosql') { %>
+        @Query("{activation_key: 'false', createdDate: {$gt: ?0}}")<% } %>
+        List<User> findNotActivatedUsersByCreationDateBefore(DateTime dateTime);
+
+        User findOneByEmail(String email);
+    }
+
+<% } %>
