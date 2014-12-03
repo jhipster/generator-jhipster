@@ -24,9 +24,13 @@ import java.util.Set;
 @Document(collection = "T_USER")<% } %>
 public class User extends AbstractAuditingEntity implements Serializable {
 
-    @NotNull
-    @Size(min = 0, max = 50)
     @Id<% if (databaseType == 'sql') { %>
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;<% } %><% if (databaseType == 'nosql') { %>
+    private String id;<% } %>
+
+    @NotNull
+    @Size(min = 0, max = 50)<% if (databaseType == 'sql') { %>
     @Column(length = 50)<% } %>
     private String login;
 
@@ -66,8 +70,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @ManyToMany
     @JoinTable(
             name = "T_USER_AUTHORITY",
-            joinColumns = {@JoinColumn(name = "login", referencedColumnName = "login")},
-            inverseJoinColumns = {@JoinColumn(name = "name", referencedColumnName = "name")})<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
     private Set<Authority> authorities = new HashSet<>();<% if (authenticationType == 'cookie') { %><% if (databaseType == 'sql') { %>
 
@@ -75,6 +79,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
     private Set<PersistentToken> persistentTokens = new HashSet<>();<% } %>
+
+    public <% if (databaseType == 'sql') { %>Long<% } else if (databaseType == 'nosql') { %>String<% } %> getId() {
+        return id;
+    }
+
+    public void setId(<% if (databaseType == 'sql') { %>Long<% } else if (databaseType == 'nosql') { %>String<% } %> id) {
+        this.id = id;
+    }
 
     public String getLogin() {
         return login;

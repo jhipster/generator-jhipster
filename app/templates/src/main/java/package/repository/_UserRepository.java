@@ -24,5 +24,7 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
     @Query("{activation_key: 'false', createdDate: {$gt: ?0}}")<% } %>
     List<User> findNotActivatedUsersByCreationDateBefore(DateTime dateTime);
 
+    User findOneByLogin(String login);
+
     User findOneByEmail(String email);
 }

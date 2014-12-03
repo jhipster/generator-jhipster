@@ -1,6 +1,6 @@
-login;name
-system;ROLE_ADMIN
-system;ROLE_USER
-admin;ROLE_ADMIN
-admin;ROLE_USER
-user;ROLE_USER
+user_id;authority_name
+0;ROLE_ADMIN
+0;ROLE_USER
+2;ROLE_ADMIN
+2;ROLE_USER
+3;ROLE_USER

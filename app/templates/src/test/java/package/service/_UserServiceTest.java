@@ -45,7 +45,7 @@ public class UserServiceTest {<% if (authenticationType == 'cookie') { %>
 
     @Test
     public void testRemoveOldPersistentTokens() {
-        User admin = userRepository.findOne("admin");
+        User admin = userRepository.findOneByLogin("admin");
         int existingCount = persistentTokenRepository.findByUser(admin).size();
         generateUserToken(admin, "1111-1111", new LocalDate());
         LocalDate now = new LocalDate();
