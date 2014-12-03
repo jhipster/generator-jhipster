@@ -45,7 +45,7 @@ Generator.prototype.addComponentsScriptToIndex = function (script) {
     }
 };
 
-Generator.prototype.addRouterToMenu = function (entityName) {
+Generator.prototype.addRouterToMenu = function (entityName,angularAppName) {
     try {
         var appPath = this.env.options.appPath;
         var fullPath = path.join(appPath, 'components/navbar/navbar.html');
@@ -53,7 +53,8 @@ Generator.prototype.addRouterToMenu = function (entityName) {
             file: fullPath,
             needle: '<!-- JHipster will add entities to the menu here -->',
             splicable: [
-                    '<li><a href="#/' + entityName + '"><span class="glyphicon glyphicon-asterisk"></span>&nbsp;' + entityName + '</a></li>'
+                    '<li ui-sref-active="active" ><a ui-sref="'+entityName+'"><span class="glyphicon glyphicon-asterisk"></span>\n' +
+                    '                        &#xA0;<span translate="'+angularAppName + '.'+entityName+'.menu">'+ entityName+'</span></a></li>'
             ]
         });
     } catch (e) {
