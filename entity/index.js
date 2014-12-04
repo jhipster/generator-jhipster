@@ -286,7 +286,9 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
 
 
 EntityGenerator.prototype.files = function files() {
-
+    if (this.databaseType == "sql") {
+        this.changelogDate = this.dateFormatForLiquibase();
+    }
     if (this.useConfigurationFile == false) { // store informations in a file for further use.
     	this.data = {};
     	this.data.relationships = this.relationships;
@@ -294,11 +296,11 @@ EntityGenerator.prototype.files = function files() {
     	this.data.fieldNamesUnderscored = this.fieldNamesUnderscored;
     	this.data.fieldsContainOwnerManyToMany = this.fieldsContainOwnerManyToMany;
     	this.data.fieldsContainOneToMany = this.fieldsContainOneToMany;
-
     	this.data.fieldsContainLocalDate = this.fieldsContainLocalDate;
     	this.data.fieldsContainCustomTime = this.fieldsContainCustomTime;
     	this.data.fieldsContainBigDecimal = this.fieldsContainBigDecimal;
     	this.data.fieldsContainDateTime = this.fieldsContainDateTime;
+        this.data.changelogDate = this.changelogDate;
     	this.filename = '.jhipster.' + this.name + '.json';
      	this.write(this.filename, JSON.stringify(this.data, null, 4));
  	} else 	{
@@ -307,11 +309,11 @@ EntityGenerator.prototype.files = function files() {
     	this.fieldNamesUnderscored = this.fileData.fieldNamesUnderscored;
     	this.fieldsContainOwnerManyToMany = this.fileData.fieldsContainOwnerManyToMany;
     	this.fieldsContainOneToMany = this.fileData.fieldsContainOneToMany;
-
     	this.fieldsContainLocalDate = this.fileData.fieldsContainLocalDate;
     	this.fieldsContainCustomTime = this.fileData.fieldsContainCustomTime;
     	this.fieldsContainBigDecimal = this.fileData.fieldsContainBigDecimal;
     	this.fieldsContainDateTime = this.fileData.fieldsContainDateTime;
+        this.changelogDate = this.fileData.changelogDate;
  	}
     this.entityClass = _s.capitalize(this.name);
     this.entityInstance = this.name.charAt(0).toLowerCase() + this.name.slice(1);
@@ -327,7 +329,6 @@ EntityGenerator.prototype.files = function files() {
         'src/main/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'Resource.java', this, {});
 
     if (this.databaseType == "sql") {
-        this.changelogDate = this.dateFormatForLiquibase();
         this.template(resourceDir + '/config/liquibase/changelog/_added_entity.xml',
             resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml', this, {});
 

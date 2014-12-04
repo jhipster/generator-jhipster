@@ -45,7 +45,7 @@ public class UserServiceTest {<% if (authenticationType == 'cookie') { %>
 
     @Test
     public void testRemoveOldPersistentTokens() {
-        User admin = userRepository.findOne("admin");
+        User admin = userRepository.findOneByLogin("admin");
         int existingCount = persistentTokenRepository.findByUser(admin).size();
         generateUserToken(admin, "1111-1111", new LocalDate());
         LocalDate now = new LocalDate();
@@ -59,7 +59,7 @@ public class UserServiceTest {<% if (authenticationType == 'cookie') { %>
     public void testFindNotActivatedUsersByCreationDateBefore() {
         userService.removeNotActivatedUsers();
         DateTime now = new DateTime();
-        List<User> users = userRepository.findNotActivatedUsersByCreationDateBefore(now.minusDays(3));
+        List<User> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minusDays(3));
         assertThat(users).isEmpty();
     }<% if (authenticationType == 'cookie') { %>
 

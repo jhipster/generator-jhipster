@@ -55,7 +55,7 @@ public class AccountResource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<?> registerAccount(@Valid @RequestBody UserDTO userDTO, HttpServletRequest request) {<% if (javaVersion == '8') { %>
-        return Optional.ofNullable(userRepository.findOne(userDTO.getLogin()))
+        return Optional.ofNullable(userRepository.findOneByLogin(userDTO.getLogin()))
             .map(user -> ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body("login already in use"))
             .orElseGet(() -> Optional.ofNullable(userRepository.findOneByEmail(userDTO.getEmail()))
                 .map(user -> ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body("e-mail address already in use"))
@@ -74,14 +74,14 @@ public class AccountResource {
                     return new ResponseEntity<>(HttpStatus.CREATED);
                 })
         );<% } else { %>
-        User user = userRepository.findOne(userDTO.getLogin());
+        User user = userRepository.findOneByLogin(userDTO.getLogin());
         if (user != null) {
             return ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body("login already in use");
         } else {
             if (userRepository.findOneByEmail(userDTO.getEmail()) != null) {
                 return ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body("e-mail address already in use");
             }
-            User user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(),
+            user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(),
             userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail().toLowerCase(),
             userDTO.getLangKey());
 
@@ -204,12 +204,12 @@ public class AccountResource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<List<PersistentToken>> getCurrentSessions() {<% if (javaVersion == '8') { %>
-        return Optional.ofNullable(userRepository.findOne(SecurityUtils.getCurrentLogin()))
+        return Optional.ofNullable(userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()))
             .map(user -> new ResponseEntity<>(
                 persistentTokenRepository.findByUser(user),
                 HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else { %>
-        User user = userRepository.findOne(SecurityUtils.getCurrentLogin());
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -236,7 +236,7 @@ public class AccountResource {
     @Timed
     public void invalidateSession(@PathVariable String series) throws UnsupportedEncodingException {
         String decodedSeries = URLDecoder.decode(series, "UTF-8");
-        User user = userRepository.findOne(SecurityUtils.getCurrentLogin());<% if (javaVersion == '8') { %>
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());<% if (javaVersion == '8') { %>
         if (persistentTokenRepository.findByUser(user).stream()
                 .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))
                 .count() > 0) {

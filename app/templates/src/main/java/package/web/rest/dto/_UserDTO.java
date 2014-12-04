@@ -64,17 +64,14 @@ public class UserDTO {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("UserDTO{");
-        sb.append("login='").append(login).append('\'');
-        if(password != null) {
-            sb.append(", password='").append(password.length()).append('\'');
-        }
-        sb.append(", firstName='").append(firstName).append('\'');
-        sb.append(", lastName='").append(lastName).append('\'');
-        sb.append(", email='").append(email).append('\'');
-        sb.append(", langKey='").append(langKey).append('\'');
-        sb.append(", roles=").append(roles);
-        sb.append('}');
-        return sb.toString();
+        return "UserDTO{" +
+        "login='" + login + '\'' +
+        ", password='" + password + '\'' +
+        ", firstName='" + firstName + '\'' +
+        ", lastName='" + lastName + '\'' +
+        ", email='" + email + '\'' +
+        ", langKey='" + langKey + '\'' +
+        ", roles=" + roles +
+        '}';
     }
 }
