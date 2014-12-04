@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;<% } %>
 
 import java.util.List;
+import java.util.Optional;
 
 <% if (databaseType == 'sql') { %>/**
  * Spring Data JPA repository for the User entity.
@@ -15,10 +16,8 @@ import java.util.List;
  * Spring Data MongoDB repository for the User entity.
  */<% } %>
 public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRepository<% } %><% if (databaseType == 'nosql') { %>MongoRepository<% } %><User, String> {
-    <% if (databaseType == 'sql') { %>
-    @Query("select u from User u where u.activationKey = ?1")<% } %><% if (databaseType == 'nosql') { %>
-    @Query("{activationKey: ?0}")<% } %>
-    User getUserByActivationKey(String activationKey);
+
+    Optional<User> findOneByActivationKey(String activationKey);
     <% if (databaseType == 'sql') { %>
     @Query("select u from User u where u.activated = false and u.createdDate > ?1")<% } %><% if (databaseType == 'nosql') { %>
     @Query("{activation_key: 'false', createdDate: {$gt: ?0}}")<% } %>

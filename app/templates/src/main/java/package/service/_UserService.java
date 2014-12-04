@@ -46,7 +46,7 @@ public class UserService {
 
     public User activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);<% if (javaVersion == '8') { %>
-        return Optional.ofNullable(userRepository.getUserByActivationKey(key))
+        return userRepository.findOneByActivationKey(key)
             .map(user -> {
                 // activate given user for the registration key.
                 user.setActivated(true);
