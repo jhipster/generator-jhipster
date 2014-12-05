@@ -21,7 +21,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="login" type="varchar(50)">
-                <constraints unique="true"/>
+                <constraints unique="true" nullable="false"/>
             </column>
             <column name="password" type="varchar(100)"/>
             <column name="first_name" type="varchar(50)"/>
@@ -77,7 +77,9 @@
             <column name="series" type="varchar(255)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="user_id" type="bigint"/>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
             <column name="token_value" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
