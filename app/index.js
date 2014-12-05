@@ -378,6 +378,9 @@ JhipsterGenerator.prototype.app = function app() {
     removefile(webappDir + 'styles/famfamfam-flags.css');
     removefile(webappDir + 'images/famfamfam-flags.png');
 
+    // Angular JS app
+    this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
+
     // Create application
     this.template('_package.json', 'package.json', this, {});
     this.template('_bower.json', 'bower.json', this, {});
@@ -663,7 +666,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(webappDir + '/swagger-ui/images/throbber.gif', webappDir + 'swagger-ui/images/throbber.gif');
 
     // Angular JS views
-    this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
 
     this.template(webappDir + '/_app.js', webappDir + 'app.js', this, {});
     // Client Components
