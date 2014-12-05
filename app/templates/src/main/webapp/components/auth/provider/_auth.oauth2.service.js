@@ -23,7 +23,7 @@ angular.module('<%=angularAppName%>')
             },
             logout: function() {
                 // logout from the server
-                $http.get('app/logout').then(function() {
+                $http.post('app/logout').then(function() {
                     localStorageService.clearAll();
                 });
             },
