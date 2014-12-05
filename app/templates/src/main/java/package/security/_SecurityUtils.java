@@ -24,7 +24,6 @@ public final class SecurityUtils {
         Authentication authentication = securityContext.getAuthentication();
         UserDetails springSecurityUser = null;
         String userName = null;
-
         if(authentication != null) {
             if (authentication.getPrincipal() instanceof UserDetails) {
                 springSecurityUser = (UserDetails) authentication.getPrincipal();
@@ -33,7 +32,6 @@ public final class SecurityUtils {
                 userName = (String) authentication.getPrincipal();
             }
         }
-
         return userName;
     }
 
@@ -44,9 +42,7 @@ public final class SecurityUtils {
      */
     public static boolean isAuthenticated() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
-
-        final Collection<? extends GrantedAuthority> authorities = securityContext.getAuthentication().getAuthorities();
-
+        Collection<? extends GrantedAuthority> authorities = securityContext.getAuthentication().getAuthorities();
         if (authorities != null) {
             for (GrantedAuthority authority : authorities) {
                 if (authority.getAuthority().equals(AuthoritiesConstants.ANONYMOUS)) {
@@ -54,7 +50,6 @@ public final class SecurityUtils {
                 }
             }
         }
-
         return true;
     }
 }

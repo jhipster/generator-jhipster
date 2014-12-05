@@ -28,7 +28,7 @@ public class AngularCookieLocaleResolver extends CookieLocaleResolver {
     }
 
     @Override
-    public LocaleContext resolveLocaleContext(final HttpServletRequest request) {
+    public LocaleContext resolveLocaleContext(HttpServletRequest request) {
         parseLocaleCookieIfNecessary(request);
         return new TimeZoneAwareLocaleContext() {
             @Override

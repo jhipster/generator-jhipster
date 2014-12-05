@@ -101,7 +101,7 @@ public class CacheConfiguration {
 
     @PostConstruct
     private HazelcastInstance hazelcastInstance() {
-        final Config config = new Config();
+        Config config = new Config();
         config.setInstanceName("<%=baseName%>");
         config.getNetworkConfig().setPort(5701);
         config.getNetworkConfig().setPortAutoIncrement(true);

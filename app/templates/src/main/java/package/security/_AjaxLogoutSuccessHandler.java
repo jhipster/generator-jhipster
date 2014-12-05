@@ -32,8 +32,7 @@ public class AjaxLogoutSuccessHandler extends AbstractAuthenticationTargetUrlReq
             throws IOException, ServletException {<% if (authenticationType == 'token') { %>
 
         // Request the token
-        final String token = request.getHeader("authorization");
-
+        String token = request.getHeader("authorization");
         if (token != null && token.startsWith(BEARER_AUTHENTICATION)) {
             final OAuth2AccessToken oAuth2AccessToken = tokenStore.readAccessToken(StringUtils.substringAfter(token, BEARER_AUTHENTICATION));
 

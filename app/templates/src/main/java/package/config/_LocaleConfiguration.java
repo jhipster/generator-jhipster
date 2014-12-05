@@ -25,14 +25,14 @@ public class LocaleConfiguration extends WebMvcConfigurerAdapter implements Envi
 
     @Bean(name = "localeResolver")
     public LocaleResolver localeResolver() {
-        final AngularCookieLocaleResolver cookieLocaleResolver = new AngularCookieLocaleResolver();
+        AngularCookieLocaleResolver cookieLocaleResolver = new AngularCookieLocaleResolver();
         cookieLocaleResolver.setCookieName("NG_TRANSLATE_LANG_KEY");
         return cookieLocaleResolver;
     }
 
     @Bean
     public MessageSource messageSource() {
-        final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasename("classpath:/i18n/messages");
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setCacheSeconds(propertyResolver.getProperty("cacheSeconds", Integer.class, 1));
@@ -41,10 +41,8 @@ public class LocaleConfiguration extends WebMvcConfigurerAdapter implements Envi
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        final LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
         localeChangeInterceptor.setParamName("language");
-
         registry.addInterceptor(localeChangeInterceptor);
     }
 }
-
