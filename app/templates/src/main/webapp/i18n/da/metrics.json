@@ -1,0 +1,95 @@
+{
+    "metrics": {
+        "title": "Program målinger",
+        "refresh.button": "Opdatér",
+        "updating": "Ajourføring...",
+        "jvm": {
+            "title": "JVM målinger",
+            "memory": {
+                "title": "Hukommelse",
+                "total": "Total Hukommelse",
+                "heap": "Heap Hukommelse",
+                "nonheap": "Non-Heap Hukommelse"
+            },
+            "threads": {
+                "title": "Tråde",
+                "all": "Alle",
+                "runnable": "Runnable",
+                "timedwaiting": "Ventende tidsbestemt",
+                "waiting": "Ventende",
+                "blocked": "Blokeret",
+                "dump": {
+                    "title": "Threads dump",
+                    "id": "Id: ",
+                    "blockedtime": "Blocked Time",
+                    "blockedcount": "Blocked Count",
+                    "waitedtime": "Waited Time",
+                    "waitedcount": "Waited Count",
+                    "lockname": "Lock name",
+                    "stacktrace": "Stacktrace",
+                    "show": "Show",
+                    "hide": "Hide"
+                }
+            },
+            "gc": {
+                "title": "Garbage collections (GC)",
+                "marksweepcount": "Antal markeringer (Mark Sweep)",
+                "marksweeptime": "Markeringstid (Mark Sweep)",
+                "scavengecount": "Antal oprydninger (Scavenge)",
+                "scavengetime": "Oprydningstid (Scavenge)"
+            },
+            "http": {
+                "title": "HTTP forespørgsler (hændelser per sekund)",
+                "active": "Aktive forespørgsler:",
+                "total": "Alle forespørgsler:",
+                "table": {
+                    "code": "Kode",
+                    "count": "Antal",
+                    "mean": "Middel",
+                    "average": "Gennemsnit"
+                },
+                "code": {
+                    "ok": "Ok",
+                    "notfound": "Ikke fundet",
+                    "servererror": "Serverfejl"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Service statistik (tid i millisekunder)",
+            "table": {
+                "name": "Servicenavn",
+                "count": "Antal",
+                "mean": "Middel",
+                "min": "Min",
+                "max": "Max",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "ehcache": {
+            "title": "Ehcache statistik",
+            "cachename": "Cache navn",
+            "objects": "Objekter",
+            "hits": "Hits",
+            "misses": "Misses",
+            "evictioncount": "Antal udsættelser",
+            "mean": "Middel get time (ms)"
+        },
+        "datasource": {
+        	"usage": "Usage",
+            "title": "DataSource statistics (time in millisecond)",
+            "name": "Pool usage",
+            "count": "Count",
+            "mean": "Mean",
+            "min": "Min",
+            "max": "Max",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}

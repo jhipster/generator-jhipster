@@ -14,6 +14,12 @@ angular.module('<%=angularAppName%>')
                         templateUrl: 'app/admin/configuration/configuration.html',
                         controller: 'ConfigurationController'
                     }
+                },
+                resolve: {
+                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                        $translatePartialLoader.addPart('configuration');
+                        return $translate.refresh();
+                    }]
                 }
             });
     })

@@ -1,0 +1,24 @@
+{
+    "register": {
+        "title": "Registrering",
+        "form": {
+            "button": "Registrera"
+        },
+        "messages": {
+            "validate": {
+                "login": {
+                    "required": "Din inloggning krävs.",
+                    "minlength": "Ditt användarnamn måste vara minst ett tecken",
+                    "maxlength": "Ditt användarnamn kan inte vara längre än 50 tecken",
+                    "pattern": "Your login can only contain lower-case letters and digits"
+                }
+            },
+            "success": "<strong>Användarnamn sparat!</strong> Kontrollera din e-post för konfirmation.",
+            "error": {
+                "fail": "<strong>Registreringen misslyckades!</strong> Prova gärna igen senare.",
+                "userexists": "<strong>Användarnamnet finns redan!</strong> Prova gärna ett annat användarnamn.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+            }
+        }
+    }
+}

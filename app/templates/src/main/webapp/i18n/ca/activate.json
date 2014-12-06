@@ -1,0 +1,9 @@
+{
+    "activate": {
+        "title": "Activació",
+        "messages": {
+            "success": "<strong>S'ha activat el seu usuari.</strong> Si us plau <a href=\"#/login\">accedeix-hi</a>.",
+            "error": "<strong>No s'ha pogut activar el seu usuari.</strong> Si us plau utilitzi el formulari de registre per obtenir un compte."
+        }
+    }
+}

@@ -1,0 +1,69 @@
+{
+    "global": {
+        "title": "<%= baseName %>",
+        "browsehappy": "Ваш браузер <strong>устарел</strong>. Пожалуйста <a href=\"http://browsehappy.com/?locale=en\">обновите ваш браузер</a>.",
+        "menu": {
+            "home": "Главная",
+            "entities": {
+                "main": "Entities"
+            },
+            "account": {
+                "main": "Профиль",
+                "settings": "Настройки",
+                "password": "Пароль",
+                "sessions": "Сессии",
+                "tracker": "Трекер польз.",
+                "metrics": "Метрики",
+                "health": "Состояние",
+                "configuration": "Configuration",
+                "logs": "Логи",
+                "audits": "Аудит",
+                "login": "Authenticate",
+                "logout": "Выйти",
+                "apidocs": "API",
+                "register": "Register"
+            },
+            "admin": "Администрирование",
+            "language": "Язык"
+        },
+        "form": {
+            "username": "Логин",
+            "username.placeholder": "Ваш логин",
+            "newpassword": "Новый пароль",
+            "newpassword.placeholder": "Новый пароль",
+            "confirmpassword": "Подтверждение нового пароля",
+            "confirmpassword.placeholder": "Подтвердите новый пароль",
+            "email": "E-mail",
+            "email.placeholder": "Ваш e-mail"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Если вы хотите <a href=\"#/login\">авторизироваться</a>, вы можете попробовать аккаунты поумолчанию:<br/>- Администратор (логин=\"admin\" и пароль=\"admin\") <br/>- Пользователь (логин=\"user\" и пароль=\"user\").",
+                "register": "You don't have an account yet? <a href=\"#/register\">Register a new account</a>"
+            },
+            "error": {
+                "dontmatch": "Пароль и его подтверждение не совпадают!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Пароль должен быть указан.",
+                    "minlength": "Длина пароля должна быть хотя-бы 5 символов",
+                    "maxlength": "Пароль не может быть длиннее чем 50 символов",
+                    "strength": "Сложность пароля:"
+                },
+                "confirmpassword": {
+                    "required": "подтверждение пароля должно быть указано.",
+                    "minlength": "Длина подтверждения пароля должна быть хотя-бы 5 символов",
+                    "maxlength": "Подтверждение пароля не может быть больше чем 50 символов"
+                },
+                "email": {
+                    "required": "E-mail должен быть указан.",
+                    "invalid": "E-mail не верен.",
+                    "minlength": "Длина e-mail должна быть хотя-бы 5 символов",
+                    "maxlength": "E-mail не может быть длиннее чем 50 символов"
+                }
+            }
+        }
+    },
+    "footer": "Это ваш футтер"
+}

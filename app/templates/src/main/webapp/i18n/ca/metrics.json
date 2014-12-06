@@ -1,0 +1,95 @@
+{
+    "metrics": {
+        "title": "Mètriques d'aplicació",
+        "refresh.button": "Actualitzar",
+        "updating": "Actualització...",
+        "jvm": {
+            "title": "Mètriques JVM",
+            "memory": {
+                "title": "Memoria",
+                "total": "Memoria total",
+                "heap": "Memoria Heap",
+                "nonheap": "Memoria Non-Heap"
+            },
+            "threads": {
+                "title": "Fils d'execució",
+                "all": "Tots",
+                "runnable": "En execució",
+                "timedwaiting": "Temps d'espera",
+                "waiting": "En espera",
+                "blocked": "Bloquejats",
+                "dump": {
+                    "title": "Volcat de fils d'execució",
+                    "id": "Id: ",
+                    "blockedtime": "Temps de bloqueig",
+                    "blockedcount": "Contador de bloquejos",
+                    "waitedtime": "Temps d'espera",
+                    "waitedcount": "Temps de contador",
+                    "lockname": "Nom del pany",
+                    "stacktrace": "Traça d'error",
+                    "show": "Mostrar",
+                    "hide": "Ocultar"
+                }
+            },
+            "gc": {
+                "title": "Re-col-lector de broça",
+                "marksweepcount": "Mark Sweep count",
+                "marksweeptime": "Mark Sweep time",
+                "scavengecount": "Scavenge count",
+                "scavengetime": "Scavenge time"
+            },
+            "http": {
+                "title": "Sol.licituds HTTP (events per segon)",
+                "active": "Sol.licituds actives:",
+                "total": "Sol.licituds totals:",
+                "table": {
+                    "code": "Codi",
+                    "count": "Contador",
+                    "mean": "mitja",
+                    "average": "mitjana"
+                },
+                "code": {
+                    "ok": "Ok",
+                    "notfound": "No s'ha trobat",
+                    "servererror": "Error de servidor"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Estadístiques de serveis (temps en mil.lisegons)",
+            "table": {
+                "name": "Nom del servei",
+                "count": "Contador",
+                "mean": "Mitja",
+                "min": "Min",
+                "max": "Max",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "ehcache": {
+            "title": "Estadístiques Ehcache",
+            "cachename": "Cau",
+            "objects": "Objectes",
+            "hits": "Accessos",
+            "misses": "Fallos",
+            "evictioncount": "Contador d'expulcions",
+            "mean": "Temps d'obtenció mig (ms)"
+        },
+        "datasource": {
+        	"usage": "Usage",
+            "title": "DataSource statistics (time in millisecond)",
+            "name": "Pool usage",
+            "count": "Count",
+            "mean": "Mean",
+            "min": "Min",
+            "max": "Max",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}

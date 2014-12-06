@@ -1,0 +1,69 @@
+{
+    "global": {
+        "title": "<%= baseName %>",
+        "browsehappy": "Du använder en <strong>gammal webbläsare</strong>. <a href=\"http://browsehappy.com/?locale=en\">Uppgradera din webbläsare</a> för bästa upplevelse.",
+        "menu": {
+            "home": "Hem",
+            "entities": {
+                "main": "Entiter"
+            },
+            "account": {
+                "main": "Konto",
+                "settings": "Inställningar",
+                "password": "Lösenord",
+                "sessions": "Sessioner",
+                "tracker": "Användarspårning",
+                "metrics": "Mätningar",
+                "health": "Status",
+                "configuration": "Configuration",
+                "logs": "Loggar",
+                "audits": "Granskningar",
+                "login": "Inloggning",
+                "logout": "Utloggning",
+                "apidocs": "API",
+                "register": "Registrera"
+            },
+            "admin": "Administration",
+            "language": "Språk"
+        },
+        "form": {
+            "username": "Inloggning",
+            "username.placeholder": "Din inloggning",
+            "newpassword": "Nytt lösenord",
+            "newpassword.placeholder": "Nytt lösenord",
+            "confirmpassword": "Konfirmera nytt lösenord",
+            "confirmpassword.placeholder": "Konfirmera det nya lösenordet",
+            "email": "E-post",
+            "email.placeholder": "Din e-post"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Om du vill <a href=\"#/login\">logga in</a> - prova med standard kontot:<br/>- Administratör (användarnamn=\"admin\" och lösenord=\"admin\") <br/>- Användare (login=\"user\" och lösenord=\"user\").",
+                "register": "Har du inget konto? <a href=\"#/register\">Du kan registrera ett konto</a>"
+            },
+            "error": {
+                "dontmatch" : "Lösenorden stämmer inte med varandra!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Ditt lösenord krävs.",
+                    "minlength": "Ditt lösenord måste vara 5 tecken",
+                    "maxlength": "Ditt lösenord kan inte vara längre än 50 tecken",
+                    "strength": "Lösenordsstyrka:"
+                },
+                "confirmpassword": {
+                    "required": "Din konfirmation krävs.",
+                    "minlength": "Ditt konfirmationslösenord måste vara 5 tecken långt",
+                    "maxlength": "Ditt konfirmationslösenord kan inte vara längre än 50 tecken"
+                },
+                "email": {
+                    "required": "Din e-post krävs.",
+                    "invalid": "Din e-post adress är inte giltig.",
+                    "minlength": "Din e-post måste vara minst 5 tecken",
+                    "maxlength": "Din e-post får inte vara längre än 50 tecken"
+                }
+            }
+        }
+    },
+    "footer": "Detta är din footer"
+}

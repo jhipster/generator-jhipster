@@ -1,0 +1,69 @@
+{
+    "global": {
+        "title": "<%= baseName %>",
+        "browsehappy": "Du bruger en <strong>forældet</strong> browser. <a href=\"http://browsehappy.com/?locale=da\">Opgrader din browser</a> og få gavn af hele den tilgængelige funktionalitet.",
+        "menu": {
+            "home": "Forsiden",
+            "entities": {
+                "main": "Entities"
+            },
+            "account": {
+                "main": "Konto",
+                "settings": "Indstillinger",
+                "password": "Kodeord",
+                "sessions": "Sessions",
+                "tracker": "Brugersporing",
+                "metrics": "Målinger",
+                "health": "Sundheds",
+                "configuration": "Configuration",
+                "logs": "Logs",
+                "audits": "Audits",
+                "login": "Log ind",
+                "logout": "Log ud",
+                "apidocs": "API",
+                "register": "Register"
+            },
+            "admin": "Administration",
+            "language": "Sprog"
+        },
+        "form": {
+            "username": "Brugernavn",
+            "username.placeholder": "Dit brugernavn",
+            "newpassword": "Nyt kodeord",
+            "newpassword.placeholder": "Indtast det nye kodeord",
+            "confirmpassword": "Bekræft det nye kodeordet",
+            "confirmpassword.placeholder": "Bekræft det nye kodeord",
+            "email": "E-mail",
+            "email.placeholder": "Din e-mail adresse"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Hvis du ønsker at <a href=\"#/login\">logge ind</a>, så kan du prøve det med:<br/>- Administrator (brugernavn=\"admin\" and kodeord=\"admin\") <br/>- User (brugernavn=\"user\" and kodeord=\"user\").",
+                "register": "You don't have an account yet? <a href=\"#/register\">Register a new account</a>"
+            },
+            "error": {
+                "dontmatch": "Kodeordet og dets bekræftelse matcher ikke!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Kodeord skal indtastes.",
+                    "minlength": "Kodeordet skal som minimum være på 5 tegn!",
+                    "maxlength": "Kodeordet må ikke overskride 20 tegn!",
+                    "strength": "Kodeord strength:"
+                },
+                "confirmpassword": {
+                    "required": "Kodeordet skal bekræftes",
+                    "minlength": "Kodeordet skal som minimum være på 5 tegn!",
+                    "maxlength": "Kodeordet må ikke overskride 20 tegn!"
+                },
+                "email": {
+                    "required": "Din e-mail adresse er påkrævet.",
+                    "invalid": "Din e-mail adresse er ugyldig!",
+                    "minlength": "Din e-mail adresse skal som minimum være på 5 tegn",
+                    "maxlength": "Din e-mail adresse må ikke overskride 50 tegn"
+                }
+            }
+        }
+    },
+    "footer": "Det her er sidefoden"
+}

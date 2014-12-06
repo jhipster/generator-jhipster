@@ -1,0 +1,24 @@
+{
+    "register": {
+        "title": "Registre",
+        "form": {
+            "button": "Registre"
+        },
+        "messages": {
+            "validate": {
+                "login": {
+                    "required": "El seu nom d'usuari és necessari.",
+                    "minlength": "El seu nom d'usuari ha de tenir, com a mínim, 1 caràcter",
+                    "maxlength": "El seu nom d'usuari no pot tenir més de 50 caràcters",
+                    "pattern": "Your login can only contain lower-case letters and digits"
+                }
+            },
+            "success": "<strong>Registre guardat!</strong> Si us plau, consulti el seu compte de correu electrònic per confirmar.",
+            "error": {
+                "fail": "<strong>Error en registre!</strong> Si us plau, torni-ho a intentar més tard.",
+                "userexists": "<strong>El nom d'usuari ja existeix!</strong> Si us plau, escolleixi un altre.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+            }
+        }
+    }
+}

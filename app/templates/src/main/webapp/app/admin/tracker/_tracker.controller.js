@@ -12,6 +12,12 @@ angular.module('<%=angularAppName%>')
                         templateUrl: 'app/admin/tracker/tracker.html',
                         controller: 'TrackerController'
                     }
+                },
+                resolve: {
+                    mainTranslatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                        $translatePartialLoader.addPart('tracker');
+                        return $translate.refresh();
+                    }]
                 }
             });
     })

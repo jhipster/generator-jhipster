@@ -1,0 +1,16 @@
+{
+    "login": {
+        "title": "인증",
+        "form": {
+            "password": "비밀번호",
+            "password.placeholder": "당신의 비밀번호",
+            "rememberme": "자동 로그인",
+            "button": "인증하기"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>인증 실패!</strong> credential을 확인하고 다시 시도해 주세요."
+            }
+        }
+    }
+}

@@ -21,7 +21,7 @@ module.exports = function (config) {
             'bower_components/angular-sanitize/angular-sanitize.js',
             'bower_components/angular-translate/angular-translate.js',
             'bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
-            'bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
+            'bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js',
             'bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js',
             'bower_components/angular-local-storage/dist/angular-local-storage.min.js',
             'bower_components/angular-cache-buster/angular-cache-buster.js',

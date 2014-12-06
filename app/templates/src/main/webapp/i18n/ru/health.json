@@ -1,0 +1,20 @@
+{
+    "health": {
+        "title": "Состояние",
+        "stacktrace": "Stacktrace",
+        "indicator": {
+            "db": "База данных",
+            "diskSpace": "Disk space",
+            "mail": "Email",
+            "mongo": "Mongo DB"
+        },
+        "table": {
+            "service": "Название сервисаo",
+            "status": "статус"
+        },
+        "status": {
+            "UP": "UP",
+            "DOWN": "DOWN"
+        }
+    }
+}

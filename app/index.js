@@ -640,20 +640,27 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(webappDir + 'htaccess.txt', webappDir + '.htaccess');
 
     // i18n
-    this.template(webappDir + '/i18n/_ca.json', webappDir + 'i18n/ca.json', this, {});
-    this.template(webappDir + '/i18n/_da.json', webappDir + 'i18n/da.json', this, {});
-    this.template(webappDir + '/i18n/_de.json', webappDir + 'i18n/de.json', this, {});
-    this.template(webappDir + '/i18n/_en.json', webappDir + 'i18n/en.json', this, {});
-    this.template(webappDir + '/i18n/_es.json', webappDir + 'i18n/es.json', this, {});
-    this.template(webappDir + '/i18n/_fr.json', webappDir + 'i18n/fr.json', this, {});
-    this.template(webappDir + '/i18n/_kr.json', webappDir + 'i18n/kr.json', this, {});
-    this.template(webappDir + '/i18n/_pl.json', webappDir + 'i18n/pl.json', this, {});
-    this.template(webappDir + '/i18n/_pt-br.json', webappDir + 'i18n/pt-br.json', this, {});
-    this.template(webappDir + '/i18n/_ru.json', webappDir + 'i18n/ru.json', this, {});
-    this.template(webappDir + '/i18n/_sv.json', webappDir + 'i18n/sv.json', this, {});
-    this.template(webappDir + '/i18n/_tr.json', webappDir + 'i18n/tr.json', this, {});
-    this.template(webappDir + '/i18n/_zh-tw.json', webappDir + 'i18n/zh-tw.json', this, {});
+    copyI18nFilesByName(this, webappDir, 'activate.json');
+    copyI18nFilesByName(this, webappDir, 'audits.json');
+    copyI18nFilesByName(this, webappDir, 'configuration.json');
+    copyI18nFilesByName(this, webappDir, 'error.json');
+    copyI18nFilesByName(this, webappDir, 'health.json');
+    copyI18nFilesByName(this, webappDir, 'login.json');
+    copyI18nFilesByName(this, webappDir, 'logs.json');
+    copyI18nFilesByName(this, webappDir, 'main.json');
+    copyI18nFilesByName(this, webappDir, 'metrics.json');
+    copyI18nFilesByName(this, webappDir, 'password.json');
+    copyI18nFilesByName(this, webappDir, 'password.json');
+    copyI18nFilesByName(this, webappDir, 'register.json');
+    copyI18nFilesByName(this, webappDir, 'sessions.json');
+    copyI18nFilesByName(this, webappDir, 'settings.json');
 
+    // remove the tracker.json files
+    if (this.websocket == 'atmosphere') {
+        copyI18nFilesByName(webappDir, 'tracker.json');
+    }
+
+    templateI18nFilesByName(this, webappDir, 'global.json');
 
     // Protected resources - used to check if a customer is still connected
     this.copy(webappDir + '/protected/authentication_check.gif', webappDir + '/protected/authentication_check.gif');
@@ -771,7 +778,7 @@ JhipsterGenerator.prototype.app = function app() {
         'bower_components/angular-sanitize/angular-sanitize.js',
         'bower_components/angular-translate/angular-translate.js',
         'bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
-        'bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
+        'bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js',
         'bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js',
         'bower_components/angular-local-storage/dist/angular-local-storage.js',
         'bower_components/angular-cache-buster/angular-cache-buster.js',
@@ -870,13 +877,49 @@ JhipsterGenerator.prototype.projectfiles = function projectfiles() {
 };
 
 function removefile(file) {
+    console.log('Remove the file - ' + file)
     if (shelljs.test('-f', file)) {
         shelljs.rm(file);
     }
+
 }
 
 function removefolder(folder) {
+    console.log('Remove the folder - ' + folder)
     if (shelljs.test('-d', folder)) {
         shelljs.rm("-rf", folder);
     }
 }
+
+function copyI18nFilesByName(_this, folder, fileToCopy) {
+    _this.copy(folder + '/i18n/ca/' + fileToCopy, folder + '/i18n/ca/' + fileToCopy);
+    _this.copy(folder + '/i18n/da/' + fileToCopy, folder + '/i18n/da/' + fileToCopy);
+    _this.copy(folder + '/i18n/de/' + fileToCopy, folder + '/i18n/de/' + fileToCopy);
+    _this.copy(folder + '/i18n/en/' + fileToCopy, folder + '/i18n/en/' + fileToCopy);
+    _this.copy(folder + '/i18n/es/' + fileToCopy, folder + '/i18n/es/' + fileToCopy);
+    _this.copy(folder + '/i18n/fr/' + fileToCopy, folder + '/i18n/fr/' + fileToCopy);
+    _this.copy(folder + '/i18n/kr/' + fileToCopy, folder + '/i18n/kr/' + fileToCopy);
+    _this.copy(folder + '/i18n/pl/' + fileToCopy, folder + '/i18n/pl/' + fileToCopy);
+    _this.copy(folder + '/i18n/pt-br/' + fileToCopy, folder + '/i18n/pt-br/' + fileToCopy);
+    _this.copy(folder + '/i18n/ru/' + fileToCopy, folder + '/i18n/ru/' + fileToCopy);
+    _this.copy(folder + '/i18n/sv/' + fileToCopy, folder + '/i18n/sv/' + fileToCopy);
+    _this.copy(folder + '/i18n/tr/' + fileToCopy, folder + '/i18n/tr/' + fileToCopy);
+    _this.copy(folder + '/i18n/zh-tw/' + fileToCopy, folder + '/i18n/zh-tw/' + fileToCopy);
+}
+
+function templateI18nFilesByName(_this, folder, fileToTemplate) {
+    _this.template(folder + '/i18n/ca/_' + fileToTemplate, folder + 'i18n/ca/' + fileToTemplate, this, {});
+    _this.template(folder + '/i18n/da/_' + fileToTemplate, folder + 'i18n/da/' + fileToTemplate, this, {});
+    _this.template(folder + '/i18n/de/_' + fileToTemplate, folder + 'i18n/de/' + fileToTemplate, this, {});
+    _this.template(folder + '/i18n/en/_' + fileToTemplate, folder + 'i18n/en/' + fileToTemplate, this, {});
+    _this.template(folder + '/i18n/es/_' + fileToTemplate, folder + 'i18n/es/' + fileToTemplate, this, {});
+    _this.template(folder + '/i18n/fr/_' + fileToTemplate, folder + 'i18n/fr/' + fileToTemplate, this, {});
+    _this.template(folder + '/i18n/kr/_' + fileToTemplate, folder + 'i18n/kr/' + fileToTemplate, this, {});
+    _this.template(folder + '/i18n/pl/_' + fileToTemplate, folder + 'i18n/pl/' + fileToTemplate, this, {});
+    _this.template(folder + '/i18n/pt-br/_' + fileToTemplate, folder + 'i18n/pt-br/' + fileToTemplate, this, {});
+    _this.template(folder + '/i18n/ru/_' + fileToTemplate, folder + 'i18n/ru/' + fileToTemplate, this, {});
+    _this.template(folder + '/i18n/sv/_' + fileToTemplate, folder + 'i18n/sv/' + fileToTemplate, this, {});
+    _this.template(folder + '/i18n/tr/_' + fileToTemplate, folder + 'i18n/tr/' + fileToTemplate, this, {});
+    _this.template(folder + '/i18n/zh-tw/_' + fileToTemplate, folder + 'i18n/zh-tw/' + fileToTemplate, this, {});
+}
+

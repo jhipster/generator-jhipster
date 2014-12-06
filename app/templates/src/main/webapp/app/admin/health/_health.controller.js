@@ -14,6 +14,12 @@ angular.module('<%=angularAppName%>')
                         templateUrl: 'app/admin/health/health.html',
                         controller: 'HealthController'
                     }
+                },
+                resolve: {
+                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                        $translatePartialLoader.addPart('app/admin/health');
+                        return $translate.refresh();
+                    }]
                 }
             });
     })

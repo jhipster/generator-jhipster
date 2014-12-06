@@ -1,0 +1,31 @@
+{
+    "settings": {
+        "title": "Brugerindstillinger for [<b>{{username}}</b>]",
+        "form": {
+            "firstname": "Fornavn",
+            "firstname.placeholder": "Dit fornavn",
+            "lastname": "Efternavn",
+            "lastname.placeholder": "Dit efternavn",
+            "button": "Gem"
+        },
+        "messages": {
+            "error": {
+                "fail": "<strong>Der opstod en fejl!</strong> Brugerindstillingerne kunne ikke gemmes.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+            },
+            "success": "<strong>Brugerindstillinger gemt!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "Dit fornavn er påkrævet.",
+                    "minlength": "Dit fornavn skal som minimum være på 1 tegn",
+                    "maxlength": "Dit brugernavn må ikke overskride 50 tegn"
+                },
+                "lastname": {
+                    "required": "Dit efternavn er påkrævet.",
+                    "minlength": "Dit efternavn skal som minimum være på 1 tegn",
+                    "maxlength": "Dit efternavn må ikke overskride 50 tegn"
+                }
+            }
+        }
+    }
+}

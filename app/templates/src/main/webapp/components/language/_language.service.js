@@ -1,19 +1,24 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .factory('Language', function ($http, $translate, LANGUAGES) {
+    .factory('Language', function ($q, $http, $translate, LANGUAGES) {
+        var self = this;
         return {
-            getBy: function (language) {
-                if (language == undefined) {
-                    language = $translate.storage().get('NG_TRANSLATE_LANG_KEY');
-                }
+            getCurrent: function () {
+                var deferred = $q.defer();
+                var language = $translate.storage().get('NG_TRANSLATE_LANG_KEY');
+
                 if (language == undefined) {
                     language = 'en';
                 }
 
-                return $http.get('/i18n/' + language + '.json').then(function (response) {
-                    return LANGUAGES;
-                });
+                deferred.resolve(language);
+                return deferred.promise;
+            },
+            getBy: function (language) {
+                var deferred = $q.defer();
+                deferred.resolve(LANGUAGES);
+                return deferred.promise;
             }
         };
     })

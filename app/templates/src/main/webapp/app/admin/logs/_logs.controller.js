@@ -14,6 +14,12 @@ angular.module('<%=angularAppName%>')
                         templateUrl: 'app/admin/logs/logs.html',
                         controller: 'LogsController'
                     }
+                },
+                resolve: {
+                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                        $translatePartialLoader.addPart('logs');
+                        return $translate.refresh();
+                    }]
                 }
             });
     })

@@ -1,0 +1,16 @@
+{
+    "login": {
+        "title": "Autenticació",
+        "form": {
+            "password": "Contrasenya",
+            "password.placeholder": "La seva contrasenya",
+            "rememberme": "Accés automàtic",
+            "button": "Autenticar-se"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Ha fallat l'autenticació!</strong> Si us plau, confirmi les seves credencials i torni a probar-ho."
+            }
+        }
+    }
+}

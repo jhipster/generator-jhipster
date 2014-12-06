@@ -1,0 +1,9 @@
+{
+    "activate": {
+        "title": "啟用",
+        "messages": {
+            "success": "<strong>您的帳號已啟用.</strong> 請<a href=\"#/login\">登入</a>.",
+            "error": "<strong>您的帳號無法啟用.</strong> 請重新註冊."
+        }
+    }
+}

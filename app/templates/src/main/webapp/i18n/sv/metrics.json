@@ -1,0 +1,95 @@
+{
+    "metrics": {
+        "title": "Applikationsmätningar",
+        "refresh.button": "Uppdatera",
+        "updating": "Uppdaterar...",
+        "jvm": {
+            "title": "Mätningar av JVM",
+            "memory": {
+                "title": "Minne",
+                "total": "Totalt minne",
+                "heap": "Heap minne",
+                "nonheap": "Non-Heap minne"
+            },
+            "threads": {
+                "title": "Trådar",
+                "all": "Alla",
+                "runnable": "Körbara",
+                "timedwaiting": "Timed waiting",
+                "waiting": "Waiting",
+                "blocked": "Blocked",
+                "dump": {
+                    "title": "Threads dump",
+                    "id": "Id: ",
+                    "blockedtime": "Blocked Time",
+                    "blockedcount": "Blocked Count",
+                    "waitedtime": "Waited Time",
+                    "waitedcount": "Waited Count",
+                    "lockname": "Lock name",
+                    "stacktrace": "Stacktrace",
+                    "show": "Visa",
+                    "hide": "Göm"
+                }
+            },
+            "gc": {
+                "title": "Garbage collections",
+                "marksweepcount": "Mark Sweep count",
+                "marksweeptime": "Mark Sweep time",
+                "scavengecount": "Scavenge count",
+                "scavengetime": "Scavenge time"
+            },
+            "http": {
+                "title": "HTTP requests (händelser/sekund)",
+                "active": "Aktiva requests:",
+                "total": "Totalt antal requests:",
+                "table": {
+                    "code": "Kod",
+                    "count": "Antal",
+                    "mean": "Medelvärde",
+                    "average": "Genomsnitt"
+                },
+                "code": {
+                    "ok": "Ok",
+                    "notfound": "Not found",
+                    "servererror": "Server Error"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Services statistik (tid i millisekund)",
+            "table": {
+                "name": "Service namn",
+                "count": "Antal",
+                "mean": "Medelvärde",
+                "min": "Min",
+                "max": "Max",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "ehcache": {
+            "title": "Ehcache statistik",
+            "cachename": "Cache namn",
+            "objects": "Objekt",
+            "hits": "Träffar",
+            "misses": "Missar",
+            "evictioncount": "Utkastade",
+            "mean": "Medeltid för GET (ms)"
+        },
+        "datasource": {
+        	"usage": "Usage",
+            "title": "DataSource statistics (time in millisecond)",
+            "name": "Pool usage",
+            "count": "Count",
+            "mean": "Mean",
+            "min": "Min",
+            "max": "Max",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}

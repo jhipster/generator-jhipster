@@ -3,7 +3,7 @@
 angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale',
     'ngResource', 'ui.router', 'ngCookies', 'pascalprecht.translate', 'ngCacheBuster'])
 
-    .run(function ($rootScope, $location, $http, $state, Auth, Principal) {
+    .run(function ($rootScope, $location, $http, $state, $translate, Auth, Principal, Language) {
         $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
             $rootScope.toState = toState;
             $rootScope.toStateParams = toStateParams;
@@ -19,6 +19,11 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
             if (Principal.isIdentityResolved()) {
                 Auth.authorize();
             }
+
+            // Update the language
+            Language.getCurrent().then(function (language) {
+                $translate.use(language);
+            });
         });
 
         $rootScope.$on("$stateChangeSuccess",  function(event, toState, toParams, fromState, fromParams) {
@@ -49,7 +54,7 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
         };
     })
     <% } %>
-    .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, $translateProvider, tmhDynamicLocaleProvider, httpRequestInterceptorCacheBusterProvider) {
+    .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, $translateProvider, $translatePartialLoaderProvider, tmhDynamicLocaleProvider, httpRequestInterceptorCacheBusterProvider) {
         //Cache everything except rest api requests
         httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*rest.*/, /.*protected.*/], true);
 
@@ -58,7 +63,8 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
             'abstract': true,
             views: {
                 'navbar@': {
-                    templateUrl: 'components/navbar/navbar.html'
+                    templateUrl: 'components/navbar/navbar.html',
+                    controller: 'NavbarController'
                 }
             },
             resolve: {
@@ -66,16 +72,16 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
                     function (Auth) {
                         return Auth.authorize();
                     }
-                ]
+                ],
+                translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                    $translatePartialLoader.addPart('global');
+                    return $translate.refresh();
+                }]
             }
         });
-        <% if (authenticationType == 'token') { %>
-        $httpProvider.interceptors.push('authInterceptor');<% } %>
 
-        // Initialize angular-translate
-        $translateProvider.useStaticFilesLoader({
-            prefix: 'i18n/',
-            suffix: '.json'
+        $translateProvider.useLoader('$translatePartialLoader', {
+            urlTemplate: '/i18n/{lang}/{part}.json'
         });
 
         $translateProvider.preferredLanguage('en');
