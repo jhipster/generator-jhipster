@@ -2,10 +2,8 @@ package <%=packageName%>.repository;
 
 import <%=packageName%>.domain.PersistentAuditEvent;
 import org.joda.time.LocalDateTime;<% if (databaseType == 'sql') { %>
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;<% } %><% if (databaseType == 'nosql') { %>
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;<% } %>
+import org.springframework.data.jpa.repository.JpaRepository;<% } %><% if (databaseType == 'nosql') { %>
+import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
 
 import java.util.List;
 
@@ -18,9 +16,7 @@ import java.util.List;
 
     List<PersistentAuditEvent> findByPrincipal(String principal);
 
-    List<PersistentAuditEvent> findByPrincipalAndAuditEventDateGreaterThan(String principal, LocalDateTime after);
-    <% if (databaseType == 'sql') { %>
-    @Query("select p from PersistentAuditEvent p where p.auditEventDate >= ?1 and p.auditEventDate <= ?2")<% } %><% if (databaseType == 'nosql') { %>
-    @Query("{auditEventDate: {$gt: ?0, $lte: ?1}}")<% } %>
-    List<PersistentAuditEvent> findByDates(LocalDateTime fromDate, LocalDateTime toDate);
+    List<PersistentAuditEvent> findByPrincipalAndAuditEventDateAfter(String principal, LocalDateTime after);
+
+    List<PersistentAuditEvent> findAllByAuditEventDateBetween(LocalDateTime fromDate, LocalDateTime toDate);
 }

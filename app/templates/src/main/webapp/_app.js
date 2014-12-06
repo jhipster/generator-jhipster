@@ -32,7 +32,8 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
         });
 
         $rootScope.back = function() {
-            if ($rootScope.previousState_name === 'activate') {
+            // If previous state is 'activate' or do not exist go to 'home'
+            if ($rootScope.previousState_name === 'activate' || $state.get($rootScope.previousState_name) === null) {
                 $state.go('home');
             } else {
                 $state.go($rootScope.previousState_name,$rootScope.previousState_params);
@@ -54,7 +55,11 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
         };
     })
     <% } %>
-    .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, $translateProvider, $translatePartialLoaderProvider, tmhDynamicLocaleProvider, httpRequestInterceptorCacheBusterProvider) {
+    .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, $translateProvider, tmhDynamicLocaleProvider, httpRequestInterceptorCacheBusterProvider) {
+        <% if (authenticationType == 'cookie') { %>//enable CSRF
+        $httpProvider.defaults.xsrfCookieName= 'CSRF-TOKEN';
+        $httpProvider.defaults.xsrfHeaderName= 'X-CSRF-TOKEN';<% } %>
+    
         //Cache everything except rest api requests
         httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*rest.*/, /.*protected.*/], true);
 
@@ -79,7 +84,10 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
                 }]
             }
         });
+        <% if (authenticationType == 'token') { %>
+        $httpProvider.interceptors.push('authInterceptor');<% } %>
 
+        // Initialize angular-translate    
         $translateProvider.useLoader('$translatePartialLoader', {
             urlTemplate: '/i18n/{lang}/{part}.json'
         });

@@ -107,7 +107,7 @@ public class CustomPersistentRememberMeServices extends
         String login = successfulAuthentication.getName();
 
         log.debug("Creating new persistent login for user {}", login);
-        User user = userRepository.findOne(login);
+        User user = userRepository.findOneByLogin(login);
 
         PersistentToken token = new PersistentToken();
         token.setSeries(generateSeriesData());
@@ -156,10 +156,8 @@ public class CustomPersistentRememberMeServices extends
             throw new InvalidCookieException("Cookie token did not contain " + 2 +
                     " tokens, but contained '" + Arrays.asList(cookieTokens) + "'");
         }
-
-        final String presentedSeries = cookieTokens[0];
-        final String presentedToken = cookieTokens[1];
-
+        String presentedSeries = cookieTokens[0];
+        String presentedToken = cookieTokens[1];
         PersistentToken token = persistentTokenRepository.findOne(presentedSeries);
 
         if (token == null) {

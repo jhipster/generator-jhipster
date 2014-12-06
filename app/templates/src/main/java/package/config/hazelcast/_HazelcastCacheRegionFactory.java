@@ -36,20 +36,20 @@ public class HazelcastCacheRegionFactory implements RegionFactory {
         return true;
     }
 
-    public final QueryResultsRegion buildQueryResultsRegion(final String regionName, final Properties properties)
+    public final QueryResultsRegion buildQueryResultsRegion(String regionName, Properties properties)
             throws CacheException {
 
         return new HazelcastQueryResultsRegion(hazelcastInstance, regionName, properties);
     }
 
-    public NaturalIdRegion buildNaturalIdRegion(final String regionName, final Properties properties, final CacheDataDescription metadata)
+    public NaturalIdRegion buildNaturalIdRegion(String regionName, Properties properties, CacheDataDescription metadata)
             throws CacheException {
 
         return new HazelcastNaturalIdRegion(hazelcastInstance, regionName, properties, metadata);
     }
 
-    public CollectionRegion buildCollectionRegion(final String regionName, final Properties properties,
-                                                  final CacheDataDescription metadata) throws CacheException {
+    public CollectionRegion buildCollectionRegion(String regionName, Properties properties,
+                                                  CacheDataDescription metadata) throws CacheException {
 
         HazelcastCollectionRegion<LocalRegionCache> region = new HazelcastCollectionRegion<>(hazelcastInstance,
                 regionName, properties, metadata, new LocalRegionCache(regionName, hazelcastInstance, metadata));
@@ -58,8 +58,8 @@ public class HazelcastCacheRegionFactory implements RegionFactory {
         return region;
     }
 
-    public EntityRegion buildEntityRegion(final String regionName, final Properties properties,
-                                          final CacheDataDescription metadata) throws CacheException {
+    public EntityRegion buildEntityRegion(String regionName, Properties properties,
+                                          CacheDataDescription metadata) throws CacheException {
 
         HazelcastEntityRegion<LocalRegionCache> region = new HazelcastEntityRegion<>(hazelcastInstance,
                 regionName, properties, metadata, new LocalRegionCache(regionName, hazelcastInstance, metadata));
@@ -68,13 +68,13 @@ public class HazelcastCacheRegionFactory implements RegionFactory {
         return region;
     }
 
-    public TimestampsRegion buildTimestampsRegion(final String regionName, final Properties properties)
+    public TimestampsRegion buildTimestampsRegion(String regionName, Properties properties)
             throws CacheException {
         return new HazelcastTimestampsRegion<>(hazelcastInstance, regionName, properties,
                 new TimestampsRegionCache(regionName, hazelcastInstance));
     }
 
-    public void start(final Settings settings, final Properties properties) throws CacheException {
+    public void start(Settings settings, Properties properties) throws CacheException {
         // Do nothing the hazelcast hazelcastInstance is injected
         log.info("Starting up {}", getClass().getSimpleName());
 

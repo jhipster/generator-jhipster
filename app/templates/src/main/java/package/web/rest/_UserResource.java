@@ -41,13 +41,13 @@ public class UserResource {
     @RolesAllowed(AuthoritiesConstants.ADMIN)<% if (javaVersion == '8') { %>
     ResponseEntity<User> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
-        return Optional.ofNullable(userRepository.findOne(login))
+        return Optional.ofNullable(userRepository.findOneByLogin(login))
                 .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }<% } else { %>
     public User getUser(@PathVariable String login, HttpServletResponse response) {
         log.debug("REST request to get User : {}", login);
-        User user = userRepository.findOne(login);
+        User user = userRepository.findOneByLogin(login);
         if (user == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }

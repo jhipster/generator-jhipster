@@ -20,7 +20,7 @@ angular.module('<%=angularAppName%>')
                 localStorageService.clearAll();
 
                 // logout from the server
-                $http.get('app/logout');
+                $http.post('app/logout');
             },
             getToken: function () {
                 var token = localStorageService.get('token');

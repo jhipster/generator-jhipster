@@ -14,7 +14,7 @@ describe('Services Tests ', function () {
             spiedAuthServerProvider = AuthServerProvider;
             //Request on app init
             $httpBackend.expectGET('i18n/en.json').respond(200, '');
-            $httpBackend.expectGET('app/logout').respond(200, '');
+            $httpBackend.expectPOST('app/logout').respond(200, '');
 
             var req = 'protected/authentication_check.gif';
             var regex_friendly_req = req.replace(/\//g, '\\/');

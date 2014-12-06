@@ -4,16 +4,14 @@
 
     <repositories>
         <repository>
-            <id>spring-lib-milestone</id>
-            <name>Spring Framework Maven Milestone Repository</name>
-            <url>http://repo.spring.io/milestone/</url>
+            <id>spring-libs-milestone</id>
+            <url>https://repo.spring.io/libs-milestone</url>
         </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
-            <id>spring-plugin-milestone</id>
-            <name>Spring Framework Maven Milestone Repository</name>
-            <url>http://repo.spring.io/milestone/</url>
+            <id>spring-plugins-releases</id>
+            <url>https://repo.spring.io/plugins-release</url>
         </pluginRepository>
     </pluginRepositories>
 
