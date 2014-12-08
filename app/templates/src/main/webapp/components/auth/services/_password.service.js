@@ -2,6 +2,6 @@
 
 angular.module('<%=angularAppName%>')
     .factory('Password', function ($resource) {
-        return $resource('app/rest/account/change_password', {}, {
+        return $resource('api/account/change_password', {}, {
         });
     });

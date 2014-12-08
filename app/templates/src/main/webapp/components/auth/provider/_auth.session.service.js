@@ -7,7 +7,7 @@ angular.module('<%=angularAppName%>')
                 var data = "j_username=" + encodeURIComponent(credentials.username) +
                     "&j_password=" + encodeURIComponent(credentials.password) +
                     "&_spring_security_remember_me=" + credentials.rememberMe + "&submit=Login";
-                return $http.post('app/authentication', data, {
+                return $http.post('api/authentication', data, {
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded"
                     }
@@ -20,7 +20,7 @@ angular.module('<%=angularAppName%>')
                 localStorageService.clearAll();
 
                 // logout from the server
-                $http.post('app/logout');
+                $http.post('api/logout');
             },
             getToken: function () {
                 var token = localStorageService.get('token');
@@ -32,4 +32,3 @@ angular.module('<%=angularAppName%>')
             }
         };
     });
-

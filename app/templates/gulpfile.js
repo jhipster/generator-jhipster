@@ -92,8 +92,8 @@ gulp.task('server', ['watch'<% if(useCompass) { %>, 'compass'<% } %>], function(
                     (function() {
                         var url = require('url');
                         var proxy = require('proxy-middleware');
-                        var options = url.parse('http://localhost:8080/app');
-                        options.route = '/app';
+                        var options = url.parse('http://localhost:8080/api');
+                        options.route = '/api';
                         return proxy(options);
                     })(),
                     (function() {
@@ -176,8 +176,8 @@ gulp.task('server:dist', ['build'], function() {
                     (function() {
                         var url = require('url');
                         var proxy = require('proxy-middleware');
-                        var options = url.parse('http://localhost:8080/app');
-                        options.route = '/app';
+                        var options = url.parse('http://localhost:8080/api');
+                        options.route = '/api';
                         return proxy(options);
                     })(),
                     (function() {

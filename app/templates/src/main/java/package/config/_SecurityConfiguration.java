@@ -72,8 +72,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/images/**")
             .antMatchers("/styles/**")
             .antMatchers("/swagger-ui/**")<% if (authenticationType == 'token') { %>
-            .antMatchers("/app/rest/register")
-            .antMatchers("/app/rest/activate")<% if (websocket == 'atmosphere') { %>
+            .antMatchers("/api/register")
+            .antMatchers("/api/activate")<% if (websocket == 'atmosphere') { %>
             .antMatchers("/websocket/activity")<% } %><% } %>
             .antMatchers("/test/**")<% if (devDatabaseType != 'h2Memory') { %>;<% } else { %>
             .antMatchers("/console/**");<% } %>
@@ -91,7 +91,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .key(env.getProperty("jhipster.security.rememberme.key"))
         .and()
             .formLogin()
-            .loginProcessingUrl("/app/authentication")
+            .loginProcessingUrl("/api/authentication")
             .successHandler(ajaxAuthenticationSuccessHandler)
             .failureHandler(ajaxAuthenticationFailureHandler)
             .usernameParameter("j_username")
@@ -99,7 +99,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .permitAll()
         .and()
             .logout()
-            .logoutUrl("/app/logout")
+            .logoutUrl("/api/logout")
             .logoutSuccessHandler(ajaxLogoutSuccessHandler)
             .deleteCookies("JSESSIONID", "hazelcast.sessionId", "CSRF-TOKEN")
             .permitAll()
@@ -108,11 +108,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .frameOptions()
             .disable()
             .authorizeRequests()
-                .antMatchers("/app/rest/register").permitAll()
-                .antMatchers("/app/rest/activate").permitAll()
-                .antMatchers("/app/rest/authenticate").permitAll()
-                .antMatchers("/app/rest/logs/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/app/rest/**").authenticated()<% if (websocket == 'atmosphere') { %>
+                .antMatchers("/api/register").permitAll()
+                .antMatchers("/api/activate").permitAll()
+                .antMatchers("/api/authenticate").permitAll()
+                .antMatchers("/api/logs/**").hasAuthority(AuthoritiesConstants.ADMIN)
+                .antMatchers("/api/**").authenticated()<% if (websocket == 'atmosphere') { %>
                 .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/websocket/**").permitAll()<% } %>
                 .antMatchers("/metrics/**").hasAuthority(AuthoritiesConstants.ADMIN)

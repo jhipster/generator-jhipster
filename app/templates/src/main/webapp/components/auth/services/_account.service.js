@@ -2,7 +2,7 @@
 
 angular.module('<%=angularAppName%>')
     .factory('Account', function Account($resource) {
-        return $resource('app/rest/account', {}, {
+        return $resource('api/account', {}, {
             'get': { method: 'GET', params: {}, isArray: false,
                 interceptor: {
                     response: function(response) {
@@ -13,6 +13,3 @@ angular.module('<%=angularAppName%>')
             }
         });
     });
-
-
-

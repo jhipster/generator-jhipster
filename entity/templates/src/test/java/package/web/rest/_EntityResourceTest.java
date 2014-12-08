@@ -96,7 +96,7 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
         assertThat(<%= entityInstance %>Repository.findAll()).hasSize(0);
 
         // Create the <%= entityClass %>
-        rest<%= entityClass %>MockMvc.perform(post("/app/rest/<%= entityInstance %>s")
+        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityInstance %>s")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %>)))
                 .andExpect(status().isOk());
@@ -115,7 +115,7 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
         <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 
         // Get all the <%= entityInstance %>s
-        rest<%= entityClass %>MockMvc.perform(get("/app/rest/<%= entityInstance %>s"))
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityInstance %>s"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
@@ -131,7 +131,7 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
         <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 
         // Get the <%= entityInstance %>
-        rest<%= entityClass %>MockMvc.perform(get("/app/rest/<%= entityInstance %>s/{id}", <%= entityInstance %>.getId()))
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityInstance %>s/{id}", <%= entityInstance %>.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().intValue()))<% } %><% if (databaseType == 'nosql') { %>
@@ -143,7 +143,7 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
     @Transactional<% } %>
     public void getNonExisting<%= entityClass %>() throws Exception {
         // Get the <%= entityInstance %>
-        rest<%= entityClass %>MockMvc.perform(get("/app/rest/<%= entityInstance %>s/{id}", 1L))
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityInstance %>s/{id}", 1L))
                 .andExpect(status().isNotFound());
     }
 
@@ -155,7 +155,7 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
 
         // Update the <%= entityInstance %><% for (fieldId in fields) { %>
         <%= entityInstance %>.set<%= fields[fieldId].fieldNameCapitalized %>(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>
-        rest<%= entityClass %>MockMvc.perform(post("/app/rest/<%= entityInstance %>s")
+        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityInstance %>s")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %>)))
                 .andExpect(status().isOk());
@@ -174,7 +174,7 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
         <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 
         // Get the <%= entityInstance %>
-        rest<%= entityClass %>MockMvc.perform(delete("/app/rest/<%= entityInstance %>s/{id}", <%= entityInstance %>.getId())
+        rest<%= entityClass %>MockMvc.perform(delete("/api/<%= entityInstance %>s/{id}", <%= entityInstance %>.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 

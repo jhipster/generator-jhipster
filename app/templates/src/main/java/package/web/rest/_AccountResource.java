@@ -30,7 +30,7 @@ import java.util.stream.Collectors;<% } %>
  * REST controller for managing the current user's account.
  */
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 public class AccountResource {
 
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
@@ -48,9 +48,9 @@ public class AccountResource {
     private MailService mailService;
 
     /**
-     * POST  /rest/register -> register the user.
+     * POST  /register -> register the user.
      */
-    @RequestMapping(value = "/rest/register",
+    @RequestMapping(value = "/register",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -96,9 +96,9 @@ public class AccountResource {
         }<% } %>
     }
     /**
-     * GET  /rest/activate -> activate the registered user.
+     * GET  /activate -> activate the registered user.
      */
-    @RequestMapping(value = "/rest/activate",
+    @RequestMapping(value = "/activate",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -114,9 +114,9 @@ public class AccountResource {
     }
 
     /**
-     * GET  /rest/authenticate -> check if the user is authenticated, and return its login.
+     * GET  /authenticate -> check if the user is authenticated, and return its login.
      */
-    @RequestMapping(value = "/rest/authenticate",
+    @RequestMapping(value = "/authenticate",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -126,9 +126,9 @@ public class AccountResource {
     }
 
     /**
-     * GET  /rest/account -> get the current user.
+     * GET  /account -> get the current user.
      */
-    @RequestMapping(value = "/rest/account",
+    @RequestMapping(value = "/account",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -166,9 +166,9 @@ public class AccountResource {
     }
 
     /**
-     * POST  /rest/account -> update the current user information.
+     * POST  /account -> update the current user information.
      */
-    @RequestMapping(value = "/rest/account",
+    @RequestMapping(value = "/account",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -182,9 +182,9 @@ public class AccountResource {
     }
 
     /**
-     * POST  /rest/change_password -> changes the current user's password
+     * POST  /change_password -> changes the current user's password
      */
-    @RequestMapping(value = "/rest/account/change_password",
+    @RequestMapping(value = "/account/change_password",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -197,9 +197,9 @@ public class AccountResource {
     }<% if (authenticationType == 'cookie') { %>
 
     /**
-     * GET  /rest/account/sessions -> get the current open sessions.
+     * GET  /account/sessions -> get the current open sessions.
      */
-    @RequestMapping(value = "/rest/account/sessions",
+    @RequestMapping(value = "/account/sessions",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -219,7 +219,7 @@ public class AccountResource {
     }
 
     /**
-     * DELETE  /rest/account/sessions?series={series} -> invalidate an existing session.
+     * DELETE  /account/sessions?series={series} -> invalidate an existing session.
      *
      * - You can only delete your own sessions, not any other user's session
      * - If you delete one of your existing sessions, and that you are currently logged in on that session, you will
@@ -231,7 +231,7 @@ public class AccountResource {
      *   There is an API to invalidate the current session, but there is no API to check which session uses which
      *   cookie.
      */
-    @RequestMapping(value = "/rest/account/sessions/{series}",
+    @RequestMapping(value = "/account/sessions/{series}",
             method = RequestMethod.DELETE)
     @Timed
     public void invalidateSession(@PathVariable String series) throws UnsupportedEncodingException {

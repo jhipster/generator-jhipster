@@ -2,7 +2,7 @@
 
 angular.module('<%=angularAppName%>')
     .factory('Activate', function ($resource) {
-        return $resource('app/rest/activate', {}, {
+        return $resource('api/activate', {}, {
             'get': { method: 'GET', params: {}, isArray: false}
         });
     });

@@ -48,7 +48,7 @@ public class OAuth2ServerConfiguration {
                 .authenticationEntryPoint(authenticationEntryPoint)
             .and()
                 .logout()
-                .logoutUrl("/app/logout")
+                .logoutUrl("/api/logout")
                 .logoutSuccessHandler(ajaxLogoutSuccessHandler)
             .and()
                 .csrf()
@@ -60,10 +60,10 @@ public class OAuth2ServerConfiguration {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
                 .authorizeRequests()
-                .antMatchers("/app/rest/authenticate").permitAll()
-                .antMatchers("/app/rest/register").permitAll()
-                .antMatchers("/app/rest/logs/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/app/rest/**").authenticated()<% if (websocket == 'atmosphere') { %>
+                .antMatchers("/api/authenticate").permitAll()
+                .antMatchers("/api/register").permitAll()
+                .antMatchers("/api/logs/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
+                .antMatchers("/api/**").authenticated()<% if (websocket == 'atmosphere') { %>
                 .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/websocket/**").permitAll()<% } %>
                 .antMatchers("/metrics/**").hasAuthority(AuthoritiesConstants.ADMIN)
