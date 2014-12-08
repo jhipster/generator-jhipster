@@ -656,7 +656,7 @@ JhipsterGenerator.prototype.app = function app() {
     // Angular JS views
     this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
 
-    this.template(webappDir + '/_app.js', webappDir + 'app.js', this, {});
+    this.template(webappDir + '/app/_app.js', webappDir + 'app/app.js', this, {});
     // Client Components
     this.template(webappDir + '/components/admin/_audits.service.js', webappDir + 'components/admin/audits.service.js', this, {});
     this.template(webappDir + '/components/admin/_configuration.service.js', webappDir + 'components/admin/configuration.service.js', this, {});
@@ -767,7 +767,7 @@ JhipsterGenerator.prototype.app = function app() {
         'bower_components/angular-local-storage/dist/angular-local-storage.js',
         'bower_components/angular-cache-buster/angular-cache-buster.js',
 
-        'app.js',
+        'app/app.js',
         'components/auth/auth.service.js',
         'components/auth/principal.service.js',
         'components/auth/services/account.service.js',

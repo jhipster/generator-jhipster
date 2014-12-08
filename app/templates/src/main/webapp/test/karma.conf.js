@@ -25,7 +25,7 @@ module.exports = function (config) {
             'bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js',
             'bower_components/angular-local-storage/dist/angular-local-storage.min.js',
             'bower_components/angular-cache-buster/angular-cache-buster.js',
-            'app.js',
+            'app/app.js',
             'app/**/*.js',
             'components/**/*.js',
             'test/**/!(karma.conf).js'
