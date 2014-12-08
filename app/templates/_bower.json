@@ -28,6 +28,5 @@
   },
   "resolutions": {
     "angular": "1.3.4"
-  },
-  "appName": "<%= angularAppName%>"
+  }
 }

@@ -32,8 +32,7 @@ module.exports = function (grunt) {
         yeoman: {
             // configurable paths
             app: require('./bower.json').appPath || 'app',
-            dist: 'src/main/webapp/dist',
-            name: require('./bower.json').appName
+            dist: 'src/main/webapp/dist'
         },
         watch: {<% if (useCompass) { %>
             compass: {
@@ -322,7 +321,7 @@ module.exports = function (grunt) {
                 src: ['app/**/*.html', 'components/**/*.html',],
                 dest: '.tmp/templates/templates.js',
                 options: {
-                    module: '<%%= yeoman.name %>',
+                    module: '<%= angularAppName%>',
                     usemin: 'scripts/scripts.js',
                     htmlmin:  {
                         removeCommentsFromCDATA: true,
