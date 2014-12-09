@@ -153,7 +153,7 @@ public class UserService {
             final User currentUser = userRepository.findOne(SecurityUtils.getCurrentLogin()).get();
             currentUser.getAuthorities().size(); // eagerly load the association
             <%} else {%>
-        final User user = userRepository.findOne(SecurityUtils.getCurrentLogin()).map(u -> u..getAuthorities().size());
+            final User currentUser = userRepository.findOne(SecurityUtils.getCurrentLogin());
             currentUser.getAuthorities().size(); // eagerly load the association
             <%}%>
         return currentUser;

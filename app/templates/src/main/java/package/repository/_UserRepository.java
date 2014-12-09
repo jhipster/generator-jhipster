@@ -1,12 +1,17 @@
 package <%=packageName%>.repository;
 
 import <%=packageName%>.domain.User;
-import org.joda.time.DateTime;<% if (databaseType == 'sql') { %>
 
+import org.joda.time.DateTime;
+<% if (databaseType == 'sql') { %>
+<% if (javaVersion == '8') { %>
 import org.springframework.data.repository.Repository;
-    import <%=packageName%>.repository.custom.Java8JpaRepository;
     import java.util.Optional;
-import org.springframework.data.jpa.repository.Query;<% } %><% if (databaseType == 'nosql') { %>
+<% } else {%>
+    import org.springframework.data.jpa.repository.JpaRepository;
+<%}%>
+import org.springframework.data.jpa.repository.Query;<% } %>
+<% if (databaseType == 'nosql') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
  <% } %>
@@ -25,7 +30,7 @@ import java.util.List;
 
 
 <% if (javaVersion == '8') { %>
-    public interface UserRepository extends <% if (databaseType == 'sql') { %>Repository<% } %><% if (databaseType == 'nosql') { %>MongoRepository<% } %><User, String> {
+    public interface UserRepository extends <% if (databaseType == 'sql') { %>Repository<% } %><% if (databaseType == 'nosql') { %>Repository<% } %><User, String> {
     <% if (databaseType == 'sql') { %>
     @Query("select u from User u where u.activationKey = ?1")<% } %><% if (databaseType == 'nosql') { %>
     @Query("{activationKey: ?0}")<% } %>
@@ -40,12 +45,11 @@ import java.util.List;
 
     Optional<User> findOne(String id);
 
-    Optional<User> findByLastname(String lastname);
+    Optional<User> findByLastName(String lastname);
 
     User save(User t);
 
     void delete(User t);
-
 
     }
 <% } else { %>
