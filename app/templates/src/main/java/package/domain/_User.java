@@ -17,8 +17,8 @@ import java.util.Set;
 
 /**
  * A user.
- */
-<% if (databaseType == 'sql') { %>@Entity
+ */<% if (databaseType == 'sql') { %>
+@Entity
 @Table(name = "T_USER")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'nosql') { %>
 @Document(collection = "T_USER")<% } %>

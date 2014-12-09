@@ -12,8 +12,11 @@ public class OAuth2AuthenticationRefreshToken {
 
     @Id
     private String id;
+
     private String tokenId;
+
     private OAuth2RefreshToken oAuth2RefreshToken;
+
     private OAuth2Authentication authentication;
 
     public OAuth2AuthenticationRefreshToken(OAuth2RefreshToken oAuth2RefreshToken, OAuth2Authentication authentication) {

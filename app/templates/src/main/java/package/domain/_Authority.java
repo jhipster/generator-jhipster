@@ -14,8 +14,8 @@ import java.io.Serializable;
 
 /**
  * An authority (a security role) used by Spring Security.
- */
-<% if (databaseType == 'sql') { %>@Entity
+ */<% if (databaseType == 'sql') { %>
+@Entity
 @Table(name = "T_AUTHORITY")<% if (hibernateCache != 'no') { %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType == 'nosql') { %>
 @Document(collection = "T_AUTHORITY")<% } %>

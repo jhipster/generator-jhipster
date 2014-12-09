@@ -14,12 +14,19 @@ public class OAuth2AuthenticationAccessToken implements Serializable {
 
     @Id
     private String id;
+
     private String tokenId;
+
     private OAuth2AccessToken oAuth2AccessToken;
+
     private String authenticationId;
+
     private String userName;
+
     private String clientId;
+
     private OAuth2Authentication authentication;
+
     private String refreshToken;
 
     @PersistenceConstructor

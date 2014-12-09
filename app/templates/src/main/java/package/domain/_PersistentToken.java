@@ -17,13 +17,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
-
 /**
  * Persistent tokens are used by Spring Security to automatically log in users.
  *
  * @see <%=packageName%>.security.CustomPersistentRememberMeServices
- */
-<% if (databaseType == 'sql') { %>@Entity
+ */<% if (databaseType == 'sql') { %>
+@Entity
 @Table(name = "T_PERSISTENT_TOKEN")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'nosql') { %>
 @Document(collection = "T_PERSISTENT_TOKEN")<% } %>

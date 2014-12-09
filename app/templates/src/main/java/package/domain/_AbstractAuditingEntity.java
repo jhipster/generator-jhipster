@@ -18,8 +18,8 @@ import javax.validation.constraints.NotNull;
 /**
  * Base abstract class for entities which will hold definitions for created, last modified by and created,
  * last modified by date.
- */
-<% if (databaseType == 'sql') { %>@MappedSuperclass
+ */<% if (databaseType == 'sql') { %>
+@MappedSuperclass
 @Audited
 @EntityListeners(AuditingEntityListener.class)<% } %>
 public abstract class AbstractAuditingEntity {
