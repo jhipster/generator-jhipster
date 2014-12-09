@@ -17,6 +17,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;<% if (fieldsContainLocalDate == true) { %>
 import org.joda.time.LocalDate;<% } %><% if (fieldsContainDateTime == true) { %>
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;<% } %><% if (fieldsContainBigDecimal == true) { %>
 import java.math.BigDecimal;<% } %>
@@ -40,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == true) { %>
 
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy/MM/dd'T'HH:mm:ss");<% } %>
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");<% } %>
 <% for (fieldId in fields) {
     var defaultValueName = 'DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase();
     var updatedValueName = 'UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase();
@@ -60,8 +61,8 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
     private static final LocalDate <%=defaultValueName %> = new LocalDate(0L);
     private static final LocalDate <%=updatedValueName %> = new LocalDate();<% } else if (fields[fieldId].fieldType == 'DateTime') { %>
 
-    private static final DateTime <%=defaultValueName %> = new DateTime(0L);
-    private static final DateTime <%=updatedValueName %> = new DateTime().withMillisOfSecond(0);
+    private static final DateTime <%=defaultValueName %> = new DateTime(0L, DateTimeZone.UTC);
+    private static final DateTime <%=updatedValueName %> = new DateTime(DateTimeZone.UTC).withMillisOfSecond(0);
     private static final String <%=defaultValueName %>_STR = dateTimeFormatter.print(<%= defaultValueName %>);<% } else if (fields[fieldId].fieldType == 'Boolean') { %>
 
     private static final Boolean <%=defaultValueName %> = false;
@@ -104,8 +105,9 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
         // Validate the <%= entityClass %> in the database
         List<<%= entityClass %>> <%= entityInstance %>s = <%= entityInstance %>Repository.findAll();
         assertThat(<%= entityInstance %>s).hasSize(1);
-        <%= entityClass %> test<%= entityClass %> = <%= entityInstance %>s.iterator().next();<% for (fieldId in fields) {%>
-        assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldNameCapitalized%>()).isEqualTo(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>
+        <%= entityClass %> test<%= entityClass %> = <%= entityInstance %>s.iterator().next();<% for (fieldId in fields) { if (fields[fieldId].fieldType == 'DateTime') { %>
+        assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldNameCapitalized%>().toDateTime(DateTimeZone.UTC)).isEqualTo(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } else { %>
+        assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldNameCapitalized%>()).isEqualTo(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% }} %>
     }
 
     @Test<% if (databaseType == 'sql') { %>
@@ -117,7 +119,6 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
         // Get all the <%= entityInstance %>s
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityInstance %>s"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
                 .andExpect(jsonPath("$.[0].id").value(<%= entityInstance %>.getId().intValue()))<% } %><% if (databaseType == 'nosql') { %>
                 .andExpect(jsonPath("$.[0].id").value(<%= entityInstance %>.getId()))<% } %><% for (fieldId in fields) {%>
@@ -163,8 +164,9 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
         // Validate the <%= entityClass %> in the database
         List<<%= entityClass %>> <%= entityInstance %>s = <%= entityInstance %>Repository.findAll();
         assertThat(<%= entityInstance %>s).hasSize(1);
-        <%= entityClass %> test<%= entityClass %> = <%= entityInstance %>s.iterator().next();<% for (fieldId in fields) {%>
-        assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldNameCapitalized%>()).isEqualTo(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>
+        <%= entityClass %> test<%= entityClass %> = <%= entityInstance %>s.iterator().next();<% for (fieldId in fields) { if (fields[fieldId].fieldType == 'DateTime') { %>
+        assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldNameCapitalized%>().toDateTime(DateTimeZone.UTC)).isEqualTo(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } else { %>
+        assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldNameCapitalized%>()).isEqualTo(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } } %>
     }
 
     @Test<% if (databaseType == 'sql') { %>

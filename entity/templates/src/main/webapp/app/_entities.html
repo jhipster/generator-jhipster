@@ -26,6 +26,7 @@
                         </div>
 <% for (fieldId in fields) {
     var fieldInputType = 'text';
+    var ngModelOption = '';
     if (fields[fieldId].fieldType == 'Integer' || fields[fieldId].fieldType == 'Long') {
         fieldInputType = 'number';
     } else if (fields[fieldId].fieldType == 'LocalDate') {
@@ -38,7 +39,7 @@
                         <div class="form-group">
                             <label><%=fields[fieldId].fieldNameCapitalized%></label>
                             <input type="<%=fieldInputType%>" class="form-control"
-                                   ng-model="<%=entityInstance %>.<%=fields[fieldId].fieldName%>">
+                                   ng-model="<%=entityInstance %>.<%=fields[fieldId].fieldName%>"<% if (fields[fieldId].fieldType == 'DateTime'){%> ng-model-options="{timezone: 'UTC'}"<%}%>>
                         </div><% } %>
 <% for (relationshipId in relationships) {
     if (relationships[relationshipId].relationshipType == 'many-to-one') {
