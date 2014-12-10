@@ -55,6 +55,7 @@
     <logger name="com.mangofactory.swagger" level="WARN"/>
     <logger name="com.wordnik.swagger" level="warn"/><% if (databaseType == 'sql') { %>
     <logger name="liquibase" level="warn"/><% } %>
+    <logger name="sun.rmi.transport" level="warn"/>
 
     <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
         <resetJUL>true</resetJUL>
