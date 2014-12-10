@@ -41,7 +41,7 @@ public class UserDetailsService implements org.springframework.security.core.use
         final String lowercaseLogin = login.toLowerCase();
         <%if (javaVersion == '8') {%>
 
-            final Optional<User> userFromDatabase =  userRepository.findOne(lowercaseLogin);
+            final Optional<User> userFromDatabase =  userRepository.findOneByLogin(lowercaseLogin);
             final boolean activated = userFromDatabase.map(u -> u.getActivated()).orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database"));
             if (!activated) {
                 throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
@@ -58,7 +58,7 @@ public class UserDetailsService implements org.springframework.security.core.use
             <%} else {%>
 
 
-            final User userFromDatabase = userRepository.findOne(lowercaseLogin);
+            final User userFromDatabase = userRepository.findOneByLogin(lowercaseLogin);
             if (userFromDatabase == null) {
                 throw new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database");
             } else if (!userFromDatabase.getActivated()) {

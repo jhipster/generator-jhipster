@@ -112,7 +112,7 @@ public class CustomPersistentRememberMeServices extends
 
         log.debug("Creating new persistent login for user {}", login);
         <% if (javaVersion == '8') {%>
-            final PersistentToken token = userRepository.findOne(login).map(u -> {
+            final PersistentToken token = userRepository.findOneByLogin(login).map(u -> {
                 PersistentToken t = new PersistentToken();
                 t.setSeries(generateSeriesData());
                 t.setUser(u);
@@ -130,7 +130,7 @@ public class CustomPersistentRememberMeServices extends
         }
 
             <% }else { %>
-                User user = userRepository.findOne(login);
+                User user = userRepository.findOneByLogin(login);
 
         PersistentToken token = new PersistentToken();
         token.setSeries(generateSeriesData());

@@ -31,39 +31,34 @@ import java.util.List;
 
 <% if (javaVersion == '8') { %>
     public interface UserRepository extends <% if (databaseType == 'sql') { %>Repository<% } %><% if (databaseType == 'nosql') { %>Repository<% } %><User, String> {
-    <% if (databaseType == 'sql') { %>
-    @Query("select u from User u where u.activationKey = ?1")<% } %><% if (databaseType == 'nosql') { %>
-    @Query("{activationKey: ?0}")<% } %>
-    Optional<User> getUserByActivationKey(String activationKey);
-    <% if (databaseType == 'sql') { %>
-    @Query("select u from User u where u.activated = false and u.createdDate > ?1")<% } %><% if (databaseType == 'nosql') { %>
-    @Query("{activation_key: 'false', createdDate: {$gt: ?0}}")<% } %>
-    List<User> findNotActivatedUsersByCreationDateBefore(DateTime dateTime);
 
+    Optional<User> findOneByActivationKey(String activationKey);
+
+
+    Optional<User> getUserByActivationKey(String activationKey);
+
+
+    List<User> findAllByActivatedIsFalseAndCreatedDateBefore(DateTime dateTime);
 
     Optional<User> findOneByEmail(String email);
 
-    Optional<User> findOne(String id);
+    Optional<User> findOneByLogin(String login);
 
-    Optional<User> findByLastName(String lastname);
-
-    User save(User t);
+    Optional<User> save(User t);
 
     void delete(User t);
 
     }
 <% } else { %>
     public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRepository<% } %><% if (databaseType == 'nosql') { %>MongoRepository<% } %><User, String> {
-        <% if (databaseType == 'sql') { %>
-        @Query("select u from User u where u.activationKey = ?1")<% } %><% if (databaseType == 'nosql') { %>
-        @Query("{activationKey: ?0}")<% } %>
-        User getUserByActivationKey(String activationKey);
-        <% if (databaseType == 'sql') { %>
-        @Query("select u from User u where u.activated = false and u.createdDate > ?1")<% } %><% if (databaseType == 'nosql') { %>
-        @Query("{activation_key: 'false', createdDate: {$gt: ?0}}")<% } %>
-        List<User> findNotActivatedUsersByCreationDateBefore(DateTime dateTime);
 
-        User findOneByEmail(String email);
+    User findOneByActivationKey(String activationKey);
+
+    List<User> findAllByActivatedIsFalseAndCreatedDateBefore(DateTime dateTime);
+
+    User findOneByLogin(String login);
+
+    User findOneByEmail(String email);
     }
 
 <% } %>

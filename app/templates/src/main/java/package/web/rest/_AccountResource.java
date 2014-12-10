@@ -57,7 +57,7 @@ public class AccountResource {
 
     public ResponseEntity<?> registerAccount(@Valid @RequestBody UserDTO userDTO, HttpServletRequest request)
     {<% if (javaVersion == '8') { %>
-        return userRepository.findOne(userDTO.getLogin())
+        return userRepository.findOneByLogin(userDTO.getLogin())
             .map(user -> new ResponseEntity<>("login already in use", HttpStatus.BAD_REQUEST))
             .orElseGet(() -> userRepository.findOneByEmail(userDTO.getEmail())
                 .map(user -> new ResponseEntity<>("e-mail address already in use", HttpStatus.BAD_REQUEST))
@@ -213,7 +213,7 @@ public class AccountResource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<List<PersistentToken>> getCurrentSessions() {<% if (javaVersion == '8') { %>
-        return userRepository.findOne(SecurityUtils.getCurrentLogin())
+        return userRepository.findOneByLogin(SecurityUtils.getCurrentLogin())
             .map(user -> new ResponseEntity<>(
                 persistentTokenRepository.findByUser(user),
                 HttpStatus.OK))
@@ -247,13 +247,13 @@ public class AccountResource {
         String decodedSeries = URLDecoder.decode(series, "UTF-8");
 
      <% if (javaVersion == '8') { %>
-                userRepository.findOne(SecurityUtils.getCurrentLogin()).ifPresent(u -> {
+                userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).ifPresent(u -> {
                     persistentTokenRepository.findByUser(u).stream()
                         .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))
                         .findAny().ifPresent(t -> persistentTokenRepository.delete(decodedSeries));
         });
                 <% } else { %>
-               final User user = userRepository.findOne(SecurityUtils.getCurrentLogin());
+               final User user = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
         List<PersistentToken> persistentTokens = persistentTokenRepository.findByUser(user);
         for (PersistentToken persistentToken : persistentTokens) {
             if (StringUtils.equals(persistentToken.getSeries(), decodedSeries)) {

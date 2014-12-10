@@ -52,10 +52,10 @@ public class UserServiceTest {<% if (authenticationType == 'cookie') { %>
     public void testRemoveOldPersistentTokens() {
 
             <% if (javaVersion == '8') { %>
-            User admin = userRepository.findOne("admin").get();
+            User admin = userRepository.findOneByLogin("admin").get();
 
                 <%}else{%>
-                User admin = userRepository.findOne("admin");
+                User admin = userRepository.findOneByLogin("admin");
 
                 <%}%>
             int existingCount = persistentTokenRepository.findByUser(admin).size();

@@ -41,7 +41,7 @@ public class UserResource {
     @RolesAllowed(AuthoritiesConstants.ADMIN)<% if (javaVersion == '8') { %>
     ResponseEntity<User> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
-        return userRepository.findOne(login)
+        return userRepository.findOneByLogin(login)
 
                 .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));

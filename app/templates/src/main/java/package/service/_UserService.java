@@ -48,7 +48,7 @@ public class UserService {
     <% if (javaVersion == '8') { %>
     public  Optional<User> activateRegistration(String key){
             log.debug("Activating user for activation key {}", key);
-            return userRepository.getUserByActivationKey(key)
+            return userRepository.findOneByActivationKey(key)
                 .map(user -> {
                     // activate given user for the registration key.
                     user.setActivated(true);
@@ -63,7 +63,7 @@ public class UserService {
 
             public  User activateRegistration(String key) {
             log.debug("Activating user for activation key {}", key);
-            final User user = userRepository.getUserByActivationKey(key);
+            final User user = userRepository.findOneByActivationKey(key);
 
         // activate given user for the registration key.
         if (user != null) {
@@ -106,7 +106,7 @@ public class UserService {
     public void updateUserInformation(String firstName, String lastName, String email) {
 
         <% if (javaVersion == '8') { %>
-            userRepository.findOne(SecurityUtils.getCurrentLogin()).ifPresent(u -> {
+            userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).ifPresent(u -> {
                 u.setFirstName(firstName);
                 u.setLastName(lastName);
                 u.setEmail(email);
@@ -114,7 +114,7 @@ public class UserService {
                 log.debug("Changed Information for User: {}", u);
             });
             <%} else {%>
-            final User currentUser = userRepository.findOne(SecurityUtils.getCurrentLogin());
+            final User currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
 
         currentUser.setFirstName(firstName);
         currentUser.setLastName(lastName);
@@ -128,7 +128,7 @@ public class UserService {
     public void changePassword(String password) {
 
         <% if (javaVersion == '8') { %>
-            userRepository.findOne(SecurityUtils.getCurrentLogin()).ifPresent(u-> {
+            userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).ifPresent(u-> {
             String encryptedPassword = passwordEncoder.encode(password);
             u.setPassword(encryptedPassword);
             userRepository.save(u);
@@ -137,7 +137,7 @@ public class UserService {
 
             <%} else {%>
 
-        User currentUser = userRepository.findOne(SecurityUtils.getCurrentLogin());
+        User currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
         String encryptedPassword = passwordEncoder.encode(password);
         currentUser.setPassword(encryptedPassword);
             userRepository.save(currentUser);
@@ -150,10 +150,10 @@ public class UserService {
     public User getUserWithAuthorities() {
 
         <% if (javaVersion == '8') { %>
-            final User currentUser = userRepository.findOne(SecurityUtils.getCurrentLogin()).get();
+            final User currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).get();
             currentUser.getAuthorities().size(); // eagerly load the association
             <%} else {%>
-            final User currentUser = userRepository.findOne(SecurityUtils.getCurrentLogin());
+            final User currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
             currentUser.getAuthorities().size(); // eagerly load the association
             <%}%>
         return currentUser;
