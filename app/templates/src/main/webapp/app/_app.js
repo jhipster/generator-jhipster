@@ -12,7 +12,7 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
                 .error(function() {
                     if ($rootScope.toState.data.roles.length > 0) {
                         Auth.logout();
-                        $state.go('login')
+                        $state.go('login');
                     }
                 });
 
@@ -26,17 +26,17 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
             });
         });
 
-        $rootScope.$on("$stateChangeSuccess",  function(event, toState, toParams, fromState, fromParams) {
-            $rootScope.previousState_name = fromState.name;
-            $rootScope.previousState_params = fromParams;
+        $rootScope.$on('$stateChangeSuccess',  function(event, toState, toParams, fromState, fromParams) {
+            $rootScope.previousStateName = fromState.name;
+            $rootScope.previousStateParams = fromParams;
         });
 
         $rootScope.back = function() {
             // If previous state is 'activate' or do not exist go to 'home'
-            if ($rootScope.previousState_name === 'activate' || $state.get($rootScope.previousState_name) === null) {
+            if ($rootScope.previousStateName === 'activate' || $state.get($rootScope.previousStateName) === null) {
                 $state.go('home');
             } else {
-                $state.go($rootScope.previousState_name,$rootScope.previousState_params);
+                $state.go($rootScope.previousStateName, $rootScope.previousStateParams);
             }
         };
     })
