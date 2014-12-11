@@ -25,6 +25,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.security.SecureRandom;
 import java.util.Arrays;
 
+<% if (javaVersion == '8') {%>
+    import org.springframework.security.core.userdetails.UsernameNotFoundException;
+<%}%>
+
 /**
  * Custom implementation of Spring Security's RememberMeServices.
  * <p/>
@@ -107,7 +111,26 @@ public class CustomPersistentRememberMeServices extends
         String login = successfulAuthentication.getName();
 
         log.debug("Creating new persistent login for user {}", login);
-        User user = userRepository.findOneByLogin(login);
+        <% if (javaVersion == '8') {%>
+            final PersistentToken token = userRepository.findOneByLogin(login).map(u -> {
+                PersistentToken t = new PersistentToken();
+                t.setSeries(generateSeriesData());
+                t.setUser(u);
+                t.setTokenValue(generateTokenData());
+                t.setTokenDate(new LocalDate());
+                t.setIpAddress(request.getRemoteAddr());
+                t.setUserAgent(request.getHeader("User-Agent"));
+                return t;
+            }).orElseThrow(() -> new UsernameNotFoundException("User " + login + " was not found in the database"));
+        try {
+            <% if (databaseType == 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'nosql') { %>persistentTokenRepository.save(token);<% } %>
+            addCookie(token, request, response);
+        } catch (DataAccessException e) {
+            log.error("Failed to save persistent token ", e);
+        }
+
+            <% }else { %>
+                User user = userRepository.findOneByLogin(login);
 
         PersistentToken token = new PersistentToken();
         token.setSeries(generateSeriesData());
@@ -122,6 +145,7 @@ public class CustomPersistentRememberMeServices extends
         } catch (DataAccessException e) {
             log.error("Failed to save persistent token ", e);
         }
+                <% } %>
     }
 
     /**

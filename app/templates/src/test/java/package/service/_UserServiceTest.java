@@ -16,6 +16,11 @@ import org.springframework.transaction.annotation.Transactional;<% } %>
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+<% if (javaVersion == '8') { %>
+
+import java.util.Optional;
+    <%}%>
+
 import javax.inject.Inject;
 
 import java.util.List;
@@ -45,8 +50,15 @@ public class UserServiceTest {<% if (authenticationType == 'cookie') { %>
 
     @Test
     public void testRemoveOldPersistentTokens() {
-        User admin = userRepository.findOneByLogin("admin");
-        int existingCount = persistentTokenRepository.findByUser(admin).size();
+
+            <% if (javaVersion == '8') { %>
+            User admin = userRepository.findOneByLogin("admin").get();
+
+                <%}else{%>
+                User admin = userRepository.findOneByLogin("admin");
+
+                <%}%>
+            int existingCount = persistentTokenRepository.findByUser(admin).size();
         generateUserToken(admin, "1111-1111", new LocalDate());
         LocalDate now = new LocalDate();
         generateUserToken(admin, "2222-2222", now.minusDays(32));

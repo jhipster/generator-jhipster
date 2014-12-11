@@ -44,19 +44,26 @@ public class UserService {
     @Inject
     private AuthorityRepository authorityRepository;
 
-    public User activateRegistration(String key) {
-        log.debug("Activating user for activation key {}", key);<% if (javaVersion == '8') { %>
-        return userRepository.findOneByActivationKey(key)
-            .map(user -> {
-                // activate given user for the registration key.
-                user.setActivated(true);
-                user.setActivationKey(null);
-                userRepository.save(user);
-                log.debug("Activated user: {}", user);
-                return user;
-            })
-            .orElse(null);<% } else { %>
-        User user = userRepository.findOneByActivationKey(key);
+
+    <% if (javaVersion == '8') { %>
+    public  Optional<User> activateRegistration(String key){
+            log.debug("Activating user for activation key {}", key);
+            return userRepository.findOneByActivationKey(key)
+                .map(user -> {
+                    // activate given user for the registration key.
+                    user.setActivated(true);
+                    user.setActivationKey(null);
+                    userRepository.save(user);
+                    log.debug("Activated user: {}", user);
+                    return user;
+                })
+                .empty();
+        }
+            <% } else { %>
+
+            public  User activateRegistration(String key) {
+            log.debug("Activating user for activation key {}", key);
+            final User user = userRepository.findOneByActivationKey(key);
 
         // activate given user for the registration key.
         if (user != null) {
@@ -65,8 +72,12 @@ public class UserService {
             userRepository.save(user);
             log.debug("Activated user: {}", user);
         }
-        return user;<% } %>
-    }
+
+        return user;
+        }
+
+            <% } %>
+
 
     public User createUserInformation(String login, String password, String firstName, String lastName, String email,
                                       String langKey) {
@@ -93,28 +104,62 @@ public class UserService {
     }
 
     public void updateUserInformation(String firstName, String lastName, String email) {
-        User currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
+
+        <% if (javaVersion == '8') { %>
+            userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).ifPresent(u -> {
+                u.setFirstName(firstName);
+                u.setLastName(lastName);
+                u.setEmail(email);
+                userRepository.save(u);
+                log.debug("Changed Information for User: {}", u);
+            });
+            <%} else {%>
+            final User currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
+
         currentUser.setFirstName(firstName);
         currentUser.setLastName(lastName);
         currentUser.setEmail(email);
         userRepository.save(currentUser);
-        log.debug("Changed Information for User: {}", currentUser);
+            log.debug("Changed Information for User: {}", currentUser);
+            <%}%>
+
     }
 
     public void changePassword(String password) {
+
+        <% if (javaVersion == '8') { %>
+            userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).ifPresent(u-> {
+            String encryptedPassword = passwordEncoder.encode(password);
+            u.setPassword(encryptedPassword);
+            userRepository.save(u);
+                log.debug("Changed password for User: {}", u);
+        } );
+
+            <%} else {%>
+
         User currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
         String encryptedPassword = passwordEncoder.encode(password);
         currentUser.setPassword(encryptedPassword);
-        userRepository.save(currentUser);
-        log.debug("Changed password for User: {}", currentUser);
+            userRepository.save(currentUser);
+            log.debug("Changed password for User: {}", currentUser);
+            <%}%>
+
     }
 <% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true)<% } %>
     public User getUserWithAuthorities() {
-        User currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
-        currentUser.getAuthorities().size(); // eagerly load the association
+
+        <% if (javaVersion == '8') { %>
+            final User currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).get();
+            currentUser.getAuthorities().size(); // eagerly load the association
+            <%} else {%>
+            final User currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
+            currentUser.getAuthorities().size(); // eagerly load the association
+            <%}%>
         return currentUser;
-    }<% if (authenticationType == 'cookie') { %>
+    }
+
+    <% if (authenticationType == 'cookie') { %>
 
     /**
      * Persistent Token are used for providing automatic authentication, they should be automatically deleted after
@@ -127,13 +172,26 @@ public class UserService {
     @Scheduled(cron = "0 0 0 * * ?")
     public void removeOldPersistentTokens() {
         LocalDate now = new LocalDate();
-        List<PersistentToken> tokens = persistentTokenRepository.findByTokenDateBefore(now.minusMonths(1));
-        for (PersistentToken token : tokens) {
-            log.debug("Deleting token {}", token.getSeries());<% if (databaseType == 'sql') { %>
-            User user = token.getUser();
-            user.getPersistentTokens().remove(token);<% } %>
-            persistentTokenRepository.delete(token);
-        }
+            <% if (javaVersion == '8') { %>
+                persistentTokenRepository.findByTokenDateBefore(now.minusMonths(1)).stream().forEach(token ->{
+                        log.debug("Deleting token {}", token.getSeries());
+                        User user = token.getUser();
+                        user.getPersistentTokens().remove(token);
+                        persistentTokenRepository.delete(token);
+                    });
+
+
+            <% }else { %>
+            List<PersistentToken> tokens = persistentTokenRepository.findByTokenDateBefore(now.minusMonths(1));
+            for (PersistentToken token : tokens) {
+                log.debug("Deleting token {}", token.getSeries());<% if (databaseType == 'sql') { %>
+                    User user = token.getUser();
+                    user.getPersistentTokens().remove(token);<% } %>
+                persistentTokenRepository.delete(token);
+            }
+
+            <% } %>
+
     }<% } %>
 
     /**
