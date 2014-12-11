@@ -13,20 +13,19 @@ describe('Directive Tests ', function () {
         scope = $rootScope.$new();
         elm = angular.element(html);
         $compile(elm)(scope);
-        $httpBackend.expectGET('i18n/en.json').respond({});
-        $httpBackend.when('GET', 'scripts/i18n/locale-en.json').respond({HEADER: 'Ueberschrift'});
 
         var req = 'protected/authentication_check.gif';
         var regex_friendly_req = req.replace(/\//g, '\\/');
         var expected = new RegExp(regex_friendly_req + '\\?cacheBuster=[0-9]+');
         $httpBackend.expectGET(expected).respond({});
 
-        req = 'api/account';
-        regex_friendly_req = req.replace(/\//g, '\\/');
-        expected = new RegExp(regex_friendly_req + '\\?cacheBuster=[0-9]+');
-        $httpBackend.expectGET(expected).respond({});
-
+        $httpBackend.expectGET('api/account').respond({});
+        $httpBackend.expectGET('i18n/en/global.json').respond({});
+        $httpBackend.expectGET('i18n/en/language.json').respond({});
         $httpBackend.expectGET('components/navbar/navbar.html').respond({});
+        $httpBackend.expectGET('i18n/en/global.json').respond({});
+        $httpBackend.expectGET('i18n/en/language.json').respond({});
+        $httpBackend.expectGET('i18n/en/main.json').respond({});
         $httpBackend.expectGET('app/main/main.html').respond({});
     }));
 

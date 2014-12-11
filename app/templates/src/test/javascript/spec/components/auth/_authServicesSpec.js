@@ -13,14 +13,18 @@ describe('Services Tests ', function () {
             authService = Auth;
             spiedAuthServerProvider = AuthServerProvider;
             //Request on app init
-            $httpBackend.expectGET('i18n/en.json').respond(200, '');
             $httpBackend.expectPOST('api/logout').respond(200, '');
-
             var req = 'protected/authentication_check.gif';
             var regex_friendly_req = req.replace(/\//g, '\\/');
             var expected = new RegExp(regex_friendly_req + '\\?cacheBuster=[0-9]+');
             $httpBackend.expectGET(expected).respond(200, '');
+
+            $httpBackend.expectGET('i18n/en/global.json').respond(200, '');
+            $httpBackend.expectGET('i18n/en/language.json').respond(200, '');
             $httpBackend.expectGET('components/navbar/navbar.html').respond({});
+            $httpBackend.expectGET('i18n/en/global.json').respond(200, '');
+            $httpBackend.expectGET('i18n/en/language.json').respond(200, '');
+            $httpBackend.expectGET('i18n/en/main.json').respond(200, '');
             $httpBackend.expectGET('app/main/main.html').respond({});
         }));
         //make sure no expectations were missed in your tests.

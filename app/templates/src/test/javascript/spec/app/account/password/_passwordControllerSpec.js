@@ -22,8 +22,6 @@ describe('Controllers Tests ', function () {
 
     describe('PasswordController', function () {
         it('should show error if passwords do not match', function () {
-            var expected = new RegExp('protected/authentication_check.gif' + '?cacheBuster=[0-9]+');
-            $httpBackend.expectGET(expected);
             //GIVEN
             $scope.password = 'password1';
             $scope.confirmPassword = 'password2';
