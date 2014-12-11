@@ -54,9 +54,7 @@ public class AccountResource {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-
-    public ResponseEntity<?> registerAccount(@Valid @RequestBody UserDTO userDTO, HttpServletRequest request)
-    {<% if (javaVersion == '8') { %>
+    public ResponseEntity<?> registerAccount(@Valid @RequestBody UserDTO userDTO, HttpServletRequest request) {<% if (javaVersion == '8') { %>
         return userRepository.findOneByLogin(userDTO.getLogin())
             .map(user -> new ResponseEntity<>("login already in use", HttpStatus.BAD_REQUEST))
             .orElseGet(() -> userRepository.findOneByEmail(userDTO.getEmail())
@@ -65,7 +63,6 @@ public class AccountResource {
                     User user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(),
                     userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail().toLowerCase(),
                     userDTO.getLangKey());
-
                     String baseUrl = request.getScheme() + // "http"
                     "://" +                                // "://"
                     request.getServerName() +              // "myhost"
@@ -86,7 +83,6 @@ public class AccountResource {
             user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(),
             userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail().toLowerCase(),
             userDTO.getLangKey());
-
             String baseUrl = request.getScheme() + // "http"
             "://" +                            // "://"
             request.getServerName() +          // "myhost"
@@ -174,20 +170,21 @@ public class AccountResource {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<String> saveAccount(@RequestBody UserDTO userDTO) {
-        <% if (javaVersion == '8') { %>
-            return userRepository.findOneByEmail(userDTO.getEmail()).filter(u -> u.getLogin().equals(SecurityUtils.getCurrentLogin())).map(u -> {
+    public ResponseEntity<String> saveAccount(@RequestBody UserDTO userDTO) {<% if (javaVersion == '8') { %>
+        return userRepository
+            .findOneByEmail(userDTO.getEmail())
+            .filter(u -> u.getLogin().equals(SecurityUtils.getCurrentLogin()))
+            .map(u -> {
                 userService.updateUserInformation(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail());
                 return new ResponseEntity<String>(HttpStatus.OK);
-            }).orElseGet(() -> new ResponseEntity<String>("e-mail address already in use", HttpStatus.BAD_REQUEST));
-        <% }else{%>
+            })
+            .orElseGet(() -> ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body("e-mail address already in use"));<% } else { %>
         User userHavingThisEmail = userRepository.findOneByEmail(userDTO.getEmail());
         if (userHavingThisEmail != null && !userHavingThisEmail.getLogin().equals(SecurityUtils.getCurrentLogin())) {
             return ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body("e-mail address already in use");
         }
         userService.updateUserInformation(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail());
-        return new ResponseEntity<>(HttpStatus.OK);
-        <%}%>
+        return new ResponseEntity<>(HttpStatus.OK);<% } %>
     }
 
     /**
@@ -244,16 +241,13 @@ public class AccountResource {
             method = RequestMethod.DELETE)
     @Timed
     public void invalidateSession(@PathVariable String series) throws UnsupportedEncodingException {
-        String decodedSeries = URLDecoder.decode(series, "UTF-8");
-
-     <% if (javaVersion == '8') { %>
-                userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).ifPresent(u -> {
-                    persistentTokenRepository.findByUser(u).stream()
-                        .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))
-                        .findAny().ifPresent(t -> persistentTokenRepository.delete(decodedSeries));
-        });
-                <% } else { %>
-               final User user = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
+        String decodedSeries = URLDecoder.decode(series, "UTF-8");<% if (javaVersion == '8') { %>
+        userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).ifPresent(u -> {
+            persistentTokenRepository.findByUser(u).stream()
+                .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))
+                .findAny().ifPresent(t -> persistentTokenRepository.delete(decodedSeries));
+        });<% } else { %>
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
         List<PersistentToken> persistentTokens = persistentTokenRepository.findByUser(user);
         for (PersistentToken persistentToken : persistentTokens) {
             if (StringUtils.equals(persistentToken.getSeries(), decodedSeries)) {
