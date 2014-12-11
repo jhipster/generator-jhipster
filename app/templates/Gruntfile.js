@@ -191,7 +191,8 @@ module.exports = function (grunt) {
             },
             all: [
                 'Gruntfile.js',
-                'src/main/webapp/scripts/{,*/}*.js'
+                'src/main/webapp/app/{,*/}*.js',
+                'src/main/webapp/component/{,*/}*.js'
             ]
         },
         coffee: {
