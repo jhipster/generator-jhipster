@@ -14,7 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collection;<%if (javaVersion == '8') {%>
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.List;<%}%>
 
 /**
  * Authenticate a user from the database.
@@ -31,8 +35,24 @@ public class UserDetailsService implements org.springframework.security.core.use
     @Transactional
     public UserDetails loadUserByUsername(final String login) {
         log.debug("Authenticating {}", login);
-        String lowercaseLogin = login.toLowerCase();
+        String lowercaseLogin = login.toLowerCase();<%if (javaVersion == '8') {%>
+        Optional<User> userFromDatabase =  userRepository.findOneByLogin(lowercaseLogin);
+        boolean activated =
+            userFromDatabase.map(u -> u.getActivated())
+            .orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database"));
 
+        if (!activated) {
+            throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
+        }
+
+        List<GrantedAuthority> grantedAuthorities = userFromDatabase.map(u -> u.getAuthorities().stream().map(authority -> {
+        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(authority.getName());
+                return grantedAuthority ;
+            }).collect(Collectors.toList())).orElse(Collections.emptyList());
+
+            return new org.springframework.security.core.userdetails.User(lowercaseLogin,
+                userFromDatabase.map(u -> u.getPassword()).orElse(null),
+                grantedAuthorities);<%} else {%>
         User userFromDatabase = userRepository.findOneByLogin(lowercaseLogin);
         if (userFromDatabase == null) {
             throw new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database");
@@ -45,8 +65,7 @@ public class UserDetailsService implements org.springframework.security.core.use
             GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(authority.getName());
             grantedAuthorities.add(grantedAuthority);
         }
-
-        return new org.springframework.security.core.userdetails.User(lowercaseLogin, userFromDatabase.getPassword(),
-                grantedAuthorities);
+        return new org.springframework.security.core.userdetails.User(lowercaseLogin,
+            userFromDatabase.getPassword(), grantedAuthorities);<% } %>
     }
 }
