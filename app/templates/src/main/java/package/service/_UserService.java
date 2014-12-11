@@ -56,7 +56,7 @@ public class UserService {
                 return user;
             })
             .orElse(null);<% } else { %>
-        User user = userRepository.getUserByActivationKey(key);
+        User user = userRepository.findOneByActivationKey(key);
 
         // activate given user for the registration key.
         if (user != null) {

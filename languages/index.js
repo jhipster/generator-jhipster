@@ -28,7 +28,7 @@ LanguagesGenerator.prototype.askFor = function askFor() {
         message: 'Please choose additional languages to install',
         choices: [
             {name: 'Catalan', value: 'ca'},
-            {name: 'Chinese (traditional)', value: 'zh-tw'},
+            {name: 'Chinese (Traditional)', value: 'zh-tw'},
             {name: 'Danish', value: 'da'},
             {name: 'German', value: 'de'},
             {name: 'Korean', value: 'kr'},

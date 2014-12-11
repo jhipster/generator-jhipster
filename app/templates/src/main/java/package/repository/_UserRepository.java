@@ -6,7 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;<% } %><% if (datab
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
 
 import java.util.List;
-import java.util.Optional;
+<% if (javaVersion == '8') { %>
+    import java.util.Optional;
+<%}%>
 
 <% if (databaseType == 'sql') { %>/**
  * Spring Data JPA repository for the User entity.
@@ -15,7 +17,11 @@ import java.util.Optional;
  */<% } %>
 public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRepository<% } %><% if (databaseType == 'nosql') { %>MongoRepository<% } %><User, String> {
 
+<% if (javaVersion == '8') { %>
     Optional<User> findOneByActivationKey(String activationKey);
+<%} else {%>
+    User findOneByActivationKey(String activationKey);
+    <%}%>
 
     List<User> findAllByActivatedIsFalseAndCreatedDateBefore(DateTime dateTime);
 

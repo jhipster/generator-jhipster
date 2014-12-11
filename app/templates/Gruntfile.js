@@ -343,7 +343,7 @@ module.exports = function (grunt) {
                     dest: '<%%= yeoman.dist %>',
                     src: [
                         '*.html',
-                        'views/*.html',
+                        'views/**/*.html',
                         'images/**/*.{png,gif,webp}',
                         'fonts/*'
                     ]
@@ -388,7 +388,7 @@ module.exports = function (grunt) {
         },
         karma: {
             unit: {
-                configFile: 'src/main/webapp/test/karma.conf.js',
+                configFile: 'src/test/javascript/karma.conf.js',
                 singleRun: true
             }
         },

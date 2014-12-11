@@ -17,7 +17,7 @@ angular.module('<%=angularAppName%>')
                 },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('app/admin/health');
+                        $translatePartialLoader.addPart('health');
                         return $translate.refresh();
                     }]
                 }

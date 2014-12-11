@@ -485,6 +485,7 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/main/java/package/config/_CloudMongoDbConfiguration.java', javaDir + 'config/CloudMongoDbConfiguration.java', this, {});
     }
     this.template('src/main/java/package/config/_DatabaseConfiguration.java', javaDir + 'config/DatabaseConfiguration.java', this, {});
+    this.template('src/main/java/package/config/_JacksonConfiguration.java', javaDir + 'config/JacksonConfiguration.java', this, {});
     this.template('src/main/java/package/config/_LocaleConfiguration.java', javaDir + 'config/LocaleConfiguration.java', this, {});
     this.template('src/main/java/package/config/_LoggingAspectConfiguration.java', javaDir + 'config/LoggingAspectConfiguration.java', this, {});
     this.template('src/main/java/package/config/_MailConfiguration.java', javaDir + 'config/MailConfiguration.java', this, {});
@@ -732,7 +733,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.indexFile = this.engine(this.indexFile, this, {});
 
     // Create Test Javascript files
-    var testJsDir = 'src/main/webapp/test/';
+    var testJsDir = 'src/test/javascript/';
     this.copy(testJsDir + 'karma.conf.js', testJsDir + 'karma.conf.js');
     if (this.websocket == 'atmosphere') {
         this.copy(testJsDir + 'mock/atmosphere.mock.js', testJsDir + 'mock/atmosphere.mock.js');

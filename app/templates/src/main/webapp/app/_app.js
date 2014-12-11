@@ -90,7 +90,7 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
 
         // Initialize angular-translate    
         $translateProvider.useLoader('$translatePartialLoader', {
-            urlTemplate: '/i18n/{lang}/{part}.json'
+            urlTemplate: 'i18n/{lang}/{part}.json'
         });
 
         $translateProvider.preferredLanguage('en');
