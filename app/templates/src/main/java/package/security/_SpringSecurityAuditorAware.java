@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 /**
  * Implementation of AuditorAware based on Spring Security.
  */
-@Component
+@Component(value = "springSecurityAuditorAware")
 public class SpringSecurityAuditorAware implements AuditorAware<String> {
 
     public String getCurrentAuditor() {
