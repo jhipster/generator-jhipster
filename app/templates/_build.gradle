@@ -1,11 +1,10 @@
 buildscript {
     repositories {
-        maven { url 'http://repo.spring.io/libs-snapshot' }
         mavenLocal()
         jcenter()
     }
     dependencies {
-        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.2.0.RC2')
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.2.0.RELEASE')
         classpath('com.moowork.gradle:gradle-node-plugin:0.8')
         classpath('com.moowork.gradle:gradle-grunt-plugin:0.6')
         classpath('be.filipblondeel.gradle:gradle-gulp-plugin:0.1')
