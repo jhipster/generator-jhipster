@@ -67,7 +67,7 @@ gulp.task('compass', function() {
                 css: 'src/main/webapp/styles',
                 generated_images: '.tmp/images/generated',
                 image: 'src/main/webapp/images',
-                javascript: 'src/main/webapp/scripts',
+                javascript: 'src/main/webapp/',
                 font: 'src/main/webapp/styles/fonts',
                 import_path: 'src/main/webapp/bower_components',
                 relative: false
