@@ -50,6 +50,7 @@ module.exports = function (grunt) {
                     'src/main/webapp/**/*.html',
                     'src/main/webapp/**/*.json',
                     '.tmp/styles/**/*.css',
+                    '{.tmp/,}src/main/webapp/app.js',
                     '{.tmp/,}src/main/webapp/app/**/*.js',
                     '{.tmp/,}src/main/webapp/components/**/*.js',
                     'src/main/webapp/images/**/*.{png,jpg,jpeg,gif,webp,svg}'
@@ -191,6 +192,7 @@ module.exports = function (grunt) {
             },
             all: [
                 'Gruntfile.js',
+                'src/main/webapp/app.js',
                 'src/main/webapp/app/{,*/}*.js',
                 'src/main/webapp/components/{,*/}*.js'
             ]
@@ -240,11 +242,11 @@ module.exports = function (grunt) {
                 }
             }
         },<% } %>
+        concat: {
         // not used since Uglify task does concat,
         // but still available if needed
-        /*concat: {
-            dist: {}
-        },*/
+        //    dist: {}
+        },
         rev: {
             dist: {
                 files: {
@@ -319,6 +321,28 @@ module.exports = function (grunt) {
             //     }
             // }
         },
+        ngtemplates:    {
+            dist: {
+                cwd: 'src/main/webapp',
+                src: ['app/**/*.html', 'components/**/*.html',],
+                dest: '.tmp/templates/templates.js',
+                options: {
+                    module: '<%= angularAppName%>',
+                    usemin: 'scripts/scripts.js',
+                    htmlmin:  {
+                        removeCommentsFromCDATA: true,
+                        // https://github.com/yeoman/grunt-usemin/issues/44
+                        collapseWhitespace: true,
+                        collapseBooleanAttributes: true,
+                        conservativeCollapse: true,
+                        removeAttributeQuotes: true,
+                        removeRedundantAttributes: true,
+                        useShortDoctype: true,
+                        removeEmptyAttributes: true
+                    }
+                }
+            }
+        },
         htmlmin: {
             dist: {
                 options: {
@@ -336,7 +360,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: '<%%= yeoman.dist %>',
-                    src: ['*.html', 'views/**/*.html'],
+                    src: ['*.html'],
                     dest: '<%%= yeoman.dist %>'
                 }]
             }
@@ -426,13 +450,14 @@ module.exports = function (grunt) {
                 }
             },
         uglify: {
-            dist: {
-                files: {
-                    '<%%= yeoman.dist %>/scripts/scripts.js': [
-                        '<%%= yeoman.dist %>/scripts/scripts.js'
-                    ]
-                }
-            }
+        // not used since Uglify task does uglify
+        //    dist: {
+        //     files: {
+        //            '<%%= yeoman.dist %>/scripts/scripts.js': [
+        //                '<%%= yeoman.dist %>/scripts/scripts.js'
+        //            ]
+        //        }
+        //    }
         },
         buildcontrol: {
             options: {
@@ -482,6 +507,7 @@ module.exports = function (grunt) {
     grunt.registerTask('build', [
         'clean:dist',
         'useminPrepare',
+        'ngtemplates',
         'concurrent:dist',
         'concat',
         'autoprefixer',
