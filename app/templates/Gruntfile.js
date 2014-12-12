@@ -192,7 +192,7 @@ module.exports = function (grunt) {
             all: [
                 'Gruntfile.js',
                 'src/main/webapp/app/{,*/}*.js',
-                'src/main/webapp/component/{,*/}*.js'
+                'src/main/webapp/components/{,*/}*.js'
             ]
         },
         coffee: {
@@ -203,8 +203,8 @@ module.exports = function (grunt) {
             dist: {
                 files: [{
                     expand: true,
-                    cwd: 'src/main/webapp/scripts',
-                    src: '**/*.coffee',
+                    cwd: 'src/main/webapp',
+                    src: ['app/**/*.coffee', 'components/**/*.coffee'],
                     dest: '.tmp/scripts',
                     ext: '.js'
                 }]
