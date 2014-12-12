@@ -324,7 +324,8 @@ module.exports = function (grunt) {
                     removeAttributeQuotes: true,
                     removeRedundantAttributes: true,
                     useShortDoctype: true,
-                    removeEmptyAttributes: true
+                    removeEmptyAttributes: true,
+                    keepClosingSlash: true
                 },
                 files: [{
                     expand: true,
