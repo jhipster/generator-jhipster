@@ -24,5 +24,7 @@ angular.module('<%=angularAppName%>')
             });
     })
     .controller('ConfigurationController', function ($scope, ConfigurationService) {
-        $scope.configuration = ConfigurationService.get();
+        ConfigurationService.get().then(function(configuration) {
+            $scope.configuration = configuration;
+        });
     });
