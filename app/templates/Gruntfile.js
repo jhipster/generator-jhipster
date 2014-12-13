@@ -50,9 +50,7 @@ module.exports = function (grunt) {
                     'src/main/webapp/**/*.html',
                     'src/main/webapp/**/*.json',
                     '.tmp/styles/**/*.css',
-                    '{.tmp/,}src/main/webapp/app.js',
-                    '{.tmp/,}src/main/webapp/app/**/*.js',
-                    '{.tmp/,}src/main/webapp/components/**/*.js',
+                    '{.tmp/,}src/main/webapp/scripts/**/*.js',
                     'src/main/webapp/images/**/*.{png,jpg,jpeg,gif,webp,svg}'
                 ]
             }
@@ -192,9 +190,7 @@ module.exports = function (grunt) {
             },
             all: [
                 'Gruntfile.js',
-                'src/main/webapp/app.js',
-                'src/main/webapp/app/{,*/}*.js',
-                'src/main/webapp/components/{,*/}*.js'
+                'src/main/webapp/scripts/{,*/}*.js'
             ]
         },
         coffee: {
@@ -205,8 +201,8 @@ module.exports = function (grunt) {
             dist: {
                 files: [{
                     expand: true,
-                    cwd: 'src/main/webapp',
-                    src: ['app/**/*.coffee', 'components/**/*.coffee'],
+                    cwd: 'src/main/webapp/scripts',
+                    src: '**/*.coffee',
                     dest: '.tmp/scripts',
                     ext: '.js'
                 }]
@@ -324,7 +320,7 @@ module.exports = function (grunt) {
         ngtemplates:    {
             dist: {
                 cwd: 'src/main/webapp',
-                src: ['app/**/*.html', 'components/**/*.html',],
+                src: ['scripts/app/**/*.html', 'scripts/components/**/*.html',],
                 dest: '.tmp/templates/templates.js',
                 options: {
                     module: '<%= angularAppName%>',
