@@ -90,7 +90,7 @@ Generator.prototype.dateFormatForLiquibase = function () {
     return year + "" + month + "" + day + "" + hour + "" + minute + "" + second;
 };
 
-Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, lang) {
+Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, resourceDir, lang) {
     this.copyI18nFilesByName(_this, webappDir, 'activate.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'audits.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'configuration.json', lang);
@@ -111,17 +111,17 @@ Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, lan
         this.copyI18nFilesByName(_this, webappDir, 'tracker.json', lang);
     }
 
-    this.templateI18nFilesByName(_this, webappDir, 'global.json', lang);
+    // Template the global file
+    _this.template(webappDir + '/i18n/' + lang + '/_global.json', webappDir + 'i18n/' + lang + '/global.json', this, {});
+
+    // Template the message server side properties
+    _this.template(resourceDir + '/i18n/_messages_' + lang + '.properties', resourceDir + 'i18n/messages_' + lang + '.properties', this, {});
+
 };
 
 Generator.prototype.copyI18nFilesByName = function(_this, webappDir, fileToCopy, lang) {
     _this.copy(webappDir + '/i18n/' + lang + '/' + fileToCopy, webappDir + '/i18n/' + lang + '/' + fileToCopy);
 };
-
-Generator.prototype.templateI18nFilesByName = function(_this, webappDir, fileToTemplate, lang) {
-    _this.template(webappDir + '/i18n/' + lang + '/_' + fileToTemplate, webappDir + 'i18n/' + lang + '/' + fileToTemplate, this, {});
-};
-
 
 Generator.prototype.installNewLanguage = function(language) {
     try {

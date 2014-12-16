@@ -426,21 +426,6 @@ JhipsterGenerator.prototype.app = function app() {
         this.copy(resourceDir + 'h2.server.properties', resourceDir + '.h2.server.properties');
     }
 
-    // i18n resources used by thymeleaf
-    this.template(resourceDir + '/i18n/_messages_en.properties', resourceDir + 'i18n/messages_en.properties', this, {});
-    this.copy(resourceDir + '/i18n/messages_ca.properties', resourceDir + 'i18n/messages_ca.properties');
-    this.copy(resourceDir + '/i18n/messages_da.properties', resourceDir + 'i18n/messages_da.properties');
-    this.copy(resourceDir + '/i18n/messages_de.properties', resourceDir + 'i18n/messages_de.properties');
-    this.copy(resourceDir + '/i18n/messages_es.properties', resourceDir + 'i18n/messages_es.properties');
-    this.copy(resourceDir + '/i18n/messages_fr.properties', resourceDir + 'i18n/messages_fr.properties');
-    this.copy(resourceDir + '/i18n/messages_kr.properties', resourceDir + 'i18n/messages_kr.properties');
-    this.copy(resourceDir + '/i18n/messages_pl.properties', resourceDir + 'i18n/messages_pl.properties');
-    this.copy(resourceDir + '/i18n/messages_pt_BR.properties', resourceDir + 'i18n/messages_pt_BR.properties');
-    this.copy(resourceDir + '/i18n/messages_ru.properties', resourceDir + 'i18n/messages_ru.properties');
-    this.copy(resourceDir + '/i18n/messages_sv.properties', resourceDir + 'i18n/messages_sv.properties');
-    this.copy(resourceDir + '/i18n/messages_tr.properties', resourceDir + 'i18n/messages_tr.properties');
-    this.copy(resourceDir + '/i18n/messages_zh_TW.properties', resourceDir + 'i18n/messages_zh_TW.properties');
-
     // Thymeleaf templates
     this.copy(resourceDir + '/templates/error.html', resourceDir + 'templates/error.html');
 
@@ -647,9 +632,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(webappDir + 'robots.txt', webappDir + 'robots.txt');
     this.copy(webappDir + 'htaccess.txt', webappDir + '.htaccess');
 
-    // install the default languages
-    this.installI18nFilesByLanguage(this, webappDir, 'en');
-    this.installI18nFilesByLanguage(this, webappDir, 'fr');
+    // install all files related to i18n
+    this.installI18nFilesByLanguage(this, webappDir, resourceDir, 'en');
+    this.installI18nFilesByLanguage(this, webappDir, resourceDir, 'fr');
 
     // Protected resources - used to check if a customer is still connected
     this.copy(webappDir + '/protected/authentication_check.gif', webappDir + '/protected/authentication_check.gif');
