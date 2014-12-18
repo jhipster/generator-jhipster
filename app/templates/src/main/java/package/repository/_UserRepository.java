@@ -26,12 +26,12 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>Reposi
     Optional<User> findOneByEmail(String email);
 
     Optional<User> findOneByLogin(String login);
-    <% if (databaseType == 'sql') { %>
-	Optional<User> save(User t);
-	<% } else if (databaseType == 'nosql') { %>
-	@SuppressWarnings("unchecked")
-	User save(User t);
-	<% } %>
+<% if (databaseType == 'sql') { %>
+    Optional<User> save(User t);
+<% } else if (databaseType == 'nosql') { %>
+    @SuppressWarnings("unchecked")
+    User save(User t);
+<% } %>
     void delete(User t);
 
 }<% } else { %>
