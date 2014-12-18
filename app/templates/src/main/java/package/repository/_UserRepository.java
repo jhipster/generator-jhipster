@@ -7,8 +7,7 @@ import org.springframework.data.repository.Repository;
 import java.util.Optional;<% } else {%>
 import org.springframework.data.jpa.repository.JpaRepository;<%}%>
 import org.springframework.data.jpa.repository.Query;<% } %><% if (databaseType == 'nosql') { %>
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;<% } %>
+import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
 
 import java.util.List;<% if (javaVersion == '8') { %>
 import java.util.Optional;<%}%>
@@ -27,9 +26,12 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>Reposi
     Optional<User> findOneByEmail(String email);
 
     Optional<User> findOneByLogin(String login);
-
+<% if (databaseType == 'sql') { %>
     Optional<User> save(User t);
-
+<% } else if (databaseType == 'nosql') { %>
+    @SuppressWarnings("unchecked")
+    User save(User t);
+<% } %>
     void delete(User t);
 
 }<% } else { %>
