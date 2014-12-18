@@ -126,7 +126,7 @@ Generator.prototype.copyI18nFilesByName = function(_this, webappDir, fileToCopy,
 Generator.prototype.installNewLanguage = function(language) {
     try {
         var appPath = this.env.options.appPath;
-        var fullPath = path.join(appPath, 'components/language/language.service.js');
+        var fullPath = path.join(appPath, 'scripts/components/language/language.service.js');
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: '//JHipster will add new languages here',
