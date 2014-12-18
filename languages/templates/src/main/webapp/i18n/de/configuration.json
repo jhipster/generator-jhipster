@@ -3,7 +3,7 @@
         "title": "Konfiguration",
         "filter": "Filter (nach Prefix)",
         "table": {
-            "prefix": "Prefix",
+            "prefix": "Präfix",
             "properties": "Eigenschaften"
         }
     }

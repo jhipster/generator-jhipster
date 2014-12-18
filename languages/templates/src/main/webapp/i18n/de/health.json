@@ -7,7 +7,7 @@
             "db": "Datenbank",
             "diskSpace": "Festplattenspeicher",
             "mail": "Email",
-            "mongo": "Mongo"
+            "mongo": "Mongo DB"
         },
         "table": {
             "service": "Dienst Name",
