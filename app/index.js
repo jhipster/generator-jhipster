@@ -677,36 +677,49 @@ JhipsterGenerator.prototype.app = function app() {
     // Client App
     this.template(webappDir + '/scripts/app/account/_account.js', webappDir + 'scripts/app/account/account.js', this, {});
     this.copy(webappDir + '/scripts/app/account/activate/activate.html', webappDir + 'scripts/app/account/activate/activate.html');
+    this.template(webappDir + '/scripts/app/account/activate/_activate.js', webappDir + 'scripts/app/account/activate/activate.js', this, {});
     this.template(webappDir + '/scripts/app/account/activate/_activate.controller.js', webappDir + 'scripts/app/account/activate/activate.controller.js', this, {});
     this.copy(webappDir + '/scripts/app/account/login/login.html', webappDir + 'scripts/app/account/login/login.html');
+    this.template(webappDir + '/scripts/app/account/login/_login.js', webappDir + 'scripts/app/account/login/login.js', this, {});
     this.template(webappDir + '/scripts/app/account/login/_login.controller.js', webappDir + 'scripts/app/account/login/login.controller.js', this, {});
+    this.template(webappDir + '/scripts/app/account/logout/_logout.js', webappDir + 'scripts/app/account/logout/logout.js', this, {});
     this.template(webappDir + '/scripts/app/account/logout/_logout.controller.js', webappDir + 'scripts/app/account/logout/logout.controller.js', this, {});
     this.copy(webappDir + '/scripts/app/account/password/password.html', webappDir + 'scripts/app/account/password/password.html');
+    this.template(webappDir + '/scripts/app/account/password/_password.js', webappDir + 'scripts/app/account/password/password.js', this, {});
     this.template(webappDir + '/scripts/app/account/password/_password.controller.js', webappDir + 'scripts/app/account/password/password.controller.js', this, {});
     this.template(webappDir + '/scripts/app/account/password/_password.directive.js', webappDir + 'scripts/app/account/password/password.directive.js', this, {});
     this.copy(webappDir + '/scripts/app/account/register/register.html', webappDir + 'scripts/app/account/register/register.html');
+    this.template(webappDir + '/scripts/app/account/register/_register.js', webappDir + 'scripts/app/account/register/register.js', this, {});
     this.template(webappDir + '/scripts/app/account/register/_register.controller.js', webappDir + 'scripts/app/account/register/register.controller.js', this, {});
     if (this.authenticationType == 'cookie') {
         this.copy(webappDir + '/scripts/app/account/sessions/sessions.html', webappDir + 'scripts/app/account/sessions/sessions.html');
+        this.template(webappDir + '/scripts/app/account/sessions/_sessions.js', webappDir + 'scripts/app/account/sessions/sessions.js', this, {});
         this.template(webappDir + '/scripts/app/account/sessions/_sessions.controller.js', webappDir + 'scripts/app/account/sessions/sessions.controller.js', this, {});
     }
     this.copy(webappDir + '/scripts/app/account/settings/settings.html', webappDir + 'scripts/app/account/settings/settings.html');
+    this.template(webappDir + '/scripts/app/account/settings/_settings.js', webappDir + 'scripts/app/account/settings/settings.js', this, {});
     this.template(webappDir + '/scripts/app/account/settings/_settings.controller.js', webappDir + 'scripts/app/account/settings/settings.controller.js', this, {});
     this.template(webappDir + '/scripts/app/admin/_admin.js', webappDir + 'scripts/app/admin/admin.js', this, {});
     this.copy(webappDir + '/scripts/app/admin/audits/audits.html', webappDir + 'scripts/app/admin/audits/audits.html');
+    this.template(webappDir + '/scripts/app/admin/audits/_audits.js', webappDir + 'scripts/app/admin/audits/audits.js', this, {});
     this.template(webappDir + '/scripts/app/admin/audits/_audits.controller.js', webappDir + 'scripts/app/admin/audits/audits.controller.js', this, {});
     this.copy(webappDir + '/scripts/app/admin/configuration/configuration.html', webappDir + 'scripts/app/admin/configuration/configuration.html');
+    this.template(webappDir + '/scripts/app/admin/configuration/_configuration.js', webappDir + 'scripts/app/admin/configuration/configuration.js', this, {});
     this.template(webappDir + '/scripts/app/admin/configuration/_configuration.controller.js', webappDir + 'scripts/app/admin/configuration/configuration.controller.js', this, {});
     this.copy(webappDir + '/scripts/app/admin/docs/docs.html', webappDir + 'scripts/app/admin/docs/docs.html');
-    this.template(webappDir + '/scripts/app/admin/docs/_docs.controller.js', webappDir + 'scripts/app/admin/docs/docs.controller.js', this, {});
+    this.template(webappDir + '/scripts/app/admin/docs/_docs.js', webappDir + 'scripts/app/admin/docs/docs.js', this, {});
     this.copy(webappDir + '/scripts/app/admin/health/health.html', webappDir + 'scripts/app/admin/health/health.html');
+    this.template(webappDir + '/scripts/app/admin/health/_health.js', webappDir + 'scripts/app/admin/health/health.js', this, {});
     this.template(webappDir + '/scripts/app/admin/health/_health.controller.js', webappDir + 'scripts/app/admin/health/health.controller.js', this, {});
     this.copy(webappDir + '/scripts/app/admin/logs/logs.html', webappDir + 'scripts/app/admin/logs/logs.html');
+    this.template(webappDir + '/scripts/app/admin/logs/_logs.js', webappDir + 'scripts/app/admin/logs/logs.js', this, {});
     this.template(webappDir + '/scripts/app/admin/logs/_logs.controller.js', webappDir + 'scripts/app/admin/logs/logs.controller.js', this, {});
     this.template(webappDir + '/scripts/app/admin/metrics/_metrics.html', webappDir + 'scripts/app/admin/metrics/metrics.html', this, {});
+    this.template(webappDir + '/scripts/app/admin/metrics/_metrics.js', webappDir + 'scripts/app/admin/metrics/metrics.js', this, {});
     this.template(webappDir + '/scripts/app/admin/metrics/_metrics.controller.js', webappDir + 'scripts/app/admin/metrics/metrics.controller.js', this, {});
     if (this.websocket == 'atmosphere') {
         this.copy(webappDir + '/scripts/app/admin/tracker/tracker.html', webappDir + 'scripts/app/admin/tracker/tracker.html');
+        this.template(webappDir + '/scripts/app/admin/tracker/_tracker.js', webappDir + 'scripts/app/admin/tracker/tracker.js', this, {});
         this.template(webappDir + '/scripts/app/admin/tracker/_tracker.controller.js', webappDir + 'scripts/app/admin/tracker/tracker.controller.js', this, {});
     }
     this.copy(webappDir + '/scripts/app/error/error.html', webappDir + 'scripts/app/error/error.html');
@@ -714,6 +727,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/scripts/app/entities/_entity.js', webappDir + 'scripts/app/entities/entity.js', this, {});
     this.template(webappDir + '/scripts/app/error/_error.js', webappDir + 'scripts/app/error/error.js', this, {});
     this.copy(webappDir + '/scripts/app/main/main.html', webappDir + 'scripts/app/main/main.html');
+    this.template(webappDir + '/scripts/app/main/_main.js', webappDir + 'scripts/app/main/main.js', this, {});
     this.template(webappDir + '/scripts/app/main/_main.controller.js', webappDir + 'scripts/app/main/main.controller.js', this, {});
 
     // Index page
@@ -776,23 +790,36 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/components/util/truncate.filter.js',
         'scripts/components/util/base64.service.js',
         'scripts/app/account/account.js',
+        'scripts/app/account/activate/activate.js',
         'scripts/app/account/activate/activate.controller.js',
+        'scripts/app/account/login/login.js',
         'scripts/app/account/login/login.controller.js',
+        'scripts/app/account/logout/logout.js',
         'scripts/app/account/logout/logout.controller.js',
+        'scripts/app/account/password/password.js',
         'scripts/app/account/password/password.controller.js',
         'scripts/app/account/password/password.directive.js',
+        'scripts/app/account/register/register.js',
         'scripts/app/account/register/register.controller.js',
+        'scripts/app/account/sessions/sessions.js',
         'scripts/app/account/sessions/sessions.controller.js',
+        'scripts/app/account/settings/settings.js',
         'scripts/app/account/settings/settings.controller.js',
         'scripts/app/admin/admin.js',
+        'scripts/app/admin/audits/audits.js',
         'scripts/app/admin/audits/audits.controller.js',
+        'scripts/app/admin/configuration/configuration.js',
         'scripts/app/admin/configuration/configuration.controller.js',
-        'scripts/app/admin/docs/docs.controller.js',
+        'scripts/app/admin/docs/docs.js',
+        'scripts/app/admin/health/health.js',
         'scripts/app/admin/health/health.controller.js',
+        'scripts/app/admin/logs/logs.js',
         'scripts/app/admin/logs/logs.controller.js',
+        'scripts/app/admin/metrics/metrics.js',
         'scripts/app/admin/metrics/metrics.controller.js',
         'scripts/app/entities/entity.js',
         'scripts/app/error/error.js',
+        'scripts/app/main/main.js',
         'scripts/app/main/main.controller.js'
         ];
 
@@ -806,6 +833,7 @@ JhipsterGenerator.prototype.app = function app() {
 
     if (this.websocket == 'atmosphere') {
         indexScripts = indexScripts.concat([
+            'scripts/app/admin/tracker/tracker.js',
             'scripts/app/admin/tracker/tracker.controller.js',
             'bower_components/atmosphere/atmosphere.js',
             'bower_components/jquery-atmosphere/jquery.atmosphere.js']);

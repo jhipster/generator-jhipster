@@ -1,22 +1,6 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .config(function ($stateProvider) {
-        $stateProvider
-            .state('<%= entityInstance %>', {
-                parent: 'entity',
-                url: '/<%= entityInstance %>',
-                data: {
-                    roles: ['ROLE_USER']
-                },
-                views: {
-                    'content@': {
-                        templateUrl: 'app/entities/<%= entityInstance %>/<%= entityInstance %>s.html',
-                        controller: '<%= entityClass %>Controller'
-                    }
-                }
-            });
-    })
     .controller('<%= entityClass %>Controller', function ($scope, <%= entityClass %><% for (relationshipId in relationships) { %>, <%= relationships[relationshipId].otherEntityNameCapitalized %><% } %>) {
         $scope.<%= entityInstance %>s = [];<% for (relationshipId in relationships) { %>
         $scope.<%= relationships[relationshipId].otherEntityName %>s = <%= relationships[relationshipId].otherEntityNameCapitalized %>.query();<% } %>
