@@ -5,7 +5,7 @@
         "menu": {
             "home": "Início",
             "entities": {
-                "main": "Entities"
+                "main": "Entidades"
             },
             "account": {
                 "main": "Conta",
@@ -15,7 +15,7 @@
                 "tracker": "Rastreamento de usuário",
                 "metrics": "Métricas",
                 "health": "Estado do Sistema",
-                "configuration": "Configuration",
+                "configuration": "Configuração",
                 "logs": "Logs",
                 "audits": "Auditorias",
                 "login": "Entrar",
