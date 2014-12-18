@@ -11,7 +11,7 @@ angular.module('<%=angularAppName%>')
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'app/entities/<%= entityInstance %>/<%= entityInstance %>s.html',
+                        templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>s.html',
                         controller: '<%= entityClass %>Controller'
                     }
                 }
