@@ -18,7 +18,7 @@ import java.util.Optional;<%}%>
  */<% } %><% if (databaseType == 'nosql') { %>/**
  * Spring Data MongoDB repository for the User entity.
  */<% } %><% if (javaVersion == '8') { %>
-public interface UserRepository extends <% if (databaseType == 'sql') { %>Repository<% } %><% if (databaseType == 'nosql') { %>Repository<% } %><User, String> {
+public interface UserRepository extends <% if (databaseType == 'sql') { %>Repository<% } %><% if (databaseType == 'nosql') { %>MongoRepository<% } %><User, String> {
 
     Optional<User> findOneByActivationKey(String activationKey);
 
