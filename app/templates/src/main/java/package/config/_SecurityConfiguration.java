@@ -64,13 +64,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-            .antMatchers("/app/**/*.{js,html}")
+            .antMatchers("/scripts/**/*.{js,html}")
             .antMatchers("/bower_components/**")
-            .antMatchers("/components/**")
-            .antMatchers("/fonts/**")
             .antMatchers("/i18n/**")
-            .antMatchers("/images/**")
-            .antMatchers("/styles/**")
+            .antMatchers("/assets/**")
             .antMatchers("/swagger-ui/**")<% if (authenticationType == 'token') { %>
             .antMatchers("/api/register")
             .antMatchers("/api/activate")<% if (websocket == 'atmosphere') { %>

@@ -47,15 +47,15 @@ gulp.task('test', function(){
 gulp.task('copy', ['clean'], function(){
     return es.merge(gulp.src(yeoman.app + 'i18n/**').
               pipe(gulp.dest(yeoman.dist + 'i18n/')),
-              gulp.src(yeoman.app + '**/*.{woff,svg,ttf,eot}').
+              gulp.src(yeoman.app + 'assets/**/*.{woff,svg,ttf,eot}').
               pipe(flatten()).
-              pipe(gulp.dest(yeoman.dist + 'fonts/')));
+              pipe(gulp.dest(yeoman.dist + 'assets/fonts/')));
 });
 
 gulp.task('images', function(){
-        return gulp.src(yeoman.app + 'images/**').
+        return gulp.src(yeoman.app + 'assets/images/**').
             pipe(imagemin({optimizationLevel: 5})).
-            pipe(gulp.dest(yeoman.dist + 'images'));
+            pipe(gulp.dest(yeoman.dist + 'assets/images'));
 });
 
 <% if(useCompass) { %>
@@ -64,11 +64,11 @@ gulp.task('compass', function() {
         pipe(compass({
                 project: __dirname,
                 sass: 'src/main/scss',
-                css: 'src/main/webapp/styles',
+                css: 'src/main/webapp/assets/styles',
                 generated_images: '.tmp/images/generated',
-                image: 'src/main/webapp/images',
+                image: 'src/main/webapp/assets/images',
                 javascript: 'src/main/webapp/scripts',
-                font: 'src/main/webapp/styles/fonts',
+                font: 'src/main/webapp/assets/fonts',
                 import_path: 'src/main/webapp/bower_components',
                 relative: false
         })).
@@ -77,7 +77,7 @@ gulp.task('compass', function() {
 <% } %>
 
 gulp.task('styles', [<% if(useCompass) { %> 'compass'<% } %>], function() {
-    return gulp.src(yeoman.app + '{,*/}*.css').
+    return gulp.src(yeoman.app + 'assets/styles/{,*/}*.css').
         pipe(gulp.dest(yeoman.tmp));
 });
 
@@ -230,7 +230,7 @@ gulp.task('usemin', ['images', 'styles'], function(){
         pipe(usemin({
             css: [
                 prefix.apply(),
-                replace(/[0-9a-zA-Z\-_\s\.\/]*\/([a-zA-Z\-_\.0-9]*\.(woff|eot|ttf|svg))/g, '/fonts/$1'),
+                replace(/[0-9a-zA-Z\-_\s\.\/]*\/([a-zA-Z\-_\.0-9]*\.(woff|eot|ttf|svg))/g, '/assets/fonts/$1'),
                 //minifyCss(),
                 'concat',
                 rev()

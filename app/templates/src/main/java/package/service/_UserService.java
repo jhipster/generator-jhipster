@@ -145,9 +145,9 @@ public class UserService {
     public void removeOldPersistentTokens() {
         LocalDate now = new LocalDate();<% if (javaVersion == '8') { %>
         persistentTokenRepository.findByTokenDateBefore(now.minusMonths(1)).stream().forEach(token ->{
-            log.debug("Deleting token {}", token.getSeries());
+            log.debug("Deleting token {}", token.getSeries());<% if (databaseType == 'sql') { %>
             User user = token.getUser();
-            user.getPersistentTokens().remove(token);
+            user.getPersistentTokens().remove(token);<% } %>
             persistentTokenRepository.delete(token);
         });<% }else { %>
         List<PersistentToken> tokens = persistentTokenRepository.findByTokenDateBefore(now.minusMonths(1));

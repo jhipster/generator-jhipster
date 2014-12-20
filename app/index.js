@@ -375,8 +375,8 @@ JhipsterGenerator.prototype.app = function app() {
     removefile(resourceDir + 'i18n/messages_pt.properties');
     removefile(webappDir + 'i18n/pt.json');
     removefile(webappDir + 'protected/transparent.gif');
-    removefile(webappDir + 'styles/famfamfam-flags.css');
-    removefile(webappDir + 'images/famfamfam-flags.png');
+    removefile(webappDir + 'assets/styles/famfamfam-flags.css');
+    removefile(webappDir + 'assets/images/famfamfam-flags.png');
 
     // Angular JS app
     this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
@@ -617,14 +617,14 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.useCompass) {
         this.copy('src/main/scss/main.scss', 'src/main/scss/main.scss');
     } else {
-        this.copy('src/main/webapp/images/glyphicons-halflings.png', 'src/main/webapp/images/glyphicons-halflings.png');
-        this.copy('src/main/webapp/images/glyphicons-halflings-white.png', 'src/main/webapp/images/glyphicons-halflings-white.png');
-        this.copy('src/main/webapp/styles/bootstrap.css', 'src/main/webapp/styles/bootstrap.css');
-        this.copy('src/main/webapp/styles/main.css', 'src/main/webapp/styles/main.css');
-        this.copy('src/main/webapp/fonts/glyphicons-halflings-regular.eot', 'src/main/webapp/fonts/glyphicons-halflings-regular.eot');
-        this.copy('src/main/webapp/fonts/glyphicons-halflings-regular.svg', 'src/main/webapp/fonts/glyphicons-halflings-regular.svg');
-        this.copy('src/main/webapp/fonts/glyphicons-halflings-regular.ttf', 'src/main/webapp/fonts/glyphicons-halflings-regular.ttf');
-        this.copy('src/main/webapp/fonts/glyphicons-halflings-regular.woff', 'src/main/webapp/fonts/glyphicons-halflings-regular.woff');
+        this.copy('src/main/webapp/assets/images/glyphicons-halflings.png', 'src/main/webapp/assets/images/glyphicons-halflings.png');
+        this.copy('src/main/webapp/assets/images/glyphicons-halflings-white.png', 'src/main/webapp/assets/images/glyphicons-halflings-white.png');
+        this.copy('src/main/webapp/assets/styles/bootstrap.css', 'src/main/webapp/assets/styles/bootstrap.css');
+        this.copy('src/main/webapp/assets/styles/main.css', 'src/main/webapp/assets/styles/main.css');
+        this.copy('src/main/webapp/assets/fonts/glyphicons-halflings-regular.eot', 'src/main/webapp/assets/fonts/glyphicons-halflings-regular.eot');
+        this.copy('src/main/webapp/assets/fonts/glyphicons-halflings-regular.svg', 'src/main/webapp/assets/fonts/glyphicons-halflings-regular.svg');
+        this.copy('src/main/webapp/assets/fonts/glyphicons-halflings-regular.ttf', 'src/main/webapp/assets/fonts/glyphicons-halflings-regular.ttf');
+        this.copy('src/main/webapp/assets/fonts/glyphicons-halflings-regular.woff', 'src/main/webapp/assets/fonts/glyphicons-halflings-regular.woff');
     }
 
     // HTML5 BoilerPlate
@@ -748,28 +748,14 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(testJsDir + 'spec/components/auth/_authServicesSpec.js', testJsDir + 'spec/components/auth/authServicesSpec.js', this, {});
 
     // CSS
-    this.copy(webappDir + 'styles/documentation.css', webappDir + 'styles/documentation.css');
+    this.copy(webappDir + 'assets/styles/documentation.css', webappDir + 'assets/styles/documentation.css');
 
     // Images
-    this.copy(webappDir + 'images/development_ribbon.png', webappDir + 'images/development_ribbon.png');
-    this.copy(webappDir + 'images/hipster.png', webappDir + 'images/hipster.png');
-    this.copy(webappDir + 'images/hipster2x.png', webappDir + 'images/hipster2x.png');
+    this.copy(webappDir + 'assets/images/development_ribbon.png', webappDir + 'assets/images/development_ribbon.png');
+    this.copy(webappDir + 'assets/images/hipster.png', webappDir + 'assets/images/hipster.png');
+    this.copy(webappDir + 'assets/images/hipster2x.png', webappDir + 'assets/images/hipster2x.png');
 
-    var indexScripts = [
-        'bower_components/modernizr/modernizr.js',
-        'bower_components/jquery/dist/jquery.js',
-        'bower_components/angular/angular.js',
-        'bower_components/angular-ui-router/release/angular-ui-router.js',
-        'bower_components/angular-resource/angular-resource.js',
-        'bower_components/angular-cookies/angular-cookies.js',
-        'bower_components/angular-sanitize/angular-sanitize.js',
-        'bower_components/angular-translate/angular-translate.js',
-        'bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
-        'bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js',
-        'bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js',
-        'bower_components/angular-local-storage/dist/angular-local-storage.js',
-        'bower_components/angular-cache-buster/angular-cache-buster.js',
-
+    var appScripts = [
         'scripts/app/app.js',
         'scripts/components/auth/auth.service.js',
         'scripts/components/auth/principal.service.js',
@@ -824,22 +810,42 @@ JhipsterGenerator.prototype.app = function app() {
         ];
 
     if (this.authenticationType == 'token') {
-        indexScripts = indexScripts.concat([
+        appScripts = appScripts.concat([
             'scripts/components/auth/provider/auth.oauth2.service.js']);
     } else {
-        indexScripts = indexScripts.concat([
+        appScripts = appScripts.concat([
             'scripts/components/auth/provider/auth.session.service.js']);
     }
 
     if (this.websocket == 'atmosphere') {
-        indexScripts = indexScripts.concat([
+        appScripts = appScripts.concat([
             'scripts/app/admin/tracker/tracker.js',
-            'scripts/app/admin/tracker/tracker.controller.js',
+            'scripts/app/admin/tracker/tracker.controller.js'])
+    }
+
+    var vendorScripts = [
+        'bower_components/modernizr/modernizr.js',
+        'bower_components/jquery/dist/jquery.js',
+        'bower_components/angular/angular.js',
+        'bower_components/angular-ui-router/release/angular-ui-router.js',
+        'bower_components/angular-resource/angular-resource.js',
+        'bower_components/angular-cookies/angular-cookies.js',
+        'bower_components/angular-sanitize/angular-sanitize.js',
+        'bower_components/angular-translate/angular-translate.js',
+        'bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
+        'bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js',
+        'bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js',
+        'bower_components/angular-local-storage/dist/angular-local-storage.js',
+        'bower_components/angular-cache-buster/angular-cache-buster.js'
+    ];
+
+    if (this.websocket == 'atmosphere') {
+        vendorScripts = vendorScripts.concat([
             'bower_components/atmosphere/atmosphere.js',
             'bower_components/jquery-atmosphere/jquery.atmosphere.js']);
     }
 
-    indexScripts = indexScripts.concat([
+    vendorScripts = vendorScripts.concat([
         'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/affix.js',
         'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/alert.js',
         'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/dropdown.js',
@@ -853,7 +859,8 @@ JhipsterGenerator.prototype.app = function app() {
         'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/collapse.js',
         'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/tab.js']);
 
-    this.indexFile = this.appendScripts(this.indexFile, 'scripts/scripts.js', indexScripts);
+    this.indexFile = this.appendScripts(this.indexFile, 'scripts/vendor.js', vendorScripts);
+    this.indexFile = this.appendScripts(this.indexFile, 'scripts/app.js', appScripts);
     this.write(webappDir + 'index.html', this.indexFile);
 
     this.config.set('baseName', this.baseName);

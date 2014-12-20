@@ -22,11 +22,11 @@ describe('Directive Tests ', function () {
         $httpBackend.expectGET('api/account').respond({});
         $httpBackend.expectGET('i18n/en/global.json').respond({});
         $httpBackend.expectGET('i18n/en/language.json').respond({});
-        $httpBackend.expectGET('components/navbar/navbar.html').respond({});
+        $httpBackend.expectGET('scripts/components/navbar/navbar.html').respond({});
         $httpBackend.expectGET('i18n/en/global.json').respond({});
         $httpBackend.expectGET('i18n/en/language.json').respond({});
         $httpBackend.expectGET('i18n/en/main.json').respond({});
-        $httpBackend.expectGET('app/main/main.html').respond({});
+        $httpBackend.expectGET('scripts/app/main/main.html').respond({});
     }));
 
     afterEach(function() {
