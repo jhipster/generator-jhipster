@@ -60,7 +60,7 @@ gulp.task('images', function(){
 
 <% if(useCompass) { %>
 gulp.task('compass', function() {
-    return gulp.src(yeoman.scss + '{,*/}*.scss').
+    return gulp.src(yeoman.scss + '**/*.scss').
         pipe(compass({
                 project: __dirname,
                 sass: 'src/main/scss',
@@ -160,7 +160,7 @@ gulp.task('server', ['watch'<% if(useCompass) { %>, 'compass'<% } %>], function(
 
 gulp.task('watch', function() {
     gulp.watch(yeoman.app + 'scripts/**');<% if(useCompass) { %>
-    gulp.watch(yeoman.scss, ['compass']); <% } %>
+    gulp.watch(yeoman.scss + '**/*.scss', ['compass']); <% } %>
     gulp.watch('src/images/**', ['images']);
     livereload();
 });
