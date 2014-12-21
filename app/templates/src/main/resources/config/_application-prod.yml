@@ -45,8 +45,6 @@ spring:
     thymeleaf:
         mode: XHTML
         cache: true
-        viewNames: error
-
 
 metrics:
     jmx.enabled: true
