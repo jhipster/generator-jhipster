@@ -133,6 +133,7 @@ dependencies {
     compile group: 'mysql', name: 'mysql-connector-java', version: mysql_connector_java_version<% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
     compile group: 'org.postgresql', name: 'postgresql', version: postgresql_version<% } %><% if (devDatabaseType == 'h2Memory') { %>
     compile group: 'com.h2database', name: 'h2', version: h2_version<% } %>
+    compile group: 'fr.ippon.spark.metrics', name: 'metrics-spark-reporter', version: metrics_spark_reporter_version
     testCompile group: 'com.jayway.awaitility', name: 'awaitility', version: awaility_version
     testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: json_path_version
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: spring_boot_version
