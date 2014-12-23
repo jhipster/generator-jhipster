@@ -1,6 +1,6 @@
 package <%=packageName%>.service;
 
-import <%=packageName%>.Application;<% if (databaseType == 'nosql') { %>
+import <%=packageName%>.Application;<% if (databaseType == 'mongodb') { %>
 import <%=packageName%>.config.MongoConfiguration;<% } %><% if (authenticationType == 'cookie') { %>
 import <%=packageName%>.domain.PersistentToken;<% } %>
 import <%=packageName%>.domain.User;<% if (authenticationType == 'cookie') { %>
@@ -10,7 +10,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;<% if (databaseType == 'nosql') { %>
+import org.springframework.boot.test.SpringApplicationConfiguration;<% if (databaseType == 'mongodb') { %>
 import org.springframework.context.annotation.Import;<% } %><% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.*;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
-@WebAppConfiguration<% if (databaseType == 'nosql') { %>
+@WebAppConfiguration<% if (databaseType == 'mongodb') { %>
 @Import(MongoConfiguration.class)<% } %><% if (databaseType == 'sql') { %>
 @Transactional<% } %>
 public class UserServiceTest {<% if (authenticationType == 'cookie') { %>
@@ -72,7 +72,7 @@ public class UserServiceTest {<% if (authenticationType == 'cookie') { %>
         token.setTokenDate(localDate);
         token.setIpAddress("127.0.0.1");
         token.setUserAgent("Test agent");<% if (databaseType == 'sql') { %>
-        persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'nosql') { %>
+        persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'mongodb') { %>
         persistentTokenRepository.save(token);<% } %>
     }<% } %>
 }

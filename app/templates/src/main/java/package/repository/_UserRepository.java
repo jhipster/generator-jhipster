@@ -6,7 +6,7 @@ import org.joda.time.DateTime;<% if (databaseType == 'sql') { %><% if (javaVersi
 import org.springframework.data.repository.Repository;
 import java.util.Optional;<% } else {%>
 import org.springframework.data.jpa.repository.JpaRepository;<%}%>
-import org.springframework.data.jpa.repository.Query;<% } %><% if (databaseType == 'nosql') { %>
+import org.springframework.data.jpa.repository.Query;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
 
 import java.util.List;<% if (javaVersion == '8') { %>
@@ -14,10 +14,10 @@ import java.util.Optional;<%}%>
 
 <% if (databaseType == 'sql') { %>/**
  * Spring Data JPA repository for the User entity.
- */<% } %><% if (databaseType == 'nosql') { %>/**
+ */<% } %><% if (databaseType == 'mongodb') { %>/**
  * Spring Data MongoDB repository for the User entity.
  */<% } %><% if (javaVersion == '8') { %>
-public interface UserRepository extends <% if (databaseType == 'sql') { %>Repository<% } %><% if (databaseType == 'nosql') { %>MongoRepository<% } %><User, String> {
+public interface UserRepository extends <% if (databaseType == 'sql') { %>Repository<% } %><% if (databaseType == 'mongodb') { %>MongoRepository<% } %><User, String> {
 
     Optional<User> findOneByActivationKey(String activationKey);
 
@@ -28,14 +28,14 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>Reposi
     Optional<User> findOneByLogin(String login);
 <% if (databaseType == 'sql') { %>
     Optional<User> save(User t);
-<% } else if (databaseType == 'nosql') { %>
+<% } else if (databaseType == 'mongodb') { %>
     @SuppressWarnings("unchecked")
     User save(User t);
 <% } %>
     void delete(User t);
 
 }<% } else { %>
-public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRepository<% } %><% if (databaseType == 'nosql') { %>MongoRepository<% } %><User, String> {
+public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRepository<% } %><% if (databaseType == 'mongodb') { %>MongoRepository<% } %><User, String> {
 
     User findOneByActivationKey(String activationKey);
 

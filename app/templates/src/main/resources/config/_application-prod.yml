@@ -3,7 +3,7 @@ server:
 
 spring:
     profiles:
-        active: prod<% if (databaseType == 'nosql') { %>
+        active: prod<% if (databaseType == 'mongodb') { %>
     data:
         mongodb:
             host: localhost

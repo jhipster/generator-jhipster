@@ -222,7 +222,7 @@
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>${commons-lang.version}</version>
-        </dependency><% if (databaseType == 'nosql') { %>
+        </dependency><% if (databaseType == 'mongodb') { %>
         <dependency>
             <groupId>cz.jirutka.spring</groupId>
             <artifactId>embedmongo-spring</artifactId>
@@ -303,7 +303,7 @@
                     <groupId>org.eclipse.jetty</groupId>
                 </exclusion>
             </exclusions>
-        </dependency><% } %><% if (databaseType == 'nosql') { %>
+        </dependency><% } %><% if (databaseType == 'mongodb') { %>
         <dependency>
             <groupId>org.mongeez</groupId>
             <artifactId>mongeez</artifactId>
@@ -339,7 +339,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency><% } %><% if (databaseType == 'nosql') { %>
+        </dependency><% } %><% if (databaseType == 'mongodb') { %>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>

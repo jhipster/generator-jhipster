@@ -1,5 +1,5 @@
 package <%=packageName%>.config;
-<% if (databaseType == 'nosql') { %>
+<% if (databaseType == 'mongodb') { %>
 import <%=packageName%>.config.oauth2.MongoDBTokenStore;
 import <%=packageName%>.repository.OAuth2AccessTokenRepository;
 import <%=packageName%>.repository.OAuth2RefreshTokenRepository;<% } %>
@@ -95,7 +95,7 @@ public class OAuth2ServerConfiguration {
         private RelaxedPropertyResolver propertyResolver;<% if (databaseType == 'sql') { %>
 
         @Inject
-        private DataSource dataSource;<% } %><% if (databaseType == 'nosql') { %>
+        private DataSource dataSource;<% } %><% if (databaseType == 'mongodb') { %>
 
         @Inject
         private OAuth2AccessTokenRepository oAuth2AccessTokenRepository;

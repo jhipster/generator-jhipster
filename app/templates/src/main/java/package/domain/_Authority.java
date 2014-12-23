@@ -1,7 +1,7 @@
 package <%=packageName%>.domain;
 
 <% if (hibernateCache != 'no' && databaseType == 'sql') { %>import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (databaseType == 'nosql') { %>
+import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;<% } %><% if (databaseType == 'sql') { %>
 import javax.persistence.Entity;
@@ -17,7 +17,7 @@ import java.io.Serializable;
  */<% if (databaseType == 'sql') { %>
 @Entity
 @Table(name = "T_AUTHORITY")<% if (hibernateCache != 'no') { %>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType == 'nosql') { %>
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType == 'mongodb') { %>
 @Document(collection = "T_AUTHORITY")<% } %>
 public class Authority implements Serializable {
 

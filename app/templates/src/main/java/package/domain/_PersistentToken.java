@@ -7,7 +7,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (database
 import org.hibernate.annotations.Type;<% } %>
 import org.joda.time.LocalDate;
 import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;<% if (databaseType == 'nosql') { %>
+import org.joda.time.format.DateTimeFormatter;<% if (databaseType == 'mongodb') { %>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;<% } %>
@@ -24,7 +24,7 @@ import java.io.Serializable;
  */<% if (databaseType == 'sql') { %>
 @Entity
 @Table(name = "T_PERSISTENT_TOKEN")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'nosql') { %>
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'mongodb') { %>
 @Document(collection = "T_PERSISTENT_TOKEN")<% } %>
 public class PersistentToken implements Serializable {
 
@@ -54,7 +54,7 @@ public class PersistentToken implements Serializable {
     private String userAgent;
 
     @JsonIgnore
-    <% if (databaseType == 'sql') { %>@ManyToOne<% } %><% if (databaseType == 'nosql') { %>
+    <% if (databaseType == 'sql') { %>@ManyToOne<% } %><% if (databaseType == 'mongodb') { %>
     @DBRef<% } %>
     private User user;
 

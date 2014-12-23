@@ -100,7 +100,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                     name: 'SQL (H2, MySQL, PostgreSQL)'
                 },
                 {
-                    value: 'nosql',
+                    value: 'mongodb',
                     name: 'NoSQL (MongoDB)'
                 }
             ],
@@ -127,7 +127,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             when: function (response) {
-                return response.databaseType == 'nosql';
+                return response.databaseType == 'mongodb';
             },
             type: 'list',
             name: 'prodDatabaseType',
@@ -165,7 +165,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             when: function (response) {
-                return response.databaseType == 'nosql';
+                return response.databaseType == 'mongodb';
             },
             type: 'list',
             name: 'devDatabaseType',
@@ -203,7 +203,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             when: function (response) {
-                return response.databaseType == 'nosql';
+                return response.databaseType == 'mongodb';
             },
             type: 'list',
             name: 'hibernateCache',
@@ -443,7 +443,7 @@ JhipsterGenerator.prototype.app = function app() {
         this.copy(resourceDir + '/config/liquibase/users_authorities.csv', resourceDir + 'config/liquibase/users_authorities.csv');
     }
 
-    if (this.databaseType == "nosql") {
+    if (this.databaseType == "mongodb") {
         this.copy(resourceDir + '/config/mongeez/authorities.xml', resourceDir + 'config/mongeez/authorities.xml');
         this.copy(resourceDir + '/config/mongeez/master.xml', resourceDir + 'config/mongeez/master.xml');
         this.copy(resourceDir + '/config/mongeez/users.xml', resourceDir + 'config/mongeez/users.xml');
@@ -469,7 +469,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/_CacheConfiguration.java', javaDir + 'config/CacheConfiguration.java', this, {});
     this.template('src/main/java/package/config/_Constants.java', javaDir + 'config/Constants.java', this, {});
     this.template('src/main/java/package/config/_CloudDatabaseConfiguration.java', javaDir + 'config/CloudDatabaseConfiguration.java', this, {});
-    if (this.databaseType == 'nosql') {
+    if (this.databaseType == 'mongodb') {
         this.template('src/main/java/package/config/_CloudMongoDbConfiguration.java', javaDir + 'config/CloudMongoDbConfiguration.java', this, {});
     }
     this.template('src/main/java/package/config/_DatabaseConfiguration.java', javaDir + 'config/DatabaseConfiguration.java', this, {});
@@ -483,7 +483,7 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/main/java/package/config/_OAuth2ServerConfiguration.java', javaDir + 'config/OAuth2ServerConfiguration.java', this, {});
     }
 
-    if (this.databaseType == 'nosql' &&  this.authenticationType == 'token') {
+    if (this.databaseType == 'mongodb' &&  this.authenticationType == 'token') {
         this.template('src/main/java/package/config/oauth2/_OAuth2AuthenticationReadConverter.java', javaDir + 'config/oauth2/OAuth2AuthenticationReadConverter.java', this, {});
         this.template('src/main/java/package/config/oauth2/_MongoDBTokenStore.java', javaDir + 'config/oauth2/MongoDBTokenStore.java', this, {});
         this.template('src/main/java/package/domain/_OAuth2AuthenticationAccessToken.java', javaDir + 'domain/OAuth2AuthenticationAccessToken.java', this, {});
@@ -594,7 +594,7 @@ JhipsterGenerator.prototype.app = function app() {
     var testResourceDir = 'src/test/resources/';
     this.mkdir(testDir);
 
-    if (this.databaseType == "nosql") {
+    if (this.databaseType == "mongodb") {
         this.template('src/test/java/package/config/_MongoConfiguration.java', testDir + 'config/MongoConfiguration.java', this, {});
     }
     this.template('src/test/java/package/security/_SecurityUtilsTest.java', testDir + 'security/SecurityUtilsTest.java', this, {});

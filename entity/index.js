@@ -152,7 +152,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
     if (this.useConfigurationFile == true) {// don't prompt if data are imported from a file
         return;
     }
-    if (this.databaseType == 'nosql') {
+    if (this.databaseType == 'mongodb') {
         return;
     }
     var packageFolder = this.packageFolder;

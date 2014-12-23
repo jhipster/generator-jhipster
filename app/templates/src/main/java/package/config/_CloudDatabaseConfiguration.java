@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cloud.config.java.AbstractCloudConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;<% if (databaseType == 'nosql') { %>
+import org.springframework.context.annotation.Profile;<% if (databaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.MongoDbFactory;<% } %>
 <% if (databaseType == 'sql') { %>
 import javax.sql.DataSource;<% } %>
@@ -20,7 +20,7 @@ public class CloudDatabaseConfiguration extends AbstractCloudConfig {
     public DataSource dataSource() {
         log.info("Configuring JDBC datasource from a cloud provider");
         return connectionFactory().dataSource();
-    }<% } %><% if (databaseType == 'nosql') { %>
+    }<% } %><% if (databaseType == 'mongodb') { %>
 
     @Bean
     public MongoDbFactory mongoDbFactory() {

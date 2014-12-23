@@ -1,7 +1,7 @@
 package <%=packageName%>.domain;
 <% if (databaseType == 'sql') { %>
 import org.hibernate.annotations.Type;<% } %>
-import org.joda.time.LocalDateTime;<% if (databaseType == 'nosql') { %>
+import org.joda.time.LocalDateTime;<% if (databaseType == 'mongodb') { %>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;<% } %><% if (databaseType == 'sql') { %>
@@ -15,7 +15,7 @@ import java.util.Map;
  * @see org.springframework.boot.actuate.audit.AuditEvent
  */<% if (databaseType == 'sql') { %>
 @Entity
-@Table(name = "T_PERSISTENT_AUDIT_EVENT")<% } %><% if (databaseType == 'nosql') { %>
+@Table(name = "T_PERSISTENT_AUDIT_EVENT")<% } %><% if (databaseType == 'mongodb') { %>
 @Document(collection = "T_PERSISTENT_AUDIT_EVENT")<% } %>
 public class PersistentAuditEvent  {
 
@@ -33,7 +33,7 @@ public class PersistentAuditEvent  {
     @Column(name = "event_date")
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")<% } %>
     private LocalDateTime auditEventDate;<% if (databaseType == 'sql') { %>
-    @Column(name = "event_type")<% } %><% if (databaseType == 'nosql') { %>
+    @Column(name = "event_type")<% } %><% if (databaseType == 'mongodb') { %>
     @Field("event_type")<% } %>
     private String auditEventType;
 <% if (databaseType == 'sql') { %>
