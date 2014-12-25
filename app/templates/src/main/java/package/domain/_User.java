@@ -31,7 +31,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @NotNull
     @Size(min = 0, max = 50)<% if (databaseType == 'sql') { %>
-    @Column(length = 50)<% } %>
+    @Column(length = 50, unique = true)<% } %>
     private String login;
 
     @JsonIgnore
@@ -51,9 +51,10 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Email
     @Size(min = 0, max = 100)<% if (databaseType == 'sql') { %>
-    @Column(length = 100)<% } %>
+    @Column(length = 100, unique = true)<% } %>
     private String email;
-
+<% if (databaseType == 'sql') { %>
+    @Column(nullable = false, columnDefinition="default 'false'")<% } %>
     private boolean activated = false;
 
     @Size(min = 2, max = 5)<% if (databaseType == 'sql') { %>
@@ -71,7 +72,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @JoinTable(
             name = "T_USER_AUTHORITY",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")},
+            indexes = @Index(name = "idx_user_authority", columnList = "user_id, authority_name", unique = true))<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
     private Set<Authority> authorities = new HashSet<>();<% if (authenticationType == 'cookie') { %><% if (databaseType == 'sql') { %>
 

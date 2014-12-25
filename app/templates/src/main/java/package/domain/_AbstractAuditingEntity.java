@@ -26,14 +26,14 @@ public abstract class AbstractAuditingEntity {
 
     @CreatedBy<% if (databaseType == 'sql') { %>
     @NotNull
-    @Column(name = "created_by", nullable = false, length = 50, updatable = false)<% } %><% if (databaseType == 'mongodb') { %>
+    @Column(name = "created_by", nullable = false, length = 50, updatable = false, columnDefinition="default 'system'")<% } %><% if (databaseType == 'mongodb') { %>
     @Field("created_by")<% } %>
     private String createdBy;
 
     @CreatedDate<% if (databaseType == 'sql') { %>
     @NotNull
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    @Column(name = "created_date", nullable = false)<% } %><% if (databaseType == 'mongodb') { %>
+    @Column(name = "created_date", nullable = false, columnDefinition="default 'now()'")<% } %><% if (databaseType == 'mongodb') { %>
     @Field("created_date")<% } %>
     private DateTime createdDate = DateTime.now();
 
