@@ -54,7 +54,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(length = 100, unique = true)<% } %>
     private String email;
 <% if (databaseType == 'sql') { %>
-    @Column(nullable = false, columnDefinition="default 'false'")<% } %>
+    @Column(nullable = false)<% } %>
     private boolean activated = false;
 
     @Size(min = 2, max = 5)<% if (databaseType == 'sql') { %>
@@ -73,7 +73,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
             name = "T_USER_AUTHORITY",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")},
-            indexes = @Index(name = "idx_user_authority", columnList = "user_id, authority_name", unique = true))<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
+            indexes = @Index(name = "idx_user_authority", columnList = "user_id, authority_name"))<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
     private Set<Authority> authorities = new HashSet<>();<% if (authenticationType == 'cookie') { %><% if (databaseType == 'sql') { %>
 
