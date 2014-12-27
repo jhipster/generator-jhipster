@@ -37,7 +37,7 @@
             <column name="created_by" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_date" type="timestamp" defaultValueDate="now">
+            <column name="created_date" type="timestamp" defaultValueDate="<%= _.unescape('\$\{now}')%>">
                 <constraints nullable="false"/>
             </column>
             <column name="last_modified_by" type="varchar(50)"/>
