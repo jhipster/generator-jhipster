@@ -18,10 +18,10 @@ angular.module('<%=angularAppName%>')
         $scope.refresh();
 
         $scope.getLabelClass = function (statusState) {
-            if (statusState == 'UP') {
-                return "label-success";
+            if (statusState === 'UP') {
+                return 'label-success';
             } else {
-                return "label-danger";
+                return 'label-danger';
             }
-        }
+        };
     });

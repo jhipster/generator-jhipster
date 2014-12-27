@@ -15,4 +15,4 @@ angular.module('<%=angularAppName%>')
                     }
                 }
             });
-    })
+    });

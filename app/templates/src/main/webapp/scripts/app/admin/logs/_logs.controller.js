@@ -8,5 +8,5 @@ angular.module('<%=angularAppName%>')
             LogsService.changeLevel({name: name, level: level}, function () {
                 $scope.loggers = LogsService.findAll();
             });
-        }
+        };
     });

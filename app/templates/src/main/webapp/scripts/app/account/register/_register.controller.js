@@ -9,8 +9,8 @@ angular.module('<%=angularAppName%>')
         $scope.registerAccount = {};
 
         $scope.register = function () {
-            if ($scope.registerAccount.password != $scope.confirmPassword) {
-                $scope.doNotMatch = "ERROR";
+            if ($scope.registerAccount.password !== $scope.confirmPassword) {
+                $scope.doNotMatch = 'ERROR';
             } else {
                 $scope.registerAccount.langKey = $translate.use();
                 $scope.doNotMatch = null;
@@ -18,18 +18,18 @@ angular.module('<%=angularAppName%>')
                 $scope.errorUserExists = null;
                 $scope.errorEmailExists = null;
 
-                Auth.createAccount($scope.registerAccount).then(function (account) {
+                Auth.createAccount($scope.registerAccount).then(function () {
                     $scope.success = 'OK';
                 }).catch(function (response) {
                     $scope.success = null;
-                    if (response.status === 400 && response.data === "login already in use") {
-                        $scope.errorUserExists = "ERROR";
-                    } else if (response.status === 400 && response.data === "e-mail address already in use") {
-                        $scope.errorEmailExists = "ERROR";
+                    if (response.status === 400 && response.data === 'login already in use') {
+                        $scope.errorUserExists = 'ERROR';
+                    } else if (response.status === 400 && response.data === 'e-mail address already in use') {
+                        $scope.errorEmailExists = 'ERROR';
                     } else {
-                        $scope.error = "ERROR";
+                        $scope.error = 'ERROR';
                     }
                 });
             }
-        }
+        };
     });
