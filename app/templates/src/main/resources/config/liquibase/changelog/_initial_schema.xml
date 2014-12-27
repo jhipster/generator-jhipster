@@ -111,6 +111,7 @@
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
         </loadData>
+        <dropDefaultValue tableName="T_USER" columnName="created_date" columnDataType="datetime"/>
 
         <loadData encoding="UTF-8"
                   file="config/liquibase/authorities.csv"

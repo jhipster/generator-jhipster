@@ -28,7 +28,10 @@
             </column><% } else if (fields[fieldId].fieldType == 'Boolean') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bit"/><% } } %><% for (relationshipId in relationships) { %><% if ((relationships[relationshipId].relationshipType == 'many-to-one') || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) { %>
             <column name="<%=relationships[relationshipId].otherEntityName.toLowerCase() %>_id" type="bigint"/><% } } %>
-        </createTable>
+        </createTable><% for (fieldId in fields) {
+            if (fields[fieldId].fieldType == 'DateTime') { %>
+        <dropDefaultValue tableName="T_<%= name.toUpperCase() %>" columnName="<%=fields[fieldId].fieldNameUnderscored %>" columnDataType="datetime"/>
+<% } } %>
         <% for (relationshipId in relationships) { %><% if ((relationships[relationshipId].relationshipType == 'many-to-one') || ((relationships[relationshipId].relationshipType == 'one-to-one')) && (relationships[relationshipId].ownerSide == true)) { %>
         <addForeignKeyConstraint baseColumnNames="<%= relationships[relationshipId].otherEntityName.toLowerCase() %>_id"
                                  baseTableName="T_<%= name.toUpperCase() %>"
