@@ -14,7 +14,7 @@ angular.module('<%=angularAppName%>')
                 deferred.resolve(language);
                 return deferred.promise;
             },
-            getBy: function (language) {
+            getAll: function () {
                 var deferred = $q.defer();
                 deferred.resolve(LANGUAGES);
                 return deferred.promise;
