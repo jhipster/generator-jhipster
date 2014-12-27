@@ -72,8 +72,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @JoinTable(
             name = "T_USER_AUTHORITY",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")},
-            indexes = @Index(name = "idx_user_authority", columnList = "user_id, authority_name"))<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
     private Set<Authority> authorities = new HashSet<>();<% if (authenticationType == 'cookie') { %><% if (databaseType == 'sql') { %>
 
