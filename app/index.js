@@ -516,7 +516,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/domain/_AbstractAuditingEntity.java', javaDir + 'domain/AbstractAuditingEntity.java', this, {});
     this.template('src/main/java/package/domain/_Authority.java', javaDir + 'domain/Authority.java', this, {});
     this.template('src/main/java/package/domain/_PersistentAuditEvent.java', javaDir + 'domain/PersistentAuditEvent.java', this, {});
-    this.template('src/main/java/package/domain/_PersistentToken.java', javaDir + 'domain/PersistentToken.java', this, {});
+    if (this.authenticationType == 'cookie') {
+        this.template('src/main/java/package/domain/_PersistentToken.java', javaDir + 'domain/PersistentToken.java', this, {});
+    }
     this.template('src/main/java/package/domain/_User.java', javaDir + 'domain/User.java', this, {});
     this.template('src/main/java/package/domain/util/_CustomLocalDateSerializer.java', javaDir + 'domain/util/CustomLocalDateSerializer.java', this, {});
     this.template('src/main/java/package/domain/util/_CustomDateTimeSerializer.java', javaDir + 'domain/util/CustomDateTimeSerializer.java', this, {});
