@@ -13,7 +13,8 @@ describe('Services Tests ', function () {
             authService = Auth;
             spiedAuthServerProvider = AuthServerProvider;
             //Request on app init
-            $httpBackend.expectPOST('api/logout').respond(200, '');
+            <% if (authenticationType == 'cookie' || authenticationType == 'token') { %>
+            $httpBackend.expectPOST('api/logout').respond(200, '');<% } %>
             var req = 'protected/authentication_check.gif';
             var regex_friendly_req = req.replace(/\//g, '\\/');
             var expected = new RegExp(regex_friendly_req + '\\?cacheBuster=[0-9]+');
@@ -33,7 +34,7 @@ describe('Services Tests ', function () {
             $httpBackend.verifyNoOutstandingExpectation();
             $httpBackend.verifyNoOutstandingRequest();
         });
-
+        <% if (authenticationType == 'cookie' || authenticationType == 'token') { %>
         it('should call backend on logout then call authServerProvider.logout', function(){
             //GIVEN
             //Set spy
@@ -48,7 +49,20 @@ describe('Services Tests ', function () {
             //THEN
             expect(spiedAuthServerProvider.logout).toHaveBeenCalled();
             expect(spiedLocalStorageService.clearAll).toHaveBeenCalled();
-        });
+        });<% } %><% if (authenticationType == 'xauth') { %>
+          it('should call LocalStorageService.clearAll on logout', function(){
+            //GIVEN
+            //Set spy
+            spyOn(spiedLocalStorageService, "clearAll").and.callThrough();
+
+            //WHEN
+            authService.logout();
+            //flush the backend to "execute" the request to do the expectedGET assertion.
+            $httpBackend.flush();
+
+            //THEN
+            expect(spiedLocalStorageService.clearAll).toHaveBeenCalled();
+          });<% } %>
 
     });
 });

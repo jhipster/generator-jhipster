@@ -61,6 +61,8 @@
             <% if (authenticationType == 'token') { %>var authToken = JSON.parse(localStorage.getItem("token")).access_token;
             window.authorizations.add("key", new ApiKeyAuthorization("Authorization",
                             "Bearer " + authToken, "header"));<% } %>
+            <% if (authenticationType == 'xauth') { %>var authToken = JSON.parse(localStorage.getItem("ls.token")).token;
+            window.authorizations.add("key", new ApiKeyAuthorization("X-Auth-Token", authToken, "header"));<% } %>
             window.swaggerUi.load();
         });
     </script>

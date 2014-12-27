@@ -40,16 +40,22 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
             }
         };
     })
-    <% if (authenticationType == 'token') { %>
+    <% if (authenticationType == 'token' || authenticationType == 'xauth') { %>
     .factory('authInterceptor', function ($rootScope, $q, $location, localStorageService) {
         return {
             // Add authorization token to headers
             request: function (config) {
                 config.headers = config.headers || {};
                 var token = localStorageService.get('token');
+                <% if (authenticationType == 'token') { %>
                 if (token && token.expires_at && token.expires_at > new Date().getTime()) {
                     config.headers.Authorization = 'Bearer ' + token.access_token;
                 }
+                <% } %><% if (authenticationType == 'xauth') { %>
+                if (token && token.expires && token.expires > new Date().getTime()) {
+                  config.headers['x-auth-token'] = token.token;
+                }
+                <% } %>
                 return config;
             }
         };
@@ -59,7 +65,7 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
         <% if (authenticationType == 'cookie') { %>//enable CSRF
         $httpProvider.defaults.xsrfCookieName= 'CSRF-TOKEN';
         $httpProvider.defaults.xsrfHeaderName= 'X-CSRF-TOKEN';<% } %>
-    
+
         //Cache everything except rest api requests
         httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*rest.*/, /.*protected.*/], true);
 
@@ -85,10 +91,10 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
                 }]
             }
         });
-        <% if (authenticationType == 'token') { %>
+        <% if (authenticationType == 'token' || authenticationType == 'xauth') { %>
         $httpProvider.interceptors.push('authInterceptor');<% } %>
 
-        // Initialize angular-translate    
+        // Initialize angular-translate
         $translateProvider.useLoader('$translatePartialLoader', {
             urlTemplate: 'i18n/{lang}/{part}.json'
         });

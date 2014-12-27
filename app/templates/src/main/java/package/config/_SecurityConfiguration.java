@@ -1,20 +1,22 @@
 package <%=packageName%>.config;
-<% if (authenticationType == 'cookie') { %>
-import <%=packageName%>.security.*;
-import <%=packageName%>.web.filter.CsrfCookieGeneratorFilter;<% } %>
+<% if (authenticationType == 'cookie' || authenticationType == 'xauth') { %>
+import <%=packageName%>.security.*;<% } %><% if (authenticationType == 'cookie') { %>
+import <%=packageName%>.web.filter.CsrfCookieGeneratorFilter;<% } %><% if (authenticationType == 'xauth') { %>
+import <%=packageName%>.security.xauth.*;<% } %>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;<% if (authenticationType == 'cookie') { %>
 import org.springframework.core.env.Environment;<% } %><% if (authenticationType == 'token') { %>
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;<% } %>
-<% if (authenticationType == 'token') { %>
+<% if (authenticationType == 'token' || authenticationType == 'xauth') { %>
 import org.springframework.security.authentication.AuthenticationManager;<% } %>
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;<% if (authenticationType == 'cookie') { %>
+import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;<% if (authenticationType == 'cookie' || authenticationType == 'xauth') { %>
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;<% } %>
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;<% if (authenticationType == 'xauth') { %>
+import org.springframework.security.config.http.SessionCreationPolicy;<% } %>
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;<% if (authenticationType == 'cookie') { %>
@@ -38,7 +40,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     private AjaxAuthenticationFailureHandler ajaxAuthenticationFailureHandler;
 
     @Inject
-    private AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler;
+    private AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler;<% } %><% if (authenticationType == 'cookie' || authenticationType == 'xauth') { %>
 
     @Inject
     private Http401UnauthorizedEntryPoint authenticationEntryPoint;<% } %>
@@ -47,7 +49,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     private UserDetailsService userDetailsService;<% if (authenticationType == 'cookie') { %>
 
     @Inject
-    private RememberMeServices rememberMeServices;<% } %>
+    private RememberMeServices rememberMeServices;<% } %><% if (authenticationType == 'xauth') { %>
+
+    @Inject
+    private TokenProvider tokenProvider;<% } %>
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -74,14 +79,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/websocket/activity")<% } %><% } %>
             .antMatchers("/test/**")<% if (devDatabaseType != 'h2Memory') { %>;<% } else { %>
             .antMatchers("/console/**");<% } %>
-    }<% if (authenticationType == 'cookie') { %>
+    }<% if (authenticationType == 'cookie' || authenticationType == 'xauth') { %>
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-            .addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class)
+        http<% if (authenticationType == 'cookie') { %>
+            .addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class)<% } %>
             .exceptionHandling()
-            .authenticationEntryPoint(authenticationEntryPoint)
+            .authenticationEntryPoint(authenticationEntryPoint)<% if (authenticationType == 'cookie') { %>
         .and()
             .rememberMe()
             .rememberMeServices(rememberMeServices)
@@ -99,11 +104,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .logoutUrl("/api/logout")
             .logoutSuccessHandler(ajaxLogoutSuccessHandler)
             .deleteCookies("JSESSIONID", "hazelcast.sessionId", "CSRF-TOKEN")
-            .permitAll()
-        .and()
+            .permitAll()<% } %>
+        .and()<% if (authenticationType == 'xauth') { %>
+            .csrf()
+            .disable()<% } %>
             .headers()
             .frameOptions()
-            .disable()
+            .disable()<% if (authenticationType == 'xauth') { %>
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()<% } %>
             .authorizeRequests()
                 .antMatchers("/api/register").permitAll()
                 .antMatchers("/api/activate").permitAll()
@@ -124,7 +134,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
                 .antMatchers("/env/**").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/trace/**").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/protected/**").authenticated();
+                .antMatchers("/protected/**").authenticated()<% if (authenticationType != 'xauth') { %>;<% } %><% if (authenticationType == 'xauth') { %>
+        .and()
+            .apply(securityConfigurerAdapter());<% } %>
 
     }<% } %><% if (authenticationType == 'token') { %>
 
@@ -141,5 +153,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
         protected MethodSecurityExpressionHandler createExpressionHandler() {
             return new OAuth2MethodSecurityExpressionHandler();
         }<% } %>
-    }
+    }<% if (authenticationType == 'xauth') { %>
+
+    private XAuthTokenConfigurer securityConfigurerAdapter() {
+      return new XAuthTokenConfigurer(userDetailsService, tokenProvider);
+    }<% } %>
 }

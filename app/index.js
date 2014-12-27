@@ -86,6 +86,10 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 {
                     value: 'token',
                     name: 'Token-Based Authentication (Oauth2)'
+                },
+                {
+                    value: 'xauth',
+                    name: 'Token-Based Authentication (XAuth)'
                 }
             ],
             default: 0
@@ -483,6 +487,10 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/main/java/package/config/_OAuth2ServerConfiguration.java', javaDir + 'config/OAuth2ServerConfiguration.java', this, {});
     }
 
+    if (this.authenticationType == 'xauth') {
+      this.template('src/main/java/package/config/_XAuthConfiguration.java', javaDir + 'config/XAuthConfiguration.java', this, {});
+    }
+
     if (this.databaseType == 'nosql' &&  this.authenticationType == 'token') {
         this.template('src/main/java/package/config/oauth2/_OAuth2AuthenticationReadConverter.java', javaDir + 'config/oauth2/OAuth2AuthenticationReadConverter.java', this, {});
         this.template('src/main/java/package/config/oauth2/_MongoDBTokenStore.java', javaDir + 'config/oauth2/MongoDBTokenStore.java', this, {});
@@ -537,7 +545,12 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/security/_package-info.java', javaDir + 'security/package-info.java', this, {});
     this.template('src/main/java/package/security/_AjaxAuthenticationFailureHandler.java', javaDir + 'security/AjaxAuthenticationFailureHandler.java', this, {});
     this.template('src/main/java/package/security/_AjaxAuthenticationSuccessHandler.java', javaDir + 'security/AjaxAuthenticationSuccessHandler.java', this, {});
-    this.template('src/main/java/package/security/_AjaxLogoutSuccessHandler.java', javaDir + 'security/AjaxLogoutSuccessHandler.java', this, {});
+    if (this.authenticationType == 'cookie' || this.authenticationType == 'token') {
+        this.template('src/main/java/package/security/_AjaxLogoutSuccessHandler.java', javaDir + 'security/AjaxLogoutSuccessHandler.java', this, {});
+    }
+    if (this.authenticationType == 'xauth'){
+        this.template('src/main/java/package/security/_AuthenticationProvider.java', javaDir + 'security/AuthenticationProvider.java', this, {});
+    }
     this.template('src/main/java/package/security/_AuthoritiesConstants.java', javaDir + 'security/AuthoritiesConstants.java', this, {});
     if (this.authenticationType == 'cookie') {
         this.template('src/main/java/package/security/_CustomPersistentRememberMeServices.java', javaDir + 'security/CustomPersistentRememberMeServices.java', this, {});
@@ -547,6 +560,14 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/security/_SpringSecurityAuditorAware.java', javaDir + 'security/SpringSecurityAuditorAware.java', this, {});
     this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java', this, {});
     this.template('src/main/java/package/security/_UserNotActivatedException.java', javaDir + 'security/UserNotActivatedException.java', this, {});
+
+    if (this.authenticationType == 'xauth'){
+      this.template('src/main/java/package/security/xauth/_Token.java', javaDir + 'security/xauth/Token.java', this, {});
+      this.template('src/main/java/package/security/xauth/_TokenProvider.java', javaDir + 'security/xauth/TokenProvider.java', this, {});
+      this.template('src/main/java/package/security/xauth/_UserXAuthTokenController.java', javaDir + 'security/xauth/UserXAuthTokenController.java', this, {});
+      this.template('src/main/java/package/security/xauth/_XAuthTokenConfigurer.java', javaDir + 'security/xauth/XAuthTokenConfigurer.java', this, {});
+      this.template('src/main/java/package/security/xauth/_XAuthTokenFilter.java', javaDir + 'security/xauth/XAuthTokenFilter.java', this, {});
+    }
 
     this.template('src/main/java/package/service/_package-info.java', javaDir + 'service/package-info.java', this, {});
     this.template('src/main/java/package/service/_AuditEventService.java', javaDir + 'service/AuditEventService.java', this, {});
@@ -655,6 +676,8 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/scripts/components/auth/_principal.service.js', webappDir + 'scripts/components/auth/principal.service.js', this, {});
     if (this.authenticationType == 'token') {
         this.template(webappDir + '/scripts/components/auth/provider/_auth.oauth2.service.js', webappDir + 'scripts/components/auth/provider/auth.oauth2.service.js', this, {});
+    } else if (this.authenticationType == 'xauth') {
+        this.template(webappDir + '/scripts/components/auth/provider/_auth.xauth.service.js', webappDir + 'scripts/components/auth/provider/auth.xauth.service.js', this, {});
     } else {
         this.template(webappDir + '/scripts/components/auth/provider/_auth.session.service.js', webappDir + 'scripts/components/auth/provider/auth.session.service.js', this, {});
     }
@@ -743,7 +766,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(testJsDir + 'spec/app/account/login/_loginControllerSpec.js', testJsDir + 'spec/app/account/login/loginControllerSpec.js', this, {});
     this.template(testJsDir + 'spec/app/account/password/_passwordControllerSpec.js', testJsDir + 'spec/app/account/password/passwordControllerSpec.js', this, {});
     this.template(testJsDir + 'spec/app/account/password/_passwordDirectiveSpec.js', testJsDir + 'spec/app/account/password/passwordDirectiveSpec.js', this, {});
-    this.template(testJsDir + 'spec/app/account/sessions/_sessionsControllerSpec.js', testJsDir + 'spec/app/account/sessions/sessionsControllerSpec.js', this, {});
+    if (this.authenticationType == 'cookie' || this.authenticationType == 'token') {
+        this.template(testJsDir + 'spec/app/account/sessions/_sessionsControllerSpec.js', testJsDir + 'spec/app/account/sessions/sessionsControllerSpec.js', this, {});
+    }
     this.template(testJsDir + 'spec/app/account/settings/_settingsControllerSpec.js', testJsDir + 'spec/app/account/settings/settingsControllerSpec.js', this, {});
     this.template(testJsDir + 'spec/components/auth/_authServicesSpec.js', testJsDir + 'spec/components/auth/authServicesSpec.js', this, {});
 
@@ -762,8 +787,16 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/components/auth/services/account.service.js',
         'scripts/components/auth/services/activate.service.js',
         'scripts/components/auth/services/password.service.js',
-        'scripts/components/auth/services/register.service.js',
-        'scripts/components/auth/services/sessions.service.js',
+        'scripts/components/auth/services/register.service.js'
+        ];
+
+    if (this.authenticationType == 'cookie' || this.authenticationType == 'token') {
+        appScripts = appScripts.concat([
+            'scripts/components/auth/services/sessions.service.js'
+            ]);
+    }
+
+    appScripts = appScripts.concat([
         'scripts/components/form/form.directive.js',
         'scripts/components/language/language.service.js',
         'scripts/components/language/language.controller.js',
@@ -786,9 +819,17 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/app/account/password/password.controller.js',
         'scripts/app/account/password/password.directive.js',
         'scripts/app/account/register/register.js',
-        'scripts/app/account/register/register.controller.js',
-        'scripts/app/account/sessions/sessions.js',
-        'scripts/app/account/sessions/sessions.controller.js',
+        'scripts/app/account/register/register.controller.js'
+        ]);
+
+    if (this.authenticationType == 'cookie' || this.authenticationType == 'token') {
+        appScripts = appScripts.concat([
+            'scripts/app/account/sessions/sessions.js',
+            'scripts/app/account/sessions/sessions.controller.js'
+            ]);
+    }
+
+    appScripts = appScripts.concat([
         'scripts/app/account/settings/settings.js',
         'scripts/app/account/settings/settings.controller.js',
         'scripts/app/admin/admin.js',
@@ -807,16 +848,18 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/app/error/error.js',
         'scripts/app/main/main.js',
         'scripts/app/main/main.controller.js'
-        ];
+        ]);
 
     if (this.authenticationType == 'token') {
         appScripts = appScripts.concat([
             'scripts/components/auth/provider/auth.oauth2.service.js']);
-    } else {
+    } else if (this.authenticationType == 'xauth'){
+        appScripts = appScripts.concat([
+            'scripts/components/auth/provider/auth.xauth.service.js']);
+    } else{
         appScripts = appScripts.concat([
             'scripts/components/auth/provider/auth.session.service.js']);
     }
-
     if (this.websocket == 'atmosphere') {
         appScripts = appScripts.concat([
             'scripts/app/admin/tracker/tracker.js',

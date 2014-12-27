@@ -25,12 +25,13 @@ spring:
         from: <%= baseName %>@localhost
 
     messageSource:
-        cacheSeconds: 1<% if (authenticationType == 'token') { %>
+        cacheSeconds: 1<% if (authenticationType == 'token' || authenticationType == 'xauth') { %>
 
-authentication:
+authentication:<% if (authenticationType == 'xauth') { %>
+    xauth:<% } %><% if (authenticationType == 'token') { %>
     oauth:
-        clientid: <%= baseName %>app
-        secret: mySecretOAuthSecret
+        clientid: <%= baseName %>app<% } %>
+        secret: mySecretAuthSecret
         # Token is valid 30 minutes
         tokenValidityInSeconds: 1800<% } %>
 
