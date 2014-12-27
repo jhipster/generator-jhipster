@@ -28,10 +28,11 @@ spring:
         cacheSeconds: 1<% if (authenticationType == 'token' || authenticationType == 'xauth') { %>
 
 authentication:<% if (authenticationType == 'xauth') { %>
-    xauth:<% } %><% if (authenticationType == 'token') { %>
+    xauth:
+        secret: myXAuthSecret<% } %><% if (authenticationType == 'token') { %>
     oauth:
-        clientid: <%= baseName %>app<% } %>
-        secret: mySecretAuthSecret
+        clientid: <%= baseName %>app
+        secret: mySecretOAuthSecret<% } %>
         # Token is valid 30 minutes
         tokenValidityInSeconds: 1800<% } %>
 
