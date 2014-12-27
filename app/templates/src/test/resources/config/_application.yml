@@ -12,7 +12,7 @@ async:
     queueCapacity: 10000
 
 spring:
-    <% if (databaseType == 'nosql') { %>
+    <% if (databaseType == 'mongodb') { %>
     data:
         mongodb:
              host: localhost

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;<% if (hibernateCache != 'no'
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
 import org.hibernate.validator.constraints.Email;
-<% if (databaseType == 'nosql') { %>import org.springframework.data.annotation.Id;
+<% if (databaseType == 'mongodb') { %>import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 <% } %><% if (databaseType == 'sql') { %>
@@ -20,18 +20,18 @@ import java.util.Set;
  */<% if (databaseType == 'sql') { %>
 @Entity
 @Table(name = "T_USER")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'nosql') { %>
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'mongodb') { %>
 @Document(collection = "T_USER")<% } %>
 public class User extends AbstractAuditingEntity implements Serializable {
 
     @Id<% if (databaseType == 'sql') { %>
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;<% } %><% if (databaseType == 'nosql') { %>
+    private Long id;<% } %><% if (databaseType == 'mongodb') { %>
     private String id;<% } %>
 
     @NotNull
     @Size(min = 0, max = 50)<% if (databaseType == 'sql') { %>
-    @Column(length = 50)<% } %>
+    @Column(length = 50, unique = true)<% } %>
     private String login;
 
     @JsonIgnore
@@ -40,29 +40,30 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private String password;
 
     @Size(min = 0, max = 50)<% if (databaseType == 'sql') { %>
-    @Column(name = "first_name", length = 50)<% } %><% if (databaseType == 'nosql') { %>
+    @Column(name = "first_name", length = 50)<% } %><% if (databaseType == 'mongodb') { %>
     @Field("first_name")<% } %>
     private String firstName;
 
     @Size(min = 0, max = 50)<% if (databaseType == 'sql') { %>
-    @Column(name = "last_name", length = 50)<% } %><% if (databaseType == 'nosql') { %>
+    @Column(name = "last_name", length = 50)<% } %><% if (databaseType == 'mongodb') { %>
     @Field("last_name")<% } %>
     private String lastName;
 
     @Email
     @Size(min = 0, max = 100)<% if (databaseType == 'sql') { %>
-    @Column(length = 100)<% } %>
+    @Column(length = 100, unique = true)<% } %>
     private String email;
-
+<% if (databaseType == 'sql') { %>
+    @Column(nullable = false)<% } %>
     private boolean activated = false;
 
     @Size(min = 2, max = 5)<% if (databaseType == 'sql') { %>
-    @Column(name = "lang_key", length = 5)<% } %><% if (databaseType == 'nosql') { %>
+    @Column(name = "lang_key", length = 5)<% } %><% if (databaseType == 'mongodb') { %>
     @Field("lang_key")<% } %>
     private String langKey;
 
     @Size(min = 0, max = 20)<% if (databaseType == 'sql') { %>
-    @Column(name = "activation_key", length = 20)<% } %><% if (databaseType == 'nosql') { %>
+    @Column(name = "activation_key", length = 20)<% } %><% if (databaseType == 'mongodb') { %>
     @Field("activation_key")<% } %>
     private String activationKey;
 
@@ -71,7 +72,8 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @JoinTable(
             name = "T_USER_AUTHORITY",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")},
+            indexes = @Index(name = "idx_user_authority", columnList = "user_id, authority_name"))<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
     private Set<Authority> authorities = new HashSet<>();<% if (authenticationType == 'cookie') { %><% if (databaseType == 'sql') { %>
 
@@ -80,11 +82,11 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
     private Set<PersistentToken> persistentTokens = new HashSet<>();<% } %>
 
-    public <% if (databaseType == 'sql') { %>Long<% } else if (databaseType == 'nosql') { %>String<% } %> getId() {
+    public <% if (databaseType == 'sql') { %>Long<% } else if (databaseType == 'mongodb') { %>String<% } %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType == 'sql') { %>Long<% } else if (databaseType == 'nosql') { %>String<% } %> id) {
+    public void setId(<% if (databaseType == 'sql') { %>Long<% } else if (databaseType == 'mongodb') { %>String<% } %> id) {
         this.id = id;
     }
 

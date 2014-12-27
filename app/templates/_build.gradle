@@ -110,7 +110,7 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-loader-tools', version: spring_boot_version
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-logging', version: spring_boot_version
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: spring_boot_version<% if (databaseType == 'sql') { %>
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: spring_boot_version<% } %><% if (databaseType == 'nosql') { %>
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: spring_boot_version<% } %><% if (databaseType == 'mongodb') { %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb', version: spring_boot_version<% } %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: spring_boot_version
     compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: spring_boot_version) {
@@ -123,7 +123,7 @@ dependencies {
     compile(group: 'org.springframework', name: 'spring-context-support') {
         exclude(module: 'quartz')
     }<% if (authenticationType == 'token') { %>
-    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: spring_security_oauth2_version<% } %><% if (databaseType == 'nosql') { %>
+    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: spring_security_oauth2_version<% } %><% if (databaseType == 'mongodb') { %>
     compile group: 'org.mongeez', name: 'mongeez', version: mongeez_version<% } %>
     compile(group: 'com.mangofactory', name: 'swagger-springmvc', version: swagger_springmvc_version) {
         exclude(module: 'jackson-module-scala_2.10')
@@ -140,7 +140,7 @@ dependencies {
     testCompile group: 'org.assertj', name: 'assertj-core', version: assertj_core_version
     testCompile group: 'junit', name: 'junit', version:'4.11'
     testCompile group: 'org.mockito', name: 'mockito-core', version:'1.9.5'<% if (databaseType == 'sql') { %>
-    testCompile group: 'com.mattbertolini', name: 'liquibase-slf4j', version: liquibase_slf4j_version<% } %><% if (databaseType == 'nosql') { %>
+    testCompile group: 'com.mattbertolini', name: 'liquibase-slf4j', version: liquibase_slf4j_version<% } %><% if (databaseType == 'mongodb') { %>
     testCompile group: 'cz.jirutka.spring', name: 'embedmongo-spring', version: embedmongo_spring_version<% } %>
     testCompile group: 'org.hamcrest', name: 'hamcrest-library', version:'1.3'
 }

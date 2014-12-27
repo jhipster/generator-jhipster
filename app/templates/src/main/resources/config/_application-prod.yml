@@ -3,7 +3,7 @@ server:
 
 spring:
     profiles:
-        active: prod<% if (databaseType == 'nosql') { %>
+        active: prod<% if (databaseType == 'mongodb') { %>
     data:
         mongodb:
             host: localhost
@@ -45,8 +45,6 @@ spring:
     thymeleaf:
         mode: XHTML
         cache: true
-        viewNames: error
-
 
 metrics:
     jmx.enabled: true

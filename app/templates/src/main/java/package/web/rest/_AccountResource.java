@@ -172,16 +172,16 @@ public class AccountResource {
     @Timed
     public ResponseEntity<String> saveAccount(@RequestBody UserDTO userDTO) {<% if (javaVersion == '8') { %>
         return userRepository
-            .findOneByEmail(userDTO.getEmail())
+            .findOneByLogin(userDTO.getLogin())
             .filter(u -> u.getLogin().equals(SecurityUtils.getCurrentLogin()))
             .map(u -> {
                 userService.updateUserInformation(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail());
                 return new ResponseEntity<String>(HttpStatus.OK);
             })
-            .orElseGet(() -> ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body("e-mail address already in use"));<% } else { %>
-        User userHavingThisEmail = userRepository.findOneByEmail(userDTO.getEmail());
-        if (userHavingThisEmail != null && !userHavingThisEmail.getLogin().equals(SecurityUtils.getCurrentLogin())) {
-            return ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body("e-mail address already in use");
+            .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else { %>
+        User userHavingThisLogin = userRepository.findOneByLogin(userDTO.getLogin());
+        if (userHavingThisLogin != null && !userHavingThisLogin.getLogin().equals(SecurityUtils.getCurrentLogin())) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         userService.updateUserInformation(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail());
         return new ResponseEntity<>(HttpStatus.OK);<% } %>

@@ -29,15 +29,15 @@
             <column name="email" type="varchar(100)">
                 <constraints unique="true"/>
             </column>
-            <column name="activated" type="boolean" defaultValueBoolean="false" valueBoolean="false">
+            <column name="activated" type="boolean" valueBoolean="false">
                 <constraints nullable="false" />
             </column>
             <column name="lang_key" type="varchar(5)"/>
             <column name="activation_key" type="varchar(20)"/>
-            <column name="created_by" type="varchar(50)" defaultValue="system">
+            <column name="created_by" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_date" type="timestamp" defaultValueDate="<%= _.unescape('\$\{now}')%>">
+            <column name="created_date" type="timestamp">
                 <constraints nullable="false"/>
             </column>
             <column name="last_modified_by" type="varchar(50)"/>
@@ -116,6 +116,7 @@
                   separator=";"
                   tableName="T_USER">
             <column name="activated" type="boolean"/>
+            <column name="created_date" type="timestamp"/>
         </loadData>
 
         <loadData encoding="UTF-8"
