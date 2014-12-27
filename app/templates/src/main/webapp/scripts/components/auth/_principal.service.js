@@ -64,9 +64,6 @@ angular.module('<%=angularAppName%>')
                         deferred.resolve(_identity);
                     });
                 return deferred.promise;
-            },
-            roles: function() {
-                return _roles;
             }
         };
     });
