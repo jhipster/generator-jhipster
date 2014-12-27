@@ -766,7 +766,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(testJsDir + 'spec/app/account/login/_loginControllerSpec.js', testJsDir + 'spec/app/account/login/loginControllerSpec.js', this, {});
     this.template(testJsDir + 'spec/app/account/password/_passwordControllerSpec.js', testJsDir + 'spec/app/account/password/passwordControllerSpec.js', this, {});
     this.template(testJsDir + 'spec/app/account/password/_passwordDirectiveSpec.js', testJsDir + 'spec/app/account/password/passwordDirectiveSpec.js', this, {});
-    if (this.authenticationType == 'cookie' || this.authenticationType == 'token') {
+    if (this.authenticationType == 'cookie') {
         this.template(testJsDir + 'spec/app/account/sessions/_sessionsControllerSpec.js', testJsDir + 'spec/app/account/sessions/sessionsControllerSpec.js', this, {});
     }
     this.template(testJsDir + 'spec/app/account/settings/_settingsControllerSpec.js', testJsDir + 'spec/app/account/settings/settingsControllerSpec.js', this, {});
@@ -787,16 +787,7 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/components/auth/services/account.service.js',
         'scripts/components/auth/services/activate.service.js',
         'scripts/components/auth/services/password.service.js',
-        'scripts/components/auth/services/register.service.js'
-        ];
-
-    if (this.authenticationType == 'cookie' || this.authenticationType == 'token') {
-        appScripts = appScripts.concat([
-            'scripts/components/auth/services/sessions.service.js'
-            ]);
-    }
-
-    appScripts = appScripts.concat([
+        'scripts/components/auth/services/register.service.js',
         'scripts/components/form/form.directive.js',
         'scripts/components/language/language.service.js',
         'scripts/components/language/language.controller.js',
@@ -819,17 +810,7 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/app/account/password/password.controller.js',
         'scripts/app/account/password/password.directive.js',
         'scripts/app/account/register/register.js',
-        'scripts/app/account/register/register.controller.js'
-        ]);
-
-    if (this.authenticationType == 'cookie' || this.authenticationType == 'token') {
-        appScripts = appScripts.concat([
-            'scripts/app/account/sessions/sessions.js',
-            'scripts/app/account/sessions/sessions.controller.js'
-            ]);
-    }
-
-    appScripts = appScripts.concat([
+        'scripts/app/account/register/register.controller.js',
         'scripts/app/account/settings/settings.js',
         'scripts/app/account/settings/settings.controller.js',
         'scripts/app/admin/admin.js',
@@ -848,18 +829,27 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/app/error/error.js',
         'scripts/app/main/main.js',
         'scripts/app/main/main.controller.js'
-        ]);
+        ];
+
+    if (this.authenticationType == 'xauth'){
+        appScripts = appScripts.concat([
+            'scripts/components/auth/provider/auth.xauth.service.js']);
+    }
 
     if (this.authenticationType == 'token') {
         appScripts = appScripts.concat([
             'scripts/components/auth/provider/auth.oauth2.service.js']);
-    } else if (this.authenticationType == 'xauth'){
-        appScripts = appScripts.concat([
-            'scripts/components/auth/provider/auth.xauth.service.js']);
-    } else{
-        appScripts = appScripts.concat([
-            'scripts/components/auth/provider/auth.session.service.js']);
     }
+
+    if (this.authenticationType == 'cookie'){
+        appScripts = appScripts.concat([
+            'scripts/components/auth/provider/auth.session.service.js',
+            'scripts/components/auth/services/sessions.service.js',
+            'scripts/app/account/sessions/sessions.js',
+            'scripts/app/account/sessions/sessions.controller.js',
+            ]);
+    }
+
     if (this.websocket == 'atmosphere') {
         appScripts = appScripts.concat([
             'scripts/app/admin/tracker/tracker.js',
