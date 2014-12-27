@@ -23,7 +23,7 @@ spring:
         useServerPrepStmts: true<% } %>
 
     jpa:
-        database-platform: <% if (prodDatabaseType == 'mysql') { %>org.hibernate.dialect.MySQLInnoDBDialect<% } else if (prodDatabaseType == 'postgresql') { %>org.hibernate.dialect.PostgreSQLDialect<% } else { %>org.hibernate.dialect.HSQLDialect<% } %>
+        database-platform: <% if (prodDatabaseType == 'mysql') { %>org.hibernate.dialect.MySQLInnoDBDialect<% } else if (prodDatabaseType == 'postgresql') { %>org.hibernate.dialect.PostgreSQL82Dialect<% } else { %>org.hibernate.dialect.HSQLDialect<% } %>
         database: <% if (prodDatabaseType == 'mysql') { %>MYSQL<% } else if (prodDatabaseType == 'postgresql') { %>POSTGRESQL<% } else { %>HSQL<% } %>
         openInView: false
         show_sql: false
