@@ -248,6 +248,12 @@ gulp.task('usemin', ['images', 'styles'], function(){
         pipe(gulp.dest(yeoman.dist));
 });
 
+gulp.task('jshint', function() {
+    return gulp.src(['gulpfile.js', yeoman.app + 'scripts/**/*.js'])
+        .pipe(jshint())
+        .pipe(jshint.reporter('jshint-stylish'));
+});
+
 gulp.task('default', function() {
     gulp.run('test');
     gulp.run('build');

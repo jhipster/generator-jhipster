@@ -53,6 +53,7 @@
     "gulp-compass": "1.1.8",<% } %>
     "proxy-middleware": "0.5.0", <% } %>
     "event-stream": "3.1.5",
+    "jshint-stylish": "^1.0.0",
     "karma-script-launcher": "0.1.0",
     "karma-chrome-launcher": "0.1.4",
     "karma-html2js-preprocessor": "0.1.0",
