@@ -13,12 +13,12 @@ angular.module('<%=angularAppName%>')
             Sessions.delete({series: encodeURIComponent(series)},
                 function () {
                     $scope.error = null;
-                    $scope.success = "OK";
+                    $scope.success = 'OK';
                     $scope.sessions = Sessions.getAll();
                 },
                 function () {
                     $scope.success = null;
-                    $scope.error = "ERROR";
+                    $scope.error = 'ERROR';
                 });
         };
     });

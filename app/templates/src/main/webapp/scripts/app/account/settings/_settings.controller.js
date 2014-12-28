@@ -17,7 +17,7 @@ angular.module('<%=angularAppName%>')
                 });
             }).catch(function() {
                 $scope.success = null;
-                $scope.error = "ERROR";
+                $scope.error = 'ERROR';
             });
         };
     });

@@ -7,7 +7,7 @@ angular.module('<%=angularAppName%>')
             $scope.success = 'OK';
         }).catch(function () {
             $scope.success = null;
-            $scope.error = "ERROR";
+            $scope.error = 'ERROR';
         });
     });
 

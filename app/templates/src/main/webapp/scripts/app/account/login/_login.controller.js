@@ -14,8 +14,8 @@ angular.module('<%=angularAppName%>')
             }).then(function () {
                 $scope.authenticationError = false;
                 $rootScope.back();
-            }).catch(function (err) {
+            }).catch(function () {
                 $scope.authenticationError = true;
             });
-        }
+        };
     });

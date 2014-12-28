@@ -1,16 +1,17 @@
+/*jshint bitwise: false*/
 'use strict';
 
 angular.module('<%=angularAppName%>')
     .service('Base64', function () {
-        var keyStr = "ABCDEFGHIJKLMNOP" +
-            "QRSTUVWXYZabcdef" +
-            "ghijklmnopqrstuv" +
-            "wxyz0123456789+/" +
-            "=";
+        var keyStr = 'ABCDEFGHIJKLMNOP' +
+            'QRSTUVWXYZabcdef' +
+            'ghijklmnopqrstuv' +
+            'wxyz0123456789+/' +
+            '=';
         this.encode = function (input) {
-            var output = "",
-                chr1, chr2, chr3 = "",
-                enc1, enc2, enc3, enc4 = "",
+            var output = '',
+                chr1, chr2, chr3 = '',
+                enc1, enc2, enc3, enc4 = '',
                 i = 0;
 
             while (i < input.length) {
@@ -34,21 +35,21 @@ angular.module('<%=angularAppName%>')
                     keyStr.charAt(enc2) +
                     keyStr.charAt(enc3) +
                     keyStr.charAt(enc4);
-                chr1 = chr2 = chr3 = "";
-                enc1 = enc2 = enc3 = enc4 = "";
+                chr1 = chr2 = chr3 = '';
+                enc1 = enc2 = enc3 = enc4 = '';
             }
 
             return output;
         };
 
         this.decode = function (input) {
-            var output = "",
-                chr1, chr2, chr3 = "",
-                enc1, enc2, enc3, enc4 = "",
+            var output = '',
+                chr1, chr2, chr3 = '',
+                enc1, enc2, enc3, enc4 = '',
                 i = 0;
 
             // remove all characters that are not A-Z, a-z, 0-9, +, /, or =
-            input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+            input = input.replace(/[^A-Za-z0-9\+\/\=]/g, '');
 
             while (i < input.length) {
                 enc1 = keyStr.indexOf(input.charAt(i++));
@@ -62,35 +63,35 @@ angular.module('<%=angularAppName%>')
 
                 output = output + String.fromCharCode(chr1);
 
-                if (enc3 != 64) {
+                if (enc3 !== 64) {
                     output = output + String.fromCharCode(chr2);
                 }
-                if (enc4 != 64) {
+                if (enc4 !== 64) {
                     output = output + String.fromCharCode(chr3);
                 }
 
-                chr1 = chr2 = chr3 = "";
-                enc1 = enc2 = enc3 = enc4 = "";
+                chr1 = chr2 = chr3 = '';
+                enc1 = enc2 = enc3 = enc4 = '';
             }
         };
     })
-    .factory('StorageService', function ($rootScope) {
+    .factory('StorageService', function ($window) {
         return {
 
             get: function (key) {
-                return JSON.parse(localStorage.getItem(key));
+                return JSON.parse($window.localStorage.getItem(key));
             },
 
             save: function (key, data) {
-                localStorage.setItem(key, JSON.stringify(data));
+                $window.localStorage.setItem(key, JSON.stringify(data));
             },
 
             remove: function (key) {
-                localStorage.removeItem(key);
+                $window.localStorage.removeItem(key);
             },
 
             clearAll : function () {
-                localStorage.clear();
+                $window.localStorage.clear();
             }
         };
     });
