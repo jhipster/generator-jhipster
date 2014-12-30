@@ -51,7 +51,6 @@ public class ActivityService implements ApplicationListener<SessionDisconnectEve
 
     @Override
     public void onApplicationEvent(SessionDisconnectEvent event) {
-        log.info("Disconnect");
         ActivityDTO activityDTO = new ActivityDTO();
         Message message = event.getMessage();
         activityDTO.setSessionId(event.getSessionId());
