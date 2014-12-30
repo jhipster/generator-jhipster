@@ -20,6 +20,18 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
         }
         this.useConfigurationFile = true;
     }
+    this.filenameInheritance = '.jhipster.inheritance.table.json';
+    if (shelljs.test('-f', this.filenameInheritance)) {
+        console.log(chalk.green('Found the '+ this.filenameInheritance +' configuration file'));
+        try {
+            this.inheritances = JSON.parse(this.readFileAsString(this.filenameInheritance))
+        } catch (err) {
+            console.log(chalk.red('The configuration file could not be read!'));
+            return;
+        }
+    } else {
+    	this.inheritances = [];
+    }
     console.log(chalk.red('The entity ' + this.name + ' is being created.'));
     this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
     this.baseName = this.config.get('baseName');
@@ -31,6 +43,8 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
 
     // Specific Entity sub-generator variables
+    this.inheritanceFor = false;
+    this.inheritanceFromClass = '';
     this.fieldId = 0;
     this.fields = [];
     this.fieldsContainLocalDate = false;
@@ -47,6 +61,82 @@ var fieldNamesUnderscored = ['id'];
 
 util.inherits(EntityGenerator, yeoman.generators.Base);
 util.inherits(EntityGenerator, scriptBase);
+
+function removefile(file) {
+    console.log('Remove the file - ' + file)
+    if (shelljs.test('-f', file)) {
+        shelljs.rm(file);
+    }
+
+}
+
+/**
+ * ask if this entity serve inheritance for others
+ */
+EntityGenerator.prototype.askForInheritanceFor = function askForInheritanceFor() {
+	if (this.useConfigurationFile == true) {// don't prompt if data are imported from a file
+        return;
+    }
+    var cb = this.async();
+    console.log(chalk.green('Generating inheritance annotations - only Single Table Strategy#'));
+    var prompts = [
+        {
+            type: 'confirm',
+            name: 'inheritanceForAdd',
+            message: 'Would like your entity be a base class inherited by other entities?',
+            default: false
+        }
+    ];
+    this.prompt(prompts, function (props) {
+        if (props.inheritanceForAdd) {
+            this.inheritanceFor = true;
+        }
+        console.log(chalk.red('===========' + _s.capitalize(this.name) + '=============='));
+        if (props.inheritanceForAdd) {
+            this.askForFields();
+        } else {
+            cb();
+        }
+    }.bind(this));
+}
+
+EntityGenerator.prototype.askForInheritanceFrom = function askForInheritanceFrom() {
+	if (this.useConfigurationFile == true || this.inheritanceFor == true) {// don't prompt if data are imported from a file
+        return;
+    }
+    var cb = this.async();
+    console.log(chalk.green('Generating inheritance #'));
+    var choicesArr = this.inheritances;
+    var prompts = [
+        {
+            type: 'confirm',
+            name: 'inheritanceFromAdd',
+            message: 'Would like your entity to inherit from an existing entity?',
+            default: false
+        },
+        {
+            when: function (response) {
+                return response.inheritanceFromAdd == true;
+            },
+            type: 'list',
+            name: 'inheritanceFromClass',
+            message: 'Which class would you like to extend?',
+            choices: choicesArr,
+            default: 0
+        }
+    ];
+    this.prompt(prompts, function (props) {
+        if (props.inheritanceFromAdd) {
+            this.inheritanceFromClass = props.inheritanceFromClass;
+        }
+        console.log(chalk.red('===========' + _s.capitalize(this.name) + '=============='));
+        if (props.inheritanceFromAdd) {
+            this.askForFields();
+        } else {
+            cb();
+        }
+    }.bind(this));
+}
 
 EntityGenerator.prototype.askForFields = function askForFields() {
     if (this.useConfigurationFile == true) {// don't prompt if data are imported from a file
@@ -284,13 +374,49 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
 
 };
 
+EntityGenerator.prototype.searchBaseTable = function searchBaseTable(entity, obj) {
+    var baseEntityData = '';
+    var filename = '.jhipster.' + entity + '.json';
+    try {
+        baseEntityData = JSON.parse(obj.readFileAsString(filename));
+    } catch (err) {
+        return;
+    }
+    var baseEntity = baseEntityData.inheritanceFromClass;
+    if ((baseEntity != '' || baseEntity != 'undefined') && baseEntityData.inheritanceFor != true){
+    	return searchBaseTable(baseEntity, obj);
+    } else {
+    	return entity;
+    }
+};
+
+
+EntityGenerator.prototype.getInheritedFields = function getInheritedFields(entity, fields, obj) {
+    var baseEntityData = '';
+    var filename = '.jhipster.' + entity + '.json';
+    try {
+        baseEntityData = JSON.parse(obj.readFileAsString(filename));
+    } catch (err) {
+        return;
+    }
+    var baseEntity = baseEntityData.inheritanceFromClass;
+    fields = fields.concat(baseEntityData.fields);
+    if ((baseEntity != '' || baseEntity != 'undefined') && baseEntityData.inheritanceFor != true){
+    	return getInheritedFields(baseEntity, fields, obj);
+    } else {
+    	return fields;
+    }
+};
 
 EntityGenerator.prototype.files = function files() {
     if (this.databaseType == "sql") {
         this.changelogDate = this.dateFormatForLiquibase();
     }
+    this.name = _s.capitalize(this.name);
     if (this.useConfigurationFile == false) { // store informations in a file for further use.
         this.data = {};
+        this.data.inheritanceFor = this.inheritanceFor;
+        this.data.inheritanceFromClass = this.inheritanceFromClass;
         this.data.relationships = this.relationships;
         this.data.fields = this.fields;
         this.data.fieldNamesUnderscored = this.fieldNamesUnderscored;
@@ -304,6 +430,8 @@ EntityGenerator.prototype.files = function files() {
         this.filename = '.jhipster.' + this.name + '.json';
         this.write(this.filename, JSON.stringify(this.data, null, 4));
     } else  {
+        this.inheritanceFor = this.fileData.inheritanceFor;
+    	this.inheritanceFromClass = this.fileData.ingeritanceFromClass;
         this.relationships = this.fileData.relationships;
         this.fields = this.fileData.fields;
         this.fieldNamesUnderscored = this.fileData.fieldNamesUnderscored;
@@ -314,6 +442,22 @@ EntityGenerator.prototype.files = function files() {
         this.fieldsContainBigDecimal = this.fileData.fieldsContainBigDecimal;
         this.fieldsContainDateTime = this.fileData.fieldsContainDateTime;
         this.changelogDate = this.fileData.changelogDate;
+    }
+    if(this.inheritanceFor == true || this.inheritanceFromClass != '') {
+    	// first read data from file - only update
+    	// add to root
+    	if (this.inheritanceFor) {
+    		this.inheritances.push(this.name);
+    	}
+    	// search root and add to its
+    	if(this.inheritanceFromClass != '') {
+    		// skip AbstractAuditingEntity - its mappedSuperclass
+    		// For further use
+    		//this.inheritances[this.inheritanceFromClass].push(this.name);
+    		this.inheritances.push(this.name);
+    	}
+    	removefile(this.filenameInheritance);
+        this.write(this.filenameInheritance, JSON.stringify(this.inheritances, null, 4));
     }
     this.entityClass = _s.capitalize(this.name);
     this.entityInstance = this.name.charAt(0).toLowerCase() + this.name.slice(1);
@@ -329,12 +473,23 @@ EntityGenerator.prototype.files = function files() {
         'src/main/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'Resource.java', this, {});
 
     if (this.databaseType == "sql") {
-        this.template(resourceDir + '/config/liquibase/changelog/_added_entity.xml',
-            resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml', this, {});
-
-        this.addChangelogToLiquibase(this.changelogDate + '_added_entity_' + this.entityClass);
+        if(this.inheritanceFromClass != '') {
+    		this.baseTable = this.searchBaseTable(this.inheritanceFromClass, this);
+    		this.template(resourceDir + '/config/liquibase/changelog/_added_inherited_entity.xml',
+    	        resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_inherited_entity_' + this.entityClass + '.xml', this, {});
+    	
+    	    this.addChangelogToLiquibase(this.changelogDate + '_added_inherited_entity_' + this.entityClass);
+    	} else {
+	        this.template(resourceDir + '/config/liquibase/changelog/_added_entity.xml',
+	            resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml', this, {});
+	
+	        this.addChangelogToLiquibase(this.changelogDate + '_added_entity_' + this.entityClass);
+    	}
     }
 
+    // after generating Liquibase we can merge fields from all inherited classes
+    this.fields = this.getInheritedFields(this.inheritanceFromClass, this.fields, this);
+    
     this.template('src/main/webapp/app/_entities.html',
         'src/main/webapp/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + 's.html', this, {});
 
