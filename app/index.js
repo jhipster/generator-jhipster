@@ -737,7 +737,6 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/components/auth/services/activate.service.js',
         'scripts/components/auth/services/password.service.js',
         'scripts/components/auth/services/register.service.js',
-        'scripts/components/auth/services/sessions.service.js',
         'scripts/components/form/form.directive.js',
         'scripts/components/language/language.service.js',
         'scripts/components/language/language.controller.js',
@@ -761,8 +760,6 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/app/account/password/password.directive.js',
         'scripts/app/account/register/register.js',
         'scripts/app/account/register/register.controller.js',
-        'scripts/app/account/sessions/sessions.js',
-        'scripts/app/account/sessions/sessions.controller.js',
         'scripts/app/account/settings/settings.js',
         'scripts/app/account/settings/settings.controller.js',
         'scripts/app/admin/admin.js',
@@ -788,7 +785,10 @@ JhipsterGenerator.prototype.app = function app() {
             'scripts/components/auth/provider/auth.oauth2.service.js']);
     } else {
         appScripts = appScripts.concat([
-            'scripts/components/auth/provider/auth.session.service.js']);
+            'scripts/components/auth/services/sessions.service.js',
+            'scripts/components/auth/provider/auth.session.service.js',
+            'scripts/app/account/sessions/sessions.js',
+            'scripts/app/account/sessions/sessions.controller.js']);
     }
 
     if (this.websocket == 'spring-websocket') {
