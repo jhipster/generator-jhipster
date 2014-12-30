@@ -1,10 +1,10 @@
 angular.module('<%=angularAppName%>')
-    .controller('TrackerController', <% if (authenticationType == 'token') { %>['AccessToken'], <% } %>function ($scope<% if (authenticationType == 'token') { %>, AuthServerProvider<% } %>) {
+    .controller('TrackerController', function ($scope<% if (authenticationType == 'token') { %>, AuthServerProvider<% } %>) {
         // This controller uses a Websocket connection to receive user activities in real-time.
 
         $scope.activities = [];
         var stompClient = null;
-        var socket = new SockJS('/websocket/tracker<% if (authenticationType == 'token') { %>?access_token=' + AuthServerProvider.getToken() + '<% } %>');
+        var socket = new SockJS('/websocket/tracker');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function(frame) {
             stompClient.subscribe('/topic/activity', function(activity){

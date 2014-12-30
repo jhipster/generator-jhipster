@@ -55,10 +55,10 @@ public class OAuth2ServerConfiguration {
                 .requireCsrfProtectionMatcher(new AntPathRequestMatcher("/oauth/authorize"))
                 .disable()
                 .headers()
-                .frameOptions().disable()
+                .frameOptions().disable()<% if (websocket == 'no') { %>
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
+            .and()<% } %>
                 .authorizeRequests()
                 .antMatchers("/api/authenticate").permitAll()
                 .antMatchers("/api/register").permitAll()

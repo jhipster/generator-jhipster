@@ -70,8 +70,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/assets/**")
             .antMatchers("/swagger-ui/**")<% if (authenticationType == 'token') { %>
             .antMatchers("/api/register")
-            .antMatchers("/api/activate")<% if (websocket == 'spring-websocket') { %>
-            .antMatchers("/websocket/activity")<% } %><% } %>
+            .antMatchers("/api/activate")<% } %>
             .antMatchers("/test/**")<% if (devDatabaseType != 'h2Memory') { %>;<% } else { %>
             .antMatchers("/console/**");<% } %>
     }<% if (authenticationType == 'cookie') { %>
