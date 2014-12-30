@@ -22,8 +22,7 @@
 
     <properties>
         <HikariCP.version>2.2.5</HikariCP.version>
-        <assertj-core.version>1.6.1</assertj-core.version><% if (websocket == 'atmosphere') { %>
-        <atmosphere-spring.version>2.2.0</atmosphere-spring.version><% } %>
+        <assertj-core.version>1.6.1</assertj-core.version>
         <awaitility.version>1.4.0</awaitility.version>
         <commons-io.version>2.4</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version><% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
@@ -253,23 +252,7 @@
             <artifactId>assertj-core</artifactId>
             <version>${assertj-core.version}</version>
             <scope>test</scope>
-        </dependency><% if (websocket == 'atmosphere') { %>
-        <dependency>
-            <groupId>org.atmosphere</groupId>
-            <artifactId>atmosphere-runtime-native</artifactId>
-            <version>2.2.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.atmosphere</groupId>
-            <artifactId>atmosphere-spring</artifactId>
-            <version>${atmosphere-spring.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.atmosphere</groupId>
-                    <artifactId>atmosphere-runtime</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency><% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
+        </dependency><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-ehcache</artifactId>
@@ -369,7 +352,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency><% if (authenticationType == 'token') { %>
+        </dependency><% if (websocket == 'spring-websocket') { %>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+        </dependency><% } %><% if (authenticationType == 'token') { %>
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
@@ -720,13 +707,7 @@
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
-                        <configuration><% if (websocket == 'atmosphere') { %>
-                            <requiresUnpack>
-                                <dependency>
-                                    <groupId>org.atmosphere</groupId>
-                                    <artifactId>atmosphere-runtime</artifactId>
-                                </dependency>
-                            </requiresUnpack><% } %>
+                        <configuration>
                             <arguments>
                                 <argument>--spring.profiles.active=prod</argument>
                             </arguments>

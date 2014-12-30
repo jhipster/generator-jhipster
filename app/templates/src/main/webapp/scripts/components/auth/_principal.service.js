@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .factory('Principal', function Principal($q, Account) {
+    .factory('Principal', function Principal($q, Account<% if (websocket == 'spring-websocket') { %>, Tracker<% } %>) {
         var _identity,
             _authenticated = false;
 
@@ -56,7 +56,8 @@ angular.module('<%=angularAppName%>')
                     .then(function (account) {
                         _identity = account.data;
                         _authenticated = true;
-                        deferred.resolve(_identity);
+                        deferred.resolve(_identity);<% if (websocket == 'spring-websocket') { %>
+                        Tracker.connect();<% } %>
                     })
                     .catch(function() {
                         _identity = null;

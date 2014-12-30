@@ -91,11 +91,7 @@ dependencies {
     compile group: 'javax.inject', name: 'javax.inject', version: javax_inject_version
     compile group: 'joda-time', name: 'joda-time', version: joda_time_version<% if (databaseType == 'sql') { %>
     compile group: 'joda-time', name: 'joda-time-hibernate', version: joda_time_hibernate_version<% } %>
-    compile group: 'org.apache.geronimo.javamail', name: 'geronimo-javamail_1.4_mail', version: geronimo_javamail_1_4_mail_version<% if (websocket == 'atmosphere') { %>
-    compile group: 'org.atmosphere', name: 'atmosphere-spring', version: atmosphere_spring_version
-    compile(group: 'org.atmosphere', name: 'atmosphere-runtime-native', version: '2.2.3'){
-        exclude(module: 'atmosphere-runtime')
-    }<% } %><% if (databaseType == 'sql') { %>
+    compile group: 'org.apache.geronimo.javamail', name: 'geronimo-javamail_1.4_mail', version: geronimo_javamail_1_4_mail_version<% if (databaseType == 'sql') { %>
     compile group: 'org.hibernate', name: 'hibernate-core', version: hibernate_entitymanager_version
     compile group: 'org.hibernate', name: 'hibernate-envers', version: hibernate_entitymanager_version<% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
     compile group: 'org.hibernate', name: 'hibernate-ehcache', version: hibernate_entitymanager_version<% } %>
@@ -115,7 +111,8 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: spring_boot_version
     compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: spring_boot_version) {
         exclude module: 'spring-boot-starter-tomcat'
-    }
+    }<% if (websocket == 'spring-websocket') { %>
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-websocket', version: spring_boot_version<% } %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: spring_boot_version
     compile group: 'org.springframework.cloud', name: 'spring-cloud-cloudfoundry-connector', version: spring_cloud_version
     compile group: 'org.springframework.cloud', name: 'spring-cloud-spring-service-connector', version: spring_cloud_version

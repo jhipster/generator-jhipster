@@ -63,7 +63,7 @@ public class OAuth2ServerConfiguration {
                 .antMatchers("/api/authenticate").permitAll()
                 .antMatchers("/api/register").permitAll()
                 .antMatchers("/api/logs/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/api/**").authenticated()<% if (websocket == 'atmosphere') { %>
+                .antMatchers("/api/**").authenticated()<% if (websocket == 'spring-websocket') { %>
                 .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/websocket/**").permitAll()<% } %>
                 .antMatchers("/metrics/**").hasAuthority(AuthoritiesConstants.ADMIN)

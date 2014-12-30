@@ -107,7 +107,7 @@ Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, res
     this.copyI18nFilesByName(_this, webappDir, 'settings.json', lang);
 
     // remove the tracker.json files
-    if (this.websocket == 'atmosphere') {
+    if (this.websocket == 'spring-websocket') {
         this.copyI18nFilesByName(_this, webappDir, 'tracker.json', lang);
     }
 

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .factory('AuthServerProvider', function loginService($http, localStorageService, $window) {
+    .factory('AuthServerProvider', function loginService($http, localStorageService, $window<% if (websocket == 'spring-websocket') { %>, Tracker<% } %>) {
         return {
             login: function(credentials) {
                 var data = 'j_username=' + encodeURIComponent(credentials.username) +
@@ -16,7 +16,8 @@ angular.module('<%=angularAppName%>')
                     return response;
                 });
             },
-            logout: function() {
+            logout: function() {<% if (websocket == 'spring-websocket') { %>
+                Tracker.disconnect();<% } %>
                 localStorageService.clearAll();
 
                 // logout from the server

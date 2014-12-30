@@ -1,65 +1,61 @@
 package <%=packageName%>.web.websocket;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.web.websocket.dto.ActivityDTO;
-import <%=packageName%>.web.websocket.dto.ActivityDTOJacksonDecoder;
-import org.atmosphere.config.service.Disconnect;
-import org.atmosphere.config.service.ManagedService;
-import org.atmosphere.config.service.Message;
-import org.atmosphere.cpr.*;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationListener;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.servlet.ServletContext;
-import java.io.IOException;
+import java.security.Principal;
 import java.util.Calendar;
 
-@ManagedService(
-        path = "/websocket/activity")
-public class ActivityService {
+import static <%=packageName%>.config.WebsocketConfiguration.IP_ADDRESS;
+
+@Controller
+public class ActivityService implements ApplicationListener<SessionDisconnectEvent> {
 
     private static final Logger log = LoggerFactory.getLogger(ActivityService.class);
 
-    private Broadcaster b;
-
     private DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
-    private ObjectMapper jsonMapper = new ObjectMapper();
-
     @Inject
-    private ServletContext servletContext;
+    SimpMessageSendingOperations messagingTemplate;
 
-    @PostConstruct
-    public void init() {
-        AtmosphereFramework atmosphereFramework = (AtmosphereFramework) servletContext.getAttribute("AtmosphereServlet");
-        this.b = atmosphereFramework.getBroadcasterFactory().lookup("/websocket/tracker", true);
+    @MessageMapping("/websocket/activity")
+    @SendTo("/topic/activity")
+    public ActivityDTO sendActivity(@Payload ActivityDTO activityDTO, StompHeaderAccessor stompHeaderAccessor, Principal principal) {
+        activityDTO.setUserLogin(SecurityUtils.getCurrentLogin());
+        activityDTO.setUserLogin(principal.getName());
+        activityDTO.setSessionId(stompHeaderAccessor.getSessionId());
+        activityDTO.setIpAddress(stompHeaderAccessor.getSessionAttributes().get(IP_ADDRESS).toString());
+        activityDTO.setTime(dateTimeFormatter.print(Calendar.getInstance().getTimeInMillis()));
+        log.debug("Sending user tracking data {}", activityDTO);
+        return activityDTO;
     }
 
-    @Disconnect
-    public void onDisconnect(AtmosphereResourceEvent event) throws IOException {
-        log.debug("Browser {} disconnected", event.getResource().uuid());
-        AtmosphereRequest request = event.getResource().getRequest();
+    @MessageMapping("/websocket/tracker")
+    public ActivityDTO receiveActivity(@Payload ActivityDTO activityDTO) {
+        return activityDTO;
+    }
+
+    @Override
+    public void onApplicationEvent(SessionDisconnectEvent event) {
+        log.info("Disconnect");
         ActivityDTO activityDTO = new ActivityDTO();
-        activityDTO.setUuid(event.getResource().uuid());
+        Message message = event.getMessage();
+        activityDTO.setSessionId(event.getSessionId());
         activityDTO.setPage("logout");
-        String json = jsonMapper.writeValueAsString(activityDTO);
-        b.broadcast(json);
-    }
-
-    @Message(decoders = {ActivityDTOJacksonDecoder.class})
-    public void onMessage(AtmosphereResource atmosphereResource, ActivityDTO activityDTO) throws IOException {
-        if (activityDTO.getUserLogin() != null){
-            AtmosphereRequest request = atmosphereResource.getRequest();
-            activityDTO.setUuid(atmosphereResource.uuid());
-            activityDTO.setIpAddress(request.getRemoteAddr());
-            activityDTO.setTime(dateTimeFormatter.print(Calendar.getInstance().getTimeInMillis()));
-            String json = jsonMapper.writeValueAsString(activityDTO);
-            log.debug("Sending user tracking data {}", json);
-            b.broadcast(json);
-        }
+        messagingTemplate.convertAndSend("/topic/activity", activityDTO);
     }
 }

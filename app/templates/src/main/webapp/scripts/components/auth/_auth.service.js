@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .factory('Auth', function Auth($rootScope, $state, $q, $translate, Principal, AuthServerProvider, Account, Register, Activate, Password) {
+    .factory('Auth', function Auth($rootScope, $state, $q, $translate, Principal, AuthServerProvider, Account, Register, Activate, Password<% if (websocket == 'spring-websocket') { %>, Tracker<% } %>) {
         return {
             login: function (credentials, callback) {
                 var cb = callback || angular.noop;
@@ -12,7 +12,8 @@ angular.module('<%=angularAppName%>')
                     Principal.identity(true).then(function(account) {
                         // After the login the language will be changed to
                         // the language selected by the user during his registration
-                        $translate.use(account.langKey);
+                        $translate.use(account.langKey);<% if (websocket == 'spring-websocket') { %>
+                        Tracker.sendActivity();<% } %>
                     });
                     deferred.resolve(data);
 

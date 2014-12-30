@@ -242,8 +242,8 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                     name: 'No'
                 },
                 {
-                    value: 'atmosphere',
-                    name: 'Yes, with Atmosphere'
+                    value: 'spring-websocket',
+                    name: 'Yes, with Spring Websocket'
                 }
             ],
             default: 0
@@ -495,6 +495,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/_SecurityConfiguration.java', javaDir + 'config/SecurityConfiguration.java', this, {});
     this.template('src/main/java/package/config/_ThymeleafConfiguration.java', javaDir + 'config/ThymeleafConfiguration.java', this, {});
     this.template('src/main/java/package/config/_WebConfigurer.java', javaDir + 'config/WebConfigurer.java', this, {});
+    if (this.websocket == 'spring-websocket') {
+        this.template('src/main/java/package/config/_WebsocketConfiguration.java', javaDir + 'config/WebsocketConfiguration.java', this, {});
+    }
 
     this.template('src/main/java/package/config/audit/_package-info.java', javaDir + 'config/audit/package-info.java', this, {});
     this.template('src/main/java/package/config/audit/_AuditEventConverter.java', javaDir + 'config/audit/AuditEventConverter.java', this, {});
@@ -582,13 +585,11 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/web/rest/_LogsResource.java', javaDir + 'web/rest/LogsResource.java', this, {});
     this.template('src/main/java/package/web/rest/_UserResource.java', javaDir + 'web/rest/UserResource.java', this, {});
 
-    if (this.websocket == 'atmosphere') {
+    if (this.websocket == 'spring-websocket') {
         this.template('src/main/java/package/web/websocket/_package-info.java', javaDir + 'web/websocket/package-info.java', this, {});
         this.template('src/main/java/package/web/websocket/_ActivityService.java', javaDir + 'web/websocket/ActivityService.java', this, {});
-        this.template('src/main/java/package/web/websocket/_TrackerService.java', javaDir + 'web/websocket/TrackerService.java', this, {});
         this.template('src/main/java/package/web/websocket/dto/_package-info.java', javaDir + 'web/websocket/dto/package-info.java', this, {});
         this.template('src/main/java/package/web/websocket/dto/_ActivityDTO.java', javaDir + 'web/websocket/dto/ActivityDTO.java', this, {});
-        this.template('src/main/java/package/web/websocket/dto/_ActivityDTOJacksonDecoder.java', javaDir + 'web/websocket/dto/ActivityDTOJacksonDecoder.java', this, {});
     }
 
     // Create Test Java files
@@ -719,10 +720,11 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/scripts/app/admin/metrics/_metrics.html', webappDir + 'scripts/app/admin/metrics/metrics.html', this, {});
     this.template(webappDir + '/scripts/app/admin/metrics/_metrics.js', webappDir + 'scripts/app/admin/metrics/metrics.js', this, {});
     this.template(webappDir + '/scripts/app/admin/metrics/_metrics.controller.js', webappDir + 'scripts/app/admin/metrics/metrics.controller.js', this, {});
-    if (this.websocket == 'atmosphere') {
+    if (this.websocket == 'spring-websocket') {
         this.copy(webappDir + '/scripts/app/admin/tracker/tracker.html', webappDir + 'scripts/app/admin/tracker/tracker.html');
         this.template(webappDir + '/scripts/app/admin/tracker/_tracker.js', webappDir + 'scripts/app/admin/tracker/tracker.js', this, {});
         this.template(webappDir + '/scripts/app/admin/tracker/_tracker.controller.js', webappDir + 'scripts/app/admin/tracker/tracker.controller.js', this, {});
+        this.template(webappDir + '/scripts/components/tracker/_tracker.service.js', webappDir + '/scripts/components/tracker/tracker.service.js', this, {});
     }
     this.copy(webappDir + '/scripts/app/error/error.html', webappDir + 'scripts/app/error/error.html');
     this.copy(webappDir + '/scripts/app/error/accessdenied.html', webappDir + 'scripts/app/error/accessdenied.html');
@@ -739,9 +741,6 @@ JhipsterGenerator.prototype.app = function app() {
     // Create Test Javascript files
     var testJsDir = 'src/test/javascript/';
     this.copy(testJsDir + 'karma.conf.js', testJsDir + 'karma.conf.js');
-    if (this.websocket == 'atmosphere') {
-        this.copy(testJsDir + 'mock/atmosphere.mock.js', testJsDir + 'mock/atmosphere.mock.js');
-    }
     this.template(testJsDir + 'spec/app/account/login/_loginControllerSpec.js', testJsDir + 'spec/app/account/login/loginControllerSpec.js', this, {});
     this.template(testJsDir + 'spec/app/account/password/_passwordControllerSpec.js', testJsDir + 'spec/app/account/password/passwordControllerSpec.js', this, {});
     this.template(testJsDir + 'spec/app/account/password/_passwordDirectiveSpec.js', testJsDir + 'spec/app/account/password/passwordDirectiveSpec.js', this, {});
@@ -819,10 +818,11 @@ JhipsterGenerator.prototype.app = function app() {
             'scripts/components/auth/provider/auth.session.service.js']);
     }
 
-    if (this.websocket == 'atmosphere') {
+    if (this.websocket == 'spring-websocket') {
         appScripts = appScripts.concat([
             'scripts/app/admin/tracker/tracker.js',
-            'scripts/app/admin/tracker/tracker.controller.js'])
+            'scripts/app/admin/tracker/tracker.controller.js',
+            'scripts/components/tracker/tracker.service.js'])
     }
 
     var vendorScripts = [
@@ -841,10 +841,10 @@ JhipsterGenerator.prototype.app = function app() {
         'bower_components/angular-cache-buster/angular-cache-buster.js'
     ];
 
-    if (this.websocket == 'atmosphere') {
+    if (this.websocket == 'spring-websocket') {
         vendorScripts = vendorScripts.concat([
-            'bower_components/atmosphere/atmosphere.js',
-            'bower_components/jquery-atmosphere/jquery.atmosphere.js']);
+            'bower_components/stomp-websocket/lib/stomp.js',
+            'bower_components/sockjs-client/dist/sockjs.js']);
     }
 
     vendorScripts = vendorScripts.concat([
