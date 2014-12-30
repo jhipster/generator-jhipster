@@ -14,7 +14,8 @@
         <createTable tableName="T_<%= name.toUpperCase() %>">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
-            </column><% for (fieldId in fields) {
+            </column>
+            <% if (inheritanceFor == true) { %><column name="type" type="varchar(255)" /><% } %><% for (fieldId in fields) {
             if (fields[fieldId].fieldType == 'String') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="varchar(255)"/><% } else if (fields[fieldId].fieldType == 'Integer') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="integer"/><% } else if (fields[fieldId].fieldType == 'Long') { %>
