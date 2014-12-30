@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <property name="now" value="now()" dbms="mysql,h2"/>
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+
+    <!--
+        Added the entity <%= entityClass %>.
+    -->
+    <changeSet id="<%= changelogDate %>" author="jhipster">
+
+            <% for (fieldId in fields) { %>
+            <addColumn tableName="T_<%= baseTable.toUpperCase() %>">
+	            <% if (fields[fieldId].fieldType == 'String') { %>
+	            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="varchar(255)"/><% } else if (fields[fieldId].fieldType == 'Integer') { %>
+	            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="integer"/><% } else if (fields[fieldId].fieldType == 'Long') { %>
+	            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bigint"/><% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
+	            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="decimal(10,2)"/><% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
+	            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="date"/><% } else if (fields[fieldId].fieldType == 'DateTime') { %>
+	            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="timestamp"/><% } else if (fields[fieldId].fieldType == 'Boolean') { %>
+	            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bit"/><% } %>
+	        </addColumn><% } %>
+	        
+	        <% for (relationshipId in relationships) { %>
+	        <addColumn tableName="T_<%= baseTable.toUpperCase() %>"><% if ((relationships[relationshipId].relationshipType == 'many-to-one') || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) { %>
+	            <column name="<%=relationships[relationshipId].otherEntityName.toLowerCase() %>_id" type="bigint"/><% } %>
+            </addColumn><% } %>
+        
+        <% for (relationshipId in relationships) { %><% if ((relationships[relationshipId].relationshipType == 'many-to-one') || ((relationships[relationshipId].relationshipType == 'one-to-one')) && (relationships[relationshipId].ownerSide == true)) { %>
+        <addForeignKeyConstraint baseColumnNames="<%= relationships[relationshipId].otherEntityName.toLowerCase() %>_id"
+                                 baseTableName="T_<%= baseTable.toUpperCase() %>"
+                                 constraintName="fk_<%= baseTable.toLowerCase() %>_<%= relationships[relationshipId].otherEntityName.toLowerCase() %>_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="T_<%= relationships[relationshipId].otherEntityName.toUpperCase() %>"/><% } else if ((relationships[relationshipId].relationshipType == 'many-to-many') && (relationships[relationshipId].ownerSide == true)) { %>
+        <createTable tableName="T_<%= baseTable.toUpperCase() %>_T_<%= relationships[relationshipId].otherEntityName.toUpperCase() %>">
+            <column name="<%= relationships[relationshipId].otherEntityName %>s_id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="<%= baseTable %>s_id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="<%= relationships[relationshipId].otherEntityName %>s_id"
+                                 baseTableName="T_<%= baseTable.toUpperCase() %>_T_<%= relationships[relationshipId].otherEntityName.toUpperCase() %>"
+                                 constraintName="fk_<%= baseTable.toLowerCase() %>_<%= relationships[relationshipId].otherEntityName.toLowerCase() %>_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="T_<%= relationships[relationshipId].otherEntityName.toUpperCase() %>"/>
+        <addForeignKeyConstraint baseColumnNames="<%= baseTable %>s_id"
+                                 baseTableName="T_<%= baseTable.toUpperCase() %>_T_<%= relationships[relationshipId].otherEntityName.toUpperCase() %>"
+                                 constraintName="fk_<%= relationships[relationshipId].otherEntityName.toLowerCase() %>_<%= baseTable.toLowerCase() %>_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="T_<%= baseTable.toUpperCase() %>"/>
+        <% } %><% } %>
+    </changeSet>
+</databaseChangeLog>
