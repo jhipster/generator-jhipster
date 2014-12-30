@@ -49,10 +49,8 @@ module.exports = function (grunt) {
                 files: [
                     'src/main/webapp/**/*.html',
                     'src/main/webapp/**/*.json',
-                    '.tmp/assets/styles/**/*.css',
-                    '{.tmp/,}src/main/webapp/scripts/app.js',
-                    '{.tmp/,}src/main/webapp/scripts/app/**/*.js',
-                    '{.tmp/,}src/main/webapp/scripts/components/**/*.js',
+                    '{.tmp/,}src/main/webapp/assets/styles/**/*.css',
+                    '{.tmp/,}src/main/webapp/scripts/**/*.js',
                     'src/main/webapp/assets/images/**/*.{png,jpg,jpeg,gif,webp,svg}'
                 ]
             }
