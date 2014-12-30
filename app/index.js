@@ -350,33 +350,6 @@ JhipsterGenerator.prototype.app = function app() {
     var webappDir = 'src/main/webapp/';
 
     // Remove old files
-    removefile(resourceDir + 'config/liquibase/db-changelog-001.xml');
-    removefile(resourceDir + 'config/liquibase/users_upd_001.csv');
-    removefile(resourceDir + 'config/liquibase/users_authorities_upd_001.csv');
-    removefile(javaDir + 'web/servlet/HealthCheckServlet.java');
-    removefile(javaDir + 'config/metrics/JavaMailHealthCheck.java');
-    removefile(javaDir + 'config/metrics/HealthCheckIndicator.java');
-    removefile(javaDir + 'config/metrics/DatabaseHealthCheckIndicator.java');
-    removefile(javaDir + 'config/metrics/JavaMailHealthCheckIndicator.java');
-    removefile(javaDir + 'config/metrics/DatabaseHealthCheck.java');
-    removefile(javaDir + 'config/apidoc/ApiPathProvider.java');
-    removefile('spring_loaded/springloaded.jar');
-    removefolder(javaDir + '/config/reload');
-    removefolder(javaDir + '/apidoc');
-    removefile(resourceDir + 'mails/messages/messages_da.properties');
-    removefile(resourceDir + 'mails/messages/messages_de.properties');
-    removefile(resourceDir + 'mails/messages/messages_en.properties');
-    removefile(resourceDir + 'mails/messages/messages_es.properties');
-    removefile(resourceDir + 'mails/messages/messages_fr.properties');
-    removefile(resourceDir + 'mails/messages/messages_kr.properties');
-    removefile(resourceDir + 'mails/messages/messages_pl.properties');
-    removefile(resourceDir + 'mails/messages/messages_ru.properties');
-    removefile(resourceDir + 'mails/messages/messages_tr.properties');
-    removefile(resourceDir + 'i18n/messages_pt.properties');
-    removefile(webappDir + 'i18n/pt.json');
-    removefile(webappDir + 'protected/transparent.gif');
-    removefile(webappDir + 'assets/styles/famfamfam-flags.css');
-    removefile(webappDir + 'assets/images/famfamfam-flags.png');
 
     // Angular JS app
     this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
