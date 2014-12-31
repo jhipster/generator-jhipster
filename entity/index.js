@@ -1,5 +1,6 @@
 'use strict';
 var util = require('util'),
+        fs = require('fs'),
         path = require('path'),
         yeoman = require('yeoman-generator'),
         chalk = require('chalk'),
@@ -353,4 +354,31 @@ EntityGenerator.prototype.files = function files() {
 
     this.template('src/test/java/package/web/rest/_EntityResourceTest.java',
         'src/test/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'ResourceTest.java', this, {});
+
+    // Copy for each
+    this.copyI18n('ca');
+    this.copyI18n('da');
+    this.copyI18n('de');
+    this.copyI18n('en');
+    this.copyI18n('es');
+    this.copyI18n('fr');
+    this.copyI18n('kr');
+    this.copyI18n('pl');
+    this.copyI18n('pt-br');
+    this.copyI18n('ru');
+    this.copyI18n('sw');
+    this.copyI18n('tr');
+    this.copyI18n('zh-tw');
+};
+
+EntityGenerator.prototype.copyI18n = function(language) {
+    try {
+        var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
+        if (stats.isDirectory()) {
+            this.template('src/main/webapp/i18n/_entity.json', 'src/main/webapp/i18n/' + language + '/' + this.entityInstance + '.json', this, {});
+        }
+    } catch(e) {
+        // An exception is thrown if the folder doesn't exist
+        // do nothing
+    }
 };

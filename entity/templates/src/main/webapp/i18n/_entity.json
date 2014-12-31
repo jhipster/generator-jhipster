@@ -1,0 +1,9 @@
+{
+    "global": {
+        "menu": {
+            "entities": {
+                "<%= entityInstance%>": "<%= entityClass  %>"
+            }
+        }
+    }
+}
