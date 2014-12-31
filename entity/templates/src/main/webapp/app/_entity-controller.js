@@ -26,7 +26,17 @@ angular.module('<%=angularAppName%>')
         };
 
         $scope.delete = function (id) {
-            <%= entityClass %>.delete({id: id}, $scope.loadAll);
+            $scope.<%= entityInstance %> = <%= entityClass %>.get({id: id});
+            $('#delete<%= entityClass %>Confirmation').modal('show');
+        };
+
+        $scope.confirmDelete = function (id) {
+            <%= entityClass %>.delete({id: id},
+                function () {
+                    $scope.loadAll();
+                    $('#delete<%= entityClass %>Confirmation').modal('hide');
+                    $scope.clear();
+                });
         };
 
         $scope.clear = function () {
