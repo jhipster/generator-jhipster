@@ -337,6 +337,8 @@ EntityGenerator.prototype.files = function files() {
 
     this.template('src/main/webapp/app/_entities.html',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + 's.html', this, {});
+    this.template('src/main/webapp/app/_entity-details.html',
+        'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + 'Details.html', this, {});
 
     this.addRouterToMenu(this.entityInstance);
 
@@ -346,6 +348,10 @@ EntityGenerator.prototype.files = function files() {
     this.template('src/main/webapp/app/_entity-controller.js',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '.controller' + '.js', this, {});
     this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.controller' + '.js');
+
+    this.template('src/main/webapp/app/_entity-details-controller.js',
+        'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + 'Details.controller' + '.js', this, {});
+    this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + 'Details.controller' + '.js');
 
     this.template('src/main/webapp/components/_entity-service.js',
         'src/main/webapp/scripts/components/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js', this, {});
