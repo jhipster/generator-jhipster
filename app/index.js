@@ -301,8 +301,11 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     this.javaVersion = this.config.get('javaVersion');
     this.buildTool = this.config.get('buildTool');
     this.frontendBuilder = this.config.get('frontendBuilder');
+    this.roleNames = this.config.get('roleNames');
     this.packagejs = packagejs;
 
+    this.roles = this.buildRoleMap(this.roleNames);
+    
     if (this.baseName != null &&
         this.packageName != null &&
         this.authenticationType != null &&
@@ -412,12 +415,12 @@ JhipsterGenerator.prototype.app = function app() {
         this.template(resourceDir + '/config/liquibase/changelog/_initial_schema.xml', resourceDir + 'config/liquibase/changelog/00000000000000_initial_schema.xml', this, {});
         this.copy(resourceDir + '/config/liquibase/master.xml', resourceDir + 'config/liquibase/master.xml');
         this.copy(resourceDir + '/config/liquibase/users.csv', resourceDir + 'config/liquibase/users.csv');
-        this.copy(resourceDir + '/config/liquibase/authorities.csv', resourceDir + 'config/liquibase/authorities.csv');
+        this.template(resourceDir + '/config/liquibase/authorities.csv', resourceDir + 'config/liquibase/authorities.csv', this, {});
         this.copy(resourceDir + '/config/liquibase/users_authorities.csv', resourceDir + 'config/liquibase/users_authorities.csv');
     }
 
     if (this.databaseType == "mongodb") {
-        this.copy(resourceDir + '/config/mongeez/authorities.xml', resourceDir + 'config/mongeez/authorities.xml');
+        this.template(resourceDir + '/config/mongeez/authorities.xml', resourceDir + 'config/mongeez/authorities.xml', this, {});
         this.copy(resourceDir + '/config/mongeez/master.xml', resourceDir + 'config/mongeez/master.xml');
         this.copy(resourceDir + '/config/mongeez/users.xml', resourceDir + 'config/mongeez/users.xml');
     }
@@ -852,6 +855,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.config.set('buildTool', this.buildTool);
     this.config.set('frontendBuilder', this.frontendBuilder);
     this.config.set('javaVersion', this.javaVersion);
+    this.config.set('roleNames', this.roleNames);
 };
 
 JhipsterGenerator.prototype.projectfiles = function projectfiles() {

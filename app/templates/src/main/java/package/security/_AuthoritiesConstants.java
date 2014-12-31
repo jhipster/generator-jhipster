@@ -7,10 +7,8 @@ public final class AuthoritiesConstants {
 
     private AuthoritiesConstants() {
     }
-
-    public static final String ADMIN = "ROLE_ADMIN";
-
-    public static final String USER = "ROLE_USER";
-
+<% for (idx in roles) { %>
+    public static final String <%= idx.toUpperCase() %> = "<%= roles[idx] %>";
+<% } %>
     public static final String ANONYMOUS = "ROLE_ANONYMOUS";
 }

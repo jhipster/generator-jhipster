@@ -1,3 +1,2 @@
-name
-ROLE_ADMIN
-ROLE_USER
+name<% for (idx in roles) { %>
+<%= roles[idx] %><% } %>
