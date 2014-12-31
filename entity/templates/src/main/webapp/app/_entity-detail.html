@@ -1,0 +1,39 @@
+<div>
+    <h2><%= entityClass %> {{<%= entityInstance %>.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody><% for (fieldId in fields) { %>
+                <tr>
+                    <td>
+                        <span><%=fields[fieldId].fieldNameCapitalized%></span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{<%= entityInstance %>.<%=fields[fieldId].fieldName%>}}" readonly>
+                    </td>
+                </tr><% } %><% for (relationshipId in relationships) {
+                                 if (relationships[relationshipId].relationshipType == 'many-to-one') {
+                                     var otherEntityName = relationships[relationshipId].otherEntityName; %>
+                <tr>
+                    <td>
+                        <span><%=otherEntityName%></span>
+                    </td>
+                    <td>
+                        <input type="text" class="input-sm form-control" value="{{<%=entityInstance %>.<%=otherEntityName%>.<%=relationships[relationshipId].otherEntityField%>}}" readonly>
+                    </td>
+                </tr><% } } %>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            ui-sref="<%= entityInstance %>"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span> Back
+    </button>
+</div>
