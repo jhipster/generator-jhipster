@@ -37,6 +37,7 @@
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven-enforcer-plugin.version>1.3.1</maven-enforcer-plugin.version>
         <maven-sortpom-plugin.version>2.3.0</maven-sortpom-plugin.version>
+        <metrics-spark-reporter.version>1.2</metrics-spark-reporter.version>
         <metrics-spring.version>3.0.3</metrics-spring.version><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
         <postgresql.version>9.3-1102-jdbc41</postgresql.version><% } %>
         <run.addResources>false</run.addResources>
@@ -377,6 +378,11 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-localconfig-connector</artifactId>
             <version>${spring-cloud.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.ippon.spark.metrics</groupId>
+            <artifactId>metrics-spark-reporter</artifactId>
+            <version>${metrics-spark-reporter.version}</version>
         </dependency>
     </dependencies>
     <build>
