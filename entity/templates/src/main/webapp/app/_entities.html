@@ -91,8 +91,13 @@
                     <td>{{<%=entityInstance %>.<%=relationships[relationshipId].otherEntityName%>.<%=relationships[relationshipId].otherEntityField%>}}</td><% } } %>
                     <td>
                         <button type="submit"
+                                ui-sref="<%= entityInstance %>Detail({id:<%= entityInstance %>.id})"
+                                class="btn btn-info">
+                            <span class="glyphicon glyphicon-eye-open"></span> View
+                        </button>
+                        <button type="submit"
                                 ng-click="update(<%=entityInstance %>.id)"
-                                class="btn btn-default">
+                                class="btn btn-primary">
                             <span class="glyphicon glyphicon-pencil"></span> Edit
                         </button>
                         <button type="submit"

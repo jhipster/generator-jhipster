@@ -5,8 +5,7 @@
         "menu": {
             "home": "Accueil",
             "entities": {
-                "main": "Entités",
-                "book": "Livre"
+                "main": "Entités"
             },
             "account": {
                 "main": "Compte",

@@ -5,8 +5,7 @@
         "menu": {
             "home": "Inici",
             "entities": {
-                "main": "Entities",
-                "book": "Book"
+                "main": "Entities"
             },
             "account": {
                 "main": "Compte",
