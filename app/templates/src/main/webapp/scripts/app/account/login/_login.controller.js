@@ -1,28 +1,6 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .config(function ($stateProvider) {
-        $stateProvider
-            .state('login', {
-                parent: 'account',
-                url: '/login',
-                data: {
-                    roles: []
-                },
-                views: {
-                    'content@': {
-                        templateUrl: 'scripts/app/account/login/login.html',
-                        controller: 'LoginController'
-                    }
-                },
-                resolve: {
-                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('login');
-                        return $translate.refresh();
-                    }]
-                }
-            });
-    })
     .controller('LoginController', function ($rootScope, $scope, $state, Auth) {
         $scope.user = {};
         $scope.errors = {};
@@ -36,8 +14,8 @@ angular.module('<%=angularAppName%>')
             }).then(function () {
                 $scope.authenticationError = false;
                 $rootScope.back();
-            }).catch(function (err) {
+            }).catch(function () {
                 $scope.authenticationError = true;
             });
-        }
+        };
     });

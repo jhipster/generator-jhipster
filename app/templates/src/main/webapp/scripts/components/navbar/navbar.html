@@ -32,7 +32,7 @@
                     </ul>
                 </li>
                 <li ng-class="{active: $state.includes('account')}" class="dropdown pointer">
-                    <a class="dropdown-toggle" data-toggle="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="">
                                 <span>
                                     <span class="glyphicon glyphicon-user"></span>
                                     <span class="hidden-tablet" translate="global.menu.account.main">
@@ -65,7 +65,7 @@
                                     <b class="caret"></b>
                                 </span>
                     </a>
-                    <ul class="dropdown-menu"><% if (websocket == 'atmosphere') { %>
+                    <ul class="dropdown-menu"><% if (websocket == 'spring-websocket') { %>
                         <li ui-sref-active="active"><a ui-sref="tracker"><span class="glyphicon glyphicon-eye-open"></span>
                                 &nbsp;<span translate="global.menu.account.tracker">User tracking</span></a></li><% } %>
                         <li ui-sref-active="active"><a ui-sref="metrics"><span class="glyphicon glyphicon-dashboard"></span>

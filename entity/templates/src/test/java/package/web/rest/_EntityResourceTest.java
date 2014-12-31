@@ -84,7 +84,7 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
     }
 
     @Before
-    public void initTest() {<% if (databaseType == 'nosql') { %>
+    public void initTest() {<% if (databaseType == 'mongodb') { %>
         <%= entityInstance %>Repository.deleteAll();<% } %>
         <%= entityInstance %> = new <%= entityClass %>();<% for (fieldId in fields) { %>
         <%= entityInstance %>.set<%= fields[fieldId].fieldNameCapitalized %>(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>
@@ -120,7 +120,7 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityInstance %>s"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
-                .andExpect(jsonPath("$.[0].id").value(<%= entityInstance %>.getId().intValue()))<% } %><% if (databaseType == 'nosql') { %>
+                .andExpect(jsonPath("$.[0].id").value(<%= entityInstance %>.getId().intValue()))<% } %><% if (databaseType == 'mongodb') { %>
                 .andExpect(jsonPath("$.[0].id").value(<%= entityInstance %>.getId()))<% } %><% for (fieldId in fields) {%>
                 .andExpect(jsonPath("$.[0].<%=fields[fieldId].fieldName%>").value(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[fieldId].fieldType == 'DateTime') { %>_STR<% } else { %>.toString()<% } %>))<% } %>;
     }
@@ -135,7 +135,7 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityInstance %>s/{id}", <%= entityInstance %>.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
-            .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().intValue()))<% } %><% if (databaseType == 'nosql') { %>
+            .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().intValue()))<% } %><% if (databaseType == 'mongodb') { %>
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId()))<% } %><% for (fieldId in fields) {%>
             .andExpect(jsonPath("$.<%=fields[fieldId].fieldName%>").value(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[fieldId].fieldType == 'DateTime') { %>_STR<% } else { %>.toString()<% } %>))<% } %>;
     }

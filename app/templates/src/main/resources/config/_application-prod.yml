@@ -3,7 +3,7 @@ server:
 
 spring:
     profiles:
-        active: prod<% if (databaseType == 'nosql') { %>
+        active: prod<% if (databaseType == 'mongodb') { %>
     data:
         mongodb:
             host: localhost
@@ -23,7 +23,7 @@ spring:
         useServerPrepStmts: true<% } %>
 
     jpa:
-        database-platform: <% if (prodDatabaseType == 'mysql') { %>org.hibernate.dialect.MySQLInnoDBDialect<% } else if (prodDatabaseType == 'postgresql') { %>org.hibernate.dialect.PostgreSQLDialect<% } else { %>org.hibernate.dialect.HSQLDialect<% } %>
+        database-platform: <% if (prodDatabaseType == 'mysql') { %>org.hibernate.dialect.MySQLInnoDBDialect<% } else if (prodDatabaseType == 'postgresql') { %>org.hibernate.dialect.PostgreSQL82Dialect<% } else { %>org.hibernate.dialect.HSQLDialect<% } %>
         database: <% if (prodDatabaseType == 'mysql') { %>MYSQL<% } else if (prodDatabaseType == 'postgresql') { %>POSTGRESQL<% } else { %>HSQL<% } %>
         openInView: false
         show_sql: false
@@ -45,11 +45,13 @@ spring:
     thymeleaf:
         mode: XHTML
         cache: true
-        viewNames: error
-
 
 metrics:
     jmx.enabled: true
+    spark:
+        enabled: false
+        host: localhost
+        port: 9999
     graphite:
         enabled: false
         host: localhost

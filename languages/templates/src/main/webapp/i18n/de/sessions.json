@@ -11,6 +11,5 @@
             "success": "<strong>Sitzung wurde geschlossen!</strong>",
             "error": "<strong>Es ist ein Fehler aufgetreten!</strong> Die Sitzung konnte nicht geschlossen werden."
         }
-
     }
 }

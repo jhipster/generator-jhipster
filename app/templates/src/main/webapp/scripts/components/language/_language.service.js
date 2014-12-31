@@ -2,20 +2,19 @@
 
 angular.module('<%=angularAppName%>')
     .factory('Language', function ($q, $http, $translate, LANGUAGES) {
-        var self = this;
         return {
             getCurrent: function () {
                 var deferred = $q.defer();
                 var language = $translate.storage().get('NG_TRANSLATE_LANG_KEY');
 
-                if (language == undefined) {
+                if (angular.isUndefined(language)) {
                     language = 'en';
                 }
 
                 deferred.resolve(language);
                 return deferred.promise;
             },
-            getBy: function (language) {
+            getAll: function () {
                 var deferred = $q.defer();
                 deferred.resolve(LANGUAGES);
                 return deferred.promise;

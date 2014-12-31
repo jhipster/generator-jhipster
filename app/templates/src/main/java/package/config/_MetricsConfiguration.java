@@ -8,6 +8,7 @@ import com.codahale.metrics.health.HealthCheckRegistry;
 import com.codahale.metrics.jvm.*;
 import com.ryantenney.metrics.spring.config.annotation.EnableMetrics;
 import com.ryantenney.metrics.spring.config.annotation.MetricsConfigurerAdapter;
+import fr.ippon.spark.metrics.SparkReporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -31,8 +32,10 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
 
     private static final String ENV_METRICS = "metrics.";
     private static final String ENV_METRICS_GRAPHITE = "metrics.graphite.";
+    private static final String ENV_METRICS_SPARK = "metrics.spark.";
     private static final String PROP_JMX_ENABLED = "jmx.enabled";
     private static final String PROP_GRAPHITE_ENABLED = "enabled";
+    private static final String PROP_SPARK_ENABLED = "enabled";
     private static final String PROP_GRAPHITE_PREFIX = "";
 
     private static final String PROP_PORT = "port";
@@ -116,6 +119,40 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
                         .prefixedWith(graphitePrefix)
                         .build(graphite);
                 graphiteReporter.start(1, TimeUnit.MINUTES);
+            }
+        }
+    }
+
+    @Configuration
+    @ConditionalOnClass(SparkReporter.class)
+    @Profile("!" + Constants.SPRING_PROFILE_FAST)
+    public static class SparkRegistry implements EnvironmentAware {
+
+        private final Logger log = LoggerFactory.getLogger(SparkRegistry.class);
+
+        @Inject
+        private MetricRegistry metricRegistry;
+
+        private RelaxedPropertyResolver propertyResolver;
+
+        @Override
+        public void setEnvironment(Environment environment) {
+            this.propertyResolver = new RelaxedPropertyResolver(environment, ENV_METRICS_SPARK);
+        }
+
+        @PostConstruct
+        private void init() {
+            Boolean sparkEnabled = propertyResolver.getProperty(PROP_SPARK_ENABLED, Boolean.class, false);
+            if (sparkEnabled) {
+                log.info("Initializing Metrics Spark reporting");
+                String sparkHost = propertyResolver.getRequiredProperty(PROP_HOST);
+                Integer sparkPort = propertyResolver.getRequiredProperty(PROP_PORT, Integer.class);
+
+                SparkReporter sparkReporter = SparkReporter.forRegistry(metricRegistry)
+                        .convertRatesTo(TimeUnit.SECONDS)
+                        .convertDurationsTo(TimeUnit.MILLISECONDS)
+                        .build(sparkHost, sparkPort);
+                sparkReporter.start(1, TimeUnit.MINUTES);
             }
         }
     }

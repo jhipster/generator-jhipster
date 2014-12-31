@@ -1,28 +1,6 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .config(function ($stateProvider) {
-        $stateProvider
-            .state('health', {
-                parent: 'admin',
-                url: '/health',
-                data: {
-                    roles: ['ROLE_ADMIN']
-                },
-                views: {
-                    'content@': {
-                        templateUrl: 'scripts/app/admin/health/health.html',
-                        controller: 'HealthController'
-                    }
-                },
-                resolve: {
-                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('health');
-                        return $translate.refresh();
-                    }]
-                }
-            });
-    })
     .controller('HealthController', function ($scope, MonitoringService) {
         $scope.updatingHealth = true;
 
@@ -40,10 +18,10 @@ angular.module('<%=angularAppName%>')
         $scope.refresh();
 
         $scope.getLabelClass = function (statusState) {
-            if (statusState == 'UP') {
-                return "label-success";
+            if (statusState === 'UP') {
+                return 'label-success';
             } else {
-                return "label-danger";
+                return 'label-danger';
             }
-        }
+        };
     });

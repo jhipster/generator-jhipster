@@ -29,12 +29,12 @@
             <column name="email" type="varchar(100)">
                 <constraints unique="true"/>
             </column>
-            <column name="activated" type="boolean" defaultValueBoolean="false" valueBoolean="false">
+            <column name="activated" type="boolean" valueBoolean="false">
                 <constraints nullable="false" />
             </column>
             <column name="lang_key" type="varchar(5)"/>
             <column name="activation_key" type="varchar(20)"/>
-            <column name="created_by" type="varchar(50)" defaultValue="system">
+            <column name="created_by" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
             <column name="created_date" type="timestamp" defaultValueDate="<%= _.unescape('\$\{now}')%>">
@@ -86,13 +86,6 @@
             <column name="user_agent" type="varchar(255)"/>
         </createTable><% } %>
 
-        <createIndex indexName="idx_user_authority"
-                     tableName="T_USER_AUTHORITY"
-                     unique="true">
-            <column name="user_id" type="varchar(50)"/>
-            <column name="authority_name" type="varchar(50)"/>
-        </createIndex>
-
         <addForeignKeyConstraint baseColumnNames="authority_name"
                                  baseTableName="T_USER_AUTHORITY"
                                  constraintName="fk_authority_name"
@@ -116,7 +109,9 @@
                   separator=";"
                   tableName="T_USER">
             <column name="activated" type="boolean"/>
+            <column name="created_date" type="timestamp"/>
         </loadData>
+        <dropDefaultValue tableName="T_USER" columnName="created_date" columnDataType="datetime"/>
 
         <loadData encoding="UTF-8"
                   file="config/liquibase/authorities.csv"

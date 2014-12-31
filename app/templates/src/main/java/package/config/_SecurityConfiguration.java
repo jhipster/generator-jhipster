@@ -64,17 +64,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-            .antMatchers("/app/**/*.{js,html}")
+            .antMatchers("/scripts/**/*.{js,html}")
             .antMatchers("/bower_components/**")
-            .antMatchers("/components/**")
-            .antMatchers("/fonts/**")
             .antMatchers("/i18n/**")
-            .antMatchers("/images/**")
-            .antMatchers("/styles/**")
+            .antMatchers("/assets/**")
             .antMatchers("/swagger-ui/**")<% if (authenticationType == 'token') { %>
             .antMatchers("/api/register")
-            .antMatchers("/api/activate")<% if (websocket == 'atmosphere') { %>
-            .antMatchers("/websocket/activity")<% } %><% } %>
+            .antMatchers("/api/activate")<% } %>
             .antMatchers("/test/**")<% if (devDatabaseType != 'h2Memory') { %>;<% } else { %>
             .antMatchers("/console/**");<% } %>
     }<% if (authenticationType == 'cookie') { %>
@@ -112,7 +108,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
                 .antMatchers("/api/activate").permitAll()
                 .antMatchers("/api/authenticate").permitAll()
                 .antMatchers("/api/logs/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/api/**").authenticated()<% if (websocket == 'atmosphere') { %>
+                .antMatchers("/api/**").authenticated()<% if (websocket == 'spring-websocket') { %>
                 .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/websocket/**").permitAll()<% } %>
                 .antMatchers("/metrics/**").hasAuthority(AuthoritiesConstants.ADMIN)

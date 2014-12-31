@@ -3,9 +3,9 @@
     "version": "0.0.0",
     "appPath": "src/main/webapp",
     "testPath": "src/test/javascript/spec",
-    "dependencies": {<% if (websocket == 'atmosphere') { %>
-    "atmosphere": "2.2.5",
-    "jquery-atmosphere": "2.2.5",<% } %>
+    "dependencies": {<% if (websocket == 'spring-websocket') { %>
+    "stomp-websocket": "2.3.4",
+    "sockjs-client": "0.3.4",<% } %>
     "bootstrap-sass": "twbs/bootstrap-sass#~3.1.1",
     "modernizr": "2.7.1",
     "jquery": "2.1.1",

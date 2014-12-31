@@ -93,7 +93,7 @@ public class CustomPersistentRememberMeServices extends
         token.setIpAddress(request.getRemoteAddr());
         token.setUserAgent(request.getHeader("User-Agent"));
         try {
-            <% if (databaseType == 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'nosql') { %>persistentTokenRepository.save(token);<% } %>
+            <% if (databaseType == 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'mongodb') { %>persistentTokenRepository.save(token);<% } %>
             addCookie(token, request, response);
         } catch (DataAccessException e) {
             log.error("Failed to update token: ", e);
@@ -118,7 +118,7 @@ public class CustomPersistentRememberMeServices extends
             return t;
         }).orElseThrow(() -> new UsernameNotFoundException("User " + login + " was not found in the database"));
         try {
-            <% if (databaseType == 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'nosql') { %>persistentTokenRepository.save(token);<% } %>
+            <% if (databaseType == 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'mongodb') { %>persistentTokenRepository.save(token);<% } %>
             addCookie(token, request, response);
         } catch (DataAccessException e) {
             log.error("Failed to save persistent token ", e);
@@ -133,7 +133,7 @@ public class CustomPersistentRememberMeServices extends
         token.setIpAddress(request.getRemoteAddr());
         token.setUserAgent(request.getHeader("User-Agent"));
         try {
-            <% if (databaseType == 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'nosql') { %>persistentTokenRepository.save(token);<% } %>
+            <% if (databaseType == 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'mongodb') { %>persistentTokenRepository.save(token);<% } %>
             addCookie(token, request, response);
         } catch (DataAccessException e) {
             log.error("Failed to save persistent token ", e);

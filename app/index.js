@@ -100,7 +100,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                     name: 'SQL (H2, MySQL, PostgreSQL)'
                 },
                 {
-                    value: 'nosql',
+                    value: 'mongodb',
                     name: 'NoSQL (MongoDB)'
                 }
             ],
@@ -127,7 +127,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             when: function (response) {
-                return response.databaseType == 'nosql';
+                return response.databaseType == 'mongodb';
             },
             type: 'list',
             name: 'prodDatabaseType',
@@ -165,7 +165,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             when: function (response) {
-                return response.databaseType == 'nosql';
+                return response.databaseType == 'mongodb';
             },
             type: 'list',
             name: 'devDatabaseType',
@@ -203,7 +203,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             when: function (response) {
-                return response.databaseType == 'nosql';
+                return response.databaseType == 'mongodb';
             },
             type: 'list',
             name: 'hibernateCache',
@@ -242,8 +242,8 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                     name: 'No'
                 },
                 {
-                    value: 'atmosphere',
-                    name: 'Yes, with Atmosphere'
+                    value: 'spring-websocket',
+                    name: 'Yes, with Spring Websocket'
                 }
             ],
             default: 0
@@ -350,33 +350,6 @@ JhipsterGenerator.prototype.app = function app() {
     var webappDir = 'src/main/webapp/';
 
     // Remove old files
-    removefile(resourceDir + 'config/liquibase/db-changelog-001.xml');
-    removefile(resourceDir + 'config/liquibase/users_upd_001.csv');
-    removefile(resourceDir + 'config/liquibase/users_authorities_upd_001.csv');
-    removefile(javaDir + 'web/servlet/HealthCheckServlet.java');
-    removefile(javaDir + 'config/metrics/JavaMailHealthCheck.java');
-    removefile(javaDir + 'config/metrics/HealthCheckIndicator.java');
-    removefile(javaDir + 'config/metrics/DatabaseHealthCheckIndicator.java');
-    removefile(javaDir + 'config/metrics/JavaMailHealthCheckIndicator.java');
-    removefile(javaDir + 'config/metrics/DatabaseHealthCheck.java');
-    removefile(javaDir + 'config/apidoc/ApiPathProvider.java');
-    removefile('spring_loaded/springloaded.jar');
-    removefolder(javaDir + '/config/reload');
-    removefolder(javaDir + '/apidoc');
-    removefile(resourceDir + 'mails/messages/messages_da.properties');
-    removefile(resourceDir + 'mails/messages/messages_de.properties');
-    removefile(resourceDir + 'mails/messages/messages_en.properties');
-    removefile(resourceDir + 'mails/messages/messages_es.properties');
-    removefile(resourceDir + 'mails/messages/messages_fr.properties');
-    removefile(resourceDir + 'mails/messages/messages_kr.properties');
-    removefile(resourceDir + 'mails/messages/messages_pl.properties');
-    removefile(resourceDir + 'mails/messages/messages_ru.properties');
-    removefile(resourceDir + 'mails/messages/messages_tr.properties');
-    removefile(resourceDir + 'i18n/messages_pt.properties');
-    removefile(webappDir + 'i18n/pt.json');
-    removefile(webappDir + 'protected/transparent.gif');
-    removefile(webappDir + 'styles/famfamfam-flags.css');
-    removefile(webappDir + 'images/famfamfam-flags.png');
 
     // Angular JS app
     this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
@@ -426,21 +399,6 @@ JhipsterGenerator.prototype.app = function app() {
         this.copy(resourceDir + 'h2.server.properties', resourceDir + '.h2.server.properties');
     }
 
-    // i18n resources used by thymeleaf
-    this.copy(resourceDir + '/i18n/messages_ca.properties', resourceDir + 'i18n/messages_ca.properties');
-    this.copy(resourceDir + '/i18n/messages_da.properties', resourceDir + 'i18n/messages_da.properties');
-    this.copy(resourceDir + '/i18n/messages_de.properties', resourceDir + 'i18n/messages_de.properties');
-    this.copy(resourceDir + '/i18n/messages_en.properties', resourceDir + 'i18n/messages_en.properties');
-    this.copy(resourceDir + '/i18n/messages_es.properties', resourceDir + 'i18n/messages_es.properties');
-    this.copy(resourceDir + '/i18n/messages_fr.properties', resourceDir + 'i18n/messages_fr.properties');
-    this.copy(resourceDir + '/i18n/messages_kr.properties', resourceDir + 'i18n/messages_kr.properties');
-    this.copy(resourceDir + '/i18n/messages_pl.properties', resourceDir + 'i18n/messages_pl.properties');
-    this.copy(resourceDir + '/i18n/messages_pt_BR.properties', resourceDir + 'i18n/messages_pt_BR.properties');
-    this.copy(resourceDir + '/i18n/messages_ru.properties', resourceDir + 'i18n/messages_ru.properties');
-    this.copy(resourceDir + '/i18n/messages_sv.properties', resourceDir + 'i18n/messages_sv.properties');
-    this.copy(resourceDir + '/i18n/messages_tr.properties', resourceDir + 'i18n/messages_tr.properties');
-    this.copy(resourceDir + '/i18n/messages_zh_TW.properties', resourceDir + 'i18n/messages_zh_TW.properties');
-
     // Thymeleaf templates
     this.copy(resourceDir + '/templates/error.html', resourceDir + 'templates/error.html');
 
@@ -458,7 +416,7 @@ JhipsterGenerator.prototype.app = function app() {
         this.copy(resourceDir + '/config/liquibase/users_authorities.csv', resourceDir + 'config/liquibase/users_authorities.csv');
     }
 
-    if (this.databaseType == "nosql") {
+    if (this.databaseType == "mongodb") {
         this.copy(resourceDir + '/config/mongeez/authorities.xml', resourceDir + 'config/mongeez/authorities.xml');
         this.copy(resourceDir + '/config/mongeez/master.xml', resourceDir + 'config/mongeez/master.xml');
         this.copy(resourceDir + '/config/mongeez/users.xml', resourceDir + 'config/mongeez/users.xml');
@@ -484,7 +442,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/_CacheConfiguration.java', javaDir + 'config/CacheConfiguration.java', this, {});
     this.template('src/main/java/package/config/_Constants.java', javaDir + 'config/Constants.java', this, {});
     this.template('src/main/java/package/config/_CloudDatabaseConfiguration.java', javaDir + 'config/CloudDatabaseConfiguration.java', this, {});
-    if (this.databaseType == 'nosql') {
+    if (this.databaseType == 'mongodb') {
         this.template('src/main/java/package/config/_CloudMongoDbConfiguration.java', javaDir + 'config/CloudMongoDbConfiguration.java', this, {});
     }
     this.template('src/main/java/package/config/_DatabaseConfiguration.java', javaDir + 'config/DatabaseConfiguration.java', this, {});
@@ -498,7 +456,7 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/main/java/package/config/_OAuth2ServerConfiguration.java', javaDir + 'config/OAuth2ServerConfiguration.java', this, {});
     }
 
-    if (this.databaseType == 'nosql' &&  this.authenticationType == 'token') {
+    if (this.databaseType == 'mongodb' &&  this.authenticationType == 'token') {
         this.template('src/main/java/package/config/oauth2/_OAuth2AuthenticationReadConverter.java', javaDir + 'config/oauth2/OAuth2AuthenticationReadConverter.java', this, {});
         this.template('src/main/java/package/config/oauth2/_MongoDBTokenStore.java', javaDir + 'config/oauth2/MongoDBTokenStore.java', this, {});
         this.template('src/main/java/package/domain/_OAuth2AuthenticationAccessToken.java', javaDir + 'domain/OAuth2AuthenticationAccessToken.java', this, {});
@@ -510,6 +468,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/_SecurityConfiguration.java', javaDir + 'config/SecurityConfiguration.java', this, {});
     this.template('src/main/java/package/config/_ThymeleafConfiguration.java', javaDir + 'config/ThymeleafConfiguration.java', this, {});
     this.template('src/main/java/package/config/_WebConfigurer.java', javaDir + 'config/WebConfigurer.java', this, {});
+    if (this.websocket == 'spring-websocket') {
+        this.template('src/main/java/package/config/_WebsocketConfiguration.java', javaDir + 'config/WebsocketConfiguration.java', this, {});
+    }
 
     this.template('src/main/java/package/config/audit/_package-info.java', javaDir + 'config/audit/package-info.java', this, {});
     this.template('src/main/java/package/config/audit/_AuditEventConverter.java', javaDir + 'config/audit/AuditEventConverter.java', this, {});
@@ -531,7 +492,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/domain/_AbstractAuditingEntity.java', javaDir + 'domain/AbstractAuditingEntity.java', this, {});
     this.template('src/main/java/package/domain/_Authority.java', javaDir + 'domain/Authority.java', this, {});
     this.template('src/main/java/package/domain/_PersistentAuditEvent.java', javaDir + 'domain/PersistentAuditEvent.java', this, {});
-    this.template('src/main/java/package/domain/_PersistentToken.java', javaDir + 'domain/PersistentToken.java', this, {});
+    if (this.authenticationType == 'cookie') {
+        this.template('src/main/java/package/domain/_PersistentToken.java', javaDir + 'domain/PersistentToken.java', this, {});
+    }
     this.template('src/main/java/package/domain/_User.java', javaDir + 'domain/User.java', this, {});
     this.template('src/main/java/package/domain/util/_CustomLocalDateSerializer.java', javaDir + 'domain/util/CustomLocalDateSerializer.java', this, {});
     this.template('src/main/java/package/domain/util/_CustomDateTimeSerializer.java', javaDir + 'domain/util/CustomDateTimeSerializer.java', this, {});
@@ -595,13 +558,11 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/web/rest/_LogsResource.java', javaDir + 'web/rest/LogsResource.java', this, {});
     this.template('src/main/java/package/web/rest/_UserResource.java', javaDir + 'web/rest/UserResource.java', this, {});
 
-    if (this.websocket == 'atmosphere') {
+    if (this.websocket == 'spring-websocket') {
         this.template('src/main/java/package/web/websocket/_package-info.java', javaDir + 'web/websocket/package-info.java', this, {});
         this.template('src/main/java/package/web/websocket/_ActivityService.java', javaDir + 'web/websocket/ActivityService.java', this, {});
-        this.template('src/main/java/package/web/websocket/_TrackerService.java', javaDir + 'web/websocket/TrackerService.java', this, {});
         this.template('src/main/java/package/web/websocket/dto/_package-info.java', javaDir + 'web/websocket/dto/package-info.java', this, {});
         this.template('src/main/java/package/web/websocket/dto/_ActivityDTO.java', javaDir + 'web/websocket/dto/ActivityDTO.java', this, {});
-        this.template('src/main/java/package/web/websocket/dto/_ActivityDTOJacksonDecoder.java', javaDir + 'web/websocket/dto/ActivityDTOJacksonDecoder.java', this, {});
     }
 
     // Create Test Java files
@@ -609,7 +570,7 @@ JhipsterGenerator.prototype.app = function app() {
     var testResourceDir = 'src/test/resources/';
     this.mkdir(testDir);
 
-    if (this.databaseType == "nosql") {
+    if (this.databaseType == "mongodb") {
         this.template('src/test/java/package/config/_MongoConfiguration.java', testDir + 'config/MongoConfiguration.java', this, {});
     }
     this.template('src/test/java/package/security/_SecurityUtilsTest.java', testDir + 'security/SecurityUtilsTest.java', this, {});
@@ -632,14 +593,14 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.useCompass) {
         this.copy('src/main/scss/main.scss', 'src/main/scss/main.scss');
     } else {
-        this.copy('src/main/webapp/images/glyphicons-halflings.png', 'src/main/webapp/images/glyphicons-halflings.png');
-        this.copy('src/main/webapp/images/glyphicons-halflings-white.png', 'src/main/webapp/images/glyphicons-halflings-white.png');
-        this.copy('src/main/webapp/styles/bootstrap.css', 'src/main/webapp/styles/bootstrap.css');
-        this.copy('src/main/webapp/styles/main.css', 'src/main/webapp/styles/main.css');
-        this.copy('src/main/webapp/fonts/glyphicons-halflings-regular.eot', 'src/main/webapp/fonts/glyphicons-halflings-regular.eot');
-        this.copy('src/main/webapp/fonts/glyphicons-halflings-regular.svg', 'src/main/webapp/fonts/glyphicons-halflings-regular.svg');
-        this.copy('src/main/webapp/fonts/glyphicons-halflings-regular.ttf', 'src/main/webapp/fonts/glyphicons-halflings-regular.ttf');
-        this.copy('src/main/webapp/fonts/glyphicons-halflings-regular.woff', 'src/main/webapp/fonts/glyphicons-halflings-regular.woff');
+        this.copy('src/main/webapp/assets/images/glyphicons-halflings.png', 'src/main/webapp/assets/images/glyphicons-halflings.png');
+        this.copy('src/main/webapp/assets/images/glyphicons-halflings-white.png', 'src/main/webapp/assets/images/glyphicons-halflings-white.png');
+        this.copy('src/main/webapp/assets/styles/bootstrap.css', 'src/main/webapp/assets/styles/bootstrap.css');
+        this.copy('src/main/webapp/assets/styles/main.css', 'src/main/webapp/assets/styles/main.css');
+        this.copy('src/main/webapp/assets/fonts/glyphicons-halflings-regular.eot', 'src/main/webapp/assets/fonts/glyphicons-halflings-regular.eot');
+        this.copy('src/main/webapp/assets/fonts/glyphicons-halflings-regular.svg', 'src/main/webapp/assets/fonts/glyphicons-halflings-regular.svg');
+        this.copy('src/main/webapp/assets/fonts/glyphicons-halflings-regular.ttf', 'src/main/webapp/assets/fonts/glyphicons-halflings-regular.ttf');
+        this.copy('src/main/webapp/assets/fonts/glyphicons-halflings-regular.woff', 'src/main/webapp/assets/fonts/glyphicons-halflings-regular.woff');
     }
 
     // HTML5 BoilerPlate
@@ -647,9 +608,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(webappDir + 'robots.txt', webappDir + 'robots.txt');
     this.copy(webappDir + 'htaccess.txt', webappDir + '.htaccess');
 
-    // install the default languages
-    this.installI18nFilesByLanguage(this, webappDir, 'en');
-    this.installI18nFilesByLanguage(this, webappDir, 'fr');
+    // install all files related to i18n
+    this.installI18nFilesByLanguage(this, webappDir, resourceDir, 'en');
+    this.installI18nFilesByLanguage(this, webappDir, resourceDir, 'fr');
 
     // Protected resources - used to check if a customer is still connected
     this.copy(webappDir + '/protected/authentication_check.gif', webappDir + '/protected/authentication_check.gif');
@@ -692,43 +653,58 @@ JhipsterGenerator.prototype.app = function app() {
     // Client App
     this.template(webappDir + '/scripts/app/account/_account.js', webappDir + 'scripts/app/account/account.js', this, {});
     this.copy(webappDir + '/scripts/app/account/activate/activate.html', webappDir + 'scripts/app/account/activate/activate.html');
+    this.template(webappDir + '/scripts/app/account/activate/_activate.js', webappDir + 'scripts/app/account/activate/activate.js', this, {});
     this.template(webappDir + '/scripts/app/account/activate/_activate.controller.js', webappDir + 'scripts/app/account/activate/activate.controller.js', this, {});
     this.copy(webappDir + '/scripts/app/account/login/login.html', webappDir + 'scripts/app/account/login/login.html');
+    this.template(webappDir + '/scripts/app/account/login/_login.js', webappDir + 'scripts/app/account/login/login.js', this, {});
     this.template(webappDir + '/scripts/app/account/login/_login.controller.js', webappDir + 'scripts/app/account/login/login.controller.js', this, {});
+    this.template(webappDir + '/scripts/app/account/logout/_logout.js', webappDir + 'scripts/app/account/logout/logout.js', this, {});
     this.template(webappDir + '/scripts/app/account/logout/_logout.controller.js', webappDir + 'scripts/app/account/logout/logout.controller.js', this, {});
     this.copy(webappDir + '/scripts/app/account/password/password.html', webappDir + 'scripts/app/account/password/password.html');
+    this.template(webappDir + '/scripts/app/account/password/_password.js', webappDir + 'scripts/app/account/password/password.js', this, {});
     this.template(webappDir + '/scripts/app/account/password/_password.controller.js', webappDir + 'scripts/app/account/password/password.controller.js', this, {});
     this.template(webappDir + '/scripts/app/account/password/_password.directive.js', webappDir + 'scripts/app/account/password/password.directive.js', this, {});
     this.copy(webappDir + '/scripts/app/account/register/register.html', webappDir + 'scripts/app/account/register/register.html');
+    this.template(webappDir + '/scripts/app/account/register/_register.js', webappDir + 'scripts/app/account/register/register.js', this, {});
     this.template(webappDir + '/scripts/app/account/register/_register.controller.js', webappDir + 'scripts/app/account/register/register.controller.js', this, {});
     if (this.authenticationType == 'cookie') {
         this.copy(webappDir + '/scripts/app/account/sessions/sessions.html', webappDir + 'scripts/app/account/sessions/sessions.html');
+        this.template(webappDir + '/scripts/app/account/sessions/_sessions.js', webappDir + 'scripts/app/account/sessions/sessions.js', this, {});
         this.template(webappDir + '/scripts/app/account/sessions/_sessions.controller.js', webappDir + 'scripts/app/account/sessions/sessions.controller.js', this, {});
     }
     this.copy(webappDir + '/scripts/app/account/settings/settings.html', webappDir + 'scripts/app/account/settings/settings.html');
+    this.template(webappDir + '/scripts/app/account/settings/_settings.js', webappDir + 'scripts/app/account/settings/settings.js', this, {});
     this.template(webappDir + '/scripts/app/account/settings/_settings.controller.js', webappDir + 'scripts/app/account/settings/settings.controller.js', this, {});
     this.template(webappDir + '/scripts/app/admin/_admin.js', webappDir + 'scripts/app/admin/admin.js', this, {});
     this.copy(webappDir + '/scripts/app/admin/audits/audits.html', webappDir + 'scripts/app/admin/audits/audits.html');
+    this.template(webappDir + '/scripts/app/admin/audits/_audits.js', webappDir + 'scripts/app/admin/audits/audits.js', this, {});
     this.template(webappDir + '/scripts/app/admin/audits/_audits.controller.js', webappDir + 'scripts/app/admin/audits/audits.controller.js', this, {});
     this.copy(webappDir + '/scripts/app/admin/configuration/configuration.html', webappDir + 'scripts/app/admin/configuration/configuration.html');
+    this.template(webappDir + '/scripts/app/admin/configuration/_configuration.js', webappDir + 'scripts/app/admin/configuration/configuration.js', this, {});
     this.template(webappDir + '/scripts/app/admin/configuration/_configuration.controller.js', webappDir + 'scripts/app/admin/configuration/configuration.controller.js', this, {});
     this.copy(webappDir + '/scripts/app/admin/docs/docs.html', webappDir + 'scripts/app/admin/docs/docs.html');
-    this.template(webappDir + '/scripts/app/admin/docs/_docs.controller.js', webappDir + 'scripts/app/admin/docs/docs.controller.js', this, {});
+    this.template(webappDir + '/scripts/app/admin/docs/_docs.js', webappDir + 'scripts/app/admin/docs/docs.js', this, {});
     this.copy(webappDir + '/scripts/app/admin/health/health.html', webappDir + 'scripts/app/admin/health/health.html');
+    this.template(webappDir + '/scripts/app/admin/health/_health.js', webappDir + 'scripts/app/admin/health/health.js', this, {});
     this.template(webappDir + '/scripts/app/admin/health/_health.controller.js', webappDir + 'scripts/app/admin/health/health.controller.js', this, {});
     this.copy(webappDir + '/scripts/app/admin/logs/logs.html', webappDir + 'scripts/app/admin/logs/logs.html');
+    this.template(webappDir + '/scripts/app/admin/logs/_logs.js', webappDir + 'scripts/app/admin/logs/logs.js', this, {});
     this.template(webappDir + '/scripts/app/admin/logs/_logs.controller.js', webappDir + 'scripts/app/admin/logs/logs.controller.js', this, {});
     this.template(webappDir + '/scripts/app/admin/metrics/_metrics.html', webappDir + 'scripts/app/admin/metrics/metrics.html', this, {});
+    this.template(webappDir + '/scripts/app/admin/metrics/_metrics.js', webappDir + 'scripts/app/admin/metrics/metrics.js', this, {});
     this.template(webappDir + '/scripts/app/admin/metrics/_metrics.controller.js', webappDir + 'scripts/app/admin/metrics/metrics.controller.js', this, {});
-    if (this.websocket == 'atmosphere') {
+    if (this.websocket == 'spring-websocket') {
         this.copy(webappDir + '/scripts/app/admin/tracker/tracker.html', webappDir + 'scripts/app/admin/tracker/tracker.html');
+        this.template(webappDir + '/scripts/app/admin/tracker/_tracker.js', webappDir + 'scripts/app/admin/tracker/tracker.js', this, {});
         this.template(webappDir + '/scripts/app/admin/tracker/_tracker.controller.js', webappDir + 'scripts/app/admin/tracker/tracker.controller.js', this, {});
+        this.template(webappDir + '/scripts/components/tracker/_tracker.service.js', webappDir + '/scripts/components/tracker/tracker.service.js', this, {});
     }
     this.copy(webappDir + '/scripts/app/error/error.html', webappDir + 'scripts/app/error/error.html');
     this.copy(webappDir + '/scripts/app/error/accessdenied.html', webappDir + 'scripts/app/error/accessdenied.html');
     this.template(webappDir + '/scripts/app/entities/_entity.js', webappDir + 'scripts/app/entities/entity.js', this, {});
     this.template(webappDir + '/scripts/app/error/_error.js', webappDir + 'scripts/app/error/error.js', this, {});
     this.copy(webappDir + '/scripts/app/main/main.html', webappDir + 'scripts/app/main/main.html');
+    this.template(webappDir + '/scripts/app/main/_main.js', webappDir + 'scripts/app/main/main.js', this, {});
     this.template(webappDir + '/scripts/app/main/_main.controller.js', webappDir + 'scripts/app/main/main.controller.js', this, {});
 
     // Index page
@@ -738,9 +714,6 @@ JhipsterGenerator.prototype.app = function app() {
     // Create Test Javascript files
     var testJsDir = 'src/test/javascript/';
     this.copy(testJsDir + 'karma.conf.js', testJsDir + 'karma.conf.js');
-    if (this.websocket == 'atmosphere') {
-        this.copy(testJsDir + 'mock/atmosphere.mock.js', testJsDir + 'mock/atmosphere.mock.js');
-    }
     this.template(testJsDir + 'spec/app/account/login/_loginControllerSpec.js', testJsDir + 'spec/app/account/login/loginControllerSpec.js', this, {});
     this.template(testJsDir + 'spec/app/account/password/_passwordControllerSpec.js', testJsDir + 'spec/app/account/password/passwordControllerSpec.js', this, {});
     this.template(testJsDir + 'spec/app/account/password/_passwordDirectiveSpec.js', testJsDir + 'spec/app/account/password/passwordDirectiveSpec.js', this, {});
@@ -749,28 +722,14 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(testJsDir + 'spec/components/auth/_authServicesSpec.js', testJsDir + 'spec/components/auth/authServicesSpec.js', this, {});
 
     // CSS
-    this.copy(webappDir + 'styles/documentation.css', webappDir + 'styles/documentation.css');
+    this.copy(webappDir + 'assets/styles/documentation.css', webappDir + 'assets/styles/documentation.css');
 
     // Images
-    this.copy(webappDir + 'images/development_ribbon.png', webappDir + 'images/development_ribbon.png');
-    this.copy(webappDir + 'images/hipster.png', webappDir + 'images/hipster.png');
-    this.copy(webappDir + 'images/hipster2x.png', webappDir + 'images/hipster2x.png');
+    this.copy(webappDir + 'assets/images/development_ribbon.png', webappDir + 'assets/images/development_ribbon.png');
+    this.copy(webappDir + 'assets/images/hipster.png', webappDir + 'assets/images/hipster.png');
+    this.copy(webappDir + 'assets/images/hipster2x.png', webappDir + 'assets/images/hipster2x.png');
 
-    var indexScripts = [
-        'bower_components/modernizr/modernizr.js',
-        'bower_components/jquery/dist/jquery.js',
-        'bower_components/angular/angular.js',
-        'bower_components/angular-ui-router/release/angular-ui-router.js',
-        'bower_components/angular-resource/angular-resource.js',
-        'bower_components/angular-cookies/angular-cookies.js',
-        'bower_components/angular-sanitize/angular-sanitize.js',
-        'bower_components/angular-translate/angular-translate.js',
-        'bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
-        'bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js',
-        'bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js',
-        'bower_components/angular-local-storage/dist/angular-local-storage.js',
-        'bower_components/angular-cache-buster/angular-cache-buster.js',
-
+    var appScripts = [
         'scripts/app/app.js',
         'scripts/components/auth/auth.service.js',
         'scripts/components/auth/principal.service.js',
@@ -778,7 +737,6 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/components/auth/services/activate.service.js',
         'scripts/components/auth/services/password.service.js',
         'scripts/components/auth/services/register.service.js',
-        'scripts/components/auth/services/sessions.service.js',
         'scripts/components/form/form.directive.js',
         'scripts/components/language/language.service.js',
         'scripts/components/language/language.controller.js',
@@ -791,42 +749,78 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/components/util/truncate.filter.js',
         'scripts/components/util/base64.service.js',
         'scripts/app/account/account.js',
+        'scripts/app/account/activate/activate.js',
         'scripts/app/account/activate/activate.controller.js',
+        'scripts/app/account/login/login.js',
         'scripts/app/account/login/login.controller.js',
+        'scripts/app/account/logout/logout.js',
         'scripts/app/account/logout/logout.controller.js',
+        'scripts/app/account/password/password.js',
         'scripts/app/account/password/password.controller.js',
         'scripts/app/account/password/password.directive.js',
+        'scripts/app/account/register/register.js',
         'scripts/app/account/register/register.controller.js',
-        'scripts/app/account/sessions/sessions.controller.js',
+        'scripts/app/account/settings/settings.js',
         'scripts/app/account/settings/settings.controller.js',
         'scripts/app/admin/admin.js',
+        'scripts/app/admin/audits/audits.js',
         'scripts/app/admin/audits/audits.controller.js',
+        'scripts/app/admin/configuration/configuration.js',
         'scripts/app/admin/configuration/configuration.controller.js',
-        'scripts/app/admin/docs/docs.controller.js',
+        'scripts/app/admin/docs/docs.js',
+        'scripts/app/admin/health/health.js',
         'scripts/app/admin/health/health.controller.js',
+        'scripts/app/admin/logs/logs.js',
         'scripts/app/admin/logs/logs.controller.js',
+        'scripts/app/admin/metrics/metrics.js',
         'scripts/app/admin/metrics/metrics.controller.js',
         'scripts/app/entities/entity.js',
         'scripts/app/error/error.js',
+        'scripts/app/main/main.js',
         'scripts/app/main/main.controller.js'
         ];
 
     if (this.authenticationType == 'token') {
-        indexScripts = indexScripts.concat([
+        appScripts = appScripts.concat([
             'scripts/components/auth/provider/auth.oauth2.service.js']);
     } else {
-        indexScripts = indexScripts.concat([
-            'scripts/components/auth/provider/auth.session.service.js']);
+        appScripts = appScripts.concat([
+            'scripts/components/auth/services/sessions.service.js',
+            'scripts/components/auth/provider/auth.session.service.js',
+            'scripts/app/account/sessions/sessions.js',
+            'scripts/app/account/sessions/sessions.controller.js']);
     }
 
-    if (this.websocket == 'atmosphere') {
-        indexScripts = indexScripts.concat([
+    if (this.websocket == 'spring-websocket') {
+        appScripts = appScripts.concat([
+            'scripts/app/admin/tracker/tracker.js',
             'scripts/app/admin/tracker/tracker.controller.js',
-            'bower_components/atmosphere/atmosphere.js',
-            'bower_components/jquery-atmosphere/jquery.atmosphere.js']);
+            'scripts/components/tracker/tracker.service.js'])
     }
 
-    indexScripts = indexScripts.concat([
+    var vendorScripts = [
+        'bower_components/modernizr/modernizr.js',
+        'bower_components/jquery/dist/jquery.js',
+        'bower_components/angular/angular.js',
+        'bower_components/angular-ui-router/release/angular-ui-router.js',
+        'bower_components/angular-resource/angular-resource.js',
+        'bower_components/angular-cookies/angular-cookies.js',
+        'bower_components/angular-sanitize/angular-sanitize.js',
+        'bower_components/angular-translate/angular-translate.js',
+        'bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
+        'bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js',
+        'bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js',
+        'bower_components/angular-local-storage/dist/angular-local-storage.js',
+        'bower_components/angular-cache-buster/angular-cache-buster.js'
+    ];
+
+    if (this.websocket == 'spring-websocket') {
+        vendorScripts = vendorScripts.concat([
+            'bower_components/stomp-websocket/lib/stomp.js',
+            'bower_components/sockjs-client/dist/sockjs.js']);
+    }
+
+    vendorScripts = vendorScripts.concat([
         'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/affix.js',
         'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/alert.js',
         'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/dropdown.js',
@@ -840,7 +834,8 @@ JhipsterGenerator.prototype.app = function app() {
         'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/collapse.js',
         'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/tab.js']);
 
-    this.indexFile = this.appendScripts(this.indexFile, 'scripts/scripts.js', indexScripts);
+    this.indexFile = this.appendScripts(this.indexFile, 'scripts/vendor.js', vendorScripts);
+    this.indexFile = this.appendScripts(this.indexFile, 'scripts/app.js', appScripts);
     this.write(webappDir + 'index.html', this.indexFile);
 
     this.config.set('baseName', this.baseName);

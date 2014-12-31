@@ -3,16 +3,17 @@
 angular.module('<%=angularAppName%>')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('docs', {
-                parent: 'admin',
-                url: '/docs',
+            .state('logout', {
+                parent: 'account',
+                url: '/logout',
                 data: {
-                    roles: ['ROLE_ADMIN']
+                    roles: []
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/admin/docs/docs.html'
+                        templateUrl: 'scripts/app/main/main.html',
+                        controller: 'LogoutController'
                     }
                 }
             });
-    })
+    });
