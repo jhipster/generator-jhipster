@@ -1,9 +1,9 @@
 <div>
 
-    <h2><%= entityClass %>s</h2>
+    <h2 translate="entity.home.title"><%= entityClass %>s</h2>
 
     <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#save<%= entityClass %>Modal" ng-click="clear()">
-        <span class="glyphicon glyphicon-flash"></span> Create a new <%= entityClass %>
+        <span class="glyphicon glyphicon-flash"></span> <span translate="entity.home.create.new">Create a new <%= entityClass %></span>
     </button>
     <div class="modal fade" id="save<%= entityClass %>Modal" tabindex="-1" role="dialog" aria-labelledby="my<%= entityClass %>Label"
          aria-hidden="true">
@@ -16,7 +16,7 @@
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                                 ng-click="clear()">&times;</button>
-                        <h4 class="modal-title" id="my<%= entityClass %>Label">Create or edit a <%= entityClass %></h4>
+                        <h4 class="modal-title" id="my<%= entityClass %>Label" translate="entity.createOrEdit.title">Create or edit a <%= entityClass %></h4>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -61,10 +61,10 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
-                            <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
                         </button>
                         <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary">
-                            <span class="glyphicon glyphicon-save"></span> Save
+                            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
                         </button>
                     </div>
                 </form>
@@ -79,17 +79,17 @@
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                                 ng-click="clear()">&times;</button>
-                        <h4 class="modal-title">Confirm delete operation</h4>
+                        <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
                     </div>
                     <div class="modal-body">
-                        <p>Are you sure you want to delete <%= entityClass %> {{<%=entityInstance %>.id}}?</p>
+                        <p translate="entity.delete.question" translate-values="{id: '{{book.id}}'}">Are you sure you want to delete <%= entityClass %> {{<%=entityInstance %>.id}}?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
-                            <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
                         </button>
                         <button type="submit" ng-disabled="form.$invalid" class="btn btn-danger">
-                            <span class="glyphicon glyphicon-remove-circle"></span> Delete
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete">Delete</span>
                         </button>
                     </div>
                 </form>
@@ -118,17 +118,17 @@
                         <button type="submit"
                                 ui-sref="<%= entityInstance %>Detail({id:<%= entityInstance %>.id})"
                                 class="btn btn-info">
-                            <span class="glyphicon glyphicon-eye-open"></span> View
+                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span translate="entity.action.view"> View</span>
                         </button>
                         <button type="submit"
                                 ng-click="update(<%=entityInstance %>.id)"
                                 class="btn btn-primary">
-                            <span class="glyphicon glyphicon-pencil"></span> Edit
+                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span translate="entity.action.edit"> Edit</span>
                         </button>
                         <button type="submit"
                                 ng-click="delete(<%=entityInstance %>.id)"
                                 class="btn btn-danger">
-                            <span class="glyphicon glyphicon-remove-circle"></span> Delete
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete"> Delete</span>
                         </button>
                     </td>
                 </tr>

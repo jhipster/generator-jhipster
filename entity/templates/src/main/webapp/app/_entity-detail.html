@@ -1,11 +1,11 @@
 <div>
-    <h2><%= entityClass %> {{<%= entityInstance %>.id}}</h2>
+    <h2>{{'entity.detail.title' | translate}}&nbsp; {{<%= entityInstance %>.id}}</h2>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Field</th>
-                    <th>Value</th>
+                    <th translate="entity.detail.field">Field</th>
+                    <th translate="entity.detail.value">Value</th>
                 </tr>
             </thead>
             <tbody><% for (fieldId in fields) { %>
@@ -34,6 +34,6 @@
     <button type="submit"
             ui-sref="<%= entityInstance %>"
             class="btn btn-info">
-        <span class="glyphicon glyphicon-arrow-left"></span> Back
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
     </button>
 </div>

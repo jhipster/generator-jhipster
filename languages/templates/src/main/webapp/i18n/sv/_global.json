@@ -5,7 +5,8 @@
         "menu": {
             "home": "Hem",
             "entities": {
-                "main": "Entiter"
+                "main": "Entiter",
+                "additionalEntity": "JHipster will add addtional entities"
             },
             "account": {
                 "main": "Konto",

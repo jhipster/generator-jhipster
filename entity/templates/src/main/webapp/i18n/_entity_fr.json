@@ -1,0 +1,30 @@
+{
+    "entity": {
+        "action": {
+            "back": "Retour",
+            "cancel": "Annuler",
+            "edit": "Editer",
+            "delete": "Suppriner",
+            "save": "Sauvegarder",
+            "view": "Voir"
+        },
+        "home": {
+            "title": "<%= entityClass %>s",
+            "create": {
+                "new": "Créer un nouveau <%= entityClass %>"
+            }
+        },
+        "createOrEdit": {
+            "title": "Créer ou éditer un <%= entityClass %>"
+        },
+        "detail": {
+            "title": "<%= entityClass %>",
+            "field": "Champ",
+            "value": "Valeur"
+        },
+        "delete": {
+            "title": "Confirmation de suppression",
+            "question": "Etes-vous certain de vouloir supprimer le <%= entityClass %> {{ id }} ?"
+        }
+    }
+}

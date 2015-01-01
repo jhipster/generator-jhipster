@@ -5,7 +5,8 @@
         "menu": {
             "home": "首頁",
             "entities": {
-                "main": "Entities"
+                "main": "Entities",
+                "additionalEntity": "JHipster will add addtional entities"
             },
             "account": {
                 "main": "帳號",

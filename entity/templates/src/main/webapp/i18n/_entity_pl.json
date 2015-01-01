@@ -1,0 +1,30 @@
+{
+    "entity": {
+        "action": {
+            "back": "Back",
+            "cancel": "Cancel",
+            "delete": "Delete",
+            "edit": "Edit",
+            "save": "Save",
+            "view": "View"
+        },
+        "home": {
+            "title": "<%= entityClass %>s",
+            "create": {
+                "new": "Create a new <%= entityClass %>"
+            }
+        },
+        "createOrEdit": {
+            "title": "Create or edit a <%= entityClass %>"
+        },
+        "detail": {
+            "title": "<%= entityClass %>",
+            "field": "Field",
+            "value": "Value"
+        },
+        "delete": {
+            "title": "Confirm delete operation",
+            "question": "Are you sure you want to delete <%= entityClass %> {{ id }}?"
+        }
+    }
+}
