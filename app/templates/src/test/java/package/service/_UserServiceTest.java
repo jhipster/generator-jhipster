@@ -10,6 +10,7 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;<% if (databaseType == 'mongodb') { %>
 import org.springframework.context.annotation.Import;<% } %><% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
@@ -29,7 +30,8 @@ import static org.assertj.core.api.Assertions.*;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
-@WebAppConfiguration<% if (databaseType == 'mongodb') { %>
+@WebAppConfiguration
+@IntegrationTest<% if (databaseType == 'mongodb') { %>
 @Import(MongoConfiguration.class)<% } %><% if (databaseType == 'sql') { %>
 @Transactional<% } %>
 public class UserServiceTest {<% if (authenticationType == 'cookie') { %>
