@@ -1,9 +1,9 @@
 <div>
-<% var keyPrefix = angularAppName + '.'+ entityInstance+ '.'; %>
-    <h2 translate="<%= keyPrefix %>entityName "><%= entityClass %>s</h2>
+<% var keyPrefix = angularAppName + '.'+ entityInstance + '.';; %>
+    <h2 translate="<%= keyPrefix %>home.title"><%= entityClass %></h2>
 
     <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#save<%= entityClass %>Modal" ng-click="clear()">
-        <span class="glyphicon glyphicon-flash"></span> <span translate="<%= keyPrefix %>createLabel">Create a new <%= entityClass %></span>
+        <span class="glyphicon glyphicon-flash"></span> <span translate="<%= keyPrefix %>home.createLabel">Create a new <%= entityClass %></span>
     </button>
     <div class="modal fade" id="save<%= entityClass %>Modal" tabindex="-1" role="dialog" aria-labelledby="my<%= entityClass %>Label"
          aria-hidden="true">
@@ -16,7 +16,7 @@
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                                 ng-click="clear()">&times;</button>
-                        <h4 class="modal-title" id="my<%= entityClass %>Label" translate="<%= keyPrefix %>createEditLabel">Create or edit a <%= entityClass %></h4>
+                        <h4 class="modal-title" id="my<%= entityClass %>Label" translate="<%= keyPrefix %>home.createOrEditLabel">Create or edit a <%= entityClass %></h4>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">

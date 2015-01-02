@@ -1,4 +1,18 @@
 {
+    "<%= angularAppName %>": {
+        "<%= entityInstance %>" : {
+            "home": {
+                "title": "<%= entityClass %>s",
+                "createLabel": "Create a new <%= entityClass %>",
+                "createOrEditLabel": "Create or edit a <%= entityClass %>"
+            },
+            "detail": {
+                "title": "<%= entityClass %>"
+            }<% for (fieldId in fields) { %>,
+            "<%=fields[fieldId].fieldName%>": "<%=fields[fieldId].fieldNameCapitalized%>"<% } %><% for (relationshipId in relationships) { %>,
+            "<%=relationships[relationshipId].otherEntityName%>": "<%= relationships[relationshipId].otherEntityName %>"<% } %>
+        }
+    },
     "entity": {
         "action": {
             "back": "Back",
@@ -8,17 +22,7 @@
             "save": "Save",
             "view": "View"
         },
-        "home": {
-            "title": "<%= entityClass %>s",
-            "create": {
-                "new": "Create a new <%= entityClass %>"
-            }
-        },
-        "createOrEdit": {
-            "title": "Create or edit a <%= entityClass %>"
-        },
         "detail": {
-            "title": "<%= entityClass %>",
             "field": "Field",
             "value": "Value"
         },
