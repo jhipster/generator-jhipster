@@ -1,30 +1,14 @@
 {
-    "entity": {
-        "action": {
-            "back": "Retour",
-            "cancel": "Annuler",
-            "edit": "Editer",
-            "delete": "Suppriner",
-            "save": "Sauvegarder",
-            "view": "Voir"
-        },
-        "home": {
-            "title": "<%= entityClass %>s",
-            "create": {
-                "new": "Créer un nouveau <%= entityClass %>"
-            }
-        },
-        "createOrEdit": {
-            "title": "Créer ou éditer un <%= entityClass %>"
-        },
-        "detail": {
-            "title": "<%= entityClass %>",
-            "field": "Champ",
-            "value": "Valeur"
-        },
-        "delete": {
-            "title": "Confirmation de suppression",
-            "question": "Etes-vous certain de vouloir supprimer le <%= entityClass %> {{ id }} ?"
+    "entities": {
+        "<%= entityInstance %>" : {
+            "listTitle": "List of <%= entityClass %>s",
+            "entityName": "<%= entityClass %>",
+            "detailTitle": "Details of <%= entityClass %>",
+            "createLabel": "Create a new <%= entityClass %>",
+            "deleteQuestion": "Are you sure you want to delete <%= entityClass %> {{ id }}?",
+            "createEditLabel" : "Create or edit a <%= entityClass %>"<% for (fieldId in fields) { %>,
+            "<%=fields[fieldId].fieldName%>": "<%=fields[fieldId].fieldNameCapitalized%>"<% } %><% for (relationshipId in relationships) { %>,
+            "<%=relationships[relationshipId].otherEntityName%>": "<%= relationships[relationshipId].otherEntityName %>"<% } %>
         }
     }
 }

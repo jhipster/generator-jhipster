@@ -66,5 +66,23 @@
             }
         }
     },
+    "entity": {
+        "action": {
+            "back": "Retour",
+            "cancel": "Annuler",
+            "edit": "Editer",
+            "delete": "Suppriner",
+            "save": "Sauvegarder",
+            "view": "Voir"
+        },
+        "detail": {
+            "id" : "ID",
+            "field": "Champ",
+            "value": "Valeur"
+        },
+        "delete": {
+            "title": "Confirmation de suppression"
+        }
+    },
     "footer": "Ceci est votre pied de page"
 }
