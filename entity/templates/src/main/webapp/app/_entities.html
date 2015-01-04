@@ -53,6 +53,7 @@
                             </select>
                         </div><% } else if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) {
         var otherEntityName = relationships[relationshipId].otherEntityName;
+        var translationKey = keyPrefix + otherEntityName;
                             %>
                          <div class="form-group">
                              <label translate="<%= translationKey %>"><%=otherEntityName %></label>
