@@ -131,7 +131,7 @@ HerokuGenerator.prototype.gitCommit = function gitInit() {
     var done = this.async();
 
     this.log(chalk.bold('Adding files for initial commit'));
-    var child = exec('git add -A && git commit -m "Initial commit"', { cwd: 'deploy/heroku' }, function (err, stdout, stderr) {
+    var child = exec('git add -A && git commit -m "Initial commit"', { cwd: 'deploy/heroku', maxBuffer: 500*1024 }, function (err, stdout, stderr) {
         if (stdout.search('nothing to commit') >= 0) {
             this.log('Re-pushing the existing build...');
         } else if (err) {
