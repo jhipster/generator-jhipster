@@ -5,7 +5,8 @@
         "menu": {
             "home": "Inicio",
             "entities": {
-                "main": "Entities"
+                "main": "Entities",
+                "additionalEntity": "JHipster will add addtional entities"
             },
             "account": {
                 "main": "Cuenta",

@@ -46,12 +46,11 @@
     "gulp-clean": "0.2.4",
     "gulp-karma": "https://github.com/lazd/gulp-karma/tarball/helper",
     "gulp-replace": "0.2.0",
-    "gulp-livereload": "2.1.1",
     "gulp-rev": "0.3.2",
     "gulp-jshint": "1.5.5",
     "gulp-browserify": "0.5.0",<% if (useCompass) { %>
     "gulp-compass": "1.1.8",<% } %>
-    "proxy-middleware": "0.5.0", <% } %>
+    "proxy-middleware": "0.9.0", <% } %>
     "event-stream": "3.1.5",
     "jshint-stylish": "^1.0.0",
     "karma-script-launcher": "0.1.0",

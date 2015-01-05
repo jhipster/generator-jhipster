@@ -124,9 +124,9 @@ Generator.prototype.copyI18nFilesByName = function(_this, webappDir, fileToCopy,
 };
 
 Generator.prototype.installNewLanguage = function(language) {
+    var appPath = this.env.options.appPath;
+    var fullPath = path.join(appPath, 'scripts/components/language/language.service.js');
     try {
-        var appPath = this.env.options.appPath;
-        var fullPath = path.join(appPath, 'scripts/components/language/language.service.js');
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: '//JHipster will add new languages here',
@@ -136,5 +136,21 @@ Generator.prototype.installNewLanguage = function(language) {
         });
     } catch (e) {
         console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + language + 'not added as a new language.\n'.yellow);
+    }
+};
+
+Generator.prototype.addNewEntityToMenu = function(language, key, value) {
+    var appPath = this.env.options.appPath;
+    var fullPath = path.join(appPath, 'i18n/' + language + '/global.json');
+    try {
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: '"additionalEntity": "JHipster will add addtional entities"',
+            splicable: [
+                    '"' + key + '": "' + value + '",'
+            ]
+        });
+    } catch (e) {
+        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + language + 'not added as a new entity in the menu.\n'.yellow);
     }
 };

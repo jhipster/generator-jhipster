@@ -6,6 +6,7 @@ import <%=packageName%>.repository.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;<% if (databaseType == 'mongodb') { %>
 import org.springframework.context.annotation.Import;<% } %>
 import org.springframework.http.MediaType;
@@ -28,7 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
-@WebAppConfiguration<% if (databaseType == 'mongodb') { %>
+@WebAppConfiguration
+@IntegrationTest<% if (databaseType == 'mongodb') { %>
 @Import(MongoConfiguration.class)<% } %>
 public class UserResourceTest {
 

@@ -1,4 +1,5 @@
 // Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= pkg.name %> <%= pkg.version %>
+/* jshint camelcase: false */
 'use strict';
 
 var gulp = require('gulp'),
@@ -8,7 +9,6 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),<% if(useCompass) { %>
     compass = require('gulp-compass'),<% } %>
     minifyHtml = require('gulp-minify-html'),
-    livereload = require('gulp-livereload'),
     imagemin = require('gulp-imagemin'),
     ngAnnotate = require('gulp-ng-annotate'),
     jshint = require('gulp-jshint'),
@@ -18,33 +18,37 @@ var gulp = require('gulp'),
     es = require('event-stream'),
     flatten = require('gulp-flatten'),
     clean = require('gulp-clean'),
-    replace = require('gulp-replace');
+    replace = require('gulp-replace'),
+    url = require('url');
 
 var karma = require('gulp-karma')({configFile: 'src/test/javascript/karma.conf.js'});
 
 var yeoman = {
-    app: 'src/main/webapp/',//require('./bower.json').appPath || 'app',
+    app: 'src/main/webapp/',
     dist: 'src/main/webapp/dist/',
     test: 'src/test/javascript/spec/',
     tmp: '.tmp/'<% if(useCompass) { %>,
-    scss: 'src/main/scss/'<% } %>
-}
+    scss: 'src/main/scss/'<% } %>,
+    port: 9000,
+    apiPort: 8080,
+    liveReloadPort: 35729
+};
 
-gulp.task('clean', function(){
+gulp.task('clean', function() {
     return gulp.src(yeoman.dist, {read: false}).
         pipe(clean());
 });
 
-gulp.task('clean:tmp', function(){
+gulp.task('clean:tmp', function() {
     return gulp.src(yeoman.tmp, {read: false}).
         pipe(clean());
 });
 
-gulp.task('test', function(){
+gulp.task('test', function() {
     karma.once();
 });
 
-gulp.task('copy', ['clean'], function(){
+gulp.task('copy', ['clean'], function() {
     return es.merge(gulp.src(yeoman.app + 'i18n/**').
               pipe(gulp.dest(yeoman.dist + 'i18n/')),
               gulp.src(yeoman.app + 'assets/**/*.{woff,svg,ttf,eot}').
@@ -52,12 +56,12 @@ gulp.task('copy', ['clean'], function(){
               pipe(gulp.dest(yeoman.dist + 'assets/fonts/')));
 });
 
-gulp.task('images', function(){
-        return gulp.src(yeoman.app + 'assets/images/**').
-            pipe(imagemin({optimizationLevel: 5})).
-            pipe(gulp.dest(yeoman.dist + 'assets/images'));
+gulp.task('images', function() {
+    return gulp.src(yeoman.app + 'assets/images/**').
+        pipe(imagemin({optimizationLevel: 5})).
+        pipe(gulp.dest(yeoman.dist + 'assets/images')).
+        pipe(connect.reload());
 });
-
 <% if(useCompass) { %>
 gulp.task('compass', function() {
     return gulp.src(yeoman.scss + '**/*.scss').
@@ -75,158 +79,90 @@ gulp.task('compass', function() {
         pipe(gulp.dest(yeoman.tmp + 'styles'));
 });
 <% } %>
+gulp.task('styles', [<% if(useCompass) { %>'compass'<% } %>], function() {
+    return gulp.src(yeoman.app + 'assets/styles/**/*.css').
+        pipe(gulp.dest(yeoman.tmp)).
+        pipe(connect.reload());
+});
 
-gulp.task('styles', [<% if(useCompass) { %> 'compass'<% } %>], function() {
-    return gulp.src(yeoman.app + 'assets/styles/{,*/}*.css').
-        pipe(gulp.dest(yeoman.tmp));
+gulp.task('scripts', function () {
+    gulp.src(yeoman.app + 'scripts/**').
+        pipe(connect.reload());
 });
 
 gulp.task('server', ['watch'<% if(useCompass) { %>, 'compass'<% } %>], function() {
-    connect.server(
-        {
-            root: [yeoman.app, yeoman.tmp],
-            port: 9000,
-            livereload: true,
-            middleware: function(connect, o) {
-                return [
-                    (function() {
-                        var url = require('url');
-                        var proxy = require('proxy-middleware');
-                        var options = url.parse('http://localhost:8080/api');
-                        options.route = '/api';
-                        return proxy(options);
-                    })(),
-                    (function() {
-                        var url = require('url');
-                        var proxy = require('proxy-middleware');
-                        var options = url.parse('http://localhost:8080/health');
-                        options.route = '/api-docs';
-                        return proxy(options);
-                    })(),
-                    (function() {
-                        var url = require('url');
-                        var proxy = require('proxy-middleware');
-                        var options = url.parse('http://localhost:8080/configprops');
-                        options.route = '/api-docs';
-                        return proxy(options);
-                    })(),
-                    (function() {
-                        var url = require('url');
-                        var proxy = require('proxy-middleware');
-                        var options = url.parse('http://localhost:8080/beans');
-                        options.route = '/api-docs';
-                        return proxy(options);
-                    })(),
-                    (function() {
-                        var url = require('url');
-                        var proxy = require('proxy-middleware');
-                        var options = url.parse('http://localhost:8080/api-docs');
-                        options.route = '/api-docs';
-                        return proxy(options);
-                    })(),
-                    (function() {
-                        var url = require('url');
-                        var proxy = require('proxy-middleware');
-                        var options = url.parse('http://localhost:8080/metrics');
-                        options.route = '/metrics';
-                        return proxy(options);
-                    })(),
-                    (function() {
-                        var url = require('url');
-                        var proxy = require('proxy-middleware');
-                        var options = url.parse('http://localhost:8080/dump');
-                        options.route = '/dump';
-                        return proxy(options);
-                    })()<% if (authenticationType == 'token') { %>,
-                    (function() {
-                        var url = require('url');
-                        var proxy = require('proxy-middleware');
-                        var options = url.parse('http://localhost:8080/oauth/token');
-                        options.route = '/oauth/token';
-                        return proxy(options);
-                    })()<% } %><% if (devDatabaseType == 'h2Memory') { %>,
-                    (function() {
-                        var url = require('url');
-                        var proxy = require('proxy-middleware');
-                        var options = url.parse('http://localhost:8080/console');
-                        options.route = '/console';
-                        return proxy(options);
-                    })()<% } %>
-                ];
-            }
+    var baseUri = 'http://localhost:' + yeoman.apiPort;
+    // Routes to proxy to the backend
+    var proxyRoutes = [
+        '/api',
+        '/health',
+        '/configprops',
+        '/api-docs',
+        '/metrics',
+        '/dump'<% if (authenticationType == 'token') { %>,
+        '/oauth/token'<% } %><% if (devDatabaseType == 'h2Memory') { %>,
+        '/console'<% } %>
+    ];
+
+    connect.server({
+        root: [yeoman.app, yeoman.tmp],
+        port: yeoman.port,
+        livereload: {
+            port: yeoman.liveReloadPort
+        },
+        middleware: function() {
+            // Build a list of proxies for routes: [route1_proxy, route2_proxy, ...]
+            return proxyRoutes.map(function (r) {
+                var options = url.parse(baseUri + r);
+                options.route = r;
+                return proxy(options);
+            });
         }
-    );
+    });
 });
 
 gulp.task('watch', function() {
-    gulp.watch(yeoman.app + 'scripts/**');<% if(useCompass) { %>
-    gulp.watch(yeoman.scss + '**/*.scss', ['compass']); <% } %>
+    gulp.watch(yeoman.app + '*.html', ['usemin']);
+    gulp.watch(yeoman.app + 'scripts/**', ['scripts']);
+    gulp.watch(<% if(useCompass) { %>yeoman.scss + '**/*.scss'<% } else { %>yeoman.app + 'assets/styles/**/*.css'<% } %>, ['styles']);
     gulp.watch('src/images/**', ['images']);
-    livereload();
 });
 
 gulp.task('server:dist', ['build'], function() {
-    connect.server(
-        {
-            root: [yeoman.dist],
-            port: 9000,
-            //livereload: true,
-            middleware: function(connect, o) {
-                return [
-                    (function() {
-                        var url = require('url');
-                        var proxy = require('proxy-middleware');
-                        var options = url.parse('http://localhost:8080/api');
-                        options.route = '/api';
-                        return proxy(options);
-                    })(),
-                    (function() {
-                        var url = require('url');
-                        var proxy = require('proxy-middleware');
-                        var options = url.parse('http://localhost:8080/metrics');
-                        options.route = '/metrics';
-                        return proxy(options);
-                    })(),
-                    (function() {
-                        var url = require('url');
-                        var proxy = require('proxy-middleware');
-                        var options = url.parse('http://localhost:8080/dump');
-                        options.route = '/dump';
-                        return proxy(options);
-                    })(),
-                    (function() {
-                        var url = require('url');
-                        var proxy = require('proxy-middleware');
-                        var options = url.parse('http://localhost:8080/api-docs');
-                        options.route = '/api-docs';
-                        return proxy(options);
-                    })()<% if (authenticationType == 'token') { %>,
-                    (function() {
-                        var url = require('url');
-                        var proxy = require('proxy-middleware');
-                        var options = url.parse('http://localhost:8080/oauth/token');
-                        options.route = '/oauth/token';
-                        return proxy(options);
-                    })()<% } %><% if (devDatabaseType == 'h2Memory') { %>,
-                    (function() {
-                        var url = require('url');
-                        var proxy = require('proxy-middleware');
-                        var options = url.parse('http://localhost:8080/console');
-                        options.route = '/console';
-                        return proxy(options);
-                    })()<% } %>
-                ];
-            }
+    var baseUri = 'http://localhost:' + yeoman.apiPort;
+    // Routes to proxy to the backend
+    var proxyRoutes = [
+        '/api',
+        '/metrics',
+        '/dump',
+        '/api-docs'<% if (authenticationType == 'token') { %>,
+        '/oauth/token'<% } %><% if (devDatabaseType == 'h2Memory') { %>,
+        '/console'<% } %>
+    ];
+
+    connect.server({
+        root: [yeoman.dist],
+        port: yeoman.port,
+        /*livereload: {
+         port: yeoman.liveReloadPort
+         },*/
+        middleware: function() {
+            // Build a list of proxies for routes: [route1_proxy, route2_proxy, ...]
+            return proxyRoutes.map(function (r) {
+                var options = url.parse(baseUri + r);
+                options.route = r;
+                return proxy(options);
+            });
         }
-    );
+    });
 });
 
-gulp.task('build', ['clean', 'copy'], function() {
+gulp.task('build', ['copy'], function () {
     gulp.run('usemin');
 });
 
-gulp.task('usemin', ['images', 'styles'], function(){
-    return gulp.src(yeoman.app + '{,views/}*.html').
+gulp.task('usemin', ['images', 'styles'], function() {
+    return gulp.src(yeoman.app + '*.html').
         pipe(usemin({
             css: [
                 prefix.apply(),
@@ -245,7 +181,8 @@ gulp.task('usemin', ['images', 'styles'], function(){
                 rev()
             ]
         })).
-        pipe(gulp.dest(yeoman.dist));
+        pipe(gulp.dest(yeoman.dist)).
+        pipe(connect.reload());
 });
 
 gulp.task('jshint', function() {

@@ -5,7 +5,8 @@
         "menu": {
             "home": "Ana Sayfa",
             "entities": {
-                "main": "Entities"
+                "main": "Entities",
+                "additionalEntity": "JHipster will add addtional entities"
             },
             "account": {
                 "main": "Hesap",

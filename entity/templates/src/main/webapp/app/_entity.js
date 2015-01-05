@@ -21,5 +21,24 @@ angular.module('<%=angularAppName%>')
                         return $translate.refresh();
                     }]
                 }
+            })
+            .state('<%= entityInstance %>Detail', {
+                parent: 'entity',
+                url: '/<%= entityInstance %>/:id',
+                data: {
+                    roles: ['ROLE_USER']
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-detail.html',
+                        controller: '<%= entityClass %>DetailController'
+                    }
+                },
+                resolve: {
+                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                        $translatePartialLoader.addPart('<%= entityInstance %>');
+                        return $translate.refresh();
+                    }]
+                }
             });
     });

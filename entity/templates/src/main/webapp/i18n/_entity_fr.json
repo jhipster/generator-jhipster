@@ -1,0 +1,35 @@
+{
+    "<%= angularAppName %>": {
+        "<%= entityInstance %>" : {
+            "home": {
+                "title": "<%= entityClass %>s",
+                "createLabel": "Créer un nouveau <%= entityClass %>",
+                "createOrEditLabel": "Créer ou éditer un <%= entityClass %>"
+            },
+            "detail": {
+                "title": "<%= entityClass %>"
+            }<% for (fieldId in fields) { %>,
+            "<%=fields[fieldId].fieldName%>": "<%=fields[fieldId].fieldNameCapitalized%>"<% } %><% for (relationshipId in relationships) { %>,
+            "<%=relationships[relationshipId].otherEntityName%>": "<%= relationships[relationshipId].otherEntityName %>"<% } %>
+        }
+    },
+    "entity": {
+        "action": {
+            "back": "Retour",
+            "cancel": "Annuler",
+            "edit": "Editer",
+            "delete": "Suppriner",
+            "save": "Sauvegarder",
+            "view": "Voir"
+        },
+        "detail": {
+            "field": "Champ",
+            "value": "Valeur"
+        },
+        "delete": {
+            "title": "Confirmation de suppression",
+            "question": "Etes-vous certain de vouloir supprimer le <%= entityClass %> {{ id }} ?"
+        }
+    }
+}
+

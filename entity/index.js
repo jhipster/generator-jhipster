@@ -1,5 +1,6 @@
 'use strict';
 var util = require('util'),
+        fs = require('fs'),
         path = require('path'),
         yeoman = require('yeoman-generator'),
         chalk = require('chalk'),
@@ -492,6 +493,8 @@ EntityGenerator.prototype.files = function files() {
     
     this.template('src/main/webapp/app/_entities.html',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + 's.html', this, {});
+    this.template('src/main/webapp/app/_entity-detail.html',
+        'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + '-detail.html', this, {});
 
     this.addRouterToMenu(this.entityInstance);
 
@@ -502,10 +505,42 @@ EntityGenerator.prototype.files = function files() {
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '.controller' + '.js', this, {});
     this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.controller' + '.js');
 
+    this.template('src/main/webapp/app/_entity-detail-controller.js',
+        'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '-detail.controller' + '.js', this, {});
+    this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '-detail.controller' + '.js');
+
     this.template('src/main/webapp/components/_entity-service.js',
         'src/main/webapp/scripts/components/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js', this, {});
     this.addComponentsScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.service' + '.js');
 
     this.template('src/test/java/package/web/rest/_EntityResourceTest.java',
         'src/test/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'ResourceTest.java', this, {});
+
+    // Copy for each
+    this.copyI18n('ca');
+    this.copyI18n('da');
+    this.copyI18n('de');
+    this.copyI18n('en');
+    this.copyI18n('es');
+    this.copyI18n('fr');
+    this.copyI18n('kr');
+    this.copyI18n('pl');
+    this.copyI18n('pt-br');
+    this.copyI18n('ru');
+    this.copyI18n('sw');
+    this.copyI18n('tr');
+    this.copyI18n('zh-tw');
+};
+
+EntityGenerator.prototype.copyI18n = function(language) {
+    try {
+        var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
+        if (stats.isDirectory()) {
+            this.template('src/main/webapp/i18n/_entity_' + language + '.json', 'src/main/webapp/i18n/' + language + '/' + this.entityInstance + '.json', this, {});
+            this.addNewEntityToMenu(language, this.entityInstance, this.entityClass);
+        }
+    } catch(e) {
+        // An exception is thrown if the folder doesn't exist
+        // do nothing
+    }
 };
