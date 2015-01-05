@@ -21,13 +21,17 @@ angular.module('<%=angularAppName%>')
         };
 
         $scope.update = function (id) {
-            $scope.<%= entityInstance %> = <%= entityClass %>.get({id: id});
-            $('#save<%= entityClass %>Modal').modal('show');
+            <%= entityClass %>.get({id: id}, function(result) {
+                $scope.<%= entityInstance %> = result;
+                $('#save<%= entityClass %>Modal').modal('show');
+            });
         };
 
         $scope.delete = function (id) {
-            $scope.<%= entityInstance %> = <%= entityClass %>.get({id: id});
-            $('#delete<%= entityClass %>Confirmation').modal('show');
+            <%= entityClass %>.get({id: id}, function(result) {
+                $scope.<%= entityInstance %> = result;
+                $('#delete<%= entityClass %>Confirmation').modal('show');
+            });
         };
 
         $scope.confirmDelete = function (id) {
