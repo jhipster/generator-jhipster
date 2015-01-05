@@ -6,9 +6,13 @@ var util = require('util'),
     _s = require('underscore.string'),
     shelljs = require('shelljs'),
     scriptBase = require('../script-base'),
-    packagejs = require(__dirname + '/../package.json');
+    packagejs = require(__dirname + '/../package.json'),
+    Insight = require('insight');
+
+var insight;
 
 var JhipsterGenerator = module.exports = function JhipsterGenerator(args, options, config) {
+
     yeoman.generators.Base.apply(this, arguments);
 
     this.on('end', function () {
@@ -16,10 +20,18 @@ var JhipsterGenerator = module.exports = function JhipsterGenerator(args, option
     });
 
     this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
+
+    insight = new Insight({
+        trackingCode: 'UA-46075199-2',
+        packageName: this.pkg.name,
+        packageVersion: this.pkg.version
+    });
 };
 
 util.inherits(JhipsterGenerator, yeoman.generators.Base);
 util.inherits(JhipsterGenerator, scriptBase);
+
+
 
 JhipsterGenerator.prototype.askFor = function askFor() {
     var cb = this.async();
@@ -38,6 +50,15 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     console.log('\nWelcome to the JHipster Generator\n');
 
     var prompts = [
+        {
+            when: function () {
+                return insight.optOut === undefined;
+            },
+            type: 'confirm',
+            name: 'insight',
+            message: 'May ' + chalk.cyan('JHipster') + ' anonymously report usage statistics to improve the tool over time?',
+            default: true
+        },
         {
             type: 'input',
             name: 'baseName',
@@ -323,6 +344,9 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         cb();
     } else {
         this.prompt(prompts, function (props) {
+            if (props.insight !== undefined) {
+                insight.optOut = !props.insight;
+            }
             this.baseName = props.baseName;
             this.packageName = props.packageName;
             this.authenticationType = props.authenticationType;
@@ -343,6 +367,18 @@ JhipsterGenerator.prototype.askFor = function askFor() {
 };
 
 JhipsterGenerator.prototype.app = function app() {
+    insight.track('generator', 'app');
+    insight.track('authenticationType', this.authenticationType);
+    insight.track('hibernateCache', this.hibernateCache);
+    insight.track('clusteredHttpSession', this.clusteredHttpSession);
+    insight.track('websocket', this.websocket);
+    insight.track('databaseType', this.databaseType);
+    insight.track('devDatabaseType', this.devDatabaseType);
+    insight.track('prodDatabaseType', this.prodDatabaseType);
+    insight.track('useCompass', this.useCompass);
+    insight.track('buildTool', this.buildTool);
+    insight.track('frontendBuilder', this.frontendBuilder);
+    insight.track('javaVersion', this.javaVersion);
 
     var packageFolder = this.packageName.replace(/\./g, '/');
     var javaDir = 'src/main/java/' + packageFolder + '/';
