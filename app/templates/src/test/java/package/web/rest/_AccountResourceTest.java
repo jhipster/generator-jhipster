@@ -4,6 +4,7 @@ import <%=packageName%>.Application;<% if (databaseType == 'mongodb') { %>
 import <%=packageName%>.config.MongoConfiguration;<% } %>
 import <%=packageName%>.domain.Authority;
 import <%=packageName%>.domain.User;
+import <%=packageName%>.repository.AuthorityRepository;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.MailService;
@@ -57,6 +58,9 @@ public class AccountResourceTest {
 
     @Inject
     private UserRepository userRepository;
+
+    @Inject
+    private AuthorityRepository authorityRepository;
 
     @Inject
     private UserService userService;
@@ -297,7 +301,7 @@ public class AccountResourceTest {
 
     @Test
     @Transactional
-    public void testRegisterAdminUnauthorized() throws Exception {
+    public void testRegisterAdminIsIgnored() throws Exception {
         UserDTO u = new UserDTO(
             "badguy",               // login
             "password",             // password
@@ -308,14 +312,19 @@ public class AccountResourceTest {
             Arrays.asList(AuthoritiesConstants.ADMIN) // <-- only admin should be able to do that
         );
 
-        restUserMockMvc.perform(
+        restMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(u)))
-            .andExpect(status().is4xxClientError());
-
-        <% if (javaVersion == '8') { %>Optional<User> userDup = userRepository.findOneByLogin("badguy");
-        assertThat(userDup.isPresent()).isFalse();<% } else { %>User userDup = userRepository.findOneByLogin("badguy");
-        assertThat(userDup).isNull();<% } %>
+            .andExpect(status().isCreated());
+<% if (javaVersion == '8') { %>
+        Optional<User> userDup = userRepository.findOneByLogin("badguy");
+        assertThat(userDup.isPresent()).isTrue();
+        assertThat(userDup.get().getAuthorities()).hasSize(1)
+            .containsExactly(authorityRepository.findOne(AuthoritiesConstants.USER));<% } else { %>
+        User userDup = userRepository.findOneByLogin("badguy");
+        assertThat(userDup).isNotNull();
+        assertThat(userDup.getAuthorities()).hasSize(1)
+            .containsExactly(authorityRepository.findOne(AuthoritiesConstants.USER));<% } %>
     }
 }
