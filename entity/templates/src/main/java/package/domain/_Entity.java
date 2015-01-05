@@ -25,16 +25,18 @@ import java.util.Set;<% } %>
 /**
  * A <%= entityClass %>.
  */<% if (databaseType == 'sql') { %>
-@Entity
-@Table(name = "T_<%= name.toUpperCase() %>")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
+@Entity<% if (inheritanceFromClass == '') { %>
+@Table(name = "T_<%= name.toUpperCase() %>")<% } %><% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
+<% if (inheritanceFor == true) { %>@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type")<% } %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'mongodb') { %>
 @Document(collection = "T_<%= name.toUpperCase() %>")<% } %>
-public class <%= entityClass %> implements Serializable {
+public class <%= entityClass %><% if (inheritanceFromClass != '') { %> extends <%= inheritanceFromClass %><% } %> implements Serializable {
 
-    @Id<% if (databaseType == 'sql') { %>
+    <% if (inheritanceFromClass == '') { %>@Id<% if (databaseType == 'sql') { %>
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;<% } %><% if (databaseType == 'mongodb') { %>
-    private String id;<% } %>
+    private String id;<% } %><% } %>
 <% for (fieldId in fields) { %><% if (databaseType == 'sql') { %><% if (fields[fieldId].fieldType == 'DateTime') { %>
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = CustomDateTimeSerializer.class)
@@ -66,13 +68,14 @@ public class <%= entityClass %> implements Serializable {
     @OneToOne<% if (relationships[relationshipId].ownerSide == false) { %>(mappedBy = "<%= entityInstance %>")<% } %>
     private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].otherEntityName %>;<% } %>
 <% } %>
-    public <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %> getId() {
+    <% if (inheritanceFromClass == '') { %>public <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %> getId() {
         return id;
     }
 
     public void setId(<% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %> id) {
         this.id = id;
     }
+    <% } %>
 <% for (fieldId in fields) { %>
     public <%= fields[fieldId].fieldType %> get<%= fields[fieldId].fieldNameCapitalized %>() {
         return <%= fields[fieldId].fieldName %>;
@@ -97,7 +100,7 @@ public class <%= entityClass %> implements Serializable {
         this.<%= relationships[relationshipId].otherEntityName %> = <%= relationships[relationshipId].otherEntityName %>;
     }<% } %>
 <% } %>
-    @Override
+    <% if (inheritanceFromClass == '') { %>@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -124,5 +127,5 @@ public class <%= entityClass %> implements Serializable {
                 "id=" + id +<% for (fieldId in fields) { %>
                 ", <%= fields[fieldId].fieldName %>='" + <%= fields[fieldId].fieldName %> + "'" +<% } %>
                 '}';
-    }
+    }<% } %>
 }
