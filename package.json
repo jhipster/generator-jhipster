@@ -28,7 +28,7 @@
     "test": "mocha --reporter spec"
   },
   "dependencies": {
-    "yeoman-generator": "0.18.6",
+    "yeoman-generator": "0.17.7",
     "cheerio": "0.17.0",
     "underscore.string": "2.3.3",
     "shelljs": "0.3.0",
