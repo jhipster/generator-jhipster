@@ -12,15 +12,15 @@
         <thead>
         <tr>
             <th>{{'health.table.service' | translate}}</th>
-            <th>{{'health.table.status' | translate}}</th>
+            <th class="text-center">{{'health.table.status' | translate}}</th>
             <th>{{'health.stacktrace' | translate}}</th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="(k, v) in healthCheck" ng-show="k != 'status'">
             <td>{{'health.indicator.' + k | translate}}</td>
-            <td><span class="label" ng-class="getLabelClass(v.status)">{{'health.status.' + v.status | translate}}</span></td>
-            <td>
+            <td class="text-center"><span class="label" ng-class="getLabelClass(v.status)">{{'health.status.' + v.status | translate}}</span></td>
+            <td class="text-center">
                 <div id="healthCheck" class="row" ng-show="v.error">
                     <div class="col-md-4">
                         <a class="hand" ng-click="showEmailException = !showEmailException">
