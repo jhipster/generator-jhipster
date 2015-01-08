@@ -26,6 +26,10 @@ springBoot {
 
 apply from: 'yeoman.gradle'
 
+<% if (databaseType == 'sql') { %>
+apply from: 'liquibase.gradle'
+<% } %>
+
 if (project.hasProperty('prod')) {
     profile = 'prod'
 } else if (project.hasProperty('fast')) {
