@@ -659,9 +659,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.installI18nFilesByLanguage(this, webappDir, resourceDir, 'en');
     this.installI18nFilesByLanguage(this, webappDir, resourceDir, 'fr');
 
-    // Protected resources - used to check if a customer is still connected
-    this.copy(webappDir + '/protected/authentication_check.gif', webappDir + '/protected/authentication_check.gif');
-
     // Swagger-ui for Jhipster
     this.template(webappDir + '/swagger-ui/_index.html', webappDir + 'swagger-ui/index.html', this, {});
     this.copy(webappDir + '/swagger-ui/images/throbber.gif', webappDir + 'swagger-ui/images/throbber.gif');
