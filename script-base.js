@@ -115,7 +115,8 @@ Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, res
     _this.template(webappDir + '/i18n/' + lang + '/_global.json', webappDir + 'i18n/' + lang + '/global.json', this, {});
 
     // Template the message server side properties
-    _this.template(resourceDir + '/i18n/_messages_' + lang + '.properties', resourceDir + 'i18n/messages_' + lang + '.properties', this, {});
+    var lang_prop = lang.replace(/-/g, "_");
+    _this.template(resourceDir + '/i18n/_messages_' + lang_prop + '.properties', resourceDir + 'i18n/messages_' + lang_prop + '.properties', this, {});
 
 };
 
