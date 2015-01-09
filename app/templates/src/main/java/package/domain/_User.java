@@ -33,7 +33,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @NotNull
     @Pattern(regexp = "^[a-z0-9]*$")
     @Size(min = 1, max = 50)<% if (databaseType == 'sql') { %>
-    @Column(length = 50, unique = true)<% } %>
+    @Column(length = 50, unique = true, nullable = false)<% } %>
     private String login;
 
     @JsonIgnore

@@ -163,7 +163,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             when: function (response) {
-                return response.databaseType == 'sql';
+                return (response.databaseType == 'sql' && response.prodDatabaseType == 'mysql');
             },
             type: 'list',
             name: 'devDatabaseType',
@@ -171,11 +171,26 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             choices: [
                 {
                     value: 'h2Memory',
-                    name: 'H2 in-memory with web console'
+                    name: 'H2 in-memory with Web console'
                 },
                 {
                     value: 'mysql',
                     name: 'MySQL'
+                }
+            ],
+            default: 0
+        },
+        {
+            when: function (response) {
+                return (response.databaseType == 'sql' && response.prodDatabaseType == 'postgresql');
+            },
+            type: 'list',
+            name: 'devDatabaseType',
+            message: '(7/13) Which *development* database would you like to use?',
+            choices: [
+                {
+                    value: 'h2Memory',
+                    name: 'H2 in-memory with Web console'
                 },
                 {
                     value: 'postgresql',
