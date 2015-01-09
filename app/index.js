@@ -6,10 +6,7 @@ var util = require('util'),
     _s = require('underscore.string'),
     shelljs = require('shelljs'),
     scriptBase = require('../script-base'),
-    packagejs = require(__dirname + '/../package.json'),
-    Insight = require('insight');
-
-var insight;
+    packagejs = require(__dirname + '/../package.json');
 
 var JhipsterGenerator = module.exports = function JhipsterGenerator(args, options, config) {
 
@@ -20,12 +17,6 @@ var JhipsterGenerator = module.exports = function JhipsterGenerator(args, option
     });
 
     this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
-
-    insight = new Insight({
-        trackingCode: 'UA-46075199-2',
-        packageName: this.pkg.name,
-        packageVersion: this.pkg.version
-    });
 };
 
 util.inherits(JhipsterGenerator, yeoman.generators.Base);
@@ -48,6 +39,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         '           \\_|_| /_/--\\  \\_\\/  /_/--\\     |_|_/ |_|__  \\_\\/  _)_)       \n'));
 
     console.log('\nWelcome to the JHipster Generator\n');
+    var insight = this.insight();
 
     var prompts = [
         {
@@ -382,18 +374,19 @@ JhipsterGenerator.prototype.askFor = function askFor() {
 };
 
 JhipsterGenerator.prototype.app = function app() {
+    var insight = this.insight();
     insight.track('generator', 'app');
-    insight.track('authenticationType', this.authenticationType);
-    insight.track('hibernateCache', this.hibernateCache);
-    insight.track('clusteredHttpSession', this.clusteredHttpSession);
-    insight.track('websocket', this.websocket);
-    insight.track('databaseType', this.databaseType);
-    insight.track('devDatabaseType', this.devDatabaseType);
-    insight.track('prodDatabaseType', this.prodDatabaseType);
-    insight.track('useCompass', this.useCompass);
-    insight.track('buildTool', this.buildTool);
-    insight.track('frontendBuilder', this.frontendBuilder);
-    insight.track('javaVersion', this.javaVersion);
+    insight.track('app/authenticationType', this.authenticationType);
+    insight.track('app/hibernateCache', this.hibernateCache);
+    insight.track('app/clusteredHttpSession', this.clusteredHttpSession);
+    insight.track('app/websocket', this.websocket);
+    insight.track('app/databaseType', this.databaseType);
+    insight.track('app/devDatabaseType', this.devDatabaseType);
+    insight.track('app/prodDatabaseType', this.prodDatabaseType);
+    insight.track('app/useCompass', this.useCompass);
+    insight.track('app/buildTool', this.buildTool);
+    insight.track('app/frontendBuilder', this.frontendBuilder);
+    insight.track('app/javaVersion', this.javaVersion);
 
     var packageFolder = this.packageName.replace(/\./g, '/');
     var javaDir = 'src/main/java/' + packageFolder + '/';

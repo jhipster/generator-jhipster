@@ -318,6 +318,12 @@ EntityGenerator.prototype.files = function files() {
     }
     this.entityClass = _s.capitalize(this.name);
     this.entityInstance = this.name.charAt(0).toLowerCase() + this.name.slice(1);
+
+    var insight = this.insight();
+    insight.track('generator', 'entity');
+    insight.track('entity/fields', this.fields.length);
+    insight.track('entity/relationships', this.relationships.length);
+
     var resourceDir = 'src/main/resources/';
 
     this.template('src/main/java/package/domain/_Entity.java',

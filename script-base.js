@@ -2,7 +2,8 @@
 var path = require('path'),
     util = require('util'),
     yeoman = require('yeoman-generator'),
-    jhipsterUtils = require('./util.js');
+    jhipsterUtils = require('./util.js'),
+    Insight = require('insight');
 
 module.exports = Generator;
 
@@ -155,3 +156,13 @@ Generator.prototype.addNewEntityToMenu = function(language, key, value) {
         console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + language + 'not added as a new entity in the menu.\n'.yellow);
     }
 };
+
+Generator.prototype.insight = function () {
+    var pkg = require('./package.json');
+    var insight = new Insight({
+        trackingCode: 'UA-46075199-2',
+        packageName: pkg.name,
+        packageVersion: pkg.version
+    });
+    return insight;
+}

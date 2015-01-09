@@ -51,11 +51,13 @@ LanguagesGenerator.prototype.askFor = function askFor() {
 LanguagesGenerator.prototype.files = function files() {
     var webappDir = 'src/main/webapp/';
     var resourceDir = 'src/main/resources/';
+    var insight = this.insight();
+    insight.track('generator', 'languages');
 
     for (var id in this.languages) {
         var language = this.languages[id];
         this.installI18nFilesByLanguage(this, webappDir, resourceDir, language);
         this.installNewLanguage(language);
+        insight.track('languages/language', language);
     }
 };
-
