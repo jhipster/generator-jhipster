@@ -13,7 +13,10 @@ var JhipsterGenerator = module.exports = function JhipsterGenerator(args, option
     yeoman.generators.Base.apply(this, arguments);
 
     this.on('end', function () {
-        this.installDependencies({ skipInstall: options['skip-install'] });
+        this.installDependencies({
+            skipInstall: options['skip-install'],
+            callback: this._injectDependencies.bind(this)
+        });
     });
 
     this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
@@ -844,43 +847,6 @@ JhipsterGenerator.prototype.app = function app() {
             'scripts/components/tracker/tracker.service.js'])
     }
 
-    var vendorScripts = [
-        'bower_components/modernizr/modernizr.js',
-        'bower_components/jquery/dist/jquery.js',
-        'bower_components/angular/angular.js',
-        'bower_components/angular-ui-router/release/angular-ui-router.js',
-        'bower_components/angular-resource/angular-resource.js',
-        'bower_components/angular-cookies/angular-cookies.js',
-        'bower_components/angular-sanitize/angular-sanitize.js',
-        'bower_components/angular-translate/angular-translate.js',
-        'bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
-        'bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js',
-        'bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js',
-        'bower_components/angular-local-storage/dist/angular-local-storage.js',
-        'bower_components/angular-cache-buster/angular-cache-buster.js'
-    ];
-
-    if (this.websocket == 'spring-websocket') {
-        vendorScripts = vendorScripts.concat([
-            'bower_components/stomp-websocket/lib/stomp.js',
-            'bower_components/sockjs-client/dist/sockjs.js']);
-    }
-
-    vendorScripts = vendorScripts.concat([
-        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/affix.js',
-        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/alert.js',
-        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/dropdown.js',
-        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/tooltip.js',
-        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/modal.js',
-        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/transition.js',
-        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/button.js',
-        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/popover.js',
-        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/carousel.js',
-        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/scrollspy.js',
-        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/collapse.js',
-        'bower_components/bootstrap-sass/vendor/assets/javascripts/bootstrap/tab.js']);
-
-    this.indexFile = this.appendScripts(this.indexFile, 'scripts/vendor.js', vendorScripts);
     this.indexFile = this.appendScripts(this.indexFile, 'scripts/app.js', appScripts);
     this.write(webappDir + 'index.html', this.indexFile);
 
@@ -919,3 +885,23 @@ function removefolder(folder) {
         shelljs.rm("-rf", folder);
     }
 }
+
+JhipsterGenerator.prototype._injectDependencies = function _injectDependencies() {
+    if (this.options['skip-install']) {
+        this.log(
+            'After running `npm install & bower install`, inject your front end dependencies' +
+            '\ninto your source code by running:' +
+            '\n' +
+            '\n' + chalk.yellow.bold('grunt wiredep')
+        );
+    } else {
+        switch (this.frontendBuilder) {
+            case 'gulp':
+                this.spawnCommand('gulp', ['wiredep:test', 'wiredep:app']);
+                break;
+            case 'grunt':
+            default:
+                this.spawnCommand('grunt', ['wiredep']);
+        }
+    }
+};

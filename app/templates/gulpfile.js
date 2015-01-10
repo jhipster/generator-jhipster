@@ -20,7 +20,8 @@ var gulp = require('gulp'),
     flatten = require('gulp-flatten'),
     clean = require('gulp-clean'),
     replace = require('gulp-replace'),
-    url = require('url');
+    url = require('url'),
+    wiredep = require('wiredep').stream;
 
 var karma = require('gulp-karma')({configFile: 'src/test/javascript/karma.conf.js'});
 
@@ -45,7 +46,7 @@ gulp.task('clean:tmp', function() {
         pipe(clean());
 });
 
-gulp.task('test', function() {
+gulp.task('test', ['wiredep:test'], function() {
     karma.once();
 });
 
@@ -91,7 +92,7 @@ gulp.task('scripts', function () {
         pipe(connect.reload());
 });
 
-gulp.task('serve', ['watch'<% if(useCompass) { %>, 'compass'<% } %>], function() {
+gulp.task('serve', ['wiredep:test', 'wiredep:app'<% if(useCompass) { %>, 'compass'<% } %>], function() {
     var baseUri = 'http://localhost:' + yeoman.apiPort;
     // Routes to proxy to the backend
     var proxyRoutes = [
@@ -120,13 +121,52 @@ gulp.task('serve', ['watch'<% if(useCompass) { %>, 'compass'<% } %>], function()
             });
         }
     });
+    gulp.run('watch');
 });
 
 gulp.task('watch', function() {
+    gulp.watch('bower.json', ['wiredep:test', 'wiredep:app']);
     gulp.watch(yeoman.app + '*.html', ['usemin']);
     gulp.watch(yeoman.app + 'scripts/**', ['scripts']);
     gulp.watch(<% if(useCompass) { %>yeoman.scss + '**/*.scss'<% } else { %>yeoman.app + 'assets/styles/**/*.css'<% } %>, ['styles']);
     gulp.watch('src/images/**', ['images']);
+});
+
+gulp.task('wiredep', ['wiredep:test', 'wiredep:app']);
+
+gulp.task('wiredep:app', function () {
+    gulp.src('src/main/webapp/index.html')
+    .pipe(wiredep({
+        exclude: [/angular-i18n/, /swagger-ui/]
+    }))
+    .pipe(gulp.dest('src/main/webapp'));<% if (useCompass) { %>
+    gulp.src('src/main/scss/main.scss')
+    .pipe(wiredep({
+        exclude: [/angular-i18n/, /swagger-ui/],
+        ignorePath: /\.\.\/webapp\/bower_components\// // remove ../webapp/bower_components/ from paths of injected sass files
+    }))
+    .pipe(gulp.dest('src/main/scss'));<% } %>
+});
+
+gulp.task('wiredep:test', function () {
+    gulp.src('src/test/javascript/karma.conf.js')
+    .pipe(wiredep({
+        exclude: [/angular-i18n/, /swagger-ui/, /angular-scenario/],
+        ignorePath: /\.\.\/\.\.\//, // remove ../../ from paths of injected javascripts
+        devDependencies: true,
+        fileTypes: {
+            js: {
+                block: /(([\s\t]*)\/\/\s*bower:*(\S*))(\n|\r|.)*?(\/\/\s*endbower)/gi,
+                detect: {
+                    js: /'(.*\.js)'/gi
+                },
+                replace: {
+                    js: '\'{{filePath}}\','
+                }
+            }
+        }
+    }))
+    .pipe(gulp.dest('src/test/javascript'));
 });
 
 gulp.task('serve:dist', ['build'], function() {
@@ -158,7 +198,7 @@ gulp.task('serve:dist', ['build'], function() {
     });
 });
 
-gulp.task('build', ['copy'], function () {
+gulp.task('build', ['copy', 'wiredep:app'], function () {
     gulp.run('usemin');
 });
 

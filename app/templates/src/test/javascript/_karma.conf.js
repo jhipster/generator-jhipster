@@ -11,22 +11,8 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            'main/webapp/bower_components/modernizr/modernizr.js',
-            'main/webapp/bower_components/jquery/dist/jquery.js',
-            'main/webapp/bower_components/angular/angular.js',
-            'main/webapp/bower_components/angular-mocks/angular-mocks.js',
-            'main/webapp/bower_components/angular-ui-router/release/angular-ui-router.js',
-            'main/webapp/bower_components/angular-resource/angular-resource.js',
-            'main/webapp/bower_components/angular-cookies/angular-cookies.js',
-            'main/webapp/bower_components/angular-sanitize/angular-sanitize.js',
-            'main/webapp/bower_components/angular-translate/angular-translate.js',
-            'main/webapp/bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js',
-            'main/webapp/bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js',
-            'main/webapp/bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js',
-            'main/webapp/bower_components/angular-local-storage/dist/angular-local-storage.min.js',
-            'main/webapp/bower_components/angular-cache-buster/angular-cache-buster.js',<% if (websocket == 'spring-websocket') { %>
-            'main/webapp/bower_components/stomp-websocket/lib/stomp.js',
-            'main/webapp/bower_components/sockjs-client/dist/sockjs.js',<% } %>
+            // bower:js
+            // endbower
             'main/webapp/scripts/app/app.js',
             'main/webapp/scripts/app/**/*.js',
             'main/webapp/scripts/components/**/*.js',
