@@ -18,9 +18,8 @@
                 </div><% if (authenticationType == 'cookie') { %>
                 <div class="form-group">
                     <label for="rememberMe">
+                        <input type="checkbox" id="rememberMe" ng-model="rememberMe" checked>
                         {{"login.form.rememberme" | translate}}
-                        <input type="checkbox" class="checkbox inline_class" id="rememberMe"
-                               ng-model="rememberMe" checked>
                     </label>
                 </div><% } %>
                 <button type="submit" class="btn btn-primary" ng-click="login()" translate="login.form.button">Authenticate</button>
