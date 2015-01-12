@@ -1,12 +1,13 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('RegisterController', function ($scope, $translate, Auth) {
+    .controller('RegisterController', function ($scope, $translate, $timeout, Auth) {
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;
         $scope.errorUserExists = null;
         $scope.registerAccount = {};
+        $timeout(function (){angular.element('[ng-model="registerAccount.login"]').focus();});
 
         $scope.register = function () {
             if ($scope.registerAccount.password !== $scope.confirmPassword) {
