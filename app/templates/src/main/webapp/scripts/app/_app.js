@@ -49,8 +49,8 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
     <% } %>
     .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, $translateProvider, tmhDynamicLocaleProvider, httpRequestInterceptorCacheBusterProvider) {
         <% if (authenticationType == 'cookie') { %>//enable CSRF
-        $httpProvider.defaults.xsrfCookieName= 'CSRF-TOKEN';
-        $httpProvider.defaults.xsrfHeaderName= 'X-CSRF-TOKEN';<% } %>
+        $httpProvider.defaults.xsrfCookieName = 'CSRF-TOKEN';
+        $httpProvider.defaults.xsrfHeaderName = 'X-CSRF-TOKEN';<% } %>
 
         //Cache everything except rest api requests
         httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*rest.*/, /.*protected.*/], true);
