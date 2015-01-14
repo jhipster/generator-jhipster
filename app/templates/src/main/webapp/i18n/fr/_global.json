@@ -13,18 +13,20 @@
                 "settings": "Profil",
                 "password": "Mot de passe",
                 "sessions": "Sessions",
+                "login": "S'authentifier",
+                "logout": "Déconnexion",
+                "register": "Créer un compte"
+            },
+            "admin": {
+                "main": "Administration",
                 "tracker": "Suivi des utilisateurs",
                 "metrics": "Métriques",
                 "health": "Diagnostics",
                 "configuration": "Configuration",
                 "logs": "Logs",
                 "audits": "Audits",
-                "login": "S'authentifier",
-                "logout": "Déconnexion",
-                "apidocs": "API",
-                "register": "Créer un compte"
+                "apidocs": "API"
             },
-            "admin": "Administration",
             "language": "Langue"
         },
         "form": {

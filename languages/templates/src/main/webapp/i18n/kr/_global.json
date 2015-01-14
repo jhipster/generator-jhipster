@@ -13,18 +13,20 @@
                 "settings": "설정",
                 "password": "비밀번호",
                 "sessions": "세션",
+                "login": "인증",
+                "logout": "로그아웃",
+                "register": "등록"
+            },
+            "admin": {
+                "main": "관리자",
                 "tracker": "사용자 트랙커",
                 "metrics": "메트릭스",
                 "health": "상태 확인",
                 "configuration": "Configuration",
                 "logs": "로그",
                 "audits": "Audit",
-                "login": "인증",
-                "logout": "로그아웃",
-                "apidocs": "API",
-                "register": "등록"
+                "apidocs": "API"
             },
-            "admin": "관리자",
             "language": "언어"
         },
         "form": {

@@ -13,18 +13,20 @@
                 "settings": "Настройки",
                 "password": "Пароль",
                 "sessions": "Сессии",
+                "login": "Authenticate",
+                "logout": "Выйти",
+                "register": "Register"
+            },
+            "admin": {
+                "main": "Администрирование",
                 "tracker": "Трекер польз.",
                 "metrics": "Метрики",
                 "health": "Состояние",
                 "configuration": "Configuration",
                 "logs": "Логи",
                 "audits": "Аудит",
-                "login": "Authenticate",
-                "logout": "Выйти",
-                "apidocs": "API",
-                "register": "Register"
+                "apidocs": "API"
             },
-            "admin": "Администрирование",
             "language": "Язык"
         },
         "form": {

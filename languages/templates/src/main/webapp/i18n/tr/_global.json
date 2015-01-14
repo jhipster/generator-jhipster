@@ -13,18 +13,20 @@
                 "settings": "Ayarlar",
                 "password": "Şifre",
                 "sessions": "Oturumlar",
+                "login": "Giriş",
+                "logout": "Çıkış",
+                "register": "Kayıt"
+            },
+            "admin": {
+                "main": "Yönetim",
                 "tracker": "Kullanıcı Takip",
                 "metrics": "Ölçümler",
                 "health": "Heath",
                 "configuration": "Configuration",
                 "logs": "Loglar",
                 "audits": "Denetim",
-                "login": "Giriş",
-                "logout": "Çıkış",
-                "apidocs": "API",
-                "register": "Kayıt"
+                "apidocs": "API"
             },
-            "admin": "Yönetim",
             "language": "Dil"
         },
         "form": {
