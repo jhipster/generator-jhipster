@@ -13,18 +13,20 @@
                 "settings": "Indstillinger",
                 "password": "Kodeord",
                 "sessions": "Sessions",
+                "login": "Log ind",
+                "logout": "Log ud",
+                "register": "Register"
+            },
+            "admin": {
+                "main": "Administration",
                 "tracker": "Brugersporing",
                 "metrics": "Målinger",
                 "health": "Sundheds",
                 "configuration": "Configuration",
                 "logs": "Logs",
                 "audits": "Audits",
-                "login": "Log ind",
-                "logout": "Log ud",
-                "apidocs": "API",
-                "register": "Register"
+                "apidocs": "API"
             },
-            "admin": "Administration",
             "language": "Sprog"
         },
         "form": {

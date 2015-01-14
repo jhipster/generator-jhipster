@@ -13,18 +13,20 @@
                 "settings": "Configuração",
                 "password": "Senha",
                 "sessions": "Sessões",
+                "login": "Entrar",
+                "logout": "Sair",
+                "register": "Registrar"
+            },
+            "admin": {
+                "main": "Administração",
                 "tracker": "Rastreamento de usuário",
                 "metrics": "Métricas",
                 "health": "Estado do Sistema",
                 "configuration": "Configuração",
                 "logs": "Logs",
                 "audits": "Auditorias",
-                "login": "Entrar",
-                "logout": "Sair",
-                "apidocs": "API",
-                "register": "Registrar"
+                "apidocs": "API"
             },
-            "admin": "Administração",
             "language": "Idioma"
         },
         "form": {
