@@ -11,7 +11,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (fieldsContainCustomTime == true && databaseType == 'sql') { %>
 import org.hibernate.annotations.Type;<% } %><% if (fieldsContainLocalDate == true) { %>
 import org.joda.time.LocalDate;<% } %><% if (fieldsContainDateTime == true) { %>
-import org.joda.time.DateTime;<% } %><% if (databaseType == 'nosql') { %>
+import org.joda.time.DateTime;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;<% } %>
@@ -29,13 +29,13 @@ import java.util.Set;<% } %>
 @Table(name = "T_<%= name.toUpperCase() %>")<% } %><% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
 <% if (inheritanceFor == true) { %>@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type")<% } %>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'nosql') { %>
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'mongodb') { %>
 @Document(collection = "T_<%= name.toUpperCase() %>")<% } %>
 public class <%= entityClass %><% if (inheritanceFromClass != '') { %> extends <%= inheritanceFromClass %><% } %> implements Serializable {
 
     <% if (entityIsRootTable == true) { %>@Id<% if (databaseType == 'sql') { %>
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;<% } %><% if (databaseType == 'nosql') { %>
+    private Long id;<% } %><% if (databaseType == 'mongodb') { %>
     private String id;<% } %><% } %>
 <% for (fieldId in fields) { %><% if (databaseType == 'sql') { %><% if (fields[fieldId].fieldType == 'DateTime') { %>
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
@@ -47,7 +47,7 @@ public class <%= entityClass %><% if (inheritanceFromClass != '') { %> extends <
     @JsonDeserialize(using = ISO8601LocalDateDeserializer.class)
     @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>", nullable = false)<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
     @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>", precision=10, scale=2)<% } else { %>
-    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>")<% }} %><% if (databaseType == 'nosql') { %><% if (fields[fieldId].fieldType == 'DateTime') { %>
+    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>")<% }} %><% if (databaseType == 'mongodb') { %><% if (fields[fieldId].fieldType == 'DateTime') { %>
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     @JsonDeserialize(using = CustomDateTimeDeserializer.class)<% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
     @JsonSerialize(using = CustomLocalDateSerializer.class)
@@ -68,11 +68,11 @@ public class <%= entityClass %><% if (inheritanceFromClass != '') { %> extends <
     @OneToOne<% if (relationships[relationshipId].ownerSide == false) { %>(mappedBy = "<%= entityInstance %>")<% } %>
     private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].otherEntityName %>;<% } %>
 <% } %>
-    <% if (entityIsRootTable == true) { %>public <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> getId() {
+    <% if (entityIsRootTable == true) { %>public <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> id) {
+    public void setId(<% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %> id) {
         this.id = id;
     }
     <% } %>
