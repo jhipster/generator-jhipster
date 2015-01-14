@@ -25,15 +25,12 @@ import java.util.Set;<% } %>
 /**
  * A <%= entityClass %>.
  */<% if (databaseType == 'sql') { %>
-@Entity<% if (entityIsRootTable == true) { %>
-@Table(name = "T_<%= name.toUpperCase() %>")<% } %><% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
-<% if (inheritanceFor == true) { %>@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "type")<% } %>
+@MappedSuperclass<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'nosql') { %>
 @Document(collection = "T_<%= name.toUpperCase() %>")<% } %>
 public class <%= entityClass %><% if (inheritanceFromClass != '') { %> extends <%= inheritanceFromClass %><% } %> implements Serializable {
 
-    <% if (entityIsRootTable == true) { %>@Id<% if (databaseType == 'sql') { %>
+    <% if (inheritanceFromClass == '') { %>@Id<% if (databaseType == 'sql') { %>
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;<% } %><% if (databaseType == 'nosql') { %>
     private String id;<% } %><% } %>
@@ -68,7 +65,7 @@ public class <%= entityClass %><% if (inheritanceFromClass != '') { %> extends <
     @OneToOne<% if (relationships[relationshipId].ownerSide == false) { %>(mappedBy = "<%= entityInstance %>")<% } %>
     private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].otherEntityName %>;<% } %>
 <% } %>
-    <% if (entityIsRootTable == true) { %>public <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> getId() {
+    <% if (inheritanceFromClass == '') { %>public <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'nosql') { %>String<% } %> getId() {
         return id;
     }
 
@@ -100,7 +97,7 @@ public class <%= entityClass %><% if (inheritanceFromClass != '') { %> extends <
         this.<%= relationships[relationshipId].otherEntityName %> = <%= relationships[relationshipId].otherEntityName %>;
     }<% } %>
 <% } %>
-    <% if (entityIsRootTable == true || databaseType != 'sql') { %>@Override
+    <% if (inheritanceFromClass == '') { %>@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
@@ -111,20 +108,14 @@ public class <%= entityClass %><% if (inheritanceFromClass != '') { %> extends <
 
         <%= entityClass %> <%= entityInstance %> = (<%= entityClass %>) o;
 
-        if (id != null ? !id.equals(<%= entityInstance %>.getId()) : <%= entityInstance %>.getId() != null) return false;
+        if (id != null ? !id.equals(<%= entityInstance %>.id) : <%= entityInstance %>.id != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-    	final int prime = 31;
-		int result = 1;
-		result = prime
-				* result
-				+ ((getClass() == null) ? 0 : getClass().hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
+        return <% if (databaseType == 'sql') { %>(int) (id ^ (id >>> 32));<% } %><% if (databaseType == 'nosql') { %>id != null ? id.hashCode() : 0;<% } %>
     }
 
     @Override

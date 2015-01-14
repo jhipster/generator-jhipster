@@ -1,6 +1,5 @@
 'use strict';
 var util = require('util'),
-        fs = require('fs'),
         path = require('path'),
         yeoman = require('yeoman-generator'),
         chalk = require('chalk'),
@@ -21,7 +20,9 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
         }
         this.useConfigurationFile = true;
     }
+    
     this.filenameInheritance = '.jhipster.inheritance.table.json';
+    this.inheritances = {};
     if (shelljs.test('-f', this.filenameInheritance)) {
         console.log(chalk.green('Found the '+ this.filenameInheritance +' configuration file'));
         try {
@@ -31,7 +32,8 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
             return;
         }
     } else {
-    	this.inheritances = [];
+        this.inheritances.entity = ['Authority', 'User'];
+        this.inheritances.msc = ['AbstractAuditingEntity'];
     }
     console.log(chalk.red('The entity ' + this.name + ' is being created.'));
     this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
@@ -45,7 +47,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
 
     // Specific Entity sub-generator variables
     this.inheritanceFor = false;
-    this.inheritanceFromClass = '';
+    this.inheritanceFromClass = '';   
     this.fieldId = 0;
     this.fields = [];
     this.fieldsContainLocalDate = false;
@@ -75,39 +77,59 @@ function removefile(file) {
  * ask if this entity serve inheritance for others
  */
 EntityGenerator.prototype.askForInheritanceFor = function askForInheritanceFor() {
-	if (this.useConfigurationFile == true) {// don't prompt if data are imported from a file
+    if (this.useConfigurationFile == true) {// don't prompt if data are imported from a file
         return;
     }
     var cb = this.async();
-    console.log(chalk.green('Generating inheritance annotations - only Single Table Strategy#'));
+    console.log(chalk.green('Generating inheritance annotations - only Single Table Strategy'));
+    var choicesArr = this.inheritances.msc;
     var prompts = [
         {
             type: 'confirm',
             name: 'inheritanceForAdd',
             message: 'Would like your entity be a base class inherited by other entities?',
             default: false
+        },
+        {
+            when: function (response) {
+                return response.inheritanceForAdd == true;
+            },
+            type: 'confirm',
+            name: 'inheritanceForClassAsk',
+            message: 'Would like your entity inherite from one of MappedSuperclasses?',
+            default: false
+        },
+        {
+            when: function (response) {
+                return response.inheritanceForClassAsk == true;
+            },
+            type: 'list',
+            name: 'inheritanceForClassFrom',
+            message: 'Which class would you like to extend?',
+            choices: choicesArr,
+            default: 0
         }
     ];
     this.prompt(prompts, function (props) {
         if (props.inheritanceForAdd) {
             this.inheritanceFor = true;
+            if(props.inheritanceForClassAsk == true && props.inheritanceForClassFrom != '') {
+                this.inheritanceFromClass = props.inheritanceForClassFrom;
+            }
         }
         console.log(chalk.red('===========' + _s.capitalize(this.name) + '=============='));
-        if (props.inheritanceForAdd) {
-            this.askForFields();
-        } else {
-            cb();
-        }
+        cb();
     }.bind(this));
 }
 
 EntityGenerator.prototype.askForInheritanceFrom = function askForInheritanceFrom() {
-	if (this.useConfigurationFile == true || this.inheritanceFor == true) {// don't prompt if data are imported from a file
+    if (this.useConfigurationFile == true || this.inheritanceFor == true) {// don't prompt if data are imported from a file
         return;
     }
     var cb = this.async();
     console.log(chalk.green('Generating inheritance #'));
-    var choicesArr = this.inheritances;
+    var choicesArr = this.inheritances.entity;
+    choicesArr = choicesArr.concat(this.inheritances.msc);
     var prompts = [
         {
             type: 'confirm',
@@ -131,11 +153,7 @@ EntityGenerator.prototype.askForInheritanceFrom = function askForInheritanceFrom
             this.inheritanceFromClass = props.inheritanceFromClass;
         }
         console.log(chalk.red('===========' + _s.capitalize(this.name) + '=============='));
-        if (props.inheritanceFromAdd) {
-            this.askForFields();
-        } else {
-            cb();
-        }
+        cb();
     }.bind(this));
 }
 
@@ -384,10 +402,10 @@ EntityGenerator.prototype.searchBaseTable = function searchBaseTable(entity, obj
         return;
     }
     var baseEntity = baseEntityData.inheritanceFromClass;
-    if ((baseEntity != '' || baseEntity != 'undefined') && baseEntityData.inheritanceFor != true){
-    	return searchBaseTable(baseEntity, obj);
+    if (baseEntity.length !== 0 && obj.inheritances.msc.indexOf(baseEntity) == -1){
+        return searchBaseTable(baseEntity, obj);
     } else {
-    	return entity;
+        return entity;
     }
 };
 
@@ -402,12 +420,30 @@ EntityGenerator.prototype.getInheritedFields = function getInheritedFields(entit
     }
     var baseEntity = baseEntityData.inheritanceFromClass;
     fields = fields.concat(baseEntityData.fields);
-    if ((baseEntity != '' || baseEntity != 'undefined') && baseEntityData.inheritanceFor != true){
-    	return getInheritedFields(baseEntity, fields, obj);
+    if (baseEntity.length !== 0) {
+        return getInheritedFields(baseEntity, fields, obj);
     } else {
-    	return fields;
+        return fields;
     }
 };
+
+EntityGenerator.prototype.fieldsTypes = function fieldsTypes() {
+
+    var fields = this.fields;
+    for(var i = 0; i < fields.length; i++) {
+        if (fields[i].fieldType == 'LocalDate') {
+            this.fieldsContainLocalDate = true;
+            this.fieldsContainCustomTime = true;
+        }
+        if (fields[i].fieldType == 'BigDecimal') {
+            this.fieldsContainBigDecimal = true;
+        }
+        if (fields[i].fieldType == 'DateTime') {
+            this.fieldsContainDateTime = true;
+            this.fieldsContainCustomTime = true;
+        }
+    }
+}
 
 EntityGenerator.prototype.files = function files() {
     if (this.databaseType == "sql") {
@@ -416,6 +452,7 @@ EntityGenerator.prototype.files = function files() {
     this.name = _s.capitalize(this.name);
     if (this.useConfigurationFile == false) { // store informations in a file for further use.
         this.data = {};
+        this.data.entityType = 'entity';
         this.data.inheritanceFor = this.inheritanceFor;
         this.data.inheritanceFromClass = this.inheritanceFromClass;
         this.data.relationships = this.relationships;
@@ -430,9 +467,13 @@ EntityGenerator.prototype.files = function files() {
         this.data.changelogDate = this.changelogDate;
         this.filename = '.jhipster.' + this.name + '.json';
         this.write(this.filename, JSON.stringify(this.data, null, 4));
+        if(this.inheritanceFor == true || this.inheritanceFromClass != '') {
+            this.inheritances.entity.push(this.name);
+        }
     } else  {
+        this.entityType = this.fileData.entityType;
         this.inheritanceFor = this.fileData.inheritanceFor;
-    	this.inheritanceFromClass = this.fileData.ingeritanceFromClass;
+        this.inheritanceFromClass = this.fileData.inheritanceFromClass;
         this.relationships = this.fileData.relationships;
         this.fields = this.fileData.fields;
         this.fieldNamesUnderscored = this.fileData.fieldNamesUnderscored;
@@ -444,57 +485,51 @@ EntityGenerator.prototype.files = function files() {
         this.fieldsContainDateTime = this.fileData.fieldsContainDateTime;
         this.changelogDate = this.fileData.changelogDate;
     }
-    if(this.inheritanceFor == true || this.inheritanceFromClass != '') {
-    	// first read data from file - only update
-    	// add to root
-    	if (this.inheritanceFor) {
-    		this.inheritances.push(this.name);
-    	}
-    	// search root and add to its
-    	if(this.inheritanceFromClass != '') {
-    		// skip AbstractAuditingEntity - its mappedSuperclass
-    		// For further use
-    		//this.inheritances[this.inheritanceFromClass].push(this.name);
-    		this.inheritances.push(this.name);
-    	}
-    	removefile(this.filenameInheritance);
-        this.write(this.filenameInheritance, JSON.stringify(this.inheritances, null, 4));
+    
+    this.entityIsRootTable = false;
+    if(this.inheritanceFromClass.length == 0
+            || this.inheritances.msc.indexOf(this.inheritanceFromClass) != -1) {
+        this.entityIsRootTable = true;
     }
     this.entityClass = _s.capitalize(this.name);
     this.entityInstance = this.name.charAt(0).toLowerCase() + this.name.slice(1);
     var resourceDir = 'src/main/resources/';
-
+    
     this.template('src/main/java/package/domain/_Entity.java',
         'src/main/java/' + this.packageFolder + '/domain/' +    this.entityClass + '.java', this, {});
 
     this.template('src/main/java/package/repository/_EntityRepository.java',
         'src/main/java/' + this.packageFolder + '/repository/' +    this.entityClass + 'Repository.java', this, {});
-
-    this.template('src/main/java/package/web/rest/_EntityResource.java',
-        'src/main/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'Resource.java', this, {});
-
-    if (this.databaseType == "sql") {
-        if(this.inheritanceFromClass != '') {
-    		this.baseTable = this.searchBaseTable(this.inheritanceFromClass, this);
-    		this.template(resourceDir + '/config/liquibase/changelog/_added_inherited_entity.xml',
-    	        resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_inherited_entity_' + this.entityClass + '.xml', this, {});
-    	
-    	    this.addChangelogToLiquibase(this.changelogDate + '_added_inherited_entity_' + this.entityClass);
-    	} else {
-	        this.template(resourceDir + '/config/liquibase/changelog/_added_entity.xml',
-	            resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml', this, {});
-	
-	        this.addChangelogToLiquibase(this.changelogDate + '_added_entity_' + this.entityClass);
-    	}
-    }
-
-    // after generating Liquibase we can merge fields from all inherited classes
-    this.fields = this.getInheritedFields(this.inheritanceFromClass, this.fields, this);
     
+    var fields = this.getInheritedFields(this.inheritanceFromClass, this.fields, this);
+    if (this.databaseType == "sql") {
+        if(this.entityIsRootTable == false) {
+            this.baseTable = this.searchBaseTable(this.inheritanceFromClass, this);
+            this.template(resourceDir + '/config/liquibase/changelog/_added_inherited_entity.xml',
+                resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_inherited_entity_' + this.entityClass + '.xml', this, {});
+            
+            this.addChangelogToLiquibase(this.changelogDate + '_added_inherited_entity_' + this.entityClass);
+        } else {
+            if(this.inheritanceFromClass.length > 0) {
+                this.fields = fields;
+            }
+            this.template(resourceDir + '/config/liquibase/changelog/_added_entity.xml',
+                resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml', this, {});
+
+            this.addChangelogToLiquibase(this.changelogDate + '_added_entity_' + this.entityClass);
+        }
+    }
+    
+    // after generating Liquibase we can merge fields from all inherited classes
+    if(this.inheritanceFromClass.length > 0) {
+        this.fields = fields;
+        this.fieldsTypes();
+    }
+    this.template('src/main/java/package/web/rest/_EntityResource.java',
+            'src/main/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'Resource.java', this, {});
+
     this.template('src/main/webapp/app/_entities.html',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + 's.html', this, {});
-    this.template('src/main/webapp/app/_entity-detail.html',
-        'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + '-detail.html', this, {});
 
     this.addRouterToMenu(this.entityInstance);
 
@@ -505,42 +540,13 @@ EntityGenerator.prototype.files = function files() {
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '.controller' + '.js', this, {});
     this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.controller' + '.js');
 
-    this.template('src/main/webapp/app/_entity-detail-controller.js',
-        'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '-detail.controller' + '.js', this, {});
-    this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '-detail.controller' + '.js');
-
     this.template('src/main/webapp/components/_entity-service.js',
         'src/main/webapp/scripts/components/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js', this, {});
     this.addComponentsScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.service' + '.js');
 
     this.template('src/test/java/package/web/rest/_EntityResourceTest.java',
         'src/test/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'ResourceTest.java', this, {});
-
-    // Copy for each
-    this.copyI18n('ca');
-    this.copyI18n('da');
-    this.copyI18n('de');
-    this.copyI18n('en');
-    this.copyI18n('es');
-    this.copyI18n('fr');
-    this.copyI18n('kr');
-    this.copyI18n('pl');
-    this.copyI18n('pt-br');
-    this.copyI18n('ru');
-    this.copyI18n('sw');
-    this.copyI18n('tr');
-    this.copyI18n('zh-tw');
-};
-
-EntityGenerator.prototype.copyI18n = function(language) {
-    try {
-        var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
-        if (stats.isDirectory()) {
-            this.template('src/main/webapp/i18n/_entity_' + language + '.json', 'src/main/webapp/i18n/' + language + '/' + this.entityInstance + '.json', this, {});
-            this.addNewEntityToMenu(language, this.entityInstance, this.entityClass);
-        }
-    } catch(e) {
-        // An exception is thrown if the folder doesn't exist
-        // do nothing
-    }
+    
+    removefile(this.filenameInheritance);
+    this.write(this.filenameInheritance, JSON.stringify(this.inheritances, null, 4));
 };

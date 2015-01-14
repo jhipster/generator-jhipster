@@ -361,6 +361,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('bowerrc', '.bowerrc', this, {});
     this.copy('gitignore', '.gitignore');
     this.copy('gitattributes', '.gitattributes');
+    this.copy('jhipster.AbstractAuditingEntity.json', '.jhipster.AbstractAuditingEntity.json');
+    this.copy('jhipster.Authority.json', '.jhipster.Authority.json');
+    this.copy('jhipster.User.json', '.jhipster.User.json');
 
     switch (this.frontendBuilder) {
         case 'gulp':
