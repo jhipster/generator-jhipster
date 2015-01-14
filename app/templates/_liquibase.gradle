@@ -1,0 +1,31 @@
+configurations {
+  liquibase
+}
+
+dependencies {
+  liquibase group: 'org.liquibase.ext', name: 'liquibase-hibernate4', version: liquibase_hibernate4_version
+}
+
+task liquibaseDiffChangelog(dependsOn: compileJava, type: JavaExec) {
+  group = "liquibase"
+
+  classpath sourceSets.main.runtimeClasspath
+  classpath configurations.liquibase
+  main = "liquibase.integration.commandline.Main"
+
+  args "--changeLogFile=src/main/resources/config/liquibase/changelog/" + buildTimestamp() +"_changelog.xml"
+  args "--referenceUrl=hibernate:spring:<%=packageName%>.domain?dialect=<% if (devDatabaseType == 'mysql') { %>org.hibernate.dialect.MySQLInnoDBDialect<% } else if (devDatabaseType == 'postgresql') { %>org.hibernate.dialect.PostgreSQL82Dialect<% } %>"
+  args "--username=<% if (devDatabaseType == 'mysql') { %>root<% } else if (devDatabaseType == 'postgresql') { %><%= baseName %><% } %>"
+  args "--password="
+  args "--url=<% if (devDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType == 'postgresql') { %>jdbc:postgresql://localhost/<%= baseName %><% } %>"
+  args "--driver=<% if (devDatabaseType == 'mysql') { %>com.mysql.jdbc.Driver<% } else if (devDatabaseType == 'postgresql') { %>org.postgresql.Driver<% } %>"
+  <% if (authenticationType == 'token') { %>args "--excludeObjects=oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token"<% } %>
+  args "diffChangeLog"
+
+}
+
+def buildTimestamp() {
+  def date = new Date()
+  def formattedDate = date.format('yyyyMMddHHmmss')
+  return formattedDate
+}

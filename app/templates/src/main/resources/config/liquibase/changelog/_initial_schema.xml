@@ -21,7 +21,7 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="login" type="varchar(50)">
-                <constraints unique="true"/>
+                <constraints unique="true" nullable="false"/>
             </column>
             <column name="password" type="varchar(100)"/>
             <column name="first_name" type="varchar(50)"/>

@@ -9,6 +9,7 @@ var util = require('util'),
     packagejs = require(__dirname + '/../package.json');
 
 var JhipsterGenerator = module.exports = function JhipsterGenerator(args, options, config) {
+
     yeoman.generators.Base.apply(this, arguments);
 
     this.on('end', function () {
@@ -20,6 +21,8 @@ var JhipsterGenerator = module.exports = function JhipsterGenerator(args, option
 
 util.inherits(JhipsterGenerator, yeoman.generators.Base);
 util.inherits(JhipsterGenerator, scriptBase);
+
+
 
 JhipsterGenerator.prototype.askFor = function askFor() {
     var cb = this.async();
@@ -36,8 +39,18 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         '           \\_|_| /_/--\\  \\_\\/  /_/--\\     |_|_/ |_|__  \\_\\/  _)_)       \n'));
 
     console.log('\nWelcome to the JHipster Generator\n');
+    var insight = this.insight();
 
     var prompts = [
+        {
+            when: function () {
+                return insight.optOut === undefined;
+            },
+            type: 'confirm',
+            name: 'insight',
+            message: 'May ' + chalk.cyan('JHipster') + ' anonymously report usage statistics to improve the tool over time?',
+            default: true
+        },
         {
             type: 'input',
             name: 'baseName',
@@ -142,7 +155,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             when: function (response) {
-                return response.databaseType == 'sql';
+                return (response.databaseType == 'sql' && response.prodDatabaseType == 'mysql');
             },
             type: 'list',
             name: 'devDatabaseType',
@@ -150,11 +163,26 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             choices: [
                 {
                     value: 'h2Memory',
-                    name: 'H2 in-memory with web console'
+                    name: 'H2 in-memory with Web console'
                 },
                 {
                     value: 'mysql',
                     name: 'MySQL'
+                }
+            ],
+            default: 0
+        },
+        {
+            when: function (response) {
+                return (response.databaseType == 'sql' && response.prodDatabaseType == 'postgresql');
+            },
+            type: 'list',
+            name: 'devDatabaseType',
+            message: '(7/13) Which *development* database would you like to use?',
+            choices: [
+                {
+                    value: 'h2Memory',
+                    name: 'H2 in-memory with Web console'
                 },
                 {
                     value: 'postgresql',
@@ -323,6 +351,9 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         cb();
     } else {
         this.prompt(prompts, function (props) {
+            if (props.insight !== undefined) {
+                insight.optOut = !props.insight;
+            }
             this.baseName = props.baseName;
             this.packageName = props.packageName;
             this.authenticationType = props.authenticationType;
@@ -343,6 +374,19 @@ JhipsterGenerator.prototype.askFor = function askFor() {
 };
 
 JhipsterGenerator.prototype.app = function app() {
+    var insight = this.insight();
+    insight.track('generator', 'app');
+    insight.track('app/authenticationType', this.authenticationType);
+    insight.track('app/hibernateCache', this.hibernateCache);
+    insight.track('app/clusteredHttpSession', this.clusteredHttpSession);
+    insight.track('app/websocket', this.websocket);
+    insight.track('app/databaseType', this.databaseType);
+    insight.track('app/devDatabaseType', this.devDatabaseType);
+    insight.track('app/prodDatabaseType', this.prodDatabaseType);
+    insight.track('app/useCompass', this.useCompass);
+    insight.track('app/buildTool', this.buildTool);
+    insight.track('app/frontendBuilder', this.frontendBuilder);
+    insight.track('app/javaVersion', this.javaVersion);
 
     var packageFolder = this.packageName.replace(/\./g, '/');
     var javaDir = 'src/main/java/' + packageFolder + '/';
@@ -381,6 +425,9 @@ JhipsterGenerator.prototype.app = function app() {
             this.template('_yeoman.gradle', 'yeoman.gradle', this, {});
             this.template('_profile_dev.gradle', 'profile_dev.gradle', this, {});
             this.template('_profile_prod.gradle', 'profile_prod.gradle', this, {});
+          if (this.databaseType == "sql") {
+            this.template('_liquibase.gradle', 'liquibase.gradle', this, {});
+          }
             this.copy('gradlew', 'gradlew');
             this.copy('gradlew.bat', 'gradlew.bat');
             this.copy('gradle/wrapper/gradle-wrapper.jar', 'gradle/wrapper/gradle-wrapper.jar');
@@ -615,9 +662,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.installI18nFilesByLanguage(this, webappDir, resourceDir, 'en');
     this.installI18nFilesByLanguage(this, webappDir, resourceDir, 'fr');
 
-    // Protected resources - used to check if a customer is still connected
-    this.copy(webappDir + '/protected/authentication_check.gif', webappDir + '/protected/authentication_check.gif');
-
     // Swagger-ui for Jhipster
     this.template(webappDir + '/swagger-ui/_index.html', webappDir + 'swagger-ui/index.html', this, {});
     this.copy(webappDir + '/swagger-ui/images/throbber.gif', webappDir + 'swagger-ui/images/throbber.gif');
@@ -716,7 +760,7 @@ JhipsterGenerator.prototype.app = function app() {
 
     // Create Test Javascript files
     var testJsDir = 'src/test/javascript/';
-    this.copy(testJsDir + 'karma.conf.js', testJsDir + 'karma.conf.js');
+    this.template(testJsDir + '_karma.conf.js', testJsDir + 'karma.conf.js');
     this.template(testJsDir + 'spec/app/account/login/_loginControllerSpec.js', testJsDir + 'spec/app/account/login/loginControllerSpec.js', this, {});
     this.template(testJsDir + 'spec/app/account/password/_passwordControllerSpec.js', testJsDir + 'spec/app/account/password/passwordControllerSpec.js', this, {});
     this.template(testJsDir + 'spec/app/account/password/_passwordDirectiveSpec.js', testJsDir + 'spec/app/account/password/passwordDirectiveSpec.js', this, {});

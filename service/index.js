@@ -1,9 +1,10 @@
 'use strict';
 var util = require('util'),
-path = require('path'),
-yeoman = require('yeoman-generator'),
-chalk = require('chalk'),
-_s = require('underscore.string');
+    path = require('path'),
+    yeoman = require('yeoman-generator'),
+    chalk = require('chalk'),
+    _s = require('underscore.string'),
+    scriptBase = require('../script-base');
 
 var ServiceGenerator = module.exports = function ServiceGenerator(args, options, config) {
     yeoman.generators.NamedBase.apply(this, arguments);
@@ -15,6 +16,7 @@ var ServiceGenerator = module.exports = function ServiceGenerator(args, options,
 };
 
 util.inherits(ServiceGenerator, yeoman.generators.Base);
+util.inherits(ServiceGenerator, scriptBase);
 
 ServiceGenerator.prototype.askFor = function askFor() {
     var cb = this.async();
@@ -37,6 +39,9 @@ ServiceGenerator.prototype.files = function files() {
 
     this.serviceClass = _s.capitalize(this.name);
     this.serviceInstance = this.name.toLowerCase();
+    var insight = this.insight();
+    insight.track('generator', 'service');
+    insight.track('service/interface', this.useInterface);
 
     this.template('src/main/java/package/service/_Service.java',
     'src/main/java/' + this.packageFolder + '/service/' +  this.serviceClass + 'Service.java');

@@ -1,11 +1,11 @@
 'use strict';
 var util = require('util'),
-path = require('path'),
-yeoman = require('yeoman-generator'),
-childProcess = require('child_process'),
-chalk = require('chalk'),
-_s = require('underscore.string'),
-scriptBase = require('../script-base');
+    path = require('path'),
+    yeoman = require('yeoman-generator'),
+    childProcess = require('child_process'),
+    chalk = require('chalk'),
+    _s = require('underscore.string'),
+    scriptBase = require('../script-base');
 
 var exec = childProcess.exec;
 var spawn = childProcess.spawn;
@@ -118,6 +118,8 @@ CloudFoundryGenerator.prototype.cloudfoundryAppCreate = function cloudfoundryApp
     var done = this.async();
 
     this.log(chalk.bold("\nCreating your Cloud Foundry hosting environment, this may take a couple minutes..."));
+    var insight = this.insight();
+    insight.track('generator', 'cloudfoundry');
     this.log(chalk.bold("Creating the database"));
     var child = exec('cf create-service ' + this.cloudfoundryDatabaseServiceName + ' ' + this.cloudfoundryDatabaseServicePlan + ' ' + this.cloudfoundryDeployedName, { }, function (err, stdout, stderr) {
         done();

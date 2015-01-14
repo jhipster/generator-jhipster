@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 <% } %><% if (databaseType == 'sql') { %>
 import javax.persistence.*;<% } %>
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -30,27 +31,29 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private String id;<% } %>
 
     @NotNull
-    @Size(min = 0, max = 50)<% if (databaseType == 'sql') { %>
-    @Column(length = 50, unique = true)<% } %>
+    @Pattern(regexp = "^[a-z0-9]*$")
+    @Size(min = 1, max = 50)<% if (databaseType == 'sql') { %>
+    @Column(length = 50, unique = true, nullable = false)<% } %>
     private String login;
 
     @JsonIgnore
-    @Size(min = 0, max = 100)<% if (databaseType == 'sql') { %>
+    @NotNull
+    @Size(min = 6, max = 100)<% if (databaseType == 'sql') { %>
     @Column(length = 100)<% } %>
     private String password;
 
-    @Size(min = 0, max = 50)<% if (databaseType == 'sql') { %>
+    @Size(max = 50)<% if (databaseType == 'sql') { %>
     @Column(name = "first_name", length = 50)<% } %><% if (databaseType == 'mongodb') { %>
     @Field("first_name")<% } %>
     private String firstName;
 
-    @Size(min = 0, max = 50)<% if (databaseType == 'sql') { %>
+    @Size(max = 50)<% if (databaseType == 'sql') { %>
     @Column(name = "last_name", length = 50)<% } %><% if (databaseType == 'mongodb') { %>
     @Field("last_name")<% } %>
     private String lastName;
 
     @Email
-    @Size(min = 0, max = 100)<% if (databaseType == 'sql') { %>
+    @Size(max = 100)<% if (databaseType == 'sql') { %>
     @Column(length = 100, unique = true)<% } %>
     private String email;
 <% if (databaseType == 'sql') { %>
@@ -62,7 +65,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Field("lang_key")<% } %>
     private String langKey;
 
-    @Size(min = 0, max = 20)<% if (databaseType == 'sql') { %>
+    @Size(max = 20)<% if (databaseType == 'sql') { %>
     @Column(name = "activation_key", length = 20)<% } %><% if (databaseType == 'mongodb') { %>
     @Field("activation_key")<% } %>
     private String activationKey;

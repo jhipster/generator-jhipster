@@ -25,6 +25,7 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
     Optional<User> findOneByEmail(String email);
 
     Optional<User> findOneByLogin(String login);
+
     void delete(User t);
 
 }<% } else { %>

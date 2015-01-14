@@ -85,7 +85,7 @@
                         <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
                     </div>
                     <div class="modal-body">
-                        <p translate="entity.delete.question" translate-values="{id: '{{<%= entityInstance %>.id}}'}">Are you sure you want to delete <%= entityClass %> {{<%=entityInstance %>.id}}?</p>
+                        <p translate="<%= keyPrefix %>delete.question" translate-values="{id: '{{<%= entityInstance %>.id}}'}">Are you sure you want to delete <%= entityClass %> {{<%=entityInstance %>.id}}?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">

@@ -269,6 +269,8 @@ OpenshiftGenerator.prototype.gitForcePush = function gitForcePush() {
     if (this.abort || !this.openshift_remote_exists) return;
     var done = this.async();
     this.log(chalk.bold("\nUploading your initial application code.\n This may take " + chalk.cyan('several minutes') + " depending on your connection speed..."));
+    var insight = this.insight();
+    insight.track('generator', 'openshift');
 
     var push = spawn('git', ['push', '-f', 'openshift', 'master'], {cwd: 'deploy/openshift'});
     var error = null;

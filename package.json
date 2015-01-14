@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster",
-  "version": "1.10.0",
+  "version": "2.0.0",
   "description": "Java + Spring + JPA + AngularJS complete dev stack",
   "keywords": [
     "yeoman-generator",
@@ -28,12 +28,13 @@
     "test": "mocha --reporter spec"
   },
   "dependencies": {
-    "yeoman-generator": "0.17.6",
+    "yeoman-generator": "0.17.7",
     "cheerio": "0.17.0",
     "underscore.string": "2.3.3",
     "shelljs": "0.3.0",
     "chalk": "0.5.1",
-    "grunt": "0.4.5"
+    "grunt": "0.4.5",
+    "insight": "0.4.3"
   },
   "devDependencies": {
     "grunt": "0.4.5",

@@ -2,7 +2,8 @@
 var path = require('path'),
     util = require('util'),
     yeoman = require('yeoman-generator'),
-    jhipsterUtils = require('./util.js');
+    jhipsterUtils = require('./util.js'),
+    Insight = require('insight');
 
 module.exports = Generator;
 
@@ -115,7 +116,8 @@ Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, res
     _this.template(webappDir + '/i18n/' + lang + '/_global.json', webappDir + 'i18n/' + lang + '/global.json', this, {});
 
     // Template the message server side properties
-    _this.template(resourceDir + '/i18n/_messages_' + lang + '.properties', resourceDir + 'i18n/messages_' + lang + '.properties', this, {});
+    var lang_prop = lang.replace(/-/g, "_");
+    _this.template(resourceDir + '/i18n/_messages_' + lang_prop + '.properties', resourceDir + 'i18n/messages_' + lang_prop + '.properties', this, {});
 
 };
 
@@ -154,3 +156,13 @@ Generator.prototype.addNewEntityToMenu = function(language, key, value) {
         console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + language + 'not added as a new entity in the menu.\n'.yellow);
     }
 };
+
+Generator.prototype.insight = function () {
+    var pkg = require('./package.json');
+    var insight = new Insight({
+        trackingCode: 'UA-46075199-2',
+        packageName: pkg.name,
+        packageVersion: pkg.version
+    });
+    return insight;
+}

@@ -87,19 +87,19 @@
         <b translate="metrics.jvm.gc.title">Garbage collections</b>
         <div class="row">
             <div class="col-md-9" translate="metrics.jvm.gc.marksweepcount">Mark Sweep count</div>
-            <div class="col-md-3">{{metrics.gauges['jvm.garbage.PS-MarkSweep.count'].value}}</div>
+            <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-MarkSweep.count'].value}}</div>
         </div>
         <div class="row">
             <div class="col-md-9" translate="metrics.jvm.gc.marksweeptime">Mark Sweep time</div>
-            <div class="col-md-3">{{metrics.gauges['jvm.garbage.PS-MarkSweep.time'].value}}ms</div>
+            <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-MarkSweep.time'].value}}ms</div>
         </div>
         <div class="row">
             <div class="col-md-9" translate="metrics.jvm.gc.scavengecount">Scavenge count</div>
-            <div class="col-md-3">{{metrics.gauges['jvm.garbage.PS-Scavenge.count'].value}}</div>
+            <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-Scavenge.count'].value}}</div>
         </div>
         <div class="row">
             <div class="col-md-9" translate="metrics.jvm.gc.scavengetime">Scavenge time</div>
-            <div class="col-md-3">{{metrics.gauges['jvm.garbage.PS-Scavenge.time'].value}}ms</div>
+            <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-Scavenge.time'].value}}ms</div>
         </div>
     </div>
 </div>
@@ -113,10 +113,10 @@
         <tr>
             <th translate="metrics.jvm.http.table.code">Code</th>
             <th translate="metrics.jvm.http.table.count">Count</th>
-            <th translate="metrics.jvm.http.table.mean">Mean</th>
-            <th>{{'metrics.jvm.http.table.average' | translate}} (1 min)</th>
-            <th>{{'metrics.jvm.http.table.average' | translate}} (5 min)</th>
-            <th>{{'metrics.jvm.http.table.average' | translate}} (15 min)</th>
+            <th class="text-right" translate="metrics.jvm.http.table.mean">Mean</th>
+            <th class="text-right">{{'metrics.jvm.http.table.average' | translate}} (1 min)</th>
+            <th class="text-right">{{'metrics.jvm.http.table.average' | translate}} (5 min)</th>
+            <th class="text-right">{{'metrics.jvm.http.table.average' | translate}} (15 min)</th>
         </tr>
         </thead>
         <tbody>
@@ -132,14 +132,14 @@
                         {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].count}}
                     </div>
             </td>
-            <td>
+            <td class="text-right">
                 {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].mean_rate | number:2}}
             </td>
-            <td>{{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m1_rate | number:2}}
+            <td class="text-right">{{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m1_rate | number:2}}
             </td>
-            <td>{{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m5_rate | number:2}}
+            <td class="text-right">{{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m5_rate | number:2}}
             </td>
-            <td>
+            <td class="text-right">
                 {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m15_rate | number:2}}
             </td>
         </tr>
@@ -156,16 +156,16 @@
                     </div>
                 </div>
             </td>
-            <td>
+            <td class="text-right">
                 {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].mean_rate | number:2}}
             </td>
-            <td>
+            <td class="text-right">
                 {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m1_rate | number:2}}
             </td>
-            <td>
+            <td class="text-right">
                 {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m5_rate | number:2}}
             </td>
-            <td>
+            <td class="text-right">
                 {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m15_rate | number:2}}
             </td>
         </tr>
@@ -182,16 +182,16 @@
                     </div>
                 </div>
             </td>
-            <td>
+            <td class="text-right">
                 {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].mean_rate | number:2}}
             </td>
-            <td>
+            <td class="text-right">
                 {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m1_rate | number:2}}
             </td>
-            <td>
+            <td class="text-right">
                 {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m5_rate | number:2}}
             </td>
-            <td>
+            <td class="text-right">
                 {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m15_rate | number:2}}
             </td>
         </tr>
@@ -205,27 +205,27 @@
         <thead>
         <tr>
             <th translate="metrics.servicesstats.table.name">Service name</th>
-            <th translate="metrics.servicesstats.table.count">Count</th>
-            <th translate="metrics.servicesstats.table.mean">Mean</th>
-            <th translate="metrics.servicesstats.table.min">Min</th>
-            <th translate="metrics.servicesstats.table.p50">p50</th>
-            <th translate="metrics.servicesstats.table.p75">p75</th>
-            <th translate="metrics.servicesstats.table.p95">p95</th>
-            <th translate="metrics.servicesstats.table.p99">p99</th>
-            <th translate="metrics.servicesstats.table.max">Max</th>
+            <th class="text-right" translate="metrics.servicesstats.table.count">Count</th>
+            <th class="text-right" translate="metrics.servicesstats.table.mean">Mean</th>
+            <th class="text-right" translate="metrics.servicesstats.table.min">Min</th>
+            <th class="text-right" translate="metrics.servicesstats.table.p50">p50</th>
+            <th class="text-right" translate="metrics.servicesstats.table.p75">p75</th>
+            <th class="text-right" translate="metrics.servicesstats.table.p95">p95</th>
+            <th class="text-right" translate="metrics.servicesstats.table.p99">p99</th>
+            <th class="text-right" translate="metrics.servicesstats.table.max">Max</th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="(k, v) in servicesStats">
             <td>{{k}}</td>
-            <td>{{v.count}}</td>
-            <td>{{v.mean * 1000 | number:0}}</td>
-            <td>{{v.min * 1000 | number:0}}</td>
-            <td>{{v.p50 * 1000 | number:0}}</td>
-            <td>{{v.p75 * 1000 | number:0}}</td>
-            <td>{{v.p95 * 1000 | number:0}}</td>
-            <td>{{v.p99 * 1000 | number:0}}</td>
-            <td>{{v.max * 1000 | number:0}}</td>
+            <td class="text-right">{{v.count}}</td>
+            <td class="text-right">{{v.mean * 1000 | number:0}}</td>
+            <td class="text-right">{{v.min * 1000 | number:0}}</td>
+            <td class="text-right">{{v.p50 * 1000 | number:0}}</td>
+            <td class="text-right">{{v.p75 * 1000 | number:0}}</td>
+            <td class="text-right">{{v.p95 * 1000 | number:0}}</td>
+            <td class="text-right">{{v.p99 * 1000 | number:0}}</td>
+            <td class="text-right">{{v.max * 1000 | number:0}}</td>
         </tr>
         </tbody>
     </table>
@@ -237,21 +237,21 @@
         <thead>
         <tr>
             <th translate="metrics.ehcache.cachename">Cache name</th>
-            <th translate="metrics.ehcache.objects">Objects</th>
-            <th translate="metrics.ehcache.hits">Hits</th>
-            <th translate="metrics.ehcache.misses">Misses</th>
-            <th translate="metrics.ehcache.evictioncount">Eviction count</th>
-            <th translate="metrics.ehcache.mean">Mean get time (ms)</th>
+            <th class="text-right" translate="metrics.ehcache.objects">Objects</th>
+            <th class="text-right" translate="metrics.ehcache.hits">Hits</th>
+            <th class="text-right" translate="metrics.ehcache.misses">Misses</th>
+            <th class="text-right" translate="metrics.ehcache.evictioncount">Eviction count</th>
+            <th class="text-right" translate="metrics.ehcache.mean">Mean get time (ms)</th>
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="(k, v) in cachesStats" ng-once>
             <td>{{v.name}}</td>
-            <td>{{metrics.gauges[k + '.objects'].value}}</td>
-            <td>{{metrics.gauges[k + '.hits'].value}}</td>
-            <td>{{metrics.gauges[k + '.misses'].value}}</td>
-            <td>{{metrics.gauges[k + '.eviction-count'].value}}</td>
-            <td>{{metrics.gauges[k + '.mean-get-time'].value | number:2}}</td>
+            <td class="text-right">{{metrics.gauges[k + '.objects'].value}}</td>
+            <td class="text-right">{{metrics.gauges[k + '.hits'].value}}</td>
+            <td class="text-right">{{metrics.gauges[k + '.misses'].value}}</td>
+            <td class="text-right">{{metrics.gauges[k + '.eviction-count'].value}}</td>
+            <td class="text-right">{{metrics.gauges[k + '.mean-get-time'].value | number:2}}</td>
         </tr>
         </tbody>
     </table>
@@ -263,14 +263,14 @@
         <thead>
             <tr>
                 <th>{{'metrics.datasource.usage' | translate}} ({{metrics.gauges['HikariPool-0.pool.ActiveConnections'].value}} / {{metrics.gauges['HikariPool-0.pool.TotalConnections'].value}})</th>
-                <th>{{'metrics.datasource.count' | translate}}</th>
-                <th>{{'metrics.datasource.mean' | translate}}</th>
-                <th>{{'metrics.datasource.min' | translate}}</th>
-                <th>{{'metrics.datasource.p50' | translate}}</th>
-                <th>{{'metrics.datasource.p75' | translate}}</th>
-                <th>{{'metrics.datasource.p95' | translate}}</th>
-                <th>{{'metrics.datasource.p99' | translate}}</th>
-                <th>{{'metrics.datasource.max' | translate}}</th>
+                <th class="text-right">{{'metrics.datasource.count' | translate}}</th>
+                <th class="text-right">{{'metrics.datasource.mean' | translate}}</th>
+                <th class="text-right">{{'metrics.datasource.min' | translate}}</th>
+                <th class="text-right">{{'metrics.datasource.p50' | translate}}</th>
+                <th class="text-right">{{'metrics.datasource.p75' | translate}}</th>
+                <th class="text-right">{{'metrics.datasource.p95' | translate}}</th>
+                <th class="text-right">{{'metrics.datasource.p99' | translate}}</th>
+                <th class="text-right">{{'metrics.datasource.max' | translate}}</th>
             </tr>
         </thead>
         <tbody>
@@ -286,14 +286,14 @@
                         </div>
                     </div>
                 </td>
-                <td>{{metrics.histograms['HikariPool-0.pool.Usage'].count}}</td>
-                <td>{{metrics.histograms['HikariPool-0.pool.Usage'].mean | number:2}}</td>
-                <td>{{metrics.histograms['HikariPool-0.pool.Usage'].min | number:2}}</td>
-                <td>{{metrics.histograms['HikariPool-0.pool.Usage'].p50 | number:2}}</td>
-                <td>{{metrics.histograms['HikariPool-0.pool.Usage'].p75 | number:2}}</td>
-                <td>{{metrics.histograms['HikariPool-0.pool.Usage'].p95 | number:2}}</td>
-                <td>{{metrics.histograms['HikariPool-0.pool.Usage'].p99 | number:2}}</td>
-                <td>{{metrics.histograms['HikariPool-0.pool.Usage'].max | number:2}}</td>
+                <td class="text-right">{{metrics.histograms['HikariPool-0.pool.Usage'].count}}</td>
+                <td class="text-right">{{metrics.histograms['HikariPool-0.pool.Usage'].mean | number:2}}</td>
+                <td class="text-right">{{metrics.histograms['HikariPool-0.pool.Usage'].min | number:2}}</td>
+                <td class="text-right">{{metrics.histograms['HikariPool-0.pool.Usage'].p50 | number:2}}</td>
+                <td class="text-right">{{metrics.histograms['HikariPool-0.pool.Usage'].p75 | number:2}}</td>
+                <td class="text-right">{{metrics.histograms['HikariPool-0.pool.Usage'].p95 | number:2}}</td>
+                <td class="text-right">{{metrics.histograms['HikariPool-0.pool.Usage'].p99 | number:2}}</td>
+                <td class="text-right">{{metrics.histograms['HikariPool-0.pool.Usage'].max | number:2}}</td>
             </tr>
         </tbody>
     </table>
@@ -321,10 +321,10 @@
                     <table class="table table-condensed">
                         <thead>
                         <tr>
-                            <th translate="metrics.jvm.threads.dump.blockedtime">Blocked Time</th>
-                            <th translate="metrics.jvm.threads.dump.blockedcount">Blocked Count</th>
-                            <th translate="metrics.jvm.threads.dump.waitedtime">Waited Time</th>
-                            <th translate="metrics.jvm.threads.dump.waitedcount">Waited Count</th>
+                            <th class="text-right" translate="metrics.jvm.threads.dump.blockedtime">Blocked Time</th>
+                            <th class="text-right" translate="metrics.jvm.threads.dump.blockedcount">Blocked Count</th>
+                            <th class="text-right" translate="metrics.jvm.threads.dump.waitedtime">Waited Time</th>
+                            <th class="text-right" translate="metrics.jvm.threads.dump.waitedcount">Waited Count</th>
                             <th translate="metrics.jvm.threads.dump.lockname">Lock Name</th>
                             <th translate="metrics.jvm.threads.dump.stacktrace">StackTrace</th>
                         </tr>
@@ -343,7 +343,7 @@
                                 </a>
                                 <div class="popover left" ng-show="show">
                                     <div class="popover-title">
-                                        <h4>{{'metrics.jvm.threads.dump.stacktrace' | translate}}<button type="button" class="close" ng-click="show = !show">x</button></h4>
+                                        <h4>{{'metrics.jvm.threads.dump.stacktrace' | translate}}<button type="button" class="close" ng-click="show = !show">&times;</button></h4>
                                     </div>
                                     <div class="popover-content">
                                         <div ng-repeat="(stK, stV) in v.stackTrace">
