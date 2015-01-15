@@ -13,18 +13,20 @@
                 "settings": "Inställningar",
                 "password": "Lösenord",
                 "sessions": "Sessioner",
+                "login": "Inloggning",
+                "logout": "Utloggning",
+                "register": "Registrera"
+            },
+            "admin": {
+                "main": "Administration",
                 "tracker": "Användarspårning",
                 "metrics": "Mätningar",
                 "health": "Status",
                 "configuration": "Configuration",
                 "logs": "Loggar",
                 "audits": "Granskningar",
-                "login": "Inloggning",
-                "logout": "Utloggning",
-                "apidocs": "API",
-                "register": "Registrera"
+                "apidocs": "API"
             },
-            "admin": "Administration",
             "language": "Språk"
         },
         "form": {

@@ -13,18 +13,20 @@
                 "settings": "Ustawienia",
                 "password": "Hasło",
                 "sessions": "Sesje",
+                "login": "Autoryzacja",
+                "logout": "Wyloguj",
+                "register": "Register"
+            },
+            "admin": {
+                "main": "Administracja",
                 "tracker": "Śledzenie użytkownika",
                 "metrics": "Metryki",
                 "health": "Health",
                 "configuration": "Configuration",
                 "logs": "Logi",
                 "audits": "Audyty",
-                "login": "Autoryzacja",
-                "logout": "Wyloguj",
-                "apidocs": "API",
-                "register": "Register"
+                "apidocs": "API"
             },
-            "admin": "Administracja",
             "language": "Język"
         },
         "form": {

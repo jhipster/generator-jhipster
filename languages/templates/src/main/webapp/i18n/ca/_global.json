@@ -13,18 +13,20 @@
                 "settings": "Ajustos",
                 "password": "Contrasenya",
                 "sessions": "Sessions",
+                "login": "Autenticar",
+                "logout": "Finalitzar la sessió",
+                "register": "Registre"
+            },
+            "admin": {
+                "main": "Administració",
                 "tracker": "User tracker",
                 "metrics": "Mètriques",
                 "health": "Salud",
                 "configuration": "Configuration",
                 "logs": "Registres",
                 "audits": "Auditories",
-                "login": "Autenticar",
-                "logout": "Finalitzar la sessió",
-                "apidocs": "API",
-                "register": "Registre"
+                "apidocs": "API"
             },
-            "admin": "Administració",
             "language": "Idioma"
         },
         "form": {

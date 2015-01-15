@@ -74,7 +74,7 @@
                 <div class="form-group">
                     <label translate="global.form.newpassword">New password</label>
                     <input type="password" class="form-control" name="password" placeholder="{{'global.form.newpassword.placeholder' | translate}}"
-                           ng-model="registerAccount.password" ng-minlength=5 ng-maxlength=50 required>
+                           ng-model="registerAccount.password" ng-minlength=6 ng-maxlength=50 required>
                     <div ng-show="form.password.$dirty && form.password.$invalid">
                         <p class="help-block"
                                ng-show="form.password.$error.required" translate="global.messages.validate.newpassword.required">
@@ -82,7 +82,7 @@
                         </p>
                         <p class="help-block"
                                ng-show="form.password.$error.minlength" translate="global.messages.validate.newpassword.minlength">
-                            Your password is required to be at least 5 characters
+                            Your password is required to be at least 6 characters
                         </p>
                         <p class="help-block"
                                ng-show="form.password.$error.maxlength" translate="global.messages.validate.newpassword.maxlength">
@@ -94,7 +94,7 @@
                 <div class="form-group">
                     <label translate="global.form.confirmpassword">New password confirmation</label>
                     <input type="password" class="form-control" name="confirmPassword" placeholder="{{'global.form.confirmpassword.placeholder' | translate}}"
-                           ng-model="confirmPassword" ng-minlength=5 ng-maxlength=50 required>
+                           ng-model="confirmPassword" ng-minlength=6 ng-maxlength=50 required>
                     <div ng-show="form.confirmPassword.$dirty && form.confirmPassword.$invalid">
                         <p class="help-block"
                                ng-show="form.confirmPassword.$error.required" translate="global.messages.validate.confirmpassword.required">
@@ -102,7 +102,7 @@
                         </p>
                         <p class="help-block"
                                ng-show="form.confirmPassword.$error.minlength" translate="global.messages.validate.confirmpassword.minlength">
-                            Your password confirmation is required to be at least 5 characters
+                            Your password confirmation is required to be at least 6 characters
                         </p>
                         <p class="help-block"
                                ng-show="form.confirmPassword.$error.maxlength" translate="global.messages.validate.confirmpassword.maxlength">
