@@ -162,7 +162,7 @@ gulp.task('build', ['copy'], function () {
 });
 
 gulp.task('usemin', ['images', 'styles'], function() {
-    return gulp.src(yeoman.app + '*.html').
+    return gulp.src(yeoman.app + '**/*.html').
         pipe(usemin({
             css: [
                 prefix.apply(),
