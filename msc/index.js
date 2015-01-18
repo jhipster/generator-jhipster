@@ -205,11 +205,7 @@ MscGenerator.prototype.askForFields = function askForFields() {
         for (var id in this.fields) {
             console.log(chalk.red(this.fields[id].fieldName + ' (' + this.fields[id].fieldType + ')'));
         }
-        if (props.fieldAdd) {
-            this.askForFields();
-        } else {
-            cb();
-        }
+        cb();
     }.bind(this));
 };
 
@@ -297,46 +293,4 @@ MscGenerator.prototype.files = function files() {
     removefile(this.filenameInheritance);
     this.write(this.filenameInheritance, JSON.stringify(this.inheritances, null, 4));
 
-//    this.template('src/main/java/package/repository/_EntityRepository.java',
-//        'src/main/java/' + this.packageFolder + '/repository/' +    this.entityClass + 'Repository.java', this, {});
-//
-//    this.template('src/main/java/package/web/rest/_EntityResource.java',
-//        'src/main/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'Resource.java', this, {});
-//
-//    if (this.databaseType == "sql") {
-//    	if(this.inheritanceFromClass != '') {
-//    		this.baseTable = this.searchBaseTable(this.inheritanceFromClass, this);
-//    		this.template(resourceDir + '/config/liquibase/changelog/_added_inherited_entity.xml',
-//    	        resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_inherited_entity_' + this.entityClass + '.xml', this, {});
-//    	
-//    	    this.addChangelogToLiquibase(this.changelogDate + '_added_inherited_entity_' + this.entityClass);
-//    	} else {
-//	        this.template(resourceDir + '/config/liquibase/changelog/_added_entity.xml',
-//	            resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml', this, {});
-//	
-//	        this.addChangelogToLiquibase(this.changelogDate + '_added_entity_' + this.entityClass);
-//    	}
-//    }
-    
-    // after generating Liquibase we can merge fields from all inherited classes
-//    this.fields = this.getInheritedFields(this.inheritanceFromClass, this.fields, this);
-//
-//    this.template('src/main/webapp/app/_entities.html',
-//        'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + 's.html', this, {});
-//
-//    this.addRouterToMenu(this.entityInstance);
-//
-//    this.template('src/main/webapp/app/_entity.js',
-//        'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '.js', this, {});
-//    this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.js');
-//    this.template('src/main/webapp/app/_entity-controller.js',
-//        'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '.controller' + '.js', this, {});
-//    this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.controller' + '.js');
-//
-//    this.template('src/main/webapp/components/_entity-service.js',
-//        'src/main/webapp/scripts/components/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js', this, {});
-//    this.addComponentsScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.service' + '.js');
-//
-//    this.template('src/test/java/package/web/rest/_EntityResourceTest.java',
-//        'src/test/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'ResourceTest.java', this, {});
 };

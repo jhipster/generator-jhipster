@@ -118,13 +118,14 @@ public class <%= entityClass %><% if (inheritanceFromClass != '') { %> extends <
 
     @Override
     public int hashCode() {
-    	final int prime = 31;
-		int result = 1;
-		result = prime
-				* result
-				+ ((getClass() == null) ? 0 : getClass().hashCode());
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
+//        final int prime = 31;
+//        int result = 1;
+//        result = prime
+//                * result
+//                + ((getClass() == null) ? 0 : getClass().hashCode());
+//        result = prime * result + ((id == null) ? 0 : id.hashCode());
+//        return result;
+        return <% if (databaseType == 'sql') { %>(int) (id ^ (id >>> 32));<% } %><% if (databaseType == 'mongodb') { %>id != null ? id.hashCode() : 0;<% } %>
     }
 
     @Override
