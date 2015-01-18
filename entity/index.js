@@ -1,5 +1,6 @@
 'use strict';
 var util = require('util'),
+        fs = require('fs'),
         path = require('path'),
         yeoman = require('yeoman-generator'),
         chalk = require('chalk'),
@@ -532,13 +533,13 @@ EntityGenerator.prototype.files = function files() {
         this.fieldsTypes();
     }
     this.template('src/main/java/package/web/rest/_EntityResource.java',
-            'src/main/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'Resource.java', this, {});
+        'src/main/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'Resource.java', this, {});
 
     this.template('src/main/webapp/app/_entities.html',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + 's.html', this, {});
     
     this.template('src/main/webapp/app/_entity-detail.html',
-            'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + '-detail.html', this, {});
+        'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + '-detail.html', this, {});
 
     this.addRouterToMenu(this.entityInstance);
 
@@ -548,6 +549,10 @@ EntityGenerator.prototype.files = function files() {
     this.template('src/main/webapp/app/_entity-controller.js',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '.controller' + '.js', this, {});
     this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.controller' + '.js');
+    
+    this.template('src/main/webapp/app/_entity-detail-controller.js',
+        'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '-detail.controller' + '.js', this, {});
+    this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '-detail.controller' + '.js');
 
     this.template('src/main/webapp/components/_entity-service.js',
         'src/main/webapp/scripts/components/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js', this, {});
