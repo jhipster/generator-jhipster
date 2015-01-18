@@ -7,21 +7,7 @@ var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
 var path = require('path');
 var useminAutoprefixer = {
     name: 'autoprefixer',
-    createConfig: function(context, block) {
-        var cfg = { files: [] };
-        var outfile = path.join(context.outDir, block.dest);
-
-        var files = {};
-        files.dest = outfile;
-        files.src = [];
-        context.inFiles.forEach(function (f) {
-            files.src.push(path.join(context.inDir, f));
-        });
-        cfg.files.push(files);
-        context.outFiles = [block.dest];
-
-        return cfg;
-    }
+    createConfig: require('grunt-usemin/lib/config/cssmin').createConfig // Reuse cssmins createConfig
 };
 
 module.exports = function (grunt) {
@@ -293,7 +279,7 @@ module.exports = function (grunt) {
                     html: {
                         steps: {
                             js: ['concat', 'uglifyjs'],
-                            css: ['concat', useminAutoprefixer, 'cssmin']
+                            css: ['cssmin', useminAutoprefixer] // Let cssmin concat files so it corrects relative paths to fonts and images
                         },
                             post: {}
                         }
@@ -346,6 +332,9 @@ module.exports = function (grunt) {
             //         ]
             //     }
             // }
+            options: {
+                root: 'src/main/webapp' // Replace relative paths for static resources with absolute path
+            }
         },
         ngtemplates:    {
             dist: {
@@ -544,10 +533,10 @@ module.exports = function (grunt) {
         'ngtemplates',
         'concurrent:dist',
         'concat',
-        'autoprefixer',
         'copy:dist',
         'ngAnnotate',
         'cssmin',
+        'autoprefixer',
         'replace',
         'uglify',
         'rev',

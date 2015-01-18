@@ -664,14 +664,7 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.useCompass) {
         this.copy('src/main/scss/main.scss', 'src/main/scss/main.scss');
     } else {
-        this.copy('src/main/webapp/assets/images/glyphicons-halflings.png', 'src/main/webapp/assets/images/glyphicons-halflings.png');
-        this.copy('src/main/webapp/assets/images/glyphicons-halflings-white.png', 'src/main/webapp/assets/images/glyphicons-halflings-white.png');
-        this.copy('src/main/webapp/assets/styles/bootstrap.css', 'src/main/webapp/assets/styles/bootstrap.css');
         this.copy('src/main/webapp/assets/styles/main.css', 'src/main/webapp/assets/styles/main.css');
-        this.copy('src/main/webapp/assets/fonts/glyphicons-halflings-regular.eot', 'src/main/webapp/assets/fonts/glyphicons-halflings-regular.eot');
-        this.copy('src/main/webapp/assets/fonts/glyphicons-halflings-regular.svg', 'src/main/webapp/assets/fonts/glyphicons-halflings-regular.svg');
-        this.copy('src/main/webapp/assets/fonts/glyphicons-halflings-regular.ttf', 'src/main/webapp/assets/fonts/glyphicons-halflings-regular.ttf');
-        this.copy('src/main/webapp/assets/fonts/glyphicons-halflings-regular.woff', 'src/main/webapp/assets/fonts/glyphicons-halflings-regular.woff');
     }
 
     // HTML5 BoilerPlate
