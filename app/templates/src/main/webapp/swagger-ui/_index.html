@@ -58,7 +58,7 @@
                 return "";
             }
             window.authorizations.add("key", new ApiKeyAuthorization("X-CSRF-TOKEN", getCSRF(), "header"));<% } %>
-            <% if (authenticationType == 'token') { %>var authToken = JSON.parse(localStorage.getItem("token")).access_token;
+            <% if (authenticationType == 'token') { %>var authToken = JSON.parse(localStorage.getItem("ls.token")).access_token;
             window.authorizations.add("key", new ApiKeyAuthorization("Authorization",
                             "Bearer " + authToken, "header"));<% } %>
             window.swaggerUi.load();

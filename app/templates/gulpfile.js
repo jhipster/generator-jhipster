@@ -3,6 +3,7 @@
 'use strict';
 
 var gulp = require('gulp'),
+    gutil = require('gulp-util'),
     prefix = require('gulp-autoprefixer'),
     minifyCss = require('gulp-minify-css'),
     usemin = require('gulp-usemin'),
@@ -90,7 +91,7 @@ gulp.task('scripts', function () {
         pipe(connect.reload());
 });
 
-gulp.task('server', ['watch'<% if(useCompass) { %>, 'compass'<% } %>], function() {
+gulp.task('serve', ['watch'<% if(useCompass) { %>, 'compass'<% } %>], function() {
     var baseUri = 'http://localhost:' + yeoman.apiPort;
     // Routes to proxy to the backend
     var proxyRoutes = [
@@ -128,7 +129,7 @@ gulp.task('watch', function() {
     gulp.watch('src/images/**', ['images']);
 });
 
-gulp.task('server:dist', ['build'], function() {
+gulp.task('serve:dist', ['build'], function() {
     var baseUri = 'http://localhost:' + yeoman.apiPort;
     // Routes to proxy to the backend
     var proxyRoutes = [
@@ -162,7 +163,7 @@ gulp.task('build', ['copy'], function () {
 });
 
 gulp.task('usemin', ['images', 'styles'], function() {
-    return gulp.src(yeoman.app + '*.html').
+    return gulp.src(yeoman.app + '**/*.html').
         pipe(usemin({
             css: [
                 prefix.apply(),
@@ -189,6 +190,10 @@ gulp.task('jshint', function() {
     return gulp.src(['gulpfile.js', yeoman.app + 'scripts/**/*.js'])
         .pipe(jshint())
         .pipe(jshint.reporter('jshint-stylish'));
+});
+
+gulp.task('server', ['serve'], function () {
+    gutil.log('The `server` task has been deprecated. Use `gulp serve` to start a server');
 });
 
 gulp.task('default', function() {
