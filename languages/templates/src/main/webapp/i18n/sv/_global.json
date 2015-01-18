@@ -25,7 +25,8 @@
                 "configuration": "Configuration",
                 "logs": "Loggar",
                 "audits": "Granskningar",
-                "apidocs": "API"
+                "apidocs": "API",
+                "database": "Databas"
             },
             "language": "Språk"
         },

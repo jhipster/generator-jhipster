@@ -25,7 +25,8 @@
                 "configuration": "Configuration",
                 "logs": "記錄",
                 "audits": "稽核",
-                "apidocs": "API"
+                "apidocs": "API",
+                "database": "Database"
             },
             "language": "語系"
         },
