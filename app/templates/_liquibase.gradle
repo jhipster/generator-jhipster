@@ -19,7 +19,7 @@ task liquibaseDiffChangelog(dependsOn: compileJava, type: JavaExec) {
   args "--password="
   args "--url=<% if (devDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType == 'postgresql') { %>jdbc:postgresql://localhost/<%= baseName %><% } %>"
   args "--driver=<% if (devDatabaseType == 'mysql') { %>com.mysql.jdbc.Driver<% } else if (devDatabaseType == 'postgresql') { %>org.postgresql.Driver<% } %>"
-  <% if (authenticationType == 'token') { %>args "--excludeObjects=oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token"<% } %>
+  <% if (authenticationType == 'oauth2') { %>args "--excludeObjects=oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token"<% } %>
   args "diffChangeLog"
 
 }

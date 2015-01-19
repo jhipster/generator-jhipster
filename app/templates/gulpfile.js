@@ -101,7 +101,7 @@ gulp.task('serve', ['wiredep:test', 'wiredep:app'<% if(useCompass) { %>, 'compas
         '/configprops',
         '/api-docs',
         '/metrics',
-        '/dump'<% if (authenticationType == 'token') { %>,
+        '/dump'<% if (authenticationType == 'oauth2') { %>,
         '/oauth/token'<% } %><% if (devDatabaseType == 'h2Memory') { %>,
         '/console'<% } %>
     ];
@@ -176,7 +176,7 @@ gulp.task('serve:dist', ['build'], function() {
         '/api',
         '/metrics',
         '/dump',
-        '/api-docs'<% if (authenticationType == 'token') { %>,
+        '/api-docs'<% if (authenticationType == 'oauth2') { %>,
         '/oauth/token'<% } %><% if (devDatabaseType == 'h2Memory') { %>,
         '/console'<% } %>
     ];

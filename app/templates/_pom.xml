@@ -43,7 +43,7 @@
         <postgresql.version>9.3-1102-jdbc41</postgresql.version><% } %>
         <run.addResources>false</run.addResources>
         <sonar-maven-plugin.version>2.2</sonar-maven-plugin.version>
-        <spring-cloud.version>1.1.0.RELEASE</spring-cloud.version><% if (authenticationType == 'token') { %>
+        <spring-cloud.version>1.1.0.RELEASE</spring-cloud.version><% if (authenticationType == 'oauth2') { %>
         <spring-security-oauth2.version>2.0.1.RELEASE</spring-security-oauth2.version><% } %>
         <swagger-springmvc.version>0.8.8</swagger-springmvc.version>
         <usertype-core.version>3.2.0.GA</usertype-core.version>
@@ -358,7 +358,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
-        </dependency><% } %><% if (authenticationType == 'token') { %>
+        </dependency><% } %><% if (authenticationType == 'oauth2') { %>
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
@@ -588,7 +588,7 @@
                     <password></password>
                     <referenceUrl>hibernate:spring:<%=packageName%>.domain?dialect=<% if (devDatabaseType == 'mysql') { %>org.hibernate.dialect.MySQLInnoDBDialect<% } else if (devDatabaseType == 'postgresql') { %>org.hibernate.dialect.PostgreSQL82Dialect<% } %></referenceUrl>
                     <verbose>true</verbose>
-                    <logging>debug</logging><% if (authenticationType == 'token') { %>
+                    <logging>debug</logging><% if (authenticationType == 'oauth2') { %>
                     <diffExcludeObjects>oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token</diffExcludeObjects><% } %>
                 </configuration>
                 <dependencies>

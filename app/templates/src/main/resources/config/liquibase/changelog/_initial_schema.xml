@@ -71,7 +71,7 @@
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="user_id, authority_name" tableName="T_USER_AUTHORITY"/><% if (authenticationType == 'cookie') { %>
+        <addPrimaryKey columnNames="user_id, authority_name" tableName="T_USER_AUTHORITY"/><% if (authenticationType == 'session') { %>
 
         <createTable tableName="T_PERSISTENT_TOKEN">
             <column name="series" type="varchar(255)">
@@ -96,7 +96,7 @@
                                  baseTableName="T_USER_AUTHORITY"
                                  constraintName="fk_user_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="T_USER"/><% if (authenticationType == 'cookie') { %>
+                                 referencedTableName="T_USER"/><% if (authenticationType == 'session') { %>
 
         <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="T_PERSISTENT_TOKEN"
@@ -164,7 +164,7 @@
                                  referencedColumnNames="event_id"
                                  referencedTableName="T_PERSISTENT_AUDIT_EVENT"/>
     </changeSet>
-    <% if (authenticationType == 'token') { %>
+    <% if (authenticationType == 'oauth2') { %>
     <!-- Manage the OAuth authentication -->
     <changeSet id="2" author="jhipster">
         <createTable tableName="oauth_client_details">
