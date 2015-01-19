@@ -62,7 +62,7 @@ describe('jhipster generator', function () {
       'baseName': 'jhipster',
       'packageName': 'com.mycompany.myapp',
       'javaVersion': '7',
-      'authenticationType': 'cookie',
+      'authenticationType': 'session',
       'databaseType': 'sql',
       'hibernateCache': 'no',
       'clusteredHttpSession': 'no',
@@ -79,7 +79,7 @@ describe('jhipster generator', function () {
     });
   });
 
-  it('creates expected files with authenticationType "token"', function (done) {
+  it('creates expected files with authenticationType "oauth2"', function (done) {
 
     var expectedAdditionalFiles = [
       resourceDir + 'config/liquibase/changelog/00000000000000_initial_schema.xml',
@@ -104,7 +104,7 @@ describe('jhipster generator', function () {
       'baseName': 'jhipster',
       'packageName': 'com.mycompany.myapp',
       'javaVersion': '7',
-      'authenticationType': 'token',
+      'authenticationType': 'oauth2',
       'databaseType': 'sql',
       'hibernateCache': 'no',
       'clusteredHttpSession': 'no',
@@ -147,7 +147,7 @@ describe('jhipster generator', function () {
       'baseName': 'jhipster',
       'packageName': 'com.mycompany.myapp',
       'javaVersion': '7',
-      'authenticationType': 'token',
+      'authenticationType': 'oauth2',
       'databaseType': 'sql',
       'hibernateCache': 'ehcache',
       'clusteredHttpSession': 'no',
@@ -190,7 +190,7 @@ describe('jhipster generator', function () {
       'baseName': 'jhipster',
       'packageName': 'com.mycompany.myapp',
       'javaVersion': '7',
-      'authenticationType': 'token',
+      'authenticationType': 'oauth2',
       'databaseType': 'sql',
       'hibernateCache': 'hazelcast',
       'clusteredHttpSession': 'no',

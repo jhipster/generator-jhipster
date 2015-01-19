@@ -124,7 +124,7 @@ dependencies {
     compile group: 'org.springframework.cloud', name: 'spring-cloud-localconfig-connector', version: spring_cloud_version
     compile(group: 'org.springframework', name: 'spring-context-support') {
         exclude(module: 'quartz')
-    }<% if (authenticationType == 'token') { %>
+    }<% if (authenticationType == 'oauth2') { %>
     compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: spring_security_oauth2_version<% } %><% if (databaseType == 'mongodb') { %>
     compile group: 'org.mongeez', name: 'mongeez', version: mongeez_version<% } %>
     compile(group: 'com.mangofactory', name: 'swagger-springmvc', version: swagger_springmvc_version) {

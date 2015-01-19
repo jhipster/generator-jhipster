@@ -1,9 +1,9 @@
 package <%=packageName%>.service;
 
 import <%=packageName%>.Application;<% if (databaseType == 'mongodb') { %>
-import <%=packageName%>.config.MongoConfiguration;<% } %><% if (authenticationType == 'cookie') { %>
+import <%=packageName%>.config.MongoConfiguration;<% } %><% if (authenticationType == 'session') { %>
 import <%=packageName%>.domain.PersistentToken;<% } %>
-import <%=packageName%>.domain.User;<% if (authenticationType == 'cookie') { %>
+import <%=packageName%>.domain.User;<% if (authenticationType == 'session') { %>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
 import <%=packageName%>.repository.UserRepository;
 import org.joda.time.DateTime;
@@ -34,7 +34,7 @@ import static org.assertj.core.api.Assertions.*;
 @IntegrationTest<% if (databaseType == 'mongodb') { %>
 @Import(MongoConfiguration.class)<% } %><% if (databaseType == 'sql') { %>
 @Transactional<% } %>
-public class UserServiceTest {<% if (authenticationType == 'cookie') { %>
+public class UserServiceTest {<% if (authenticationType == 'session') { %>
 
     @Inject
     private PersistentTokenRepository persistentTokenRepository;<% } %>
@@ -43,7 +43,7 @@ public class UserServiceTest {<% if (authenticationType == 'cookie') { %>
     private UserRepository userRepository;
 
     @Inject
-    private UserService userService;<% if (authenticationType == 'cookie') { %>
+    private UserService userService;<% if (authenticationType == 'session') { %>
 
     @Test
     public void testRemoveOldPersistentTokens() {<% if (javaVersion == '8') { %>
@@ -64,7 +64,7 @@ public class UserServiceTest {<% if (authenticationType == 'cookie') { %>
         DateTime now = new DateTime();
         List<User> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minusDays(3));
         assertThat(users).isEmpty();
-    }<% if (authenticationType == 'cookie') { %>
+    }<% if (authenticationType == 'session') { %>
 
     private void generateUserToken(User user, String tokenSeries, LocalDate localDate) {
         PersistentToken token = new PersistentToken();

@@ -1,9 +1,9 @@
 package <%=packageName%>.service;
 
-import <%=packageName%>.domain.Authority;<% if (authenticationType == 'cookie') { %>
+import <%=packageName%>.domain.Authority;<% if (authenticationType == 'session') { %>
 import <%=packageName%>.domain.PersistentToken;<% } %>
 import <%=packageName%>.domain.User;
-import <%=packageName%>.repository.AuthorityRepository;<% if (authenticationType == 'cookie') { %>
+import <%=packageName%>.repository.AuthorityRepository;<% if (authenticationType == 'session') { %>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.SecurityUtils;
@@ -36,7 +36,7 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     @Inject
-    private UserRepository userRepository;<% if (authenticationType == 'cookie') { %>
+    private UserRepository userRepository;<% if (authenticationType == 'session') { %>
 
     @Inject
     private PersistentTokenRepository persistentTokenRepository;<% } %>
@@ -132,7 +132,7 @@ public class UserService {
         currentUser.getAuthorities().size(); // eagerly load the association<% } %>
         return currentUser;
     }
-<% if (authenticationType == 'cookie') { %>
+<% if (authenticationType == 'session') { %>
     /**
      * Persistent Token are used for providing automatic authentication, they should be automatically deleted after
      * 30 days.

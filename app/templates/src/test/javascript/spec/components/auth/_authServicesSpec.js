@@ -12,8 +12,8 @@ describe('Services Tests ', function () {
             spiedLocalStorageService = localStorageService;
             authService = Auth;
             spiedAuthServerProvider = AuthServerProvider;
-            //Request on app init
-            $httpBackend.expectPOST('api/logout').respond(200, '');
+            //Request on app init<% if (authenticationType == 'session' || authenticationType == 'oauth2') { %>
+            $httpBackend.expectPOST('api/logout').respond(200, '');<% } %>
 
             $httpBackend.expectGET('i18n/en/global.json').respond(200, '');
             $httpBackend.expectGET('i18n/en/language.json').respond(200, '');
@@ -29,7 +29,7 @@ describe('Services Tests ', function () {
             $httpBackend.verifyNoOutstandingExpectation();
             $httpBackend.verifyNoOutstandingRequest();
         });
-
+        <% if (authenticationType == 'session' || authenticationType == 'oauth2') { %>
         it('should call backend on logout then call authServerProvider.logout', function(){
             //GIVEN
             //Set spy
@@ -44,7 +44,20 @@ describe('Services Tests ', function () {
             //THEN
             expect(spiedAuthServerProvider.logout).toHaveBeenCalled();
             expect(spiedLocalStorageService.clearAll).toHaveBeenCalled();
-        });
+        });<% } %><% if (authenticationType == 'xauth') { %>
+          it('should call LocalStorageService.clearAll on logout', function(){
+            //GIVEN
+            //Set spy
+            spyOn(spiedLocalStorageService, "clearAll").and.callThrough();
+
+            //WHEN
+            authService.logout();
+            //flush the backend to "execute" the request to do the expectedGET assertion.
+            $httpBackend.flush();
+
+            //THEN
+            expect(spiedLocalStorageService.clearAll).toHaveBeenCalled();
+          });<% } %>
 
     });
 });

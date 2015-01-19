@@ -1,6 +1,6 @@
 package <%=packageName%>.config;
 
-import com.mongodb.Mongo;<% if (authenticationType == 'token') { %>
+import com.mongodb.Mongo;<% if (authenticationType == 'oauth2') { %>
 import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class CloudMongoDbConfiguration extends AbstractMongoConfiguration  {
     @Bean
     public LocalValidatorFactoryBean validator() {
         return new LocalValidatorFactoryBean();
-    }<% if (authenticationType == 'token') { %>
+    }<% if (authenticationType == 'oauth2') { %>
 
     @Bean
     public CustomConversions customConversions() {

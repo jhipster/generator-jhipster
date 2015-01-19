@@ -145,7 +145,7 @@ module.exports = function (grunt) {
                     port: 8080,
                     https: false,
                     changeOrigin: false
-                }<% if (authenticationType == 'token') { %>,
+                }<% if (authenticationType == 'oauth2') { %>,
                 {
                     context: '/oauth/token',
                     host: 'localhost',

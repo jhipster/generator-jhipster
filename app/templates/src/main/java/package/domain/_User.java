@@ -77,7 +77,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
-    private Set<Authority> authorities = new HashSet<>();<% if (authenticationType == 'cookie') { %><% if (databaseType == 'sql') { %>
+    private Set<Authority> authorities = new HashSet<>();<% if (authenticationType == 'session') { %><% if (databaseType == 'sql') { %>
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
@@ -162,7 +162,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
-    }<% if ((authenticationType == 'cookie') && (databaseType == 'sql')) { %>
+    }<% if ((authenticationType == 'session') && (databaseType == 'sql')) { %>
 
     public Set<PersistentToken> getPersistentTokens() {
         return persistentTokens;

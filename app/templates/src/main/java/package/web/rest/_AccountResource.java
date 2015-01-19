@@ -1,9 +1,9 @@
 package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import <%=packageName%>.domain.Authority;<% if (authenticationType == 'cookie') { %>
+import <%=packageName%>.domain.Authority;<% if (authenticationType == 'session') { %>
 import <%=packageName%>.domain.PersistentToken;<% } %>
-import <%=packageName%>.domain.User;<% if (authenticationType == 'cookie') { %>
+import <%=packageName%>.domain.User;<% if (authenticationType == 'session') { %>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.SecurityUtils;
@@ -39,7 +39,7 @@ public class AccountResource {
     private UserRepository userRepository;
 
     @Inject
-    private UserService userService;<% if (authenticationType == 'cookie') { %>
+    private UserService userService;<% if (authenticationType == 'session') { %>
 
     @Inject
     private PersistentTokenRepository persistentTokenRepository;<% } %>
@@ -200,7 +200,7 @@ public class AccountResource {
         }
         userService.changePassword(password);
         return new ResponseEntity<>(HttpStatus.OK);
-    }<% if (authenticationType == 'cookie') { %>
+    }<% if (authenticationType == 'session') { %>
 
     /**
      * GET  /account/sessions -> get the current open sessions.

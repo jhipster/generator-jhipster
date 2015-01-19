@@ -4,7 +4,7 @@ package <%=packageName%>.config;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import liquibase.integration.spring.SpringLiquibase;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'token') { %>
+import liquibase.integration.spring.SpringLiquibase;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'oauth2') { %>
 import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;<% } %><% if (databaseType == 'mongodb') { %>
 import com.mongodb.Mongo;
 import org.mongeez.Mongeez;<% } %>
@@ -21,11 +21,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;<% if (databaseType == 'mongodb') { %>
 import org.springframework.context.annotation.Import;<% } %><% if (databaseType == 'sql') { %>
-import org.springframework.core.env.Environment;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'token') { %>
+import org.springframework.core.env.Environment;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'oauth2') { %>
 import org.springframework.core.convert.converter.Converter;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
-import org.springframework.data.mongodb.config.EnableMongoAuditing;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'token') { %>
+import org.springframework.data.mongodb.config.EnableMongoAuditing;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'oauth2') { %>
 import org.springframework.data.mongodb.core.convert.CustomConversions;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -36,7 +36,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.Arrays;<% } %><% if (databaseType == 'mongodb') { %>
-import javax.inject.Inject;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'token') { %>
+import javax.inject.Inject;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'oauth2') { %>
 import java.util.ArrayList;
 import java.util.List;<% } %>
 
@@ -144,7 +144,7 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
     @Override
     public Mongo mongo() throws Exception {
         return mongo;
-    }<% if (authenticationType == 'token') { %>
+    }<% if (authenticationType == 'oauth2') { %>
 
     @Bean
     public CustomConversions customConversions() {
