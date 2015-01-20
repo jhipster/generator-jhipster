@@ -21,7 +21,8 @@ var gulp = require('gulp'),
     clean = require('gulp-clean'),
     replace = require('gulp-replace'),
     url = require('url'),
-    wiredep = require('wiredep').stream;
+    wiredep = require('wiredep').stream,
+    gulpif = require('gulp-if');
 
 var karma = require('gulp-karma')({configFile: 'src/test/javascript/karma.conf.js'});
 
@@ -204,6 +205,7 @@ gulp.task('build', ['copy', 'wiredep:app'], function () {
 
 gulp.task('usemin', ['images', 'styles'], function() {
     return gulp.src(yeoman.app + '**/*.html').
+        pipe(gulpif('**/' + yeoman.app + 'index.html', replace('<div class="development"></div>', ''))).
         pipe(usemin({
             css: [
                 prefix.apply(),
