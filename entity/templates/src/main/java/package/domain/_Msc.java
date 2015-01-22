@@ -30,10 +30,6 @@ import java.util.Set;<% } %>
 @Document(collection = "T_<%= name.toUpperCase() %>")<% } %>
 public class <%= entityClass %><% if (inheritanceFromClass != '') { %> extends <%= inheritanceFromClass %><% } %> implements Serializable {
 
-    <% if (inheritanceFromClass == '') { %>@Id<% if (databaseType == 'sql') { %>
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;<% } %><% if (databaseType == 'mongodb') { %>
-    private String id;<% } %><% } %>
 <% for (fieldId in fields) { %><% if (databaseType == 'sql') { %><% if (fields[fieldId].fieldType == 'DateTime') { %>
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = CustomDateTimeSerializer.class)
@@ -65,14 +61,7 @@ public class <%= entityClass %><% if (inheritanceFromClass != '') { %> extends <
     @OneToOne<% if (relationships[relationshipId].ownerSide == false) { %>(mappedBy = "<%= entityInstance %>")<% } %>
     private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].otherEntityName %>;<% } %>
 <% } %>
-    <% if (inheritanceFromClass == '') { %>public <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %> getId() {
-        return id;
-    }
-
-    public void setId(<% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %> id) {
-        this.id = id;
-    }
-    <% } %>
+    
 <% for (fieldId in fields) { %>
     public <%= fields[fieldId].fieldType %> get<%= fields[fieldId].fieldNameCapitalized %>() {
         return <%= fields[fieldId].fieldName %>;
@@ -97,32 +86,11 @@ public class <%= entityClass %><% if (inheritanceFromClass != '') { %> extends <
         this.<%= relationships[relationshipId].otherEntityName %> = <%= relationships[relationshipId].otherEntityName %>;
     }<% } %>
 <% } %>
-    <% if (inheritanceFromClass == '') { %>@Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        <%= entityClass %> <%= entityInstance %> = (<%= entityClass %>) o;
-
-        if (id != null ? !id.equals(<%= entityInstance %>.id) : <%= entityInstance %>.id != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        return <% if (databaseType == 'sql') { %>(int) (id ^ (id >>> 32));<% } %><% if (databaseType == 'mongodb') { %>id != null ? id.hashCode() : 0;<% } %>
-    }
-
     @Override
     public String toString() {
         return "<%= entityClass %>{" +
-                "id=" + id +<% for (fieldId in fields) { %>
+                <% for (fieldId in fields) { %>
                 ", <%= fields[fieldId].fieldName %>='" + <%= fields[fieldId].fieldName %> + "'" +<% } %>
                 '}';
-    }<% } %>
+    }
 }
