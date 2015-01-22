@@ -34,7 +34,11 @@ module.exports = function (grunt) {
             app: require('./bower.json').appPath || 'app',
             dist: 'src/main/webapp/dist'
         },
-        watch: {<% if (useCompass) { %>
+        watch: {
+            bower: {
+                files: ['bower.json'],
+                tasks: ['wiredep']
+            },<% if (useCompass) { %>
             compass: {
                 files: ['src/main/scss/**/*.{scss,sass}'],
                 tasks: ['compass:server']
@@ -66,6 +70,30 @@ module.exports = function (grunt) {
         //            dest: '.tmp/styles/'
         //        }]
         //    }
+        },
+        wiredep: {
+            app: {
+                src: ['src/main/webapp/index.html'<% if (useCompass) { %>,, 'src/main/scss/main.scss'<% } %>],
+                exclude: [/angular-i18n/, /swagger-ui/]<% if (useCompass) { %>,
+                ignorePath: /\.\.\/webapp\/bower_components\// // remove ../webapp/bower_components/ from paths of injected sass files<% } %>
+            },
+            test: {
+                src: 'src/test/javascript/karma.conf.js',
+                exclude: [/angular-i18n/, /swagger-ui/, /angular-scenario/],
+                ignorePath: /\.\.\/\.\.\//, // remove ../../ from paths of injected javascripts
+                devDependencies: true,
+                fileTypes: {
+                    js: {
+                        block: /(([\s\t]*)\/\/\s*bower:*(\S*))(\n|\r|.)*?(\/\/\s*endbower)/gi,
+                        detect: {
+                            js: /'(.*\.js)'/gi
+                        },
+                        replace: {
+                            js: '\'{{filePath}}\','
+                        }
+                    }
+                }
+            }
         },
         connect: {
             proxies: [
@@ -117,7 +145,7 @@ module.exports = function (grunt) {
                     port: 8080,
                     https: false,
                     changeOrigin: false
-                }<% if (authenticationType == 'token') { %>,
+                }<% if (authenticationType == 'oauth2') { %>,
                 {
                     context: '/oauth/token',
                     host: 'localhost',
@@ -488,6 +516,7 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
+            'wiredep',
             'concurrent:server',
             'configureProxies',
             'connect:livereload',
@@ -502,6 +531,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('test', [
         'clean:server',
+        'wiredep:test',
         'concurrent:test',
         'connect:test',
         'karma'
@@ -509,6 +539,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', [
         'clean:dist',
+        'wiredep:app',
         'useminPrepare',
         'ngtemplates',
         'concurrent:dist',

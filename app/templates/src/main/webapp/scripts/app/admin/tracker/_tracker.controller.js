@@ -1,5 +1,5 @@
 angular.module('<%=angularAppName%>')
-    .controller('TrackerController', function ($scope<% if (authenticationType == 'token') { %>, AuthServerProvider<% } %>) {
+    .controller('TrackerController', function ($scope<% if (authenticationType == 'oauth2') { %>, AuthServerProvider<% } %>) {
         // This controller uses a Websocket connection to receive user activities in real-time.
 
         $scope.activities = [];
