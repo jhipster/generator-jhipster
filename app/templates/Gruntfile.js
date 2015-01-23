@@ -185,17 +185,12 @@ module.exports = function (grunt) {
             },
             test: {
                 options: {
-                 port: 9001,
+                    port: 9001,
                     base: [
                         '.tmp',
                         'test',
                         'src/main/webapp'
                     ]
-                }
-            },
-            dist: {
-                options: {
-                    base: '<%%= yeoman.dist %>'
                 }
             }
         },
@@ -473,17 +468,7 @@ module.exports = function (grunt) {
                         from: '<div class="development"></div>',
                         to: ''
                     }]
-                }
-            },
-        uglify: {
-        // not used since Uglify task does uglify
-        //    dist: {
-        //     files: {
-        //            '<%%= yeoman.dist %>/scripts/scripts.js': [
-        //                '<%%= yeoman.dist %>/scripts/scripts.js'
-        //            ]
-        //        }
-        //    }
+            }
         },
         buildcontrol: {
             options: {
@@ -509,20 +494,14 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask('serve', function (target) {
-        if (target === 'dist') {
-            return grunt.task.run(['build', 'connect:dist:keepalive']);
-        }
-
-        grunt.task.run([
-            'clean:server',
-            'wiredep',
-            'concurrent:server',
-            'configureProxies',
-            'connect:livereload',
-            'watch'
-        ]);
-    });
+    grunt.registerTask('serve', [
+        'clean:server',
+        'wiredep',
+        'concurrent:server',
+        'configureProxies',
+        'connect:livereload',
+        'watch'
+    ]);
 
     grunt.registerTask('server', function (target) {
         grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
