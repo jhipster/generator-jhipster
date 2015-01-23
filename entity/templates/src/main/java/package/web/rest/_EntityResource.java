@@ -28,9 +28,9 @@ public class <%= entityClass %>Resource {
     private <%= entityClass %>Repository <%= entityInstance %>Repository;
 
     /**
-     * POST  /<%= entityInstance %>s -> Create a new <%= entityInstance %>.
+     * POST  /<%= entityInstances %> -> Create a new <%= entityInstance %>.
      */
-    @RequestMapping(value = "/<%= entityInstance %>s",
+    @RequestMapping(value = "/<%= entityInstances %>",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -40,9 +40,9 @@ public class <%= entityClass %>Resource {
     }
 
     /**
-     * GET  /<%= entityInstance %>s -> get all the <%= entityInstance %>s.
+     * GET  /<%= entityInstances %> -> get all the <%= entityInstances %>.
      */
-    @RequestMapping(value = "/<%= entityInstance %>s",
+    @RequestMapping(value = "/<%= entityInstances %>",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -52,9 +52,9 @@ public class <%= entityClass %>Resource {
     }
 
     /**
-     * GET  /<%= entityInstance %>s/:id -> get the "id" <%= entityInstance %>.
+     * GET  /<%= entityInstances %>/:id -> get the "id" <%= entityInstance %>.
      */
-    @RequestMapping(value = "/<%= entityInstance %>s/{id}",
+    @RequestMapping(value = "/<%= entityInstances %>/{id}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -73,9 +73,9 @@ public class <%= entityClass %>Resource {
     }
 
     /**
-     * DELETE  /<%= entityInstance %>s/:id -> delete the "id" <%= entityInstance %>.
+     * DELETE  /<%= entityInstances %>/:id -> delete the "id" <%= entityInstance %>.
      */
-    @RequestMapping(value = "/<%= entityInstance %>s/{id}",
+    @RequestMapping(value = "/<%= entityInstances %>/{id}",
             method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed

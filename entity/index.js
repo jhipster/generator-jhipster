@@ -318,6 +318,12 @@ EntityGenerator.prototype.files = function files() {
     }
     this.entityClass = _s.capitalize(this.name);
     this.entityInstance = this.name.charAt(0).toLowerCase() + this.name.slice(1);
+    
+    if (this.entityInstance.slice(-1) == "y") {
+        this.entityInstances = this.entityInstance.str.slice(0, - 1) + "ies";
+    } else {
+        this.entityInstances = this.entityInstance + "s";
+    }
 
     var insight = this.insight();
     insight.track('generator', 'entity');
@@ -343,7 +349,7 @@ EntityGenerator.prototype.files = function files() {
     }
 
     this.template('src/main/webapp/app/_entities.html',
-        'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + 's.html', this, {});
+        'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstances + '.html', this, {});
     this.template('src/main/webapp/app/_entity-detail.html',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + '-detail.html', this, {});
 
