@@ -2,7 +2,7 @@
 
 angular.module('<%=angularAppName%>')
     .factory('<%= entityClass %>', function ($resource) {
-        return $resource('api/<%= entityInstance %>s/:id', {}, {
+        return $resource('api/<%= entityInstances %>/:id', {}, {
             'query': { method: 'GET', isArray: true},
             'get': {
                 method: 'GET',

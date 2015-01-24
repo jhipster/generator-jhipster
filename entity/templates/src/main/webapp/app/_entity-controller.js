@@ -2,11 +2,11 @@
 
 angular.module('<%=angularAppName%>')
     .controller('<%= entityClass %>Controller', function ($scope, <%= entityClass %><% for (relationshipId in relationships) { %>, <%= relationships[relationshipId].otherEntityNameCapitalized %><% } %>) {
-        $scope.<%= entityInstance %>s = [];<% for (relationshipId in relationships) { %>
+        $scope.<%= entityInstances %> = [];<% for (relationshipId in relationships) { %>
         $scope.<%= relationships[relationshipId].otherEntityName %>s = <%= relationships[relationshipId].otherEntityNameCapitalized %>.query();<% } %>
         $scope.loadAll = function() {
             <%= entityClass %>.query(function(result) {
-               $scope.<%= entityInstance %>s = result;
+               $scope.<%= entityInstances %> = result;
             });
         };
         $scope.loadAll();

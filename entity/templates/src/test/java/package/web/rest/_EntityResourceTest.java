@@ -99,27 +99,27 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
         assertThat(<%= entityInstance %>Repository.findAll()).hasSize(0);
 
         // Create the <%= entityClass %>
-        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityInstance %>s")
+        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityInstances %>")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %>)))
                 .andExpect(status().isOk());
 
         // Validate the <%= entityClass %> in the database
-        List<<%= entityClass %>> <%= entityInstance %>s = <%= entityInstance %>Repository.findAll();
-        assertThat(<%= entityInstance %>s).hasSize(1);
-        <%= entityClass %> test<%= entityClass %> = <%= entityInstance %>s.iterator().next();<% for (fieldId in fields) { if (fields[fieldId].fieldType == 'DateTime') { %>
+        List<<%= entityClass %>> <%= entityInstances %> = <%= entityInstance %>Repository.findAll();
+        assertThat(<%= entityInstances %>).hasSize(1);
+        <%= entityClass %> test<%= entityClass %> = <%= entityInstances %>.iterator().next();<% for (fieldId in fields) { if (fields[fieldId].fieldType == 'DateTime') { %>
         assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldNameCapitalized%>().toDateTime(DateTimeZone.UTC)).isEqualTo(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } else { %>
         assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldNameCapitalized%>()).isEqualTo(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% }} %>
     }
 
     @Test<% if (databaseType == 'sql') { %>
     @Transactional<% } %>
-    public void getAll<%= entityClass %>s() throws Exception {
+    public void getAll<%= entityClasses %>() throws Exception {
         // Initialize the database
         <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 
-        // Get all the <%= entityInstance %>s
-        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityInstance %>s"))
+        // Get all the <%= entityInstances %>
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityInstances %>"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
                 .andExpect(jsonPath("$.[0].id").value(<%= entityInstance %>.getId().intValue()))<% } %><% if (databaseType == 'mongodb') { %>
@@ -134,7 +134,7 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
         <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 
         // Get the <%= entityInstance %>
-        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityInstance %>s/{id}", <%= entityInstance %>.getId()))
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityInstances %>/{id}", <%= entityInstance %>.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().intValue()))<% } %><% if (databaseType == 'mongodb') { %>
@@ -146,7 +146,7 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
     @Transactional<% } %>
     public void getNonExisting<%= entityClass %>() throws Exception {
         // Get the <%= entityInstance %>
-        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityInstance %>s/{id}", 1L))
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityInstances %>/{id}", 1L))
                 .andExpect(status().isNotFound());
     }
 
@@ -158,15 +158,15 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
 
         // Update the <%= entityInstance %><% for (fieldId in fields) { %>
         <%= entityInstance %>.set<%= fields[fieldId].fieldNameCapitalized %>(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>
-        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityInstance %>s")
+        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityInstances %>")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %>)))
                 .andExpect(status().isOk());
 
         // Validate the <%= entityClass %> in the database
-        List<<%= entityClass %>> <%= entityInstance %>s = <%= entityInstance %>Repository.findAll();
-        assertThat(<%= entityInstance %>s).hasSize(1);
-        <%= entityClass %> test<%= entityClass %> = <%= entityInstance %>s.iterator().next();<% for (fieldId in fields) { if (fields[fieldId].fieldType == 'DateTime') { %>
+        List<<%= entityClass %>> <%= entityInstances %> = <%= entityInstance %>Repository.findAll();
+        assertThat(<%= entityInstances %>).hasSize(1);
+        <%= entityClass %> test<%= entityClass %> = <%= entityInstances %>.iterator().next();<% for (fieldId in fields) { if (fields[fieldId].fieldType == 'DateTime') { %>
         assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldNameCapitalized%>().toDateTime(DateTimeZone.UTC)).isEqualTo(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } else { %>
         assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldNameCapitalized%>()).isEqualTo(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } } %>
     }
@@ -178,12 +178,12 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
         <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 
         // Get the <%= entityInstance %>
-        rest<%= entityClass %>MockMvc.perform(delete("/api/<%= entityInstance %>s/{id}", <%= entityInstance %>.getId())
+        rest<%= entityClass %>MockMvc.perform(delete("/api/<%= entityInstances %>/{id}", <%= entityInstance %>.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
         // Validate the database is empty
-        List<<%= entityClass %>> <%= entityInstance %>s = <%= entityInstance %>Repository.findAll();
-        assertThat(<%= entityInstance %>s).hasSize(0);
+        List<<%= entityClass %>> <%= entityInstances %> = <%= entityInstance %>Repository.findAll();
+        assertThat(<%= entityInstances %>).hasSize(0);
     }
 }
