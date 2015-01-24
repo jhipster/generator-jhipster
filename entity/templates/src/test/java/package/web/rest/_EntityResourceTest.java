@@ -114,7 +114,7 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
 
     @Test<% if (databaseType == 'sql') { %>
     @Transactional<% } %>
-    public void getAll<%= entityClass %>s() throws Exception {
+    public void getAll<%= entityClasses %>() throws Exception {
         // Initialize the database
         <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 

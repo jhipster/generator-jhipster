@@ -47,7 +47,7 @@ public class <%= entityClass %>Resource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public List<<%= entityClass %>> getAll() {
-        log.debug("REST request to get all <%= entityClass %>s");
+        log.debug("REST request to get all <%= entityClasses %>");
         return <%= entityInstance %>Repository.findAll();
     }
 

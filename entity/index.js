@@ -321,8 +321,10 @@ EntityGenerator.prototype.files = function files() {
 
     if (this.entityInstance.slice(-1) == "y") {
         this.entityInstances = this.entityInstance.slice(0, - 1) + "ies";
+        this.entityClasses = this.entityClass.slice(0, -1) + "ies";
     } else {
         this.entityInstances = this.entityInstance + "s";
+        this.entityClasses = this.entityClass + "s";
     }
 
     var insight = this.insight();
