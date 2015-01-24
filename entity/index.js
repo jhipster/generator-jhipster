@@ -318,9 +318,9 @@ EntityGenerator.prototype.files = function files() {
     }
     this.entityClass = _s.capitalize(this.name);
     this.entityInstance = this.name.charAt(0).toLowerCase() + this.name.slice(1);
-    
+
     if (this.entityInstance.slice(-1) == "y") {
-        this.entityInstances = this.entityInstance.str.slice(0, - 1) + "ies";
+        this.entityInstances = this.entityInstance.slice(0, - 1) + "ies";
     } else {
         this.entityInstances = this.entityInstance + "s";
     }
