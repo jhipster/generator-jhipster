@@ -170,35 +170,6 @@ gulp.task('wiredep:test', function () {
     .pipe(gulp.dest('src/test/javascript'));
 });
 
-gulp.task('serve:dist', ['build'], function() {
-    var baseUri = 'http://localhost:' + yeoman.apiPort;
-    // Routes to proxy to the backend
-    var proxyRoutes = [
-        '/api',
-        '/metrics',
-        '/dump',
-        '/api-docs'<% if (authenticationType == 'oauth2') { %>,
-        '/oauth/token'<% } %><% if (devDatabaseType == 'h2Memory') { %>,
-        '/console'<% } %>
-    ];
-
-    connect.server({
-        root: [yeoman.dist],
-        port: yeoman.port,
-        /*livereload: {
-         port: yeoman.liveReloadPort
-         },*/
-        middleware: function() {
-            // Build a list of proxies for routes: [route1_proxy, route2_proxy, ...]
-            return proxyRoutes.map(function (r) {
-                var options = url.parse(baseUri + r);
-                options.route = r;
-                return proxy(options);
-            });
-        }
-    });
-});
-
 gulp.task('build', ['copy', 'wiredep:app'], function () {
     gulp.run('usemin');
 });
