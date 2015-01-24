@@ -175,14 +175,13 @@ gulp.task('build', ['copy', 'wiredep:app'], function () {
 });
 
 gulp.task('usemin', ['images', 'styles'], function() {
-    return gulp.src(yeoman.app + '**/*.html').
+    return gulp.src([yeoman.app + '**/*.html', '!' + yeoman.app + 'bower_components/**/*.html']).
         pipe(gulpif('**/' + yeoman.app + 'index.html', replace('<div class="development"></div>', ''))).
         pipe(usemin({
             css: [
                 prefix.apply(),
-                replace(/[0-9a-zA-Z\-_\s\.\/]*\/([a-zA-Z\-_\.0-9]*\.(woff|eot|ttf|svg))/g, '/assets/fonts/$1'),
-                //minifyCss(),
-                'concat',
+                minifyCss({root: 'src/main/webapp'}),  // Replace relative paths for static resources with absolute path with root
+                'concat', // Needs to be present for minifyCss root option to work
                 rev()
             ],
             html: [
