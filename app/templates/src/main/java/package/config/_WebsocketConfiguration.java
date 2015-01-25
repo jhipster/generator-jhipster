@@ -23,7 +23,6 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSocketMessageBroker
