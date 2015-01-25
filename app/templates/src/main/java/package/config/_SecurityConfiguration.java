@@ -83,7 +83,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http<% if (authenticationType == 'session') { %>
-            //.addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class)  // See https://github.com/jhipster/generator-jhipster/issues/965<% } %>
+            .addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class)  // See https://github.com/jhipster/generator-jhipster/issues/965<% } %>
             .exceptionHandling()
             .authenticationEntryPoint(authenticationEntryPoint)<% if (authenticationType == 'session') { %>
         .and()
@@ -105,8 +105,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .deleteCookies("JSESSIONID"<% if (clusteredHttpSession == 'hazelcast') { %>, "hazelcast.sessionId"<% } %>)
             .permitAll()<% } %>
         .and()
-            .csrf()
-            .disable() // See https://github.com/jhipster/generator-jhipster/issues/965
             .headers()
             .frameOptions()
             .disable()<% if (authenticationType == 'xauth') { %>
