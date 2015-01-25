@@ -83,7 +83,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http<% if (authenticationType == 'session') { %>
-            .addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class)  // See https://github.com/jhipster/generator-jhipster/issues/965<% } %>
+            .addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class)<% } %>
             .exceptionHandling()
             .authenticationEntryPoint(authenticationEntryPoint)<% if (authenticationType == 'session') { %>
         .and()
