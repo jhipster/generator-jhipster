@@ -9,6 +9,10 @@ body {
     color: #333;
 }
 
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+}
+
 .development {
     position: absolute;
     width: 149px;
