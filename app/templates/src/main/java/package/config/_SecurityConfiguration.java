@@ -104,7 +104,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .logoutSuccessHandler(ajaxLogoutSuccessHandler)
             .deleteCookies("JSESSIONID"<% if (clusteredHttpSession == 'hazelcast') { %>, "hazelcast.sessionId"<% } %>)
             .permitAll()<% } %>
-        .and()
+        .and()<% if (authenticationType == 'xauth') { %>
+            .csrf()
+            .disable()<% } %>
             .headers()
             .frameOptions()
             .disable()<% if (authenticationType == 'xauth') { %>
