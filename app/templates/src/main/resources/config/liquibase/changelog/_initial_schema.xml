@@ -208,7 +208,7 @@
         </createTable>
 
         <addForeignKeyConstraint baseColumnNames="user_name"
-            baseTableName="oauth_client_token"
+            baseTableName="oauth_access_token"
             constraintName="fk_oauth_access_token_user_name"
             referencedColumnNames="login"
             referencedTableName="T_USER"/>
