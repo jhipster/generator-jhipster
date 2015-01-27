@@ -38,7 +38,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @JsonIgnore
     @NotNull
-    @Size(min = 6, max = 100)<% if (databaseType == 'sql') { %>
+    @Size(min = 5, max = 100)<% if (databaseType == 'sql') { %>
     @Column(length = 100)<% } %>
     private String password;
 
