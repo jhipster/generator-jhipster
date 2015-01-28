@@ -449,6 +449,7 @@
                 <filtering>true</filtering>
                 <includes>
                     <include>**/*.xml</include>
+                    <include>config/application.yml</include>
                 </includes>
             </resource>
             <resource>
@@ -456,9 +457,26 @@
                 <filtering>false</filtering>
                 <excludes>
                     <exclude>**/*.xml</exclude>
+                    <exclude>config/application.yml</exclude>
                 </excludes>
             </resource>
         </resources>
+        <testResources>
+            <testResource>
+                <filtering>true</filtering>
+                <directory>src/test/resources</directory>
+                <includes>
+                    <include>config/application.yml</include>
+                </includes>
+            </testResource>
+            <testResource>
+                <filtering>false</filtering>
+                <directory>src/test/resources</directory>
+                <excludes>
+                    <exclude>config/application.yml</exclude>
+                </excludes>
+            </testResource>
+        </testResources>
         <pluginManagement>
             <plugins>
                 <!--This plugin's configuration is used to store Eclipse m2e settings
