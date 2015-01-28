@@ -25,7 +25,8 @@
                 "configuration": "Configuration",
                 "logs": "Logs",
                 "audits": "Auditorías",
-                "apidocs": "API"
+                "apidocs": "API",
+                "database": "Database"
             },
             "language": "Idioma"
         },

@@ -80,6 +80,8 @@
                             &#xA0;<span translate="global.menu.admin.logs">Logs</span></a></li>
                         <li ui-sref-active="active"><a ui-sref="docs"><span class="glyphicon glyphicon-book"></span>
                             &#xA0;<span translate="global.menu.admin.apidocs">API Docs</span></a></li>
+                        <li ng-show="{{ENV === 'dev'}}"><a href='/console' target="_tab"><span class="glyphicon glyphicon-hdd"></span>
+                            &#xA0;<span translate="global.menu.admin.database">Database</span></a></li>
                     </ul>
                 </li>
                 <li ui-sref-active="active" class="dropdown pointer" ng-controller="LanguageController">

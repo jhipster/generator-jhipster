@@ -3,7 +3,8 @@
 angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale',
     'ngResource', 'ui.router', 'ngCookies', 'pascalprecht.translate', 'ngCacheBuster'])
 
-    .run(function ($rootScope, $location, $http, $state, $translate, Auth, Principal, Language) {
+    .run(function ($rootScope, $location, $http, $state, $translate, Auth, Principal, Language, ENV) {
+        $rootScope.ENV = ENV;
         $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
             $rootScope.toState = toState;
             $rootScope.toStateParams = toStateParams;
