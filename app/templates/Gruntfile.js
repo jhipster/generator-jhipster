@@ -1,10 +1,10 @@
 // Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= pkg.name %> <%= pkg.version %>
 'use strict';
 
+var pomParser = require('node-pom-parser');
 var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
 
 // usemin custom step
-var path = require('path');
 var useminAutoprefixer = {
     name: 'autoprefixer',
     createConfig: require('grunt-usemin/lib/config/cssmin').createConfig // Reuse cssmins createConfig
@@ -26,7 +26,7 @@ module.exports = function (grunt) {
                 tasks: ['wiredep']
             },
             ngconstant: {
-                files: ['Gruntfile.js'],
+                files: ['Gruntfile.js', 'pom.xml'],
                 tasks: ['ngconstant:dev']
             },<% if (useCompass) { %>
             compass: {
@@ -486,7 +486,8 @@ module.exports = function (grunt) {
                     dest: 'src/main/webapp/scripts/app/app.constants.js',
                 },
                 constants: {
-                    ENV: 'dev'
+                    ENV: 'dev',
+                    VERSION: pomParser.parsePom({ filePath: "pom.xml"}).version
                 }
             },
             prod: {
@@ -494,7 +495,8 @@ module.exports = function (grunt) {
                     dest: '.tmp/scripts/app/app.constants.js',
                 },
                 constants: {
-                    ENV: 'prod'
+                    ENV: 'prod',
+                    VERSION: pomParser.parsePom({ filePath: "pom.xml"}).version
                 }
             }
         }
