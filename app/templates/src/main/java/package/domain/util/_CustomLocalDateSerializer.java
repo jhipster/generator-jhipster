@@ -9,19 +9,13 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.io.IOException;
 
-/**
- * Custom Jackson serializer for displaying Joda Time dates.
- */
 public class CustomLocalDateSerializer extends JsonSerializer<LocalDate> {
 
-    private static DateTimeFormatter formatter =
-            DateTimeFormat.forPattern("yyyy-MM-dd");
+    private static DateTimeFormatter formatter = DateTimeFormat
+            .forPattern("yyyy-MM-dd");
 
     @Override
-    public void serialize(LocalDate value, JsonGenerator generator,
-                          SerializerProvider serializerProvider)
-            throws IOException {
-
-        generator.writeString(formatter.print(value));
+    public void serialize(LocalDate value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+        jgen.writeString(formatter.print(value));
     }
 }

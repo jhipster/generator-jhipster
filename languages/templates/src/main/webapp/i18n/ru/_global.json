@@ -1,0 +1,90 @@
+{
+    "global": {
+        "title": "<%= baseName %>",
+        "browsehappy": "Ваш браузер <strong>устарел</strong>. Пожалуйста <a href=\"http://browsehappy.com/?locale=en\">обновите ваш браузер</a>.",
+        "menu": {
+            "home": "Главная",
+            "entities": {
+                "main": "Entities",
+                "additionalEntity": "JHipster will add addtional entities"
+            },
+            "account": {
+                "main": "Профиль",
+                "settings": "Настройки",
+                "password": "Пароль",
+                "sessions": "Сессии",
+                "login": "Authenticate",
+                "logout": "Выйти",
+                "register": "Register"
+            },
+            "admin": {
+                "main": "Администрирование",
+                "tracker": "Трекер польз.",
+                "metrics": "Метрики",
+                "health": "Состояние",
+                "configuration": "Configuration",
+                "logs": "Логи",
+                "audits": "Аудит",
+                "apidocs": "API",
+                "database": "Database"
+            },
+            "language": "Язык"
+        },
+        "form": {
+            "username": "Логин",
+            "username.placeholder": "Ваш логин",
+            "newpassword": "Новый пароль",
+            "newpassword.placeholder": "Новый пароль",
+            "confirmpassword": "Подтверждение нового пароля",
+            "confirmpassword.placeholder": "Подтвердите новый пароль",
+            "email": "E-mail",
+            "email.placeholder": "Ваш e-mail"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Если вы хотите <a href=\"#/login\">авторизироваться</a>, вы можете попробовать аккаунты поумолчанию:<br/>- Администратор (логин=\"admin\" и пароль=\"admin\") <br/>- Пользователь (логин=\"user\" и пароль=\"user\").",
+                "register": "You don't have an account yet? <a href=\"#/register\">Register a new account</a>"
+            },
+            "error": {
+                "dontmatch": "Пароль и его подтверждение не совпадают!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Пароль должен быть указан.",
+                    "minlength": "Длина пароля должна быть хотя-бы 5 символов",
+                    "maxlength": "Пароль не может быть длиннее чем 50 символов",
+                    "strength": "Сложность пароля:"
+                },
+                "confirmpassword": {
+                    "required": "подтверждение пароля должно быть указано.",
+                    "minlength": "Длина подтверждения пароля должна быть хотя-бы 5 символов",
+                    "maxlength": "Подтверждение пароля не может быть больше чем 50 символов"
+                },
+                "email": {
+                    "required": "E-mail должен быть указан.",
+                    "invalid": "E-mail не верен.",
+                    "minlength": "Длина e-mail должна быть хотя-бы 5 символов",
+                    "maxlength": "E-mail не может быть длиннее чем 50 символов"
+                }
+            }
+        }
+    },
+    "entity": {
+        "action": {
+            "back": "Back",
+            "cancel": "Cancel",
+            "delete": "Delete",
+            "edit": "Edit",
+            "save": "Save",
+            "view": "View"
+        },
+        "detail": {
+            "field": "Field",
+            "value": "Value"
+        },
+        "delete": {
+            "title": "Confirm delete operation"
+        }
+    },
+    "footer": "Это ваш футтер"
+}

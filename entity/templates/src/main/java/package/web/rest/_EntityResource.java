@@ -24,7 +24,7 @@ import java.math.BigDecimal;<% } %>
  * REST controller for managing <%= entityClass %>.
  */
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 public class <%= entityClass %>Resource {
 
     private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
@@ -33,9 +33,9 @@ public class <%= entityClass %>Resource {
     private <%= entityClass %>Repository <%= entityInstance %>Repository;
 
     /**
-     * POST  /rest/<%= entityInstance %>s -> Create a new <%= entityInstance %>.
+     * POST  /<%= entityInstance %>s -> Create a new <%= entityInstance %>.
      */
-    @RequestMapping(value = "/rest/<%= entityInstance %>s",
+    @RequestMapping(value = "/<%= entityInstance %>s",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -45,9 +45,9 @@ public class <%= entityClass %>Resource {
     }
 
     /**
-     * GET  /rest/<%= entityInstance %>s -> get all the <%= entityInstance %>s.
+     * GET  /<%= entityInstance %>s -> get all the <%= entityInstance %>s.
      */
-    @RequestMapping(value = "/rest/<%= entityInstance %>s",
+    @RequestMapping(value = "/<%= entityInstance %>s",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -57,13 +57,13 @@ public class <%= entityClass %>Resource {
     }
 
     /**
-     * GET  /rest/<%= entityInstance %>s/:<%= primaryKeyField.fieldName %> -> get the "<%= primaryKeyField.fieldName %>" <%= entityInstance %>.
+     * GET  /<%= entityInstance %>s/:<%= primaryKeyField.fieldName %> -> get the "<%= primaryKeyField.fieldName %>" <%= entityInstance %>.
      */
-    @RequestMapping(value = "/rest/<%= entityInstance %>s/{<%= primaryKeyField.fieldName %>}",
+    @RequestMapping(value = "/<%= entityInstance %>s/{<%= primaryKeyField.fieldName %>}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<<%= entityClass %>> get(@PathVariable <% if (databaseType == 'sql') { %><% if (primaryKeyField.fieldType == 'LocalDate') { %>@DateTimeFormat(pattern="yyyy-MM-dd")<% } %><% if (primaryKeyField.fieldType == 'DateTime') { %>@DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")<% } %><%= primaryKeyField.fieldType %><% } %><% if (databaseType == 'nosql') { %>String<% } %> <%= primaryKeyField.fieldName %><% if (javaVersion == '7') { %>, HttpServletResponse response<% } %>) {
+    public ResponseEntity<<%= entityClass %>> get(@PathVariable <% if (databaseType == 'sql') { %><% if (primaryKeyField.fieldType == 'LocalDate') { %>@DateTimeFormat(pattern="yyyy-MM-dd")<% } %><% if (primaryKeyField.fieldType == 'DateTime') { %>@DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")<% } %><%= primaryKeyField.fieldType %><% } %><% if (databaseType == 'mongodb') { %>String<% } %> <%= primaryKeyField.fieldName %><% if (javaVersion == '7') { %>, HttpServletResponse response<% } %>) {
         log.debug("REST request to get <%= entityClass %> : {}", <%= primaryKeyField.fieldName %>);<% if (javaVersion == '8') { %>
         return Optional.ofNullable(<%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findOneWithEagerRelationships<% } else { %>findOne<% } %>(<%= primaryKeyField.fieldName %>))
             .map(<%= entityInstance %> -> new ResponseEntity<>(
@@ -78,13 +78,13 @@ public class <%= entityClass %>Resource {
     }
 
     /**
-     * DELETE  /rest/<%= entityInstance %>s/:<%= primaryKeyField.fieldName %> -> delete the "<%= primaryKeyField.fieldName %>" <%= entityInstance %>.
+     * DELETE  /<%= entityInstance %>s/:<%= primaryKeyField.fieldName %> -> delete the "<%= primaryKeyField.fieldName %>" <%= entityInstance %>.
      */
-    @RequestMapping(value = "/rest/<%= entityInstance %>s/{<%= primaryKeyField.fieldName %>}",
+    @RequestMapping(value = "/<%= entityInstance %>s/{<%= primaryKeyField.fieldName %>}",
             method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public void delete(@PathVariable <% if (databaseType == 'sql') { %><% if (primaryKeyField.fieldType == 'LocalDate') { %>@DateTimeFormat(pattern="yyyy-MM-dd")<% } %><% if (primaryKeyField.fieldType == 'DateTime') { %>@DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")<% } %><%= primaryKeyField.fieldType %><% } %><% if (databaseType == 'nosql') { %>String<% } %> <%= primaryKeyField.fieldName %>) {
+    public void delete(@PathVariable <% if (databaseType == 'sql') { %><% if (primaryKeyField.fieldType == 'LocalDate') { %>@DateTimeFormat(pattern="yyyy-MM-dd")<% } %><% if (primaryKeyField.fieldType == 'DateTime') { %>@DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm:ss")<% } %><%= primaryKeyField.fieldType %><% } %><% if (databaseType == 'mongodb') { %>String<% } %> <%= primaryKeyField.fieldName %>) {
         log.debug("REST request to delete <%= entityClass %> : {}", <%= primaryKeyField.fieldName %>);
         <%= entityInstance %>Repository.delete(<%= primaryKeyField.fieldName %>);
     }

@@ -1,0 +1,16 @@
+{
+    "login": {
+        "title": "Giriş",
+        "form": {
+            "password": "Şifre",
+            "password.placeholder": "Şifre",
+            "rememberme": "Beni Hatırla",
+            "button": "Giriş"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Giriş işlemi başarısız oldu!</strong> Lütfen kullanıcı bilgilerinizi kontrol edip tekrar deneyin."
+            }
+        }
+    }
+}

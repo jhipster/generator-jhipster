@@ -2,7 +2,8 @@ server:
     port: 8080
 
 spring:
-    profiles: dev<% if (databaseType == 'nosql') { %>
+    profiles:
+        active: dev<% if (databaseType == 'mongodb') { %>
     data:
         mongodb:
             host: localhost
@@ -11,7 +12,7 @@ spring:
     <% if (databaseType == 'sql') { %>
     datasource:
         dataSourceClassName: <% if (devDatabaseType == 'mysql') { %>com.mysql.jdbc.jdbc2.optional.MysqlDataSource<% } else if (devDatabaseType == 'postgresql') { %>org.postgresql.ds.PGSimpleDataSource<% } else { %>org.h2.jdbcx.JdbcDataSource<% } %>
-        url: <% if (devDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType == 'postgresql') { %><% } else { %>jdbc:h2:mem:jhipster<% } %>
+        url: <% if (devDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType == 'postgresql') { %><% } else { %>jdbc:h2:mem:jhipster;DB_CLOSE_DELAY=-1<% } %>
         databaseName: <% if (devDatabaseType == 'postgresql') { %><%= baseName %><% } %>
         serverName: <% if (devDatabaseType == 'postgresql') { %>localhost<% } %>
         username: <% if (devDatabaseType == 'mysql') { %>root<% } else if (devDatabaseType == 'postgresql') { %><%= baseName %><% } %>
@@ -22,7 +23,7 @@ spring:
         useServerPrepStmts: true<% } %>
 
     jpa:
-        database-platform: <% if (devDatabaseType == 'mysql') { %>org.hibernate.dialect.MySQLInnoDBDialect<% } else if (devDatabaseType == 'postgresql') { %>org.hibernate.dialect.PostgreSQLDialect<% } else { %>org.hibernate.dialect.H2Dialect<% } %>
+        database-platform: <% if (devDatabaseType == 'mysql') { %>org.hibernate.dialect.MySQLInnoDBDialect<% } else if (devDatabaseType == 'postgresql') { %>org.hibernate.dialect.PostgreSQL82Dialect<% } else { %>org.hibernate.dialect.H2Dialect<% } %>
         database: <% if (devDatabaseType == 'mysql') { %>MYSQL<% } else if (devDatabaseType == 'postgresql') { %>POSTGRESQL<% } else { %>H2<% } %>
         openInView: false
         show_sql: true
@@ -45,10 +46,13 @@ spring:
     thymeleaf:
         mode: XHTML
         cache: false
-        viewNames: error
 
 metrics:
     jmx.enabled: true
+    spark:
+        enabled: false
+        host: localhost
+        port: 9999
     graphite:
         enabled: false
         host: localhost

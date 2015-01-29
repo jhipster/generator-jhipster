@@ -17,10 +17,10 @@ import java.util.stream.Collectors;<% } %>
  * Controller for view and managing Log Level at runtime.
  */
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 public class LogsResource {
 
-    @RequestMapping(value = "/rest/logs",
+    @RequestMapping(value = "/logs",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -38,7 +38,7 @@ public class LogsResource {
         return loggers;<% } %>
     }
 
-    @RequestMapping(value = "/rest/logs",
+    @RequestMapping(value = "/logs",
             method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Timed

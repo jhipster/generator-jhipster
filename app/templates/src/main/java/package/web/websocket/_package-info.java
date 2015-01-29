@@ -1,4 +1,4 @@
 /**
- * WebSocket services, using the Atmosphere framework.
+ * WebSocket services, using Spring Websocket.
  */
 package <%=packageName%>.web.websocket;

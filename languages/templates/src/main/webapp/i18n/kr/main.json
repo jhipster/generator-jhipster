@@ -1,0 +1,18 @@
+{
+    "main": {
+        "title": "Java Hipster 에 오신 것을 환영합니다!",
+        "subtitle": "이것은 당신의 홈페이지입니다.",
+        "logged": {
+            "message": "\"{{username}}\"로 로그인하셨습니다."
+        },
+        "question": "JHipster에 질문이 있다면:",
+        "link": {
+            "homepage": "JHipster 홈페이지",
+            "stackoverflow": "JHipster Stack Overflow",
+            "bugtracker": "JHipster 버그 트랙커",
+            "contact": "트위터에서 @java_hipster 에 접속하세요."
+        },
+        "like": "JHipster 가 마음에 든다면, 별을 주는 것을 잊지 마세요.",
+        "github": "Github"
+    }
+}

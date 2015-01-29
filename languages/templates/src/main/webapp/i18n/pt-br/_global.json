@@ -1,0 +1,90 @@
+{
+    "global": {
+        "title": "<%= baseName %>",
+        "browsehappy": "Você está usando um navegador <strong>desatualizado</strong>. Favor <a href=\"http://browsehappy.com/?locale=pt_BR\">atualizar o seu navegador</a> para ter uma experiência melhor.",
+        "menu": {
+            "home": "Início",
+            "entities": {
+                "main": "Entidades",
+                "additionalEntity": "JHipster will add addtional entities"
+            },
+            "account": {
+                "main": "Conta",
+                "settings": "Configuração",
+                "password": "Senha",
+                "sessions": "Sessões",
+                "login": "Entrar",
+                "logout": "Sair",
+                "register": "Registrar"
+            },
+            "admin": {
+                "main": "Administração",
+                "tracker": "Rastreamento de usuário",
+                "metrics": "Métricas",
+                "health": "Estado do Sistema",
+                "configuration": "Configuração",
+                "logs": "Logs",
+                "audits": "Auditorias",
+                "apidocs": "API",
+                "database": "Database"
+            },
+            "language": "Idioma"
+        },
+        "form": {
+            "username": "Usuário",
+            "username.placeholder": "Seu usuário",
+            "newpassword": "Nova senha",
+            "newpassword.placeholder": "Nova senha",
+            "confirmpassword": "Confirmação de nova senha",
+            "confirmpassword.placeholder": "Confirme a nova senha",
+            "email": "E-mail",
+            "email.placeholder": "Seu e-mail"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Para <a href=\"#/login\">entrar</a>, utilize as seguintes contas padrões:<br/>- Administrador (usuário=\"admin\" and senha=\"admin\") <br/>- Usuário (usuário=\"user\" and senha=\"user\").",
+                "register": "Não possui uma conta ainda? <a href=\"#/register\">Crie uma nova conta</a>"
+            },
+            "error": {
+                "dontmatch" : "A senha e sua confirmação devem ser iguais!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "A senha é obrigatória.",
+                    "minlength": "A senha deve ter pelo menos 5 caracteres",
+                    "maxlength": "A senha não pode ter mais de 50 caracteres",
+                    "strength": "Nível de dificuldade da senha:"
+                },
+                "confirmpassword": {
+                    "required": "A confirmação da senha é obrigatória.",
+                    "minlength": "A confirmação da senha deve ter pelo menos 5 caracteres",
+                    "maxlength": "A confirmação da senha não pode ter mais de 50 caracteres"
+                },
+                "email": {
+                    "required": "O e-mail é obrigatório.",
+                    "invalid": "E-mail inválido.",
+                    "minlength": "O e-mail deve ter pelo menos 5 caracteres",
+                    "maxlength": "O e-mail não pode ter mais de 50 caracteres"
+                }
+            }
+        }
+    },
+    "entity": {
+        "action": {
+            "back": "Back",
+            "cancel": "Cancel",
+            "delete": "Delete",
+            "edit": "Edit",
+            "save": "Save",
+            "view": "View"
+        },
+        "detail": {
+            "field": "Field",
+            "value": "Value"
+        },
+        "delete": {
+            "title": "Confirm delete operation"
+        }
+    },
+    "footer": "Este é o seu rodapé"
+}

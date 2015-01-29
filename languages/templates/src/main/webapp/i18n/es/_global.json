@@ -1,0 +1,90 @@
+{
+    "global": {
+        "title": "<%= baseName %>",
+        "browsehappy": "Está usando un navegador <strong>no actualizado</strong>. Por favor <a href=\"http://browsehappy.com/?locale=en\">actualice su navegador</a> para mejorar su experiencia.",
+        "menu": {
+            "home": "Inicio",
+            "entities": {
+                "main": "Entities",
+                "additionalEntity": "JHipster will add addtional entities"
+            },
+            "account": {
+                "main": "Cuenta",
+                "settings": "Ajustes",
+                "password": "Contraseña",
+                "sessions": "Sesiones",
+                "login": "Iniciar sesión",
+                "logout": "Cerrar la sesión",
+                "register": "Crear una cuenta"
+            },
+            "admin": {
+                "main": "Administración",
+                "tracker": "Rastreador de los usarios",
+                "metrics": "Métricas",
+                "health": "Health",
+                "configuration": "Configuration",
+                "logs": "Logs",
+                "audits": "Auditorías",
+                "apidocs": "API",
+                "database": "Database"
+            },
+            "language": "Idioma"
+        },
+        "form": {
+            "username": "Usuario",
+            "username.placeholder": "Su usuario",
+            "newpassword": "Nueva contraseña",
+            "newpassword.placeholder": "Nueva contraseña",
+            "confirmpassword": "Confirmación de la nueva contraseña",
+            "confirmpassword.placeholder": "Confirmación de la nueva contraseña",
+            "email": "Correo electrónico",
+            "email.placeholder": "Su correo electrónico"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Si desea <a href=\"#/login\">iniciar una sesión</a>, puede intentar con las cuentas predeterminadas:<br/>- Administrator (usuario=\"admin\" y contraseña=\"admin\") <br/>- Usuario (usuario=\"user\" y contraseña=\"user\").",
+                "register": "¿No tienes una cuenta todavía? <a href=\"#/register\">Crear una cuenta</a>"
+            },
+            "error": {
+                "dontmatch" : "¡La contraseña y la confirmación no coinciden!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Se requiere que ingrese una contraseña.",
+                    "minlength": "Se requiere que su contraseña tenga por lo menos 5 carácteres",
+                    "maxlength": "Su contraseña no puede tener mas de 50 carácteres",
+                    "strength": "Seguridad de la contraseña:"
+                },
+                "confirmpassword": {
+                    "required": "Se requiere que confirme la contraseña.",
+                    "minlength": "Se requiere que su contraseña de confirmación tenga por lo menos 5 carácteres",
+                    "maxlength": "Su contraseña de confirmación no puede tener mas de 50 carácteres"
+                },
+                "email": {
+                    "required": "Se requiere un correo electrónico.",
+                    "invalid": "Su correo electrónico no es válido.",
+                    "minlength": "Se requiere que su correo electrónico tenga por lo menos 5 carácteres",
+                    "maxlength": "Su correo electrónico no puede tener mas de 50 carácteres"
+                }
+            }
+        }
+    },
+    "entity": {
+        "action": {
+            "back": "Back",
+            "cancel": "Cancel",
+            "delete": "Delete",
+            "edit": "Edit",
+            "save": "Save",
+            "view": "View"
+        },
+        "detail": {
+            "field": "Field",
+            "value": "Value"
+        },
+        "delete": {
+            "title": "Confirm delete operation"
+        }
+    },
+    "footer": "pie de página"
+}

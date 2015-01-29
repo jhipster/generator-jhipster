@@ -1,0 +1,11 @@
+{
+    "logs": {
+        "title": "Protokolle",
+        "nbloggers": "Es existieren {{ total }} Logger.",
+        "filter": "Filter",
+        "table": {
+            "name": "Name",
+            "level": "Stufe"
+        }
+    }
+}

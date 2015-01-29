@@ -1,0 +1,90 @@
+{
+    "global": {
+        "title": "<%= baseName %>",
+        "browsehappy": "Używasz <strong>przestarzałej</strong> przeglądarki. Proszę <a href=\"http://browsehappy.com/\">uaktualnij swoją przeglądarkę</a> aby polepszyć doświadczenie użytkownika.",
+        "menu": {
+            "home": "Strona domowa",
+            "entities": {
+                "main": "Entities",
+                "additionalEntity": "JHipster will add addtional entities"
+            },
+            "account": {
+                "main": "Konto",
+                "settings": "Ustawienia",
+                "password": "Hasło",
+                "sessions": "Sesje",
+                "login": "Autoryzacja",
+                "logout": "Wyloguj",
+                "register": "Register"
+            },
+            "admin": {
+                "main": "Administracja",
+                "tracker": "Śledzenie użytkownika",
+                "metrics": "Metryki",
+                "health": "Health",
+                "configuration": "Configuration",
+                "logs": "Logi",
+                "audits": "Audyty",
+                "apidocs": "API",
+                "database": "Database"
+            },
+            "language": "Język"
+        },
+        "form": {
+            "username": "Login",
+            "username.placeholder": "Twój login",
+            "newpassword": "Nowe hasło",
+            "newpassword.placeholder": "Nowe hasło",
+            "confirmpassword": "Potwierdź nowe hasło",
+            "confirmpassword.placeholder": "Potwierdź nowe hasło",
+            "email": "E-mail",
+            "email.placeholder": "Twój e-mail"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Jeśli chcek <a href=\"#/login\">zalogować się</a>, możesz spróbować domyślnego konta:<br/>- Administrator (login=\"admin\" i hasło=\"admin\") <br/>- Użytkownik (login=\"user\" i hasło=\"user\").",
+                "register": "You don't have an account yet? <a href=\"#/register\">Register a new account</a>"
+            },
+            "error": {
+                "dontmatch": "Hasło i potwierdzenie nie zgadzają się!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Twoje hasło jest wymagane.",
+                    "minlength": "Twoje hasło powinno mieć minimum 5 znaków",
+                    "maxlength": "Twoje hasło nie może być dłuższe niż 50 znaków",
+                    "strength": "Siła hasła:"
+                },
+                "confirmpassword": {
+                    "required": "Twoje hasło potwierdzające jest wymagane.",
+                    "minlength": "Twoje hasło potwierdzające powinno mieć minimum 5 character",
+                    "maxlength": "Twoje hasło potwierdzające nie powinno być dłuższe niż 50 znaków"
+                },
+                "email": {
+                    "required": "Twój e-mail jest wymagany.",
+                    "invalid": "Twój e-mail jest błędny.",
+                    "minlength": "Twój e-mail musi mieć przynajmniej 5 liter",
+                    "maxlength": "Your e-mail nie może być dłuższe niż 50 liter"
+                }
+            }
+        }
+    },
+    "entity": {
+        "action": {
+            "back": "Back",
+            "cancel": "Cancel",
+            "delete": "Delete",
+            "edit": "Edit",
+            "save": "Save",
+            "view": "View"
+        },
+        "detail": {
+            "field": "Field",
+            "value": "Value"
+        },
+        "delete": {
+            "title": "Confirm delete operation"
+        }
+    },
+    "footer": "To jest stopka"
+}

@@ -1,0 +1,90 @@
+{
+    "global": {
+        "title": "<%= baseName %>",
+        "browsehappy": "Està usant un navegador <strong>des-actualitzat</strong>. Si us plau <a href=\"http://browsehappy.com/?locale=en\">actualitzi el seu navegador</a> per millorar l'experiencia.",
+        "menu": {
+            "home": "Inici",
+            "entities": {
+                "main": "Entities",
+                "additionalEntity": "JHipster will add addtional entities"
+            },
+            "account": {
+                "main": "Compte",
+                "settings": "Ajustos",
+                "password": "Contrasenya",
+                "sessions": "Sessions",
+                "login": "Autenticar",
+                "logout": "Finalitzar la sessió",
+                "register": "Registre"
+            },
+            "admin": {
+                "main": "Administració",
+                "tracker": "User tracker",
+                "metrics": "Mètriques",
+                "health": "Salud",
+                "configuration": "Configuration",
+                "logs": "Registres",
+                "audits": "Auditories",
+                "apidocs": "API",
+                "database": "Database"
+            },
+            "language": "Idioma"
+        },
+        "form": {
+            "username": "Iniciar sessió",
+            "username.placeholder": "Nom d'usuari",
+            "newpassword": "Nova Contrassenya",
+            "newpassword.placeholder": "Nova Contrassenya",
+            "confirmpassword": "Confirmació de la nova contrasenya",
+            "confirmpassword.placeholder": "Confirmació de la nova contrasenya",
+            "email": "Correu electrònic",
+            "email.placeholder": "Correu electrònic"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Si vol <a href=\"#/login\">autenticar-se</a>, pot usar els comptes per defect:<br/>- Administrador (nom d'usuari=\"admin\" i contrasenya=\"admin\") <br/>- Usuari (nom d'usuari=\"user\" i contrasenya=\"user\").",
+                "register": "No disposa d'un compte encara? <a href=\"#/register\">Registri un nou compte</a>"
+            },
+            "error": {
+                "dontmatch" : "La contrasenya i la confirmació no coincideixen!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "La seva contrasenya és necessaria.",
+                    "minlength": "La seva contrasenya ha de tenir, com a mínim, 5 caràcters",
+                    "maxlength": "La seva contrasenya no pot tenir més de 50 caràcters",
+                    "strength": "Fortalesa de la contrasenya:"
+                },
+                "confirmpassword": {
+                    "required": "És necessari confirmar la seva contrasenya.",
+                    "minlength": "La confirmació de la seva contrasenya ha de tenir, com a mínim, 5 caràcters",
+                    "maxlength": "La confirmació de la seva contrasenya no pot tenir més de 50 caràcters"
+                },
+                "email": {
+                    "required": "És necessari el seu compte de correu electrònic.",
+                    "invalid": "El seu compte de correu electrònic és invàlid.",
+                    "minlength": "El seu compte de correu electrònic ha de tenir, com a mínim, 5 caràcters",
+                    "maxlength": "El seu compte de correu electrònic no pot tenir més de 50 caràcters"
+                }
+            }
+        }
+    },
+    "entity": {
+        "action": {
+            "back": "Back",
+            "cancel": "Cancel",
+            "delete": "Delete",
+            "edit": "Edit",
+            "save": "Save",
+            "view": "View"
+        },
+        "detail": {
+            "field": "Field",
+            "value": "Value"
+        },
+        "delete": {
+            "title": "Confirm delete operation"
+        }
+    },
+    "footer": "Aquest és el teu footer"
+}

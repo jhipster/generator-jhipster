@@ -1,0 +1,21 @@
+{
+    "health": {
+        "title": "Gesundheit ihrer Anwendung",
+        "refresh.button": "Aktualisieren",
+        "stacktrace": "Stacktrace",
+        "indicator": {
+            "db": "Datenbank",
+            "diskSpace": "Festplattenspeicher",
+            "mail": "Email",
+            "mongo": "Mongo DB"
+        },
+        "table": {
+            "service": "Dienst Name",
+            "status": "Status"
+        },
+        "status": {
+            "UP": "UP",
+            "DOWN": "DOWN"
+        }
+    }
+}

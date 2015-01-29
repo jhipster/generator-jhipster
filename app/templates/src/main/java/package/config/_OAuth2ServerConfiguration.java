@@ -1,5 +1,5 @@
 package <%=packageName%>.config;
-<% if (databaseType == 'nosql') { %>
+<% if (databaseType == 'mongodb') { %>
 import <%=packageName%>.config.oauth2.MongoDBTokenStore;
 import <%=packageName%>.repository.OAuth2AccessTokenRepository;
 import <%=packageName%>.repository.OAuth2RefreshTokenRepository;<% } %>
@@ -48,22 +48,22 @@ public class OAuth2ServerConfiguration {
                 .authenticationEntryPoint(authenticationEntryPoint)
             .and()
                 .logout()
-                .logoutUrl("/app/logout")
+                .logoutUrl("/api/logout")
                 .logoutSuccessHandler(ajaxLogoutSuccessHandler)
             .and()
                 .csrf()
                 .requireCsrfProtectionMatcher(new AntPathRequestMatcher("/oauth/authorize"))
                 .disable()
                 .headers()
-                .frameOptions().disable()
+                .frameOptions().disable()<% if (websocket == 'no') { %>
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
+            .and()<% } %>
                 .authorizeRequests()
-                .antMatchers("/app/rest/authenticate").permitAll()
-                .antMatchers("/app/rest/register").permitAll()
-                .antMatchers("/app/rest/logs/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/app/**").authenticated()<% if (websocket == 'atmosphere') { %>
+                .antMatchers("/api/authenticate").permitAll()
+                .antMatchers("/api/register").permitAll()
+                .antMatchers("/api/logs/**").hasAnyAuthority(AuthoritiesConstants.ADMIN)
+                .antMatchers("/api/**").authenticated()<% if (websocket == 'spring-websocket') { %>
                 .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
                 .antMatchers("/websocket/**").permitAll()<% } %>
                 .antMatchers("/metrics/**").hasAuthority(AuthoritiesConstants.ADMIN)
@@ -95,7 +95,7 @@ public class OAuth2ServerConfiguration {
         private RelaxedPropertyResolver propertyResolver;<% if (databaseType == 'sql') { %>
 
         @Inject
-        private DataSource dataSource;<% } %><% if (databaseType == 'nosql') { %>
+        private DataSource dataSource;<% } %><% if (databaseType == 'mongodb') { %>
 
         @Inject
         private OAuth2AccessTokenRepository oAuth2AccessTokenRepository;

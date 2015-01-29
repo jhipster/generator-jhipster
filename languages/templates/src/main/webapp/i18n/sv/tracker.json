@@ -1,0 +1,12 @@
+{
+    "tracker": {
+        "title": "Användaraktiviteter i realtid",
+        "table": {
+            "userlogin": "Användarnamn",
+            "ipaddress": "IP-adress",
+            "userAgent": "Användaragent (User-Agent)",
+            "page": "Nuvarande sida",
+            "time": "Tid"
+        }
+    }
+}

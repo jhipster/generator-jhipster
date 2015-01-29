@@ -1,0 +1,90 @@
+{
+    "global": {
+        "title": "<%= baseName %>",
+        "browsehappy": "Sie benutzen einen <strong>veralteten</strong> Browser. Bitte <a href=\"http://browsehappy.com/?locale=de/\">aktualisieren Sie Ihren Browser</a>, um die Benutzerfreundlichkeit zu erhöhen.",
+        "menu": {
+            "home": "Startseite",
+            "entities": {
+                "main": "Entitäten",
+                "additionalEntity": "JHipster will add addtional entities"
+            },
+            "account": {
+                "main": "Zugang",
+                "settings": "Einstellungen",
+                "password": "Passwort",
+                "sessions": "Sitzungen",
+                "login": "Anmelden",
+                "logout": "Abmelden",
+                "register": "Registrierung"
+            },
+            "admin": {
+                "main": "Administration",
+                "tracker": "Benutzer Aktivitäten",
+                "metrics": "Metriken",
+                "health": "Status",
+                "configuration": "Konfiguration",
+                "logs": "Protokoll",
+                "audits": "Audits",
+                "apidocs": "API",
+                "database": "Database"
+            },
+            "language": "Sprache"
+        },
+        "form": {
+            "username": "Benutzername",
+            "username.placeholder": "Ihr Benutzername",
+            "newpassword": "Neues Passwort",
+            "newpassword.placeholder": "Neues Passwort",
+            "confirmpassword": "Neues Passwort bestätigen",
+            "confirmpassword.placeholder": "Bestätigen Sie ihr neues Passwort",
+            "email": "E-Mail Adresse",
+            "email.placeholder": "Ihre E-Mail Adresse"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Wenn Sie sich <a href=\"#/login\">anmelden</a> möchten, versuchen Sie es mit <br/>- Administrator (Name=\"admin\" und Passwort=\"admin\")<br/>- Benutzer (Name=\"user\" und Passwort=\"user\").",
+                "register": "Sie haben noch keinen Zugang? <a href=\"#/register\">Registrieren Sie sich</a>"
+            },
+            "error": {
+                "dontmatch": "Das bestätigte Passwort entspricht nicht dem neuen Passwort!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Ein neues Passwort wird benötigt.",
+                    "minlength": "Das neue Passwort muss mindestens 5 Zeichen lang sein",
+                    "maxlength": "Das neue Passwort darf nicht länger als 50 Zeichen sein",
+                    "strength": "Passwortstärke:"
+                },
+                "confirmpassword": {
+                    "required": "Sie müssen das Passwort bestätigen.",
+                    "minlength": "Das bestätigte Passwort muss mindestens 5 Zeichen lang sein",
+                    "maxlength": "Das bestätigte Passwort darf nicht länger als 50 Zeichen sein"
+                },
+                "email": {
+                    "required": "Ihre E-Mail Adresse wird benötigt.",
+                    "invalid": "Ihre E-Mail Adresse ist ungültig.",
+                    "minlength": "Ihre E-Mail Adresse muss mindestens 5 Zeichen lang sein",
+                    "maxlength": "Ihre E-Mail Adresse darf nicht länger als 50 Zeichen sein"
+                }
+            }
+        }
+    },
+    "entity": {
+        "action": {
+            "back": "Back",
+            "cancel": "Cancel",
+            "delete": "Delete",
+            "edit": "Edit",
+            "save": "Save",
+            "view": "View"
+        },
+        "detail": {
+            "field": "Field",
+            "value": "Value"
+        },
+        "delete": {
+            "title": "Confirm delete operation"
+        }
+    },
+    "footer": "Dies ist Ihre Fußzeile"
+}

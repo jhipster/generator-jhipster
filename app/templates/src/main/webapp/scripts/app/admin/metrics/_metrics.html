@@ -1,0 +1,366 @@
+<div>
+
+<h2 translate="metrics.title">Application Metrics</h2>
+<p>
+    <button type="button" class="btn btn-primary" ng-click="refresh()"><span class="glyphicon glyphicon-refresh"></span>&nbsp;{{'metrics.refresh.button' | translate}}</button>
+</p>
+
+<h3 translate="metrics.jvm.title">JVM Metrics</h3>
+<div class="row" ng-hide="updatingMetrics">
+    <div class="col-md-4">
+        <b translate="metrics.jvm.memory.title">Memory</b>
+        <p>{{'metrics.jvm.memory.total' | translate}} ({{metrics.gauges['jvm.memory.total.used'].value / 1000000 | number:0}}M / {{metrics.gauges['jvm.memory.total.max'].value / 1000000 | number:0}}M)</p>
+        <div class="progress progress-striped">
+            <div class="progress-bar progress-bar-success" role="progressbar"
+                 aria-valuenow="{{metrics.gauges['jvm.memory.total.used'].value / 1000000 | number:0}}"
+                 aria-valuemin="0"
+                 aria-valuemax="{{metrics.gauges['jvm.memory.total.max'].value / 1000000 | number:0}}"
+                 ng-style="{width: (metrics.gauges['jvm.memory.total.used'].value * 100 / metrics.gauges['jvm.memory.total.max'].value | number:0) + '%'}">
+                {{metrics.gauges['jvm.memory.total.used'].value * 100 / metrics.gauges['jvm.memory.total.max'].value  | number:0}}%
+            </div>
+        </div>
+        <p>{{'metrics.jvm.memory.heap' | translate}} ({{metrics.gauges['jvm.memory.heap.used'].value / 1000000 | number:0}}M / {{metrics.gauges['jvm.memory.heap.max'].value / 1000000 | number:0}}M)</p>
+        <div class="progress progress-striped">
+            <div class="progress-bar progress-bar-success" role="progressbar"
+                 aria-valuenow="{{metrics.gauges['jvm.memory.heap.used'].value / 1000000 | number:0}}"
+                 aria-valuemin="0"
+                 aria-valuemax="{{metrics.gauges['jvm.memory.heap.max'].value / 1000000 | number:0}}"
+                 ng-style="{width: (metrics.gauges['jvm.memory.heap.usage'].value * 100 | number:0) + '%'}">
+                {{(metrics.gauges['jvm.memory.heap.usage'].value * 100 | number:0)}}%
+            </div>
+        </div>
+        <p>{{'metrics.jvm.memory.nonheap' | translate}} ({{metrics.gauges['jvm.memory.non-heap.used'].value / 1000000 | number:0}}M / {{metrics.gauges['jvm.memory.non-heap.committed'].value / 1000000 | number:0}}M)</p>
+        <div class="progress progress-striped">
+            <div class="progress-bar progress-bar-success" role="progressbar"
+                aria-valuenow="{{metrics.gauges['jvm.memory.non-heap.used'].value / 1000000 | number:0}}"
+                aria-valuemin="0"
+                aria-valuemax="{{metrics.gauges['jvm.memory.non-heap.committed'].value / 1000000 | number:0}}"
+                ng-style="{width: (metrics.gauges['jvm.memory.non-heap.committed'].value / 1000000 | number:0) + '%'}">
+                {{(metrics.gauges['jvm.memory.non-heap.used'].value * 100 / metrics.gauges['jvm.memory.non-heap.committed'].value | number:0)}}%
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <b translate="metrics.jvm.threads.title">Threads</b> (Total: {{metrics.gauges['jvm.threads.count'].value}}) <a class="hand" ng-click="refreshThreadDumpData()" data-toggle="modal" data-target="#threadDump"><i class="glyphicon glyphicon-eye-open"></i></a>
+        <p>{{'metrics.jvm.threads.runnable' | translate}} {{metrics.gauges['jvm.threads.runnable.count'].value}}</p>
+        <div class="progress progress-striped">
+            <div class="progress-bar progress-bar-success" role="progressbar"
+                 aria-valuenow="{{metrics.gauges['jvm.threads.runnable.count'].value}}"
+                 aria-valuemin="0"
+                 aria-valuemax="{{metrics.gauges['jvm.threads.count'].value}}"
+                 ng-style="{width: (metrics.gauges['jvm.threads.runnable.count'].value * 100 / metrics.gauges['jvm.threads.count'].value | number:0) + '%'}">
+                {{metrics.gauges['jvm.threads.runnable.count'].value * 100 / metrics.gauges['jvm.threads.count'].value | number:0}}%
+            </div>
+        </div>
+        <p>{{'metrics.jvm.threads.timedwaiting' | translate}} ({{metrics.gauges['jvm.threads.timed_waiting.count'].value}})</p>
+        <div class="progress progress-striped">
+            <div class="progress-bar progress-bar-warning" role="progressbar"
+                 aria-valuenow="{{metrics.gauges['jvm.threads.timed_waiting.count'].value}}"
+                 aria-valuemin="0"
+                 aria-valuemax="{{metrics.gauges['jvm.threads.count'].value}}"
+                 ng-style="{width: (metrics.gauges['jvm.threads.timed_waiting.count'].value * 100 / metrics.gauges['jvm.threads.count'].value | number:0) + '%'}">
+                {{metrics.gauges['jvm.threads.timed_waiting.count'].value * 100 / metrics.gauges['jvm.threads.count'].value | number:0}}%
+            </div>
+        </div>
+        <p>{{'metrics.jvm.threads.waiting' | translate}} ({{metrics.gauges['jvm.threads.waiting.count'].value}})</p>
+        <div class="progress progress-striped">
+            <div class="progress-bar progress-bar-warning" role="progressbar"
+                 aria-valuenow="{{metrics.gauges['jvm.threads.waiting.count'].value}}"
+                 aria-valuemin="0"
+                 aria-valuemax="{{metrics.gauges['jvm.threads.count'].value}}"
+                 ng-style="{width: (metrics.gauges['jvm.threads.waiting.count'].value * 100 / metrics.gauges['jvm.threads.count'].value | number:0) + '%'}">
+                {{metrics.gauges['jvm.threads.waiting.count'].value * 100 / metrics.gauges['jvm.threads.count'].value | number:0}}%
+            </div>
+        </div>
+        <p>{{'metrics.jvm.threads.blocked' | translate}}  ({{metrics.gauges['jvm.threads.blocked.count'].value}})</p>
+        <div class="progress progress-striped">
+            <div class="progress-bar progress-bar-danger" role="progressbar"
+                 aria-valuenow="{{metrics.gauges['jvm.threads.blocked.count'].value}}"
+                 aria-valuemin="0"
+                 aria-valuemax="{{metrics.gauges['jvm.threads.count'].value}}"
+                 ng-style="{width: (metrics.gauges['jvm.threads.blocked.count'].value * 100 / metrics.gauges['jvm.threads.count'].value | number:0) + '%'}">
+                {{metrics.gauges['jvm.threads.blocked.count'].value * 100 / metrics.gauges['jvm.threads.count'].value | number:0}}%
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <b translate="metrics.jvm.gc.title">Garbage collections</b>
+        <div class="row">
+            <div class="col-md-9" translate="metrics.jvm.gc.marksweepcount">Mark Sweep count</div>
+            <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-MarkSweep.count'].value}}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-9" translate="metrics.jvm.gc.marksweeptime">Mark Sweep time</div>
+            <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-MarkSweep.time'].value}}ms</div>
+        </div>
+        <div class="row">
+            <div class="col-md-9" translate="metrics.jvm.gc.scavengecount">Scavenge count</div>
+            <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-Scavenge.count'].value}}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-9" translate="metrics.jvm.gc.scavengetime">Scavenge time</div>
+            <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-Scavenge.time'].value}}ms</div>
+        </div>
+    </div>
+</div>
+<div class="well well-lg" ng-show="updatingMetrics" translate="metrics.updating">Updating...</div>
+
+<h3 translate="metrics.jvm.http.title">HTTP requests (events per second)</h3>
+<p>{{'metrics.jvm.http.active' | translate}} <b>{{metrics.counters['com.codahale.metrics.servlet.InstrumentedFilter.activeRequests'].count | number:0}}</b> - {{'metrics.jvm.http.total' | translate}} <b>{{metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count | number:0}}</b></p>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th translate="metrics.jvm.http.table.code">Code</th>
+            <th translate="metrics.jvm.http.table.count">Count</th>
+            <th class="text-right" translate="metrics.jvm.http.table.mean">Mean</th>
+            <th class="text-right">{{'metrics.jvm.http.table.average' | translate}} (1 min)</th>
+            <th class="text-right">{{'metrics.jvm.http.table.average' | translate}} (5 min)</th>
+            <th class="text-right">{{'metrics.jvm.http.table.average' | translate}} (15 min)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td translate="metrics.jvm.http.code.ok">OK</td>
+            <td>
+                <div class="progress progress-striped">
+                    <div class="progress-bar progress-bar-success" role="progressbar"
+                         aria-valuenow="{{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].count * 100 / metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count}}"
+                         aria-valuemin="0"
+                         aria-valuemax="{{metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count}}"
+                         ng-style="{width: ((metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].count * 100 / metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count) | number:0) + '%'}">
+                        {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].count}}
+                    </div>
+            </td>
+            <td class="text-right">
+                {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].mean_rate | number:2}}
+            </td>
+            <td class="text-right">{{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m1_rate | number:2}}
+            </td>
+            <td class="text-right">{{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m5_rate | number:2}}
+            </td>
+            <td class="text-right">
+                {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.ok'].m15_rate | number:2}}
+            </td>
+        </tr>
+        <tr>
+            <td translate="metrics.jvm.http.code.notfound">Not Found</td>
+            <td>
+                <div class="progress progress-striped">
+                    <div class="progress-bar progress-bar-warning" role="progressbar"
+                         aria-valuenow="{{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].count * 100 / metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count}}"
+                         aria-valuemin="0"
+                         aria-valuemax="{{metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count}}"
+                         ng-style="{width: ((metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].count * 100 / metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count) | number:0) + '%'}">
+                        {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].count}}
+                    </div>
+                </div>
+            </td>
+            <td class="text-right">
+                {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].mean_rate | number:2}}
+            </td>
+            <td class="text-right">
+                {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m1_rate | number:2}}
+            </td>
+            <td class="text-right">
+                {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m5_rate | number:2}}
+            </td>
+            <td class="text-right">
+                {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.notFound'].m15_rate | number:2}}
+            </td>
+        </tr>
+        <tr>
+            <td translate="metrics.jvm.http.code.servererror">Server error</td>
+            <td>
+                <div class="progress progress-striped">
+                    <div class="progress-bar progress-bar-danger" role="progressbar"
+                         aria-valuenow="{{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].count * 100 / metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count}}"
+                         aria-valuemin="0"
+                         aria-valuemax="{{metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count}}"
+                         ng-style="{width: ((metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].count * 100 / metrics.timers['com.codahale.metrics.servlet.InstrumentedFilter.requests'].count) | number:0) + '%'}">
+                        {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].count}}
+                    </div>
+                </div>
+            </td>
+            <td class="text-right">
+                {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].mean_rate | number:2}}
+            </td>
+            <td class="text-right">
+                {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m1_rate | number:2}}
+            </td>
+            <td class="text-right">
+                {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m5_rate | number:2}}
+            </td>
+            <td class="text-right">
+                {{metrics.meters['com.codahale.metrics.servlet.InstrumentedFilter.responseCodes.serverError'].m15_rate | number:2}}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<h3 translate="metrics.servicesstats.title">Services statistics (time in millisecond)</h3>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th translate="metrics.servicesstats.table.name">Service name</th>
+            <th class="text-right" translate="metrics.servicesstats.table.count">Count</th>
+            <th class="text-right" translate="metrics.servicesstats.table.mean">Mean</th>
+            <th class="text-right" translate="metrics.servicesstats.table.min">Min</th>
+            <th class="text-right" translate="metrics.servicesstats.table.p50">p50</th>
+            <th class="text-right" translate="metrics.servicesstats.table.p75">p75</th>
+            <th class="text-right" translate="metrics.servicesstats.table.p95">p95</th>
+            <th class="text-right" translate="metrics.servicesstats.table.p99">p99</th>
+            <th class="text-right" translate="metrics.servicesstats.table.max">Max</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="(k, v) in servicesStats">
+            <td>{{k}}</td>
+            <td class="text-right">{{v.count}}</td>
+            <td class="text-right">{{v.mean * 1000 | number:0}}</td>
+            <td class="text-right">{{v.min * 1000 | number:0}}</td>
+            <td class="text-right">{{v.p50 * 1000 | number:0}}</td>
+            <td class="text-right">{{v.p75 * 1000 | number:0}}</td>
+            <td class="text-right">{{v.p95 * 1000 | number:0}}</td>
+            <td class="text-right">{{v.p99 * 1000 | number:0}}</td>
+            <td class="text-right">{{v.max * 1000 | number:0}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<% if (hibernateCache == 'ehcache') { %>
+<h3 translate="metrics.ehcache.title">Ehcache statistics</h3>
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th translate="metrics.ehcache.cachename">Cache name</th>
+            <th class="text-right" translate="metrics.ehcache.objects">Objects</th>
+            <th class="text-right" translate="metrics.ehcache.hits">Hits</th>
+            <th class="text-right" translate="metrics.ehcache.misses">Misses</th>
+            <th class="text-right" translate="metrics.ehcache.evictioncount">Eviction count</th>
+            <th class="text-right" translate="metrics.ehcache.mean">Mean get time (ms)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="(k, v) in cachesStats" ng-once>
+            <td>{{v.name}}</td>
+            <td class="text-right">{{metrics.gauges[k + '.objects'].value}}</td>
+            <td class="text-right">{{metrics.gauges[k + '.hits'].value}}</td>
+            <td class="text-right">{{metrics.gauges[k + '.misses'].value}}</td>
+            <td class="text-right">{{metrics.gauges[k + '.eviction-count'].value}}</td>
+            <td class="text-right">{{metrics.gauges[k + '.mean-get-time'].value | number:2}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<% } %>
+<h3 translate="metrics.datasource.title" ng-show="metrics.gauges['HikariPool-0.pool.TotalConnections'].value > 0">DataSource statistics</h3>
+<div class="table-responsive" ng-show="metrics.gauges['HikariPool-0.pool.TotalConnections'].value > 0">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>{{'metrics.datasource.usage' | translate}} ({{metrics.gauges['HikariPool-0.pool.ActiveConnections'].value}} / {{metrics.gauges['HikariPool-0.pool.TotalConnections'].value}})</th>
+                <th class="text-right">{{'metrics.datasource.count' | translate}}</th>
+                <th class="text-right">{{'metrics.datasource.mean' | translate}}</th>
+                <th class="text-right">{{'metrics.datasource.min' | translate}}</th>
+                <th class="text-right">{{'metrics.datasource.p50' | translate}}</th>
+                <th class="text-right">{{'metrics.datasource.p75' | translate}}</th>
+                <th class="text-right">{{'metrics.datasource.p95' | translate}}</th>
+                <th class="text-right">{{'metrics.datasource.p99' | translate}}</th>
+                <th class="text-right">{{'metrics.datasource.max' | translate}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <div class="progress progress-striped">
+                        <div class="progress-bar progress-bar-success" role="progressbar"
+                             aria-valuenow="{{metrics.gauges['HikariPool-0.pool.ActiveConnections'].value | number:0}}"
+                             aria-valuemin="0"
+                             aria-valuemax="{{metrics.gauges['HikariPool-0.pool.TotalConnections'].value | number:0}}"
+                             ng-style="{width: (metrics.gauges['HikariPool-0.pool.ActiveConnections'].value * 100 / metrics.gauges['HikariPool-0.pool.TotalConnections'].value | number:0) + '%'}">
+                            {{metrics.gauges['HikariPool-0.pool.ActiveConnections'].value * 100 / metrics.gauges['HikariPool-0.pool.TotalConnections'].value  | number:0}}%
+                        </div>
+                    </div>
+                </td>
+                <td class="text-right">{{metrics.histograms['HikariPool-0.pool.Usage'].count}}</td>
+                <td class="text-right">{{metrics.histograms['HikariPool-0.pool.Usage'].mean | number:2}}</td>
+                <td class="text-right">{{metrics.histograms['HikariPool-0.pool.Usage'].min | number:2}}</td>
+                <td class="text-right">{{metrics.histograms['HikariPool-0.pool.Usage'].p50 | number:2}}</td>
+                <td class="text-right">{{metrics.histograms['HikariPool-0.pool.Usage'].p75 | number:2}}</td>
+                <td class="text-right">{{metrics.histograms['HikariPool-0.pool.Usage'].p95 | number:2}}</td>
+                <td class="text-right">{{metrics.histograms['HikariPool-0.pool.Usage'].p99 | number:2}}</td>
+                <td class="text-right">{{metrics.histograms['HikariPool-0.pool.Usage'].max | number:2}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</div>
+<!-- Modal used to display the threads dump -->
+<div id="threadDump" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel" translate="metrics.jvm.threads.dump.title">Threads dump</h4>
+            </div>
+            <div class="modal-body well">
+                <span class="label label-primary" ng-click="threadDumpFilter = {}">{{'metrics.jvm.threads.all' | translate}}&nbsp;<span class="badge">{{threadDumpAll}}</span></span>&nbsp;
+                <span class="label label-success" ng-click="threadDumpFilter = {threadState: 'RUNNABLE'}">{{'metrics.jvm.threads.runnable' | translate}}&nbsp;<span class="badge">{{threadDumpRunnable}}</span></span>&nbsp;
+                <span class="label label-info" ng-click="threadDumpFilter = {threadState: 'WAITING'}">{{'metrics.jvm.threads.waiting' | translate}}&nbsp;<span class="badge">{{threadDumpWaiting}}</span></span>&nbsp;
+                <span class="label label-warning" ng-click="threadDumpFilter = {threadState: 'TIMED_WAITING'}">{{'metrics.jvm.threads.timedwaiting' | translate}}&nbsp;<span class="badge">{{threadDumpTimedWaiting}}</span></span>&nbsp;
+                <span class="label label-danger" ng-click="threadDumpFilter = {threadState: 'BLOCKED'}">{{'metrics.jvm.threads.blocked' | translate}}&nbsp;<span class="badge">{{threadDumpBlocked}}</span></span>&nbsp;
+                <div class="voffset2">&nbsp;</div>
+                <div class="row" ng-repeat="(k, v) in threadDump | filter:threadDumpFilter">
+                    <h5><span class="label" ng-class="getLabelClass(v.threadState)">&nbsp;</span>&nbsp;{{v.threadName}} ({{'metrics.jvm.threads.dump.id' | translate}} {{v.threadId}})</h5>
+                    <table class="table table-condensed">
+                        <thead>
+                        <tr>
+                            <th class="text-right" translate="metrics.jvm.threads.dump.blockedtime">Blocked Time</th>
+                            <th class="text-right" translate="metrics.jvm.threads.dump.blockedcount">Blocked Count</th>
+                            <th class="text-right" translate="metrics.jvm.threads.dump.waitedtime">Waited Time</th>
+                            <th class="text-right" translate="metrics.jvm.threads.dump.waitedcount">Waited Count</th>
+                            <th translate="metrics.jvm.threads.dump.lockname">Lock Name</th>
+                            <th translate="metrics.jvm.threads.dump.stacktrace">StackTrace</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>{{v.blockedTime}}</td>
+                            <td>{{v.blockedCount}}</td>
+                            <td>{{v.waitedTime}}</td>
+                            <td>{{v.waitedCount}}</td>
+                            <td>{{v.lockName}}</td>
+                            <td>
+                                <a ng-click="show = !show" data-placement="left" >
+                                    <span ng-show="!show" translate="metrics.jvm.threads.dump.show">show</span>
+                                    <span ng-show="show" translate="metrics.jvm.threads.dump.hide">hide</span>
+                                </a>
+                                <div class="popover left" ng-show="show">
+                                    <div class="popover-title">
+                                        <h4>{{'metrics.jvm.threads.dump.stacktrace' | translate}}<button type="button" class="close" ng-click="show = !show">&times;</button></h4>
+                                    </div>
+                                    <div class="popover-content">
+                                        <div ng-repeat="(stK, stV) in v.stackTrace">
+                                            {{stV.className}}.{{stV.methodName}}({{stV.fileName}}:{{stV.lineNumber}})
+                                            <span class="voffset1"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,13 +1,13 @@
 package <%=packageName%>.security;
-<% if (authenticationType == 'token') { %>
+<% if (authenticationType == 'oauth2') { %>
 import org.apache.commons.lang.StringUtils;<% } %>
-import org.springframework.security.core.Authentication;<% if (authenticationType == 'token') { %>
+import org.springframework.security.core.Authentication;<% if (authenticationType == 'oauth2') { %>
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.token.TokenStore;<% } %>
 import org.springframework.security.web.authentication.AbstractAuthenticationTargetUrlRequestHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
-<% if (authenticationType == 'token') { %>
+<% if (authenticationType == 'oauth2') { %>
 import javax.inject.Inject;<% } %>
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,28 +19,28 @@ import java.io.IOException;
  */
 @Component
 public class AjaxLogoutSuccessHandler extends AbstractAuthenticationTargetUrlRequestHandler
-        implements LogoutSuccessHandler {
-    <% if (authenticationType == 'token') { %>
+        implements LogoutSuccessHandler {<% if (authenticationType == 'oauth2') { %>
+
     public static final String BEARER_AUTHENTICATION = "Bearer ";
+
     @Inject
     private TokenStore tokenStore;<% } %>
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
                                 Authentication authentication)
-            throws IOException, ServletException {
-        <% if (authenticationType == 'token') { %>
-        // Request the token
-        final String token = request.getHeader("authorization");
+            throws IOException, ServletException {<% if (authenticationType == 'oauth2') { %>
 
+        // Request the token
+        String token = request.getHeader("authorization");
         if (token != null && token.startsWith(BEARER_AUTHENTICATION)) {
             final OAuth2AccessToken oAuth2AccessToken = tokenStore.readAccessToken(StringUtils.substringAfter(token, BEARER_AUTHENTICATION));
 
             if (oAuth2AccessToken != null) {
                 tokenStore.removeAccessToken(oAuth2AccessToken);
             }
-        }<% } %>
-
+        }
+<% } %>
         response.setStatus(HttpServletResponse.SC_OK);
     }
 }

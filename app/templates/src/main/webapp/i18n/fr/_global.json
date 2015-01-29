@@ -1,0 +1,90 @@
+{
+    "global": {
+        "title": "<%= baseName %>",
+        "browsehappy": "Vous utilisez un <strong>ancien</strong> navigateur. Veuillez <a href=\"http://browsehappy.com/?locale=fr\">mettre à jour votre navigateur</a> pour une meilleure expérience.",
+        "menu": {
+            "home": "Accueil",
+            "entities": {
+                "main": "Entités",
+                "additionalEntity": "JHipster will add addtional entities"
+            },
+            "account": {
+                "main": "Compte",
+                "settings": "Profil",
+                "password": "Mot de passe",
+                "sessions": "Sessions",
+                "login": "S'authentifier",
+                "logout": "Déconnexion",
+                "register": "Créer un compte"
+            },
+            "admin": {
+                "main": "Administration",
+                "tracker": "Suivi des utilisateurs",
+                "metrics": "Métriques",
+                "health": "Diagnostics",
+                "configuration": "Configuration",
+                "logs": "Logs",
+                "audits": "Audits",
+                "apidocs": "API",
+                "database": "Base de données"
+            },
+            "language": "Langue"
+        },
+        "form": {
+            "username": "Nom d'utilisateur",
+            "username.placeholder": "Votre nom d'utilisateur",
+            "newpassword": "Nouveau mot de passe",
+            "newpassword.placeholder": "Nouveau mot de passe",
+            "confirmpassword": "Confirmation du nouveau mot de passe",
+            "confirmpassword.placeholder": "Confirmation du nouveau mot de passe",
+            "email": "Email",
+            "email.placeholder": "Votre email"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Si vous voulez vous <a href=\"#/login\">connecter</a>, vous pouvez utiliser les comptes par défaut : <br/> - Administrateur (nom d'utilisateur=\"admin\" et mot de passe =\"admin\") <br/> - Utilisateur (nom d'utilisateur=\"user\" et mot de passe =\"user\").",
+                "register": "Vous n'avez pas encore de compte ? <a href=\"#/register\">Créer un compte</a>"
+            },
+            "error": {
+                "dontmatch": "Le nouveau mot de passe et sa confirmation ne sont pas égaux!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Votre mot de passe est requis.",
+                    "minlength": "Votre mot de passe doit comporter au moins 5 caractères",
+                    "maxlength": "Votre mot de passe ne doit pas comporter plus de 50 caractères",
+                    "strength": "Robustesse du mot de passe:"
+                },
+                "confirmpassword": {
+                    "required": "Votre confirmation du mot de passe est requis.",
+                    "minlength": "Votre confirmation du mot de passe doit comporter au moins 5 caractères",
+                    "maxlength": "Votre confirmation du mot de passe ne doit pas comporter plus de 50 caractères"
+                },
+                "email": {
+                    "required": "Votre email est requis.",
+                    "minlength": "Votre email doit comporter au moins 5 caractères",
+                    "maxlength": "Votre email ne doit pas comporter plus de 50 caractères",
+                    "invalid": "Votre email n'est pas valide."
+                }
+            }
+        }
+    },
+    "entity": {
+        "action": {
+            "back": "Retour",
+            "cancel": "Annuler",
+            "edit": "Editer",
+            "delete": "Suppriner",
+            "save": "Sauvegarder",
+            "view": "Voir"
+        },
+        "detail": {
+            "field": "Champ",
+            "value": "Valeur"
+        },
+        "delete": {
+            "title": "Confirmation de suppression"
+        }
+    },
+    "footer": "Ceci est votre pied de page"
+}

@@ -1,13 +1,12 @@
 buildscript {
     repositories {
-        maven { url 'http://repo.spring.io/libs-snapshot' }
         mavenLocal()
         jcenter()
     }
     dependencies {
-        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.1.9.RELEASE')
-        classpath('com.moowork.gradle:gradle-node-plugin:0.4')
-        classpath('com.moowork.gradle:gradle-grunt-plugin:0.5')
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.2.0.RELEASE')
+        classpath('com.moowork.gradle:gradle-node-plugin:0.8')
+        classpath('com.moowork.gradle:gradle-grunt-plugin:0.6')
         classpath('be.filipblondeel.gradle:gradle-gulp-plugin:0.1')
     }
 }
@@ -27,8 +26,20 @@ springBoot {
 
 apply from: 'yeoman.gradle'
 
+<% if (databaseType == 'sql') { %>
+apply from: 'liquibase.gradle'
+<% } %>
+
+if (project.hasProperty('prod')) {
+    profile = 'prod'
+} else if (project.hasProperty('fast')) {
+    profile = 'fast'
+}
+
 if (profile == 'prod') {
     apply from: 'profile_prod.gradle'
+} else if (profile == 'fast') {
+    apply from: 'profile_fast.gradle'
 } else {
     apply from: 'profile_dev.gradle'
 }
@@ -48,7 +59,6 @@ war {
 }
 
 repositories {
-
     maven { url 'http://repo.spring.io/milestone' }
     maven { url 'http://repo.spring.io/snapshot' }
     maven { url 'https://repository.jboss.org/nexus/content/repositories/releases' }
@@ -83,20 +93,17 @@ dependencies {
     compile group: 'commons-lang', name: 'commons-lang', version: commons_lang_version
     compile group: 'commons-io', name: 'commons-io', version: commons_io_version
     compile group: 'javax.inject', name: 'javax.inject', version: javax_inject_version
+    compile group: 'javax.transaction', name: 'javax.transaction-api', version: javax_transaction_version 
     compile group: 'joda-time', name: 'joda-time', version: joda_time_version<% if (databaseType == 'sql') { %>
     compile group: 'joda-time', name: 'joda-time-hibernate', version: joda_time_hibernate_version<% } %>
-    compile group: 'org.apache.geronimo.javamail', name: 'geronimo-javamail_1.4_mail', version: geronimo_javamail_1_4_mail_version<% if (websocket == 'atmosphere') { %>
-    compile group: 'org.atmosphere', name: 'atmosphere-spring', version: atmosphere_spring_version
-    compile group: 'org.atmosphere', name: 'atmosphere-runtime', version: '2.2.2'<% } %><% if (databaseType == 'sql') { %>
-    compile group: 'org.hibernate', name: 'hibernate-core', version: hibernate_entitymanager_version<% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
+    compile group: 'org.apache.geronimo.javamail', name: 'geronimo-javamail_1.4_mail', version: geronimo_javamail_1_4_mail_version<% if (databaseType == 'sql') { %>
+    compile group: 'org.hibernate', name: 'hibernate-core', version: hibernate_entitymanager_version
+    compile group: 'org.hibernate', name: 'hibernate-envers', version: hibernate_entitymanager_version<% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
     compile group: 'org.hibernate', name: 'hibernate-ehcache', version: hibernate_entitymanager_version<% } %>
     compile group: 'org.hibernate', name: 'hibernate-validator', version: hibernate_validator_version<% if (databaseType == 'sql') { %>
     compile group: 'org.jadira.usertype', name: 'usertype.core', version: usertype_core_version
     compile (group: 'org.liquibase', name: 'liquibase-core', version: liquibase_core_version) {
         exclude(module: 'jetty-servlet')
-    }
-    compile(group: 'org.liquibase.ext', name: 'liquibase-hibernate4', version: liquibase_hibernate_version) {
-        exclude(module: 'hibernate-jpa-2.0-api')
     }
     compile group: 'com.mattbertolini', name: 'liquibase-slf4j', version: liquibase_slf4j_version<% } %>
     compile group: 'org.springframework.boot', name: 'spring-boot-actuator', version: spring_boot_version
@@ -104,22 +111,21 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-loader-tools', version: spring_boot_version
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-logging', version: spring_boot_version
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: spring_boot_version<% if (databaseType == 'sql') { %>
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: spring_boot_version<% } %><% if (databaseType == 'nosql') { %>
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: spring_boot_version<% } %><% if (databaseType == 'mongodb') { %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb', version: spring_boot_version<% } %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: spring_boot_version
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: spring_boot_version
     compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: spring_boot_version) {
-        exclude module: 'spring_boot-starter-tomcat'
-    }
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: spring_boot_version
+        exclude module: 'spring-boot-starter-tomcat'
+    }<% if (websocket == 'spring-websocket') { %>
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-websocket', version: spring_boot_version<% } %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: spring_boot_version
     compile group: 'org.springframework.cloud', name: 'spring-cloud-cloudfoundry-connector', version: spring_cloud_version
     compile group: 'org.springframework.cloud', name: 'spring-cloud-spring-service-connector', version: spring_cloud_version
     compile group: 'org.springframework.cloud', name: 'spring-cloud-localconfig-connector', version: spring_cloud_version
     compile(group: 'org.springframework', name: 'spring-context-support') {
         exclude(module: 'quartz')
-    }<% if (authenticationType == 'token') { %>
-    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: spring_security_oauth2_version<% } %><% if (databaseType == 'nosql') { %>
+    }<% if (authenticationType == 'oauth2') { %>
+    compile group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: spring_security_oauth2_version<% } %><% if (databaseType == 'mongodb') { %>
     compile group: 'org.mongeez', name: 'mongeez', version: mongeez_version<% } %>
     compile(group: 'com.mangofactory', name: 'swagger-springmvc', version: swagger_springmvc_version) {
         exclude(module: 'jackson-module-scala_2.10')
@@ -129,6 +135,7 @@ dependencies {
     compile group: 'mysql', name: 'mysql-connector-java', version: mysql_connector_java_version<% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
     compile group: 'org.postgresql', name: 'postgresql', version: postgresql_version<% } %><% if (devDatabaseType == 'h2Memory') { %>
     compile group: 'com.h2database', name: 'h2', version: h2_version<% } %>
+    compile group: 'fr.ippon.spark.metrics', name: 'metrics-spark-reporter', version: metrics_spark_reporter_version
     testCompile group: 'com.jayway.awaitility', name: 'awaitility', version: awaility_version
     testCompile group: 'com.jayway.jsonpath', name: 'json-path', version: json_path_version
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: spring_boot_version
@@ -136,11 +143,11 @@ dependencies {
     testCompile group: 'org.assertj', name: 'assertj-core', version: assertj_core_version
     testCompile group: 'junit', name: 'junit', version:'4.11'
     testCompile group: 'org.mockito', name: 'mockito-core', version:'1.9.5'<% if (databaseType == 'sql') { %>
-    testCompile group: 'com.mattbertolini', name: 'liquibase-slf4j', version: liquibase_slf4j_version<% } %><% if (databaseType == 'nosql') { %>
+    testCompile group: 'com.mattbertolini', name: 'liquibase-slf4j', version: liquibase_slf4j_version<% } %><% if (databaseType == 'mongodb') { %>
     testCompile group: 'cz.jirutka.spring', name: 'embedmongo-spring', version: embedmongo_spring_version<% } %>
     testCompile group: 'org.hamcrest', name: 'hamcrest-library', version:'1.3'
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.1'
+    gradleVersion = '2.2.1'
 }

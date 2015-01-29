@@ -1,0 +1,11 @@
+{
+    "logs": {
+        "title": "Loglar",
+        "nbloggers": "Toplam {{ total }} logger var.",
+        "filter": "Filtre",
+        "table": {
+            "name": "Adı",
+            "level": "Seviye"
+        }
+    }
+}

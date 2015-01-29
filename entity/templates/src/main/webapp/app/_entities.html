@@ -1,0 +1,141 @@
+<div>
+<% var keyPrefix = angularAppName + '.'+ entityInstance + '.';; %>
+    <h2 translate="<%= keyPrefix %>home.title"><%= entityClass %></h2>
+
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#save<%= entityClass %>Modal" ng-click="clear()">
+        <span class="glyphicon glyphicon-flash"></span> <span translate="<%= keyPrefix %>home.createLabel">Create a new <%= entityClass %></span>
+    </button>
+    <div class="modal fade" id="save<%= entityClass %>Modal" tabindex="-1" role="dialog" aria-labelledby="my<%= entityClass %>Label"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="form" role="form" novalidate
+                      class="ng-scope ng-invalid ng-invalid-required ng-dirty ng-valid-minlength"
+                      ng-submit="create()">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" id="my<%= entityClass %>Label" translate="<%= keyPrefix %>home.createOrEditLabel">Create or edit a <%= entityClass %></h4>
+                    </div>
+                    <div class="modal-body"><% if (pkManagedByJHipster == true) { %>
+                        <div class="form-group">
+                            <label>ID</label>
+                            <input type="text" class="form-control" name="id"
+                                   ng-model="<%=entityInstance %>.id" readonly>
+                        </div><% } %>
+<% for (fieldId in fields) {
+    var fieldInputType = 'text';
+    var ngModelOption = '';
+    var translationKey = keyPrefix + fields[fieldId].fieldName;
+    if (fields[fieldId].fieldType == 'Integer' || fields[fieldId].fieldType == 'Long') {
+        fieldInputType = 'number';
+    } else if (fields[fieldId].fieldType == 'LocalDate') {
+        fieldInputType = 'date';
+    } else if (fields[fieldId].fieldType == 'DateTime') {
+        fieldInputType = 'datetime-local';
+    } else if (fields[fieldId].fieldType == 'Boolean') {
+        fieldInputType = 'checkbox';
+    }%>
+                        <div class="form-group">
+                            <label translate="<%= translationKey %>"><%=fields[fieldId].fieldNameCapitalized%></label>
+                            <input type="<%=fieldInputType%>" class="form-control"
+                                   ng-model="<%=entityInstance %>.<%=fields[fieldId].fieldName%>"<% if (fields[fieldId].fieldType == 'DateTime'){%> ng-model-options="{timezone: 'UTC'}"<%}%>>
+                        </div><% } %>
+<% for (relationshipId in relationships) {
+    if (relationships[relationshipId].relationshipType == 'many-to-one') {
+        var otherEntityName = relationships[relationshipId].otherEntityName;
+        var translationKey = keyPrefix + otherEntityName;
+                        %>
+                        <div class="form-group">
+                            <label translate="<%= translationKey %>"><%=otherEntityName %></label>
+                            <select class="form-control" ng-model="<%=entityInstance %>.<%=otherEntityName %>.id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=relationships[relationshipId].otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName %>s">
+                            </select>
+                        </div><% } else if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) {
+        var otherEntityName = relationships[relationshipId].otherEntityName;
+        var translationKey = keyPrefix + otherEntityName;
+                            %>
+                         <div class="form-group">
+                             <label translate="<%= translationKey %>"><%=otherEntityName %></label>
+                             <select class="form-control" multiple ng-model="<%=entityInstance %>.<%=otherEntityName %>s" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=relationships[relationshipId].otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName %>s track by <%=otherEntityName %>.id">
+                             </select>
+                         </div><% } } %>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="delete<%= entityClass %>Confirmation">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="form" ng-submit="confirmDelete(<%=entityInstance %>.id)">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p translate="<%= keyPrefix %>delete.question" translate-values="{id: '{{<%= entityInstance %>.id}}'}">Are you sure you want to delete <%= entityClass %> {{<%=entityInstance %>.id}}?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+                        </button>
+                        <button type="submit" ng-disabled="form.$invalid" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr><% if (pkManagedByJHipster == true) { %>
+                    <th>ID</th><% } %><% for (fieldId in fields) { %>
+                    <th translate="<%=keyPrefix + fields[fieldId].fieldName %>"><%=fields[fieldId].fieldNameCapitalized%></th><% } %><% for (relationshipId in relationships) {
+                        if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
+                    <th translate="<%= keyPrefix + otherEntityName%>"><%=relationships[relationshipId].otherEntityName%></th><% } } %>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="<%=entityInstance %> in <%=entityInstance %>s"><% if (pkManagedByJHipster == true) { %>
+                    <td><a ui-sref="<%= entityInstance %>Detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td><% for (fieldId in fields) { %>
+                    <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%>}}</td><% } %><% for (relationshipId in relationships) {
+                        if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
+                    <td>{{<%=entityInstance %>.<%=relationships[relationshipId].otherEntityName%>.<%=relationships[relationshipId].otherEntityField%>}}</td><% } } %>
+                    <td>
+                        <button type="submit"
+                                ui-sref="<%= entityInstance %>Detail({id:<%= entityInstance %>.<%=primaryKeyField.fieldName %>})"
+                                class="btn btn-info">
+                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span translate="entity.action.view"> View</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="update(<%=entityInstance %>.<%=primaryKeyField.fieldName %>)"
+                                class="btn btn-primary">
+                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span translate="entity.action.edit"> Edit</span>
+                        </button>
+                        <button type="submit"
+                                ng-click="delete(<%=entityInstance %>.<%=primaryKeyField.fieldName %>)"
+                                class="btn btn-danger">
+                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete"> Delete</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

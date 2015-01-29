@@ -131,7 +131,7 @@ HerokuGenerator.prototype.gitCommit = function gitInit() {
     var done = this.async();
 
     this.log(chalk.bold('Adding files for initial commit'));
-    var child = exec('git add -A && git commit -m "Initial commit"', { cwd: 'deploy/heroku' }, function (err, stdout, stderr) {
+    var child = exec('git add -A && git commit -m "Initial commit"', { cwd: 'deploy/heroku', maxBuffer: 500*1024 }, function (err, stdout, stderr) {
         if (stdout.search('nothing to commit') >= 0) {
             this.log('Re-pushing the existing build...');
         } else if (err) {
@@ -152,6 +152,8 @@ HerokuGenerator.prototype.gitForcePush = function gitForcePush() {
     var done = this.async();
 
     this.log(chalk.bold("\nUploading your initial application code.\n This may take " + chalk.cyan('several minutes') + " depending on your connection speed..."));
+        var insight = this.insight();
+        insight.track('generator', 'heroku');
 
     var child = exec('git push -f heroku master', { cwd: 'deploy/heroku', maxBuffer: 500*1024 }, function (err, stdout, stderr) {
         console.log(stdout);

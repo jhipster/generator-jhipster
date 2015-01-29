@@ -1,11 +1,16 @@
-$icon-font-path: "../bower_components/bootstrap-sass/vendor/assets/fonts/bootstrap/";
+$icon-font-path: "../../bower_components/bootstrap-sass/assets/fonts/bootstrap/";
 
-@import './bootstrap-sass/vendor/assets/stylesheets/bootstrap.scss';
+// bower:scss
+// endbower
 
 body {
     background: #fafafa;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #333;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
 }
 
 .development {
@@ -19,6 +24,18 @@ body {
     background-image: url("../images/development_ribbon.png");
     background-position: center center;
     background-repeat: no-repeat;
+}
+
+.navbar-version {
+    font-size: 10px;
+    color: #ccc
+}
+
+.browserupgrade {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
 }
 
 .hero-unit {

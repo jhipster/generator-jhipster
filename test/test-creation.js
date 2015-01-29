@@ -46,14 +46,7 @@ describe('jhipster generator', function () {
       resourceDir + 'config/liquibase/users.csv',
       resourceDir + 'config/liquibase/authorities.csv',
       resourceDir + 'config/liquibase/users_authorities.csv',
-      webappDir + 'images/glyphicons-halflings.png',
-      webappDir + 'images/glyphicons-halflings-white.png',
-      webappDir + 'styles/bootstrap.css',
-      webappDir + 'styles/main.css',
-      webappDir + 'fonts/glyphicons-halflings-regular.eot',
-      webappDir + 'fonts/glyphicons-halflings-regular.svg',
-      webappDir + 'fonts/glyphicons-halflings-regular.ttf',
-      webappDir + 'fonts/glyphicons-halflings-regular.woff'
+      webappDir + 'assets/styles/main.css',
     ];
 
     var expected = defaultFiles.concat(expectedAdditionalFiles);
@@ -62,7 +55,7 @@ describe('jhipster generator', function () {
       'baseName': 'jhipster',
       'packageName': 'com.mycompany.myapp',
       'javaVersion': '7',
-      'authenticationType': 'cookie',
+      'authenticationType': 'session',
       'databaseType': 'sql',
       'hibernateCache': 'no',
       'clusteredHttpSession': 'no',
@@ -79,7 +72,7 @@ describe('jhipster generator', function () {
     });
   });
 
-  it('creates expected files with authenticationType "token"', function (done) {
+  it('creates expected files with authenticationType "oauth2"', function (done) {
 
     var expectedAdditionalFiles = [
       resourceDir + 'config/liquibase/changelog/00000000000000_initial_schema.xml',
@@ -87,14 +80,7 @@ describe('jhipster generator', function () {
       resourceDir + 'config/liquibase/users.csv',
       resourceDir + 'config/liquibase/authorities.csv',
       resourceDir + 'config/liquibase/users_authorities.csv',
-      webappDir + 'images/glyphicons-halflings.png',
-      webappDir + 'images/glyphicons-halflings-white.png',
-      webappDir + 'styles/bootstrap.css',
-      webappDir + 'styles/main.css',
-      webappDir + 'fonts/glyphicons-halflings-regular.eot',
-      webappDir + 'fonts/glyphicons-halflings-regular.svg',
-      webappDir + 'fonts/glyphicons-halflings-regular.ttf',
-      webappDir + 'fonts/glyphicons-halflings-regular.woff',
+      webappDir + 'assets/styles/main.css',
       javaPackageDir + 'config/OAuth2ServerConfiguration.java'
     ];
 
@@ -104,7 +90,7 @@ describe('jhipster generator', function () {
       'baseName': 'jhipster',
       'packageName': 'com.mycompany.myapp',
       'javaVersion': '7',
-      'authenticationType': 'token',
+      'authenticationType': 'oauth2',
       'databaseType': 'sql',
       'hibernateCache': 'no',
       'clusteredHttpSession': 'no',
@@ -129,14 +115,7 @@ describe('jhipster generator', function () {
       resourceDir + 'config/liquibase/users.csv',
       resourceDir + 'config/liquibase/authorities.csv',
       resourceDir + 'config/liquibase/users_authorities.csv',
-      webappDir + 'images/glyphicons-halflings.png',
-      webappDir + 'images/glyphicons-halflings-white.png',
-      webappDir + 'styles/bootstrap.css',
-      webappDir + 'styles/main.css',
-      webappDir + 'fonts/glyphicons-halflings-regular.eot',
-      webappDir + 'fonts/glyphicons-halflings-regular.svg',
-      webappDir + 'fonts/glyphicons-halflings-regular.ttf',
-      webappDir + 'fonts/glyphicons-halflings-regular.woff',
+      webappDir + 'assets/styles/main.css',
       resourceDir + 'ehcache.xml',
       testResourceDir + 'ehcache.xml'
     ];
@@ -147,7 +126,7 @@ describe('jhipster generator', function () {
       'baseName': 'jhipster',
       'packageName': 'com.mycompany.myapp',
       'javaVersion': '7',
-      'authenticationType': 'token',
+      'authenticationType': 'oauth2',
       'databaseType': 'sql',
       'hibernateCache': 'ehcache',
       'clusteredHttpSession': 'no',
@@ -172,14 +151,7 @@ describe('jhipster generator', function () {
       resourceDir + 'config/liquibase/users.csv',
       resourceDir + 'config/liquibase/authorities.csv',
       resourceDir + 'config/liquibase/users_authorities.csv',
-      webappDir + 'images/glyphicons-halflings.png',
-      webappDir + 'images/glyphicons-halflings-white.png',
-      webappDir + 'styles/bootstrap.css',
-      webappDir + 'styles/main.css',
-      webappDir + 'fonts/glyphicons-halflings-regular.eot',
-      webappDir + 'fonts/glyphicons-halflings-regular.svg',
-      webappDir + 'fonts/glyphicons-halflings-regular.ttf',
-      webappDir + 'fonts/glyphicons-halflings-regular.woff',
+      webappDir + 'assets/styles/main.css',
       javaPackageDir + 'config/hazelcast/HazelcastCacheRegionFactory.java',
       javaPackageDir + 'config/hazelcast/package-info.java'
     ];
@@ -190,7 +162,7 @@ describe('jhipster generator', function () {
       'baseName': 'jhipster',
       'packageName': 'com.mycompany.myapp',
       'javaVersion': '7',
-      'authenticationType': 'token',
+      'authenticationType': 'oauth2',
       'databaseType': 'sql',
       'hibernateCache': 'hazelcast',
       'clusteredHttpSession': 'no',

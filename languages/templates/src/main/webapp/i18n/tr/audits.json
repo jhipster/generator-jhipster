@@ -1,0 +1,27 @@
+{
+    "audits": {
+        "title": "Denetim",
+        "filter": {
+            "title": "Filter per date",
+            "from": "kimden",
+            "to": "kime",
+            "button": {
+                "weeks": "Hafta",
+                "today": "bugün",
+                "clear": "temizle",
+                "close": "kapat"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Kullanıcı",
+                "date": "Tarih",
+                "status": "Durum",
+                "data": "Extra data"
+            },
+            "data": {
+                "remoteAddress": "Uzak Adres:"
+            }
+        }
+    }
+}

@@ -30,27 +30,31 @@
     <logger name="<%=packageName%>" level="DEBUG"/>
 
     <logger name="javax.activation" level="WARN"/>
+    <logger name="javax.mail" level="WARN"/>
     <logger name="javax.xml.bind" level="WARN"/>
     <logger name="ch.qos.logback" level="WARN"/>
     <logger name="com.codahale.metrics" level="WARN"/>
     <logger name="com.ryantenney" level="WARN"/>
     <logger name="com.sun.xml.internal.bind" level="WARN"/>
-    <logger name="com.zaxxer" level="WARN"/><% if (hibernateCache == 'ehcache') { %>
+    <logger name="com.zaxxer" level="WARN"/>
+    <logger name="io.undertow" level="WARN"/><% if (hibernateCache == 'ehcache') { %>
     <logger name="net.sf.ehcache" level="WARN"/><% } %>
     <logger name="org.apache" level="WARN"/>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
+    <logger name="org.bson" level="WARN"/>
     <logger name="org.hibernate.validator" level="WARN"/>
     <logger name="org.hibernate" level="WARN"/>
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>
-    <logger name="org.atmosphere" level="WARN"/>
     <logger name="org.springframework" level="WARN"/>
     <logger name="org.springframework.web" level="WARN"/>
     <logger name="org.springframework.security" level="WARN"/>
     <logger name="org.springframework.cache" level="WARN"/>
     <logger name="org.thymeleaf" level="WARN"/>
-    <logger name="com.mangofactory.swagger" level="warn"/>
+    <logger name="org.xnio" level="WARN"/>
+    <logger name="com.mangofactory.swagger" level="WARN"/>
     <logger name="com.wordnik.swagger" level="warn"/><% if (databaseType == 'sql') { %>
     <logger name="liquibase" level="warn"/><% } %>
+    <logger name="sun.rmi.transport" level="warn"/>
 
     <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
         <resetJUL>true</resetJUL>

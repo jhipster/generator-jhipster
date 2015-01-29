@@ -8,25 +8,21 @@ import com.hazelcast.web.SessionListener;
 import com.hazelcast.web.WebFilter;<% } %>
 import <%=packageName%>.web.filter.CachingHttpHeadersFilter;
 import <%=packageName%>.web.filter.StaticResourcesProductionFilter;
-import <%=packageName%>.web.filter.gzip.GZipServletFilter;<% if (websocket == 'atmosphere') { %>
-import org.atmosphere.cache.UUIDBroadcasterCache;
-import org.atmosphere.cpr.AtmosphereFramework;
-import org.atmosphere.cpr.AtmosphereServlet;<% } %>
+import <%=packageName%>.web.filter.gzip.GZipServletFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.MimeMappings;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;<% if (websocket == 'atmosphere') { %>
-import org.springframework.util.ReflectionUtils;<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
+import org.springframework.core.env.Environment;<% if (clusteredHttpSession == 'hazelcast') { %>
 import org.springframework.web.context.support.WebApplicationContextUtils;<% } %>
 
 import javax.inject.Inject;
-import javax.servlet.*;<% if (websocket == 'atmosphere') { %>
-import java.lang.reflect.Field;<% } %>
+import javax.servlet.*;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -45,7 +41,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     @Inject
     private Environment env;
 
-    @Inject
+    @Autowired(required = false)
     private MetricRegistry metricRegistry;
 
     @Override
@@ -53,13 +49,14 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         log.info("Web application configuration, using profiles: {}", Arrays.toString(env.getActiveProfiles()));
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);<% if (clusteredHttpSession == 'hazelcast') { %>
         initClusteredHttpSessionFilter(servletContext, disps);<% } %>
-        initMetrics(servletContext, disps);<% if (websocket == 'atmosphere') { %>
-        initAtmosphereServlet(servletContext);<% } %>
+        if (!env.acceptsProfiles(Constants.SPRING_PROFILE_FAST)) {
+            initMetrics(servletContext, disps);
+        }
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
             initCachingHttpHeadersFilter(servletContext, disps);
             initStaticResourcesProductionFilter(servletContext, disps);
-        }
-        initGzipFilter(servletContext, disps);<% if (devDatabaseType == 'h2Memory') { %>
+            initGzipFilter(servletContext, disps);
+        }<% if (devDatabaseType == 'h2Memory') { %>
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
             initH2Console(servletContext);
         }<% } %>
@@ -140,7 +137,9 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         compressingFilter.addMappingForUrlPatterns(disps, true, "*.json");
         compressingFilter.addMappingForUrlPatterns(disps, true, "*.html");
         compressingFilter.addMappingForUrlPatterns(disps, true, "*.js");
-        compressingFilter.addMappingForUrlPatterns(disps, true, "/app/rest/*");
+        compressingFilter.addMappingForUrlPatterns(disps, true, "*.svg");
+        compressingFilter.addMappingForUrlPatterns(disps, true, "*.ttf");
+        compressingFilter.addMappingForUrlPatterns(disps, true, "/api/*");
         compressingFilter.addMappingForUrlPatterns(disps, true, "/metrics/*");
         compressingFilter.setAsyncSupported(true);
     }
@@ -158,11 +157,8 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
 
         staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/");
         staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/index.html");
-        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/images/*");
-        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/fonts/*");
+        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/assets/*");
         staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/scripts/*");
-        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/styles/*");
-        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/views/*");
         staticResourcesProductionFilter.setAsyncSupported(true);
     }
 
@@ -176,10 +172,8 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
                 servletContext.addFilter("cachingHttpHeadersFilter",
                         new CachingHttpHeadersFilter());
 
-        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/images/*");
-        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/fonts/*");
+        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/assets/*");
         cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/scripts/*");
-        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/styles/*");
         cachingHttpHeadersFilter.setAsyncSupported(true);
     }
 
@@ -207,52 +201,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         metricsAdminServlet.addMapping("/metrics/metrics/*");
         metricsAdminServlet.setAsyncSupported(true);
         metricsAdminServlet.setLoadOnStartup(2);
-    }<% if (websocket == 'atmosphere') { %>
-
-    /**
-     * Initializes Atmosphere.
-     */
-    private void initAtmosphereServlet(ServletContext servletContext) {
-        log.debug("Registering Atmosphere Servlet");
-        AtmosphereServlet servlet = new AtmosphereServlet();
-        Field frameworkField = ReflectionUtils.findField(AtmosphereServlet.class, "framework");
-        ReflectionUtils.makeAccessible(frameworkField);
-        NoAnalyticsAtmosphereFramework atmosphereFramework = new NoAnalyticsAtmosphereFramework();
-        ReflectionUtils.setField(frameworkField, servlet, atmosphereFramework);
-        ServletRegistration.Dynamic atmosphereServlet =
-                servletContext.addServlet("atmosphereServlet", servlet);
-
-        servletContext.setAttribute("AtmosphereServlet", atmosphereFramework);
-
-        atmosphereServlet.setInitParameter("org.atmosphere.cpr.packages", "<%=packageName%>.web.websocket");
-        atmosphereServlet.setInitParameter("org.atmosphere.cpr.broadcasterCacheClass", UUIDBroadcasterCache.class.getName());
-        atmosphereServlet.setInitParameter("org.atmosphere.cpr.broadcaster.shareableThreadPool", "true");
-        atmosphereServlet.setInitParameter("org.atmosphere.cpr.broadcaster.maxProcessingThreads", "10");
-        atmosphereServlet.setInitParameter("org.atmosphere.cpr.broadcaster.maxAsyncWriteThreads", "10");
-        servletContext.addListener(new org.atmosphere.cpr.SessionSupport());
-
-        atmosphereServlet.addMapping("/websocket/*");
-        atmosphereServlet.setLoadOnStartup(3);
-        atmosphereServlet.setAsyncSupported(true);
-    }
-
-    /**
-     * Atmosphere sends tracking data to Google Analytics, which is a potential security issue.
-     * <p>
-     * If you want to send this data, please use directly the AtmosphereFramework class.
-     * </p>
-     */
-    public class NoAnalyticsAtmosphereFramework extends AtmosphereFramework {
-
-        public NoAnalyticsAtmosphereFramework() {
-            super();
-        }
-
-        @Override
-        protected void analytics() {
-            // noop
-        }
-    }<% } %><% if (devDatabaseType == 'h2Memory') { %>
+    }<% if (devDatabaseType == 'h2Memory') { %>
 
     /**
      * Initializes H2 console
@@ -261,6 +210,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         log.debug("Initialize H2 console");
         ServletRegistration.Dynamic h2ConsoleServlet = servletContext.addServlet("H2Console", new org.h2.server.web.WebServlet());
         h2ConsoleServlet.addMapping("/console/*");
+        h2ConsoleServlet.setInitParameter("-properties", "src/main/resources");
         h2ConsoleServlet.setLoadOnStartup(1);
     }<% } %>
 }

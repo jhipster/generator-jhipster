@@ -1,5 +1,6 @@
 package <%=packageName%>.service;
 
+import <%=packageName%>.domain.User;
 import org.apache.commons.lang.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +10,8 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -35,6 +38,9 @@ public class MailService {
 
     @Inject
     private MessageSource messageSource;
+    
+    @Inject
+    private SpringTemplateEngine templateEngine;
 
     /**
      * System default email address that sends the e-mails.
@@ -60,16 +66,21 @@ public class MailService {
             message.setSubject(subject);
             message.setText(content, isHtml);
             javaMailSender.send(mimeMessage);
-            log.debug("Sent e-mail to User '{}'!", to);
+            log.debug("Sent e-mail to User '{}'", to);
         } catch (Exception e) {
             log.warn("E-mail could not be sent to user '{}', exception is: {}", to, e.getMessage());
         }
     }
 
     @Async
-    public void sendActivationEmail(final String email, String content, Locale locale) {
-        log.debug("Sending activation e-mail to '{}'", email);
+    public void sendActivationEmail(User user, String baseUrl) {
+        log.debug("Sending activation e-mail to '{}'", user.getEmail());
+        Locale locale = Locale.forLanguageTag(user.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable("user", user);
+        context.setVariable("baseUrl", baseUrl);
+        String content = templateEngine.process("activationEmail", context);
         String subject = messageSource.getMessage("email.activation.title", null, locale);
-        sendEmail(email, subject, content, false, true);
+        sendEmail(user.getEmail(), subject, content, false, true);
     }
 }

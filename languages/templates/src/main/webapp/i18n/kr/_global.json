@@ -1,0 +1,90 @@
+{
+    "global": {
+        "title": "<%= baseName %>",
+        "browsehappy": "당신은 <strong>오래된</strong> 브라우저를 사용하고 있군요. <a href=\"http://browsehappy.com/?locale=en\">브라우저를 업그레이드</a> 해 당신의 경험을 발전시키세요.",
+        "menu": {
+            "home": "홈",
+            "entities": {
+                "main": "Entities",
+                "additionalEntity": "JHipster will add addtional entities"
+            },
+            "account": {
+                "main": "계정",
+                "settings": "설정",
+                "password": "비밀번호",
+                "sessions": "세션",
+                "login": "인증",
+                "logout": "로그아웃",
+                "register": "등록"
+            },
+            "admin": {
+                "main": "관리자",
+                "tracker": "사용자 트랙커",
+                "metrics": "메트릭스",
+                "health": "상태 확인",
+                "configuration": "Configuration",
+                "logs": "로그",
+                "audits": "Audit",
+                "apidocs": "API",
+                "database": "Database"
+            },
+            "language": "언어"
+        },
+        "form": {
+            "username": "로그인 아이디",
+            "username.placeholder": "로그인 아이디",
+            "newpassword": "새 비밀번호",
+            "newpassword.placeholder": "새 비밀번호",
+            "confirmpassword": "새 비밀번호 확인",
+            "confirmpassword.placeholder": "새 비밀번호 확인",
+            "email": "이메일",
+            "email.placeholder": "이메일을 입력하세요"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "<a href=\"#/login\">인증</a>을 원하시면, 기본 계정을 사용할 수 있습니다:<br/>- 관리자 (아이디=\"admin\", 비밀번호=\"admin\") <br/>- 사용자 (아이디=\"user\", 비밀번호=\"user\").",
+                "register": "아직 계정이 없습니까? <a href=\"#/register\">새로운 계정을 등록하세요</a>"
+            },
+            "error": {
+                "dontmatch" : "비밀번호가 일치하지 않습니다!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "비밀번호 입력이 필요합니다.",
+                    "minlength": "비밀번호는 최소 5자 이상이어야 합니다",
+                    "maxlength": "비밀번호는 최대 50자 까지입니다.",
+                    "strength": "비밀번호 길이:"
+                },
+                "confirmpassword": {
+                    "required": "확인할 비밀번호 입력이 필요합니다.",
+                    "minlength": "확인할 비밀번호는 최소 5자 이상이어야 합니다",
+                    "maxlength": "확인할 비밀번호는 최대 50자 까지입니다"
+                },
+                "email": {
+                    "required": "이메일 입력이 필요합니다.",
+                    "invalid": "잘못된 이메일입니다.",
+                    "minlength": "이메일은 최소 5자 이상이어야 합니다",
+                    "maxlength": "이메일은 최대 50자 까지입니다."
+                }
+            }
+        }
+    },
+    "entity": {
+        "action": {
+            "back": "Back",
+            "cancel": "Cancel",
+            "delete": "Delete",
+            "edit": "Edit",
+            "save": "Save",
+            "view": "View"
+        },
+        "detail": {
+            "field": "Field",
+            "value": "Value"
+        },
+        "delete": {
+            "title": "Confirm delete operation"
+        }
+    },
+    "footer": "하단영역"
+}

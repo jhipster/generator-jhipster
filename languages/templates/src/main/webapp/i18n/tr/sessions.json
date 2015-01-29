@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "[<b>{{username}}</b>] kullanıcısı için aktif oturumlar",
+        "table": {
+            "ipaddress": "IP adresi",
+            "useragent": "Kullanıcı Bilgisi",
+            "date": "Tarih",
+            "button": "Etkisizleştir"
+        },
+        "messages": {
+            "success": "<strong>Oturum etkisizleştirildi!</strong>",
+            "error": "<strong>Bİr hata oluştu!</strong> Oturum etkisizleştirilemedi."
+        }
+    }
+}

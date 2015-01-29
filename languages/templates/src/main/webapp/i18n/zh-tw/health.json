@@ -1,0 +1,21 @@
+{
+    "health": {
+        "title": "服務狀態",
+        "refresh.button": "重整",
+        "stacktrace": "堆疊追蹤",
+        "indicator": {
+            "db": "資料庫",
+            "diskSpace": "Disk space",
+            "mail": "電子郵件",
+            "mongo": "MongoDB"
+        },
+        "table": {
+            "service": "服務名稱",
+            "status": "狀態"
+        },
+        "status": {
+            "UP": "正常",
+            "DOWN": "異常"
+        }
+    }
+}

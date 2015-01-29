@@ -1,0 +1,21 @@
+{
+    "health": {
+        "title": "Heath checks",
+        "refresh.button": "Yenile",
+        "stacktrace": "Stacktrace",
+        "indicator": {
+            "db": "Veritabanı",
+            "diskSpace": "Disk space",
+            "mail": "E-posta",
+            "mongo": "Mongo DB"
+        },
+        "table": {
+            "service": "Hizmetin adı",
+            "status": "Durum"
+        },
+        "status": {
+            "UP": "UP",
+            "DOWN": "DOWN"
+        }
+    }
+}

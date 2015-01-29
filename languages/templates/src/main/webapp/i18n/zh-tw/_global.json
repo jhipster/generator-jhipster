@@ -1,0 +1,90 @@
+{
+    "global": {
+        "title": "<%= baseName %>",
+        "browsehappy": "您目前使用<strong>過於老舊</strong>的瀏覽器, 建議您<a href=\"http://browsehappy.com/?locale=en\">升級瀏覽器</a>讓您有更佳的上網體驗.",
+        "menu": {
+            "home": "首頁",
+            "entities": {
+                "main": "Entities",
+                "additionalEntity": "JHipster will add addtional entities"
+            },
+            "account": {
+                "main": "帳號",
+                "settings": "設定",
+                "password": "密碼",
+                "sessions": "Sessions",
+                "login": "登入",
+                "logout": "登出",
+                "register": "註冊"
+            },
+            "admin": {
+                "main": "管理",
+                "tracker": "追蹤使用者",
+                "metrics": "資源監控",
+                "health": "服務狀態",
+                "configuration": "Configuration",
+                "logs": "記錄",
+                "audits": "稽核",
+                "apidocs": "API",
+                "database": "Database"
+            },
+            "language": "語系"
+        },
+        "form": {
+            "username": "帳號",
+            "username.placeholder": "您的帳號",
+            "newpassword": "新密碼",
+            "newpassword.placeholder": "您的新密碼",
+            "confirmpassword": "新密碼確認",
+            "confirmpassword.placeholder": "確認您的新密碼",
+            "email": "電子郵件",
+            "email.placeholder": "您的電子郵件"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "如果您要<a href=\"#/login\">登入</a>, 您可以使用預設帳號:<br/>- 管理者 (帳號=\"admin\"與密碼=\"admin\") <br/>- 使用者 (帳號=\"user\"與密碼=\"user\").",
+                "register": "您還沒有帳號？<a href=\"#/register\">註冊一個新帳號</a>"
+            },
+            "error": {
+                "dontmatch" : "您輸入的密碼與密碼確認不符合!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "您的密碼是必填欄位.",
+                    "minlength": "您的密碼長度至少要有5個字元",
+                    "maxlength": "您的密碼長度不能超過50個字元",
+                    "strength": "密碼強度:"
+                },
+                "confirmpassword": {
+                    "required": "您的密碼確認是必填欄位.",
+                    "minlength": "您的密碼確認長度至少要有5個字元",
+                    "maxlength": "您的密碼確認長度不能超過50個字元"
+                },
+                "email": {
+                    "required": "您的電子郵件是必填欄位.",
+                    "invalid": "您的電子郵件格式格式不正確.",
+                    "minlength": "您的電子郵件長度至少要有5個字元",
+                    "maxlength": "您的電子郵件長度不能超過50個字元"
+                }
+            }
+        }
+    },
+    "entity": {
+        "action": {
+            "back": "Back",
+            "cancel": "Cancel",
+            "delete": "Delete",
+            "edit": "Edit",
+            "save": "Save",
+            "view": "View"
+        },
+        "detail": {
+            "field": "Field",
+            "value": "Value"
+        },
+        "delete": {
+            "title": "Confirm delete operation"
+        }
+    },
+    "footer": "這裡是頁尾"
+}

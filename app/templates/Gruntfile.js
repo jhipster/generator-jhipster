@@ -1,13 +1,21 @@
 // Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= pkg.name %> <%= pkg.version %>
 'use strict';
-
-// # Globbing
-// for performance reasons we're only matching one level down:
-// 'test/spec/{,*/}*.js'
-// use this if you want to recursively match all subfolders:
-// 'test/spec/**/*.js'
-
+<% if (buildTool == 'maven') { %>
+var pomParser = require('node-pom-parser');<% } else { %>
+var fs = require('fs');<% } %>
 var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
+<% if (buildTool == 'gradle') { %>
+// Returns the first occurence of the version number
+var parseVersionFromBuildGradle = function() {
+    var versionRegex = /^version\s*=\s*[',"]([^',"]*)[',"]/gm; // Match and group the version number
+    return versionRegex.exec(fs.readFileSync('build.gradle', "utf8"))[1];
+};<% } %>
+
+// usemin custom step
+var useminAutoprefixer = {
+    name: 'autoprefixer',
+    createConfig: require('grunt-usemin/lib/config/cssmin').createConfig // Reuse cssmins createConfig
+};
 
 module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt);
@@ -19,14 +27,21 @@ module.exports = function (grunt) {
             app: require('./bower.json').appPath || 'app',
             dist: 'src/main/webapp/dist'
         },
-        watch: {<% if (useCompass) { %>
+        watch: {
+            bower: {
+                files: ['bower.json'],
+                tasks: ['wiredep']
+            },
+            ngconstant: {
+                files: ['Gruntfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>],
+                tasks: ['ngconstant:dev']
+            },<% if (useCompass) { %>
             compass: {
                 files: ['src/main/scss/**/*.{scss,sass}'],
-                tasks: ['compass:server', 'autoprefixer']
+                tasks: ['compass:server']
             },<% } %>
             styles: {
-                files: ['src/main/webapp/styles/**/*.css'],
-                tasks: ['copy:styles', 'autoprefixer']
+                files: ['src/main/webapp/assets/styles/**/*.css']
             },
             livereload: {
                 options: {
@@ -35,27 +50,52 @@ module.exports = function (grunt) {
                 files: [
                     'src/main/webapp/**/*.html',
                     'src/main/webapp/**/*.json',
-                    '.tmp/styles/**/*.css',
+                    '{.tmp/,}src/main/webapp/assets/styles/**/*.css',
                     '{.tmp/,}src/main/webapp/scripts/**/*.js',
-                    'src/main/webapp/images/**/*.{png,jpg,jpeg,gif,webp,svg}'
+                    'src/main/webapp/assets/images/**/*.{png,jpg,jpeg,gif,webp,svg}'
                 ]
             }
         },
         autoprefixer: {
-            options: ['last 1 version'],
-            dist: {
-                files: [{
-                    expand: true,
-                    cwd: '.tmp/styles/',
-                    src: '**/*.css',
-                    dest: '.tmp/styles/'
-                }]
+        // not used since Uglify task does autoprefixer,
+        //    options: ['last 1 version'],
+        //    dist: {
+        //        files: [{
+        //            expand: true,
+        //            cwd: '.tmp/styles/',
+        //            src: '**/*.css',
+        //            dest: '.tmp/styles/'
+        //        }]
+        //    }
+        },
+        wiredep: {
+            app: {
+                src: ['src/main/webapp/index.html'<% if (useCompass) { %>,, 'src/main/scss/main.scss'<% } %>],
+                exclude: [/angular-i18n/, /swagger-ui/]<% if (useCompass) { %>,
+                ignorePath: /\.\.\/webapp\/bower_components\// // remove ../webapp/bower_components/ from paths of injected sass files<% } %>
+            },
+            test: {
+                src: 'src/test/javascript/karma.conf.js',
+                exclude: [/angular-i18n/, /swagger-ui/, /angular-scenario/],
+                ignorePath: /\.\.\/\.\.\//, // remove ../../ from paths of injected javascripts
+                devDependencies: true,
+                fileTypes: {
+                    js: {
+                        block: /(([\s\t]*)\/\/\s*bower:*(\S*))(\n|\r|.)*?(\/\/\s*endbower)/gi,
+                        detect: {
+                            js: /'(.*\.js)'/gi
+                        },
+                        replace: {
+                            js: '\'{{filePath}}\','
+                        }
+                    }
+                }
             }
         },
         connect: {
             proxies: [
                 {
-                    context: '/app',
+                    context: '/api',
                     host: 'localhost',
                     port: 8080,
                     https: false,
@@ -102,7 +142,7 @@ module.exports = function (grunt) {
                     port: 8080,
                     https: false,
                     changeOrigin: false
-                }<% if (authenticationType == 'token') { %>,
+                }<% if (authenticationType == 'oauth2') { %>,
                 {
                     context: '/oauth/token',
                     host: 'localhost',
@@ -142,17 +182,12 @@ module.exports = function (grunt) {
             },
             test: {
                 options: {
-                 port: 9001,
+                    port: 9001,
                     base: [
                         '.tmp',
                         'test',
                         'src/main/webapp'
                     ]
-                }
-            },
-            dist: {
-                options: {
-                    base: '<%%= yeoman.dist %>'
                 }
             }
         },
@@ -175,7 +210,9 @@ module.exports = function (grunt) {
             },
             all: [
                 'Gruntfile.js',
-                'src/main/webapp/scripts/{,*/}*.js'
+                'src/main/webapp/scripts/app.js',
+                'src/main/webapp/scripts/app/**/*.js',
+                'src/main/webapp/scripts/components/**/*.js'
             ]
         },
         coffee: {
@@ -187,7 +224,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: 'src/main/webapp/scripts',
-                    src: '**/*.coffee',
+                    src: ['scripts/app/**/*.coffee', 'scripts/components/**/*.coffee'],
                     dest: '.tmp/scripts',
                     ext: '.js'
                 }]
@@ -205,15 +242,15 @@ module.exports = function (grunt) {
         compass: {
             options: {
                 sassDir: 'src/main/scss',
-                cssDir: 'src/main/webapp/styles',
-                generatedImagesDir: '.tmp/images/generated',
-                imagesDir: 'src/main/webapp/images',
+                cssDir: 'src/main/webapp/assets/styles',
+                generatedImagesDir: '.tmp/assets/images/generated',
+                imagesDir: 'src/main/webapp/assets/images',
                 javascriptsDir: 'src/main/webapp/scripts',
-                fontsDir: 'src/main/webapp/styles/fonts',
+                fontsDir: 'src/main/webapp/assets/fonts',
                 importPath: 'src/main/webapp/bower_components',
-                httpImagesPath: '/images',
-                httpGeneratedImagesPath: '/images/generated',
-                httpFontsPath: '/styles/fonts',
+                httpImagesPath: '/assets/images',
+                httpGeneratedImagesPath: '/assets/images/generated',
+                httpFontsPath: '/assets/fonts',
                 relativeAssets: false
             },
             dist: {},
@@ -223,19 +260,19 @@ module.exports = function (grunt) {
                 }
             }
         },<% } %>
+        concat: {
         // not used since Uglify task does concat,
         // but still available if needed
-        /*concat: {
-            dist: {}
-        },*/
+        //    dist: {}
+        },
         rev: {
             dist: {
                 files: {
                     src: [
                         '<%%= yeoman.dist %>/scripts/**/*.js',
-                        '<%%= yeoman.dist %>/styles/**/*.css',
-                        '<%%= yeoman.dist %>/images/**/*.{png,jpg,jpeg,gif,webp,svg}',
-                        '<%%= yeoman.dist %>/fonts/*'
+                        '<%%= yeoman.dist %>/assets/styles/**/*.css',
+                        '<%%= yeoman.dist %>/assets/images/**/*.{png,jpg,jpeg,gif,webp,svg}',
+                        '<%%= yeoman.dist %>/assets/fonts/*'
                     ]
                 }
             }
@@ -243,14 +280,29 @@ module.exports = function (grunt) {
         useminPrepare: {
             html: 'src/main/webapp/**/*.html',
             options: {
-                dest: '<%%= yeoman.dist %>'
+                dest: '<%%= yeoman.dist %>',
+                flow: {
+                    html: {
+                        steps: {
+                            js: ['concat', 'uglifyjs'],
+                            css: ['cssmin', useminAutoprefixer] // Let cssmin concat files so it corrects relative paths to fonts and images
+                        },
+                            post: {}
+                        }
+                    }
             }
         },
         usemin: {
             html: ['<%%= yeoman.dist %>/**/*.html'],
-            css: ['<%%= yeoman.dist %>/styles/**/*.css'],
+            css: ['<%%= yeoman.dist %>/assets/styles/**/*.css'],
+            js: ['<%%= yeoman.dist %>/scripts/**/*.js'],
             options: {
-                assetsDirs: ['<%%= yeoman.dist %>/**/'],
+                assetsDirs: ['<%%= yeoman.dist %>', '<%%= yeoman.dist %>/assets/styles', '<%%= yeoman.dist %>/assets/images', '<%%= yeoman.dist %>/assets/fonts'],
+                patterns: {
+                    js: [
+                        [/(assets\/images\/.*?\.(?:gif|jpeg|jpg|png|webp|svg))/gm, 'Update the JS to reference our revved images']
+                    ]
+                },
                 dirs: ['<%%= yeoman.dist %>']
             }
         },
@@ -258,9 +310,9 @@ module.exports = function (grunt) {
             dist: {
                 files: [{
                     expand: true,
-                    cwd: 'src/main/webapp/images',
-                src: '**/*.{jpg,jpeg}', // we don't optimize PNG files as it doesn't work on Linux. If you are not on Linux, feel free to use '{,*/}*.{png,jpg,jpeg}'
-                    dest: '<%%= yeoman.dist %>/images'
+                    cwd: 'src/main/webapp/assets/images',
+                src: '**/*.{jpg,jpeg}', // we don't optimize PNG files as it doesn't work on Linux. If you are not on Linux, feel free to use '**/*.{png,jpg,jpeg}'
+                    dest: '<%%= yeoman.dist %>/assets/images'
                 }]
             }
         },
@@ -268,9 +320,9 @@ module.exports = function (grunt) {
             dist: {
                 files: [{
                     expand: true,
-                    cwd: 'src/main/webapp/images',
+                    cwd: 'src/main/webapp/assets/images',
                     src: '**/*.svg',
-                    dest: '<%%= yeoman.dist %>/images'
+                    dest: '<%%= yeoman.dist %>/assets/images'
                 }]
             }
         },
@@ -281,11 +333,36 @@ module.exports = function (grunt) {
             // dist: {
             //     files: {
             //         '<%%= yeoman.dist %>/styles/main.css': [
-            //             '.tmp/styles/{,*/}*.css',
-            //             'styles/{,*/}*.css'
+            //             '.tmp/styles/**/*.css',
+            //             'styles/**/*.css'
             //         ]
             //     }
             // }
+            options: {
+                root: 'src/main/webapp' // Replace relative paths for static resources with absolute path
+            }
+        },
+        ngtemplates:    {
+            dist: {
+                cwd: 'src/main/webapp',
+                src: ['scripts/app/**/*.html', 'scripts/components/**/*.html',],
+                dest: '.tmp/templates/templates.js',
+                options: {
+                    module: '<%= angularAppName%>',
+                    usemin: 'scripts/app.js',
+                    htmlmin:  {
+                        removeCommentsFromCDATA: true,
+                        // https://github.com/yeoman/grunt-usemin/issues/44
+                        collapseWhitespace: true,
+                        collapseBooleanAttributes: true,
+                        conservativeCollapse: true,
+                        removeAttributeQuotes: true,
+                        removeRedundantAttributes: true,
+                        useShortDoctype: true,
+                        removeEmptyAttributes: true
+                    }
+                }
+            }
         },
         htmlmin: {
             dist: {
@@ -298,12 +375,13 @@ module.exports = function (grunt) {
                     removeAttributeQuotes: true,
                     removeRedundantAttributes: true,
                     useShortDoctype: true,
-                    removeEmptyAttributes: true
+                    removeEmptyAttributes: true,
+                    keepClosingSlash: true
                 },
                 files: [{
                     expand: true,
                     cwd: '<%%= yeoman.dist %>',
-                    src: ['*.html', 'views/**/*.html'],
+                    src: ['*.html'],
                     dest: '<%%= yeoman.dist %>'
                 }]
             }
@@ -318,24 +396,18 @@ module.exports = function (grunt) {
                     dest: '<%%= yeoman.dist %>',
                     src: [
                         '*.html',
-                        'views/*.html',
-                        'images/**/*.{png,gif,webp}',
-                        'fonts/*'
+                        'scripts/**/*.html',
+                        'assets/images/**/*.{png,gif,webp}',
+                        'assets/fonts/*'
                     ]
                 }, {
                     expand: true,
-                    cwd: '.tmp/images',
-                    dest: '<%%= yeoman.dist %>/images',
+                    cwd: '.tmp/assets/images',
+                    dest: '<%%= yeoman.dist %>/assets/images',
                     src: [
                         'generated/*'
                     ]
                 }]
-            },
-            styles: {
-                expand: true,
-                cwd: 'src/main/webapp',
-                dest: '.tmp',
-                src: '**/*.css'
             },
             generateHerokuDirectory: {
                     expand: true,
@@ -356,16 +428,13 @@ module.exports = function (grunt) {
         },
         concurrent: {
             server: [<% if (useCompass) { %>
-                'compass:server',<% } %>
-                'copy:styles'
+                'compass:server'<% } %>
             ],
             test: [<% if (useCompass) { %>
-                'compass',<% } %>
-                'copy:styles'
+                'compass'<% } %>
             ],
             dist: [<% if (useCompass) { %>
                 'compass:dist',<% } %>
-                'copy:styles',
                 'imagemin',
                 'svgmin'
             ]
@@ -391,25 +460,6 @@ module.exports = function (grunt) {
                 }]
             }
         },
-        replace: {
-            dist: {
-                src: ['<%%= yeoman.dist %>/index.html'],
-                    overwrite: true,                                 // overwrite matched source files
-                    replacements: [{
-                        from: '<div class="development"></div>',
-                        to: ''
-                    }]
-                }
-            },
-        uglify: {
-            dist: {
-                files: {
-                    '<%%= yeoman.dist %>/scripts/scripts.js': [
-                        '<%%= yeoman.dist %>/scripts/scripts.js'
-                    ]
-                }
-            }
-        },
         buildcontrol: {
             options: {
                 commit: true,
@@ -432,41 +482,69 @@ module.exports = function (grunt) {
                 }
             }
         },
+        ngconstant: {
+            options: {
+                name: '<%= angularAppName%>',
+                deps: false,
+                wrap: '"use strict";\n// DO NOT EDIT THIS FILE, EDIT THE GRUNT TASK NGCONSTANT SETTINGS INSTEAD WHICH GENERATES THIS FILE\n{%= __ngModule %}'
+            },
+            dev: {
+                options: {
+                    dest: 'src/main/webapp/scripts/app/app.constants.js',
+                },
+                constants: {
+                    ENV: 'dev',
+                    VERSION: <% if(buildTool == 'maven') { %>pomParser.parsePom({ filePath: "pom.xml"}).version<% } else { %>parseVersionFromBuildGradle()<% } %>
+                }
+            },
+            prod: {
+                options: {
+                    dest: '.tmp/scripts/app/app.constants.js',
+                },
+                constants: {
+                    ENV: 'prod',
+                    VERSION: <% if(buildTool == 'maven') { %>pomParser.parsePom({ filePath: "pom.xml"}).version<% } else { %>parseVersionFromBuildGradle()<% } %>
+                }
+            }
+        }
     });
 
-    grunt.registerTask('server', function (target) {
-        if (target === 'dist') {
-            return grunt.task.run(['build', 'connect:dist:keepalive']);
-        }
+    grunt.registerTask('serve', [
+        'clean:server',
+        'wiredep',
+        'ngconstant:dev',
+        'concurrent:server',
+        'configureProxies',
+        'connect:livereload',
+        'watch'
+    ]);
 
-        grunt.task.run([
-            'clean:server',
-            'concurrent:server',
-            'autoprefixer',
-            'configureProxies',
-            'connect:livereload',
-            'watch'
-        ]);
+    grunt.registerTask('server', function (target) {
+        grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
+        grunt.task.run([target ? ('serve:' + target) : 'serve']);
     });
 
     grunt.registerTask('test', [
         'clean:server',
+        'wiredep:test',
+        'ngconstant:dev',
         'concurrent:test',
-        'autoprefixer',
         'connect:test',
         'karma'
     ]);
 
     grunt.registerTask('build', [
         'clean:dist',
+        'wiredep:app',
+        'ngconstant:prod',
         'useminPrepare',
+        'ngtemplates',
         'concurrent:dist',
-        'autoprefixer',
         'concat',
         'copy:dist',
         'ngAnnotate',
         'cssmin',
-        'replace',
+        'autoprefixer',
         'uglify',
         'rev',
         'usemin',

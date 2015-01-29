@@ -1,0 +1,90 @@
+{
+    "global": {
+        "title": "<%= baseName %>",
+        "browsehappy": "<strong>Çok eski</strong> bir tarayıcı kullanıyorsunuz. Lütfen kullanım kalitenizi arttırmak için <a href=\"http://browsehappy.com/?locale=tr\">tarayıcınızı yükseltin</a>.",
+        "menu": {
+            "home": "Ana Sayfa",
+            "entities": {
+                "main": "Entities",
+                "additionalEntity": "JHipster will add addtional entities"
+            },
+            "account": {
+                "main": "Hesap",
+                "settings": "Ayarlar",
+                "password": "Şifre",
+                "sessions": "Oturumlar",
+                "login": "Giriş",
+                "logout": "Çıkış",
+                "register": "Kayıt"
+            },
+            "admin": {
+                "main": "Yönetim",
+                "tracker": "Kullanıcı Takip",
+                "metrics": "Ölçümler",
+                "health": "Heath",
+                "configuration": "Configuration",
+                "logs": "Loglar",
+                "audits": "Denetim",
+                "apidocs": "API",
+                "database": "Database"
+            },
+            "language": "Dil"
+        },
+        "form": {
+            "username": "Kullanıcı Adı",
+            "username.placeholder": "Kullanıcı Adınız",
+            "newpassword": "Yeni Şifre",
+            "newpassword.placeholder": "Yeni Şifre",
+            "confirmpassword": "Yeni Şifre Tekrar",
+            "confirmpassword.placeholder": "Yeni Şifre Tekrar",
+            "email": "E-posta",
+            "email.placeholder": "E-posta adresiniz"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "<a href=\"#/login\">Giriş</a> yapmak istiyorsanız, varsayılan hesaplardan birini deneyebilirsiniz:<br/>- Yönetici (kullanıcı adı=\"admin\" ve şifre=\"admin\") <br/>- Kullanıcı (kullanıcı adı=\"user\" and şifre=\"user\").",
+                "register": "Henüz bir hesabınız yok mu? <a href=\"#/register\">Yeni hesap oluştur</a>"
+            },
+            "error": {
+                "dontmatch" : "Şifreler eşleşmedi!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "Şifre zorunlu alandır.",
+                    "minlength": "Şifreniz en az 5 karakter olmak zorundadır",
+                    "maxlength": "Şifreniz 50 karakterden uzun olamaz",
+                    "strength": "Şifre karmaşıklığı:"
+                },
+                "confirmpassword": {
+                    "required": "Tekrar şifresi zorunludur.",
+                    "minlength": "Tekrar şifreniz en az 5 karakter olmalıdır",
+                    "maxlength": "Tekrar şifreniz 50 karakterden uzun olamaz"
+                },
+                "email": {
+                    "required": "E-posta zorunlu alandır.",
+                    "invalid": "E-posta alanı uygun değil.",
+                    "minlength": "E-posta adresi en az 5 karakter olmalıdır",
+                    "maxlength": "E-posta adresi 50 karakterden fazla olamaz"
+                }
+            }
+        }
+    },
+    "entity": {
+        "action": {
+            "back": "Back",
+            "cancel": "Cancel",
+            "delete": "Delete",
+            "edit": "Edit",
+            "save": "Save",
+            "view": "View"
+        },
+        "detail": {
+            "field": "Field",
+            "value": "Value"
+        },
+        "delete": {
+            "title": "Confirm delete operation"
+        }
+    },
+    "footer": "Burası sayfa alt bilgisi"
+}

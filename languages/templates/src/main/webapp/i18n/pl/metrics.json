@@ -1,0 +1,95 @@
+{
+    "metrics": {
+        "title": "Metryki aplikacji",
+        "refresh.button": "Odśwież",
+        "updating": "Aktualizacja...",
+        "jvm": {
+            "title": "Metryki JVM",
+            "memory": {
+                "title": "Pamięć",
+                "total": "Całkowita Pamięć",
+                "heap": "Pamięć stogu",
+                "nonheap": "Pozostała Pamięć"
+            },
+            "threads": {
+                "title": "Wątki",
+                "all": "Wszystkie",
+                "runnable": "Uruchamialne",
+                "timedwaiting": "Czasowo oczekujące",
+                "waiting": "Oczekujące",
+                "blocked": "Zablokowane",
+                "dump": {
+                    "title": "Zrzut wątków",
+                    "id": "Id: ",
+                    "blockedtime": "Czas zablokowanych",
+                    "blockedcount": "Liczba zablokowanych",
+                    "waitedtime": "Oczekiwany czas",
+                    "waitedcount": "Liczba oczekiwanych",
+                    "lockname": "Nazwa blokady",
+                    "stacktrace": "Stos wywołań",
+                    "show": "Pokaż",
+                    "hide": "Ukryj"
+                }
+            },
+            "gc": {
+                "title": "Odśmiecanie pamięci",
+                "marksweepcount": "Licznik Mark Sweep",
+                "marksweeptime": "Czas Mark Sweep",
+                "scavengecount": "Licznik Scavenge",
+                "scavengetime": "Czas Scavenge"
+            },
+            "http": {
+                "title": "Zapytania HTTP  (zdarzenia na sekundę)",
+                "active": "Aktywne zapytania:",
+                "total": "Całkowita libcza zapytań:",
+                "table": {
+                    "code": "Kod",
+                    "count": "Liczba",
+                    "mean": "Średnia",
+                    "average": "Średnia"
+                },
+                "code": {
+                    "ok": "Ok",
+                    "notfound": "Nie znaleziono",
+                    "servererror": "Błąd servera"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Services statistics (time in millisecond)",
+            "table": {
+                "name": "Nazwa usługi",
+                "count": "Licznik",
+                "mean": "Średnia",
+                "min": "Min",
+                "max": "Max",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "ehcache": {
+            "title": "Statystyki Ehcache",
+            "cachename": "Nazwa cache",
+            "objects": "Obiekty",
+            "hits": "Odsłon",
+            "misses": "Nie trafionych",
+            "evictioncount": "Liczba wyeksmitowanych",
+            "mean": "Średni czas pobierania (ms)"
+        },
+        "datasource": {
+        	"usage": "Usage",
+            "title": "DataSource statistics (time in millisecond)",
+            "name": "Pool usage",
+            "count": "Count",
+            "mean": "Mean",
+            "min": "Min",
+            "max": "Max",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}

@@ -1,0 +1,24 @@
+{
+    "register": {
+        "title": "Kayıt",
+        "form": {
+            "button": "Kayıt Ol"
+        },
+        "messages": {
+            "validate": {
+                "login": {
+                    "required": "Kullanıcı adı zorunlu.",
+                    "minlength": "Kullanıcı adı en az 1 karakter olmak zorundadır",
+                    "maxlength": "Kullanıcı adı en fazla 50 karakter olabilir",
+                    "pattern": "Your login can only contain lower-case letters and digits"
+                }
+            },
+            "success": "<strong>Kayıt işlemi yapıldı!</strong> Lütfen onay için e-posta'nızı kontrol edin.",
+            "error": {
+                "fail": "<strong>Kayıt işlemi başarısız oldu!</strong> Lütfen daha sonra tekrar deneyin.",
+                "userexists": "<strong>Girdiğiniz kullanıcı sistemde mevcut!</strong> Lütfen başka bir kullanıcı deneyin.",
+                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+            }
+        }
+    }
+}

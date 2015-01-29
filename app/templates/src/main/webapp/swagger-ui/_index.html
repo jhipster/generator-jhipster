@@ -18,7 +18,7 @@
     <script src='../bower_components/swagger-ui/dist/lib/swagger.js' type='text/javascript'></script>
     <script src='../bower_components/swagger-ui/dist/swagger-ui.js' type='text/javascript'></script>
     <script src='../bower_components/swagger-ui/dist/lib/highlight.7.3.pack.js' type='text/javascript'></script>
-    <% if (authenticationType == 'token') { %>
+    <% if (authenticationType == 'oauth2') { %>
     <!-- enabling this will enable oauth2 implicit scope support -->
     <script src='../bower_components/swagger-ui/dist/lib/swagger-oauth.js' type='text/javascript'></script><% } %>
 
@@ -47,9 +47,22 @@
                 docExpansion: "none"
             });
 
-            <% if (authenticationType == 'token') { %>var authToken = JSON.parse(localStorage.getItem("token")).access_token;
+            <% if (authenticationType == 'session') { %>function getCSRF() {
+                var name = "CSRF-TOKEN=";
+                var ca = document.cookie.split(';');
+                for(var i=0; i<ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1);
+                    if (c.indexOf(name) != -1) return c.substring(name.length,c.length);
+                }
+                return "";
+            }
+            window.authorizations.add("key", new ApiKeyAuthorization("X-CSRF-TOKEN", getCSRF(), "header"));<% } %>
+            <% if (authenticationType == 'oauth2') { %>var authToken = JSON.parse(localStorage.getItem("ls.token")).access_token;
             window.authorizations.add("key", new ApiKeyAuthorization("Authorization",
                             "Bearer " + authToken, "header"));<% } %>
+            <% if (authenticationType == 'xauth') { %>var authToken = JSON.parse(localStorage.getItem("ls.token")).token;
+            window.authorizations.add("key", new ApiKeyAuthorization("X-Auth-Token", authToken, "header"));<% } %>
             window.swaggerUi.load();
         });
     </script>

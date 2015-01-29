@@ -14,16 +14,23 @@ public class OAuth2AuthenticationAccessToken implements Serializable {
 
     @Id
     private String id;
+
     private String tokenId;
+
     private OAuth2AccessToken oAuth2AccessToken;
+
     private String authenticationId;
+
     private String userName;
+
     private String clientId;
+
     private OAuth2Authentication authentication;
+
     private String refreshToken;
 
     @PersistenceConstructor
-    public OAuth2AuthenticationAccessToken(final OAuth2AccessToken oAuth2AccessToken, final OAuth2Authentication authentication, final String authenticationId) {
+    public OAuth2AuthenticationAccessToken(OAuth2AccessToken oAuth2AccessToken, OAuth2Authentication authentication, String authenticationId) {
         this.id = UUID.randomUUID().toString();
         this.tokenId = oAuth2AccessToken.getValue();
         this.oAuth2AccessToken = oAuth2AccessToken;

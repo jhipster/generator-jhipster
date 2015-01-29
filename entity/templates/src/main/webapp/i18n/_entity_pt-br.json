@@ -1,0 +1,19 @@
+{
+    "<%= angularAppName %>": {
+        "<%= entityInstance %>" : {
+            "home": {
+                "title": "<%= entityClass %>s",
+                "createLabel": "Create a new <%= entityClass %>",
+                "createOrEditLabel": "Create or edit a <%= entityClass %>"
+            },
+            "delete": {
+                "question": "Are you sure you want to delete <%= entityClass %> {{ id }}?"
+            },
+            "detail": {
+                "title": "<%= entityClass %>"
+            }<% for (fieldId in fields) { %>,
+            "<%=fields[fieldId].fieldName%>": "<%=fields[fieldId].fieldNameCapitalized%>"<% } %><% for (relationshipId in relationships) { %>,
+            "<%=relationships[relationshipId].otherEntityName%>": "<%= relationships[relationshipId].otherEntityName %>"<% } %>
+        }
+    }
+}

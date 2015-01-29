@@ -1,0 +1,49 @@
+<div>
+
+    <h2 translate="health.title">Application Health Check</h2>
+
+    <p>
+        <button type="button" class="btn btn-primary" ng-click="refresh()"><span
+                class="glyphicon glyphicon-refresh"></span>&nbsp;{{'health.refresh.button' | translate}}
+        </button>
+    </p>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>{{'health.table.service' | translate}}</th>
+            <th class="text-center">{{'health.table.status' | translate}}</th>
+            <th>{{'health.stacktrace' | translate}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="(k, v) in healthCheck" ng-show="k != 'status'">
+            <td>{{'health.indicator.' + k | translate}}</td>
+            <td class="text-center"><span class="label" ng-class="getLabelClass(v.status)">{{'health.status.' + v.status | translate}}</span></td>
+            <td class="text-center">
+                <div id="healthCheck" class="row" ng-show="v.error">
+                    <div class="col-md-4">
+                        <a class="hand" ng-click="showEmailException = !showEmailException">
+                            <i class="glyphicon glyphicon-eye-open"></i>
+                        </a>
+                        <div class="popover" ng-show="showEmailException">
+                            <div class="popover-title">
+                                <h4>{{'health.stacktrace' | translate}}
+                                    <button type="button" class="close"
+                                            ng-click="showEmailException = !showEmailException">
+                                        x
+                                    </button>
+                                </h4>
+                            </div>
+                            <div class="popover-content">
+                                <pre>{{healthCheck.mail.error}}</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

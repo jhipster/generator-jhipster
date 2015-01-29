@@ -1,0 +1,16 @@
+{
+    "login": {
+        "title": "Авторизация",
+        "form": {
+            "password": "Пароль",
+            "password.placeholder": "Ваш пароль",
+            "rememberme": "Входить автоматический",
+            "button": "Войти"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Не удалось войти!</strong> Пожалуйста, проверьте ваши учетные данные и попробуйте еще раз."
+            }
+        }
+    }
+}

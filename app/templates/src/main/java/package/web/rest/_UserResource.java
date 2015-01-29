@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;<% } %>
  * REST controller for managing users.
  */
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 public class UserResource {
 
     private final Logger log = LoggerFactory.getLogger(UserResource.class);
@@ -32,22 +32,22 @@ public class UserResource {
     private UserRepository userRepository;
 
     /**
-     * GET  /rest/users/:login -> get the "login" user.
+     * GET  /users/:login -> get the "login" user.
      */
-    @RequestMapping(value = "/rest/users/{login}",
+    @RequestMapping(value = "/users/{login}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @RolesAllowed(AuthoritiesConstants.ADMIN)<% if (javaVersion == '8') { %>
     ResponseEntity<User> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
-        return Optional.ofNullable(userRepository.findOne(login))
+        return userRepository.findOneByLogin(login)
                 .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }<% } else { %>
     public User getUser(@PathVariable String login, HttpServletResponse response) {
         log.debug("REST request to get User : {}", login);
-        User user = userRepository.findOne(login);
+        User user = userRepository.findOneByLogin(login);
         if (user == null) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
