@@ -1,8 +1,15 @@
 // Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= pkg.name %> <%= pkg.version %>
 'use strict';
-
-var pomParser = require('node-pom-parser');
+<% if (buildTool == 'maven') { %>
+var pomParser = require('node-pom-parser');<% } else { %>
+var fs = require('fs');<% } %>
 var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
+<% if (buildTool == 'gradle') { %>
+// Returns the first occurence of the version number
+var parseVersionFromBuildGradle = function() {
+    var versionRegex = /^version\s*=\s*[',"]([^',"]*)[',"]/gm; // Match and group the version number
+    return versionRegex.exec(fs.readFileSync('build.gradle', "utf8"))[1];
+};<% } %>
 
 // usemin custom step
 var useminAutoprefixer = {
@@ -26,7 +33,7 @@ module.exports = function (grunt) {
                 tasks: ['wiredep']
             },
             ngconstant: {
-                files: ['Gruntfile.js', 'pom.xml'],
+                files: ['Gruntfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>],
                 tasks: ['ngconstant:dev']
             },<% if (useCompass) { %>
             compass: {
@@ -487,7 +494,7 @@ module.exports = function (grunt) {
                 },
                 constants: {
                     ENV: 'dev',
-                    VERSION: pomParser.parsePom({ filePath: "pom.xml"}).version
+                    VERSION: <% if(buildTool == 'maven') { %>pomParser.parsePom({ filePath: "pom.xml"}).version<% } else { %>parseVersionFromBuildGradle()<% } %>
                 }
             },
             prod: {
@@ -496,7 +503,7 @@ module.exports = function (grunt) {
                 },
                 constants: {
                     ENV: 'prod',
-                    VERSION: pomParser.parsePom({ filePath: "pom.xml"}).version
+                    VERSION: <% if(buildTool == 'maven') { %>pomParser.parsePom({ filePath: "pom.xml"}).version<% } else { %>parseVersionFromBuildGradle()<% } %>
                 }
             }
         }
