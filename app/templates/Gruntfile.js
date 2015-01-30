@@ -1,14 +1,20 @@
 // Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= pkg.name %> <%= pkg.version %>
 'use strict';
-<% if (buildTool == 'maven') { %>
-var pomParser = require('node-pom-parser');<% } else { %>
-var fs = require('fs');<% } %>
+var fs = require('fs');
 var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
-<% if (buildTool == 'gradle') { %>
+<% if (buildTool == 'maven') { %>
+// Returns the second occurence of the version number
+var parseVersionFromPomXml = function() {
+    var versionRegex = /<\s*version\s*>\s*([^<,>]*)<\s*\/\s*version\s*>/gm; // Match and group the version number
+    var pomXml = fs.readFileSync('pom.xml', "utf8");
+    versionRegex.exec(pomXml); // throw first match away (parent version)
+    return versionRegex.exec(pomXml)[1];
+};<% } else { %>
 // Returns the first occurence of the version number
 var parseVersionFromBuildGradle = function() {
     var versionRegex = /^version\s*=\s*[',"]([^',"]*)[',"]/gm; // Match and group the version number
-    return versionRegex.exec(fs.readFileSync('build.gradle', "utf8"))[1];
+    var buildGradle = fs.readFileSync('build.gradle', "utf8");
+    return versionRegex.exec(buildGradle)[1];
 };<% } %>
 
 // usemin custom step
@@ -494,7 +500,7 @@ module.exports = function (grunt) {
                 },
                 constants: {
                     ENV: 'dev',
-                    VERSION: <% if(buildTool == 'maven') { %>pomParser.parsePom({ filePath: "pom.xml"}).version<% } else { %>parseVersionFromBuildGradle()<% } %>
+                    VERSION: <% if(buildTool == 'maven') { %>parseVersionFromPomXml()<% } else { %>parseVersionFromBuildGradle()<% } %>
                 }
             },
             prod: {
@@ -503,7 +509,7 @@ module.exports = function (grunt) {
                 },
                 constants: {
                     ENV: 'prod',
-                    VERSION: <% if(buildTool == 'maven') { %>pomParser.parsePom({ filePath: "pom.xml"}).version<% } else { %>parseVersionFromBuildGradle()<% } %>
+                    VERSION: <% if(buildTool == 'maven') { %>parseVersionFromPomXml()<% } else { %>parseVersionFromBuildGradle()<% } %>
                 }
             }
         }
