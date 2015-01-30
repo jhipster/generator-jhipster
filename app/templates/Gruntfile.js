@@ -3,12 +3,15 @@
 var fs = require('fs');
 var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
 <% if (buildTool == 'maven') { %>
+var parseString = require('xml2js').parseString;
 // Returns the second occurence of the version number
 var parseVersionFromPomXml = function() {
-    var versionRegex = /<\s*version\s*>\s*([^<,>]*)<\s*\/\s*version\s*>/gm; // Match and group the version number
+    var version;
     var pomXml = fs.readFileSync('pom.xml', "utf8");
-    versionRegex.exec(pomXml); // throw first match away (parent version)
-    return versionRegex.exec(pomXml)[1];
+    parseString(pomXml, function (err, result){
+        version = result.project.version[0];
+    });
+    return version;
 };<% } else { %>
 // Returns the first occurence of the version number
 var parseVersionFromBuildGradle = function() {
