@@ -79,7 +79,7 @@ module.exports = function (grunt) {
         },
         wiredep: {
             app: {
-                src: ['src/main/webapp/index.html'<% if (useCompass) { %>,, 'src/main/scss/main.scss'<% } %>],
+                src: ['src/main/webapp/index.html'<% if (useCompass) { %>, 'src/main/scss/main.scss'<% } %>],
                 exclude: [/angular-i18n/, /swagger-ui/]<% if (useCompass) { %>,
                 ignorePath: /\.\.\/webapp\/bower_components\// // remove ../webapp/bower_components/ from paths of injected sass files<% } %>
             },
