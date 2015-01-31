@@ -25,7 +25,8 @@
                 "configuration": "Configuration",
                 "logs": "Loglar",
                 "audits": "Denetim",
-                "apidocs": "API"
+                "apidocs": "API",
+                "database": "Database"
             },
             "language": "Dil"
         },

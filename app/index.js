@@ -15,7 +15,7 @@ var JhipsterGenerator = module.exports = function JhipsterGenerator(args, option
     this.on('end', function () {
         this.installDependencies({
             skipInstall: options['skip-install'],
-            callback: this._injectDependencies.bind(this)
+            callback: this._injectDependenciesAndConstants.bind(this)
         });
     });
 
@@ -796,6 +796,7 @@ JhipsterGenerator.prototype.app = function app() {
 
     var appScripts = [
         'scripts/app/app.js',
+        'scripts/app/app.constants.js',
         'scripts/components/auth/auth.service.js',
         'scripts/components/auth/principal.service.js',
         'scripts/components/auth/services/account.service.js',
@@ -870,7 +871,7 @@ JhipsterGenerator.prototype.app = function app() {
             'scripts/components/tracker/tracker.service.js'])
     }
 
-    this.indexFile = this.appendScripts(this.indexFile, 'scripts/app.js', appScripts);
+    this.indexFile = this.appendScripts(this.indexFile, 'scripts/app.js', appScripts, {}, ['.tmp', 'src/main/webapp']);
     this.write(webappDir + 'index.html', this.indexFile);
 
     this.config.set('baseName', this.baseName);
@@ -909,22 +910,25 @@ function removefolder(folder) {
     }
 }
 
-JhipsterGenerator.prototype._injectDependencies = function _injectDependencies() {
+JhipsterGenerator.prototype._injectDependenciesAndConstants = function _injectDependenciesAndConstants() {
     if (this.options['skip-install']) {
         this.log(
             'After running `npm install & bower install`, inject your front end dependencies' +
             '\ninto your source code by running:' +
             '\n' +
-            '\n' + chalk.yellow.bold('grunt wiredep')
+            '\n' + chalk.yellow.bold('grunt wiredep') +
+            '\n' +
+            '\n ...and generate the Angular constants with:' +
+            '\n' + chalk.yellow.bold('grunt ngconstant:dev')
         );
     } else {
         switch (this.frontendBuilder) {
             case 'gulp':
-                this.spawnCommand('gulp', ['wiredep:test', 'wiredep:app']);
+                this.spawnCommand('gulp', ['ngconstant:dev', 'wiredep:test', 'wiredep:app']);
                 break;
             case 'grunt':
             default:
-                this.spawnCommand('grunt', ['wiredep']);
+                this.spawnCommand('grunt', ['ngconstant:dev', 'wiredep']);
         }
     }
 };
