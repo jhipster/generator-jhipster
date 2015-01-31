@@ -117,7 +117,7 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
             if ("org.h2.jdbcx.JdbcDataSource".equals(propertyResolver.getProperty("dataSourceClassName"))) {
                 liquibase.setShouldRun(true);
                 log.warn("Using '{}' profile with H2 database in memory is not optimal, you should consider switching to" +
-                    " MySQl or Postgresql to avoid rebuilding your database upon each start.", Constants.SPRING_PROFILE_FAST);
+                    " MySQL or Postgresql to avoid rebuilding your database upon each start.", Constants.SPRING_PROFILE_FAST);
             } else {
                 liquibase.setShouldRun(false);
             }
