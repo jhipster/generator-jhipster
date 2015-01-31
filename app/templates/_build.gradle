@@ -12,6 +12,8 @@ buildscript {
 }
 
 apply plugin: 'java'
+sourceCompatibility=1.${javaVersion}
+targetCompatibility=1.${javaVersion}
 apply plugin: 'maven'
 apply plugin: 'spring-boot'
 apply plugin: 'war'
