@@ -1,5 +1,5 @@
 package <%=packageName%>.domain;
-<% if (relationships.length > 0  && (fieldsContainOwnerManyToMany == false || fieldsContainOneToMany == true)) { %>
+<% if (relationships.length > 0  && (fieldsContainOwnerManyToMany == true || fieldsContainOneToMany == true)) { %>
 import com.fasterxml.jackson.annotation.JsonIgnore;<% } %><% if (fieldsContainCustomTime == true) { %>
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;<% } %><% if (fieldsContainLocalDate == true) { %>
@@ -61,8 +61,8 @@ public class <%= entityClass %> implements Serializable {
     private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].relationshipFieldName %>;<% } else if (relationships[relationshipId].relationshipType == 'many-to-many') { %>
     @ManyToMany<% if (relationships[relationshipId].ownerSide == false) { %>(mappedBy = "<%= entityInstance %>s")
     @JsonIgnore<% } %><% if (hibernateCache != 'no') { %>
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
-    @JoinTable(name = "T_<%= name.toUpperCase() + '_' + relationships[relationshipId].relationshipName.toUpperCase() %>")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (relationships[relationshipId].ownerSide == true) { %>
+    @JoinTable(name = "T_<%= name.toUpperCase() + '_' + relationships[relationshipId].relationshipName.toUpperCase() %>")<% } %>
     private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();<% } else { %>
     @OneToOne<% if (relationships[relationshipId].ownerSide == false) { %>(mappedBy = "<%= entityInstance %>")<% } %>
     private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].relationshipFieldName %>;<% } %>
