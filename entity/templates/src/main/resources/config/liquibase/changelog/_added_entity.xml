@@ -14,7 +14,7 @@
         <createTable tableName="T_<%= name.toUpperCase() %>"><%if (pkManagedByJHipster == true) { %>
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
-            </column><% } %><% for (fieldId in fields) {
+            </column><% } for (fieldId in fields) {
             if (fields[fieldId].fieldType == 'String') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="varchar(255)"><%if (fields[fieldId].isPk == true) { %>
                 <constraints primaryKey="true" nullable="false"/><% } %>

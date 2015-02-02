@@ -30,13 +30,12 @@ import java.util.Set;<% } %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'mongodb') { %>
 @Document(collection = "T_<%= name.toUpperCase() %>")<% } %>
 public class <%= entityClass %> implements Serializable {
-    <% if (databaseType == 'sql' && pkManagedByJHipster == true) { %>
-    @Id
+    <% if (pkManagedByJHipster == true) { %>
+	@Id<% if (databaseType == 'sql') { %>
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;<% } %><% if (databaseType == 'mongodb') { %>
-	@Id
-    private String id;<% } %>
-	<% for (fieldId in fields) { %><% if (databaseType == 'sql') { %><% if (fields[fieldId].isPk == true) { %>
+    private Long id;<% } if (databaseType == 'mongodb') { %>
+    private String id;<% } } %>
+	<% for (fieldId in fields) { if (databaseType == 'sql') { if (fields[fieldId].isPk == true) { %>
     @Id<% } %><% if (fields[fieldId].fieldType == 'DateTime') { %>
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = CustomDateTimeSerializer.class)
