@@ -172,24 +172,27 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
                 return response.relationshipAdd == true;
             },
             type: 'input',
-            name: 'relationshipName',
-            validate: function (input) {
-                if ((/^([a-zA-Z0-9_]*)$/.test(input)) && input != '' && input != 'id' && fieldNamesUnderscored.indexOf(_s.underscored(input)) == -1) return true;
-                return 'Your relationship name cannot contain special characters or use an already existing field name';
-            },
-            message: 'What is the name of the relationship?'
-        },
-        {
-            when: function (response) {
-                return response.relationshipAdd == true;
-            },
-            type: 'input',
             name: 'otherEntityName',
             validate: function (input) {
                 if ((/^([a-zA-Z0-9_]*)$/.test(input)) && input != '') return true;
                 return 'Your other entity cannot contain special characters';
             },
             message: 'What is the name of the other entity?'
+        },
+        {
+            when: function (response) {
+                return response.relationshipAdd == true;
+            },
+            type: 'input',
+            name: 'relationshipName',
+            validate: function (input) {
+                if ((/^([a-zA-Z0-9_]*)$/.test(input)) && input != '' && input != 'id' && fieldNamesUnderscored.indexOf(_s.underscored(input)) == -1) return true;
+                return 'Your relationship name cannot contain special characters or use an already existing field name';
+            },
+            message: 'What is the name of the relationship?',
+            default: function (response) {
+                 return response.otherEntityName;
+            }
         },
         {
             when: function (response) {
@@ -288,7 +291,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
         }
         console.log(chalk.red('-------------------'));
         for (var id in this.relationships) {
-            console.log(chalk.red(this.relationships[id].otherEntityName + ' (' + this.relationships[id].relationshipType + ')'));
+            console.log(chalk.red(this.relationships[id].relationshipName + ' - ' + this.relationships[id].otherEntityName + ' (' + this.relationships[id].relationshipType + ')'));
         }
         if (props.relationshipAdd) {
             this.askForRelationships();
