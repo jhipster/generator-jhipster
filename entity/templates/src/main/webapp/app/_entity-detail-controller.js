@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('<%= entityClass %>DetailController', function ($scope, $stateParams, <%= entityClass %><% for (relationshipId in relationships) { %>, <%= relationships[relationshipId].otherEntityNameCapitalized %><% } %>) {
+    .controller('<%= entityClass %>DetailController', function ($scope, $stateParams<% for (idx in differentTypes) { %>, <%= differentTypes[idx] %><% } %>) {
         $scope.<%= entityInstance %> = {};
         $scope.load = function (id) {
             <%= entityClass %>.get({id: id}, function(result) {
