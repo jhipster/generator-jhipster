@@ -227,10 +227,22 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
                 return response.relationshipAdd == true;
             },
             type: 'input',
-            name: 'otherEntityName',
+            name: 'relationshipName',
             validate: function (input) {
                 if ((/^([a-zA-Z0-9_]*)$/.test(input)) && input != '' && input != 'id' && fieldNamesUnderscored.indexOf(_s.underscored(input)) == -1) return true;
                 return 'Your relationship name cannot contain special characters or use an already existing field name';
+            },
+            message: 'What is the name of the relationship?'
+        },
+        {
+            when: function (response) {
+                return response.relationshipAdd == true;
+            },
+            type: 'input',
+            name: 'otherEntityName',
+            validate: function (input) {
+                if ((/^([a-zA-Z0-9_]*)$/.test(input)) && input != '') return true;
+                return 'Your other entity cannot contain special characters';
             },
             message: 'What is the name of the other entity?'
         },
@@ -307,6 +319,9 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
         }
         if (props.relationshipAdd) {
             var relationship = {relationshipId: this.relationshipId,
+                relationshipName: props.relationshipName,
+                relationshipNameCapitalized: _s.capitalize(props.relationshipName),
+                relationshipFieldName: props.relationshipName.charAt(0).toLowerCase() + props.relationshipName.slice(1),
                 otherEntityName: props.otherEntityName.charAt(0).toLowerCase() + props.otherEntityName.slice(1),
                 relationshipType: props.relationshipType,
                 otherEntityNameCapitalized: _s.capitalize(props.otherEntityName),
@@ -319,7 +334,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             if (props.relationshipType == 'one-to-many') {
                 this.fieldsContainOneToMany = true;
             }
-            fieldNamesUnderscored.push(_s.underscored(props.otherEntityName));
+            fieldNamesUnderscored.push(_s.underscored(props.relationshipName));
             this.relationships.push(relationship);
         }
         console.log(chalk.red('===========' + _s.capitalize(this.name) + '=============='));
@@ -373,6 +388,15 @@ EntityGenerator.prototype.files = function files() {
     }
     this.entityClass = _s.capitalize(this.name);
     this.entityInstance = this.name.charAt(0).toLowerCase() + this.name.slice(1);
+    
+    this.differentTypes = [this.entityClass];
+    var relationshipId;
+    for (relationshipId in this.relationships) {
+      var entityType = this.relationships[relationshipId].otherEntityNameCapitalized;
+      if (this.differentTypes.indexOf(entityType) == -1) {
+        this.differentTypes.push(entityType);
+      }
+    }
 
     var insight = this.insight();
     insight.track('generator', 'entity');
@@ -436,6 +460,7 @@ EntityGenerator.prototype.files = function files() {
     this.copyI18n('es');
     this.copyI18n('fr');
     this.copyI18n('kr');
+    this.copyI18n('hu');
     this.copyI18n('pl');
     this.copyI18n('pt-br');
     this.copyI18n('ru');

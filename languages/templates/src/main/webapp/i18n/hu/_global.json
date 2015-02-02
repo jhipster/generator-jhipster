@@ -1,0 +1,89 @@
+{
+    "global": {
+        "title": "<%= baseName %>",
+        "browsehappy": "Ön <strong>elavult</strong> böngészőt használ. Kérjük <a href=\"http://browsehappy.com/?locale=hu\">frissítse böngészőjét</a> hogy javuljon a felhasználói élménye.",
+        "menu": {
+            "home": "Kezdőpont",
+            "entities": {
+                "main": "Entitások",
+                "additionalEntity": "JHipster will add addtional entities"
+            },
+            "account": {
+                "main": "Hozzáférés",
+                "settings": "Beállítások",
+                "password": "Jelszó",
+                "sessions": "Munkamenetek",
+                "login": "Hitelesítés",
+                "logout": "Kilépés",
+                "register": "Regisztráció"
+            },
+            "admin": {
+                "main": "Adminisztráció",
+                "tracker": "Felhasználó követés",
+                "metrics": "Metrikák",
+                "health": "Health",
+                "configuration": "Konfiguráció",
+                "logs": "Naplók",
+                "audits": "Nyomkövetés",
+                "apidocs": "API dokumentáció"
+            },
+            "language": "Nyelvek"
+        },
+        "form": {
+            "username": "Azonosító",
+            "username.placeholder": "Az Ön felhasználói neve",
+            "newpassword": "Új jelszó",
+            "newpassword.placeholder": "Új jelszava",
+            "confirmpassword": "Új jelszó megerősítése",
+            "confirmpassword.placeholder": "Újra írja be jelszavát",
+            "email": "E-mail",
+            "email.placeholder": "Az Ön email címe"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Ha be akar <a href=\"#/login\">lépni</a>, kipróbálhatja az alapértelmezett azonosítókat:<br/>- Adminisztrátori (azonosító=\"admin\" és a jelszó=\"admin\") <br/>- Felhasználó (azonosító=\"user\" és jelszó=\"user\").",
+                "register": "Nincs még hozzáférése? <a href=\"#/register\">Regisztráljon</a>"
+            },
+            "error": {
+                "dontmatch" : "A jelszó és a jelszó megerősítés nem egyezik meg!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "A jelszó kötelező.",
+                    "minlength": "A jelszó legalább 6 betűből kell, hogy álljon",
+                    "maxlength": "A jelszó nem lehet hosszabb mint 50 betű",
+                    "strength": "A jelszó bonyolultsága:"
+                },
+                "confirmpassword": {
+                    "required": "A jelszó megerősítés kötelező.",
+                    "minlength": "A jelszó megerősítés legalább 6 betűből kell, hogy álljon",
+                    "maxlength": "A jelszó megerősítés nem lehet hosszabb mint 50 betű"
+                },
+                "email": {
+                    "required": "Az email cím kötelező.",
+                    "invalid": "A megadott email cím nem jó.",
+                    "minlength": "Az email cím legalább 5 betüből kell, hogy álljon",
+                    "maxlength": "Az email cím nem lehet hosszabb mint 50 betű"
+                }
+            }
+        }
+    },
+    "entity": {
+        "action": {
+            "back": "Vissza",
+            "cancel": "Mégsem",
+            "delete": "Törlés",
+            "edit": "Szerkesztés",
+            "save": "Mentés",
+            "view": "Nézet"
+        },
+        "detail": {
+            "field": "Mező",
+            "value": "Érték"
+        },
+        "delete": {
+            "title": "Erősítse meg a törlési szándékát"
+        }
+    },
+    "footer": "Ez a lábléc."
+}

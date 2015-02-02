@@ -37,37 +37,39 @@
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bit"><%if (fields[fieldId].isPk == true) { %>
                 <constraints primaryKey="true" nullable="false"/><% } %>
             </column><% } } %><% for (relationshipId in relationships) { %><% if ((relationships[relationshipId].relationshipType == 'many-to-one') || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) { %>
-            <column name="<%=relationships[relationshipId].otherEntityName.toLowerCase() %>_id" type="bigint"/><% } } %>
+            <column name="<%=relationships[relationshipId].relationshipName.toLowerCase() %>_id" type="bigint"/><% } } %>
         </createTable><% for (fieldId in fields) {
             if (fields[fieldId].fieldType == 'DateTime') { %>
         <dropDefaultValue tableName="T_<%= name.toUpperCase() %>" columnName="<%=fields[fieldId].fieldNameUnderscored %>" columnDataType="datetime"/>
 <% } } %>
         <% for (relationshipId in relationships) { %><% if ((relationships[relationshipId].relationshipType == 'many-to-one') || ((relationships[relationshipId].relationshipType == 'one-to-one')) && (relationships[relationshipId].ownerSide == true)) { %>
-        <addForeignKeyConstraint baseColumnNames="<%= relationships[relationshipId].otherEntityName.toLowerCase() %>_id"
+        <addForeignKeyConstraint baseColumnNames="<%= relationships[relationshipId].relationshipName.toLowerCase() %>_id"
                                  baseTableName="T_<%= name.toUpperCase() %>"
-                                 constraintName="fk_<%= name.toLowerCase() %>_<%= relationships[relationshipId].otherEntityName.toLowerCase() %>_id"
+                                 constraintName="fk_<%= name.toLowerCase() %>_<%= relationships[relationshipId].relationshipName.toLowerCase() %>_id"
                                  referencedColumnNames="id"
                                  referencedTableName="T_<%= relationships[relationshipId].otherEntityName.toUpperCase() %>"/>
-<% } else if ((relationships[relationshipId].relationshipType == 'many-to-many') && (relationships[relationshipId].ownerSide == true)) { %>
-        <createTable tableName="T_<%= name.toUpperCase() %>_T_<%= relationships[relationshipId].otherEntityName.toUpperCase() %>">
+<% } else if ((relationships[relationshipId].relationshipType == 'many-to-many') && (relationships[relationshipId].ownerSide == true)) {
+   var joinTableName = 'T_' + name.toUpperCase() + '_'+ relationships[relationshipId].relationshipName.toUpperCase();
+  %>
+        <createTable tableName="<%= joinTableName %>">
             <column name="<%= relationships[relationshipId].otherEntityName %>s_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="<%= name %>s_id" type="bigint">
+            <column name="<%= relationships[relationshipId].relationshipName %>s_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="<%= name %>s_id, <%= relationships[relationshipId].otherEntityName %>s_id" tableName="T_<%= name.toUpperCase() %>_T_<%= relationships[relationshipId].otherEntityName.toUpperCase() %>"/>
+        <addPrimaryKey columnNames="<%= relationships[relationshipId].relationshipName %>s_id, <%= relationships[relationshipId].otherEntityName %>_id" tableName="<%= joinTableName %>"/>
 
         <addForeignKeyConstraint baseColumnNames="<%= relationships[relationshipId].otherEntityName %>s_id"
-                                 baseTableName="T_<%= name.toUpperCase() %>_T_<%= relationships[relationshipId].otherEntityName.toUpperCase() %>"
-                                 constraintName="fk_<%= name.toLowerCase() %>_<%= relationships[relationshipId].otherEntityName.toLowerCase() %>_id"
+                                 baseTableName="<%= joinTableName %>"
+                                 constraintName="fk_<%= name.toLowerCase() %>_<%= relationships[relationshipId].relationshipName.toLowerCase() %>_id"
                                  referencedColumnNames="id"
                                  referencedTableName="T_<%= relationships[relationshipId].otherEntityName.toUpperCase() %>"/>
 
-        <addForeignKeyConstraint baseColumnNames="<%= name %>s_id"
-                                 baseTableName="T_<%= name.toUpperCase() %>_T_<%= relationships[relationshipId].otherEntityName.toUpperCase() %>"
+        <addForeignKeyConstraint baseColumnNames="<%= relationships[relationshipId].relationshipName %>s_id"
+                                 baseTableName="<%= joinTableName %>"
                                  constraintName="fk_<%= relationships[relationshipId].otherEntityName.toLowerCase() %>_<%= name.toLowerCase() %>_id"
                                  referencedColumnNames="id"
                                  referencedTableName="T_<%= name.toUpperCase() %>"/>
