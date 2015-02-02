@@ -6,8 +6,11 @@ buildscript {
     dependencies {
         classpath('org.springframework.boot:spring-boot-gradle-plugin:1.2.0.RELEASE')
         classpath('com.moowork.gradle:gradle-node-plugin:0.8')
+        <% if(frontendBuilder == 'grunt') {%>
         classpath('com.moowork.gradle:gradle-grunt-plugin:0.6')
-        classpath('be.filipblondeel.gradle:gradle-gulp-plugin:0.1')
+        <% }  if(frontendBuilder == 'gulp') {%>
+  	    classpath('com.moowork.gradle:gradle-gulp-plugin:0.1')
+        <% } %>
     }
 }
 
@@ -95,7 +98,7 @@ dependencies {
     compile group: 'commons-lang', name: 'commons-lang', version: commons_lang_version
     compile group: 'commons-io', name: 'commons-io', version: commons_io_version
     compile group: 'javax.inject', name: 'javax.inject', version: javax_inject_version
-    compile group: 'javax.transaction', name: 'javax.transaction-api', version: javax_transaction_version 
+    compile group: 'javax.transaction', name: 'javax.transaction-api', version: javax_transaction_version
     compile group: 'joda-time', name: 'joda-time', version: joda_time_version<% if (databaseType == 'sql') { %>
     compile group: 'joda-time', name: 'joda-time-hibernate', version: joda_time_hibernate_version<% } %>
     compile group: 'org.apache.geronimo.javamail', name: 'geronimo-javamail_1.4_mail', version: geronimo_javamail_1_4_mail_version<% if (databaseType == 'sql') { %>
