@@ -1,5 +1,5 @@
 package <%=packageName%>.domain;
-<% if (relationships.length > 0  && (fieldsContainOwnerManyToMany == true || fieldsContainOneToMany == true)) { %>
+<% if (relationships.length > 0  && (fieldsContainOwnerManyToMany == false || fieldsContainOneToMany == true)) { %>
 import com.fasterxml.jackson.annotation.JsonIgnore;<% } %><% if (fieldsContainCustomTime == true) { %>
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;<% } %><% if (fieldsContainLocalDate == true) { %>
