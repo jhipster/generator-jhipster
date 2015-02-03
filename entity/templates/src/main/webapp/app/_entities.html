@@ -107,7 +107,7 @@
                     <th>ID</th><% for (fieldId in fields) { %>
                     <th translate="<%=keyPrefix + fields[fieldId].fieldName %>"><%=fields[fieldId].fieldNameCapitalized%></th><% } %><% for (relationshipId in relationships) {
                         if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
-                    <th translate="<%= keyPrefix + otherEntityName%>"><%=relationships[relationshipId].otherEntityName%></th><% } } %>
+                    <th translate="<%= keyPrefix + relationships[relationshipId].otherEntityName%>"><%=relationships[relationshipId].otherEntityName%></th><% } } %>
                     <th></th>
                 </tr>
             </thead>
