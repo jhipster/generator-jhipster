@@ -221,7 +221,7 @@ gulp.task('usemin', ['images', 'styles'], function() {
 gulp.task('ngconstant:dev', function() {
     ngConstant({
         dest: 'app.constants.js',
-        name: 'jhipsterApp',
+        name: '<%= angularAppName %>',
         deps:   false,
         noFile: true,
         interpolate: /\{%=(.+?)%\}/g,
@@ -237,7 +237,7 @@ gulp.task('ngconstant:dev', function() {
 gulp.task('ngconstant:prod', function() {
     ngConstant({
         dest: 'app.constants.js',
-        name: 'jhipsterApp',
+        name: '<%= angularAppName %>',
         deps:   false,
         noFile: true,
         interpolate: /\{%=(.+?)%\}/g,
