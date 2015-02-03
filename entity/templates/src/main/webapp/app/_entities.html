@@ -43,23 +43,21 @@
                                    ng-model="<%=entityInstance %>.<%=fields[fieldId].fieldName%>"<% if (fields[fieldId].fieldType == 'DateTime'){%> ng-model-options="{timezone: 'UTC'}"<%}%>>
                         </div><% } %>
 <% for (relationshipId in relationships) {
-    if (relationships[relationshipId].relationshipType == 'many-to-one') {
-        var otherEntityName = relationships[relationshipId].otherEntityName;
-        var relationshipName = relationships[relationshipId].relationshipName;
-        var translationKey = keyPrefix + relationshipName;
+    var otherEntityName = relationships[relationshipId].otherEntityName;
+    var relationshipName = relationships[relationshipId].relationshipName;
+    var relationshipFieldName = relationships[relationshipId].relationshipFieldName;
+    var translationKey = keyPrefix + relationshipName;
+     if (relationships[relationshipId].relationshipType == 'many-to-one') {
                         %>
                         <div class="form-group">
                             <label translate="<%= translationKey %>"><%=relationshipName %></label>
-                            <select class="form-control" ng-model="<%=entityInstance %>.<%=relationshipName %>.id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=relationships[relationshipId].otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName %>s">
+                            <select class="form-control" ng-model="<%=entityInstance %>.<%=relationshipFieldName %>.id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=relationships[relationshipId].otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName %>s">
                             </select>
                         </div><% } else if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) {
-        var otherEntityName = relationships[relationshipId].otherEntityName;
-        var relationshipName = relationships[relationshipId].relationshipName;
-        var translationKey = keyPrefix + relationshipName;
                             %>
                          <div class="form-group">
                              <label translate="<%= translationKey %>"><%=relationshipName %></label>
-                             <select class="form-control" multiple ng-model="<%=entityInstance %>.<%=relationshipName %>s" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=relationships[relationshipId].otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName %>s track by <%=otherEntityName %>.id">
+                             <select class="form-control" multiple ng-model="<%=entityInstance %>.<%=relationshipFieldName %>s" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=relationships[relationshipId].otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName %>s track by <%=otherEntityName %>.id">
                              </select>
                          </div><% } } %>
 
