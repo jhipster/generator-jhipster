@@ -37,6 +37,10 @@ var yeoman = {
     liveReloadPort: 35729
 };
 
+var endsWith = function (str, suffix) {
+    return str.indexOf('/', str.length - suffix.length) !== -1;
+};
+
 <% if (buildTool == 'maven') { %>
 var parseString = require('xml2js').parseString;
 var parseVersionFromPomXml = function() {
@@ -112,7 +116,10 @@ gulp.task('scripts', function () {
 
 gulp.task('serve', ['wiredep:test', 'wiredep:app', 'ngconstant:dev'<% if(useCompass) { %>, 'compass'<% } %>], function() {
     var baseUri = 'http://localhost:' + yeoman.apiPort;
-    // Routes to proxy to the backend
+    // Routes to proxy to the backend. Routes ending with a / will setup
+    // a redirect so that if accessed without a trailing slash, will
+    // redirect. This is required for some endpoints for proxy-middleware
+    // to correctly handle them.
     var proxyRoutes = [
         '/api',
         '/health',
@@ -121,8 +128,16 @@ gulp.task('serve', ['wiredep:test', 'wiredep:app', 'ngconstant:dev'<% if(useComp
         '/metrics',
         '/dump'<% if (authenticationType == 'oauth2') { %>,
         '/oauth/token'<% } %><% if (devDatabaseType == 'h2Memory') { %>,
-        '/console'<% } %>
+        '/console/'<% } %>
     ];
+
+    var requireTrailingSlash = proxyRoutes.filter(function (r) {
+        return endsWith(r, '/');
+    }).map(function (r) {
+        // Strip trailing slash so we can use the route to match requests
+        // with non trailing slash
+        return r.substr(0, r.length - 1);
+    });
 
     connect.server({
         root: [yeoman.app, yeoman.tmp],
@@ -131,12 +146,25 @@ gulp.task('serve', ['wiredep:test', 'wiredep:app', 'ngconstant:dev'<% if(useComp
             port: yeoman.liveReloadPort
         },
         middleware: function() {
-            // Build a list of proxies for routes: [route1_proxy, route2_proxy, ...]
-            return proxyRoutes.map(function (r) {
-                var options = url.parse(baseUri + r);
-                options.route = r;
-                return proxy(options);
-            });
+            return [
+                // Ensure trailing slash in routes that require it
+                function (req, res, next) {
+                    for (var route in requireTrailingSlash) {
+                        if (url.parse(req.url).path === route) {
+                            res.statusCode = 301;
+                            res.setHeader('Location', route + '/');
+                            res.end();
+                        }
+                        next();
+                    }
+                }
+            ].concat(
+                // Build a list of proxies for routes: [route1_proxy, route2_proxy, ...]
+                proxyRoutes.map(function (r) {
+                    var options = url.parse(baseUri + r);
+                    options.route = r;
+                    return proxy(options);
+                }));
         }
     });
     gulp.run('watch');
