@@ -41,7 +41,6 @@
     "gulp-minify-css": "0.3.11",
     "gulp-uglify": "1.1.0",
     "gulp-minify-html": "0.1.8",
-    "gulp-if": "1.2.5",
     "gulp-imagemin": "2.1.0",
     "gulp-flatten": "0.0.4",
     "gulp-ng-annotate": "0.5.0",
@@ -49,7 +48,6 @@
     "gulp-connect": "2.2.0",
     "gulp-clean": "0.3.1",
     "gulp-karma": "https://github.com/lazd/gulp-karma/tarball/helper",
-    "gulp-replace": "0.5.2",
     "gulp-rev": "3.0.0",
     "gulp-jshint": "1.9.0",
     "gulp-browserify": "0.5.1",<% if (useCompass) { %>
