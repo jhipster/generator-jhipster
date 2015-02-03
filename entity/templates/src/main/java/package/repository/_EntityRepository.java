@@ -13,11 +13,11 @@ import java.math.BigDecimal;<% } %>
  */<% } %><% if (databaseType=='mongodb') { %>/**
  * Spring Data MongoDB repository for the <%= entityClass %> entity.
  */<% } %>
+public interface <%=entityClass%>Repository extends <% if (databaseType=='sql') { %>JpaRepository<% } %><% if (databaseType=='mongodb') { %>MongoRepository<% } %><<%=entityClass%>,<% if (databaseType=='sql') { %><%= primaryKeyField.fieldType %><% } %><% if (databaseType=='mongodb') { %>String<% } %>> {
 
-public interface <%=entityClass%>Repository extends <% if (databaseType=='sql') { %>JpaRepository<% } %><% if (databaseType=='mongodb') { %>MongoRepository<% } %><<%= entityClass %>, <% if (databaseType=='sql') { %><%= primaryKeyField.fieldType %><% } %><% if (databaseType=='mongodb') { %>String<% } %>> {
-<% if (fieldsContainOwnerManyToMany == true) { %>
+<% if (fieldsContainOwnerManyToMany==true) { %>
     @Query("select <%= entityInstance %> from <%= entityClass %> <%= entityInstance %> <% for (relationshipId in relationships) {
-        if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %>left join fetch <%= entityInstance %>.<%= relationships[relationshipId].relationshipFieldName %>s <% } } %>where <%= entityInstance %>.<%= primaryKeyField.fieldName %> = :<%= primaryKeyField.fieldName %>")
+    if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %>left join fetch <%= entityInstance %>.<%= relationships[relationshipId].otherEntityName %>s <% } } %>where <%= entityInstance %>.<%= primaryKeyField.fieldName %> = :<%= primaryKeyField.fieldName %>")
     <%= entityClass %> findOneWithEagerRelationships(@Param("<%= primaryKeyField.fieldName %>") <%= primaryKeyField.fieldType %> <%= primaryKeyField.fieldName %>);
 <% } %>
 }

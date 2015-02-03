@@ -19,14 +19,13 @@
                     </td>
                 </tr><% } %><% for (relationshipId in relationships) {
                                  if (relationships[relationshipId].relationshipType == 'many-to-one') {
-                                     var relationshipName = relationships[relationshipId].relationshipName;
                                      var otherEntityName = relationships[relationshipId].otherEntityName; %>
                 <tr>
                     <td>
-                        <span translate="<%= keyPrefix %>.<%=relationshipName%>"><%=relationshipName%></span>
+                        <span translate="<%= keyPrefix %>.<%=otherEntityName%>"><%=otherEntityName%></span>
                     </td>
                     <td>
-                        <input type="text" class="input-sm form-control" value="{{<%=entityInstance %>.<%=relationshipName%>.<%=relationships[relationshipId].otherEntityField%>}}" readonly>
+                        <input type="text" class="input-sm form-control" value="{{<%=entityInstance %>.<%=otherEntityName%>.<%=relationships[relationshipId].otherEntityField%>}}" readonly>
                     </td>
                 </tr><% } } %>
             </tbody>

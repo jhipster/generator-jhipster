@@ -43,21 +43,21 @@
                                    ng-model="<%=entityInstance %>.<%=fields[fieldId].fieldName%>"<% if (fields[fieldId].fieldType == 'DateTime'){%> ng-model-options="{timezone: 'UTC'}"<%}%>>
                         </div><% } %>
 <% for (relationshipId in relationships) {
-    var otherEntityName = relationships[relationshipId].otherEntityName;
-    var relationshipName = relationships[relationshipId].relationshipName;
-    var relationshipFieldName = relationships[relationshipId].relationshipFieldName;
-    var translationKey = keyPrefix + relationshipName;
-     if (relationships[relationshipId].relationshipType == 'many-to-one') {
+    if (relationships[relationshipId].relationshipType == 'many-to-one') {
+        var otherEntityName = relationships[relationshipId].otherEntityName;
+        var translationKey = keyPrefix + otherEntityName;
                         %>
                         <div class="form-group">
-                            <label translate="<%= translationKey %>"><%=relationshipName %></label>
-                            <select class="form-control" ng-model="<%=entityInstance %>.<%=relationshipFieldName %>.id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=relationships[relationshipId].otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName %>s">
+                            <label translate="<%= translationKey %>"><%=otherEntityName %></label>
+                            <select class="form-control" ng-model="<%=entityInstance %>.<%=otherEntityName %>.id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=relationships[relationshipId].otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName %>s">
                             </select>
                         </div><% } else if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) {
+        var otherEntityName = relationships[relationshipId].otherEntityName;
+        var translationKey = keyPrefix + otherEntityName;
                             %>
                          <div class="form-group">
-                             <label translate="<%= translationKey %>"><%=relationshipName %></label>
-                             <select class="form-control" multiple ng-model="<%=entityInstance %>.<%=relationshipFieldName %>s" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=relationships[relationshipId].otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName %>s track by <%=otherEntityName %>.id">
+                             <label translate="<%= translationKey %>"><%=otherEntityName %></label>
+                             <select class="form-control" multiple ng-model="<%=entityInstance %>.<%=otherEntityName %>s" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=relationships[relationshipId].otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName %>s track by <%=otherEntityName %>.id">
                              </select>
                          </div><% } } %>
 
@@ -107,7 +107,7 @@
                 <th>ID</th><% } for (fieldId in fields) { %>
                 <th translate="<%=keyPrefix + fields[fieldId].fieldName %>"><%=fields[fieldId].fieldNameCapitalized%></th><% } %><% for (relationshipId in relationships) {
                 if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
-                <th translate="<%= keyPrefix + relationships[relationshipId].relationshipName%>"><%=relationships[relationshipId].relationshipName%></th><% } } %>
+                <th translate="<%= keyPrefix + relationships[relationshipId].otherEntityName%>"><%=relationships[relationshipId].otherEntityName%></th><% } } %>
                 <th></th>
             </tr>
             </thead>
@@ -116,7 +116,7 @@
                 <td><a ui-sref="<%= entityInstance %>Detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td><% } for (fieldId in fields) { %>
                 <td><%if (fields[fieldId].isPk == true) { %><a ui-sref="<%= entityInstance %>Detail({id:<%= entityInstance %>.<%=fields[fieldId].fieldName%>})"><%}%>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%>}}<%if (fields[fieldId].isPk == true) { %></a><%}%></td><% } %><% for (relationshipId in relationships) {
                 if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
-                <td>{{<%=entityInstance %>.<%=relationships[relationshipId].relationshipName%>.<%=relationships[relationshipId].otherEntityField%>}}</td><% } } %>
+                <td>{{<%=entityInstance %>.<%=relationships[relationshipId].otherEntityName%>.<%=relationships[relationshipId].otherEntityField%>}}</td><% } } %>
                 <td>
                     <button type="submit"
                             ui-sref="<%= entityInstance %>Detail({id:<%= entityInstance %>.<%=primaryKeyField.fieldName %>})"
