@@ -13,8 +13,8 @@ import org.springframework.data.mongodb.repository.MongoRepository;<%}%>
  */<% } %>
 public interface <%=entityClass%>Repository extends <% if (databaseType=='sql') { %>JpaRepository<% } %><% if (databaseType=='mongodb') { %>MongoRepository<% } %><<%=entityClass%>,<% if (databaseType=='sql') {%>Long<%}%><% if (databaseType=='mongodb') { %>String<%}%>>{
 <% if (fieldsContainOwnerManyToMany==true) { %>
-    @Query("select <%= entityInstance %> from <%= entityClass %> <%= entityInstance %> <% for (relationshipId in relationships) {
-    if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %>left join fetch <%=entityInstance%>.<%=relationships[relationshipId].otherEntityName%>s<%} }%> where <%=entityInstance%>.id =:id")
+    @Query("select <%= entityInstance %> from <%= entityClass %> <%= entityInstance %><% for (relationshipId in relationships) {
+    if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %> left join fetch <%=entityInstance%>.<%=relationships[relationshipId].relationshipFieldName%>s<%} }%> where <%=entityInstance%>.id =:id")
     <%=entityClass%> findOneWithEagerRelationships(@Param("id") Long id);
 <% } %>
 }

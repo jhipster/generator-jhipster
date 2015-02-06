@@ -56,15 +56,18 @@ public class <%= entityClass %> implements Serializable {
     @OneToMany(mappedBy = "<%= entityInstance %>")
     @JsonIgnore<% if (hibernateCache != 'no') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
-    private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> <%= relationships[relationshipId].otherEntityName %>s = new HashSet<>();<% } else if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
+    private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();<% } else if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
     @ManyToOne
-    private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].otherEntityName %>;<% } else if (relationships[relationshipId].relationshipType == 'many-to-many') { %>
+    private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].relationshipFieldName %>;<% } else if (relationships[relationshipId].relationshipType == 'many-to-many') { %>
     @ManyToMany<% if (relationships[relationshipId].ownerSide == false) { %>(mappedBy = "<%= entityInstance %>s")
     @JsonIgnore<% } %><% if (hibernateCache != 'no') { %>
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
-    private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> <%= relationships[relationshipId].otherEntityName %>s = new HashSet<>();<% } else { %>
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (relationships[relationshipId].ownerSide == true) { %>
+    @JoinTable(name = "T_<%= name.toUpperCase() + '_' + relationships[relationshipId].relationshipName.toUpperCase() %>",
+               joinColumns = @JoinColumn(name="<%= name %>s_id", referencedColumnName="ID"),
+               inverseJoinColumns = @JoinColumn(name="<%= relationships[relationshipId].relationshipName %>s_id", referencedColumnName="ID"))<% } %>
+    private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();<% } else { %>
     @OneToOne<% if (relationships[relationshipId].ownerSide == false) { %>(mappedBy = "<%= entityInstance %>")<% } %>
-    private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].otherEntityName %>;<% } %>
+    private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].relationshipFieldName %>;<% } %>
 <% } %>
     public <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %> getId() {
         return id;
@@ -82,19 +85,19 @@ public class <%= entityClass %> implements Serializable {
         this.<%= fields[fieldId].fieldName %> = <%= fields[fieldId].fieldName %>;
     }
 <% } %><% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'one-to-many' || relationships[relationshipId].relationshipType == 'many-to-many') { %>
-    public Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> get<%= relationships[relationshipId].otherEntityNameCapitalized %>s() {
-        return <%= relationships[relationshipId].otherEntityName %>s;
+    public Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> get<%= relationships[relationshipId].relationshipNameCapitalized %>s() {
+        return <%= relationships[relationshipId].relationshipFieldName %>s;
     }
 
-    public void set<%= relationships[relationshipId].otherEntityNameCapitalized %>s(Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> <%= relationships[relationshipId].otherEntityName %>s) {
-        this.<%= relationships[relationshipId].otherEntityName %>s = <%= relationships[relationshipId].otherEntityName %>s;
+    public void set<%= relationships[relationshipId].relationshipNameCapitalized %>s(Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> <%= relationships[relationshipId].otherEntityName %>s) {
+        this.<%= relationships[relationshipId].relationshipFieldName %>s = <%= relationships[relationshipId].otherEntityName %>s;
     }<% } else { %>
-    public <%= relationships[relationshipId].otherEntityNameCapitalized %> get<%= relationships[relationshipId].otherEntityNameCapitalized %>() {
-        return <%= relationships[relationshipId].otherEntityName %>;
+    public <%= relationships[relationshipId].otherEntityNameCapitalized %> get<%= relationships[relationshipId].relationshipNameCapitalized %>() {
+        return <%= relationships[relationshipId].relationshipFieldName %>;
     }
 
-    public void set<%= relationships[relationshipId].otherEntityNameCapitalized %>(<%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].otherEntityName %>) {
-        this.<%= relationships[relationshipId].otherEntityName %> = <%= relationships[relationshipId].otherEntityName %>;
+    public void set<%= relationships[relationshipId].relationshipNameCapitalized %>(<%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].otherEntityName %>) {
+        this.<%= relationships[relationshipId].relationshipFieldName %> = <%= relationships[relationshipId].otherEntityName %>;
     }<% } %>
 <% } %>
     @Override
