@@ -6,7 +6,7 @@ security.basic.enabled: false
 endpoints.jolokia.enabled: false
 
 # security configuration (this key should be unique for your application, and kept secret)
-jhipster.security.rememberme.key: <%= baseName %>
+jhipster.security.rememberme.key: <%= rememberMeKey %>
 
 async:
     corePoolSize: 2
