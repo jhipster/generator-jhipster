@@ -2,7 +2,14 @@
     "health": {
         "title": "Health checks",
         "refresh.button": "Refresh",
-        "stacktrace": "Stacktrace",
+        "stacktrace": "Stacktrace",        
+        "details": {
+            "details": "Details",
+            "properties": "Properties",
+            "name": "Name",
+            "value": "Value",
+            "error": "Error"
+        },
         "indicator": {
             "diskSpace": "Disk space",
             "mail": "Email",<% if (databaseType == 'sql') { %>

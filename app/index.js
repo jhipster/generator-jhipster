@@ -436,6 +436,7 @@ JhipsterGenerator.prototype.app = function app() {
             this.template('_yeoman.gradle', 'yeoman.gradle', this, {});
             this.template('_profile_dev.gradle', 'profile_dev.gradle', this, {});
             this.template('_profile_prod.gradle', 'profile_prod.gradle', this, {});
+            this.template('_gatling.gradle', 'gatling.gradle', this, {});
           if (this.databaseType == "sql") {
             this.template('_liquibase.gradle', 'liquibase.gradle', this, {});
           }
@@ -831,6 +832,7 @@ JhipsterGenerator.prototype.app = function app() {
     // Create Test Javascript files
     var testJsDir = 'src/test/javascript/';
     this.template(testJsDir + '_karma.conf.js', testJsDir + 'karma.conf.js');
+    this.template(testJsDir + 'spec/app/account/admin/health/_healthControllerSpec.js', testJsDir + 'spec/app/account/health/healthControllerSpec.js', this, {});
     this.template(testJsDir + 'spec/app/account/login/_loginControllerSpec.js', testJsDir + 'spec/app/account/login/loginControllerSpec.js', this, {});
     this.template(testJsDir + 'spec/app/account/password/_passwordControllerSpec.js', testJsDir + 'spec/app/account/password/passwordControllerSpec.js', this, {});
     this.template(testJsDir + 'spec/app/account/password/_passwordDirectiveSpec.js', testJsDir + 'spec/app/account/password/passwordDirectiveSpec.js', this, {});

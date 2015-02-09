@@ -6,7 +6,7 @@ import <%=packageName%>.domain.User;<% if (databaseType == 'sql' || databaseType
 import <%=packageName%>.repository.AuthorityRepository;<% } %><% if (authenticationType == 'session') { %>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
 import <%=packageName%>.repository.UserRepository;<% if (databaseType == 'cassandra') { %>
-import com.mycompany.myapp.security.AuthoritiesConstants;<% } %>
+import <%=packageName%>.security.AuthoritiesConstants;<% } %>
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.util.RandomUtil;
 import org.joda.time.DateTime;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
