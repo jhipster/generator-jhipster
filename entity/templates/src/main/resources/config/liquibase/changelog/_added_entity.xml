@@ -11,22 +11,32 @@
         Added the entity <%= entityClass %>.
     -->
     <changeSet id="<%= changelogDate %>" author="jhipster">
-        <createTable tableName="T_<%= name.toUpperCase() %>">
+        <createTable tableName="T_<%= name.toUpperCase() %>"><%if (pkManagedByJHipster == true) { %>
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
-            </column><% for (fieldId in fields) {
+            </column><% } for (fieldId in fields) {
             if (fields[fieldId].fieldType == 'String') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="varchar(255)"/><% } else if (fields[fieldId].fieldType == 'Integer') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="integer"/><% } else if (fields[fieldId].fieldType == 'Long') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bigint"/><% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="decimal(10,2)"/><% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="date">
-                <constraints nullable="false" />
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="varchar(255)"><%if (fields[fieldId].isPk == true) { %>
+                <constraints primaryKey="true" nullable="false"/><% } %>
+            </column><% } else if (fields[fieldId].fieldType == 'Integer') { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="integer"><%if (fields[fieldId].isPk == true) { %>
+                <constraints primaryKey="true" nullable="false"/><% } %>
+            </column><% } else if (fields[fieldId].fieldType == 'Long') { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bigint"><%if (fields[fieldId].isPk == true) { %>
+                <constraints primaryKey="true" nullable="false"/><% } %>
+            </column><% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="decimal(10,2)"><%if (fields[fieldId].isPk == true) { %>
+                <constraints primaryKey="true" nullable="false"/><% } %>
+            </column><% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="date"><%if (fields[fieldId].isPk == true) { %>
+                <constraints primaryKey="true" nullable="false"/><% } %>
             </column><% } else if (fields[fieldId].fieldType == 'DateTime') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="timestamp">
-                <constraints nullable="false" />
+                <constraints nullable="false" <%if (fields[fieldId].isPk == true) { %> primaryKey="true" <% } %>/>
             </column><% } else if (fields[fieldId].fieldType == 'Boolean') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bit"/><% } } %><% for (relationshipId in relationships) { %><% if ((relationships[relationshipId].relationshipType == 'many-to-one') || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bit"><%if (fields[fieldId].isPk == true) { %>
+                <constraints primaryKey="true" nullable="false"/><% } %>
+            </column><% } } %><% for (relationshipId in relationships) { %><% if ((relationships[relationshipId].relationshipType == 'many-to-one') || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) { %>
             <column name="<%=relationships[relationshipId].otherEntityName.toLowerCase() %>_id" type="bigint"/><% } } %>
         </createTable><% for (fieldId in fields) {
             if (fields[fieldId].fieldType == 'DateTime') { %>
