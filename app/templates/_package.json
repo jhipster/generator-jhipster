@@ -2,6 +2,7 @@
   "name": "<%= _.slugify(baseName) %>",
   "version": "0.0.0",
   "description": "Description for <%= baseName %>",
+  "private": true,
   "dependencies": {
   },
   "devDependencies": {<% if(frontendBuilder == 'grunt') { %>
