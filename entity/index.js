@@ -11,10 +11,11 @@ var util = require('util'),
 var EntityGenerator = module.exports = function EntityGenerator(args, options, config) {
     yeoman.generators.NamedBase.apply(this, arguments);
     this.useConfigurationFile =false;
-    if (shelljs.test('-f', '.jhipster.' + this.name + '.json')) {
-        console.log(chalk.green('Found the .jhipster.' + this.name + '.json configuration file, automatically generating the entity'));
+    this.filename = '.jhipster.' + _s.capitalize(this.name) + '.json';
+    if (shelljs.test('-f', this.filename)) {
+        console.log(chalk.green('Found the ' + this.filename + ' configuration file, automatically generating the entity'));
         try {
-            this.fileData = JSON.parse(this.readFileAsString('.jhipster.' + this.name + '.json'))
+            this.fileData = JSON.parse(this.readFileAsString(this.filename))
         } catch (err) {
             console.log(chalk.red('The configuration file could not be read!'));
             return;
@@ -42,6 +43,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.fieldsContainOneToMany = false;
     this.relationshipId = 0;
     this.relationships = [];
+
 };
 
 var fieldNamesUnderscored = ['id'];
@@ -302,7 +304,6 @@ EntityGenerator.prototype.files = function files() {
         this.data.fieldsContainBigDecimal = this.fieldsContainBigDecimal;
         this.data.fieldsContainDateTime = this.fieldsContainDateTime;
         this.data.changelogDate = this.changelogDate;
-        this.filename = '.jhipster.' + this.name + '.json';
         this.write(this.filename, JSON.stringify(this.data, null, 4));
     } else  {
         this.relationships = this.fileData.relationships;
