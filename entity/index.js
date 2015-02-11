@@ -380,6 +380,7 @@ EntityGenerator.prototype.files = function files() {
     this.copyI18n('ru');
     this.copyI18n('sw');
     this.copyI18n('tr');
+    this.copyI18n('zh-cn');
     this.copyI18n('zh-tw');
 };
 
