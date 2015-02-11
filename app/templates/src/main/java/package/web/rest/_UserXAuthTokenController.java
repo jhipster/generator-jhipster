@@ -1,4 +1,4 @@
-package <%=packageName%>.security.xauth;
+package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import org.springframework.beans.factory.annotation.Autowired;
