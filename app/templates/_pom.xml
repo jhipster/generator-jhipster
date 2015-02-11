@@ -26,7 +26,7 @@
         <awaitility.version>1.4.0</awaitility.version>
         <commons-io.version>2.4</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version><% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
-        <hazelcast.version>3.3.3</hazelcast.version><% } %><% if (databaseType == 'sql') { %>
+        <hazelcast.version>3.4</hazelcast.version><% } %><% if (databaseType == 'sql') { %>
         <hibernate.version>4.3.6.Final</hibernate.version><% } %>
         <java.version>1.<%= javaVersion %></java.version>
         <javax.inject.version>1</javax.inject.version><% if (databaseType == 'sql') { %>
