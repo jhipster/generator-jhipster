@@ -12,9 +12,6 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     yeoman.generators.NamedBase.apply(this, arguments);
     this.useConfigurationFile =false;
     this.jhipsterConfigDirectory = '.jhipster';
-    if (!shelljs.test('-d', this.jhipsterConfigDirectory)) {
-        shelljs.mkdir('', this.jhipsterConfigDirectory);
-    }
     this.filename = this.jhipsterConfigDirectory + '/' + _s.capitalize(this.name) + '.json';
     if (shelljs.test('-f', this.filename)) {
         console.log(chalk.green('Found the ' + this.filename + ' configuration file, automatically generating the entity'));
