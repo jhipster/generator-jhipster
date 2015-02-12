@@ -21,8 +21,19 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
         });
 
         $rootScope.$on('$stateChangeSuccess',  function(event, toState, toParams, fromState, fromParams) {
+            var titleKey = 'global.title';
+
             $rootScope.previousStateName = fromState.name;
             $rootScope.previousStateParams = fromParams;
+
+            // Set the page title key to the one configured in state or use default one
+            if (toState.data.pageTitle) {
+                titleKey = toState.data.pageTitle;
+            }
+            $translate(titleKey).then(function (title) {
+                // Change window title with translated one
+                $window.document.title = title;
+            });
         });
 
         $rootScope.back = function() {

@@ -7,7 +7,8 @@ angular.module('<%=angularAppName%>')
                 parent: 'admin',
                 url: '/configuration',
                 data: {
-                    roles: ['ROLE_ADMIN']
+                    roles: ['ROLE_ADMIN'],
+                    pageTitle: 'configuration.title'
                 },
                 views: {
                     'content@': {
