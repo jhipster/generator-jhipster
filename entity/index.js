@@ -11,7 +11,11 @@ var util = require('util'),
 var EntityGenerator = module.exports = function EntityGenerator(args, options, config) {
     yeoman.generators.NamedBase.apply(this, arguments);
     this.useConfigurationFile =false;
-    this.filename = '.jhipster.' + _s.capitalize(this.name) + '.json';
+    this.jhipsterConfigDirectory = '.jhipster';
+    if (!shelljs.test('-d', this.jhipsterConfigDirectory)) {
+        shelljs.mkdir('', this.jhipsterConfigDirectory);
+    }
+    this.filename = this.jhipsterConfigDirectory + '/' + _s.capitalize(this.name) + '.json';
     if (shelljs.test('-f', this.filename)) {
         console.log(chalk.green('Found the ' + this.filename + ' configuration file, automatically generating the entity'));
         try {
@@ -334,7 +338,7 @@ EntityGenerator.prototype.files = function files() {
         this.fieldsContainBigDecimal = this.fileData.fieldsContainBigDecimal;
         this.fieldsContainDateTime = this.fileData.fieldsContainDateTime;
         this.changelogDate = this.fileData.changelogDate;
-        for (var idx in this.relationships) { 
+        for (var idx in this.relationships) {
           var rel = this.relationships[idx];
           rel.relationshipName = rel.relationshipName || rel.otherEntityName;
           rel.relationshipNameCapitalized = rel.relationshipNameCapitalized || _s.capitalize(rel.relationshipName);
@@ -343,7 +347,7 @@ EntityGenerator.prototype.files = function files() {
     }
     this.entityClass = _s.capitalize(this.name);
     this.entityInstance = this.name.charAt(0).toLowerCase() + this.name.slice(1);
-    
+
     this.differentTypes = [this.entityClass];
     var relationshipId;
     for (relationshipId in this.relationships) {
