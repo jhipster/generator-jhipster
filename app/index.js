@@ -26,8 +26,6 @@ var JhipsterGenerator = module.exports = function JhipsterGenerator(args, option
 util.inherits(JhipsterGenerator, yeoman.generators.Base);
 util.inherits(JhipsterGenerator, scriptBase);
 
-
-
 JhipsterGenerator.prototype.askFor = function askFor() {
     var cb = this.async();
 
@@ -112,6 +110,9 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             default: 0
         },
         {
+            when: function (response) {
+                return (!(response.authenticationType == 'oauth2' || response.javaVersion == '7'));
+            },
             type: 'list',
             name: 'databaseType',
             message: '(5/13) Which *type* of database would you like to use?',
@@ -122,7 +123,30 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 },
                 {
                     value: 'mongodb',
-                    name: 'NoSQL (MongoDB)'
+                    name: 'MongoDB'
+                },
+                {
+                    value: 'cassandra',
+                    name: 'Cassandra'
+                }
+            ],
+            default: 0
+        },
+        {
+            when: function (response) {
+                return (response.authenticationType == 'oauth2' || response.javaVersion == '7');
+            },
+            type: 'list',
+            name: 'databaseType',
+            message: '(5/13) Which *type* of database would you like to use? (Note that you cannot choose Cassandra as you selected either OAuth2 authentication or Java 7, which are not supported)',
+            choices: [
+                {
+                    value: 'sql',
+                    name: 'SQL (H2, MySQL, PostgreSQL)'
+                },
+                {
+                    value: 'mongodb',
+                    name: 'MongoDB'
                 }
             ],
             default: 0
@@ -157,6 +181,21 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 {
                     value: 'mongodb',
                     name: 'MongoDB'
+                }
+            ],
+            default: 0
+        },
+        {
+            when: function (response) {
+                return response.databaseType == 'mongodb';
+            },
+            type: 'list',
+            name: 'prodDatabaseType',
+            message: '(6/13) Which *production* database would you like to use?',
+            choices: [
+                {
+                    value: 'cassandra',
+                    name: 'Cassandra'
                 }
             ],
             default: 0
@@ -216,6 +255,21 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             when: function (response) {
+                return response.databaseType == 'mongodb';
+            },
+            type: 'list',
+            name: 'devDatabaseType',
+            message: '(7/13) Which *development* database would you like to use?',
+            choices: [
+                {
+                    value: 'cassandra',
+                    name: 'Cassandra'
+                }
+            ],
+            default: 0
+        },
+        {
+            when: function (response) {
                 return response.databaseType == 'sql';
             },
             type: 'list',
@@ -239,7 +293,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             when: function (response) {
-                return response.databaseType == 'mongodb';
+                return !(response.databaseType == 'sql');
             },
             type: 'list',
             name: 'hibernateCache',
@@ -247,7 +301,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             choices: [
                 {
                     value: 'no',
-                    name: 'No (this not possible with the NoSQL option)'
+                    name: 'No (this not possible with a non-SQL database)'
                 },
             ],
             default: 0
@@ -503,11 +557,15 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/_AsyncConfiguration.java', javaDir + 'config/AsyncConfiguration.java', this, {});
     this.template('src/main/java/package/config/_CacheConfiguration.java', javaDir + 'config/CacheConfiguration.java', this, {});
     this.template('src/main/java/package/config/_Constants.java', javaDir + 'config/Constants.java', this, {});
-    this.template('src/main/java/package/config/_CloudDatabaseConfiguration.java', javaDir + 'config/CloudDatabaseConfiguration.java', this, {});
+    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+        this.template('src/main/java/package/config/_CloudDatabaseConfiguration.java', javaDir + 'config/CloudDatabaseConfiguration.java', this, {});
+    }
     if (this.databaseType == 'mongodb') {
         this.template('src/main/java/package/config/_CloudMongoDbConfiguration.java', javaDir + 'config/CloudMongoDbConfiguration.java', this, {});
     }
-    this.template('src/main/java/package/config/_DatabaseConfiguration.java', javaDir + 'config/DatabaseConfiguration.java', this, {});
+    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+        this.template('src/main/java/package/config/_DatabaseConfiguration.java', javaDir + 'config/DatabaseConfiguration.java', this, {});
+    }
     this.template('src/main/java/package/config/_JacksonConfiguration.java', javaDir + 'config/JacksonConfiguration.java', this, {});
     this.template('src/main/java/package/config/_LocaleConfiguration.java', javaDir + 'config/LocaleConfiguration.java', this, {});
     this.template('src/main/java/package/config/_LoggingAspectConfiguration.java', javaDir + 'config/LoggingAspectConfiguration.java', this, {});
@@ -538,14 +596,27 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/main/java/package/config/_WebsocketConfiguration.java', javaDir + 'config/WebsocketConfiguration.java', this, {});
     }
 
-    this.template('src/main/java/package/config/audit/_package-info.java', javaDir + 'config/audit/package-info.java', this, {});
-    this.template('src/main/java/package/config/audit/_AuditEventConverter.java', javaDir + 'config/audit/AuditEventConverter.java', this, {});
+    if (this.databaseType == "cassandra") {
+        this.template('src/main/java/package/config/cassandra/_CassandraAutoConfiguration.java', javaDir + 'config/cassandra/CassandraAutoConfiguration.java', this, {});
+        this.template('src/main/java/package/config/cassandra/_CassandraDataAutoConfiguration.java', javaDir + 'config/cassandra/CassandraDataAutoConfiguration.java', this, {});
+        this.template('src/main/java/package/config/cassandra/_CassandraProperties.java', javaDir + 'config/cassandra/CassandraProperties.java', this, {});
+    }
+
+    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+        this.template('src/main/java/package/config/audit/_package-info.java', javaDir + 'config/audit/package-info.java', this, {});
+        this.template('src/main/java/package/config/audit/_AuditEventConverter.java', javaDir + 'config/audit/AuditEventConverter.java', this, {});
+    }
 
     this.template('src/main/java/package/config/locale/_package-info.java', javaDir + 'config/locale/package-info.java', this, {});
     this.template('src/main/java/package/config/locale/_AngularCookieLocaleResolver.java', javaDir + 'config/locale/AngularCookieLocaleResolver.java', this, {});
 
     this.template('src/main/java/package/config/metrics/_package-info.java', javaDir + 'config/metrics/package-info.java', this, {});
-    this.template('src/main/java/package/config/metrics/_DatabaseHealthIndicator.java', javaDir + 'config/metrics/DatabaseHealthIndicator.java', this, {});
+    if (this.databaseType == 'cassandra') {
+        this.template('src/main/java/package/config/metrics/_CassandraHealthIndicator.java', javaDir + 'config/metrics/CassandraHealthIndicator.java', this, {});
+    }
+    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+        this.template('src/main/java/package/config/metrics/_DatabaseHealthIndicator.java', javaDir + 'config/metrics/DatabaseHealthIndicator.java', this, {});
+    }
     this.template('src/main/java/package/config/metrics/_JavaMailHealthIndicator.java', javaDir + 'config/metrics/JavaMailHealthIndicator.java', this, {});
     this.template('src/main/java/package/config/metrics/_JHipsterHealthIndicatorConfiguration.java', javaDir + 'config/metrics/JHipsterHealthIndicatorConfiguration.java', this, {});
 

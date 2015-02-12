@@ -23,11 +23,13 @@
     <properties>
         <HikariCP.version>2.2.5</HikariCP.version>
         <assertj-core.version>1.6.1</assertj-core.version>
-        <awaitility.version>1.4.0</awaitility.version>
+        <awaitility.version>1.4.0</awaitility.version><% if (databaseType == 'cassandra') { %>
+        <cassandra.version>2.0.12</cassandra.version><% } %>
         <commons-io.version>2.4</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version><% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
         <hazelcast.version>3.4</hazelcast.version><% } %><% if (databaseType == 'sql') { %>
-        <hibernate.version>4.3.6.Final</hibernate.version><% } %>
+        <hibernate.version>4.3.6.Final</hibernate.version><% } %><% if (databaseType == 'cassandra') { %>
+        <datastax-driver.version>2.1.4</datastax-driver.version><% } %>
         <java.version>1.<%= javaVersion %></java.version>
         <javax.inject.version>1</javax.inject.version><% if (databaseType == 'sql') { %>
         <joda-time-hibernate.version>1.3</joda-time-hibernate.version><% } %>
@@ -254,7 +256,19 @@
             <artifactId>assertj-core</artifactId>
             <version>${assertj-core.version}</version>
             <scope>test</scope>
-        </dependency><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
+        </dependency><% if (databaseType == 'cassandra') { %>
+        <dependency>
+            <groupId>org.cassandraunit</groupId>
+            <artifactId>cassandra-unit-spring</artifactId>
+            <version>2.0.2.2</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency><% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-ehcache</artifactId>
@@ -363,6 +377,26 @@
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
             <version>${spring-security-oauth2.version}</version>
+        </dependency><% } %><% if (databaseType == 'cassandra') { %>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-cassandra</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cassandra</groupId>
+            <artifactId>cassandra-all</artifactId>
+            <version>${cassandra.version}</version>
+        </dependency>
+        <!-- DataStax driver -->
+        <dependency>
+            <groupId>com.datastax.cassandra</groupId>
+            <artifactId>cassandra-driver-dse</artifactId>
+            <version>${datastax-driver.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.datastax.cassandra</groupId>
+            <artifactId>cassandra-driver-mapping</artifactId>
+            <version>${datastax-driver.version}</version>
         </dependency><% } %>
         <!-- Spring Cloud -->
         <dependency>
