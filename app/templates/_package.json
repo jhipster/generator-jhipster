@@ -34,6 +34,7 @@
     "grunt-karma": "0.10.1",
     "time-grunt": "1.0.0",<% if (useCompass) { %>
     "grunt-contrib-compass": "1.0.1",<% }} if(frontendBuilder == 'gulp') { %>
+    "del": "1.1.1",
     "gulp": "3.8.10",
     "gulp-util": "3.0.2",
     "gulp-usemin": "0.3.8",
@@ -47,7 +48,6 @@
     "gulp-ng-annotate": "0.5.0",
     "gulp-ng-constant-fork": "0.4.1",
     "gulp-connect": "2.2.0",
-    "gulp-clean": "0.3.1",
     "gulp-karma": "https://github.com/lazd/gulp-karma/tarball/helper",
     "gulp-replace": "0.5.2",
     "gulp-rev": "3.0.0",
