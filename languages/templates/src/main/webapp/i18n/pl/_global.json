@@ -15,23 +15,23 @@
                 "sessions": "Sesje",
                 "login": "Autoryzacja",
                 "logout": "Wyloguj",
-                "register": "Register"
+                "register": "Zarejestruj się"
             },
             "admin": {
                 "main": "Administracja",
                 "tracker": "Śledzenie użytkownika",
                 "metrics": "Metryki",
-                "health": "Health",
-                "configuration": "Configuration",
+                "health": "Status",
+                "configuration": "Konfiguracja",
                 "logs": "Logi",
                 "audits": "Audyty",
                 "apidocs": "API",
-                "database": "Database"
+                "database": "Baza danych"
             },
             "language": "Język"
         },
         "form": {
-            "username": "Login",
+            "username": "Zaloguj się",
             "username.placeholder": "Twój login",
             "newpassword": "Nowe hasło",
             "newpassword.placeholder": "Nowe hasło",
@@ -43,7 +43,7 @@
         "messages": {
             "info": {
                 "authenticated": "Jeśli chcek <a href=\"#/login\">zalogować się</a>, możesz spróbować domyślnego konta:<br/>- Administrator (login=\"admin\" i hasło=\"admin\") <br/>- Użytkownik (login=\"user\" i hasło=\"user\").",
-                "register": "You don't have an account yet? <a href=\"#/register\">Register a new account</a>"
+                "register": "Nie masz jeszcze konta? <a href=\"#/register\">Zarejestruj się</a>"
             },
             "error": {
                 "dontmatch": "Hasło i potwierdzenie nie zgadzają się!"
@@ -71,19 +71,19 @@
     },
     "entity": {
         "action": {
-            "back": "Back",
-            "cancel": "Cancel",
-            "delete": "Delete",
-            "edit": "Edit",
-            "save": "Save",
-            "view": "View"
+            "back": "Wstecz",
+            "cancel": "Anuluj",
+            "delete": "Usuń",
+            "edit": "Edytuj",
+            "save": "Zapisz",
+            "view": "Widok"
         },
         "detail": {
-            "field": "Field",
-            "value": "Value"
+            "field": "Pole",
+            "value": "Wartość"
         },
         "delete": {
-            "title": "Confirm delete operation"
+            "title": "Potwierdź usunięcie"
         }
     },
     "footer": "To jest stopka"

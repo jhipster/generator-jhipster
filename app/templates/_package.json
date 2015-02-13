@@ -2,6 +2,7 @@
   "name": "<%= _.slugify(baseName) %>",
   "version": "0.0.0",
   "description": "Description for <%= baseName %>",
+  "private": true,
   "dependencies": {
   },
   "devDependencies": {<% if(frontendBuilder == 'grunt') { %>
@@ -9,12 +10,11 @@
     "grunt-autoprefixer": "2.2.0",
     "grunt-build-control": "0.2.2",
     "grunt-wiredep": "2.0.0",
+    "grunt-browser-sync": "2.0.0",
     "grunt-contrib-copy": "0.7.0",
     "grunt-concurrent": "1.0.0",
-    "grunt-connect-proxy": "0.1.10",
     "grunt-contrib-clean": "0.6.0",
     "grunt-contrib-concat": "0.5.0",
-    "grunt-contrib-connect": "0.9.0",
     "grunt-contrib-cssmin": "0.11.0",
     "grunt-contrib-htmlmin": "0.3.0",
     "grunt-contrib-imagemin": "0.9.2",
@@ -40,7 +40,6 @@
     "gulp-minify-css": "0.3.11",
     "gulp-uglify": "1.1.0",
     "gulp-minify-html": "0.1.8",
-    "gulp-if": "1.2.5",
     "gulp-imagemin": "2.1.0",
     "gulp-flatten": "0.0.4",
     "gulp-ng-annotate": "0.5.0",
@@ -48,7 +47,6 @@
     "gulp-connect": "2.2.0",
     "gulp-clean": "0.3.1",
     "gulp-karma": "https://github.com/lazd/gulp-karma/tarball/helper",
-    "gulp-replace": "0.5.2",
     "gulp-rev": "3.0.0",
     "gulp-jshint": "1.9.0",
     "gulp-browserify": "0.5.1",<% if (useCompass) { %>
@@ -62,10 +60,10 @@
     "karma-jasmine": "0.3.5",
     "karma-requirejs": "0.2.2",
     "karma-phantomjs-launcher": "0.1.4",
-    "karma": "0.12.31",<% if (buildTool == 'maven') { %>
-    "node-pom-parser": "0.1.1", <% } %>
+    "karma": "0.12.31",
     "generator-jhipster": "<%= packagejs.version %>",
-    "lodash": "2.4.1",
+    "lodash": "2.4.1",<% if (buildTool == 'maven') { %>
+    "xml2js": "0.4.4",<% } %>
     "zeparser": "0.0.7",
     "wiredep": "2.2.2"
   },

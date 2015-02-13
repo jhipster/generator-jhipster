@@ -1,0 +1,21 @@
+{
+    "health": {
+        "title": "Rendszer ellenőrzések",
+        "refresh.button": "Frissítés",
+        "stacktrace": "Stacktrace",
+        "indicator": {
+            "db": "Adatbázis",
+            "diskSpace": "Szabad hely a diszken",
+            "mail": "Email",
+            "mongo": "Mongo DB"
+        },
+        "table": {
+            "service": "Szervíz neve",
+            "status": "Státusz"
+        },
+        "status": {
+            "UP": "MŰKÖDIK",
+            "DOWN": "NEM MŰKÖDIK"
+        }
+    }
+}
