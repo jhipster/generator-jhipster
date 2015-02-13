@@ -1,0 +1,12 @@
+{
+    "tracker": {
+        "title": "Azonnali felhasználói nyomkövetés",
+        "table": {
+            "userlogin": "Felhasználó",
+            "ipaddress": "IP cím",
+            "userAgent": "Böngésző típus",
+            "page": "Aktuális oldal",
+            "time": "Időpont"
+        }
+    }
+}

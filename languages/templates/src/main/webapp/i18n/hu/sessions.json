@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "[<b>{{username}}</b>]-hoz tartozó aktív munkamenetek",
+        "table": {
+            "ipaddress": "IP cím",
+            "useragent": "Böngésző típusa",
+            "date": "Dátum",
+            "button": "Kiléptet"
+        },
+        "messages": {
+            "success": "<strong>Munkamenet be lett fejezve!</strong>",
+            "error": "<strong>Hiba történt!</strong> A munkamenetet nem sikerült befejezni."
+        }
+    }
+}

@@ -1,14 +1,22 @@
 // Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= pkg.name %> <%= pkg.version %>
 'use strict';
+var fs = require('fs');
 <% if (buildTool == 'maven') { %>
-var pomParser = require('node-pom-parser');<% } else { %>
-var fs = require('fs');<% } %>
-var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
-<% if (buildTool == 'gradle') { %>
+var parseString = require('xml2js').parseString;
+// Returns the second occurence of the version number
+var parseVersionFromPomXml = function() {
+    var version;
+    var pomXml = fs.readFileSync('pom.xml', "utf8");
+    parseString(pomXml, function (err, result){
+        version = result.project.version[0];
+    });
+    return version;
+};<% } else { %>
 // Returns the first occurence of the version number
 var parseVersionFromBuildGradle = function() {
     var versionRegex = /^version\s*=\s*[',"]([^',"]*)[',"]/gm; // Match and group the version number
-    return versionRegex.exec(fs.readFileSync('build.gradle', "utf8"))[1];
+    var buildGradle = fs.readFileSync('build.gradle', "utf8");
+    return versionRegex.exec(buildGradle)[1];
 };<% } %>
 
 // usemin custom step
@@ -42,18 +50,6 @@ module.exports = function (grunt) {
             },<% } %>
             styles: {
                 files: ['src/main/webapp/assets/styles/**/*.css']
-            },
-            livereload: {
-                options: {
-                    livereload: 35729
-                },
-                files: [
-                    'src/main/webapp/**/*.html',
-                    'src/main/webapp/**/*.json',
-                    '{.tmp/,}src/main/webapp/assets/styles/**/*.css',
-                    '{.tmp/,}src/main/webapp/scripts/**/*.js',
-                    'src/main/webapp/assets/images/**/*.{png,jpg,jpeg,gif,webp,svg}'
-                ]
             }
         },
         autoprefixer: {
@@ -70,7 +66,7 @@ module.exports = function (grunt) {
         },
         wiredep: {
             app: {
-                src: ['src/main/webapp/index.html'<% if (useCompass) { %>,, 'src/main/scss/main.scss'<% } %>],
+                src: ['src/main/webapp/index.html'<% if (useCompass) { %>, 'src/main/scss/main.scss'<% } %>],
                 exclude: [/angular-i18n/, /swagger-ui/]<% if (useCompass) { %>,
                 ignorePath: /\.\.\/webapp\/bower_components\// // remove ../webapp/bower_components/ from paths of injected sass files<% } %>
             },
@@ -92,103 +88,21 @@ module.exports = function (grunt) {
                 }
             }
         },
-        connect: {
-            proxies: [
-                {
-                    context: '/api',
-                    host: 'localhost',
-                    port: 8080,
-                    https: false,
-                    changeOrigin: false
-                },
-                {
-                    context: '/metrics',
-                    host: 'localhost',
-                    port: 8080,
-                    https: false,
-                    changeOrigin: false
-                },
-                {
-                    context: '/dump',
-                    host: 'localhost',
-                    port: 8080,
-                    https: false,
-                    changeOrigin: false
-                },
-                {
-                    context: '/health',
-                    host: 'localhost',
-                    port: 8080,
-                    https: false,
-                    changeOrigin: false
-                },
-                {
-                    context: '/configprops',
-                    host: 'localhost',
-                    port: 8080,
-                    https: false,
-                    changeOrigin: false
-                },
-                {
-                    context: '/beans',
-                    host: 'localhost',
-                    port: 8080,
-                    https: false,
-                    changeOrigin: false
-                },
-                {
-                    context: '/api-docs',
-                    host: 'localhost',
-                    port: 8080,
-                    https: false,
-                    changeOrigin: false
-                }<% if (authenticationType == 'oauth2') { %>,
-                {
-                    context: '/oauth/token',
-                    host: 'localhost',
-                    port: 8080,
-                    https: false,
-                    changeOrigin: false
-                }<% } %><% if (devDatabaseType == 'h2Memory') { %>,
-                {
-                    context: '/console',
-                    host: 'localhost',
-                    port: 8080,
-                    https: false,
-                    changeOrigin: false
-                 }<% } %>
-            ],
-            options: {
-                port: 9000,
-                // Change this to 'localhost' to deny access to the server from outside.
-                hostname: '0.0.0.0',
-                livereload: 35729
-            },
-            livereload: {
-                options: {
-                    open: true,
-                    base: [
-                        '.tmp',
-                        'src/main/webapp'
-                    ],
-                    middleware: function (connect) {
-                        return [
-                            proxySnippet,
-                            connect.static('.tmp'),
-                            connect.static('src/main/webapp')
-                        ];
-                    }
-                }
-            },
-            test: {
-                options: {
-                    port: 9001,
-                    base: [
-                        '.tmp',
-                        'test',
-                        'src/main/webapp'
+        browserSync: {
+            dev: {
+                bsFiles: {
+                    src : [
+                        'src/main/webapp/**/*.html',
+                        'src/main/webapp/**/*.json',
+                        '{.tmp/,}src/main/webapp/assets/styles/**/*.css',
+                        '{.tmp/,}src/main/webapp/scripts/**/*.js',
+                        'src/main/webapp/assets/images/**/*.{png,jpg,jpeg,gif,webp,svg}'
                     ]
                 }
+            },
+            options: {
+                watchTask: true,
+                proxy: "localhost:8080"
             }
         },
         clean: {
@@ -494,7 +408,7 @@ module.exports = function (grunt) {
                 },
                 constants: {
                     ENV: 'dev',
-                    VERSION: <% if(buildTool == 'maven') { %>pomParser.parsePom({ filePath: "pom.xml"}).version<% } else { %>parseVersionFromBuildGradle()<% } %>
+                    VERSION: <% if(buildTool == 'maven') { %>parseVersionFromPomXml()<% } else { %>parseVersionFromBuildGradle()<% } %>
                 }
             },
             prod: {
@@ -503,7 +417,7 @@ module.exports = function (grunt) {
                 },
                 constants: {
                     ENV: 'prod',
-                    VERSION: <% if(buildTool == 'maven') { %>pomParser.parsePom({ filePath: "pom.xml"}).version<% } else { %>parseVersionFromBuildGradle()<% } %>
+                    VERSION: <% if(buildTool == 'maven') { %>parseVersionFromPomXml()<% } else { %>parseVersionFromBuildGradle()<% } %>
                 }
             }
         }
@@ -514,8 +428,7 @@ module.exports = function (grunt) {
         'wiredep',
         'ngconstant:dev',
         'concurrent:server',
-        'configureProxies',
-        'connect:livereload',
+        'browserSync',
         'watch'
     ]);
 
@@ -529,7 +442,6 @@ module.exports = function (grunt) {
         'wiredep:test',
         'ngconstant:dev',
         'concurrent:test',
-        'connect:test',
         'karma'
     ]);
 

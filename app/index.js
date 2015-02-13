@@ -6,7 +6,8 @@ var util = require('util'),
     _s = require('underscore.string'),
     shelljs = require('shelljs'),
     scriptBase = require('../script-base'),
-    packagejs = require(__dirname + '/../package.json');
+    packagejs = require(__dirname + '/../package.json'),
+    crypto = require("crypto");
 
 var JhipsterGenerator = module.exports = function JhipsterGenerator(args, options, config) {
 
@@ -336,6 +337,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     this.javaVersion = this.config.get('javaVersion');
     this.buildTool = this.config.get('buildTool');
     this.frontendBuilder = this.config.get('frontendBuilder');
+    this.rememberMeKey = this.config.get('rememberMeKey');
     this.packagejs = packagejs;
 
     if (this.baseName != null &&
@@ -351,6 +353,11 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         this.buildTool != null &&
         this.frontendBuilder != null &&
         this.javaVersion != null) {
+
+        // Generate key if key does not already exist in config
+        if (this.rememberMeKey == null) {
+            this.rememberMeKey = crypto.randomBytes(20).toString('hex');
+        }
 
         console.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
             'to re-generate the project...\n'));
@@ -374,6 +381,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             this.buildTool = props.buildTool;
             this.frontendBuilder = props.frontendBuilder;
             this.javaVersion = props.javaVersion;
+            this.rememberMeKey = crypto.randomBytes(20).toString('hex');
 
             cb();
         }.bind(this));
@@ -888,6 +896,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.config.set('buildTool', this.buildTool);
     this.config.set('frontendBuilder', this.frontendBuilder);
     this.config.set('javaVersion', this.javaVersion);
+    this.config.set('rememberMeKey', this.rememberMeKey);
 };
 
 JhipsterGenerator.prototype.projectfiles = function projectfiles() {

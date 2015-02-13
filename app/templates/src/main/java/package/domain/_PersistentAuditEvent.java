@@ -24,7 +24,7 @@ public class PersistentAuditEvent  {
     @Column(name = "event_id")
     private Long id;<% } else { %>
     @Field("event_id")
-    private long id;<% } %>
+    private String id;<% } %>
 
     @NotNull<% if (databaseType == 'sql') { %>
     @Column(nullable = false)<% } %>
@@ -50,11 +50,11 @@ public class PersistentAuditEvent  {
     public void setId(Long id) {
         this.id = id;
     }<% } else { %>
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }<% } %>
 

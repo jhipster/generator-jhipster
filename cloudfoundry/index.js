@@ -54,12 +54,12 @@ CloudFoundryGenerator.prototype.askForName = function askForName() {
     {
         name: 'cloudfoundryDatabaseServiceName',
         message: 'What is the name of your database service?',
-        default: 'p-mysql'
+        default: 'elephantsql'
     },
     {
         name: 'cloudfoundryDatabaseServicePlan',
         message: 'What is the name of your database plan?',
-        default: '100mb'
+        default: 'turtle'
     }];
 
     this.prompt(prompts, function (props) {

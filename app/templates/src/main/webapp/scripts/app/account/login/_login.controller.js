@@ -14,7 +14,11 @@ angular.module('<%=angularAppName%>')
                 rememberMe: $scope.rememberMe
             }).then(function () {
                 $scope.authenticationError = false;
-                $rootScope.back();
+                if ($rootScope.previousStateName === 'register') {
+                    $state.go('home');
+                } else {
+                    $rootScope.back();
+                }
             }).catch(function () {
                 $scope.authenticationError = true;
             });

@@ -22,8 +22,8 @@ describe('Services Tests ', function () {
             $httpBackend.expectGET('i18n/en/language.json').respond(200, '');
             $httpBackend.expectGET('i18n/en/main.json').respond(200, '');
             $httpBackend.expectGET('scripts/app/main/main.html').respond({});
-            <% if (authenticationType == 'session' || authenticationType == 'oauth2') { %>
-            $httpBackend.expectGET(/api\/account\?cacheBuster=\d+/).respond({});
+            <% if (authenticationType == 'session') { %>
+                $httpBackend.expectGET(/api\/account\?cacheBuster=\d+/).respond({});
             <% } %>
           }));
         //make sure no expectations were missed in your tests.

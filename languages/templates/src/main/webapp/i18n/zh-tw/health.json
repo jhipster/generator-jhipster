@@ -5,7 +5,7 @@
         "stacktrace": "堆疊追蹤",
         "indicator": {
             "db": "資料庫",
-            "diskSpace": "Disk space",
+            "diskSpace": "硬碟空間",
             "mail": "電子郵件",
             "mongo": "MongoDB"
         },
