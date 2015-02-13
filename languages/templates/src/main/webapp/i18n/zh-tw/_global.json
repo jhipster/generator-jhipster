@@ -5,14 +5,14 @@
         "menu": {
             "home": "首頁",
             "entities": {
-                "main": "Entities",
-                "additionalEntity": "JHipster will add addtional entities"
+                "main": "實體",
+                "additionalEntity": "JHipster 會新增其他實體"
             },
             "account": {
                 "main": "帳號",
                 "settings": "設定",
                 "password": "密碼",
-                "sessions": "Sessions",
+                "sessions": "工作階段",
                 "login": "登入",
                 "logout": "登出",
                 "register": "註冊"
@@ -22,11 +22,11 @@
                 "tracker": "追蹤使用者",
                 "metrics": "資源監控",
                 "health": "服務狀態",
-                "configuration": "Configuration",
+                "configuration": "設定",
                 "logs": "記錄",
                 "audits": "稽核",
                 "apidocs": "API",
-                "database": "Database"
+                "database": "資料庫"
             },
             "language": "語系"
         },
@@ -71,19 +71,19 @@
     },
     "entity": {
         "action": {
-            "back": "Back",
-            "cancel": "Cancel",
-            "delete": "Delete",
-            "edit": "Edit",
-            "save": "Save",
-            "view": "View"
+            "back": "返回",
+            "cancel": "取消",
+            "delete": "刪除",
+            "edit": "編輯",
+            "save": "儲存",
+            "view": "檢視"
         },
         "detail": {
-            "field": "Field",
-            "value": "Value"
+            "field": "屬性",
+            "value": "值"
         },
         "delete": {
-            "title": "Confirm delete operation"
+            "title": "確定刪除"
         }
     },
     "footer": "這裡是頁尾"
