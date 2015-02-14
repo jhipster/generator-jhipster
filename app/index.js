@@ -172,36 +172,6 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             when: function (response) {
-                return response.databaseType == 'mongodb';
-            },
-            type: 'list',
-            name: 'prodDatabaseType',
-            message: '(6/13) Which *production* database would you like to use?',
-            choices: [
-                {
-                    value: 'mongodb',
-                    name: 'MongoDB'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: function (response) {
-                return response.databaseType == 'mongodb';
-            },
-            type: 'list',
-            name: 'prodDatabaseType',
-            message: '(6/13) Which *production* database would you like to use?',
-            choices: [
-                {
-                    value: 'cassandra',
-                    name: 'Cassandra'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: function (response) {
                 return (response.databaseType == 'sql' && response.prodDatabaseType == 'mysql');
             },
             type: 'list',
@@ -240,36 +210,6 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             when: function (response) {
-                return response.databaseType == 'mongodb';
-            },
-            type: 'list',
-            name: 'devDatabaseType',
-            message: '(7/13) Which *development* database would you like to use?',
-            choices: [
-                {
-                    value: 'mongodb',
-                    name: 'MongoDB'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: function (response) {
-                return response.databaseType == 'mongodb';
-            },
-            type: 'list',
-            name: 'devDatabaseType',
-            message: '(7/13) Which *development* database would you like to use?',
-            choices: [
-                {
-                    value: 'cassandra',
-                    name: 'Cassandra'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: function (response) {
                 return response.databaseType == 'sql';
             },
             type: 'list',
@@ -290,21 +230,6 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 }
             ],
             default: 1
-        },
-        {
-            when: function (response) {
-                return !(response.databaseType == 'sql');
-            },
-            type: 'list',
-            name: 'hibernateCache',
-            message: '(8/13) Do you want to use Hibernate 2nd level cache?',
-            choices: [
-                {
-                    value: 'no',
-                    name: 'No (this not possible with a non-SQL database)'
-                },
-            ],
-            default: 0
         },
         {
             type: 'list',
@@ -381,12 +306,22 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     this.baseName = this.config.get('baseName');
     this.packageName = this.config.get('packageName');
     this.authenticationType = this.config.get('authenticationType');
-    this.hibernateCache = this.config.get('hibernateCache');
     this.clusteredHttpSession = this.config.get('clusteredHttpSession');
     this.websocket = this.config.get('websocket');
     this.databaseType = this.config.get('databaseType');
-    this.devDatabaseType = this.config.get('devDatabaseType');
-    this.prodDatabaseType = this.config.get('prodDatabaseType');
+    if (this.databaseType == 'mongodb') {
+        this.devDatabaseType = 'mongodb';
+        this.prodDatabaseType = 'mongodb';
+        this.hibernateCache = 'no';
+    } else if (this.databaseType == 'cassandra') {
+        this.devDatabaseType = 'cassandra';
+        this.prodDatabaseType = 'cassandra';
+        this.hibernateCache = 'no';
+    } else { // sql
+        this.devDatabaseType = this.config.get('devDatabaseType');
+        this.prodDatabaseType = this.config.get('prodDatabaseType');
+        this.hibernateCache = this.config.get('hibernateCache');
+    }
     this.useCompass = this.config.get('useCompass');
     this.javaVersion = this.config.get('javaVersion');
     this.buildTool = this.config.get('buildTool');
@@ -626,9 +561,11 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     this.template('src/main/java/package/domain/_package-info.java', javaDir + 'domain/package-info.java', this, {});
-    this.template('src/main/java/package/domain/_AbstractAuditingEntity.java', javaDir + 'domain/AbstractAuditingEntity.java', this, {});
-    this.template('src/main/java/package/domain/_Authority.java', javaDir + 'domain/Authority.java', this, {});
-    this.template('src/main/java/package/domain/_PersistentAuditEvent.java', javaDir + 'domain/PersistentAuditEvent.java', this, {});
+    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+        this.template('src/main/java/package/domain/_AbstractAuditingEntity.java', javaDir + 'domain/AbstractAuditingEntity.java', this, {});
+        this.template('src/main/java/package/domain/_Authority.java', javaDir + 'domain/Authority.java', this, {});
+        this.template('src/main/java/package/domain/_PersistentAuditEvent.java', javaDir + 'domain/PersistentAuditEvent.java', this, {});
+    }
     if (this.authenticationType == 'session') {
         this.template('src/main/java/package/domain/_PersistentToken.java', javaDir + 'domain/PersistentToken.java', this, {});
     }
@@ -639,15 +576,17 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/domain/util/_ISO8601LocalDateDeserializer.java', javaDir + 'domain/util/ISO8601LocalDateDeserializer.java', this, {});
 
     this.template('src/main/java/package/repository/_package-info.java', javaDir + 'repository/package-info.java', this, {});
-    this.template('src/main/java/package/repository/_AuthorityRepository.java', javaDir + 'repository/AuthorityRepository.java', this, {});
-    this.template('src/main/java/package/repository/_CustomAuditEventRepository.java', javaDir + 'repository/CustomAuditEventRepository.java', this, {});
+    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+        this.template('src/main/java/package/repository/_AuthorityRepository.java', javaDir + 'repository/AuthorityRepository.java', this, {});
+        this.template('src/main/java/package/repository/_CustomAuditEventRepository.java', javaDir + 'repository/CustomAuditEventRepository.java', this, {});
+        this.template('src/main/java/package/repository/_PersistenceAuditEventRepository.java', javaDir + 'repository/PersistenceAuditEventRepository.java', this, {});
+    }
 
     this.template('src/main/java/package/repository/_UserRepository.java', javaDir + 'repository/UserRepository.java', this, {});
 
     if (this.authenticationType == 'session') {
         this.template('src/main/java/package/repository/_PersistentTokenRepository.java', javaDir + 'repository/PersistentTokenRepository.java', this, {});
     }
-    this.template('src/main/java/package/repository/_PersistenceAuditEventRepository.java', javaDir + 'repository/PersistenceAuditEventRepository.java', this, {});
 
     this.template('src/main/java/package/security/_package-info.java', javaDir + 'security/package-info.java', this, {});
     this.template('src/main/java/package/security/_AjaxAuthenticationFailureHandler.java', javaDir + 'security/AjaxAuthenticationFailureHandler.java', this, {});

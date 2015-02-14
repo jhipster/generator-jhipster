@@ -1,5 +1,6 @@
 package <%=packageName%>.domain;
-
+<% if (databaseType == 'cassandra') { %>
+import com.datastax.driver.mapping.annotations.*;<% } %>
 import com.fasterxml.jackson.annotation.JsonIgnore;<% if (hibernateCache != 'no' && databaseType == 'sql') { %>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
@@ -22,12 +23,16 @@ import java.util.Set;
 @Entity
 @Table(name = "T_USER")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'mongodb') { %>
-@Document(collection = "T_USER")<% } %>
+@Document(collection = "T_USER")<% } %><% if (databaseType == 'cassandra') { %>
+@Table(name = "user")<% } %>
 public class User extends AbstractAuditingEntity implements Serializable {
-
-    @Id<% if (databaseType == 'sql') { %>
+<% if (databaseType == 'sql') { %>
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;<% } %><% if (databaseType == 'mongodb') { %>
+    @Id
+    private String id;<% } %><% if (databaseType == 'cassandra') { %>
+    @PartitionKey
     private String id;<% } %>
 
     @NotNull
@@ -62,12 +67,14 @@ public class User extends AbstractAuditingEntity implements Serializable {
 
     @Size(min = 2, max = 5)<% if (databaseType == 'sql') { %>
     @Column(name = "lang_key", length = 5)<% } %><% if (databaseType == 'mongodb') { %>
-    @Field("lang_key")<% } %>
+    @Field("lang_key")<% } %><% if (databaseType == 'cassandra') { %>
+    @Column(name = "lang_key")<% } %>
     private String langKey;
 
     @Size(max = 20)<% if (databaseType == 'sql') { %>
     @Column(name = "activation_key", length = 20)<% } %><% if (databaseType == 'mongodb') { %>
-    @Field("activation_key")<% } %>
+    @Field("activation_key")<% } %><% if (databaseType == 'cassandra') { %>
+    @Column(name = "activation_key")<% } %>
     private String activationKey;
 
     @JsonIgnore<% if (databaseType == 'sql') { %>
@@ -75,12 +82,12 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @JoinTable(
             name = "T_USER_AUTHORITY",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
-    private Set<Authority> authorities = new HashSet<>();<% if (authenticationType == 'session') { %><% if (databaseType == 'sql') { %>
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})<% if (hibernateCache != 'no') { %>
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %>
+    private Set<Authority> authorities = new HashSet<>();<% if (authenticationType == 'session' && databaseType == 'sql') { %>
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")<% if (hibernateCache != 'no') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
     private Set<PersistentToken> persistentTokens = new HashSet<>();<% } %>
 
@@ -156,11 +163,11 @@ public class User extends AbstractAuditingEntity implements Serializable {
         this.langKey = langKey;
     }
 
-    public Set<Authority> getAuthorities() {
+    public Set<<% if (databaseType == 'sql' || databaseType == 'mongodb')  { %>Authority<% } %><% if (databaseType == 'cassandra') { %>String<% } %>> getAuthorities() {
         return authorities;
     }
 
-    public void setAuthorities(Set<Authority> authorities) {
+    public void setAuthorities(Set<<% if (databaseType == 'sql' || databaseType == 'mongodb')  { %>Authority<% } %><% if (databaseType == 'cassandra') { %>String<% } %>> authorities) {
         this.authorities = authorities;
     }<% if ((authenticationType == 'session') && (databaseType == 'sql')) { %>
 
