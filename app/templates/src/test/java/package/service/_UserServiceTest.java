@@ -1,13 +1,16 @@
 package <%=packageName%>.service;
 
 import <%=packageName%>.Application;<% if (databaseType == 'mongodb') { %>
-import <%=packageName%>.config.MongoConfiguration;<% } %><% if (authenticationType == 'session') { %>
+import <%=packageName%>.config.MongoConfiguration;<% } %><% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 import <%=packageName%>.domain.PersistentToken;<% } %>
-import <%=packageName%>.domain.User;<% if (authenticationType == 'session') { %>
+import <%=packageName%>.domain.User;<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
-import <%=packageName%>.repository.UserRepository;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
+import <%=packageName%>.repository.UserRepository;<% if (databaseType == 'cassandra') { %>
+import org.cassandraunit.CassandraCQLUnit;
+import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;<% } %>
+import org.joda.time.DateTime;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import org.joda.time.LocalDate;<% } %><% if (databaseType == 'cassandra') { %>
+import org.junit.ClassRule;<% } %>
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.IntegrationTest;
@@ -17,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;<% } %>
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import javax.inject.Inject;<% if (javaVersion == '8') { %>
+import javax.inject.Inject;<% if ((databaseType == 'sql' || databaseType == 'mongodb') && javaVersion == '8') { %>
 import java.util.Optional;<%}%>
 import java.util.List;
 
@@ -34,16 +37,19 @@ import static org.assertj.core.api.Assertions.*;
 @IntegrationTest<% if (databaseType == 'mongodb') { %>
 @Import(MongoConfiguration.class)<% } %><% if (databaseType == 'sql') { %>
 @Transactional<% } %>
-public class UserServiceTest {<% if (authenticationType == 'session') { %>
+public class UserServiceTest {<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 
     @Inject
-    private PersistentTokenRepository persistentTokenRepository;<% } %>
+    private PersistentTokenRepository persistentTokenRepository;<% } %><% if (databaseType == 'cassandra') { %>
+    @ClassRule
+    public static CassandraCQLUnit cassandra = new CassandraCQLUnit(new ClassPathCQLDataSet("config/cql/create-tables.cql", true, "<%= baseName %>"));
+<% } %>
 
     @Inject
     private UserRepository userRepository;
 
     @Inject
-    private UserService userService;<% if (authenticationType == 'session') { %>
+    private UserService userService;<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 
     @Test
     public void testRemoveOldPersistentTokens() {<% if (javaVersion == '8') { %>
@@ -64,7 +70,7 @@ public class UserServiceTest {<% if (authenticationType == 'session') { %>
         DateTime now = new DateTime();
         List<User> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minusDays(3));
         assertThat(users).isEmpty();
-    }<% if (authenticationType == 'session') { %>
+    }<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 
     private void generateUserToken(User user, String tokenSeries, LocalDate localDate) {
         PersistentToken token = new PersistentToken();

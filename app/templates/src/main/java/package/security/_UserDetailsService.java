@@ -1,6 +1,6 @@
 package <%=packageName%>.security;
-
-import <%=packageName%>.domain.Authority;
+<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import <%=packageName%>.domain.Authority;<%}%>
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.UserRepository;
 import org.slf4j.Logger;
@@ -41,8 +41,9 @@ public class UserDetailsService implements org.springframework.security.core.use
             if (!user.getActivated()) {
                 throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
             }
-            List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
-                    .map(authority -> new SimpleGrantedAuthority(authority.getName()))
+            List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+                    .map(authority -> new SimpleGrantedAuthority(authority.getName()))<%}%><% if (databaseType == 'cassandra') { %>
+                    .map(authority -> new SimpleGrantedAuthority(authority))<% } %>
                     .collect(Collectors.toList());
             return new org.springframework.security.core.userdetails.User(lowercaseLogin,
                     user.getPassword(),

@@ -3,13 +3,7 @@ server:
 
 spring:
     profiles:
-        active: prod<% if (databaseType == 'mongodb') { %>
-    data:
-        mongodb:
-            host: localhost
-            port: 27017
-            database: <%= baseName %><% } %>
-    <% if (databaseType == 'sql') { %>
+        active: prod<% if (databaseType == 'sql') { %>
     datasource:
         dataSourceClassName: <% if (prodDatabaseType == 'mysql') { %>com.mysql.jdbc.jdbc2.optional.MysqlDataSource<% } else if (prodDatabaseType == 'postgresql') { %>org.postgresql.ds.PGSimpleDataSource<% } else { %>org.hsqldb.jdbc.JDBCDataSource<% } %>
         url: <% if (prodDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (prodDatabaseType == 'postgresql') { %><% } %>
@@ -37,7 +31,18 @@ spring:
             hibernate.generate_statistics: false
             <% if (hibernateCache == 'ehcache') { %>hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory<% } else if (hibernateCache == 'hazelcast') { %>hibernate.cache.region.factory_class: <%=packageName%>.config.hazelcast.HazelcastCacheRegionFactory<% } %>
             <% if (hibernateCache == 'hazelcast') { %>hibernate.cache.use_minimal_puts: true
-            hibernate.cache.hazelcast.use_lite_member: true<% } %><% } %>
+            hibernate.cache.hazelcast.use_lite_member: true<% } %><% } %><% if (databaseType == 'mongodb') { %>
+    data:
+        mongodb:
+            host: localhost
+            port: 27017
+            database: <%= baseName %><% } %><% if (databaseType == 'cassandra') { %>
+    data:
+        cassandra:
+            contactPoints: localhost
+            protocolVersion: V2
+            compression: LZ4
+            keyspaceName: <%= baseName %><% } %>
 
     mail:
         baseUrl: http://localhost:8080

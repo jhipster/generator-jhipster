@@ -473,6 +473,15 @@ JhipsterGenerator.prototype.app = function app() {
         this.copy(resourceDir + '/config/mongeez/users.xml', resourceDir + 'config/mongeez/users.xml');
     }
 
+    if (this.databaseType == "cassandra") {
+        this.template(resourceDir + '/config/cql/_create-keyspace-prod.cql', resourceDir + 'config/config/cql/create-keyspace-prod.cql', this, {});
+        this.template(resourceDir + '/config/cql/_create-keyspace.cql', resourceDir + 'config/config/cql/create-keyspace.cql', this, {});
+        this.template(resourceDir + '/config/cql/_drop-keyspace.cql', resourceDir + 'config/config/cql/drop-keyspace.cql', this, {});
+        this.template(resourceDir + '/config/cql/_install.cql', resourceDir + 'config/config/cql/install.cql', this, {});
+        this.template(resourceDir + '/config/cql/_reset.cql', resourceDir + 'config/config/cql/reset.cql', this, {});
+        this.copy(resourceDir + '/config/cql/create-tables.cql', resourceDir + 'config/cql/create-tables.cql');
+    }
+
     // Create mail templates
     this.copy(resourceDir + '/mails/activationEmail.html', resourceDir + 'mails/activationEmail.html');
 
@@ -616,7 +625,9 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     this.template('src/main/java/package/service/_package-info.java', javaDir + 'service/package-info.java', this, {});
-    this.template('src/main/java/package/service/_AuditEventService.java', javaDir + 'service/AuditEventService.java', this, {});
+    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+        this.template('src/main/java/package/service/_AuditEventService.java', javaDir + 'service/AuditEventService.java', this, {});
+    }
     this.template('src/main/java/package/service/_UserService.java', javaDir + 'service/UserService.java', this, {});
     this.template('src/main/java/package/service/_MailService.java', javaDir + 'service/MailService.java', this, {});
     this.template('src/main/java/package/service/util/_RandomUtil.java', javaDir + 'service/util/RandomUtil.java', this, {});
@@ -643,7 +654,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/web/rest/dto/_UserDTO.java', javaDir + 'web/rest/dto/UserDTO.java', this, {});
     this.template('src/main/java/package/web/rest/_package-info.java', javaDir + 'web/rest/package-info.java', this, {});
     this.template('src/main/java/package/web/rest/_AccountResource.java', javaDir + 'web/rest/AccountResource.java', this, {});
-    this.template('src/main/java/package/web/rest/_AuditResource.java', javaDir + 'web/rest/AuditResource.java', this, {});
+    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+        this.template('src/main/java/package/web/rest/_AuditResource.java', javaDir + 'web/rest/AuditResource.java', this, {});
+    }
     this.template('src/main/java/package/web/rest/_LogsResource.java', javaDir + 'web/rest/LogsResource.java', this, {});
     this.template('src/main/java/package/web/rest/_UserResource.java', javaDir + 'web/rest/UserResource.java', this, {});
 
@@ -661,6 +674,9 @@ JhipsterGenerator.prototype.app = function app() {
 
     if (this.databaseType == "mongodb") {
         this.template('src/test/java/package/config/_MongoConfiguration.java', testDir + 'config/MongoConfiguration.java', this, {});
+    }
+    if (this.databaseType == "cassandra") {
+            this.template('src/test/java/package/_CassandraKeyspaceTest.java', testDir + 'CassandraKeyspaceTest.java', this, {});
     }
     this.template('src/test/java/package/security/_SecurityUtilsTest.java', testDir + 'security/SecurityUtilsTest.java', this, {});
     this.template('src/test/java/package/service/_UserServiceTest.java', testDir + 'service/UserServiceTest.java', this, {});

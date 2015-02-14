@@ -1,10 +1,10 @@
 package <%=packageName%>.security;
 
-import <%=packageName%>.domain.PersistentToken;
-import <%=packageName%>.domain.User;
+import <%=packageName%>.domain.PersistentToken;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import <%=packageName%>.domain.User;<%}%>
 import <%=packageName%>.repository.PersistentTokenRepository;
-import <%=packageName%>.repository.UserRepository;
-import org.joda.time.LocalDate;
+import <%=packageName%>.repository.UserRepository;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import org.joda.time.LocalDate;<%}%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -23,8 +23,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.security.SecureRandom;
-import java.util.Arrays;
+import java.security.SecureRandom;<% if (databaseType == 'cassandra') { %>
+import java.time.temporal.ChronoUnit;<%}%>
+import java.util.Arrays;<% if (databaseType == 'cassandra') { %>
+import java.util.Date;<%}%>
 
 /**
  * Custom implementation of Spring Security's RememberMeServices.
@@ -83,12 +85,14 @@ public class CustomPersistentRememberMeServices extends
     @Transactional
     protected UserDetails processAutoLoginCookie(String[] cookieTokens, HttpServletRequest request, HttpServletResponse response) {
 
-        PersistentToken token = getPersistentToken(cookieTokens);
-        String login = token.getUser().getLogin();
+        PersistentToken token = getPersistentToken(cookieTokens);<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+        String login = token.getUser().getLogin();<%}%><% if (databaseType == 'cassandra') { %>
+        String login = token.getLogin();<%}%>
 
         // Token also matches, so login is valid. Update the token value, keeping the *same* series number.
-        log.debug("Refreshing persistent login token for user '{}', series '{}'", login, token.getSeries());
-        token.setTokenDate(new LocalDate());
+        log.debug("Refreshing persistent login token for user '{}', series '{}'", login, token.getSeries());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+        token.setTokenDate(new LocalDate());<%}%><% if (databaseType == 'cassandra') { %>
+        token.setTokenDate(new Date());<%}%>
         token.setTokenValue(generateTokenData());
         token.setIpAddress(request.getRemoteAddr());
         token.setUserAgent(request.getHeader("User-Agent"));
@@ -109,10 +113,14 @@ public class CustomPersistentRememberMeServices extends
         log.debug("Creating new persistent login for user {}", login);<% if (javaVersion == '8') {%>
         PersistentToken token = userRepository.findOneByLogin(login).map(u -> {
             PersistentToken t = new PersistentToken();
-            t.setSeries(generateSeriesData());
+            t.setSeries(generateSeriesData());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
             t.setUser(u);
             t.setTokenValue(generateTokenData());
-            t.setTokenDate(new LocalDate());
+            t.setTokenDate(new LocalDate());<%}%><% if (databaseType == 'cassandra') { %>
+            t.setLogin(login);
+            t.setUserId(u.getId());
+            t.setTokenValue(generateTokenData());
+            t.setTokenDate(new Date());<%}%>
             t.setIpAddress(request.getRemoteAddr());
             t.setUserAgent(request.getHeader("User-Agent"));
             return t;
@@ -188,8 +196,9 @@ public class CustomPersistentRememberMeServices extends
             persistentTokenRepository.delete(token);
             throw new CookieTheftException("Invalid remember-me token (Series/token) mismatch. Implies previous cookie theft attack.");
         }
-
-        if (token.getTokenDate().plusDays(TOKEN_VALIDITY_DAYS).isBefore(LocalDate.now())) {
+<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+        if (token.getTokenDate().plusDays(TOKEN_VALIDITY_DAYS).isBefore(LocalDate.now())) {<%}%><% if (databaseType == 'cassandra') { %>
+        if (token.getTokenDate().toInstant().plus(TOKEN_VALIDITY_DAYS, ChronoUnit.DAYS).isBefore((new Date()).toInstant())) {<%}%>
             persistentTokenRepository.delete(token);
             throw new RememberMeAuthenticationException("Remember-me login has expired");
         }

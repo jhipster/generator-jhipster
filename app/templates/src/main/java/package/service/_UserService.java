@@ -1,15 +1,16 @@
 package <%=packageName%>.service;
-
+<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import <%=packageName%>.domain.Authority;<% if (authenticationType == 'session') { %>
-import <%=packageName%>.domain.PersistentToken;<% } %>
-import <%=packageName%>.domain.User;
-import <%=packageName%>.repository.AuthorityRepository;<% if (authenticationType == 'session') { %>
+import <%=packageName%>.domain.PersistentToken;<% } %><% } %>
+import <%=packageName%>.domain.User;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import <%=packageName%>.repository.AuthorityRepository;<% } %><% if (authenticationType == 'session') { %>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
-import <%=packageName%>.repository.UserRepository;
+import <%=packageName%>.repository.UserRepository;<% if (databaseType == 'cassandra') { %>
+import com.mycompany.myapp.security.AuthoritiesConstants;<% } %>
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.util.RandomUtil;
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
+import org.joda.time.DateTime;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import org.joda.time.LocalDate;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,11 +18,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 
-import javax.inject.Inject;
+import javax.inject.Inject;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import java.util.HashSet;
 import java.util.List;<% if (javaVersion == '8') { %>
 import java.util.Optional;<% } %>
-import java.util.Set;
+import java.util.Set;<% } %><% if (databaseType == 'cassandra') { %>
+import java.util.*;<% } %>
 
 /**
  * Service class for managing users.
@@ -40,9 +42,9 @@ public class UserService {
 
     @Inject
     private PersistentTokenRepository persistentTokenRepository;<% } %>
-
+<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Inject
-    private AuthorityRepository authorityRepository;
+    private AuthorityRepository authorityRepository;<% } %>
 <% if (javaVersion == '8') { %>
     public Optional<User> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
@@ -72,9 +74,11 @@ public class UserService {
 
     public User createUserInformation(String login, String password, String firstName, String lastName, String email,
                                       String langKey) {
-        User newUser = new User();
+        User newUser = new User();<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         Authority authority = authorityRepository.findOne("ROLE_USER");
-        Set<Authority> authorities = new HashSet<>();
+        Set<Authority> authorities = new HashSet<>();<% } %><% if (databaseType == 'cassandra') { %>
+        newUser.setId(UUID.randomUUID().toString());
+        Set<String> authorities = new HashSet<>();<% } %>
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(login);
         // new user gets initially a generated password
@@ -86,8 +90,9 @@ public class UserService {
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key
-        newUser.setActivationKey(RandomUtil.generateActivationKey());
-        authorities.add(authority);
+        newUser.setActivationKey(RandomUtil.generateActivationKey());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+        authorities.add(authority);<% } %><% if (databaseType == 'cassandra') { %>
+        authorities.add(AuthoritiesConstants.USER);<% } %>
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
         log.debug("Created Information for User: {}", newUser);
@@ -110,13 +115,14 @@ public class UserService {
         log.debug("Changed Information for User: {}", currentUser);<%}%>
     }
 
-    public void changePassword(String password) {<% if (javaVersion == '8') { %>
-        userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).ifPresent(u-> {
+    public void changePassword(String password) {<% if (javaVersion == '8') { %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+        userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).ifPresent(u-> {<% } %><% if (databaseType == 'cassandra') { %>
+        userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).ifPresent(u -> {<% } %>
             String encryptedPassword = passwordEncoder.encode(password);
             u.setPassword(encryptedPassword);
             userRepository.save(u);
             log.debug("Changed password for User: {}", u);
-        } );<%} else {%>
+        });<%} else {%>
         User currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
         String encryptedPassword = passwordEncoder.encode(password);
         currentUser.setPassword(encryptedPassword);
@@ -132,7 +138,7 @@ public class UserService {
         currentUser.getAuthorities().size(); // eagerly load the association<% } %>
         return currentUser;
     }
-<% if (authenticationType == 'session') { %>
+<% if (databaseType == 'sql' || databaseType == 'mongodb') { %><% if (authenticationType == 'session') { %>
     /**
      * Persistent Token are used for providing automatic authentication, they should be automatically deleted after
      * 30 days.
@@ -174,5 +180,5 @@ public class UserService {
             log.debug("Deleting not activated user {}", user.getLogin());
             userRepository.delete(user);
         }
-    }
+    }<% } %>
 }

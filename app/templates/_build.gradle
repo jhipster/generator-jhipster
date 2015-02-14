@@ -101,6 +101,7 @@ dependencies {
     compile group: 'javax.transaction', name: 'javax.transaction-api', version: javax_transaction_version
     compile group: 'joda-time', name: 'joda-time', version: joda_time_version<% if (databaseType == 'sql') { %>
     compile group: 'joda-time', name: 'joda-time-hibernate', version: joda_time_hibernate_version<% } %>
+    compile group: 'net.jpountz.lz4', name: 'lz4', version: lz4_version
     compile group: 'org.apache.geronimo.javamail', name: 'geronimo-javamail_1.4_mail', version: geronimo_javamail_1_4_mail_version<% if (databaseType == 'sql') { %>
     compile group: 'org.hibernate', name: 'hibernate-core', version: hibernate_entitymanager_version
     compile group: 'org.hibernate', name: 'hibernate-envers', version: hibernate_entitymanager_version<% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>

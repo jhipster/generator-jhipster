@@ -1,7 +1,7 @@
 package <%=packageName%>.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import <%=packageName%>.domain.Authority;<% if (authenticationType == 'session') { %>
+import com.codahale.metrics.annotation.Timed;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import <%=packageName%>.domain.Authority;<% } %><% if (authenticationType == 'session') { %>
 import <%=packageName%>.domain.PersistentToken;<% } %>
 import <%=packageName%>.domain.User;<% if (authenticationType == 'session') { %>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
@@ -139,8 +139,10 @@ public class AccountResource {
                     user.getFirstName(),
                     user.getLastName(),
                     user.getEmail(),
-                    user.getLangKey(),
-                    user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toList())),
+                    user.getLangKey(),<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+                    user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toList())),<% } %><% if (databaseType == 'cassandra') { %>
+                    user.getAuthorities().stream().collect(Collectors.toList())),
+<% } %>
                 HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else { %>
         User user = userService.getUserWithAuthorities();
