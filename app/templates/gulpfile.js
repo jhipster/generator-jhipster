@@ -188,7 +188,11 @@ gulp.task('wiredep:app', function () {
     .pipe(gulp.dest('src/main/webapp'));<% if (useCompass) { %>
     gulp.src('src/main/scss/main.scss')
     .pipe(wiredep({
-        exclude: [/angular-i18n/, /swagger-ui/],
+        exclude: [
+            /angular-i18n/,  // localizations are loaded dynamically
+            /swagger-ui/,
+            'bower_components/bootstrap/' // Exclude Bootstrap LESS as we use bootstrap-sass 
+        ],
         ignorePath: /\.\.\/webapp\/bower_components\// // remove ../webapp/bower_components/ from paths of injected sass files
     }))
     .pipe(gulp.dest('src/main/scss'));<% } %>
