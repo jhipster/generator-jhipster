@@ -2,7 +2,7 @@
     "audits": {
         "title": "Denetim",
         "filter": {
-            "title": "Filter per date",
+            "title": "Tarihleri filtrele",
             "from": "kimden",
             "to": "kime",
             "button": {

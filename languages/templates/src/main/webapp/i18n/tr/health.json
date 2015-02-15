@@ -1,6 +1,6 @@
 {
     "health": {
-        "title": "Heath checks",
+        "title": "Health",
         "refresh.button": "Yenile",
         "stacktrace": "Stacktrace",
         "indicator": {
@@ -14,8 +14,8 @@
             "status": "Durum"
         },
         "status": {
-            "UP": "UP",
-            "DOWN": "DOWN"
+            "UP": "AKTİF",
+            "DOWN": "DEAKTİF"
         }
     }
 }

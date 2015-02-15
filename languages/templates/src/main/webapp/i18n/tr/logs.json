@@ -1,7 +1,7 @@
 {
     "logs": {
-        "title": "Loglar",
-        "nbloggers": "Toplam {{ total }} logger var.",
+        "title": "Kayıtlar",
+        "nbloggers": "Toplam {{ total }} kayıt var.",
         "filter": "Filtre",
         "table": {
             "name": "Adı",
