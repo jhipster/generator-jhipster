@@ -607,7 +607,7 @@
                     <plugin>
                         <groupId>com.github.trecloux</groupId>
                         <artifactId>yeoman-maven-plugin</artifactId>
-                        <version>0.3</version>
+                        <version>0.4</version>
                         <executions>
                             <execution>
                                 <id>run-grunt</id>
