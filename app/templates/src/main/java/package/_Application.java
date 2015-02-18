@@ -15,13 +15,15 @@ import com.google.common.base.Joiner;<% } %>
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Arrays;
 
 @ComponentScan
 @EnableAutoConfiguration(exclude = {MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class})
 public class Application {
 
-    private final Logger log = LoggerFactory.getLogger(Application.class);
+    private static final Logger log = LoggerFactory.getLogger(Application.class);
 
     @Inject
     private Environment env;
@@ -44,7 +46,7 @@ public class Application {
     /**
      * Main method, used to run the application.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnknownHostException {
         SpringApplication app = new SpringApplication(Application.class);
         app.setShowBanner(false);
 
@@ -54,7 +56,14 @@ public class Application {
         // if not the development profile will be added
         addDefaultProfile(app, source);<% if (databaseType == 'sql') { %>
         addLiquibaseScanPackages();<% } %>
-        app.run(args);
+        Environment env = app.run(args).getEnvironment();
+        log.info("Access URLs:\n----------------------------------------------------------\n\t" +
+            "Local: \t\thttp://127.0.0.1:{}\n\t" +
+            "External: \thttp://{}:{}\n----------------------------------------------------------",
+            env.getProperty("server.port"),
+            InetAddress.getLocalHost().getHostAddress(),
+            env.getProperty("server.port"));
+
     }
 
     /**

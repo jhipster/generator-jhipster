@@ -1,0 +1,90 @@
+{
+    "global": {
+        "title": "<%= baseName %>",
+        "browsehappy": "您目前使用<strong>过于老旧</strong>的浏览器, 建议您<a href=\"http://browsehappy.com/?locale=en\">升级浏览器</a>让您有更佳的上网体验.",
+        "menu": {
+            "home": "首页",
+            "entities": {
+                "main": "Entities",
+                "additionalEntity": "JHipster will add addtional entities"
+            },
+            "account": {
+                "main": "账号",
+                "settings": "设置",
+                "password": "密码",
+                "sessions": "会话",
+                "login": "登录",
+                "logout": "退出",
+                "register": "注册"
+            },
+            "admin": {
+                "main": "管理",
+                "tracker": "追踪使用者",
+                "metrics": "资源监控",
+                "health": "服务状态",
+                "configuration": "配置",
+                "logs": "日志",
+                "audits": "审核",
+                "apidocs": "API",
+                "database": "数据库"
+            },
+            "language": "语言"
+        },
+        "form": {
+            "username": "账号",
+            "username.placeholder": "您的账号",
+            "newpassword": "新密码",
+            "newpassword.placeholder": "您的新密码",
+            "confirmpassword": "新密码确认",
+            "confirmpassword.placeholder": "确认您的新密码",
+            "email": "电子邮件",
+            "email.placeholder": "您的电子邮件"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "如果您要<a href=\"#/login\">登录</a>, 您可以使用默认账号:<br/>- 管理员 (账号=\"admin\"和密码=\"admin\") <br/>- 普通用户 (账号=\"user\"和密码=\"user\").",
+                "register": "您还没有账号？<a href=\"#/register\">注册一个新账号</a>"
+            },
+            "error": {
+                "dontmatch" : "您输入的密码和确认确认密码不匹配!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "您的密码是必填项.",
+                    "minlength": "您的密码长度至少要有5个字符",
+                    "maxlength": "您的密码长度不能超过50个字符",
+                    "strength": "密码强度:"
+                },
+                "confirmpassword": {
+                    "required": "您的确认密码是必填项.",
+                    "minlength": "您的确认密码长度至少要有5个字符",
+                    "maxlength": "您的确认密码长度不能超过50个字符"
+                },
+                "email": {
+                    "required": "您的电子邮件是必填项.",
+                    "invalid": "您的电子邮件格式格式不正确.",
+                    "minlength": "您的电子邮件长度至少要有5个字符",
+                    "maxlength": "您的电子邮件长度不能超过50个字符"
+                }
+            }
+        }
+    },
+    "entity": {
+        "action": {
+            "back": "Back",
+            "cancel": "Cancel",
+            "delete": "Delete",
+            "edit": "Edit",
+            "save": "Save",
+            "view": "View"
+        },
+        "detail": {
+            "field": "Field",
+            "value": "Value"
+        },
+        "delete": {
+            "title": "Confirm delete operation"
+        }
+    },
+    "footer": "这里是页脚"
+}

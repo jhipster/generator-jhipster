@@ -7,7 +7,8 @@ angular.module('<%=angularAppName%>')
                 parent: 'account',
                 url: '/register',
                 data: {
-                    roles: []
+                    roles: [],
+                    pageTitle: 'register.title'
                 },
                 views: {
                     'content@': {

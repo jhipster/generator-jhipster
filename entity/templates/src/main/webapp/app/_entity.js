@@ -7,7 +7,8 @@ angular.module('<%=angularAppName%>')
                 parent: 'entity',
                 url: '/<%= entityInstance %>',
                 data: {
-                    roles: ['ROLE_USER']
+                    roles: ['ROLE_USER'],
+                    pageTitle: '<%= angularAppName %>.<%= entityInstance %>.home.title'
                 },
                 views: {
                     'content@': {
@@ -26,7 +27,8 @@ angular.module('<%=angularAppName%>')
                 parent: 'entity',
                 url: '/<%= entityInstance %>/:id',
                 data: {
-                    roles: ['ROLE_USER']
+                    roles: ['ROLE_USER'],
+                    pageTitle: '<%= angularAppName %>.<%= entityInstance %>.detail.title'
                 },
                 views: {
                     'content@': {

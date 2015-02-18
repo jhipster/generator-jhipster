@@ -4,12 +4,12 @@
         "stacktrace": "Stacktrace",
         "indicator": {
             "db": "База данных",
-            "diskSpace": "Disk space",
+            "diskSpace": "Место на диске",
             "mail": "Email",
             "mongo": "Mongo DB"
         },
         "table": {
-            "service": "Название сервисаo",
+            "service": "Название сервиса",
             "status": "статус"
         },
         "status": {
