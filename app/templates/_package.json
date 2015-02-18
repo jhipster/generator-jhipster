@@ -52,7 +52,8 @@
     "gulp-jshint": "1.9.0",
     "gulp-browserify": "0.5.1",<% if (useCompass) { %>
     "gulp-compass": "2.0.3",<% } %>
-    "proxy-middleware": "0.9.0", <% } %>
+    "proxy-middleware": "0.9.0",
+    "run-sequence": "^1.0.2",<% } %>
     "event-stream": "3.2.1",
     "jshint-stylish": "1.0.0",
     "karma-script-launcher": "0.1.0",

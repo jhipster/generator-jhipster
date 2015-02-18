@@ -1,10 +1,10 @@
 {
     "configuration": {
-        "title": "Configuration",
-        "filter": "Filter (by prefix)",
+        "title": "Yapılandırma",
+        "filter": "Filtrele (Önek ile)",
         "table": {
-            "prefix": "Prefix",
-            "properties": "Properties"
+            "prefix": "Önek",
+            "properties": "Özellikler"
         }
     }
 }

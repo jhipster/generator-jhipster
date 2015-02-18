@@ -10,14 +10,14 @@
                     "required": "Kullanıcı adı zorunlu.",
                     "minlength": "Kullanıcı adı en az 1 karakter olmak zorundadır",
                     "maxlength": "Kullanıcı adı en fazla 50 karakter olabilir",
-                    "pattern": "Your login can only contain lower-case letters and digits"
+                    "pattern": "Kullanıcı adınız sadece küçük harfler ve numaralardan oluşabilir"
                 }
             },
             "success": "<strong>Kayıt işlemi yapıldı!</strong> Lütfen onay için e-posta'nızı kontrol edin.",
             "error": {
                 "fail": "<strong>Kayıt işlemi başarısız oldu!</strong> Lütfen daha sonra tekrar deneyin.",
                 "userexists": "<strong>Girdiğiniz kullanıcı sistemde mevcut!</strong> Lütfen başka bir kullanıcı deneyin.",
-                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+                "emailexists": "<strong>E-mail adresi zaten kullanılıyor!</strong> Lütfen başka bir mail seçiniz."
             }
         }
     }

@@ -4,7 +4,7 @@
         "form": {
             "password": "Пароль",
             "password.placeholder": "Ваш пароль",
-            "rememberme": "Входить автоматический",
+            "rememberme": "Входить автоматически",
             "button": "Войти"
         },
         "messages": {
