@@ -1,0 +1,92 @@
+{
+    "inheritanceFor": false,
+    "inheritanceFromClass": "AbstractAuditingEntity",
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "otherEntityName": "Authority",
+            "relationshipType": "many-to-many",
+            "otherEntityNameCapitalized": "Authority",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipId": 2,
+            "otherEntityName": "PersistentToken",
+            "relationshipType": "one-to-many",
+            "otherEntityNameCapitalized": "PersistentToken"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "id",
+            "fieldType": "Long",
+            "fieldNameCapitalized": "Id",
+            "fieldNameUnderscored": "id"
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "login",
+            "fieldType": "String",
+            "fieldNameCapitalized": "Login",
+            "fieldNameUnderscored": "login"
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "password",
+            "fieldType": "String",
+            "fieldNameCapitalized": "Password",
+            "fieldNameUnderscored": "password"
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "firstName",
+            "fieldType": "String",
+            "fieldNameCapitalized": "FirstName",
+            "fieldNameUnderscored": "first_name"
+        },
+        {
+            "fieldId": 5,
+            "fieldName": "lastName",
+            "fieldType": "String",
+            "fieldNameCapitalized": "LastName",
+            "fieldNameUnderscored": "last_name"
+        },
+        {
+            "fieldId": 6,
+            "fieldName": "email",
+            "fieldType": "String",
+            "fieldNameCapitalized": "Email",
+            "fieldNameUnderscored": "email"
+        },
+        {
+            "fieldId": 7,
+            "fieldName": "activated",
+            "fieldType": "Boolean",
+            "fieldNameCapitalized": "Activated",
+            "fieldNameUnderscored": "activated"
+        },
+        {
+            "fieldId": 8,
+            "fieldName": "langKey",
+            "fieldType": "String",
+            "fieldNameCapitalized": "LangKey",
+            "fieldNameUnderscored": "lang_key"
+        },
+        {
+            "fieldId": 9,
+            "fieldName": "activationKey",
+            "fieldType": "String",
+            "fieldNameCapitalized": "ActivationKey",
+            "fieldNameUnderscored": "activation_key"
+        }
+    ],
+    "fieldsContainOwnerManyToMany": true,
+    "fieldsContainOneToMany": false,
+    "fieldsContainLocalDate": false,
+    "fieldsContainCustomTime": false,
+    "fieldsContainBigDecimal": false,
+    "fieldsContainDateTime": false,
+    "changelogDate": "20141231124810"
+}

@@ -1,0 +1,42 @@
+{
+    "inheritanceFor": true,
+    "inheritanceFromClass": "",
+    "relationships": [],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "createdBy",
+            "fieldType": "String",
+            "fieldNameCapitalized": "CreatedBy",
+            "fieldNameUnderscored": "created_by"
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "createdDate",
+            "fieldType": "DateTime",
+            "fieldNameCapitalized": "CreatedDate",
+            "fieldNameUnderscored": "created_date"
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "lastModifiedBy",
+            "fieldType": "String",
+            "fieldNameCapitalized": "LastModifiedBy",
+            "fieldNameUnderscored": "last_modified_by"
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "lastModifiedDate",
+            "fieldType": "DateTime",
+            "fieldNameCapitalized": "LastModifiedDate",
+            "fieldNameUnderscored": "last_modified_date"
+        }
+    ],
+    "fieldsContainOwnerManyToMany": false,
+    "fieldsContainOneToMany": false,
+    "fieldsContainLocalDate": false,
+    "fieldsContainCustomTime": true,
+    "fieldsContainBigDecimal": false,
+    "fieldsContainDateTime": true,
+    "changelogDate": "20141231124810"
+}
