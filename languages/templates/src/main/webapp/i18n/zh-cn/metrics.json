@@ -1,0 +1,95 @@
+{
+    "metrics": {
+        "title": "应用程序资源监控",
+        "refresh.button": "刷新",
+        "updating": "更新中...",
+        "jvm": {
+            "title": "JVM 资源监控",
+            "memory": {
+                "title": "内存",
+                "total": "总内存",
+                "heap": "堆内存",
+                "nonheap": "非堆内存"
+            },
+            "threads": {
+                "title": "线程",
+                "all": "All",
+                "runnable": "Runnable",
+                "timedwaiting": "Timed waiting",
+                "waiting": "Waiting",
+                "blocked": "Blocked",
+                "dump": {
+                    "title": "Threads dump",
+                    "id": "Id: ",
+                    "blockedtime": "Blocked Time",
+                    "blockedcount": "Blocked Count",
+                    "waitedtime": "Waited Time",
+                    "waitedcount": "Waited Count",
+                    "lockname": "Lock name",
+                    "stacktrace": "堆栈追踪",
+                    "show": "显示",
+                    "hide": "隐藏"
+                }
+            },
+            "gc": {
+                "title": "Garbage collections",
+                "marksweepcount": "Mark Sweep count",
+                "marksweeptime": "Mark Sweep time",
+                "scavengecount": "Scavenge count",
+                "scavengetime": "Scavenge time"
+            },
+            "http": {
+                "title": "HTTP 请求 (事件 / 秒)",
+                "active": "使用中请求:",
+                "total": "请求总数:",
+                "table": {
+                    "code": "状态码",
+                    "count": "次数",
+                    "mean": "平均数",
+                    "average": "平均值"
+                },
+                "code": {
+                    "ok": "2xx (成功)",
+                    "notfound": "4xx (请求错误)",
+                    "servererror": "5xx (服务器错误)"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "服务统计 (时间单位为毫秒)",
+            "table": {
+                "name": "服务名称",
+                "count": "计数",
+                "mean": "平均值",
+                "min": "最小值",
+                "max": "最大值",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "ehcache": {
+            "title": "Ehcache 统计",
+            "cachename": "缓存名称",
+            "objects": "对象",
+            "hits": "缓存命中计数",
+            "misses": "缓存遗漏计数",
+            "evictioncount": "收回计数",
+            "mean": "平均读取时间 (毫秒)"
+        },
+        "datasource": {
+        	"usage": "用法",
+            "title": "数据源统计 (时间单位为毫秒)",
+            "name": "池使用情况",
+            "count": "计数",
+            "mean": "平均值",
+            "min": "最小值",
+            "max": "最大值",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}
