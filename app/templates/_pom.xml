@@ -532,43 +532,7 @@
                 <configuration>
                     <packagingExcludes>WEB-INF/lib/tomcat-*.jar</packagingExcludes>
                 </configuration>
-            </plugin><% if(frontendBuilder == 'gulp') { %>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>Build Frontend with Gulp.JS</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${runner}</executable>
-                            <workingDirectory>${project.basedir}</workingDirectory>
-                            <arguments>
-                                <argument>${runprefix}</argument>
-                                <argument>gulp</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>Test Frontend with Gulp.JS</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${runner}</executable>
-                            <workingDirectory>${project.basedir}</workingDirectory>
-                            <arguments>
-                                <argument>${runprefix}</argument>
-                                <argument>gulp test</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin><% } %>
+            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
@@ -643,7 +607,7 @@
                     <plugin>
                         <groupId>com.github.trecloux</groupId>
                         <artifactId>yeoman-maven-plugin</artifactId>
-                        <version>0.2</version>
+                        <version>0.4</version>
                         <executions>
                             <execution>
                                 <id>run-grunt</id>
@@ -653,7 +617,8 @@
                                 </goals>
                                 <configuration>
                                     <skipTests>true</skipTests>
-                                    <gruntBuildArgs>compass:server --force</gruntBuildArgs>
+                                    <buildTool>grunt</buildTool>
+                                    <buildArgs>compass:server --force</buildArgs>
                                 </configuration>
                             </execution>
                         </executions>
@@ -703,18 +668,19 @@
                     <plugin>
                         <groupId>com.github.trecloux</groupId>
                         <artifactId>yeoman-maven-plugin</artifactId>
-                        <version>0.2</version>
-                        <executions><% if(frontendBuilder == 'grunt') { %>
+                        <version>0.4</version>
+                        <executions>
                             <execution>
-                                <id>run-grunt</id>
+                                <id>run-frontend-build</id>
                                 <phase>generate-resources</phase>
                                 <goals>
                                     <goal>build</goal>
                                 </goals>
                                 <configuration>
-                                    <gruntBuildArgs>--force</gruntBuildArgs>
+                                    <buildTool><%= frontendBuilder %></buildTool><% if (frontendBuilder == 'grunt') { %>
+                                    <buildArgs>build --force --no-color</buildArgs><% } %>
                                 </configuration>
-                            </execution><% } %>
+                            </execution>
                         </executions>
                         <configuration>
                             <yeomanProjectDirectory>${project.basedir}</yeomanProjectDirectory>
@@ -752,30 +718,6 @@
                 <!-- log configuration -->
                 <logback.loglevel>INFO</logback.loglevel>
             </properties>
-        </profile><% if(frontendBuilder == 'gulp') { %>
-        <profile>
-            <id>Windows</id>
-            <activation>
-                <os>
-                    <family>windows</family>
-                </os>
-            </activation>
-            <properties>
-                <runner>cmd</runner>
-                <runprefix>/C</runprefix>
-            </properties>
         </profile>
-        <profile>
-            <id>*nix</id>
-            <activation>
-                <os>
-                    <family>!windows</family>
-                </os>
-            </activation>
-            <properties>
-                <runner>sh</runner>
-                <runprefix>-c</runprefix>
-            </properties>
-        </profile><% } %>
     </profiles>
 </project>
