@@ -7,7 +7,8 @@ angular.module('<%=angularAppName%>')
                 parent: 'admin',
                 url: '/docs',
                 data: {
-                    roles: ['ROLE_ADMIN']
+                    roles: ['ROLE_ADMIN'],
+                    pageTitle: 'global.menu.admin.apidocs'
                 },
                 views: {
                     'content@': {
