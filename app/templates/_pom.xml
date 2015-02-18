@@ -42,7 +42,7 @@
         <metrics-spring.version>3.0.3</metrics-spring.version><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
         <postgresql.version>9.3-1102-jdbc41</postgresql.version><% } %>
         <run.addResources>false</run.addResources>
-        <sonar-maven-plugin.version>2.2</sonar-maven-plugin.version>
+        <sonar-maven-plugin.version>2.3</sonar-maven-plugin.version>
         <spring-cloud.version>1.1.0.RELEASE</spring-cloud.version><% if (authenticationType == 'oauth2') { %>
         <spring-security-oauth2.version>2.0.1.RELEASE</spring-security-oauth2.version><% } %>
         <swagger-springmvc.version>0.9.5</swagger-springmvc.version>
