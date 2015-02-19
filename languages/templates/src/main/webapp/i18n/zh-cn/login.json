@@ -1,0 +1,16 @@
+{
+    "login": {
+        "title": "验证",
+        "form": {
+            "password": "密码",
+            "password.placeholder": "您的密码",
+            "rememberme": "自动登录",
+            "button": "登录"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>验证失败!</strong> 请检查您的登录信息, 并重试一次."
+            }
+        }
+    }
+}

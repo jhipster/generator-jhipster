@@ -1,32 +1,32 @@
 {
     "global": {
         "title": "<%= baseName %>",
-        "browsehappy": "Ваш браузер <strong>устарел</strong>. Пожалуйста <a href=\"http://browsehappy.com/?locale=en\">обновите ваш браузер</a>.",
+        "browsehappy": "Ваш браузер <strong>устарел</strong>. Пожалуйста <a href=\"http://browsehappy.com/?locale=ru\">обновите ваш браузер</a>.",
         "menu": {
             "home": "Главная",
             "entities": {
-                "main": "Entities",
-                "additionalEntity": "JHipster will add addtional entities"
+                "main": "Сущности",
+                "additionalEntity": "JHipster добавит дополнительные сущности"
             },
             "account": {
                 "main": "Профиль",
                 "settings": "Настройки",
                 "password": "Пароль",
                 "sessions": "Сессии",
-                "login": "Authenticate",
+                "login": "Войти",
                 "logout": "Выйти",
-                "register": "Register"
+                "register": "Зарегистрироваться"
             },
             "admin": {
                 "main": "Администрирование",
                 "tracker": "Трекер польз.",
                 "metrics": "Метрики",
                 "health": "Состояние",
-                "configuration": "Configuration",
+                "configuration": "Настройки",
                 "logs": "Логи",
                 "audits": "Аудит",
                 "apidocs": "API",
-                "database": "Database"
+                "database": "База данных"
             },
             "language": "Язык"
         },
@@ -42,8 +42,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Если вы хотите <a href=\"#/login\">авторизироваться</a>, вы можете попробовать аккаунты поумолчанию:<br/>- Администратор (логин=\"admin\" и пароль=\"admin\") <br/>- Пользователь (логин=\"user\" и пароль=\"user\").",
-                "register": "You don't have an account yet? <a href=\"#/register\">Register a new account</a>"
+                "authenticated": "Если вы хотите <a href=\"#/login\">авторизироваться</a>, вы можете попробовать аккаунты по умолчанию:<br/>- Администратор (логин=\"admin\" и пароль=\"admin\") <br/>- Пользователь (логин=\"user\" и пароль=\"user\").",
+                "register": "У вас нет аккаунта? <a href=\"#/register\">Создать новый аккаунт</a>"
             },
             "error": {
                 "dontmatch": "Пароль и его подтверждение не совпадают!"
@@ -71,19 +71,19 @@
     },
     "entity": {
         "action": {
-            "back": "Back",
-            "cancel": "Cancel",
-            "delete": "Delete",
-            "edit": "Edit",
-            "save": "Save",
-            "view": "View"
+            "back": "Назад",
+            "cancel": "Отмена",
+            "delete": "Удалить",
+            "edit": "Изменить",
+            "save": "Сохранить",
+            "view": "Просмотр"
         },
         "detail": {
-            "field": "Field",
-            "value": "Value"
+            "field": "Поле",
+            "value": "Значение"
         },
         "delete": {
-            "title": "Confirm delete operation"
+            "title": "Подтвердите операцию удаления"
         }
     },
     "footer": "Это ваш футтер"

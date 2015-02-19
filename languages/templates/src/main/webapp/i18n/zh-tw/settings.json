@@ -11,7 +11,7 @@
         "messages": {
             "error": {
                 "fail": "<strong>發生錯誤!</strong> 設定無法被儲存.",
-                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+                "emailexists": "<strong>E-mail 已經存在!</strong> 請使用其他E-mail."
             },
             "success": "<strong>設定儲存成功!</strong>",
             "validate": {

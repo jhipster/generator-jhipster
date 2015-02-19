@@ -5,8 +5,8 @@
         "menu": {
             "home": "Ana Sayfa",
             "entities": {
-                "main": "Entities",
-                "additionalEntity": "JHipster will add addtional entities"
+                "main": "Varlıklar",
+                "additionalEntity": "JHipster ek varlıklar ekleyecek."
             },
             "account": {
                 "main": "Hesap",
@@ -22,11 +22,11 @@
                 "tracker": "Kullanıcı Takip",
                 "metrics": "Ölçümler",
                 "health": "Heath",
-                "configuration": "Configuration",
-                "logs": "Loglar",
+                "configuration": "Yapılandırma",
+                "logs": "Kayıtlar",
                 "audits": "Denetim",
                 "apidocs": "API",
-                "database": "Database"
+                "database": "Veritabanı"
             },
             "language": "Dil"
         },
@@ -71,19 +71,19 @@
     },
     "entity": {
         "action": {
-            "back": "Back",
-            "cancel": "Cancel",
-            "delete": "Delete",
-            "edit": "Edit",
-            "save": "Save",
-            "view": "View"
+            "back": "Geri",
+            "cancel": "İptal",
+            "delete": "Sil",
+            "edit": "Düzenle",
+            "save": "Kaydet",
+            "view": "Görüntüle"
         },
         "detail": {
-            "field": "Field",
-            "value": "Value"
+            "field": "Alan",
+            "value": "Değer"
         },
         "delete": {
-            "title": "Confirm delete operation"
+            "title": "Silme işlemini onayla"
         }
     },
     "footer": "Burası sayfa alt bilgisi"
