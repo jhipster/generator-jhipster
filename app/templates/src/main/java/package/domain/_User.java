@@ -25,7 +25,7 @@ import java.util.Set;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'mongodb') { %>
 @Document(collection = "T_USER")<% } %><% if (databaseType == 'cassandra') { %>
 @Table(name = "user")<% } %>
-public class User extends AbstractAuditingEntity implements Serializable {
+public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %> extends AbstractAuditingEntity<% } %> implements Serializable {
 <% if (databaseType == 'sql') { %>
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -83,19 +83,20 @@ public class User extends AbstractAuditingEntity implements Serializable {
             name = "T_USER_AUTHORITY",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})<% if (hibernateCache != 'no') { %>
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %>
-    private Set<Authority> authorities = new HashSet<>();<% if (authenticationType == 'session' && databaseType == 'sql') { %>
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+    private Set<Authority> authorities = new HashSet<>();<% } %><% if (databaseType == 'cassandra') { %>
+    private Set<String> authorities = new HashSet<>();<% } %><% if (authenticationType == 'session' && databaseType == 'sql') { %>
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")<% if (hibernateCache != 'no') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
     private Set<PersistentToken> persistentTokens = new HashSet<>();<% } %>
 
-    public <% if (databaseType == 'sql') { %>Long<% } else if (databaseType == 'mongodb') { %>String<% } %> getId() {
+    public <% if (databaseType == 'sql') { %>Long<% } else if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType == 'sql') { %>Long<% } else if (databaseType == 'mongodb') { %>String<% } %> id) {
+    public void setId(<% if (databaseType == 'sql') { %>Long<% } else if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id) {
         this.id = id;
     }
 
@@ -167,7 +168,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
         return authorities;
     }
 
-    public void setAuthorities(Set<<% if (databaseType == 'sql' || databaseType == 'mongodb')  { %>Authority<% } %><% if (databaseType == 'cassandra') { %>String<% } %>> authorities) {
+    public void setAuthorities(Set<<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>Authority<% } %><% if (databaseType == 'cassandra') { %>String<% } %>> authorities) {
         this.authorities = authorities;
     }<% if ((authenticationType == 'session') && (databaseType == 'sql')) { %>
 

@@ -1,16 +1,19 @@
 package <%=packageName%>.web.rest;
 
 import <%=packageName%>.Application;<% if (databaseType == 'mongodb') { %>
-import <%=packageName%>.config.MongoConfiguration;<% } %>
-import <%=packageName%>.domain.Authority;
-import <%=packageName%>.domain.User;
-import <%=packageName%>.repository.AuthorityRepository;
+import <%=packageName%>.config.MongoConfiguration;<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import <%=packageName%>.domain.Authority;<% } %>
+import <%=packageName%>.domain.User;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import <%=packageName%>.repository.AuthorityRepository;<% } %>
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.UserService;
-import <%=packageName%>.web.rest.dto.UserDTO;
-import org.junit.Before;
+import <%=packageName%>.web.rest.dto.UserDTO;<% if (databaseType == 'cassandra') { %>
+import org.cassandraunit.CassandraCQLUnit;
+import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;<% } %>
+import org.junit.Before;<% if (databaseType == 'cassandra') { %>
+import org.junit.ClassRule;<% } %>
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -18,14 +21,13 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;<% if (databaseType == 'mongodb') { %>
 import org.springframework.context.annotation.Import;<% } %>
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.http.MediaType;<% if (javaVersion == '7') { %>
+import org.springframework.mock.web.MockHttpServletRequest;<% } %>
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.RequestPostProcessor;
+import org.springframework.test.web.servlet.MockMvc;<% if (javaVersion == '7') { %>
+import org.springframework.test.web.servlet.request.RequestPostProcessor;<% } %>
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import javax.inject.Inject;
@@ -55,13 +57,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest<% if (databaseType == 'mongodb') { %>
 @Import(MongoConfiguration.class)<% } %>
 public class AccountResourceTest {
-
+<% if (databaseType == 'cassandra') { %>
+    @ClassRule
+    public static CassandraCQLUnit cassandra = new CassandraCQLUnit(new ClassPathCQLDataSet("config/cql/create-tables.cql", true, "<%= baseName %>"));
+<% } %>
     @Inject
     private UserRepository userRepository;
-
+<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Inject
     private AuthorityRepository authorityRepository;
-
+<% } %>
     @Inject
     private UserService userService;
 
@@ -119,11 +124,13 @@ public class AccountResourceTest {
     }
 
     @Test
-    public void testGetExistingAccount() throws Exception {
+    public void testGetExistingAccount() throws Exception {<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         Set<Authority> authorities = new HashSet<>();
         Authority authority = new Authority();
         authority.setName(AuthoritiesConstants.ADMIN);
-        authorities.add(authority);
+        authorities.add(authority);<% } %><% if (databaseType == 'cassandra') { %>
+        Set<String> authorities = new HashSet<>();
+        authorities.add(AuthoritiesConstants.ADMIN);<% } %>
 
         User user = new User();
         user.setLogin("test");
@@ -321,7 +328,7 @@ public class AccountResourceTest {
         Optional<User> userDup = userRepository.findOneByLogin("badguy");
         assertThat(userDup.isPresent()).isTrue();
         assertThat(userDup.get().getAuthorities()).hasSize(1)
-            .containsExactly(authorityRepository.findOne(AuthoritiesConstants.USER));<% } else { %>
+            .containsExactly(<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>authorityRepository.findOne(AuthoritiesConstants.USER)<% } %><% if (databaseType == 'cassandra') { %>AuthoritiesConstants.USER<% } %>);<% } else { %>
         User userDup = userRepository.findOneByLogin("badguy");
         assertThat(userDup).isNotNull();
         assertThat(userDup.getAuthorities()).hasSize(1)

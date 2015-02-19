@@ -8,7 +8,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;<% if (hibernateCache != 'no'
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (databaseType == 'sql') { %>
 import org.hibernate.annotations.Type;<% } %>
-import org.joda.time.LocalDate;
+import org.joda.time.LocalDate;<% if (databaseType == 'cassandra') { %>
+import org.joda.time.DateTime;<% } %>
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;<% if (databaseType == 'mongodb') { %>
 import org.springframework.data.annotation.Id;
@@ -48,7 +49,9 @@ public class PersistentToken implements Serializable {
     private String tokenValue;
 
     @JsonIgnore<% if (databaseType == 'sql') { %>
+    @Column(name = "token_date")
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
+    private LocalDate tokenDate;<% } %><% if (databaseType == 'mongodb') { %>
     private LocalDate tokenDate;<% } %><% if (databaseType == 'cassandra') { %>
     @Column(name = "token_date")
     private Date tokenDate;<% } %>

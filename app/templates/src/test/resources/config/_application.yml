@@ -11,14 +11,7 @@ async:
     maxPoolSize: 50
     queueCapacity: 10000
 
-spring:
-    <% if (databaseType == 'mongodb') { %>
-    data:
-        mongodb:
-             host: localhost
-             port: 27017
-             database: <%= baseName %><% } %>
-    <% if (databaseType == 'sql') { %>
+spring:<% if (databaseType == 'sql') { %>
     datasource:
         dataSourceClassName: org.h2.jdbcx.JdbcDataSource
         url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1
@@ -40,7 +33,18 @@ spring:
             hibernate.cache.use_second_level_cache: false
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
-            hibernate.hbm2ddl.auto: validate<% } %>
+            hibernate.hbm2ddl.auto: validate<% } %><% if (databaseType == 'mongodb') { %>
+    data:
+        mongodb:
+            host: localhost
+            port: 27017
+            database: <%= baseName %><% } %><% if (databaseType == 'cassandra') { %>
+    data:
+        cassandra:
+            contactPoints: localhost
+            protocolVersion: V2
+            compression: LZ4
+            keyspaceName: <%= baseName %><% } %>
 
     mail:
         host: localhost

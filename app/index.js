@@ -372,6 +372,16 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             this.javaVersion = props.javaVersion;
             this.rememberMeKey = crypto.randomBytes(20).toString('hex');
 
+            if (this.databaseType == 'mongodb') {
+                this.devDatabaseType = 'mongodb';
+                this.prodDatabaseType = 'mongodb';
+                this.hibernateCache = 'no';
+            } else if (this.databaseType == 'cassandra') {
+                this.devDatabaseType = 'cassandra';
+                this.prodDatabaseType = 'cassandra';
+                this.hibernateCache = 'no';
+            }
+
             cb();
         }.bind(this));
     }

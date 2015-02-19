@@ -137,8 +137,8 @@ public class UserService {
         User currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
         currentUser.getAuthorities().size(); // eagerly load the association<% } %>
         return currentUser;
-    }
-<% if (databaseType == 'sql' || databaseType == 'mongodb') { %><% if (authenticationType == 'session') { %>
+    }<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
+
     /**
      * Persistent Token are used for providing automatic authentication, they should be automatically deleted after
      * 30 days.
@@ -180,5 +180,5 @@ public class UserService {
             log.debug("Deleting not activated user {}", user.getLogin());
             userRepository.delete(user);
         }
-    }<% } %>
+    }
 }

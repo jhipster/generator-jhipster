@@ -41,9 +41,9 @@ public class UserServiceTest {<% if ((databaseType == 'sql' || databaseType == '
 
     @Inject
     private PersistentTokenRepository persistentTokenRepository;<% } %><% if (databaseType == 'cassandra') { %>
+
     @ClassRule
-    public static CassandraCQLUnit cassandra = new CassandraCQLUnit(new ClassPathCQLDataSet("config/cql/create-tables.cql", true, "<%= baseName %>"));
-<% } %>
+    public static CassandraCQLUnit cassandra = new CassandraCQLUnit(new ClassPathCQLDataSet("config/cql/create-tables.cql", true, "<%= baseName %>"));<% } %>
 
     @Inject
     private UserRepository userRepository;
