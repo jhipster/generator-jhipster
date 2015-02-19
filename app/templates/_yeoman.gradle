@@ -2,9 +2,8 @@ apply plugin: 'com.moowork.node'<% if(frontendBuilder == 'grunt') {%>
 apply plugin: 'grunt'<% } if(frontendBuilder == 'gulp') {%>
 apply plugin: 'com.moowork.gulp'<% } %>
 
-task bower(dependsOn: 'npmInstall', type: NodeTask){
-    script = file('node_modules/bower/bin/bower')
-    args = ['install']
+task bower(type: Exec) {
+   commandLine 'bower', 'install'
 }
 
 <% if(frontendBuilder == 'grunt') {%>
