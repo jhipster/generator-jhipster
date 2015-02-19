@@ -484,11 +484,11 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     if (this.databaseType == "cassandra") {
-        this.template(resourceDir + '/config/cql/_create-keyspace-prod.cql', resourceDir + 'config/config/cql/create-keyspace-prod.cql', this, {});
-        this.template(resourceDir + '/config/cql/_create-keyspace.cql', resourceDir + 'config/config/cql/create-keyspace.cql', this, {});
-        this.template(resourceDir + '/config/cql/_drop-keyspace.cql', resourceDir + 'config/config/cql/drop-keyspace.cql', this, {});
-        this.template(resourceDir + '/config/cql/_install.cql', resourceDir + 'config/config/cql/install.cql', this, {});
-        this.template(resourceDir + '/config/cql/_reset.cql', resourceDir + 'config/config/cql/reset.cql', this, {});
+        this.template(resourceDir + '/config/cql/_create-keyspace-prod.cql', resourceDir + 'config/cql/create-keyspace-prod.cql', this, {});
+        this.template(resourceDir + '/config/cql/_create-keyspace.cql', resourceDir + 'config/cql/create-keyspace.cql', this, {});
+        this.template(resourceDir + '/config/cql/_drop-keyspace.cql', resourceDir + 'config/cql/drop-keyspace.cql', this, {});
+        this.template(resourceDir + '/config/cql/_install.cql', resourceDir + 'config/cql/install.cql', this, {});
+        this.template(resourceDir + '/config/cql/_reset.cql', resourceDir + 'config/cql/reset.cql', this, {});
         this.copy(resourceDir + '/config/cql/create-tables.cql', resourceDir + 'config/cql/create-tables.cql');
     }
 

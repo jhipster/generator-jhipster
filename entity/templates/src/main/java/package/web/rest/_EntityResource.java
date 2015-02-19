@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;<% if (javaVersion == '7') { %>
 import javax.servlet.http.HttpServletResponse;<% } %>
 import java.util.List;<% if (javaVersion == '8') { %>
-import java.util.Optional;<% } %>
+import java.util.Optional;<% } %><% if (databaseType == 'cassandra') { %>
+import java.util.UUID;<% } %>
 
 /**
  * REST controller for managing <%= entityClass %>.
@@ -58,9 +59,10 @@ public class <%= entityClass %>Resource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<<%= entityClass %>> get(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %> id<% if (javaVersion == '7') { %>, HttpServletResponse response<% } %>) {
-        log.debug("REST request to get <%= entityClass %> : {}", id);<% if (javaVersion == '8') { %>
-        return Optional.ofNullable(<%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findOneWithEagerRelationships<% } else { %>findOne<% } %>(id))
+    public ResponseEntity<<%= entityClass %>> get(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id<% if (javaVersion == '7') { %>, HttpServletResponse response<% } %>) {
+        log.debug("REST request to get <%= entityClass %> : {}", id);<% if (javaVersion == '8') { %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+        return Optional.ofNullable(<%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findOneWithEagerRelationships<% } else { %>findOne<% } %>(id))<% } %><% if (databaseType == 'cassandra') { %>
+        return Optional.ofNullable(<%= entityInstance %>Repository.findOne(UUID.fromString(id)))<% } %>
             .map(<%= entityInstance %> -> new ResponseEntity<>(
                 <%= entityInstance %>,
                 HttpStatus.OK))
@@ -79,8 +81,9 @@ public class <%= entityClass %>Resource {
             method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public void delete(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %> id) {
-        log.debug("REST request to delete <%= entityClass %> : {}", id);
-        <%= entityInstance %>Repository.delete(id);
+    public void delete(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id) {
+        log.debug("REST request to delete <%= entityClass %> : {}", id);<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+        <%= entityInstance %>Repository.delete(id);<% } %><% if (databaseType == 'cassandra') { %>
+        <%= entityInstance %>Repository.delete(UUID.fromString(id));<% } %>
     }
 }

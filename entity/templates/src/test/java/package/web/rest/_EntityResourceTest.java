@@ -1,6 +1,13 @@
 package <%=packageName%>.web.rest;
 
-import org.junit.Before;
+import <%=packageName%>.Application;
+import <%=packageName%>.domain.<%= entityClass %>;
+import <%=packageName%>.repository.<%= entityClass %>Repository;
+<% if (databaseType == 'cassandra') { %>
+import org.cassandraunit.CassandraCQLUnit;
+import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;<% } %>
+import org.junit.Before;<% if (databaseType == 'cassandra') { %>
+import org.junit.ClassRule;<% } %>
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -21,12 +28,10 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;<% } %><% if (fieldsContainBigDecimal == true) { %>
-import java.math.BigDecimal;<% } %>
-import java.util.List;
-
-import <%=packageName%>.Application;
-import <%=packageName%>.domain.<%= entityClass %>;
-import <%=packageName%>.repository.<%= entityClass %>Repository;
+import java.math.BigDecimal;<% } %><% if (fieldsContainDate == true) { %>
+import java.util.Date;<% } %>
+import java.util.List;<% if (databaseType == 'cassandra') { %>
+import java.util.UUID;<% } %>
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -58,7 +63,16 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
     private static final Long <%=updatedValueName %> = 1L;<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
 
     private static final BigDecimal <%=defaultValueName %> = BigDecimal.ZERO;
-    private static final BigDecimal <%=updatedValueName %> = BigDecimal.ONE;<% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
+    private static final BigDecimal <%=updatedValueName %> = BigDecimal.ONE;<% } else if (fields[fieldId].fieldType == 'UUID') { %>
+
+    private static final UUID <%=defaultValueName %> = UUID.randomUUID();
+    private static final UUID <%=updatedValueName %> = UUID.randomUUID();<% } else if (fields[fieldId].fieldType == 'TimeUUID') { %>
+
+    private static final UUID <%=defaultValueName %> = UUID.randomUUID();
+    private static final UUID <%=updatedValueName %> = UUID.randomUUID();<% } else if (fields[fieldId].fieldType == 'Date') { %>
+
+    private static final Date <%=defaultValueName %> = new Date();
+    private static final Date <%=updatedValueName %> = new Date();<% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
 
     private static final LocalDate <%=defaultValueName %> = new LocalDate(0L);
     private static final LocalDate <%=updatedValueName %> = new LocalDate();<% } else if (fields[fieldId].fieldType == 'DateTime') { %>
@@ -69,7 +83,10 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
 
     private static final Boolean <%=defaultValueName %> = false;
     private static final Boolean <%=updatedValueName %> = true;<% } } %>
-
+<% if (databaseType == 'cassandra') { %>
+    @ClassRule
+    public static CassandraCQLUnit cassandra = new CassandraCQLUnit(new ClassPathCQLDataSet("config/cql/create-tables.cql", true, "<%= baseName %>"));
+<% } %>
     @Inject
     private <%= entityClass %>Repository <%= entityInstance %>Repository;
 
@@ -86,9 +103,10 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
     }
 
     @Before
-    public void initTest() {<% if (databaseType == 'mongodb') { %>
+    public void initTest() {<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>
         <%= entityInstance %>Repository.deleteAll();<% } %>
-        <%= entityInstance %> = new <%= entityClass %>();<% for (fieldId in fields) { %>
+        <%= entityInstance %> = new <%= entityClass %>();<% if (databaseType == 'cassandra') { %>
+        <%= entityInstance %>.setId(UUID.randomUUID());<% } %><% for (fieldId in fields) { %>
         <%= entityInstance %>.set<%= fields[fieldId].fieldNameCapitalized %>(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>
     }
 
@@ -123,8 +141,9 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
                 .andExpect(jsonPath("$.[0].id").value(<%= entityInstance %>.getId().intValue()))<% } %><% if (databaseType == 'mongodb') { %>
-                .andExpect(jsonPath("$.[0].id").value(<%= entityInstance %>.getId()))<% } %><% for (fieldId in fields) {%>
-                .andExpect(jsonPath("$.[0].<%=fields[fieldId].fieldName%>").value(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[fieldId].fieldType == 'DateTime') { %>_STR<% } else { %>.toString()<% } %>))<% } %>;
+                .andExpect(jsonPath("$.[0].id").value(<%= entityInstance %>.getId()))<% } %><% if (databaseType == 'cassandra') { %>
+                .andExpect(jsonPath("$.[0].id").value(<%= entityInstance %>.getId().toString()))<% } %><% for (fieldId in fields) {%>
+                .andExpect(jsonPath("$.[0].<%=fields[fieldId].fieldName%>").value(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[fieldId].fieldType == 'DateTime') { %>_STR<% } else if (fields[fieldId].fieldType == 'Date') { %>.getTime()<% } else { %>.toString()<% } %>))<% } %>;
     }
 
     @Test<% if (databaseType == 'sql') { %>
@@ -138,15 +157,16 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().intValue()))<% } %><% if (databaseType == 'mongodb') { %>
-            .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId()))<% } %><% for (fieldId in fields) {%>
-            .andExpect(jsonPath("$.<%=fields[fieldId].fieldName%>").value(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[fieldId].fieldType == 'DateTime') { %>_STR<% } else { %>.toString()<% } %>))<% } %>;
+            .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId()))<% } %><% if (databaseType == 'cassandra') { %>
+            .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().toString()))<% } %><% for (fieldId in fields) {%>
+            .andExpect(jsonPath("$.<%=fields[fieldId].fieldName%>").value(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[fieldId].fieldType == 'DateTime') { %>_STR<% } else if (fields[fieldId].fieldType == 'Date') { %>.getTime()<% } else { %>.toString()<% } %>))<% } %>;
     }
 
     @Test<% if (databaseType == 'sql') { %>
     @Transactional<% } %>
     public void getNonExisting<%= entityClass %>() throws Exception {
         // Get the <%= entityInstance %>
-        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityInstance %>s/{id}", 1L))
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityInstance %>s/{id}", <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>1L<% } %><% if (databaseType == 'cassandra') { %>UUID.randomUUID().toString()<% } %>))
                 .andExpect(status().isNotFound());
     }
 

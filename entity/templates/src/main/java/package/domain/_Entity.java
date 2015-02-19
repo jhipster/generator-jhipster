@@ -1,5 +1,6 @@
 package <%=packageName%>.domain;
-<% if (relationships.length > 0  && (fieldsContainOwnerManyToMany == false || fieldsContainOneToMany == true)) { %>
+<% if (databaseType == 'cassandra') { %>
+import com.datastax.driver.mapping.annotations.*;<% } %><% if (relationships.length > 0  && (fieldsContainOwnerManyToMany == false || fieldsContainOneToMany == true)) { %>
 import com.fasterxml.jackson.annotation.JsonIgnore;<% } %><% if (fieldsContainCustomTime == true) { %>
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;<% } %><% if (fieldsContainLocalDate == true) { %>
@@ -18,23 +19,29 @@ import org.springframework.data.mongodb.core.mapping.Field;<% } %>
 <% if (databaseType == 'sql') { %>
 import javax.persistence.*;<% } %>
 import java.io.Serializable;<% if (fieldsContainBigDecimal == true) { %>
-import java.math.BigDecimal;<% } %><% if (relationships.length > 0) { %>
+import java.math.BigDecimal;<% } %><% if (fieldsContainDate == true) { %>
+import java.util.Date;<% } %><% if (relationships.length > 0) { %>
 import java.util.HashSet;
-import java.util.Set;<% } %>
+import java.util.Set;<% } %><% if (databaseType == 'cassandra') { %>
+import java.util.UUID;<% } %>
 
 /**
  * A <%= entityClass %>.
  */<% if (databaseType == 'sql') { %>
 @Entity
-@Table(name = "T_<%= name.toUpperCase() %>")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'mongodb') { %>
-@Document(collection = "T_<%= name.toUpperCase() %>")<% } %>
+@Table(name = "T_<%= name.toUpperCase() %>")<% if (hibernateCache != 'no') { %>
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType == 'mongodb') { %>
+@Document(collection = "T_<%= name.toUpperCase() %>")<% } %><% if (databaseType == 'cassandra') { %>
+@Table(name = "<%= entityInstance %>")<% } %>
 public class <%= entityClass %> implements Serializable {
-
-    @Id<% if (databaseType == 'sql') { %>
+<% if (databaseType == 'sql') { %>
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;<% } %><% if (databaseType == 'mongodb') { %>
-    private String id;<% } %>
+    @Id
+    private String id;<% } %><% if (databaseType == 'cassandra') { %>
+    @PartitionKey
+    private UUID id;<% } %>
 <% for (fieldId in fields) { %><% if (databaseType == 'sql') { %><% if (fields[fieldId].fieldType == 'DateTime') { %>
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = CustomDateTimeSerializer.class)
@@ -69,11 +76,11 @@ public class <%= entityClass %> implements Serializable {
     @OneToOne<% if (relationships[relationshipId].ownerSide == false) { %>(mappedBy = "<%= entityInstance %>")<% } %>
     private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].relationshipFieldName %>;<% } %>
 <% } %>
-    public <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %> getId() {
+    public <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %><% if (databaseType == 'cassandra') { %>UUID<% } %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %> id) {
+    public void setId(<% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %><% if (databaseType == 'cassandra') { %>UUID<% } %> id) {
         this.id = id;
     }
 <% for (fieldId in fields) { %>
@@ -118,7 +125,7 @@ public class <%= entityClass %> implements Serializable {
 
     @Override
     public int hashCode() {
-        return <% if (databaseType == 'sql') { %>(int) (id ^ (id >>> 32));<% } %><% if (databaseType == 'mongodb') { %>id != null ? id.hashCode() : 0;<% } %>
+        return <% if (databaseType == 'sql') { %>(int) (id ^ (id >>> 32));<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra' ) { %>id != null ? id.hashCode() : 0;<% } %>
     }
 
     @Override

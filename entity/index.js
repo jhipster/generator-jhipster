@@ -11,6 +11,15 @@ var util = require('util'),
 var EntityGenerator = module.exports = function EntityGenerator(args, options, config) {
     yeoman.generators.NamedBase.apply(this, arguments);
     this.useConfigurationFile =false;
+    this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
+    this.baseName = this.config.get('baseName');
+    this.packageName = this.config.get('packageName');
+    this.packageFolder = this.config.get('packageFolder');
+    this.javaVersion = this.config.get('javaVersion');
+    this.hibernateCache = this.config.get('hibernateCache');
+    this.databaseType = this.config.get('databaseType');
+    databaseType = this.databaseType;
+    this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
     this.jhipsterConfigDirectory = '.jhipster';
     this.filename = this.jhipsterConfigDirectory + '/' + _s.capitalize(this.name) + '.json';
     if (shelljs.test('-f', this.filename)) {
@@ -24,20 +33,12 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
         this.useConfigurationFile = true;
     }
     console.log(chalk.red('The entity ' + this.name + ' is being created.'));
-    this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
-    this.baseName = this.config.get('baseName');
-    this.packageName = this.config.get('packageName');
-    this.packageFolder = this.config.get('packageFolder');
-    this.javaVersion = this.config.get('javaVersion');
-    this.hibernateCache = this.config.get('hibernateCache');
-    this.databaseType = this.config.get('databaseType');
-    this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
-
     // Specific Entity sub-generator variables
     this.fieldId = 0;
     this.fields = [];
-    this.fieldsContainLocalDate = false;
-    this.fieldsContainDateTime = false;
+    this.fieldsContainDate = false; // Java 8 Date
+    this.fieldsContainLocalDate = false; // JodaTime
+    this.fieldsContainDateTime = false; // JodaTime
     this.fieldsContainCustomTime = false;
     this.fieldsContainBigDecimal = false;
     this.fieldsContainOwnerManyToMany = false;
@@ -48,6 +49,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
 };
 
 var fieldNamesUnderscored = ['id'];
+var databaseType;
 
 util.inherits(EntityGenerator, yeoman.generators.Base);
 util.inherits(EntityGenerator, scriptBase);
@@ -80,7 +82,8 @@ EntityGenerator.prototype.askForFields = function askForFields() {
         },
         {
             when: function (response) {
-                return response.fieldAdd == true;
+                console.log("this.databaseType-->" + databaseType);
+                return response.fieldAdd == true && (databaseType == 'sql' || databaseType == 'mongodb');
             },
             type: 'list',
             name: 'fieldType',
@@ -116,6 +119,49 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 }
             ],
             default: 0
+        },
+        {
+            when: function (response) {
+                return response.fieldAdd == true && databaseType == 'cassandra';
+            },
+            type: 'list',
+            name: 'fieldType',
+            message: 'What is the type of your field?',
+            choices: [
+                {
+                    value: 'UUID',
+                    name: 'UUID'
+                },
+                {
+                    value: 'TimeUUID',
+                    name: 'TimeUUID'
+                },
+                {
+                    value: 'String',
+                    name: 'String'
+                },
+                {
+                    value: 'Integer',
+                    name: 'Integer'
+                },
+                {
+                    value: 'Long',
+                    name: 'Long'
+                },
+                {
+                    value: 'BigDecimal',
+                    name: 'BigDecimal'
+                },
+                {
+                    value: 'Date',
+                    name: 'Date'
+                },
+                {
+                    value: 'Boolean',
+                    name: 'Boolean'
+                }
+            ],
+            default: 0
         }
     ];
     this.prompt(prompts, function (props) {
@@ -139,6 +185,10 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 this.fieldsContainDateTime = true;
                 this.fieldsContainCustomTime = true;
             }
+            if (props.fieldType == 'Date') {
+                this.fieldsContainDate = true;
+                this.fieldsContainCustomTime = true;
+            }
         }
         console.log(chalk.red('===========' + _s.capitalize(this.name) + '=============='));
         for (var id in this.fields) {
@@ -156,7 +206,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
     if (this.useConfigurationFile == true) {// don't prompt if data are imported from a file
         return;
     }
-    if (this.databaseType == 'mongodb') {
+    if (this.databaseType == 'mongodb' || this.databaseType == 'cassandra') {
         return;
     }
     var packageFolder = this.packageFolder;
@@ -308,7 +358,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
 
 
 EntityGenerator.prototype.files = function files() {
-    if (this.databaseType == "sql") {
+    if (this.databaseType == "sql" || this.databaseType == "cassandra") {
         this.changelogDate = this.dateFormatForLiquibase();
     }
     if (this.useConfigurationFile == false) { // store informations in a file for further use.
@@ -322,6 +372,7 @@ EntityGenerator.prototype.files = function files() {
         this.data.fieldsContainCustomTime = this.fieldsContainCustomTime;
         this.data.fieldsContainBigDecimal = this.fieldsContainBigDecimal;
         this.data.fieldsContainDateTime = this.fieldsContainDateTime;
+        this.data.fieldsContainDate = this.fieldsContainDate;
         this.data.changelogDate = this.changelogDate;
         this.write(this.filename, JSON.stringify(this.data, null, 4));
     } else  {
@@ -334,6 +385,7 @@ EntityGenerator.prototype.files = function files() {
         this.fieldsContainCustomTime = this.fileData.fieldsContainCustomTime;
         this.fieldsContainBigDecimal = this.fileData.fieldsContainBigDecimal;
         this.fieldsContainDateTime = this.fileData.fieldsContainDateTime;
+        this.fieldsContainDate = this.fileData.fieldsContainDate;
         this.changelogDate = this.fileData.changelogDate;
         for (var idx in this.relationships) {
           var rel = this.relationships[idx];
@@ -375,6 +427,10 @@ EntityGenerator.prototype.files = function files() {
             resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml', this, {});
 
         this.addChangelogToLiquibase(this.changelogDate + '_added_entity_' + this.entityClass);
+    }
+    if (this.databaseType == "cassandra") {
+        this.template(resourceDir + '/config/cql/_added_entity.cql',
+            resourceDir + 'config/cql/' + this.changelogDate + '_added_entity_' + this.entityClass + '.cql', this, {});
     }
 
     this.template('src/main/webapp/app/_entities.html',
