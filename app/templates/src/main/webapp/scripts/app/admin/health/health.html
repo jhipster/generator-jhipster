@@ -23,20 +23,20 @@
             <td class="text-center">
                 <div id="healthCheck" class="row" ng-show="v.error">
                     <div class="col-md-4">
-                        <a class="hand" ng-click="showEmailException = !showEmailException">
+                        <a class="hand" ng-click="showHealthcheckException = !showHealthcheckException">
                             <i class="glyphicon glyphicon-eye-open"></i>
                         </a>
-                        <div class="popover" ng-show="showEmailException">
+                        <div class="popover" ng-show="showHealthcheckException">
                             <div class="popover-title">
                                 <h4>{{'health.stacktrace' | translate}}
                                     <button type="button" class="close"
-                                            ng-click="showEmailException = !showEmailException">
+                                            ng-click="showHealthcheckException = !showHealthcheckException">
                                         x
                                     </button>
                                 </h4>
                             </div>
                             <div class="popover-content">
-                                <pre>{{healthCheck.mail.error}}</pre>
+                                <pre>{{v.error}}</pre>
                             </div>
                         </div>
                     </div>
