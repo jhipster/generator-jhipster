@@ -155,7 +155,7 @@ dependencies {
     }<% } %>
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: spring_boot_version
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-jetty', version: spring_boot_version<% if (javaVersion == '8') { %>
-    testCompile group: 'org.assertj', name: 'assertj-core-java8', version: assertj_core_version<% } else { %>
+    testCompile group: 'org.assertj', name: 'assertj-core-java8', version: assertj_core_version<% } %><% if (javaVersion == '7') { %>
     testCompile group: 'org.assertj', name: 'assertj-core', version: assertj_core_version<% } %>
     testCompile group: 'junit', name: 'junit', version:'4.11'
     testCompile group: 'org.mockito', name: 'mockito-core', version:'1.9.5'<% if (databaseType == 'sql') { %>
