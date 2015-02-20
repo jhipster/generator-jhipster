@@ -3,11 +3,11 @@
         "title": "Revisions de salud",
         "refresh.button": "Actualitzar",
         "stacktrace": "Traça d'error",
-        "indicator": {<% if (databaseType == 'sql') { %>
-            "db": "Base de dades",<% } %>
+        "indicator": {
             "diskSpace": "Disk space",
-            "mail": "Compte de correu electrònic",<% if (databaseType == 'mongodb') { %>
-            "mongo": "MongoDB",<% } %><% if (databaseType == 'cassandra') { %>
+            "mail": "Compte de correu electrònic",<% if (databaseType == 'sql') { %>
+            "db": "Base de dades"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
             "cassandra": "Cassandra"<% } %>
         },
         "table": {

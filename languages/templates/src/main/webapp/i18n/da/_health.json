@@ -3,11 +3,11 @@
         "title": "Sundhed",
         "refresh.button": "Opdatér",
         "stacktrace": "Stacktrace",
-        "indicator": {<% if (databaseType == 'sql') { %>
-            "db": "Database",<% } %>
+        "indicator": {
             "diskSpace": "Disk space",
-            "mail": "Email",<% if (databaseType == 'mongodb') { %>
-            "mongo": "MongoDB",<% } %><% if (databaseType == 'cassandra') { %>
+            "mail": "Email",<% if (databaseType == 'sql') { %>
+            "db": "Database"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
             "cassandra": "Cassandra"<% } %>
         },
         "table": {

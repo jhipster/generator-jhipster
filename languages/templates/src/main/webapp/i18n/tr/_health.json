@@ -3,11 +3,11 @@
         "title": "Health",
         "refresh.button": "Yenile",
         "stacktrace": "Stacktrace",
-        "indicator": {<% if (databaseType == 'sql') { %>
-            "db": "Veritabanı",<% } %>
+        "indicator": {
             "diskSpace": "Disk space",
-            "mail": "E-posta",<% if (databaseType == 'mongodb') { %>
-            "mongo": "MongoDB",<% } %><% if (databaseType == 'cassandra') { %>
+            "mail": "E-posta",<% if (databaseType == 'sql') { %>
+            "db": "Veritabanı"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
             "cassandra": "Cassandra"<% } %>
         },
         "table": {

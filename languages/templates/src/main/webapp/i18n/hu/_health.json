@@ -3,11 +3,11 @@
         "title": "Rendszer ellenőrzések",
         "refresh.button": "Frissítés",
         "stacktrace": "Stacktrace",
-        "indicator": {<% if (databaseType == 'sql') { %>
-            "db": "Adatbázis",<% } %>
+        "indicator": {
             "diskSpace": "Szabad hely a diszken",
-            "mail": "Email",<% if (databaseType == 'mongodb') { %>
-            "mongo": "MongoDB",<% } %><% if (databaseType == 'cassandra') { %>
+            "mail": "Email",<% if (databaseType == 'sql') { %>
+            "db": "Adatbázis"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
             "cassandra": "Cassandra"<% } %>
         },
         "table": {

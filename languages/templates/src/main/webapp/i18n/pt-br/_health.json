@@ -3,11 +3,11 @@
         "title": "Estado do Sistema",
         "refresh.button": "Atualizar",
         "stacktrace": "Stacktrace",
-        "indicator": {<% if (databaseType == 'sql') { %>
-            "db": "Banco de dados",<% } %>
+        "indicator": {
             "diskSpace": "Disk space",
-            "mail": "Email",<% if (databaseType == 'mongodb') { %>
-            "mongo": "MongoDB",<% } %><% if (databaseType == 'cassandra') { %>
+            "mail": "Email",<% if (databaseType == 'sql') { %>
+            "db": "Banco de dados"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
             "cassandra": "Cassandra"<% } %>
         },
         "table": {
