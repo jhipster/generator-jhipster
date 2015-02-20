@@ -1,5 +1,6 @@
 package <%=packageName%>.web.rest;
-
+<% if (databaseType == 'cassandra') { %>
+import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.Application;<% if (databaseType == 'mongodb') { %>
 import <%=packageName%>.config.MongoConfiguration;<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import <%=packageName%>.domain.Authority;<% } %>
@@ -9,11 +10,8 @@ import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.UserService;
-import <%=packageName%>.web.rest.dto.UserDTO;<% if (databaseType == 'cassandra') { %>
-import org.cassandraunit.CassandraCQLUnit;
-import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;<% } %>
-import org.junit.Before;<% if (databaseType == 'cassandra') { %>
-import org.junit.ClassRule;<% } %>
+import <%=packageName%>.web.rest.dto.UserDTO;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -56,11 +54,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @IntegrationTest<% if (databaseType == 'mongodb') { %>
 @Import(MongoConfiguration.class)<% } %>
-public class AccountResourceTest {
-<% if (databaseType == 'cassandra') { %>
-    @ClassRule
-    public static CassandraCQLUnit cassandra = new CassandraCQLUnit(new ClassPathCQLDataSet("config/cql/create-tables.cql", true, "<%= baseName %>"));
-<% } %>
+public class AccountResourceTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+
     @Inject
     private UserRepository userRepository;
 <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>

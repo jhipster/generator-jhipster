@@ -42,9 +42,10 @@ spring:<% if (databaseType == 'sql') { %>
     data:
         cassandra:
             contactPoints: localhost
+            port: 9142
             protocolVersion: V2
-            compression: LZ4
-            keyspaceName: <%= baseName %><% } %>
+            compression: NONE
+            keyspaceName: cassandra_unit_keyspace<% } %>
 
     mail:
         host: localhost

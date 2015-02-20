@@ -1,12 +1,10 @@
 package <%=packageName%>.web.rest;
-
+<% if (databaseType == 'cassandra') { %>
+import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.Application;<% if (databaseType == 'mongodb') { %>
 import <%=packageName%>.config.MongoConfiguration;<% } %>
-import <%=packageName%>.repository.UserRepository;<% if (databaseType == 'cassandra') { %>
-import org.cassandraunit.CassandraCQLUnit;
-import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;<% } %>
-import org.junit.Before;<% if (databaseType == 'cassandra') { %>
-import org.junit.ClassRule;<% } %>
+import <%=packageName%>.repository.UserRepository;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.IntegrationTest;
@@ -34,11 +32,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @IntegrationTest<% if (databaseType == 'mongodb') { %>
 @Import(MongoConfiguration.class)<% } %>
-public class UserResourceTest {
-<% if (databaseType == 'cassandra') { %>
-    @ClassRule
-    public static CassandraCQLUnit cassandra = new CassandraCQLUnit(new ClassPathCQLDataSet("config/cql/create-tables.cql", true, "<%= baseName %>"));
-<% } %>
+public class UserResourceTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+
     @Inject
     private UserRepository userRepository;
 

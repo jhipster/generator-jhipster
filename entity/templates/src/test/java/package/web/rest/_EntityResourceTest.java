@@ -1,13 +1,11 @@
 package <%=packageName%>.web.rest;
-
+<% if (databaseType == 'cassandra') { %>
+import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.Application;
 import <%=packageName%>.domain.<%= entityClass %>;
 import <%=packageName%>.repository.<%= entityClass %>Repository;
-<% if (databaseType == 'cassandra') { %>
-import org.cassandraunit.CassandraCQLUnit;
-import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;<% } %>
-import org.junit.Before;<% if (databaseType == 'cassandra') { %>
-import org.junit.ClassRule;<% } %>
+
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
@@ -46,7 +44,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 @IntegrationTest
-public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == true) { %>
+public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{<% if (fieldsContainDateTime == true) { %>
 
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");<% } %>
 <% for (fieldId in fields) {
@@ -83,10 +81,7 @@ public class <%= entityClass %>ResourceTest {<% if (fieldsContainDateTime == tru
 
     private static final Boolean <%=defaultValueName %> = false;
     private static final Boolean <%=updatedValueName %> = true;<% } } %>
-<% if (databaseType == 'cassandra') { %>
-    @ClassRule
-    public static CassandraCQLUnit cassandra = new CassandraCQLUnit(new ClassPathCQLDataSet("config/cql/create-tables.cql", true, "<%= baseName %>"));
-<% } %>
+
     @Inject
     private <%= entityClass %>Repository <%= entityInstance %>Repository;
 

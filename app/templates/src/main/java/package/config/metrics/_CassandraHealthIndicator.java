@@ -1,13 +1,12 @@
 package  <%=packageName%>.config.metrics;
 
+import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
-import com.datastax.driver.core.querybuilder.Select;
+import com.datastax.driver.core.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.actuate.health.Health;
-import org.springframework.data.cassandra.core.CassandraAdminOperations;
 import org.springframework.util.Assert;
 
 /**
@@ -18,19 +17,22 @@ public class CassandraHealthIndicator extends AbstractHealthIndicator {
 
     private static Log logger = LogFactory.getLog(CassandraHealthIndicator.class);
 
-    private CassandraAdminOperations cassandraTemplate;
+    private Session session;
 
-    public CassandraHealthIndicator(CassandraAdminOperations cassandraTemplate) {
-        Assert.notNull(cassandraTemplate, "cassandraTemplate must not be null");
-        this.cassandraTemplate = cassandraTemplate;
+    private PreparedStatement validationStmt;
+
+    public CassandraHealthIndicator(Session session) {
+        Assert.notNull(session, "Cassandra session must not be null");
+        this.session = session;
+        this.validationStmt = session.prepare(
+            "SELECT release_version FROM system.local");
     }
 
     @Override
     protected void doHealthCheck(Health.Builder builder) throws Exception {
         logger.debug("Initializing Cassandra health indicator");
         try {
-            Select select = QueryBuilder.select("release_version").from("system", "local");
-            ResultSet results = cassandraTemplate.query(select);
+            ResultSet results = session.execute(validationStmt.bind());
             if (results.isExhausted()) {
                 builder.up();
             } else {

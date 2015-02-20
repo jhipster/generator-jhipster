@@ -396,8 +396,14 @@
         <!-- DataStax driver -->
         <dependency>
             <groupId>com.datastax.cassandra</groupId>
-            <artifactId>cassandra-driver-dse</artifactId>
+            <artifactId>cassandra-driver-core</artifactId>
             <version>${datastax-driver.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.codahale.metrics</groupId>
+                    <artifactId>metrics-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.datastax.cassandra</groupId>

@@ -1,16 +1,14 @@
 package <%=packageName%>.service;
-
+<% if (databaseType == 'cassandra') { %>
+import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.Application;<% if (databaseType == 'mongodb') { %>
 import <%=packageName%>.config.MongoConfiguration;<% } %><% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 import <%=packageName%>.domain.PersistentToken;<% } %>
 import <%=packageName%>.domain.User;<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
-import <%=packageName%>.repository.UserRepository;<% if (databaseType == 'cassandra') { %>
-import org.cassandraunit.CassandraCQLUnit;
-import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;<% } %>
+import <%=packageName%>.repository.UserRepository;
 import org.joda.time.DateTime;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import org.joda.time.LocalDate;<% } %><% if (databaseType == 'cassandra') { %>
-import org.junit.ClassRule;<% } %>
+import org.joda.time.LocalDate;<% } %>
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.IntegrationTest;
@@ -37,13 +35,10 @@ import static org.assertj.core.api.Assertions.*;
 @IntegrationTest<% if (databaseType == 'mongodb') { %>
 @Import(MongoConfiguration.class)<% } %><% if (databaseType == 'sql') { %>
 @Transactional<% } %>
-public class UserServiceTest {<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
+public class UserServiceTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 
     @Inject
-    private PersistentTokenRepository persistentTokenRepository;<% } %><% if (databaseType == 'cassandra') { %>
-
-    @ClassRule
-    public static CassandraCQLUnit cassandra = new CassandraCQLUnit(new ClassPathCQLDataSet("config/cql/create-tables.cql", true, "<%= baseName %>"));<% } %>
+    private PersistentTokenRepository persistentTokenRepository;<% } %>
 
     @Inject
     private UserRepository userRepository;
