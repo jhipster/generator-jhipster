@@ -77,12 +77,3 @@ VALUES('4','user','$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K'
 
 INSERT INTO user_by_login (login, id)
 VALUES('user','4');
-
-CREATE TABLE IF NOT EXISTS author (
-    id uuid,
-    firstName text,
-    lastName text,
-    email text,
-    birthday timestamp,
-    PRIMARY KEY(id)
-);
