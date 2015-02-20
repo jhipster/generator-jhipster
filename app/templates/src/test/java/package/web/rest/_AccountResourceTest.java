@@ -246,18 +246,18 @@ public class AccountResourceTest {
             Arrays.asList(AuthoritiesConstants.USER)
         );
 
-        // Duplicate login, diff e-mail
+        // Duplicate login, different e-mail
         UserDTO dup = new UserDTO(u.getLogin(), u.getPassword(), u.getLogin(), u.getLastName(),
             "alicejr@example.com", u.getLangKey(), u.getRoles());
 
-        // Good
+        // Good user
         restMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(u)))
             .andExpect(status().isCreated());
 
-        // Duplicate
+        // Duplicate login
         restMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -283,11 +283,11 @@ public class AccountResourceTest {
             Arrays.asList(AuthoritiesConstants.USER)
         );
 
-        // Duplicate e-mail, diff login
+        // Duplicate e-mail, different login
         UserDTO dup = new UserDTO("johnjr", u.getPassword(), u.getLogin(), u.getLastName(),
             u.getEmail(), u.getLangKey(), u.getRoles());
 
-        // Good
+        // Good user
         restMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
