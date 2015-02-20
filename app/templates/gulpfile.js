@@ -19,7 +19,8 @@ var gulp = require('gulp'),
     proxy = require('proxy-middleware'),
     es = require('event-stream'),
     flatten = require('gulp-flatten'),
-    clean = require('gulp-clean'),
+    del = require('del'),
+    replace = require('gulp-replace'),
     url = require('url'),
     wiredep = require('wiredep').stream,
     fs = require('fs'),
@@ -58,14 +59,12 @@ var parseVersionFromBuildGradle = function() {
     return versionRegex.exec(buildGradle)[1];
 };<% } %>
 
-gulp.task('clean', function() {
-    return gulp.src(yeoman.dist, {read: false}).
-        pipe(clean());
+gulp.task('clean', function (cb) {
+  del([yeoman.dist], cb);
 });
 
-gulp.task('clean:tmp', function() {
-    return gulp.src(yeoman.tmp, {read: false}).
-        pipe(clean());
+gulp.task('clean:tmp', function (cb) {
+  del([yeoman.tmp], cb);
 });
 
 gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function() {
@@ -187,10 +186,14 @@ gulp.task('wiredep:app', function () {
             exclude: [/angular-i18n/, /swagger-ui/]
         }))
         .pipe(gulp.dest('src/main/webapp'));
-
+        
     return <% if (useCompass) { %>es.merge(s, gulp.src('src/main/scss/main.scss')
         .pipe(wiredep({
-            exclude: [/angular-i18n/, /swagger-ui/],
+            exclude: [
+                /angular-i18n/,  // localizations are loaded dynamically
+                /swagger-ui/,
+                'bower_components/bootstrap/' // Exclude Bootstrap LESS as we use bootstrap-sass 
+            ],
             ignorePath: /\.\.\/webapp\/bower_components\// // remove ../webapp/bower_components/ from paths of injected sass files
         }))
         .pipe(gulp.dest('src/main/scss')));<% } else { %>s;<% } %>
