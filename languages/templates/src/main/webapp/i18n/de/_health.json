@@ -3,11 +3,11 @@
         "title": "Gesundheit ihrer Anwendung",
         "refresh.button": "Aktualisieren",
         "stacktrace": "Stacktrace",
-        "indicator": {<% if (databaseType == 'sql') { %>
-            "db": "Datenbank",<% } %>
+        "indicator": {
             "diskSpace": "Festplattenspeicher",
-            "mail": "Email",<% if (databaseType == 'mongodb') { %>
-            "mongo": "MongoDB",<% } %><% if (databaseType == 'cassandra') { %>
+            "mail": "Email",<% if (databaseType == 'sql') { %>
+            "db": "Datenbank"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
             "cassandra": "Cassandra"<% } %>
         },
         "table": {

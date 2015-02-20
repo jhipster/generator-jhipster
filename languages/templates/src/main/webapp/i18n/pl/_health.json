@@ -3,11 +3,11 @@
         "title": "Heath checks",
         "refresh.button": "Odśwież",
         "stacktrace": "Stos wywołań",
-        "indicator": {<% if (databaseType == 'sql') { %>
-            "db": "Baza danych",<% } %>
+        "indicator": {
             "diskSpace": "Disk space",
-            "mail": "Email",<% if (databaseType == 'mongodb') { %>
-            "mongo": "MongoDB",<% } %><% if (databaseType == 'cassandra') { %>
+            "mail": "Email",<% if (databaseType == 'sql') { %>
+            "db": "Baza danych"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
             "cassandra": "Cassandra"<% } %>
         },
         "table": {

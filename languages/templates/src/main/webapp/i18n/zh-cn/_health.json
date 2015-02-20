@@ -3,11 +3,11 @@
         "title": "服务状态",
         "refresh.button": "刷新",
         "stacktrace": "堆栈调用",
-        "indicator": {<% if (databaseType == 'sql') { %>
-            "db": "数据库",<% } %>
+        "indicator": {
             "diskSpace": "硬盘空间",
-            "mail": "电子邮件",<% if (databaseType == 'mongodb') { %>
-            "mongo": "MongoDB",<% } %><% if (databaseType == 'cassandra') { %>
+            "mail": "电子邮件",<% if (databaseType == 'sql') { %>
+            "db": "数据库"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
             "cassandra": "Cassandra"<% } %>
         },
         "table": {
