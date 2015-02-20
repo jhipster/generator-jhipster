@@ -2,11 +2,12 @@
     "health": {
         "title": "Состояние",
         "stacktrace": "Stacktrace",
-        "indicator": {
-            "db": "База данных",
+        "indicator": {<% if (databaseType == 'sql') { %>
+            "db": "База данных",<% } %>
             "diskSpace": "Место на диске",
-            "mail": "Email",
-            "mongo": "Mongo DB"
+            "mail": "Email",<% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB",<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
         },
         "table": {
             "service": "Название сервиса",

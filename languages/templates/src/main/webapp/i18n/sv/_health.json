@@ -3,11 +3,12 @@
         "title": "Statuskontroller",
         "refresh.button": "Uppdatera",
         "stacktrace": "Stacktrace",
-        "indicator": {
-            "db": "Databas",
+        "indicator": {<% if (databaseType == 'sql') { %>
+            "db": "Databas",<% } %>
             "diskSpace": "Disk space",
-            "mail": "E-post",
-            "mongo": "Mongo DB"
+            "mail": "E-post",<% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB",<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
         },
         "table": {
             "service": "Service namn",

@@ -2,11 +2,12 @@
     "health": {
         "title": "Diagnostics",
         "refresh.button": "Rafraichir",
-        "indicator": {
-            "db": "Base de données",
+        "indicator": {<% if (databaseType == 'sql') { %>
+            "db": "Base de données",<% } %>
             "diskSpace": "Espace disque",
-            "mail": "Email",
-            "mongo": "MongoDB"
+            "mail": "Email",<% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB",<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
         },
         "stacktrace": "Stacktrace",
         "table": {

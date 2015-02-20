@@ -2,11 +2,12 @@
     "health": {
         "title": "상태 확인",
         "refresh.button": "새로고침",
-        "indicator": {
-            "db": "데이터베이스",
+        "indicator": {<% if (databaseType == 'sql') { %>
+            "db": "데이터베이스",<% } %>
             "diskSpace": "Disk space",
-            "mail": "이메일",
-            "mongo": "Mongo DB"
+            "mail": "이메일",<% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB",<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
         },
         "stacktrace": "스택트레이스",
         "table": {

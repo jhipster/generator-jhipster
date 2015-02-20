@@ -96,7 +96,6 @@ Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, res
     this.copyI18nFilesByName(_this, webappDir, 'audits.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'configuration.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'error.json', lang);
-    this.copyI18nFilesByName(_this, webappDir, 'health.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'language.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'login.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'logs.json', lang);
@@ -107,13 +106,14 @@ Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, res
     this.copyI18nFilesByName(_this, webappDir, 'sessions.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'settings.json', lang);
 
-    // remove the tracker.json files
+    // tracker.json for Websocket
     if (this.websocket == 'spring-websocket') {
         this.copyI18nFilesByName(_this, webappDir, 'tracker.json', lang);
     }
 
-    // Template the global file
+    // Templates
     _this.template(webappDir + '/i18n/' + lang + '/_global.json', webappDir + 'i18n/' + lang + '/global.json', this, {});
+    _this.template(webappDir + '/i18n/' + lang + '/_health.json', webappDir + 'i18n/' + lang + '/health.json', this, {});
 
     // Template the message server side properties
     var lang_prop = lang.replace(/-/g, "_");

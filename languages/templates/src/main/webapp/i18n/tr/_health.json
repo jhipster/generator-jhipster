@@ -3,11 +3,12 @@
         "title": "Health",
         "refresh.button": "Yenile",
         "stacktrace": "Stacktrace",
-        "indicator": {
-            "db": "Veritabanı",
+        "indicator": {<% if (databaseType == 'sql') { %>
+            "db": "Veritabanı",<% } %>
             "diskSpace": "Disk space",
-            "mail": "E-posta",
-            "mongo": "Mongo DB"
+            "mail": "E-posta",<% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB",<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
         },
         "table": {
             "service": "Hizmetin adı",

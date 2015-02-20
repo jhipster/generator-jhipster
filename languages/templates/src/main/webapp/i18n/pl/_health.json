@@ -3,11 +3,12 @@
         "title": "Heath checks",
         "refresh.button": "Odśwież",
         "stacktrace": "Stos wywołań",
-        "indicator": {
-            "db": "Baza danych",
+        "indicator": {<% if (databaseType == 'sql') { %>
+            "db": "Baza danych",<% } %>
             "diskSpace": "Disk space",
-            "mail": "Email",
-            "mongo": "Mongo DB"
+            "mail": "Email",<% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB",<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
         },
         "table": {
             "service": "Nazwa usługi",

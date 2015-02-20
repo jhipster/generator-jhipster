@@ -3,11 +3,12 @@
         "title": "服务状态",
         "refresh.button": "刷新",
         "stacktrace": "堆栈调用",
-        "indicator": {
-            "db": "数据库",
+        "indicator": {<% if (databaseType == 'sql') { %>
+            "db": "数据库",<% } %>
             "diskSpace": "硬盘空间",
-            "mail": "电子邮件",
-            "mongo": "MongoDB"
+            "mail": "电子邮件",<% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB",<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
         },
         "table": {
             "service": "服务名称",

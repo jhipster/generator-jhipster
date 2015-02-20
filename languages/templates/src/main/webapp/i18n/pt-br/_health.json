@@ -3,11 +3,12 @@
         "title": "Estado do Sistema",
         "refresh.button": "Atualizar",
         "stacktrace": "Stacktrace",
-        "indicator": {
-            "db": "Banco de dados",
+        "indicator": {<% if (databaseType == 'sql') { %>
+            "db": "Banco de dados",<% } %>
             "diskSpace": "Disk space",
-            "mail": "E-mail",
-            "mongo": "Mongo DB"
+            "mail": "Email",<% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB",<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
         },
         "table": {
             "service": "Nome do Serviço",
