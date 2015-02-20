@@ -125,7 +125,7 @@ dependencies {
     }<% if (websocket == 'spring-websocket') { %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-websocket', version: spring_boot_version<% } %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: spring_boot_version<% if (databaseType == 'cassandra') { %>
-    compile group: 'org.springframework.data', name: 'spring-data-cassandra', version: spring_boot_version
+    compile group: 'org.springframework.data', name: 'spring-data-cassandra', version: spring_data_cassandra_version
     compile group: 'org.apache.cassandra', name: 'cassandra-all', version: cassandra_version
     compile(group: 'com.datastax.cassandra', name: 'cassandra-driver-core', version: datastax_driver_version) {
         exclude module: 'com.codahale.metrics'
