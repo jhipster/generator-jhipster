@@ -1,8 +1,6 @@
 apply plugin: 'spring-boot'
 apply plugin: 'com.moowork.node'
-<% if(frontendBuilder == 'grunt') {%>
-apply plugin: 'grunt'
-<% }  if(frontendBuilder == 'gulp') {%>
+<% if(frontendBuilder == 'gulp') {%>
 apply plugin: 'com.moowork.gulp'
 <% } %>
 
@@ -21,11 +19,17 @@ task setProdProperties(dependsOn: bootRun) << {
 }
 
 <% if(frontendBuilder == 'grunt') {%>
-grunt_build.dependsOn 'npmInstall'
-grunt_build.dependsOn 'bower'
-processResources.dependsOn grunt_build
-test.dependsOn grunt_test
-bootRun.dependsOn grunt_test
+task gruntBuild(type: Exec) {
+   commandLine 'grunt', '--force', 'build'
+}
+task gruntTest(type: Exec) {
+   commandLine 'grunt', 'test'
+}
+gruntBuild.dependsOn 'npmInstall'
+gruntBuild.dependsOn 'bower'
+processResources.dependsOn gruntBuild
+test.dependsOn gruntTest
+bootRun.dependsOn gruntTest
 <% }  if(frontendBuilder == 'gulp') {%>
 gulp_build.dependsOn 'npmInstall'
 gulp_build.dependsOn 'bower'
