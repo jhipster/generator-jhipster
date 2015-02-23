@@ -260,7 +260,7 @@
         </dependency><% } %>
         <dependency>
             <groupId>org.assertj</groupId><% if (javaVersion == '8') { %>
-            <artifactId>assertj-core-java8</artifactId></version><% } %><% if (javaVersion == '7') { %>
+            <artifactId>assertj-core-java8</artifactId><% } %><% if (javaVersion == '7') { %>
             <artifactId>assertj-core</artifactId><% } %>
             <version>${assertj-core.version}</version>
             <scope>test</scope>
