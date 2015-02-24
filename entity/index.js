@@ -327,8 +327,8 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
                 relationshipType: props.relationshipType,
                 otherEntityNameCapitalized: _s.capitalize(props.otherEntityName),
                 otherEntityField: props.otherEntityField,
-                ownerSide: props.ownerSide}
-
+                ownerSide: props.ownerSide
+            }
             if (props.relationshipType == 'many-to-many' && props.ownerSide == true) {
                 this.fieldsContainOwnerManyToMany = true;
             }
