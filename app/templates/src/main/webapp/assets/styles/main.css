@@ -141,3 +141,14 @@ ul#strength {
     width:20px;
 }
 /* end Password strength bar style */
+
+/*AngularJS css*/
+
+form .ng-invalid-required.ng-dirty { background-color: lightpink; }
+form .ng-invalid-maxlength.ng-dirty { background-color: lightpink; }
+form .ng-valid.ng-dirty { background-color: lightgreen; }
+span.summary.ng-invalid { color: red; font-weight: bold; }
+span.summary.ng-valid { color: green; }
+div.error {color: red; font-weight: bold; background-color: white;}
+
+/*End AngularJS css*/

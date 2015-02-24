@@ -52,7 +52,7 @@ public class <%= entityClass %> implements Serializable {
     @JsonDeserialize(using = ISO8601LocalDateDeserializer.class)
     @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>", nullable = false)<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
     @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>", precision=10, scale=2)<% } else { %>
-    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>")<% }} %><% if (databaseType == 'mongodb') { %><% if (fields[fieldId].fieldType == 'DateTime') { %>
+    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>", nullable = <%=!fields[fieldId].fieldRequired%>)<% }} %><% if (databaseType == 'mongodb') { %><% if (fields[fieldId].fieldType == 'DateTime') { %>
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     @JsonDeserialize(using = CustomDateTimeDeserializer.class)<% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
     @JsonSerialize(using = CustomLocalDateSerializer.class)
