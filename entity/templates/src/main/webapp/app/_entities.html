@@ -51,13 +51,13 @@
                         %>
                         <div class="form-group">
                             <label translate="<%= translationKey %>"><%=relationshipName %></label>
-                            <select class="form-control" name="<%= fields[fieldId].fieldName %>" ng-model="<%=entityInstance %>.<%=relationshipFieldName %>.id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=relationships[relationshipId].otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName.toLowerCase() %>s">
+                            <select class="form-control" name="<%= relationshipName %>" ng-model="<%=entityInstance %>.<%=relationshipFieldName %>.id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=relationships[relationshipId].otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName.toLowerCase() %>s">
                             </select>
                         </div><% } else if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) {
                             %>
                          <div class="form-group">
                              <label translate="<%= translationKey %>"><%=relationshipName %></label>
-                             <select class="form-control" multiple name="<%= fields[fieldId].fieldName %>" ng-model="<%=entityInstance %>.<%=relationshipFieldName %>s" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=relationships[relationshipId].otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName.toLowerCase() %>s track by <%=otherEntityName %>.id">
+                             <select class="form-control" multiple name="<%= relationshipName %>" ng-model="<%=entityInstance %>.<%=relationshipFieldName %>s" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=relationships[relationshipId].otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName.toLowerCase() %>s track by <%=otherEntityName %>.id">
                              </select>
                          </div><% } } %>
 
