@@ -5,12 +5,15 @@ import <%=packageName%>.domain.<%= entityClass %>;
 import <%=packageName%>.repository.<%= entityClass %>Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.inject.Inject;<% if (javaVersion == '7') { %>
+import javax.inject.Inject;
+import java.net.URI;
+import java.net.URISyntaxException;<% if (javaVersion == '7') { %>
 import javax.servlet.http.HttpServletResponse;<% } %>
 import java.util.List;<% if (javaVersion == '8') { %>
 import java.util.Optional;<% } %><% if (databaseType == 'cassandra') { %>
@@ -35,9 +38,29 @@ public class <%= entityClass %>Resource {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public void create(@RequestBody <%= entityClass %> <%= entityInstance %>) {
+    public ResponseEntity<Void> create(@RequestBody <%= entityClass %> <%= entityInstance %>) throws URISyntaxException {
         log.debug("REST request to save <%= entityClass %> : {}", <%= entityInstance %>);
+        if (<%= entityInstance %>.getId() != null) {
+            return ResponseEntity.badRequest().header("Failure", "A new <%= entityInstance %> cannot already have an ID").build();
+        }
         <%= entityInstance %>Repository.save(<%= entityInstance %>);
+        return ResponseEntity.created(new URI("/api/<%= entityInstance %>s/" + <%= entityInstance %>.getId())).build();
+    }
+
+    /**
+     * PUT  /<%= entityInstance %>s -> Updates an existing <%= entityInstance %>.
+     */
+    @RequestMapping(value = "/<%= entityInstance %>s",
+        method = RequestMethod.PUT,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<Void> update(@RequestBody <%= entityClass %> <%= entityInstance %>) throws URISyntaxException {
+        log.debug("REST request to update <%= entityClass %> : {}", <%= entityInstance %>);
+        if (<%= entityInstance %>.getId() == null) {
+            return create(<%= entityInstance %>);
+        }
+        <%= entityInstance %>Repository.save(<%= entityInstance %>);
+        return ResponseEntity.ok().build();
     }
 
     /**
