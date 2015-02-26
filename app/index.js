@@ -704,6 +704,12 @@ JhipsterGenerator.prototype.app = function app() {
         this.template(testResourceDir + '_ehcache.xml', testResourceDir + 'ehcache.xml', this, {});
     }
 
+    // Create Gatling test files
+    this.copy('src/test/gatling/conf/gatling.conf', 'src/test/gatling/conf/gatling.conf');
+    this.mkdir('src/test/gatling/data');
+    this.mkdir('src/test/gatling/bodies');
+    this.mkdir('src/test/gatling/simulations');
+
     // Create Webapp
     this.mkdir(webappDir);
 
