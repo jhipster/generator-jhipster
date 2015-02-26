@@ -27,7 +27,7 @@
     </appender>
 -->
 
-    <logger name="<%=packageName%>" level="DEBUG"/>
+    <logger name="<%=packageName%>" level="${logback.loglevel}"/>
 
     <logger name="javax.activation" level="WARN"/>
     <logger name="javax.mail" level="WARN"/>
@@ -52,9 +52,9 @@
     <logger name="org.thymeleaf" level="WARN"/>
     <logger name="org.xnio" level="WARN"/>
     <logger name="com.mangofactory.swagger" level="WARN"/>
-    <logger name="com.wordnik.swagger" level="warn"/><% if (databaseType == 'sql') { %>
-    <logger name="liquibase" level="warn"/><% } %>
-    <logger name="sun.rmi.transport" level="warn"/>
+    <logger name="com.wordnik.swagger" level="WARN"/><% if (databaseType == 'sql') { %>
+    <logger name="liquibase" level="WARN"/><% } %>
+    <logger name="sun.rmi.transport" level="WARN"/>
 
     <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
         <resetJUL>true</resetJUL>
