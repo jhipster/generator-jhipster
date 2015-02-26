@@ -463,7 +463,7 @@ JhipsterGenerator.prototype.app = function app() {
     // Thymeleaf templates
     this.copy(resourceDir + '/templates/error.html', resourceDir + 'templates/error.html');
 
-    this.template(resourceDir + '_logback.xml', resourceDir + 'logback.xml', this, {});
+    this.template(resourceDir + '_logback.xml', resourceDir + 'logback.xml', this, { 'interpolate': /<%=([\s\S]+?)%>/g });
 
     this.template(resourceDir + '/config/_application.yml', resourceDir + 'config/application.yml', this, {});
     this.template(resourceDir + '/config/_application-dev.yml', resourceDir + 'config/application-dev.yml', this, {});
