@@ -27,7 +27,7 @@ import java.util.UUID;<% } %>
 public interface <%=entityClass%>Repository extends <% if (databaseType=='sql') { %>JpaRepository<% } %><% if (databaseType=='mongodb') { %>MongoRepository<% } %><<%=entityClass%>,<% if (databaseType=='sql') {%>Long<%}%><% if (databaseType=='mongodb') { %>String<%}%>> {<% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'many-to-one' && relationships[relationshipId].otherEntityName == 'user') { %>
 
     @Query("select <%= entityInstance %> from <%= entityClass %> <%= entityInstance %> where <%= entityInstance %>.<%= relationships[relationshipId].relationshipFieldName %>.login = ?#{principal.username}")
-    List<Contracts> findAllForCurrentUser();<% } } %>
+    List<<%= entityClass %>> findAllForCurrentUser();<% } } %>
 <% if (fieldsContainOwnerManyToMany==true) { %>
     @Query("select <%= entityInstance %> from <%= entityClass %> <%= entityInstance %><% for (relationshipId in relationships) {
     if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %> left join fetch <%=entityInstance%>.<%=relationships[relationshipId].relationshipFieldName%>s<%} }%> where <%=entityInstance%>.id =:id")
