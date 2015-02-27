@@ -83,7 +83,6 @@ EntityGenerator.prototype.askForFields = function askForFields() {
         },
         {
             when: function (response) {
-                console.log("this.databaseType-->" + databaseType);
                 return response.fieldAdd == true && (databaseType == 'sql' || databaseType == 'mongodb');
             },
             type: 'list',
