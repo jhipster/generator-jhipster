@@ -7,7 +7,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;<% if (authenticationType == 'session') { %>
 import org.springframework.core.env.Environment;<% } %><% if (authenticationType == 'oauth2') { %>
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;<% } %>
-<% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
+
+import org.springframework.data.repository.query.spi.EvaluationContextExtension;
+import org.springframework.data.repository.query.spi.EvaluationContextExtensionSupport;
+import org.springframework.security.access.expression.SecurityExpressionRoot;<% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
 import org.springframework.security.authentication.AuthenticationManager;<% } %>
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -17,6 +20,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;<% if (authenticationType == 'xauth') { %>
 import org.springframework.security.config.http.SessionCreationPolicy;<% } %>
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;<% if (authenticationType == 'session') { %>
@@ -157,4 +161,25 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     private XAuthTokenConfigurer securityConfigurerAdapter() {
       return new XAuthTokenConfigurer(userDetailsService, tokenProvider);
     }<% } %>
+
+    /**
+     * This allows SpEL support in Spring Data JPA @Query definitions.
+     *
+     * See https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definitions
+     */
+    @Bean
+    EvaluationContextExtension securityExtension() {
+        return new EvaluationContextExtensionSupport() {
+            @Override
+            public String getExtensionId() {
+                return "security";
+            }
+
+            @Override
+            public SecurityExpressionRoot getRootObject() {
+                return new SecurityExpressionRoot(SecurityContextHolder.getContext().getAuthentication()) {};
+            }
+        };
+    }
+
 }
