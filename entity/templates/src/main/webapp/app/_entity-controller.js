@@ -1,14 +1,25 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('<%= entityClass %>Controller', function ($scope<% for (idx in differentTypes) { %>, <%= differentTypes[idx] %><% } %>) {
+    .controller('<%= entityClass %>Controller', function ($scope<% for (idx in differentTypes) { %>, <%= differentTypes[idx] %><% } %><% if (pagination == 'link-header') { %>, ParseLinks<% } %>) {
         $scope.<%= entityInstance %>s = [];<% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) { %>
-        $scope.<%= differentTypes[idx].toLowerCase() %>s = <%= differentTypes[idx] %>.query();<% } } %>
+        $scope.<%= differentTypes[idx].toLowerCase() %>s = <%= differentTypes[idx] %>.query();<% } } %><% if (pagination == 'link-header') { %>
+        $scope.page = 1;
+        $scope.loadAll = function() {
+            <%= entityClass %>.query({page: $scope.page, per_page: 20}, function(result, headers) {
+                $scope.links = ParseLinks.parse(headers('link'));
+                $scope.<%= entityInstance %>s = result;
+            });
+        };
+        $scope.loadPage = function(page) {
+            $scope.page = page;
+            $scope.loadAll();
+        };<% } %><% if (pagination == 'no') { %>
         $scope.loadAll = function() {
             <%= entityClass %>.query(function(result) {
                $scope.<%= entityInstance %>s = result;
             });
-        };
+        };<% } %>
         $scope.loadAll();
 
         $scope.create = function () {

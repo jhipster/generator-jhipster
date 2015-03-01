@@ -2,10 +2,12 @@ package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import <%=packageName%>.domain.<%= entityClass %>;
-import <%=packageName%>.repository.<%= entityClass %>Repository;
+import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (pagination == 'link-header') { %>
+import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
+import org.slf4j.LoggerFactory;<% if (pagination == 'link-header') { %>
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;<% } %>
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -69,10 +71,16 @@ public class <%= entityClass %>Resource {
     @RequestMapping(value = "/<%= entityInstance %>s",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
+    @Timed<% if (pagination == 'no') { %>
     public List<<%= entityClass %>> getAll() {
         log.debug("REST request to get all <%= entityClass %>s");
-        return <%= entityInstance %>Repository.findAll();
+        return <%= entityInstance %>Repository.findAll();<% } %><% if (pagination == 'link-header') { %>
+    public ResponseEntity<List<<%= entityClass %>>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
+                                  @RequestParam(value = "per_page", required = false) Integer limit)
+        throws URISyntaxException {
+        Page page = <%= entityInstance %>Repository.findAll(PaginationUtil.generatePageRequest(offset, limit));
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityInstance %>s", offset, limit);
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);<% } %>
     }
 
     /**

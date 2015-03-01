@@ -46,7 +46,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.fieldsContainOneToMany = false;
     this.relationshipId = 0;
     this.relationships = [];
-
+    this.pagination = 'link-header';
 };
 
 var fieldNamesUnderscored = ['id'];
@@ -203,7 +203,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
 };
 
 EntityGenerator.prototype.askForRelationships = function askForRelationships() {
-    if (this.useConfigurationFile == true) {// don't prompt if data are imported from a file
+    if (this.useConfigurationFile == true) { // don't prompt if data are imported from a file
         return;
     }
     if (this.databaseType == 'mongodb' || this.databaseType == 'cassandra') {
@@ -349,11 +349,42 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
         if (props.relationshipAdd) {
             this.askForRelationships();
         } else {
-            console.log(chalk.green('Everything is configured, generating the entity...'));
             cb();
         }
     }.bind(this));
+};
 
+EntityGenerator.prototype.askForRelationships = function askForPagination() {
+    if (this.useConfigurationFile == true) { // don't prompt if data are imported from a file
+        return;
+    }
+    if (this.databaseType == 'mongodb' || this.databaseType == 'cassandra') {
+        return;
+    }
+    var cb = this.async();
+    var prompts = [
+        {
+            type: 'list',
+            name: 'pagination',
+            message: 'Do you want pagination on your entity?',
+            choices: [
+                {
+                    value: 'link-header',
+                    name: 'Yes, using Link headers'
+                },
+                {
+                    value: 'no',
+                    name: 'No'
+                }
+            ],
+            default: 0
+        }
+    ];
+    this.prompt(prompts, function (props) {
+        this.pagination = props.pagination;
+        console.log(chalk.green('Everything is configured, generating the entity...'));
+        cb();
+    }.bind(this));
 };
 
 
@@ -374,6 +405,7 @@ EntityGenerator.prototype.files = function files() {
         this.data.fieldsContainDateTime = this.fieldsContainDateTime;
         this.data.fieldsContainDate = this.fieldsContainDate;
         this.data.changelogDate = this.changelogDate;
+        this.data.pagination = this.pagination;
         this.write(this.filename, JSON.stringify(this.data, null, 4));
     } else  {
         this.relationships = this.fileData.relationships;
@@ -393,6 +425,7 @@ EntityGenerator.prototype.files = function files() {
           rel.relationshipNameCapitalized = rel.relationshipNameCapitalized || _s.capitalize(rel.relationshipName);
           rel.relationshipFieldName = rel.relationshipFieldName || rel.relationshipName.charAt(0).toLowerCase() + rel.relationshipName.slice(1);
         }
+        this.pagination = this.fileData.pagination;
     }
     this.entityClass = _s.capitalize(this.name);
     this.entityInstance = this.name.charAt(0).toLowerCase() + this.name.slice(1);
@@ -410,6 +443,7 @@ EntityGenerator.prototype.files = function files() {
     insight.track('generator', 'entity');
     insight.track('entity/fields', this.fields.length);
     insight.track('entity/relationships', this.relationships.length);
+    insight.track('entity/pagination', this.pagination);
 
     var resourceDir = 'src/main/resources/';
 
