@@ -436,6 +436,7 @@ JhipsterGenerator.prototype.app = function app() {
             this.template('_yeoman.gradle', 'yeoman.gradle', this, {});
             this.template('_profile_dev.gradle', 'profile_dev.gradle', this, {});
             this.template('_profile_prod.gradle', 'profile_prod.gradle', this, {});
+            this.template('_gatling.gradle', 'gatling.gradle', this, {});
           if (this.databaseType == "sql") {
             this.template('_liquibase.gradle', 'liquibase.gradle', this, {});
           }
