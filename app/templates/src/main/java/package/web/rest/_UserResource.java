@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
-import javax.inject.Inject;<% if (javaVersion == '8') { %>
-import java.util.Optional;<% } else { %>
+import javax.inject.Inject;
+import java.util.List;<% if (javaVersion == '7') { %>
 import javax.servlet.http.HttpServletResponse;<% } %>
 
 /**
@@ -30,6 +30,18 @@ public class UserResource {
 
     @Inject
     private UserRepository userRepository;
+
+    /**
+     * GET  /users -> get all users.
+     */
+    @RequestMapping(value = "/users",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public List<User> getAll() {
+        log.debug("REST request to get all Users");
+        return userRepository.findAll();
+    }
 
     /**
      * GET  /users/:login -> get the "login" user.

@@ -27,7 +27,9 @@
         <awaitility.version>1.4.0</awaitility.version><% if (databaseType == 'cassandra') { %>
         <cassandra.version>2.0.12</cassandra.version><% } %>
         <commons-io.version>2.4</commons-io.version>
-        <commons-lang.version>2.6</commons-lang.version><% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
+        <commons-lang.version>2.6</commons-lang.version>
+        <gatling.version>2.1.4</gatling.version>
+        <gatling-maven-plugin.version>2.1.2</gatling-maven-plugin.version><% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
         <hazelcast.version>3.4</hazelcast.version><% } %><% if (databaseType == 'sql') { %>
         <hibernate.version>4.3.6.Final</hibernate.version><% } %><% if (databaseType == 'cassandra') { %>
         <datastax-driver.version>2.1.4</datastax-driver.version><% } %>
@@ -236,6 +238,12 @@
             <scope>test</scope>
         </dependency><% } %>
         <dependency>
+            <groupId>io.gatling.highcharts</groupId>
+            <artifactId>gatling-charts-highcharts</artifactId>
+            <version>${gatling.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
             <version>${javax.inject.version}</version>
@@ -260,7 +268,7 @@
         </dependency><% } %>
         <dependency>
             <groupId>org.assertj</groupId><% if (javaVersion == '8') { %>
-            <artifactId>assertj-core-java8</artifactId></version><% } %><% if (javaVersion == '7') { %>
+            <artifactId>assertj-core-java8</artifactId><% } %><% if (javaVersion == '7') { %>
             <artifactId>assertj-core</artifactId><% } %>
             <version>${assertj-core.version}</version>
             <scope>test</scope>
@@ -528,6 +536,21 @@
                     <sortPlugins>groupId,artifactId</sortPlugins>
                     <keepBlankLines>true</keepBlankLines>
                     <expandEmptyElements>false</expandEmptyElements>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>io.gatling</groupId>
+                <artifactId>gatling-maven-plugin</artifactId>
+                <version>${gatling-maven-plugin.version}</version>
+                <configuration>
+                    <configFolder>src/test/gatling/conf</configFolder>
+                    <dataFolder>src/test/gatling/data</dataFolder>
+                    <resultsFolder>target/gatling/results</resultsFolder>
+                    <bodiesFolder>src/test/gatling/bodies</bodiesFolder>
+                    <simulationsFolder>src/test/gatling/simulations</simulationsFolder>
+                    <!-- This will force Gatling to ask which simulation to run
+                         This is useful when you have multiple simulations -->
+                    <simulationClass>*</simulationClass>
                 </configuration>
             </plugin>
             <plugin>

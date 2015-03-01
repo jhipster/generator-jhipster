@@ -17,6 +17,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.packageName = this.config.get('packageName');
     this.packageFolder = this.config.get('packageFolder');
     this.javaVersion = this.config.get('javaVersion');
+    this.authenticationType = this.config.get('authenticationType');
     this.hibernateCache = this.config.get('hibernateCache');
     this.databaseType = this.config.get('databaseType');
     databaseType = this.databaseType;
@@ -83,7 +84,6 @@ EntityGenerator.prototype.askForFields = function askForFields() {
         },
         {
             when: function (response) {
-                console.log("this.databaseType-->" + databaseType);
                 return response.fieldAdd == true && (databaseType == 'sql' || databaseType == 'mongodb');
             },
             type: 'list',
@@ -369,8 +369,8 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
                 relationshipType: props.relationshipType,
                 otherEntityNameCapitalized: _s.capitalize(props.otherEntityName),
                 otherEntityField: props.otherEntityField,
-                ownerSide: props.ownerSide}
-
+                ownerSide: props.ownerSide
+            }
             if (props.relationshipType == 'many-to-many' && props.ownerSide == true) {
                 this.fieldsContainOwnerManyToMany = true;
             }
@@ -499,6 +499,9 @@ EntityGenerator.prototype.files = function files() {
 
     this.template('src/test/java/package/web/rest/_EntityResourceTest.java',
         'src/test/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'ResourceTest.java', this, {});
+
+    this.template('src/test/gatling/simulations/_EntityGatlingTest.scala',
+        'src/test/gatling/simulations/' + this.entityClass + 'GatlingTest.scala', this, { 'interpolate': /<%=([\s\S]+?)%>/g });
 
     // Copy for each
     this.copyI18n('ca');

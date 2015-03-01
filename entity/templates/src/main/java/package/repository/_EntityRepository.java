@@ -4,9 +4,10 @@ import com.datastax.driver.core.*;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;<% } %>
 import <%=packageName%>.domain.<%=entityClass%>;<% if (databaseType=='sql') { %>
-import org.springframework.data.jpa.repository.JpaRepository;<% if (fieldsContainOwnerManyToMany==true) { %>
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;<% } } %><% if (databaseType=='mongodb') { %>
+import org.springframework.data.jpa.repository.*;<% if (fieldsContainOwnerManyToMany==true) { %>
+import org.springframework.data.repository.query.Param;<% } %>
+
+import java.util.List;<% } %><% if (databaseType=='mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %><% if (databaseType == 'cassandra') { %>
 import org.springframework.stereotype.Repository;
 
@@ -23,7 +24,10 @@ import java.util.UUID;<% } %>
  */<% } %><% if (databaseType=='cassandra') { %>/**
  * Cassandra repository for the <%= entityClass %> entity.
  */<% } %><% if (databaseType=='sql' || databaseType=='mongodb') { %>
-public interface <%=entityClass%>Repository extends <% if (databaseType=='sql') { %>JpaRepository<% } %><% if (databaseType=='mongodb') { %>MongoRepository<% } %><<%=entityClass%>,<% if (databaseType=='sql') {%>Long<%}%><% if (databaseType=='mongodb') { %>String<%}%>>{
+public interface <%=entityClass%>Repository extends <% if (databaseType=='sql') { %>JpaRepository<% } %><% if (databaseType=='mongodb') { %>MongoRepository<% } %><<%=entityClass%>,<% if (databaseType=='sql') {%>Long<%}%><% if (databaseType=='mongodb') { %>String<%}%>> {<% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'many-to-one' && relationships[relationshipId].otherEntityName == 'user') { %>
+
+    @Query("select <%= entityInstance %> from <%= entityClass %> <%= entityInstance %> where <%= entityInstance %>.<%= relationships[relationshipId].relationshipFieldName %>.login = ?#{principal.username}")
+    List<<%= entityClass %>> findAllForCurrentUser();<% } } %>
 <% if (fieldsContainOwnerManyToMany==true) { %>
     @Query("select <%= entityInstance %> from <%= entityClass %> <%= entityInstance %><% for (relationshipId in relationships) {
     if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %> left join fetch <%=entityInstance%>.<%=relationships[relationshipId].relationshipFieldName%>s<%} }%> where <%=entityInstance%>.id =:id")

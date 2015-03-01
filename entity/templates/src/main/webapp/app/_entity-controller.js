@@ -12,7 +12,7 @@ angular.module('<%=angularAppName%>')
         $scope.loadAll();
 
         $scope.create = function () {
-            <%= entityClass %>.save($scope.<%= entityInstance %>,
+            <%= entityClass %>.update($scope.<%= entityInstance %>,
                 function () {
                     $scope.loadAll();
                     $('#save<%= entityClass %>Modal').modal('hide');

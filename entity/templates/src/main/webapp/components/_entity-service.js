@@ -15,6 +15,7 @@ angular.module('<%=angularAppName%>')
                     data.<%=fields[fieldId].fieldName%> = new Date(data.<%=fields[fieldId].fieldName%>);<% } }%>
                     return data;
                 }
-            }
+            },
+            'update': { method:'PUT' }
         });
     });

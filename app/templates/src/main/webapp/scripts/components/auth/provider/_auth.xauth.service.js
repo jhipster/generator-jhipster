@@ -9,7 +9,7 @@ angular.module('<%=angularAppName%>')
                 return $http.post('api/authenticate', data, {
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
-                        "Accept": "application/json",
+                        "Accept": "application/json"
                     }
                 }).success(function (response) {
                     localStorageService.set('token', response);

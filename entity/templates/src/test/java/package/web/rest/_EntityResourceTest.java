@@ -100,8 +100,7 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     @Before
     public void initTest() {<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>
         <%= entityInstance %>Repository.deleteAll();<% } %>
-        <%= entityInstance %> = new <%= entityClass %>();<% if (databaseType == 'cassandra') { %>
-        <%= entityInstance %>.setId(UUID.randomUUID());<% } %><% for (fieldId in fields) { %>
+        <%= entityInstance %> = new <%= entityClass %>();<% for (fieldId in fields) { %>
         <%= entityInstance %>.set<%= fields[fieldId].fieldNameCapitalized %>(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>
     }
 
@@ -115,7 +114,7 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityInstance %>s")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %>)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
 
         // Validate the <%= entityClass %> in the database
         List<<%= entityClass %>> <%= entityInstance %>s = <%= entityInstance %>Repository.findAll();
@@ -173,7 +172,7 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
 
         // Update the <%= entityInstance %><% for (fieldId in fields) { %>
         <%= entityInstance %>.set<%= fields[fieldId].fieldNameCapitalized %>(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>
-        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityInstance %>s")
+        rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityInstance %>s")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %>)))
                 .andExpect(status().isOk());
