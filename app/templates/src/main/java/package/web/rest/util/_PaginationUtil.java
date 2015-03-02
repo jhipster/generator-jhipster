@@ -2,6 +2,7 @@ package <%=packageName%>.web.rest.util;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 
 import java.net.URI;
@@ -25,7 +26,7 @@ public class PaginationUtil {
 
     public static final int MAX_LIMIT = 100;
 
-    public static PageRequest generatePageRequest(Integer offset, Integer limit) {
+    public static Pageable generatePageRequest(Integer offset, Integer limit) {
         if (offset == null || offset < MIN_OFFSET) {
             offset = DEFAULT_OFFSET;
         }
