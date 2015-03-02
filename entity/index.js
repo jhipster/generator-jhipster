@@ -358,7 +358,7 @@ EntityGenerator.prototype.askForRelationships = function askForPagination() {
     if (this.useConfigurationFile == true) { // don't prompt if data are imported from a file
         return;
     }
-    if (this.databaseType == 'mongodb' || this.databaseType == 'cassandra') {
+    if (this.databaseType == 'cassandra') {
         return;
     }
     var cb = this.async();
