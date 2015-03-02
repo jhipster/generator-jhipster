@@ -111,7 +111,7 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody<% if (pagination == 'infinite-scroll') { %> infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page"<% } %>>
                 <tr ng-repeat="<%=entityInstance %> in <%=entityInstance %>s">
                     <td><a ui-sref="<%= entityInstance %>Detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td><% for (fieldId in fields) { %>
                     <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%>}}</td><% } %><% for (relationshipId in relationships) {
@@ -136,7 +136,7 @@
                     </td>
                 </tr>
             </tbody>
-        </table><% if (pagination == 'link-header') { %>
+        </table><% if (pagination == 'pager') { %>
         <nav>
             <ul class="pager">
                 <li ng-show="links['first']" ng-click="loadPage(links['first'])"><a href="#">&lt;&lt;</a></li>

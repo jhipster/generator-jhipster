@@ -46,7 +46,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.fieldsContainOneToMany = false;
     this.relationshipId = 0;
     this.relationships = [];
-    this.pagination = 'link-header';
+    this.pagination = 'pager';
 };
 
 var fieldNamesUnderscored = ['id'];
@@ -369,8 +369,12 @@ EntityGenerator.prototype.askForRelationships = function askForPagination() {
             message: 'Do you want pagination on your entity?',
             choices: [
                 {
-                    value: 'link-header',
-                    name: 'Yes, using Link headers'
+                    value: 'pager',
+                    name: 'Yes, with a simple pager'
+                },
+                {
+                    value: 'infinite-scroll',
+                    name: 'Yes, with infinite scroll'
                 },
                 {
                     value: 'no',
