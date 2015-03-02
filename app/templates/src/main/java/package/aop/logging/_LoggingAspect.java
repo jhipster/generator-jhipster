@@ -26,9 +26,9 @@ public class LoggingAspect {
     private Environment env;
 
     @Pointcut("within(<%=packageName%>.repository..*) || within(<%=packageName%>.service..*) || within(<%=packageName%>.web.rest..*)")
-    public void loggingPoincut() {}
+    public void loggingPointcut() {}
 
-    @AfterThrowing(pointcut = "loggingPoincut()", throwing = "e")
+    @AfterThrowing(pointcut = "loggingPointcut()", throwing = "e")
     public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
             log.error("Exception in {}.{}() with cause = {}", joinPoint.getSignature().getDeclaringTypeName(),
@@ -39,7 +39,7 @@ public class LoggingAspect {
         }
     }
 
-    @Around("loggingPoincut()")
+    @Around("loggingPointcut()")
     public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
         if (log.isDebugEnabled()) {
             log.debug("Enter: {}.{}() with argument[s] = {}", joinPoint.getSignature().getDeclaringTypeName(),
