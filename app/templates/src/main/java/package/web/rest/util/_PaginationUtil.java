@@ -19,12 +19,14 @@ public class PaginationUtil {
 
     public static final int DEFAULT_OFFSET = 1;
 
+    public static final int MIN_OFFSET = 1;
+
     public static final int DEFAULT_LIMIT = 20;
 
     public static final int MAX_LIMIT = 100;
 
     public static PageRequest generatePageRequest(Integer offset, Integer limit) {
-        if (offset == null) {
+        if (offset == null || offset < MIN_OFFSET) {
             offset = DEFAULT_OFFSET;
         }
         if (limit == null || limit > MAX_LIMIT) {
@@ -36,7 +38,7 @@ public class PaginationUtil {
     public static HttpHeaders generatePaginationHttpHeaders(Page page, String baseUrl, Integer offset, Integer limit)
         throws URISyntaxException {
 
-        if (offset == null) {
+        if (offset == null || offset < MIN_OFFSET) {
             offset = DEFAULT_OFFSET;
         }
         if (limit == null || limit > MAX_LIMIT) {
