@@ -80,7 +80,7 @@ public class <%= entityClass %>Resource {
         throws URISyntaxException {
         Page page = <%= entityInstance %>Repository.findAll(PaginationUtil.generatePageRequest(offset, limit));
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityInstance %>s", offset, limit);
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);<% } %>
+        return new ResponseEntity<<% if (javaVersion == '7') { %>List<<%= entityClass %>><% } %>>(page.getContent(), headers, HttpStatus.OK);<% } %>
     }
 
     /**
