@@ -354,7 +354,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
     }.bind(this));
 };
 
-EntityGenerator.prototype.askForRelationships = function askForPagination() {
+EntityGenerator.prototype.askForPagination = function askForPagination() {
     if (this.useConfigurationFile == true) { // don't prompt if data are imported from a file
         return;
     }
@@ -369,6 +369,10 @@ EntityGenerator.prototype.askForRelationships = function askForPagination() {
             message: 'Do you want pagination on your entity?',
             choices: [
                 {
+                    value: 'no',
+                    name: 'No'
+                },
+                {
                     value: 'pager',
                     name: 'Yes, with a simple pager'
                 },
@@ -379,10 +383,6 @@ EntityGenerator.prototype.askForRelationships = function askForPagination() {
                 {
                     value: 'infinite-scroll',
                     name: 'Yes, with infinite scroll'
-                },
-                {
-                    value: 'no',
-                    name: 'No'
                 }
             ],
             default: 0
