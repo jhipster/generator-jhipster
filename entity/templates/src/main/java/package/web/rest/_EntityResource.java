@@ -2,10 +2,10 @@ package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import <%=packageName%>.domain.<%= entityClass %>;
-import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (pagination == 'pager') { %>
+import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (pagination == 'pager' || pagination == 'infinite-scroll') { %>
 import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;<% if (pagination == 'pager') { %>
+import org.slf4j.LoggerFactory;<% if (pagination == 'pager' || pagination == 'infinite-scroll') { %>
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;<% } %>
 import org.springframework.http.HttpStatus;
@@ -74,7 +74,7 @@ public class <%= entityClass %>Resource {
     @Timed<% if (pagination == 'no') { %>
     public List<<%= entityClass %>> getAll() {
         log.debug("REST request to get all <%= entityClass %>s");
-        return <%= entityInstance %>Repository.findAll();<% } %><% if (pagination == 'pager') { %>
+        return <%= entityInstance %>Repository.findAll();<% } %><% if (pagination == 'pager' || pagination == 'infinite-scroll') { %>
     public ResponseEntity<List<<%= entityClass %>>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
                                   @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
