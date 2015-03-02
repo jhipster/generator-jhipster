@@ -2,10 +2,10 @@ package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import <%=packageName%>.domain.<%= entityClass %>;
-import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (pagination == 'pager' || pagination == 'infinite-scroll') { %>
+import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (pagination != 'no') { %>
 import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;<% if (pagination == 'pager' || pagination == 'infinite-scroll') { %>
+import org.slf4j.LoggerFactory;<% if (pagination != 'no') { %>
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;<% } %>
 import org.springframework.http.HttpStatus;
