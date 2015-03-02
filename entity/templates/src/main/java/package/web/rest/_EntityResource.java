@@ -74,7 +74,7 @@ public class <%= entityClass %>Resource {
     @Timed<% if (pagination == 'no') { %>
     public List<<%= entityClass %>> getAll() {
         log.debug("REST request to get all <%= entityClass %>s");
-        return <%= entityInstance %>Repository.findAll();<% } %><% if (pagination == 'pager' || pagination == 'infinite-scroll') { %>
+        return <%= entityInstance %>Repository.findAll();<% } %><% if (pagination != 'no') { %>
     public ResponseEntity<List<<%= entityClass %>>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
                                   @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {

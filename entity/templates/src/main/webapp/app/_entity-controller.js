@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('<%= entityClass %>Controller', function ($scope<% for (idx in differentTypes) { %>, <%= differentTypes[idx] %><% } %><% if (pagination == 'pager' || pagination == 'infinite-scroll') { %>, ParseLinks<% } %>) {
+    .controller('<%= entityClass %>Controller', function ($scope<% for (idx in differentTypes) { %>, <%= differentTypes[idx] %><% } %><% if (pagination != 'no') { %>, ParseLinks<% } %>) {
         $scope.<%= entityInstance %>s = [];<% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) { %>
-        $scope.<%= differentTypes[idx].toLowerCase() %>s = <%= differentTypes[idx] %>.query();<% } } %><% if (pagination == 'pager') { %>
+        $scope.<%= differentTypes[idx].toLowerCase() %>s = <%= differentTypes[idx] %>.query();<% } } %><% if (pagination == 'pager' || pagination == 'pagination') { %>
         $scope.page = 1;
         $scope.loadAll = function() {
             <%= entityClass %>.query({page: $scope.page, per_page: 20}, function(result, headers) {
@@ -19,7 +19,7 @@ angular.module('<%=angularAppName%>')
                     $scope.<%= entityInstance %>s.push(result[i]);
                 }
             });
-        };<% } %><% if (pagination == 'pager' || pagination == 'infinite-scroll') { %>
+        };<% } %><% if (pagination != 'no') { %>
         $scope.loadPage = function(page) {
             $scope.page = page;
             $scope.loadAll();

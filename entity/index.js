@@ -373,6 +373,10 @@ EntityGenerator.prototype.askForRelationships = function askForPagination() {
                     name: 'Yes, with a simple pager'
                 },
                 {
+                    value: 'pagination',
+                    name: 'Yes, with pagination links'
+                },
+                {
                     value: 'infinite-scroll',
                     name: 'Yes, with infinite scroll'
                 },
