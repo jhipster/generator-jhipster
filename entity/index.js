@@ -426,6 +426,9 @@ EntityGenerator.prototype.files = function files() {
           rel.relationshipFieldName = rel.relationshipFieldName || rel.relationshipName.charAt(0).toLowerCase() + rel.relationshipName.slice(1);
         }
         this.pagination = this.fileData.pagination;
+        if (this.pagination == undefined) {
+            this.pagination = 'no';
+        }
     }
     this.entityClass = _s.capitalize(this.name);
     this.entityInstance = this.name.charAt(0).toLowerCase() + this.name.slice(1);
