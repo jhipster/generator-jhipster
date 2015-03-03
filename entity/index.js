@@ -46,7 +46,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.fieldsContainOneToMany = false;
     this.relationshipId = 0;
     this.relationships = [];
-    this.pagination = 'pager';
+    this.pagination = 'no';
 };
 
 var fieldNamesUnderscored = ['id'];
