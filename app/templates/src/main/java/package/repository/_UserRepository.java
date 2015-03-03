@@ -61,6 +61,8 @@ public class UserRepository {
 
     private Mapper<User> mapper;
 
+    private PreparedStatement findAllStmt;
+
     private PreparedStatement findOneByActivationKeyStmt;
 
     private PreparedStatement insertByActivationKeyStmt;
@@ -82,6 +84,8 @@ public class UserRepository {
     @PostConstruct
     public void init() {
         mapper = new MappingManager(session).mapper(User.class);
+
+        findAllStmt = session.prepare("SELECT * FROM user");
 
         findOneByActivationKeyStmt = session.prepare(
             "SELECT id " +
@@ -141,9 +145,8 @@ public class UserRepository {
         return findOneFromIndex(stmt);
     }
 
-    public List<User> findAllByActivatedIsFalseAndCreatedDateBefore(DateTime dateTime) {
-        // TODO
-        return new ArrayList<>();
+    public List<User> findAll() {
+        return mapper.map(session.execute(findAllStmt.bind())).all();
     }
 
     public void save(User user) {

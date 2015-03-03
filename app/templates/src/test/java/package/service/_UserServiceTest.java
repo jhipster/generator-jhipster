@@ -57,7 +57,7 @@ public class UserServiceTest <% if (databaseType == 'cassandra') { %>extends Abs
         assertThat(persistentTokenRepository.findByUser(admin)).hasSize(existingCount + 2);
         userService.removeOldPersistentTokens();
         assertThat(persistentTokenRepository.findByUser(admin)).hasSize(existingCount + 1);
-    }<% } %>
+    }<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 
     @Test
     public void testFindNotActivatedUsersByCreationDateBefore() {
@@ -65,7 +65,7 @@ public class UserServiceTest <% if (databaseType == 'cassandra') { %>extends Abs
         DateTime now = new DateTime();
         List<User> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minusDays(3));
         assertThat(users).isEmpty();
-    }<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
+    }<% } %><% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 
     private void generateUserToken(User user, String tokenSeries, LocalDate localDate) {
         PersistentToken token = new PersistentToken();
