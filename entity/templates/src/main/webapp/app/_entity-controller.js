@@ -19,6 +19,11 @@ angular.module('<%=angularAppName%>')
                     $scope.<%= entityInstance %>s.push(result[i]);
                 }
             });
+        };
+        $scope.reset = function() {
+            $scope.page = 1;
+            $scope.<%= entityInstance %>s = [];
+            $scope.loadAll();
         };<% } %><% if (pagination != 'no') { %>
         $scope.loadPage = function(page) {
             $scope.page = page;
@@ -33,8 +38,9 @@ angular.module('<%=angularAppName%>')
 
         $scope.create = function () {
             <%= entityClass %>.update($scope.<%= entityInstance %>,
-                function () {
-                    $scope.loadAll();
+                function () {<% if (pagination != 'infinite-scroll') { %>
+                    $scope.loadAll();<% } else { %>
+                    $scope.reset();<% } %>
                     $('#save<%= entityClass %>Modal').modal('hide');
                     $scope.clear();
                 });
@@ -56,8 +62,9 @@ angular.module('<%=angularAppName%>')
 
         $scope.confirmDelete = function (id) {
             <%= entityClass %>.delete({id: id},
-                function () {
-                    $scope.loadAll();
+                function () {<% if (pagination != 'infinite-scroll') { %>
+                    $scope.loadAll();<% } else { %>
+                    $scope.reset();<% } %>
                     $('#delete<%= entityClass %>Confirmation').modal('hide');
                     $scope.clear();
                 });
