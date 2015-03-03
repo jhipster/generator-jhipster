@@ -133,8 +133,8 @@ public class AccountResourceTest <% if (databaseType == 'cassandra') { %>extends
         user.setLastName("doe");
         user.setEmail("john.doe@jhipter.com");
         user.setAuthorities(authorities);
-        when(mockUserService.getUserWithAuthorities()).thenReturn(user);
-
+        <% if(javaVersion == '8') { %>when(mockUserService.getUserWithAuthorities()).thenReturn(Optional.of(user));
+        <% } else {%>when(mockUserService.getUserWithAuthorities()).thenReturn(user);<% } %>
         restUserMockMvc.perform(get("/api/account")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -147,8 +147,9 @@ public class AccountResourceTest <% if (databaseType == 'cassandra') { %>extends
     }
 
     @Test
-    public void testGetUnknownAccount() throws Exception {
-        when(mockUserService.getUserWithAuthorities()).thenReturn(null);
+    public void testGetUnknownAccount() throws Exception{
+        <%if(javaVersion=='8'){%>when(mockUserService.getUserWithAuthorities()).thenReturn(Optional.empty());<% } else
+        { %>when(mockUserService.getUserWithAuthorities()).thenReturn(null);<% } %>
 
         restUserMockMvc.perform(get("/api/account")
                 .accept(MediaType.APPLICATION_JSON))

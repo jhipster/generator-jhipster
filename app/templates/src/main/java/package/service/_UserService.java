@@ -130,13 +130,11 @@ public class UserService {
         log.debug("Changed password for User: {}", currentUser);<% } %>
     }
 <% if (databaseType == 'sql') { %>
-    @Transactional(readOnly = true)<% } %>
-    public User getUserWithAuthorities() {<% if (javaVersion == '8') { %>
-        User currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).get();
-        currentUser.getAuthorities().size(); // eagerly load the association<% } else { %>
-        User currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
-        currentUser.getAuthorities().size(); // eagerly load the association<% } %>
-        return currentUser;
+    @Transactional(readOnly = true)<% } %><% if (javaVersion == '8') { %>
+    public Optional<User> getUserWithAuthorities(){
+        return userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());<%} else { %>
+    public User getUserWithAuthorities() {
+        return userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());<% } %>
     }<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 
     /**

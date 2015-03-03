@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -130,8 +131,10 @@ public class AccountResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<UserDTO> getAccount() {<% if (javaVersion == '8') { %>
-        return Optional.ofNullable(userService.getUserWithAuthorities())
+<% if (databaseType == 'sql') { %>
+    @Transactional(readOnly = true)
+<% } %>    public ResponseEntity<UserDTO> getAccount() {<% if (javaVersion == '8') { %>
+        return userService.getUserWithAuthorities()
             .map(user -> new ResponseEntity<>(
                 new UserDTO(
                     user.getLogin(),
