@@ -13,3 +13,4 @@ node_modules
 src/main/webapp/dist
 .gradle
 build
+!src/main/webapp/bower_components/ngInfiniteScroll/build
