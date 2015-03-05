@@ -513,6 +513,7 @@ EntityGenerator.prototype.files = function files() {
     this.copyI18n('en');
     this.copyI18n('es');
     this.copyI18n('fr');
+    this.copyI18n('ja');
     this.copyI18n('kr');
     this.copyI18n('hu');
     this.copyI18n('pl');

@@ -33,13 +33,14 @@ LanguagesGenerator.prototype.askFor = function askFor() {
             {name: 'Chinese (Traditional)', value: 'zh-tw'},
             {name: 'Danish', value: 'da'},
             {name: 'German', value: 'de'},
-            {name: 'Korean', value: 'kr'},
             {name: 'Hungarian', value: 'hu'},
+            {name: 'Japanese', value: 'ja'},
+            {name: 'Korean', value: 'kr'},
             {name: 'Polish', value: 'pl'},
             {name: 'Portuguese (Brazilian)', value: 'pt-br'},
             {name: 'Russian', value: 'ru'},
-            {name:  'Spanish', value: 'es'},
-            {name:  'Swedish', value: 'sv'},
+            {name: 'Spanish', value: 'es'},
+            {name: 'Swedish', value: 'sv'},
             {name: 'Turkish', value: 'tr'}
         ],
         default: 0
