@@ -70,7 +70,7 @@ module.exports = function (grunt) {
                 exclude: [
                     /angular-i18n/, // localizations are loaded dynamically
                     /swagger-ui/,
-                    'bower_components/bootstrap/' // Exclude Bootstrap LESS as we use bootstrap-sass 
+                    'bower_components/bootstrap/' // Exclude Bootstrap LESS as we use bootstrap-sass
                 ],
                 ignorePath: /\.\.\/webapp\/bower_components\// // remove ../webapp/bower_components/ from paths of injected sass files <% } else { %>
                 src: ['src/main/webapp/index.html'],
@@ -320,7 +320,7 @@ module.exports = function (grunt) {
                     src: [
                         '*.html',
                         'scripts/**/*.html',
-                        'assets/images/**/*.{png,gif,webp}',
+                        'assets/images/**/*.{png,gif,webp,jpg,jpeg,svg}',
                         'assets/fonts/*'
                     ]
                 }, {
