@@ -22,8 +22,8 @@ import java.io.Serializable;<% if (fieldsContainBigDecimal == true) { %>
 import java.math.BigDecimal;<% } %><% if (fieldsContainDate == true) { %>
 import java.util.Date;<% } %><% if (relationships.length > 0) { %>
 import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;<% } %><% if (databaseType == 'cassandra') { %>
+import java.util.Set;<% } %>
+import java.util.Objects;<% if (databaseType == 'cassandra') { %>
 import java.util.UUID;<% } %>
 
 /**
