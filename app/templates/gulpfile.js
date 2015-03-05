@@ -121,7 +121,7 @@ gulp.task('serve', function() {
             '/configprops',
             '/api-docs',
             '/metrics',
-            '/dump'<% if (authenticationType == 'oauth2') { %>,
+            '/dump/'<% if (authenticationType == 'oauth2') { %>,
             '/oauth/token'<% } %><% if (devDatabaseType == 'h2Memory') { %>,
             '/console/'<% } %>
         ];
@@ -186,13 +186,13 @@ gulp.task('wiredep:app', function () {
             exclude: [/angular-i18n/, /swagger-ui/]
         }))
         .pipe(gulp.dest('src/main/webapp'));
-        
+
     return <% if (useCompass) { %>es.merge(s, gulp.src('src/main/scss/main.scss')
         .pipe(wiredep({
             exclude: [
                 /angular-i18n/,  // localizations are loaded dynamically
                 /swagger-ui/,
-                'bower_components/bootstrap/' // Exclude Bootstrap LESS as we use bootstrap-sass 
+                'bower_components/bootstrap/' // Exclude Bootstrap LESS as we use bootstrap-sass
             ],
             ignorePath: /\.\.\/webapp\/bower_components\// // remove ../webapp/bower_components/ from paths of injected sass files
         }))
