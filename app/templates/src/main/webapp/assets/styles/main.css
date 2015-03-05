@@ -104,6 +104,10 @@ only screen and (                min-resolution: 2dppx) {
     margin-left: -50px;
 }
 
+.health-details {
+    min-width: 400px;
+}
+
 .alert .popover pre {
     font-size: 10px;
 }

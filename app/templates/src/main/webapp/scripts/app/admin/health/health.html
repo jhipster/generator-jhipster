@@ -2,48 +2,80 @@
 
     <h2 translate="health.title">Application Health Check</h2>
 
+    <div class="modal fade" id="showHealthModal" tabindex="-1" role="dialog" aria-labelledby="showHealthLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="form" role="form" novalidate
+                      class="ng-scope ng-invalid ng-invalid-required ng-dirty ng-valid-minlength"
+                      ng-submit="create()">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" id="showHealthLabel">
+                            {{'health.indicator.' + baseName(currentHealth.name) | translate}}
+                            {{subSystemName(currentHealth.name)}}
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div ng-show="currentHealth.details">
+                            <h4>{{'health.details.properties' | translate}}</h4>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="col-md-6 text-left">{{'health.details.name' | translate}}</th>
+                                        <th class="col-md-6 text-left">{{'health.details.value' | translate}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="(k,v) in currentHealth.details">
+                                        <td class="col-md-6 text-left">{{k}}</td>
+                                        <td class="col-md-6 text-left">{{v}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div ng-show="currentHealth.error">
+                            <h4>{{'health.details.error' | translate}}</h4>
+                                <pre>{{currentHealth.error}}</pre>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <p>
         <button type="button" class="btn btn-primary" ng-click="refresh()"><span
                 class="glyphicon glyphicon-refresh"></span>&nbsp;{{'health.refresh.button' | translate}}
         </button>
     </p>
 
-    <table class="table table-striped">
+    <table id="healthCheck" class="table table-striped">
         <thead>
-        <tr>
-            <th>{{'health.table.service' | translate}}</th>
-            <th class="text-center">{{'health.table.status' | translate}}</th>
-            <th>{{'health.stacktrace' | translate}}</th>
-        </tr>
+            <tr>
+                <th class="col-md-7">{{'health.table.service' | translate}}</th>
+                <th class="col-md-2 text-center">{{'health.table.status' | translate}}</th>
+                <th class="col-md-2 text-center">{{'health.details.details' | translate}}</th>
+                <th class="col-md-1 text-center"></th>
+            </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="(k, v) in healthCheck" ng-show="k != 'status'">
-            <td>{{'health.indicator.' + k | translate}}</td>
-            <td class="text-center"><span class="label" ng-class="getLabelClass(v.status)">{{'health.status.' + v.status | translate}}</span></td>
-            <td class="text-center">
-                <div id="healthCheck" class="row" ng-show="v.error">
-                    <div class="col-md-4">
-                        <a class="hand" ng-click="showHealthcheckException = !showHealthcheckException">
-                            <i class="glyphicon glyphicon-eye-open"></i>
-                        </a>
-                        <div class="popover" ng-show="showHealthcheckException">
-                            <div class="popover-title">
-                                <h4>{{'health.stacktrace' | translate}}
-                                    <button type="button" class="close"
-                                            ng-click="showHealthcheckException = !showHealthcheckException">
-                                        x
-                                    </button>
-                                </h4>
-                            </div>
-                            <div class="popover-content">
-                                <pre>{{v.error}}</pre>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </td>
-        </tr>
+            <tr ng-repeat="health in healthData">
+                <td>{{'health.indicator.' + baseName(health.name) | translate}}{{subSystemName(health.name)}}</td>
+                <td class="text-center">
+                    <span class="label" ng-class="getLabelClass(health.status)">
+                        {{'health.status.' + health.status | translate}}
+                    </span>
+                </td>
+                <td class="text-center">
+                    <a class="hand" ng-click="showHealth(health)" ng-show="health.details || health.error">
+                        <i class="glyphicon glyphicon-eye-open"></i>
+                    </a>
+                </td>
+                <td></td>
+            </tr>
         </tbody>
     </table>
 </div>
