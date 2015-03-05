@@ -609,8 +609,10 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     this.template('src/main/java/package/security/_package-info.java', javaDir + 'security/package-info.java', this, {});
-    this.template('src/main/java/package/security/_AjaxAuthenticationFailureHandler.java', javaDir + 'security/AjaxAuthenticationFailureHandler.java', this, {});
-    this.template('src/main/java/package/security/_AjaxAuthenticationSuccessHandler.java', javaDir + 'security/AjaxAuthenticationSuccessHandler.java', this, {});
+    if (this.authenticationType == 'session') {
+        this.template('src/main/java/package/security/_AjaxAuthenticationFailureHandler.java', javaDir + 'security/AjaxAuthenticationFailureHandler.java', this, {});
+        this.template('src/main/java/package/security/_AjaxAuthenticationSuccessHandler.java', javaDir + 'security/AjaxAuthenticationSuccessHandler.java', this, {});
+    }
     if (this.authenticationType == 'session' || this.authenticationType == 'oauth2') {
         this.template('src/main/java/package/security/_AjaxLogoutSuccessHandler.java', javaDir + 'security/AjaxLogoutSuccessHandler.java', this, {});
     }
