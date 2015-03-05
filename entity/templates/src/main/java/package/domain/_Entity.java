@@ -22,6 +22,7 @@ import java.io.Serializable;<% if (fieldsContainBigDecimal == true) { %>
 import java.math.BigDecimal;<% } %><% if (fieldsContainDate == true) { %>
 import java.util.Date;<% } %><% if (relationships.length > 0) { %>
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;<% } %><% if (databaseType == 'cassandra') { %>
 import java.util.UUID;<% } %>
 
@@ -118,14 +119,14 @@ public class <%= entityClass %> implements Serializable {
 
         <%= entityClass %> <%= entityInstance %> = (<%= entityClass %>) o;
 
-        if (id != null ? !id.equals(<%= entityInstance %>.id) : <%= entityInstance %>.id != null) return false;
+        if ( ! Objects.equals(id, <%= entityInstance %>.id)) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return <% if (databaseType == 'sql') { %>(int) (id ^ (id >>> 32));<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra' ) { %>id != null ? id.hashCode() : 0;<% } %>
+        return Objects.hashCode(id);
     }
 
     @Override
