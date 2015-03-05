@@ -431,7 +431,7 @@ JhipsterGenerator.prototype.app = function app() {
 
     switch (this.buildTool) {
         case 'gradle':
-            this.template('_build.gradle', 'build.gradle', this, {});
+            this.template('_build.gradle', 'build.gradle', this, { interpolate: /<%=(.+?)%>/g }); // Set interpolate to ignore interpolating ${...}
             this.template('_gradle.properties', 'gradle.properties', this, {});
             this.template('_yeoman.gradle', 'yeoman.gradle', this, {});
             this.template('_profile_dev.gradle', 'profile_dev.gradle', this, {});
@@ -466,7 +466,7 @@ JhipsterGenerator.prototype.app = function app() {
 
     this.template(resourceDir + '_logback.xml', resourceDir + 'logback.xml', this, { 'interpolate': /<%=([\s\S]+?)%>/g });
 
-    this.template(resourceDir + '/config/_application.yml', resourceDir + 'config/application.yml', this, {});
+    this.template(resourceDir + '/config/_application.yml', resourceDir + 'config/application.yml', this, { interpolate: /<%=(.+?)%>/g }); // Set interpolate to ignore interpolating ${...}
     this.template(resourceDir + '/config/_application-dev.yml', resourceDir + 'config/application-dev.yml', this, {});
     this.template(resourceDir + '/config/_application-prod.yml', resourceDir + 'config/application-prod.yml', this, {});
 
@@ -701,7 +701,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/test/java/package/web/rest/_TestUtil.java', testDir + 'web/rest/TestUtil.java', this, {});
     this.template('src/test/java/package/web/rest/_UserResourceTest.java', testDir + 'web/rest/UserResourceTest.java', this, {});
 
-    this.template(testResourceDir + 'config/_application.yml', testResourceDir + 'config/application.yml', this, {});
+    this.template(testResourceDir + 'config/_application.yml', testResourceDir + 'config/application.yml', this, { interpolate: /<%=(.+?)%>/g }); // Set interpolate to ignore interpolating ${...}
     this.template(testResourceDir + '_logback-test.xml', testResourceDir + 'logback-test.xml', this, {});
 
     if (this.hibernateCache == "ehcache") {

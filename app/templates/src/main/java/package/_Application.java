@@ -7,9 +7,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.autoconfigure.MetricFilterAutoConfiguration;
 import org.springframework.boot.actuate.autoconfigure.MetricRepositoryAutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.env.YamlPropertySourceLoader;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
-import org.springframework.core.env.SimpleCommandLinePropertySource;<% if (databaseType == 'sql') { %>
+import org.springframework.core.env.PropertySource;
+import org.springframework.core.env.SimpleCommandLinePropertySource;
+import org.springframework.core.io.ClassPathResource;<% if (databaseType == 'sql') { %>
 import com.google.common.base.Joiner;<% } %>
 
 import javax.annotation.PostConstruct;
@@ -47,6 +50,9 @@ public class Application {
      * Main method, used to run the application.
      */
     public static void main(String[] args) throws UnknownHostException {
+        PropertySource applicationYml = loadApplicationYml();
+
+        log.info("Starting Application {} version {}", applicationYml.getProperty("application.name"), applicationYml.getProperty("application.version"));
         SpringApplication app = new SpringApplication(Application.class);
         app.setShowBanner(false);
 
@@ -87,4 +93,16 @@ public class Application {
             "liquibase.structure", "liquibase.structurecompare", "liquibase.lockservice",
             "liquibase.ext", "liquibase.changelog"));
     }<% } %>
+
+    /**
+     * Loads and returns the "application.yml" configurations from the class path
+     */
+    private static PropertySource loadApplicationYml() {
+        try {
+            YamlPropertySourceLoader loader = new YamlPropertySourceLoader();
+            return loader.load("application.yml", new ClassPathResource("config/application.yml"), null);
+        } catch (IOException ex) {
+            throw new RuntimeException("Failed to load config/application.yml from class path");
+        }
+    }
 }

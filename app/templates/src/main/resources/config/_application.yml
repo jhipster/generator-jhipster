@@ -13,6 +13,10 @@ async:
     maxPoolSize: 50
     queueCapacity: 10000
 
+application:
+    name: <% if (buildTool == 'maven') { %>${project.name}<% } else { %>@rootProject.name@<% } %>
+    version: <% if (buildTool == 'maven') { %>${project.version}<% } else { %>@version@<% } %>
+
 spring:
     mail:
         host: localhost

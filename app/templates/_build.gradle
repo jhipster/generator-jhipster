@@ -15,8 +15,8 @@ buildscript {
 }
 
 apply plugin: 'java'
-sourceCompatibility=1.${javaVersion}
-targetCompatibility=1.${javaVersion}
+sourceCompatibility=1.<%= javaVersion %>
+targetCompatibility=1.<%= javaVersion %>
 apply plugin: 'maven'
 apply plugin: 'spring-boot'
 apply plugin: 'war'
@@ -27,6 +27,10 @@ bootRepackage {
 
 springBoot {
     mainClass = '<%= packageName %>.Application'
+}
+
+bootRun {
+    addResources = false
 }
 
 apply from: 'yeoman.gradle'
@@ -164,6 +168,20 @@ dependencies {
     testCompile group: 'cz.jirutka.spring', name: 'embedmongo-spring', version: embedmongo_spring_version<% } %>
     testCompile group: 'org.hamcrest', name: 'hamcrest-library', version:'1.3'
     testCompile group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version: gatling_version
+}
+
+import org.apache.tools.ant.filters.ReplaceTokens
+processResources {
+    filter ReplaceTokens, tokens: [
+        "rootProject.name": project.properties["rootProject.name"],
+        "version": project.properties["version"]
+    ]
+}
+processTestResources {
+    filter ReplaceTokens, tokens: [
+        "rootProject.name": project.properties["rootProject.name"],
+        "version": project.properties["version"]
+    ]
 }
 
 task wrapper(type: Wrapper) {
