@@ -24,7 +24,7 @@ LanguagesGenerator.prototype.askFor = function askFor() {
 
     var prompts = [
     {
-        type: "checkbox",
+        type: 'checkbox',
         name: 'languages',
         message: 'Please choose additional languages to install',
         choices: [
