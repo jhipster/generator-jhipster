@@ -49,6 +49,7 @@ angular.module('<%=angularAppName%>')
         $scope.update = function (id) {
             <%= entityClass %>.get({id: id}, function(result) {
                 $scope.<%= entityInstance %> = result;
+                $scope.editForm.$setPristine(true);
                 $('#save<%= entityClass %>Modal').modal('show');
             });
         };
@@ -72,5 +73,6 @@ angular.module('<%=angularAppName%>')
 
         $scope.clear = function () {
             $scope.<%= entityInstance %> = {<% for (fieldId in fields) { %><%= fields[fieldId].fieldName %>: null, <% } %>id: null};
+            $scope.editForm.$setPristine(true);
         };
     });

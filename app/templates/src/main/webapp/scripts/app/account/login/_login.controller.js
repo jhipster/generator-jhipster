@@ -23,4 +23,15 @@ angular.module('<%=angularAppName%>')
                 $scope.authenticationError = true;
             });
         };
+    })
+    .directive('noDirtyCheck', function() {
+        // Interacting with input elements having this directive won't cause the
+        // form to be marked dirty. http://stackoverflow.com/questions/17089090/prevent-input-from-setting-form-dirty-angularjs
+        return {
+            restrict: 'A',
+            require: 'ngModel',
+            link: function(scope, elm, attrs, ctrl) {
+                ctrl.$pristine = false;
+            }
+        }
     });

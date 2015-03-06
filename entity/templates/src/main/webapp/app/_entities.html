@@ -39,8 +39,18 @@
     }%>
                         <div class="form-group">
                             <label translate="<%= translationKey %>"><%=fields[fieldId].fieldNameCapitalized%></label>
-                            <input type="<%=fieldInputType%>" class="form-control" name="<%= fields[fieldId].fieldName %>"
+                            <input type="<%=fieldInputType%>" class="form-control" name="<%= fields[fieldId].fieldName %>" <%if (fields[fieldId].fieldType == 'String') {%><%if (fields[fieldId].fieldRequired) {%>required <%}%>ng-maxlength="<%= fields[fieldId].fieldLength %>"<%}%>
                                    ng-model="<%=entityInstance %>.<%=fields[fieldId].fieldName%>"<% if (fields[fieldId].fieldType == 'DateTime'){%> ng-model-options="{timezone: 'UTC'}"<%}%>>
+                        <% if (fields[fieldId].fieldType == 'String') { %>
+                        <div class="error" ng-show="editForm.<%=fields[fieldId].fieldName%>.$invalid && editForm.<%=fields[fieldId].fieldName%>.$dirty">
+                            <span ng-show="editForm.<%=fields[fieldId].fieldName%>.$error.maxlength">
+                                Please enter a valid length
+                            </span>
+                            <span ng-show="editForm.<%=fields[fieldId].fieldName%>.$error.required">
+                                Please enter a value
+                            </span>
+                        </div>
+                        <% } %>
                         </div><% } %>
 <% for (relationshipId in relationships) {
     var otherEntityName = relationships[relationshipId].otherEntityName;

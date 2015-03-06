@@ -1,4 +1,5 @@
 'use strict';
+
 var util = require('util'),
         fs = require('fs'),
         path = require('path'),
@@ -122,6 +123,39 @@ EntityGenerator.prototype.askForFields = function askForFields() {
         },
         {
             when: function (response) {
+                console.log("this.databaseType-->" + databaseType);
+                return response.fieldType == 'String' && databaseType == 'sql';
+            },
+            type: 'list',
+            name: 'fieldRequired',
+            message: 'Is the field required?',
+            choices: [
+                {
+                    value: 'true',
+                    name: 'true'
+                },
+                {
+                    value: 'false',
+                    name: 'false'
+                }
+            ],
+            default: 0
+        },
+        {
+            when: function (response) {
+                console.log("this.databaseType-->" + databaseType);
+                return response.fieldType == 'String' && databaseType == 'sql';
+            },
+            type: 'input',
+            name: 'fieldLength',
+            validate: function (input) {
+                if ((/^([0-9_]*)$/.test(input)) && input != '') return true;
+                return 'Your field length cannot contain special characters';
+            },
+            message: 'What is the length of your field?'
+        },
+        {
+            when: function (response) {
                 return response.fieldAdd == true && databaseType == 'cassandra';
             },
             type: 'list',
@@ -166,13 +200,21 @@ EntityGenerator.prototype.askForFields = function askForFields() {
     ];
     this.prompt(prompts, function (props) {
         if (props.fieldAdd) {
-            var field = {fieldId: this.fieldId,
+            var field = {
+                fieldId: this.fieldId,
                 fieldName: props.fieldName,
                 fieldType: props.fieldType,
                 fieldNameCapitalized: _s.capitalize(props.fieldName),
-                fieldNameUnderscored: _s.underscored(props.fieldName)}
+                fieldNameUnderscored: _s.underscored(props.fieldName)
+            }
 
             fieldNamesUnderscored.push(_s.underscored(props.fieldName));
+
+            if(props.fieldType == 'String' ) {
+                field.fieldRequired = props.fieldRequired;
+                field.fieldLength = props.fieldLength;
+            }
+
             this.fields.push(field);
             if (props.fieldType == 'LocalDate') {
                 this.fieldsContainLocalDate = true;
