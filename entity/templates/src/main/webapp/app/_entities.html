@@ -28,7 +28,7 @@
     var fieldInputType = 'text';
     var ngModelOption = '';
     var translationKey = keyPrefix + fields[fieldId].fieldName;
-    if (fields[fieldId].fieldType == 'Integer' || fields[fieldId].fieldType == 'Long') {
+    if (fields[fieldId].fieldType == 'Integer' || fields[fieldId].fieldType == 'Long' || fields[fieldId].fieldType == 'Long'BigDecimal') {
         fieldInputType = 'number';
     } else if (fields[fieldId].fieldType == 'LocalDate') {
         fieldInputType = 'date';
@@ -39,8 +39,8 @@
     }%>
                         <div class="form-group">
                             <label translate="<%= translationKey %>"><%=fields[fieldId].fieldNameCapitalized%></label>
-                            <input type="<%=fieldInputType%>" class="form-control" name="<%= fields[fieldId].fieldName %>"
-                                   ng-model="<%=entityInstance %>.<%=fields[fieldId].fieldName%>"<% if (fields[fieldId].fieldType == 'DateTime'){%> ng-model-options="{timezone: 'UTC'}"<%}%>>
+                            <input type="<%= fieldInputType %>" class="form-control" name="<%= fields[fieldId].fieldName %>"
+                                   ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldType == 'DateTime'){%> ng-model-options="{timezone: 'UTC'}"<%}%>>
                         </div><% } %>
 <% for (relationshipId in relationships) {
     var otherEntityName = relationships[relationshipId].otherEntityName;
