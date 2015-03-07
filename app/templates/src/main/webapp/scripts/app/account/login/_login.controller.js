@@ -14,6 +14,7 @@ angular.module('<%=angularAppName%>')
                 rememberMe: $scope.rememberMe
             }).then(function () {
                 $scope.authenticationError = false;
+                $rootScope.$broadcast('updateUsername');
                 if ($rootScope.previousStateName === 'register') {
                     $state.go('home');
                 } else {
