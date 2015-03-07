@@ -162,6 +162,142 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 }
             ],
             default: 0
+        },
+        {
+            when: function (response) {
+                return response.fieldAdd == true;
+            },
+            type: 'confirm',
+            name: 'fieldValidate',
+            message: 'Do you want to add validation rules to your field?',
+            default: false
+        },
+        {
+            when: function (response) {
+                return response.fieldAdd == true &&
+                    response.fieldValidate == true &&
+                    response.fieldType == 'String';
+            },
+            type: 'checkbox',
+            name: 'fieldValidateRules',
+            message: 'Which validation rules do you want to add?',
+            choices: [
+                {name: 'Required', value: 'required'},
+                {name: 'Minimum length', value: 'minlength'},
+                {name: 'Maximum length', value: 'maxlength'},
+                {name: 'Regular expression pattern', value: 'pattern'}
+            ],
+            default: 0
+        },
+        {
+            when: function (response) {
+                return response.fieldAdd == true &&
+                    response.fieldValidate == true &&
+                    (response.fieldType == 'Integer' ||
+                    response.fieldType == 'Long' ||
+                    response.fieldType == 'BigDecimal');
+            },
+            type: 'checkbox',
+            name: 'fieldValidateRules',
+            message: 'Which validation rules do you want to add?',
+            choices: [
+                {name: 'Required', value: 'required'},
+                {name: 'Minimum size', value: 'min'},
+                {name: 'Maximum size', value: 'max'}
+            ],
+            default: 0
+        },
+        {
+            when: function (response) {
+                return response.fieldAdd == true &&
+                    response.fieldValidate == true &&
+                    (response.fieldType == 'LocalDate' ||
+                    response.fieldType == 'DateTime');
+            },
+            type: 'checkbox',
+            name: 'fieldValidateRules',
+            message: 'Which validation rules do you want to add?',
+            choices: [
+                {name: 'Required', value: 'required'}
+            ],
+            default: 0
+        },
+        {
+            when: function (response) {
+                return response.fieldAdd == true &&
+                    response.fieldValidate == true &&
+                    response.fieldValidateRules.indexOf('minlength') != -1;
+            },
+            type: 'input',
+            name: 'fieldValidateRulesMinlength',
+            validate: function (input) {
+                if (/^([0-9]*)$/.test(input)) return true;
+                return 'Minimum length must be a number';
+            },
+            message: 'What is the minimum length of your field?',
+            default: 0
+        },
+        {
+            when: function (response) {
+                return response.fieldAdd == true &&
+                    response.fieldValidate == true &&
+                    response.fieldValidateRules.indexOf('maxlength') != -1;
+            },
+            type: 'input',
+            name: 'fieldValidateRulesMaxlength',
+            validate: function (input) {
+                if (/^([0-9]*)$/.test(input)) return true;
+                return 'Maximum length must be a number';
+            },
+            message: 'What is the maximum length of your field?',
+            default: 20
+        },
+        {
+            when: function (response) {
+                return response.fieldAdd == true &&
+                    response.fieldValidate == true &&
+                    response.fieldValidateRules.indexOf('pattern') != -1;
+            },
+            type: 'input',
+            name: 'fieldValidateRulesPattern',
+            message: 'What is the regular expression pattern you want to apply on your field?',
+            default: ''
+        },
+        {
+            when: function (response) {
+                return response.fieldAdd == true &&
+                    response.fieldValidate == true &&
+                    response.fieldValidateRules.indexOf('min') != -1 &&
+                    (response.fieldType == 'Integer' ||
+                    response.fieldType == 'Long' ||
+                    response.fieldType == 'BigDecimal');
+            },
+            type: 'input',
+            name: 'fieldValidateRulesMin',
+            message: 'What is the minimum size of your field?',
+            validate: function (input) {
+                if (/^([0-9]*)$/.test(input)) return true;
+                return 'Minimum size must be a number';
+            },
+            default: 0
+        },
+        {
+            when: function (response) {
+                return response.fieldAdd == true &&
+                    response.fieldValidate == true &&
+                    response.fieldValidateRules.indexOf('max') != -1 &&
+                    (response.fieldType == 'Integer' ||
+                    response.fieldType == 'Long' ||
+                    response.fieldType == 'BigDecimal');
+            },
+            type: 'input',
+            name: 'fieldValidateRulesMax',
+            message: 'What is the maximum size of your field?',
+            validate: function (input) {
+                if (/^([0-9]*)$/.test(input)) return true;
+                return 'Maximum size must be a number';
+            },
+            default: 20
         }
     ];
     this.prompt(prompts, function (props) {
@@ -170,7 +306,15 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 fieldName: props.fieldName,
                 fieldType: props.fieldType,
                 fieldNameCapitalized: _s.capitalize(props.fieldName),
-                fieldNameUnderscored: _s.underscored(props.fieldName)}
+                fieldNameUnderscored: _s.underscored(props.fieldName),
+                fieldValidate: props.fieldValidate,
+                fieldValidateRules: props.fieldValidateRules,
+                fieldValidateRulesMinlength: props.fieldValidateRulesMinlength,
+                fieldValidateRulesMaxlength: props.fieldValidateRulesMaxlength,
+                fieldValidateRulesPattern: props.fieldValidateRulesPattern,
+                fieldValidateRulesMin: props.fieldValidateRulesMin,
+                fieldValidateRulesMax: props.fieldValidateRulesMax
+                }
 
             fieldNamesUnderscored.push(_s.underscored(props.fieldName));
             this.fields.push(field);
@@ -190,9 +334,30 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 this.fieldsContainCustomTime = true;
             }
         }
-        console.log(chalk.red('===========' + _s.capitalize(this.name) + '=============='));
+        console.log(chalk.red('=================' + _s.capitalize(this.name) + '================='));
         for (var id in this.fields) {
-            console.log(chalk.red(this.fields[id].fieldName + ' (' + this.fields[id].fieldType + ')'));
+            var validationDetails = '';
+            if (this.fields[id].fieldValidate == true) {
+                if (this.fields[id].fieldValidateRules.indexOf('required') != -1) {
+                    validationDetails = 'required ';
+                }
+                if (this.fields[id].fieldValidateRules.indexOf('minlength') != -1) {
+                    validationDetails += 'minlength=\'' + this.fields[id].fieldValidateRulesMinlength + '\' ';
+                }
+                if (this.fields[id].fieldValidateRules.indexOf('maxlength') != -1) {
+                    validationDetails += 'maxlength=\'' + this.fields[id].fieldValidateRulesMaxlength + '\' ';
+                }
+                if (this.fields[id].fieldValidateRules.indexOf('pattern') != -1) {
+                    validationDetails += 'pattern=\'' + this.fields[id].fieldValidateRulesPattern + '\' ';
+                }
+                if (this.fields[id].fieldValidateRules.indexOf('min') != -1) {
+                    validationDetails += 'min=\'' + this.fields[id].fieldValidateRulesMin + '\' ';
+                }
+                if (this.fields[id].fieldValidateRules.indexOf('max') != -1) {
+                    validationDetails += 'max=\'' + this.fields[id].fieldValidateRulesMax + '\' ';
+                }
+            }
+            console.log(chalk.red(this.fields[id].fieldName) + chalk.white(' (' + this.fields[id].fieldType + ') ') + chalk.cyan(validationDetails));
         }
         if (props.fieldAdd) {
             this.askForFields();
