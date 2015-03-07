@@ -5,13 +5,11 @@ describe('Controllers Tests ', function () {
     beforeEach(module('<%= angularAppName %>'));
 
     describe('HealthController', function () {
-        var $scope, MonitoringService;
+        var $scope;
 
-        beforeEach(inject(function ($rootScope, $controller, Sessions) {
+        beforeEach(inject(function ($rootScope, $controller) {
             $scope = $rootScope.$new();
-
-            MonitoringService = Sessions;
-            $controller('HealthController', { $scope: $scope, Sessions: MonitoringService });
+            $controller('HealthController', { $scope: $scope });
         }));
 
         describe('isHealthObject and hasSubSystem', function () {
@@ -298,8 +296,6 @@ describe('Controllers Tests ', function () {
             it('should show empty string if neither name nor path is defined', function () {
                 expect($scope.getModuleName()).toEqual('');
             });
-
         });
     });
-
 });

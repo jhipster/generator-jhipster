@@ -23,6 +23,9 @@ angular.module('<%=angularAppName%>')
                     function($0, $1, $2, $3) { queryString[$1] = $3; }
                 );
                 var page = queryString['page'];
+                if( angular.isString(page) ) {
+                    page = parseInt(page);
+                }
                 var name = section[1].replace(/rel="(.*)"/, '$1').trim();
                 links[name] = page;
             });

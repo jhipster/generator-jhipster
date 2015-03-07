@@ -65,7 +65,25 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
             }
         };
     })
-    <% } %>
+    <% } %><% if (authenticationType == 'oauth2') { %>
+    .factory('authExpiredInterceptor', function ($rootScope, $q, $injector, localStorageService) {
+        return {
+            responseError: function (response) {
+                // token has expired
+                console.log(response.data);
+                if (response.status === 401 && (response.data.error == 'invalid_token' || response.data.error == 'unauthorized')) {
+                    console.log("yolo");
+                    localStorageService.remove('token');
+                    var Principal = $injector.get('Principal');
+                    if (Principal.isAuthenticated()) {
+                        var Auth = $injector.get('Auth');
+                        Auth.authorize(true);
+                    }
+                }
+                return $q.reject(response);
+            }
+        };
+    })<% } %>
     .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, $translateProvider, tmhDynamicLocaleProvider, httpRequestInterceptorCacheBusterProvider) {
 <% if (authenticationType == 'session') { %>
         //enable CSRF
@@ -97,8 +115,9 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
                 }]
             }
         });
-        <% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
-        $httpProvider.interceptors.push('authInterceptor');<% } %>
+<% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
+        $httpProvider.interceptors.push('authInterceptor');<% } %><% if (authenticationType == 'oauth2') { %>
+        $httpProvider.interceptors.push('authExpiredInterceptor');<% } %>
 
         // Initialize angular-translate
         $translateProvider.useLoader('$translatePartialLoader', {
