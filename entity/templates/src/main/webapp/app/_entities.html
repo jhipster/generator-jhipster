@@ -9,9 +9,7 @@
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form name="editForm" role="form" novalidate
-                      class="ng-scope ng-invalid ng-invalid-required ng-dirty ng-valid-minlength"
-                      ng-submit="create()">
+                <form name="editForm" role="form" novalidate ng-submit="create()">
 
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
@@ -28,7 +26,7 @@
     var fieldInputType = 'text';
     var ngModelOption = '';
     var translationKey = keyPrefix + fields[fieldId].fieldName;
-    if (fields[fieldId].fieldType == 'Integer' || fields[fieldId].fieldType == 'Long' || fields[fieldId].fieldType == 'Long'BigDecimal') {
+    if (fields[fieldId].fieldType == 'Integer' || fields[fieldId].fieldType == 'Long' || fields[fieldId].fieldType == 'BigDecimal') {
         fieldInputType = 'number';
     } else if (fields[fieldId].fieldType == 'LocalDate') {
         fieldInputType = 'date';
@@ -36,12 +34,46 @@
         fieldInputType = 'datetime-local';
     } else if (fields[fieldId].fieldType == 'Boolean') {
         fieldInputType = 'checkbox';
-    }%>
+    } %>
                         <div class="form-group">
                             <label translate="<%= translationKey %>"><%=fields[fieldId].fieldNameCapitalized%></label>
                             <input type="<%= fieldInputType %>" class="form-control" name="<%= fields[fieldId].fieldName %>"
-                                   ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldType == 'DateTime'){%> ng-model-options="{timezone: 'UTC'}"<%}%>>
-                        </div><% } %>
+                                   ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldType == 'DateTime') { %> ng-model-options="{timezone: 'UTC'}"<% } %><% if (fields[fieldId].fieldValidate == true) {
+                                       if (fields[fieldId].fieldValidateRules.indexOf('required') != -1) {
+                                       %> required<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('minlength') != -1) {
+                                       %> ng-minlength="<%= fields[fieldId].fieldValidateRulesMinlength %>"<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('maxlength') != -1) {
+                                       %> ng-maxlength="<%= fields[fieldId].fieldValidateRulesMaxlength %>"<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('min') != -1) {
+                                       %> min="<%= fields[fieldId].fieldValidateRulesMin %>"<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('max') != -1) {
+                                       %> max="<%= fields[fieldId].fieldValidateRulesMax %>"<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('pattern') != -1) {
+                                       %> ng-pattern="<%= fields[fieldId].fieldValidateRulesPattern %>"<% } } %>>
+<% if (fields[fieldId].fieldValidate == true) { %>
+                            <div ng-show="editForm.<%= fields[fieldId].fieldName %>.$dirty && editForm.<%= fields[fieldId].fieldName %>.$invalid"><% if (fields[fieldId].fieldValidateRules.indexOf('required') != -1) { %>
+                                <p class="help-block"
+                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.required" translate="settings.messages.validate.required">
+                                    This field is required.
+                                </p><% } %><% if (fields[fieldId].fieldValidateRules.indexOf('minlength') != -1) { %>
+                                <p class="help-block"
+                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.minlength" translate="settings.messages.validate.minlength">
+                                    This field is required to be at least <%= fields[fieldId].fieldValidateRulesMinlength %> characters.
+                                </p><% } %><% if (fields[fieldId].fieldValidateRules.indexOf('maxlength') != -1) { %>
+                                <p class="help-block"
+                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.maxlength" translate="settings.messages.validate.maxlength">
+                                    This field cannot be longer than <%= fields[fieldId].fieldValidateRulesMaxlength %> characters.
+                                </p><% } %><% if (fields[fieldId].fieldValidateRules.indexOf('min') != -1) { %>
+                                <p class="help-block"
+                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.min" translate="settings.messages.validate.min">
+                                    This field should be more than <%= fields[fieldId].fieldValidateRulesMin %>.
+                                </p><% } %><% if (fields[fieldId].fieldValidateRules.indexOf('max') != -1) { %>
+                                <p class="help-block"
+                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.max" translate="settings.messages.validate.max">
+                                    This field cannot be more than <%= fields[fieldId].fieldValidateRulesMax %>.
+                                </p><% } %><% if (fields[fieldId].fieldValidateRules.indexOf('pattern') != -1) { %>
+                                <p class="help-block"
+                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.pattern" translate="settings.messages.validate.pattern">
+                                    This field should follow pattern "<%= fields[fieldId].fieldValidateRulesPattern %>".
+                                </p><% } %>
+                            </div>
+                        </div><% } %><% } %>
 <% for (relationshipId in relationships) {
     var otherEntityName = relationships[relationshipId].otherEntityName;
     var relationshipName = relationships[relationshipId].relationshipName;

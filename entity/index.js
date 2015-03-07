@@ -165,6 +165,10 @@ EntityGenerator.prototype.askForFields = function askForFields() {
         },
         {
             when: function (response) {
+                if (response.fieldType == 'Boolean') {
+                    response.fieldValidate = false;
+                    return false;
+                }
                 return response.fieldAdd == true;
             },
             type: 'confirm',
@@ -261,7 +265,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
             type: 'input',
             name: 'fieldValidateRulesPattern',
             message: 'What is the regular expression pattern you want to apply on your field?',
-            default: ''
+            default: '^[a-zA-Z0-9]*$'
         },
         {
             when: function (response) {
