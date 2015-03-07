@@ -35,7 +35,10 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" href="">
                                 <span>
                                     <span class="glyphicon glyphicon-user"></span>
-                                    <span class="hidden-tablet" translate="global.menu.account.main">
+                                    <span class="hidden-tablet" ng-switch-when="true">
+                                        {{account.firstName}} {{account.lastName}}
+                                    </span>    
+                                    <span class="hidden-tablet" ng-switch-when="false" translate="global.menu.account.main">
                                         Account
                                     </span>
                                     <b class="caret"></b>
