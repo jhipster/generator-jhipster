@@ -15,16 +15,15 @@ var gulp = require('gulp'),
     ngConstant = require('gulp-ng-constant-fork'),
     jshint = require('gulp-jshint'),
     rev = require('gulp-rev'),
-    connect = require('gulp-connect'),
     proxy = require('proxy-middleware'),
     es = require('event-stream'),
     flatten = require('gulp-flatten'),
     del = require('del'),
-    replace = require('gulp-replace'),
     url = require('url'),
     wiredep = require('wiredep').stream,
     fs = require('fs'),
-    runSequence = require('run-sequence');
+    runSequence = require('run-sequence'),
+    browserSync = require('browser-sync');
 
 var karma = require('gulp-karma')({configFile: 'src/test/javascript/karma.conf.js'});
 
@@ -83,7 +82,7 @@ gulp.task('images', function() {
     return gulp.src(yeoman.app + 'assets/images/**').
         pipe(imagemin({optimizationLevel: 5})).
         pipe(gulp.dest(yeoman.dist + 'assets/images')).
-        pipe(connect.reload());
+        pipe(browserSync.reload({stream: true}));
 });
 <% if(useCompass) { %>
 gulp.task('compass', function() {
@@ -105,7 +104,7 @@ gulp.task('compass', function() {
 gulp.task('styles', [<% if(useCompass) { %>'compass'<% } %>], function() {
     return gulp.src(yeoman.app + 'assets/styles/**/*.css').
         pipe(gulp.dest(yeoman.tmp)).
-        pipe(connect.reload());
+        pipe(browserSync.reload({stream: true}));
 });
 
 gulp.task('serve', function() {
@@ -134,34 +133,35 @@ gulp.task('serve', function() {
             return r.substr(0, r.length - 1);
         });
 
-        connect.server({
-            root: [yeoman.app, yeoman.tmp],
-            port: yeoman.port,
-            livereload: {
-                port: yeoman.liveReloadPort
-            },
-            middleware: function() {
-                return [
-                    // Ensure trailing slash in routes that require it
-                    function (req, res, next) {
-                        for (var route in requireTrailingSlash) {
-                            if (url.parse(req.url).path === route) {
-                                res.statusCode = 301;
-                                res.setHeader('Location', route + '/');
-                                res.end();
-                            }
-                            next();
-                        }
+        var proxies = [
+            // Ensure trailing slash in routes that require it
+            function (req, res, next) {
+                for (var route in requireTrailingSlash) {
+                    if (url.parse(req.url).path === route) {
+                        res.statusCode = 301;
+                        res.setHeader('Location', route + '/');
+                        res.end();
                     }
-                ].concat(
-                    // Build a list of proxies for routes: [route1_proxy, route2_proxy, ...]
-                    proxyRoutes.map(function (r) {
-                        var options = url.parse(baseUri + r);
-                        options.route = r;
-                        return proxy(options);
-                    }));
+                    next();
+                }
+            }
+        ].concat(
+            // Build a list of proxies for routes: [route1_proxy, route2_proxy, ...]
+            proxyRoutes.map(function (r) {
+                var options = url.parse(baseUri + r);
+                options.route = r;
+                return proxy(options);
+            }));
+
+        browserSync({
+            open: false,
+            port: yeoman.port,
+            server: {
+                baseDir: yeoman.app,
+                middleware: proxies
             }
         });
+
         gulp.run('watch');
     });
 });
@@ -170,12 +170,8 @@ gulp.task('watch', function() {
     gulp.watch('bower.json', ['wiredep:test', 'wiredep:app']);
     gulp.watch(['Gruntfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>], ['ngconstant:dev']);
     gulp.watch(<% if(useCompass) { %>yeoman.scss + '**/*.scss'<% } else { %>yeoman.app + 'assets/styles/**/*.css'<% } %>, ['styles']);
-    gulp.watch('src/images/**', ['images']);
-
-    gulp.watch([yeoman.app + '*.html', yeoman.app + 'scripts/**'], function (e) {
-        return gulp.src(e.path)
-            .pipe(connect.reload());
-    });
+    gulp.watch(yeoman.app + 'assets/images/**', ['images']);
+    gulp.watch([yeoman.app + '*.html', yeoman.app + 'scripts/**']).on('change', browserSync.reload);
 });
 
 gulp.task('wiredep', ['wiredep:test', 'wiredep:app']);
