@@ -9,7 +9,7 @@
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form name="editForm" role="form" novalidate ng-submit="create()">
+                <form name="editForm" role="form" novalidate ng-submit="create()" show-validation>
 
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
@@ -49,27 +49,27 @@
 <% if (fields[fieldId].fieldValidate == true) { %>
                             <div ng-show="editForm.<%= fields[fieldId].fieldName %>.$dirty && editForm.<%= fields[fieldId].fieldName %>.$invalid"><% if (fields[fieldId].fieldValidateRules.indexOf('required') != -1) { %>
                                 <p class="help-block"
-                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.required" translate="settings.messages.validate.required">
+                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.required" translate="entity.validation.required">
                                     This field is required.
                                 </p><% } %><% if (fields[fieldId].fieldValidateRules.indexOf('minlength') != -1) { %>
                                 <p class="help-block"
-                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.minlength" translate="settings.messages.validate.minlength">
+                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.minlength" translate="entity.validation.minlength" translate-value-min="<%= fields[fieldId].fieldValidateRulesMinlength %>">
                                     This field is required to be at least <%= fields[fieldId].fieldValidateRulesMinlength %> characters.
                                 </p><% } %><% if (fields[fieldId].fieldValidateRules.indexOf('maxlength') != -1) { %>
                                 <p class="help-block"
-                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.maxlength" translate="settings.messages.validate.maxlength">
+                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="<%= fields[fieldId].fieldValidateRulesMaxlength %>">
                                     This field cannot be longer than <%= fields[fieldId].fieldValidateRulesMaxlength %> characters.
                                 </p><% } %><% if (fields[fieldId].fieldValidateRules.indexOf('min') != -1) { %>
                                 <p class="help-block"
-                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.min" translate="settings.messages.validate.min">
+                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.min" translate="entity.validation.min" translate-value-min="<%= fields[fieldId].fieldValidateRulesMin %>">
                                     This field should be more than <%= fields[fieldId].fieldValidateRulesMin %>.
                                 </p><% } %><% if (fields[fieldId].fieldValidateRules.indexOf('max') != -1) { %>
                                 <p class="help-block"
-                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.max" translate="settings.messages.validate.max">
+                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.max" translate="entity.validation.max" translate-value-max="<%= fields[fieldId].fieldValidateRulesMax %>">
                                     This field cannot be more than <%= fields[fieldId].fieldValidateRulesMax %>.
                                 </p><% } %><% if (fields[fieldId].fieldValidateRules.indexOf('pattern') != -1) { %>
                                 <p class="help-block"
-                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.pattern" translate="settings.messages.validate.pattern">
+                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.pattern" translate="entity.validation.pattern" translate-value-pattern="<%= fields[fieldId].fieldValidateRulesPattern %>">
                                     This field should follow pattern "<%= fields[fieldId].fieldValidateRulesPattern %>".
                                 </p><% } %>
                             </div>
@@ -87,12 +87,12 @@
                             </select>
                         </div><% } else if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) {
                             %>
-                         <div class="form-group">
-                             <label translate="<%= translationKey %>"><%=relationshipName %></label>
-                             <select class="form-control" multiple name="<%= relationshipName %>" ng-model="<%=entityInstance %>.<%=relationshipFieldName %>s" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=relationships[relationshipId].otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName.toLowerCase() %>s track by <%=otherEntityName %>.id">
-                             </select>
-                         </div><% } } %>
-
+                            <div class="form-group">
+                                <label translate="<%= translationKey %>"><%=relationshipName %></label>
+                                <select class="form-control" multiple name="<%= relationshipName %>" ng-model="<%=entityInstance %>.<%=relationshipFieldName %>s" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=relationships[relationshipId].otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName.toLowerCase() %>s track by <%=otherEntityName %>.id">
+                                </select>
+                             </div><% } } %>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
