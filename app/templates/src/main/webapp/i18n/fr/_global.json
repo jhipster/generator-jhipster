@@ -79,11 +79,21 @@
             "view": "Voir"
         },
         "detail": {
-            "field": "Champ",
+            "field": "Champs",
             "value": "Valeur"
         },
         "delete": {
             "title": "Confirmation de suppression"
+        },
+        "validation": {
+            "required": "Ce champs est obligatoire.",
+            "minlength": "Ce champs doit faire au minimum {{min}} caractères.",
+            "maxlength": "Ce champs doit faire moins de {{max}} caractères.",
+            "min": "Ce champs doit être inférieur à {{min}}.",
+            "max": "Ce champs doit être supérieur à {{max}}.",
+            "pattern": "Ce champs doit suivre l'expression régluière {{pattern}}.",
+            "number": "Ce champs doit être un nombre.",
+            "datetimelocal": "Ce champs doit être une date et une heure."
         }
     },
     "footer": "Ceci est votre pied de page"

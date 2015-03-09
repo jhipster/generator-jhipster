@@ -84,6 +84,16 @@
         },
         "delete": {
             "title": "Подтвердите операцию удаления"
+        },
+        "validation": {
+            "required": "This field is required.",
+            "minlength": "This field is required to be at least {{min}} characters.",
+            "maxlength": "This field cannot be longer than {{max}} characters.",
+            "min": "This field should be more than {{min}}.",
+            "max": "This field cannot be more than {{max}}.",
+            "pattern": "This field should follow pattern {{pattern}}.",
+            "number": "This field should be a number.",
+            "datetimelocal": "This field should be a date and time."
         }
     },
     "footer": "Это ваш футтер"
