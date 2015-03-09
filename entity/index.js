@@ -302,7 +302,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 if (/^([0-9]*)$/.test(input)) return true;
                 return 'Maximum size must be a number';
             },
-            default: 20
+            default: 100
         }
     ];
     this.prompt(prompts, function (props) {
