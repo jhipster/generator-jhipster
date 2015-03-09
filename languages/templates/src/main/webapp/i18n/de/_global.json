@@ -86,14 +86,14 @@
             "title": "Löschen bestätigen"
         },
         "validation": {
-            "required": "This field is required.",
-            "minlength": "This field is required to be at least {{min}} characters.",
-            "maxlength": "This field cannot be longer than {{max}} characters.",
-            "min": "This field should be more than {{min}}.",
-            "max": "This field cannot be more than {{max}}.",
-            "pattern": "This field should follow pattern {{pattern}}.",
-            "number": "This field should be a number.",
-            "datetimelocal": "This field should be a date and time."
+            "required": "Dieses Feld wird benötigt.",
+            "minlength": "Dieses Feld muss mind. {{min}} Zeichen lang sein.",
+            "maxlength": "Dieses Feld darf max. {{max}} Zeichen lang sein.",
+            "min": "Dieses Feld muss größer als {{min}} sein.",
+            "max": "Dieses Feld muss kleiner als {{max}} sein.",
+            "pattern": "Dieses Feld muss das Muster {{pattern}} erfüllen.",
+            "number": "Dieses Feld muss eine Zahl sein.",
+            "datetimelocal": "Dieses Feld muss eine Datums- und Zeitangabe enthalten."
         }
     },
     "footer": "Dies ist Ihre Fußzeile"
