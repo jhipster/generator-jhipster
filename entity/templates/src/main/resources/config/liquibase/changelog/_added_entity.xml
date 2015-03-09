@@ -15,18 +15,27 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column><% for (fieldId in fields) {
+            var required = false;
+            if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) {
+                required = true;
+            }
+            var maxlength = 255;
+            if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('maxlength') != -1) {
+                maxlength = fields[fieldId].fieldValidateRulesMaxlength;
+            }
             if (fields[fieldId].fieldType == 'String') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="varchar(255)"/><% } else if (fields[fieldId].fieldType == 'Integer') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="integer"/><% } else if (fields[fieldId].fieldType == 'Long') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bigint"/><% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="decimal(10,2)"/><% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="date">
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="varchar(<%= maxlength %>)"<% } else if (fields[fieldId].fieldType == 'Integer') { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="integer"<% } else if (fields[fieldId].fieldType == 'Long') { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bigint"<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="decimal(10,2)"<% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="date"<% } else if (fields[fieldId].fieldType == 'DateTime') { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="timestamp"<% } else if (fields[fieldId].fieldType == 'Boolean') { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bit"<% } %><% if (required == false) {
+                 %>/><% } else { %>>
                 <constraints nullable="false" />
-            </column><% } else if (fields[fieldId].fieldType == 'DateTime') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="timestamp">
-                <constraints nullable="false" />
-            </column><% } else if (fields[fieldId].fieldType == 'Boolean') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bit"/><% } } %><% for (relationshipId in relationships) { %><% if ((relationships[relationshipId].relationshipType == 'many-to-one') || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) { %>
+            </column><% } %><%
+
+            } %><% for (relationshipId in relationships) { %><% if ((relationships[relationshipId].relationshipType == 'many-to-one') || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) { %>
             <column name="<%=relationships[relationshipId].relationshipName.toLowerCase() %>_id" type="bigint"/><% } } %>
         </createTable><% for (fieldId in fields) {
             if (fields[fieldId].fieldType == 'DateTime') { %>

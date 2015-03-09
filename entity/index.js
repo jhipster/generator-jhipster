@@ -47,6 +47,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.relationshipId = 0;
     this.relationships = [];
     this.pagination = 'no';
+    this.validation = false;
 };
 
 var fieldNamesUnderscored = ['id'];
@@ -337,6 +338,9 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 this.fieldsContainDate = true;
                 this.fieldsContainCustomTime = true;
             }
+            if (props.fieldValidate) {
+                this.validation = true;
+            }
         }
         console.log(chalk.red('=================' + _s.capitalize(this.name) + '================='));
         for (var id in this.fields) {
@@ -583,6 +587,7 @@ EntityGenerator.prototype.files = function files() {
         this.data.fieldsContainDate = this.fieldsContainDate;
         this.data.changelogDate = this.changelogDate;
         this.data.pagination = this.pagination;
+        this.data.validation = this.validation;
         this.write(this.filename, JSON.stringify(this.data, null, 4));
     } else  {
         this.relationships = this.fileData.relationships;
@@ -605,6 +610,10 @@ EntityGenerator.prototype.files = function files() {
         this.pagination = this.fileData.pagination;
         if (this.pagination == undefined) {
             this.pagination = 'no';
+        }
+        this.validation = this.fileData.validation;
+        if (this.validation == undefined) {
+            this.validation = false;
         }
     }
     this.entityClass = _s.capitalize(this.name);

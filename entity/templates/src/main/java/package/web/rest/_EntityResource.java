@@ -13,7 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.inject.Inject;
+import javax.inject.Inject;<% if (validation) { %>
+import javax.validation.Valid;<% } %>
 import java.net.URI;
 import java.net.URISyntaxException;<% if (javaVersion == '7') { %>
 import javax.servlet.http.HttpServletResponse;<% } %>
@@ -40,7 +41,7 @@ public class <%= entityClass %>Resource {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> create(@RequestBody <%= entityClass %> <%= entityInstance %>) throws URISyntaxException {
+    public ResponseEntity<Void> create(<% if (validation) { %>@Valid <% } %>@RequestBody <%= entityClass %> <%= entityInstance %>) throws URISyntaxException {
         log.debug("REST request to save <%= entityClass %> : {}", <%= entityInstance %>);
         if (<%= entityInstance %>.getId() != null) {
             return ResponseEntity.badRequest().header("Failure", "A new <%= entityInstance %> cannot already have an ID").build();
@@ -56,7 +57,7 @@ public class <%= entityClass %>Resource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> update(@RequestBody <%= entityClass %> <%= entityInstance %>) throws URISyntaxException {
+    public ResponseEntity<Void> update(<% if (validation) { %>@Valid <% } %>@RequestBody <%= entityClass %> <%= entityInstance %>) throws URISyntaxException {
         log.debug("REST request to update <%= entityClass %> : {}", <%= entityInstance %>);
         if (<%= entityInstance %>.getId() == null) {
             return create(<%= entityInstance %>);
