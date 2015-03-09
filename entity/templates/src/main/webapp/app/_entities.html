@@ -47,7 +47,7 @@
                                        %> max="<%= fields[fieldId].fieldValidateRulesMax %>"<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('pattern') != -1) {
                                        %> ng-pattern="<%= fields[fieldId].fieldValidateRulesPattern %>"<% } } %>>
 <% if (fields[fieldId].fieldValidate == true) { %>
-                            <div ng-show="editForm.<%= fields[fieldId].fieldName %>.$dirty && editForm.<%= fields[fieldId].fieldName %>.$invalid"><% if (fields[fieldId].fieldValidateRules.indexOf('required') != -1) { %>
+                            <div ng-show="editForm.<%= fields[fieldId].fieldName %>.$invalid"><% if (fields[fieldId].fieldValidateRules.indexOf('required') != -1) { %>
                                 <p class="help-block"
                                    ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.required" translate="entity.validation.required">
                                     This field is required.
@@ -71,6 +71,14 @@
                                 <p class="help-block"
                                    ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.pattern" translate="entity.validation.pattern" translate-value-pattern="<%= fields[fieldId].fieldValidateRulesPattern %>">
                                     This field should follow pattern "<%= fields[fieldId].fieldValidateRulesPattern %>".
+                                </p><% } %><% if (fields[fieldId].fieldType == 'Integer' || fields[fieldId].fieldType == 'Long' || fields[fieldId].fieldType == 'BigDecimal') { %>
+                                <p class="help-block"
+                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.number" translate="entity.validation.number">
+                                    This field should be a number.
+                                </p><% } %><% if (fields[fieldId].fieldType == 'DateTime') { %>
+                                <p class="help-block"
+                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.datetimelocal" translate="entity.validation.datetimelocal">
+                                    This field should be a date and time.
                                 </p><% } %>
                             </div>
                         </div><% } %><% } %>

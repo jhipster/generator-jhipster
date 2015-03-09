@@ -72,5 +72,7 @@ angular.module('<%=angularAppName%>')
 
         $scope.clear = function () {
             $scope.<%= entityInstance %> = {<% for (fieldId in fields) { %><%= fields[fieldId].fieldName %>: null, <% } %>id: null};
+            $scope.editForm.$setPristine();
+            $scope.editForm.$setUntouched();
         };
     });
