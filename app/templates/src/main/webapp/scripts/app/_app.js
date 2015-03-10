@@ -70,7 +70,6 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
         return {
             responseError: function (response) {
                 // token has expired
-                console.log(response.data);
                 if (response.status === 401 && (response.data.error == 'invalid_token' || response.data.error == 'Unauthorized')) {
                     localStorageService.remove('token');
                     var Principal = $injector.get('Principal');
