@@ -1,7 +1,7 @@
 {
     "configuration": {
         "title": "Konfiguration",
-        "filter": "Filter (nach Prefix)",
+        "filter": "Filter (nach Präfix)",
         "table": {
             "prefix": "Präfix",
             "properties": "Eigenschaften"
