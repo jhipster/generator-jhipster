@@ -640,7 +640,7 @@
                     <dependency>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-starter-data-jpa</artifactId>
-                        <version>1.2.0.RELEASE</version>
+                        <version>${project.parent.version}</version>
                     </dependency>
                 </dependencies>
             </plugin><% } %>
