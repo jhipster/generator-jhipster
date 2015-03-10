@@ -61,7 +61,7 @@
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="<%= relationshipName %>s_id, <%= name %>s_id" tableName="<%= joinTableName %>"/>
+        <addPrimaryKey columnNames="<%= name %>s_id, <%= relationshipName %>s_id" tableName="<%= joinTableName %>"/>
 
         <addForeignKeyConstraint baseColumnNames="<%= name %>s_id"
                                  baseTableName="<%= joinTableName %>"
