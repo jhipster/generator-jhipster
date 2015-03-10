@@ -65,7 +65,7 @@
 
         <addForeignKeyConstraint baseColumnNames="<%= name %>s_id"
                                  baseTableName="<%= joinTableName %>"
-                                constraintName="fk_<%= name.toLowerCase() %>_<%= relationshipName.toLowerCase() %>_<%= otherEntityName.toLowerCase() %>_id"
+                                 constraintName="fk_<%= name.toLowerCase() %>_<%= relationshipName.toLowerCase() %>_<%= otherEntityName.toLowerCase() %>_id"
                                  referencedColumnNames="id"
                                  referencedTableName="T_<%= name.toUpperCase() %>"/>
 
