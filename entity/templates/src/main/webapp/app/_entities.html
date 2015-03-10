@@ -45,7 +45,7 @@
                                        %> ng-maxlength="<%= fields[fieldId].fieldValidateRulesMaxlength %>"<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('min') != -1) {
                                        %> min="<%= fields[fieldId].fieldValidateRulesMin %>"<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('max') != -1) {
                                        %> max="<%= fields[fieldId].fieldValidateRulesMax %>"<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('pattern') != -1) {
-                                       %> ng-pattern="<%= fields[fieldId].fieldValidateRulesPattern %>"<% } } %>>
+                                       %> ng-pattern="/<%= fields[fieldId].fieldValidateRulesPattern %>/"<% } } %>>
 <% if (fields[fieldId].fieldValidate == true) { %>
                             <div ng-show="editForm.<%= fields[fieldId].fieldName %>.$invalid"><% if (fields[fieldId].fieldValidateRules.indexOf('required') != -1) { %>
                                 <p class="help-block"
