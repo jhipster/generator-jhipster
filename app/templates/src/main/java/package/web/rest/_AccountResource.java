@@ -197,8 +197,8 @@ public class AccountResource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<?> changePassword(@RequestBody String password) {
-        if (StringUtils.isEmpty(password)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        if (StringUtils.isEmpty(password) || password.length() < 5 || password.length() > 50) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         userService.changePassword(password);
         return new ResponseEntity<>(HttpStatus.OK);
