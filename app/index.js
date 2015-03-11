@@ -432,6 +432,7 @@ JhipsterGenerator.prototype.app = function app() {
     switch (this.buildTool) {
         case 'gradle':
             this.template('_build.gradle', 'build.gradle', this, {});
+            this.template('_settings.gradle', 'settings.gradle', this, {});
             this.template('_gradle.properties', 'gradle.properties', this, {});
             this.template('_yeoman.gradle', 'yeoman.gradle', this, {});
             this.template('_profile_dev.gradle', 'profile_dev.gradle', this, {});

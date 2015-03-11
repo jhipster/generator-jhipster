@@ -59,11 +59,6 @@ configurations {
     providedRuntime
 }
 
-war {
-    baseName = '<%= _.slugify(baseName) %>'
-    version =  '0.1-SNAPSHOT'
-}
-
 repositories {
     maven { url 'http://repo.spring.io/milestone' }
     maven { url 'http://repo.spring.io/snapshot' }
