@@ -60,11 +60,11 @@ public class <%= entityClass %>Repository {
             row -> {
                 <%= entityClass %> <%= entityInstance %> = new <%= entityClass %>();
                 <%= entityInstance %>.setId(row.getUUID("id"));<% for (fieldId in fields) { %><% if (fields[fieldId].fieldType == 'TimeUUID') { %>
-                <%= entityInstance %>.set<%= fields[fieldId].fieldNameCapitalized %>(row.getUUID("<%= fields[fieldId].fieldName %>"));<% } else if (fields[fieldId].fieldType == 'Integer') { %>
-                <%= entityInstance %>.set<%= fields[fieldId].fieldNameCapitalized %>(row.getInt("<%= fields[fieldId].fieldName %>"));<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
-                <%= entityInstance %>.set<%= fields[fieldId].fieldNameCapitalized %>(row.getDecimal("<%= fields[fieldId].fieldName %>"));<% } else if (fields[fieldId].fieldType == 'Boolean') { %>
-                <%= entityInstance %>.set<%= fields[fieldId].fieldNameCapitalized %>(row.getBool("<%= fields[fieldId].fieldName %>"));<% } else { %>
-                <%= entityInstance %>.set<%= fields[fieldId].fieldNameCapitalized %>(row.get<%= fields[fieldId].fieldType %>("<%= fields[fieldId].fieldName %>"));<% } } %>
+                <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(row.getUUID("<%= fields[fieldId].fieldName %>"));<% } else if (fields[fieldId].fieldType == 'Integer') { %>
+                <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(row.getInt("<%= fields[fieldId].fieldName %>"));<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
+                <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(row.getDecimal("<%= fields[fieldId].fieldName %>"));<% } else if (fields[fieldId].fieldType == 'Boolean') { %>
+                <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(row.getBool("<%= fields[fieldId].fieldName %>"));<% } else { %>
+                <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(row.get<%= fields[fieldId].fieldType %>("<%= fields[fieldId].fieldName %>"));<% } } %>
                 return <%= entityInstance %>;
             }
         ).forEach(<%= entityInstance %>s::add);

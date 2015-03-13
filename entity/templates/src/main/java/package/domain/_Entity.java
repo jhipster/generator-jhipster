@@ -98,11 +98,11 @@ public class <%= entityClass %> implements Serializable {
         this.id = id;
     }
 <% for (fieldId in fields) { %>
-    public <%= fields[fieldId].fieldType %> get<%= fields[fieldId].fieldNameCapitalized %>() {
+    public <%= fields[fieldId].fieldType %> get<%= fields[fieldId].fieldInJavaBeanMethod %>() {
         return <%= fields[fieldId].fieldName %>;
     }
 
-    public void set<%= fields[fieldId].fieldNameCapitalized %>(<%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>) {
+    public void set<%= fields[fieldId].fieldInJavaBeanMethod %>(<%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>) {
         this.<%= fields[fieldId].fieldName %> = <%= fields[fieldId].fieldName %>;
     }
 <% } %><% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'one-to-many' || relationships[relationshipId].relationshipType == 'many-to-many') { %>

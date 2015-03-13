@@ -101,7 +101,7 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     public void initTest() {<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>
         <%= entityInstance %>Repository.deleteAll();<% } %>
         <%= entityInstance %> = new <%= entityClass %>();<% for (fieldId in fields) { %>
-        <%= entityInstance %>.set<%= fields[fieldId].fieldNameCapitalized %>(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>
+        <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>
     }
 
     @Test<% if (databaseType == 'sql') { %>
@@ -120,8 +120,8 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
         List<<%= entityClass %>> <%= entityInstance %>s = <%= entityInstance %>Repository.findAll();
         assertThat(<%= entityInstance %>s).hasSize(1);
         <%= entityClass %> test<%= entityClass %> = <%= entityInstance %>s.iterator().next();<% for (fieldId in fields) { if (fields[fieldId].fieldType == 'DateTime') { %>
-        assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldNameCapitalized%>().toDateTime(DateTimeZone.UTC)).isEqualTo(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } else { %>
-        assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldNameCapitalized%>()).isEqualTo(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% }} %>
+        assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldInJavaBeanMethod%>().toDateTime(DateTimeZone.UTC)).isEqualTo(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } else { %>
+        assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% }} %>
     }
 
     @Test<% if (databaseType == 'sql') { %>
@@ -171,7 +171,7 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
         <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 
         // Update the <%= entityInstance %><% for (fieldId in fields) { %>
-        <%= entityInstance %>.set<%= fields[fieldId].fieldNameCapitalized %>(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>
+        <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityInstance %>s")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %>)))
@@ -181,8 +181,8 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
         List<<%= entityClass %>> <%= entityInstance %>s = <%= entityInstance %>Repository.findAll();
         assertThat(<%= entityInstance %>s).hasSize(1);
         <%= entityClass %> test<%= entityClass %> = <%= entityInstance %>s.iterator().next();<% for (fieldId in fields) { if (fields[fieldId].fieldType == 'DateTime') { %>
-        assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldNameCapitalized%>().toDateTime(DateTimeZone.UTC)).isEqualTo(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } else { %>
-        assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldNameCapitalized%>()).isEqualTo(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } } %>
+        assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldInJavaBeanMethod%>().toDateTime(DateTimeZone.UTC)).isEqualTo(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } else { %>
+        assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldInJavaBeanMethod%>()).isEqualTo(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } } %>
     }
 
     @Test<% if (databaseType == 'sql') { %>

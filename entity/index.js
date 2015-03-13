@@ -307,11 +307,28 @@ EntityGenerator.prototype.askForFields = function askForFields() {
     ];
     this.prompt(prompts, function (props) {
         if (props.fieldAdd) {
+
+            // Handle the specific case when the second letter is capitalized
+            // See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
+            var fieldInJavaBeanMethod = props.fieldName;
+            if (fieldInJavaBeanMethod.length > 1) {
+                var firstLetter = fieldInJavaBeanMethod.charAt(0);
+                var secondLetter = fieldInJavaBeanMethod.charAt(1);
+                if (firstLetter == firstLetter.toLowerCase() && secondLetter == secondLetter.toUpperCase()) {
+                    fieldInJavaBeanMethod  = firstLetter.toLowerCase() + fieldInJavaBeanMethod.slice(1);
+                } else {
+                    fieldInJavaBeanMethod = _s.capitalize(props.fieldName);
+                }
+            } else {
+                fieldInJavaBeanMethod = _s.capitalize(props.fieldName);
+            }
+
             var field = {fieldId: this.fieldId,
                 fieldName: props.fieldName,
                 fieldType: props.fieldType,
                 fieldNameCapitalized: _s.capitalize(props.fieldName),
                 fieldNameUnderscored: _s.underscored(props.fieldName),
+                fieldInJavaBeanMethod: fieldInJavaBeanMethod,
                 fieldValidate: props.fieldValidate,
                 fieldValidateRules: props.fieldValidateRules,
                 fieldValidateRulesMinlength: props.fieldValidateRulesMinlength,
