@@ -15,6 +15,7 @@ angular.module('<%=angularAppName%>')
                 Principal.identity().then(function(account) {
                     $scope.settingsAccount = account;
                 });
+                $rootScope.$broadcast('updateUsername');
             }).catch(function() {
                 $scope.success = null;
                 $scope.error = 'ERROR';
