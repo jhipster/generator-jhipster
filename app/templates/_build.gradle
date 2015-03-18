@@ -70,19 +70,23 @@ repositories {
 
 dependencies {
     compile group: 'io.dropwizard.metrics', name: 'metrics-core'<% if (hibernateCache == 'ehcache') { %>
+    compile group: 'io.dropwizard.metrics', name: 'metrics-annotation', version: dropwizard_metrics_version
     compile group: 'io.dropwizard.metrics', name: 'metrics-ehcache', version: dropwizard_metrics_version<% } %>
     compile group: 'io.dropwizard.metrics', name: 'metrics-graphite'
+    compile group: 'io.dropwizard.metrics', name: 'metrics-healthchecks'
     compile group: 'io.dropwizard.metrics', name: 'metrics-jvm', version: dropwizard_metrics_version
     compile group: 'io.dropwizard.metrics', name: 'metrics-servlet', version: dropwizard_metrics_version
     compile group: 'io.dropwizard.metrics', name: 'metrics-json', version: dropwizard_metrics_version
-    compile(group: 'io.dropwizard.metrics', name: 'metrics-servlets') {
-        exclude(module: 'metrics-healthchecks')
-    }
+    compile group: 'io.dropwizard.metrics', name: 'metrics-servlets'
+
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-json-org', version: jackson_version
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hppc', version: jackson_version
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-joda'
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate4', version: jackson_version
-    compile group: 'com.ryantenney.metrics', name: 'metrics-spring', version: metrics_spring_version<% if (hibernateCache == 'hazelcast') { %>
+    compile (group: 'com.ryantenney.metrics', name: 'metrics-spring', version: metrics_spring_version) {
+        exclude(module: 'metrics-core')
+        exclude(module: 'metrics-healthchecks')
+    } <% if (hibernateCache == 'hazelcast') { %>
     compile group: 'com.hazelcast', name: 'hazelcast', version: hazelcast_version
     compile group: 'com.hazelcast', name: 'hazelcast-hibernate4', version: hazelcast_version
     compile group: 'com.hazelcast', name: 'hazelcast-spring', version: hazelcast_version<% } %><% if (clusteredHttpSession == 'hazelcast' && hibernateCache != 'hazelcast') { %>
@@ -101,7 +105,9 @@ dependencies {
     compile group: 'org.apache.geronimo.javamail', name: 'geronimo-javamail_1.4_mail', version: geronimo_javamail_1_4_mail_version<% if (databaseType == 'sql') { %>
     compile group: 'org.hibernate', name: 'hibernate-core', version: hibernate_entitymanager_version
     compile group: 'org.hibernate', name: 'hibernate-envers'<% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
-    compile group: 'org.hibernate', name: 'hibernate-ehcache'<% } %>
+    compile (group: 'org.hibernate', name: 'hibernate-ehcache') {
+        exclude(module: 'ehcache-core')
+    }<% } %>
     compile group: 'org.hibernate', name: 'hibernate-validator'<% if (databaseType == 'sql') { %>
     compile group: 'org.jadira.usertype', name: 'usertype.core', version: usertype_core_version
     compile (group: 'org.liquibase', name: 'liquibase-core', version: liquibase_core_version) {
