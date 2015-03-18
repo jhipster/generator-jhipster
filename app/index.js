@@ -765,6 +765,10 @@ JhipsterGenerator.prototype.app = function app() {
         this.template(webappDir + '/scripts/components/auth/services/_sessions.service.js', webappDir + 'scripts/components/auth/services/sessions.service.js', this, {});
     }
     this.template(webappDir + '/scripts/components/form/_form.directive.js', webappDir + 'scripts/components/form/form.directive.js', this, {});
+    this.template(webappDir + '/scripts/components/form/_pager.directive.js', webappDir + 'scripts/components/form/pager.directive.js', this, {});
+    this.template(webappDir + '/scripts/components/form/_pager.html', webappDir + 'scripts/components/form/pager.html', this, {});
+    this.template(webappDir + '/scripts/components/form/_pagination.directive.js', webappDir + 'scripts/components/form/pagination.directive.js', this, {});
+    this.template(webappDir + '/scripts/components/form/_pagination.html', webappDir + 'scripts/components/form/pagination.html', this, {});
     this.template(webappDir + '/scripts/components/language/_language.controller.js', webappDir + 'scripts/components/language/language.controller.js', this, {});
     this.template(webappDir + '/scripts/components/language/_language.service.js', webappDir + 'scripts/components/language/language.service.js', this, {});
     this.template(webappDir + '/scripts/components/navbar/_navbar.directive.js', webappDir + 'scripts/components/navbar/navbar.directive.js', this, {});
@@ -867,6 +871,8 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/components/auth/services/password.service.js',
         'scripts/components/auth/services/register.service.js',
         'scripts/components/form/form.directive.js',
+        'scripts/components/form/pager.directive.js',
+        'scripts/components/form/pagination.directive.js',
         'scripts/components/language/language.service.js',
         'scripts/components/language/language.controller.js',
         'scripts/components/admin/audits.service.js',
