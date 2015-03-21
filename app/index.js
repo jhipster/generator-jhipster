@@ -750,6 +750,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/scripts/components/admin/_monitoring.service.js', webappDir + 'scripts/components/admin/monitoring.service.js', this, {});
     this.template(webappDir + '/scripts/components/auth/_auth.service.js', webappDir + 'scripts/components/auth/auth.service.js', this, {});
     this.template(webappDir + '/scripts/components/auth/_principal.service.js', webappDir + 'scripts/components/auth/principal.service.js', this, {});
+    this.template(webappDir + '/scripts/components/auth/_authority.directive.js', webappDir + 'scripts/components/auth/authority.directive.js', this, {});
     if (this.authenticationType == 'oauth2') {
         this.template(webappDir + '/scripts/components/auth/provider/_auth.oauth2.service.js', webappDir + 'scripts/components/auth/provider/auth.oauth2.service.js', this, {});
     } else if (this.authenticationType == 'xauth') {
@@ -866,6 +867,7 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/app/app.constants.js',
         'scripts/components/auth/auth.service.js',
         'scripts/components/auth/principal.service.js',
+        'scripts/components/auth/authority.directive.js',
         'scripts/components/auth/services/account.service.js',
         'scripts/components/auth/services/activate.service.js',
         'scripts/components/auth/services/password.service.js',
