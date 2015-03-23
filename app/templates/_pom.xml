@@ -34,6 +34,8 @@
         <hibernate.version>4.3.6.Final</hibernate.version><% } %><% if (databaseType == 'cassandra') { %>
         <datastax-driver.version>2.1.4</datastax-driver.version><% } %>
         <java.version>1.<%= javaVersion %></java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <javax.inject.version>1</javax.inject.version><% if (databaseType == 'sql') { %>
         <joda-time-hibernate.version>1.3</joda-time-hibernate.version><% } %>
         <json-path.version>0.9.1</json-path.version><% if (databaseType == 'sql') { %>
