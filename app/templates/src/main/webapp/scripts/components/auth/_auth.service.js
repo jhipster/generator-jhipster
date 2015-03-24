@@ -14,9 +14,8 @@ angular.module('<%=angularAppName%>')
                         // the language selected by the user during his registration
                         $translate.use(account.langKey);<% if (websocket == 'spring-websocket') { %>
                         Tracker.sendActivity();<% } %>
+                        deferred.resolve(data);
                     });
-                    deferred.resolve(data);
-
                     return cb();
                 }).catch(function (err) {
                     this.logout();
