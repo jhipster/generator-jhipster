@@ -5,12 +5,24 @@ apply plugin: 'com.moowork.node'
 apply plugin: 'com.moowork.gulp'
 <% } %>
 
+ext {
+    logbackLoglevel = "INFO"
+}
+
 dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: spring_boot_version
 }
 
 bootRun {
   args = ["--spring.profiles.active=prod"]
+}
+
+processResources {
+    filesMatching('**/logback.xml') {
+        filter {
+            it.replace('${logback.loglevel}', logbackLoglevel)
+        }
+    }
 }
 
 task setProdProperties(dependsOn: bootRun) << {
