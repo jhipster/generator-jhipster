@@ -25,7 +25,8 @@
                 "configuration": "Konfiguráció",
                 "logs": "Naplók",
                 "audits": "Nyomkövetés",
-                "apidocs": "API dokumentáció"
+                "apidocs": "API dokumentáció",
+                "database": "Adatbázis"
             },
             "language": "Nyelvek"
         },
@@ -85,14 +86,14 @@
             "title": "Erősítse meg a törlési szándékát"
         },
         "validation": {
-            "required": "This field is required.",
-            "minlength": "This field is required to be at least {{min}} characters.",
-            "maxlength": "This field cannot be longer than {{max}} characters.",
-            "min": "This field should be more than {{min}}.",
-            "max": "This field cannot be more than {{max}}.",
-            "pattern": "This field should follow pattern {{pattern}}.",
-            "number": "This field should be a number.",
-            "datetimelocal": "This field should be a date and time."
+            "required": "Ez a mező kötelező.",
+            "minlength": "Ez a mező legalább {{min}} karaktert kell, hogy tartalmazzon.",
+            "maxlength": "Ez a mező nem lehet hosszabb mint {{max}} karakter.",
+            "min": "Ennek a mezőnek a megengedett minimum értéke {{min}}.",
+            "max": "Ennek a mezőnek a megengedett maximum értéke {{max}}.",
+            "pattern": "Ennek a mezőnek meg kell felelni a {{pattern}} mintának.",
+            "number": "Ennek a mezőnek számnak kéne lennie.",
+            "datetimelocal": "Ennek a mezőnek dátumnak vagy időpontnak kéne lennie."
         }
     },
     "footer": "Ez a lábléc."
