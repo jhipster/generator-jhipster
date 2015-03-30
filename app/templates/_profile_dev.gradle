@@ -1,5 +1,9 @@
 apply plugin: 'spring-boot'
 
+ext {
+    logbackLoglevel = "DEBUG"
+}
+
 dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: spring_boot_version
 }
@@ -11,5 +15,13 @@ bootRun {
 task setProdProperties(dependsOn: bootRun) << {
     doFirst {
         System.setProperty('spring.profiles.active', 'dev')
+    }
+}
+
+processResources {
+    filesMatching('**/logback.xml') {
+        filter {
+            it.replace('${logback.loglevel}', logbackLoglevel)
+        }
     }
 }

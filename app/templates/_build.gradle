@@ -29,6 +29,10 @@ springBoot {
     mainClass = '<%= packageName %>.Application'
 }
 
+bootRun {
+    addResources = false
+}
+
 apply from: 'yeoman.gradle'
 
 <% if (databaseType == 'sql') { %>
