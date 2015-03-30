@@ -82,8 +82,8 @@ HerokuGenerator.prototype.herokuCreate = function herokuCreate() {
     var regionParams = (this.herokuRegion !== 'us') ? ' --region ' + this.herokuRegion : '';
 
     this.log(chalk.bold('Creating Heroku application and setting up node environment'));
-    console.log('heroku apps:create ' + this.herokuDeployedName + regionParams + ' && heroku config:set NODE_ENV=production');
-    var child = exec('heroku apps:create ' + this.herokuDeployedName + regionParams + ' && heroku config:set NODE_ENV=production', { cwd: 'deploy/heroku' }, function (err, stdout, stderr) {
+    console.log('heroku apps:create ' + this.herokuDeployedName + regionParams + ' && heroku config:set NODE_ENV=production --app ' + this.herokuDeployedName );
+    var child = exec('heroku apps:create ' + this.herokuDeployedName + regionParams + ' && heroku config:set NODE_ENV=production --app ' + this.herokuDeployedName , { cwd: 'deploy/heroku' }, function (err, stdout, stderr) {
         if (err) {
             this.abort = true;
             this.log.error(err);
