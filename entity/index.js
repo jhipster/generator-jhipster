@@ -217,7 +217,9 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 return response.fieldAdd == true &&
                     response.fieldValidate == true &&
                     (response.fieldType == 'LocalDate' ||
-                    response.fieldType == 'DateTime');
+                    response.fieldType == 'DateTime' ||
+                    response.fieldType == 'UUID' ||
+                    response.fieldType == 'TimeUUID');
             },
             type: 'checkbox',
             name: 'fieldValidateRules',
