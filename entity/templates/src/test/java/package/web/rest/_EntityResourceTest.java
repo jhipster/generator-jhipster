@@ -123,7 +123,31 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
         assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldInJavaBeanMethod%>().toDateTime(DateTimeZone.UTC)).isEqualTo(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } else { %>
         assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% }} %>
     }
+<% for (fieldId in fields) { %><% if (fields[fieldId].fieldValidate == true) {
+    var required = false;
+    if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) {
+        required = true;
+    }
+    if (required) { %>
+    @Test<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>
+    public void check<%= fields[fieldId].fieldInJavaBeanMethod %>IsRequired() throws Exception {
+        // Validate the database is empty
+        assertThat(<%= entityInstance %>Repository.findAll()).hasSize(0);
+        // set the field null
+        <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(null);
 
+        // Create the <%= entityClass %>, which fails.
+        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityInstance %>s")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %>)))
+                .andExpect(status().isBadRequest());
+
+        // Validate the database is still empty
+        List<<%= entityClass %>> <%= entityInstance %>s = <%= entityInstance %>Repository.findAll();
+        assertThat(<%= entityInstance %>s).hasSize(0);
+    }
+<%  } } } %>
     @Test<% if (databaseType == 'sql') { %>
     @Transactional<% } %>
     public void getAll<%= entityClass %>s() throws Exception {
