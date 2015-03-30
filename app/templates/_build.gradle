@@ -37,17 +37,11 @@ apply from: 'liquibase.gradle'
 apply from: 'gatling.gradle'
 
 if (project.hasProperty('prod')) {
-    profile = 'prod'
-} else if (project.hasProperty('fast')) {
-    profile = 'fast'
-}
-
-if (profile == 'prod') {
     apply from: 'profile_prod.gradle'
-} else if (profile == 'fast') {
+} else if (project.hasProperty('fast')) {
     apply from: 'profile_fast.gradle'
 } else {
-    apply from: 'profile_dev.gradle'
+  apply from: 'profile_dev.gradle'
 }
 
 group = '<%= packageName %>'
