@@ -550,6 +550,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/_WebConfigurer.java', javaDir + 'config/WebConfigurer.java', this, {});
     if (this.websocket == 'spring-websocket') {
         this.template('src/main/java/package/config/_WebsocketConfiguration.java', javaDir + 'config/WebsocketConfiguration.java', this, {});
+        this.template('src/main/java/package/config/_WebsocketSecurityConfiguration.java', javaDir + 'config/WebsocketSecurityConfiguration.java', this, {});
     }
 
     if (this.databaseType == "cassandra") {

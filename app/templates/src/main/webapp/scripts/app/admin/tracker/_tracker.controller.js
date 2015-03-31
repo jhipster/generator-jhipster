@@ -1,13 +1,15 @@
 angular.module('<%=angularAppName%>')
-    .controller('TrackerController', function ($scope<% if (authenticationType == 'oauth2') { %>, AuthServerProvider<% } %>) {
+    .controller('TrackerController', function ($scope<% if (authenticationType == 'oauth2') { %>, AuthServerProvider<% } %>, $cookies, $http) {
         // This controller uses a Websocket connection to receive user activities in real-time.
 
         $scope.activities = [];
         var stompClient = null;
         var socket = new SockJS('/websocket/tracker');
         stompClient = Stomp.over(socket);
-        stompClient.connect({}, function(frame) {
-            stompClient.subscribe('/topic/activity', function(activity){
+        var headers = {};
+        headers['X-CSRF-TOKEN'] = $cookies[$http.defaults.xsrfCookieName];
+        stompClient.connect(headers, function(frame) {
+            stompClient.subscribe('/topic/activity', function(activity) {
                 showActivity(JSON.parse(activity.body));
             });
         });

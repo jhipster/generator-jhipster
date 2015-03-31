@@ -23,7 +23,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;<% } %>
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;<% if (authenticationType == 'session') { %>
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
+<% if (authenticationType == 'session') { %>
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.csrf.CsrfFilter;<% } %><% if (authenticationType == 'oauth2') { %>
 import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecurityExpressionHandler;<% } %>
@@ -87,6 +89,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http<% if (authenticationType == 'session') { %>
+            .csrf()
+            .ignoringAntMatchers("/websocket/**")
+        .and()
             .addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class)<% } %>
             .exceptionHandling()
             .authenticationEntryPoint(authenticationEntryPoint)<% if (authenticationType == 'session') { %>
@@ -113,31 +118,32 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .disable()<% } %>
             .headers()
             .frameOptions()
-            .disable()<% if (authenticationType == 'xauth') { %>
+            .disable()
+        .and()<% if (authenticationType == 'xauth') { %>
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()<% } %>
             .authorizeRequests()
-                .antMatchers("/api/register").permitAll()
-                .antMatchers("/api/activate").permitAll()
-                .antMatchers("/api/authenticate").permitAll()
-                .antMatchers("/api/logs/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/api/**").authenticated()<% if (websocket == 'spring-websocket') { %>
-                .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/websocket/**").permitAll()<% } %>
-                .antMatchers("/metrics/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/health/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/trace/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/dump/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/shutdown/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/beans/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/configprops/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/info/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/autoconfig/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/env/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/trace/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
-                .antMatchers("/protected/**").authenticated()<% if (authenticationType != 'xauth') { %>;<% } %><% if (authenticationType == 'xauth') { %>
+            .antMatchers("/api/register").permitAll()
+            .antMatchers("/api/activate").permitAll()
+            .antMatchers("/api/authenticate").permitAll()
+            .antMatchers("/api/logs/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/api/**").authenticated()<% if (websocket == 'spring-websocket') { %>
+            .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/websocket/**").permitAll()<% } %>
+            .antMatchers("/metrics/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/health/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/trace/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/dump/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/shutdown/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/beans/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/configprops/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/info/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/autoconfig/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/env/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/trace/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/protected/**").authenticated()<% if (authenticationType != 'xauth') { %>;<% } %><% if (authenticationType == 'xauth') { %>
         .and()
             .apply(securityConfigurerAdapter());<% } %>
 
@@ -150,7 +156,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     }<% } %>
 
     @EnableGlobalMethodSecurity(prePostEnabled = true, jsr250Enabled = true)
-    private static class GlobalSecurityConfiguration extends GlobalMethodSecurityConfiguration {<% if (authenticationType == 'oauth2') { %>
+    public static class GlobalSecurityConfiguration extends GlobalMethodSecurityConfiguration {<% if (authenticationType == 'oauth2') { %>
 
         @Override
         protected MethodSecurityExpressionHandler createExpressionHandler() {
@@ -162,24 +168,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
       return new XAuthTokenConfigurer(userDetailsService, tokenProvider);
     }<% } %>
 
-    /**
-     * This allows SpEL support in Spring Data JPA @Query definitions.
-     *
-     * See https://spring.io/blog/2014/07/15/spel-support-in-spring-data-jpa-query-definitions
-     */
     @Bean
-    EvaluationContextExtension securityExtension() {
-        return new EvaluationContextExtensionSupport() {
-            @Override
-            public String getExtensionId() {
-                return "security";
-            }
-
-            @Override
-            public SecurityExpressionRoot getRootObject() {
-                return new SecurityExpressionRoot(SecurityContextHolder.getContext().getAuthentication()) {};
-            }
-        };
+    public SecurityEvaluationContextExtension securityEvaluationContextExtension() {
+        return new SecurityEvaluationContextExtension();
     }
-
 }

@@ -50,7 +50,8 @@
         <metrics-spring.version>3.0.3</metrics-spring.version><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
         <postgresql.version>9.3-1102-jdbc41</postgresql.version><% } %>
         <run.addResources>false</run.addResources>
-        <sonar-maven-plugin.version>2.3</sonar-maven-plugin.version><% if (authenticationType == 'oauth2') { %>
+        <sonar-maven-plugin.version>2.3</sonar-maven-plugin.version>
+        <spring-security.version>4.0.0.RELEASE</spring-security.version><% if (authenticationType == 'oauth2') { %>
         <spring-security-oauth2.version>2.0.1.RELEASE</spring-security-oauth2.version><% } %>
         <swagger-springmvc.version>0.9.5</swagger-springmvc.version>
         <usertype-core.version>3.2.0.GA</usertype-core.version>
@@ -440,6 +441,18 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-localconfig-connector</artifactId>
         </dependency>
+        <!-- security -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-data</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-messaging</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+        <!-- reporting -->
         <dependency>
             <groupId>fr.ippon.spark.metrics</groupId>
             <artifactId>metrics-spark-reporter</artifactId>
