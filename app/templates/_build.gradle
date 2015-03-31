@@ -137,6 +137,7 @@ dependencies {
     compile(group: 'org.springframework', name: 'spring-context-support') {
         exclude(module: 'quartz')
     }
+    compile group: 'org.springframework.security', name: 'spring-security-config', version: spring_security_version
     compile group: 'org.springframework.security', name: 'spring-security-data', version: spring_security_version
     compile group: 'org.springframework.security', name: 'spring-security-web', version: spring_security_version
     compile group: 'org.springframework.security', name: 'spring-security-messaging', version: spring_security_version <% if (authenticationType == 'oauth2') { %>
