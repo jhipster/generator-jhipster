@@ -55,7 +55,8 @@ public class OAuth2ServerConfiguration {
                 .requireCsrfProtectionMatcher(new AntPathRequestMatcher("/oauth/authorize"))
                 .disable()
                 .headers()
-                .frameOptions().disable()<% if (websocket == 'no') { %>
+                .frameOptions().disable()
+            .and()<% if (websocket == 'no') { %>
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()<% } %>

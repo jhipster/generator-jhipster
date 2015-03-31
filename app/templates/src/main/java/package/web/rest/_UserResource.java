@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import java.util.List;<% if (javaVersion == '7') { %>
 import javax.servlet.http.HttpServletResponse;<% } %>
@@ -49,8 +48,7 @@ public class UserResource {
     @RequestMapping(value = "/users/{login}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    @RolesAllowed(AuthoritiesConstants.ADMIN)<% if (javaVersion == '8') { %>
+    @Timed<% if (javaVersion == '8') { %>
     ResponseEntity<User> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
         return userRepository.findOneByLogin(login)

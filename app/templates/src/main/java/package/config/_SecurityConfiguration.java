@@ -34,6 +34,7 @@ import javax.inject.Inject;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (authenticationType == 'session') { %>
 
     @Inject
@@ -153,16 +154,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
-    }<% } %>
-
-    @EnableGlobalMethodSecurity(prePostEnabled = true, jsr250Enabled = true)
-    public static class GlobalSecurityConfiguration extends GlobalMethodSecurityConfiguration {<% if (authenticationType == 'oauth2') { %>
-
-        @Override
-        protected MethodSecurityExpressionHandler createExpressionHandler() {
-            return new OAuth2MethodSecurityExpressionHandler();
-        }<% } %>
-    }<% if (authenticationType == 'xauth') { %>
+    }<% } %><% if (authenticationType == 'xauth') { %>
 
     private XAuthTokenConfigurer securityConfigurerAdapter() {
       return new XAuthTokenConfigurer(userDetailsService, tokenProvider);
