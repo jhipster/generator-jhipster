@@ -4,11 +4,12 @@ angular.module('<%=angularAppName%>')
     .factory('Tracker', function ($rootScope, $cookies, $http) {
         var stompClient = null;
         function sendActivity() {
-            stompClient
-                .send('/topic/activity',
-                {},
-                JSON.stringify({'page': $rootScope.toState.name}));
-
+            if (stompClient != null && stompClient.connected) {
+                stompClient
+                    .send('/topic/activity',
+                    {},
+                    JSON.stringify({'page': $rootScope.toState.name}));
+            }
         }
         return {
             connect: function () {

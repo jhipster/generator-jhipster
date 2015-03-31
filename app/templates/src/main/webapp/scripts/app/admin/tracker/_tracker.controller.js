@@ -9,7 +9,7 @@ angular.module('<%=angularAppName%>')
         var headers = {};
         headers['X-CSRF-TOKEN'] = $cookies[$http.defaults.xsrfCookieName];
         stompClient.connect(headers, function(frame) {
-            stompClient.subscribe('/topic/activity', function(activity) {
+            stompClient.subscribe('/topic/tracker', function(activity) {
                 showActivity(JSON.parse(activity.body));
             });
         });

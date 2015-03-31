@@ -7,11 +7,10 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
-import org.springframework.messaging.Message;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
@@ -32,8 +31,8 @@ public class ActivityService implements ApplicationListener<SessionDisconnectEve
     @Inject
     SimpMessageSendingOperations messagingTemplate;
 
-    @MessageMapping("/websocket/activity")
-    @SendTo("/topic/activity")
+    @SubscribeMapping("/topic/activity")
+    @SendTo("/topic/tracker")
     public ActivityDTO sendActivity(@Payload ActivityDTO activityDTO, StompHeaderAccessor stompHeaderAccessor, Principal principal) {
         activityDTO.setUserLogin(SecurityUtils.getCurrentLogin());
         activityDTO.setUserLogin(principal.getName());
@@ -44,17 +43,11 @@ public class ActivityService implements ApplicationListener<SessionDisconnectEve
         return activityDTO;
     }
 
-    @MessageMapping("/websocket/tracker")
-    public ActivityDTO receiveActivity(@Payload ActivityDTO activityDTO) {
-        return activityDTO;
-    }
-
     @Override
     public void onApplicationEvent(SessionDisconnectEvent event) {
         ActivityDTO activityDTO = new ActivityDTO();
-        Message message = event.getMessage();
         activityDTO.setSessionId(event.getSessionId());
         activityDTO.setPage("logout");
-        messagingTemplate.convertAndSend("/topic/activity", activityDTO);
+        messagingTemplate.convertAndSend("/topic/tracker", activityDTO);
     }
 }
