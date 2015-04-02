@@ -4,14 +4,14 @@
         "refresh.button": "Opdatér",
         "stacktrace": "Stacktrace",
         "indicator": {
-            "diskSpace": "Disk space",
+            "diskSpace": "Diskplads",
             "mail": "Email",<% if (databaseType == 'sql') { %>
             "db": "Database"<% } %><% if (databaseType == 'mongodb') { %>
             "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
             "cassandra": "Cassandra"<% } %>
         },
         "table": {
-            "service": "Tjeneste navn",
+            "service": "Tjenestenavn",
             "status": "Status"
         },
         "status": {
