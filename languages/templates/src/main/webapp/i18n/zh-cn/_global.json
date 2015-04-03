@@ -6,7 +6,7 @@
             "home": "首页",
             "entities": {
                 "main": "Entities",
-                "additionalEntity": "JHipster will add addtional entities"
+                "additionalEntity": "JHipster will add addtional entities here"
             },
             "account": {
                 "main": "账号",

@@ -6,7 +6,7 @@
             "home": "Ana Sayfa",
             "entities": {
                 "main": "Varlıklar",
-                "additionalEntity": "JHipster ek varlıklar ekleyecek."
+                "additionalEntity": "JHipster will add addtional entities here"
             },
             "account": {
                 "main": "Hesap",

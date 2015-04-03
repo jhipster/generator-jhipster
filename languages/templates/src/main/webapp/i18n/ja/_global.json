@@ -6,7 +6,7 @@
             "home": "ホーム",
             "entities": {
                 "main": "エンティティ",
-                "additionalEntity": "JHipsterはエンティティを追加します。"
+                "additionalEntity": "JHipster will add addtional entities here"
             },
             "account": {
                 "main": "アカウント",

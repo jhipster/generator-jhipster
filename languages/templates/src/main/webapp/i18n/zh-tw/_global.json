@@ -6,7 +6,7 @@
             "home": "首頁",
             "entities": {
                 "main": "實體",
-                "additionalEntity": "JHipster 會新增其他實體"
+                "additionalEntity": "JHipster will add addtional entities here"
             },
             "account": {
                 "main": "帳號",

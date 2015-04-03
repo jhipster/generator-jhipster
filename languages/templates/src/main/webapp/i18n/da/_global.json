@@ -6,7 +6,7 @@
             "home": "Forsiden",
             "entities": {
                 "main": "Entities",
-                "additionalEntity": "JHipster vil tilføje yderligere entities"
+                "additionalEntity": "JHipster will add addtional entities here"
             },
             "account": {
                 "main": "Konto",

@@ -6,7 +6,7 @@
             "home": "Главная",
             "entities": {
                 "main": "Сущности",
-                "additionalEntity": "JHipster добавит дополнительные сущности"
+                "additionalEntity": "JHipster will add addtional entities here"
             },
             "account": {
                 "main": "Профиль",

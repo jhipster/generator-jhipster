@@ -6,7 +6,7 @@
             "home": "Kezdőpont",
             "entities": {
                 "main": "Entitások",
-                "additionalEntity": "JHipster will add addtional entities"
+                "additionalEntity": "JHipster will add addtional entities here"
             },
             "account": {
                 "main": "Hozzáférés",
