@@ -446,12 +446,12 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-data</artifactId>
             <version>${spring-security.version}</version>
-        </dependency>
+        </dependency><% if (websocket == 'spring-websocket') { %>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-messaging</artifactId>
             <version>${spring-security.version}</version>
-        </dependency>
+        </dependency><% } %>
         <!-- reporting -->
         <dependency>
             <groupId>fr.ippon.spark.metrics</groupId>
