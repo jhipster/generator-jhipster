@@ -53,11 +53,11 @@ spring:
         cache: false
 
 metrics:
-    jmx.enabled: true
+    jmx.enabled: true<% if (javaVersion == '8') { %>
     spark:
         enabled: false
         host: localhost
-        port: 9999
+        port: 9999<% } %>
     graphite:
         enabled: false
         host: localhost

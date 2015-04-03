@@ -7,8 +7,8 @@ import com.codahale.metrics.graphite.GraphiteReporter;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.codahale.metrics.jvm.*;
 import com.ryantenney.metrics.spring.config.annotation.EnableMetrics;
-import com.ryantenney.metrics.spring.config.annotation.MetricsConfigurerAdapter;
-import fr.ippon.spark.metrics.SparkReporter;
+import com.ryantenney.metrics.spring.config.annotation.MetricsConfigurerAdapter;<% if (javaVersion == '8') { %>
+import fr.ippon.spark.metrics.SparkReporter;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -31,11 +31,11 @@ import java.util.concurrent.TimeUnit;
 public class MetricsConfiguration extends MetricsConfigurerAdapter implements EnvironmentAware {
 
     private static final String ENV_METRICS = "metrics.";
-    private static final String ENV_METRICS_GRAPHITE = "metrics.graphite.";
-    private static final String ENV_METRICS_SPARK = "metrics.spark.";
+    private static final String ENV_METRICS_GRAPHITE = "metrics.graphite.";<% if (javaVersion == '8') { %>
+    private static final String ENV_METRICS_SPARK = "metrics.spark.";<% } %>
     private static final String PROP_JMX_ENABLED = "jmx.enabled";
-    private static final String PROP_GRAPHITE_ENABLED = "enabled";
-    private static final String PROP_SPARK_ENABLED = "enabled";
+    private static final String PROP_GRAPHITE_ENABLED = "enabled";<% if (javaVersion == '8') { %>
+    private static final String PROP_SPARK_ENABLED = "enabled";<% } %>
     private static final String PROP_GRAPHITE_PREFIX = "";
 
     private static final String PROP_PORT = "port";
@@ -121,7 +121,7 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
                 graphiteReporter.start(1, TimeUnit.MINUTES);
             }
         }
-    }
+    }<% if (javaVersion == '8') { %>
 
     @Configuration
     @ConditionalOnClass(SparkReporter.class)
@@ -155,5 +155,5 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter implements En
                 sparkReporter.start(1, TimeUnit.MINUTES);
             }
         }
-    }
+    }<% } %>
 }

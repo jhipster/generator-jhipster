@@ -452,12 +452,12 @@
             <artifactId>spring-security-messaging</artifactId>
             <version>${spring-security.version}</version>
         </dependency><% } %>
-        <!-- reporting -->
+        <!-- reporting --><% if (javaVersion == '8') { %>
         <dependency>
             <groupId>fr.ippon.spark.metrics</groupId>
             <artifactId>metrics-spark-reporter</artifactId>
             <version>${metrics-spark-reporter.version}</version>
-        </dependency>
+        </dependency><% } %>
     </dependencies>
     <build>
         <resources>
