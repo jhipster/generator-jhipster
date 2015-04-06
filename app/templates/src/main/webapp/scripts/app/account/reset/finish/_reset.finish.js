@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('jhipsterApp')
+angular.module('<%=angularAppName%>')
     .config(function ($stateProvider) {
         $stateProvider
             .state('finishReset', {
