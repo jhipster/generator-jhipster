@@ -3,22 +3,34 @@
 
 var path    = require('path');
 var helpers = require('yeoman-generator').test;
+var fsExtra = require('fs.extra');
+var _DEBUG = false;
 
 
 describe('jhipster generator', function () {
-  beforeEach(function (done) {
-    helpers.testDirectory(path.join(__dirname, 'temp'), function (err) {
+	var targetDir = path.join(__dirname, 'temp', 'test-creation');
+
+	beforeEach(function (done) {
+    helpers.testDirectory(targetDir, function (err) {
       if (err) {
         return done(err);
       }
 
       this.app = helpers.createGenerator('jhipster:app', [
-        '../../app'
+        '../../../app'
       ]);
       done();
     }.bind(this));
   });
 
+  afterEach(function (done) {
+    if (_DEBUG) {
+      done();
+    } else {
+      fsExtra.rmrf(targetDir, done)
+    }
+  });
+  
   var defaultFiles = [
       '.jshintrc',
       '.editorconfig',
