@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('<%= entityClass %>Controller', function ($scope<% for (idx in differentTypes) { %>, <%= differentTypes[idx] %><% } %><% if (pagination != 'no') { %>, ParseLinks<% } %>) {
+    .controller('<%= entityClass %>Controller', function ($scope<% for (var idx in differentTypes) { %>, <%= differentTypes[idx] %><% } %><% if (pagination != 'no') { %>, ParseLinks<% } %>) {
         $scope.<%= entityInstance %>s = [];<% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) { %>
         $scope.<%= differentTypes[idx].toLowerCase() %>s = <%= differentTypes[idx] %>.query();<% } } %><% if (pagination == 'pager' || pagination == 'pagination') { %>
         $scope.page = 1;
