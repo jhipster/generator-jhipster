@@ -85,7 +85,7 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
         }
         HikariConfig config = new HikariConfig();
         config.setDataSourceClassName(propertyResolver.getProperty("dataSourceClassName"));
-        if (propertyResolver.getProperty("url") == null || "".equals(propertyResolver.getProperty("url"))) {
+        if(StringUtils.isEmpty(propertyResolver.getProperty("url"))) {
             config.addDataSourceProperty("databaseName", propertyResolver.getProperty("databaseName"));
             config.addDataSourceProperty("serverName", propertyResolver.getProperty("serverName"));
         } else {
