@@ -1,5 +1,6 @@
 package <%=packageName%>.domain;
 <% if (databaseType == 'cassandra') { %>
+import java.util.Date;
 import com.datastax.driver.mapping.annotations.*;<% } %>
 import com.fasterxml.jackson.annotation.JsonIgnore;<% if (hibernateCache != 'no' && databaseType == 'sql') { %>
 import org.hibernate.annotations.Cache;
@@ -17,6 +18,8 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import org.joda.time.DateTime;<% } %>
 
 
 /**
