@@ -29,4 +29,13 @@ public final class RandomUtil {
     public static String generateActivationKey() {
         return RandomStringUtils.randomNumeric(DEF_COUNT);
     }
+
+    /**
+    * Generates a reset key.
+    *
+    * @return the generated reset key
+    */
+   public static String generateResetKey() {
+       return RandomStringUtils.randomNumeric(DEF_COUNT);
+   }
 }
