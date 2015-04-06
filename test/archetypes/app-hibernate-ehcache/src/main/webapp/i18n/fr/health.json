@@ -1,0 +1,20 @@
+{
+    "health": {
+        "title": "Diagnostics",
+        "refresh.button": "Rafraichir",
+        "indicator": {
+            "diskSpace": "Espace disque",
+            "mail": "Email",
+            "db": "Base de données"
+        },
+        "stacktrace": "Stacktrace",
+        "table": {
+            "service": "Nom du service",
+            "status": "Etat"
+        },
+        "status": {
+            "UP": "DISPONIBLE",
+            "DOWN": "HORS SERVICE"
+        }
+    }
+}
