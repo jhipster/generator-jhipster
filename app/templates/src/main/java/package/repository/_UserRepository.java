@@ -35,6 +35,8 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
 
     List<User> findAllByActivatedIsFalseAndCreatedDateBefore(DateTime dateTime);
 
+    Optional<User> findOneByResetKey(String resetKey);
+
     Optional<User> findOneByEmail(String email);
 
     Optional<User> findOneByLogin(String login);
@@ -47,6 +49,8 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
     User findOneByActivationKey(String activationKey);
 
     List<User> findAllByActivatedIsFalseAndCreatedDateBefore(DateTime dateTime);
+
+    User findOneByResetKey(String resetKey);
 
     User findOneByLogin(String login);
 
@@ -64,6 +68,8 @@ public class UserRepository {
     private PreparedStatement findAllStmt;
 
     private PreparedStatement findOneByActivationKeyStmt;
+
+    private PreparedStatement findOneByResetKeyStmt;
 
     private PreparedStatement insertByActivationKeyStmt;
 
@@ -91,6 +97,11 @@ public class UserRepository {
             "SELECT id " +
             "FROM user_by_activation_key " +
             "WHERE activation_key = :activation_key");
+
+        findOneByResetKeyStmt = session.prepare(
+            "SELECT id " +
+            "FROM user_by_reset_key " +
+            "WHERE reset_key = :reset_key");
 
         insertByActivationKeyStmt = session.prepare(
             "INSERT INTO user_by_activation_key (activation_key, id) " +
@@ -130,6 +141,12 @@ public class UserRepository {
     public Optional<User> findOneByActivationKey(String activationKey) {
         BoundStatement stmt = findOneByActivationKeyStmt.bind();
         stmt.setString("activation_key", activationKey);
+        return findOneFromIndex(stmt);
+    }
+
+    public Optional<User> findOneByResetKey(String resetKey) {
+        BoundStatement stmt = findOneByResetKeyStmt.bind();
+        stmt.setString("reset_key", resetKey);
         return findOneFromIndex(stmt);
     }
 
