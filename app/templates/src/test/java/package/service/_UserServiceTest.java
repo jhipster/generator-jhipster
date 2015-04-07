@@ -60,6 +60,30 @@ public class UserServiceTest <% if (databaseType == 'cassandra') { %>extends Abs
     }<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 
     @Test
+    public void assertThatUserMustExistToResetPassword() {
+        <% if (javaVersion == '8') { %>
+        Optional<User> maybeUser = userService.requestPasswordReset("john.doe@localhost");
+        assertThat(maybeUser.isPresent()).isFalse();
+
+        maybeUser = userService.requestPasswordReset("admin@localhost");
+        assertThat(maybeUser.isPresent()).isTrue();
+
+        assertThat(maybeUser.get().getEmail()).isEqualTo("admin@localhost");
+        assertThat(maybeUser.get().getResetDate()).isNotNull();
+        assertThat(maybeUser.get().getResetKey()).isNotNull();
+        <% } else { %>
+        User user = userService.requestPasswordReset("john.doe@localhost");
+        assertThat(user).isNull();
+
+        user = userService.requestPasswordReset("admin@localhost");
+        assertThat(user).isNotNull();
+        assertThat(user.getEmail()).isEqualTo("admin@localhost");
+        assertThat(user.getResetDate()).isNotNull();
+        assertThat(user.getResetKey()).isNotNull();
+        <% } %>
+    }
+
+    @Test
     public void testFindNotActivatedUsersByCreationDateBefore() {
         userService.removeNotActivatedUsers();
         DateTime now = new DateTime();
