@@ -464,8 +464,22 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             type: 'input',
             name: 'otherEntityName',
             validate: function (input) {
-                if ((/^([a-zA-Z0-9_]*)$/.test(input)) && input != '') return true;
-                return 'Your other entity cannot contain special characters';
+                if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
+                    return 'Your other entity name cannot contain special characters';
+                } else if (input == '') {
+                    return 'Your other entity name cannot be empty';
+                } else if (input == 'id' || fieldNamesUnderscored.indexOf(_s.underscored(input)) != -1) {
+                    return 'Your other entity name cannot use an already existing field name';
+                } else if (reservedWords_Java.indexOf(input.toUpperCase()) != -1) {
+                    return 'Your other entity name cannot contain a Java reserved keyword';
+                } else if (prodDatabaseType == 'mysql' && reservedWords_MySQL.indexOf(input.toUpperCase()) != -1) {
+                    return 'Your other entity name cannot contain a MySQL reserved keyword';
+                } else if (prodDatabaseType == 'postgresql' && reservedWords_Postgresql.indexOf(input.toUpperCase()) != -1) {
+                    return 'Your other entity name cannot contain a PostgreSQL reserved keyword';
+                } else if (prodDatabaseType == 'cassandra' && reservedWords_Cassandra.indexOf(input.toUpperCase()) != -1) {
+                    return 'Your other entity name cannot contain a Cassandra reserved keyword';
+                }
+                return true;
             },
             message: 'What is the name of the other entity?'
         },
@@ -476,8 +490,22 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             type: 'input',
             name: 'relationshipName',
             validate: function (input) {
-                if ((/^([a-zA-Z0-9_]*)$/.test(input)) && input != '' && input != 'id' && fieldNamesUnderscored.indexOf(_s.underscored(input)) == -1) return true;
-                return 'Your relationship name cannot contain special characters or use an already existing field name';
+                if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
+                    return 'Your relationship cannot contain special characters';
+                } else if (input == '') {
+                    return 'Your relationship cannot be empty';
+                } else if (input == 'id' || fieldNamesUnderscored.indexOf(_s.underscored(input)) != -1) {
+                    return 'Your relationship cannot use an already existing field name';
+                } else if (reservedWords_Java.indexOf(input.toUpperCase()) != -1) {
+                    return 'Your relationship cannot contain a Java reserved keyword';
+                } else if (prodDatabaseType == 'mysql' && reservedWords_MySQL.indexOf(input.toUpperCase()) != -1) {
+                    return 'Your relationship cannot contain a MySQL reserved keyword';
+                } else if (prodDatabaseType == 'postgresql' && reservedWords_Postgresql.indexOf(input.toUpperCase()) != -1) {
+                    return 'Your relationship cannot contain a PostgreSQL reserved keyword';
+                } else if (prodDatabaseType == 'cassandra' && reservedWords_Cassandra.indexOf(input.toUpperCase()) != -1) {
+                    return 'Your relationship cannot contain a Cassandra reserved keyword';
+                }
+                return true;
             },
             message: 'What is the name of the relationship?',
             default: function (response) {
