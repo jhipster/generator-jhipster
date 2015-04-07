@@ -43,6 +43,26 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
         }
         this.useConfigurationFile = true;
     }
+    if (!(/^([a-zA-Z0-9_]*)$/.test(this.name))) {
+        console.log(chalk.red('The entity name cannot contain special characters'));
+        throw new Error("Validation error");
+    } else if (this.name == '') {
+        console.log(chalk.red('The entity name cannot be empty'));
+        throw new Error("Validation error");
+    } else if (reservedWords_Java.indexOf(this.name.toUpperCase()) != -1) {
+        console.log(chalk.red('The entity name cannot contain a Java reserved keyword'));
+        throw new Error("Validation error");
+    } else if (prodDatabaseType == 'mysql' && reservedWords_MySQL.indexOf(this.name.toUpperCase()) != -1) {
+        console.log(chalk.red('The entity name cannot contain a MySQL reserved keyword'));
+        throw new Error("Validation error");
+    } else if (prodDatabaseType == 'postgresql' && reservedWords_Postgresql.indexOf(this.name.toUpperCase()) != -1) {
+        console.log(chalk.red('The entity name cannot contain a PostgreSQL reserved keyword'));
+        throw new Error("Validation error");
+    } else if (prodDatabaseType == 'cassandra' && reservedWords_Cassandra.indexOf(this.name.toUpperCase()) != -1) {
+        console.log(chalk.red('The entity name cannot contain a Cassandra reserved keyword'));
+        throw new Error("Validation error");
+    }
+
     console.log(chalk.red('The entity ' + this.name + ' is being created.'));
     // Specific Entity sub-generator variables
     this.fieldId = 0;
