@@ -28,20 +28,20 @@
     "test": "mocha --reporter spec"
   },
   "dependencies": {
-    "yeoman-generator": "0.17.7",
+    "yeoman-generator": "0.19.0",
     "cheerio": "0.17.0",
-    "underscore.string": "2.3.3",
     "shelljs": "0.3.0",
     "chalk": "0.5.1",
     "grunt": "0.4.5",
     "insight": "0.4.3"
   },
   "devDependencies": {
+    "underscore.string": "3.0.3",
     "grunt": "0.4.5",
     "mocha": "1.21.5"
   },
   "peerDependencies": {
-    "yo": ">=1.3.0"
+    "yo": ">=1.4.6"
   },
   "engines": {
     "node": ">=0.10.0",

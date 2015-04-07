@@ -4,7 +4,7 @@ var util = require('util'),
         path = require('path'),
         yeoman = require('yeoman-generator'),
         chalk = require('chalk'),
-        _s = require('underscore.string'),
+        _ = require('underscore.string'),
         shelljs = require('shelljs'),
         scriptBase = require('../script-base');
 
@@ -30,9 +30,9 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     databaseType = this.databaseType;
     this.prodDatabaseType = this.config.get('prodDatabaseType');
     prodDatabaseType = this.prodDatabaseType;
-    this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
+    this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
     this.jhipsterConfigDirectory = '.jhipster';
-    this.filename = this.jhipsterConfigDirectory + '/' + _s.capitalize(this.name) + '.json';
+    this.filename = this.jhipsterConfigDirectory + '/' + _.capitalize(this.name) + '.json';
     if (shelljs.test('-f', this.filename)) {
         console.log(chalk.green('Found the ' + this.filename + ' configuration file, automatically generating the entity'));
         try {
@@ -92,7 +92,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     return 'Your field name cannot contain special characters';
                 } else if (input == '') {
                     return 'Your field name cannot be empty';
-                } else if (input == 'id' || fieldNamesUnderscored.indexOf(_s.underscored(input)) != -1) {
+                } else if (input == 'id' || fieldNamesUnderscored.indexOf(_.underscored(input)) != -1) {
                     return 'Your field name cannot use an already existing field name';
                 } else if (reservedWords_Java.indexOf(input.toUpperCase()) != -1) {
                     return 'Your field name cannot contain a Java reserved keyword';
@@ -344,17 +344,17 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 if (firstLetter == firstLetter.toLowerCase() && secondLetter == secondLetter.toUpperCase()) {
                     fieldInJavaBeanMethod  = firstLetter.toLowerCase() + fieldInJavaBeanMethod.slice(1);
                 } else {
-                    fieldInJavaBeanMethod = _s.capitalize(props.fieldName);
+                    fieldInJavaBeanMethod = _.capitalize(props.fieldName);
                 }
             } else {
-                fieldInJavaBeanMethod = _s.capitalize(props.fieldName);
+                fieldInJavaBeanMethod = _.capitalize(props.fieldName);
             }
 
             var field = {fieldId: this.fieldId,
                 fieldName: props.fieldName,
                 fieldType: props.fieldType,
-                fieldNameCapitalized: _s.capitalize(props.fieldName),
-                fieldNameUnderscored: _s.underscored(props.fieldName),
+                fieldNameCapitalized: _.capitalize(props.fieldName),
+                fieldNameUnderscored: _.underscored(props.fieldName),
                 fieldInJavaBeanMethod: fieldInJavaBeanMethod,
                 fieldValidate: props.fieldValidate,
                 fieldValidateRules: props.fieldValidateRules,
@@ -365,7 +365,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 fieldValidateRulesMax: props.fieldValidateRulesMax
                 }
 
-            fieldNamesUnderscored.push(_s.underscored(props.fieldName));
+            fieldNamesUnderscored.push(_.underscored(props.fieldName));
             this.fields.push(field);
             if (props.fieldType == 'LocalDate') {
                 this.fieldsContainLocalDate = true;
@@ -386,7 +386,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 this.validation = true;
             }
         }
-        console.log(chalk.red('=================' + _s.capitalize(this.name) + '================='));
+        console.log(chalk.red('=================' + _.capitalize(this.name) + '================='));
         for (var id in this.fields) {
             var validationDetails = '';
             if (this.fields[id].fieldValidate == true) {
@@ -456,7 +456,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             type: 'input',
             name: 'relationshipName',
             validate: function (input) {
-                if ((/^([a-zA-Z0-9_]*)$/.test(input)) && input != '' && input != 'id' && fieldNamesUnderscored.indexOf(_s.underscored(input)) == -1) return true;
+                if ((/^([a-zA-Z0-9_]*)$/.test(input)) && input != '' && input != 'id' && fieldNamesUnderscored.indexOf(_.underscored(input)) == -1) return true;
                 return 'Your relationship name cannot contain special characters or use an already existing field name';
             },
             message: 'What is the name of the relationship?',
@@ -493,7 +493,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
         },
         {
             when: function(response) {
-                return (response.relationshipAdd == true && response.relationshipType == 'many-to-one' && !shelljs.test('-f', 'src/main/java/' + packageFolder + '/domain/' + _s.capitalize(response.otherEntityName) + '.java'))
+                return (response.relationshipAdd == true && response.relationshipType == 'many-to-one' && !shelljs.test('-f', 'src/main/java/' + packageFolder + '/domain/' + _.capitalize(response.otherEntityName) + '.java'))
             },
             type: 'confirm',
             name: 'noOtherEntity',
@@ -511,7 +511,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
         },
         {
             when: function(response) {
-                return (response.relationshipAdd == true && response.ownerSide == true && !shelljs.test('-f', 'src/main/java/' + packageFolder + '/domain/' + _s.capitalize(response.otherEntityName) + '.java'))
+                return (response.relationshipAdd == true && response.ownerSide == true && !shelljs.test('-f', 'src/main/java/' + packageFolder + '/domain/' + _.capitalize(response.otherEntityName) + '.java'))
             },
             type: 'confirm',
             name: 'noOtherEntity2',
@@ -538,11 +538,11 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
         if (props.relationshipAdd) {
             var relationship = {relationshipId: this.relationshipId,
                 relationshipName: props.relationshipName,
-                relationshipNameCapitalized: _s.capitalize(props.relationshipName),
+                relationshipNameCapitalized: _.capitalize(props.relationshipName),
                 relationshipFieldName: props.relationshipName.charAt(0).toLowerCase() + props.relationshipName.slice(1),
                 otherEntityName: props.otherEntityName.charAt(0).toLowerCase() + props.otherEntityName.slice(1),
                 relationshipType: props.relationshipType,
-                otherEntityNameCapitalized: _s.capitalize(props.otherEntityName),
+                otherEntityNameCapitalized: _.capitalize(props.otherEntityName),
                 otherEntityField: props.otherEntityField,
                 ownerSide: props.ownerSide
             }
@@ -552,10 +552,10 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             if (props.relationshipType == 'one-to-many') {
                 this.fieldsContainOneToMany = true;
             }
-            fieldNamesUnderscored.push(_s.underscored(props.relationshipName));
+            fieldNamesUnderscored.push(_.underscored(props.relationshipName));
             this.relationships.push(relationship);
         }
-        console.log(chalk.red('===========' + _s.capitalize(this.name) + '=============='));
+        console.log(chalk.red('===========' + _.capitalize(this.name) + '=============='));
         for (var id in this.fields) {
             console.log(chalk.red(this.fields[id].fieldName + ' (' + this.fields[id].fieldType + ')'));
         }
@@ -648,7 +648,7 @@ EntityGenerator.prototype.files = function files() {
         for (var idx in this.relationships) {
           var rel = this.relationships[idx];
           rel.relationshipName = rel.relationshipName || rel.otherEntityName;
-          rel.relationshipNameCapitalized = rel.relationshipNameCapitalized || _s.capitalize(rel.relationshipName);
+          rel.relationshipNameCapitalized = rel.relationshipNameCapitalized || _.capitalize(rel.relationshipName);
           rel.relationshipFieldName = rel.relationshipFieldName || rel.relationshipName.charAt(0).toLowerCase() + rel.relationshipName.slice(1);
         }
         this.pagination = this.fileData.pagination;
@@ -660,7 +660,7 @@ EntityGenerator.prototype.files = function files() {
             this.validation = false;
         }
     }
-    this.entityClass = _s.capitalize(this.name);
+    this.entityClass = _.capitalize(this.name);
     this.entityInstance = this.name.charAt(0).toLowerCase() + this.name.slice(1);
 
     this.differentTypes = [this.entityClass];

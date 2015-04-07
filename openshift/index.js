@@ -4,7 +4,7 @@ path = require('path'),
 yeoman = require('yeoman-generator'),
 childProcess = require('child_process'),
 chalk = require('chalk'),
-_s = require('underscore.string'),
+_ = require('underscore.string'),
 scriptBase = require('../script-base');
 
 var exec = childProcess.exec;
@@ -21,7 +21,7 @@ var OpenshiftGenerator = module.exports = function OpenshiftGenerator() {
     this.hibernateCache = this.config.get('hibernateCache');
     this.databaseType = this.config.get('databaseType');
     this.prodDatabaseType = this.config.get('prodDatabaseType');
-    this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
+    this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
 };
 
 util.inherits(OpenshiftGenerator, yeoman.generators.Base);

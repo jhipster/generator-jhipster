@@ -4,7 +4,7 @@ path = require('path'),
 yeoman = require('yeoman-generator'),
 exec = require('child_process').exec,
 chalk = require('chalk'),
-_s = require('underscore.string'),
+_ = require('underscore.string'),
 scriptBase = require('../script-base');
 
 var HerokuGenerator = module.exports = function HerokuGenerator(args, options, config) {
@@ -17,7 +17,7 @@ var HerokuGenerator = module.exports = function HerokuGenerator(args, options, c
     this.javaVersion = this.config.get('javaVersion');
     this.hibernateCache = this.config.get('hibernateCache');
     this.databaseType = this.config.get('databaseType');
-    this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
+    this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
 };
 
 util.inherits(HerokuGenerator, yeoman.generators.Base);

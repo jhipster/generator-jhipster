@@ -4,7 +4,7 @@ var util = require('util'),
     yeoman = require('yeoman-generator'),
     childProcess = require('child_process'),
     chalk = require('chalk'),
-    _s = require('underscore.string'),
+    _ = require('underscore.string'),
     scriptBase = require('../script-base');
 
 var exec = childProcess.exec;
@@ -22,7 +22,7 @@ var CloudFoundryGenerator = module.exports = function CloudFoundryGenerator() {
     this.databaseType = this.config.get('databaseType');
     this.devDatabaseType = this.config.get('devDatabaseType');
     this.prodDatabaseType = this.config.get('prodDatabaseType');
-    this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
+    this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
 };
 
 util.inherits(CloudFoundryGenerator, yeoman.generators.Base);
@@ -63,7 +63,7 @@ CloudFoundryGenerator.prototype.askForName = function askForName() {
     }];
 
     this.prompt(prompts, function (props) {
-        this.cloudfoundryDeployedName = this._.slugify(props.cloudfoundryDeployedName).split('-').join('');
+        this.cloudfoundryDeployedName = this._.(props.cloudfoundryDeployedName).split('-').join('');
         this.cloudfoundryProfile = props.cloudfoundryProfile;
         this.cloudfoundryDatabaseServiceName = props.cloudfoundryDatabaseServiceName;
         this.cloudfoundryDatabaseServicePlan = props.cloudfoundryDatabaseServicePlan;

@@ -3,7 +3,7 @@ var util = require('util'),
     path = require('path'),
     yeoman = require('yeoman-generator'),
     chalk = require('chalk'),
-    _s = require('underscore.string'),
+    _ = require('underscore.string'),
     scriptBase = require('../script-base');
 
 var ServiceGenerator = module.exports = function ServiceGenerator(args, options, config) {
@@ -37,7 +37,7 @@ ServiceGenerator.prototype.askFor = function askFor() {
 
 ServiceGenerator.prototype.files = function files() {
 
-    this.serviceClass = _s.capitalize(this.name);
+    this.serviceClass = _.capitalize(this.name);
     this.serviceInstance = this.name.toLowerCase();
     var insight = this.insight();
     insight.track('generator', 'service');

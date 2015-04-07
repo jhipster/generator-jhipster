@@ -4,7 +4,7 @@ path = require('path'),
 yeoman = require('yeoman-generator'),
 exec = require('child_process').exec,
 chalk = require('chalk'),
-_s = require('underscore.string'),
+_ = require('underscore.string'),
 scriptBase = require('../script-base');
 
 var LanguagesGenerator = module.exports = function LanguagesGenerator(args, options, config) {
