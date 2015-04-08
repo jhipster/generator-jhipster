@@ -55,16 +55,22 @@ public class <%= entityClass %>Resource {
     @RequestMapping(value = "/<%= entityInstance %>s",
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<Void> create(<% if (validation) { %>@Valid <% } %>@RequestBody <%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %> <%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>) throws URISyntaxException {
-        log.debug("REST request to save <%= entityClass %> : {}", <%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>);
-        if (<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>.getId() != null) {
-            return ResponseEntity.badRequest().header("Failure", "A new <%= entityInstance %> cannot already have an ID").build();
+    @Timed<%
+    var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
+    var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
+    var mapper = entityInstance  + 'Mapper';
+    var dtoToEntity = mapper + '.'+ entityInstance +'DTOTo' + entityClass;
+    var entityToDto = mapper + '.'+ entityInstance +'To' + entityClass + 'DTO';
+    %>
+    public ResponseEntity<<%= instanceType %>> create(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
+        log.debug("REST request to save <%= entityClass %> : {}", <%= instanceName %>);
+        if (<%= instanceName %>.getId() != null) {
+            return ResponseEntity.badRequest().header("Failure", "A new <%= entityInstance %> cannot already have an ID").body(null);
         }<% if (dto == 'mapstruct') { %>
-        <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Mapper.<%= entityInstance %>DTOTo<%= entityClass %>(<%= entityInstance %>DTO);<% } %>
-        <%= entityInstance %>Repository.save(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
-        <%= entityInstance %>SearchRepository.save(<%= entityInstance %>);<% } %>
-        return ResponseEntity.created(new URI("/api/<%= entityInstance %>s/" + <%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>.getId())).build();
+        <%= entityClass %> <%= entityInstance %> = <%= dtoToEntity %>(<%= instanceName %>);<% } %>
+        <%= entityClass %> result = <%= entityInstance %>Repository.save(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
+        <%= entityInstance %>SearchRepository.save(result);<% } %>
+        return ResponseEntity.created(new URI("/api/<%= entityInstance %>s/" + <%= instanceName %>.getId())).body(<% if (dto == 'mapstruct') { %><%= entityToDto %>(result)<% } else { %>result<% } %>);
     }
 
     /**
@@ -74,15 +80,15 @@ public class <%= entityClass %>Resource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> update(<% if (validation) { %>@Valid <% } %>@RequestBody <%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %> <%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>) throws URISyntaxException {
-        log.debug("REST request to update <%= entityClass %> : {}", <%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>);
-        if (<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>.getId() == null) {
-            return create(<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>);
+    public ResponseEntity<<%= instanceType %>> update(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
+        log.debug("REST request to update <%= entityClass %> : {}", <%= instanceName %>);
+        if (<%= instanceName %>.getId() == null) {
+            return create(<%= instanceName %>);
         }<% if (dto == 'mapstruct') { %>
-        <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Mapper.<%= entityInstance %>DTOTo<%= entityClass %>(<%= entityInstance %>DTO);<% } %>
-        <%= entityInstance %>Repository.save(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
+        <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Mapper.<%= entityInstance %>DTOTo<%= entityClass %>(<%= instanceName %>);<% } %>
+        <%= entityClass %> result = <%= entityInstance %>Repository.save(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
         <%= entityInstance %>SearchRepository.save(<%= entityInstance %>);<% } %>
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(<% if (dto == 'mapstruct') { %><%= entityToDto %>(result)<% } else { %>result<% } %>);
     }
 
     /**
