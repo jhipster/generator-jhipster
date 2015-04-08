@@ -32,7 +32,6 @@
     "cheerio": "0.17.0",
     "shelljs": "0.3.0",
     "chalk": "0.5.1",
-    "grunt": "0.4.5",
     "insight": "0.4.3"
   },
   "devDependencies": {
