@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <property name="now" value="now()" dbms="mysql,h2"/>
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+
+    <changeSet id="00000000000000" author="jhipster" dbms="postgresql">
+        <createSequence sequenceName="hibernate_sequence" startValue="1000" incrementBy="1"/>
+    </changeSet>
+
+    <!--
+        JHipster core tables.
+        The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
+    -->
+    <changeSet id="00000000000001" author="jhipster">
+        <createTable tableName="T_USER">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="login" type="varchar(50)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="password" type="varchar(100)"/>
+            <column name="first_name" type="varchar(50)"/>
+            <column name="last_name" type="varchar(50)"/>
+            <column name="email" type="varchar(100)">
+                <constraints unique="true"/>
+            </column>
+            <column name="activated" type="boolean" valueBoolean="false">
+                <constraints nullable="false" />
+            </column>
+            <column name="lang_key" type="varchar(5)"/>
+            <column name="activation_key" type="varchar(20)"/>
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </createTable>
+
+        <createIndex indexName="idx_user_login"
+            tableName="T_USER"
+            unique="true">
+            <column name="login" type="varchar(50)"/>
+        </createIndex>
+
+        <createIndex indexName="idx_user_email"
+            tableName="T_USER"
+            unique="true">
+            <column name="email" type="varchar(100)"/>
+        </createIndex>
+
+        <createTable tableName="T_AUTHORITY">
+            <column name="name" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="T_USER_AUTHORITY">
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="authority_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="user_id, authority_name" tableName="T_USER_AUTHORITY"/>
+
+        <addForeignKeyConstraint baseColumnNames="authority_name"
+                                 baseTableName="T_USER_AUTHORITY"
+                                 constraintName="fk_authority_name"
+                                 referencedColumnNames="name"
+                                 referencedTableName="T_AUTHORITY"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="T_USER_AUTHORITY"
+                                 constraintName="fk_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="T_USER"/>
+
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/users.csv"
+                  separator=";"
+                  tableName="T_USER">
+            <column name="activated" type="boolean"/>
+            <column name="created_date" type="timestamp"/>
+        </loadData>
+        <dropDefaultValue tableName="T_USER" columnName="created_date" columnDataType="datetime"/>
+
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/authorities.csv"
+                  separator=";"
+                  tableName="T_AUTHORITY"/>
+
+        <loadData encoding="UTF-8"
+                  file="config/liquibase/users_authorities.csv"
+                  separator=";"
+                  tableName="T_USER_AUTHORITY"/>
+
+        <createTable tableName="T_PERSISTENT_AUDIT_EVENT">
+            <column name="event_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="principal" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="event_date" type="timestamp"/>
+            <column name="event_type" type="varchar(255)"/>
+        </createTable>
+
+        <createTable tableName="T_PERSISTENT_AUDIT_EVENT_DATA">
+            <column name="event_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="varchar(255)"/>
+        </createTable>
+        <addPrimaryKey columnNames="event_id, name" tableName="T_PERSISTENT_AUDIT_EVENT_DATA"/>
+
+        <createIndex indexName="idx_persistent_audit_event"
+                     tableName="T_PERSISTENT_AUDIT_EVENT"
+                     unique="false">
+            <column name="principal" type="varchar(255)"/>
+            <column name="event_date" type="timestamp"/>
+        </createIndex>
+
+        <createIndex indexName="idx_persistent_audit_event_data"
+                     tableName="T_PERSISTENT_AUDIT_EVENT_DATA"
+                     unique="false">
+            <column name="event_id" type="bigint"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="event_id"
+                                 baseTableName="T_PERSISTENT_AUDIT_EVENT_DATA"
+                                 constraintName="FK_event_persistent_audit_event_data"
+                                 referencedColumnNames="event_id"
+                                 referencedTableName="T_PERSISTENT_AUDIT_EVENT"/>
+    </changeSet>
+    
+</databaseChangeLog>
