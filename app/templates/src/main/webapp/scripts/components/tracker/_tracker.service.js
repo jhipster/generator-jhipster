@@ -6,6 +6,7 @@ angular.module('<%=angularAppName%>')
         var subscriber = null;
         var listener = $q.defer();
         var connected = $q.defer();
+        var alreadyConnectedOnce = false;
         function sendActivity() {
             if (stompClient != null && stompClient.connected) {
                 stompClient
@@ -23,9 +24,12 @@ angular.module('<%=angularAppName%>')
                 stompClient.connect(headers, function(frame) {
                     connected.resolve("success");
                     sendActivity();
-                    $rootScope.$on('$stateChangeStart', function (event) {
-                        sendActivity();
-                    });
+                    if (!alreadyConnectedOnce) {
+                        $rootScope.$on('$stateChangeStart', function (event) {
+                            sendActivity();
+                        });
+                        alreadyConnectedOnce = true;
+                    }
                 });
             },
             subscribe: function() {
