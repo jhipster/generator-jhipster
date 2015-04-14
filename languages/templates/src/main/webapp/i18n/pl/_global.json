@@ -1,12 +1,12 @@
 {
     "global": {
         "title": "<%= baseName %>",
-        "browsehappy": "Używasz <strong>przestarzałej</strong> przeglądarki. Proszę <a href=\"http://browsehappy.com/\">uaktualnij swoją przeglądarkę</a> aby polepszyć doświadczenie użytkownika.",
+        "browsehappy": "Używasz <strong>przestarzałej</strong> przeglądarki. Proszę <a href=\"http://browsehappy.com/\">uaktualnij swoją przeglądarkę</a> aby poprawić wrażenia z użytkowania tej aplikacji.",
         "menu": {
             "home": "Strona domowa",
             "entities": {
-                "main": "Entities",
-                "additionalEntity": "JHipster will add addtional entities here"
+                "main": "Encje",
+                "additionalEntity": "JHipster doda w tym miejscu nowe encje"
             },
             "account": {
                 "main": "Konto",
@@ -31,7 +31,7 @@
             "language": "Język"
         },
         "form": {
-            "username": "Zaloguj się",
+            "username": "Nazwa użytkownika",
             "username.placeholder": "Twój login",
             "newpassword": "Nowe hasło",
             "newpassword.placeholder": "Nowe hasło",
@@ -42,7 +42,7 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Jeśli chcek <a href=\"#/login\">zalogować się</a>, możesz spróbować domyślnego konta:<br/>- Administrator (login=\"admin\" i hasło=\"admin\") <br/>- Użytkownik (login=\"user\" i hasło=\"user\").",
+                "authenticated": "Jeśli chcesz się <a href=\"#/login\">zalogować</a>, możesz spróbować któregoś z domyślnych kont:<br/>- Administrator (login=\"admin\" i hasło=\"admin\") <br/>- Użytkownik (login=\"user\" i hasło=\"user\").",
                 "register": "Nie masz jeszcze konta? <a href=\"#/register\">Zarejestruj się</a>"
             },
             "error": {
@@ -56,15 +56,15 @@
                     "strength": "Siła hasła:"
                 },
                 "confirmpassword": {
-                    "required": "Twoje hasło potwierdzające jest wymagane.",
-                    "minlength": "Twoje hasło potwierdzające powinno mieć minimum 5 character",
-                    "maxlength": "Twoje hasło potwierdzające nie powinno być dłuższe niż 50 znaków"
+                    "required": "Potwierdzenie hasła jest wymagane.",
+                    "minlength": "Potwierdzenie hasła powinno mieć minimum 5 znaków",
+                    "maxlength": "Potwierdzenie hasła nie powinno być dłuższe niż 50 znaków"
                 },
                 "email": {
                     "required": "Twój e-mail jest wymagany.",
                     "invalid": "Twój e-mail jest błędny.",
-                    "minlength": "Twój e-mail musi mieć przynajmniej 5 liter",
-                    "maxlength": "Your e-mail nie może być dłuższe niż 50 liter"
+                    "minlength": "Twój e-mail musi mieć przynajmniej 5 znaków",
+                    "maxlength": "Twój e-mail nie może być dłuższy niż 50 znaków"
                 }
             }
         }
@@ -86,14 +86,14 @@
             "title": "Potwierdź usunięcie"
         },
         "validation": {
-            "required": "This field is required.",
-            "minlength": "This field is required to be at least {{min}} characters.",
-            "maxlength": "This field cannot be longer than {{max}} characters.",
-            "min": "This field should be more than {{min}}.",
-            "max": "This field cannot be more than {{max}}.",
-            "pattern": "This field should follow pattern {{pattern}}.",
-            "number": "This field should be a number.",
-            "datetimelocal": "This field should be a date and time."
+            "required": "To pole jest wymagane.",
+            "minlength": "Wartość musi mieć długość co najmniej {{min}} znaków.",
+            "maxlength": "Wartość nie może być dłuższa niż {{max}} znaków.",
+            "min": "Wartość powinna być większa niż {{min}}.",
+            "max": "Wartość nie może być większa niż {{max}}.",
+            "pattern": "Wartość powinna być zgodna ze wzorem {{pattern}}.",
+            "number": "Wartość powinna być liczbowa.",
+            "datetimelocal": "Wartość powinna zawierać datę i czas."
         }
     },
     "footer": "To jest stopka"
