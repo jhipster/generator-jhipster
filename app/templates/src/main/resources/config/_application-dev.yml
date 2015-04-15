@@ -44,6 +44,8 @@ spring:
             protocolVersion: V2
             compression: LZ4
             keyspaceName: <%= baseName %><% } %>
+    messages:
+        cache-seconds: 1
     thymeleaf:
         mode: XHTML
         cache: false
