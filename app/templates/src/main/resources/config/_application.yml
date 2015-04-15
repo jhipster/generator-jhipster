@@ -13,16 +13,15 @@ async:
     maxPoolSize: 50
     queueCapacity: 10000
 
-spring:
-    mail:
-        host: localhost
-        port: 25
-        user:
-        password:
-        protocol: smtp
-        tls: false
-        auth: false
-        from: <%= baseName %>@localhost
+mail:
+    host: localhost
+    port: 25
+    username:
+    password:
+    protocol: smtp
+    tls: false
+    auth: false
+    from: <%= baseName %>@localhost
 <% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
 authentication:<% if (authenticationType == 'xauth') { %>
     xauth:
