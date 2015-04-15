@@ -93,6 +93,7 @@ public class AccountResource {
             return new ResponseEntity<>(HttpStatus.CREATED);
         }<% } %>
     }
+
     /**
      * GET  /activate -> activate the registered user.
      */
@@ -295,8 +296,7 @@ public class AccountResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<String> finishPasswordReset(@RequestParam(value = "key") String key, @RequestParam(value = "newPassword") String newPassword) {
-        <% if (javaVersion == '8') { %>
+    public ResponseEntity<String> finishPasswordReset(@RequestParam(value = "key") String key, @RequestParam(value = "newPassword") String newPassword) {<% if (javaVersion == '8') { %>
         return userService.completePasswordReset(newPassword, key)
               .map(user -> new ResponseEntity<String>(HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
         <% } else {%>
