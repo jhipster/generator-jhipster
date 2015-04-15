@@ -9,6 +9,8 @@ CREATE TABLE IF NOT EXISTS user (
     activated boolean,
     lang_key text,
     activation_key text,
+    reset_key text,
+    reset_date timestamp,
     authorities set<text>,
     PRIMARY KEY(id)
 );
@@ -29,6 +31,12 @@ CREATE TABLE IF NOT EXISTS user_by_activation_key (
     activation_key text,
     id text,
     PRIMARY KEY(activation_key, id)
+);
+
+CREATE TABLE IF NOT EXISTS user_by_reset_key (
+    reset_key text,
+    id text,
+    PRIMARY KEY(reset_key, id)
 );
 
 CREATE TABLE IF NOT EXISTS activation_key_by_creation_date (

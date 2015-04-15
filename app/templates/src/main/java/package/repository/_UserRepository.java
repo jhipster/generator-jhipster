@@ -35,6 +35,8 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
 
     List<User> findAllByActivatedIsFalseAndCreatedDateBefore(DateTime dateTime);
 
+    Optional<User> findOneByResetKey(String resetKey);
+
     Optional<User> findOneByEmail(String email);
 
     Optional<User> findOneByLogin(String login);
@@ -47,6 +49,8 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
     User findOneByActivationKey(String activationKey);
 
     List<User> findAllByActivatedIsFalseAndCreatedDateBefore(DateTime dateTime);
+
+    User findOneByResetKey(String resetKey);
 
     User findOneByLogin(String login);
 
@@ -64,6 +68,8 @@ public class UserRepository {
     private PreparedStatement findAllStmt;
 
     private PreparedStatement findOneByActivationKeyStmt;
+
+    private PreparedStatement findOneByResetKeyStmt;
 
     private PreparedStatement insertByActivationKeyStmt;
 
@@ -92,13 +98,26 @@ public class UserRepository {
             "FROM user_by_activation_key " +
             "WHERE activation_key = :activation_key");
 
+        findOneByResetKeyStmt = session.prepare(
+            "SELECT id " +
+            "FROM user_by_reset_key " +
+            "WHERE reset_key = :reset_key");
+
         insertByActivationKeyStmt = session.prepare(
             "INSERT INTO user_by_activation_key (activation_key, id) " +
             "VALUES (:activation_key, :id)");
 
+        insertByResetKeyStmt = session.prepare(
+            "INSERT INTO user_by_reset_key (reset_key, id) " +
+            "VALUES (:reset_key, :id)");
+
         deleteByActivationKeyStmt = session.prepare(
             "DELETE FROM user_by_activation_key " +
             "WHERE activation_key = :activation_key");
+
+        deleteByResetKeyStmt = session.prepare(
+            "DELETE FROM user_by_reset_key " +
+            "WHERE reset_key = :reset_key");
 
         findOneByLoginStmt = session.prepare(
             "SELECT id " +
@@ -133,6 +152,12 @@ public class UserRepository {
         return findOneFromIndex(stmt);
     }
 
+    public Optional<User> findOneByResetKey(String resetKey) {
+        BoundStatement stmt = findOneByResetKeyStmt.bind();
+        stmt.setString("reset_key", resetKey);
+        return findOneFromIndex(stmt);
+    }
+
     public Optional<User> findOneByEmail(String email) {
         BoundStatement stmt = findOneByEmailStmt.bind();
         stmt.setString("email", email);
@@ -155,6 +180,9 @@ public class UserRepository {
             if (!StringUtils.isEmpty(oldUser.getActivationKey()) && !oldUser.getActivationKey().equals(user.getActivationKey())) {
                 session.execute(deleteByActivationKeyStmt.bind().setString("activation_key", oldUser.getActivationKey()));
             }
+            if (!StringUtils.isEmpty(oldUser.getResetKey()) && !oldUser.getResetKey().equals(user.getResetKey())) {
+                session.execute(deleteByResetKeyStmt.bind().setString("reset_key", oldUser.getResetKey()));
+            }
             if (!StringUtils.isEmpty(oldUser.getLogin()) && !oldUser.getLogin().equals(user.getLogin())) {
                 session.execute(deleteByLoginStmt.bind().setString("login", oldUser.getLogin()));
             }
@@ -168,6 +196,11 @@ public class UserRepository {
             batch.add(insertByActivationKeyStmt.bind()
                 .setString("activation_key", user.getActivationKey())
                 .setString("id", user.getId()));
+        }
+        if (!StringUtils.isEmpty(user.getResetKey())) {
+          batch.add(insertByResetKeyStmt.bind()
+              .setString("reset_key", user.getResetKey())
+              .setString("id", user.getId()));
         }
         batch.add(insertByLoginStmt.bind()
             .setString("login", user.getLogin())
@@ -183,6 +216,9 @@ public class UserRepository {
         batch.add(mapper.deleteQuery(user));
         if (!StringUtils.isEmpty(user.getActivationKey())) {
             batch.add(deleteByActivationKeyStmt.bind().setString("activation_key", user.getActivationKey()));
+        }
+        if (!StringUtils.isEmpty(user.getResetKey())) {
+            batch.add(deleteByResetKeyStmt.bind().setString("reset_key", user.getResetKey()));
         }
         batch.add(deleteByLoginStmt.bind().setString("login", user.getLogin()));
         batch.add(deleteByEmailStmt.bind().setString("email", user.getEmail()));
