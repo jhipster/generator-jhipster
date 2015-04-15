@@ -4,8 +4,8 @@
         "form": {
             "password": "Hasło",
             "password.placeholder": "Twoje hasło",
-            "rememberme": "Automatyczny login",
-            "button": "Autoryzacja"
+            "rememberme": "Zapamiętaj mnie",
+            "button": "Zaloguj"
         },
         "messages": {
             "error": {

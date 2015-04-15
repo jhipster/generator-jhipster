@@ -148,7 +148,7 @@ Generator.prototype.addNewEntityToMenu = function(language, key, value) {
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
-            needle: '"additionalEntity": "JHipster will add addtional entities here"',
+            needle: '"additionalEntity": "JHipster will add additional entities here (do not translate!)"',
             splicable: [
                     '"' + key + '": "' + value + '",'
             ]
