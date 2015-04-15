@@ -43,10 +43,6 @@ spring:
             protocolVersion: V2
             compression: LZ4
             keyspaceName: <%= baseName %><% } %>
-
-    mail:
-        baseUrl: http://localhost:8080
-
     thymeleaf:
         mode: XHTML
         cache: true
