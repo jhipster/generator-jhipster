@@ -18,6 +18,12 @@ angular.module('<%=angularAppName%>')
                         $translatePartialLoader.addPart('tracker');
                         return $translate.refresh();
                     }]
-                }
+                },
+                onEnter: function(Tracker) {
+                    Tracker.subscribe();
+                },
+                onExit: function(Tracker) {
+                    Tracker.unsubscribe();
+                },
             });
     });
