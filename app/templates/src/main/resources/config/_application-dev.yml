@@ -6,7 +6,7 @@ spring:
         active: dev<% if (databaseType == 'sql') { %>
     datasource:
         dataSourceClassName: <% if (devDatabaseType == 'mysql') { %>com.mysql.jdbc.jdbc2.optional.MysqlDataSource<% } else if (devDatabaseType == 'postgresql') { %>org.postgresql.ds.PGSimpleDataSource<% } else { %>org.h2.jdbcx.JdbcDataSource<% } %>
-        url: <% if (devDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType == 'postgresql') { %><% } else { %>jdbc:h2:mem:jhipster;DB_CLOSE_DELAY=-1<% } %>
+        url: <% if (devDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType == 'postgresql') { %>jdbc:postgresql://localhost:5432/<%= basename %><% } else { %>jdbc:h2:mem:jhipster;DB_CLOSE_DELAY=-1<% } %>
         databaseName: <% if (devDatabaseType == 'postgresql') { %><%= baseName %><% } %>
         serverName: <% if (devDatabaseType == 'postgresql') { %>localhost<% } %>
         username: <% if (devDatabaseType == 'mysql') { %>root<% } else if (devDatabaseType == 'postgresql') { %><%= baseName %><% } %>
