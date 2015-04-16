@@ -29,6 +29,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.databaseType = this.config.get('databaseType');
     databaseType = this.databaseType;
     this.prodDatabaseType = this.config.get('prodDatabaseType');
+    this.searchEngine = this.config.get('searchEngine');
     prodDatabaseType = this.prodDatabaseType;
     this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
     this.jhipsterConfigDirectory = '.jhipster';
@@ -734,6 +735,11 @@ EntityGenerator.prototype.files = function files() {
     this.template('src/main/java/package/repository/_EntityRepository.java',
         'src/main/java/' + this.packageFolder + '/repository/' +    this.entityClass + 'Repository.java', this, {});
 
+    if (this.searchEngine == 'elasticsearch') {
+        this.template('src/main/java/package/repository/search/_EntitySearchRepository.java',
+            'src/main/java/' + this.packageFolder + '/repository/search/' +    this.entityClass + 'SearchRepository.java', this, {});
+    }
+
     this.template('src/main/java/package/web/rest/_EntityResource.java',
         'src/main/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'Resource.java', this, {});
 
@@ -769,6 +775,12 @@ EntityGenerator.prototype.files = function files() {
     this.template('src/main/webapp/components/_entity-service.js',
         'src/main/webapp/scripts/components/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js', this, {});
     this.addComponentsScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.service' + '.js');
+
+    if (this.searchEngine == 'elasticsearch') {
+        this.template('src/main/webapp/components/_entity-search-service.js',
+            'src/main/webapp/scripts/components/entities/' + this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js', this, {});
+        this.addComponentsScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js');
+    }
 
     this.template('src/test/java/package/web/rest/_EntityResourceTest.java',
         'src/test/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'ResourceTest.java', this, {});

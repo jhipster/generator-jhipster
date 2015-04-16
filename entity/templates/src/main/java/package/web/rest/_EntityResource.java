@@ -2,7 +2,8 @@ package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import <%=packageName%>.domain.<%= entityClass %>;
-import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (pagination != 'no') { %>
+import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine == 'elasticsearch') { %>
+import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } %><% if (pagination != 'no') { %>
 import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (pagination != 'no') { %>
@@ -20,7 +21,11 @@ import java.net.URISyntaxException;<% if (javaVersion == '7') { %>
 import javax.servlet.http.HttpServletResponse;<% } %>
 import java.util.List;<% if (javaVersion == '8') { %>
 import java.util.Optional;<% } %><% if (databaseType == 'cassandra') { %>
-import java.util.UUID;<% } %>
+import java.util.UUID;<% } %><% if (searchEngine == 'elasticsearch') { %>
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
 
 /**
  * REST controller for managing <%= entityClass %>.
@@ -32,7 +37,10 @@ public class <%= entityClass %>Resource {
     private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
 
     @Inject
-    private <%= entityClass %>Repository <%= entityInstance %>Repository;
+    private <%= entityClass %>Repository <%= entityInstance %>Repository;<% if (searchEngine == 'elasticsearch') { %>
+
+    @Inject
+    private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;<% } %>
 
     /**
      * POST  /<%= entityInstance %>s -> Create a new <%= entityInstance %>.
@@ -46,7 +54,8 @@ public class <%= entityClass %>Resource {
         if (<%= entityInstance %>.getId() != null) {
             return ResponseEntity.badRequest().header("Failure", "A new <%= entityInstance %> cannot already have an ID").build();
         }
-        <%= entityInstance %>Repository.save(<%= entityInstance %>);
+        <%= entityInstance %>Repository.save(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
+        <%= entityInstance %>SearchRepository.save(<%= entityInstance %>);<% } %>
         return ResponseEntity.created(new URI("/api/<%= entityInstance %>s/" + <%= entityInstance %>.getId())).build();
     }
 
@@ -62,7 +71,8 @@ public class <%= entityClass %>Resource {
         if (<%= entityInstance %>.getId() == null) {
             return create(<%= entityInstance %>);
         }
-        <%= entityInstance %>Repository.save(<%= entityInstance %>);
+        <%= entityInstance %>Repository.save(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
+        <%= entityInstance %>SearchRepository.save(<%= entityInstance %>);<% } %>
         return ResponseEntity.ok().build();
     }
 
@@ -116,6 +126,17 @@ public class <%= entityClass %>Resource {
     public void delete(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id) {
         log.debug("REST request to delete <%= entityClass %> : {}", id);<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         <%= entityInstance %>Repository.delete(id);<% } %><% if (databaseType == 'cassandra') { %>
-        <%= entityInstance %>Repository.delete(UUID.fromString(id));<% } %>
-    }
+        <%= entityInstance %>Repository.delete(UUID.fromString(id));<% } %><% if (searchEngine == 'elasticsearch') { %>
+        <%= entityInstance %>SearchRepository.delete(id);<% } %>
+    }<% if (searchEngine == 'elasticsearch') { %>
+
+    @RequestMapping(value = "/_search/<%= entityInstance %>s/{query}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public List<<%= entityClass %>> search(@PathVariable String query) {
+        return StreamSupport
+            .stream(<%= entityInstance %>SearchRepository.search(queryString(query)).spliterator(), false)
+            .collect(Collectors.toList());
+    }<% } %>
 }
