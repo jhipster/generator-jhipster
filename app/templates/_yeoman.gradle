@@ -12,6 +12,7 @@ task bower(type: Exec) {
 }
 
 <% if(frontendBuilder == 'grunt') {%>
+bower.onlyIf { !project.hasProperty('skipBower') }
 processResources.dependsOn 'bower'
 <% }  if(frontendBuilder == 'gulp') {%>
 gulp_build.dependsOn 'npmInstall'
