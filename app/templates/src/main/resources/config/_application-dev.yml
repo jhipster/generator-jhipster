@@ -46,6 +46,7 @@ spring:
             keyspaceName: <%= baseName %><% } %><% if (searchEngine == 'elasticsearch') { %>
     data:
         elasticsearch:
+            cluster-name: 
             cluster-nodes: <% } %>
     messages:
         cache-seconds: 1

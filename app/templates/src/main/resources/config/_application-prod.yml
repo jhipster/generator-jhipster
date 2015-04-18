@@ -45,6 +45,7 @@ spring:
             keyspaceName: <%= baseName %><% } %><% if (searchEngine == 'elasticsearch') { %>
     data:
         elasticsearch:
+            cluster-name: 
             cluster-nodes: localhost:9200<% } %>
     thymeleaf:
         mode: XHTML
