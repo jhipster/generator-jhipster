@@ -625,6 +625,7 @@ JhipsterGenerator.prototype.app = function app() {
 
     if (this.searchEngine == 'elasticsearch') {
         this.template('src/main/java/package/repository/search/_package-info.java', javaDir + 'repository/search/package-info.java', this, {});
+        this.template('src/main/java/package/repository/search/_UserSearchRepository.java', javaDir + 'repository/search/UserSearchRepository.java', this, {});
     }
     this.template('src/main/java/package/repository/_package-info.java', javaDir + 'repository/package-info.java', this, {});
     if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {

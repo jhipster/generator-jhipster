@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;<% if (hibernateCache != 'no'
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
 import org.hibernate.validator.constraints.Email;
-<% if (databaseType == 'mongodb') { %>import org.springframework.data.annotation.Id;
+<% if (searchEngine == 'elasticsearch') { %>
+import org.springframework.data.elasticsearch.annotations.Document;<% } %><% if (databaseType == 'mongodb') { %>import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 <% } %><% if (databaseType == 'sql') { %>
@@ -24,7 +25,8 @@ import java.util.Set;
 @Table(name = "T_USER")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'mongodb') { %>
 @Document(collection = "T_USER")<% } %><% if (databaseType == 'cassandra') { %>
-@Table(name = "user")<% } %>
+@Table(name = "user")<% } %><% if (searchEngine == 'elasticsearch') { %>
+@Document(indexName="user")<% } %>
 public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %> extends AbstractAuditingEntity<% } %> implements Serializable {
 <% if (databaseType == 'sql') { %>
     @Id
@@ -75,6 +77,7 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Column(name = "activation_key", length = 20)<% } %><% if (databaseType == 'mongodb') { %>
     @Field("activation_key")<% } %><% if (databaseType == 'cassandra') { %>
     @Column(name = "activation_key")<% } %>
+    @JsonIgnore
     private String activationKey;
 
     @JsonIgnore<% if (databaseType == 'sql') { %>
