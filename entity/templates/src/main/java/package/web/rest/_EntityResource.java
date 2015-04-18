@@ -126,10 +126,15 @@ public class <%= entityClass %>Resource {
     public void delete(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id) {
         log.debug("REST request to delete <%= entityClass %> : {}", id);<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         <%= entityInstance %>Repository.delete(id);<% } %><% if (databaseType == 'cassandra') { %>
-        <%= entityInstance %>Repository.delete(UUID.fromString(id));<% } %><% if (searchEngine == 'elasticsearch') { %>
-        <%= entityInstance %>SearchRepository.delete(id);<% } %>
+        <%= entityInstance %>Repository.delete(UUID.fromString(id));<% } %><% if (searchEngine == 'elasticsearch') { %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+        <%= entityInstance %>SearchRepository.delete(id);<% } %><% if (databaseType == 'cassandra') { %>
+        <%= entityInstance %>SearchRepository.delete(UUID.fromString(id));<% } %><% } %>
     }<% if (searchEngine == 'elasticsearch') { %>
 
+    /**
+     * SEARCH  /_search/<%= entityInstance %>s/:query -> search for the <%= entityInstance %> corresponding
+     * to the query.
+     */
     @RequestMapping(value = "/_search/<%= entityInstance %>s/{query}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
