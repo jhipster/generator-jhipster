@@ -75,7 +75,7 @@ angular.module('<%=angularAppName%>')
                 $scope.<%= entityInstance %>s = result;
             }, function(response) {
                 if(response.status === 404) {
-                    $scope.<%= entityInstance %>s = [];
+                    $scope.loadAll();
                 }
             });
         };<% } %>
