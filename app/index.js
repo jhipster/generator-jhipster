@@ -233,7 +233,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             when: function (response) {
-                return (!(response.javaVersion == '7'));
+                return (!(response.javaVersion == '7') && response.databaseType == 'sql');
             },
             type: 'list',
             name: 'searchEngine',
