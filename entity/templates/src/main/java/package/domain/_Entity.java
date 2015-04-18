@@ -31,9 +31,9 @@ import java.util.UUID;<% } %>
  * A <%= entityClass %>.
  */<% if (databaseType == 'sql') { %>
 @Entity
-@Table(name = "T_<%= name.toUpperCase() %>")<% if (hibernateCache != 'no') { %>
+@Table(name = "<%= name.toUpperCase() %>")<% if (hibernateCache != 'no') { %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType == 'mongodb') { %>
-@Document(collection = "T_<%= name.toUpperCase() %>")<% } %><% if (databaseType == 'cassandra') { %>
+@Document(collection = "<%= name.toUpperCase() %>")<% } %><% if (databaseType == 'cassandra') { %>
 @Table(name = "<%= entityInstance %>")<% } %>
 public class <%= entityClass %> implements Serializable {
 <% if (databaseType == 'sql') { %>
@@ -83,7 +83,7 @@ public class <%= entityClass %> implements Serializable {
     @ManyToMany<% if (relationships[relationshipId].ownerSide == false) { %>(mappedBy = "<%= entityInstance %>s")
     @JsonIgnore<% } %><% if (hibernateCache != 'no') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (relationships[relationshipId].ownerSide == true) { %>
-    @JoinTable(name = "T_<%= name.toUpperCase() + '_' + relationships[relationshipId].relationshipName.toUpperCase() %>",
+    @JoinTable(name = "<%= name.toUpperCase() + '_' + relationships[relationshipId].relationshipName.toUpperCase() %>",
                joinColumns = @JoinColumn(name="<%= name %>s_id", referencedColumnName="ID"),
                inverseJoinColumns = @JoinColumn(name="<%= relationships[relationshipId].relationshipName %>s_id", referencedColumnName="ID"))<% } %>
     private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();<% } else { %>

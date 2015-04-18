@@ -7,7 +7,7 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 
 import java.util.UUID;
 
-@Document(collection = "T_OAUTH_AUTHENTICATION_REFRESH_TOKEN")
+@Document(collection = "OAUTH_AUTHENTICATION_REFRESH_TOKEN")
 public class OAuth2AuthenticationRefreshToken {
 
     @Id

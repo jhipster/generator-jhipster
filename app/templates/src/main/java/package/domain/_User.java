@@ -21,9 +21,9 @@ import java.util.Set;
  * A user.
  */<% if (databaseType == 'sql') { %>
 @Entity
-@Table(name = "T_USER")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
+@Table(name = "JHI_USER")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'mongodb') { %>
-@Document(collection = "T_USER")<% } %><% if (databaseType == 'cassandra') { %>
+@Document(collection = "JHI_USER")<% } %><% if (databaseType == 'cassandra') { %>
 @Table(name = "user")<% } %>
 public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %> extends AbstractAuditingEntity<% } %> implements Serializable {
 <% if (databaseType == 'sql') { %>
@@ -80,7 +80,7 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @JsonIgnore<% if (databaseType == 'sql') { %>
     @ManyToMany
     @JoinTable(
-            name = "T_USER_AUTHORITY",
+            name = "JHI_USER_AUTHORITY",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})<% if (hibernateCache != 'no') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
