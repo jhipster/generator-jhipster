@@ -682,6 +682,12 @@ EntityGenerator.prototype.files = function files() {
     } else  {
         this.relationships = this.fileData.relationships;
         this.fields = this.fileData.fields;
+        for (var fieldIdx in this.fields) {
+            var field = this.fields[fieldIdx];
+            if (field.fieldInJavaBeanMethod == null) {
+                field.fieldInJavaBeanMethod = _s.capitalize(field.fieldName);
+            }
+        }
         this.fieldNamesUnderscored = this.fileData.fieldNamesUnderscored;
         this.fieldsContainOwnerManyToMany = this.fileData.fieldsContainOwnerManyToMany;
         this.fieldsContainOneToMany = this.fileData.fieldsContainOneToMany;
