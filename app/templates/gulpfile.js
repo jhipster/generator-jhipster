@@ -120,7 +120,7 @@ gulp.task('serve', function() {
             '/configprops',
             '/api-docs',
             '/metrics',
-            '/dump/'<% if (authenticationType == 'oauth2') { %>,
+            '/dump'<% if (authenticationType == 'oauth2') { %>,
             '/oauth/token'<% } %><% if (devDatabaseType == 'h2Memory') { %>,
             '/console/'<% } %>
         ];
@@ -136,14 +136,15 @@ gulp.task('serve', function() {
         var proxies = [
             // Ensure trailing slash in routes that require it
             function (req, res, next) {
-                for (var route in requireTrailingSlash) {
+                requireTrailingSlash.forEach(function(route){
                     if (url.parse(req.url).path === route) {
                         res.statusCode = 301;
                         res.setHeader('Location', route + '/');
                         res.end();
                     }
-                    next();
-                }
+                });
+
+                next();
             }
         ].concat(
             // Build a list of proxies for routes: [route1_proxy, route2_proxy, ...]
