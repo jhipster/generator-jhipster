@@ -6,6 +6,7 @@
             "firstname.placeholder": "Az Ön keresztneve",
             "lastname": "Családnév",
             "lastname.placeholder": "Az Ön családneve",
+            "language": "Nyelvek",
             "button": "Mentés"
         },
         "messages": {

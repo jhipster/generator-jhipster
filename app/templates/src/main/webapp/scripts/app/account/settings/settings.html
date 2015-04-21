@@ -78,6 +78,10 @@
                         </p>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label translate="settings.form.language">Language</label>
+                    <select name="langKey" class="form-control" ng-model="settingsAccount.langKey" ng-controller="LanguageController" ng-options="code as ('language.' + code | translate) for code in languages"></select>
+                </div>
 
                 <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary" translate="settings.form.button">Save</button>
             </form>
