@@ -284,7 +284,7 @@ public class AccountResource {
               ":" +
               request.getServerPort();
           mailService.sendPasswordResetMail(user, baseUrl);
-          return new ResponseEntity<>("e-mail was send", HttpStatus.OK);
+          return new ResponseEntity<>("e-mail was sent", HttpStatus.OK);
         } else {
           return new ResponseEntity<>("e-mail address not registered", HttpStatus.BAD_REQUEST);
         }
