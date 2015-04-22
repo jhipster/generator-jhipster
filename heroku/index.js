@@ -17,7 +17,9 @@ var HerokuGenerator = module.exports = function HerokuGenerator(args, options, c
     this.javaVersion = this.config.get('javaVersion');
     this.hibernateCache = this.config.get('hibernateCache');
     this.databaseType = this.config.get('databaseType');
+    this.prodDatabaseType = this.config.get('prodDatabaseType');
     this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
+    this.buildTool = this.config.get('buildTool');
 };
 
 util.inherits(HerokuGenerator, yeoman.generators.Base);
@@ -89,6 +91,32 @@ HerokuGenerator.prototype.herokuCreate = function herokuCreate() {
             this.log.error(err);
         } else {
             this.log('stdout: ' + stdout);
+
+			if (this.buildTool == 'gradle') {
+				if (this.prodDatabaseType == 'postgresql') {
+					var addOn = 'heroku-postgresql:hobby-dev';
+					this.log(chalk.bold('Provisioning Database for Heroku application'));
+					console.log('heroku addons:add ' + addOn + ' --app ' + this.herokuDeployedName);
+					var dbChild = exec('heroku addons:add ' + addOn + ' --app ' + this.herokuDeployedName,
+						{ cwd: 'deploy/heroku' },
+						function(err, stdout, stderr) {
+						if (err) {
+							this.abort = true;
+							this.log.error(err);
+						} else {
+							this.log('stdout: ' + stdout);
+						}
+					}.bind(this));
+
+				    dbChild.stdout.on('data', function(data) {
+				        var output = data.toString();
+				        this.log(output);
+				    }.bind(this));
+				} else {
+					this.log.error('Only PostGreSQL is Supported for Heroku + Gradle');
+					this.abort = true;
+				}
+			}
         }
         done();
     }.bind(this));
@@ -97,6 +125,7 @@ HerokuGenerator.prototype.herokuCreate = function herokuCreate() {
         var output = data.toString();
         this.log(output);
     }.bind(this));
+
 };
 
 HerokuGenerator.prototype.copyHerokuFiles = function copyHerokuFiles() {
@@ -105,7 +134,7 @@ HerokuGenerator.prototype.copyHerokuFiles = function copyHerokuFiles() {
     this.log(chalk.bold('\nCreating Heroku deployment files'));
 
     this.copy('slugignore', 'deploy/heroku/.slugignore');
-    this.copy('Procfile', 'deploy/heroku/Procfile');
+    this.template('_Procfile', 'deploy/heroku/Procfile');
     this.copy('system.properties', 'deploy/heroku/system.properties');
     this.template('src/main/java/package/config/_HerokuDatabaseConfiguration.java', 'deploy/heroku/src/main/java/' + this.packageFolder + '/config/HerokuDatabaseConfiguration.java');
     this.conflicter.resolve(function (err) {
