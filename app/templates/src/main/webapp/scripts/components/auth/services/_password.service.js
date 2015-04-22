@@ -6,13 +6,13 @@ angular.module('<%=angularAppName%>')
         });
     });
 
-angular.module('jhipsterApp')
+angular.module('<%=angularAppName%>')
     .factory('PasswordResetInit', function ($resource) {
         return $resource('api/account/reset_password/init', {}, {
         })
     });
 
-angular.module('jhipsterApp')
+angular.module('<%=angularAppName%>')
     .factory('PasswordResetFinish', function ($resource) {
         return $resource('api/account/reset_password/finish', {}, {
         })
