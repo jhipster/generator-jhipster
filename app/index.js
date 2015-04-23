@@ -422,6 +422,7 @@ JhipsterGenerator.prototype.app = function app() {
     insight.track('app/databaseType', this.databaseType);
     insight.track('app/devDatabaseType', this.devDatabaseType);
     insight.track('app/prodDatabaseType', this.prodDatabaseType);
+    insight.track('app/searchEngine', this.searchEngine);
     insight.track('app/useCompass', this.useCompass);
     insight.track('app/buildTool', this.buildTool);
     insight.track('app/frontendBuilder', this.frontendBuilder);
