@@ -3,7 +3,8 @@ package <%=packageName%>.web.rest;
 import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.Application;
 import <%=packageName%>.domain.<%= entityClass %>;
-import <%=packageName%>.repository.<%= entityClass %>Repository;
+import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine == 'elasticsearch') { %>
+import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } %>
 
 import org.junit.Before;
 import org.junit.Test;
@@ -84,7 +85,10 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     private static final Boolean <%=updatedValueName %> = true;<% } } %>
 
     @Inject
-    private <%= entityClass %>Repository <%= entityInstance %>Repository;
+    private <%= entityClass %>Repository <%= entityInstance %>Repository;<% if (searchEngine == 'elasticsearch') { %>
+
+    @Inject
+    private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;<% } %>
 
     private MockMvc rest<%= entityClass %>MockMvc;
 
@@ -94,7 +98,8 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     public void setup() {
         MockitoAnnotations.initMocks(this);
         <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource();
-        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Repository", <%= entityInstance %>Repository);
+        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Repository", <%= entityInstance %>Repository);<% if (searchEngine == 'elasticsearch') { %>
+        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>SearchRepository", <%= entityInstance %>SearchRepository);<% } %>
         this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource).build();
     }
 
@@ -193,7 +198,7 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     public void update<%= entityClass %>() throws Exception {
         // Initialize the database
         <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
-		
+
 		int databaseSizeBeforeUpdate = <%= entityInstance %>Repository.findAll().size();
 
         // Update the <%= entityInstance %><% for (fieldId in fields) { %>
@@ -216,7 +221,7 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     public void delete<%= entityClass %>() throws Exception {
         // Initialize the database
         <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
-		
+
 		int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll().size();
 
         // Get the <%= entityInstance %>

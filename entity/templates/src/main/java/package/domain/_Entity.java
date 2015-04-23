@@ -15,7 +15,8 @@ import org.joda.time.LocalDate;<% } %><% if (fieldsContainDateTime == true) { %>
 import org.joda.time.DateTime;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;<% } %>
+import org.springframework.data.mongodb.core.mapping.Field;<% } %><% if (searchEngine == 'elasticsearch') { %>
+import org.springframework.data.elasticsearch.annotations.Document;<% } %>
 <% if (databaseType == 'sql') { %>
 import javax.persistence.*;<% } %><% if (validation) { %>
 import javax.validation.constraints.*;<% } %>
@@ -34,7 +35,8 @@ import java.util.UUID;<% } %>
 @Table(name = "<%= name.toUpperCase() %>")<% if (hibernateCache != 'no') { %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType == 'mongodb') { %>
 @Document(collection = "<%= name.toUpperCase() %>")<% } %><% if (databaseType == 'cassandra') { %>
-@Table(name = "<%= entityInstance %>")<% } %>
+@Table(name = "<%= entityInstance %>")<% } %><% if (searchEngine == 'elasticsearch') { %>
+@Document(indexName="<%= entityInstance %>")<% } %>
 public class <%= entityClass %> implements Serializable {
 <% if (databaseType == 'sql') { %>
     @Id

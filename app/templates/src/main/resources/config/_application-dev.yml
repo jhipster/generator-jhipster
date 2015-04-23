@@ -43,7 +43,11 @@ spring:
             contactPoints: localhost
             protocolVersion: V2
             compression: LZ4
-            keyspaceName: <%= baseName %><% } %>
+            keyspaceName: <%= baseName %><% } %><% if (searchEngine == 'elasticsearch') { %>
+    data:
+        elasticsearch:
+            cluster-name: 
+            cluster-nodes: <% } %>
     messages:
         cache-seconds: 1
     thymeleaf:

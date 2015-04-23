@@ -101,6 +101,7 @@ Desktop.ini
 ######################
 /build/**
 /bin/**
+/data/**
 /spring_loaded/**
 /deploy/**
 
@@ -121,4 +122,3 @@ Desktop.ini
 # Gradle Wrapper
 ######################
 !gradle/wrapper/gradle-wrapper.jar
-
