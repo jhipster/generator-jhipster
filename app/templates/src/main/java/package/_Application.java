@@ -52,11 +52,12 @@ public class Application {
 
         SimpleCommandLinePropertySource source = new SimpleCommandLinePropertySource(args);
 
-        // Check if the selected profile has been set as argument.
-        // if not the development profile will be added
-        addDefaultProfile(app, source);<% if (databaseType == 'sql') { %>
+        <% if (databaseType == 'sql') { %>
         addLiquibaseScanPackages();<% } %>
         Environment env = app.run(args).getEnvironment();
+        // Check if the selected profile has been set as argument.
+        // if not the development profile will be added
+        addDefaultProfile(app, source, env);
         log.info("Access URLs:\n----------------------------------------------------------\n\t" +
             "Local: \t\thttp://127.0.0.1:{}\n\t" +
             "External: \thttp://{}:{}\n----------------------------------------------------------",
@@ -69,8 +70,8 @@ public class Application {
     /**
      * Set a default profile if it has not been set
      */
-    private static void addDefaultProfile(SpringApplication app, SimpleCommandLinePropertySource source) {
-        if (!source.containsProperty("spring.profiles.active")) {
+    private static void addDefaultProfile(SpringApplication app, SimpleCommandLinePropertySource source, Environment environment) {
+        if (!source.containsProperty("spring.profiles.active") && !environment.containsProperty("spring.profiles.active")) {
             app.setAdditionalProfiles(Constants.SPRING_PROFILE_DEVELOPMENT);
         }
     }<% if (databaseType == 'sql') { %>
