@@ -101,7 +101,6 @@ Desktop.ini
 ######################
 /build/**
 /bin/**
-/data/**
 /spring_loaded/**
 /deploy/**
 
