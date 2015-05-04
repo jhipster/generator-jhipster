@@ -36,21 +36,25 @@ angular.module('<%=angularAppName%>')
         };<% } %>
         $scope.loadAll();
 
-        $scope.create = function () {
-            <%= entityClass %>.update($scope.<%= entityInstance %>,
-                function () {<% if (pagination != 'infinite-scroll') { %>
-                    $scope.loadAll();<% } else { %>
-                    $scope.reset();<% } %>
-                    $('#save<%= entityClass %>Modal').modal('hide');
-                    $scope.clear();
-                });
-        };
-
-        $scope.update = function (id) {
+        $scope.showUpdate = function (id) {
             <%= entityClass %>.get({id: id}, function(result) {
                 $scope.<%= entityInstance %> = result;
                 $('#save<%= entityClass %>Modal').modal('show');
             });
+        };
+
+        $scope.save = function () {
+            if ($scope.<%= entityInstance %>.id != null) {
+                <%= entityClass %>.update($scope.<%= entityInstance %>,
+                    function () {
+                        $scope.refresh();
+                    });
+            } else {
+                <%= entityClass %>.save($scope.<%= entityInstance %>,
+                    function () {
+                        $scope.refresh();
+                    });
+            }
         };
 
         $scope.delete = function (id) {
@@ -79,6 +83,13 @@ angular.module('<%=angularAppName%>')
                 }
             });
         };<% } %>
+
+        $scope.refresh = function () {<% if (pagination != 'infinite-scroll') { %>
+            $scope.loadAll();<% } else { %>
+            $scope.reset();<% } %>
+            $('#save<%= entityClass %>Modal').modal('hide');
+            $scope.clear();
+        };
 
         $scope.clear = function () {
             $scope.<%= entityInstance %> = {<% for (fieldId in fields) { %><%= fields[fieldId].fieldName %>: null, <% } %>id: null};
