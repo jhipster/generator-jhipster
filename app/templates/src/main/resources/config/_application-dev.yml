@@ -47,7 +47,11 @@ spring:
     data:
         elasticsearch:
             cluster-name: 
-            cluster-nodes: <% } %>
+            cluster-nodes: 
+            properties:
+                path:
+                  logs: target/elasticsearch/log
+                  data: target/elasticsearch/data <% } %>
     messages:
         cache-seconds: 1
     thymeleaf:
