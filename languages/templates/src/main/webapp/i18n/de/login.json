@@ -11,6 +11,9 @@
             "error": {
                 "authentication": "<strong>Anmeldung fehlgeschlagen!</strong> Überprüfen Sie bitte Ihre Angaben und versuchen Sie es erneut."
             }
+        },
+        "password" : {
+            "forgot": "Sie haben ihr Password vergessen?"
         }
     }
 }

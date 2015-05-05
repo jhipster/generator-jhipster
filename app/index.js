@@ -829,6 +829,12 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(webappDir + '/scripts/app/account/register/register.html', webappDir + 'scripts/app/account/register/register.html');
     this.template(webappDir + '/scripts/app/account/register/_register.js', webappDir + 'scripts/app/account/register/register.js', this, {});
     this.template(webappDir + '/scripts/app/account/register/_register.controller.js', webappDir + 'scripts/app/account/register/register.controller.js', this, {});
+    this.copy(webappDir + '/scripts/app/account/reset/request/reset.request.html', webappDir + 'scripts/app/account/reset/request/reset.request.html');
+    this.template(webappDir + '/scripts/app/account/reset/request/_reset.request.js', webappDir + 'scripts/app/account/reset/request/reset.request.js', this, {});
+    this.template(webappDir + '/scripts/app/account/reset/request/_reset.request.controller.js', webappDir + 'scripts/app/account/reset/request/reset.request.controller.js', this, {});
+    this.copy(webappDir + '/scripts/app/account/reset/finish/reset.finish.html', webappDir + 'scripts/app/account/reset/finish/reset.finish.html');
+    this.template(webappDir + '/scripts/app/account/reset/finish/_reset.finish.js', webappDir + 'scripts/app/account/reset/finish/reset.finish.js', this, {});
+    this.template(webappDir + '/scripts/app/account/reset/finish/_reset.finish.controller.js', webappDir + 'scripts/app/account/reset/finish/reset.finish.controller.js', this, {});
     if (this.authenticationType == 'session') {
         this.copy(webappDir + '/scripts/app/account/sessions/sessions.html', webappDir + 'scripts/app/account/sessions/sessions.html');
         this.template(webappDir + '/scripts/app/account/sessions/_sessions.js', webappDir + 'scripts/app/account/sessions/sessions.js', this, {});
@@ -933,6 +939,10 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/app/account/register/register.controller.js',
         'scripts/app/account/settings/settings.js',
         'scripts/app/account/settings/settings.controller.js',
+        'scripts/app/account/reset/finish/reset.finish.controller.js',
+        'scripts/app/account/reset/finish/reset.finish.js',
+        'scripts/app/account/reset/request/reset.request.controller.js',
+        'scripts/app/account/reset/request/reset.request.js',
         'scripts/app/admin/admin.js',
         'scripts/app/admin/audits/audits.js',
         'scripts/app/admin/audits/audits.controller.js',

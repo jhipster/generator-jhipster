@@ -63,6 +63,35 @@ public class UserService {
                 return user;
             });
         return Optional.empty();
+    }
+
+    public Optional<User> completePasswordReset(String newPassword, String key) {
+       log.debug("Reset user password for reset key {}", key);
+
+       return userRepository.findOneByResetKey(key)
+           .filter(user -> {
+               DateTime oneDayAgo = DateTime.now().minusHours(24);
+               return user.getResetDate().isAfter(oneDayAgo.toInstant().getMillis());
+           })
+           .map(user -> {
+               user.setActivated(true);
+               user.setPassword(passwordEncoder.encode(newPassword));
+               user.setResetKey(null);
+               user.setResetDate(null);
+               userRepository.save(user);
+               return user;
+           });
+    }
+
+    public Optional<User> requestPasswordReset(String mail) {
+
+       return userRepository.findOneByEmail(mail)
+           .map(user -> {
+               user.setResetKey(RandomUtil.generateResetKey());
+               user.setResetDate(DateTime.now());
+               userRepository.save(user);
+               return user;
+           });
     }<% } else { %>
     public  User activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
@@ -76,6 +105,43 @@ public class UserService {
             log.debug("Activated user: {}", user);
         }
         return user;
+    }
+
+    public User completePasswordReset(String newPassword, String key) {
+      log.debug("Reset user password for reset key {}", key);
+
+      User user = userRepository.findOneByResetKey(key);
+
+      DateTime oneDayAgo = DateTime.now().minusHours(24);
+
+      if (user != null) {
+        if (user.getResetDate().isAfter(oneDayAgo.toInstant().getMillis())) {
+          user.setActivated(true);
+          user.setPassword(passwordEncoder.encode(newPassword));
+          user.setResetKey(null);
+          user.setResetDate(null);
+          userRepository.save(user);
+          return user;
+
+          } else {
+            return null;
+          }
+      }
+
+       return null;
+    }
+
+    public User requestPasswordReset(String mail) {
+      User user = userRepository.findOneByEmail(mail);
+
+      if (user != null) {
+        user.setResetKey(RandomUtil.generateResetKey());
+        user.setResetDate(DateTime.now());
+        userRepository.save(user);
+        return user;
+      }
+
+      return user;
     }<% } %>
 
     public User createUserInformation(String login, String password, String firstName, String lastName, String email,
