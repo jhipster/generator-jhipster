@@ -49,11 +49,7 @@ public class Application {
     public static void main(String[] args) throws UnknownHostException {
         SpringApplication app = new SpringApplication(Application.class);
         app.setShowBanner(false);
-
         SimpleCommandLinePropertySource source = new SimpleCommandLinePropertySource(args);
-
-        // Check if the selected profile has been set as argument.
-        // if not the development profile will be added
         addDefaultProfile(app, source);<% if (databaseType == 'sql') { %>
         addLiquibaseScanPackages();<% } %>
         Environment env = app.run(args).getEnvironment();
@@ -67,10 +63,12 @@ public class Application {
     }
 
     /**
-     * Set a default profile if it has not been set
+     * If no profile has been configured, set by default the "dev" profile.
      */
     private static void addDefaultProfile(SpringApplication app, SimpleCommandLinePropertySource source) {
-        if (!source.containsProperty("spring.profiles.active")) {
+        if (!source.containsProperty("spring.profiles.active") &&
+                !System.getenv().containsKey("SPRING_PROFILES_ACTIVE")) {
+
             app.setAdditionalProfiles(Constants.SPRING_PROFILE_DEVELOPMENT);
         }
     }<% if (databaseType == 'sql') { %>
