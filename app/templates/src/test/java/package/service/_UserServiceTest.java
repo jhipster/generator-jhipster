@@ -8,7 +8,7 @@ import <%=packageName%>.domain.User;<% if ((databaseType == 'sql' || databaseTyp
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
 import <%=packageName%>.repository.UserRepository;
 import org.joda.time.DateTime;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import com.mycompany.myapp.service.util.RandomUtil;
+import <%=packageName%>.service.util.RandomUtil;
 import org.joda.time.LocalDate;<% } %>
 import org.junit.Test;
 import org.junit.runner.RunWith;
