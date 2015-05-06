@@ -523,6 +523,7 @@ JhipsterGenerator.prototype.app = function app() {
 
     // Create mail templates
     this.copy(resourceDir + '/mails/activationEmail.html', resourceDir + 'mails/activationEmail.html');
+    this.copy(resourceDir + '/mails/passwordResetEmail.html', resourceDir + 'mails/passwordResetEmail.html');
 
     // Create Java files
     this.template('src/main/java/package/_Application.java', javaDir + '/Application.java', this, {});
