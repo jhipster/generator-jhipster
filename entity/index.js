@@ -113,6 +113,8 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     return 'Your field name cannot contain special characters';
                 } else if (input == '') {
                     return 'Your field name cannot be empty';
+                } else if (input.charAt(0) == input.charAt(0).toUpperCase()) {
+                    return 'Your field name cannot start with a upper case letter';
                 } else if (input == 'id' || fieldNamesUnderscored.indexOf(_s.underscored(input)) != -1) {
                     return 'Your field name cannot use an already existing field name';
                 } else if (reservedWords_Java.indexOf(input.toUpperCase()) != -1) {
