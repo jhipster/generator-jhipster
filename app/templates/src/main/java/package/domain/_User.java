@@ -7,7 +7,13 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
 import org.hibernate.validator.constraints.Email;
 <% if (searchEngine == 'elasticsearch') { %>
-import org.springframework.data.elasticsearch.annotations.Document;<% } %><% if (databaseType == 'mongodb') { %>import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;<% } %><% if (databaseType == 'mongodb') { %>
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import <%=packageName%>.domain.util.CustomDateTimeDeserializer;
+import <%=packageName%>.domain.util.CustomDateTimeSerializer;
+
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 <% } %><% if (databaseType == 'sql') { %>
@@ -88,8 +94,8 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Column(name = "reset_key", length = 20)<% } %><% if (databaseType == 'mongodb') { %>
     @Field("reset_key")<% } %><% if (databaseType == 'cassandra') { %>
     @Column(name = "reset_key")<% } %>
-    private String resetKey;
-<%if (databaseType == 'sql') {%>
+    private String resetKey;<%if (databaseType == 'sql') {%>
+
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(name = "reset_date", nullable = true)
     private DateTime resetDate = null;<% }%><%if (databaseType == 'mongodb') {%>
@@ -97,8 +103,8 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     @JsonDeserialize(using = CustomDateTimeDeserializer.class)
     @Field("reset_date")
-    private DateTime resetDate = null;<% }%>
-    <% if (databaseType == 'cassandra') { %>
+    private DateTime resetDate = null;<% }%><% if (databaseType == 'cassandra') { %>
+
     @Column(name = "reset_date")
     private Date resetDate;<% }%>
 

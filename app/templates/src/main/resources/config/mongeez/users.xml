@@ -24,7 +24,7 @@
                 "password" : "$2a$10$j8S5d7Sr7.8VTOYNviDPOeWX8KcYILUVJBsYV83Y5NtECayypx9lO",
                 "first_name": "Anonymous",
                 "last_name": "User",
-                "email": "",
+                "email": "user@localhost",
                 "activated": "true",
                 "lang_key": "en",
                 "created_by": "system",
@@ -36,9 +36,9 @@
                 "_id" : "user-2",
                 "login" : "admin",
                 "password" : "$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC",
-                "first_name": "",
+                "first_name": "admin",
                 "last_name": "Administrator",
-                "email": "",
+                "email": "admin@localhost",
                 "activated": "true",
                 "lang_key": "en",
                 "created_by": "system",
@@ -47,7 +47,7 @@
             });
             db.JHI_USER.insert(
             {
-                "_id" : "user-3", 
+                "_id" : "user-3",
                 "login" : "user",
                 "password" : "$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K",
                 "first_name": "",
