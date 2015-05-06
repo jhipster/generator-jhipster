@@ -36,7 +36,7 @@ import java.util.UUID;<% } %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType == 'mongodb') { %>
 @Document(collection = "<%= name.toUpperCase() %>")<% } %><% if (databaseType == 'cassandra') { %>
 @Table(name = "<%= entityInstance %>")<% } %><% if (searchEngine == 'elasticsearch') { %>
-@Document(indexName="<%= entityInstance %>")<% } %>
+@Document(indexName="<%= entityInstance.toLowerCase() %>")<% } %>
 public class <%= entityClass %> implements Serializable {
 <% if (databaseType == 'sql') { %>
     @Id
