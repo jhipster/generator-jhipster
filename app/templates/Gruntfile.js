@@ -103,9 +103,10 @@ module.exports = function (grunt) {
                     src : [
                         'src/main/webapp/**/*.html',
                         'src/main/webapp/**/*.json',
-                        '{.tmp/,}src/main/webapp/assets/styles/**/*.css',
-                        '{.tmp/,}src/main/webapp/scripts/**/*.js',
-                        'src/main/webapp/assets/images/**/*.{png,jpg,jpeg,gif,webp,svg}'
+                        'src/main/webapp/assets/styles/**/*.css',
+                        'src/main/webapp/scripts/**/*.js',
+                        'src/main/webapp/assets/images/**/*.{png,jpg,jpeg,gif,webp,svg}',
+                        'tmp/**/*.{css,js}'
                     ]
                 }
             },
@@ -337,6 +338,10 @@ module.exports = function (grunt) {
                     dest: 'deploy/heroku',
                     src: [
                         'pom.xml',
+                        'gradlew',
+                        '*.gradle',
+                        'gradle.properties',
+                        'gradle/**',
                         'src/main/**'
                 ]
             },
@@ -472,16 +477,36 @@ module.exports = function (grunt) {
         'htmlmin'
     ]);
 
+	grunt.registerTask('appendSkipBower', 'Force skip of bower for Gradle', function () {
+		var filepath = 'deploy/heroku/gradle.properties';
+
+		if (!grunt.file.exists(filepath)) {
+			// Assume this is a maven project
+			return true;
+		}
+
+		var fileContent = grunt.file.read(filepath);
+		var skipBowerIndex = fileContent.indexOf("skipBower=true");
+
+		if (skipBowerIndex != -1) {
+			return true;
+		}
+
+		grunt.file.write(filepath, fileContent + "\nskipBower=true\n");
+	});
+
     grunt.registerTask('buildHeroku', [
         'test',
         'build',
         'copy:generateHerokuDirectory',
+        'appendSkipBower'
     ]);
 
     grunt.registerTask('deployHeroku', [
         'test',
         'build',
         'copy:generateHerokuDirectory',
+        'appendSkipBower',
         'buildcontrol:heroku'
     ]);
 

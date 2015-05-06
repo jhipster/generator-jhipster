@@ -42,11 +42,11 @@ spring:
             contactPoints: localhost
             protocolVersion: V2
             compression: LZ4
-            keyspaceName: <%= baseName %><% } %>
-
-    mail:
-        baseUrl: http://localhost:8080
-
+            keyspaceName: <%= baseName %><% } %><% if (searchEngine == 'elasticsearch') { %>
+    data:
+        elasticsearch:
+            cluster-name:
+            cluster-nodes: localhost:9200<% } %>
     thymeleaf:
         mode: XHTML
         cache: true
@@ -62,6 +62,10 @@ metrics:
         host: localhost
         port: 2003
         prefix: <%= baseName %>
+
+http:
+    cache:
+        timeToLiveInDays: 31
 
 <% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast' || hibernateCache == 'ehcache') {%>cache:
     timeToLiveSeconds: 3600<% } if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') {%>

@@ -2,7 +2,7 @@
     "audits": {
         "title": "Audyty",
         "filter": {
-            "title": "Fitry przez datę",
+            "title": "Filtruj po dacie",
             "from": "od",
             "to": "do",
             "button": {
@@ -20,7 +20,7 @@
                 "data": "Dodatkowe dane"
             },
             "data": {
-                "remoteAddress": "Zdalny address:"
+                "remoteAddress": "Zdalny adres:"
             }
         }
     }

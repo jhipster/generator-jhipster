@@ -16,9 +16,9 @@ import java.io.Serializable;
  * An authority (a security role) used by Spring Security.
  */<% if (databaseType == 'sql') { %>
 @Entity
-@Table(name = "T_AUTHORITY")<% if (hibernateCache != 'no') { %>
+@Table(name = "JHI_AUTHORITY")<% if (hibernateCache != 'no') { %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType == 'mongodb') { %>
-@Document(collection = "T_AUTHORITY")<% } %>
+@Document(collection = "JHI_AUTHORITY")<% } %>
 public class Authority implements Serializable {
 
     @NotNull

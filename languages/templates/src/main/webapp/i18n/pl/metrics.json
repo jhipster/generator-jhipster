@@ -8,7 +8,7 @@
             "memory": {
                 "title": "Pamięć",
                 "total": "Całkowita Pamięć",
-                "heap": "Pamięć stogu",
+                "heap": "Pamięć Stogu",
                 "nonheap": "Pozostała Pamięć"
             },
             "threads": {
@@ -39,7 +39,7 @@
                 "scavengetime": "Czas Scavenge"
             },
             "http": {
-                "title": "Zapytania HTTP  (zdarzenia na sekundę)",
+                "title": "Zapytania HTTP (zdarzenia na sekundę)",
                 "active": "Aktywne zapytania:",
                 "total": "Całkowita libcza zapytań:",
                 "table": {
@@ -51,12 +51,12 @@
                 "code": {
                     "ok": "Ok",
                     "notfound": "Nie znaleziono",
-                    "servererror": "Błąd servera"
+                    "servererror": "Błąd serwera"
                 }
             }
         },
         "servicesstats": {
-            "title": "Services statistics (time in millisecond)",
+            "title": "Statystyki usług (czas w milisekundach)",
             "table": {
                 "name": "Nazwa usługi",
                 "count": "Licznik",
@@ -74,16 +74,16 @@
             "cachename": "Nazwa cache",
             "objects": "Obiekty",
             "hits": "Odsłon",
-            "misses": "Nie trafionych",
+            "misses": "Nietrafionych",
             "evictioncount": "Liczba wyeksmitowanych",
             "mean": "Średni czas pobierania (ms)"
         },
         "datasource": {
-        	"usage": "Usage",
-            "title": "DataSource statistics (time in millisecond)",
-            "name": "Pool usage",
-            "count": "Count",
-            "mean": "Mean",
+        	"usage": "Użycie",
+            "title": "Statystyki bazy danych (czas w milisekundach)",
+            "name": "Użycie puli połączeń",
+            "count": "Licznik",
+            "mean": "Średnia",
             "min": "Min",
             "max": "Max",
             "p50": "p50",

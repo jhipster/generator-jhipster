@@ -16,7 +16,7 @@
         The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
     -->
     <changeSet id="00000000000001" author="jhipster">
-        <createTable tableName="T_USER">
+        <createTable tableName="JHI_USER">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -49,24 +49,24 @@
         </createTable>
 
         <createIndex indexName="idx_user_login"
-            tableName="T_USER"
+            tableName="JHI_USER"
             unique="true">
             <column name="login" type="varchar(50)"/>
         </createIndex>
 
         <createIndex indexName="idx_user_email"
-            tableName="T_USER"
+            tableName="JHI_USER"
             unique="true">
             <column name="email" type="varchar(100)"/>
         </createIndex>
 
-        <createTable tableName="T_AUTHORITY">
+        <createTable tableName="JHI_AUTHORITY">
             <column name="name" type="varchar(50)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
         </createTable>
 
-        <createTable tableName="T_USER_AUTHORITY">
+        <createTable tableName="JHI_USER_AUTHORITY">
             <column name="user_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
@@ -75,9 +75,9 @@
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="user_id, authority_name" tableName="T_USER_AUTHORITY"/><% if (authenticationType == 'session') { %>
+        <addPrimaryKey columnNames="user_id, authority_name" tableName="JHI_USER_AUTHORITY"/><% if (authenticationType == 'session') { %>
 
-        <createTable tableName="T_PERSISTENT_TOKEN">
+        <createTable tableName="JHI_PERSISTENT_TOKEN">
             <column name="series" type="varchar(255)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -91,43 +91,43 @@
         </createTable><% } %>
 
         <addForeignKeyConstraint baseColumnNames="authority_name"
-                                 baseTableName="T_USER_AUTHORITY"
+                                 baseTableName="JHI_USER_AUTHORITY"
                                  constraintName="fk_authority_name"
                                  referencedColumnNames="name"
-                                 referencedTableName="T_AUTHORITY"/>
+                                 referencedTableName="JHI_AUTHORITY"/>
 
         <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="T_USER_AUTHORITY"
+                                 baseTableName="JHI_USER_AUTHORITY"
                                  constraintName="fk_user_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="T_USER"/><% if (authenticationType == 'session') { %>
+                                 referencedTableName="JHI_USER"/><% if (authenticationType == 'session') { %>
 
         <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="T_PERSISTENT_TOKEN"
+                                 baseTableName="JHI_PERSISTENT_TOKEN"
                                  constraintName="fk_user_persistent_token"
                                  referencedColumnNames="id"
-                                 referencedTableName="T_USER"/><% } %>
+                                 referencedTableName="JHI_USER"/><% } %>
 
         <loadData encoding="UTF-8"
                   file="config/liquibase/users.csv"
                   separator=";"
-                  tableName="T_USER">
+                  tableName="JHI_USER">
             <column name="activated" type="boolean"/>
             <column name="created_date" type="timestamp"/>
         </loadData>
-        <dropDefaultValue tableName="T_USER" columnName="created_date" columnDataType="datetime"/>
+        <dropDefaultValue tableName="JHI_USER" columnName="created_date" columnDataType="datetime"/>
 
         <loadData encoding="UTF-8"
                   file="config/liquibase/authorities.csv"
                   separator=";"
-                  tableName="T_AUTHORITY"/>
+                  tableName="JHI_AUTHORITY"/>
 
         <loadData encoding="UTF-8"
                   file="config/liquibase/users_authorities.csv"
                   separator=";"
-                  tableName="T_USER_AUTHORITY"/>
+                  tableName="JHI_USER_AUTHORITY"/>
 
-        <createTable tableName="T_PERSISTENT_AUDIT_EVENT">
+        <createTable tableName="JHI_PERSISTENT_AUDIT_EVENT">
             <column name="event_id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -138,7 +138,7 @@
             <column name="event_type" type="varchar(255)"/>
         </createTable>
 
-        <createTable tableName="T_PERSISTENT_AUDIT_EVENT_DATA">
+        <createTable tableName="JHI_PERSISTENT_AUDIT_EVENT_DATA">
             <column name="event_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
@@ -147,40 +147,40 @@
             </column>
             <column name="value" type="varchar(255)"/>
         </createTable>
-        <addPrimaryKey columnNames="event_id, name" tableName="T_PERSISTENT_AUDIT_EVENT_DATA"/>
+        <addPrimaryKey columnNames="event_id, name" tableName="JHI_PERSISTENT_AUDIT_EVENT_DATA"/>
 
         <createIndex indexName="idx_persistent_audit_event"
-                     tableName="T_PERSISTENT_AUDIT_EVENT"
+                     tableName="JHI_PERSISTENT_AUDIT_EVENT"
                      unique="false">
             <column name="principal" type="varchar(255)"/>
             <column name="event_date" type="timestamp"/>
         </createIndex>
 
         <createIndex indexName="idx_persistent_audit_event_data"
-                     tableName="T_PERSISTENT_AUDIT_EVENT_DATA"
+                     tableName="JHI_PERSISTENT_AUDIT_EVENT_DATA"
                      unique="false">
             <column name="event_id" type="bigint"/>
         </createIndex>
 
         <addForeignKeyConstraint baseColumnNames="event_id"
-                                 baseTableName="T_PERSISTENT_AUDIT_EVENT_DATA"
+                                 baseTableName="JHI_PERSISTENT_AUDIT_EVENT_DATA"
                                  constraintName="FK_event_persistent_audit_event_data"
                                  referencedColumnNames="event_id"
-                                 referencedTableName="T_PERSISTENT_AUDIT_EVENT"/>
+                                 referencedTableName="JHI_PERSISTENT_AUDIT_EVENT"/>
     </changeSet>
     <% if (authenticationType == 'oauth2') { %>
     <!-- Manage the OAuth authentication -->
     <changeSet id="2" author="jhipster">
         <createTable tableName="oauth_client_details">
-            <column name="client_id" type="VARCHAR(256)">
+            <column name="client_id" type="varchar(255)">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="resource_ids" type="VARCHAR(256)"/>
-            <column name="client_secret" type="VARCHAR(256)"/>
-            <column name="scope" type="VARCHAR(256)"/>
-            <column name="authorized_grant_types" type="VARCHAR(256)"/>
-            <column name="web_server_redirect_uri" type="VARCHAR(256)"/>
-            <column name="authorities" type="VARCHAR(256)"/>
+            <column name="resource_ids" type="varchar(255)"/>
+            <column name="client_secret" type="varchar(255)"/>
+            <column name="scope" type="varchar(255)"/>
+            <column name="authorized_grant_types" type="varchar(255)"/>
+            <column name="web_server_redirect_uri" type="varchar(255)"/>
+            <column name="authorities" type="varchar(255)"/>
             <column name="access_token_validity" type="INT"/>
             <column name="refresh_token_validity" type="INT"/>
             <column name="additional_information" type="VARCHAR(4096)"/>
@@ -188,50 +188,50 @@
         </createTable>
 
         <createTable tableName="oauth_client_token">
-            <column name="token_id" type="VARCHAR(256)"/>
+            <column name="token_id" type="varchar(255)"/>
             <column name="token" type="BLOB"/>
-            <column name="authentication_id" type="VARCHAR(256)"/>
-            <column name="user_name" type="VARCHAR(256)"/>
-            <column name="client_id" type="VARCHAR(256)"/>
+            <column name="authentication_id" type="varchar(255)"/>
+            <column name="user_name" type="varchar(255)"/>
+            <column name="client_id" type="varchar(255)"/>
         </createTable>
 
         <addForeignKeyConstraint baseColumnNames="user_name"
             baseTableName="oauth_client_token"
             constraintName="fk_oauth_client_token_user_name"
             referencedColumnNames="login"
-            referencedTableName="T_USER"/>
+            referencedTableName="JHI_USER"/>
 
         <createTable tableName="oauth_access_token">
-            <column name="token_id" type="VARCHAR(256)"/>
+            <column name="token_id" type="varchar(255)"/>
             <column name="token" type="BLOB"/>
-            <column name="authentication_id" type="VARCHAR(256)"/>
-            <column name="user_name" type="VARCHAR(256)"/>
-            <column name="client_id" type="VARCHAR(256)"/>
+            <column name="authentication_id" type="varchar(255)"/>
+            <column name="user_name" type="varchar(255)"/>
+            <column name="client_id" type="varchar(255)"/>
             <column name="authentication" type="BLOB"/>
-            <column name="refresh_token" type="VARCHAR(256)"/>
+            <column name="refresh_token" type="varchar(255)"/>
         </createTable>
 
         <addForeignKeyConstraint baseColumnNames="user_name"
             baseTableName="oauth_access_token"
             constraintName="fk_oauth_access_token_user_name"
             referencedColumnNames="login"
-            referencedTableName="T_USER"/>
+            referencedTableName="JHI_USER"/>
 
         <createTable tableName="oauth_refresh_token">
-            <column name="token_id" type="VARCHAR(256)"/>
+            <column name="token_id" type="varchar(255)"/>
             <column name="token" type="BLOB"/>
             <column name="authentication" type="BLOB"/>
         </createTable>
 
         <createTable tableName="oauth_code">
-            <column name="code" type="VARCHAR(256)"/>
+            <column name="code" type="varchar(255)"/>
         </createTable>
 
         <createTable tableName="oauth_approvals">
-            <column name="userId" type="VARCHAR(256)"/>
-            <column name="clientId" type="VARCHAR(256)"/>
-            <column name="scope" type="VARCHAR(256)"/>
-            <column name="status" type="VARCHAR(256)"/>
+            <column name="userId" type="varchar(255)"/>
+            <column name="clientId" type="varchar(255)"/>
+            <column name="scope" type="varchar(255)"/>
+            <column name="status" type="varchar(255)"/>
             <column name="expiresAt" type="timestamp"/>
             <column name="lastModifiedAt" type="timestamp"/>
         </createTable>

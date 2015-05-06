@@ -2,6 +2,12 @@ package <%=packageName%>.web.rest;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
+import com.fasterxml.jackson.datatype.joda.ser.JacksonJodaFormat;
+import org.joda.time.DateTime;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.datetime.joda.DateTimeFormatterFactory;
 import org.springframework.http.MediaType;
 
 import java.io.IOException;
@@ -29,6 +35,13 @@ public class TestUtil {
             throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        JodaModule module = new JodaModule();
+        DateTimeFormatterFactory formatterFactory = new DateTimeFormatterFactory();
+        formatterFactory.setIso(DateTimeFormat.ISO.DATE);
+        module.addSerializer(DateTime.class, new DateTimeSerializer(
+            new JacksonJodaFormat(formatterFactory.createDateTimeFormatter()
+                .withZoneUTC())));
+        mapper.registerModule(module);
         return mapper.writeValueAsBytes(object);
     }
 }
