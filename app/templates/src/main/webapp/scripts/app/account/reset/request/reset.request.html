@@ -4,15 +4,15 @@
             <h1 translate="reset.request.title">Reset your password</h1>
 
             <div class="alert alert-danger" translate="reset.request.messages.notfound" ng-show="errorEmailNotExists">
-                <strong>E-Mail doesn't exist!</strong> Please check and try again.
+                <strong>E-Mail address isn't registered!</strong> Please check and try again.
             </div>
 
             <div class="alert alert-warning" ng-hide="success">
-                <p translate="reset.request.messages.info">Enter the e-mail you used to register.</p>
+                <p translate="reset.request.messages.info">Enter the e-mail address you used to register.</p>
             </div>
 
             <div class="alert alert-success" ng-show="success == 'OK'">
-                <p translate="reset.request.messages.success">Check your mails for details how to proceed the password reset.</p>
+                <p translate="reset.request.messages.success">Check your e-mails for details on how to reset your password.</p>
             </div>
 
             <form ng-show="!success" name="form" role="form" novalidate ng-submit="requestReset()" show-validation>

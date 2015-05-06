@@ -1,28 +1,28 @@
 {
     "reset": {
         "request": {
-            "title": "Reset your password",
+            "title": "Réinitialiser son mot de passe",
             "form": {
-                "button": "Reset password"
+                "button": "Réinitialiser le mot de passe"
             },
             "messages": {
-                "info": "Enter the e-mail you used to register",
-                "success": "Check your mails for details how to proceed the password reset.",
-                "notfound": "<strong>E-Mail doesn't exist!</strong> Please check and try again"
+                "info": "Veuillez renseigner l'addresse e-mail utilisée pour vous enregistrer",
+                "success": "Veuillez vérifier vos nouveaux e-mails et suivre les instructions pour réinitialiser votre mot de passe.",
+                "notfound": "<strong>L'adresse e-mail n'existe pas!</strong> Merci de la vérifier et de rééssayer."
 
             }
 
         },
         "finish" : {
-            "title": "Choose a new password",
+            "title": "Réinitialisation du mot de passe",
             "form": {
-                "button": "Finish password reset"
+                "button": "Réinitialiser le mot de passe"
             },
             "messages": {
-                "info": "Choose a new password",
-                "success": "<strong>Your password has been reset.</strong> Please <a href=\"#/login\">authenticate</a>.",
-                "keymissing": "Resetkey is required",
-                "error": "Can't reset your password. Remember a password request is only valid for 24 hours."
+                "info": "Choisir un nouveau mot de passe",
+                "success": "<strong>Votre mot de passe a été réinitialisé.</strong> Merci de <a href=\"#/login\">vous authentifier</a>.",
+                "keymissing": "La clef de réinitilisation est manquante",
+                "error": "Votre mot de passe n'a pas pu être réinitialisée. La demande de réinitialisation n'est valable que 24 heures."
             }
         }
     }
