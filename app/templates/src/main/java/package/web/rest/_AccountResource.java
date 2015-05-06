@@ -93,6 +93,7 @@ public class AccountResource {
             return new ResponseEntity<>(HttpStatus.CREATED);
         }<% } %>
     }
+
     /**
      * GET  /activate -> activate the registered user.
      */
@@ -257,4 +258,52 @@ public class AccountResource {
             }
         }<% } %>
     }<% } %>
+
+    @RequestMapping(value = "/account/reset_password/init",
+        method = RequestMethod.POST,
+        produces = MediaType.TEXT_PLAIN_VALUE)
+    @Timed
+    public ResponseEntity<?> requestPasswordReset(@RequestBody String mail, HttpServletRequest request) {
+        <% if (javaVersion == '8') { %>
+        return userService.requestPasswordReset(mail)
+            .map(user -> {
+                String baseUrl = request.getScheme() +
+                    "://" +
+                    request.getServerName() +
+                    ":" +
+                    request.getServerPort();
+            mailService.sendPasswordResetMail(user, baseUrl);
+            return new ResponseEntity<>("e-mail was sent", HttpStatus.OK);
+            }).orElse(new ResponseEntity<>("e-mail address not registered", HttpStatus.BAD_REQUEST));
+        <% } else {%>
+        User user = userService.requestPasswordReset(mail);
+
+        if (user != null) {
+          String baseUrl = request.getScheme() +
+              "://" +
+              request.getServerName() +
+              ":" +
+              request.getServerPort();
+          mailService.sendPasswordResetMail(user, baseUrl);
+          return new ResponseEntity<>("e-mail was sent", HttpStatus.OK);
+        } else {
+          return new ResponseEntity<>("e-mail address not registered", HttpStatus.BAD_REQUEST);
+        }
+        <%}%>
+    }
+
+    @RequestMapping(value = "/account/reset_password/finish",
+        method = RequestMethod.POST,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<String> finishPasswordReset(@RequestParam(value = "key") String key, @RequestParam(value = "newPassword") String newPassword) {<% if (javaVersion == '8') { %>
+        return userService.completePasswordReset(newPassword, key)
+              .map(user -> new ResponseEntity<String>(HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else {%>
+        User user = userService.completePasswordReset(newPassword, key);
+        if (user != null) {
+          return new ResponseEntity<String>(HttpStatus.OK);
+        } else {
+          return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }<% }%>
+    }
 }

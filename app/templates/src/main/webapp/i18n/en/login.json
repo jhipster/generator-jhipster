@@ -11,6 +11,9 @@
             "error": {
                 "authentication": "<strong>Authentication failed!</strong> Please check your credentials and try again."
             }
+        },
+        "password" : {
+            "forgot": "Did you forget your password?"
         }
     }
 }

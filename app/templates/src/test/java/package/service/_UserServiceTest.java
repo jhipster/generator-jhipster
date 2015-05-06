@@ -8,6 +8,7 @@ import <%=packageName%>.domain.User;<% if ((databaseType == 'sql' || databaseTyp
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
 import <%=packageName%>.repository.UserRepository;
 import org.joda.time.DateTime;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import <%=packageName%>.service.util.RandomUtil;
 import org.joda.time.LocalDate;<% } %>
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -58,6 +59,149 @@ public class UserServiceTest <% if (databaseType == 'cassandra') { %>extends Abs
         userService.removeOldPersistentTokens();
         assertThat(persistentTokenRepository.findByUser(admin)).hasSize(existingCount + 1);
     }<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+
+    @Test
+    public void assertThatUserMustExistToResetPassword() {
+        <% if (javaVersion == '8') { %>
+        Optional<User> maybeUser = userService.requestPasswordReset("john.doe@localhost");
+        assertThat(maybeUser.isPresent()).isFalse();
+
+        maybeUser = userService.requestPasswordReset("admin@localhost");
+        assertThat(maybeUser.isPresent()).isTrue();
+
+        assertThat(maybeUser.get().getEmail()).isEqualTo("admin@localhost");
+        assertThat(maybeUser.get().getResetDate()).isNotNull();
+        assertThat(maybeUser.get().getResetKey()).isNotNull();
+        <% } else { %>
+        User user = userService.requestPasswordReset("john.doe@localhost");
+        assertThat(user).isNull();
+
+        user = userService.requestPasswordReset("admin@localhost");
+        assertThat(user).isNotNull();
+        assertThat(user.getEmail()).isEqualTo("admin@localhost");
+        assertThat(user.getResetDate()).isNotNull();
+        assertThat(user.getResetKey()).isNotNull();
+        <% } %>
+    }
+
+    @Test
+    public void assertThatResetKeyMustNotBeOlderThan24Hours() {
+        <% if (javaVersion == '8') { %>
+        User user = userService.createUserInformation("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "en-US");
+
+        DateTime daysAgo = DateTime.now().minusHours(25);
+        String resetKey = RandomUtil.generateResetKey();
+        user.setActivated(true);
+        user.setResetDate(daysAgo);
+        user.setResetKey(resetKey);
+
+        userRepository.save(user);
+
+        Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
+
+        assertThat(maybeUser.isPresent()).isFalse();
+
+        userRepository.delete(user);
+        <% } else { %>
+        User user = userService.createUserInformation("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "en-US");
+
+        DateTime daysAgo = DateTime.now().minusHours(25);
+        String resetKey = RandomUtil.generateResetKey();
+        user.setActivated(true);
+        user.setResetDate(daysAgo);
+        user.setResetKey(resetKey);
+
+        userRepository.save(user);
+
+        User maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
+
+        assertThat(maybeUser).isNull();
+
+        userRepository.delete(user);
+        <% } %>
+    }
+
+    @Test
+    public void assertThatResetKeyMustBeValid() {
+        <% if (javaVersion == '8') { %>
+        User user = userService.createUserInformation("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "en-US");
+
+        DateTime daysAgo = DateTime.now().minusHours(25);
+        user.setActivated(true);
+        user.setResetDate(daysAgo);
+        user.setResetKey("1234");
+
+        userRepository.save(user);
+
+        Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
+
+        assertThat(maybeUser.isPresent()).isFalse();
+
+        userRepository.delete(user);
+        <% } else { %>
+        User user = userService.createUserInformation("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "en-US");
+
+        DateTime daysAgo = DateTime.now().minusHours(25);
+        user.setActivated(true);
+        user.setResetDate(daysAgo);
+        user.setResetKey("1234");
+
+        userRepository.save(user);
+
+        User maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
+
+        assertThat(maybeUser).isNull();
+
+        userRepository.delete(user);
+        <% } %>
+    }
+
+    @Test
+    public void assertThatUserCanResetPassword() {
+        <% if (javaVersion == '8') { %>
+        User user = userService.createUserInformation("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "en-US");
+
+        String oldPassword = user.getPassword();
+
+        DateTime daysAgo = DateTime.now().minusHours(2);
+        String resetKey = RandomUtil.generateResetKey();
+        user.setActivated(true);
+        user.setResetDate(daysAgo);
+        user.setResetKey(resetKey);
+
+        userRepository.save(user);
+
+        Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
+
+        assertThat(maybeUser.isPresent()).isTrue();
+        assertThat(maybeUser.get().getResetDate()).isNull();
+        assertThat(maybeUser.get().getResetKey()).isNull();
+        assertThat(maybeUser.get().getPassword()).isNotEqualTo(oldPassword);
+
+        userRepository.delete(user);
+        <% } else { %>
+        User user = userService.createUserInformation("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "en-US");
+
+        String oldPassword = user.getPassword();
+
+        DateTime daysAgo = DateTime.now().minusHours(2);
+        String resetKey = RandomUtil.generateResetKey();
+        user.setActivated(true);
+        user.setResetDate(daysAgo);
+        user.setResetKey(resetKey);
+
+        userRepository.save(user);
+
+        User maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
+
+        assertThat(maybeUser).isNotNull();
+        assertThat(maybeUser.getResetDate()).isNull();
+        assertThat(maybeUser.getResetKey()).isNull();
+        assertThat(maybeUser.getPassword()).isNotEqualTo(oldPassword);
+
+        userRepository.delete(user);
+        <% } %>
+    }
 
     @Test
     public void testFindNotActivatedUsersByCreationDateBefore() {

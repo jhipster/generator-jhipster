@@ -11,6 +11,9 @@
             "error": {
                 "authentication": "<strong>Autentisering misslyckades!</strong> Kontrollera ditt användarnamn och lösenord och prova igen."
             }
+        },
+        "password" : {
+            "forgot": "Did you forget your password?"
         }
     }
 }

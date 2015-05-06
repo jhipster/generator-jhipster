@@ -11,6 +11,9 @@
             "error": {
                 "authentication": "<strong>Giriş işlemi başarısız oldu!</strong> Lütfen kullanıcı bilgilerinizi kontrol edip tekrar deneyin."
             }
+        },
+        "password" : {
+            "forgot": "Did you forget your password?"
         }
     }
 }
