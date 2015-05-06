@@ -298,8 +298,7 @@ public class AccountResource {
     @Timed
     public ResponseEntity<String> finishPasswordReset(@RequestParam(value = "key") String key, @RequestParam(value = "newPassword") String newPassword) {<% if (javaVersion == '8') { %>
         return userService.completePasswordReset(newPassword, key)
-              .map(user -> new ResponseEntity<String>(HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
-        <% } else {%>
+              .map(user -> new ResponseEntity<String>(HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else {%>
         User user = userService.completePasswordReset(newPassword, key);
         if (user != null) {
           return new ResponseEntity<String>(HttpStatus.OK);

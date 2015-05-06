@@ -18,10 +18,9 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Set;
-<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import org.joda.time.DateTime;<% } %>
+import java.util.Set;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 
+import org.joda.time.DateTime;<% } %>
 
 /**
  * A user.
@@ -90,12 +89,11 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Field("reset_key")<% } %><% if (databaseType == 'cassandra') { %>
     @Column(name = "reset_key")<% } %>
     private String resetKey;
-
-    <%if (databaseType = 'sql') {%>
+<%if (databaseType == 'sql') {%>
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(name = "reset_date", nullable = true)
-    private DateTime resetDate = null;<% }%>
-    <%if (databaseType == 'mongodb') {%>
+    private DateTime resetDate = null;<% }%><%if (databaseType == 'mongodb') {%>
+
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     @JsonDeserialize(using = CustomDateTimeDeserializer.class)
     @Field("reset_date")
@@ -189,18 +187,16 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 
     public void setResetKey(String resetKey) {
         this.resetKey = resetKey;
-    }
+    }<% if (databaseType == 'sql' || databaseType == 'mongodb') {%>
 
-    <% if (databaseType == 'sql' || databaseType == 'mongodb') {%>
     public DateTime getResetDate() {
        return resetDate;
     }
 
     public void setResetDate(DateTime resetDate) {
        this.resetDate = resetDate;
-    }<% }%>
+    }<% }%><% if (databaseType == 'cassandra') { %>
 
-    <% if (databaseType == 'cassandra') { %>
     public Date getResetDate() {
         return resetDate;
     }

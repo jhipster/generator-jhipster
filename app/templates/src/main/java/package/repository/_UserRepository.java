@@ -73,7 +73,11 @@ public class UserRepository {
 
     private PreparedStatement insertByActivationKeyStmt;
 
+    private PreparedStatement insertByResetKeyStmt;
+
     private PreparedStatement deleteByActivationKeyStmt;
+
+    private PreparedStatement deleteByResetKeyStmt;
 
     private PreparedStatement findOneByLoginStmt;
 

@@ -71,7 +71,7 @@ public class UserService {
        return userRepository.findOneByResetKey(key)
            .filter(user -> {
                DateTime oneDayAgo = DateTime.now().minusHours(24);
-               return user.getResetDate().isAfter(oneDayAgo.toInstant().getMillis());
+               return user.getResetDate()<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>.isAfter(oneDayAgo.toInstant().getMillis());<% } %><% if (databaseType == 'cassandra') { %>.after(oneDayAgo.toDate());<% } %>
            })
            .map(user -> {
                user.setActivated(true);
@@ -87,7 +87,7 @@ public class UserService {
        return userRepository.findOneByEmail(mail)
            .map(user -> {
                user.setResetKey(RandomUtil.generateResetKey());
-               user.setResetDate(DateTime.now());
+               user.<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>setResetDate(DateTime.now());<% } %><% if (databaseType == 'cassandra') { %>setResetDate(new Date());<% } %>
                userRepository.save(user);
                return user;
            });
