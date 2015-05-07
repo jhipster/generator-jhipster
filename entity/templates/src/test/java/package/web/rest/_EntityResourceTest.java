@@ -52,18 +52,33 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
 <% for (fieldId in fields) {
     var defaultValueName = 'DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase();
     var updatedValueName = 'UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase();
+
+    var defaultValue = 0;
+    var updatedValue = 1;
+
+    if (fields[fieldId].fieldValidate == true) {
+        if (fields[fieldId].fieldValidateRules.indexOf('max') != -1) {
+            defaultValue = fields[fieldId].fieldValidateRulesMax;
+            updatedValue = parseInt(fields[fieldId].fieldValidateRulesMax) - 1;
+        }
+        if (fields[fieldId].fieldValidateRules.indexOf('min') != -1) {
+            defaultValue = fields[fieldId].fieldValidateRulesMin;
+            updatedValue = parseInt(fields[fieldId].fieldValidateRulesMin) + 1;
+        }
+    }
+
     if (fields[fieldId].fieldType == 'String') { %>
     private static final String <%=defaultValueName %> = "SAMPLE_TEXT";
     private static final String <%=updatedValueName %> = "UPDATED_TEXT";<% } else if (fields[fieldId].fieldType == 'Integer') { %>
 
-    private static final Integer <%=defaultValueName %> = 0;
-    private static final Integer <%=updatedValueName %> = 1;<% } else if (fields[fieldId].fieldType == 'Long') { %>
+    private static final Integer <%=defaultValueName %> = <%= defaultValue %>;
+    private static final Integer <%=updatedValueName %> = <%= updatedValue %>;<% } else if (fields[fieldId].fieldType == 'Long') { %>
 
-    private static final Long <%=defaultValueName %> = 0L;
-    private static final Long <%=updatedValueName %> = 1L;<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
+    private static final Long <%=defaultValueName %> = <%= defaultValue %>L;
+    private static final Long <%=updatedValueName %> = <%= updatedValue %>L;<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
 
-    private static final BigDecimal <%=defaultValueName %> = BigDecimal.ZERO;
-    private static final BigDecimal <%=updatedValueName %> = BigDecimal.ONE;<% } else if (fields[fieldId].fieldType == 'UUID') { %>
+    private static final BigDecimal <%=defaultValueName %> = new BigDecimal(<%= defaultValue %>);
+    private static final BigDecimal <%=updatedValueName %> = new BigDecimal(<%= updatedValue %>);<% } else if (fields[fieldId].fieldType == 'UUID') { %>
 
     private static final UUID <%=defaultValueName %> = UUID.randomUUID();
     private static final UUID <%=updatedValueName %> = UUID.randomUUID();<% } else if (fields[fieldId].fieldType == 'TimeUUID') { %>
