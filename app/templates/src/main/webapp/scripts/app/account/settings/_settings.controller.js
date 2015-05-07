@@ -4,7 +4,7 @@ angular.module('<%=angularAppName%>')
     .controller('SettingsController', function ($scope, Principal, Auth) {
         $scope.success = null;
         $scope.error = null;
-        Principal.identity().then(function(account) {
+        Principal.identity(true).then(function(account) {
             $scope.settingsAccount = account;
         });
 
