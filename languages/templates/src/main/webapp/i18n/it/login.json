@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "Inizia la sessione",
+        "form": {
+            "password": "Password",
+            "password.placeholder": "la password",
+            "rememberme": "Login automatico",
+            "button": "Login"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong> Accesso non riuscito </ strong> rivedere le credenziali e riprovare !."
+            }
+        },
+        "password" : {
+            "forgot": "Hai dimenticato la tua password?"
+        }
+    }
+}
