@@ -40,7 +40,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         '             | |  / /\\  \\ \\  /  / /\\      | | \\ | |_  \\ \\  / ( (`       \n' +
         '           \\_|_| /_/--\\  \\_\\/  /_/--\\     |_|_/ |_|__  \\_\\/  _)_)       \n'));
 
-    console.log('\nWelcome to the JHipster Generator\n');
+    console.log('\nWelcome to the JHipster Generator v' + packagejs.version + '\n');
     var insight = this.insight();
 
     var prompts = [
