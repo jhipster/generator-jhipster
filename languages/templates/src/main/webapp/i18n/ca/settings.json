@@ -6,6 +6,7 @@
             "firstname.placeholder": "El seu nom",
             "lastname": "Cognoms",
             "lastname.placeholder": "Els seus cognoms",
+            "language": "Idioma",
             "button": "Guardar"
         },
         "messages": {

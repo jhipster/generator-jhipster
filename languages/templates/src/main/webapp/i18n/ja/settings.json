@@ -6,6 +6,7 @@
             "firstname.placeholder": "名",
             "lastname": "姓",
             "lastname.placeholder": "姓",
+            "language": "言語",
             "button": "保存する"
         },
         "messages": {

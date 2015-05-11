@@ -165,11 +165,12 @@ public class UserService {
         return newUser;
     }
 
-    public void updateUserInformation(String firstName, String lastName, String email) {<% if (javaVersion == '8') { %>
+    public void updateUserInformation(String firstName, String lastName, String email, String langKey) {<% if (javaVersion == '8') { %>
         userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).ifPresent(u -> {
             u.setFirstName(firstName);
             u.setLastName(lastName);
             u.setEmail(email);
+            u.setLangKey(langKey);
             userRepository.save(u);<% if (searchEngine == 'elasticsearch') { %>
             userSearchRepository.save(u);<% } %>
             log.debug("Changed Information for User: {}", u);
@@ -178,6 +179,7 @@ public class UserService {
         currentUser.setFirstName(firstName);
         currentUser.setLastName(lastName);
         currentUser.setEmail(email);
+        currentUser.setLangKey(langKey);
         userRepository.save(currentUser);<% if (searchEngine == 'elasticsearch') { %>
         userSearchRepository.save(user);<% } %>
         log.debug("Changed Information for User: {}", currentUser);<%}%>

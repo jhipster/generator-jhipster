@@ -6,6 +6,7 @@
             "firstname.placeholder": "Seu primeiro nome",
             "lastname": "Sobrenome",
             "lastname.placeholder": "Seu sobrenome",
+            "language": "Idioma",
             "button": "Salvar"
         },
         "messages": {
