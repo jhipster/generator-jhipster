@@ -6,6 +6,7 @@
             "firstname.placeholder": "이름",
             "lastname": "성",
             "lastname.placeholder": "성",
+            "language": "언어",
             "button": "저장"
         },
         "messages": {

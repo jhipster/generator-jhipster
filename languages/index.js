@@ -34,6 +34,7 @@ LanguagesGenerator.prototype.askFor = function askFor() {
             {name: 'Danish', value: 'da'},
             {name: 'German', value: 'de'},
             {name: 'Hungarian', value: 'hu'},
+            {name: 'Italian', value: 'it'},
             {name: 'Japanese', value: 'ja'},
             {name: 'Korean', value: 'kr'},
             {name: 'Polish', value: 'pl'},
@@ -41,8 +42,7 @@ LanguagesGenerator.prototype.askFor = function askFor() {
             {name: 'Russian', value: 'ru'},
             {name: 'Spanish', value: 'es'},
             {name: 'Swedish', value: 'sv'},
-            {name: 'Turkish', value: 'tr'},
-            {name: 'Italian', value: 'it'}
+            {name: 'Turkish', value: 'tr'}
         ],
         default: 0
     }];

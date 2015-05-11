@@ -6,6 +6,7 @@
             "firstname.placeholder": "Adınız",
             "lastname": "Soyisim",
             "lastname.placeholder": "Soyadınız",
+            "language": "Dil",
             "button": "Kaydet"
         },
         "messages": {
