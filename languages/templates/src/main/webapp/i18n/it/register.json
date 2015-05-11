@@ -1,0 +1,24 @@
+{
+    "register": {
+        "title": "Registrazione",
+        "form": {
+            "button": "Crea Account"
+        },
+        "messages": {
+            "validate": {
+                "login": {
+                    "required": "è necessario per entrare in un utente.",
+                    "minlength": "E 'necessario che l'utente ha almeno 1 carattere",
+                    "maxlength": "L'utente non può avere più di 50 caratteri",
+                    "pattern": "Contenere tuo login può solo lettere e cifre minuscole"
+                }
+            },
+            "success": "<strong>La registrazione account è stato salvata</strong>  Controlla la tua email per confermare.",
+            "error": {
+                "fail": "<strong>La registrazione dell'account è fallita!</strong> Riprova più tardi !.",
+                "userexists": "<strong>Il nome utente è già registrato !</strong> Scegliere un altro utente !.",
+                "emailexists": "<strong>e-mail è già in uso</strong> Scegliere un altro!."
+            }
+        }
+    }
+}

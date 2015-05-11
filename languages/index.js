@@ -41,7 +41,8 @@ LanguagesGenerator.prototype.askFor = function askFor() {
             {name: 'Russian', value: 'ru'},
             {name: 'Spanish', value: 'es'},
             {name: 'Swedish', value: 'sv'},
-            {name: 'Turkish', value: 'tr'}
+            {name: 'Turkish', value: 'tr'},
+            {name: 'Italian', value: 'it'}
         ],
         default: 0
     }];
