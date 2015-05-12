@@ -22,7 +22,13 @@ var parseVersionFromBuildGradle = function() {
 // usemin custom step
 var useminAutoprefixer = {
     name: 'autoprefixer',
-    createConfig: require('grunt-usemin/lib/config/cssmin').createConfig // Reuse cssmins createConfig
+    createConfig: function(context, block) {
+        if(block.src.length === 0) {
+            return {};
+        } else {
+            return require('grunt-usemin/lib/config/cssmin').createConfig(context, block) // Reuse cssmins createConfig
+        }
+    }
 };
 
 module.exports = function (grunt) {
@@ -261,12 +267,7 @@ module.exports = function (grunt) {
             //             'styles/**/*.css'
             //         ]
             //     }
-            // }<% if (useCompass) { %>
-            dist: {
-                files: {
-                    '<%%= yeoman.dist %>/assets/styles/main.css': ['src/main/webapp/assets/styles/*.css']
-                }
-            },<% } %>
+            // }
             options: {
                 root: 'src/main/webapp' // Replace relative paths for static resources with absolute path
             }
