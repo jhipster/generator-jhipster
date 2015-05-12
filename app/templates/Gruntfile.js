@@ -261,12 +261,7 @@ module.exports = function (grunt) {
             //             'styles/**/*.css'
             //         ]
             //     }
-            // }<% if (useCompass) { %>
-            dist: {
-                files: {
-                    '<%%= yeoman.dist %>/assets/styles/main.css': ['src/main/webapp/assets/styles/*.css']
-                }
-            },<% } %>
+            // }
             options: {
                 root: 'src/main/webapp' // Replace relative paths for static resources with absolute path
             }
