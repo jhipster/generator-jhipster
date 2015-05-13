@@ -11,6 +11,9 @@
             "error": {
                 "authentication": "<strong>Hitelesítés nem sikerült!</strong> Kérjük ellenörizze, hogy helyesen adta meg nevét és jelszavát, és próbálja újra."
             }
+        },
+        "password" : {
+            "forgot": "Did you forget your password?"
         }
     }
 }

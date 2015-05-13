@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
+import java.util.Collection;
 
 @ComponentScan
 @EnableAutoConfiguration(exclude = {MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class})
@@ -33,6 +34,9 @@ public class Application {
      * <p/>
      * Spring profiles can be configured with a program arguments --spring.profiles.active=your-active-profile
      * <p/>
+     * <p>
+     * You can find more information on how profiles work with JHipster on <a href="http://jhipster.github.io/profiles.html">http://jhipster.github.io/profiles.html</a>.
+     * </p>
      */
     @PostConstruct
     public void initApplication() throws IOException {
@@ -40,6 +44,19 @@ public class Application {
             log.warn("No Spring profile configured, running with default configuration");
         } else {
             log.info("Running with Spring profile(s) : {}", Arrays.toString(env.getActiveProfiles()));
+            Collection activeProfiles = Arrays.asList(env.getActiveProfiles());
+            if (activeProfiles.contains("dev") && activeProfiles.contains("prod")) {
+                log.error("You have misconfigured your application! " +
+                    "It should not run with both the 'dev' and 'prod' profiles at the same time.");
+            }
+            if (activeProfiles.contains("prod") && activeProfiles.contains("fast")) {
+                log.error("You have misconfigured your application! " +
+                    "It should not run with both the 'prod' and 'fast' profiles at the same time.");
+            }
+            if (activeProfiles.contains("dev") && activeProfiles.contains("cloud")) {
+                log.error("You have misconfigured your application! " +
+                    "It should not run with both the 'dev' and 'cloud' profiles at the same time.");
+            }
         }
     }
 
@@ -49,11 +66,7 @@ public class Application {
     public static void main(String[] args) throws UnknownHostException {
         SpringApplication app = new SpringApplication(Application.class);
         app.setShowBanner(false);
-
         SimpleCommandLinePropertySource source = new SimpleCommandLinePropertySource(args);
-
-        // Check if the selected profile has been set as argument.
-        // if not the development profile will be added
         addDefaultProfile(app, source);<% if (databaseType == 'sql') { %>
         addLiquibaseScanPackages();<% } %>
         Environment env = app.run(args).getEnvironment();
@@ -67,10 +80,12 @@ public class Application {
     }
 
     /**
-     * Set a default profile if it has not been set
+     * If no profile has been configured, set by default the "dev" profile.
      */
     private static void addDefaultProfile(SpringApplication app, SimpleCommandLinePropertySource source) {
-        if (!source.containsProperty("spring.profiles.active")) {
+        if (!source.containsProperty("spring.profiles.active") &&
+                !System.getenv().containsKey("SPRING_PROFILES_ACTIVE")) {
+
             app.setAdditionalProfiles(Constants.SPRING_PROFILE_DEVELOPMENT);
         }
     }<% if (databaseType == 'sql') { %>

@@ -6,6 +6,7 @@
             "firstname.placeholder": "Ditt förnamn",
             "lastname": "Efternamn",
             "lastname.placeholder": "Ditt efternamn",
+            "language": "Språk",
             "button": "Save"
         },
         "messages": {

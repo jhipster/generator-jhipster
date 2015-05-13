@@ -1,21 +1,32 @@
 package <%=packageName%>.domain;
 <% if (databaseType == 'cassandra') { %>
+import java.util.Date;
 import com.datastax.driver.mapping.annotations.*;<% } %>
 import com.fasterxml.jackson.annotation.JsonIgnore;<% if (hibernateCache != 'no' && databaseType == 'sql') { %>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
 import org.hibernate.validator.constraints.Email;
-<% if (databaseType == 'mongodb') { %>import org.springframework.data.annotation.Id;
+<% if (searchEngine == 'elasticsearch') { %>
+import org.springframework.data.elasticsearch.annotations.Document;<% } %><% if (databaseType == 'mongodb') { %>
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import <%=packageName%>.domain.util.CustomDateTimeDeserializer;
+import <%=packageName%>.domain.util.CustomDateTimeSerializer;
+
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 <% } %><% if (databaseType == 'sql') { %>
-import javax.persistence.*;<% } %>
+import javax.persistence.*;
+import org.hibernate.annotations.Type;<% } %>
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.Set;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+
+import org.joda.time.DateTime;<% } %>
 
 /**
  * A user.
@@ -24,7 +35,8 @@ import java.util.Set;
 @Table(name = "JHI_USER")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'mongodb') { %>
 @Document(collection = "JHI_USER")<% } %><% if (databaseType == 'cassandra') { %>
-@Table(name = "user")<% } %>
+@Table(name = "user")<% } %><% if (searchEngine == 'elasticsearch') { %>
+@Document(indexName="user")<% } %>
 public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %> extends AbstractAuditingEntity<% } %> implements Serializable {
 <% if (databaseType == 'sql') { %>
     @Id
@@ -75,7 +87,26 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Column(name = "activation_key", length = 20)<% } %><% if (databaseType == 'mongodb') { %>
     @Field("activation_key")<% } %><% if (databaseType == 'cassandra') { %>
     @Column(name = "activation_key")<% } %>
+    @JsonIgnore
     private String activationKey;
+
+    @Size(max = 20)<% if (databaseType == 'sql') { %>
+    @Column(name = "reset_key", length = 20)<% } %><% if (databaseType == 'mongodb') { %>
+    @Field("reset_key")<% } %><% if (databaseType == 'cassandra') { %>
+    @Column(name = "reset_key")<% } %>
+    private String resetKey;<%if (databaseType == 'sql') {%>
+
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @Column(name = "reset_date", nullable = true)
+    private DateTime resetDate = null;<% }%><%if (databaseType == 'mongodb') {%>
+
+    @JsonSerialize(using = CustomDateTimeSerializer.class)
+    @JsonDeserialize(using = CustomDateTimeDeserializer.class)
+    @Field("reset_date")
+    private DateTime resetDate = null;<% }%><% if (databaseType == 'cassandra') { %>
+
+    @Column(name = "reset_date")
+    private Date resetDate;<% }%>
 
     @JsonIgnore<% if (databaseType == 'sql') { %>
     @ManyToMany
@@ -155,6 +186,30 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     public void setActivationKey(String activationKey) {
         this.activationKey = activationKey;
     }
+
+    public String getResetKey() {
+        return resetKey;
+    }
+
+    public void setResetKey(String resetKey) {
+        this.resetKey = resetKey;
+    }<% if (databaseType == 'sql' || databaseType == 'mongodb') {%>
+
+    public DateTime getResetDate() {
+       return resetDate;
+    }
+
+    public void setResetDate(DateTime resetDate) {
+       this.resetDate = resetDate;
+    }<% }%><% if (databaseType == 'cassandra') { %>
+
+    public Date getResetDate() {
+        return resetDate;
+    }
+
+    public void setResetDate(Date resetDate) {
+        this.resetDate = resetDate;
+    }<% }%>
 
     public String getLangKey() {
         return langKey;

@@ -11,6 +11,9 @@
             "error": {
                 "authentication": "<strong>Nieudane logowanie!</strong> Sprawdź swoje dane logowania i spróbuj ponownie."
             }
+        },
+        "password" : {
+            "forgot": "Did you forget your password?"
         }
     }
 }
