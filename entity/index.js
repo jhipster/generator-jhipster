@@ -162,9 +162,47 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 {
                     value: 'Boolean',
                     name: 'Boolean'
+                },
+                {
+                    value: 'enum',
+                    name: 'enum'
                 }
             ],
             default: 0
+        },
+        {
+            when: function (response) {
+                if (response.fieldType == 'enum') {
+                    response.fieldIsEnum = true;
+                    return true;
+                } else {
+                    response.fieldIsEnum = false;
+                    return false;
+                }
+            },
+            type: 'input',
+            name: 'fieldType',
+            validate: function (input) {
+                if (input == '') {
+                    return 'Your class name cannot be empty';
+                }
+                return true;
+            },
+            message: 'What is the class of your enumeration?'
+        },
+        {
+            when: function (response) {
+                return response.fieldIsEnum;
+            },
+            type: 'input',
+            name: 'fieldValues',
+            validate: function (input) {
+                if (input == '') {
+                    return 'You must specify values for your enumeration';
+                }
+                return true;
+            },
+            message: 'What are the values of your enumeration (separated by comma)?'
         },
         {
             when: function (response) {
@@ -264,7 +302,8 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     (response.fieldType == 'LocalDate' ||
                     response.fieldType == 'DateTime' ||
                     response.fieldType == 'UUID' ||
-                    response.fieldType == 'TimeUUID');
+                    response.fieldType == 'TimeUUID' ||
+                    response.fieldIsEnum == true);
             },
             type: 'checkbox',
             name: 'fieldValidateRules',
@@ -373,6 +412,8 @@ EntityGenerator.prototype.askForFields = function askForFields() {
             var field = {fieldId: this.fieldId,
                 fieldName: props.fieldName,
                 fieldType: props.fieldType,
+                fieldIsEnum: props.fieldIsEnum,
+                fieldValues: props.fieldValues,
                 fieldNameCapitalized: _s.capitalize(props.fieldName),
                 fieldNameUnderscored: _s.underscored(props.fieldName),
                 fieldInJavaBeanMethod: fieldInJavaBeanMethod,
