@@ -796,22 +796,22 @@ EntityGenerator.prototype.files = function files() {
 
     // Copy for each
     this.copyI18n('ca');
+    this.copyI18n('zh-cn');
+    this.copyI18n('zh-tw');
     this.copyI18n('da');
     this.copyI18n('de');
     this.copyI18n('en');
-    this.copyI18n('es');
     this.copyI18n('fr');
+    this.copyI18n('hu');
+    this.copyI18n('it');
     this.copyI18n('ja');
     this.copyI18n('kr');
-    this.copyI18n('hu');
     this.copyI18n('pl');
     this.copyI18n('pt-br');
     this.copyI18n('ru');
-    this.copyI18n('sw');
+    this.copyI18n('es');
+    this.copyI18n('sv');
     this.copyI18n('tr');
-    this.copyI18n('zh-cn');
-    this.copyI18n('zh-tw');
-    this.copyI18n('it');
 };
 
 EntityGenerator.prototype.copyI18n = function(language) {
