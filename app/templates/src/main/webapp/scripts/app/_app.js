@@ -121,6 +121,7 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
         });
 
         $translateProvider.preferredLanguage('en');
+        $translateProvider.fallbackLanguage('en');
         $translateProvider.useCookieStorage();
         $translateProvider.useSanitizeValueStrategy('escaped');
 
