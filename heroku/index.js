@@ -68,14 +68,20 @@ HerokuGenerator.prototype.gitInit = function gitInit() {
     if(this.abort) return;
     var done = this.async();
 
-    this.log(chalk.bold('\nInitializing deployment repository'));
-    this.mkdir('deploy/heroku');
-    var child = exec('git init', { cwd: 'deploy/heroku' }, function (err, stdout, stderr) {
+    try {
+      var stats = fs.lstatSync('.git');
+      this.log(chalk.bold('\nUsing existing Git repository'));
+      done();
+    } catch(e) {
+      // An exception is thrown if the folder doesn't exist
+      this.log(chalk.bold('\nInitializing Git repository'));
+      var child = exec('git init', {}, function (err, stdout, stderr) {
         done();
-    }.bind(this));
-    child.stdout.on('data', function(data) {
+      }.bind(this));
+      child.stdout.on('data', function(data) {
         console.log(data.toString());
-    });
+      });
+    }
 };
 
 HerokuGenerator.prototype.herokuCreate = function herokuCreate() {
@@ -84,39 +90,22 @@ HerokuGenerator.prototype.herokuCreate = function herokuCreate() {
     var regionParams = (this.herokuRegion !== 'us') ? ' --region ' + this.herokuRegion : '';
 
     this.log(chalk.bold('Creating Heroku application and setting up node environment'));
-    console.log('heroku apps:create ' + this.herokuDeployedName + regionParams + ' && heroku config:set NODE_ENV=production --app ' + this.herokuDeployedName );
-    var child = exec('heroku apps:create ' + this.herokuDeployedName + regionParams + ' && heroku config:set NODE_ENV=production --app ' + this.herokuDeployedName , { cwd: 'deploy/heroku' }, function (err, stdout, stderr) {
+    var herokuCreateCmd = 'heroku apps:create ' + this.herokuDeployedName + regionParams +
+      ' && heroku buildpacks:add https://github.com/heroku/heroku-buildpack-nodejs --app ' + this.herokuDeployedName;
+
+    if (this.buildTool == 'gradle') {
+      herokuCreateCmd += ' && heroku buildpacks:add https://github.com/heroku/heroku-buildpack-gradle --app ' + this.herokuDeployedName;
+      herokuCreateCmd += ' && heroku config:set --app ' + this.herokuDeployedName;
+    } else {
+      herokuCreateCmd += ' && heroku buildpacks:add https://github.com/heroku/heroku-buildpack-java --app ' + this.herokuDeployedName;
+      herokuCreateCmd += ' && heroku config:set MAVEN_CUSTOM_OPTS="-Pprod -DskipTests=true" --app ' + this.herokuDeployedName;
+    }
+
+    console.log(herokuCreateCmd);
+    var child = exec(herokuCreateCmd, {}, function (err, stdout, stderr) {
         if (err) {
             this.abort = true;
             this.log.error(err);
-        } else {
-            this.log('stdout: ' + stdout);
-
-			if (this.buildTool == 'gradle') {
-				if (this.prodDatabaseType == 'postgresql') {
-					var addOn = 'heroku-postgresql:hobby-dev';
-					this.log(chalk.bold('Provisioning Database for Heroku application'));
-					console.log('heroku addons:add ' + addOn + ' --app ' + this.herokuDeployedName);
-					var dbChild = exec('heroku addons:add ' + addOn + ' --app ' + this.herokuDeployedName,
-						{ cwd: 'deploy/heroku' },
-						function(err, stdout, stderr) {
-						if (err) {
-							this.abort = true;
-							this.log.error(err);
-						} else {
-							this.log('stdout: ' + stdout);
-						}
-					}.bind(this));
-
-				    dbChild.stdout.on('data', function(data) {
-				        var output = data.toString();
-				        this.log(output);
-				    }.bind(this));
-				} else {
-					this.log.error('Only PostGreSQL is Supported for Heroku + Gradle');
-					this.abort = true;
-				}
-			}
         }
         done();
     }.bind(this));
@@ -133,34 +122,26 @@ HerokuGenerator.prototype.copyHerokuFiles = function copyHerokuFiles() {
     var done = this.async();
     this.log(chalk.bold('\nCreating Heroku deployment files'));
 
-    this.copy('slugignore', 'deploy/heroku/.slugignore');
-    this.template('_Procfile', 'deploy/heroku/Procfile');
-    this.copy('system.properties', 'deploy/heroku/system.properties');
-    this.template('src/main/java/package/config/_HerokuDatabaseConfiguration.java', 'deploy/heroku/src/main/java/' + this.packageFolder + '/config/HerokuDatabaseConfiguration.java');
-    this.conflicter.resolve(function (err) {
-        done();
-    });
-};
+    this.npmInstall(['bower', 'grunt-cli'], { 'save': true }, function (err, stdout, stderr) {
+      if (err) {
+        this.abort = true;
+        this.log.error(err);
+      }
 
-HerokuGenerator.prototype.productionBuild = function productionBuild() {
-    if(this.abort) return;
-    var done = this.async();
-
-    this.log(chalk.bold('\nBuilding in production mode, and deploying...'));
-    var child = exec('grunt buildHeroku', function (err, stdout) {
+      this.template('_Procfile', 'Procfile');
+      this.template('src/main/java/package/config/_HerokuDatabaseConfiguration.java', 'src/main/java/' + this.packageFolder + '/config/HerokuDatabaseConfiguration.java');
+      this.conflicter.resolve(function (err) {
         done();
+      });
     }.bind(this));
-    child.stdout.on('data', function(data) {
-        console.log(data.toString());
-    });
 };
 
-HerokuGenerator.prototype.gitCommit = function gitInit() {
+HerokuGenerator.prototype.gitCommit = function gitCommit() {
     if(this.abort) return;
     var done = this.async();
 
-    this.log(chalk.bold('Adding files for initial commit'));
-    var child = exec('git add -A && git commit -m "Initial commit"', { cwd: 'deploy/heroku', maxBuffer: 500*1024 }, function (err, stdout, stderr) {
+    this.log(chalk.bold('\nAdding files for deployment'));
+    var child = exec('git add -A && git commit -m "Deploying to Heroku"', { maxBuffer: 500*1024 }, function (err, stdout, stderr) {
         if (stdout.search('nothing to commit') >= 0) {
             this.log('Re-pushing the existing build...');
         } else if (err) {
@@ -180,18 +161,17 @@ HerokuGenerator.prototype.gitForcePush = function gitForcePush() {
     if(this.abort) return;
     var done = this.async();
 
-    this.log(chalk.bold("\nUploading your initial application code.\n This may take " + chalk.cyan('several minutes') + " depending on your connection speed..."));
+    this.log(chalk.bold("\nUploading your application code.\n This may take " + chalk.cyan('several minutes') + " depending on your connection speed..."));
         var insight = this.insight();
         insight.track('generator', 'heroku');
 
-    var child = exec('git push -f heroku master', { cwd: 'deploy/heroku', maxBuffer: 500*1024 }, function (err, stdout, stderr) {
+    var child = exec('git push -f heroku master', { maxBuffer: 500*1024 }, function (err, stdout, stderr) {
         console.log(stdout);
         if (err) {
             console.log(chalk.red(err));
         } else {
-            console.log(chalk.green('\nYour app should now be live. To view it run\n\t' + chalk.bold('cd deploy/heroku && heroku open')));
-            console.log(chalk.yellow('After application modification, re-deploy it with\n\t' + chalk.bold('grunt deployHeroku') +
-            ' and then do a \n\t' + chalk.bold('git push') + ' on your Heroku repository.'));
+            console.log(chalk.green('\nYour app should now be live. To view it run\n\t' + chalk.bold('heroku open')));
+            console.log(chalk.yellow('After application modification, re-deploy it with\n\t' + chalk.bold('git push heroku')));
         }
         done();
     }.bind(this));
