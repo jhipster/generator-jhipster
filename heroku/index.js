@@ -183,6 +183,7 @@ HerokuGenerator.prototype.productionBuild = function productionBuild() {
   }
 
   var done = this.async();
+  this.log(chalk.bold('\nBuilding application'));
   var child = exec('mvn package -Pprod -DskipTests=true', function (err, stdout) {
     if (err) {
       this.abort = true;
@@ -231,7 +232,8 @@ HerokuGenerator.prototype.herokuCliDeploy = function herokuCliDeploy() {
       console.log(chalk.red(err));
     } else {
       console.log(chalk.green('\nYour app should now be live. To view it run\n\t' + chalk.bold('heroku open --app ' + this.herokuDeployedName)));
-      console.log(chalk.yellow('After application modification, re-deploy it with\n\t' + chalk.bold(herokuDeployCommand)));
+      console.log(chalk.yellow('After application modification, repackage it with\n\t' + chalk.bold('mvn package -Pprod -DskipTests')));
+      console.log(chalk.yellow('And then re-deploy it with\n\t' + chalk.bold(herokuDeployCommand)));
     }
     done();
     done();
