@@ -102,7 +102,6 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
             config.addDataSourceProperty("cachePrepStmts", propertyResolver.getProperty("cachePrepStmts", "true"));
             config.addDataSourceProperty("prepStmtCacheSize", propertyResolver.getProperty("prepStmtCacheSize", "250"));
             config.addDataSourceProperty("prepStmtCacheSqlLimit", propertyResolver.getProperty("prepStmtCacheSqlLimit", "2048"));
-            config.addDataSourceProperty("useServerPrepStmts", propertyResolver.getProperty("useServerPrepStmts", "true"));
         }<% } %>
         if (metricRegistry != null) {
             config.setMetricRegistry(metricRegistry);
