@@ -1,10 +1,10 @@
 {
     "configuration": {
-        "title": "Configuration",
-        "filter": "Filter (by prefix)",
+        "title": "配置",
+        "filter": "过滤 (按前缀)",
         "table": {
-            "prefix": "Prefix",
-            "properties": "Properties"
+            "prefix": "前缀",
+            "properties": "属性"
         }
     }
 }
