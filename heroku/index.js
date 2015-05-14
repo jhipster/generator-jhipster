@@ -174,6 +174,14 @@ HerokuGenerator.prototype.copyHerokuFiles = function copyHerokuFiles() {
 HerokuGenerator.prototype.productionBuild = function productionBuild() {
   if(this.abort) return;
   if(this.herokuType == "Git") return;
+
+  if (this.buildTool == 'gradle') {
+    this.abort = true;
+    this.log.error("Gradle is not yet supported with Heroku CLI deployment");
+    done()
+    return;
+  }
+
   var done = this.async();
   var child = exec('mvn package -Pprod -DskipTests=true', function (err, stdout) {
     if (err) {
