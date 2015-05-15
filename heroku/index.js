@@ -99,15 +99,52 @@ HerokuGenerator.prototype.herokuCreate = function herokuCreate() {
     var regionParams = (this.herokuRegion !== 'us') ? ' --region ' + this.herokuRegion : '';
 
     this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
-    var herokuCreateCmd = 'heroku apps:create ' + this.herokuDeployedName + regionParams + ' --addons heroku-postgresql:hobby-dev';
+    var herokuCreateCmd = 'heroku create ' + this.herokuDeployedName + regionParams + ' --addons heroku-postgresql:hobby-dev';
 
     console.log(herokuCreateCmd);
     var child = exec(herokuCreateCmd, {}, function (err, stdout, stderr) {
         if (err) {
+          if (stderr.indexOf('Name is already taken') > -1) {
+            var prompts = [
+            {
+              type: "list",
+              name: 'herokuForceName',
+              message: 'The Heroku app "' + chalk.cyan(this.herokuDeployedName) + '" already exists! Use it anyways?',
+              choices: [{
+                value: 'Yes',
+                name: 'Yes, I have access to it',
+              },{
+                value: 'No',
+                name: 'No, generate a random name'
+              }],
+              default: 0
+            }];
+
+            console.log("");
+            this.prompt(prompts, function (props) {
+              if (props.herokuForceName == 'Yes') {
+                herokuCreateCmd = 'heroku git:remote --app ' + this.herokuDeployedName
+              } else {
+                herokuCreateCmd = 'heroku create ' + regionParams + ' --addons heroku-postgresql:hobby-dev';
+              }
+              var forceCreateChild = exec(herokuCreateCmd, {}, function (err, stdout, stderr) {
+                if (err) {
+                  this.abort = true;
+                  this.log.error(err);
+                } else {
+                  this.log(stdout);
+                }
+                done();
+              }.bind(this));
+            }.bind(this));
+          } else {
             this.abort = true;
             this.log.error(err);
+            done();
+          }
+        } else {
+          done();
         }
-        done();
     }.bind(this));
 
     child.stdout.on('data', function(data) {
@@ -180,7 +217,7 @@ HerokuGenerator.prototype.herokuCliDeploy = function herokuCliDeploy() {
   }
 
   this.log(chalk.bold("\nUploading your application code.\n This may take " + chalk.cyan('several minutes') + " depending on your connection speed..."));
-  var child = exec(herokuDeployCommand + ' -a ' + this.herokuDeployedName, function (err, stdout) {
+  var child = exec(herokuDeployCommand, function (err, stdout) {
     if (err) {
       this.abort = true;
       this.log.error(err);
