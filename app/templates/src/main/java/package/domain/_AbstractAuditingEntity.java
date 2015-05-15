@@ -8,6 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 <% if (databaseType == 'mongodb') { %>import org.springframework.data.mongodb.core.mapping.Field;
+import java.time.ZonedDateTime;
 <% } %><% if (databaseType == 'sql') { %>
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.ZonedDateTime;
@@ -34,7 +35,7 @@ public abstract class AbstractAuditingEntity {
 
     @CreatedDate<% if (databaseType == 'sql') { %>
     @NotNull
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentZonedDateTime")
+    @Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime")
     @Column(name = "created_date", nullable = false)<% } %><% if (databaseType == 'mongodb') { %>
     @Field("created_date")<% } %>
     @JsonIgnore
@@ -47,7 +48,7 @@ public abstract class AbstractAuditingEntity {
     private String lastModifiedBy;
 
     @LastModifiedDate<% if (databaseType == 'sql') { %>
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentZonedDateTime")
+    @Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime")
     @Column(name = "last_modified_date")<% } %><% if (databaseType == 'mongodb') { %>
     @Field("last_modified_date  ")<% } %>
     @JsonIgnore

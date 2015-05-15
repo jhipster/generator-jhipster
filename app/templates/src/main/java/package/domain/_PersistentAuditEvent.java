@@ -32,7 +32,7 @@ public class PersistentAuditEvent  {
     private String principal;
 <% if (databaseType == 'sql') { %>
     @Column(name = "event_date")
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")<% } %>
+    @Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime")<% } %>
     private LocalDateTime auditEventDate;<% if (databaseType == 'sql') { %>
     @Column(name = "event_type")<% } %><% if (databaseType == 'mongodb') { %>
     @Field("event_type")<% } %>

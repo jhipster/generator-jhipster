@@ -179,8 +179,8 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     name: 'LocalDate'
                 },
                 {
-                    value: 'DateTime',
-                    name: 'DateTime'
+                    value: 'ZonedDateTime',
+                    name: 'ZonedDateTime'
                 },
                 {
                     value: 'Boolean',

@@ -600,6 +600,10 @@ JhipsterGenerator.prototype.app = function app() {
     }
     if (this.databaseType == 'mongodb') {
         this.template('src/main/java/package/config/_CloudMongoDbConfiguration.java', javaDir + 'config/CloudMongoDbConfiguration.java', this, {});
+        this.template('src/main/java/package/domain/util/_DateToZonedDateTimeConverter.java', javaDir + 'domain/util/DateToZonedDateTimeConverter.java', this, {});
+        this.template('src/main/java/package/domain/util/_ZonedDateTimeToDateConverter.java', javaDir + 'domain/util/ZonedDateTimeToDateConverter.java', this, {});
+        this.template('src/main/java/package/domain/util/_DateToLocalDateConverter.java', javaDir + 'domain/util/DateToLocalDateConverter.java', this, {});
+        this.template('src/main/java/package/domain/util/_LocalDateToDateConverter.java', javaDir + 'domain/util/LocalDateToDateConverter.java', this, {});
     }
     if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
         this.template('src/main/java/package/config/_DatabaseConfiguration.java', javaDir + 'config/DatabaseConfiguration.java', this, {});

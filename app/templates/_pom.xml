@@ -54,7 +54,7 @@
         <spring-security.version>4.0.1.RELEASE</spring-security.version><% if (authenticationType == 'oauth2') { %>
         <spring-security-oauth2.version>2.0.7.RELEASE</spring-security-oauth2.version><% } %>
         <swagger-springmvc.version>0.9.5</swagger-springmvc.version>
-        <usertype-core.version>3.2.0.GA</usertype-core.version>
+        <usertype.version>3.2.0.GA</usertype.version>
     </properties>
 
     <dependencies>
@@ -305,7 +305,12 @@
         <dependency>
             <groupId>org.jadira.usertype</groupId>
             <artifactId>usertype.core</artifactId>
-            <version>${usertype-core.version}</version>
+            <version>${usertype.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jadira.usertype</groupId>
+            <artifactId>usertype.extended</artifactId>
+            <version>${usertype.version}</version>
         </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>

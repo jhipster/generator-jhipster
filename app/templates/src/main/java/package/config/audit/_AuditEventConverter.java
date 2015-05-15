@@ -5,6 +5,8 @@ import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.*;
 
 @Configuration

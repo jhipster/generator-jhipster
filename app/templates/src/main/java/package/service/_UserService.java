@@ -71,7 +71,7 @@ public class UserService {
        return userRepository.findOneByResetKey(key)
            .filter(user -> {
                ZonedDateTime oneDayAgo = ZonedDateTime.now().minusHours(24);
-               return user.getResetDate()<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>.isAfter(oneDayAgo.toInstant().getMillis());<% } %><% if (databaseType == 'cassandra') { %>.after(oneDayAgo.toDate());<% } %>
+               return user.getResetDate()<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>.isAfter(oneDayAgo);<% } %><% if (databaseType == 'cassandra') { %>.after(oneDayAgo.toDate());<% } %>
            })
            .map(user -> {
                user.setPassword(passwordEncoder.encode(newPassword));
@@ -87,7 +87,7 @@ public class UserService {
            .filter(user -> user.getActivated() == true)
            .map(user -> {
                user.setResetKey(RandomUtil.generateResetKey());
-               user.<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>setResetDate(DateTime.now());<% } %><% if (databaseType == 'cassandra') { %>setResetDate(new Date());<% } %>
+               user.<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>setResetDate(ZonedDateTime.now());<% } %><% if (databaseType == 'cassandra') { %>setResetDate(new Date());<% } %>
                userRepository.save(user);
                return user;
            });
@@ -109,9 +109,9 @@ public class UserService {
     public User completePasswordReset(String newPassword, String key) {
         log.debug("Reset user password for reset key {}", key);
         User user = userRepository.findOneByResetKey(key);
-        DateTime oneDayAgo = DateTime.now().minusHours(24);
+        ZonedDateTime oneDayAgo = ZonedDateTime.now().minusHours(24);
         if (user != null && user.getActivated()) {
-            if (user.getResetDate().isAfter(oneDayAgo.toInstant().getMillis())) {
+            if (user.getResetDate().isAfter(oneDayAgo)) {
                 user.setPassword(passwordEncoder.encode(newPassword));
                 user.setResetKey(null);
                 user.setResetDate(null);
@@ -126,9 +126,9 @@ public class UserService {
 
     public User requestPasswordReset(String mail) {
         User user = userRepository.findOneByEmail(mail);
-        if (user != null && user.getActivated()) {
+        if (user != null) {
             user.setResetKey(RandomUtil.generateResetKey());
-            user.setResetDate(DateTime.now());
+            user.setResetDate(ZonedDateTime.now());
             userRepository.save(user);
             return user;
         }
@@ -219,7 +219,7 @@ public class UserService {
      */
     @Scheduled(cron = "0 0 0 * * ?")
     public void removeOldPersistentTokens() {
-        LocalDate now = new LocalDate();<% if (javaVersion == '8') { %>
+        LocalDate now = LocalDate.now();<% if (javaVersion == '8') { %>
         persistentTokenRepository.findByTokenDateBefore(now.minusMonths(1)).stream().forEach(token ->{
             log.debug("Deleting token {}", token.getSeries());<% if (databaseType == 'sql') { %>
             User user = token.getUser();
@@ -244,7 +244,7 @@ public class UserService {
      */
     @Scheduled(cron = "0 0 1 * * ?")
     public void removeNotActivatedUsers() {
-        DateTime now = new DateTime();
+        ZonedDateTime now = ZonedDateTime.now();
         List<User> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minusDays(3));
         for (User user : users) {
             log.debug("Deleting not activated user {}", user.getLogin());

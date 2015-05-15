@@ -104,7 +104,8 @@ dependencies {
         exclude(module: 'ehcache-core')
     }<% } %>
     compile group: 'org.hibernate', name: 'hibernate-validator'<% if (databaseType == 'sql') { %>
-    compile group: 'org.jadira.usertype', name: 'usertype.core', version: usertype_core_version
+    compile group: 'org.jadira.usertype', name: 'usertype.core', version: usertype_version
+    compile group: 'org.jadira.usertype', name: 'usertype.extended', version: usertype_version
     compile (group: 'org.liquibase', name: 'liquibase-core', version: liquibase_core_version) {
         exclude(module: 'jetty-servlet')
     }
