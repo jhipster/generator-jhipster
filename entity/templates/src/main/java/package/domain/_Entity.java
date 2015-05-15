@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;<% } %><% if (fieldsContainCu
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;<% } %><% if (fieldsContainLocalDate == true) { %>
 import <%=packageName%>.domain.util.CustomLocalDateSerializer;
-import <%=packageName%>.domain.util.ISO8601LocalDateDeserializer;<% } %><% if (fieldsContainDateTime == true) { %>
+import <%=packageName%>.domain.util.ISO8601LocalDateDeserializer;<% } %><% if (fieldsContainZonedDateTime == true) { %>
 import <%=packageName%>.domain.util.CustomDateTimeDeserializer;
 import <%=packageName%>.domain.util.CustomDateTimeSerializer;<% } %><% if (hibernateCache != 'no') { %>
 import org.hibernate.annotations.Cache;
@@ -71,8 +71,7 @@ public class <%= entityClass %> implements Serializable {
     @Size(min = <%= fields[fieldId].fieldValidateRulesMinlength %>, max = <%= fields[fieldId].fieldValidateRulesMaxlength %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('min') != -1) { %>
     @Min(value = <%= fields[fieldId].fieldValidateRulesMin %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('max') != -1) { %>
     @Max(value = <%= fields[fieldId].fieldValidateRulesMax %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('pattern') != -1) { %>
-    @Pattern(regexp = "<%= fields[fieldId].fieldValidateRulesPattern %>")<% } } %><% if (databaseType == 'sql') { %><% if (fields[fieldId].fieldIsEnum) { %>
-    @Enumerated(EnumType.STRING)<% } %><% if (fields[fieldId].fieldType == 'DateTime') { %>
+    @Pattern(regexp = "<%= fields[fieldId].fieldValidateRulesPattern %>")<% } } %><% if (databaseType == 'sql') { %><% if (fields[fieldId].fieldType == 'DateTime') { %>
     @Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime")
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     @JsonDeserialize(using = CustomDateTimeDeserializer.class)

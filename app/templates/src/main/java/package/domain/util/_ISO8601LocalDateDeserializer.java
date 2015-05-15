@@ -9,13 +9,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-<<<<<<< HEAD
-import java.time.Instant;
-
-import java.io.IOException;
-=======
 import java.time.format.DateTimeFormatter;
->>>>>>> Migration from Joda Time to Java 8 Time
 
 /**
  * ISO 8601 date format

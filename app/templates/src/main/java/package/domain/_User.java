@@ -10,8 +10,6 @@ import org.hibernate.validator.constraints.Email;
 import org.springframework.data.elasticsearch.annotations.Document;<% } %><% if (databaseType == 'mongodb') { %>
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import <%=packageName%>.domain.util.CustomZonedDateTimeDeserializer;
-import <%=packageName%>.domain.util.CustomZonedDateTimeSerializer;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -100,8 +98,6 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Column(name = "reset_date", nullable = true)
     private ZonedDateTime resetDate = null;<% }%><%if (databaseType == 'mongodb') {%>
 
-    @JsonSerialize(using = CustomZonedDateTimeSerializer.class)
-    @JsonDeserialize(using = CustomZonedDateTimeDeserializer.class)
     @Field("reset_date")
     private ZonedDateTime resetDate = null;<% }%><% if (databaseType == 'cassandra') { %>
 

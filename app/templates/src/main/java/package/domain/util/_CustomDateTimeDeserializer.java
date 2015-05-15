@@ -18,8 +18,6 @@ public class CustomDateTimeDeserializer extends JsonDeserializer<ZonedDateTime> 
 
     private static DateTimeFormatter formatter = DateTimeFormatter.ISO_ZONED_DATE_TIME;
 
-    private static DateTimeFormatter formatter = DateTimeFormatter.ISO_ZONED_DATE_TIME;
-
     @Override
     public ZonedDateTime deserialize(JsonParser jp, DeserializationContext ctxt)
             throws IOException {
