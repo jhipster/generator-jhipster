@@ -5,7 +5,7 @@ set -x
 jar=$(ls ${OPENSHIFT_REPO_DIR}target/*.war | head -n1)
 
 <% if (javaVersion === '8') { %>
-export JAVA_HOME=${OPENSHIFT_DATA_DIR}jdk1.8.0_20
+export JAVA_HOME=${OPENSHIFT_DATA_DIR}jdk1.8.0_40
 export PATH=$JAVA_HOME/bin:$PATH
 <% } %>
 
@@ -20,4 +20,3 @@ nohup java -server \
      --spring.datasource.url=jdbc:mysql://${OPENSHIFT_MYSQL_DB_HOST}:${OPENSHIFT_MYSQL_DB_PORT}/${OPENSHIFT_APP_NAME} \
      --spring.datasource.username=${OPENSHIFT_MYSQL_DB_USERNAME} \
      --spring.datasource.password=${OPENSHIFT_MYSQL_DB_PASSWORD} > ${OPENSHIFT_DIY_LOG_DIR}<%= baseName %>.log 2>&1 &<% } %>
-
