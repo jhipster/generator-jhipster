@@ -50,6 +50,9 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     } else if (this.name == '') {
         console.log(chalk.red('The entity name cannot be empty'));
         throw new Error("Validation error");
+    } else if (this.name.indexOf("Detail", this.name.length - "Detail".length) !== -1) {
+        console.log(chalk.red('The entity name cannot end with \'Detail\''));
+        throw new Error("Validation error");
     } else if (reservedWords_Java.indexOf(this.name.toUpperCase()) != -1) {
         console.log(chalk.red('The entity name cannot contain a Java reserved keyword'));
         throw new Error("Validation error");
