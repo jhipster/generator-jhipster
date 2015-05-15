@@ -49,7 +49,7 @@ public class MailService {
 
     @PostConstruct
     public void init() {
-        this.from = env.getProperty("spring.mail.from");
+        this.from = env.getProperty("mail.from");
     }
 
     @Async
