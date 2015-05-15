@@ -71,29 +71,29 @@
     },
     "entity": {
         "action": {
-            "back": "Back",
-            "cancel": "Cancel",
-            "delete": "Delete",
-            "edit": "Edit",
-            "save": "Save",
-            "view": "View"
+            "back": "Tillbaka",
+            "cancel": "Avbryt",
+            "delete": "Ta bort",
+            "edit": "Ändra",
+            "save": "Spara",
+            "view": "Titta"
         },
         "detail": {
-            "field": "Field",
-            "value": "Value"
+            "field": "Fält",
+            "value": "Värde"
         },
         "delete": {
-            "title": "Confirm delete operation"
+            "title": "Bekräfta bortagningen"
         },
         "validation": {
-            "required": "This field is required.",
-            "minlength": "This field is required to be at least {{min}} characters.",
-            "maxlength": "This field cannot be longer than {{max}} characters.",
-            "min": "This field should be more than {{min}}.",
-            "max": "This field cannot be more than {{max}}.",
-            "pattern": "This field should follow pattern {{pattern}}.",
-            "number": "This field should be a number.",
-            "datetimelocal": "This field should be a date and time."
+            "required": "Detta fält krävs.",
+            "minlength": "Detta fält måste vara {{min}} tecken.",
+            "maxlength": "Detta fält kan inte vara längre än {{max}} tecken.",
+            "min": "Detta fält måste vara större än {{min}}.",
+            "max": "Detta fält måste vara mindre än {{max}}.",
+            "pattern": "Detta fält måste följa mönstret {{pattern}}.",
+            "number": "Detta fält måste vara ett tal.",
+            "datetimelocal": "Detta fält måste vara ett datum och en tid."
         }
     },
     "footer": "Detta är din footer"
