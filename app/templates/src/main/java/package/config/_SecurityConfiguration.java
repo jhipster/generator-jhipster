@@ -82,7 +82,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/assets/**")
             .antMatchers("/swagger-ui/**")<% if (authenticationType == 'oauth2') { %>
             .antMatchers("/api/register")
-            .antMatchers("/api/activate")<% } %>
+            .antMatchers("/api/activate")
+            .antMatchers("/api/account/reset_password/init")
+            .antMatchers("/api/account/reset_password/finish")<% } %>
             .antMatchers("/test/**")<% if (devDatabaseType != 'h2Memory') { %>;<% } else { %>
             .antMatchers("/console/**");<% } %>
     }<% if (authenticationType == 'session' || authenticationType == 'xauth') { %>
