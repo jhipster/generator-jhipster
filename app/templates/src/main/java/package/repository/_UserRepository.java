@@ -5,7 +5,7 @@ import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;<% } %>
 import <%=packageName%>.domain.User;
 
-import org.joda.time.DateTime;<% if (databaseType == 'sql') { %>
+import java.time.ZonedDateTime;<% if (databaseType == 'sql') { %>
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
@@ -48,7 +48,7 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
 
     User findOneByActivationKey(String activationKey);
 
-    List<User> findAllByActivatedIsFalseAndCreatedDateBefore(DateTime dateTime);
+    List<User> findAllByActivatedIsFalseAndCreatedDateBefore(ZonedDateTime dateTime);
 
     User findOneByResetKey(String resetKey);
 

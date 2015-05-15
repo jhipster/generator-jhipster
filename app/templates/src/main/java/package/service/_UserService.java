@@ -10,8 +10,8 @@ import <%=packageName%>.repository.search.UserSearchRepository;<% } %><% if (dat
 import <%=packageName%>.security.AuthoritiesConstants;<% } %>
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.util.RandomUtil;
-import org.joda.time.DateTime;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import org.joda.time.LocalDate;<% } %>
+import java.time.ZonedDateTime;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import java.time.LocalDate;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -70,7 +70,7 @@ public class UserService {
 
        return userRepository.findOneByResetKey(key)
            .filter(user -> {
-               DateTime oneDayAgo = DateTime.now().minusHours(24);
+               ZonedDateTime oneDayAgo = ZonedDateTime.now().minusHours(24);
                return user.getResetDate()<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>.isAfter(oneDayAgo.toInstant().getMillis());<% } %><% if (databaseType == 'cassandra') { %>.after(oneDayAgo.toDate());<% } %>
            })
            .map(user -> {

@@ -2,8 +2,9 @@ package <%=packageName%>.domain.util;
 
 import java.io.IOException;
 
-import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
+import java.time.DateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.Instant;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
@@ -11,9 +12,11 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
 /**
- * Custom Jackson deserializer for displaying Joda DateTime objects.
+ * Custom Jackson deserializer for displaying Java DateTime objects.
  */
 public class CustomDateTimeDeserializer extends JsonDeserializer<DateTime> {
+
+    private static DateTimeFormatter formatter = DateTimeFormatter.ISO_ZONED_DATE_TIME;
 
     @Override
     public DateTime deserialize(JsonParser jp, DeserializationContext ctxt)
@@ -21,10 +24,10 @@ public class CustomDateTimeDeserializer extends JsonDeserializer<DateTime> {
         JsonToken t = jp.getCurrentToken();
         if (t == JsonToken.VALUE_STRING) {
             String str = jp.getText().trim();
-            return ISODateTimeFormat.dateTimeParser().parseDateTime(str);
+            return formatter.parse(str);
         }
         if (t == JsonToken.VALUE_NUMBER_INT) {
-            return new DateTime(jp.getLongValue());
+            return Instant.ofEpochMilli(jp.getLongValue()).atZone(ZoneId.systemDefault());
         }
         throw ctxt.mappingException(handledType());
     }

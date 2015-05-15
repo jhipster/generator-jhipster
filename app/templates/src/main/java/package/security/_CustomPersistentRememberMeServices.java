@@ -4,7 +4,7 @@ import <%=packageName%>.domain.PersistentToken;<% if (databaseType == 'sql' || d
 import <%=packageName%>.domain.User;<%}%>
 import <%=packageName%>.repository.PersistentTokenRepository;
 import <%=packageName%>.repository.UserRepository;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import org.joda.time.LocalDate;<%}%>
+import java.time.LocalDate;<%}%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;

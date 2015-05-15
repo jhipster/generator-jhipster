@@ -2,7 +2,7 @@ package <%=packageName%>.web.rest;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.fasterxml.jackson.datatype.joda.Jsr310Module;
 import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
 import com.fasterxml.jackson.datatype.joda.ser.JacksonJodaFormat;
 import org.joda.time.DateTime;
