@@ -12,7 +12,7 @@
         "messages": {
             "error": {
                 "fail": "<strong>发生错误!</strong> 设置无法保存.",
-                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+                "emailexists": "<strong>该邮件地址已被使用!</strong> 请使用另外的邮件地址."
             },
             "success": "<strong>设置保存成功!</strong>",
             "validate": {

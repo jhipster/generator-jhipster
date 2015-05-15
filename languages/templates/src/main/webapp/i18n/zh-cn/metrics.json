@@ -13,30 +13,30 @@
             },
             "threads": {
                 "title": "线程",
-                "all": "All",
-                "runnable": "Runnable",
-                "timedwaiting": "Timed waiting",
-                "waiting": "Waiting",
-                "blocked": "Blocked",
+                "all": "所有",
+                "runnable": "可运行",
+                "timedwaiting": "定时等待",
+                "waiting": "等待中",
+                "blocked": "阻塞中",
                 "dump": {
-                    "title": "Threads dump",
+                    "title": "线程转储",
                     "id": "Id: ",
-                    "blockedtime": "Blocked Time",
-                    "blockedcount": "Blocked Count",
-                    "waitedtime": "Waited Time",
-                    "waitedcount": "Waited Count",
-                    "lockname": "Lock name",
+                    "blockedtime": "阻塞时间",
+                    "blockedcount": "阻塞次数",
+                    "waitedtime": "等待时间",
+                    "waitedcount": "等待次数",
+                    "lockname": "锁名称",
                     "stacktrace": "堆栈追踪",
                     "show": "显示",
                     "hide": "隐藏"
                 }
             },
             "gc": {
-                "title": "Garbage collections",
-                "marksweepcount": "Mark Sweep count",
-                "marksweeptime": "Mark Sweep time",
-                "scavengecount": "Scavenge count",
-                "scavengetime": "Scavenge time"
+                "title": "垃圾回收",
+                "marksweepcount": "标记清除次数",
+                "marksweeptime": "标记清除耗时",
+                "scavengecount": "回收次数",
+                "scavengetime": "回收耗时"
             },
             "http": {
                 "title": "HTTP 请求 (事件 / 秒)",

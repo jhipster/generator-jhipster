@@ -5,7 +5,7 @@
         "menu": {
             "home": "首页",
             "entities": {
-                "main": "Entities",
+                "main": "数据",
                 "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
@@ -71,29 +71,29 @@
     },
     "entity": {
         "action": {
-            "back": "Back",
-            "cancel": "Cancel",
-            "delete": "Delete",
-            "edit": "Edit",
-            "save": "Save",
-            "view": "View"
+            "back": "返回",
+            "cancel": "取消",
+            "delete": "删除",
+            "edit": "编辑",
+            "save": "保存",
+            "view": "查看"
         },
         "detail": {
-            "field": "Field",
-            "value": "Value"
+            "field": "字段",
+            "value": "值"
         },
         "delete": {
-            "title": "Confirm delete operation"
+            "title": "确认删除操作"
         },
         "validation": {
-            "required": "This field is required.",
-            "minlength": "This field is required to be at least {{min}} characters.",
-            "maxlength": "This field cannot be longer than {{max}} characters.",
-            "min": "This field should be more than {{min}}.",
-            "max": "This field cannot be more than {{max}}.",
-            "pattern": "This field should follow pattern {{pattern}}.",
-            "number": "This field should be a number.",
-            "datetimelocal": "This field should be a date and time."
+            "required": "本字段不能为空.",
+            "minlength": "本字段最短长度为 {{min}} 个字符.",
+            "maxlength": "本字段最大长度为 {{max}} 个字符.",
+            "min": "本字段不能小于 {{min}}.",
+            "max": "本字段不能大于 {{max}}.",
+            "pattern": "本字段必须符合模式 {{pattern}}.",
+            "number": "本字段必须为数字.",
+            "datetimelocal": "本字段必须为日期和时间."
         }
     },
     "footer": "这里是页脚"
