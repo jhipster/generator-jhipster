@@ -137,7 +137,7 @@ HerokuGenerator.prototype.productionBuild = function productionBuild() {
 
   var buildCmd = 'mvn package -Pprod -DskipTests=true'
   if (this.buildTool == 'gradle') {
-    buildCmd = 'gradlew -Pprod bootRepackage'
+    buildCmd = './gradlew -Pprod bootRepackage -x test'
   }
 
   var child = exec(buildCmd, function (err, stdout) {
@@ -192,7 +192,7 @@ HerokuGenerator.prototype.herokuCliDeploy = function herokuCliDeploy() {
       console.log(chalk.green('\nYour app should now be live. To view it run\n\t' + chalk.bold('heroku open')));
       console.log(chalk.yellow('And you can view the logs with this command\n\t' + chalk.bold('heroku logs --tail')));
       if (this.buildTool == 'gradle') {
-        console.log(chalk.yellow('After application modification, repackage it with\n\t' + chalk.bold('gradlew -Pprod bootRepackage')));
+        console.log(chalk.yellow('After application modification, repackage it with\n\t' + chalk.bold('./gradlew -Pprod bootRepackage -x test')));
       } else {
         console.log(chalk.yellow('After application modification, repackage it with\n\t' + chalk.bold('mvn package -Pprod -DskipTests')));
       }
