@@ -85,6 +85,23 @@ HerokuGenerator.prototype.gitInit = function gitInit() {
     }
 };
 
+HerokuGenerator.prototype.installHerokuDeployPlugin = function installHerokuDeployPlugin() {
+  if(this.abort) return;
+  var done = this.async();
+  this.log(chalk.bold('\nInstalling Heroku CLI deployment plugin'));
+  var child = exec('heroku plugins:install https://github.com/heroku/heroku-deploy', function (err, stdout) {
+    if (err) {
+      this.abort = true;
+      this.log.error(err);
+    }
+    done();
+  }.bind(this));
+
+  child.stdout.on('data', function(data) {
+    this.log(data.toString());
+  }.bind(this));
+};
+
 HerokuGenerator.prototype.herokuCreate = function herokuCreate() {
     if(this.abort) return;
     var done = this.async();
@@ -178,23 +195,6 @@ HerokuGenerator.prototype.productionBuild = function productionBuild() {
   }
 
   var child = exec(buildCmd, function (err, stdout) {
-    if (err) {
-      this.abort = true;
-      this.log.error(err);
-    }
-    done();
-  }.bind(this));
-
-  child.stdout.on('data', function(data) {
-    this.log(data.toString());
-  }.bind(this));
-};
-
-HerokuGenerator.prototype.installHerokuDeployPlugin = function installHerokuDeployPlugin() {
-  if(this.abort) return;
-  var done = this.async();
-  this.log(chalk.bold('\nInstalling Heroku CLI deployment plugin'));
-  var child = exec('heroku plugins:install https://github.com/heroku/heroku-deploy', function (err, stdout) {
     if (err) {
       this.abort = true;
       this.log.error(err);
