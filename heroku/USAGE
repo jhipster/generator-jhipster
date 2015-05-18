@@ -1,13 +1,9 @@
 Description:
-    Initalizes a Heroku app and generates a `deploy/heroku` folder which is ready to push to Heroku.
+    Initializes a Heroku app and generates a WAR file that is ready to push to Heroku.
 
 Example:
     yo jhipster:heroku
 
     This will create:
-        deploy/heroku/Procfile
-        deploy/heroku/.slugignore
-        deploy/heroku/system.properties
-        deploy/heroku/src/main/java/your_package_name/config/HerokuDatabaseConfiguration.java
-
-    And it will copy the "production" code to deploy/heroku
+        Procfile
+        src/main/java/your_package_name/config/HerokuDatabaseConfiguration.java

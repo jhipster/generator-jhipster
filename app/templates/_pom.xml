@@ -21,7 +21,7 @@
     </prerequisites>
 
     <properties>
-        <HikariCP.version>2.2.5</HikariCP.version><% if (javaVersion == '8') { %>
+        <HikariCP.version>2.3.7</HikariCP.version><% if (javaVersion == '8') { %>
         <assertj-core.version>1.0.0m1</assertj-core.version><% } %><% if (javaVersion == '7') { %>
         <assertj-core.version>1.6.1</assertj-core.version><% } %>
         <awaitility.version>1.4.0</awaitility.version><% if (databaseType == 'cassandra') { %>

@@ -1,10 +1,10 @@
 {
     "configuration": {
-        "title": "Configuration",
-        "filter": "Filter (by prefix)",
+        "title": "Konfigurering",
+        "filter": "Filter (via prefix)",
         "table": {
             "prefix": "Prefix",
-            "properties": "Properties"
+            "properties": "Egenskaper"
         }
     }
 }
