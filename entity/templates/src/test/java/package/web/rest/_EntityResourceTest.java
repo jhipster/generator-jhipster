@@ -67,37 +67,54 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
         }
     }
 
-    if (fields[fieldId].fieldType == 'String') { %>
+    var fieldType = fields[fieldId].fieldType;
+    var isEnum = fields[fieldId].fieldIsEnum;
+    var enumValue1;
+    var enumValue2;
+    if (isEnum) {
+        var values = fields[fieldId].fieldValues.split(",");
+        enumValue1 = values[0];
+        if (values.length > 1) {
+            enumValue2 = values[1];
+        } else {
+            enumValue2 = enumValue1;
+        }
+    }
+
+    if (fieldType == 'String') { %>
     private static final String <%=defaultValueName %> = "SAMPLE_TEXT";
-    private static final String <%=updatedValueName %> = "UPDATED_TEXT";<% } else if (fields[fieldId].fieldType == 'Integer') { %>
+    private static final String <%=updatedValueName %> = "UPDATED_TEXT";<% } else if (fieldType == 'Integer') { %>
 
     private static final Integer <%=defaultValueName %> = <%= defaultValue %>;
-    private static final Integer <%=updatedValueName %> = <%= updatedValue %>;<% } else if (fields[fieldId].fieldType == 'Long') { %>
+    private static final Integer <%=updatedValueName %> = <%= updatedValue %>;<% } else if (fieldType == 'Long') { %>
 
     private static final Long <%=defaultValueName %> = <%= defaultValue %>L;
-    private static final Long <%=updatedValueName %> = <%= updatedValue %>L;<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
+    private static final Long <%=updatedValueName %> = <%= updatedValue %>L;<% } else if (fieldType == 'BigDecimal') { %>
 
     private static final BigDecimal <%=defaultValueName %> = new BigDecimal(<%= defaultValue %>);
-    private static final BigDecimal <%=updatedValueName %> = new BigDecimal(<%= updatedValue %>);<% } else if (fields[fieldId].fieldType == 'UUID') { %>
+    private static final BigDecimal <%=updatedValueName %> = new BigDecimal(<%= updatedValue %>);<% } else if (fieldType == 'UUID') { %>
 
     private static final UUID <%=defaultValueName %> = UUID.randomUUID();
-    private static final UUID <%=updatedValueName %> = UUID.randomUUID();<% } else if (fields[fieldId].fieldType == 'TimeUUID') { %>
+    private static final UUID <%=updatedValueName %> = UUID.randomUUID();<% } else if (fieldType == 'TimeUUID') { %>
 
     private static final UUID <%=defaultValueName %> = UUID.randomUUID();
-    private static final UUID <%=updatedValueName %> = UUID.randomUUID();<% } else if (fields[fieldId].fieldType == 'Date') { %>
+    private static final UUID <%=updatedValueName %> = UUID.randomUUID();<% } else if (fieldType == 'Date') { %>
 
     private static final Date <%=defaultValueName %> = new Date();
-    private static final Date <%=updatedValueName %> = new Date();<% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
+    private static final Date <%=updatedValueName %> = new Date();<% } else if (fieldType == 'LocalDate') { %>
 
     private static final LocalDate <%=defaultValueName %> = new LocalDate(0L);
-    private static final LocalDate <%=updatedValueName %> = new LocalDate();<% } else if (fields[fieldId].fieldType == 'DateTime') { %>
+    private static final LocalDate <%=updatedValueName %> = new LocalDate();<% } else if (fieldType == 'DateTime') { %>
 
     private static final DateTime <%=defaultValueName %> = new DateTime(0L, DateTimeZone.UTC);
     private static final DateTime <%=updatedValueName %> = new DateTime(DateTimeZone.UTC).withMillisOfSecond(0);
-    private static final String <%=defaultValueName %>_STR = dateTimeFormatter.print(<%= defaultValueName %>);<% } else if (fields[fieldId].fieldType == 'Boolean') { %>
+    private static final String <%=defaultValueName %>_STR = dateTimeFormatter.print(<%= defaultValueName %>);<% } else if (fieldType == 'Boolean') { %>
 
     private static final Boolean <%=defaultValueName %> = false;
-    private static final Boolean <%=updatedValueName %> = true;<% } } %>
+    private static final Boolean <%=updatedValueName %> = true;<% } else if (isEnum) { %>
+
+    private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%=enumValue1 %>;
+    private static final <%=fieldType %> <%=updatedValueName %> = <%=fieldType %>.<%=enumValue2 %>;<% } } %>
 
     @Inject
     private <%= entityClass %>Repository <%= entityInstance %>Repository;<% if (searchEngine == 'elasticsearch') { %>
