@@ -5,20 +5,21 @@ angular.module('<%=angularAppName%>')
                 parent: 'admin',
                 url: '/tracker',
                 data: {
-                    roles: ['ROLE_ADMIN']
+                    roles: ['ROLE_ADMIN'],
+                    pageTitle: <% if (enableTranslation){ %>'tracker.title'<% }else{ %>'Real-time user activities'<% } %>
                 },
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/admin/tracker/tracker.html',
                         controller: 'TrackerController'
                     }
-                },
+                },<% if (enableTranslation){ %>
                 resolve: {
                     mainTranslatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('tracker');
                         return $translate.refresh();
                     }]
-                },
+                },<% } %>
                 onEnter: function(Tracker) {
                     Tracker.subscribe();
                 },

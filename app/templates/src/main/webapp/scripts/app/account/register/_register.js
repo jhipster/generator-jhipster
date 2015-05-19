@@ -8,19 +8,19 @@ angular.module('<%=angularAppName%>')
                 url: '/register',
                 data: {
                     roles: [],
-                    pageTitle: 'register.title'
+                    pageTitle: <% if (enableTranslation){ %>'register.title'<% }else{ %>'Registration'<% } %>
                 },
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/account/register/register.html',
                         controller: 'RegisterController'
                     }
-                },
+                }<% if (enableTranslation){ %>,
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('register');
                         return $translate.refresh();
                     }]
-                }
+                }<% } %>
             });
     });

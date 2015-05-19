@@ -14,12 +14,12 @@ angular.module('<%=angularAppName%>')
                         templateUrl: 'scripts/app/main/main.html',
                         controller: 'MainController'
                     }
-                },
+                }<% if (enableTranslation){ %>,
                 resolve: {
                     mainTranslatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate,$translatePartialLoader) {
                         $translatePartialLoader.addPart('main');
                         return $translate.refresh();
                     }]
-                }
+                }<% } %>
             });
     });

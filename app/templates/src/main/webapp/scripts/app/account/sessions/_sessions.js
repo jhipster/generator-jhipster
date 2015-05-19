@@ -8,19 +8,19 @@ angular.module('<%=angularAppName%>')
                 url: '/sessions',
                 data: {
                     roles: ['ROLE_USER'],
-                    pageTitle: 'global.menu.account.sessions'
+                    pageTitle: <% if (enableTranslation){ %>'global.menu.account.sessions'<% }else { %>'Sessions'<% } %>
                 },
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/account/sessions/sessions.html',
                         controller: 'SessionsController'
                     }
-                },
+                }<% if (enableTranslation){ %>,
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('sessions');
                         return $translate.refresh();
                     }]
-                }
+                }<% } %>
             });
     });

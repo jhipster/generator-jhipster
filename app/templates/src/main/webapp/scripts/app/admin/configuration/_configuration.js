@@ -8,19 +8,19 @@ angular.module('<%=angularAppName%>')
                 url: '/configuration',
                 data: {
                     roles: ['ROLE_ADMIN'],
-                    pageTitle: 'configuration.title'
+                    pageTitle: <% if (enableTranslation){ %>'configuration.title'<% }else{ %>'Configuration'<% } %>
                 },
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/admin/configuration/configuration.html',
                         controller: 'ConfigurationController'
                     }
-                },
+                }<% if (enableTranslation){ %>,
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('configuration');
                         return $translate.refresh();
                     }]
-                }
+                }<% } %>
             });
     });

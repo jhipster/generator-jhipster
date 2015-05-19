@@ -46,7 +46,7 @@ Generator.prototype.addComponentsScriptToIndex = function (script) {
     }
 };
 
-Generator.prototype.addRouterToMenu = function (entityName) {
+Generator.prototype.addRouterToMenu = function (entityName,enableTranslation) {
     try {
         var appPath = this.env.options.appPath;
         var fullPath = path.join(appPath, 'scripts/components/navbar/navbar.html');
@@ -55,7 +55,7 @@ Generator.prototype.addRouterToMenu = function (entityName) {
             needle: '<!-- JHipster will add entities to the menu here -->',
             splicable: [
                     '<li ui-sref-active="active" ><a ui-sref="' + entityName + '"><span class="glyphicon glyphicon-asterisk"></span>\n' +
-                    '                        &#xA0;<span translate="global.menu.entities.' + entityName + '">'+ entityName+'</span></a></li>'
+                    '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.entities.' + entityName + '"':'' ) + '>' + entityName + '</span></a></li>'
             ]
         });
     } catch (e) {
@@ -139,7 +139,7 @@ Generator.prototype.installNewLanguage = function(language) {
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + language + 'not added as a new language.\n'.yellow);
+        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + language + 'not added as a new language. Check if you have enabled translation support.\n'.yellow);
     }
 };
 
@@ -167,4 +167,30 @@ Generator.prototype.insight = function () {
         packageVersion: pkg.version
     });
     return insight;
+}
+
+Generator.prototype.copyHtmlTpl = function (source, dest, _this) {
+    if (_this.enableTranslation) {
+        _this.copy(source, dest);
+    } else {
+        _this.stripTranslateDirective(this, source, dest);
+    }
+}
+
+Generator.prototype.htmlTpl = function (source, dest, _this, _opt) {
+    if (_this.enableTranslation) {
+        _this.template(source, dest, _this, _opt);
+    } else {
+        _this.stripTranslateDirective(this, source, dest);
+    }
+}
+
+Generator.prototype.stripTranslateDirective = function (_this, source, dest) {
+    var directiveRegex = '( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")'; //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
+
+    var body = _this.readFileAsString(path.join(_this.sourceRoot(), source));
+    var re = new RegExp(directiveRegex, 'g');
+    body = _this.engine(body, _this, {});
+    body = body.replace(re, '');
+    _this.write(dest, body);
 }

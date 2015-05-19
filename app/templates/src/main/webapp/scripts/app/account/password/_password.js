@@ -8,19 +8,19 @@ angular.module('<%=angularAppName%>')
                 url: '/password',
                 data: {
                     roles: ['ROLE_USER'],
-                    pageTitle: 'global.menu.account.password'
+                    pageTitle: <% if (enableTranslation) { %>'global.menu.account.password'<% }else {%> 'password' <% } %>
                 },
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/account/password/password.html',
                         controller: 'PasswordController'
                     }
-                },
+                }<% if (enableTranslation) { %>,
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('password');
                         return $translate.refresh();
                     }]
-                }
+                }<% } %>
             });
     });

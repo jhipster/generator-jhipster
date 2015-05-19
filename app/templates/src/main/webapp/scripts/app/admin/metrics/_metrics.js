@@ -8,19 +8,19 @@ angular.module('<%=angularAppName%>')
                 url: '/metrics',
                 data: {
                     roles: ['ROLE_ADMIN'],
-                    pageTitle: 'metrics.title'
+                    pageTitle: <% if (enableTranslation){ %>'metrics.title'<% }else{ %>'Application Metrics'<% } %>
                 },
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/admin/metrics/metrics.html',
                         controller: 'MetricsController'
                     }
-                },
+                }<% if (enableTranslation){ %>,
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('metrics');
                         return $translate.refresh();
                     }]
-                }
+                }<% } %>
             });
     });

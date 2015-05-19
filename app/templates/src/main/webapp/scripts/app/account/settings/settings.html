@@ -1,7 +1,7 @@
 <div>
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <h2 translate="settings.title" translate-values="{username: '{{settingsAccount.login}}'}">User settings</h2>
+            <h2 translate="settings.title" translate-values="{username: '{{settingsAccount.login}}'}">User settings for [<b>{{settingsAccount.login}}</b>]</h2>
 
             <div class="alert alert-success" ng-show="success" translate="settings.messages.success">
                 <strong>Settings saved!</strong>
@@ -19,7 +19,7 @@
 
                 <div class="form-group">
                     <label translate="settings.form.firstname">First Name</label>
-                    <input type="text" class="form-control" name="firstName" placeholder="{{'settings.form.firstname.placeholder' | translate}}"
+                    <input type="text" class="form-control" name="firstName" placeholder=<% if (enableTranslation){ %>"{{'settings.form.firstname.placeholder' | translate}}"<% }else{ %>"Your first name"<% } %>
                            ng-model="settingsAccount.firstName" ng-minlength=1 ng-maxlength=50 required maxlength="50">
                     <div ng-show="form.firstName.$dirty && form.firstName.$invalid">
                         <p class="help-block"
@@ -28,17 +28,17 @@
                         </p>
                         <p class="help-block"
                                ng-show="form.firstName.$error.minlength" translate="settings.messages.validate.firstname.minlength">
-                            Your first name is required to be at least 1 character
+                            Your first name is required to be at least 1 character.
                         </p>
                         <p class="help-block"
                                ng-show="form.firstName.$error.maxlength" translate="settings.messages.validate.firstname.maxlength">
-                            Your first name cannot be longer than 50 characters
+                            Your first name cannot be longer than 50 characters.
                         </p>
                     </div>
                 </div>
                 <div class="form-group">
                     <label translate="settings.form.lastname">Last Name</label>
-                    <input type="text" class="form-control" name="lastName" placeholder="{{'settings.form.lastname.placeholder' | translate}}"
+                    <input type="text" class="form-control" name="lastName" placeholder=<% if (enableTranslation){ %>"{{'settings.form.lastname.placeholder' | translate}}"<% }else{ %>"Your last name"<% } %>
                            ng-model="settingsAccount.lastName" ng-minlength=1 ng-maxlength=50 required maxlength="50">
                     <div ng-show="form.lastName.$dirty && form.lastName.$invalid">
                         <p class="help-block"
@@ -47,17 +47,17 @@
                         </p>
                         <p class="help-block"
                                ng-show="form.lastName.$error.minlength" translate="settings.messages.validate.lastname.minlength">
-                            Your last name is required to be at least 1 character
+                            Your last name is required to be at least 1 character.
                         </p>
                         <p class="help-block"
                                ng-show="form.lastName.$error.maxlength" translate="settings.messages.validate.lastname.maxlength">
-                            Your last name cannot be longer than 50 characters
+                            Your last name cannot be longer than 50 characters.
                         </p>
                     </div>
                 </div>
                 <div class="form-group">
                     <label translate="global.form.email">E-mail</label>
-                    <input type="email" class="form-control" name="email" placeholder="{{'global.form.email.placeholder' | translate}}"
+                    <input type="email" class="form-control" name="email" placeholder=<% if (enableTranslation){ %>"{{'global.form.email.placeholder' | translate}}"<% }else{ %>"Your e-mail"<% } %>
                            ng-model="settingsAccount.email" ng-minlength=5 ng-maxlength=100 required maxlength="100">
                     <div ng-show="form.email.$dirty && form.email.$invalid">
                         <p class="help-block"
@@ -70,18 +70,18 @@
                         </p>
                         <p class="help-block"
                                ng-show="form.email.$error.minlength" translate="global.messages.validate.email.minlength">
-                            Your e-mail is required to be at least 5 characters
+                            Your e-mail is required to be at least 5 characters.
                         </p>
                         <p class="help-block"
                                ng-show="form.email.$error.maxlength" translate="global.messages.validate.email.maxlength">
-                            Your e-mail cannot be longer than 100 characters
+                            Your e-mail cannot be longer than 100 characters.
                         </p>
                     </div>
-                </div>
+                </div><% if (enableTranslation){ %>
                 <div class="form-group">
                     <label translate="settings.form.language">Language</label>
                     <select name="langKey" class="form-control" ng-model="settingsAccount.langKey" ng-controller="LanguageController" ng-options="code as ('language.' + code | translate) for code in languages"></select>
-                </div>
+                </div><% } %>
 
                 <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary" translate="settings.form.button">Save</button>
             </form>

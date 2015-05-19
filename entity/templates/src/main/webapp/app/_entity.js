@@ -8,39 +8,39 @@ angular.module('<%=angularAppName%>')
                 url: '/<%= entityInstance %>',
                 data: {
                     roles: ['ROLE_USER'],
-                    pageTitle: '<%= angularAppName %>.<%= entityInstance %>.home.title'
+                    pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>.home.title'<% }else{ %>'<%= entityClass %>s'<% } %>
                 },
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>s.html',
                         controller: '<%= entityClass %>Controller'
                     }
-                },
+                }<% if (enableTranslation){ %>,
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('<%= entityInstance %>');
                         return $translate.refresh();
                     }]
-                }
+                }<% } %>
             })
             .state('<%= entityInstance %>Detail', {
                 parent: 'entity',
                 url: '/<%= entityInstance %>/:id',
                 data: {
                     roles: ['ROLE_USER'],
-                    pageTitle: '<%= angularAppName %>.<%= entityInstance %>.detail.title'
+                    pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>.detail.title'<% }else{ %>'<%= entityClass %>'<% } %>
                 },
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-detail.html',
                         controller: '<%= entityClass %>DetailController'
                     }
-                },
+                }<% if (enableTranslation){ %>,
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('<%= entityInstance %>');
                         return $translate.refresh();
                     }]
-                }
+                }<% } %>
             });
     });

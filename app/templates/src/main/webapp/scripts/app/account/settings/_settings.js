@@ -8,19 +8,19 @@ angular.module('<%=angularAppName%>')
                 url: '/settings',
                 data: {
                     roles: ['ROLE_USER'],
-                    pageTitle: 'global.menu.account.settings'
+                    pageTitle: <% if (enableTranslation){ %>'global.menu.account.settings'<% }else { %>'Settings'<% } %>
                 },
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/account/settings/settings.html',
                         controller: 'SettingsController'
                     }
-                },
+                }<% if (enableTranslation){ %>,
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('settings');
                         return $translate.refresh();
                     }]
-                }
+                }<% } %>
             });
     });

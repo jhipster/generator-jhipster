@@ -80,7 +80,7 @@ public class MailService {
         context.setVariable("user", user);
         context.setVariable("baseUrl", baseUrl);
         String content = templateEngine.process("activationEmail", context);
-        String subject = messageSource.getMessage("email.activation.title", null, locale);
+        String subject = <% if (enableTranslation) { %>messageSource.getMessage("email.activation.title", null, locale)<% }else { %> "<%= baseName %> account activation"<% } %>;
         sendEmail(user.getEmail(), subject, content, false, true);
     }
 
@@ -92,7 +92,7 @@ public class MailService {
         context.setVariable("user", user);
         context.setVariable("baseUrl", baseUrl);
         String content = templateEngine.process("passwordResetEmail", context);
-        String subject = messageSource.getMessage("email.reset.title", null, locale);
+        String subject = <% if (enableTranslation) { %>messageSource.getMessage("email.reset.title", null, locale)<% }else { %> "<%= baseName %> password reset"<% } %>;
         sendEmail(user.getEmail(), subject, content, false, true);
     }
 }
