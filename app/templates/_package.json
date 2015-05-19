@@ -4,6 +4,7 @@
   "description": "Description for <%= baseName %>",
   "private": true,
   "dependencies": {
+    "bower": "1.4.0"
   },
   "devDependencies": {<% if(frontendBuilder == 'grunt') { %>
     "grunt": "0.4.5",
@@ -73,5 +74,8 @@
   },
   "engines": {
     "node": ">=0.10.0"
+  },
+  "scripts": {
+    "postinstall": "./node_modules/bower/bin/bower install"
   }
 }
