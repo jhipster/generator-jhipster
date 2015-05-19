@@ -14,13 +14,13 @@ angular.module('<%=angularAppName%>')
                     'content@': {
                         templateUrl: 'scripts/app/error/error.html'
                     }
-                }<% if (enableTranslation){ %>,
+                },
                 resolve: {
                     mainTranslatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate,$translatePartialLoader) {
                         $translatePartialLoader.addPart('error');
                         return $translate.refresh();
                     }]
-                }<% } %>
+                }
             })
             .state('accessdenied', {
                 parent: 'site',
@@ -32,12 +32,12 @@ angular.module('<%=angularAppName%>')
                     'content@': {
                         templateUrl: 'scripts/app/error/accessdenied.html'
                     }
-                }<% if (enableTranslation){ %>,
+                },
                 resolve: {
                     mainTranslatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate,$translatePartialLoader) {
                         $translatePartialLoader.addPart('error');
                         return $translate.refresh();
                     }]
-                }<% } %>
+                }
             });
     });

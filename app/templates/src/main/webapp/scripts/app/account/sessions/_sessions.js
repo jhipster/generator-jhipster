@@ -15,12 +15,12 @@ angular.module('<%=angularAppName%>')
                         templateUrl: 'scripts/app/account/sessions/sessions.html',
                         controller: 'SessionsController'
                     }
-                }<% if (enableTranslation){ %>,
+                },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('sessions');
                         return $translate.refresh();
                     }]
-                }<% } %>
+                }
             });
     });

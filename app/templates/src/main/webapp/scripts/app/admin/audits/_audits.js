@@ -15,12 +15,12 @@ angular.module('<%=angularAppName%>')
                         templateUrl: 'scripts/app/admin/audits/audits.html',
                         controller: 'AuditsController'
                     }
-                }<% if (enableTranslation){ %>,
+                },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('audits');
                         return $translate.refresh();
                     }]
-                }<% } %>
+                }
             });
     });

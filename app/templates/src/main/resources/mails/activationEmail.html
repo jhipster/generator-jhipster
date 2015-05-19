@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title <% if (enableTranslation) { %>th:text="#{email.activation.title}"<% } %>><%= baseName %> account activation</title>
+        <title th:text="#{email.activation.title}"><%= baseName %> account activation</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     </head>
     <body>
-        <p <% if (enableTranslation) { %>th:text="#{email.activation.greeting(${user.login})}" <% } else { %> th:text="'Dear ' + ${user.login}" <% } %>>
-            Dear
+        <p th:text="#{email.activation.greeting(${user.login})}" th:inline="text">
+            Dear [[${user.login}]]
         </p>
-        <p <% if (enableTranslation) { %>th:text="#{email.activation.text1}"<% } %>>
+        <p th:text="#{email.activation.text1}">
           Your <%= baseName %> account has been created, please click on the URL below to activate it:
         </p>
         <p>
@@ -16,9 +16,9 @@
                th:text="|${user.login}|">Activation Link</a>
         </p>
         <p>
-            <span <% if (enableTranslation) { %>th:text="#{email.activation.text2}"<% } %>>Regards, </span>
+            <span th:text="#{email.activation.text2}">Regards, </span>
             <br/>
-            <em <% if (enableTranslation) { %>th:text="#{email.signature}"<% } %>><%= baseName %> Team.</em>
+            <em th:text="#{email.signature}"><%= baseName %> Team.</em>
         </p>
     </body>
 </html>

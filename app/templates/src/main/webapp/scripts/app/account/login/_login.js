@@ -15,12 +15,12 @@ angular.module('<%=angularAppName%>')
                         templateUrl: 'scripts/app/account/login/login.html',
                         controller: 'LoginController'
                     }
-                }<% if (enableTranslation) { %>,
+                },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('login');
                         return $translate.refresh();
                     }]
-                }<% } %>
+                }
             });
     });

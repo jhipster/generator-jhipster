@@ -13,13 +13,13 @@ angular.module('<%=angularAppName%>')
                         templateUrl: 'scripts/app/admin/tracker/tracker.html',
                         controller: 'TrackerController'
                     }
-                },<% if (enableTranslation){ %>
+                },
                 resolve: {
                     mainTranslatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('tracker');
                         return $translate.refresh();
                     }]
-                },<% } %>
+                },
                 onEnter: function(Tracker) {
                     Tracker.subscribe();
                 },

@@ -15,12 +15,12 @@ angular.module('<%=angularAppName%>')
                         templateUrl: 'scripts/app/account/password/password.html',
                         controller: 'PasswordController'
                     }
-                }<% if (enableTranslation) { %>,
+                },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('password');
                         return $translate.refresh();
                     }]
-                }<% } %>
+                }
             });
     });

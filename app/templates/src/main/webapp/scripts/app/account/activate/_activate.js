@@ -15,12 +15,12 @@ angular.module('<%=angularAppName%>')
                         templateUrl: 'scripts/app/account/activate/activate.html',
                         controller: 'ActivationController'
                     }
-                }<% if (enableTranslation) { %>,
+                },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('activate');
                         return $translate.refresh();
                     }]
-                }<% } %>
+                }
             });
     });

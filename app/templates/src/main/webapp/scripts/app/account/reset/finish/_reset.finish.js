@@ -14,12 +14,12 @@ angular.module('<%=angularAppName%>')
                         templateUrl: 'scripts/app/account/reset/finish/reset.finish.html',
                         controller: 'ResetFinishController'
                     }
-                }<% if (enableTranslation){ %>,
+                },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('reset');
                         return $translate.refresh();
                     }]
-                }<% } %>
+                }
             });
     });

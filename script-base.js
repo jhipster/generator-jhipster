@@ -169,28 +169,73 @@ Generator.prototype.insight = function () {
     return insight;
 }
 
-Generator.prototype.copyHtmlTpl = function (source, dest, _this) {
+Generator.prototype.copyHtmlTpl = function (source, dest, _this, _opt) {
+    _opt = _opt !== undefined ? _opt : {};
     if (_this.enableTranslation) {
         _this.copy(source, dest);
     } else {
-        _this.stripTranslateDirective(this, source, dest);
+        _this.stripTranslationInHtml(this, source, dest, _opt);
+    }
+}
+
+Generator.prototype.copyThymeleafTpl = function (source, dest, _this, _opt) {
+    _opt = _opt !== undefined ? _opt : {};
+    if (_this.enableTranslation) {
+        _this.copy(source, dest);
+    } else {
+        _this.stripTranslationInThymeleaf(this, source, dest, _opt);
     }
 }
 
 Generator.prototype.htmlTpl = function (source, dest, _this, _opt) {
+    _opt = _opt !== undefined ? _opt : {};
     if (_this.enableTranslation) {
         _this.template(source, dest, _this, _opt);
     } else {
-        _this.stripTranslateDirective(this, source, dest);
+        _this.stripTranslationInHtml(this, source, dest, _opt);
     }
 }
 
-Generator.prototype.stripTranslateDirective = function (_this, source, dest) {
-    var directiveRegex = '( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")'; //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
+Generator.prototype.copyJsTpl = function (source, dest, _this, _opt) {
+    _opt = _opt !== undefined ? _opt : {};
+    if (_this.enableTranslation) {
+        _this.copy(source, dest);
+    } else {
+        _this.stripTranslationInJs(this, source, dest, _opt);
+    }
+}
+
+Generator.prototype.stripTranslationInHtml = function (_this, source, dest, _opt) {
+    var directiveRegex = '( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")';         
+    //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}" 
 
     var body = _this.readFileAsString(path.join(_this.sourceRoot(), source));
-    var re = new RegExp(directiveRegex, 'g');
-    body = _this.engine(body, _this, {});
-    body = body.replace(re, '');
+    body = _this.stripContent(_this, body, directiveRegex, _opt)
     _this.write(dest, body);
+}
+
+Generator.prototype.stripTranslationInThymeleaf = function (_this, source, dest, _opt) {
+    var directiveRegex = '( th\:text\="#\{([a-zA-Z0-9\$\{\}\.\(\)\#\[\]](\.)?)+\}")';         
+    //looks for something like th:text="#{email.activation.greeting(${user.login})}"
+
+    var body = _this.readFileAsString(path.join(_this.sourceRoot(), source));
+    body = _this.stripContent(_this, body, directiveRegex, _opt)
+    _this.write(dest, body);
+}
+
+Generator.prototype.stripTranslationInJs = function (_this, source, dest, _opt) {
+    var directiveRegex = '[a-zA-Z]+\:(\s)?\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\>\;\s]*\}\]'; 
+    //looks for something like mainTranslatePartialLoader: [*]
+
+    var body = _this.readFileAsString(path.join(_this.sourceRoot(), source));
+    body = _this.stripContent(_this, body, directiveRegex, _opt)
+    _this.write(dest, body);
+}
+
+Generator.prototype.stripContent = function (_this, body, regex, _opt) {
+    var re = new RegExp(regex, 'g');
+    body = _this.engine(body, _this, _opt);
+    body = body.replace(re, '');
+    
+    return body;
 }

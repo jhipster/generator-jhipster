@@ -15,12 +15,12 @@ angular.module('<%=angularAppName%>')
                         templateUrl: 'scripts/app/admin/metrics/metrics.html',
                         controller: 'MetricsController'
                     }
-                }<% if (enableTranslation){ %>,
+                },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('metrics');
                         return $translate.refresh();
                     }]
-                }<% } %>
+                }
             });
     });

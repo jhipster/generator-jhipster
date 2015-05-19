@@ -15,13 +15,13 @@ angular.module('<%=angularAppName%>')
                         templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>s.html',
                         controller: '<%= entityClass %>Controller'
                     }
-                }<% if (enableTranslation){ %>,
+                },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('<%= entityInstance %>');
                         return $translate.refresh();
                     }]
-                }<% } %>
+                }
             })
             .state('<%= entityInstance %>Detail', {
                 parent: 'entity',
@@ -35,12 +35,12 @@ angular.module('<%=angularAppName%>')
                         templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-detail.html',
                         controller: '<%= entityClass %>DetailController'
                     }
-                }<% if (enableTranslation){ %>,
+                },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('<%= entityInstance %>');
                         return $translate.refresh();
                     }]
-                }<% } %>
+                }
             });
     });
