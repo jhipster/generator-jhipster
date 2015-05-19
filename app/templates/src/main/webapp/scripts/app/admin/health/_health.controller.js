@@ -123,6 +123,31 @@ angular.module('<%=angularAppName%>')
               return split[0];
             }
         };
+    
+        $scope.baseNameText = function(name) {
+            var base = "";
+            if (name) {
+                var split = name.split('.');
+                base = split[0];
+            }
+            switch (base) {
+                case 'diskSpace':
+                    return "Disk space";
+                    break;
+                case 'mail':
+                    return "Email";
+                    break;<% if (databaseType == 'sql') { %>
+                case "db": 
+                    return "Database";
+                    break;<% } %><% if (databaseType == 'mongodb') { %>
+                case "mongo":
+                    return "MongoDB";
+                    break;<% } %><% if (databaseType == 'cassandra') { %>
+                case "cassandra":
+                    return "Cassandra";
+                    break;<% } %>
+            }
+        };
 
         $scope.subSystemName = function (name) {
             if (name) {

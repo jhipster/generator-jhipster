@@ -8,7 +8,7 @@ angular.module('<%=angularAppName%>')
                 url: '/activate?key',
                 data: {
                     roles: [],
-                    pageTitle: 'activate.title'
+                    pageTitle: <% if (enableTranslation) { %>'activate.title'<% }else {%> 'Activation' <% } %>
                 },
                 views: {
                     'content@': {
@@ -24,4 +24,3 @@ angular.module('<%=angularAppName%>')
                 }
             });
     });
-

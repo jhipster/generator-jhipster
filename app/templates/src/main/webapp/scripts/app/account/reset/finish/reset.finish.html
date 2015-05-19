@@ -16,7 +16,7 @@
             </div>
 
             <div class="alert alert-success" ng-show="success">
-                <p translate="reset.finish.messages.success"><strong>Your password has been reset.</strong> Please <a href=\"#/login\">authenticate</a>.</p>
+                <p translate="reset.finish.messages.success"><strong>Your password has been reset.</strong> Please <a href="#/login">authenticate</a>.</p>
             </div>
 
             <div class="alert alert-danger" ng-show="doNotMatch" translate="global.messages.error.dontmatch">
@@ -27,7 +27,7 @@
                 <form ng-show="!success" name="form" role="form" novalidate ng-submit="finishReset()" show-validation>
                     <div class="form-group">
                         <label translate="global.form.newpassword">New password</label>
-                        <input type="password" class="form-control" name="password" placeholder="{{'global.form.newpassword.placeholder' | translate}}"
+                        <input type="password" class="form-control" name="password" placeholder=<% if (enableTranslation){ %>"{{'global.form.newpassword.placeholder' | translate}}"<% }else { %>"New password"<% } %>
                                ng-model="resetAccount.password" ng-minlength=5 ng-maxlength=50 required>
                         <div ng-show="form.password.$dirty && form.password.$invalid">
                             <p class="help-block"
@@ -36,11 +36,11 @@
                             </p>
                             <p class="help-block"
                                ng-show="form.password.$error.minlength" translate="global.messages.validate.newpassword.minlength">
-                                Your password is required to be at least 5 characters
+                                Your password is required to be at least 5 characters.
                             </p>
                             <p class="help-block"
                                ng-show="form.password.$error.maxlength" translate="global.messages.validate.newpassword.maxlength">
-                                Your password cannot be longer than 50 characters
+                                Your password cannot be longer than 50 characters.
                             </p>
                         </div>
                         <password-strength-bar password-to-check="resetAccount.password"></password-strength-bar>
@@ -48,7 +48,7 @@
 
                     <div class="form-group">
                         <label translate="global.form.confirmpassword">New password confirmation</label>
-                        <input type="password" class="form-control" name="confirmPassword" placeholder="{{'global.form.confirmpassword.placeholder' | translate}}"
+                        <input type="password" class="form-control" name="confirmPassword" placeholder=<% if (enableTranslation){ %>"{{'global.form.confirmpassword.placeholder' | translate}}"<% }else { %>"New password confirmation"<% } %>
                                ng-model="confirmPassword" ng-minlength=5 ng-maxlength=50 required>
                         <div ng-show="form.confirmPassword.$dirty && form.confirmPassword.$invalid">
                             <p class="help-block"
@@ -57,11 +57,11 @@
                             </p>
                             <p class="help-block"
                                ng-show="form.confirmPassword.$error.minlength" translate="global.messages.validate.confirmpassword.minlength">
-                                Your password confirmation is required to be at least 5 characters
+                                Your password confirmation is required to be at least 5 characters.
                             </p>
                             <p class="help-block"
                                ng-show="form.confirmPassword.$error.maxlength" translate="global.messages.validate.confirmpassword.maxlength">
-                                Your password confirmation cannot be longer than 50 characters
+                                Your password confirmation cannot be longer than 50 characters.
                             </p>
                         </div>
                     </div>

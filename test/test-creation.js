@@ -63,7 +63,8 @@ describe('jhipster generator', function () {
       'prodDatabaseType': 'mysql',
       'devDatabaseType': 'h2Memory',
       'frontendBuilder': 'grunt',
-      'useCompass': false
+      'useCompass': false,
+      'enableTranslation' : true
     });
     this.app.options['skip-install'] = true;
     this.app.run({}, function () {
@@ -98,7 +99,8 @@ describe('jhipster generator', function () {
       'prodDatabaseType': 'mysql',
       'devDatabaseType': 'h2Memory',
       'frontendBuilder': 'grunt',
-      'useCompass': false
+      'useCompass': false,
+      'enableTranslation' : true
     });
     this.app.options['skip-install'] = true;
     this.app.run({}, function () {
@@ -134,7 +136,8 @@ describe('jhipster generator', function () {
       'prodDatabaseType': 'mysql',
       'devDatabaseType': 'h2Memory',
       'frontendBuilder': 'grunt',
-      'useCompass': false
+      'useCompass': false,
+      'enableTranslation' : true
     });
     this.app.options['skip-install'] = true;
     this.app.run({}, function () {
@@ -170,7 +173,8 @@ describe('jhipster generator', function () {
       'prodDatabaseType': 'mysql',
       'devDatabaseType': 'h2Memory',
       'frontendBuilder': 'grunt',
-      'useCompass': false
+      'useCompass': false,
+      'enableTranslation' : true
     });
     this.app.options['skip-install'] = true;
     this.app.run({}, function () {
@@ -178,4 +182,39 @@ describe('jhipster generator', function () {
       done();
     });
   });
+
+  it('creates expected files with translation enabled', function (done) {
+
+    var expectedAdditionalFiles = [
+        resourceDir + 'i18n/messages_en.properties',
+        resourceDir + 'i18n/messages_fr.properties',
+        webappDir + 'i18n/en/global.json',
+        webappDir + 'i18n/fr/global.json',
+        webappDir + 'scripts/components/language/language.controller.js',
+        webappDir + 'scripts/components/language/language.service.js'
+    ];
+
+    var expected = defaultFiles.concat(expectedAdditionalFiles);
+
+    helpers.mockPrompt(this.app, {
+        'baseName': 'jhipster',
+        'packageName': 'com.mycompany.myapp',
+        'javaVersion': '7',
+        'authenticationType': 'session',
+        'databaseType': 'sql',
+        'hibernateCache': 'no',
+        'clusteredHttpSession': 'no',
+        'websocket': 'no',
+        'prodDatabaseType': 'mysql',
+        'devDatabaseType': 'h2Memory',
+        'frontendBuilder': 'grunt',
+        'useCompass': false,
+        'enableTranslation' : true
+    });
+    this.app.options['skip-install'] = true;
+    this.app.run({}, function () {
+        helpers.assertFiles(expected);
+        done();
+    });
+});
 });

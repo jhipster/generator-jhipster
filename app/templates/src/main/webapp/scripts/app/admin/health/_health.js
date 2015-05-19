@@ -8,7 +8,7 @@ angular.module('<%=angularAppName%>')
                 url: '/health',
                 data: {
                     roles: ['ROLE_ADMIN'],
-                    pageTitle: 'health.title'
+                    pageTitle: <% if (enableTranslation){ %>'health.title'<% }else{ %>'Health checks'<% } %>
                 },
                 views: {
                     'content@': {

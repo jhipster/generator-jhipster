@@ -8,7 +8,7 @@ angular.module('<%=angularAppName%>')
                 url: '/error',
                 data: {
                     roles: [],
-                    pageTitle: 'errors.title'
+                    pageTitle: <% if (enableTranslation){ %>'errors.title'<% }else{ %>'Error page!'<% } %>
                 },
                 views: {
                     'content@': {
