@@ -8,7 +8,7 @@ angular.module('<%=angularAppName%>')
                 url: '/settings',
                 data: {
                     roles: ['ROLE_USER'],
-                    pageTitle: 'global.menu.account.settings'
+                    pageTitle: <% if (enableTranslation){ %>'global.menu.account.settings'<% }else { %>'Settings'<% } %>
                 },
                 views: {
                     'content@': {

@@ -8,7 +8,7 @@ angular.module('<%=angularAppName%>')
                 url: '/register',
                 data: {
                     roles: [],
-                    pageTitle: 'register.title'
+                    pageTitle: <% if (enableTranslation){ %>'register.title'<% }else{ %>'Registration'<% } %>
                 },
                 views: {
                     'content@': {

@@ -8,7 +8,7 @@ angular.module('<%=angularAppName%>')
                 url: '/password',
                 data: {
                     roles: ['ROLE_USER'],
-                    pageTitle: 'global.menu.account.password'
+                    pageTitle: <% if (enableTranslation) { %>'global.menu.account.password'<% }else {%> 'password' <% } %>
                 },
                 views: {
                     'content@': {

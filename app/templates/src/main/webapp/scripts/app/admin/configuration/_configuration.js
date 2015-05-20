@@ -8,7 +8,7 @@ angular.module('<%=angularAppName%>')
                 url: '/configuration',
                 data: {
                     roles: ['ROLE_ADMIN'],
-                    pageTitle: 'configuration.title'
+                    pageTitle: <% if (enableTranslation){ %>'configuration.title'<% }else{ %>'Configuration'<% } %>
                 },
                 views: {
                     'content@': {

@@ -15,12 +15,16 @@ describe('Directive Tests ', function () {
         $compile(elm)(scope);
 
         $httpBackend.expectGET(/api\/account\?cacheBuster=\d+/).respond({});
+        <% if (enableTranslation) { %> // This seems to be duplicated here, not sure if intentional
         $httpBackend.expectGET('i18n/en/global.json').respond({});
         $httpBackend.expectGET('i18n/en/language.json').respond({});
+        <% } %>
         $httpBackend.expectGET('scripts/components/navbar/navbar.html').respond({});
+        <% if (enableTranslation) { %>
         $httpBackend.expectGET('i18n/en/global.json').respond({});
         $httpBackend.expectGET('i18n/en/language.json').respond({});
         $httpBackend.expectGET('i18n/en/main.json').respond({});
+        <% } %>
         $httpBackend.expectGET('scripts/app/main/main.html').respond({});
     }));
 

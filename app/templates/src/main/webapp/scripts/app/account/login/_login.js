@@ -7,8 +7,8 @@ angular.module('<%=angularAppName%>')
                 parent: 'account',
                 url: '/login',
                 data: {
-                    roles: [], 
-                    pageTitle: 'login.title'
+                    roles: [],
+                    pageTitle: <% if (enableTranslation) { %>'login.title'<% }else {%> 'Authentication' <% } %>
                 },
                 views: {
                     'content@': {

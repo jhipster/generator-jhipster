@@ -61,13 +61,13 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" href="">
                                 <span>
                                     <span class="glyphicon glyphicon-tower"></span>
-                                    <span class="hidden-tablet" translate="global.menu.admin.main">Admin</span>
+                                    <span class="hidden-tablet" translate="global.menu.admin.main">Administration</span>
                                     <b class="caret"></b>
                                 </span>
                     </a>
                     <ul class="dropdown-menu"><% if (websocket == 'spring-websocket') { %>
                         <li ui-sref-active="active"><a ui-sref="tracker"><span class="glyphicon glyphicon-eye-open"></span>
-                                &nbsp;<span translate="global.menu.admin.tracker">User tracking</span></a></li><% } %>
+                                &nbsp;<span translate="global.menu.admin.tracker">User tracker</span></a></li><% } %>
                         <li ui-sref-active="active"><a ui-sref="metrics"><span class="glyphicon glyphicon-dashboard"></span>
                             &#xA0;<span translate="global.menu.admin.metrics">Metrics</span></a></li>
                         <li ui-sref-active="active"><a ui-sref="health"><span class="glyphicon glyphicon-heart"></span>
@@ -79,11 +79,11 @@
                         <li ui-sref-active="active"><a ui-sref="logs"><span class="glyphicon glyphicon-tasks"></span>
                             &#xA0;<span translate="global.menu.admin.logs">Logs</span></a></li>
                         <li ui-sref-active="active"><a ui-sref="docs"><span class="glyphicon glyphicon-book"></span>
-                            &#xA0;<span translate="global.menu.admin.apidocs">API Docs</span></a></li><% if (devDatabaseType == 'h2Memory') { %>
+                            &#xA0;<span translate="global.menu.admin.apidocs">API</span></a></li><% if (devDatabaseType == 'h2Memory') { %>
                         <li ng-show="{{ENV === 'dev'}}"><a href='/console' target="_tab"><span class="glyphicon glyphicon-hdd"></span>
                             &#xA0;<span translate="global.menu.admin.database">Database</span></a></li><% } %>
                     </ul>
-                </li>
+                </li><% if (enableTranslation){ %>
                 <li ui-sref-active="active" class="dropdown pointer" ng-controller="LanguageController">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="">
                                 <span>
@@ -97,7 +97,7 @@
                             <a href="" ng-click="changeLanguage(language)">{{'language.' + language| translate}}</a>
                         </li>
                     </ul>
-                </li>
+                </li><% } %>
             </ul>
         </div>
     </div>

@@ -8,7 +8,7 @@ angular.module('<%=angularAppName%>')
                 url: '/docs',
                 data: {
                     roles: ['ROLE_ADMIN'],
-                    pageTitle: 'global.menu.admin.apidocs'
+                    pageTitle: <% if (enableTranslation){ %>'global.menu.admin.apidocs'<% }else{ %>'API'<% } %>
                 },
                 views: {
                     'content@': {
