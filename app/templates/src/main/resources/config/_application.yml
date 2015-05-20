@@ -21,7 +21,9 @@ mail:
     protocol: smtp
     tls: false
     auth: false
-    from: <%= baseName %>@localhost
+    from:
+        name: <%= baseName %>
+        email: <%= baseName %>@localhost
 <% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
 authentication:<% if (authenticationType == 'xauth') { %>
     xauth:

@@ -15,6 +15,7 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Locale;
 
@@ -45,11 +46,13 @@ public class MailService {
     /**
      * System default email address that sends the e-mails.
      */
-    private String from;
+    private String fromName;
+    private String fromEmail;
 
     @PostConstruct
     public void init() {
-        this.from = env.getProperty("mail.from");
+        this.fromName = env.getProperty("mail.from.name");
+        this.fromEmail = env.getProperty("mail.from.email");
     }
 
     @Async
@@ -62,7 +65,7 @@ public class MailService {
         try {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
             message.setTo(to);
-            message.setFrom(from);
+            message.setFrom(new InternetAddress(fromEmail, fromName));
             message.setSubject(subject);
             message.setText(content, isHtml);
             javaMailSender.send(mimeMessage);
