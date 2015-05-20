@@ -178,15 +178,6 @@ Generator.prototype.copyHtmlTpl = function (source, dest, _this, _opt) {
     }
 }
 
-Generator.prototype.copyThymeleafTpl = function (source, dest, _this, _opt) {
-    _opt = _opt !== undefined ? _opt : {};
-    if (_this.enableTranslation) {
-        _this.copy(source, dest);
-    } else {
-        _this.stripTranslationInThymeleaf(this, source, dest, _opt);
-    }
-}
-
 Generator.prototype.htmlTpl = function (source, dest, _this, _opt) {
     _opt = _opt !== undefined ? _opt : {};
     if (_this.enableTranslation) {
@@ -208,15 +199,6 @@ Generator.prototype.copyJsTpl = function (source, dest, _this, _opt) {
 Generator.prototype.stripTranslationInHtml = function (_this, source, dest, _opt) {
     var directiveRegex = '( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")';         
     //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}" 
-
-    var body = _this.readFileAsString(path.join(_this.sourceRoot(), source));
-    body = _this.stripContent(_this, body, directiveRegex, _opt)
-    _this.write(dest, body);
-}
-
-Generator.prototype.stripTranslationInThymeleaf = function (_this, source, dest, _opt) {
-    var directiveRegex = '( th\:text\="#\{([a-zA-Z0-9\$\{\}\.\(\)\#\[\]](\.)?)+\}")';         
-    //looks for something like th:text="#{email.activation.greeting(${user.login})}"
 
     var body = _this.readFileAsString(path.join(_this.sourceRoot(), source));
     body = _this.stripContent(_this, body, directiveRegex, _opt)

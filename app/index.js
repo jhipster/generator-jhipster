@@ -502,7 +502,7 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     // Thymeleaf templates
-    this.copyThymeleafTpl(resourceDir + '/templates/error.html', resourceDir + 'templates/error.html', this, { 'interpolate': interpolateRegex });
+    this.copy(resourceDir + '/templates/error.html', resourceDir + 'templates/error.html');
 
     this.template(resourceDir + '_logback.xml', resourceDir + 'logback.xml', this, { 'interpolate': interpolateRegex });
 
@@ -533,9 +533,9 @@ JhipsterGenerator.prototype.app = function app() {
         this.copy(resourceDir + '/config/cql/create-tables.cql', resourceDir + 'config/cql/create-tables.cql');
     }
 
-    // Create mail templates - interpolate Hack to make it work in thymeleaf templates
-    this.copyThymeleafTpl(resourceDir + '/mails/activationEmail.html', resourceDir + 'mails/activationEmail.html', this, {'interpolate': interpolateRegex});
-    this.copyThymeleafTpl(resourceDir + '/mails/passwordResetEmail.html', resourceDir + 'mails/passwordResetEmail.html', this, {'interpolate': interpolateRegex});
+    // Create mail templates
+    this.copy(resourceDir + '/mails/activationEmail.html', resourceDir + 'mails/activationEmail.html');
+    this.copy(resourceDir + '/mails/passwordResetEmail.html', resourceDir + 'mails/passwordResetEmail.html');
 
     // Create Java files
     this.template('src/main/java/package/_Application.java', javaDir + '/Application.java', this, {});
@@ -781,6 +781,8 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.enableTranslation) {
         this.installI18nFilesByLanguage(this, webappDir, resourceDir, 'en');
         this.installI18nFilesByLanguage(this, webappDir, resourceDir, 'fr');
+    }else{
+        this.template(resourceDir + '/i18n/_messages_en.properties', resourceDir + 'i18n/messages_en.properties', this, {});
     }
     // Swagger-ui for Jhipster
     this.template(webappDir + '/swagger-ui/_index.html', webappDir + 'swagger-ui/index.html', this, {});
