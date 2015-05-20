@@ -76,20 +76,20 @@ public class <%= entityClass %> implements Serializable {
     @Field("<%=fields[fieldId].fieldNameUnderscored %>")<% } %>
     private <%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>;
 <% } %><% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'one-to-many') { %>
-    @OneToMany(mappedBy = "<%= entityInstance %>")
+    @OneToMany(mappedBy = "<%= relationships[relationshipId].mappedBy %>")
     @JsonIgnore<% if (hibernateCache != 'no') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
     private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();<% } else if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
     @ManyToOne
     private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].relationshipFieldName %>;<% } else if (relationships[relationshipId].relationshipType == 'many-to-many') { %>
-    @ManyToMany<% if (relationships[relationshipId].ownerSide == false) { %>(mappedBy = "<%= entityInstance %>s")
+    @ManyToMany<% if (relationships[relationshipId].ownerSide == false) { %>(mappedBy = "<%= relationships[relationshipId].mappedBy %>s")
     @JsonIgnore<% } %><% if (hibernateCache != 'no') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (relationships[relationshipId].ownerSide == true) { %>
     @JoinTable(name = "<%= name.toUpperCase() + '_' + relationships[relationshipId].relationshipName.toUpperCase() %>",
                joinColumns = @JoinColumn(name="<%= name.toLowerCase() %>s_id", referencedColumnName="ID"),
                inverseJoinColumns = @JoinColumn(name="<%= relationships[relationshipId].relationshipName.toLowerCase() %>s_id", referencedColumnName="ID"))<% } %>
     private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();<% } else { %>
-    @OneToOne<% if (relationships[relationshipId].ownerSide == false) { %>(mappedBy = "<%= entityInstance %>")<% } %>
+    @OneToOne<% if (relationships[relationshipId].ownerSide == false) { %>(mappedBy = "<%= relationships[relationshipId].mappedBy %>")<% } %>
     private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].relationshipFieldName %>;<% } %>
 <% } %>
     public <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %><% if (databaseType == 'cassandra') { %>UUID<% } %> getId() {
