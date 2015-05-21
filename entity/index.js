@@ -77,6 +77,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.fieldsContainCustomTime = false;
     this.fieldsContainBigDecimal = false;
     this.fieldsContainOwnerManyToMany = false;
+    this.fieldsContainOwnerOneToOne = false;
     this.fieldsContainOneToMany = false;
     this.relationshipId = 0;
     this.relationships = [];
@@ -616,6 +617,9 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             if (props.relationshipType == 'many-to-many' && props.ownerSide == true) {
                 this.fieldsContainOwnerManyToMany = true;
             }
+            if (props.relationshipType == 'one-to-one' && props.ownerSide == true) {
+                this.fieldsContainOwnerOneToOne = true;
+            }
             if (props.relationshipType == 'one-to-many') {
                 this.fieldsContainOneToMany = true;
             }
@@ -690,6 +694,7 @@ EntityGenerator.prototype.files = function files() {
         this.data.fields = this.fields;
         this.data.fieldNamesUnderscored = this.fieldNamesUnderscored;
         this.data.fieldsContainOwnerManyToMany = this.fieldsContainOwnerManyToMany;
+        this.data.fieldsContainOwnerOneToOne = this.fieldsContainOwnerOneToOne;
         this.data.fieldsContainOneToMany = this.fieldsContainOneToMany;
         this.data.fieldsContainLocalDate = this.fieldsContainLocalDate;
         this.data.fieldsContainCustomTime = this.fieldsContainCustomTime;
@@ -717,6 +722,7 @@ EntityGenerator.prototype.files = function files() {
         }
         this.fieldNamesUnderscored = this.fileData.fieldNamesUnderscored;
         this.fieldsContainOwnerManyToMany = this.fileData.fieldsContainOwnerManyToMany;
+        this.fieldsContainOwnerOneToOne = this.fileData.fieldsContainOwnerOneToOne;
         this.fieldsContainOneToMany = this.fileData.fieldsContainOneToMany;
         this.fieldsContainLocalDate = this.fileData.fieldsContainLocalDate;
         this.fieldsContainCustomTime = this.fileData.fieldsContainCustomTime;
