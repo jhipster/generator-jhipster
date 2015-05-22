@@ -1,6 +1,9 @@
 server:
     port: 8080
 
+liquibase:
+    context: development
+
 spring:
     profiles:
         active: dev<% if (databaseType == 'sql') { %>
@@ -46,8 +49,8 @@ spring:
             keyspaceName: <%= baseName %><% } %><% if (searchEngine == 'elasticsearch') { %>
     data:
         elasticsearch:
-            cluster-name: 
-            cluster-nodes: 
+            cluster-name:
+            cluster-nodes:
             properties:
                 path:
                   logs: target/elasticsearch/log
