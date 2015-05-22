@@ -570,7 +570,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
                     (response.relationshipType == 'one-to-one' && response.ownerSide == false)));
             },
             type: 'input',
-            name: 'mappedBy',
+            name: 'otherEntityRelationshipName',
             message: 'What is the name of this relationship in the other entity?',
             default: function (response) {
                  return name.charAt(0).toLowerCase() + name.slice(1);
@@ -612,7 +612,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
                 otherEntityNameCapitalized: _s.capitalize(props.otherEntityName),
                 otherEntityField: props.otherEntityField,
                 ownerSide: props.ownerSide,
-                mappedBy: props.mappedBy
+                otherEntityRelationshipName: props.otherEntityRelationshipName
             }
             if (props.relationshipType == 'many-to-many' && props.ownerSide == true) {
                 this.fieldsContainOwnerManyToMany = true;
@@ -709,8 +709,8 @@ EntityGenerator.prototype.files = function files() {
         this.relationships = this.fileData.relationships;
         for (var relationshipIdx in this.relationships) {
             var relationship = this.relationships[relationshipIdx];
-            if (relationship.mappedBy == null) {
-                relationship.mappedBy = this.name.charAt(0).toLowerCase() + this.name.slice(1);
+            if (relationship.otherEntityRelationshipName == null) {
+                relationship.otherEntityRelationshipName = this.name.charAt(0).toLowerCase() + this.name.slice(1);
             }
         }
         this.fields = this.fileData.fields;
