@@ -571,7 +571,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             },
             type: 'input',
             name: 'mappedBy',
-            message: 'What field is used on the other entity to map this entity?',
+            message: 'What is the name of this relationship in the other entity?',
             default: function (response) {
                  return name.charAt(0).toLowerCase() + name.slice(1);
             }
