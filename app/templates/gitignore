@@ -1,6 +1,7 @@
 ######################
 # Project Specific
-######################
+######################<% if (useCompass) { %>
+/src/main/webapp/assets/styles/main.css<% } %>
 /src/main/webapp/dist
 
 ######################
