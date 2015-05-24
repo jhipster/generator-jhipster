@@ -116,7 +116,7 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
         SpringLiquibase liquibase = new SpringLiquibase();
         liquibase.setDataSource(dataSource);
         liquibase.setChangeLog("classpath:config/liquibase/master.xml");
-        liquibase.setContexts(liquiBasePropertyResolver.getProperty("context", "development, production"));
+        liquibase.setContexts(liquiBasePropertyResolver.getProperty("context"));
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_FAST)) {
             if ("org.h2.jdbcx.JdbcDataSource".equals(dataSourcePropertyResolver.getProperty("dataSourceClassName"))) {
                 liquibase.setShouldRun(true);
