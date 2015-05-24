@@ -2,7 +2,7 @@ server:
     port: 8080
 
 liquibase:
-    context: development
+    context: dev
 
 spring:
     profiles:
