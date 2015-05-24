@@ -515,7 +515,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             },
             message: 'What is the name of the relationship?',
             default: function (response) {
-                 return response.otherEntityName;
+                 return response.otherEntityName.charAt(0).toLowerCase() + response.otherEntityName.slice(1);
             }
         },
         {
