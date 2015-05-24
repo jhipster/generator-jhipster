@@ -322,11 +322,6 @@ module.exports = function (grunt) {
                 singleRun: true
             }
         },
-        cdnify: {
-            dist: {
-                html: ['<%%= yeoman.dist %>/*.html']
-            }
-        },
         ngAnnotate: {
             dist: {
                 files: [{
