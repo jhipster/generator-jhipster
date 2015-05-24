@@ -49,14 +49,11 @@ module.exports = function (grunt) {
             ngconstant: {
                 files: ['Gruntfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>],
                 tasks: ['ngconstant:dev']
-            },<% if (useCompass) { %>
+            }<% if (useCompass) { %>,
             compass: {
                 files: ['src/main/scss/**/*.{scss,sass}'],
                 tasks: ['compass:server']
-            },<% } %>
-            styles: {
-                files: ['src/main/webapp/assets/styles/**/*.css']
-            }
+            }<% } %>
         },
         autoprefixer: {
         // not used since Uglify task does autoprefixer,
