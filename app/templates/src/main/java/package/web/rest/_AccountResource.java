@@ -141,8 +141,10 @@ public class AccountResource {
                     user.getLastName(),
                     user.getEmail(),
                     user.getLangKey(),<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-                    user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toCollection(LinkedList::new))),<% } %><% if (databaseType == 'cassandra') { %>
-                    user.getAuthorities().stream().collect(Collectors.toCollection(LinkedList::new))),
+                    user.getAuthorities().stream().map(Authority::getName)
+                        .collect(Collectors.toCollection(LinkedList::new))),<% } %><% if (databaseType == 'cassandra') { %>
+                    user.getAuthorities().stream()
+                        .collect(Collectors.toCollection(LinkedList::new))),
 <% } %>
                 HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else { %>
