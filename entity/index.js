@@ -641,6 +641,33 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
         }
     }.bind(this));
 };
+EntityGenerator.prototype.askForDtos = function askForDtos() {
+    if (this.useConfigurationFile == true) { // don't prompt if data are imported from a file
+        return;
+    }
+    var cb = this.async();
+    var prompts = [
+        {
+            type: 'list',
+            name: 'generateDto',
+            message: 'Do you want to have separate DTO classes for communicating with the clients ?',
+            choices: [
+                {
+                    value: 'no',
+                    name: 'No, using entities is fine'
+                },
+                {
+                    value: 'yes',
+                    name: 'Yes, I prefer to use a separate DTO, for a better control of the communication'
+                }],
+            default: 'no'
+        }
+    ];
+    this.prompt(prompts, function (props) {
+      this.generateDto = props.generateDto;
+      cb();
+    }.bind(this));
+}
 
 EntityGenerator.prototype.askForPagination = function askForPagination() {
     if (this.useConfigurationFile == true) { // don't prompt if data are imported from a file
@@ -683,7 +710,6 @@ EntityGenerator.prototype.askForPagination = function askForPagination() {
     }.bind(this));
 };
 
-
 EntityGenerator.prototype.files = function files() {
     if (this.databaseType == "sql" || this.databaseType == "cassandra") {
         this.changelogDate = this.dateFormatForLiquibase();
@@ -704,6 +730,7 @@ EntityGenerator.prototype.files = function files() {
         this.data.changelogDate = this.changelogDate;
         this.data.pagination = this.pagination;
         this.data.validation = this.validation;
+        this.data.generateDto = this.generateDto;
         this.write(this.filename, JSON.stringify(this.data, null, 4));
     } else  {
         this.relationships = this.fileData.relationships;
@@ -730,6 +757,7 @@ EntityGenerator.prototype.files = function files() {
         this.fieldsContainDateTime = this.fileData.fieldsContainDateTime;
         this.fieldsContainDate = this.fileData.fieldsContainDate;
         this.changelogDate = this.fileData.changelogDate;
+        this.generateDto = this.fileData.generateDto;
         for (var idx in this.relationships) {
           var rel = this.relationships[idx];
           rel.relationshipName = rel.relationshipName || rel.otherEntityName;
@@ -762,6 +790,7 @@ EntityGenerator.prototype.files = function files() {
     insight.track('entity/fields', this.fields.length);
     insight.track('entity/relationships', this.relationships.length);
     insight.track('entity/pagination', this.pagination);
+    insight.track('entity/generateDto', this.generateDto);
 
     var resourceDir = 'src/main/resources/';
 
@@ -776,8 +805,21 @@ EntityGenerator.prototype.files = function files() {
             'src/main/java/' + this.packageFolder + '/repository/search/' +    this.entityClass + 'SearchRepository.java', this, {});
     }
 
-    this.template('src/main/java/package/web/rest/_EntityResource.java',
-        'src/main/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'Resource.java', this, {});
+    this.template('src/main/java/package/web/rest/_EntityResource.java', 
+        'src/main/java/' + this.packageFolder + '/web/rest/' +  this.entityClass + 'Resource.java', this, {});
+
+    if (this.generateDto) {
+      this.template('src/main/java/package/web/rest/mapper/_EntityMapper.java', 
+          'src/main/java/' + this.packageFolder + '/web/rest/mapper/' +  this.entityClass + 'Mapper.java', this, {});
+      this.template('src/main/java/package/web/rest/mapper/_EntityDetailMapper.java', 
+          'src/main/java/' + this.packageFolder + '/web/rest/mapper/' +  this.entityClass + 'DetailMapper.java', this, {});
+      this.template('src/main/java/package/web/rest/dto/_EntityListDTO.java', 
+          'src/main/java/' + this.packageFolder + '/web/rest/dto/' +  this.entityClass + 'ListDTO.java', this, {});
+      this.template('src/main/java/package/web/rest/dto/_EntityDetailsDTO.java', 
+          'src/main/java/' + this.packageFolder + '/web/rest/dto/' +  this.entityClass + 'DetailsDTO.java', this, {});
+      this.template('src/main/java/package/web/rest/dto/_EntityUpdateDTO.java', 
+          'src/main/java/' + this.packageFolder + '/web/rest/dto/' +  this.entityClass + 'UpdateDTO.java', this, {});
+    }
 
     if (this.databaseType == "sql") {
         this.template(resourceDir + '/config/liquibase/changelog/_added_entity.xml',
