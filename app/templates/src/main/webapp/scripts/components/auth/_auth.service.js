@@ -12,7 +12,8 @@ angular.module('<%=angularAppName%>')
                     Principal.identity(true).then(function(account) {
                         // After the login the language will be changed to
                         // the language selected by the user during his registration
-                        $translate.use(account.langKey);<% if (websocket == 'spring-websocket') { %>
+                        $translate.use(account.langKey);
+                        $translate.refresh();<% if (websocket == 'spring-websocket') { %>
                         Tracker.sendActivity();<% } %>
                         deferred.resolve(data);
                     });
@@ -99,7 +100,7 @@ angular.module('<%=angularAppName%>')
                     return cb(err);
                 }).$promise;
             },
-            
+
             resetPasswordInit: function (mail, callback) {
                 var cb = callback || angular.noop;
 
@@ -108,7 +109,6 @@ angular.module('<%=angularAppName%>')
                 }, function (err) {
                     return cb(err);
                 }).$promise;
-
             },
 
             resetPasswordFinish: function(key, newPassword, callback) {

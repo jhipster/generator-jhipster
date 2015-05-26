@@ -15,7 +15,29 @@ angular.module('<%=angularAppName%>')
                     if (data.<%=fields[fieldId].fieldName%> != null) data.<%=fields[fieldId].fieldName%> = new Date(data.<%=fields[fieldId].fieldName%>);<% } }%>
                     return data;
                 }
+            },<% if (fieldsContainLocalDate == true) { %>
+            'update': {
+                method: 'PUT',
+                transformRequest: function (data) {<% for (fieldId in fields) { if (fields[fieldId].fieldType == 'LocalDate') { %>
+                    var <%=fields[fieldId].fieldName%> = new Date();
+                    <%=fields[fieldId].fieldName%>.setUTCDate(data.<%=fields[fieldId].fieldName%>.getDate());
+                    <%=fields[fieldId].fieldName%>.setUTCMonth(data.<%=fields[fieldId].fieldName%>.getMonth());
+                    <%=fields[fieldId].fieldName%>.setUTCFullYear(data.<%=fields[fieldId].fieldName%>.getFullYear());
+                    data.<%=fields[fieldId].fieldName%> = <%=fields[fieldId].fieldName%>;<% } }%>
+                    return angular.toJson(data);
+                }
             },
-            'update': { method:'PUT' }
+            'save': {
+                method: 'POST',
+                transformRequest: function (data) {<% for (fieldId in fields) { if (fields[fieldId].fieldType == 'LocalDate') { %>
+                    var <%=fields[fieldId].fieldName%> = new Date();
+                    <%=fields[fieldId].fieldName%>.setUTCDate(data.<%=fields[fieldId].fieldName%>.getDate());
+                    <%=fields[fieldId].fieldName%>.setUTCMonth(data.<%=fields[fieldId].fieldName%>.getMonth());
+                    <%=fields[fieldId].fieldName%>.setUTCFullYear(data.<%=fields[fieldId].fieldName%>.getFullYear());
+                    data.<%=fields[fieldId].fieldName%> = <%=fields[fieldId].fieldName%>;<% } }%>
+                    return angular.toJson(data);
+                }
+            }<% } else { %>
+            'update': { method:'PUT' }<% } %>
         });
     });

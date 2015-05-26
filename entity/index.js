@@ -77,6 +77,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.fieldsContainCustomTime = false;
     this.fieldsContainBigDecimal = false;
     this.fieldsContainOwnerManyToMany = false;
+    this.fieldsContainOwnerOneToOne = false;
     this.fieldsContainOneToMany = false;
     this.relationshipId = 0;
     this.relationships = [];
@@ -494,6 +495,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
         return;
     }
     var packageFolder = this.packageFolder;
+    var name = this.name;
     var cb = this.async();
     this.relationshipId++;
     console.log(chalk.green('Generating relationships with other entities'));
@@ -554,7 +556,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             },
             message: 'What is the name of the relationship?',
             default: function (response) {
-                 return response.otherEntityName;
+                 return response.otherEntityName.charAt(0).toLowerCase() + response.otherEntityName.slice(1);
             }
         },
         {
@@ -603,6 +605,19 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             default: false
         },
         {
+            when: function (response) {
+                return (response.relationshipAdd == true && (response.relationshipType == 'one-to-many' ||
+                    (response.relationshipType == 'many-to-many' && response.ownerSide == false) ||
+                    (response.relationshipType == 'one-to-one' && response.ownerSide == false)));
+            },
+            type: 'input',
+            name: 'otherEntityRelationshipName',
+            message: 'What is the name of this relationship in the other entity?',
+            default: function (response) {
+                 return name.charAt(0).toLowerCase() + name.slice(1);
+            }
+        },
+        {
             when: function(response) {
                 return (response.relationshipAdd == true && response.ownerSide == true && !shelljs.test('-f', 'src/main/java/' + packageFolder + '/domain/' + _s.capitalize(response.otherEntityName) + '.java'))
             },
@@ -637,10 +652,14 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
                 relationshipType: props.relationshipType,
                 otherEntityNameCapitalized: _s.capitalize(props.otherEntityName),
                 otherEntityField: props.otherEntityField,
-                ownerSide: props.ownerSide
+                ownerSide: props.ownerSide,
+                otherEntityRelationshipName: props.otherEntityRelationshipName
             }
             if (props.relationshipType == 'many-to-many' && props.ownerSide == true) {
                 this.fieldsContainOwnerManyToMany = true;
+            }
+            if (props.relationshipType == 'one-to-one' && props.ownerSide == true) {
+                this.fieldsContainOwnerOneToOne = true;
             }
             if (props.relationshipType == 'one-to-many') {
                 this.fieldsContainOneToMany = true;
@@ -716,6 +735,7 @@ EntityGenerator.prototype.files = function files() {
         this.data.fields = this.fields;
         this.data.fieldNamesUnderscored = this.fieldNamesUnderscored;
         this.data.fieldsContainOwnerManyToMany = this.fieldsContainOwnerManyToMany;
+        this.data.fieldsContainOwnerOneToOne = this.fieldsContainOwnerOneToOne;
         this.data.fieldsContainOneToMany = this.fieldsContainOneToMany;
         this.data.fieldsContainLocalDate = this.fieldsContainLocalDate;
         this.data.fieldsContainCustomTime = this.fieldsContainCustomTime;
@@ -728,6 +748,12 @@ EntityGenerator.prototype.files = function files() {
         this.write(this.filename, JSON.stringify(this.data, null, 4));
     } else  {
         this.relationships = this.fileData.relationships;
+        for (var relationshipIdx in this.relationships) {
+            var relationship = this.relationships[relationshipIdx];
+            if (relationship.otherEntityRelationshipName == null) {
+                relationship.otherEntityRelationshipName = this.name.charAt(0).toLowerCase() + this.name.slice(1);
+            }
+        }
         this.fields = this.fileData.fields;
         for (var fieldIdx in this.fields) {
             var field = this.fields[fieldIdx];
@@ -737,6 +763,7 @@ EntityGenerator.prototype.files = function files() {
         }
         this.fieldNamesUnderscored = this.fileData.fieldNamesUnderscored;
         this.fieldsContainOwnerManyToMany = this.fileData.fieldsContainOwnerManyToMany;
+        this.fieldsContainOwnerOneToOne = this.fileData.fieldsContainOwnerOneToOne;
         this.fieldsContainOneToMany = this.fileData.fieldsContainOneToMany;
         this.fieldsContainLocalDate = this.fileData.fieldsContainLocalDate;
         this.fieldsContainCustomTime = this.fileData.fieldsContainCustomTime;

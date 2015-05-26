@@ -40,6 +40,7 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
 
     Optional<User> findOneByLogin(String login);
 
+    @Override
     void delete(User t);
 
 }<% } else if ((databaseType == 'sql' || databaseType == 'mongodb') && javaVersion == '7') { %>
