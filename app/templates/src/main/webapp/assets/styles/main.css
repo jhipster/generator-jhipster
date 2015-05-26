@@ -70,7 +70,7 @@ Browser Upgrade Prompt
 .hipster {
     display: inline-block;
     width: 347px;
-    height: 497px;
+    height: 497px !important;
     background: url("../images/hipster.png") no-repeat center top;
     background-size: contain;
 }

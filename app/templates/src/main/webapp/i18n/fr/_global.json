@@ -28,7 +28,8 @@
                 "apidocs": "API",
                 "database": "Base de données"
             },
-            "language": "Langue"
+            "language": "Langue",
+            "theme" : "Theme"
         },
         "form": {
             "username": "Nom d'utilisateur",
