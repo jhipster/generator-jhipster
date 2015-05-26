@@ -83,6 +83,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.relationships = [];
     this.pagination = 'no';
     this.validation = false;
+    this.dto = 'no';
 };
 
 var fieldNamesUnderscored = ['id'];
@@ -642,6 +643,38 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
     }.bind(this));
 };
 
+EntityGenerator.prototype.askForDto = function askForDto() {
+    if (this.useConfigurationFile == true) { // don't prompt if data are imported from a file
+        return;
+    }
+    if (this.javaVersion == '7') {
+        return;
+    }
+    var cb = this.async();
+    var prompts = [
+        {
+            type: 'list',
+            name: 'dto',
+            message: 'Do you want to use a Data Transfer Object (DTO)?',
+            choices: [
+                {
+                    value: 'no',
+                    name: 'No, use JPA entities directly'
+                },
+                {
+                    value: 'mapstruct',
+                    name: 'Yes, generate a DTO with MapStruct'
+                }
+            ],
+            default: 0
+        }
+    ];
+    this.prompt(prompts, function (props) {
+        this.dto = props.dto;
+        cb();
+    }.bind(this));
+};
+
 EntityGenerator.prototype.askForPagination = function askForPagination() {
     if (this.useConfigurationFile == true) { // don't prompt if data are imported from a file
         return;
@@ -683,7 +716,6 @@ EntityGenerator.prototype.askForPagination = function askForPagination() {
     }.bind(this));
 };
 
-
 EntityGenerator.prototype.files = function files() {
     if (this.databaseType == "sql" || this.databaseType == "cassandra") {
         this.changelogDate = this.dateFormatForLiquibase();
@@ -702,6 +734,7 @@ EntityGenerator.prototype.files = function files() {
         this.data.fieldsContainDateTime = this.fieldsContainDateTime;
         this.data.fieldsContainDate = this.fieldsContainDate;
         this.data.changelogDate = this.changelogDate;
+        this.data.dto = this.dto;
         this.data.pagination = this.pagination;
         this.data.validation = this.validation;
         this.write(this.filename, JSON.stringify(this.data, null, 4));
@@ -736,6 +769,10 @@ EntityGenerator.prototype.files = function files() {
           rel.relationshipNameCapitalized = rel.relationshipNameCapitalized || _s.capitalize(rel.relationshipName);
           rel.relationshipFieldName = rel.relationshipFieldName || rel.relationshipName.charAt(0).toLowerCase() + rel.relationshipName.slice(1);
         }
+        this.dto = this.fileData.dto;
+        if (this.dto == undefined) {
+            this.dto = 'no';
+        }
         this.pagination = this.fileData.pagination;
         if (this.pagination == undefined) {
             this.pagination = 'no';
@@ -751,10 +788,15 @@ EntityGenerator.prototype.files = function files() {
     this.differentTypes = [this.entityClass];
     var relationshipId;
     for (relationshipId in this.relationships) {
-      var entityType = this.relationships[relationshipId].otherEntityNameCapitalized;
-      if (this.differentTypes.indexOf(entityType) == -1) {
-        this.differentTypes.push(entityType);
-      }
+        var entityType = this.relationships[relationshipId].otherEntityNameCapitalized;
+        if (this.differentTypes.indexOf(entityType) == -1) {
+            this.differentTypes.push(entityType);
+        }
+        if (this.relationships[relationshipId].otherEntityField != null) {
+            this.relationships[relationshipId].otherEntityFieldCapitalized =
+            this.relationships[relationshipId].otherEntityField.charAt(0).toUpperCase() +
+            this.relationships[relationshipId].otherEntityField.slice(1);
+        }
     }
 
     var insight = this.insight();
@@ -778,6 +820,14 @@ EntityGenerator.prototype.files = function files() {
 
     this.template('src/main/java/package/web/rest/_EntityResource.java',
         'src/main/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'Resource.java', this, {});
+
+    if (this.dto == 'mapstruct') {
+        this.template('src/main/java/package/web/rest/dto/_EntityDto.java',
+            'src/main/java/' + this.packageFolder + '/web/rest/dto/' +    this.entityClass + 'Dto.java', this, {});
+
+        this.template('src/main/java/package/web/rest/mapper/_EntityMapper.java',
+            'src/main/java/' + this.packageFolder + '/web/rest/mapper/' +    this.entityClass + 'Mapper.java', this, {});
+    }
 
     if (this.databaseType == "sql") {
         this.template(resourceDir + '/config/liquibase/changelog/_added_entity.xml',
