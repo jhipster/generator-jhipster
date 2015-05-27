@@ -663,7 +663,7 @@ EntityGenerator.prototype.askForDTO = function askForDTO() {
             choices: [
                 {
                     value: 'no',
-                    name: 'No, use JPA entities directly'
+                    name: 'No, use the entity directly'
                 },
                 {
                     value: 'mapstruct',
