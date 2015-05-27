@@ -20,7 +20,7 @@ import java.util.UUID;<% } %>
 /**
  * A DTO for the <%= entityClass %> entity.
  */
-public class <%= entityClass %>Dto implements Serializable {
+public class <%= entityClass %>DTO implements Serializable {
 <% if (databaseType == 'sql') { %>
     private Long id;<% } %><% if (databaseType == 'mongodb') { %>
     private String id;<% } %><% if (databaseType == 'cassandra') { %>
@@ -45,7 +45,7 @@ public class <%= entityClass %>Dto implements Serializable {
     private <%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>;
 <% } %><% for (relationshipId in relationships) {
     otherEntityRelationshipName = relationships[relationshipId].otherEntityRelationshipName;%><% if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %>
-    private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>Dto> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();
+    private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>DTO> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();
 <% } else if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
     private Long <%= relationships[relationshipId].relationshipFieldName %>Id;<% if (relationships[relationshipId].otherEntityFieldCapitalized != '') { %>
 
@@ -67,11 +67,11 @@ public class <%= entityClass %>Dto implements Serializable {
         this.<%= fields[fieldId].fieldName %> = <%= fields[fieldId].fieldName %>;
     }
 <% } %><% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %>
-    public Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>Dto> get<%= relationships[relationshipId].relationshipNameCapitalized %>s() {
+    public Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>DTO> get<%= relationships[relationshipId].relationshipNameCapitalized %>s() {
         return <%= relationships[relationshipId].relationshipFieldName %>s;
     }
 
-    public void set<%= relationships[relationshipId].relationshipNameCapitalized %>s(Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>Dto> <%= relationships[relationshipId].otherEntityName %>s) {
+    public void set<%= relationships[relationshipId].relationshipNameCapitalized %>s(Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>DTO> <%= relationships[relationshipId].otherEntityName %>s) {
         this.<%= relationships[relationshipId].relationshipFieldName %>s = <%= relationships[relationshipId].otherEntityName %>s;
     }<% } else if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
 
@@ -99,9 +99,9 @@ public class <%= entityClass %>Dto implements Serializable {
             return false;
         }
 
-        <%= entityClass %>Dto <%= entityInstance %>Dto = (<%= entityClass %>Dto) o;
+        <%= entityClass %>DTO <%= entityInstance %>DTO = (<%= entityClass %>DTO) o;
 
-        if ( ! Objects.equals(id, <%= entityInstance %>Dto.id)) return false;
+        if ( ! Objects.equals(id, <%= entityInstance %>DTO.id)) return false;
 
         return true;
     }
@@ -113,7 +113,7 @@ public class <%= entityClass %>Dto implements Serializable {
 
     @Override
     public String toString() {
-        return "<%= entityClass %>Dto{" +
+        return "<%= entityClass %>DTO{" +
                 "id=" + id +<% for (fieldId in fields) { %>
                 ", <%= fields[fieldId].fieldName %>='" + <%= fields[fieldId].fieldName %> + "'" +<% } %>
                 '}';

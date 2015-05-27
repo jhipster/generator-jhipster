@@ -643,7 +643,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
     }.bind(this));
 };
 
-EntityGenerator.prototype.askForDto = function askForDto() {
+EntityGenerator.prototype.askForDTO = function askForDTO() {
     if (this.useConfigurationFile == true) { // don't prompt if data are imported from a file
         return;
     }
@@ -822,8 +822,8 @@ EntityGenerator.prototype.files = function files() {
         'src/main/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'Resource.java', this, {});
 
     if (this.dto == 'mapstruct') {
-        this.template('src/main/java/package/web/rest/dto/_EntityDto.java',
-            'src/main/java/' + this.packageFolder + '/web/rest/dto/' +    this.entityClass + 'Dto.java', this, {});
+        this.template('src/main/java/package/web/rest/dto/_EntityDTO.java',
+            'src/main/java/' + this.packageFolder + '/web/rest/dto/' +    this.entityClass + 'DTO.java', this, {});
 
         this.template('src/main/java/package/web/rest/mapper/_EntityMapper.java',
             'src/main/java/' + this.packageFolder + '/web/rest/mapper/' +    this.entityClass + 'Mapper.java', this, {});
