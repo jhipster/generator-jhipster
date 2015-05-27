@@ -1,9 +1,7 @@
 package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import <%=packageName%>.domain.<%= entityClass %>;<% if (dto == 'mapstruct') { %><% for (relationshipId in relationships) { %>
-import <%=packageName%>.domain.<%= relationships[relationshipId].otherEntityNameCapitalized %>;<% } %><% for (relationshipId in relationships) { %>
-import <%=packageName%>.repository.<%= relationships[relationshipId].otherEntityNameCapitalized %>Repository;<% } } %>
+import <%=packageName%>.domain.<%= entityClass %>;
 import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } %><% if (pagination != 'no') { %>
 import <%=packageName%>.web.rest.util.PaginationUtil;<% } %><% if (dto == 'mapstruct') { %>
@@ -43,10 +41,7 @@ public class <%= entityClass %>Resource {
     private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
 
     @Inject
-    private <%= entityClass %>Repository <%= entityInstance %>Repository;<% if (dto == 'mapstruct') { %><% for (relationshipId in relationships) { %>
-
-    @Inject
-    private <%= relationships[relationshipId].otherEntityNameCapitalized %>Repository <%= relationships[relationshipId].otherEntityName %>Repository;<% } %>
+    private <%= entityClass %>Repository <%= entityInstance %>Repository;<% if (dto == 'mapstruct') { %>
 
     @Inject
     private <%= entityClass %>Mapper <%= entityInstance %>Mapper;<% } %><% if (searchEngine == 'elasticsearch') { %>
