@@ -37,6 +37,9 @@ for (relationshipId in relationships) {
     %>
 
     default <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].otherEntityName %>FromId(Long id) {
+        if (id == null) {
+            return null;
+        }
         <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].otherEntityName %> = new <%= relationships[relationshipId].otherEntityNameCapitalized %>();
         <%= relationships[relationshipId].otherEntityName %>.setId(id);
         return <%= relationships[relationshipId].otherEntityName %>;
