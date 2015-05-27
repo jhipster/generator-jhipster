@@ -1,15 +1,15 @@
 <div>
     <h2 translate="logs.title">Logs</h2>
 
-    <p translate="logs.nbloggers" translate-values="{total: '{{ loggers.length }}'}">There are 0 loggers.</p>
+    <p translate="logs.nbloggers" translate-values="{total: '{{ loggers.length }}'}">There are {{ loggers.length }} loggers.</p>
 
-    {{'logs.filter' | translate}} <input type="text" ng-model="filter" class="form-control">
+    <span translate="logs.filter">Filter</span> <input type="text" ng-model="filter" class="form-control">
 
     <table class="table table-condensed table-striped table-bordered table-responsive">
         <thead>
         <tr title="click to order">
-            <th ng-click="predicate = 'name'; reverse=!reverse" >{{'logs.table.name' | translate}}</th>
-            <th ng-click="predicate = 'level'; reverse=!reverse">{{'logs.table.level' | translate}}</th>
+            <th ng-click="predicate = 'name'; reverse=!reverse"><span translate="logs.table.name">Name</span></th>
+            <th ng-click="predicate = 'level'; reverse=!reverse"><span translate="logs.table.level">Level</span></th>
         </tr>
         </thead>
 
