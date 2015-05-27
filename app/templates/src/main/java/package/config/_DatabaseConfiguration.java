@@ -56,6 +56,7 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
     private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);<% if (databaseType == 'sql') { %>
 
     private RelaxedPropertyResolver dataSourcePropertyResolver;
+
     private RelaxedPropertyResolver liquiBasePropertyResolver;
 
     private Environment env;
