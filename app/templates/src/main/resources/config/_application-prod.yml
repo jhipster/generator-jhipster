@@ -1,6 +1,9 @@
 server:
     port: 8080
 
+liquibase:
+    context: prod
+
 spring:
     profiles:
         active: prod<% if (databaseType == 'sql') { %>

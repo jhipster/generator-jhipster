@@ -11,6 +11,9 @@ async:
     maxPoolSize: 50
     queueCapacity: 10000
 
+liquibase:
+    context: test
+
 spring:<% if (databaseType == 'sql') { %>
     datasource:
         dataSourceClassName: org.h2.jdbcx.JdbcDataSource
