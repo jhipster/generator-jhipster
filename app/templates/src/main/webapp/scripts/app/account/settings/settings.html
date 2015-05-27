@@ -1,7 +1,7 @@
 <div>
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <h2 translate="settings.title" translate-values="{username: '{{settingsAccount.login}}'}">User settings</h2>
+            <h2 translate="settings.title" translate-values="{username: '{{settingsAccount.login}}'}">User settings for [<b>{{settingsAccount.login}}</b>]</h2>
 
             <div class="alert alert-success" ng-show="success" translate="settings.messages.success">
                 <strong>Settings saved!</strong>
@@ -28,11 +28,11 @@
                         </p>
                         <p class="help-block"
                                ng-show="form.firstName.$error.minlength" translate="settings.messages.validate.firstname.minlength">
-                            Your first name is required to be at least 1 character
+                            Your first name is required to be at least 1 character.
                         </p>
                         <p class="help-block"
                                ng-show="form.firstName.$error.maxlength" translate="settings.messages.validate.firstname.maxlength">
-                            Your first name cannot be longer than 50 characters
+                            Your first name cannot be longer than 50 characters.
                         </p>
                     </div>
                 </div>
@@ -47,11 +47,11 @@
                         </p>
                         <p class="help-block"
                                ng-show="form.lastName.$error.minlength" translate="settings.messages.validate.lastname.minlength">
-                            Your last name is required to be at least 1 character
+                            Your last name is required to be at least 1 character.
                         </p>
                         <p class="help-block"
                                ng-show="form.lastName.$error.maxlength" translate="settings.messages.validate.lastname.maxlength">
-                            Your last name cannot be longer than 50 characters
+                            Your last name cannot be longer than 50 characters.
                         </p>
                     </div>
                 </div>
@@ -70,11 +70,11 @@
                         </p>
                         <p class="help-block"
                                ng-show="form.email.$error.minlength" translate="global.messages.validate.email.minlength">
-                            Your e-mail is required to be at least 5 characters
+                            Your e-mail is required to be at least 5 characters.
                         </p>
                         <p class="help-block"
                                ng-show="form.email.$error.maxlength" translate="global.messages.validate.email.maxlength">
-                            Your e-mail cannot be longer than 100 characters
+                            Your e-mail cannot be longer than 100 characters.
                         </p>
                     </div>
                 </div>

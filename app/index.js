@@ -432,6 +432,7 @@ JhipsterGenerator.prototype.app = function app() {
     var javaDir = 'src/main/java/' + packageFolder + '/';
     var resourceDir = 'src/main/resources/';
     var webappDir = 'src/main/webapp/';
+    var interpolateRegex = /<%=([\s\S]+?)%>/g; // so that tags in templates do not get mistreated as _ templates
 
     // Remove old files
 
@@ -461,9 +462,9 @@ JhipsterGenerator.prototype.app = function app() {
             this.template('_settings.gradle', 'settings.gradle', this, {});
             this.template('_gradle.properties', 'gradle.properties', this, {});
             this.template('_yeoman.gradle', 'yeoman.gradle', this, {});
-            this.template('_profile_dev.gradle', 'profile_dev.gradle', this, { 'interpolate': /<%=([\s\S]+?)%>/g });
-            this.template('_profile_prod.gradle', 'profile_prod.gradle', this, { 'interpolate': /<%=([\s\S]+?)%>/g });
-            this.template('_profile_fast.gradle', 'profile_fast.gradle', this, { 'interpolate': /<%=([\s\S]+?)%>/g });
+            this.template('_profile_dev.gradle', 'profile_dev.gradle', this, { 'interpolate': interpolateRegex });
+            this.template('_profile_prod.gradle', 'profile_prod.gradle', this, { 'interpolate': interpolateRegex });
+            this.template('_profile_fast.gradle', 'profile_fast.gradle', this, { 'interpolate': interpolateRegex });
             this.template('_gatling.gradle', 'gatling.gradle', this, {});
           if (this.databaseType == "sql") {
             this.template('_liquibase.gradle', 'liquibase.gradle', this, {});
@@ -475,7 +476,7 @@ JhipsterGenerator.prototype.app = function app() {
             break;
         case 'maven':
         default :
-            this.template('_pom.xml', 'pom.xml', null, { 'interpolate': /<%=([\s\S]+?)%>/g });
+            this.template('_pom.xml', 'pom.xml', null, { 'interpolate': interpolateRegex });
     }
 
     // Create Java resource files
@@ -492,7 +493,7 @@ JhipsterGenerator.prototype.app = function app() {
     // Thymeleaf templates
     this.copy(resourceDir + '/templates/error.html', resourceDir + 'templates/error.html');
 
-    this.template(resourceDir + '_logback.xml', resourceDir + 'logback.xml', this, { 'interpolate': /<%=([\s\S]+?)%>/g });
+    this.template(resourceDir + '_logback.xml', resourceDir + 'logback.xml', this, { 'interpolate': interpolateRegex });
 
     this.template(resourceDir + '/config/_application.yml', resourceDir + 'config/application.yml', this, {});
     this.template(resourceDir + '/config/_application-dev.yml', resourceDir + 'config/application-dev.yml', this, {});
@@ -731,7 +732,7 @@ JhipsterGenerator.prototype.app = function app() {
     }
     this.template('src/test/java/package/security/_SecurityUtilsTest.java', testDir + 'security/SecurityUtilsTest.java', this, {});
     if (this.databaseType == "sql" || this.databaseType == "mongodb") {
-    this.template('src/test/java/package/service/_UserServiceTest.java', testDir + 'service/UserServiceTest.java', this, {});
+        this.template('src/test/java/package/service/_UserServiceTest.java', testDir + 'service/UserServiceTest.java', this, {});
     }
     this.template('src/test/java/package/web/rest/_AccountResourceTest.java', testDir + 'web/rest/AccountResourceTest.java', this, {});
     this.template('src/test/java/package/web/rest/_TestUtil.java', testDir + 'web/rest/TestUtil.java', this, {});

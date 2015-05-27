@@ -1,6 +1,6 @@
 <div>
 
-    <h2 translate="health.title">Application Health Check</h2>
+    <h2 translate="health.title">Health Check</h2>
 
     <div class="modal fade" id="showHealthModal" tabindex="-1" role="dialog" aria-labelledby="showHealthLabel"
          aria-hidden="true">
@@ -20,12 +20,12 @@
                     </div>
                     <div class="modal-body">
                         <div ng-show="currentHealth.details">
-                            <h4>{{'health.details.properties' | translate}}</h4>
+                            <h4 translate="health.details.properties">Properties</h4>
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th class="col-md-6 text-left">{{'health.details.name' | translate}}</th>
-                                        <th class="col-md-6 text-left">{{'health.details.value' | translate}}</th>
+                                        <th class="col-md-6 text-left" translate="health.details.name">Name</th>
+                                        <th class="col-md-6 text-left" translate="health.details.value">Value</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -37,7 +37,7 @@
                             </table>
                         </div>
                         <div ng-show="currentHealth.error">
-                            <h4>{{'health.details.error' | translate}}</h4>
+                            <h4 translate="health.details.error">Error</h4>
                                 <pre>{{currentHealth.error}}</pre>
                         </div>
                     </div>
@@ -47,17 +47,16 @@
     </div>
 
     <p>
-        <button type="button" class="btn btn-primary" ng-click="refresh()"><span
-                class="glyphicon glyphicon-refresh"></span>&nbsp;{{'health.refresh.button' | translate}}
+        <button type="button" class="btn btn-primary" ng-click="refresh()"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span translate="health.refresh.button">Refresh</span>
         </button>
     </p>
 
     <table id="healthCheck" class="table table-striped">
         <thead>
             <tr>
-                <th class="col-md-7">{{'health.table.service' | translate}}</th>
-                <th class="col-md-2 text-center">{{'health.table.status' | translate}}</th>
-                <th class="col-md-2 text-center">{{'health.details.details' | translate}}</th>
+                <th class="col-md-7" translate="health.table.service">Service Name</th>
+                <th class="col-md-2 text-center" translate="health.table.status">Status</th>
+                <th class="col-md-2 text-center" translate="health.details.details">Details</th>
                 <th class="col-md-1 text-center"></th>
             </tr>
         </thead>

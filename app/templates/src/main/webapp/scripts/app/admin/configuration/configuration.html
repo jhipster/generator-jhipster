@@ -1,13 +1,13 @@
 <div>
     <h2 translate="configuration.title">configuration</h2>
 
-    {{'configuration.filter' | translate}} <input type="text" ng-model="filter" class="form-control">
+    <span translate="configuration.filter">Filter (by prefix)</span> <input type="text" ng-model="filter" class="form-control">
 
     <table class="table table-condensed table-striped table-bordered table-responsive" style="table-layout:fixed">
         <thead>
         <tr>
-            <th ng-click="predicate = 'prefix'; reverse=!reverse">{{'configuration.table.prefix' | translate}}</th>
-            <th>{{'configuration.table.properties' | translate}}</th>
+            <th ng-click="predicate = 'prefix'; reverse=!reverse"><span translate="configuration.table.prefix">Prefix</span></th>
+            <th translate="configuration.table.properties">Properties</th>
         </tr>
         </thead>
         
