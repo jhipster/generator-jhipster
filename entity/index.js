@@ -667,7 +667,7 @@ EntityGenerator.prototype.askForDTO = function askForDTO() {
                 },
                 {
                     value: 'mapstruct',
-                    name: 'Yes, generate a DTO with MapStruct'
+                    name: '[BETA] Yes, generate a DTO with MapStruct'
                 }
             ],
             default: 0
