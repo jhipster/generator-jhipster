@@ -22,7 +22,7 @@
                                      var relationshipName = relationships[relationshipId].relationshipName;
                                      var otherEntityName = relationships[relationshipId].otherEntityName;
                                      var relationShipValue = entityInstance + "." + relationshipName + "." + relationships[relationshipId].otherEntityField;
-                                     if (dto = 'mapstruct') {
+                                     if (dto == 'mapstruct') {
                                          relationShipValue = entityInstance + "." + relationshipName + relationships[relationshipId].otherEntityFieldCapitalized;
                                      }%>
                 <tr>

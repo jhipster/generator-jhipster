@@ -104,7 +104,7 @@
     var relationshipFieldName = relationships[relationshipId].relationshipFieldName;
     var translationKey = keyPrefix + relationshipName;
     var relationShipValue = entityInstance + "." + relationships[relationshipId].relationshipFieldName + ".id";
-    if (dto = 'mapstruct') {
+    if (dto == 'mapstruct') {
         relationShipValue = entityInstance + "." + relationships[relationshipId].relationshipFieldName + "Id";
     }
     if (relationships[relationshipId].relationshipType == 'many-to-one') {
@@ -177,7 +177,7 @@
                     <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%>}}</td><% } %><% for (relationshipId in relationships) {
                         if (relationships[relationshipId].relationshipType == 'many-to-one') {
                             var relationShipValue = entityInstance + "." + relationships[relationshipId].relationshipFieldName + "." + relationships[relationshipId].otherEntityField;
-                            if (dto = 'mapstruct') {
+                            if (dto == 'mapstruct') {
                                 relationShipValue = entityInstance + "." + relationships[relationshipId].relationshipFieldName + relationships[relationshipId].otherEntityFieldCapitalized;
                             }%>
                     <td>{{<%=relationShipValue %>}}</td><% } } %>
