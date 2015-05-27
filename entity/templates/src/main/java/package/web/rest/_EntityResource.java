@@ -15,7 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;<% } %>
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity;<% if (dto == 'mapstruct') { %>
+import org.springframework.transaction.annotation.Transactional;<% } %>
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;<% if (validation) { %>
@@ -65,8 +66,8 @@ public class <%= entityClass %>Resource {
         if (<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>.getId() != null) {
             return ResponseEntity.badRequest().header("Failure", "A new <%= entityInstance %> cannot already have an ID").build();
         }<% if (dto == 'mapstruct') { %>
-        save<%= entityClass %>(<%= entityInstance %>DTO);<% } else { %>
-        <%= entityInstance %>Repository.save(<%= entityInstance %>);<% } %><% if (searchEngine == 'elasticsearch') { %>
+        <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Mapper.<%= entityInstance %>DTOTo<%= entityClass %>(<%= entityInstance %>DTO);<% } %>
+        <%= entityInstance %>Repository.save(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
         <%= entityInstance %>SearchRepository.save(<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>);<% } %>
         return ResponseEntity.created(new URI("/api/<%= entityInstance %>s/" + <%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>.getId())).build();
     }
@@ -83,20 +84,11 @@ public class <%= entityClass %>Resource {
         if (<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>.getId() == null) {
             return create(<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>);
         }<% if (dto == 'mapstruct') { %>
-        save<%= entityClass %>(<%= entityInstance %>DTO);<% } else { %>
-        <%= entityInstance %>Repository.save(<%= entityInstance %>);<% } %><% if (searchEngine == 'elasticsearch') { %>
+        <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Mapper.<%= entityInstance %>DTOTo<%= entityClass %>(<%= entityInstance %>DTO);<% } %>
+        <%= entityInstance %>Repository.save(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
         <%= entityInstance %>SearchRepository.save(<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>);<% } %>
         return ResponseEntity.ok().build();
-    }<% if (dto == 'mapstruct') { %>
-
-    private void save<%= entityClass %>(<%= entityClass %>DTO <%= entityInstance %>DTO) {
-        <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Mapper.<%= entityInstance %>DTOTo<%= entityClass %>(<%= entityInstance %>DTO);<% for (relationshipId in relationships) {
-            if (relationships[relationshipId].relationshipType == 'many-to-one') {
-            %>
-        <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].otherEntityName %> = <%= relationships[relationshipId].otherEntityName %>Repository.findOne(<%= entityInstance %>DTO.get<%= relationships[relationshipId].otherEntityNameCapitalized %>Id());
-        <%= entityInstance %>.set<%= relationships[relationshipId].otherEntityNameCapitalized %>(<%= relationships[relationshipId].otherEntityName %>);<% } } %>
-        <%= entityInstance %>Repository.save(<%= entityInstance %>);
-    }<% } %>
+    }
 
     /**
      * GET  /<%= entityInstance %>s -> get all the <%= entityInstance %>s.
@@ -104,7 +96,8 @@ public class <%= entityClass %>Resource {
     @RequestMapping(value = "/<%= entityInstance %>s",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed<% if (pagination == 'no') { %>
+    @Timed<% if (dto == 'mapstruct') { %>
+    @Transactional(readOnly = true)<% } %><% if (pagination == 'no') { %>
     public List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> getAll() {
         log.debug("REST request to get all <%= entityClass %>s");
         return <%= entityInstance %>Repository.findAll()<% if (dto == 'mapstruct') { %>.stream()
