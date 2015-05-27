@@ -31,6 +31,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.prodDatabaseType = this.config.get('prodDatabaseType');
     this.searchEngine = this.config.get('searchEngine');
     prodDatabaseType = this.prodDatabaseType;
+    this.buildTool = this.config.get('buildTool');
     this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
     this.jhipsterConfigDirectory = '.jhipster';
     this.filename = this.jhipsterConfigDirectory + '/' + _s.capitalize(this.name) + '.json';
@@ -648,6 +649,9 @@ EntityGenerator.prototype.askForDTO = function askForDTO() {
         return;
     }
     if (this.javaVersion == '7') {
+        return;
+    }
+    if (this.buildTool == 'gradle') {
         return;
     }
     var cb = this.async();
