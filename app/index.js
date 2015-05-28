@@ -813,6 +813,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/scripts/components/util/_base64.service.js', webappDir + 'scripts/components/util/base64.service.js', this, {});
     this.template(webappDir + '/scripts/components/util/_parse-links.service.js', webappDir + 'scripts/components/util/parse-links.service.js', this, {});
     this.template(webappDir + '/scripts/components/util/_truncate.filter.js', webappDir + 'scripts/components/util/truncate.filter.js', this, {});
+    this.template(webappDir + '/scripts/components/util/_bootswatch.service.js', webappDir + 'scripts/components/util/bootswatch.service.js', this, {});
+    this.template(webappDir + '/scripts/components/util/_bootswatch.directive.js', webappDir + 'scripts/components/util/bootswatch.directive.js', this, {});
+    this.template(webappDir + '/scripts/components/util/_bootswatch.controller.js', webappDir + 'scripts/components/util/bootswatch.controller.js', this, {});
 
     // Client App
     this.template(webappDir + '/scripts/app/account/_account.js', webappDir + 'scripts/app/account/account.js', this, {});
@@ -927,6 +930,9 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/components/util/truncate.filter.js',
         'scripts/components/util/base64.service.js',
         'scripts/components/util/parse-links.service.js',
+        'scripts/components/util/bootswatch.service.js',
+        'scripts/components/util/bootswatch.directive.js',
+        'scripts/components/util/bootswatch.controller.js',
         'scripts/app/account/account.js',
         'scripts/app/account/activate/activate.js',
         'scripts/app/account/activate/activate.controller.js',
