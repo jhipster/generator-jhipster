@@ -480,12 +480,6 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
                     return 'Your other entity name cannot be empty';
                 } else if (reservedWords_Java.indexOf(input.toUpperCase()) != -1) {
                     return 'Your other entity name cannot contain a Java reserved keyword';
-                } else if (prodDatabaseType == 'mysql' && reservedWords_MySQL.indexOf(input.toUpperCase()) != -1) {
-                    return 'Your other entity name cannot contain a MySQL reserved keyword';
-                } else if (input != 'user' && prodDatabaseType == 'postgresql' && reservedWords_Postgresql.indexOf(input.toUpperCase()) != -1) {
-                    return 'Your other entity name cannot contain a PostgreSQL reserved keyword';
-                } else if (prodDatabaseType == 'cassandra' && reservedWords_Cassandra.indexOf(input.toUpperCase()) != -1) {
-                    return 'Your other entity name cannot contain a Cassandra reserved keyword';
                 }
                 return true;
             },
@@ -506,12 +500,6 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
                     return 'Your relationship cannot use an already existing field name';
                 } else if (reservedWords_Java.indexOf(input.toUpperCase()) != -1) {
                     return 'Your relationship cannot contain a Java reserved keyword';
-                } else if (prodDatabaseType == 'mysql' && reservedWords_MySQL.indexOf(input.toUpperCase()) != -1) {
-                    return 'Your relationship cannot contain a MySQL reserved keyword';
-                } else if (input != 'user' && prodDatabaseType == 'postgresql' && reservedWords_Postgresql.indexOf(input.toUpperCase()) != -1) {
-                    return 'Your relationship cannot contain a PostgreSQL reserved keyword';
-                } else if (prodDatabaseType == 'cassandra' && reservedWords_Cassandra.indexOf(input.toUpperCase()) != -1) {
-                    return 'Your relationship cannot contain a Cassandra reserved keyword';
                 }
                 return true;
             },
