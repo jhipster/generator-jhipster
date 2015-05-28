@@ -63,7 +63,7 @@ public class <%= entityClass %>Resource {
         }<% if (dto == 'mapstruct') { %>
         <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Mapper.<%= entityInstance %>DTOTo<%= entityClass %>(<%= entityInstance %>DTO);<% } %>
         <%= entityInstance %>Repository.save(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
-        <%= entityInstance %>SearchRepository.save(<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>);<% } %>
+        <%= entityInstance %>SearchRepository.save(<%= entityInstance %>);<% } %>
         return ResponseEntity.created(new URI("/api/<%= entityInstance %>s/" + <%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>.getId())).build();
     }
 
@@ -81,7 +81,7 @@ public class <%= entityClass %>Resource {
         }<% if (dto == 'mapstruct') { %>
         <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Mapper.<%= entityInstance %>DTOTo<%= entityClass %>(<%= entityInstance %>DTO);<% } %>
         <%= entityInstance %>Repository.save(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
-        <%= entityInstance %>SearchRepository.save(<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>);<% } %>
+        <%= entityInstance %>SearchRepository.save(<%= entityInstance %>);<% } %>
         return ResponseEntity.ok().build();
     }
 
