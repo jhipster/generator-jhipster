@@ -5,7 +5,8 @@ angular.module('<%=angularAppName%>')
                 parent: 'admin',
                 url: '/tracker',
                 data: {
-                    roles: ['ROLE_ADMIN']
+                    roles: ['ROLE_ADMIN'],
+                    pageTitle: 'tracker.title'
                 },
                 views: {
                     'content@': {

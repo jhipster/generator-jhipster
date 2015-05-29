@@ -83,7 +83,7 @@
                         <li ng-show="{{ENV === 'dev'}}"><a href='/console' target="_tab"><span class="glyphicon glyphicon-hdd"></span>
                             &#xA0;<span translate="global.menu.admin.database">Database</span></a></li><% } %>
                     </ul>
-                </li>
+                </li><% if (enableTranslation){ %>
                 <li ui-sref-active="active" class="dropdown pointer" ng-controller="LanguageController">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="">
                                 <span>
@@ -97,7 +97,7 @@
                             <a href="" ng-click="changeLanguage(language)">{{'language.' + language| translate}}</a>
                         </li>
                     </ul>
-                </li>
+                </li><% } %>
             </ul>
         </div>
     </div>
