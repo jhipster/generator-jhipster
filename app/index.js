@@ -7,7 +7,8 @@ var util = require('util'),
     shelljs = require('shelljs'),
     scriptBase = require('../script-base'),
     packagejs = require(__dirname + '/../package.json'),
-    crypto = require("crypto");
+    crypto = require("crypto"),
+    ejs = require('ejs');
 
 var JhipsterGenerator = module.exports = function JhipsterGenerator(args, options, config) {
 
@@ -883,6 +884,7 @@ JhipsterGenerator.prototype.app = function app() {
 
     // Index page
     this.indexFile = this.readFileAsString(path.join(this.sourceRoot(), webappDir + '_index.html'));
+    this.engine = require('ejs').render;
     this.indexFile = this.engine(this.indexFile, this, {});
 
     // Create Test Javascript files
