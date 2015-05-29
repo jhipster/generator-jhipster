@@ -796,6 +796,7 @@ EntityGenerator.prototype.files = function files() {
     insight.track('entity/fields', this.fields.length);
     insight.track('entity/relationships', this.relationships.length);
     insight.track('entity/pagination', this.pagination);
+    insight.track('entity/dto', this.dto);
 
     var resourceDir = 'src/main/resources/';
 
