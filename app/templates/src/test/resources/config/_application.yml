@@ -11,6 +11,9 @@ async:
     maxPoolSize: 50
     queueCapacity: 10000
 
+liquibase:
+    context: test
+
 spring:<% if (databaseType == 'sql') { %>
     datasource:
         dataSourceClassName: org.h2.jdbcx.JdbcDataSource
@@ -47,14 +50,14 @@ spring:<% if (databaseType == 'sql') { %>
             compression: NONE
             keyspaceName: cassandra_unit_keyspace<% } %>
 
-    mail:
-        host: localhost
-        port: 25
-        user:
-        password:
-        protocol: smtp
-        tls: false
-        auth: false
+mail:
+    host: localhost
+    port: 25
+    username:
+    password:
+    protocol: smtp
+    tls: false
+    auth: false
 
 metrics:
     jmx.enabled: false

@@ -1,6 +1,7 @@
 ######################
 # Project Specific
-######################
+######################<% if (useCompass) { %>
+/src/main/webapp/assets/styles/main.css<% } %>
 /src/main/webapp/dist
 
 ######################
@@ -121,4 +122,3 @@ Desktop.ini
 # Gradle Wrapper
 ######################
 !gradle/wrapper/gradle-wrapper.jar
-

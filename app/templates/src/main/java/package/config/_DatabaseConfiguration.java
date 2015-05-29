@@ -23,7 +23,8 @@ import org.springframework.context.annotation.Profile;<% if (databaseType == 'mo
 import org.springframework.context.annotation.Import;<% } %><% if (databaseType == 'sql') { %>
 import org.springframework.core.env.Environment;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'oauth2') { %>
 import org.springframework.core.convert.converter.Converter;<% } %><% if (databaseType == 'mongodb') { %>
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.ClassPathResource;<% } %><% if (searchEngine == 'elasticsearch') { %>
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'oauth2') { %>
 import org.springframework.data.mongodb.core.convert.CustomConversions;<% } %><% if (databaseType == 'mongodb') { %>
@@ -33,6 +34,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;<
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
 import java.util.Arrays;<% } %><% if (databaseType == 'mongodb') { %>
@@ -43,7 +45,8 @@ import java.util.List;<% } %>
 @Configuration<% if (databaseType == 'sql') { %>
 @EnableJpaRepositories("<%=packageName%>.repository")
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
-@EnableTransactionManagement<% } %><% if (databaseType == 'mongodb') { %>
+@EnableTransactionManagement<% } %><% if (searchEngine == 'elasticsearch') { %>
+@EnableElasticsearchRepositories("<%=packageName%>.repository.search")<% } %><% if (databaseType == 'mongodb') { %>
 @Profile("!cloud")
 @EnableMongoRepositories("<%=packageName%>.repository")
 @Import(value = MongoAutoConfiguration.class)
@@ -52,7 +55,9 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
 
     private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);<% if (databaseType == 'sql') { %>
 
-    private RelaxedPropertyResolver propertyResolver;
+    private RelaxedPropertyResolver dataSourcePropertyResolver;
+
+    private RelaxedPropertyResolver liquiBasePropertyResolver;
 
     private Environment env;
 
@@ -68,7 +73,8 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
     @Override
     public void setEnvironment(Environment env) {
         this.env = env;
-        this.propertyResolver = new RelaxedPropertyResolver(env, "spring.datasource.");
+        this.dataSourcePropertyResolver = new RelaxedPropertyResolver(env, "spring.datasource.");
+        this.liquiBasePropertyResolver = new RelaxedPropertyResolver(env, "liquiBase.");
     }
 
     @Bean(destroyMethod = "shutdown")
@@ -76,30 +82,29 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
     @Profile("!" + Constants.SPRING_PROFILE_CLOUD)
     public DataSource dataSource() {
         log.debug("Configuring Datasource");
-        if (propertyResolver.getProperty("url") == null && propertyResolver.getProperty("databaseName") == null) {
+        if (dataSourcePropertyResolver.getProperty("url") == null && dataSourcePropertyResolver.getProperty("databaseName") == null) {
             log.error("Your database connection pool configuration is incorrect! The application" +
-                    "cannot start. Please check your Spring profile, current profiles are: {}",
+                    " cannot start. Please check your Spring profile, current profiles are: {}",
                     Arrays.toString(env.getActiveProfiles()));
 
             throw new ApplicationContextException("Database connection pool is not configured correctly");
         }
         HikariConfig config = new HikariConfig();
-        config.setDataSourceClassName(propertyResolver.getProperty("dataSourceClassName"));
-        if (propertyResolver.getProperty("url") == null || "".equals(propertyResolver.getProperty("url"))) {
-            config.addDataSourceProperty("databaseName", propertyResolver.getProperty("databaseName"));
-            config.addDataSourceProperty("serverName", propertyResolver.getProperty("serverName"));
+        config.setDataSourceClassName(dataSourcePropertyResolver.getProperty("dataSourceClassName"));
+        if(StringUtils.isEmpty(dataSourcePropertyResolver.getProperty("url"))) {
+            config.addDataSourceProperty("databaseName", dataSourcePropertyResolver.getProperty("databaseName"));
+            config.addDataSourceProperty("serverName", dataSourcePropertyResolver.getProperty("serverName"));
         } else {
-            config.addDataSourceProperty("url", propertyResolver.getProperty("url"));
+            config.addDataSourceProperty("url", dataSourcePropertyResolver.getProperty("url"));
         }
-        config.addDataSourceProperty("user", propertyResolver.getProperty("username"));
-        config.addDataSourceProperty("password", propertyResolver.getProperty("password"));
+        config.addDataSourceProperty("user", dataSourcePropertyResolver.getProperty("username"));
+        config.addDataSourceProperty("password", dataSourcePropertyResolver.getProperty("password"));
 <% if (prodDatabaseType == 'mysql' || devDatabaseType == 'mysql') { %>
         //MySQL optimizations, see https://github.com/brettwooldridge/HikariCP/wiki/MySQL-Configuration
-        if ("com.mysql.jdbc.jdbc2.optional.MysqlDataSource".equals(propertyResolver.getProperty("dataSourceClassName"))) {
-            config.addDataSourceProperty("cachePrepStmts", propertyResolver.getProperty("cachePrepStmts", "true"));
-            config.addDataSourceProperty("prepStmtCacheSize", propertyResolver.getProperty("prepStmtCacheSize", "250"));
-            config.addDataSourceProperty("prepStmtCacheSqlLimit", propertyResolver.getProperty("prepStmtCacheSqlLimit", "2048"));
-            config.addDataSourceProperty("useServerPrepStmts", propertyResolver.getProperty("useServerPrepStmts", "true"));
+        if ("com.mysql.jdbc.jdbc2.optional.MysqlDataSource".equals(dataSourcePropertyResolver.getProperty("dataSourceClassName"))) {
+            config.addDataSourceProperty("cachePrepStmts", dataSourcePropertyResolver.getProperty("cachePrepStmts", "true"));
+            config.addDataSourceProperty("prepStmtCacheSize", dataSourcePropertyResolver.getProperty("prepStmtCacheSize", "250"));
+            config.addDataSourceProperty("prepStmtCacheSqlLimit", dataSourcePropertyResolver.getProperty("prepStmtCacheSqlLimit", "2048"));
         }<% } %>
         if (metricRegistry != null) {
             config.setMetricRegistry(metricRegistry);
@@ -112,9 +117,9 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
         SpringLiquibase liquibase = new SpringLiquibase();
         liquibase.setDataSource(dataSource);
         liquibase.setChangeLog("classpath:config/liquibase/master.xml");
-        liquibase.setContexts("development, production");
+        liquibase.setContexts(liquiBasePropertyResolver.getProperty("context"));
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_FAST)) {
-            if ("org.h2.jdbcx.JdbcDataSource".equals(propertyResolver.getProperty("dataSourceClassName"))) {
+            if ("org.h2.jdbcx.JdbcDataSource".equals(dataSourcePropertyResolver.getProperty("dataSourceClassName"))) {
                 liquibase.setShouldRun(true);
                 log.warn("Using '{}' profile with H2 database in memory is not optimal, you should consider switching to" +
                     " MySQL or Postgresql to avoid rebuilding your database upon each start.", Constants.SPRING_PROFILE_FAST);

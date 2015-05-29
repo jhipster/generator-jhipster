@@ -1,17 +1,18 @@
 {
     "settings": {
-        "title": "Ustawienie dla użytkownika [<b>{{username}}</b>]",
+        "title": "Ustawienia dla użytkownika [<b>{{username}}</b>]",
         "form": {
             "firstname": "Imię",
             "firstname.placeholder": "Twoje imię",
             "lastname": "Nazwisko",
             "lastname.placeholder": "Twoje nazwisko",
+            "language": "Język",
             "button": "Zapisz"
         },
         "messages": {
             "error": {
-                "fail": "<strong>Wystąpi błąd!</strong> Ustawienia nie zostały zapisane.",
-                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+                "fail": "<strong>Wystąpił błąd!</strong> Ustawienia nie zostały zapisane.",
+                "emailexists": "<strong>Ten adres e-mail jest już zarejestrowany!</strong> Prosimy wybrać inny adres."
             },
             "success": "<strong>Ustawienia zapisane!</strong>",
             "validate": {

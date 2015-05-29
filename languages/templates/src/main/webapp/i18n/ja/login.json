@@ -11,6 +11,9 @@
             "error": {
                 "authentication": "<strong>ログイン失敗!</strong> パスワードをチェックして再度入力してください。"
             }
+        },
+        "password" : {
+            "forgot": "Did you forget your password?"
         }
     }
 }

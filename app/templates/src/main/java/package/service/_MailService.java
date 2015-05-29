@@ -38,7 +38,7 @@ public class MailService {
 
     @Inject
     private MessageSource messageSource;
-    
+
     @Inject
     private SpringTemplateEngine templateEngine;
 
@@ -49,7 +49,7 @@ public class MailService {
 
     @PostConstruct
     public void init() {
-        this.from = env.getProperty("spring.mail.from");
+        this.from = env.getProperty("mail.from");
     }
 
     @Async
@@ -81,6 +81,18 @@ public class MailService {
         context.setVariable("baseUrl", baseUrl);
         String content = templateEngine.process("activationEmail", context);
         String subject = messageSource.getMessage("email.activation.title", null, locale);
+        sendEmail(user.getEmail(), subject, content, false, true);
+    }
+
+    @Async
+    public void sendPasswordResetMail(User user, String baseUrl) {
+        log.debug("Sending password reset e-mail to '{}'", user.getEmail());
+        Locale locale = Locale.forLanguageTag(user.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable("user", user);
+        context.setVariable("baseUrl", baseUrl);
+        String content = templateEngine.process("passwordResetEmail", context);
+        String subject = messageSource.getMessage("email.reset.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
     }
 }

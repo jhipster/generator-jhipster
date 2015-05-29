@@ -120,7 +120,7 @@ gulp.task('serve', function() {
             '/configprops',
             '/api-docs',
             '/metrics',
-            '/dump/'<% if (authenticationType == 'oauth2') { %>,
+            '/dump'<% if (authenticationType == 'oauth2') { %>,
             '/oauth/token'<% } %><% if (devDatabaseType == 'h2Memory') { %>,
             '/console/'<% } %>
         ];
@@ -136,14 +136,15 @@ gulp.task('serve', function() {
         var proxies = [
             // Ensure trailing slash in routes that require it
             function (req, res, next) {
-                for (var route in requireTrailingSlash) {
+                requireTrailingSlash.forEach(function(route){
                     if (url.parse(req.url).path === route) {
                         res.statusCode = 301;
                         res.setHeader('Location', route + '/');
                         res.end();
                     }
-                    next();
-                }
+                });
+
+                next();
             }
         ].concat(
             // Build a list of proxies for routes: [route1_proxy, route2_proxy, ...]
@@ -171,7 +172,7 @@ gulp.task('watch', function() {
     gulp.watch(['gulpfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>], ['ngconstant:dev']);
     gulp.watch(<% if(useCompass) { %>yeoman.scss + '**/*.scss'<% } else { %>yeoman.app + 'assets/styles/**/*.css'<% } %>, ['styles']);
     gulp.watch(yeoman.app + 'assets/images/**', ['images']);
-    gulp.watch([yeoman.app + '*.html', yeoman.app + 'scripts/**']).on('change', browserSync.reload);
+    gulp.watch([yeoman.app + '*.html', yeoman.app + 'scripts/**', yeoman.app + 'i18n/**']).on('change', browserSync.reload);
 });
 
 gulp.task('wiredep', ['wiredep:test', 'wiredep:app']);

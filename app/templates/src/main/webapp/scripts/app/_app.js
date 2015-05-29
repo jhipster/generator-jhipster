@@ -44,8 +44,7 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
                 $state.go($rootScope.previousStateName, $rootScope.previousStateParams);
             }
         };
-    })
-    <% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
+    })<% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
     .factory('authInterceptor', function ($rootScope, $q, $location, localStorageService) {
         return {
             // Add authorization token to headers
@@ -64,8 +63,7 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
                 return config;
             }
         };
-    })
-    <% } %><% if (authenticationType == 'oauth2') { %>
+    })<% } %><% if (authenticationType == 'oauth2') { %>
     .factory('authExpiredInterceptor', function ($rootScope, $q, $injector, localStorageService) {
         return {
             responseError: function (response) {
@@ -109,7 +107,6 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                     $translatePartialLoader.addPart('global');
                     $translatePartialLoader.addPart('language');
-                    return $translate.refresh();
                 }]
             }
         });
@@ -124,7 +121,9 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
 
         $translateProvider.preferredLanguage('en');
         $translateProvider.useCookieStorage();
+        $translateProvider.useSanitizeValueStrategy('escaped');
 
         tmhDynamicLocaleProvider.localeLocationPattern('bower_components/angular-i18n/angular-locale_{{locale}}.js');
-        tmhDynamicLocaleProvider.useCookieStorage('NG_TRANSLATE_LANG_KEY');
+        tmhDynamicLocaleProvider.useCookieStorage();
+        tmhDynamicLocaleProvider.storageKey('NG_TRANSLATE_LANG_KEY');
     });

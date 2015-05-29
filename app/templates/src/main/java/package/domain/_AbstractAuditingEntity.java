@@ -1,6 +1,7 @@
 package <%=packageName%>.domain;
 
-<% if (databaseType == 'sql') { %>import org.hibernate.annotations.Type;
+import com.fasterxml.jackson.annotation.JsonIgnore;<% if (databaseType == 'sql') { %>
+import org.hibernate.annotations.Type;
 import org.hibernate.envers.Audited;<% } %>
 import org.joda.time.DateTime;
 import org.springframework.data.annotation.CreatedBy;
@@ -28,6 +29,7 @@ public abstract class AbstractAuditingEntity {
     @NotNull
     @Column(name = "created_by", nullable = false, length = 50, updatable = false)<% } %><% if (databaseType == 'mongodb') { %>
     @Field("created_by")<% } %>
+    @JsonIgnore
     private String createdBy;
 
     @CreatedDate<% if (databaseType == 'sql') { %>
@@ -35,17 +37,20 @@ public abstract class AbstractAuditingEntity {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(name = "created_date", nullable = false)<% } %><% if (databaseType == 'mongodb') { %>
     @Field("created_date")<% } %>
+    @JsonIgnore
     private DateTime createdDate = DateTime.now();
 
     @LastModifiedBy<% if (databaseType == 'sql') { %>
     @Column(name = "last_modified_by", length = 50)<% } %><% if (databaseType == 'mongodb') { %>
     @Field("last_modified_by")<% } %>
+    @JsonIgnore
     private String lastModifiedBy;
 
     @LastModifiedDate<% if (databaseType == 'sql') { %>
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(name = "last_modified_date")<% } %><% if (databaseType == 'mongodb') { %>
     @Field("last_modified_date  ")<% } %>
+    @JsonIgnore
     private DateTime lastModifiedDate = DateTime.now();
 
     public String getCreatedBy() {

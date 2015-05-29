@@ -117,7 +117,8 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-loader-tools'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-logging'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop'<% if (databaseType == 'sql') { %>
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'<% } %><% if (databaseType == 'mongodb') { %>
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'<% } %><% if (searchEngine == 'elasticsearch') { %>
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-elasticsearch'<% } %><% if (databaseType == 'mongodb') { %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb'<% } %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security'
     compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web') {
@@ -173,5 +174,8 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
+    gradleVersion = '2.4'
+}
+
+task stage(dependsOn: 'bootRepackage') {
 }

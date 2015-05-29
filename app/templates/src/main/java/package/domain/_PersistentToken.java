@@ -28,9 +28,9 @@ import java.util.Date;<% } %>
  * @see <%=packageName%>.security.CustomPersistentRememberMeServices
  */<% if (databaseType == 'sql') { %>
 @Entity
-@Table(name = "T_PERSISTENT_TOKEN")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
+@Table(name = "JHI_PERSISTENT_TOKEN")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'mongodb') { %>
-@Document(collection = "T_PERSISTENT_TOKEN")<% } %><% if (databaseType == 'cassandra') { %>
+@Document(collection = "JHI_PERSISTENT_TOKEN")<% } %><% if (databaseType == 'cassandra') { %>
 @Table(name = "persistent_token")<% } %>
 public class PersistentToken implements Serializable {
 

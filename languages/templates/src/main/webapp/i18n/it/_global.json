@@ -1,0 +1,100 @@
+{
+    "global": {
+        "title": "<%= baseName %>",
+        "browsehappy": "Stai utilizzando un browser <strong> non aggiornato </ strong> <a href=\"http://browsehappy.com/?locale=en\"> Aggiorna il tuo browser per </a> migliorare la loro esperienza.",
+        "menu": {
+            "home": "Home",
+            "entities": {
+                "main": "Entità",
+                "additionalEntity": "JHipster con entita' aggiunte qui senza traduzione"
+            },
+            "account": {
+                "main": "Principale",
+                "settings": "Impostazioni",
+                "password": "Password",
+                "sessions": "Sessione",
+                "login": "Accesso",
+                "logout": "Esci",
+                "register": "Effettua registrazione"
+            },
+            "admin": {
+                "main": "Amministratore",
+                "tracker": "Tracciamento utente",
+                "metrics": "Metrica",
+                "health": "Salute",
+                "configuration": "Configurazione",
+                "logs": "Logs",
+                "audits": "Cambiamenti",
+                "apidocs": "API",
+                "database": "Database"
+            },
+            "language": "Lingua"
+        },
+        "form": {
+            "username": "User",
+            "username.placeholder": "Il tuo nome utente",
+            "newpassword": "Nuova password",
+            "newpassword.placeholder": "Nuova password",
+            "confirmpassword": "Conferma nuova password",
+            "confirmpassword.placeholder": "Conferma nuova password",
+            "email": "Email",
+            "email.placeholder": "Il tuo indirizzo email"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Se si vuole <a href=\"#/login\"> avviare una sessione</a> , è possibile provare a utilizzare gli account di default: <br/> - Amministratore (user = \" admin \"e la password = \"admin \") <br/> - utente (user = \"user \" e la password = \"user \")",
+                "register": "Non hai ancora un account  <a href=\"#/register\">Crea un account?</a>"
+            },
+            "error": {
+                "dontmatch" : "La password e la conferma non corrispondono!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "è necessario immettere una password.",
+                    "minlength": "La tua password  è richiesta con almeno 5 caratteri",
+                    "maxlength": "La tua password non può essere più di 50 caratteri",
+                    "strength": "Password di sicurezza:"
+                },
+                "confirmpassword": {
+                    "required": "è necessario per confermare la password.",
+                    "minlength": "La tua password  è richiesta con almeno 5 caratteri",
+                    "maxlength": "La tua password non può essere più di 50 caratteri"
+                },
+                "email": {
+                    "required": "è necessario e-mail.",
+                    "invalid": "Il tuo indirizzo email non è valido.",
+                    "minlength": "E 'necessario che la tua email è di almeno 5 caratteri",
+                    "maxlength": "Il tuo indirizzo email non può essere più di 50 caratteri"
+                }
+            }
+        }
+    },
+    "entity": {
+        "action": {
+            "back": "Indietro",
+            "cancel": "Annulla",
+            "delete": "Elimina",
+            "edit": "Modifica",
+            "save": "Salva",
+            "view": "Visualizza"
+        },
+        "detail": {
+            "field": "Campo",
+            "value": "Valore"
+        },
+        "delete": {
+            "title": "Conferma operazione di cancellazione"
+        },
+        "validation": {
+            "required": "Questo campo è obbligatorio.",
+            "minlength": "Questo campo deve essere almeno {{numero minimo}} caratteri.",
+            "maxlength": "Questo campo non può essere più lungo di {{max}} caratteri.",
+            "min": "Questo campo dovrebbe essere più di {{min}}..",
+            "max": "Questo campo non può essere superiore a {{max}}.",
+            "pattern": "Questo campo dovrebbe seguire pattern pattern {{}}.",
+            "number": "Questo campo deve essere un numero.",
+            "datetimelocal": "Questo campo dovrebbe essere una data e l'ora."
+        }
+    },
+    "footer": "pie di pagina"
+}

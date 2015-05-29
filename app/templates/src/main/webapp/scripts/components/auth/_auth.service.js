@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .factory('Auth', function Auth($rootScope, $state, $q, $translate, Principal, AuthServerProvider, Account, Register, Activate, Password<% if (websocket == 'spring-websocket') { %>, Tracker<% } %>) {
+    .factory('Auth', function Auth($rootScope, $state, $q, $translate, Principal, AuthServerProvider, Account, Register, Activate, Password, PasswordResetInit, PasswordResetFinish<% if (websocket == 'spring-websocket') { %>, Tracker<% } %>) {
         return {
             login: function (credentials, callback) {
                 var cb = callback || angular.noop;
@@ -12,7 +12,8 @@ angular.module('<%=angularAppName%>')
                     Principal.identity(true).then(function(account) {
                         // After the login the language will be changed to
                         // the language selected by the user during his registration
-                        $translate.use(account.langKey);<% if (websocket == 'spring-websocket') { %>
+                        $translate.use(account.langKey);
+                        $translate.refresh();<% if (websocket == 'spring-websocket') { %>
                         Tracker.sendActivity();<% } %>
                         deferred.resolve(data);
                     });
@@ -94,6 +95,26 @@ angular.module('<%=angularAppName%>')
                 var cb = callback || angular.noop;
 
                 return Password.save(newPassword, function () {
+                    return cb();
+                }, function (err) {
+                    return cb(err);
+                }).$promise;
+            },
+
+            resetPasswordInit: function (mail, callback) {
+                var cb = callback || angular.noop;
+
+                return PasswordResetInit.save(mail, function() {
+                    return cb();
+                }, function (err) {
+                    return cb(err);
+                }).$promise;
+            },
+
+            resetPasswordFinish: function(key, newPassword, callback) {
+                var cb = callback || angular.noop;
+
+                return PasswordResetFinish.save(key, newPassword, function () {
                     return cb();
                 }, function (err) {
                     return cb(err);

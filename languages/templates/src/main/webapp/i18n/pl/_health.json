@@ -1,11 +1,11 @@
 {
     "health": {
-        "title": "Heath checks",
+        "title": "Stan usług",
         "refresh.button": "Odśwież",
         "stacktrace": "Stos wywołań",
         "indicator": {
-            "diskSpace": "Disk space",
-            "mail": "Email",<% if (databaseType == 'sql') { %>
+            "diskSpace": "Przestrzeń dyskowa",
+            "mail": "E-mail",<% if (databaseType == 'sql') { %>
             "db": "Baza danych"<% } %><% if (databaseType == 'mongodb') { %>
             "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
             "cassandra": "Cassandra"<% } %>
@@ -16,7 +16,7 @@
         },
         "status": {
             "UP": "DOSTĘPNE",
-            "DOWN": "NIE DZIAŁAJĄCY"
+            "DOWN": "NIEDZIAŁAJĄCY"
         }
     }
 }

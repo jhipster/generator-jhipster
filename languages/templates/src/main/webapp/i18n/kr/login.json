@@ -11,6 +11,9 @@
             "error": {
                 "authentication": "<strong>인증 실패!</strong> credential을 확인하고 다시 시도해 주세요."
             }
+        },
+        "password" : {
+            "forgot": "Did you forget your password?"
         }
     }
 }

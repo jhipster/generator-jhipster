@@ -82,7 +82,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/assets/**")
             .antMatchers("/swagger-ui/**")<% if (authenticationType == 'oauth2') { %>
             .antMatchers("/api/register")
-            .antMatchers("/api/activate")<% } %>
+            .antMatchers("/api/activate")
+            .antMatchers("/api/account/reset_password/init")
+            .antMatchers("/api/account/reset_password/finish")<% } %>
             .antMatchers("/test/**")<% if (devDatabaseType != 'h2Memory') { %>;<% } else { %>
             .antMatchers("/console/**");<% } %>
     }<% if (authenticationType == 'session' || authenticationType == 'xauth') { %>
@@ -99,6 +101,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
         .and()
             .rememberMe()
             .rememberMeServices(rememberMeServices)
+            .rememberMeParameter("remember-me")
             .key(env.getProperty("jhipster.security.rememberme.key"))
         .and()
             .formLogin()
@@ -128,6 +131,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/api/register").permitAll()
             .antMatchers("/api/activate").permitAll()
             .antMatchers("/api/authenticate").permitAll()
+            .antMatchers("/api/account/reset_password/init").permitAll()
+            .antMatchers("/api/account/reset_password/finish").permitAll()
             .antMatchers("/api/logs/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/**").authenticated()<% if (websocket == 'spring-websocket') { %>
             .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)

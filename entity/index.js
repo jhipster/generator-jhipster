@@ -4,7 +4,7 @@ var util = require('util'),
         path = require('path'),
         yeoman = require('yeoman-generator'),
         chalk = require('chalk'),
-        _ = require('underscore.string'),
+        _s = require('underscore.string'),
         shelljs = require('shelljs'),
         scriptBase = require('../script-base');
 
@@ -12,7 +12,7 @@ var reservedWords_Java = ["ABSTRACT", "CONTINUE", "FOR", "NEW", "SWITCH", "ASSER
 
 var reservedWords_MySQL = ["ACCESSIBLE", "ADD", "ALL", "ALTER", "ANALYZE", "AND", "AS", "ASC", "ASENSITIVE", "BEFORE", "BETWEEN", "BIGINT", "BINARY", "BLOB", "BOTH", "BY", "CALL", "CASCADE", "CASE", "CHANGE", "CHAR", "CHARACTER", "CHECK", "COLLATE", "COLUMN", "CONDITION", "CONSTRAINT", "CONTINUE", "CONVERT", "CREATE", "CROSS", "CURRENT_DATE", "CURRENT_TIME", "CURRENT_TIMESTAMP", "CURRENT_USER", "CURSOR", "DATABASE", "DATABASES", "DAY_HOUR", "DAY_MICROSECOND", "DAY_MINUTE", "DAY_SECOND", "DEC", "DECIMAL", "DECLARE", "DEFAULT", "DELAYED", "DELETE", "DESC", "DESCRIBE", "DETERMINISTIC", "DISTINCT", "DISTINCTROW", "DIV", "DOUBLE", "DROP", "DUAL", "EACH", "ELSE", "ELSEIF", "ENCLOSED", "ESCAPED", "EXISTS", "EXIT", "EXPLAIN", "FALSE", "FETCH", "FLOAT", "FLOAT4", "FLOAT8", "FOR", "FORCE", "FOREIGN", "FROM", "FULLTEXT", "GRANT", "GROUP", "HAVING", "HIGH_PRIORITY", "HOUR_MICROSECOND", "HOUR_MINUTE", "HOUR_SECOND", "IF", "IGNORE", "IN", "INDEX", "INFILE", "INNER", "INOUT", "INSENSITIVE", "INSERT", "INT", "INT1", "INT2", "INT3", "INT4", "INT8", "INTEGER", "INTERVAL", "INTO", "IS", "ITERATE", "JOIN", "KEY", "KEYS", "KILL", "LEADING", "LEAVE", "LEFT", "LIKE", "LIMIT", "LINEAR", "LINES", "LOAD", "LOCALTIME", "LOCALTIMESTAMP", "LOCK", "LONG", "LONGBLOB", "LONGTEXT", "LOOP", "LOW_PRIORITY", "MASTER_SSL_VERIFY_SERVER_CERT", "MATCH", "MAXVALUE", "MEDIUMBLOB", "MEDIUMINT", "MEDIUMTEXT", "MIDDLEINT", "MINUTE_MICROSECOND", "MINUTE_SECOND", "MOD", "MODIFIES", "NATURAL", "NOT", "NO_WRITE_TO_BINLOG", "NULL", "NUMERIC", "ON", "OPTIMIZE", "OPTION", "OPTIONALLY", "OR", "ORDER", "OUT", "OUTER", "OUTFILE", "PRECISION", "PRIMARY", "PROCEDURE", "PURGE", "RANGE", "READ", "READS", "READ_WRITE", "REAL", "REFERENCES", "REGEXP", "RELEASE", "RENAME", "REPEAT", "REPLACE", "REQUIRE", "RESIGNAL", "RESTRICT", "RETURN", "REVOKE", "RIGHT", "RLIKE", "SCHEMA", "SCHEMAS", "SECOND_MICROSECOND", "SELECT", "SENSITIVE", "SEPARATOR", "SET", "SHOW", "SIGNAL", "SMALLINT", "SPATIAL", "SPECIFIC", "SQL", "SQLEXCEPTION", "SQLSTATE", "SQLWARNING", "SQL_BIG_RESULT", "SQL_CALC_FOUND_ROWS", "SQL_SMALL_RESULT", "SSL", "STARTING", "STRAIGHT_JOIN", "TABLE", "TERMINATED", "THEN", "TINYBLOB", "TINYINT", "TINYTEXT", "TO", "TRAILING", "TRIGGER", "TRUE", "UNDO", "UNION", "UNIQUE", "UNLOCK", "UNSIGNED", "UPDATE", "USAGE", "USE", "USING", "UTC_DATE", "UTC_TIME", "UTC_TIMESTAMP", "VALUES", "VARBINARY", "VARCHAR", "VARCHARACTER", "VARYING", "WHEN", "WHERE", "WHILE", "WITH", "WRITE", "XOR", "YEAR_MONTH", "ZEROFILL", "GENERAL", "IGNORE_SERVER_IDS", "MASTER_HEARTBEAT_PERIOD", "MAXVALUE", "RESIGNAL", "SIGNAL", "SLOW"];
 
-var reservedWords_Postgresql = ["ABORT", "ABS", "ABSOLUTE", "ACCESS", "ACTION", "ADA", "ADD", "ADMIN", "AFTER", "AGGREGATE", "ALIAS", "ALL", "ALLOCATE", "ALTER", "ANALYSE", "ANALYZE", "AND", "ANY", "ARE", "ARRAY", "AS", "ASC", "ASENSITIVE", "ASSERTION", "ASSIGNMENT", "ASYMMETRIC", "AT", "ATOMIC", "AUTHORIZATION", "AVG", "BACKWARD", "BEFORE", "BEGIN", "BETWEEN", "BIGINT", "BINARY", "BIT", "BITVAR", "BIT_LENGTH", "BLOB", "BOOLEAN", "BOTH", "BREADTH", "BY", "C", "CACHE", "CALL", "CALLED", "CARDINALITY", "CASCADE", "CASCADED", "CASE", "CAST", "CATALOG", "CATALOG_NAME", "CHAIN", "CHAR", "CHARACTER", "CHARACTERISTICS", "CHARACTER_LENGTH", "CHARACTER_SET_CATALOG", "CHARACTER_SET_NAME", "CHARACTER_SET_SCHEMA", "CHAR_LENGTH", "CHECK", "CHECKED", "CHECKPOINT", "CLASS", "CLASS_ORIGIN", "CLOB", "CLOSE", "CLUSTER", "COALESCE", "COBOL", "COLLATE", "COLLATION", "COLLATION_CATALOG", "COLLATION_NAME", "COLLATION_SCHEMA", "COLUMN", "COLUMN_NAME", "COMMAND_FUNCTION", "COMMAND_FUNCTION_CODE", "COMMENT", "COMMIT", "COMMITTED", "COMPLETION", "CONDITION_NUMBER", "CONNECT", "CONNECTION", "CONNECTION_NAME", "CONSTRAINT", "CONSTRAINTS", "CONSTRAINT_CATALOG", "CONSTRAINT_NAME", "CONSTRAINT_SCHEMA", "CONSTRUCTOR", "CONTAINS", "CONTINUE", "CONVERSION", "CONVERT", "COPY", "CORRESPONDING", "COUNT", "CREATE", "CREATEDB", "CREATEUSER", "CROSS", "CUBE", "CURRENT", "CURRENT_DATE", "CURRENT_PATH", "CURRENT_ROLE", "CURRENT_TIME", "CURRENT_TIMESTAMP", "CURRENT_USER", "CURSOR", "CURSOR_NAME", "CYCLE", "DATA", "DATABASE", "DATE", "DATETIME_INTERVAL_CODE", "DATETIME_INTERVAL_PRECISION", "DAY", "DEALLOCATE", "DEC", "DECIMAL", "DECLARE", "DEFAULT", "DEFERRABLE", "DEFERRED", "DEFINED", "DEFINER", "DELETE", "DELIMITER", "DELIMITERS", "DEPTH", "DEREF", "DESC", "DESCRIBE", "DESCRIPTOR", "DESTROY", "DESTRUCTOR", "DETERMINISTIC", "DIAGNOSTICS", "DICTIONARY", "DISCONNECT", "DISPATCH", "DISTINCT", "DO", "DOMAIN", "DOUBLE", "DROP", "DYNAMIC", "DYNAMIC_FUNCTION", "DYNAMIC_FUNCTION_CODE", "EACH", "ELSE", "ENCODING", "ENCRYPTED", "END", "END-EXEC", "EQUALS", "ESCAPE", "EVERY", "EXCEPT", "EXCEPTION", "EXCLUSIVE", "EXEC", "EXECUTE", "EXISTING", "EXISTS", "EXPLAIN", "EXTERNAL", "EXTRACT", "FALSE", "FETCH", "FINAL", "FIRST", "FLOAT", "FOR", "FORCE", "FOREIGN", "FORTRAN", "FORWARD", "FOUND", "FREE", "FREEZE", "FROM", "FULL", "FUNCTION", "G", "GENERAL", "GENERATED", "GET", "GLOBAL", "GO", "GOTO", "GRANT", "GRANTED", "GROUP", "GROUPING", "HANDLER", "HAVING", "HIERARCHY", "HOLD", "HOST", "HOUR", "IDENTITY", "IGNORE", "ILIKE", "IMMEDIATE", "IMMUTABLE", "IMPLEMENTATION", "IMPLICIT", "IN", "INCREMENT", "INDEX", "INDICATOR", "INFIX", "INHERITS", "INITIALIZE", "INITIALLY", "INNER", "INOUT", "INPUT", "INSENSITIVE", "INSERT", "INSTANCE", "INSTANTIABLE", "INSTEAD", "INT", "INTEGER", "INTERSECT", "INTERVAL", "INTO", "INVOKER", "IS", "ISNULL", "ISOLATION", "ITERATE", "JOIN", "K", "KEY", "KEY_MEMBER", "KEY_TYPE", "LANCOMPILER", "LANGUAGE", "LARGE", "LAST", "LATERAL", "LEADING", "LEFT", "LENGTH", "LESS", "LEVEL", "LIKE", "LIMIT", "LISTEN", "LOAD", "LOCAL", "LOCALTIME", "LOCALTIMESTAMP", "LOCATION", "LOCATOR", "LOCK", "LOWER", "M", "MAP", "MATCH", "MAX", "MAXVALUE", "MESSAGE_LENGTH", "MESSAGE_OCTET_LENGTH", "MESSAGE_TEXT", "METHOD", "MIN", "MINUTE", "MINVALUE", "MOD", "MODE", "MODIFIES", "MODIFY", "MODULE", "MONTH", "MORE", "MOVE", "MUMPS", "NAME", "NAMES", "NATIONAL", "NATURAL", "NCHAR", "NCLOB", "NEW", "NEXT", "NO", "NOCREATEDB", "NOCREATEUSER", "NONE", "NOT", "NOTHING", "NOTIFY", "NOTNULL", "NULL", "NULLABLE", "NULLIF", "NUMBER", "NUMERIC", "OBJECT", "OCTET_LENGTH", "OF", "OFF", "OFFSET", "OIDS", "OLD", "ON", "ONLY", "OPEN", "OPERATION", "OPERATOR", "OPTION", "OPTIONS", "OR", "ORDER", "ORDINALITY", "OUT", "OUTER", "OUTPUT", "OVERLAPS", "OVERLAY", "OVERRIDING", "OWNER", "PAD", "PARAMETER", "PARAMETERS", "PARAMETER_MODE", "PARAMETER_NAME", "PARAMETER_ORDINAL_POSITION", "PARAMETER_SPECIFIC_CATALOG", "PARAMETER_SPECIFIC_NAME", "PARAMETER_SPECIFIC_SCHEMA", "PARTIAL", "PASCAL", "PASSWORD", "PATH", "PENDANT", "PLACING", "PLI", "POSITION", "POSTFIX", "PRECISION", "PREFIX", "PREORDER", "PREPARE", "PRESERVE", "PRIMARY", "PRIOR", "PRIVILEGES", "PROCEDURAL", "PROCEDURE", "PUBLIC", "READ", "READS", "REAL", "RECHECK", "RECURSIVE", "REF", "REFERENCES", "REFERENCING", "REINDEX", "RELATIVE", "RENAME", "REPEATABLE", "REPLACE", "RESET", "RESTRICT", "RESULT", "RETURN", "RETURNED_LENGTH", "RETURNED_OCTET_LENGTH", "RETURNED_SQLSTATE", "RETURNS", "REVOKE", "RIGHT", "ROLE", "ROLLBACK", "ROLLUP", "ROUTINE", "ROUTINE_CATALOG", "ROUTINE_NAME", "ROUTINE_SCHEMA", "ROW", "ROWS", "ROW_COUNT", "RULE", "SAVEPOINT", "SCALE", "SCHEMA", "SCHEMA_NAME", "SCOPE", "SCROLL", "SEARCH", "SECOND", "SECTION", "SECURITY", "SELECT", "SELF", "SENSITIVE", "SEQUENCE", "SERIALIZABLE", "SERVER_NAME", "SESSION", "SESSION_USER", "SET", "SETOF", "SETS", "SHARE", "SHOW", "SIMILAR", "SIMPLE", "SIZE", "SMALLINT", "SOME", "SOURCE", "SPACE", "SPECIFIC", "SPECIFICTYPE", "SPECIFIC_NAME", "SQL", "SQLCODE", "SQLERROR", "SQLEXCEPTION", "SQLSTATE", "SQLWARNING", "STABLE", "START", "STATE", "STATEMENT", "STATIC", "STATISTICS", "STDIN", "STDOUT", "STORAGE", "STRICT", "STRUCTURE", "STYLE", "SUBCLASS_ORIGIN", "SUBLIST", "SUBSTRING", "SUM", "SYMMETRIC", "SYSID", "SYSTEM", "SYSTEM_USER", "TABLE", "TABLE_NAME", "TEMP", "TEMPLATE", "TEMPORARY", "TERMINATE", "THAN", "THEN", "TIME", "TIMESTAMP", "TIMEZONE_HOUR", "TIMEZONE_MINUTE", "TO", "TOAST", "TRAILING", "TRANSACTION", "TRANSACTIONS_COMMITTED", "TRANSACTIONS_ROLLED_BACK", "TRANSACTION_ACTIVE", "TRANSFORM", "TRANSFORMS", "TRANSLATE", "TRANSLATION", "TREAT", "TRIGGER", "TRIGGER_CATALOG", "TRIGGER_NAME", "TRIGGER_SCHEMA", "TRIM", "TRUE", "TRUNCATE", "TRUSTED", "TYPE", "UNCOMMITTED", "UNDER", "UNENCRYPTED", "UNION", "UNIQUE", "UNKNOWN", "UNLISTEN", "UNNAMED", "UNNEST", "UNTIL", "UPDATE", "UPPER", "USAGE", "USER", "USER_DEFINED_TYPE_CATALOG", "USER_DEFINED_TYPE_NAME", "USER_DEFINED_TYPE_SCHEMA", "USING", "VACUUM", "VALID", "VALIDATOR", "VALUE", "VALUES", "VARCHAR", "VARIABLE", "VARYING", "VERBOSE", "VERSION", "VIEW", "VOLATILE", "WHEN", "WHENEVER", "WHERE", "WITH", "WITHOUT", "WORK", "WRITE", "YEAR", "ZONE"];
+var reservedWords_Postgresql = ["ABORT", "ABS", "ABSOLUTE", "ACCESS", "ACTION", "ADA", "ADD", "ADMIN", "AFTER", "AGGREGATE", "ALIAS", "ALL", "ALLOCATE", "ALTER", "ANALYSE", "ANALYZE", "AND", "ANY", "ARE", "ARRAY", "AS", "ASC", "ASENSITIVE", "ASSERTION", "ASSIGNMENT", "ASYMMETRIC", "AT", "ATOMIC", "AUTHORIZATION", "AVG", "BACKWARD", "BEFORE", "BEGIN", "BETWEEN", "BIGINT", "BINARY", "BIT", "BITVAR", "BIT_LENGTH", "BLOB", "BOOLEAN", "BOTH", "BREADTH", "BY", "C", "CACHE", "CALL", "CALLED", "CARDINALITY", "CASCADE", "CASCADED", "CASE", "CAST", "CATALOG", "CATALOG_NAME", "CHAIN", "CHAR", "CHARACTER", "CHARACTERISTICS", "CHARACTER_LENGTH", "CHARACTER_SET_CATALOG", "CHARACTER_SET_NAME", "CHARACTER_SET_SCHEMA", "CHAR_LENGTH", "CHECK", "CHECKED", "CHECKPOINT", "CLASS", "CLASS_ORIGIN", "CLOB", "CLOSE", "CLUSTER", "COALESCE", "COBOL", "COLLATE", "COLLATION", "COLLATION_CATALOG", "COLLATION_NAME", "COLLATION_SCHEMA", "COLUMN", "COLUMN_NAME", "COMMAND_FUNCTION", "COMMAND_FUNCTION_CODE", "COMMENT", "COMMIT", "COMMITTED", "COMPLETION", "CONDITION_NUMBER", "CONNECT", "CONNECTION", "CONNECTION_NAME", "CONSTRAINT", "CONSTRAINTS", "CONSTRAINT_CATALOG", "CONSTRAINT_NAME", "CONSTRAINT_SCHEMA", "CONSTRUCTOR", "CONTAINS", "CONTINUE", "CONVERSION", "CONVERT", "COPY", "CORRESPONDING", "COUNT", "CREATE", "CREATEDB", "CREATEUSER", "CROSS", "CUBE", "CURRENT", "CURRENT_DATE", "CURRENT_PATH", "CURRENT_ROLE", "CURRENT_TIME", "CURRENT_TIMESTAMP", "CURRENT_USER", "CURSOR", "CURSOR_NAME", "CYCLE", "DATA", "DATABASE", "DATETIME_INTERVAL_CODE", "DATETIME_INTERVAL_PRECISION", "DAY", "DEALLOCATE", "DEC", "DECIMAL", "DECLARE", "DEFAULT", "DEFERRABLE", "DEFERRED", "DEFINED", "DEFINER", "DELETE", "DELIMITER", "DELIMITERS", "DEPTH", "DEREF", "DESC", "DESCRIBE", "DESCRIPTOR", "DESTROY", "DESTRUCTOR", "DETERMINISTIC", "DIAGNOSTICS", "DICTIONARY", "DISCONNECT", "DISPATCH", "DISTINCT", "DO", "DOMAIN", "DOUBLE", "DROP", "DYNAMIC", "DYNAMIC_FUNCTION", "DYNAMIC_FUNCTION_CODE", "EACH", "ELSE", "ENCODING", "ENCRYPTED", "END", "END-EXEC", "EQUALS", "ESCAPE", "EVERY", "EXCEPT", "EXCEPTION", "EXCLUSIVE", "EXEC", "EXECUTE", "EXISTING", "EXISTS", "EXPLAIN", "EXTERNAL", "EXTRACT", "FALSE", "FETCH", "FINAL", "FIRST", "FLOAT", "FOR", "FORCE", "FOREIGN", "FORTRAN", "FORWARD", "FOUND", "FREE", "FREEZE", "FROM", "FULL", "FUNCTION", "G", "GENERAL", "GENERATED", "GET", "GLOBAL", "GO", "GOTO", "GRANT", "GRANTED", "GROUP", "GROUPING", "HANDLER", "HAVING", "HIERARCHY", "HOLD", "HOST", "HOUR", "IDENTITY", "IGNORE", "ILIKE", "IMMEDIATE", "IMMUTABLE", "IMPLEMENTATION", "IMPLICIT", "IN", "INCREMENT", "INDEX", "INDICATOR", "INFIX", "INHERITS", "INITIALIZE", "INITIALLY", "INNER", "INOUT", "INPUT", "INSENSITIVE", "INSERT", "INSTANCE", "INSTANTIABLE", "INSTEAD", "INT", "INTEGER", "INTERSECT", "INTERVAL", "INTO", "INVOKER", "IS", "ISNULL", "ISOLATION", "ITERATE", "JOIN", "K", "KEY", "KEY_MEMBER", "KEY_TYPE", "LANCOMPILER", "LANGUAGE", "LARGE", "LAST", "LATERAL", "LEADING", "LEFT", "LENGTH", "LESS", "LEVEL", "LIKE", "LIMIT", "LISTEN", "LOAD", "LOCAL", "LOCALTIME", "LOCALTIMESTAMP", "LOCATION", "LOCATOR", "LOCK", "LOWER", "M", "MAP", "MATCH", "MAX", "MAXVALUE", "MESSAGE_LENGTH", "MESSAGE_OCTET_LENGTH", "MESSAGE_TEXT", "METHOD", "MIN", "MINUTE", "MINVALUE", "MOD", "MODE", "MODIFIES", "MODIFY", "MODULE", "MONTH", "MORE", "MOVE", "MUMPS", "NAMES", "NATIONAL", "NATURAL", "NCHAR", "NCLOB", "NEW", "NEXT", "NO", "NOCREATEDB", "NOCREATEUSER", "NONE", "NOT", "NOTHING", "NOTIFY", "NOTNULL", "NULL", "NULLABLE", "NULLIF", "NUMBER", "NUMERIC", "OBJECT", "OCTET_LENGTH", "OF", "OFF", "OFFSET", "OIDS", "OLD", "ON", "ONLY", "OPEN", "OPERATOR", "OPTION", "OPTIONS", "OR", "ORDER", "ORDINALITY", "OUT", "OUTER", "OUTPUT", "OVERLAPS", "OVERLAY", "OVERRIDING", "OWNER", "PAD", "PARAMETER", "PARAMETERS", "PARAMETER_MODE", "PARAMETER_NAME", "PARAMETER_ORDINAL_POSITION", "PARAMETER_SPECIFIC_CATALOG", "PARAMETER_SPECIFIC_NAME", "PARAMETER_SPECIFIC_SCHEMA", "PARTIAL", "PASCAL", "PASSWORD", "PATH", "PENDANT", "PLACING", "PLI", "POSITION", "POSTFIX", "PRECISION", "PREFIX", "PREORDER", "PREPARE", "PRESERVE", "PRIMARY", "PRIOR", "PRIVILEGES", "PROCEDURAL", "PROCEDURE", "PUBLIC", "READ", "READS", "REAL", "RECHECK", "RECURSIVE", "REF", "REFERENCES", "REFERENCING", "REINDEX", "RELATIVE", "RENAME", "REPEATABLE", "REPLACE", "RESET", "RESTRICT", "RESULT", "RETURN", "RETURNED_LENGTH", "RETURNED_OCTET_LENGTH", "RETURNED_SQLSTATE", "RETURNS", "REVOKE", "RIGHT", "ROLE", "ROLLBACK", "ROLLUP", "ROUTINE", "ROUTINE_CATALOG", "ROUTINE_NAME", "ROUTINE_SCHEMA", "ROW", "ROWS", "ROW_COUNT", "RULE", "SAVEPOINT", "SCALE", "SCHEMA", "SCHEMA_NAME", "SCOPE", "SCROLL", "SEARCH", "SECOND", "SECTION", "SECURITY", "SELECT", "SELF", "SENSITIVE", "SEQUENCE", "SERIALIZABLE", "SERVER_NAME", "SESSION", "SESSION_USER", "SET", "SETOF", "SETS", "SHARE", "SHOW", "SIMILAR", "SIMPLE", "SIZE", "SMALLINT", "SOME", "SOURCE", "SPACE", "SPECIFIC", "SPECIFICTYPE", "SPECIFIC_NAME", "SQL", "SQLCODE", "SQLERROR", "SQLEXCEPTION", "SQLSTATE", "SQLWARNING", "STABLE", "START", "STATE", "STATEMENT", "STATIC", "STATISTICS", "STDIN", "STDOUT", "STORAGE", "STRICT", "STRUCTURE", "STYLE", "SUBCLASS_ORIGIN", "SUBLIST", "SUBSTRING", "SUM", "SYMMETRIC", "SYSID", "SYSTEM", "SYSTEM_USER", "TABLE", "TABLE_NAME", "TEMP", "TEMPLATE", "TEMPORARY", "TERMINATE", "THAN", "THEN", "TIME", "TIMESTAMP", "TIMEZONE_HOUR", "TIMEZONE_MINUTE", "TO", "TOAST", "TRAILING", "TRANSACTION", "TRANSACTIONS_COMMITTED", "TRANSACTIONS_ROLLED_BACK", "TRANSACTION_ACTIVE", "TRANSFORM", "TRANSFORMS", "TRANSLATE", "TRANSLATION", "TREAT", "TRIGGER", "TRIGGER_CATALOG", "TRIGGER_NAME", "TRIGGER_SCHEMA", "TRIM", "TRUE", "TRUNCATE", "TRUSTED", "TYPE", "UNCOMMITTED", "UNDER", "UNENCRYPTED", "UNION", "UNIQUE", "UNKNOWN", "UNLISTEN", "UNNAMED", "UNNEST", "UNTIL", "UPDATE", "UPPER", "USAGE", "USER", "USER_DEFINED_TYPE_CATALOG", "USER_DEFINED_TYPE_NAME", "USER_DEFINED_TYPE_SCHEMA", "USING", "VACUUM", "VALID", "VALIDATOR", "VALUE", "VALUES", "VARCHAR", "VARIABLE", "VARYING", "VERBOSE", "VERSION", "VIEW", "VOLATILE", "WHEN", "WHENEVER", "WHERE", "WITH", "WITHOUT", "WRITE", "YEAR", "ZONE"];
 
 var reservedWords_Cassandra = ["ADD", "ALL", "ALTER", "AND", "ANY", "APPLY", "AS", "ASC", "ASCII", "AUTHORIZE", "BATCH", "BEGIN", "BIGINT", "BLOB", "BOOLEAN", "BY", "CLUSTERING", "COLUMNFAMILY", "COMPACT", "CONSISTENCY", "COUNT", "COUNTER", "CREATE", "DECIMAL", "DELETE", "DESC", "DOUBLE", "DROP", "EACH_QUORUM", "FLOAT", "FROM", "GRANT", "IN", "INDEX", "CUSTOM", "INSERT", "INT", "INTO", "KEY", "KEYSPACE", "LEVEL", "LIMIT", "LOCAL_ONE", "LOCAL_QUORUM", "MODIFY", "NORECURSIVE", "NOSUPERUSER", "OF", "ON", "ONE", "ORDER", "PASSWORD", "PERMISSION", "PERMISSIONS", "PRIMARY", "QUORUM", "REVOKE", "SCHEMA", "SELECT", "SET", "STORAGE", "SUPERUSER", "TABLE", "TEXT", "TIMESTAMP", "TIMEUUID", "THREE", "TOKEN", "TRUNCATE", "TTL", "TWO", "TYPE", "UPDATE", "USE", "USER", "USERS", "USING", "UUID", "VALUES", "VARCHAR", "VARINT", "WHERE", "WITH", "WRITETIME", "DISTINCT", "BYTE", "SMALLINT", "COMPLEX", "ENUM", "DATE", "INTERVAL", "MACADDR", "BITSTRING"];
 
@@ -29,10 +29,12 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.databaseType = this.config.get('databaseType');
     databaseType = this.databaseType;
     this.prodDatabaseType = this.config.get('prodDatabaseType');
+    this.searchEngine = this.config.get('searchEngine');
     prodDatabaseType = this.prodDatabaseType;
-    this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
+    this.buildTool = this.config.get('buildTool');
+    this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
     this.jhipsterConfigDirectory = '.jhipster';
-    this.filename = this.jhipsterConfigDirectory + '/' + _.capitalize(this.name) + '.json';
+    this.filename = this.jhipsterConfigDirectory + '/' + _s.capitalize(this.name) + '.json';
     if (shelljs.test('-f', this.filename)) {
         console.log(chalk.green('Found the ' + this.filename + ' configuration file, automatically generating the entity'));
         try {
@@ -43,6 +45,29 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
         }
         this.useConfigurationFile = true;
     }
+    if (!(/^([a-zA-Z0-9_]*)$/.test(this.name))) {
+        console.log(chalk.red('The entity name cannot contain special characters'));
+        throw new Error("Validation error");
+    } else if (this.name == '') {
+        console.log(chalk.red('The entity name cannot be empty'));
+        throw new Error("Validation error");
+    } else if (this.name.indexOf("Detail", this.name.length - "Detail".length) !== -1) {
+        console.log(chalk.red('The entity name cannot end with \'Detail\''));
+        throw new Error("Validation error");
+    } else if (reservedWords_Java.indexOf(this.name.toUpperCase()) != -1) {
+        console.log(chalk.red('The entity name cannot contain a Java reserved keyword'));
+        throw new Error("Validation error");
+    } else if (prodDatabaseType == 'mysql' && reservedWords_MySQL.indexOf(this.name.toUpperCase()) != -1) {
+        console.log(chalk.red('The entity name cannot contain a MySQL reserved keyword'));
+        throw new Error("Validation error");
+    } else if (prodDatabaseType == 'postgresql' && reservedWords_Postgresql.indexOf(this.name.toUpperCase()) != -1) {
+        console.log(chalk.red('The entity name cannot contain a PostgreSQL reserved keyword'));
+        throw new Error("Validation error");
+    } else if (prodDatabaseType == 'cassandra' && reservedWords_Cassandra.indexOf(this.name.toUpperCase()) != -1) {
+        console.log(chalk.red('The entity name cannot contain a Cassandra reserved keyword'));
+        throw new Error("Validation error");
+    }
+
     console.log(chalk.red('The entity ' + this.name + ' is being created.'));
     // Specific Entity sub-generator variables
     this.fieldId = 0;
@@ -53,11 +78,13 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.fieldsContainCustomTime = false;
     this.fieldsContainBigDecimal = false;
     this.fieldsContainOwnerManyToMany = false;
+    this.fieldsContainOwnerOneToOne = false;
     this.fieldsContainOneToMany = false;
     this.relationshipId = 0;
     this.relationships = [];
     this.pagination = 'no';
     this.validation = false;
+    this.dto = 'no';
 };
 
 var fieldNamesUnderscored = ['id'];
@@ -92,7 +119,9 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     return 'Your field name cannot contain special characters';
                 } else if (input == '') {
                     return 'Your field name cannot be empty';
-                } else if (input == 'id' || fieldNamesUnderscored.indexOf(_.underscored(input)) != -1) {
+                } else if (input.charAt(0) == input.charAt(0).toUpperCase()) {
+                    return 'Your field name cannot start with a upper case letter';
+                } else if (input == 'id' || fieldNamesUnderscored.indexOf(_s.underscored(input)) != -1) {
                     return 'Your field name cannot use an already existing field name';
                 } else if (reservedWords_Java.indexOf(input.toUpperCase()) != -1) {
                     return 'Your field name cannot contain a Java reserved keyword';
@@ -344,17 +373,17 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 if (firstLetter == firstLetter.toLowerCase() && secondLetter == secondLetter.toUpperCase()) {
                     fieldInJavaBeanMethod  = firstLetter.toLowerCase() + fieldInJavaBeanMethod.slice(1);
                 } else {
-                    fieldInJavaBeanMethod = _.capitalize(props.fieldName);
+                    fieldInJavaBeanMethod = _s.capitalize(props.fieldName);
                 }
             } else {
-                fieldInJavaBeanMethod = _.capitalize(props.fieldName);
+                fieldInJavaBeanMethod = _s.capitalize(props.fieldName);
             }
 
             var field = {fieldId: this.fieldId,
                 fieldName: props.fieldName,
                 fieldType: props.fieldType,
-                fieldNameCapitalized: _.capitalize(props.fieldName),
-                fieldNameUnderscored: _.underscored(props.fieldName),
+                fieldNameCapitalized: _s.capitalize(props.fieldName),
+                fieldNameUnderscored: _s.underscored(props.fieldName),
                 fieldInJavaBeanMethod: fieldInJavaBeanMethod,
                 fieldValidate: props.fieldValidate,
                 fieldValidateRules: props.fieldValidateRules,
@@ -365,7 +394,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 fieldValidateRulesMax: props.fieldValidateRulesMax
                 }
 
-            fieldNamesUnderscored.push(_.underscored(props.fieldName));
+            fieldNamesUnderscored.push(_s.underscored(props.fieldName));
             this.fields.push(field);
             if (props.fieldType == 'LocalDate') {
                 this.fieldsContainLocalDate = true;
@@ -386,7 +415,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 this.validation = true;
             }
         }
-        console.log(chalk.red('=================' + _.capitalize(this.name) + '================='));
+        console.log(chalk.red('=================' + _s.capitalize(this.name) + '================='));
         for (var id in this.fields) {
             var validationDetails = '';
             if (this.fields[id].fieldValidate == true) {
@@ -427,6 +456,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
         return;
     }
     var packageFolder = this.packageFolder;
+    var name = this.name;
     var cb = this.async();
     this.relationshipId++;
     console.log(chalk.green('Generating relationships with other entities'));
@@ -444,8 +474,14 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             type: 'input',
             name: 'otherEntityName',
             validate: function (input) {
-                if ((/^([a-zA-Z0-9_]*)$/.test(input)) && input != '') return true;
-                return 'Your other entity cannot contain special characters';
+                if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
+                    return 'Your other entity name cannot contain special characters';
+                } else if (input == '') {
+                    return 'Your other entity name cannot be empty';
+                } else if (reservedWords_Java.indexOf(input.toUpperCase()) != -1) {
+                    return 'Your other entity name cannot contain a Java reserved keyword';
+                }
+                return true;
             },
             message: 'What is the name of the other entity?'
         },
@@ -456,12 +492,20 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             type: 'input',
             name: 'relationshipName',
             validate: function (input) {
-                if ((/^([a-zA-Z0-9_]*)$/.test(input)) && input != '' && input != 'id' && fieldNamesUnderscored.indexOf(_.underscored(input)) == -1) return true;
-                return 'Your relationship name cannot contain special characters or use an already existing field name';
+                if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
+                    return 'Your relationship cannot contain special characters';
+                } else if (input == '') {
+                    return 'Your relationship cannot be empty';
+                } else if (input == 'id' || fieldNamesUnderscored.indexOf(_s.underscored(input)) != -1) {
+                    return 'Your relationship cannot use an already existing field name';
+                } else if (reservedWords_Java.indexOf(input.toUpperCase()) != -1) {
+                    return 'Your relationship cannot contain a Java reserved keyword';
+                }
+                return true;
             },
             message: 'What is the name of the relationship?',
             default: function (response) {
-                 return response.otherEntityName;
+                 return response.otherEntityName.charAt(0).toLowerCase() + response.otherEntityName.slice(1);
             }
         },
         {
@@ -493,7 +537,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
         },
         {
             when: function(response) {
-                return (response.relationshipAdd == true && response.relationshipType == 'many-to-one' && !shelljs.test('-f', 'src/main/java/' + packageFolder + '/domain/' + _.capitalize(response.otherEntityName) + '.java'))
+                return (response.relationshipAdd == true && response.relationshipType == 'many-to-one' && !shelljs.test('-f', 'src/main/java/' + packageFolder + '/domain/' + _s.capitalize(response.otherEntityName) + '.java'))
             },
             type: 'confirm',
             name: 'noOtherEntity',
@@ -510,8 +554,21 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             default: false
         },
         {
+            when: function (response) {
+                return (response.relationshipAdd == true && (response.relationshipType == 'one-to-many' ||
+                    (response.relationshipType == 'many-to-many' && response.ownerSide == false) ||
+                    (response.relationshipType == 'one-to-one' && response.ownerSide == false)));
+            },
+            type: 'input',
+            name: 'otherEntityRelationshipName',
+            message: 'What is the name of this relationship in the other entity?',
+            default: function (response) {
+                 return name.charAt(0).toLowerCase() + name.slice(1);
+            }
+        },
+        {
             when: function(response) {
-                return (response.relationshipAdd == true && response.ownerSide == true && !shelljs.test('-f', 'src/main/java/' + packageFolder + '/domain/' + _.capitalize(response.otherEntityName) + '.java'))
+                return (response.relationshipAdd == true && response.ownerSide == true && !shelljs.test('-f', 'src/main/java/' + packageFolder + '/domain/' + _s.capitalize(response.otherEntityName) + '.java'))
             },
             type: 'confirm',
             name: 'noOtherEntity2',
@@ -538,24 +595,28 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
         if (props.relationshipAdd) {
             var relationship = {relationshipId: this.relationshipId,
                 relationshipName: props.relationshipName,
-                relationshipNameCapitalized: _.capitalize(props.relationshipName),
+                relationshipNameCapitalized: _s.capitalize(props.relationshipName),
                 relationshipFieldName: props.relationshipName.charAt(0).toLowerCase() + props.relationshipName.slice(1),
                 otherEntityName: props.otherEntityName.charAt(0).toLowerCase() + props.otherEntityName.slice(1),
                 relationshipType: props.relationshipType,
-                otherEntityNameCapitalized: _.capitalize(props.otherEntityName),
+                otherEntityNameCapitalized: _s.capitalize(props.otherEntityName),
                 otherEntityField: props.otherEntityField,
-                ownerSide: props.ownerSide
+                ownerSide: props.ownerSide,
+                otherEntityRelationshipName: props.otherEntityRelationshipName
             }
             if (props.relationshipType == 'many-to-many' && props.ownerSide == true) {
                 this.fieldsContainOwnerManyToMany = true;
             }
+            if (props.relationshipType == 'one-to-one' && props.ownerSide == true) {
+                this.fieldsContainOwnerOneToOne = true;
+            }
             if (props.relationshipType == 'one-to-many') {
                 this.fieldsContainOneToMany = true;
             }
-            fieldNamesUnderscored.push(_.underscored(props.relationshipName));
+            fieldNamesUnderscored.push(_s.underscored(props.relationshipName));
             this.relationships.push(relationship);
         }
-        console.log(chalk.red('===========' + _.capitalize(this.name) + '=============='));
+        console.log(chalk.red('===========' + _s.capitalize(this.name) + '=============='));
         for (var id in this.fields) {
             console.log(chalk.red(this.fields[id].fieldName + ' (' + this.fields[id].fieldType + ')'));
         }
@@ -568,6 +629,41 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
         } else {
             cb();
         }
+    }.bind(this));
+};
+
+EntityGenerator.prototype.askForDTO = function askForDTO() {
+    if (this.useConfigurationFile == true) { // don't prompt if data are imported from a file
+        return;
+    }
+    if (this.javaVersion == '7') {
+        return;
+    }
+    if (this.buildTool == 'gradle') {
+        return;
+    }
+    var cb = this.async();
+    var prompts = [
+        {
+            type: 'list',
+            name: 'dto',
+            message: 'Do you want to use a Data Transfer Object (DTO)?',
+            choices: [
+                {
+                    value: 'no',
+                    name: 'No, use the entity directly'
+                },
+                {
+                    value: 'mapstruct',
+                    name: '[BETA] Yes, generate a DTO with MapStruct'
+                }
+            ],
+            default: 0
+        }
+    ];
+    this.prompt(prompts, function (props) {
+        this.dto = props.dto;
+        cb();
     }.bind(this));
 };
 
@@ -612,7 +708,6 @@ EntityGenerator.prototype.askForPagination = function askForPagination() {
     }.bind(this));
 };
 
-
 EntityGenerator.prototype.files = function files() {
     if (this.databaseType == "sql" || this.databaseType == "cassandra") {
         this.changelogDate = this.dateFormatForLiquibase();
@@ -623,6 +718,7 @@ EntityGenerator.prototype.files = function files() {
         this.data.fields = this.fields;
         this.data.fieldNamesUnderscored = this.fieldNamesUnderscored;
         this.data.fieldsContainOwnerManyToMany = this.fieldsContainOwnerManyToMany;
+        this.data.fieldsContainOwnerOneToOne = this.fieldsContainOwnerOneToOne;
         this.data.fieldsContainOneToMany = this.fieldsContainOneToMany;
         this.data.fieldsContainLocalDate = this.fieldsContainLocalDate;
         this.data.fieldsContainCustomTime = this.fieldsContainCustomTime;
@@ -630,14 +726,28 @@ EntityGenerator.prototype.files = function files() {
         this.data.fieldsContainDateTime = this.fieldsContainDateTime;
         this.data.fieldsContainDate = this.fieldsContainDate;
         this.data.changelogDate = this.changelogDate;
+        this.data.dto = this.dto;
         this.data.pagination = this.pagination;
         this.data.validation = this.validation;
         this.write(this.filename, JSON.stringify(this.data, null, 4));
     } else  {
         this.relationships = this.fileData.relationships;
+        for (var relationshipIdx in this.relationships) {
+            var relationship = this.relationships[relationshipIdx];
+            if (relationship.otherEntityRelationshipName == null) {
+                relationship.otherEntityRelationshipName = this.name.charAt(0).toLowerCase() + this.name.slice(1);
+            }
+        }
         this.fields = this.fileData.fields;
+        for (var fieldIdx in this.fields) {
+            var field = this.fields[fieldIdx];
+            if (field.fieldInJavaBeanMethod == null) {
+                field.fieldInJavaBeanMethod = _s.capitalize(field.fieldName);
+            }
+        }
         this.fieldNamesUnderscored = this.fileData.fieldNamesUnderscored;
         this.fieldsContainOwnerManyToMany = this.fileData.fieldsContainOwnerManyToMany;
+        this.fieldsContainOwnerOneToOne = this.fileData.fieldsContainOwnerOneToOne;
         this.fieldsContainOneToMany = this.fileData.fieldsContainOneToMany;
         this.fieldsContainLocalDate = this.fileData.fieldsContainLocalDate;
         this.fieldsContainCustomTime = this.fileData.fieldsContainCustomTime;
@@ -648,8 +758,12 @@ EntityGenerator.prototype.files = function files() {
         for (var idx in this.relationships) {
           var rel = this.relationships[idx];
           rel.relationshipName = rel.relationshipName || rel.otherEntityName;
-          rel.relationshipNameCapitalized = rel.relationshipNameCapitalized || _.capitalize(rel.relationshipName);
+          rel.relationshipNameCapitalized = rel.relationshipNameCapitalized || _s.capitalize(rel.relationshipName);
           rel.relationshipFieldName = rel.relationshipFieldName || rel.relationshipName.charAt(0).toLowerCase() + rel.relationshipName.slice(1);
+        }
+        this.dto = this.fileData.dto;
+        if (this.dto == undefined) {
+            this.dto = 'no';
         }
         this.pagination = this.fileData.pagination;
         if (this.pagination == undefined) {
@@ -660,16 +774,21 @@ EntityGenerator.prototype.files = function files() {
             this.validation = false;
         }
     }
-    this.entityClass = _.capitalize(this.name);
+    this.entityClass = _s.capitalize(this.name);
     this.entityInstance = this.name.charAt(0).toLowerCase() + this.name.slice(1);
 
     this.differentTypes = [this.entityClass];
     var relationshipId;
     for (relationshipId in this.relationships) {
-      var entityType = this.relationships[relationshipId].otherEntityNameCapitalized;
-      if (this.differentTypes.indexOf(entityType) == -1) {
-        this.differentTypes.push(entityType);
-      }
+        var entityType = this.relationships[relationshipId].otherEntityNameCapitalized;
+        if (this.differentTypes.indexOf(entityType) == -1) {
+            this.differentTypes.push(entityType);
+        }
+        if (this.relationships[relationshipId].otherEntityField != null) {
+            this.relationships[relationshipId].otherEntityFieldCapitalized =
+            this.relationships[relationshipId].otherEntityField.charAt(0).toUpperCase() +
+            this.relationships[relationshipId].otherEntityField.slice(1);
+        }
     }
 
     var insight = this.insight();
@@ -686,8 +805,21 @@ EntityGenerator.prototype.files = function files() {
     this.template('src/main/java/package/repository/_EntityRepository.java',
         'src/main/java/' + this.packageFolder + '/repository/' +    this.entityClass + 'Repository.java', this, {});
 
+    if (this.searchEngine == 'elasticsearch') {
+        this.template('src/main/java/package/repository/search/_EntitySearchRepository.java',
+            'src/main/java/' + this.packageFolder + '/repository/search/' +    this.entityClass + 'SearchRepository.java', this, {});
+    }
+
     this.template('src/main/java/package/web/rest/_EntityResource.java',
         'src/main/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'Resource.java', this, {});
+
+    if (this.dto == 'mapstruct') {
+        this.template('src/main/java/package/web/rest/dto/_EntityDTO.java',
+            'src/main/java/' + this.packageFolder + '/web/rest/dto/' +    this.entityClass + 'DTO.java', this, {});
+
+        this.template('src/main/java/package/web/rest/mapper/_EntityMapper.java',
+            'src/main/java/' + this.packageFolder + '/web/rest/mapper/' +    this.entityClass + 'Mapper.java', this, {});
+    }
 
     if (this.databaseType == "sql") {
         this.template(resourceDir + '/config/liquibase/changelog/_added_entity.xml',
@@ -722,6 +854,12 @@ EntityGenerator.prototype.files = function files() {
         'src/main/webapp/scripts/components/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js', this, {});
     this.addComponentsScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.service' + '.js');
 
+    if (this.searchEngine == 'elasticsearch') {
+        this.template('src/main/webapp/components/_entity-search-service.js',
+            'src/main/webapp/scripts/components/entities/' + this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js', this, {});
+        this.addComponentsScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js');
+    }
+
     this.template('src/test/java/package/web/rest/_EntityResourceTest.java',
         'src/test/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'ResourceTest.java', this, {});
 
@@ -730,21 +868,22 @@ EntityGenerator.prototype.files = function files() {
 
     // Copy for each
     this.copyI18n('ca');
+    this.copyI18n('zh-cn');
+    this.copyI18n('zh-tw');
     this.copyI18n('da');
     this.copyI18n('de');
     this.copyI18n('en');
-    this.copyI18n('es');
     this.copyI18n('fr');
+    this.copyI18n('hu');
+    this.copyI18n('it');
     this.copyI18n('ja');
     this.copyI18n('kr');
-    this.copyI18n('hu');
     this.copyI18n('pl');
     this.copyI18n('pt-br');
     this.copyI18n('ru');
-    this.copyI18n('sw');
+    this.copyI18n('es');
+    this.copyI18n('sv');
     this.copyI18n('tr');
-    this.copyI18n('zh-cn');
-    this.copyI18n('zh-tw');
 };
 
 EntityGenerator.prototype.copyI18n = function(language) {

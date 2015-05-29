@@ -40,7 +40,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         '             | |  / /\\  \\ \\  /  / /\\      | | \\ | |_  \\ \\  / ( (`       \n' +
         '           \\_|_| /_/--\\  \\_\\/  /_/--\\     |_|_/ |_|__  \\_\\/  _)_)       \n'));
 
-    console.log('\nWelcome to the JHipster Generator\n');
+    console.log('\nWelcome to the JHipster Generator v' + packagejs.version + '\n');
     var insight = this.insight();
 
     var prompts = [
@@ -60,7 +60,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 if (/^([a-zA-Z0-9_]*)$/.test(input)) return true;
                 return 'Your application name cannot contain special characters or a blank space, using the default name instead';
             },
-            message: '(1/13) What is the base name of your application?',
+            message: '(1/14) What is the base name of your application?',
             default: 'jhipster'
         },
         {
@@ -70,13 +70,13 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 if (/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)) return true;
                 return 'The package name you have provided is not a valid Java package name.';
             },
-            message: '(2/13) What is your default Java package name?',
+            message: '(2/14) What is your default Java package name?',
             default: 'com.mycompany.myapp'
         },
         {
             type: 'list',
             name: 'javaVersion',
-            message: '(3/13) Do you want to use Java 8?',
+            message: '(3/14) Do you want to use Java 8?',
             choices: [
                 {
                     value: '8',
@@ -84,7 +84,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 },
                 {
                     value: '7',
-                    name: 'No (use Java 7)'
+                    name: 'No (use Java 7 - Warning! Cassandra and ElasticSearch support will not be available)'
                 }
             ],
             default: 0
@@ -92,7 +92,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'authenticationType',
-            message: '(4/13) Which *type* of authentication would you like to use?',
+            message: '(4/14) Which *type* of authentication would you like to use?',
             choices: [
                 {
                     value: 'session',
@@ -115,7 +115,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'databaseType',
-            message: '(5/13) Which *type* of database would you like to use?',
+            message: '(5/14) Which *type* of database would you like to use?',
             choices: [
                 {
                     value: 'sql',
@@ -138,7 +138,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'databaseType',
-            message: '(5/13) Which *type* of database would you like to use? (Note that you cannot choose Cassandra as you selected either OAuth2 authentication or Java 7, which are not supported)',
+            message: '(5/14) Which *type* of database would you like to use? (Note that you cannot choose Cassandra as you selected either OAuth2 authentication or Java 7, which are not supported)',
             choices: [
                 {
                     value: 'sql',
@@ -157,7 +157,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'prodDatabaseType',
-            message: '(6/13) Which *production* database would you like to use?',
+            message: '(6/14) Which *production* database would you like to use?',
             choices: [
                 {
                     value: 'mysql',
@@ -176,7 +176,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'devDatabaseType',
-            message: '(7/13) Which *development* database would you like to use?',
+            message: '(7/14) Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'h2Memory',
@@ -195,7 +195,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'devDatabaseType',
-            message: '(7/13) Which *development* database would you like to use?',
+            message: '(7/14) Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'h2Memory',
@@ -214,7 +214,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'hibernateCache',
-            message: '(8/13) Do you want to use Hibernate 2nd level cache?',
+            message: '(8/14) Do you want to use Hibernate 2nd level cache?',
             choices: [
                 {
                     value: 'no',
@@ -232,9 +232,28 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             default: 1
         },
         {
+            when: function (response) {
+                return (!(response.javaVersion == '7') && response.databaseType == 'sql');
+            },
+            type: 'list',
+            name: 'searchEngine',
+            message: '(9/14) Do you want to use a search engine in your application?',
+            choices: [
+                {
+                    value: 'no',
+                    name: 'No'
+                },
+                {
+                    value: 'elasticsearch',
+                    name: 'Yes, with ElasticSearch'
+                }
+            ],
+            default: 0
+        },
+        {
             type: 'list',
             name: 'clusteredHttpSession',
-            message: '(9/13) Do you want to use clustered HTTP sessions?',
+            message: '(10/14) Do you want to use clustered HTTP sessions?',
             choices: [
                 {
                     value: 'no',
@@ -250,7 +269,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'websocket',
-            message: '(10/13) Do you want to use WebSockets?',
+            message: '(11/14) Do you want to use WebSockets?',
             choices: [
                 {
                     value: 'no',
@@ -266,7 +285,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'buildTool',
-            message: '(11/13) Would you like to use Maven or Gradle for building the backend?',
+            message: '(12/14) Would you like to use Maven or Gradle for building the backend?',
             choices: [
                 {
                     value: 'maven',
@@ -292,13 +311,13 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                     name: 'Gulp.js'
                 }
             ],
-            message: '(12/13) Would you like to use Grunt or Gulp.js for building the frontend?',
+            message: '(13/14) Would you like to use Grunt or Gulp.js for building the frontend?',
             default: 'grunt'
         },
         {
             type: 'confirm',
             name: 'useCompass',
-            message: '(13/13) Would you like to use the Compass CSS Authoring Framework?',
+            message: '(14/14) Would you like to use the Compass CSS Authoring Framework?',
             default: false
         }
     ];
@@ -307,6 +326,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     this.packageName = this.config.get('packageName');
     this.authenticationType = this.config.get('authenticationType');
     this.clusteredHttpSession = this.config.get('clusteredHttpSession');
+    this.searchEngine = this.config.get('searchEngine');
     this.websocket = this.config.get('websocket');
     this.databaseType = this.config.get('databaseType');
     if (this.databaseType == 'mongodb') {
@@ -338,6 +358,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         this.databaseType != null &&
         this.devDatabaseType != null &&
         this.prodDatabaseType != null &&
+        this.searchEngine != null &&
         this.useCompass != null &&
         this.buildTool != null &&
         this.frontendBuilder != null &&
@@ -366,6 +387,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             this.databaseType = props.databaseType;
             this.devDatabaseType = props.devDatabaseType;
             this.prodDatabaseType = props.prodDatabaseType;
+            this.searchEngine = props.searchEngine;
             this.useCompass = props.useCompass;
             this.buildTool = props.buildTool;
             this.frontendBuilder = props.frontendBuilder;
@@ -380,6 +402,9 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 this.devDatabaseType = 'cassandra';
                 this.prodDatabaseType = 'cassandra';
                 this.hibernateCache = 'no';
+            }
+            if (this.searchEngine == null) {
+                this.searchEngine = 'no';
             }
 
             cb();
@@ -397,6 +422,7 @@ JhipsterGenerator.prototype.app = function app() {
     insight.track('app/databaseType', this.databaseType);
     insight.track('app/devDatabaseType', this.devDatabaseType);
     insight.track('app/prodDatabaseType', this.prodDatabaseType);
+    insight.track('app/searchEngine', this.searchEngine);
     insight.track('app/useCompass', this.useCompass);
     insight.track('app/buildTool', this.buildTool);
     insight.track('app/frontendBuilder', this.frontendBuilder);
@@ -406,6 +432,7 @@ JhipsterGenerator.prototype.app = function app() {
     var javaDir = 'src/main/java/' + packageFolder + '/';
     var resourceDir = 'src/main/resources/';
     var webappDir = 'src/main/webapp/';
+    var interpolateRegex = /<%=([\s\S]+?)%>/g; // so that tags in templates do not get mistreated as _ templates
 
     // Remove old files
 
@@ -435,9 +462,9 @@ JhipsterGenerator.prototype.app = function app() {
             this.template('_settings.gradle', 'settings.gradle', this, {});
             this.template('_gradle.properties', 'gradle.properties', this, {});
             this.template('_yeoman.gradle', 'yeoman.gradle', this, {});
-            this.template('_profile_dev.gradle', 'profile_dev.gradle', this, { 'interpolate': /<%=([\s\S]+?)%>/g });
-            this.template('_profile_prod.gradle', 'profile_prod.gradle', this, { 'interpolate': /<%=([\s\S]+?)%>/g });
-            this.template('_profile_fast.gradle', 'profile_fast.gradle', this, { 'interpolate': /<%=([\s\S]+?)%>/g });
+            this.template('_profile_dev.gradle', 'profile_dev.gradle', this, { 'interpolate': interpolateRegex });
+            this.template('_profile_prod.gradle', 'profile_prod.gradle', this, { 'interpolate': interpolateRegex });
+            this.template('_profile_fast.gradle', 'profile_fast.gradle', this, { 'interpolate': interpolateRegex });
             this.template('_gatling.gradle', 'gatling.gradle', this, {});
           if (this.databaseType == "sql") {
             this.template('_liquibase.gradle', 'liquibase.gradle', this, {});
@@ -449,7 +476,7 @@ JhipsterGenerator.prototype.app = function app() {
             break;
         case 'maven':
         default :
-            this.template('_pom.xml', 'pom.xml', null, { 'interpolate': /<%=([\s\S]+?)%>/g });
+            this.template('_pom.xml', 'pom.xml', null, { 'interpolate': interpolateRegex });
     }
 
     // Create Java resource files
@@ -466,7 +493,7 @@ JhipsterGenerator.prototype.app = function app() {
     // Thymeleaf templates
     this.copy(resourceDir + '/templates/error.html', resourceDir + 'templates/error.html');
 
-    this.template(resourceDir + '_logback.xml', resourceDir + 'logback.xml', this, { 'interpolate': /<%=([\s\S]+?)%>/g });
+    this.template(resourceDir + '_logback.xml', resourceDir + 'logback.xml', this, { 'interpolate': interpolateRegex });
 
     this.template(resourceDir + '/config/_application.yml', resourceDir + 'config/application.yml', this, {});
     this.template(resourceDir + '/config/_application-dev.yml', resourceDir + 'config/application-dev.yml', this, {});
@@ -497,6 +524,7 @@ JhipsterGenerator.prototype.app = function app() {
 
     // Create mail templates
     this.copy(resourceDir + '/mails/activationEmail.html', resourceDir + 'mails/activationEmail.html');
+    this.copy(resourceDir + '/mails/passwordResetEmail.html', resourceDir + 'mails/passwordResetEmail.html');
 
     // Create Java files
     this.template('src/main/java/package/_Application.java', javaDir + '/Application.java', this, {});
@@ -598,6 +626,10 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/domain/util/_CustomDateTimeDeserializer.java', javaDir + 'domain/util/CustomDateTimeDeserializer.java', this, {});
     this.template('src/main/java/package/domain/util/_ISO8601LocalDateDeserializer.java', javaDir + 'domain/util/ISO8601LocalDateDeserializer.java', this, {});
 
+    if (this.searchEngine == 'elasticsearch') {
+        this.template('src/main/java/package/repository/search/_package-info.java', javaDir + 'repository/search/package-info.java', this, {});
+        this.template('src/main/java/package/repository/search/_UserSearchRepository.java', javaDir + 'repository/search/UserSearchRepository.java', this, {});
+    }
     this.template('src/main/java/package/repository/_package-info.java', javaDir + 'repository/package-info.java', this, {});
     if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
         this.template('src/main/java/package/repository/_AuthorityRepository.java', javaDir + 'repository/AuthorityRepository.java', this, {});
@@ -700,7 +732,7 @@ JhipsterGenerator.prototype.app = function app() {
     }
     this.template('src/test/java/package/security/_SecurityUtilsTest.java', testDir + 'security/SecurityUtilsTest.java', this, {});
     if (this.databaseType == "sql" || this.databaseType == "mongodb") {
-    this.template('src/test/java/package/service/_UserServiceTest.java', testDir + 'service/UserServiceTest.java', this, {});
+        this.template('src/test/java/package/service/_UserServiceTest.java', testDir + 'service/UserServiceTest.java', this, {});
     }
     this.template('src/test/java/package/web/rest/_AccountResourceTest.java', testDir + 'web/rest/AccountResourceTest.java', this, {});
     this.template('src/test/java/package/web/rest/_TestUtil.java', testDir + 'web/rest/TestUtil.java', this, {});
@@ -781,6 +813,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/scripts/components/util/_base64.service.js', webappDir + 'scripts/components/util/base64.service.js', this, {});
     this.template(webappDir + '/scripts/components/util/_parse-links.service.js', webappDir + 'scripts/components/util/parse-links.service.js', this, {});
     this.template(webappDir + '/scripts/components/util/_truncate.filter.js', webappDir + 'scripts/components/util/truncate.filter.js', this, {});
+    this.template(webappDir + '/scripts/components/util/_dateutil.service.js', webappDir + 'scripts/components/util/dateutil.service.js', this, {});
 
     // Client App
     this.template(webappDir + '/scripts/app/account/_account.js', webappDir + 'scripts/app/account/account.js', this, {});
@@ -799,6 +832,12 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(webappDir + '/scripts/app/account/register/register.html', webappDir + 'scripts/app/account/register/register.html');
     this.template(webappDir + '/scripts/app/account/register/_register.js', webappDir + 'scripts/app/account/register/register.js', this, {});
     this.template(webappDir + '/scripts/app/account/register/_register.controller.js', webappDir + 'scripts/app/account/register/register.controller.js', this, {});
+    this.copy(webappDir + '/scripts/app/account/reset/request/reset.request.html', webappDir + 'scripts/app/account/reset/request/reset.request.html');
+    this.template(webappDir + '/scripts/app/account/reset/request/_reset.request.js', webappDir + 'scripts/app/account/reset/request/reset.request.js', this, {});
+    this.template(webappDir + '/scripts/app/account/reset/request/_reset.request.controller.js', webappDir + 'scripts/app/account/reset/request/reset.request.controller.js', this, {});
+    this.copy(webappDir + '/scripts/app/account/reset/finish/reset.finish.html', webappDir + 'scripts/app/account/reset/finish/reset.finish.html');
+    this.template(webappDir + '/scripts/app/account/reset/finish/_reset.finish.js', webappDir + 'scripts/app/account/reset/finish/reset.finish.js', this, {});
+    this.template(webappDir + '/scripts/app/account/reset/finish/_reset.finish.controller.js', webappDir + 'scripts/app/account/reset/finish/reset.finish.controller.js', this, {});
     if (this.authenticationType == 'session') {
         this.copy(webappDir + '/scripts/app/account/sessions/sessions.html', webappDir + 'scripts/app/account/sessions/sessions.html');
         this.template(webappDir + '/scripts/app/account/sessions/_sessions.js', webappDir + 'scripts/app/account/sessions/sessions.js', this, {});
@@ -846,15 +885,15 @@ JhipsterGenerator.prototype.app = function app() {
     // Create Test Javascript files
     var testJsDir = 'src/test/javascript/';
     this.template(testJsDir + '_karma.conf.js', testJsDir + 'karma.conf.js');
-    this.template(testJsDir + 'spec/app/account/admin/health/_healthControllerSpec.js', testJsDir + 'spec/app/account/health/healthControllerSpec.js', this, {});
-    this.template(testJsDir + 'spec/app/account/login/_loginControllerSpec.js', testJsDir + 'spec/app/account/login/loginControllerSpec.js', this, {});
-    this.template(testJsDir + 'spec/app/account/password/_passwordControllerSpec.js', testJsDir + 'spec/app/account/password/passwordControllerSpec.js', this, {});
-    this.template(testJsDir + 'spec/app/account/password/_passwordDirectiveSpec.js', testJsDir + 'spec/app/account/password/passwordDirectiveSpec.js', this, {});
+    this.template(testJsDir + 'spec/app/account/admin/health/_health.controller.spec.js', testJsDir + 'spec/app/account/health/health.controller.spec.js', this, {});
+    this.template(testJsDir + 'spec/app/account/login/_login.controller.spec.js', testJsDir + 'spec/app/account/login/login.controller.spec.js', this, {});
+    this.template(testJsDir + 'spec/app/account/password/_password.controller.spec.js', testJsDir + 'spec/app/account/password/password.controller.spec.js', this, {});
+    this.template(testJsDir + 'spec/app/account/password/_password.directive.spec.js', testJsDir + 'spec/app/account/password/password.directive.spec.js', this, {});
     if (this.authenticationType == 'session') {
-        this.template(testJsDir + 'spec/app/account/sessions/_sessionsControllerSpec.js', testJsDir + 'spec/app/account/sessions/sessionsControllerSpec.js', this, {});
+        this.template(testJsDir + 'spec/app/account/sessions/_sessions.controller.spec.js', testJsDir + 'spec/app/account/sessions/sessions.controller.spec.js', this, {});
     }
-    this.template(testJsDir + 'spec/app/account/settings/_settingsControllerSpec.js', testJsDir + 'spec/app/account/settings/settingsControllerSpec.js', this, {});
-    this.template(testJsDir + 'spec/components/auth/_authServicesSpec.js', testJsDir + 'spec/components/auth/authServicesSpec.js', this, {});
+    this.template(testJsDir + 'spec/app/account/settings/_settings.controller.spec.js', testJsDir + 'spec/app/account/settings/settings.controller.spec.js', this, {});
+    this.template(testJsDir + 'spec/components/auth/_auth.services.spec.js', testJsDir + 'spec/components/auth/auth.services.spec.js', this, {});
 
     // CSS
     this.copy(webappDir + 'assets/styles/documentation.css', webappDir + 'assets/styles/documentation.css');
@@ -903,6 +942,10 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/app/account/register/register.controller.js',
         'scripts/app/account/settings/settings.js',
         'scripts/app/account/settings/settings.controller.js',
+        'scripts/app/account/reset/finish/reset.finish.controller.js',
+        'scripts/app/account/reset/finish/reset.finish.js',
+        'scripts/app/account/reset/request/reset.request.controller.js',
+        'scripts/app/account/reset/request/reset.request.js',
         'scripts/app/admin/admin.js',
         'scripts/app/admin/audits/audits.js',
         'scripts/app/admin/audits/audits.controller.js',
@@ -959,6 +1002,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.config.set('databaseType', this.databaseType);
     this.config.set('devDatabaseType', this.devDatabaseType);
     this.config.set('prodDatabaseType', this.prodDatabaseType);
+    this.config.set('searchEngine', this.searchEngine);
     this.config.set('useCompass', this.useCompass);
     this.config.set('buildTool', this.buildTool);
     this.config.set('frontendBuilder', this.frontendBuilder);

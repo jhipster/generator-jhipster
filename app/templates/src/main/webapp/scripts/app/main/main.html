@@ -8,18 +8,16 @@
             <p class="lead" translate="main.subtitle">This is your homepage</p>
 
             <div ng-switch="isAuthenticated()">
-                <div class="alert alert-success" ng-switch-when="true"
-                     translate="main.logged.message" translate-values="{username: '{{account.login}}'}">
-                    You are logged in as user "Admin".
+                <div class="alert alert-success" ng-switch-when="true" translate="main.logged.message" translate-values="{username: '{{account.login}}'}">
+                    You are logged in as user "{{account.login}}".
                 </div>
 
                 <div class="alert alert-warning" ng-switch-when="false" translate="global.messages.info.authenticated">
-                    If you want to <a href="#/login">authenticate</a>, you can try the default login="admin" and
-                    password="admin".
+                    If you want to <a href="#/login">authenticate</a>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").
                 </div>
 
                 <div class="alert alert-warning" ng-switch-when="false" translate="global.messages.info.register">
-                    Don't have an account? <a href=\"#/register\">Register</a>
+                    You don't have an account yet? <a href="#/register">Register a new account</a>
                 </div>
             </div>
 
@@ -31,6 +29,7 @@
                 <li><a href="http://jhipster.github.io/" target="_blank" translate="main.link.homepage">JHipster homepage</a></li>
                 <li><a href="http://stackoverflow.com/tags/jhipster/info" target="_blank" translate="main.link.stackoverflow">JHipster on Stack Overflow</a></li>
                 <li><a href="https://github.com/jhipster/generator-jhipster/issues?state=open" target="_blank" translate="main.link.bugtracker">JHipster bug tracker</a></li>
+                <li><a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" translate="main.link.chat">JHipster public chat room</a></li>
                 <li><a href="https://twitter.com/java_hipster" target="_blank"  translate="main.link.contact">contact @java_hipster on Twitter</a></li>
             </ul>
 

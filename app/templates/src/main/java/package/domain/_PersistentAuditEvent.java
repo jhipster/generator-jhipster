@@ -15,8 +15,8 @@ import java.util.Map;
  * @see org.springframework.boot.actuate.audit.AuditEvent
  */<% if (databaseType == 'sql') { %>
 @Entity
-@Table(name = "T_PERSISTENT_AUDIT_EVENT")<% } %><% if (databaseType == 'mongodb') { %>
-@Document(collection = "T_PERSISTENT_AUDIT_EVENT")<% } %>
+@Table(name = "JHI_PERSISTENT_AUDIT_EVENT")<% } %><% if (databaseType == 'mongodb') { %>
+@Document(collection = "JHI_PERSISTENT_AUDIT_EVENT")<% } %>
 public class PersistentAuditEvent  {
 
     @Id<% if (databaseType == 'sql') { %>
@@ -40,7 +40,7 @@ public class PersistentAuditEvent  {
     @ElementCollection
     @MapKeyColumn(name="name")
     @Column(name="value")
-    @CollectionTable(name="T_PERSISTENT_AUDIT_EVENT_DATA", joinColumns=@JoinColumn(name="event_id"))<% } %>
+    @CollectionTable(name="JHI_PERSISTENT_AUDIT_EVENT_DATA", joinColumns=@JoinColumn(name="event_id"))<% } %>
     private Map<String, String> data = new HashMap<>();
 <% if (databaseType == 'sql') { %>
     public Long getId() {
