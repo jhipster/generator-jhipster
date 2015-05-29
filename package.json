@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster",
-  "version": "2.13.0",
+  "version": "2.14.0",
   "description": "Java + Spring + JPA + AngularJS complete dev stack",
   "keywords": [
     "yeoman-generator",
@@ -28,19 +28,18 @@
     "test": "mocha --reporter spec"
   },
   "dependencies": {
-    "yeoman-generator": "0.19.0",
+    "yo": ">=1.4.6",
+    "yeoman-generator": "0.20.1",
     "cheerio": "0.17.0",
     "shelljs": "0.3.0",
     "chalk": "0.5.1",
-    "insight": "0.4.3"
+    "insight": "0.4.3",
+    "underscore.string": "3.0.3"
   },
   "devDependencies": {
     "underscore.string": "3.0.3",
     "grunt": "0.4.5",
     "mocha": "1.21.5"
-  },
-  "peerDependencies": {
-    "yo": ">=1.4.6"
   },
   "engines": {
     "node": ">=0.10.0",
