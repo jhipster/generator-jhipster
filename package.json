@@ -37,7 +37,6 @@
     "underscore.string": "3.0.3"
   },
   "devDependencies": {
-    "underscore.string": "3.0.3",
     "grunt": "0.4.5",
     "mocha": "1.21.5"
   },

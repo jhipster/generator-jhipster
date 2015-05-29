@@ -38,7 +38,7 @@
             <column name="created_by" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_date" type="timestamp" defaultValueDate="<%= _.unescape('\$\{now}')%>">
+            <column name="created_date" type="timestamp" defaultValueDate="<%= liquibaseNow %>">
                 <constraints nullable="false"/>
             </column>
             <column name="reset_date" type="timestamp">
