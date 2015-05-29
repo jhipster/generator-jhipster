@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('RegisterController', function ($scope, $translate, $timeout, Auth) {
+    .controller('RegisterController', function ($scope, <% if (enableTranslation){ %>$translate, <% } %>$timeout, Auth) {
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;
@@ -13,7 +13,7 @@ angular.module('<%=angularAppName%>')
             if ($scope.registerAccount.password !== $scope.confirmPassword) {
                 $scope.doNotMatch = 'ERROR';
             } else {
-                $scope.registerAccount.langKey = $translate.use();
+                $scope.registerAccount.langKey = <% if (enableTranslation){ %>$translate.use()<% }else {%> 'en' <% } %>;
                 $scope.doNotMatch = null;
                 $scope.error = null;
                 $scope.errorUserExists = null;

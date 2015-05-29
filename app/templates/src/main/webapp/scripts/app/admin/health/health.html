@@ -14,7 +14,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                                 ng-click="clear()">&times;</button>
                         <h4 class="modal-title" id="showHealthLabel">
-                            {{'health.indicator.' + baseName(currentHealth.name) | translate}}
+                            <% if (enableTranslation){ %>{{'health.indicator.' + baseName(currentHealth.name) | translate}}<% }else{ %><span class="text-capitalize">{{ baseName(currentHealth.name) }}</span><% } %>
                             {{subSystemName(currentHealth.name)}}
                         </h4>
                     </div>
@@ -62,10 +62,10 @@
         </thead>
         <tbody>
             <tr ng-repeat="health in healthData">
-                <td>{{'health.indicator.' + baseName(health.name) | translate}}{{subSystemName(health.name)}}</td>
+                <td><% if (enableTranslation){ %>{{'health.indicator.' + baseName(health.name) | translate}}<% }else{ %><span class="text-capitalize">{{ baseName(health.name) }}</span><% } %> {{subSystemName(health.name)}}</td>
                 <td class="text-center">
                     <span class="label" ng-class="getLabelClass(health.status)">
-                        {{'health.status.' + health.status | translate}}
+                        <% if (enableTranslation){ %>{{'health.status.' + health.status | translate}}<% }else{ %>{{ health.status }}<% } %>
                     </span>
                 </td>
                 <td class="text-center">
