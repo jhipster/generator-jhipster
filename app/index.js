@@ -3,7 +3,7 @@ var util = require('util'),
     path = require('path'),
     yeoman = require('yeoman-generator'),
     chalk = require('chalk'),
-    _s = require('underscore.string'),
+    _ = require('underscore.string'),
     shelljs = require('shelljs'),
     scriptBase = require('../script-base'),
     packagejs = require(__dirname + '/../package.json'),
@@ -436,8 +436,10 @@ JhipsterGenerator.prototype.app = function app() {
 
     // Remove old files
 
-    // Angular JS app
-    this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
+    // Application name modified, using each technology's conventions
+    this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
+    this.camelizedBaseName = _.camelize(this.baseName);
+    this.slugifiedBaseName = _.slugify(this.baseName);
 
     // Create application
     this.template('_package.json', 'package.json', this, {});

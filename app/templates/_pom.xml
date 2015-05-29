@@ -10,7 +10,7 @@
     </parent>
 
     <groupId><%= packageName %></groupId>
-    <artifactId><%= _.slugify(baseName) %></artifactId>
+    <artifactId><%= slugifiedBaseName %></artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 
