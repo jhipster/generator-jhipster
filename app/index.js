@@ -436,8 +436,10 @@ JhipsterGenerator.prototype.app = function app() {
 
     // Remove old files
 
-    // Angular JS app
+    // Application name modified, using each technology's conventions
     this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
+    this.camelizedBaseName = _.camelize(this.baseName);
+    this.slugifiedBaseName = _.slugify(this.baseName);
 
     // Create application
     this.template('_package.json', 'package.json', this, {});
