@@ -4,7 +4,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.2.3.RELEASE')
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.2.4.RELEASE')
         classpath('com.moowork.gradle:gradle-node-plugin:0.8')
         <% if(frontendBuilder == 'grunt') {%>
         classpath('com.moowork.gradle:gradle-grunt-plugin:0.6')
@@ -36,9 +36,10 @@ bootRun {
 apply from: 'yeoman.gradle'
 
 <% if (databaseType == 'sql') { %>
-apply from: 'liquibase.gradle'
-<% } %>
+apply from: 'liquibase.gradle'<% } %>
 apply from: 'gatling.gradle'
+<% if (javaVersion == '8') { %>
+apply from: 'mapstruct.gradle'<% } %>
 
 if (project.hasProperty('prod')) {
     apply from: 'profile_prod.gradle'
@@ -152,7 +153,8 @@ dependencies {
     compile group: 'mysql', name: 'mysql-connector-java'<% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
     compile group: 'org.postgresql', name: 'postgresql', version: postgresql_version<% } %><% if (devDatabaseType == 'h2Memory') { %>
     compile group: 'com.h2database', name: 'h2'<% } %><% if (javaVersion == '8') { %>
-    compile group: 'fr.ippon.spark.metrics', name: 'metrics-spark-reporter', version: metrics_spark_reporter_version<% } %>
+    compile group: 'fr.ippon.spark.metrics', name: 'metrics-spark-reporter', version: metrics_spark_reporter_version<% } %><% if (javaVersion == '8') { %>
+    compile group: 'org.mapstruct', name: 'mapstruct-jdk8', version: mapstruct_version<% } %>
     testCompile group: 'com.jayway.awaitility', name: 'awaitility', version: awaility_version
     testCompile group: 'com.jayway.jsonpath', name: 'json-path'<% if (databaseType == 'cassandra') { %>
     testCompile(group: 'org.cassandraunit', name: 'cassandra-unit-spring', version: cassandra_unit_spring_version) {
@@ -169,7 +171,9 @@ dependencies {
     testCompile group: 'org.hamcrest', name: 'hamcrest-library'
     testCompile group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version: gatling_version
     <% if (devDatabaseType != 'h2Memory') { %>
-    testCompile group: 'com.h2database', name: 'h2'<% } %>
+    testCompile group: 'com.h2database', name: 'h2'<% } %><% if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { %>
+    runtime files('lib/oracle/ojdbc/<% if (javaVersion == '7') { %>6/ojdbc-6<% }else { %>7/ojdbc-7<% } %>.jar')
+    runtime fileTree(dir: 'lib', include: '*.jar')<% } %>
 
 }
 

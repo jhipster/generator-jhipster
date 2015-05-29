@@ -126,13 +126,13 @@ public class UserService {
 
     public User requestPasswordReset(String mail) {
         User user = userRepository.findOneByEmail(mail);
-            if (user != null && user.getActivated()) {
-                user.setResetKey(RandomUtil.generateResetKey());
-                user.setResetDate(DateTime.now());
-                userRepository.save(user);
-                return user;
-            }
-        return user;
+        if (user != null && user.getActivated()) {
+            user.setResetKey(RandomUtil.generateResetKey());
+            user.setResetDate(DateTime.now());
+            userRepository.save(user);
+            return user;
+        }
+        return null;
     }<% } %>
 
     public User createUserInformation(String login, String password, String firstName, String lastName, String email,

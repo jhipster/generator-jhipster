@@ -8,7 +8,7 @@ angular.module('<%=angularAppName%>')
                 url: '/error',
                 data: {
                     roles: [],
-                    pageTitle: 'errors.title'
+                    pageTitle: 'error.title'
                 },
                 views: {
                     'content@': {
