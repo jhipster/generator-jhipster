@@ -928,6 +928,7 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/components/util/truncate.filter.js',
         'scripts/components/util/base64.service.js',
         'scripts/components/util/parse-links.service.js',
+        'scripts/components/util/dateutil.service.js',
         'scripts/app/account/account.js',
         'scripts/app/account/activate/activate.js',
         'scripts/app/account/activate/activate.controller.js',
