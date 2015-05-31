@@ -8,6 +8,7 @@ var util = require('util'),
     scriptBase = require('../script-base'),
     packagejs = require(__dirname + '/../package.json'),
     crypto = require("crypto"),
+    mkdirp = require('mkdirp'),
     ejs = require('ejs');
 
 var JhipsterGenerator = module.exports = function JhipsterGenerator(args, options, config) {
@@ -483,7 +484,7 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     // Create Java resource files
-    this.mkdir(resourceDir);
+    mkdirp(resourceDir);
     this.copy(resourceDir + '/banner.txt', resourceDir + '/banner.txt');
 
     if (this.hibernateCache == "ehcache") {
@@ -725,7 +726,7 @@ JhipsterGenerator.prototype.app = function app() {
     // Create Test Java files
     var testDir = 'src/test/java/' + packageFolder + '/';
     var testResourceDir = 'src/test/resources/';
-    this.mkdir(testDir);
+    mkdirp(testDir);
 
     if (this.databaseType == "mongodb") {
         this.template('src/test/java/package/config/_MongoConfiguration.java', testDir + 'config/MongoConfiguration.java', this, {});
@@ -751,12 +752,12 @@ JhipsterGenerator.prototype.app = function app() {
 
     // Create Gatling test files
     this.copy('src/test/gatling/conf/gatling.conf', 'src/test/gatling/conf/gatling.conf');
-    this.mkdir('src/test/gatling/data');
-    this.mkdir('src/test/gatling/bodies');
-    this.mkdir('src/test/gatling/simulations');
+    mkdirp('src/test/gatling/data');
+    mkdirp('src/test/gatling/bodies');
+    mkdirp('src/test/gatling/simulations');
 
     // Create Webapp
-    this.mkdir(webappDir);
+    mkdirp(webappDir);
 
     // normal CSS or SCSS?
     if (this.useCompass) {
