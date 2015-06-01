@@ -6,6 +6,7 @@ var util = require('util'),
         chalk = require('chalk'),
         _s = require('underscore.string'),
         shelljs = require('shelljs'),
+        html = require("html-wiring"),
         scriptBase = require('../script-base');
 
 var reservedWords_Java = ["ABSTRACT", "CONTINUE", "FOR", "NEW", "SWITCH", "ASSERT", "DEFAULT", "GOTO", "PACKAGE", "SYNCHRONIZED", "BOOLEAN", "DO", "IF", "PRIVATE", "THIS", "BREAK", "DOUBLE", "IMPLEMENTS", "PROTECTED", "THROW", "BYTE", "ELSE", "IMPORT", "PUBLIC", "THROWS", "CASE", "ENUM", "INSTANCEOF", "RETURN", "TRANSIENT", "CATCH", "EXTENDS", "INT", "SHORT", "TRY", "CHAR", "FINAL", "INTERFACE", "STATIC", "VOID", "CLASS", "FINALLY", "LONG", "STRICTFP", "VOLATILE", "CONST", "FLOAT", "NATIVE", "SUPER", "WHILE"];
@@ -38,7 +39,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     if (shelljs.test('-f', this.filename)) {
         console.log(chalk.green('Found the ' + this.filename + ' configuration file, automatically generating the entity'));
         try {
-            this.fileData = JSON.parse(this.readFileAsString(this.filename))
+            this.fileData = JSON.parse(html.readFileAsString(this.filename))
         } catch (err) {
             console.log(chalk.red('The configuration file could not be read!'));
             return;

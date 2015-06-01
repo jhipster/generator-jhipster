@@ -9,6 +9,7 @@ var util = require('util'),
     packagejs = require(__dirname + '/../package.json'),
     crypto = require("crypto"),
     mkdirp = require('mkdirp'),
+    html = require("html-wiring"),
     ejs = require('ejs');
 
 var JhipsterGenerator = module.exports = function JhipsterGenerator(args, options, config) {
@@ -22,7 +23,7 @@ var JhipsterGenerator = module.exports = function JhipsterGenerator(args, option
         });
     });
 
-    this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
+    this.pkg = JSON.parse(html.readFileAsString(path.join(__dirname, '../package.json')));
 };
 
 util.inherits(JhipsterGenerator, yeoman.generators.Base);
@@ -884,7 +885,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/scripts/app/main/_main.controller.js', webappDir + 'scripts/app/main/main.controller.js', this, {});
 
     // Index page
-    this.indexFile = this.readFileAsString(path.join(this.sourceRoot(), webappDir + '_index.html'));
+    this.indexFile = html.readFileAsString(path.join(this.sourceRoot(), webappDir + '_index.html'));
     this.engine = require('ejs').render;
     this.indexFile = this.engine(this.indexFile, this, {});
 
@@ -996,7 +997,7 @@ JhipsterGenerator.prototype.app = function app() {
             'scripts/components/tracker/tracker.service.js'])
     }
 
-    this.indexFile = this.appendScripts(this.indexFile, 'scripts/app.js', appScripts, {}, ['.tmp', 'src/main/webapp']);
+    this.indexFile = html.appendScripts(this.indexFile, 'scripts/app.js', appScripts, {}, ['.tmp', 'src/main/webapp']);
     this.write(webappDir + 'index.html', this.indexFile);
 
     this.config.set('baseName', this.baseName);
