@@ -8,7 +8,7 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity <%= entityClass %> and its DTO <%= entityClass %>DTO.
  */
-@Mapper(uses = {<% for (relationshipId in relationships) {
+@Mapper(componentModel = "spring", uses = {<% for (relationshipId in relationships) {
     if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %><%= relationships[relationshipId].otherEntityNameCapitalized %>Mapper.class, <% } } %>})
 public interface <%= entityClass %>Mapper {
 <%
