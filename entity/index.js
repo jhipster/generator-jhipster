@@ -806,6 +806,20 @@ EntityGenerator.prototype.files = function files() {
 
     var resourceDir = 'src/main/resources/';
 
+    for (var fieldIdx in this.fields) {
+        var field = this.fields[fieldIdx];
+        if (field.fieldIsEnum == true) {
+            var fieldType = field.fieldType;
+            var lastDot = fieldType.lastIndexOf(".");
+            var enumInfo = new Object();
+            enumInfo.packageName = fieldType.substring(0, lastDot);
+            enumInfo.enumName = fieldType.substring(lastDot + 1);
+            enumInfo.enumValues = field.fieldValues;
+            this.template('src/main/java/package/_Enum.java',
+                'src/main/java/' + fieldType.replace(/\./g, '/') + '.java', enumInfo, {});
+        }
+    }
+
     this.template('src/main/java/package/domain/_Entity.java',
         'src/main/java/' + this.packageFolder + '/domain/' +    this.entityClass + '.java', this, {});
 
