@@ -74,7 +74,6 @@ public class UserService {
                return user.getResetDate()<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>.isAfter(oneDayAgo.toInstant().getMillis());<% } %><% if (databaseType == 'cassandra') { %>.after(oneDayAgo.toDate());<% } %>
            })
            .map(user -> {
-               user.setActivated(true);
                user.setPassword(passwordEncoder.encode(newPassword));
                user.setResetKey(null);
                user.setResetDate(null);
@@ -85,6 +84,7 @@ public class UserService {
 
     public Optional<User> requestPasswordReset(String mail) {
        return userRepository.findOneByEmail(mail)
+           .filter(user -> user.getActivated() == true)
            .map(user -> {
                user.setResetKey(RandomUtil.generateResetKey());
                user.<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>setResetDate(DateTime.now());<% } %><% if (databaseType == 'cassandra') { %>setResetDate(new Date());<% } %>
@@ -110,9 +110,8 @@ public class UserService {
         log.debug("Reset user password for reset key {}", key);
         User user = userRepository.findOneByResetKey(key);
         DateTime oneDayAgo = DateTime.now().minusHours(24);
-        if (user != null) {
+        if (user != null && user.getActivated()) {
             if (user.getResetDate().isAfter(oneDayAgo.toInstant().getMillis())) {
-                user.setActivated(true);
                 user.setPassword(passwordEncoder.encode(newPassword));
                 user.setResetKey(null);
                 user.setResetDate(null);
@@ -127,7 +126,7 @@ public class UserService {
 
     public User requestPasswordReset(String mail) {
         User user = userRepository.findOneByEmail(mail);
-            if (user != null) {
+            if (user != null && user.getActivated()) {
                 user.setResetKey(RandomUtil.generateResetKey());
                 user.setResetDate(DateTime.now());
                 userRepository.save(user);

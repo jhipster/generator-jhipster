@@ -85,6 +85,20 @@ public class UserServiceTest <% if (databaseType == 'cassandra') { %>extends Abs
     }
 
     @Test
+    public void assertThatOnlyActivatedUserCanRequestPasswordReset() {
+        User user = userService.createUserInformation("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "en-US");
+        <% if (javaVersion == '8') { %>
+        Optional<User> maybeUser = userService.requestPasswordReset("john.doe@localhost");
+
+        assertThat(maybeUser.isPresent()).isFalse();
+        <% } else { %>
+        User maybeUser = userService.requestPasswordReset("john.doe@localhost");
+        assertThat(maybeUser).isNull();
+        <% } %>
+        userRepository.delete(user);
+    }
+
+    @Test
     public void assertThatResetKeyMustNotBeOlderThan24Hours() {
         <% if (javaVersion == '8') { %>
         User user = userService.createUserInformation("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "en-US");
