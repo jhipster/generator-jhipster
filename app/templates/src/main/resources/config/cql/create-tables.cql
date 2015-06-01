@@ -1,4 +1,6 @@
 
+USE <%= baseName %>;
+
 CREATE TABLE IF NOT EXISTS user (
     id text,
     login text,
