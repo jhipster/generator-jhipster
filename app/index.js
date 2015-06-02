@@ -16,11 +16,9 @@ var JhipsterGenerator = module.exports = function JhipsterGenerator(args, option
 
     yeoman.generators.Base.apply(this, arguments);
 
-    this.on('end', function () {
-        this.installDependencies({
-            skipInstall: options['skip-install'],
-            callback: this._injectDependenciesAndConstants.bind(this)
-        });
+    this.installDependencies({
+        skipInstall: options['skip-install'],
+        callback: this._injectDependenciesAndConstants.bind(this)
     });
 
     this.pkg = JSON.parse(html.readFileAsString(path.join(__dirname, '../package.json')));
