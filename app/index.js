@@ -15,11 +15,19 @@ var util = require('util'),
 var JhipsterGenerator = module.exports = function JhipsterGenerator(args, options, config) {
 
     yeoman.generators.Base.apply(this, arguments);
-
+    
     this.installDependencies({
         skipInstall: options['skip-install'],
         callback: this._injectDependenciesAndConstants.bind(this)
     });
+
+    this.on('end', function () {
+        if(this.prodDatabaseType === 'oracle'){   
+            console.log(chalk.yellow.bold('\n\nYou have selected Oracle database.\n') + 'Please place the ' + chalk.yellow.bold('ojdbc-'+ this.ojdbcVersion +'.jar') + ' in the `'+ chalk.yellow.bold(this.libFolder) +'` folder under the project root. \n');
+        }
+        
+    });
+    
 
     this.pkg = JSON.parse(html.readFileAsString(path.join(__dirname, '../package.json')));
 };
@@ -120,7 +128,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             choices: [
                 {
                     value: 'sql',
-                    name: 'SQL (H2, MySQL, PostgreSQL)'
+                    name: 'SQL (H2, MySQL, PostgreSQL, Oracle)'
                 },
                 {
                     value: 'mongodb',
@@ -167,6 +175,10 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 {
                     value: 'postgresql',
                     name: 'PostgreSQL'
+                },
+                {
+                    value: 'oracle',
+                    name: 'Oracle - Warning! ojdbc jar is not bundled. Provide as per instruction in the documentation'
                 }
             ],
             default: 0
@@ -205,6 +217,25 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 {
                     value: 'postgresql',
                     name: 'PostgreSQL'
+                }
+            ],
+            default: 0
+        },
+        {
+            when: function (response) {
+                return (response.databaseType == 'sql' && response.prodDatabaseType == 'oracle');
+            },
+            type: 'list',
+            name: 'devDatabaseType',
+            message: '(7/14) Which *development* database would you like to use?',
+            choices: [
+                {
+                    value: 'h2Memory',
+                    name: 'H2 in-memory with Web console'
+                },
+                {
+                    value: 'oracle',
+                    name: 'Oracle 12c'
                 }
             ],
             default: 0
@@ -442,6 +473,11 @@ JhipsterGenerator.prototype.app = function app() {
     this.camelizedBaseName = _.camelize(this.baseName);
     this.slugifiedBaseName = _.slugify(this.baseName);
 
+    if(this.prodDatabaseType === 'oracle'){ // create a folder for users to place ojdbc jar
+        this.ojdbcVersion = this.javaVersion == '7'? '6' : '7';
+        this.libFolder = 'lib/oracle/ojdbc/'+ this.ojdbcVersion +'/';
+        mkdirp(this.libFolder);
+    }
     // Create application
     this.template('_package.json', 'package.json', this, {});
     this.template('_bower.json', 'bower.json', this, {});
@@ -503,8 +539,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(resourceDir + '/config/_application-prod.yml', resourceDir + 'config/application-prod.yml', this, {});
 
     if (this.databaseType == "sql") {
-        this.liquibaseNow = '${now}';
-        this.template(resourceDir + '/config/liquibase/changelog/_initial_schema.xml', resourceDir + 'config/liquibase/changelog/00000000000000_initial_schema.xml', this, {});
+        this.template(resourceDir + '/config/liquibase/changelog/_initial_schema.xml', resourceDir + 'config/liquibase/changelog/00000000000000_initial_schema.xml', this, { 'interpolate': interpolateRegex });
         this.copy(resourceDir + '/config/liquibase/master.xml', resourceDir + 'config/liquibase/master.xml');
         this.copy(resourceDir + '/config/liquibase/users.csv', resourceDir + 'config/liquibase/users.csv');
         this.copy(resourceDir + '/config/liquibase/authorities.csv', resourceDir + 'config/liquibase/authorities.csv');

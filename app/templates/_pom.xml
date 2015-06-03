@@ -268,6 +268,11 @@
             <groupId>net.jpountz.lz4</groupId>
             <artifactId>lz4</artifactId>
             <version>${lz4.version}</version>
+        </dependency><% } %><% if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { %>
+        <dependency>
+            <groupId>oracle</groupId>
+            <artifactId>ojdbc</artifactId>
+            <version><% if (javaVersion == '7') { %>6<% }else { %>7<% } %></version>
         </dependency><% } %>
         <dependency>
             <groupId>org.assertj</groupId><% if (javaVersion == '8') { %>
@@ -854,5 +859,11 @@
                 <logback.loglevel>INFO</logback.loglevel>
             </properties>
         </profile>
-    </profiles>
+    </profiles><% if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { %>
+    <repositories>
+        <repository>
+            <id>Local-lib</id>
+            <url>file://${project.basedir}/lib</url>
+        </repository>
+      </repositories><% } %>
 </project>

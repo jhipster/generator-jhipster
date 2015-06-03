@@ -7,9 +7,10 @@ liquibase:
 spring:
     profiles:
         active: prod<% if (databaseType == 'sql') { %>
-    datasource:
-        dataSourceClassName: <% if (prodDatabaseType == 'mysql') { %>com.mysql.jdbc.jdbc2.optional.MysqlDataSource<% } else if (prodDatabaseType == 'postgresql') { %>org.postgresql.ds.PGSimpleDataSource<% } else { %>org.hsqldb.jdbc.JDBCDataSource<% } %>
-        url: <% if (prodDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (prodDatabaseType == 'postgresql') { %><% } %>
+    datasource:<% if (prodDatabaseType == 'oracle') { %>
+        driverClassName: oracle.jdbc.OracleDriver<% } %>
+        dataSourceClassName: <% if (prodDatabaseType == 'mysql') { %>com.mysql.jdbc.jdbc2.optional.MysqlDataSource<% } else if (prodDatabaseType == 'postgresql') { %>org.postgresql.ds.PGSimpleDataSource<% } else if (prodDatabaseType == 'oracle') { %>oracle.jdbc.pool.OracleDataSource<% } else { %>org.hsqldb.jdbc.JDBCDataSource<% } %>
+        url: <% if (prodDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (prodDatabaseType == 'postgresql') { %><% } else if (prodDatabaseType == 'oracle') { %>jdbc:oracle:thin:@localhost:1521:<%= baseName %><% } %>
         databaseName: <% if (prodDatabaseType == 'postgresql') { %><%= baseName %><% } %>
         serverName: <% if (prodDatabaseType == 'postgresql') { %>localhost<% } %>
         username: <% if (prodDatabaseType == 'mysql') { %>root<% } else if (prodDatabaseType == 'postgresql') { %><%= baseName %><% } %>
@@ -20,8 +21,8 @@ spring:
         useServerPrepStmts: true<% } %>
 
     jpa:
-        database-platform: <% if (prodDatabaseType == 'mysql') { %>org.hibernate.dialect.MySQLInnoDBDialect<% } else if (prodDatabaseType == 'postgresql') { %>org.hibernate.dialect.PostgreSQL82Dialect<% } else { %>org.hibernate.dialect.HSQLDialect<% } %>
-        database: <% if (prodDatabaseType == 'mysql') { %>MYSQL<% } else if (prodDatabaseType == 'postgresql') { %>POSTGRESQL<% } else { %>HSQL<% } %>
+        database-platform: <% if (prodDatabaseType == 'mysql') { %>org.hibernate.dialect.MySQLInnoDBDialect<% } else if (prodDatabaseType == 'postgresql') { %>org.hibernate.dialect.PostgreSQL82Dialect<% } else if (prodDatabaseType == 'oracle') { %>org.hibernate.dialect.Oracle10gDialect<% } else { %>org.hibernate.dialect.HSQLDialect<% } %>
+        database: <% if (prodDatabaseType == 'mysql') { %>MYSQL<% } else if (prodDatabaseType == 'postgresql') { %>POSTGRESQL<% } else if (prodDatabaseType == 'oracle') { %>ORACLE<% } else { %>HSQL<% } %>
         openInView: false
         show_sql: false
         generate-ddl: false
