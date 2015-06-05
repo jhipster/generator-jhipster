@@ -63,7 +63,7 @@ CloudFoundryGenerator.prototype.askForName = function askForName() {
     }];
 
     this.prompt(prompts, function (props) {
-        this.cloudfoundryDeployedName = this._.(props.cloudfoundryDeployedName).split('-').join('');
+        this.cloudfoundryDeployedName = _.slugify(props.cloudfoundryDeployedName).split('-').join('');
         this.cloudfoundryProfile = props.cloudfoundryProfile;
         this.cloudfoundryDatabaseServiceName = props.cloudfoundryDatabaseServiceName;
         this.cloudfoundryDatabaseServicePlan = props.cloudfoundryDatabaseServicePlan;
