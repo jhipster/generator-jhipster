@@ -177,7 +177,7 @@ CloudFoundryGenerator.prototype.restartApp = function restartApp() {
         this.log(chalk.green('\nYour app should now be live'));
         if(hasWarning) {
             this.log(chalk.green('\nYou may need to address the issues mentioned above and restart the server for the app to work correctly \n\t' +
-            'rhc app-restart -a ' + this.cloudfoundryDeployedName));
+            'cf restart ' + this.cloudfoundryDeployedName));
         }
         this.log(chalk.yellow('After application modification, re-deploy it with\n\t' + chalk.bold('grunt deploycloudfoundry')));
     }.bind(this));
