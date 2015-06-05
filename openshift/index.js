@@ -1,11 +1,11 @@
 'use strict';
 var util = require('util'),
-path = require('path'),
-yeoman = require('yeoman-generator'),
-childProcess = require('child_process'),
-chalk = require('chalk'),
-_ = require('underscore.string'),
-scriptBase = require('../script-base');
+    path = require('path'),
+    yeoman = require('yeoman-generator'),
+    childProcess = require('child_process'),
+    chalk = require('chalk'),
+    _ = require('underscore.string'),
+    scriptBase = require('../script-base');
 
 var exec = childProcess.exec;
 var spawn = childProcess.spawn;
@@ -37,7 +37,7 @@ OpenshiftGenerator.prototype.askForName = function askForName() {
     }];
 
     this.prompt(prompts, function (props) {
-        this.openShiftDeployedName = this._.slugify(props.openShiftDeployedName).split('-').join('');
+        this.openShiftDeployedName = _.slugify(props.openShiftDeployedName).split('-').join('');
         done();
     }.bind(this));
 };
