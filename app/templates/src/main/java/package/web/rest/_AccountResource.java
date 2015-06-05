@@ -301,7 +301,7 @@ public class AccountResource {
     @Timed
     public ResponseEntity<String> finishPasswordReset(@RequestParam(value = "key") String key, @RequestParam(value = "newPassword") String newPassword) {<% if (javaVersion == '8') { %>
         checkPasswordLength(password);
-        
+
         return userService.completePasswordReset(newPassword, key)
               .map(user -> new ResponseEntity<String>(HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else {%>
         User user = userService.completePasswordReset(newPassword, key);
@@ -313,7 +313,7 @@ public class AccountResource {
     }
 
     private void checkPasswordLength(String password) {
-      if (StringUtils.isEmpty(password) || password.length() < 5 || password.length() > 100) {
+      if (StringUtils.isEmpty(password) || password.length() < UserDTO.PASSWORD_MIN_LENGTH || password.length() > UserDTO.PASSWORD_MAX_LENGTH) {
           throw new PasswordLengthException();
       }
     }
