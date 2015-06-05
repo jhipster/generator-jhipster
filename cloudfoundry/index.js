@@ -73,13 +73,8 @@ CloudFoundryGenerator.prototype.askForName = function askForName() {
 
 CloudFoundryGenerator.prototype.copyCloudFoundryFiles = function copyCloudFoundryFiles() {
     if(this.abort) return;
-    var done = this.async();
     this.log(chalk.bold('\nCreating Cloud Foundry deployment files'));
-
     this.template('_manifest.yml', 'deploy/cloudfoundry/manifest.yml');
-    this.conflicter.resolve(function (err) {
-        done();
-    });
 };
 
 CloudFoundryGenerator.prototype.checkInstallation = function checkInstallation() {
@@ -153,20 +148,22 @@ CloudFoundryGenerator.prototype.productionBuild = function productionBuild() {
 };
 
 CloudFoundryGenerator.prototype.cloudfoundryPush = function cloudfoundryPush() {
-    if(this.abort) return;
-    var done = this.async();
+    this.on('end', function () {
+        if(this.abort) return;
+        var done = this.async();
 
-    this.log(chalk.bold('\nPushing the application to Cloud Foundry'));
-    var child = exec('cf push -f ./deploy/cloudfoundry/manifest.yml -p target/*.war', function (err, stdout) {
-        if (err) {
-            this.log.error(err);
-        }
-        done();
-    }.bind(this));
+        this.log(chalk.bold('\nPushing the application to Cloud Foundry'));
+        var child = exec('cf push -f ./deploy/cloudfoundry/manifest.yml -p target/*.war', function (err, stdout) {
+            if (err) {
+                this.log.error(err);
+            }
+            done();
+        }.bind(this));
 
-    child.stdout.on('data', function(data) {
-        this.log(data.toString());
-    }.bind(this));
+        child.stdout.on('data', function(data) {
+            this.log(data.toString());
+        }.bind(this));
+    });
 };
 
 CloudFoundryGenerator.prototype.restartApp = function restartApp() {
