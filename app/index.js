@@ -468,6 +468,7 @@ JhipsterGenerator.prototype.app = function app() {
             this.template('_profile_dev.gradle', 'profile_dev.gradle', this, { 'interpolate': interpolateRegex });
             this.template('_profile_prod.gradle', 'profile_prod.gradle', this, { 'interpolate': interpolateRegex });
             this.template('_profile_fast.gradle', 'profile_fast.gradle', this, { 'interpolate': interpolateRegex });
+            this.template('_mapstruct.gradle', 'mapstruct.gradle', this, { 'interpolate': interpolateRegex });
             this.template('_gatling.gradle', 'gatling.gradle', this, {});
           if (this.databaseType == "sql") {
             this.template('_liquibase.gradle', 'liquibase.gradle', this, {});
