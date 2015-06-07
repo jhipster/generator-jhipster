@@ -9,7 +9,7 @@ var gulp = require('gulp'),
     usemin = require('gulp-usemin'),
     uglify = require('gulp-uglify'),<% if(useCompass) { %>
     compass = require('gulp-compass'),<% } %>
-    minifyHtml = require('gulp-minify-html'),
+    htmlmin = require('gulp-htmlmin'),
     imagemin = require('gulp-imagemin'),
     ngAnnotate = require('gulp-ng-annotate'),
     ngConstant = require('gulp-ng-constant-fork'),
@@ -232,7 +232,7 @@ gulp.task('usemin', function() {
                     rev()
                 ],
                 html: [
-                    minifyHtml({empty: true, conditionals:true})
+                    htmlmin({collapseWhitespace: true})
                 ],
                 js: [
                     ngAnnotate(),
