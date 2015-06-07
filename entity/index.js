@@ -640,9 +640,6 @@ EntityGenerator.prototype.askForDTO = function askForDTO() {
     if (this.javaVersion == '7') {
         return;
     }
-    if (this.buildTool == 'gradle') {
-        return;
-    }
     var cb = this.async();
     var prompts = [
         {
