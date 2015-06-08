@@ -71,8 +71,9 @@ gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function() {
 });
 
 gulp.task('copy', function() {
-    return es.merge(gulp.src(yeoman.app + 'i18n/**').
-              pipe(gulp.dest(yeoman.dist + 'i18n/')),
+    return es.merge( <% if(enableTranslation) { %> // copy i18n folders only if translation is enabled
+              gulp.src(yeoman.app + 'i18n/**').
+              pipe(gulp.dest(yeoman.dist + 'i18n/')), <% } %>
               gulp.src(yeoman.app + 'assets/**/*.{woff,svg,ttf,eot}').
               pipe(flatten()).
               pipe(gulp.dest(yeoman.dist + 'assets/fonts/')));

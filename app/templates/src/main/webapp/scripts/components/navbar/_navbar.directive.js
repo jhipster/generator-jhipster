@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('<%=angularAppName%>')
+angular.module('<%=angularAppName%>')<% if (enableTranslation){ %>
     .directive('activeMenu', function($translate, $locale, tmhDynamicLocale) {
         return {
             restrict: 'A',
@@ -19,7 +19,7 @@ angular.module('<%=angularAppName%>')
                 });
             }
         };
-    })
+    })<% } %>
     .directive('activeLink', function(location) {
         return {
             restrict: 'A',
