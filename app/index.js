@@ -15,19 +15,19 @@ var util = require('util'),
 var JhipsterGenerator = module.exports = function JhipsterGenerator(args, options, config) {
 
     yeoman.generators.Base.apply(this, arguments);
-    
+
     this.installDependencies({
         skipInstall: options['skip-install'],
         callback: this._injectDependenciesAndConstants.bind(this)
     });
 
     this.on('end', function () {
-        if(this.prodDatabaseType === 'oracle'){   
+        if(this.prodDatabaseType === 'oracle'){
             console.log(chalk.yellow.bold('\n\nYou have selected Oracle database.\n') + 'Please place the ' + chalk.yellow.bold('ojdbc-'+ this.ojdbcVersion +'.jar') + ' in the `'+ chalk.yellow.bold(this.libFolder) +'` folder under the project root. \n');
         }
-        
+
     });
-    
+
 
     this.pkg = JSON.parse(html.readFileAsString(path.join(__dirname, '../package.json')));
 };
@@ -178,7 +178,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 },
                 {
                     value: 'oracle',
-                    name: 'Oracle - Warning! ojdbc jar is not bundled. Provide as per instruction in the documentation'
+                    name: 'Oracle - Warning! The Oracle JDBC driver (ojdbc) is not bundled because it is not Open Source. Please follow our documentation to install it manually.'
                 }
             ],
             default: 0
