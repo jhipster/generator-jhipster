@@ -6,13 +6,17 @@
 
     <property name="now" value="now()" dbms="mysql,h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
+    <property name="now" value="sysdate" dbms="oracle"/>
 
+    <property name="autoIncrement" value="true" dbms="mysql,h2,postgresql"/>
+    <property name="autoIncrement" value="false" dbms="oracle"/>
     <!--
         Added the entity <%= entityClass %>.
     -->
-    <changeSet id="<%= changelogDate %>" author="jhipster">
+    <changeSet id="<%= changelogDate %>" author="jhipster"><% if(prodDatabaseType === 'oracle') {%>
+        <createSequence sequenceName="SEQ_<%= name.toUpperCase() %>" startValue="1000" incrementBy="1"/><% } %>
         <createTable tableName="<%= name.toUpperCase() %>">
-            <column name="id" type="bigint" autoIncrement="true">
+            <column name="id" type="bigint" autoIncrement="${autoIncrement}" <% if(prodDatabaseType === 'oracle') {%>defaultValueComputed="SEQ_<%= name.toUpperCase() %>.NEXTVAL"<% } %>>
                 <constraints primaryKey="true" nullable="false"/>
             </column><% for (fieldId in fields) {
             var required = false;
@@ -41,10 +45,14 @@
             if (fields[fieldId].fieldType == 'DateTime') { %>
         <dropDefaultValue tableName="<%= name.toUpperCase() %>" columnName="<%=fields[fieldId].fieldNameUnderscored %>" columnDataType="datetime"/>
 <% } } %>
-        <% for (relationshipId in relationships) { %><% if ((relationships[relationshipId].relationshipType == 'many-to-one') || ((relationships[relationshipId].relationshipType == 'one-to-one')) && (relationships[relationshipId].ownerSide == true)) { %>
+        <% for (relationshipId in relationships) { %><% if ((relationships[relationshipId].relationshipType == 'many-to-one') || ((relationships[relationshipId].relationshipType == 'one-to-one')) && (relationships[relationshipId].ownerSide == true)) { 
+            var constraintName = 'fk_' + name.toLowerCase() + '_' + relationships[relationshipId].relationshipName.toLowerCase() + '_id';
+            if(prodDatabaseType === 'oracle' && constraintName.length > 30) {
+                constraintName = 'fk_' + name.toLowerCase().substring(0, 3) + '_' + relationships[relationshipId].relationshipName.toLowerCase().substring(0, 3) + '_id';
+            }%>
         <addForeignKeyConstraint baseColumnNames="<%= relationships[relationshipId].relationshipName.toLowerCase() %>_id"
                                  baseTableName="<%= name.toUpperCase() %>"
-                                 constraintName="fk_<%= name.toLowerCase() %>_<%= relationships[relationshipId].relationshipName.toLowerCase() %>_id"
+                                 constraintName="<%= constraintName %>"
                                  referencedColumnNames="id"
                                  referencedTableName="<%
                                  var otherEntityTable = relationships[relationshipId].otherEntityName.toUpperCase();
@@ -53,6 +61,12 @@
    var relationshipName = relationships[relationshipId].relationshipName;
    var otherEntityName = relationships[relationshipId].otherEntityName;
    var joinTableName = name.toUpperCase() + '_'+ relationshipName.toUpperCase();
+   var constraintName = 'fk_' + name.toLowerCase() + '_' + relationshipName.toLowerCase() + '_' + otherEntityName.toLowerCase() + '_id';
+   var otherEntityConstraintName = 'fk_' + otherEntityName.toLowerCase() + '_' + relationshipName.toLowerCase() + '_' + name.toLowerCase() + '_id';
+            if(prodDatabaseType === 'oracle' && constraintName.length > 30) {
+                constraintName = 'fk_' + name.toLowerCase().substring(0, 3) + '_' + relationshipName.toLowerCase().substring(0, 3) +  '_' + otherEntityName.toLowerCase().substring(0, 3) + '_id';
+                otherEntityConstraintName = 'fk_' + otherEntityName.toLowerCase().substring(0, 3) + '_' + relationshipName.toLowerCase().substring(0, 3) +  '_' + name.toLowerCase().substring(0, 3) + '_id';
+            }
   %>
         <createTable tableName="<%= joinTableName %>">
             <column name="<%= relationshipName.toLowerCase() %>s_id" type="bigint">
@@ -67,13 +81,13 @@
 
         <addForeignKeyConstraint baseColumnNames="<%= name.toLowerCase() %>s_id"
                                  baseTableName="<%= joinTableName %>"
-                                 constraintName="fk_<%= name.toLowerCase() %>_<%= relationshipName.toLowerCase() %>_<%= otherEntityName.toLowerCase() %>_id"
+                                 constraintName="<%= constraintName %>"
                                  referencedColumnNames="id"
                                  referencedTableName="<%= name.toUpperCase() %>"/>
 
         <addForeignKeyConstraint baseColumnNames="<%= relationshipName.toLowerCase() %>s_id"
                                  baseTableName="<%= joinTableName %>"
-                                 constraintName="fk_<%= otherEntityName.toLowerCase() %>_<%= relationshipName.toLowerCase() %>_<%= name.toLowerCase() %>_id"
+                                 constraintName="<%= otherEntityConstraintName %>"
                                  referencedColumnNames="id"
                                  referencedTableName="<%
                                  var otherEntityTable = otherEntityName.toUpperCase();
