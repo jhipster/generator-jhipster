@@ -1,0 +1,24 @@
+{
+    "register": {
+        "title": "Inregistrare",
+        "form": {
+            "button": "Inregistrare"
+        },
+        "messages": {
+            "validate": {
+                "login": {
+                    "required": "Numele dumneavoastră de utilizator este necesar.",
+                    "minlength": "Numele dumneavoastră de utilizator trebuie să aibă cel puțin 1 caracter.",
+                    "maxlength": "Numele dumneavoastră de utilizator nu poate să fie mai mare de 50 de caractere.",
+                    "pattern": "Numele dumneavoastră de utilizator poate conține doar litere mici si numere."
+                }
+            },
+            "success": "<strong>Înregistrare salvată!</strong> Vă rugăm să vă verificați e-mailul pentru confirmare.",
+            "error": {
+                "fail": "<strong>Inregistrare eșuată!</strong> Vă rugăm să încercați mai tarziu.",
+                "userexists": "<strong>Acest nume de utilizator a mai fost folosit!</strong> Vă rugăm să alegeți un altul.",
+                "emailexists": "<strong>Acest email a mai fost folosit!</strong> Vă rugăm să alegeți un altul."
+            }
+        }
+    }
+}

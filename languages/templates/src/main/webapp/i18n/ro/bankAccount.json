@@ -1,0 +1,22 @@
+{
+    "bankinghipApp": {
+        "bankAccount" : {
+            "home": {
+                "title": "Conturi Bancare",
+                "createLabel": "Creează un nou cont bancar",
+                "createOrEditLabel": "Creează sau editează un cont bancar"
+            },
+            "delete": {
+                "question": "Sunteți sigur că doriți stergerea contului bancar {{ id }}?"
+            },
+            "detail": {
+                "title": "ContBancar"
+            },
+            "name": "Nume",
+            "balance": "Bilanț",
+            "iban": "Iban",
+            "user": "utilizator",
+            "operation": "operație"
+        }
+    }
+}

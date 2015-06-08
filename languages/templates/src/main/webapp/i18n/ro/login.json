@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "Autentificare",
+        "form": {
+            "password": "Parolă",
+            "password.placeholder": "Parola dumneavoastră",
+            "rememberme": "Login automat",
+            "button": "Autentificare"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>Authentificare nereușită!</strong> Va rugăm să vă verificați credențialele si să încercați din nou."
+            }
+        },
+        "password" : {
+            "forgot": "V-ați uitat parola?"
+        }
+    }
+}
