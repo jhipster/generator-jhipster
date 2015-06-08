@@ -133,20 +133,22 @@ public class AccountResource {
     @Timed
     public ResponseEntity<UserDTO> getAccount() {<% if (javaVersion == '8') { %>
         return Optional.ofNullable(userService.getUserWithAuthorities())
-            .map(user -> new ResponseEntity<>(
-                new UserDTO(
-                    user.getLogin(),
-                    null,
-                    user.getFirstName(),
-                    user.getLastName(),
-                    user.getEmail(),
-                    user.getLangKey(),<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-                    user.getAuthorities().stream().map(Authority::getName)
-                        .collect(Collectors.toCollection(LinkedList::new))),<% } %><% if (databaseType == 'cassandra') { %>
-                    user.getAuthorities().stream()
-                        .collect(Collectors.toCollection(LinkedList::new))),
-<% } %>
-                HttpStatus.OK))
+            .map(user -> {
+                return new ResponseEntity<>(
+                    new UserDTO(
+                        user.getLogin(),
+                        null,
+                        user.getFirstName(),
+                        user.getLastName(),
+                        user.getEmail(),
+                        user.getLangKey(),<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+                        user.getAuthorities().stream().map(Authority::getName)
+                            .collect(Collectors.toList())),<% } %><% if (databaseType == 'cassandra') { %>
+                        user.getAuthorities().stream()
+                            .collect(Collectors.toList())),
+    <% } %>
+                HttpStatus.OK);
+            })
             .orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else { %>
         User user = userService.getUserWithAuthorities();
         if (user == null) {
