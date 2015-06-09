@@ -228,7 +228,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'devDatabaseType',
-            message: '(7/14) Which *development* database would you like to use?',
+            message: '(7/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'h2Memory',

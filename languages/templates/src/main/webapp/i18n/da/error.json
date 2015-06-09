@@ -1,5 +1,5 @@
 {
-    "errors": {
+    "error": {
         "title": "Fejlside!",
         "403": "Du er ikke autoriseret til at få adgang til siden."
     }
