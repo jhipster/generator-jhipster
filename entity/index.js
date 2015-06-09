@@ -207,11 +207,11 @@ EntityGenerator.prototype.askForFields = function askForFields() {
             name: 'fieldType',
             validate: function (input) {
                 if (input == '') {
-                    return 'Your class name cannot be empty';
+                    return 'Your full class name cannot be empty';
                 }
                 return true;
             },
-            message: 'What is the class of your enumeration?'
+            message: 'What is the full class name (with package) of your enumeration?'
         },
         {
             when: function (response) {
