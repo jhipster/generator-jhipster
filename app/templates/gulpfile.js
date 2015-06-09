@@ -9,7 +9,7 @@ var gulp = require('gulp'),
     usemin = require('gulp-usemin'),
     uglify = require('gulp-uglify'),<% if(useCompass) { %>
     compass = require('gulp-compass'),<% } %>
-    minifyHtml = require('gulp-minify-html'),
+    htmlmin = require('gulp-htmlmin'),
     imagemin = require('gulp-imagemin'),
     ngAnnotate = require('gulp-ng-annotate'),
     ngConstant = require('gulp-ng-constant-fork'),
@@ -71,8 +71,9 @@ gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function() {
 });
 
 gulp.task('copy', function() {
-    return es.merge(gulp.src(yeoman.app + 'i18n/**').
-              pipe(gulp.dest(yeoman.dist + 'i18n/')),
+    return es.merge( <% if(enableTranslation) { %> // copy i18n folders only if translation is enabled
+              gulp.src(yeoman.app + 'i18n/**').
+              pipe(gulp.dest(yeoman.dist + 'i18n/')), <% } %>
               gulp.src(yeoman.app + 'assets/**/*.{woff,svg,ttf,eot}').
               pipe(flatten()).
               pipe(gulp.dest(yeoman.dist + 'assets/fonts/')));
@@ -172,7 +173,7 @@ gulp.task('watch', function() {
     gulp.watch(['gulpfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>], ['ngconstant:dev']);
     gulp.watch(<% if(useCompass) { %>yeoman.scss + '**/*.scss'<% } else { %>yeoman.app + 'assets/styles/**/*.css'<% } %>, ['styles']);
     gulp.watch(yeoman.app + 'assets/images/**', ['images']);
-    gulp.watch([yeoman.app + '*.html', yeoman.app + 'scripts/**']).on('change', browserSync.reload);
+    gulp.watch([yeoman.app + '*.html', yeoman.app + 'scripts/**', yeoman.app + 'i18n/**']).on('change', browserSync.reload);
 });
 
 gulp.task('wiredep', ['wiredep:test', 'wiredep:app']);
@@ -232,7 +233,7 @@ gulp.task('usemin', function() {
                     rev()
                 ],
                 html: [
-                    minifyHtml({empty: true, conditionals:true})
+                    htmlmin({collapseWhitespace: true})
                 ],
                 js: [
                     ngAnnotate(),

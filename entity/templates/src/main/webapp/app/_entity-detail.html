@@ -20,13 +20,17 @@
                 </tr><% } %><% for (relationshipId in relationships) {
                                  if (relationships[relationshipId].relationshipType == 'many-to-one') {
                                      var relationshipName = relationships[relationshipId].relationshipName;
-                                     var otherEntityName = relationships[relationshipId].otherEntityName; %>
+                                     var otherEntityName = relationships[relationshipId].otherEntityName;
+                                     var relationShipValue = entityInstance + "." + relationshipName + "." + relationships[relationshipId].otherEntityField;
+                                     if (dto == 'mapstruct') {
+                                         relationShipValue = entityInstance + "." + relationshipName + relationships[relationshipId].otherEntityFieldCapitalized;
+                                     }%>
                 <tr>
                     <td>
-                        <span translate="<%= keyPrefix %>.<%=relationshipName%>"><%=relationshipName%></span>
+                        <span translate="<%= keyPrefix %>.<%= relationshipName %>"><%=relationshipName%></span>
                     </td>
                     <td>
-                        <input type="text" class="input-sm form-control" value="{{<%=entityInstance %>.<%=relationshipName%>.<%=relationships[relationshipId].otherEntityField%>}}" readonly>
+                        <input type="text" class="input-sm form-control" value="{{<%= relationShipValue %>}}" readonly>
                     </td>
                 </tr><% } } %>
             </tbody>

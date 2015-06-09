@@ -1,5 +1,5 @@
 {
-  "name": "<%= _.slugify(baseName) %>",
+  "name": "<%= slugifiedBaseName %>",
   "version": "0.0.0",
   "description": "Description for <%= baseName %>",
   "private": true,
@@ -12,7 +12,6 @@
     "grunt-wiredep": "2.0.0",
     "grunt-browser-sync": "2.1.2",
     "grunt-contrib-copy": "0.8.0",
-    "grunt-concurrent": "1.0.0",
     "grunt-contrib-clean": "0.6.0",
     "grunt-contrib-concat": "0.5.1",
     "grunt-contrib-cssmin": "0.11.0",
@@ -30,18 +29,18 @@
     "grunt-usemin": "3.0.0",
     "grunt-angular-templates":"0.5.7",
     "load-grunt-tasks": "3.1.0",
-    "grunt-karma": "0.10.1",
+    "grunt-karma": "0.11.0",
     "time-grunt": "1.1.0",<% if (useCompass) { %>
     "grunt-contrib-compass": "1.0.1",<% }} if(frontendBuilder == 'gulp') { %>
-    "browser-sync": "2.2.3",
+    "browser-sync": "2.7.6",
     "del": "1.1.1",
-    "gulp": "3.8.10",
+    "gulp": "3.8.11",
     "gulp-util": "3.0.2",
     "gulp-usemin": "0.3.8",
     "gulp-autoprefixer": "2.1.0",
     "gulp-minify-css": "0.3.11",
     "gulp-uglify": "1.1.0",
-    "gulp-minify-html": "0.1.8",
+    "gulp-htmlmin": "1.1.2",
     "gulp-imagemin": "2.2.1",
     "gulp-flatten": "0.0.4",
     "gulp-ng-annotate": "0.5.0",
@@ -52,16 +51,17 @@
     "gulp-browserify": "0.5.1",<% if (useCompass) { %>
     "gulp-compass": "2.0.3",<% } %>
     "proxy-middleware": "0.9.0",
-    "run-sequence": "^1.0.2",<% } %>
-    "event-stream": "3.2.2",
+    "run-sequence": "1.1.0",<% } %>
+    "event-stream": "3.3.1",
     "jshint-stylish": "1.0.1",
     "karma-script-launcher": "0.1.0",
-    "karma-chrome-launcher": "0.1.7",
+    "karma-chrome-launcher": "0.1.12",
     "karma-html2js-preprocessor": "0.1.0",
     "karma-jasmine": "0.3.5",
     "karma-requirejs": "0.2.2",
-    "karma-phantomjs-launcher": "0.1.4",
-    "karma": "0.12.32",
+    "karma-phantomjs-launcher": "0.2.0",
+    "phantomjs": "1.9.17",
+    "karma": "0.12.35",
     "generator-jhipster": "<%= packagejs.version %>",
     "lodash": "3.3.1",<% if (buildTool == 'maven') { %>
     "xml2js": "0.4.5",<% } %>
@@ -72,6 +72,6 @@
     "wiredep": "2.2.2"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=0.12.0"
   }
 }

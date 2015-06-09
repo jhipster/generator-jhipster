@@ -1,12 +1,12 @@
 'use strict';
 var util = require('util'),
-path = require('path'),
-fs = require('fs'),
-yeoman = require('yeoman-generator'),
-exec = require('child_process').exec,
-chalk = require('chalk'),
-_s = require('underscore.string'),
-scriptBase = require('../script-base');
+    path = require('path'),
+    fs = require('fs'),
+    yeoman = require('yeoman-generator'),
+    exec = require('child_process').exec,
+    chalk = require('chalk'),
+    _ = require('underscore.string'),
+    scriptBase = require('../script-base');
 
 var HerokuGenerator = module.exports = function HerokuGenerator(args, options, config) {
     yeoman.generators.Base.apply(this, arguments);
@@ -19,7 +19,7 @@ var HerokuGenerator = module.exports = function HerokuGenerator(args, options, c
     this.hibernateCache = this.config.get('hibernateCache');
     this.databaseType = this.config.get('databaseType');
     this.prodDatabaseType = this.config.get('prodDatabaseType');
-    this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
+    this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
     this.buildTool = this.config.get('buildTool');
 };
 
@@ -45,7 +45,7 @@ HerokuGenerator.prototype.askFor = function askFor() {
     }];
 
     this.prompt(prompts, function (props) {
-        this.herokuDeployedName = this._.slugify(props.herokuDeployedName);
+        this.herokuDeployedName = _.slugify(props.herokuDeployedName);
         this.herokuRegion = props.herokuRegion;
         done();
     }.bind(this));

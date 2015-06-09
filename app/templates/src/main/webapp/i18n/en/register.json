@@ -8,9 +8,9 @@
             "validate": {
                 "login": {
                     "required": "Your login is required.",
-                    "minlength": "Your login is required to be at least 1 character",
-                    "maxlength": "Your login cannot be longer than 50 characters",
-                    "pattern": "Your login can only contain lower-case letters and digits"
+                    "minlength": "Your login is required to be at least 1 character.",
+                    "maxlength": "Your login cannot be longer than 50 characters.",
+                    "pattern": "Your login can only contain lower-case letters and digits."
                 }
             },
             "success": "<strong>Registration saved!</strong> Please check your email for confirmation.",

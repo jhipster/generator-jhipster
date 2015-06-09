@@ -4,7 +4,7 @@ path = require('path'),
 yeoman = require('yeoman-generator'),
 exec = require('child_process').exec,
 chalk = require('chalk'),
-_s = require('underscore.string'),
+_ = require('underscore.string'),
 scriptBase = require('../script-base');
 
 var LanguagesGenerator = module.exports = function LanguagesGenerator(args, options, config) {
@@ -14,6 +14,7 @@ var LanguagesGenerator = module.exports = function LanguagesGenerator(args, opti
     this.websocket = this.config.get('websocket');
     this.databaseType = this.config.get('databaseType');
     this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
+    this.enableTranslation = this.config.get('enableTranslation');
 };
 
 util.inherits(LanguagesGenerator, yeoman.generators.Base);
@@ -39,6 +40,7 @@ LanguagesGenerator.prototype.askFor = function askFor() {
             {name: 'Korean', value: 'kr'},
             {name: 'Polish', value: 'pl'},
             {name: 'Portuguese (Brazilian)', value: 'pt-br'},
+            {name: 'Romanian', value: 'ro'},
             {name: 'Russian', value: 'ru'},
             {name: 'Spanish', value: 'es'},
             {name: 'Swedish', value: 'sv'},
@@ -46,11 +48,15 @@ LanguagesGenerator.prototype.askFor = function askFor() {
         ],
         default: 0
     }];
-
-    this.prompt(prompts, function (props) {
-        this.languages = props.languages;
-        cb();
-    }.bind(this));
+    if (this.enableTranslation) {
+        this.prompt(prompts, function (props) {
+            this.languages = props.languages;
+            cb();
+        }.bind(this));
+    }else{
+        console.log(chalk.red('Translation is disabled for the project. Language cannot be added.'));
+        return;
+    }
 };
 
 LanguagesGenerator.prototype.files = function files() {

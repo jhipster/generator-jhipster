@@ -1,0 +1,95 @@
+{
+    "metrics": {
+        "title": "Metrici aplicație",
+        "refresh.button": "Recreează",
+        "updating": "Recreere...",
+        "jvm": {
+            "title": "Metrici JVM",
+            "memory": {
+                "title": "Memorie",
+                "total": "Memorie Totală",
+                "heap": "Memorie Heap",
+                "nonheap": "Memorie Non-Heap"
+            },
+            "threads": {
+                "title": "Threads",
+                "all": "Toate",
+                "runnable": "Runnable",
+                "timedwaiting": "Timed waiting",
+                "waiting": "Waiting",
+                "blocked": "Blocked",
+                "dump": {
+                    "title": "Threads dump",
+                    "id": "Id: ",
+                    "blockedtime": "Blocked Time",
+                    "blockedcount": "Blocked Count",
+                    "waitedtime": "Waited Time",
+                    "waitedcount": "Waited Count",
+                    "lockname": "Lock name",
+                    "stacktrace": "Stacktrace",
+                    "show": "Arată",
+                    "hide": "Ascunde"
+                }
+            },
+            "gc": {
+                "title": "Garbage collections",
+                "marksweepcount": "Mark Sweep count",
+                "marksweeptime": "Mark Sweep time",
+                "scavengecount": "Scavenge count",
+                "scavengetime": "Scavenge time"
+            },
+            "http": {
+                "title": "Conexiuni HTTP (evenimente pe secundă)",
+                "active": "Conexiuni Active:",
+                "total": "Conexiuni Totale :",
+                "table": {
+                    "code": "Cod",
+                    "count": "Număr",
+                    "mean": "Medie aritmentică",
+                    "average": "Medie"
+                },
+                "code": {
+                    "ok": "Ok",
+                    "notfound": "Negăsit",
+                    "servererror": "Eroare server"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Statistici servicii (timpi in milisecunde)",
+            "table": {
+                "name": "Nume serviciu",
+                "count": "Numar",
+                "mean": "Medie",
+                "min": "Min",
+                "max": "Max",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "ehcache": {
+            "title": "Statistici Ehcache",
+            "cachename": "Nume cache",
+            "objects": "Obiecte",
+            "hits": "Hits",
+            "misses": "Misses",
+            "evictioncount": "Eviction count",
+            "mean": "Timp mediu get (ms)"
+        },
+        "datasource": {
+        	"usage": "Folosire",
+            "title": "Statistici sursă date(timpi in milisecunde)",
+            "name": "Folosire pool",
+            "count": "Număr",
+            "mean": "Medie",
+            "min": "Min",
+            "max": "Max",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}

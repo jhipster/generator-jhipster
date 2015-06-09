@@ -4,25 +4,29 @@ import com.codahale.metrics.annotation.Timed;
 import <%=packageName%>.domain.<%= entityClass %>;
 import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } %><% if (pagination != 'no') { %>
-import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
+import <%=packageName%>.web.rest.util.PaginationUtil;<% } %><% if (dto == 'mapstruct') { %>
+import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
+import <%=packageName%>.web.rest.mapper.<%= entityClass %>Mapper;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (pagination != 'no') { %>
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;<% } %>
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity;<% if (dto == 'mapstruct') { %>
+import org.springframework.transaction.annotation.Transactional;<% } %>
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;<% if (validation) { %>
 import javax.validation.Valid;<% } %>
 import java.net.URI;
 import java.net.URISyntaxException;<% if (javaVersion == '7') { %>
-import javax.servlet.http.HttpServletResponse;<% } %>
+import javax.servlet.http.HttpServletResponse;<% } %><% if (dto == 'mapstruct') { %>
+import java.util.LinkedList;<% } %>
 import java.util.List;<% if (javaVersion == '8') { %>
 import java.util.Optional;<% } %><% if (databaseType == 'cassandra') { %>
-import java.util.UUID;<% } %><% if (searchEngine == 'elasticsearch') { %>
-import java.util.stream.Collectors;
+import java.util.UUID;<% } %><% if (searchEngine == 'elasticsearch' || dto == 'mapstruct') { %>
+import java.util.stream.Collectors;<% } %><% if (searchEngine == 'elasticsearch') { %>
 import java.util.stream.StreamSupport;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
@@ -37,7 +41,10 @@ public class <%= entityClass %>Resource {
     private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
 
     @Inject
-    private <%= entityClass %>Repository <%= entityInstance %>Repository;<% if (searchEngine == 'elasticsearch') { %>
+    private <%= entityClass %>Repository <%= entityInstance %>Repository;<% if (dto == 'mapstruct') { %>
+
+    @Inject
+    private <%= entityClass %>Mapper <%= entityInstance %>Mapper;<% } %><% if (searchEngine == 'elasticsearch') { %>
 
     @Inject
     private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;<% } %>
@@ -49,14 +56,15 @@ public class <%= entityClass %>Resource {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> create(<% if (validation) { %>@Valid <% } %>@RequestBody <%= entityClass %> <%= entityInstance %>) throws URISyntaxException {
-        log.debug("REST request to save <%= entityClass %> : {}", <%= entityInstance %>);
-        if (<%= entityInstance %>.getId() != null) {
+    public ResponseEntity<Void> create(<% if (validation) { %>@Valid <% } %>@RequestBody <%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %> <%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>) throws URISyntaxException {
+        log.debug("REST request to save <%= entityClass %> : {}", <%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>);
+        if (<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>.getId() != null) {
             return ResponseEntity.badRequest().header("Failure", "A new <%= entityInstance %> cannot already have an ID").build();
-        }
+        }<% if (dto == 'mapstruct') { %>
+        <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Mapper.<%= entityInstance %>DTOTo<%= entityClass %>(<%= entityInstance %>DTO);<% } %>
         <%= entityInstance %>Repository.save(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
         <%= entityInstance %>SearchRepository.save(<%= entityInstance %>);<% } %>
-        return ResponseEntity.created(new URI("/api/<%= entityInstance %>s/" + <%= entityInstance %>.getId())).build();
+        return ResponseEntity.created(new URI("/api/<%= entityInstance %>s/" + <%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>.getId())).build();
     }
 
     /**
@@ -66,11 +74,12 @@ public class <%= entityClass %>Resource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> update(<% if (validation) { %>@Valid <% } %>@RequestBody <%= entityClass %> <%= entityInstance %>) throws URISyntaxException {
-        log.debug("REST request to update <%= entityClass %> : {}", <%= entityInstance %>);
-        if (<%= entityInstance %>.getId() == null) {
-            return create(<%= entityInstance %>);
-        }
+    public ResponseEntity<Void> update(<% if (validation) { %>@Valid <% } %>@RequestBody <%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %> <%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>) throws URISyntaxException {
+        log.debug("REST request to update <%= entityClass %> : {}", <%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>);
+        if (<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>.getId() == null) {
+            return create(<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>);
+        }<% if (dto == 'mapstruct') { %>
+        <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Mapper.<%= entityInstance %>DTOTo<%= entityClass %>(<%= entityInstance %>DTO);<% } %>
         <%= entityInstance %>Repository.save(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
         <%= entityInstance %>SearchRepository.save(<%= entityInstance %>);<% } %>
         return ResponseEntity.ok().build();
@@ -82,16 +91,21 @@ public class <%= entityClass %>Resource {
     @RequestMapping(value = "/<%= entityInstance %>s",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed<% if (pagination == 'no') { %>
-    public List<<%= entityClass %>> getAll() {
+    @Timed<% if (dto == 'mapstruct') { %>
+    @Transactional(readOnly = true)<% } %><% if (pagination == 'no') { %>
+    public List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> getAll() {
         log.debug("REST request to get all <%= entityClass %>s");
-        return <%= entityInstance %>Repository.findAll();<% } %><% if (pagination != 'no') { %>
-    public ResponseEntity<List<<%= entityClass %>>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
+        return <%= entityInstance %>Repository.findAll()<% if (dto == 'mapstruct') { %>.stream()
+            .map(<%= entityInstance %> -> <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(<%= entityInstance %>))
+            .collect(Collectors.toCollection(LinkedList::new))<% } %>;<% } %><% if (pagination != 'no') { %>
+    public ResponseEntity<List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
                                   @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
         Page<<%= entityClass %>> page = <%= entityInstance %>Repository.findAll(PaginationUtil.generatePageRequest(offset, limit));
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityInstance %>s", offset, limit);
-        return new ResponseEntity<<% if (javaVersion == '7') { %>List<<%= entityClass %>><% } %>>(page.getContent(), headers, HttpStatus.OK);<% } %>
+        return new ResponseEntity<<% if (javaVersion == '7') { %>List<<%= entityClass %>><% } %>>(page.getContent()<% if (dto == 'mapstruct') { %>.stream()
+            .map(<%= entityInstance %>Mapper::<%= entityInstance %>To<%= entityClass %>DTO)
+            .collect(Collectors.toCollection(LinkedList::new))<% } %>, headers, HttpStatus.OK);<% } %>
     }
 
     /**
@@ -101,12 +115,13 @@ public class <%= entityClass %>Resource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<<%= entityClass %>> get(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id<% if (javaVersion == '7') { %>, HttpServletResponse response<% } %>) {
+    public ResponseEntity<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> get(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id<% if (javaVersion == '7') { %>, HttpServletResponse response<% } %>) {
         log.debug("REST request to get <%= entityClass %> : {}", id);<% if (javaVersion == '8') { %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         return Optional.ofNullable(<%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findOneWithEagerRelationships<% } else { %>findOne<% } %>(id))<% } %><% if (databaseType == 'cassandra') { %>
-        return Optional.ofNullable(<%= entityInstance %>Repository.findOne(UUID.fromString(id)))<% } %>
-            .map(<%= entityInstance %> -> new ResponseEntity<>(
-                <%= entityInstance %>,
+        return Optional.ofNullable(<%= entityInstance %>Repository.findOne(UUID.fromString(id)))<% } %><% if (dto == 'mapstruct') { %>
+            .map(<%= entityInstance %>Mapper::<%= entityInstance %>To<%= entityClass %>DTO)<% } %>
+            .map(<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %> -> new ResponseEntity<>(
+                <%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>,
                 HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));<% } else { %>
         <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findOneWithEagerRelationships<% } else { %>findOne<% } %>(id);

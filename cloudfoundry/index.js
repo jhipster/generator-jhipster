@@ -4,7 +4,7 @@ var util = require('util'),
     yeoman = require('yeoman-generator'),
     childProcess = require('child_process'),
     chalk = require('chalk'),
-    _s = require('underscore.string'),
+    _ = require('underscore.string'),
     scriptBase = require('../script-base');
 
 var exec = childProcess.exec;
@@ -22,7 +22,7 @@ var CloudFoundryGenerator = module.exports = function CloudFoundryGenerator() {
     this.databaseType = this.config.get('databaseType');
     this.devDatabaseType = this.config.get('devDatabaseType');
     this.prodDatabaseType = this.config.get('prodDatabaseType');
-    this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
+    this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
 };
 
 util.inherits(CloudFoundryGenerator, yeoman.generators.Base);
@@ -63,7 +63,7 @@ CloudFoundryGenerator.prototype.askForName = function askForName() {
     }];
 
     this.prompt(prompts, function (props) {
-        this.cloudfoundryDeployedName = this._.slugify(props.cloudfoundryDeployedName).split('-').join('');
+        this.cloudfoundryDeployedName = _.slugify(props.cloudfoundryDeployedName).split('-').join('');
         this.cloudfoundryProfile = props.cloudfoundryProfile;
         this.cloudfoundryDatabaseServiceName = props.cloudfoundryDatabaseServiceName;
         this.cloudfoundryDatabaseServicePlan = props.cloudfoundryDatabaseServicePlan;
@@ -73,13 +73,8 @@ CloudFoundryGenerator.prototype.askForName = function askForName() {
 
 CloudFoundryGenerator.prototype.copyCloudFoundryFiles = function copyCloudFoundryFiles() {
     if(this.abort) return;
-    var done = this.async();
     this.log(chalk.bold('\nCreating Cloud Foundry deployment files'));
-
     this.template('_manifest.yml', 'deploy/cloudfoundry/manifest.yml');
-    this.conflicter.resolve(function (err) {
-        done();
-    });
 };
 
 CloudFoundryGenerator.prototype.checkInstallation = function checkInstallation() {
@@ -153,20 +148,22 @@ CloudFoundryGenerator.prototype.productionBuild = function productionBuild() {
 };
 
 CloudFoundryGenerator.prototype.cloudfoundryPush = function cloudfoundryPush() {
-    if(this.abort) return;
-    var done = this.async();
+    this.on('end', function () {
+        if(this.abort) return;
+        var done = this.async();
 
-    this.log(chalk.bold('\nPushing the application to Cloud Foundry'));
-    var child = exec('cf push -f ./deploy/cloudfoundry/manifest.yml -p target/*.war', function (err, stdout) {
-        if (err) {
-            this.log.error(err);
-        }
-        done();
-    }.bind(this));
+        this.log(chalk.bold('\nPushing the application to Cloud Foundry'));
+        var child = exec('cf push -f ./deploy/cloudfoundry/manifest.yml -p target/*.war', function (err, stdout) {
+            if (err) {
+                this.log.error(err);
+            }
+            done();
+        }.bind(this));
 
-    child.stdout.on('data', function(data) {
-        this.log(data.toString());
-    }.bind(this));
+        child.stdout.on('data', function(data) {
+            this.log(data.toString());
+        }.bind(this));
+    });
 };
 
 CloudFoundryGenerator.prototype.restartApp = function restartApp() {
@@ -177,7 +174,7 @@ CloudFoundryGenerator.prototype.restartApp = function restartApp() {
         this.log(chalk.green('\nYour app should now be live'));
         if(hasWarning) {
             this.log(chalk.green('\nYou may need to address the issues mentioned above and restart the server for the app to work correctly \n\t' +
-            'rhc app-restart -a ' + this.cloudfoundryDeployedName));
+            'cf restart ' + this.cloudfoundryDeployedName));
         }
         this.log(chalk.yellow('After application modification, re-deploy it with\n\t' + chalk.bold('grunt deploycloudfoundry')));
     }.bind(this));

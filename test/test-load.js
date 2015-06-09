@@ -3,7 +3,7 @@
 
 var assert  = require('assert');
 
-describe('jhipster generator', function () {
+describe('JHipster generator', function () {
   it('can be imported without blowing up', function () {
     var app = require('../app');
     assert(app !== undefined);

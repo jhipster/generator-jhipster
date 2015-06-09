@@ -1,28 +1,28 @@
 {
     "reset": {
         "request": {
-            "title": "Reset your password",
+            "title": "Passwort zurücksetzen",
             "form": {
-                "button": "Reset password"
+                "button": "Passwort zurücksetzen"
             },
             "messages": {
-                "info": "Enter the e-mail address you used to register",
-                "success": "Check your e-mails for details on how to reset your password.",
-                "notfound": "<strong>E-Mail address isn't registered!</strong> Please check and try again"
+                "info": "Geben Sie die E-Mail Adresse ein, welche Sie bei der Registrierung verwendet haben.",
+                "success": "Eine E-Mail mit weiteren Instruktionen für das Zurücksetzen des Passworts wurde gesendet.",
+                "notfound": "<strong>Diese E-Mail Adresse existiert nicht!</strong> Überprüfen Sie ihre E-Mail Adresse und versuchen Sie es nochmal."
 
             }
 
         },
         "finish" : {
-            "title": "Reset password",
+            "title": "Passwort zurücksetzen",
             "form": {
-                "button": "Validate new password"
+                "button": "Neues Passwort setzen"
             },
             "messages": {
-                "info": "Choose a new password",
-                "success": "<strong>Your password has been reset.</strong> Please <a href=\"#/login\">authenticate</a>.",
-                "keymissing": "The reset key is missing.",
-                "error": "Your password couldn't be reset. Remember a password request is only valid for 24 hours."
+                "info": "Wählen Sie ein neues Passwort",
+                "success": "<strong>Ihr Passwort wurde zurückgesetzt.</strong> Bitte <a href=\"#/login\">melden</a> Sie sich erneut an.",
+                "keymissing": "Der Reset Schlüssel fehlt.",
+                "error": "Ihr Passwort konnte nicht zurückgesetzt werden. Zur Erinnerung ihre Anfrage ist nur 24 Stunden gültig."
             }
         }
     }

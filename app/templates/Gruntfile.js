@@ -49,26 +49,14 @@ module.exports = function (grunt) {
             ngconstant: {
                 files: ['Gruntfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>],
                 tasks: ['ngconstant:dev']
-            },<% if (useCompass) { %>
+            }<% if (useCompass) { %>,
             compass: {
                 files: ['src/main/scss/**/*.{scss,sass}'],
                 tasks: ['compass:server']
-            },<% } %>
-            styles: {
-                files: ['src/main/webapp/assets/styles/**/*.css']
-            }
+            }<% } %>
         },
         autoprefixer: {
-        // not used since Uglify task does autoprefixer,
-        //    options: ['last 1 version'],
-        //    dist: {
-        //        files: [{
-        //            expand: true,
-        //            cwd: '.tmp/styles/',
-        //            src: '**/*.css',
-        //            dest: '.tmp/styles/'
-        //        }]
-        //    }
+            // src and dest is configured in a subtask called "generated" by usemin
         },
         wiredep: {
             app: {<% if (useCompass) { %>
@@ -144,30 +132,6 @@ module.exports = function (grunt) {
                 'src/main/webapp/scripts/app/**/*.js',
                 'src/main/webapp/scripts/components/**/*.js'
             ]
-        },
-        coffee: {
-            options: {
-                sourceMap: true,
-                sourceRoot: ''
-            },
-            dist: {
-                files: [{
-                    expand: true,
-                    cwd: 'src/main/webapp/scripts',
-                    src: ['scripts/app/**/*.coffee', 'scripts/components/**/*.coffee'],
-                    dest: '.tmp/scripts',
-                    ext: '.js'
-                }]
-            },
-            test: {
-                files: [{
-                    expand: true,
-                    cwd: 'test/spec',
-                    src: '**/*.coffee',
-                    dest: '.tmp/spec',
-                    ext: '.js'
-                }]
-            }
         },<% if (useCompass) { %>
         compass: {
             options: {
@@ -191,9 +155,10 @@ module.exports = function (grunt) {
             }
         },<% } %>
         concat: {
-        // not used since Uglify task does concat,
-        // but still available if needed
-        //    dist: {}
+            // src and dest is configured in a subtask called "generated" by usemin
+        },
+        uglifyjs: {
+            // src and dest is configured in a subtask called "generated" by usemin
         },
         rev: {
             dist: {
@@ -241,7 +206,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: 'src/main/webapp/assets/images',
-                src: '**/*.{jpg,jpeg}', // we don't optimize PNG files as it doesn't work on Linux. If you are not on Linux, feel free to use '**/*.{png,jpg,jpeg}'
+                    src: '**/*.{jpg,jpeg}', // we don't optimize PNG files as it doesn't work on Linux. If you are not on Linux, feel free to use '**/*.{png,jpg,jpeg}'
                     dest: '<%%= yeoman.dist %>/assets/images'
                 }]
             }
@@ -257,20 +222,10 @@ module.exports = function (grunt) {
             }
         },
         cssmin: {
-            // By default, your `index.html` <!-- Usemin Block --> will take care of
-            // minification. This option is pre-configured if you do not wish to use
-            // Usemin blocks.
-            // dist: {
-            //     files: {
-            //         '<%%= yeoman.dist %>/styles/main.css': [
-            //             '.tmp/styles/**/*.css',
-            //             'styles/**/*.css'
-            //         ]
-            //     }
-            // }
             options: {
                 root: 'src/main/webapp' // Replace relative paths for static resources with absolute path
             }
+            // src and dest is configured in a subtask called "generated" by usemin
         },
         ngtemplates:    {
             dist: {
@@ -348,28 +303,10 @@ module.exports = function (grunt) {
                 ]
             }
         },
-        concurrent: {
-            server: [<% if (useCompass) { %>
-                'compass:server'<% } %>
-            ],
-            test: [<% if (useCompass) { %>
-                'compass'<% } %>
-            ],
-            dist: [<% if (useCompass) { %>
-                'compass:dist',<% } %>
-                'imagemin',
-                'svgmin'
-            ]
-        },
         karma: {
             unit: {
                 configFile: 'src/test/javascript/karma.conf.js',
                 singleRun: true
-            }
-        },
-        cdnify: {
-            dist: {
-                html: ['<%%= yeoman.dist %>/*.html']
             }
         },
         ngAnnotate: {
@@ -427,8 +364,8 @@ module.exports = function (grunt) {
     grunt.registerTask('serve', [
         'clean:server',
         'wiredep',
-        'ngconstant:dev',
-        'concurrent:server',
+        'ngconstant:dev',<% if (useCompass) { %>
+        'compass:server',<% } %>
         'browserSync',
         'watch'
     ]);
@@ -441,8 +378,8 @@ module.exports = function (grunt) {
     grunt.registerTask('test', [
         'clean:server',
         'wiredep:test',
-        'ngconstant:dev',
-        'concurrent:test',
+        'ngconstant:dev',<% if (useCompass) { %>
+        'compass',<% } %>
         'karma'
     ]);
 
@@ -451,8 +388,10 @@ module.exports = function (grunt) {
         'wiredep:app',
         'ngconstant:prod',
         'useminPrepare',
-        'ngtemplates',
-        'concurrent:dist',
+        'ngtemplates',<% if (useCompass) { %>
+        'compass:dist',<% } %>
+        'imagemin',
+        'svgmin',
         'concat',
         'copy:dist',
         'ngAnnotate',

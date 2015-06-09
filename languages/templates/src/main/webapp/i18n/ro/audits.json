@@ -1,0 +1,27 @@
+{
+    "audits": {
+        "title": "Audit",
+        "filter": {
+            "title": "Filtru pe date",
+            "from": "de la",
+            "to": "pana la",
+            "button": {
+                "weeks": "Saptamani",
+                "today": "azi",
+                "clear": "sterge",
+                "close": "inchide"
+            }
+        },
+        "table": {
+            "header": {
+                "principal": "Utilizator",
+                "date": "Data",
+                "status": "Stare",
+                "data": "Extra data"
+            },
+            "data": {
+                "remoteAddress": "Adresa:"
+            }
+        }
+    }
+}

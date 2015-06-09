@@ -1,0 +1,19 @@
+{
+    "bankinghipApp": {
+        "label" : {
+            "home": {
+                "title": "Etichete",
+                "createLabel": "Creează o etichetă noua",
+                "createOrEditLabel": "Creează sau editează o etichetă"
+            },
+            "delete": {
+                "question": "Sunteți sigur că doriți stergerea etichetei {{ id }}?"
+            },
+            "detail": {
+                "title": "Etichetă"
+            },
+            "label": "Etichetă",
+            "operation": "operație"
+        }
+    }
+}
