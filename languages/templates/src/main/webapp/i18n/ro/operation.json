@@ -1,0 +1,22 @@
+{
+    "bankinghipApp": {
+        "operation" : {
+            "home": {
+                "title": "Operații",
+                "createLabel": "Creează o noua Operație",
+                "createOrEditLabel": "Creează sau editează o Operație"
+            },
+            "delete": {
+                "question": "Sunteți sigur că doriți ștergerea Operației {{ id }}?"
+            },
+            "detail": {
+                "title": "Operație"
+            },
+            "date": "Data",
+            "description": "Descriere",
+            "amount": "Suma",
+            "bankAccount": "contBancă",
+            "label": "etichetă"
+        }
+    }
+}
