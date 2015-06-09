@@ -22,6 +22,7 @@ describe('JHipster generator ', function () {
                 "devDatabaseType": "h2Memory",
                 "prodDatabaseType": "mysql",
                 "useCompass": false,
+                "enableTranslation" : true,
                 "buildTool": "maven",
                 "frontendBuilder": "grunt",
                 "javaVersion": "8",
@@ -303,6 +304,7 @@ describe('JHipster generator ', function () {
                 "devDatabaseType": "h2Memory",
                 "prodDatabaseType": "mysql",
                 "useCompass": false,
+                "enableTranslation" : true,
                 "buildTool": "maven",
                 "frontendBuilder": "grunt",
                 "javaVersion": "8",
@@ -336,6 +338,7 @@ describe('JHipster generator ', function () {
                 "devDatabaseType": "h2Memory",
                 "prodDatabaseType": "mysql",
                 "useCompass": false,
+                "enableTranslation" : true,
                 "buildTool": "maven",
                 "frontendBuilder": "grunt",
                 "javaVersion": "8",
@@ -368,6 +371,7 @@ describe('JHipster generator ', function () {
                 "devDatabaseType": "h2Memory",
                 "prodDatabaseType": "mysql",
                 "useCompass": false,
+                "enableTranslation" : true,
                 "buildTool": "maven",
                 "frontendBuilder": "grunt",
                 "javaVersion": "8",
@@ -399,6 +403,7 @@ describe('JHipster generator ', function () {
                 "devDatabaseType": "h2Memory",
                 "prodDatabaseType": "mysql",
                 "useCompass": false,
+                "enableTranslation" : true,
                 "buildTool": "maven",
                 "frontendBuilder": "grunt",
                 "javaVersion": "8",
@@ -411,6 +416,42 @@ describe('JHipster generator ', function () {
     assert.file([
         'src/main/java/com/mycompany/myapp/config/hazelcast/HazelcastCacheRegionFactory.java',
         'src/main/java/com/mycompany/myapp/config/hazelcast/package-info.java'
+    ]);
+  });
+});
+
+describe('JHipster generator ', function () {
+    before(function (done) {
+        helpers.run(path.join(__dirname, '../app'))
+            .withOptions({ skipInstall: true })
+            .withPrompts({
+                "baseName": "jhipster",
+                "packageName": "com.mycompany.myapp",
+                "packageFolder": "com/mycompany/myapp",
+                "authenticationType": "session",
+                "hibernateCache": "hazelcast",
+                "clusteredHttpSession": "no",
+                "websocket": "no",
+                "databaseType": "sql",
+                "devDatabaseType": "h2Memory",
+                "prodDatabaseType": "mysql",
+                "useCompass": false,
+                "enableTranslation" : false,
+                "buildTool": "maven",
+                "frontendBuilder": "grunt",
+                "javaVersion": "8",
+                "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
+                "searchEngine": "no" })
+      .on('end', done);
+  });
+
+  it('does not create i18n files if i18n is disabled', function () {
+    assert.noFile([
+        'src/main/resources/i18n/messages_fr.properties',
+        'src/main/webapp/i18n/en/global.json',
+        'src/main/webapp/i18n/fr/global.json',
+        'src/main/webapp/scripts/components/language/language.controller.js',
+        'src/main/webapp/scripts/components/language/language.service.js'
     ]);
   });
 });

@@ -33,6 +33,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     databaseType = this.databaseType;
     this.prodDatabaseType = this.config.get('prodDatabaseType');
     this.searchEngine = this.config.get('searchEngine');
+    this.enableTranslation = this.config.get('enableTranslation');
     prodDatabaseType = this.prodDatabaseType;
     this.buildTool = this.config.get('buildTool');
     this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
@@ -844,12 +845,12 @@ EntityGenerator.prototype.files = function files() {
             resourceDir + 'config/cql/' + this.changelogDate + '_added_entity_' + this.entityClass + '.cql', this, {});
     }
 
-    this.template('src/main/webapp/app/_entities.html',
-        'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + 's.html', this, {});
-    this.template('src/main/webapp/app/_entity-detail.html',
-        'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + '-detail.html', this, {});
+    this.copyHtml('src/main/webapp/app/_entities.html',
+        'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + 's.html', this, {}, true);
+    this.copyHtml('src/main/webapp/app/_entity-detail.html',
+        'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + '-detail.html', this, {}, true);
 
-    this.addRouterToMenu(this.entityInstance);
+    this.addRouterToMenu(this.entityInstance, this.enableTranslation);
 
     this.template('src/main/webapp/app/_entity.js',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '.js', this, {});
@@ -879,23 +880,25 @@ EntityGenerator.prototype.files = function files() {
         'src/test/gatling/simulations/' + this.entityClass + 'GatlingTest.scala', this, { 'interpolate': /<%=([\s\S]+?)%>/g });
 
     // Copy for each
-    this.copyI18n('ca');
-    this.copyI18n('zh-cn');
-    this.copyI18n('zh-tw');
-    this.copyI18n('da');
-    this.copyI18n('de');
-    this.copyI18n('en');
-    this.copyI18n('fr');
-    this.copyI18n('hu');
-    this.copyI18n('it');
-    this.copyI18n('ja');
-    this.copyI18n('kr');
-    this.copyI18n('pl');
-    this.copyI18n('pt-br');
-    this.copyI18n('ru');
-    this.copyI18n('es');
-    this.copyI18n('sv');
-    this.copyI18n('tr');
+    if(this.enableTranslation) {
+        this.copyI18n('ca');
+        this.copyI18n('zh-cn');
+        this.copyI18n('zh-tw');
+        this.copyI18n('da');
+        this.copyI18n('de');
+        this.copyI18n('en');
+        this.copyI18n('fr');
+        this.copyI18n('hu');
+        this.copyI18n('it');
+        this.copyI18n('ja');
+        this.copyI18n('kr');
+        this.copyI18n('pl');
+        this.copyI18n('pt-br');
+        this.copyI18n('ru');
+        this.copyI18n('es');
+        this.copyI18n('sv');
+        this.copyI18n('tr');
+    }
 };
 
 EntityGenerator.prototype.copyI18n = function(language) {

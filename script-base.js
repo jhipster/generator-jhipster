@@ -3,7 +3,10 @@ var path = require('path'),
     util = require('util'),
     yeoman = require('yeoman-generator'),
     jhipsterUtils = require('./util.js'),
-    Insight = require('insight');
+    shelljs = require('shelljs'),
+    Insight = require('insight'),
+    html = require("html-wiring"),
+    ejs = require('ejs');
 
 module.exports = Generator;
 
@@ -46,7 +49,7 @@ Generator.prototype.addComponentsScriptToIndex = function (script) {
     }
 };
 
-Generator.prototype.addRouterToMenu = function (entityName) {
+Generator.prototype.addRouterToMenu = function (entityName,enableTranslation) {
     try {
         var appPath = this.env.options.appPath;
         var fullPath = path.join(appPath, 'scripts/components/navbar/navbar.html');
@@ -55,7 +58,7 @@ Generator.prototype.addRouterToMenu = function (entityName) {
             needle: '<!-- JHipster will add entities to the menu here -->',
             splicable: [
                     '<li ui-sref-active="active" ><a ui-sref="' + entityName + '"><span class="glyphicon glyphicon-asterisk"></span>\n' +
-                    '                        &#xA0;<span translate="global.menu.entities.' + entityName + '">'+ entityName+'</span></a></li>'
+                    '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.entities.' + entityName + '"':'' ) + '>' + entityName + '</span></a></li>'
             ]
         });
     } catch (e) {
@@ -139,7 +142,7 @@ Generator.prototype.installNewLanguage = function(language) {
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + language + 'not added as a new language.\n'.yellow);
+        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + language + 'not added as a new language. Check if you have enabled translation support.\n'.yellow);
     }
 };
 
@@ -167,4 +170,118 @@ Generator.prototype.insight = function () {
         packageVersion: pkg.version
     });
     return insight;
+}
+
+Generator.prototype.copyHtml = function (source, dest, data, _opt, template) {
+
+    _opt = _opt !== undefined ? _opt : {};
+    data = data !== undefined ? data : this;
+    if (this.enableTranslation) {
+        // uses template method instead of copy if template boolean is set as true
+        template ? this.template(source, dest, data, _opt) : this.copy(source, dest);
+    } else {
+        var regex = '( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")';         
+        //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}" 
+        var body = this.stripContent(source, regex, data, _opt);
+        body = this.replacePlaceholders(body, data);
+        this.write(dest, body);
+    }
+}
+
+
+Generator.prototype.copyJs = function (source, dest, data, _opt, template) {
+    _opt = _opt !== undefined ? _opt : {};
+    data = data !== undefined ? data : this;
+    if (this.enableTranslation) {
+        // uses template method instead of copy if template boolean is set as true
+        template ? this.template(source, dest, data, _opt) : this.copy(source, dest);
+    } else {
+        var regex = '[a-zA-Z]+\:(\s)?\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\>\;\s]*\}\]'; 
+        //looks for something like mainTranslatePartialLoader: [*]
+        var body = this.stripContent(source, regex, data, _opt);
+        body = this.replaceTitle(body, data, template);
+        this.write(dest, body);
+    }
+}
+
+
+Generator.prototype.stripContent = function (source, regex, data, _opt) {
+    var re = new RegExp(regex, 'g');
+    var that=this;
+
+    var body = html.readFileAsString(path.join(that.sourceRoot(), source));
+    this.engine = require('ejs').render;
+    body = this.engine(body, data, _opt);
+    body = body.replace(re, '');
+
+    return body;
+}
+
+Generator.prototype.replaceTitle = function (body, data, template) {
+    var re = /pageTitle[\s]*:[\s]*[\'|\"]([a-zA-Z0-9\.\-\_]+)[\'|\"]/g;
+    var match;
+
+    while (match = re.exec(body)) {
+        // match is now the next match, in array form and our key is at index 1, index 1 is replace target.
+        var key = match[1], target = key;
+        var jsonData = this.geti18nJson(key, data);
+        var keyValue = jsonData !== undefined ? this.deepFind(jsonData, key) : undefined;
+
+        body = body.replace(target, keyValue!== undefined ? keyValue : this.baseName);
+    }
+
+    return body;
+}
+
+Generator.prototype.replacePlaceholders = function (body, data) {
+    var re = /placeholder=[\'|\"]([\{]{2}[\'|\"]([a-zA-Z0-9\.\-\_]+)[\'|\"][\s][\|][\s](translate)[\}]{2})[\'|\"]/g;
+    var match;
+
+    while (match = re.exec(body)) {
+        // match is now the next match, in array form and our key is at index 2, index 1 is replace target.
+        var key = match[2], target = match[1];
+        var jsonData = this.geti18nJson(key, data);
+        var keyValue = jsonData !== undefined ? this.deepFind(jsonData, key, true) : undefined; // dirty fix to get placeholder as it is not in proper json format, name has a dot in it. Assuming that all placeholders are in similar format
+
+        body = body.replace(target, keyValue!== undefined ? keyValue : '');
+    }
+
+    return body;
+}
+
+Generator.prototype.geti18nJson = function (key, data, template) {
+    var that = this,
+    i18nDirectory = 'src/main/webapp/i18n/en/',
+    filename = i18nDirectory + key.split('.')[0] + '.json',
+    keyValue, render = template;
+
+    if (!shelljs.test('-f', path.join(that.sourceRoot(), filename))) {
+        filename = i18nDirectory + '_' +key.split('.')[0] + '.json';
+        render = true;
+    }
+    try {
+        var file = html.readFileAsString(path.join(that.sourceRoot(), filename));
+        this.engine = require('ejs').render;
+        file = render ? this.engine(file, data, {}) : file;
+        return JSON.parse(file);
+    } catch (err) {
+        // 'Error reading translation file!'
+        return undefined;
+    }
+}
+
+Generator.prototype.deepFind = function (obj, path, placeholder) {
+    var paths = path.split('.'), current=obj, i;
+    if(placeholder){// dirty fix for placeholders, the json files needs to be corrected
+        paths[paths.length-2] = paths[paths.length-2] + '.' + paths[paths.length-1];
+        paths.pop();
+    }
+    for (i = 0; i < paths.length; ++i) {
+        if (current[paths[i]] == undefined) {
+            return undefined;
+        } else {
+            current = current[paths[i]];
+        }
+    }
+    return current;
 }
