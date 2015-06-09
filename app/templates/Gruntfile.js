@@ -206,7 +206,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: 'src/main/webapp/assets/images',
-                src: '**/*.{jpg,jpeg}', // we don't optimize PNG files as it doesn't work on Linux. If you are not on Linux, feel free to use '**/*.{png,jpg,jpeg}'
+                    src: '**/*.{jpg,jpeg}', // we don't optimize PNG files as it doesn't work on Linux. If you are not on Linux, feel free to use '**/*.{png,jpg,jpeg}'
                     dest: '<%%= yeoman.dist %>/assets/images'
                 }]
             }
@@ -303,19 +303,6 @@ module.exports = function (grunt) {
                 ]
             }
         },
-        concurrent: {
-            server: [<% if (useCompass) { %>
-                'compass:server'<% } %>
-            ],
-            test: [<% if (useCompass) { %>
-                'compass'<% } %>
-            ],
-            dist: [<% if (useCompass) { %>
-                'compass:dist',<% } %>
-                'imagemin',
-                'svgmin'
-            ]
-        },
         karma: {
             unit: {
                 configFile: 'src/test/javascript/karma.conf.js',
@@ -377,8 +364,8 @@ module.exports = function (grunt) {
     grunt.registerTask('serve', [
         'clean:server',
         'wiredep',
-        'ngconstant:dev',
-        'concurrent:server',
+        'ngconstant:dev',<% if (useCompass) { %>
+        'compass:server',<% } %>
         'browserSync',
         'watch'
     ]);
@@ -391,8 +378,8 @@ module.exports = function (grunt) {
     grunt.registerTask('test', [
         'clean:server',
         'wiredep:test',
-        'ngconstant:dev',
-        'concurrent:test',
+        'ngconstant:dev',<% if (useCompass) { %>
+        'compass',<% } %>
         'karma'
     ]);
 
@@ -401,8 +388,10 @@ module.exports = function (grunt) {
         'wiredep:app',
         'ngconstant:prod',
         'useminPrepare',
-        'ngtemplates',
-        'concurrent:dist',
+        'ngtemplates',<% if (useCompass) { %>
+        'compass:dist',<% } %>
+        'imagemin',
+        'svgmin',
         'concat',
         'copy:dist',
         'ngAnnotate',
