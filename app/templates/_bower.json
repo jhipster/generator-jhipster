@@ -11,7 +11,11 @@
     "modernizr": "2.8.3",
     "jquery": "2.1.3",
     "json3": "3.3.2",
-    "angular-ui-router": "0.2.13",<% if (enableTranslation) { %>
+    "angular-ui-router": "0.2.13",
+    "angular": "1.4.0",
+    "angular-resource": "1.4.0",
+    "angular-cookies": "1.4.0",
+    "angular-sanitize": "1.4.0",<% if (enableTranslation) { %>
     "angular-i18n": "1.4.0",
     "angular-translate": "2.7.0",
     "angular-translate-storage-cookie": "2.7.0",

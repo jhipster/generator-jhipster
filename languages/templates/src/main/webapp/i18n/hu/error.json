@@ -1,5 +1,5 @@
 {
-    "errors": {
+    "error": {
         "title": "Hiba!",
         "403": "Nem vagy jogosult ennek a lapnak a megnézésére."
     }
