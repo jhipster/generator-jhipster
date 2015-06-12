@@ -5,7 +5,8 @@ import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.web.rest.dto.userManagementDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.MappingTarget;<% if (javaVersion == '7') { %>
+import org.mapstruct.Mappings;<% } %>
 
 import javax.inject.Inject;
 import java.util.List;
@@ -34,7 +35,7 @@ public abstract class userManagementMapper {
         return userRepository.findOneWithEagerRelationships(userManagementDTO.getId())
             .map(user -> this.updateUserFromDto(userManagementDTO, user))
             .orElse(null);<% } else { %>
-        User user = findOneWithEagerRelationships(userManagementDTO.getId());
+        User user = userRepository.findOneWithEagerRelationships(userManagementDTO.getId());
         return updateUserFromDto(userManagementDTO, user);<% } %>
     }
 }

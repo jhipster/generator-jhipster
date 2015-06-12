@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import java.util.List;
-import java.util.Optional;
+import java.util.List;<% if (javaVersion == '8') { %>
+import java.util.Optional;<% } %>
 
 // TODO: Java 7 compatibility
 /**
@@ -55,11 +55,16 @@ public class AuthorityResource {
     @Timed
     @RolesAllowed(AuthoritiesConstants.ADMIN)
     public ResponseEntity<Authority> get(@PathVariable String name) {
-        log.debug("REST request to get Authority : {}", name);
+        log.debug("REST request to get Authority : {}", name);<% if (javaVersion == '8') { %>
         return Optional.ofNullable(authorityRepository.findOne(name))
             .map(authority -> new ResponseEntity<>(
                 authority,
                 HttpStatus.OK))
-            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));<% } else { %>
+        Authority authority = authorityRepository.findOne(name);
+        if (authority == null) {
+          return new ResponseEntity<Authority>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<Authority>(authority, HttpStatus.OK);<% } %>
     }
 }
