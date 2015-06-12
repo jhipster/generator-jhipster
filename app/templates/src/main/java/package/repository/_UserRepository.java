@@ -42,11 +42,11 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
 
     Optional<User> findOneByLogin(String login);
 
-    @Query("select user " +
+    <% if (databaseType == 'sql') { %>@Query("select user " +
         "from User user " +
         "left join fetch user.authorities " +
         "where user.id =:id")
-    Optional<User> findOneWithEagerRelationships(@Param("id") Long id);
+    Optional<User> findOneWithEagerRelationships(@Param("id") Long id);<% } %>
 
     @Override
     void delete(User t);
@@ -64,11 +64,11 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
 
     User findOneByEmail(String email);
 
-    @Query("select user " +
+    <% if (databaseType == 'sql') { %>@Query("select user " +
            "from User user " +
            "left join fetch user.authorities " +
            "where user.id =:id")
-    User findOneWithEagerRelationships(@Param("id") Long id);
+    User findOneWithEagerRelationships(@Param("id") Long id);<% } %>
 
 }<% } else if (databaseType == 'cassandra') { %>
 @Repository

@@ -98,7 +98,6 @@ Generator.prototype.dateFormatForLiquibase = function () {
 Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, resourceDir, lang) {
     this.copyI18nFilesByName(_this, webappDir, 'activate.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'audits.json', lang);
-    this.copyI18nFilesByName(_this, webappDir, 'userManagement.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'configuration.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'error.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'login.json', lang);
@@ -114,6 +113,10 @@ Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, res
     // tracker.json for Websocket
     if (this.websocket == 'spring-websocket') {
         this.copyI18nFilesByName(_this, webappDir, 'tracker.json', lang);
+    }
+
+    if (this.databaseType == "sql") {
+        this.copyI18nFilesByName(_this, webappDir, 'userManagement.json', lang);
     }
 
     // Templates

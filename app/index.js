@@ -755,14 +755,14 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/web/rest/dto/_package-info.java', javaDir + 'web/rest/dto/package-info.java', this, {});
     this.template('src/main/java/package/web/rest/dto/_LoggerDTO.java', javaDir + 'web/rest/dto/LoggerDTO.java', this, {});
     this.template('src/main/java/package/web/rest/dto/_UserDTO.java', javaDir + 'web/rest/dto/UserDTO.java', this, {});
-    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+    if (this.databaseType == 'sql') {
       this.template('src/main/java/package/web/rest/dto/_userManagementDTO.java', javaDir + 'web/rest/dto/userManagementDTO.java', this, {});
       this.template('src/main/java/package/web/rest/mapper/_userManagementMapper.java', javaDir + 'web/rest/mapper/userManagementMapper.java', this, {});
     }
     this.template('src/main/java/package/web/rest/util/_PaginationUtil.java', javaDir + 'web/rest/util/PaginationUtil.java', this, {});
     this.template('src/main/java/package/web/rest/_package-info.java', javaDir + 'web/rest/package-info.java', this, {});
     this.template('src/main/java/package/web/rest/_AccountResource.java', javaDir + 'web/rest/AccountResource.java', this, {});
-    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+    if (this.databaseType == 'sql') {
         this.template('src/main/java/package/web/rest/_AuditResource.java', javaDir + 'web/rest/AuditResource.java', this, {});
         this.template('src/main/java/package/web/rest/_userManagementResource.java', javaDir + 'web/rest/userManagementResource.java', this, {});
         this.template('src/main/java/package/web/rest/_AuthorityResource.java', javaDir + 'web/rest/AuthorityResource.java', this, {});
@@ -792,6 +792,7 @@ JhipsterGenerator.prototype.app = function app() {
     }
     this.template('src/test/java/package/security/_SecurityUtilsTest.java', testDir + 'security/SecurityUtilsTest.java', this, {});
     if (this.databaseType == "sql" || this.databaseType == "mongodb") {
+      //this.template('src/test/java/package/web/rest/_AccountResourceTest.java', testDir + 'web/rest/AccountResourceTest.java', this, {});
         this.template('src/test/java/package/service/_UserServiceTest.java', testDir + 'service/UserServiceTest.java', this, {});
     }
     this.template('src/test/java/package/web/rest/_AccountResourceTest.java', testDir + 'web/rest/AccountResourceTest.java', this, {});
@@ -932,7 +933,7 @@ JhipsterGenerator.prototype.app = function app() {
         this.template(webappDir + '/scripts/app/admin/tracker/_tracker.controller.js', webappDir + 'scripts/app/admin/tracker/tracker.controller.js', this, {});
         this.template(webappDir + '/scripts/components/tracker/_tracker.service.js', webappDir + '/scripts/components/tracker/tracker.service.js', this, {});
     }
-    if (this.databaseType == "sql" || this.databaseType == "mongodb") {
+    if (this.databaseType == "sql") {
       this.copyHtml(webappDir + '/scripts/app/admin/userManagement/usersManagement.html', webappDir + 'scripts/app/admin/userManagement/usersManagement.html');
       this.copyHtml(webappDir + '/scripts/app/admin/userManagement/userManagement-detail.html', webappDir + 'scripts/app/admin/userManagement/userManagement-detail.html');
       this.copyJs(webappDir + '/scripts/app/admin/userManagement/_userManagement.js', webappDir + 'scripts/app/admin/userManagement/userManagement.js', this, {});
@@ -940,7 +941,6 @@ JhipsterGenerator.prototype.app = function app() {
       this.template(webappDir + '/scripts/app/admin/userManagement/_userManagement-detail.controller.js', webappDir + 'scripts/app/admin/userManagement/userManagement-detail.controller.js', this, {});
       this.template(webappDir + '/scripts/components/admin/_userManagement.service.js', webappDir + '/scripts/components/admin/userManagement.service.js', this, {});
       this.template(webappDir + '/scripts/components/admin/_authority.service.js', webappDir + '/scripts/components/admin/authority.service.js', this, {});
-
     }
     this.copyHtml(webappDir + '/scripts/app/error/error.html', webappDir + 'scripts/app/error/error.html');
     this.copyHtml(webappDir + '/scripts/app/error/accessdenied.html', webappDir + 'scripts/app/error/accessdenied.html');
@@ -993,7 +993,6 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/components/admin/logs.service.js',
         'scripts/components/admin/configuration.service.js',
         'scripts/components/admin/monitoring.service.js',
-        'scripts/components/admin/userManagement.service.js',
         'scripts/components/admin/authority.service.js',
         'scripts/components/navbar/navbar.directive.js',
         'scripts/components/navbar/navbar.controller.js',
@@ -1032,9 +1031,6 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/app/admin/logs/logs.controller.js',
         'scripts/app/admin/metrics/metrics.js',
         'scripts/app/admin/metrics/metrics.controller.js',
-        'scripts/app/admin/userManagement/userManagement-detail.controller.js',
-        'scripts/app/admin/userManagement/userManagement.controller.js',
-        'scripts/app/admin/userManagement/userManagement.js',
         'scripts/app/entities/entity.js',
         'scripts/app/error/error.js',
         'scripts/app/main/main.js',
@@ -1068,6 +1064,14 @@ JhipsterGenerator.prototype.app = function app() {
             'scripts/app/admin/tracker/tracker.js',
             'scripts/app/admin/tracker/tracker.controller.js',
             'scripts/components/tracker/tracker.service.js'])
+    }
+    
+    if (this.databaseType == "sql") {
+      appScripts = appScripts.concat([
+          'scripts/components/admin/userManagement.service.js',
+          'scripts/app/admin/userManagement/userManagement-detail.controller.js',
+          'scripts/app/admin/userManagement/userManagement.controller.js',
+          'scripts/app/admin/userManagement/userManagement.js'])
     }
 
     this.indexFile = html.appendScripts(this.indexFile, 'scripts/app.js', appScripts, {}, ['.tmp', 'src/main/webapp']);
