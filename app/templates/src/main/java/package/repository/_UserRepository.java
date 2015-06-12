@@ -9,11 +9,13 @@ import org.joda.time.DateTime;<% if (databaseType == 'sql') { %>
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;<% if (javaVersion == '8') { %>
 import java.util.Optional;<%}%><% if (databaseType == 'cassandra') { %>
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
+
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -40,6 +42,12 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
 
     Optional<User> findOneByLogin(String login);
 
+    @Query("select user " +
+        "from User user " +
+        "left join fetch user.authorities " +
+        "where user.id =:id")
+    Optional<User> findOneWithEagerRelationships(@Param("id") Long id);
+
     @Override
     void delete(User t);
 
@@ -55,6 +63,12 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
     User findOneByLogin(String login);
 
     User findOneByEmail(String email);
+
+    @Query("select user " +
+           "from User user " +
+           "left join fetch user.authorities " +
+           "where user.id =:id")
+    User findOneWithEagerRelationships(@Param("id") Long id);
 
 }<% } else if (databaseType == 'cassandra') { %>
 @Repository

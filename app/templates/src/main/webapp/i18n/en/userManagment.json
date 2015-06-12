@@ -1,0 +1,27 @@
+{
+    "userManagment" : {
+        "home": {
+            "title": "Users",
+            "createLabel": "Create a new user",
+            "createOrEditLabel": "Create or edit an user"
+        },
+        "delete": {
+            "question": "Are you sure you want to delete user {{ id }}?"
+        },
+        "detail": {
+            "title": "User"
+        },
+        "login": "Login",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "Email",
+        "activated": "Activated",
+        "deactivated": "Deactivated",
+        "authorities": "Authorities",
+        "langKey": "Language",
+        "createdBy": "Created by",
+        "createdDate": "Created date",
+        "lastModifiedBy": "Modified by",
+        "lastModifiedDate": "Modified date"
+    }
+}

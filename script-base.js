@@ -98,6 +98,7 @@ Generator.prototype.dateFormatForLiquibase = function () {
 Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, resourceDir, lang) {
     this.copyI18nFilesByName(_this, webappDir, 'activate.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'audits.json', lang);
+    this.copyI18nFilesByName(_this, webappDir, 'userManagment.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'configuration.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'error.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'login.json', lang);
@@ -179,8 +180,8 @@ Generator.prototype.copyHtml = function (source, dest, data, _opt, template) {
         // uses template method instead of copy if template boolean is set as true
         template ? this.template(source, dest, data, _opt) : this.copy(source, dest);
     } else {
-        var regex = '( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")';         
-        //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}" 
+        var regex = '( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")';
+        //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
         var body = this.stripContent(source, regex, data, _opt);
         body = this.replacePlaceholders(body, data);
         this.write(dest, body);
@@ -195,7 +196,7 @@ Generator.prototype.copyJs = function (source, dest, data, _opt, template) {
         // uses template method instead of copy if template boolean is set as true
         template ? this.template(source, dest, data, _opt) : this.copy(source, dest);
     } else {
-        var regex = '[a-zA-Z]+\:(\s)?\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\>\;\s]*\}\]'; 
+        var regex = '[a-zA-Z]+\:(\s)?\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\>\;\s]*\}\]';
         //looks for something like mainTranslatePartialLoader: [*]
         var body = this.stripContent(source, regex, data, _opt);
         body = this.replaceTitle(body, data, template);

@@ -19,6 +19,7 @@
             },
             "admin": {
                 "main": "Administration",
+                "userManagment": "User managment",
                 "tracker": "User tracker",
                 "metrics": "Metrics",
                 "health": "Health",
