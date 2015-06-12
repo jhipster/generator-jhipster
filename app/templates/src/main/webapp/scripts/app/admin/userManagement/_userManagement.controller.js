@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('UserManagmentController', function ($scope, UserManagment, Authority, ParseLinks) {
+    .controller('userManagementController', function ($scope, userManagement, Authority, ParseLinks) {
         $scope.users = [];
         $scope.authorities = Authority.query();
 
         $scope.page = 1;
         $scope.loadAll = function() {
-            UserManagment.query({page: $scope.page, per_page: 20}, function(result, headers) {
+            userManagement.query({page: $scope.page, per_page: 20}, function(result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 $scope.users = result;
             });
@@ -20,21 +20,21 @@ angular.module('<%=angularAppName%>')
 
         $scope.setActive = function (user, isActivated) {
         	user.activated = isActivated;
-        	UserManagment.update(user, function () {
+        	userManagement.update(user, function () {
                 $scope.loadAll();
                 $scope.clear();
             });
         };
 
         $scope.showUpdate = function (id) {
-            UserManagment.get({id: id}, function(result) {
+            userManagement.get({id: id}, function(result) {
                 $scope.user = result;
                 $('#saveUserModal').modal('show');
             });
         };
 
         $scope.save = function () {
-            UserManagment.update($scope.user,
+            userManagement.update($scope.user,
                 function () {
                     $scope.refresh();
                 });

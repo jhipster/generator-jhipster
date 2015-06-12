@@ -1,6 +1,6 @@
 <div>
 	  <div class="row">
-        <h2 class="col-sm-6" translate="userManagment.home.title">User</h2>
+        <h2 class="col-sm-6" translate="userManagement.home.title">User</h2>
     </div>
 
     <div class="modal fade" id="saveUserModal" tabindex="-1" role="dialog" aria-labelledby="myUserLabel"
@@ -12,7 +12,7 @@
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                                 ng-click="clear()">&times;</button>
-                        <h4 class="modal-title" id="myUserLabel" translate="userManagment.home.createOrEditLabel">Create or edit a User</h4>
+                        <h4 class="modal-title" id="myUserLabel" translate="userManagement.home.createOrEditLabel">Create or edit a User</h4>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
@@ -22,7 +22,7 @@
                         </div>
 
                         <div class="form-group" ng-show="user.id == null">
-                            <label translate="userManagment.login">Login</label>
+                            <label translate="userManagement.login">Login</label>
                             <input type="text" class="form-control" name="login"
                                    ng-model="user.login" ng-required="user.id == null" ng-maxlength="50">
 
@@ -38,7 +38,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label translate="userManagment.firstName">FirstName</label>
+                            <label translate="userManagement.firstName">FirstName</label>
                             <input type="text" class="form-control" name="firstName"
                                    ng-model="user.firstName" ng-maxlength="50">
 
@@ -50,7 +50,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label translate="userManagment.lastName">LastName</label>
+                            <label translate="userManagement.lastName">LastName</label>
                             <input type="text" class="form-control" name="lastName"
                                    ng-model="user.lastName" ng-maxlength="50">
 
@@ -62,7 +62,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label translate="userManagment.email">Email</label>
+                            <label translate="userManagement.email">Email</label>
                             <input type="text" class="form-control" name="email"
                                    ng-model="user.email" required ng-maxlength="100">
 
@@ -78,13 +78,13 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label translate="userManagment.activated">Activated</label>
+                            <label translate="userManagement.activated">Activated</label>
                             <input type="checkbox" class="form-control" name="activated"
                                    ng-model="user.activated">
 
                         </div>
                         <div class="form-group">
-                            <label translate="userManagment.langKey">LangKey</label>
+                            <label translate="userManagement.langKey">LangKey</label>
                             <input type="text" class="form-control" name="langKey"
                                    ng-model="user.langKey" ng-maxlength="5">
 
@@ -97,7 +97,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label translate="userManagment.authorities">authorities</label>
+                            <label translate="userManagement.authorities">authorities</label>
                             <select class="form-control" multiple name="authority" ng-model="user.authorities" ng-options="authority as authority.name for authority in authorities track by authority.name">
                             </select>
                         </div>
@@ -125,7 +125,7 @@
                         <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
                     </div>
                     <div class="modal-body">
-                        <p translate="userManagment.delete.question" translate-values="{login: '{{user.login}}'}">Are you sure you want to delete this User?</p>
+                        <p translate="userManagement.delete.question" translate-values="{login: '{{user.login}}'}">Are you sure you want to delete this User?</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
@@ -145,14 +145,14 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th translate="userManagment.login">Login</th>
-                    <th translate="userManagment.email">Email</th>
+                    <th translate="userManagement.login">Login</th>
+                    <th translate="userManagement.email">Email</th>
                     <th></th>
-                    <th translate="userManagment.langKey">LangKey</th>
-                    <th translate="userManagment.authorities">Authorities</th>
-                    <th translate="userManagment.createdDate">CreatedDate</th>
-                    <th translate="userManagment.lastModifiedBy">LastModifiedBy</th>
-                    <th translate="userManagment.lastModifiedDate">LastModifiedDate</th>
+                    <th translate="userManagement.langKey">LangKey</th>
+                    <th translate="userManagement.authorities">Authorities</th>
+                    <th translate="userManagement.createdDate">CreatedDate</th>
+                    <th translate="userManagement.lastModifiedBy">LastModifiedBy</th>
+                    <th translate="userManagement.lastModifiedDate">LastModifiedDate</th>
                     <th></th>
                 </tr>
             </thead>
@@ -162,8 +162,8 @@
                     <td>{{user.login}}</td>
                     <td>{{user.email}}</td>
                     <td>
-                    	<span class="label label-danger" ng-click="setActive(user, true)" ng-show="!user.activated" translate="userManagment.deactivated" style="cursor: pointer;">Desactivated</span>
-                    	<span class="label label-success" ng-click="setActive(user, false)" ng-show="user.activated" translate="userManagment.activated" style="cursor: pointer;">Activated</span>
+                    	<span class="label label-danger" ng-click="setActive(user, true)" ng-show="!user.activated" translate="userManagement.deactivated" style="cursor: pointer;">Desactivated</span>
+                    	<span class="label label-success" ng-click="setActive(user, false)" ng-show="user.activated" translate="userManagement.activated" style="cursor: pointer;">Activated</span>
                     </td>
                     <td>{{user.langKey}}</td>
                     <td>
@@ -176,7 +176,7 @@
                     <td>{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td>
                     <td class="text-right">
                         <button type="submit"
-                                ui-sref="userManagmentDetail({id:user.id})"
+                                ui-sref="userManagementDetail({id:user.id})"
                                 class="btn btn-info btn-sm">
                             <span class="glyphicon glyphicon-eye-open"></span>
                         </button>

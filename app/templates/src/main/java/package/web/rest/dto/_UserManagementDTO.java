@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
-public class UserManagmentDTO {
+public class userManagementDTO {
 
     private Long id;
 
@@ -41,8 +41,8 @@ public class UserManagmentDTO {
     private String lastModifiedBy;
     private DateTime lastModifiedDate;
 
-    public UserManagmentDTO() {}
-    public UserManagmentDTO(Long id, String login, String firstName,
+    public userManagementDTO() {}
+    public userManagementDTO(Long id, String login, String firstName,
             String lastName, String email, boolean activated, String langKey,
             Set<Authority> authorities, String createdBy, DateTime createdDate,
             String lastModifiedBy, DateTime lastModifiedDate) {
@@ -162,7 +162,7 @@ public class UserManagmentDTO {
 
     @Override
     public String toString() {
-        return "UserManagmentDTO [id=" + id + ", login=" + login
+        return "userManagementDTO [id=" + id + ", login=" + login
                 + ", firstName=" + firstName + ", lastName=" + lastName
                 + ", email=" + email + ", activated=" + activated
                 + ", langKey=" + langKey + ", authorities=" + authorities + ", createdBy="

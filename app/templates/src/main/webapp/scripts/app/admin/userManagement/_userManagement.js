@@ -3,42 +3,42 @@
 angular.module('<%=angularAppName%>')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('userManagment', {
+            .state('userManagement', {
                 parent: 'admin',
                 url: '/user-managment',
                 data: {
                     roles: ['ROLE_ADMIN'],
-                    pageTitle: 'userManagment.home.title'
+                    pageTitle: 'userManagement.home.title'
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/admin/userManagment/usersManagment.html',
-                        controller: 'UserManagmentController'
+                        templateUrl: 'scripts/app/admin/userManagement/usersManagement.html',
+                        controller: 'userManagementController'
                     }
                 },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('userManagment');
+                        $translatePartialLoader.addPart('userManagement');
                         return $translate.refresh();
                     }]
                 }
             })
-            .state('userManagmentDetail', {
+            .state('userManagementDetail', {
                 parent: 'admin',
                 url: '/user-managment/:id',
                 data: {
                     roles: ['ROLE_ADMIN'],
-                    pageTitle: 'userManagment.detail.title'
+                    pageTitle: 'userManagement.detail.title'
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/admin/userManagment/userManagment-detail.html',
-                        controller: 'UserManagmentDetailController'
+                        templateUrl: 'scripts/app/admin/userManagement/userManagement-detail.html',
+                        controller: 'userManagementDetailController'
                     }
                 },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('userManagment');
+                        $translatePartialLoader.addPart('userManagement');
                         return $translate.refresh();
                     }]
                 }

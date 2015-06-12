@@ -98,7 +98,7 @@ Generator.prototype.dateFormatForLiquibase = function () {
 Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, resourceDir, lang) {
     this.copyI18nFilesByName(_this, webappDir, 'activate.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'audits.json', lang);
-    this.copyI18nFilesByName(_this, webappDir, 'userManagment.json', lang);
+    this.copyI18nFilesByName(_this, webappDir, 'userManagement.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'configuration.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'error.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'login.json', lang);

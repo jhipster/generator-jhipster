@@ -4,8 +4,8 @@ import com.codahale.metrics.annotation.Timed;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.AuthoritiesConstants;
-import <%=packageName%>.web.rest.dto.UserManagmentDTO;
-import <%=packageName%>.web.rest.mapper.UserManagmentMapper;
+import <%=packageName%>.web.rest.dto.userManagementDTO;
+import <%=packageName%>.web.rest.mapper.userManagementMapper;
 import <%=packageName%>.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,76 +30,76 @@ import javax.servlet.http.HttpServletResponse;<% } %>
  */
 @RestController
 @RequestMapping("/api")
-public class UserManagmentResource {
+public class userManagementResource {
 
-    private final Logger log = LoggerFactory.getLogger(UserManagmentResource.class);
+    private final Logger log = LoggerFactory.getLogger(userManagementResource.class);
 
     @Inject
     private UserRepository userRepository;
 
     @Inject
-    private UserManagmentMapper userManagmentMapper;
+    private userManagementMapper userManagementMapper;
 
     /**
-     * GET  /userManagment -> get all users to manage.
+     * GET  /userManagement -> get all users to manage.
      */
-    @RequestMapping(value = "/userManagment",
+    @RequestMapping(value = "/userManagement",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @RolesAllowed(AuthoritiesConstants.ADMIN)
     @Transactional(readOnly = true)
-    public ResponseEntity<List<UserManagmentDTO>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
+    public ResponseEntity<List<userManagementDTO>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
                                                          @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
         Page<User> page = userRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/userManagment", offset, limit);<% if (javaVersion == '8') { %>
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/userManagement", offset, limit);<% if (javaVersion == '8') { %>
         return new ResponseEntity<>(page.getContent().stream()
-                 .map(userManagmentMapper::userToUserManagmentDTO)
+                 .map(userManagementMapper::userTouserManagementDTO)
                  .collect(Collectors.toCollection(LinkedList::new)), headers, HttpStatus.OK);<% } else { %>
-        List<UserManagmentDTO> usersManagmentDTO = userManagmentMapper.usersToUserManagmentsDTO(page.getContent());
-        return new ResponseEntity<List<UserManagmentDTO>>(usersManagmentDTO, headers, HttpStatus.OK);<% } %>
+        List<userManagementDTO> usersManagementDTO = userManagementMapper.usersTouserManagementsDTO(page.getContent());
+        return new ResponseEntity<List<userManagementDTO>>(usersManagementDTO, headers, HttpStatus.OK);<% } %>
     }
 
     /**
-     * GET  /userManagment/:id -> get id user to manage.
+     * GET  /userManagement/:id -> get id user to manage.
      */
-    @RequestMapping(value = "/userManagment/{id}",
+    @RequestMapping(value = "/userManagement/{id}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @RolesAllowed(AuthoritiesConstants.ADMIN)
     @Transactional(readOnly = true)
-    ResponseEntity<UserManagmentDTO> getUser(@PathVariable Long id) {
+    ResponseEntity<userManagementDTO> getUser(@PathVariable Long id) {
        log.debug("REST request to get User to manage : {}", id);<% if (javaVersion == '8') { %>
        return  userRepository.findOneWithEagerRelationships(id)
-               .map(userManagmentMapper::userToUserManagmentDTO)
-               .map(userManagmentDTO -> new ResponseEntity<>(
-                    userManagmentDTO,
+               .map(userManagementMapper::userTouserManagementDTO)
+               .map(userManagementDTO -> new ResponseEntity<>(
+                    userManagementDTO,
                     HttpStatus.OK))
                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));<% } else { %>
        User user = userRepository.findOneWithEagerRelationships(id);
        if (product == null) {
-           return new ResponseEntity<UserManagmentDTO>(HttpStatus.NOT_FOUND);
+           return new ResponseEntity<userManagementDTO>(HttpStatus.NOT_FOUND);
        }
-       return new ResponseEntity<UserManagmentDTO>(userManagmentMapper.userToUserManagmentDTO(user),
+       return new ResponseEntity<userManagementDTO>(userManagementMapper.userTouserManagementDTO(user),
                                                    HttpStatus.OK);<% } %>
     }
 
     /**
-     * PUT  /userManagment -> Updates an existing user.
+     * PUT  /userManagement -> Updates an existing user.
      */
-    @RequestMapping(value = "/userManagment",
+    @RequestMapping(value = "/userManagement",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @RolesAllowed(AuthoritiesConstants.ADMIN)
-    public ResponseEntity<Void> update(@RequestBody UserManagmentDTO userManagmentDTO) throws URISyntaxException {
-        log.debug("REST request to update User : {}", userManagmentDTO);
-        if (userManagmentDTO.getId() == null) {
+    public ResponseEntity<Void> update(@RequestBody userManagementDTO userManagementDTO) throws URISyntaxException {
+        log.debug("REST request to update User : {}", userManagementDTO);
+        if (userManagementDTO.getId() == null) {
             return ResponseEntity.badRequest().header("Failure", "You cannot create a new user").build();
         }
-        User user = userManagmentMapper.userManagmentDTOToUser(userManagmentDTO);
+        User user = userManagementMapper.userManagementDTOToUser(userManagementDTO);
         userRepository.save(user);
         return ResponseEntity.ok().build();
     }

@@ -2,7 +2,7 @@ package <%=packageName%>.web.rest.mapper;
 
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.UserRepository;
-import <%=packageName%>.web.rest.dto.UserManagmentDTO;
+import <%=packageName%>.web.rest.dto.userManagementDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -11,12 +11,12 @@ import javax.inject.Inject;
 import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {})
-public abstract class UserManagmentMapper {
+public abstract class userManagementMapper {
     @Inject
     private UserRepository userRepository;
 
-    public abstract UserManagmentDTO userToUserManagmentDTO(User user);
-    public abstract List<UserManagmentDTO> usersToUserManagmentsDTO(List<User> users);
+    public abstract userManagementDTO userTouserManagementDTO(User user);
+    public abstract List<userManagementDTO> usersTouserManagementsDTO(List<User> users);
 
     <% if (javaVersion == '8') { %>@Mapping(target = "createdBy", ignore=true)
     @Mapping(target = "createdDate", ignore=true)
@@ -28,13 +28,13 @@ public abstract class UserManagmentMapper {
       @Mapping(target = "lastModifiedBy", ignore=true),
       @Mapping(target = "lastModifiedDate", ignore=true)
     })<% } %>
-    public abstract User updateUserFromDto(UserManagmentDTO userManagmentDTO, @MappingTarget User user);
+    public abstract User updateUserFromDto(userManagementDTO userManagementDTO, @MappingTarget User user);
 
-    public User userManagmentDTOToUser(UserManagmentDTO userManagmentDTO) {<% if (javaVersion == '8') { %>
-        return userRepository.findOneWithEagerRelationships(userManagmentDTO.getId())
-            .map(user -> this.updateUserFromDto(userManagmentDTO, user))
+    public User userManagementDTOToUser(userManagementDTO userManagementDTO) {<% if (javaVersion == '8') { %>
+        return userRepository.findOneWithEagerRelationships(userManagementDTO.getId())
+            .map(user -> this.updateUserFromDto(userManagementDTO, user))
             .orElse(null);<% } else { %>
-        User user = findOneWithEagerRelationships(userManagmentDTO.getId());
-        return updateUserFromDto(userManagmentDTO, user);<% } %>
+        User user = findOneWithEagerRelationships(userManagementDTO.getId());
+        return updateUserFromDto(userManagementDTO, user);<% } %>
     }
 }
