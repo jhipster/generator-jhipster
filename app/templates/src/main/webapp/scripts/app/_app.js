@@ -128,7 +128,6 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTransl
                 ]<% if (enableTranslation) { %>,
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                     $translatePartialLoader.addPart('global');
-                    $translatePartialLoader.addPart('language');
                 }]<% } %>
             }
         });
