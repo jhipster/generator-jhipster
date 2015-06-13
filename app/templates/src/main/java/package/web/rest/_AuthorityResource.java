@@ -19,7 +19,6 @@ import javax.inject.Inject;
 import java.util.List;<% if (javaVersion == '8') { %>
 import java.util.Optional;<% } %>
 
-// TODO: Java 7 compatibility
 /**
  * REST controller for managing Authority.
  */
@@ -42,7 +41,7 @@ public class AuthorityResource {
     @Timed
     @RolesAllowed(AuthoritiesConstants.ADMIN)
     public List<Authority> getAll() {
-        log.debug("REST request to get all Authoritys");
+        log.debug("REST request to get all Authorities");
         return authorityRepository.findAll();
     }
 

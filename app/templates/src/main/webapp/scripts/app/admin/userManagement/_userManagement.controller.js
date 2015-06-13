@@ -26,8 +26,8 @@ angular.module('<%=angularAppName%>')
             });
         };
 
-        $scope.showUpdate = function (id) {
-            userManagement.get({id: id}, function(result) {
+        $scope.showUpdate = function (login) {
+            userManagement.get({login: login}, function(result) {
                 $scope.user = result;
                 $('#saveUserModal').modal('show');
             });

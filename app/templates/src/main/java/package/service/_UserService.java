@@ -199,14 +199,19 @@ public class UserService {
         userSearchRepository.save(user);<% } %>
         log.debug("Changed password for User: {}", currentUser);<% } %>
     }
+
+    public User getUserWithAuthorities() {
+      return getUserWithAuthorities(SecurityUtils.getCurrentLogin());
+    }
+
 <% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true)<% } %>
-    public User getUserWithAuthorities() {<% if (javaVersion == '8') { %>
-        User currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).get();
-        currentUser.getAuthorities().size(); // eagerly load the association<% } else { %>
-        User currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
-        currentUser.getAuthorities().size(); // eagerly load the association<% } %>
-        return currentUser;
+    public User getUserWithAuthorities(String login) {<% if (javaVersion == '8') { %>
+        User user = userRepository.findOneByLogin(login).get();
+        user.getAuthorities().size(); // eagerly load the association<% } else { %>
+        User user = userRepository.findOneByLogin(login);
+        user.getAuthorities().size(); // eagerly load the association<% } %>
+        return user;
     }<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 
     /**

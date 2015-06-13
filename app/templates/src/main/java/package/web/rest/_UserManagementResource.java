@@ -7,6 +7,7 @@ import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.web.rest.dto.userManagementDTO;
 import <%=packageName%>.web.rest.mapper.userManagementMapper;
 import <%=packageName%>.web.rest.util.PaginationUtil;
+import <%=packageName%>.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ import java.net.URISyntaxException;
 import javax.inject.Inject;
 import java.util.List;<% if (javaVersion == '8') { %>
 import java.util.LinkedList;
+import java.util.Optional;
 import java.util.stream.Collectors;<% } %><% if (javaVersion == '7') { %>
 import javax.servlet.http.HttpServletResponse;<% } %>
 
@@ -33,6 +35,9 @@ import javax.servlet.http.HttpServletResponse;<% } %>
 public class userManagementResource {
 
     private final Logger log = LoggerFactory.getLogger(userManagementResource.class);
+
+    @Inject
+    private UserService userService;
 
     @Inject
     private UserRepository userRepository;
@@ -64,21 +69,21 @@ public class userManagementResource {
     /**
      * GET  /userManagement/:id -> get id user to manage.
      */
-    @RequestMapping(value = "/userManagement/{id}",
+    @RequestMapping(value = "/userManagement/{login}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @RolesAllowed(AuthoritiesConstants.ADMIN)
     @Transactional(readOnly = true)
-    ResponseEntity<userManagementDTO> getUser(@PathVariable Long id) {
-       log.debug("REST request to get User to manage : {}", id);<% if (javaVersion == '8') { %>
-       return  userRepository.findOneWithEagerRelationships(id)
+    ResponseEntity<userManagementDTO> getUser(@PathVariable String login) {
+       log.debug("REST request to get User to manage : {}", login);<% if (javaVersion == '8') { %>
+       return  Optional.ofNullable(userService.getUserWithAuthorities(login))
                .map(userManagementMapper::userTouserManagementDTO)
                .map(userManagementDTO -> new ResponseEntity<>(
                     userManagementDTO,
                     HttpStatus.OK))
                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));<% } else { %>
-       User user = userRepository.findOneWithEagerRelationships(id);
+       User user = userService.getUserWithAuthorities(login);
        if (user == null) {
            return new ResponseEntity<userManagementDTO>(HttpStatus.NOT_FOUND);
        }

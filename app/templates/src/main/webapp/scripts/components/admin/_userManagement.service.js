@@ -2,7 +2,7 @@
 
 angular.module('<%=angularAppName%>')
     .factory('userManagement', function ($resource) {
-        return $resource('api/userManagement/:id', {}, {
+        return $resource('api/userManagement/:login', {}, {
                 'query': {method: 'GET', isArray: true},
                 'get': {
                     method: 'GET',
