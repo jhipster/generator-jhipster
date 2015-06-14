@@ -16,7 +16,7 @@ public interface <%= entityClass %>Mapper {
 for (relationshipId in relationships) {
         if (relationships[relationshipId].relationshipType == 'many-to-one') {
         %>
-    @Mapping(source = "<%= relationships[relationshipId].relationshipName %>.id", target = "<%= relationships[relationshipId].relationshipFieldName %>Id")<% if (relationships[relationshipId].otherEntityFieldCapitalized != '') { %>
+    @Mapping(source = "<%= relationships[relationshipId].relationshipName %>.id", target = "<%= relationships[relationshipId].relationshipFieldName %>Id")<% if (relationships[relationshipId].otherEntityFieldCapitalized !='Id' && relationships[relationshipId].otherEntityFieldCapitalized != '') { %>
     @Mapping(source = "<%= relationships[relationshipId].relationshipName %>.<%=relationships[relationshipId].otherEntityField %>", target = "<%= relationships[relationshipId].relationshipFieldName %><%= relationships[relationshipId].otherEntityFieldCapitalized %>")<% } } } %>
     <%= entityClass %>DTO <%= entityInstance %>To<%= entityClass %>DTO(<%= entityClass %> <%= entityInstance %>);
 <%
