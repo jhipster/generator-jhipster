@@ -47,7 +47,7 @@ public class <%= entityClass %>DTO implements Serializable {
     otherEntityRelationshipName = relationships[relationshipId].otherEntityRelationshipName;%><% if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %>
     private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>DTO> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();
 <% } else if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
-    private Long <%= relationships[relationshipId].relationshipFieldName %>Id;<% if (relationships[relationshipId].otherEntityFieldCapitalized != '') { %>
+    private Long <%= relationships[relationshipId].relationshipFieldName %>Id;<% if (relationships[relationshipId].otherEntityFieldCapitalized !='Id' && relationships[relationshipId].otherEntityFieldCapitalized != '') { %>
 
     private String <%= relationships[relationshipId].relationshipFieldName %><%= relationships[relationshipId].otherEntityFieldCapitalized %>;
 <% } } } %>
@@ -81,7 +81,7 @@ public class <%= entityClass %>DTO implements Serializable {
 
     public void set<%= relationships[relationshipId].relationshipNameCapitalized %>Id(Long <%= relationships[relationshipId].otherEntityName %>Id) {
         this.<%= relationships[relationshipId].relationshipFieldName %>Id = <%= relationships[relationshipId].otherEntityName %>Id;
-    }<% if (relationships[relationshipId].otherEntityFieldCapitalized != '') { %>
+    }<% if (relationships[relationshipId].otherEntityFieldCapitalized !='Id' && relationships[relationshipId].otherEntityFieldCapitalized != '') { %>
 
     public String get<%= relationships[relationshipId].relationshipNameCapitalized %><%= relationships[relationshipId].otherEntityFieldCapitalized %>() {
         return <%= relationships[relationshipId].relationshipFieldName %><%= relationships[relationshipId].otherEntityFieldCapitalized %>;
