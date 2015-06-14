@@ -57,7 +57,7 @@
                 <td>
                     <input type="text" class="input-sm form-control" value="{{user.langKey}}" readonly>
                 </td>
-            </tr>
+            </tr><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
             <tr>
                 <td>
                     <span translate="userManagement.createdBy">CreatedBy</span>
@@ -89,7 +89,7 @@
                 <td>
                     <input type="text" class="input-sm form-control" value="{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}" readonly>
                 </td>
-            </tr>
+            </tr><% } %>
             </tbody>
         </table>
     </div>

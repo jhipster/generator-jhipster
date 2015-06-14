@@ -1,8 +1,8 @@
 package <%=packageName%>.web.rest.dto;
 
 import <%=packageName%>.domain.Authority;
-import org.hibernate.validator.constraints.Email;
-import org.joda.time.DateTime;
+import org.hibernate.validator.constraints.Email;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import org.joda.time.DateTime;<% } %>
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -35,17 +35,17 @@ public class userManagementDTO {
     private String langKey;
 
     private Set<Authority> authorities = new HashSet<>();
-
+    <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     private String createdBy;
     private DateTime createdDate;
     private String lastModifiedBy;
-    private DateTime lastModifiedDate;
+    private DateTime lastModifiedDate;<% } %>
 
     public userManagementDTO() {}
     public userManagementDTO(Long id, String login, String firstName,
             String lastName, String email, boolean activated, String langKey,
-            Set<Authority> authorities, String createdBy, DateTime createdDate,
-            String lastModifiedBy, DateTime lastModifiedDate) {
+            Set<Authority> authorities<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>, String createdBy, DateTime createdDate,
+            String lastModifiedBy, DateTime lastModifiedDate<% } %>) {
         super();
         this.id = id;
         this.login = login;
@@ -54,11 +54,11 @@ public class userManagementDTO {
         this.email = email;
         this.activated = activated;
         this.langKey = langKey;
-        this.authorities = authorities;
+        this.authorities = authorities;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         this.createdBy = createdBy;
         this.createdDate = createdDate;
         this.lastModifiedBy = lastModifiedBy;
-        this.lastModifiedDate = lastModifiedDate;
+        this.lastModifiedDate = lastModifiedDate;<% } %>
     }
 
 
@@ -94,7 +94,7 @@ public class userManagementDTO {
     public Set<Authority> getAuthorities() {
         return authorities;
     }
-
+    <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     public String getCreatedBy() {
         return createdBy;
     }
@@ -109,7 +109,7 @@ public class userManagementDTO {
 
     public DateTime getLastModifiedDate() {
         return lastModifiedDate;
-    }
+    }<% } %>
 
     public void setId(Long id) {
         this.id = id;
@@ -142,7 +142,7 @@ public class userManagementDTO {
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
     }
-
+    <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     public void setCreatedDate(DateTime createdDate) {
         this.createdDate = createdDate;
     }
@@ -156,19 +156,18 @@ public class userManagementDTO {
     }
 
     public void setCreatedBy(String createdBy) {
-
         this.createdBy = createdBy;
-    }
+    }<% } %>
 
     @Override
     public String toString() {
         return "userManagementDTO [id=" + id + ", login=" + login
                 + ", firstName=" + firstName + ", lastName=" + lastName
                 + ", email=" + email + ", activated=" + activated
-                + ", langKey=" + langKey + ", authorities=" + authorities + ", createdBy="
+                + ", langKey=" + langKey + ", authorities=" + authorities + <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>", createdBy="
                 + createdBy + ", createdDate=" + createdDate
                 + ", lastModifiedBy=" + lastModifiedBy + ", lastModifiedDate="
-                + lastModifiedDate + "]";
+                + lastModifiedDate +<% } %> "]";
     }
 
 }
