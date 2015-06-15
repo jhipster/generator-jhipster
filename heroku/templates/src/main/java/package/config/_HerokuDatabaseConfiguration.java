@@ -22,15 +22,13 @@ public class HerokuDatabaseConfiguration implements EnvironmentAware {
 
     private RelaxedPropertyResolver propertyResolver;
 
-    private Environment environment;
-
     @Override
     public void setEnvironment(Environment environment) {
-        this.environment = environment;
         this.propertyResolver = new RelaxedPropertyResolver(environment, "spring.datasource.");
     }
 
     @Bean
+    @Profile(Constants.SPRING_PROFILE_HEROKU)
     public DataSource dataSource() {
         log.debug("Configuring Heroku Datasource");
 
