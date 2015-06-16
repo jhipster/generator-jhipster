@@ -1,9 +1,21 @@
 package <%=packageName%>.config.cassandra;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.datastax.driver.core.*;
+import com.datastax.driver.core.policies.LatencyAwarePolicy;
+import com.datastax.driver.core.policies.LatencyAwarePolicy.Builder;
 import com.datastax.driver.core.policies.LoadBalancingPolicy;
 import com.datastax.driver.core.policies.ReconnectionPolicy;
 import com.datastax.driver.core.policies.RetryPolicy;
+import com.google.common.collect.Lists;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -90,6 +102,19 @@ public class CassandraProperties {
      */
     private String keyspaceName;
 
+    
+    /**
+     * User in case authentication is needed
+     */
+    private String user = "";
+    
+    /**
+     * password in case authentication is needed
+     */
+    private String password = "";
+    
+    
+    
     public String getClusterName() {
         return clusterName;
     }
@@ -209,6 +234,258 @@ public class CassandraProperties {
     public void setKeyspaceName(String keyspaceName) {
         this.keyspaceName = keyspaceName;
     }
+            
+    
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public static LoadBalancingPolicy parseLbPolicy(String loadBalancingPolicyString) throws InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException{
+        String lb_regex = "([a-zA-Z]*Policy)(\\()(.*)(\\))";
+        Pattern lb_pattern = Pattern.compile(lb_regex);
+        if(!loadBalancingPolicyString.contains("(")){
+            loadBalancingPolicyString += "()";
+        }
+        Matcher lb_matcher = lb_pattern.matcher(loadBalancingPolicyString);
+        
+        if(lb_matcher.matches()){
+            if(lb_matcher.groupCount()>0){
+                // Primary LB policy has been specified
+                String primaryLoadBalancingPolicy = lb_matcher.group(1);
+                String loadBalancingPolicyParams = lb_matcher.group(3);
+                return getLbPolicy(primaryLoadBalancingPolicy, loadBalancingPolicyParams);
+            }
+        }
+        
+        return null;
+    }
+    
+    public static LoadBalancingPolicy getLbPolicy(String lbString, String parameters) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+        LoadBalancingPolicy policy = null;
+        if(!lbString.contains(".")){
+            lbString="com.datastax.driver.core.policies."+ lbString;
+        }
+
+        
+        if(parameters.length()>0){
+            // Child policy or parameters have been specified            
+            String paramsRegex = "([^,]+\\(.+?\\))|([^,]+)";                
+            Pattern param_pattern = Pattern.compile(paramsRegex);
+            Matcher lb_matcher = param_pattern.matcher(parameters);
+                        
+            ArrayList<Object> paramList = Lists.newArrayList();
+            ArrayList<Class> primaryParametersClasses = Lists.newArrayList();
+            int nb=0;
+            while(lb_matcher.find()){
+                if(lb_matcher.groupCount()>0){                  
+                        try{
+                            if(lb_matcher.group().contains("(") && !lb_matcher.group().trim().startsWith("(")){
+                                // We are dealing with child policies here
+                                primaryParametersClasses.add(LoadBalancingPolicy.class);
+                                // Parse and add child policy to the parameter list
+                                paramList.add(parseLbPolicy(lb_matcher.group()));
+                                nb++;
+                            }else{
+                                // We are dealing with parameters that are not policies here
+                                String param = lb_matcher.group();
+                                if(param.contains("'") || param.contains("\"")){
+                                    primaryParametersClasses.add(String.class);
+                                    paramList.add(new String(param.trim().replace("'", "").replace("\"","")));
+                                }else if(param.contains(".") || param.toLowerCase().contains("(double)") || param.toLowerCase().contains("(float)")){
+                                    // gotta allow using float or double
+                                    if(param.toLowerCase().contains("(double)")){
+                                        primaryParametersClasses.add(double.class);
+                                        paramList.add(Double.parseDouble(param.replace("(double)","").trim()));
+                                    }else{                                      
+                                        primaryParametersClasses.add(float.class);
+                                        paramList.add(Float.parseFloat(param.replace("(float)","").trim()));                                    
+                                    }
+                                }else{
+                                    if(param.toLowerCase().contains("(long)")){
+                                        primaryParametersClasses.add(long.class);
+                                        paramList.add(Long.parseLong(param.toLowerCase().replace("(long)","").trim()));
+                                    }else{
+                                        primaryParametersClasses.add(int.class);
+                                        paramList.add(Integer.parseInt(param.toLowerCase().replace("(int)","").trim()));
+                                    }
+                                }
+                                nb++;
+                            }
+                        }catch(Exception e){
+                            e.printStackTrace();
+                        }
+                    }                   
+            }
+                        
+            
+            if(nb>0){
+                // Instantiate load balancing policy with parameters
+                if(lbString.toLowerCase().contains("latencyawarepolicy")){
+                    //special sauce for the latency aware policy which uses a builder subclass to instantiate
+                    Builder builder = LatencyAwarePolicy.builder((LoadBalancingPolicy) paramList.get(0));
+                    
+                    builder.withExclusionThreshold((Double)paramList.get(1));
+                    builder.withScale((Long)paramList.get(2), TimeUnit.MILLISECONDS);
+                    builder.withRetryPeriod((Long)paramList.get(3), TimeUnit.MILLISECONDS);
+                    builder.withUpdateRate((Long)paramList.get(4), TimeUnit.MILLISECONDS);
+                    builder.withMininumMeasurements((Integer)paramList.get(5));
+                    
+                    return builder.build();
+                    
+                }else{
+                    Class<?> clazz = Class.forName(lbString);
+                    Constructor<?> constructor = clazz.getConstructor(primaryParametersClasses.toArray(new Class[primaryParametersClasses.size()]));
+                    
+                    return (LoadBalancingPolicy) constructor.newInstance(paramList.toArray(new Object[paramList.size()]));
+                }
+            }else{
+                // Only one policy has been specified, with no parameter or child policy                
+                Class<?> clazz = Class.forName(lbString);           
+                policy =  (LoadBalancingPolicy) clazz.newInstance();
+            
+                return policy;
+            
+            }           
+                        
+        }else{
+            // Only one policy has been specified, with no parameter or child policy 
+            
+            Class<?> clazz = Class.forName(lbString);           
+            policy =  (LoadBalancingPolicy) clazz.newInstance();
+        
+            return policy;
+        
+        }
+        //return null;
+    }
+    
+    public static RetryPolicy parseRetryPolicy(String retryPolicyString) throws InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException, NoSuchFieldException{
+    
+        if(!retryPolicyString.contains(".")){
+            retryPolicyString="com.datastax.driver.core.policies."+ retryPolicyString;
+            
+            Class<?> clazz = Class.forName(retryPolicyString);
+            
+            Field field = clazz.getDeclaredField("INSTANCE");
+            RetryPolicy policy = (RetryPolicy) field.get(null);
+        
+            return policy;
+        }
+        
+        return null;
+    }
+    
+    
+    public static ReconnectionPolicy parseReconnectionPolicy(String reconnectionPolicyString) throws InstantiationException, IllegalAccessException, ClassNotFoundException, NoSuchMethodException, SecurityException, IllegalArgumentException, InvocationTargetException{
+        String lb_regex = "([a-zA-Z]*Policy)(\\()(.*)(\\))";
+        Pattern lb_pattern = Pattern.compile(lb_regex);
+        Matcher lb_matcher = lb_pattern.matcher(reconnectionPolicyString);
+        
+        if(lb_matcher.matches()){
+            if(lb_matcher.groupCount()>0){
+                // Primary LB policy has been specified
+                String primaryReconnectionPolicy = lb_matcher.group(1);
+                String reconnectionPolicyParams = lb_matcher.group(3);
+                return getReconnectionPolicy(primaryReconnectionPolicy, reconnectionPolicyParams);
+            }
+        }
+        
+        return null;
+    }
+    
+    public static ReconnectionPolicy getReconnectionPolicy(String rcString, String parameters) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+        ReconnectionPolicy policy = null;
+        //ReconnectionPolicy childPolicy = null;
+        if(!rcString.contains(".")){
+            rcString="com.datastax.driver.core.policies."+ rcString;
+        }
+        
+        
+        if(parameters.length()>0){
+            // Child policy or parameters have been specified
+            String paramsRegex = "([^,]+\\(.+?\\))|([^,]+)";    
+            Pattern param_pattern = Pattern.compile(paramsRegex);
+            Matcher lb_matcher = param_pattern.matcher(parameters);
+                        
+            ArrayList<Object> paramList = Lists.newArrayList();
+            ArrayList<Class> primaryParametersClasses = Lists.newArrayList();
+            int nb=0;
+            while(lb_matcher.find()){
+                if(lb_matcher.groupCount()>0){                  
+                        try{
+                            if(lb_matcher.group().contains("(") && !lb_matcher.group().trim().startsWith("(")){
+                                // We are dealing with child policies here
+                                primaryParametersClasses.add(LoadBalancingPolicy.class);
+                                // Parse and add child policy to the parameter list
+                                paramList.add(parseReconnectionPolicy(lb_matcher.group()));
+                                nb++;
+                            }else{
+                                // We are dealing with parameters that are not policies here
+                                String param = lb_matcher.group();
+                                if(param.contains("'") || param.contains("\"")){
+                                    primaryParametersClasses.add(String.class);
+                                    paramList.add(new String(param.trim().replace("'", "").replace("\"","")));
+                                }else if(param.contains(".") || param.toLowerCase().contains("(double)") || param.toLowerCase().contains("(float)")){
+                                    // gotta allow using float or double
+                                    if(param.toLowerCase().contains("(double)")){
+                                        primaryParametersClasses.add(double.class);
+                                        paramList.add(Double.parseDouble(param.replace("(double)","").trim()));
+                                    }else{                                      
+                                        primaryParametersClasses.add(float.class);
+                                        paramList.add(Float.parseFloat(param.replace("(float)","").trim()));                                    
+                                    }
+                                }else{
+                                    if(param.toLowerCase().contains("(long)")){
+                                        primaryParametersClasses.add(long.class);
+                                        paramList.add(Long.parseLong(param.toLowerCase().replace("(long)","").trim()));
+                                    }else{
+                                        primaryParametersClasses.add(int.class);
+                                        paramList.add(Integer.parseInt(param.toLowerCase().replace("(int)","").trim()));
+                                    }
+                                }
+                                nb++;
+                            }
+                        }catch(Exception e){
+                            e.printStackTrace();
+                        }
+                    }                   
+            }
+                        
+            
+            if(nb>0){
+                // Instantiate load balancing policy with parameters
+                    Class<?> clazz = Class.forName(rcString);
+                    Constructor<?> constructor = clazz.getConstructor(primaryParametersClasses.toArray(new Class[primaryParametersClasses.size()]));
+                    
+                    return (ReconnectionPolicy) constructor.newInstance(paramList.toArray(new Object[paramList.size()]));
+
+            }
+            // Only one policy has been specified, with no parameter or child policy                
+            Class<?> clazz = Class.forName(rcString);           
+            policy =  (ReconnectionPolicy) clazz.newInstance();
+        
+            return policy;          
+                        
+        }
+        Class<?> clazz = Class.forName(rcString);           
+        policy =  (ReconnectionPolicy) clazz.newInstance();
+
+        return policy;
+    }
+    
+    
 
     public Cluster createCluster() {
         Cluster.Builder builder = Cluster.builder()
@@ -235,10 +512,7 @@ public class CassandraProperties {
         // Manage the load balancing policy
         if (!StringUtils.isEmpty(this.getLoadBalancingPolicy())) {
             try {
-                Class loadBalancingPolicyClass = ClassUtils.forName(this.getLoadBalancingPolicy(), null);
-                Object loadBalancingPolicyInstance = loadBalancingPolicyClass.newInstance();
-                LoadBalancingPolicy userLoadBalancingPolicy = (LoadBalancingPolicy) loadBalancingPolicyInstance;
-                builder.withLoadBalancingPolicy(userLoadBalancingPolicy);
+                builder.withLoadBalancingPolicy(parseLbPolicy(this.getLoadBalancingPolicy()));
             } catch (ClassNotFoundException e) {
                 logger.warn("The load balancing policy could not be loaded, falling back to the default policy", e);
             } catch (InstantiationException e) {
@@ -247,6 +521,14 @@ public class CassandraProperties {
                 logger.warn("The load balancing policy could not be created, falling back to the default policy", e);
             } catch (ClassCastException e) {
                 logger.warn("The load balancing policy does not implement the correct interface, falling back to the default policy", e);
+            } catch (NoSuchMethodException e) {
+                logger.warn("The load balancing policy could not be created, falling back to the default policy", e);
+            } catch (SecurityException e) {
+                logger.warn("The load balancing policy could not be created, falling back to the default policy", e);
+            } catch (IllegalArgumentException e) {
+                logger.warn("The load balancing policy could not be created, falling back to the default policy", e);
+            } catch (InvocationTargetException e) {
+                logger.warn("The load balancing policy could not be created, falling back to the default policy", e);
             }
         }
 
@@ -265,11 +547,8 @@ public class CassandraProperties {
 
         // Manage the reconnection policy
         if (!StringUtils.isEmpty(this.getReconnectionPolicy())) {
-            try {
-                Class reconnectionPolicyClass = ClassUtils.forName(this.getReconnectionPolicy(), null);
-                Object reconnectionPolicyInstance = reconnectionPolicyClass.newInstance();
-                ReconnectionPolicy userReconnectionPolicy = (ReconnectionPolicy) reconnectionPolicyInstance;
-                builder.withReconnectionPolicy(userReconnectionPolicy);
+            try {                
+                builder.withReconnectionPolicy(parseReconnectionPolicy(this.getReconnectionPolicy()));
             } catch (ClassNotFoundException e) {
                 logger.warn("The reconnection policy could not be loaded, falling back to the default policy", e);
             } catch (InstantiationException e) {
@@ -278,16 +557,21 @@ public class CassandraProperties {
                 logger.warn("The reconnection policy could not be created, falling back to the default policy", e);
             } catch (ClassCastException e) {
                 logger.warn("The reconnection policy does not implement the correct interface, falling back to the default policy", e);
+            } catch (NoSuchMethodException e) {
+                logger.warn("The reconnection policy could not be created, falling back to the default policy", e);
+            } catch (SecurityException e) {
+                logger.warn("The reconnection policy could not be created, falling back to the default policy", e);
+            } catch (IllegalArgumentException e) {
+                logger.warn("The reconnection policy could not be created, falling back to the default policy", e);
+            } catch (InvocationTargetException e) {
+                logger.warn("The reconnection policy could not be created, falling back to the default policy", e);
             }
         }
 
         // Manage the retry policy
         if (!StringUtils.isEmpty(this.getRetryPolicy())) {
             try {
-                Class retryPolicyClass = ClassUtils.forName(this.getRetryPolicy(), null);
-                Object retryPolicyInstance = retryPolicyClass.newInstance();
-                RetryPolicy userRetryPolicy = (RetryPolicy) retryPolicyInstance;
-                builder.withRetryPolicy(userRetryPolicy);
+                builder.withRetryPolicy(parseRetryPolicy(this.getRetryPolicy()));
             } catch (ClassNotFoundException e) {
                 logger.warn("The retry policy could not be loaded, falling back to the default policy", e);
             } catch (InstantiationException e) {
@@ -296,7 +580,21 @@ public class CassandraProperties {
                 logger.warn("The retry policy could not be created, falling back to the default policy", e);
             } catch (ClassCastException e) {
                 logger.warn("The retry policy does not implement the correct interface, falling back to the default policy", e);
+            } catch (NoSuchMethodException e) {
+                logger.warn("The retry policy could not be created, falling back to the default policy", e);
+            } catch (SecurityException e) {
+                logger.warn("The retry policy could not be created, falling back to the default policy", e);
+            } catch (IllegalArgumentException e) {
+                logger.warn("The retry policy could not be created, falling back to the default policy", e);
+            } catch (InvocationTargetException e) {
+                logger.warn("The retry policy could not be created, falling back to the default policy", e);
+            } catch (NoSuchFieldException e) {
+                logger.warn("The retry policy could not be created, falling back to the default policy", e);
             }
+        }
+        
+        if(!StringUtils.isEmpty(this.getUser()) && !StringUtils.isEmpty(this.getPassword())){
+            builder.withCredentials(this.getUser(), this.getPassword());
         }
 
         // Manage socket options
