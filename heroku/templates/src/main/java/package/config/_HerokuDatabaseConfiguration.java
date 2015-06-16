@@ -15,7 +15,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @Configuration
-@Profile(Constants.SPRING_PROFILE_CLOUD)
+@Profile(Constants.SPRING_PROFILE_HEROKU)
 public class HerokuDatabaseConfiguration implements EnvironmentAware {
 
     private final Logger log = LoggerFactory.getLogger(HerokuDatabaseConfiguration.class);
@@ -28,7 +28,6 @@ public class HerokuDatabaseConfiguration implements EnvironmentAware {
     }
 
     @Bean
-    @Profile(Constants.SPRING_PROFILE_HEROKU)
     public DataSource dataSource() {
         log.debug("Configuring Heroku Datasource");
 
