@@ -402,12 +402,16 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         this.useCompass != null &&
         this.buildTool != null &&
         this.frontendBuilder != null &&
-        this.enableTranslation != null &&
         this.javaVersion != null) {
 
         // Generate key if key does not already exist in config
         if (this.rememberMeKey == null) {
             this.rememberMeKey = crypto.randomBytes(20).toString('hex');
+        }
+
+        // If translation is not defined, it is enabled by default
+        if (this.enableTranslation == null) {
+            this.enableTranslation = true;
         }
 
         console.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
@@ -568,8 +572,6 @@ JhipsterGenerator.prototype.app = function app() {
         this.template(resourceDir + '/config/cql/_create-keyspace-prod.cql', resourceDir + 'config/cql/create-keyspace-prod.cql', this, {});
         this.template(resourceDir + '/config/cql/_create-keyspace.cql', resourceDir + 'config/cql/create-keyspace.cql', this, {});
         this.template(resourceDir + '/config/cql/_drop-keyspace.cql', resourceDir + 'config/cql/drop-keyspace.cql', this, {});
-        this.template(resourceDir + '/config/cql/_install.cql', resourceDir + 'config/cql/install.cql', this, {});
-        this.template(resourceDir + '/config/cql/_reset.cql', resourceDir + 'config/cql/reset.cql', this, {});
         this.copy(resourceDir + '/config/cql/create-tables.cql', resourceDir + 'config/cql/create-tables.cql');
     }
 

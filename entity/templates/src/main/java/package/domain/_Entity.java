@@ -1,6 +1,17 @@
 package <%=packageName%>.domain;
 <% if (databaseType == 'cassandra') { %>
-import com.datastax.driver.mapping.annotations.*;<% } %><% if (relationships.length > 0  && (fieldsContainOwnerManyToMany == false || fieldsContainOwnerOneToOne == false || fieldsContainOneToMany == true)) { %>
+import com.datastax.driver.mapping.annotations.*;<% } %><%
+var importJsonignore = false;
+for (relationshipId in relationships) {
+    if (relationships[relationshipId].relationshipType == 'one-to-many') {
+        importJsonignore = true;
+    } else if (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == false) {
+        importJsonignore = true;
+    } else if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == false) {
+        importJsonignore = true;
+    }
+}
+if (importJsonignore) { %>
 import com.fasterxml.jackson.annotation.JsonIgnore;<% } %><% if (fieldsContainCustomTime == true) { %>
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;<% } %><% if (fieldsContainLocalDate == true) { %>

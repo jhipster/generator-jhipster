@@ -15,18 +15,15 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @Configuration
-@Profile("heroku")
+@Profile(Constants.SPRING_PROFILE_HEROKU)
 public class HerokuDatabaseConfiguration implements EnvironmentAware {
 
     private final Logger log = LoggerFactory.getLogger(HerokuDatabaseConfiguration.class);
 
     private RelaxedPropertyResolver propertyResolver;
 
-    private Environment environment;
-
     @Override
     public void setEnvironment(Environment environment) {
-        this.environment = environment;
         this.propertyResolver = new RelaxedPropertyResolver(environment, "spring.datasource.");
     }
 

@@ -11,7 +11,7 @@ import org.mongeez.Mongeez;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (databaseType == 'sql') { %>
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;<% } %><% if (databaseType == 'mongodb') { %>
+import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoProperties;<% } %><% if (databaseType == 'sql') { %>
 import org.springframework.boot.bind.RelaxedPropertyResolver;
@@ -47,7 +47,7 @@ import java.util.List;<% } %>
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @EnableTransactionManagement<% } %><% if (searchEngine == 'elasticsearch') { %>
 @EnableElasticsearchRepositories("<%=packageName%>.repository.search")<% } %><% if (databaseType == 'mongodb') { %>
-@Profile("!cloud")
+@Profile("!" + Constants.SPRING_PROFILE_CLOUD)
 @EnableMongoRepositories("<%=packageName%>.repository")
 @Import(value = MongoAutoConfiguration.class)
 @EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")<% } %>
@@ -78,8 +78,7 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
     }
 
     @Bean(destroyMethod = "shutdown")
-    @ConditionalOnMissingClass(name = "<%=packageName%>.config.HerokuDatabaseConfiguration")
-    @Profile("!" + Constants.SPRING_PROFILE_CLOUD)
+    @ConditionalOnExpression("#{!environment.acceptsProfiles('cloud') && !environment.acceptsProfiles('heroku')}")
     public DataSource dataSource() {
         log.debug("Configuring Datasource");
         if (dataSourcePropertyResolver.getProperty("url") == null && dataSourcePropertyResolver.getProperty("databaseName") == null) {

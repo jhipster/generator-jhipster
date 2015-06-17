@@ -184,62 +184,58 @@ HerokuGenerator.prototype.copyHerokuFiles = function copyHerokuFiles() {
     });
 };
 
-HerokuGenerator.prototype.productionBuild = function productionBuild() {
-  if(this.abort) return;
-  var done = this.async();
-  this.log(chalk.bold('\nBuilding application'));
+HerokuGenerator.prototype.productionDeploy = function productionDeploy() {
+    this.on('end', function () {
+        if(this.abort) return;
+        var done = this.async();
+        this.log(chalk.bold('\nBuilding application'));
 
-  var buildCmd = 'mvn package -Pprod -DskipTests=true'
-  if (this.buildTool == 'gradle') {
-    buildCmd = './gradlew -Pprod bootRepackage -x test'
-  }
+        var buildCmd = 'mvn package -Pprod -DskipTests=true'
+        if (this.buildTool == 'gradle') {
+            buildCmd = './gradlew -Pprod bootRepackage -x test'
+        }
 
-  var child = exec(buildCmd, function (err, stdout) {
-    if (err) {
-      this.abort = true;
-      this.log.error(err);
-    }
-    done();
-  }.bind(this));
+        var child = exec(buildCmd, function (err, stdout) {
+            if (err) {
+                this.abort = true;
+                this.log.error(err);
+            }
+            done();
+        }.bind(this));
 
-  child.stdout.on('data', function(data) {
-    this.log(data.toString());
-  }.bind(this));
-};
+        child.stdout.on('data', function(data) {
+            this.log(data.toString());
+        }.bind(this));
 
-HerokuGenerator.prototype.herokuCliDeploy = function herokuCliDeploy() {
-  if(this.abort) return;
-  var done = this.async();
+        var herokuDeployCommand = 'heroku deploy:jar --jar target/*.war';
+        if (this.buildTool == 'gradle') {
+            herokuDeployCommand = 'heroku deploy:jar --jar build/libs/*.war'
+        }
 
-  var herokuDeployCommand = 'heroku deploy:jar --jar target/*.war';
-  if (this.buildTool == 'gradle') {
-    herokuDeployCommand = 'heroku deploy:jar --jar build/libs/*.war'
-  }
+        this.log(chalk.bold("\nUploading your application code.\n This may take " + chalk.cyan('several minutes') + " depending on your connection speed..."));
+        var child = exec(herokuDeployCommand, function (err, stdout) {
+            if (err) {
+                this.abort = true;
+                this.log.error(err);
+            }
+            console.log(stdout);
+            if (err) {
+                console.log(chalk.red(err));
+            } else {
+                console.log(chalk.green('\nYour app should now be live. To view it run\n\t' + chalk.bold('heroku open')));
+                console.log(chalk.yellow('And you can view the logs with this command\n\t' + chalk.bold('heroku logs --tail')));
+            if (this.buildTool == 'gradle') {
+                console.log(chalk.yellow('After application modification, repackage it with\n\t' + chalk.bold('./gradlew -Pprod bootRepackage -x test')));
+            } else {
+                console.log(chalk.yellow('After application modification, repackage it with\n\t' + chalk.bold('mvn package -Pprod -DskipTests')));
+            }
+                console.log(chalk.yellow('And then re-deploy it with\n\t' + chalk.bold(herokuDeployCommand)));
+            }
+            done();
+        }.bind(this));
 
-  this.log(chalk.bold("\nUploading your application code.\n This may take " + chalk.cyan('several minutes') + " depending on your connection speed..."));
-  var child = exec(herokuDeployCommand, function (err, stdout) {
-    if (err) {
-      this.abort = true;
-      this.log.error(err);
-    }
-    console.log(stdout);
-    if (err) {
-      console.log(chalk.red(err));
-    } else {
-      console.log(chalk.green('\nYour app should now be live. To view it run\n\t' + chalk.bold('heroku open')));
-      console.log(chalk.yellow('And you can view the logs with this command\n\t' + chalk.bold('heroku logs --tail')));
-      if (this.buildTool == 'gradle') {
-        console.log(chalk.yellow('After application modification, repackage it with\n\t' + chalk.bold('./gradlew -Pprod bootRepackage -x test')));
-      } else {
-        console.log(chalk.yellow('After application modification, repackage it with\n\t' + chalk.bold('mvn package -Pprod -DskipTests')));
-      }
-      console.log(chalk.yellow('And then re-deploy it with\n\t' + chalk.bold(herokuDeployCommand)));
-    }
-    done();
-    done();
-  }.bind(this));
-
-  child.stdout.on('data', function(data) {
-    this.log(data.toString());
-  }.bind(this));
+        child.stdout.on('data', function(data) {
+            this.log(data.toString());
+        }.bind(this));
+    });
 };

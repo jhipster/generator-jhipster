@@ -1,7 +1,6 @@
 import org.apache.tools.ant.taskdefs.condition.Os
 apply plugin: 'spring-boot'
-apply plugin: 'com.moowork.node'
-<% if(frontendBuilder == 'gulp') {%>
+apply plugin: 'com.moowork.node'<% if(frontendBuilder == 'gulp') {%>
 apply plugin: 'com.moowork.gulp'
 <% } %>
 
