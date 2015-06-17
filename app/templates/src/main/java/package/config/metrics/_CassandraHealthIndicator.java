@@ -15,7 +15,7 @@ import org.springframework.util.Assert;
  */
 public class CassandraHealthIndicator extends AbstractHealthIndicator {
 
-    private static Log logger = LogFactory.getLog(CassandraHealthIndicator.class);
+    private static Log log = LogFactory.getLog(CassandraHealthIndicator.class);
 
     private Session session;
 
@@ -30,7 +30,7 @@ public class CassandraHealthIndicator extends AbstractHealthIndicator {
 
     @Override
     protected void doHealthCheck(Health.Builder builder) throws Exception {
-        logger.debug("Initializing Cassandra health indicator");
+        log.debug("Initializing Cassandra health indicator");
         try {
             ResultSet results = session.execute(validationStmt.bind());
             if (results.isExhausted()) {
@@ -39,7 +39,7 @@ public class CassandraHealthIndicator extends AbstractHealthIndicator {
                 builder.up().withDetail("version", results.one().getString(0));
             }
         } catch (Exception e) {
-            logger.debug("Cannot connect to Cassandra cluster. Error: {}", e);
+            log.debug("Cannot connect to Cassandra cluster. Error: {}", e);
             builder.down(e);
         }
     }
