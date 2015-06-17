@@ -1,4 +1,4 @@
-package <%= packageName %>;
+package <%=packageName%>.domain.enumeration;
 
 /**
  * The <%= enumName %> enumeration.

@@ -38,6 +38,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+<% for (fieldId in fields) { if (fields[fieldId].fieldIsEnum == true) { %>import <%=packageName%>.domain.enumeration.<%= fields[fieldId].fieldType %>;
+<% } } %>
 /**
  * Test class for the <%= entityClass %>Resource REST controller.
  *

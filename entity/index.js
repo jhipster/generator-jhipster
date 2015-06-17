@@ -207,11 +207,11 @@ EntityGenerator.prototype.askForFields = function askForFields() {
             name: 'fieldType',
             validate: function (input) {
                 if (input == '') {
-                    return 'Your full class name cannot be empty';
+                    return 'Your class name cannot be empty';
                 }
                 return true;
             },
-            message: 'What is the full class name (with package) of your enumeration?'
+            message: 'What is the class name of your enumeration?'
         },
         {
             when: function (response) {
@@ -857,13 +857,12 @@ EntityGenerator.prototype.files = function files() {
         var field = this.fields[fieldIdx];
         if (field.fieldIsEnum == true) {
             var fieldType = field.fieldType;
-            var lastDot = fieldType.lastIndexOf(".");
             var enumInfo = new Object();
-            enumInfo.packageName = fieldType.substring(0, lastDot);
-            enumInfo.enumName = fieldType.substring(lastDot + 1);
+            enumInfo.packageName = this.packageName;
+            enumInfo.enumName = fieldType;
             enumInfo.enumValues = field.fieldValues;
-            this.template('src/main/java/package/_Enum.java',
-                'src/main/java/' + fieldType.replace(/\./g, '/') + '.java', enumInfo, {});
+            this.template('src/main/java/package/domain/enumeration/_Enum.java',
+                'src/main/java/' + this.packageFolder + '/domain/enumeration/' + fieldType + '.java', enumInfo, {});
         }
     }
 

@@ -16,6 +16,8 @@ import java.util.HashSet;
 import java.util.Set;<% } %>
 import java.util.Objects;<% if (databaseType == 'cassandra') { %>
 import java.util.UUID;<% } %>
+<% for (fieldId in fields) { if (fields[fieldId].fieldIsEnum == true) { %>
+import <%=packageName%>.domain.enumeration.<%= fields[fieldId].fieldType %>;<% } } %>
 
 /**
  * A DTO for the <%= entityClass %> entity.
