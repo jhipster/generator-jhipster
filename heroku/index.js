@@ -188,28 +188,11 @@ HerokuGenerator.prototype.productionDeploy = function productionDeploy() {
     this.on('end', function () {
         if(this.abort) return;
         var done = this.async();
-        this.log(chalk.bold('\nBuilding application'));
+        this.log(chalk.bold('\nBuilding and deploying application'));
 
-        var buildCmd = 'mvn package -Pprod -DskipTests=true'
+        var herokuDeployCommand = 'mvn package -Pprod -DskipTests=true && heroku deploy:jar --jar target/*.war';
         if (this.buildTool == 'gradle') {
-            buildCmd = './gradlew -Pprod bootRepackage -x test'
-        }
-
-        var child = exec(buildCmd, function (err, stdout) {
-            if (err) {
-                this.abort = true;
-                this.log.error(err);
-            }
-            done();
-        }.bind(this));
-
-        child.stdout.on('data', function(data) {
-            this.log(data.toString());
-        }.bind(this));
-
-        var herokuDeployCommand = 'heroku deploy:jar --jar target/*.war';
-        if (this.buildTool == 'gradle') {
-            herokuDeployCommand = 'heroku deploy:jar --jar build/libs/*.war'
+            herokuDeployCommand = './gradlew -Pprod bootRepackage -x test && heroku deploy:jar --jar build/libs/*.war'
         }
 
         this.log(chalk.bold("\nUploading your application code.\n This may take " + chalk.cyan('several minutes') + " depending on your connection speed..."));
