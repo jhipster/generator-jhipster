@@ -124,7 +124,7 @@ only screen and (                min-resolution: 2dppx) {
 .voffset9 { margin-top: 150px; }
 
 /* start Password strength bar style */
-ul#strength {
+ul#strengthBar {
     display:inline;
     list-style:none;
     margin:0;
