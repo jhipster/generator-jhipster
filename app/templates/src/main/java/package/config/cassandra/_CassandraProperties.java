@@ -502,9 +502,9 @@ public class CassandraProperties {
         }
 
         // Manage compression protocol
-        if (ProtocolOptions.Compression.SNAPPY.equals(this.getCompression())) {
+        if (ProtocolOptions.Compression.SNAPPY.name().equals(this.getCompression())) {
             builder.withCompression(ProtocolOptions.Compression.SNAPPY);
-        } else if (ProtocolOptions.Compression.LZ4.equals(this.getCompression())) {
+        } else if (ProtocolOptions.Compression.LZ4.name().equals(this.getCompression())) {
             builder.withCompression(ProtocolOptions.Compression.LZ4);
         } else {
             builder.withCompression(ProtocolOptions.Compression.NONE);
