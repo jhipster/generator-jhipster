@@ -24,8 +24,8 @@ public class <%= entityClass %>DTO implements Serializable {
 <% if (databaseType == 'sql') { %>
     private Long id;<% } %><% if (databaseType == 'mongodb') { %>
     private String id;<% } %><% if (databaseType == 'cassandra') { %>
-    private UUID id;<% } %>
-<% for (fieldId in fields) { %><% if (fields[fieldId].fieldValidate == true) {
+    private UUID id;<% } %><% for (fieldId in fields) { %>
+<% if (fields[fieldId].fieldValidate == true) {
     var required = false;
     if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) {
         required = true;
@@ -42,15 +42,14 @@ public class <%= entityClass %>DTO implements Serializable {
     @JsonDeserialize(using = CustomDateTimeDeserializer.class)<% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     @JsonDeserialize(using = ISO8601LocalDateDeserializer.class)<% } %>
-    private <%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>;
-<% } %><% for (relationshipId in relationships) {
+    private <%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>;<% } %><% for (relationshipId in relationships) {
     otherEntityRelationshipName = relationships[relationshipId].otherEntityRelationshipName;%><% if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %>
-    private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>DTO> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();
-<% } else if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
+    private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>DTO> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();<% } else if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
+
     private Long <%= relationships[relationshipId].relationshipFieldName %>Id;<% if (relationships[relationshipId].otherEntityFieldCapitalized !='Id' && relationships[relationshipId].otherEntityFieldCapitalized != '') { %>
 
-    private String <%= relationships[relationshipId].relationshipFieldName %><%= relationships[relationshipId].otherEntityFieldCapitalized %>;
-<% } } } %>
+    private String <%= relationships[relationshipId].relationshipFieldName %><%= relationships[relationshipId].otherEntityFieldCapitalized %>;<% } } } %>
+
     public <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %><% if (databaseType == 'cassandra') { %>UUID<% } %> getId() {
         return id;
     }
@@ -65,8 +64,8 @@ public class <%= entityClass %>DTO implements Serializable {
 
     public void set<%= fields[fieldId].fieldInJavaBeanMethod %>(<%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>) {
         this.<%= fields[fieldId].fieldName %> = <%= fields[fieldId].fieldName %>;
-    }
-<% } %><% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %>
+    }<% } %><% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %>
+
     public Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>DTO> get<%= relationships[relationshipId].relationshipNameCapitalized %>s() {
         return <%= relationships[relationshipId].relationshipFieldName %>s;
     }
@@ -90,6 +89,7 @@ public class <%= entityClass %>DTO implements Serializable {
     public void set<%= relationships[relationshipId].relationshipNameCapitalized %><%= relationships[relationshipId].otherEntityFieldCapitalized %>(String <%= relationships[relationshipId].otherEntityName %><%= relationships[relationshipId].otherEntityFieldCapitalized %>) {
         this.<%= relationships[relationshipId].relationshipFieldName %><%= relationships[relationshipId].otherEntityFieldCapitalized %> = <%= relationships[relationshipId].otherEntityName %><%= relationships[relationshipId].otherEntityFieldCapitalized %>;
     }<% } } } %>
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
