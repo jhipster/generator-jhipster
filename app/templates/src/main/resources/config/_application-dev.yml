@@ -10,7 +10,7 @@ spring:
     datasource:<% if (devDatabaseType == 'oracle') { %>
         driverClassName: oracle.jdbc.OracleDriver<% } %>
         dataSourceClassName: <% if (devDatabaseType == 'mysql') { %>com.mysql.jdbc.jdbc2.optional.MysqlDataSource<% } else if (devDatabaseType == 'postgresql') { %>org.postgresql.ds.PGSimpleDataSource<% } else if (devDatabaseType == 'oracle') { %>oracle.jdbc.pool.OracleDataSource<% } else { %>org.h2.jdbcx.JdbcDataSource<% } %>
-        url: <% if (devDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType == 'postgresql') { %><% } else if (devDatabaseType == 'oracle') { %>jdbc:oracle:thin:@localhost:1521:<%= baseName %><% } else { %>jdbc:h2:mem:jhipster;DB_CLOSE_DELAY=-1<% } %>
+        url: <% if (devDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8<% } else if (devDatabaseType == 'postgresql') { %><% } else if (devDatabaseType == 'oracle') { %>jdbc:oracle:thin:@localhost:1521:<%= baseName %><% } else { %>jdbc:h2:mem:jhipster;DB_CLOSE_DELAY=-1<% } %>
         databaseName: <% if (devDatabaseType == 'postgresql') { %><%= baseName %><% } %>
         serverName: <% if (devDatabaseType == 'postgresql') { %>localhost<% } %>
         username: <% if (devDatabaseType == 'mysql') { %>root<% } else if (devDatabaseType == 'postgresql') { %><%= baseName %><% } %>
