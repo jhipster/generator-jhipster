@@ -188,7 +188,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 },
                 {
                     value: 'enum',
-                    name: 'enum'
+                    name: 'Enumeration (Java enum type)'
                 }
             ],
             default: 0
@@ -430,6 +430,10 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 }
             } else {
                 fieldInJavaBeanMethod = _s.capitalize(props.fieldName);
+            }
+
+            if (props.fieldIsEnum) {
+                props.fieldType = _s.capitalize(props.fieldType);
             }
 
             var field = {fieldId: this.fieldId,
