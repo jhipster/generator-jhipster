@@ -52,7 +52,14 @@
         fieldInputType = 'checkbox';
     } %>
                         <div class="form-group">
-                            <label translate="<%= translationKey %>"><%=fields[fieldId].fieldNameCapitalized%></label>
+                            <label translate="<%= translationKey %>"><%=fields[fieldId].fieldNameCapitalized%></label><% if (fields[fieldId].fieldIsEnum) { %>
+                            <select class="form-control" name="<%= fields[fieldId].fieldName %>" ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) { %> required<% } %>><%
+                                var values = fields[fieldId].fieldValues.split(",");
+                                for (key in values) {
+                                    var value = values[key]; %>
+                                <option value="<%= value %>"><%= value %></option><%
+                                } %>
+                            </select><% } else { %>
                             <input type="<%= fieldInputType %>" class="form-control" name="<%= fields[fieldId].fieldName %>"
                                    ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldType == 'DateTime') { %> ng-model-options="{timezone: 'UTC'}"<% } %><% if (fields[fieldId].fieldValidate == true) {
                                        if (fields[fieldId].fieldValidateRules.indexOf('required') != -1) {
@@ -61,7 +68,7 @@
                                        %> ng-maxlength="<%= fields[fieldId].fieldValidateRulesMaxlength %>"<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('min') != -1) {
                                        %> min="<%= fields[fieldId].fieldValidateRulesMin %>"<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('max') != -1) {
                                        %> max="<%= fields[fieldId].fieldValidateRulesMax %>"<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('pattern') != -1) {
-                                       %> ng-pattern="/<%= fields[fieldId].fieldValidateRulesPattern %>/"<% } } %>>
+                                       %> ng-pattern="/<%= fields[fieldId].fieldValidateRulesPattern %>/"<% } } %>><% } %>
 <% if (fields[fieldId].fieldValidate == true) { %>
                             <div ng-show="editForm.<%= fields[fieldId].fieldName %>.$invalid"><% if (fields[fieldId].fieldValidateRules.indexOf('required') != -1) { %>
                                 <p class="help-block"

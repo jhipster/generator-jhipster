@@ -27,13 +27,14 @@
             if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('maxlength') != -1) {
                 maxlength = fields[fieldId].fieldValidateRulesMaxlength;
             }
-            if (fields[fieldId].fieldType == 'String') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="varchar(<%= maxlength %>)"<% } else if (fields[fieldId].fieldType == 'Integer') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="integer"<% } else if (fields[fieldId].fieldType == 'Long') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bigint"<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="decimal(10,2)"<% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="date"<% } else if (fields[fieldId].fieldType == 'DateTime') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="timestamp"<% } else if (fields[fieldId].fieldType == 'Boolean') { %>
+            var fieldType = fields[fieldId].fieldType;
+            if (fieldType == 'String' || fields[fieldId].fieldIsEnum) { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="varchar(<%= maxlength %>)"<% } else if (fieldType == 'Integer') { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="integer"<% } else if (fieldType == 'Long') { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bigint"<% } else if (fieldType == 'BigDecimal') { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="decimal(10,2)"<% } else if (fieldType == 'LocalDate') { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="date"<% } else if (fieldType == 'DateTime') { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="timestamp"<% } else if (fieldType == 'Boolean') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bit"<% } %><% if (required == false) {
                  %>/><% } else { %>>
                 <constraints nullable="false" />
