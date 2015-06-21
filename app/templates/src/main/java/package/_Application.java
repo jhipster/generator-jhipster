@@ -44,7 +44,7 @@ public class Application {
             log.warn("No Spring profile configured, running with default configuration");
         } else {
             log.info("Running with Spring profile(s) : {}", Arrays.toString(env.getActiveProfiles()));
-            Collection activeProfiles = Arrays.asList(env.getActiveProfiles());
+            Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
             if (activeProfiles.contains("dev") && activeProfiles.contains("prod")) {
                 log.error("You have misconfigured your application! " +
                     "It should not run with both the 'dev' and 'prod' profiles at the same time.");

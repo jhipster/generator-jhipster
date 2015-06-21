@@ -36,7 +36,7 @@ public class PaginationUtil {
         return new PageRequest(offset - 1, limit);
     }
 
-    public static HttpHeaders generatePaginationHttpHeaders(Page page, String baseUrl, Integer offset, Integer limit)
+    public static HttpHeaders generatePaginationHttpHeaders(Page<?> page, String baseUrl, Integer offset, Integer limit)
         throws URISyntaxException {
 
         if (offset == null || offset < MIN_OFFSET) {

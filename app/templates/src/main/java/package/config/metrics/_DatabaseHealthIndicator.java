@@ -18,8 +18,6 @@ import java.util.Map;<% } %>
  */
 public class DatabaseHealthIndicator extends AbstractHealthIndicator {
     <% if (databaseType == 'sql') { %>
-    private DataSource dataSource;
-
     private JdbcTemplate jdbcTemplate;
 
     private static Map<String, String> queries = new HashMap<>();
@@ -39,7 +37,6 @@ public class DatabaseHealthIndicator extends AbstractHealthIndicator {
     private String query = null;
 
     public DatabaseHealthIndicator(DataSource dataSource) {
-        this.dataSource = dataSource;
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
