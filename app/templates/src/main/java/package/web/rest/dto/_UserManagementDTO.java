@@ -1,7 +1,7 @@
 package <%=packageName%>.web.rest.dto;
 
-import <%=packageName%>.domain.Authority;
 import org.hibernate.validator.constraints.Email;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import <%=packageName%>.domain.Authority;
 import org.joda.time.DateTime;<% } %>
 
 import javax.validation.constraints.NotNull;
@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
-public class userManagementDTO {
+public class UserManagementDTO {
 
     private Long id;
 
@@ -33,8 +33,9 @@ public class userManagementDTO {
 
     @Size(min = 2, max = 5)
     private String langKey;
-
-    private Set<Authority> authorities = new HashSet<>();
+    <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+    private Set<Authority> authorities = new HashSet<>();<% } %><% if (databaseType == 'cassandra') { %>
+    private Set<String> authorities = new HashSet<>();<% } %>
     <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     private String createdBy;
     private DateTime createdDate;
@@ -43,8 +44,8 @@ public class userManagementDTO {
 
     public userManagementDTO() {}
     public userManagementDTO(Long id, String login, String firstName,
-            String lastName, String email, boolean activated, String langKey,
-            Set<Authority> authorities<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>, String createdBy, DateTime createdDate,
+            String lastName, String email, boolean activated, String langKey<% if (databaseType == 'cassandra') { %>, Set<String> authorities<% } %>
+            <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>, Set<Authority> authorities, String createdBy, DateTime createdDate,
             String lastModifiedBy, DateTime lastModifiedDate<% } %>) {
         super();
         this.id = id;
@@ -89,12 +90,15 @@ public class userManagementDTO {
     public String getLangKey() {
         return langKey;
     }
-
-
+    <% if (databaseType == 'cassandra') { %>
+    public Set<String> getAuthorities() {
+        return authorities;
+    }<% } %>
+    <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     public Set<Authority> getAuthorities() {
         return authorities;
     }
-    <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+
     public String getCreatedBy() {
         return createdBy;
     }
@@ -138,11 +142,15 @@ public class userManagementDTO {
     public void setLangKey(String langKey) {
         this.langKey = langKey;
     }
-
+    <% if (databaseType == 'cassandra') { %>
+    public void setAuthorities(Set<String> authorities) {
+        this.authorities = authorities;
+    }<% } %>
+    <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
     }
-    <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+
     public void setCreatedDate(DateTime createdDate) {
         this.createdDate = createdDate;
     }

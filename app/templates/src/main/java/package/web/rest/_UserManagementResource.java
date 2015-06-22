@@ -52,8 +52,8 @@ public class userManagementResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    @RolesAllowed(AuthoritiesConstants.ADMIN)
-    @Transactional(readOnly = true)
+    @RolesAllowed(AuthoritiesConstants.ADMIN)<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+    @Transactional(readOnly = true)<% } %>
     public ResponseEntity<List<userManagementDTO>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
                                                          @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {

@@ -13,19 +13,19 @@ import javax.inject.Inject;
 import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {})
-public abstract class userManagementMapper {
+public abstract class UserManagementMapper {
 
     @Inject
     private UserService userService;
 
-    public abstract userManagementDTO userTouserManagementDTO(User user);
-    public abstract List<userManagementDTO> usersTouserManagementsDTO(List<User> users);
+    public abstract userManagementDTO userToUserManagementDTO(User user);
+    public abstract List<userManagementDTO> usersToUserManagementsDTO(List<User> users);
 
     <% if (databaseType == 'sql' || databaseType == 'mongodb') { %><% if (javaVersion == '8') { %>
     @Mapping(target = "createdBy", ignore=true)
     @Mapping(target = "createdDate", ignore=true)
     @Mapping(target = "lastModifiedBy", ignore=true)
-    @Mapping(target = "lastModifiedDate", ignore=true)<% } %><% if (javaVersion == '7') { %>
+    @Mapping(target = "lastModifiedDate", ignore=true)<% } else { %>
     @Mappings({
       @Mapping(target = "createdBy", ignore=true),
       @Mapping(target = "createdDate", ignore=true),
