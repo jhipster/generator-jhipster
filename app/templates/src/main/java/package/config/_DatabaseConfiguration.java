@@ -9,7 +9,8 @@ import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;<% } %><
 import com.mongodb.Mongo;
 import org.mongeez.Mongeez;<% } %>
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;<% if (databaseType == 'sql') { %>
+import org.slf4j.LoggerFactory;<% if (databaseType == 'sql') { %><% if (hibernateCache == 'hazelcast') { %>
+import org.springframework.cache.CacheManager;<% } %>
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
@@ -79,7 +80,7 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
 
     @Bean(destroyMethod = "shutdown")
     @ConditionalOnExpression("#{!environment.acceptsProfiles('cloud') && !environment.acceptsProfiles('heroku')}")
-    public DataSource dataSource() {
+    public DataSource dataSource(<% if (hibernateCache == 'hazelcast') { %>CacheManager cacheManager<% } %>) {
         log.debug("Configuring Datasource");
         if (dataSourcePropertyResolver.getProperty("url") == null && dataSourcePropertyResolver.getProperty("databaseName") == null) {
             log.error("Your database connection pool configuration is incorrect! The application" +

@@ -39,7 +39,7 @@ public class CacheConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(CacheConfiguration.class);<% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
 
-    private static HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance();<% } if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
+    private static HazelcastInstance hazelcastInstance;<% } if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
 
     @PersistenceContext
     private EntityManager entityManager;<% } %><% if ((hibernateCache == 'ehcache') || hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
@@ -68,7 +68,7 @@ public class CacheConfiguration {
     }
 
     @Bean
-    public CacheManager cacheManager() {<% if (hibernateCache == 'ehcache') { %>
+    public CacheManager cacheManager(<% if (hibernateCache == 'hazelcast') { %>HazelcastInstance hazelcastInstance<% } %>) {<% if (hibernateCache == 'ehcache') { %>
         log.debug("Starting Ehcache");
         cacheManager = net.sf.ehcache.CacheManager.create();
         cacheManager.getConfiguration().setMaxBytesLocalHeap(env.getProperty("cache.ehcache.maxBytesLocalHeap", String.class, "16M"));
@@ -100,19 +100,20 @@ public class CacheConfiguration {
         return cacheManager;<% } %>
     }<% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
 
-    @PostConstruct
-    private HazelcastInstance hazelcastInstance() {
+    @Bean
+    public HazelcastInstance hazelcastInstance() {
+        log.debug("Configuring Hazelcast");
         Config config = new Config();
         config.setInstanceName("<%=baseName%>");
         config.getNetworkConfig().setPort(5701);
         config.getNetworkConfig().setPortAutoIncrement(true);
 
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
-          System.setProperty("hazelcast.local.localAddress", "127.0.0.1");
+            System.setProperty("hazelcast.local.localAddress", "127.0.0.1");
 
-          config.getNetworkConfig().getJoin().getAwsConfig().setEnabled(false);
-          config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
-          config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(false);
+            config.getNetworkConfig().getJoin().getAwsConfig().setEnabled(false);
+            config.getNetworkConfig().getJoin().getMulticastConfig().setEnabled(false);
+            config.getNetworkConfig().getJoin().getTcpIpConfig().setEnabled(false);
         }
         <% if (hibernateCache == 'hazelcast') { %>
         config.getMapConfigs().put("default", initializeDefaultMapConfig());

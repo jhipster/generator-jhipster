@@ -30,7 +30,7 @@
         <commons-lang.version>2.6</commons-lang.version>
         <gatling.version>2.1.5</gatling.version>
         <gatling-maven-plugin.version>2.1.5</gatling-maven-plugin.version><% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
-        <hazelcast.version>3.4</hazelcast.version><% } %><% if (databaseType == 'sql') { %>
+        <hazelcast.version>3.4.3</hazelcast.version><% } %><% if (databaseType == 'sql') { %>
         <hibernate.version>4.3.6.Final</hibernate.version><% } %><% if (databaseType == 'cassandra') { %>
         <datastax-driver.version>2.1.4</datastax-driver.version><% } %>
         <java.version>1.<%= javaVersion %></java.version>
@@ -53,7 +53,7 @@
         <run.addResources>false</run.addResources>
         <sonar-maven-plugin.version>2.3</sonar-maven-plugin.version>
         <spring-security.version>4.0.0.RELEASE</spring-security.version><% if (authenticationType == 'oauth2') { %>
-        <spring-security-oauth2.version>2.0.1.RELEASE</spring-security-oauth2.version><% } %>
+        <spring-security-oauth2.version>2.0.7.RELEASE</spring-security-oauth2.version><% } %>
         <swagger-springmvc.version>0.9.5</swagger-springmvc.version>
         <usertype-core.version>3.2.0.GA</usertype-core.version>
     </properties>

@@ -3,7 +3,8 @@ package <%=packageName%>.config;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.LoggerFactory;<% if (hibernateCache == 'hazelcast') { %>
+import org.springframework.cache.CacheManager;<% } %>
 import org.springframework.boot.bind.RelaxedPropertyResolver;
 import org.springframework.context.ApplicationContextException;
 import org.springframework.context.EnvironmentAware;
@@ -28,7 +29,7 @@ public class HerokuDatabaseConfiguration implements EnvironmentAware {
     }
 
     @Bean
-    public DataSource dataSource() {
+    public DataSource dataSource(<% if (hibernateCache == 'hazelcast') { %>CacheManager cacheManager<% } %>) {
         log.debug("Configuring Heroku Datasource");
 
         String herokuUrl = propertyResolver.getProperty("heroku-url");
