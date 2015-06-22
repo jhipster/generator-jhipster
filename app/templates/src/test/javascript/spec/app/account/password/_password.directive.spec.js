@@ -18,7 +18,6 @@ describe('Directive Tests ', function () {
         $httpBackend.expectGET('scripts/components/navbar/navbar.html').respond({});
         <% if (enableTranslation) { %>
         $httpBackend.expectGET('i18n/en/global.json').respond({});
-        $httpBackend.expectGET('i18n/en/language.json').respond({});
         $httpBackend.expectGET('i18n/en/main.json').respond({});
         <% } %>
         $httpBackend.expectGET('scripts/app/main/main.html').respond({});
