@@ -94,7 +94,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li active-menu="{{language}}" ng-repeat="language in languages">
-                            <a href="" ng-click="changeLanguage(language)">{{language | getLang}}</a>
+                            <a href="" ng-click="changeLanguage(language)">{{language | findLanguageFromKey}}</a>
                         </li>
                     </ul>
                 </li><% } %>

@@ -11,7 +11,7 @@ angular.module('<%=angularAppName%>')
             $scope.languages = languages;
         });
     })
-    .filter('getLang', function () {
+    .filter('findLanguageFromKey', function () {
         return function (lang) {
             return {
                 "en": "English",

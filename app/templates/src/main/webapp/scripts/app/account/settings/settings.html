@@ -80,7 +80,7 @@
                 </div><% if (enableTranslation){ %>
                 <div class="form-group">
                     <label translate="settings.form.language">Language</label>
-                    <select name="langKey" class="form-control" ng-model="settingsAccount.langKey" ng-controller="LanguageController" ng-options="code as (code | getLang) for code in languages"></select>
+                    <select name="langKey" class="form-control" ng-model="settingsAccount.langKey" ng-controller="LanguageController" ng-options="code as (code | findLanguageFromKey) for code in languages"></select>
                 </div><% } %>
 
                 <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary" translate="settings.form.button">Save</button>
