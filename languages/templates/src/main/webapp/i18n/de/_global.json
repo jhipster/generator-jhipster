@@ -74,6 +74,7 @@
     },
     "entity": {
         "action": {
+            "addblob": "Add blob",
             "back": "Zurück",
             "cancel": "Abbrechen",
             "delete": "Löschen",
@@ -94,6 +95,8 @@
             "maxlength": "Dieses Feld darf max. {{max}} Zeichen lang sein.",
             "min": "Dieses Feld muss größer als {{min}} sein.",
             "max": "Dieses Feld muss kleiner als {{max}} sein.",
+            "minbytes": "This field should be more than {{min}} bytes.",
+            "maxbytes": "This field cannot be more than {{max}} bytes.",
             "pattern": "Dieses Feld muss das Muster {{pattern}} erfüllen.",
             "number": "Dieses Feld muss eine Zahl sein.",
             "datetimelocal": "Dieses Feld muss eine Datums- und Zeitangabe enthalten."

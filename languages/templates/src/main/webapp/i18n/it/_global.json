@@ -74,6 +74,7 @@
     },
     "entity": {
         "action": {
+            "addblob": "Add blob",
             "back": "Indietro",
             "cancel": "Annulla",
             "delete": "Elimina",
@@ -94,6 +95,8 @@
             "maxlength": "Questo campo non può essere più lungo di {{max}} caratteri.",
             "min": "Questo campo dovrebbe essere più di {{min}}..",
             "max": "Questo campo non può essere superiore a {{max}}.",
+            "minbytes": "This field should be more than {{min}} bytes.",
+            "maxbytes": "This field cannot be more than {{max}} bytes.",
             "pattern": "Questo campo dovrebbe seguire pattern pattern {{}}.",
             "number": "Questo campo deve essere un numero.",
             "datetimelocal": "Questo campo dovrebbe essere una data e l'ora."

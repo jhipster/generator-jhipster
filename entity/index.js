@@ -99,6 +99,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.fieldsContainDateTime = false; // JodaTime
     this.fieldsContainCustomTime = false;
     this.fieldsContainBigDecimal = false;
+    this.fieldsContainBlob = false;
     this.fieldsContainOwnerManyToMany = false;
     this.fieldsContainOwnerOneToOne = false;
     this.fieldsContainOneToMany = false;
@@ -201,6 +202,10 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 {
                     value: 'enum',
                     name: 'Enumeration (Java enum type)'
+                },
+                {
+                    value: 'byte[]',
+                    name: 'Blob'
                 }
             ],
             default: 0
@@ -346,6 +351,22 @@ EntityGenerator.prototype.askForFields = function askForFields() {
             when: function (response) {
                 return response.fieldAdd == true &&
                     response.fieldValidate == true &&
+                    response.fieldType == 'byte[]';
+            },
+            type: 'checkbox',
+            name: 'fieldValidateRules',
+            message: 'Which validation rules do you want to add?',
+            choices: [
+                {name: 'Required', value: 'required'},
+                {name: 'Minimum byte size', value: 'minbytes'},
+                {name: 'Maximum byte size', value: 'maxbytes'}
+            ],
+            default: 0
+        },
+        {
+            when: function (response) {
+                return response.fieldAdd == true &&
+                    response.fieldValidate == true &&
                     (response.fieldType == 'LocalDate' ||
                     response.fieldType == 'DateTime' ||
                     response.fieldType == 'UUID' ||
@@ -436,6 +457,38 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 return 'Maximum size must be a number';
             },
             default: 100
+        },
+        {
+            when: function (response) {
+                return response.fieldAdd == true &&
+                    response.fieldValidate == true &&
+                    response.fieldValidateRules.indexOf('minbytes') != -1 &&
+                    response.fieldType == 'byte[]';
+            },
+            type: 'input',
+            name: 'fieldValidateRulesMinbytes',
+            message: 'What is the minimum byte size of your field?',
+            validate: function (input) {
+                if (/^([0-9]*)$/.test(input)) return true;
+                return 'Minimum byte size must be a number';
+            },
+            default: 0
+        },
+        {
+            when: function (response) {
+                return response.fieldAdd == true &&
+                    response.fieldValidate == true &&
+                    response.fieldValidateRules.indexOf('maxbytes') != -1 &&
+                    response.fieldType == 'byte[]';
+            },
+            type: 'input',
+            name: 'fieldValidateRulesMaxbytes',
+            message: 'What is the maximum byte size of your field?',
+            validate: function (input) {
+                if (/^([0-9]*)$/.test(input)) return true;
+                return 'Maximum byte size must be a number';
+            },
+            default: 5000000
         }
     ];
     this.prompt(prompts, function (props) {
@@ -475,8 +528,10 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 fieldValidateRulesMaxlength: props.fieldValidateRulesMaxlength,
                 fieldValidateRulesPattern: props.fieldValidateRulesPattern,
                 fieldValidateRulesMin: props.fieldValidateRulesMin,
-                fieldValidateRulesMax: props.fieldValidateRulesMax
-            };
+                fieldValidateRulesMax: props.fieldValidateRulesMax,
+                fieldValidateRulesMinbytes: props.fieldValidateRulesMinbytes,
+                fieldValidateRulesMaxbytes: props.fieldValidateRulesMaxbytes
+                }
 
             fieldNamesUnderscored.push(_s.underscored(props.fieldName));
             this.fields.push(field);
@@ -494,6 +549,9 @@ EntityGenerator.prototype.askForFields = function askForFields() {
             if (props.fieldType == 'Date') {
                 this.fieldsContainDate = true;
                 this.fieldsContainCustomTime = true;
+            }
+            if (props.fieldType == 'byte[]') {
+                this.fieldsContainBlob = true;
             }
             if (props.fieldValidate) {
                 this.validation = true;
@@ -520,6 +578,12 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 }
                 if (this.fields[id].fieldValidateRules.indexOf('max') != -1) {
                     validationDetails += 'max=\'' + this.fields[id].fieldValidateRulesMax + '\' ';
+                }
+                if (this.fields[id].fieldValidateRules.indexOf('minbytes') != -1) {
+                    validationDetails += 'minbytes=\'' + this.fields[id].fieldValidateRulesMinbytes + '\' ';
+                }
+                if (this.fields[id].fieldValidateRules.indexOf('maxbytes') != -1) {
+                    validationDetails += 'maxbytes=\'' + this.fields[id].fieldValidateRulesMaxbytes + '\' ';
                 }
             }
             console.log(chalk.red(this.fields[id].fieldName) + chalk.white(' (' + this.fields[id].fieldType + ') ') + chalk.cyan(validationDetails));
@@ -806,6 +870,7 @@ EntityGenerator.prototype.files = function files() {
         this.data.fieldsContainBigDecimal = this.fieldsContainBigDecimal;
         this.data.fieldsContainDateTime = this.fieldsContainDateTime;
         this.data.fieldsContainDate = this.fieldsContainDate;
+        this.data.fieldsContainBlob = this.fieldsContainBlob;
         this.data.changelogDate = this.changelogDate;
         this.data.dto = this.dto;
         this.data.pagination = this.pagination;
@@ -835,6 +900,7 @@ EntityGenerator.prototype.files = function files() {
         this.fieldsContainBigDecimal = this.fileData.fieldsContainBigDecimal;
         this.fieldsContainDateTime = this.fileData.fieldsContainDateTime;
         this.fieldsContainDate = this.fileData.fieldsContainDate;
+        this.fieldsContainBlob = this.fileData.fieldsContainBlob;
         this.changelogDate = this.fileData.changelogDate;
         for (var idx in this.relationships) {
           var rel = this.relationships[idx];

@@ -74,6 +74,7 @@
     },
     "entity": {
         "action": {
+            "addblob": "Add blob",
             "back": "戻る",
             "cancel": "キャンセル",
             "delete": "削除",
@@ -94,6 +95,8 @@
             "maxlength": "This field cannot be longer than {{max}} characters.",
             "min": "This field should be more than {{min}}.",
             "max": "This field cannot be more than {{max}}.",
+            "minbytes": "This field should be more than {{min}} bytes.",
+            "maxbytes": "This field cannot be more than {{max}} bytes.",
             "pattern": "This field should follow pattern {{pattern}}.",
             "number": "This field should be a number.",
             "datetimelocal": "This field should be a date and time."

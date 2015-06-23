@@ -83,6 +83,7 @@
     },
     "entity": {
         "action": {
+            "addblob": "Add blob",
             "back": "Înapoi",
             "cancel": "Anulează",
             "delete": "Șterge",
@@ -103,6 +104,8 @@
             "maxlength": "Acest câmp nu poate să fie mai lung decât {{max}} caractere.",
             "min": "Acest câmp trebuie să fie mai mult decât {{min}}.",
             "max": "Acest câmp nu poate să fie mai mult decât {{max}}.",
+            "minbytes": "This field should be more than {{min}} bytes.",
+            "maxbytes": "This field cannot be more than {{max}} bytes.",
             "pattern": "Acest câmp trebuie să corespundă șablonului {{pattern}}.",
             "number": "Acest câmp trebuie să fie numeric.",
             "datetimelocal": "Acest câmp trebuie să conțină data si ora."

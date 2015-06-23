@@ -70,5 +70,31 @@ angular.module('<%=angularAppName%>')
 
         $scope.clear = function () {
             $scope.<%= entityInstance %> = {<% for (fieldId in fields) { %><%= fields[fieldId].fieldName %>: null, <% } %>id: null};
-        };
+        };<% if (fieldsContainBlob) { %>
+
+        $scope.formatBase64String = function (base64String) {
+            if (!angular.isString(base64String)) {
+                return base64String;
+            }
+            function endsWith(suffix, str) {
+                return str.indexOf(suffix, str.length - suffix.length) !== -1;
+            }
+            function paddingSize(base64String) {
+                if (endsWith('==', base64String)) {
+                    return 2;
+                }
+                if (endsWith('=', base64String)) {
+                    return 1;
+                }
+                return 0;
+            }
+            var bytes = base64String.length / 4 * 3 - paddingSize(base64String);
+            var size = bytes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " bytes";
+
+            if (base64String.length < 30) {
+                return base64String + ' size:' + size;
+            }
+
+            return base64String.substring(0, 10) + '...' + base64String.slice(-10) + ' size:' + size;
+        };<% } %>
     });

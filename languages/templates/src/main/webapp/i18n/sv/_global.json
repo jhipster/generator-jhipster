@@ -74,6 +74,7 @@
     },
     "entity": {
         "action": {
+            "addblob": "Lägg till blob",
             "back": "Tillbaka",
             "cancel": "Avbryt",
             "delete": "Ta bort",
@@ -94,6 +95,8 @@
             "maxlength": "Detta fält kan inte vara längre än {{max}} tecken.",
             "min": "Detta fält måste vara större än {{min}}.",
             "max": "Detta fält måste vara mindre än {{max}}.",
+            "minbytes": "Detta fält måste vara större än {{min}} bytes.",
+            "maxbytes": "Detta fält måste vara mindre än {{max}} bytes.",
             "pattern": "Detta fält måste följa mönstret {{pattern}}.",
             "number": "Detta fält måste vara ett tal.",
             "datetimelocal": "Detta fält måste vara ett datum och en tid."
