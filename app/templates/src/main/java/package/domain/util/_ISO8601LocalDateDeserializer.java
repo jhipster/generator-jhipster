@@ -21,7 +21,7 @@ public class ISO8601LocalDateDeserializer extends JsonDeserializer<LocalDate> {
         JsonToken t = jp.getCurrentToken();
         if (t == JsonToken.VALUE_STRING) {
             String str = jp.getText().trim();
-            return ISODateTimeFormat.dateTimeParser().parseLocalDate(str);
+            return ISODateTimeFormat.dateTimeParser().parseDateTime(str).toLocalDate();
         }
         if (t == JsonToken.VALUE_NUMBER_INT) {
             return new LocalDate(jp.getLongValue());
