@@ -826,10 +826,7 @@ JhipsterGenerator.prototype.app = function app() {
     }else{
         this.template(resourceDir + '/i18n/_messages_en.properties', resourceDir + 'i18n/messages_en.properties', this, {});
     }
-    // Swagger-ui for Jhipster
-    this.template(webappDir + '/swagger-ui/_index.html', webappDir + 'swagger-ui/index.html', this, {});
-    this.copy(webappDir + '/swagger-ui/images/throbber.gif', webappDir + 'swagger-ui/images/throbber.gif');
-
+    
     // Angular JS views
 
     this.template(webappDir + '/scripts/app/_app.js', webappDir + 'scripts/app/app.js', this, {});

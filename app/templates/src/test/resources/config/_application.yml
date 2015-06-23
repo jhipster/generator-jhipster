@@ -65,6 +65,7 @@ metrics:
 swagger:
     apiDocsLocation: http://localhost:8080
     title: jhipster API
+    version: 0.0.1
     description: jhipster applications and beyond!
     termsOfServiceUrl: http://jhipster.github.io/
     contact:

@@ -35,6 +35,7 @@ authentication:<% if (authenticationType == 'xauth') { %>
 swagger:
     title: <%=baseName%> API
     description: <%=baseName%> applications and beyond!
+    version: 0.0.1
     termsOfServiceUrl: http://jhipster.github.io/
     contact:
     license: Apache 2.0

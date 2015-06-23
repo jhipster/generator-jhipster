@@ -63,19 +63,17 @@ module.exports = function (grunt) {
                 src: ['src/main/webapp/index.html', 'src/main/scss/main.scss'],
                 exclude: [
                     /angular-i18n/, // localizations are loaded dynamically
-                    /swagger-ui/,
                     'bower_components/bootstrap/' // Exclude Bootstrap LESS as we use bootstrap-sass
                 ],
                 ignorePath: /\.\.\/webapp\/bower_components\// // remove ../webapp/bower_components/ from paths of injected sass files <% } else { %>
                 src: ['src/main/webapp/index.html'],
                 exclude: [
-                    /angular-i18n/,  // localizations are loaded dynamically
-                    /swagger-ui/
+                    /angular-i18n/  // localizations are loaded dynamically
                 ]<% } %>
             },
             test: {
                 src: 'src/test/javascript/karma.conf.js',
-                exclude: [/angular-i18n/, /swagger-ui/, /angular-scenario/],
+                exclude: [/angular-i18n/, /angular-scenario/],
                 ignorePath: /\.\.\/\.\.\//, // remove ../../ from paths of injected javascripts
                 devDependencies: true,
                 fileTypes: {
