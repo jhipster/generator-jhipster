@@ -121,7 +121,12 @@ gulp.task('serve', function() {
             '/configprops',
             '/v2/api-docs',
             '/swagger-ui.html',
+            '/configuration/security',
+            '/configuration/ui',
+            '/swagger-resources',
+            '/webjars',
             '/metrics',
+            '/websocket/tracker',
             '/dump'<% if (authenticationType == 'oauth2') { %>,
             '/oauth/token'<% } %><% if (devDatabaseType == 'h2Memory') { %>,
             '/console/'<% } %>
