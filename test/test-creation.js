@@ -184,8 +184,6 @@ describe('JHipster generator ', function () {
             'src/main/webapp/i18n/fr/global.json',
             'src/main/webapp/i18n/fr/health.json',
             'src/main/resources/i18n/messages_fr.properties',
-            'src/main/webapp/swagger-ui/index.html',
-            'src/main/webapp/swagger-ui/images/throbber.gif',
             'src/main/webapp/scripts/app/app.js',
             'src/main/webapp/scripts/components/admin/audits.service.js',
             'src/main/webapp/scripts/components/admin/configuration.service.js',
