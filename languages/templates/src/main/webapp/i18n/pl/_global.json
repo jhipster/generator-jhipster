@@ -67,6 +67,9 @@
                     "maxlength": "Twój e-mail nie może być dłuższy niż 50 znaków"
                 }
             }
+        }, 
+        "field": {
+            "id" : "ID"
         }
     },
     "entity": {

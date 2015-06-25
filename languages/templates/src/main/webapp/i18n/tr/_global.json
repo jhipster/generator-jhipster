@@ -67,6 +67,9 @@
                     "maxlength": "E-posta adresi 50 karakterden fazla olamaz"
                 }
             }
+        }, 
+        "field": {
+            "id" : "ID"
         }
     },
     "entity": {

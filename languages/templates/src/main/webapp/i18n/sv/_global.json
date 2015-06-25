@@ -67,6 +67,9 @@
                     "maxlength": "Din e-post får inte vara längre än 50 tecken"
                 }
             }
+        }, 
+        "field": {
+            "id" : "ID"
         }
     },
     "entity": {

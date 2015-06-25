@@ -67,6 +67,9 @@
                     "maxlength": "Su correo electrónico no puede tener mas de 50 carácteres"
                 }
             }
+        }, 
+        "field": {
+            "id" : "ID"
         }
     },
     "entity": {
