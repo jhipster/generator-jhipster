@@ -67,6 +67,9 @@
                     "maxlength": "Din e-mail adresse må ikke overskride 50 tegn"
                 }
             }
+        }, 
+        "field": {
+            "id" : "ID"
         }
     },
     "entity": {

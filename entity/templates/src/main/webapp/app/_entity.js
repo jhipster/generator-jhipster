@@ -19,6 +19,7 @@ angular.module('<%=angularAppName%>')
                 resolve: {<% if (enableTranslation){ %>
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('<%= entityInstance %>');
+                        $translatePartialLoader.addPart('global');
                         return $translate.refresh();
                     }]<% } %>
                 }
