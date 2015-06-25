@@ -67,6 +67,9 @@
                     "maxlength": "Your e-mail cannot be longer than 50 characters."
                 }
             }
+        },
+        "field": {
+            "id" : "ID"
         }
     },
     "entity": {

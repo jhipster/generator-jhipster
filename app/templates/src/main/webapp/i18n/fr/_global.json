@@ -67,6 +67,9 @@
                     "invalid": "Votre email n'est pas valide."
                 }
             }
+        }, 
+        "field": {
+            "id" : "ID"
         }
     },
     "entity": {

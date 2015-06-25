@@ -67,6 +67,9 @@
                     "maxlength": "Az email cím nem lehet hosszabb mint 50 betű"
                 }
             }
+        }, 
+        "field": {
+            "id" : "ID"
         }
     },
     "entity": {

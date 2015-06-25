@@ -67,6 +67,9 @@
                     "maxlength": "O e-mail não pode ter mais de 50 caracteres"
                 }
             }
+        }, 
+        "field": {
+            "id" : "Código"
         }
     },
     "entity": {
