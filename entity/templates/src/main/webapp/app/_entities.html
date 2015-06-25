@@ -34,7 +34,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>ID</label>
+                            <label translate="global.field.id">ID</label>
                             <input type="text" class="form-control" name="id"
                                    ng-model="<%=entityInstance %>.id" readonly>
                         </div>
@@ -171,7 +171,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th><% for (fieldId in fields) { %>
+                    <th translate="global.field.id">ID</th><% for (fieldId in fields) { %>
                     <th translate="<%=keyPrefix + fields[fieldId].fieldName %>"><%=fields[fieldId].fieldNameCapitalized%></th><% } %><% for (relationshipId in relationships) {
                         if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
                     <th translate="<%= keyPrefix + relationships[relationshipId].relationshipName%>"><%=relationships[relationshipId].relationshipName%></th><% } } %>
