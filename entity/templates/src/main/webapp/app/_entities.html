@@ -46,7 +46,7 @@
         fieldInputType = 'number';
     } else if (fields[fieldId].fieldType == 'LocalDate') {
         fieldInputType = 'date';
-    } else if (fields[fieldId].fieldType == 'DateTime') {
+    } else if (fields[fieldId].fieldType == 'ZonedDateTime') {
         fieldInputType = 'datetime-local';
     } else if (fields[fieldId].fieldType == 'Boolean') {
         fieldInputType = 'checkbox';
@@ -61,7 +61,7 @@
                                 } %>
                             </select><% } else { %>
                             <input type="<%= fieldInputType %>" class="form-control" name="<%= fields[fieldId].fieldName %>"
-                                   ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldType == 'DateTime') { %> ng-model-options="{timezone: 'UTC'}"<% } %><% if (fields[fieldId].fieldValidate == true) {
+                                   ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldType == 'ZonedDateTime') { %> ng-model-options="{timezone: 'UTC'}"<% } %><% if (fields[fieldId].fieldValidate == true) {
                                        if (fields[fieldId].fieldValidateRules.indexOf('required') != -1) {
                                        %> required<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('minlength') != -1) {
                                        %> ng-minlength="<%= fields[fieldId].fieldValidateRulesMinlength %>"<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('maxlength') != -1) {
@@ -98,7 +98,7 @@
                                 <p class="help-block"
                                    ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.number" translate="entity.validation.number">
                                     This field should be a number.
-                                </p><% } %><% if (fields[fieldId].fieldType == 'DateTime') { %>
+                                </p><% } %><% if (fields[fieldId].fieldType == 'ZonedDateTime') { %>
                                 <p class="help-block"
                                    ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.datetimelocal" translate="entity.validation.datetimelocal">
                                     This field should be a date and time.
