@@ -17,15 +17,15 @@ import java.time.format.DateTimeFormatter;
  */
 public class ISO8601LocalDateDeserializer extends JsonDeserializer<LocalDate> {
 
-    private static DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
+    private static DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
     @Override
     public LocalDate deserialize(JsonParser jp, DeserializationContext ctxt)
-            throws IOException {
+        throws IOException {
         JsonToken t = jp.getCurrentToken();
         if (t == JsonToken.VALUE_STRING) {
             String str = jp.getText().trim();
-            return LocalDate.from(formatter.parse(str));
+            return LocalDateTime.from(formatter.parse(str)).toLocalDate();
         }
         if (t == JsonToken.VALUE_NUMBER_INT) {
             return Instant.ofEpochMilli(jp.getLongValue()).atZone(ZoneId.systemDefault()).toLocalDate();
