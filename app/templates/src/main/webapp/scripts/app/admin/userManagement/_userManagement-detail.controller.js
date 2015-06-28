@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('userManagementDetailController', function ($scope, $stateParams, userManagement, Authority) {
+    .controller('UserManagementDetailController', function ($scope, $stateParams, UserManagement, Authority) {
         $scope.user = {};
         $scope.load = function (login) {
-            userManagement.get({login: login}, function(result) {
+            UserManagement.get({login: login}, function(result) {
                 $scope.user = result;
                 console.log(result);
             });

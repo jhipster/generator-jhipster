@@ -42,8 +42,8 @@ public class UserManagementDTO {
     private String lastModifiedBy;
     private DateTime lastModifiedDate;<% } %>
 
-    public userManagementDTO() {}
-    public userManagementDTO(Long id, String login, String firstName,
+    public UserManagementDTO() {}
+    public UserManagementDTO(Long id, String login, String firstName,
             String lastName, String email, boolean activated, String langKey<% if (databaseType == 'cassandra') { %>, Set<String> authorities<% } %>
             <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>, Set<Authority> authorities, String createdBy, DateTime createdDate,
             String lastModifiedBy, DateTime lastModifiedDate<% } %>) {
@@ -169,7 +169,7 @@ public class UserManagementDTO {
 
     @Override
     public String toString() {
-        return "userManagementDTO [id=" + id + ", login=" + login
+        return "UserManagementDTO [id=" + id + ", login=" + login
                 + ", firstName=" + firstName + ", lastName=" + lastName
                 + ", email=" + email + ", activated=" + activated
                 + ", langKey=" + langKey + ", authorities=" + authorities + <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>", createdBy="

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .factory('userManagement', function ($resource) {
+    .factory('UserManagement', function ($resource) {
         return $resource('api/userManagement/:login', {}, {
                 'query': {method: 'GET', isArray: true},
                 'get': {

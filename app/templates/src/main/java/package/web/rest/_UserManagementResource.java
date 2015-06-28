@@ -4,8 +4,8 @@ import com.codahale.metrics.annotation.Timed;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.AuthoritiesConstants;
-import <%=packageName%>.web.rest.dto.userManagementDTO;
-import <%=packageName%>.web.rest.mapper.userManagementMapper;
+import <%=packageName%>.web.rest.dto.UserManagementDTO;
+import <%=packageName%>.web.rest.mapper.UserManagementMapper;
 import <%=packageName%>.web.rest.util.PaginationUtil;
 import <%=packageName%>.service.UserService;
 import org.slf4j.Logger;
@@ -32,9 +32,9 @@ import javax.servlet.http.HttpServletResponse;<% } %>
  */
 @RestController
 @RequestMapping("/api")
-public class userManagementResource {
+public class UserManagementResource {
 
-    private final Logger log = LoggerFactory.getLogger(userManagementResource.class);
+    private final Logger log = LoggerFactory.getLogger(UserManagementResource.class);
 
     @Inject
     private UserService userService;
@@ -43,7 +43,7 @@ public class userManagementResource {
     private UserRepository userRepository;
 
     @Inject
-    private userManagementMapper userManagementMapper;
+    private UserManagementMapper userManagementMapper;
 
     /**
      * GET  /userManagement -> get all users to manage.
@@ -54,16 +54,16 @@ public class userManagementResource {
     @Timed
     @RolesAllowed(AuthoritiesConstants.ADMIN)<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Transactional(readOnly = true)<% } %>
-    public ResponseEntity<List<userManagementDTO>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
+    public ResponseEntity<List<UserManagementDTO>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
                                                          @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
         Page<User> page = userRepository.findAll(PaginationUtil.generatePageRequest(offset, limit));
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/userManagement", offset, limit);<% if (javaVersion == '8') { %>
         return new ResponseEntity<>(page.getContent().stream()
-                 .map(userManagementMapper::userTouserManagementDTO)
+                 .map(userManagementMapper::userToUserManagementDTO)
                  .collect(Collectors.toCollection(LinkedList::new)), headers, HttpStatus.OK);<% } else { %>
-        List<userManagementDTO> usersManagementDTO = userManagementMapper.usersTouserManagementsDTO(page.getContent());
-        return new ResponseEntity<List<userManagementDTO>>(usersManagementDTO, headers, HttpStatus.OK);<% } %>
+        List<UserManagementDTO> usersManagementDTO = userManagementMapper.usersToUserManagementsDTO(page.getContent());
+        return new ResponseEntity<List<UserManagementDTO>>(usersManagementDTO, headers, HttpStatus.OK);<% } %>
     }
 
     /**
@@ -75,19 +75,19 @@ public class userManagementResource {
     @Timed
     @RolesAllowed(AuthoritiesConstants.ADMIN)
     @Transactional(readOnly = true)
-    ResponseEntity<userManagementDTO> getUser(@PathVariable String login) {
+    ResponseEntity<UserManagementDTO> getUser(@PathVariable String login) {
        log.debug("REST request to get User to manage : {}", login);<% if (javaVersion == '8') { %>
        return  Optional.ofNullable(userService.getUserWithAuthorities(login))
-               .map(userManagementMapper::userTouserManagementDTO)
+               .map(userManagementMapper::userToUserManagementDTO)
                .map(userManagementDTO -> new ResponseEntity<>(
                     userManagementDTO,
                     HttpStatus.OK))
                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));<% } else { %>
        User user = userService.getUserWithAuthorities(login);
        if (user == null) {
-           return new ResponseEntity<userManagementDTO>(HttpStatus.NOT_FOUND);
+           return new ResponseEntity<UserManagementDTO>(HttpStatus.NOT_FOUND);
        }
-       return new ResponseEntity<userManagementDTO>(userManagementMapper.userTouserManagementDTO(user),
+       return new ResponseEntity<UserManagementDTO>(userManagementMapper.userToUserManagementDTO(user),
                                                    HttpStatus.OK);<% } %>
     }
 
@@ -99,7 +99,7 @@ public class userManagementResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @RolesAllowed(AuthoritiesConstants.ADMIN)
-    public ResponseEntity<Void> update(@RequestBody userManagementDTO userManagementDTO) throws URISyntaxException {
+    public ResponseEntity<Void> update(@RequestBody UserManagementDTO userManagementDTO) throws URISyntaxException {
         log.debug("REST request to update User : {}", userManagementDTO);
         if (userManagementDTO.getId() == null) {
             return ResponseEntity.badRequest().header("Failure", "You cannot create a new user").build();

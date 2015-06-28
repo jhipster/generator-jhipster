@@ -13,7 +13,7 @@ angular.module('<%=angularAppName%>')
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/admin/userManagement/usersManagement.html',
-                        controller: 'userManagementController'
+                        controller: 'UserManagementController'
                     }
                 },
                 resolve: {
@@ -33,7 +33,7 @@ angular.module('<%=angularAppName%>')
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/admin/userManagement/userManagement-detail.html',
-                        controller: 'userManagementDetailController'
+                        controller: 'UserManagementDetailController'
                     }
                 },
                 resolve: {
