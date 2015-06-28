@@ -7,9 +7,9 @@ import <%=packageName%>.domain.PersistentToken;<% } %>
 import <%=packageName%>.domain.User;<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
 import <%=packageName%>.repository.UserRepository;
-import org.joda.time.DateTime;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import java.time.ZonedDateTime;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import <%=packageName%>.service.util.RandomUtil;
-import org.joda.time.LocalDate;<% } %>
+import java.time.LocalDate;<% } %>
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.IntegrationTest;
@@ -52,8 +52,8 @@ public class UserServiceTest <% if (databaseType == 'cassandra') { %>extends Abs
         User admin = userRepository.findOneByLogin("admin").get();<% } else { %>
         User admin = userRepository.findOneByLogin("admin");<% } %>
         int existingCount = persistentTokenRepository.findByUser(admin).size();
-        generateUserToken(admin, "1111-1111", new LocalDate());
-        LocalDate now = new LocalDate();
+        generateUserToken(admin, "1111-1111", LocalDate.now());
+        LocalDate now = LocalDate.now();
         generateUserToken(admin, "2222-2222", now.minusDays(32));
         assertThat(persistentTokenRepository.findByUser(admin)).hasSize(existingCount + 2);
         userService.removeOldPersistentTokens();
@@ -99,7 +99,7 @@ public class UserServiceTest <% if (databaseType == 'cassandra') { %>extends Abs
         <% if (javaVersion == '8') { %>
         User user = userService.createUserInformation("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "en-US");
 
-        DateTime daysAgo = DateTime.now().minusHours(25);
+        ZonedDateTime daysAgo = ZonedDateTime.now().minusHours(25);
         String resetKey = RandomUtil.generateResetKey();
         user.setActivated(true);
         user.setResetDate(daysAgo);
@@ -115,7 +115,7 @@ public class UserServiceTest <% if (databaseType == 'cassandra') { %>extends Abs
         <% } else { %>
         User user = userService.createUserInformation("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "en-US");
 
-        DateTime daysAgo = DateTime.now().minusHours(25);
+        ZonedDateTime daysAgo = ZonedDateTime.now().minusHours(25);
         String resetKey = RandomUtil.generateResetKey();
         user.setActivated(true);
         user.setResetDate(daysAgo);
@@ -136,7 +136,7 @@ public class UserServiceTest <% if (databaseType == 'cassandra') { %>extends Abs
         <% if (javaVersion == '8') { %>
         User user = userService.createUserInformation("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "en-US");
 
-        DateTime daysAgo = DateTime.now().minusHours(25);
+        ZonedDateTime daysAgo = ZonedDateTime.now().minusHours(25);
         user.setActivated(true);
         user.setResetDate(daysAgo);
         user.setResetKey("1234");
@@ -151,7 +151,7 @@ public class UserServiceTest <% if (databaseType == 'cassandra') { %>extends Abs
         <% } else { %>
         User user = userService.createUserInformation("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "en-US");
 
-        DateTime daysAgo = DateTime.now().minusHours(25);
+        ZonedDateTime daysAgo = ZonedDateTime.now().minusHours(25);
         user.setActivated(true);
         user.setResetDate(daysAgo);
         user.setResetKey("1234");
@@ -173,7 +173,7 @@ public class UserServiceTest <% if (databaseType == 'cassandra') { %>extends Abs
 
         String oldPassword = user.getPassword();
 
-        DateTime daysAgo = DateTime.now().minusHours(2);
+        ZonedDateTime daysAgo = ZonedDateTime.now().minusHours(2);
         String resetKey = RandomUtil.generateResetKey();
         user.setActivated(true);
         user.setResetDate(daysAgo);
@@ -194,7 +194,7 @@ public class UserServiceTest <% if (databaseType == 'cassandra') { %>extends Abs
 
         String oldPassword = user.getPassword();
 
-        DateTime daysAgo = DateTime.now().minusHours(2);
+        ZonedDateTime daysAgo = ZonedDateTime.now().minusHours(2);
         String resetKey = RandomUtil.generateResetKey();
         user.setActivated(true);
         user.setResetDate(daysAgo);
@@ -216,7 +216,7 @@ public class UserServiceTest <% if (databaseType == 'cassandra') { %>extends Abs
     @Test
     public void testFindNotActivatedUsersByCreationDateBefore() {
         userService.removeNotActivatedUsers();
-        DateTime now = new DateTime();
+        ZonedDateTime now = ZonedDateTime.now();
         List<User> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minusDays(3));
         assertThat(users).isEmpty();
     }<% } %><% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>

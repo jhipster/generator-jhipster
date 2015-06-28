@@ -10,8 +10,6 @@ import org.hibernate.validator.constraints.Email;
 import org.springframework.data.elasticsearch.annotations.Document;<% } %><% if (databaseType == 'mongodb') { %>
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import <%=packageName%>.domain.util.CustomDateTimeDeserializer;
-import <%=packageName%>.domain.util.CustomDateTimeSerializer;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -26,7 +24,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 
-import org.joda.time.DateTime;<% } %>
+import java.time.ZonedDateTime;<% } %>
 
 /**
  * A user.
@@ -96,14 +94,12 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Column(name = "reset_key")<% } %>
     private String resetKey;<%if (databaseType == 'sql') {%>
 
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime")
     @Column(name = "reset_date", nullable = true)
-    private DateTime resetDate = null;<% }%><%if (databaseType == 'mongodb') {%>
+    private ZonedDateTime resetDate = null;<% }%><%if (databaseType == 'mongodb') {%>
 
-    @JsonSerialize(using = CustomDateTimeSerializer.class)
-    @JsonDeserialize(using = CustomDateTimeDeserializer.class)
     @Field("reset_date")
-    private DateTime resetDate = null;<% }%><% if (databaseType == 'cassandra') { %>
+    private ZonedDateTime resetDate = null;<% }%><% if (databaseType == 'cassandra') { %>
 
     @Column(name = "reset_date")
     private Date resetDate;<% }%>
@@ -195,11 +191,11 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         this.resetKey = resetKey;
     }<% if (databaseType == 'sql' || databaseType == 'mongodb') {%>
 
-    public DateTime getResetDate() {
+    public ZonedDateTime getResetDate() {
        return resetDate;
     }
 
-    public void setResetDate(DateTime resetDate) {
+    public void setResetDate(ZonedDateTime resetDate) {
        this.resetDate = resetDate;
     }<% }%><% if (databaseType == 'cassandra') { %>
 

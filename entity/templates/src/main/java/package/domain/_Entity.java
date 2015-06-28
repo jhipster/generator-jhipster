@@ -22,8 +22,8 @@ import <%=packageName%>.domain.util.CustomDateTimeSerializer;<% } %><% if (hiber
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (fieldsContainCustomTime == true && databaseType == 'sql') { %>
 import org.hibernate.annotations.Type;<% } %><% if (fieldsContainLocalDate == true) { %>
-import org.joda.time.LocalDate;<% } %><% if (fieldsContainDateTime == true) { %>
-import org.joda.time.DateTime;<% } %><% if (databaseType == 'mongodb') { %>
+import java.time.LocalDate;<% } %><% if (fieldsContainDateTime == true) { %>
+import java.time.ZonedDateTime;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;<% } %><% if (searchEngine == 'elasticsearch') { %>
@@ -71,18 +71,17 @@ public class <%= entityClass %> implements Serializable {
     @Size(min = <%= fields[fieldId].fieldValidateRulesMinlength %>, max = <%= fields[fieldId].fieldValidateRulesMaxlength %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('min') != -1) { %>
     @Min(value = <%= fields[fieldId].fieldValidateRulesMin %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('max') != -1) { %>
     @Max(value = <%= fields[fieldId].fieldValidateRulesMax %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('pattern') != -1) { %>
-    @Pattern(regexp = "<%= fields[fieldId].fieldValidateRulesPattern %>")<% } } %><% if (databaseType == 'sql') { %><% if (fields[fieldId].fieldIsEnum) { %>
-    @Enumerated(EnumType.STRING)<% } %><% if (fields[fieldId].fieldType == 'DateTime') { %>
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    @Pattern(regexp = "<%= fields[fieldId].fieldValidateRulesPattern %>")<% } } %><% if (databaseType == 'sql') { %><% if (fields[fieldId].fieldType == 'ZonedDateTime') { %>
+    @Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime")
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     @JsonDeserialize(using = CustomDateTimeDeserializer.class)
     @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>"<% if (required) { %>, nullable = false<% } %>)<% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
+    @Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDate")
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     @JsonDeserialize(using = ISO8601LocalDateDeserializer.class)
     @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>"<% if (required) { %>, nullable = false<% } %>)<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
     @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>", precision=10, scale=2<% if (required) { %>, nullable = false<% } %>)<% } else { %>
-    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>"<% if (fields[fieldId].fieldValidate == true) { %><% if (fields[fieldId].fieldValidateRules.indexOf('maxlength') != -1) { %>, length = <%= fields[fieldId].fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% } %>)<% } } %><% if (databaseType == 'mongodb') { %><% if (fields[fieldId].fieldType == 'DateTime') { %>
+    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>"<% if (fields[fieldId].fieldValidate == true) { %><% if (fields[fieldId].fieldValidateRules.indexOf('maxlength') != -1) { %>, length = <%= fields[fieldId].fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% } %>)<% } } %><% if (databaseType == 'mongodb') { %><% if (fields[fieldId].fieldType == 'ZonedDateTime') { %>
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     @JsonDeserialize(using = CustomDateTimeDeserializer.class)<% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
     @JsonSerialize(using = CustomLocalDateSerializer.class)

@@ -3,8 +3,7 @@ package <%=packageName%>.security;
 import <%=packageName%>.domain.PersistentToken;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import <%=packageName%>.domain.User;<%}%>
 import <%=packageName%>.repository.PersistentTokenRepository;
-import <%=packageName%>.repository.UserRepository;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import org.joda.time.LocalDate;<%}%>
+import <%=packageName%>.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
@@ -23,7 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.security.SecureRandom;<% if (databaseType == 'cassandra') { %>
+import java.security.SecureRandom;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import java.time.LocalDate;<%}%><% if (databaseType == 'cassandra') { %>
 import java.time.temporal.ChronoUnit;<%}%>
 import java.util.Arrays;<% if (databaseType == 'cassandra') { %>
 import java.util.Date;<%}%>
@@ -91,7 +91,7 @@ public class CustomPersistentRememberMeServices extends
 
         // Token also matches, so login is valid. Update the token value, keeping the *same* series number.
         log.debug("Refreshing persistent login token for user '{}', series '{}'", login, token.getSeries());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-        token.setTokenDate(new LocalDate());<%}%><% if (databaseType == 'cassandra') { %>
+        token.setTokenDate(LocalDate.now());<%}%><% if (databaseType == 'cassandra') { %>
         token.setTokenDate(new Date());<%}%>
         token.setTokenValue(generateTokenData());
         token.setIpAddress(request.getRemoteAddr());
@@ -116,7 +116,7 @@ public class CustomPersistentRememberMeServices extends
             t.setSeries(generateSeriesData());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
             t.setUser(u);
             t.setTokenValue(generateTokenData());
-            t.setTokenDate(new LocalDate());<%}%><% if (databaseType == 'cassandra') { %>
+            t.setTokenDate(LocalDate.now());<%}%><% if (databaseType == 'cassandra') { %>
             t.setLogin(login);
             t.setUserId(u.getId());
             t.setTokenValue(generateTokenData());

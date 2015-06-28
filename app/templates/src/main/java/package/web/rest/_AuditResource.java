@@ -3,7 +3,7 @@ package <%=packageName%>.web.rest;
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.AuditEventService;
 import <%=packageName%>.web.propertyeditors.LocaleDateTimeEditor;
-import org.joda.time.LocalDateTime;
+import java.time.LocalDateTime;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.WebDataBinder;

@@ -78,7 +78,7 @@ dependencies {
 
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-json-org', version: jackson_version
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hppc', version: jackson_version
-    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-joda'
+    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310'
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate4', version: jackson_version
     compile (group: 'com.ryantenney.metrics', name: 'metrics-spring', version: metrics_spring_version) {
         exclude(module: 'metrics-core')
@@ -95,9 +95,7 @@ dependencies {
     compile group: 'commons-lang', name: 'commons-lang', version: commons_lang_version
     compile group: 'commons-io', name: 'commons-io', version: commons_io_version
     compile group: 'javax.inject', name: 'javax.inject', version: javax_inject_version
-    compile group: 'javax.transaction', name: 'javax.transaction-api'
-    compile group: 'joda-time', name: 'joda-time'<% if (databaseType == 'sql') { %>
-    compile group: 'joda-time', name: 'joda-time-hibernate', version: joda_time_hibernate_version<% } %><% if (databaseType == 'cassandra') { %>
+    compile group: 'javax.transaction', name: 'javax.transaction-api'<% if (databaseType == 'cassandra') { %>
     compile group: 'net.jpountz.lz4', name: 'lz4', version: lz4_version<% } %>
     compile group: 'org.apache.geronimo.javamail', name: 'geronimo-javamail_1.4_mail', version: geronimo_javamail_1_4_mail_version<% if (databaseType == 'sql') { %>
     compile group: 'org.hibernate', name: 'hibernate-core', version: hibernate_entitymanager_version
@@ -106,7 +104,8 @@ dependencies {
         exclude(module: 'ehcache-core')
     }<% } %>
     compile group: 'org.hibernate', name: 'hibernate-validator'<% if (databaseType == 'sql') { %>
-    compile group: 'org.jadira.usertype', name: 'usertype.core', version: usertype_core_version
+    compile group: 'org.jadira.usertype', name: 'usertype.core', version: usertype_version
+    compile group: 'org.jadira.usertype', name: 'usertype.extended', version: usertype_version
     compile (group: 'org.liquibase', name: 'liquibase-core', version: liquibase_core_version) {
         exclude(module: 'jetty-servlet')
     }

@@ -179,8 +179,8 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     name: 'LocalDate'
                 },
                 {
-                    value: 'DateTime',
-                    name: 'DateTime'
+                    value: 'ZonedDateTime',
+                    name: 'ZonedDateTime'
                 },
                 {
                     value: 'Boolean',
@@ -323,7 +323,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 return response.fieldAdd == true &&
                     response.fieldValidate == true &&
                     (response.fieldType == 'LocalDate' ||
-                    response.fieldType == 'DateTime' ||
+                    response.fieldType == 'ZonedDateTime' ||
                     response.fieldType == 'UUID' ||
                     response.fieldType == 'TimeUUID' ||
                     response.fieldIsEnum == true);
@@ -462,7 +462,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
             if (props.fieldType == 'BigDecimal') {
                 this.fieldsContainBigDecimal = true;
             }
-            if (props.fieldType == 'DateTime') {
+            if (props.fieldType == 'ZonedDateTime') {
                 this.fieldsContainDateTime = true;
                 this.fieldsContainCustomTime = true;
             }

@@ -1,10 +1,11 @@
 package <%=packageName%>.domain;
 <% if (databaseType == 'sql') { %>
 import org.hibernate.annotations.Type;<% } %>
-import org.joda.time.LocalDateTime;<% if (databaseType == 'mongodb') { %>
+<% if (databaseType == 'mongodb') { %>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;<% } %><% if (databaseType == 'sql') { %>
+import org.springframework.data.mongodb.core.mapping.Field;<% } %>
+import java.time.LocalDateTime;<% if (databaseType == 'sql') { %>
 import javax.persistence.*;<% } %>
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public class PersistentAuditEvent  {
     private String principal;
 <% if (databaseType == 'sql') { %>
     @Column(name = "event_date")
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime")<% } %>
+    @Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime")<% } %>
     private LocalDateTime auditEventDate;<% if (databaseType == 'sql') { %>
     @Column(name = "event_type")<% } %><% if (databaseType == 'mongodb') { %>
     @Field("event_type")<% } %>

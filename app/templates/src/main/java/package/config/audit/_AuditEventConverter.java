@@ -5,6 +5,8 @@ import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.*;
 
 @Configuration
@@ -23,7 +25,9 @@ public class AuditEventConverter {
         List<AuditEvent> auditEvents = new ArrayList<>();
 
         for (PersistentAuditEvent persistentAuditEvent : persistentAuditEvents) {
-            AuditEvent auditEvent = new AuditEvent(persistentAuditEvent.getAuditEventDate().toDate(), persistentAuditEvent.getPrincipal(),
+
+            Instant instant = persistentAuditEvent.getAuditEventDate().atZone(ZoneId.systemDefault()).toInstant();
+            AuditEvent auditEvent = new AuditEvent(Date.from(instant), persistentAuditEvent.getPrincipal(),
                     persistentAuditEvent.getAuditEventType(), convertDataToObjects(persistentAuditEvent.getData()));
             auditEvents.add(auditEvent);
         }
