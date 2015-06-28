@@ -1054,6 +1054,15 @@ JhipsterGenerator.prototype.app = function app() {
     this.indexFile = html.appendScripts(this.indexFile, 'scripts/app.js', appScripts, {}, ['.tmp', 'src/main/webapp']);
     this.write(webappDir + 'index.html', this.indexFile);
 
+    // Remove old files, from previous JHipster versions
+    removefile(testJsDir + 'spec/app/account/health/healthControllerSpec.js');
+    removefile(testJsDir + 'spec/app/account/login/loginControllerSpec.js');
+    removefile(testJsDir + 'spec/app/account/password/passwordControllerSpec.js');
+    removefile(testJsDir + 'spec/app/account/password/passwordDirectiveSpec.js');
+    removefile(testJsDir + 'spec/app/account/sessions/sessionsControllerSpec.js');
+    removefile(testJsDir + 'spec/app/account/settings/settingsControllerSpec.js');
+    removefile(testJsDir + 'spec/components/auth/authServicesSpec.js');
+
     this.config.set('baseName', this.baseName);
     this.config.set('packageName', this.packageName);
     this.config.set('packageFolder', packageFolder);
@@ -1083,7 +1092,6 @@ function removefile(file) {
     if (shelljs.test('-f', file)) {
         shelljs.rm(file);
     }
-
 }
 
 function removefolder(folder) {
