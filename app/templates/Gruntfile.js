@@ -220,9 +220,6 @@ module.exports = function (grunt) {
             }
         },
         cssmin: {
-            options: {
-                root: 'src/main/webapp' // Replace relative paths for static resources with absolute path
-            }
             // src and dest is configured in a subtask called "generated" by usemin
         },
         ngtemplates:    {
@@ -271,6 +268,18 @@ module.exports = function (grunt) {
         },
         // Put files not handled in other tasks here
         copy: {
+            fonts: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    flatten: true,
+                    cwd: 'src/main/webapp',
+                    dest: '<%%= yeoman.dist %>/assets/fonts',
+                    src: [
+                      'bower_components/bootstrap/fonts/*.*'
+                    ]
+                }]
+            },
             dist: {
                 files: [{
                     expand: true,
@@ -391,6 +400,7 @@ module.exports = function (grunt) {
         'imagemin',
         'svgmin',
         'concat',
+        'copy:fonts',
         'copy:dist',
         'ngAnnotate',
         'cssmin',
