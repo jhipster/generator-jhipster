@@ -119,8 +119,14 @@ gulp.task('serve', function() {
             '/api',
             '/health',
             '/configprops',
-            '/api-docs',
+            '/v2/api-docs',
+            '/swagger-ui.html',
+            '/configuration/security',
+            '/configuration/ui',
+            '/swagger-resources',
+            '/webjars',
             '/metrics',
+            '/websocket/tracker',
             '/dump'<% if (authenticationType == 'oauth2') { %>,
             '/oauth/token'<% } %><% if (devDatabaseType == 'h2Memory') { %>,
             '/console/'<% } %>
@@ -181,7 +187,7 @@ gulp.task('wiredep', ['wiredep:test', 'wiredep:app']);
 gulp.task('wiredep:app', function () {
     var s = gulp.src('src/main/webapp/index.html')
         .pipe(wiredep({
-            exclude: [/angular-i18n/, /swagger-ui/]
+            exclude: [/angular-i18n/]
         }))
         .pipe(gulp.dest('src/main/webapp'));
 
@@ -189,7 +195,6 @@ gulp.task('wiredep:app', function () {
         .pipe(wiredep({
             exclude: [
                 /angular-i18n/,  // localizations are loaded dynamically
-                /swagger-ui/,
                 'bower_components/bootstrap/' // Exclude Bootstrap LESS as we use bootstrap-sass
             ],
             ignorePath: /\.\.\/webapp\/bower_components\// // remove ../webapp/bower_components/ from paths of injected sass files
@@ -200,7 +205,7 @@ gulp.task('wiredep:app', function () {
 gulp.task('wiredep:test', function () {
     return gulp.src('src/test/javascript/karma.conf.js')
         .pipe(wiredep({
-            exclude: [/angular-i18n/, /swagger-ui/, /angular-scenario/],
+            exclude: [/angular-i18n/, /angular-scenario/],
             ignorePath: /\.\.\/\.\.\//, // remove ../../ from paths of injected javascripts
             devDependencies: true,
             fileTypes: {

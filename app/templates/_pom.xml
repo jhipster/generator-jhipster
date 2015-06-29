@@ -54,7 +54,7 @@
         <sonar-maven-plugin.version>2.3</sonar-maven-plugin.version>
         <spring-security.version>4.0.1.RELEASE</spring-security.version><% if (authenticationType == 'oauth2') { %>
         <spring-security-oauth2.version>2.0.7.RELEASE</spring-security-oauth2.version><% } %>
-        <swagger-springmvc.version>0.9.5</swagger-springmvc.version>
+        <springfox.version>2.0.3</springfox.version>
         <usertype-core.version>3.2.0.GA</usertype-core.version>
     </properties>
 
@@ -164,23 +164,14 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.mangofactory</groupId>
-            <artifactId>swagger-springmvc</artifactId>
-            <version>${swagger-springmvc.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>jackson-module-scala_2.10</artifactId>
-                    <groupId>com.fasterxml.jackson.module</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>scalap</artifactId>
-                    <groupId>org.scala-lang</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>scala-compiler</artifactId>
-                    <groupId>org.scala-lang</groupId>
-                </exclusion>
-            </exclusions>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox.version}</version>
         </dependency><% if (databaseType == 'sql') { %>
         <dependency>
             <groupId>com.mattbertolini</groupId>

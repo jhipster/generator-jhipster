@@ -22,7 +22,6 @@
     "angular-translate-loader-partial": "2.7.0",
     "angular-dynamic-locale": "0.1.27",<% } %>
     "angular-local-storage": "0.2.0",
-    "swagger-ui": "2.0.24",
     "angular-cache-buster": "0.4.3",
     "ngInfiniteScroll": "1.2.0"
   },
