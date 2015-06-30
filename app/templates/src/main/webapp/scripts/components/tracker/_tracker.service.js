@@ -17,7 +17,10 @@ angular.module('<%=angularAppName%>')
         }
         return {
             connect: function () {
-                var socket = new SockJS('/websocket/tracker');
+                //building absolute path so that websocket doesnt fail when deploying with a context path
+                var loc = window.location;
+                var url = '//' + loc.host + loc.pathname + 'websocket/tracker';
+                var socket = new SockJS(url);
                 stompClient = Stomp.over(socket);
                 var headers = {};
                 headers['X-CSRF-TOKEN'] = $cookies[$http.defaults.xsrfCookieName];
