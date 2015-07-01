@@ -794,11 +794,13 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/test/java/package/security/_SecurityUtilsTest.java', testDir + 'security/SecurityUtilsTest.java', this, {});
     if (this.databaseType == "sql" || this.databaseType == "mongodb") {
       //this.template('src/test/java/package/web/rest/_AccountResourceTest.java', testDir + 'web/rest/AccountResourceTest.java', this, {});
+        this.template('src/test/java/package/web/rest/_AuthorityResourceTest.java', testDir + 'web/rest/AuthorityResourceTest.java', this, {});
         this.template('src/test/java/package/service/_UserServiceTest.java', testDir + 'service/UserServiceTest.java', this, {});
     }
     this.template('src/test/java/package/web/rest/_AccountResourceTest.java', testDir + 'web/rest/AccountResourceTest.java', this, {});
     this.template('src/test/java/package/web/rest/_TestUtil.java', testDir + 'web/rest/TestUtil.java', this, {});
     this.template('src/test/java/package/web/rest/_UserResourceTest.java', testDir + 'web/rest/UserResourceTest.java', this, {});
+    this.template('src/test/java/package/web/rest/_UserManagementResourceTest.java', testDir + 'web/rest/UserManagementResourceTest.java', this, {});
 
     this.template(testResourceDir + 'config/_application.yml', testResourceDir + 'config/application.yml', this, {});
     this.template(testResourceDir + '_logback-test.xml', testResourceDir + 'logback-test.xml', this, {});
