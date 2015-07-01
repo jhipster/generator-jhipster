@@ -14,9 +14,13 @@
                     <td>
                         <span translate="<%= keyPrefix %>.<%=fields[fieldId].fieldName%>"><%=fields[fieldId].fieldNameCapitalized%></span>
                     </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{<%= entityInstance %>.<%=fields[fieldId].fieldName%>}}" readonly>
-                    </td>
+                    <td><% if (fields[fieldId].fieldIsEnum) {
+                            var enumPrefix = angularAppName + '.'+ fields[fieldId].fieldType; %>
+                            <span class="input-sm form-control readonly" translate="<%=enumPrefix%>.SELECT"
+                                  translate-interpolation="messageformat" translate-values="{ VALUE: <%= entityInstance %>.<%=fields[fieldId].fieldName%> }"></span>
+                        <% } else { %>
+                            <input type="text" class="input-sm form-control" value="{{<%= entityInstance %>.<%=fields[fieldId].fieldName%>}}" readonly>
+                    <% } %></td>
                 </tr><% } %><% for (relationshipId in relationships) {
                                  if (relationships[relationshipId].relationshipType == 'many-to-one') {
                                      var relationshipName = relationships[relationshipId].relationshipName;

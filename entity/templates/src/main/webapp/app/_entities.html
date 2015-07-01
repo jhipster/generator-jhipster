@@ -56,8 +56,9 @@
                             <select class="form-control" name="<%= fields[fieldId].fieldName %>" ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) { %> required<% } %>><%
                                 var values = fields[fieldId].fieldValues.split(",");
                                 for (key in values) {
+                                    var enumPrefix = angularAppName + '.'+ fields[fieldId].fieldType;
                                     var value = values[key]; %>
-                                <option value="<%= value %>"><%= value %></option><%
+                                <option value="<%= value %>" translate="<%=enumPrefix%>.<%=value%>"><%= value %></option><%
                                 } %>
                             </select><% } else { %>
                             <input type="<%= fieldInputType %>" class="form-control" name="<%= fields[fieldId].fieldName %>"
@@ -181,7 +182,10 @@
             <tbody<% if (pagination == 'infinite-scroll') { %> infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page"<% } %>>
                 <tr ng-repeat="<%=entityInstance %> in <%=entityInstance %>s">
                     <td><a ui-sref="<%= entityInstance %>Detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td><% for (fieldId in fields) { %>
-                    <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%>}}</td><% } %><% for (relationshipId in relationships) {
+                    <% if (fields[fieldId].fieldIsEnum) {
+                        var enumPrefix = angularAppName + '.'+ fields[fieldId].fieldType;%>
+                        <td translate="<%=enumPrefix%>.SELECT" translate-values="{ VALUE: <%= entityInstance %>.<%=fields[fieldId].fieldName%> }" translate-interpolation="messageformat"></td>
+                        <% } else { %><td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%>}}</td><% }} %><% for (relationshipId in relationships) {
                         if (relationships[relationshipId].relationshipType == 'many-to-one') {
                             var relationShipValue = entityInstance + "." + relationships[relationshipId].relationshipFieldName + "." + relationships[relationshipId].otherEntityField;
                             if (dto == 'mapstruct') {

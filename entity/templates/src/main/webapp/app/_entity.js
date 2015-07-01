@@ -18,7 +18,10 @@ angular.module('<%=angularAppName%>')
                 },
                 resolve: {<% if (enableTranslation){ %>
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('<%= entityInstance %>');
+                        $translatePartialLoader.addPart('<%= entityInstance %>');<%
+                        for (var fieldIdx in fields) {
+                          if (fields[fieldIdx].fieldIsEnum == true) { %>
+                        $translatePartialLoader.addPart('<%= fields[fieldIdx].enumInstance %>');<% }} %>
                         $translatePartialLoader.addPart('global');
                         return $translate.refresh();
                     }]<% } %>
@@ -39,7 +42,10 @@ angular.module('<%=angularAppName%>')
                 },
                 resolve: {<% if (enableTranslation){ %>
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('<%= entityInstance %>');
+                        $translatePartialLoader.addPart('<%= entityInstance %>');<%
+                        for (var fieldIdx in fields) {
+                          if (fields[fieldIdx].fieldIsEnum == true) { %>
+                        $translatePartialLoader.addPart('<%= fields[fieldIdx].enumInstance %>');<% }} %>
                         return $translate.refresh();
                     }]<% } %>
                 }
