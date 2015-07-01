@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .factory('Principal', function Principal($q, Account<% if (websocket == 'spring-websocket') { %>, Tracker<% } %>) {
+    .factory('Principal', function Principal($q, Account, AuthServerProvider<% if (websocket == 'spring-websocket') { %>, Tracker<% } %>) {
         var _identity,
             _authenticated = false;
 
@@ -10,6 +10,11 @@ angular.module('<%=angularAppName%>')
                 return angular.isDefined(_identity);
             },
             isAuthenticated: function () {
+                if(!AuthServerProvider.hasValidToken()){
+                    _authenticated = false;
+                    _identity = undefined;
+                    return false;
+                }
                 return _authenticated;
             },
             isInRole: function (role) {
