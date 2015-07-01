@@ -1030,6 +1030,8 @@ JhipsterGenerator.prototype.app = function app() {
         ];
     if (this.enableTranslation) {
         appScripts = appScripts.concat([
+          'bower_components/messageformat/locale/en.js',
+          'bower_components/messageformat/locale/fr.js',
           'scripts/components/language/language.service.js',
           'scripts/components/language/language.controller.js']);
     }

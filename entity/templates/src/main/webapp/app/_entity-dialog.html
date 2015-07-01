@@ -31,10 +31,11 @@
             <label translate="<%= translationKey %>" for="field_<%= fields[fieldId].fieldName %>"><%=fields[fieldId].fieldNameCapitalized%></label><%
             if (fields[fieldId].fieldIsEnum) { %>
             <select class="form-control" name="<%= fields[fieldId].fieldName %>" ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>" id="field_<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) { %> required<% } %>><%
+               var enumPrefix = angularAppName + '.'+ fields[fieldId].fieldType;
                var values = fields[fieldId].fieldValues.split(",");
                for (key in values) {
                  var value = values[key]; %>
-               <option value="<%= value %>"><%= value %></option><%
+               <option value="<%= value %>" translate="<%=enumPrefix%>.<%=value%>"><%= value %></option><%
                } %>
             </select><% } else { %><% if (fields[fieldId].fieldType == 'byte[]') { %>
             <div><% if (fields[fieldId].fieldTypeBlobContent == 'image') { %>

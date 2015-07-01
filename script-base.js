@@ -49,6 +49,22 @@ Generator.prototype.addComponentsScriptToIndex = function (script) {
     }
 };
 
+Generator.prototype.addMessageformatLocaleToIndex = function (script) {
+    try {
+        var appPath = this.env.options.appPath;
+        var fullPath = path.join(appPath, 'index.html');
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: '<!-- endbuild -->',
+            splicable: [
+                    '<script src="bower_components/messageformat/locale/' + script + '"></script>'
+            ]
+        });
+    } catch (e) {
+        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + script + '.js ' + 'not added.\n'.yellow);
+    }
+};
+
 Generator.prototype.addRouterToMenu = function (entityName,enableTranslation) {
     try {
         var appPath = this.env.options.appPath;
@@ -74,7 +90,7 @@ Generator.prototype.addChangelogToLiquibase = function (changelogName) {
             file: fullPath,
             needle: '<!-- JHipster will add liquibase changelogs here -->',
             splicable: [
-                    '<include file="classpath:config/liquibase/changelog/' + changelogName + '.xml" relativeToChangelogFile="false"/>'
+                    '<include file="config/liquibase/changelog/' + changelogName + '.xml" relativeToChangelogFile="false"/>'
             ]
         });
     } catch (e) {

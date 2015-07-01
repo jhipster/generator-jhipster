@@ -148,3 +148,8 @@ ul#strengthBar {
     width:20px;
 }
 /* end Password strength bar style */
+
+.readonly {
+    background-color: #eee;
+    opacity: 1;
+}

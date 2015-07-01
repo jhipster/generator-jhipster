@@ -69,6 +69,7 @@ LanguagesGenerator.prototype.files = function files() {
         var language = this.languages[id];
         this.installI18nFilesByLanguage(this, webappDir, resourceDir, language);
         this.installNewLanguage(language);
+        this.addMessageformatLocaleToIndex(language.split("-")[0] + '.js');
         insight.track('languages/language', language);
     }
 };

@@ -19,6 +19,7 @@
     "angular-sanitize": "1.4.0",<% if (enableTranslation) { %>
     "angular-i18n": "1.4.0",
     "angular-translate": "2.7.0",
+    "angular-translate-interpolation-messageformat": "2.7.0",
     "angular-translate-storage-cookie": "2.7.0",
     "angular-translate-loader-partial": "2.7.0",
     "angular-dynamic-locale": "0.1.27",<% } %>

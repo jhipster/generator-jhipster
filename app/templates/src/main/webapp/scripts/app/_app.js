@@ -145,6 +145,7 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTransl
         $translateProvider.preferredLanguage('en');
         $translateProvider.useCookieStorage();
         $translateProvider.useSanitizeValueStrategy('escaped');
+        $translateProvider.addInterpolation('$translateMessageFormatInterpolation');
 
         tmhDynamicLocaleProvider.localeLocationPattern('bower_components/angular-i18n/angular-locale_{{locale}}.js');
         tmhDynamicLocaleProvider.useCookieStorage();

@@ -977,8 +977,32 @@ EntityGenerator.prototype.files = function files() {
             enumInfo.packageName = this.packageName;
             enumInfo.enumName = fieldType;
             enumInfo.enumValues = field.fieldValues;
+            enumInfo.enumInstance = enumInfo.enumName.charAt(0).toLowerCase() + enumInfo.enumName.slice(1);
+            enumInfo.angularAppName = this.angularAppName;
+            enumInfo.enums = enumInfo.enumValues.split(',');
             this.template('src/main/java/package/domain/enumeration/_Enum.java',
                 'src/main/java/' + this.packageFolder + '/domain/enumeration/' + fieldType + '.java', enumInfo, {});
+
+            // Copy for each
+            if (this.enableTranslation) {
+                this.copyEnumI18n('ca', enumInfo);
+                this.copyEnumI18n('zh-cn', enumInfo);
+                this.copyEnumI18n('zh-tw', enumInfo);
+                this.copyEnumI18n('da', enumInfo);
+                this.copyEnumI18n('de', enumInfo);
+                this.copyEnumI18n('en', enumInfo);
+                this.copyEnumI18n('fr', enumInfo);
+                this.copyEnumI18n('hu', enumInfo);
+                this.copyEnumI18n('it', enumInfo);
+                this.copyEnumI18n('ja', enumInfo);
+                this.copyEnumI18n('kr', enumInfo);
+                this.copyEnumI18n('pl', enumInfo);
+                this.copyEnumI18n('pt-br', enumInfo);
+                this.copyEnumI18n('ru', enumInfo);
+                this.copyEnumI18n('es', enumInfo);
+                this.copyEnumI18n('sv', enumInfo);
+                this.copyEnumI18n('tr', enumInfo);
+            }
         }
     }
 
@@ -1082,6 +1106,18 @@ EntityGenerator.prototype.copyI18n = function(language) {
         if (stats.isDirectory()) {
             this.template('src/main/webapp/i18n/_entity_' + language + '.json', 'src/main/webapp/i18n/' + language + '/' + this.entityInstance + '.json', this, {});
             this.addNewEntityToMenu(language, this.entityInstance, this.entityClass);
+        }
+    } catch(e) {
+        // An exception is thrown if the folder doesn't exist
+        // do nothing
+    }
+};
+
+EntityGenerator.prototype.copyEnumI18n = function(language, enumInfo) {
+    try {
+        var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
+        if (stats.isDirectory()) {
+            this.template('src/main/webapp/i18n/_enum_' + language + '.json', 'src/main/webapp/i18n/' + language + '/' + enumInfo.enumInstance + '.json', enumInfo, {});
         }
     } catch(e) {
         // An exception is thrown if the folder doesn't exist
