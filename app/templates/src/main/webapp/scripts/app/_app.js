@@ -66,7 +66,7 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTransl
                 return config;
             }
         };
-    })<% } %><% if (authenticationType == 'oauth2') { %>
+    })<% } %><% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
     .factory('authExpiredInterceptor', function ($rootScope, $q, $injector, localStorageService) {
         return {
             responseError: function (response) {
@@ -132,12 +132,9 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTransl
             }
         });
 
-<% if (authenticationType == 'session') { %>
-        $httpProvider.interceptors.push('authExpiredInterceptor');<% } %>
-
+        $httpProvider.interceptors.push('authExpiredInterceptor');
 <% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
-        $httpProvider.interceptors.push('authInterceptor');<% } %><% if (authenticationType == 'oauth2') { %>
-        $httpProvider.interceptors.push('authExpiredInterceptor');<% } %>
+        $httpProvider.interceptors.push('authInterceptor');<% } %>
         <% if (enableTranslation) { %>
         // Initialize angular-translate
         $translateProvider.useLoader('$translatePartialLoader', {
