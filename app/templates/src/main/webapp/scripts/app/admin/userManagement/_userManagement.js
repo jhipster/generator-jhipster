@@ -5,7 +5,7 @@ angular.module('<%=angularAppName%>')
         $stateProvider
             .state('userManagement', {
                 parent: 'admin',
-                url: '/user-managment',
+                url: '/user-management',
                 data: {
                     roles: ['ROLE_ADMIN'],
                     pageTitle: 'userManagement.home.title'
@@ -25,7 +25,7 @@ angular.module('<%=angularAppName%>')
             })
             .state('userManagementDetail', {
                 parent: 'admin',
-                url: '/user-managment/:login',
+                url: '/user-management/:login',
                 data: {
                     roles: ['ROLE_ADMIN'],
                     pageTitle: 'userManagement.detail.title'
