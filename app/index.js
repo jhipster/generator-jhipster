@@ -941,7 +941,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/scripts/app/admin/userManagement/_userManagement-detail.controller.js', webappDir + 'scripts/app/admin/userManagement/userManagement-detail.controller.js', this, {});
     this.template(webappDir + '/scripts/components/admin/_userManagement.service.js', webappDir + '/scripts/components/admin/userManagement.service.js', this, {});
 
-    this.template(webappDir + '/scripts/components/admin/_authority.service.js', webappDir + '/scripts/components/admin/authority.service.js', this, {});
+    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+      this.template(webappDir + '/scripts/components/admin/_authority.service.js', webappDir + '/scripts/components/admin/authority.service.js', this, {});
+    }
     this.copyHtml(webappDir + '/scripts/app/error/error.html', webappDir + 'scripts/app/error/error.html');
     this.copyHtml(webappDir + '/scripts/app/error/accessdenied.html', webappDir + 'scripts/app/error/accessdenied.html');
     this.copyJs(webappDir + '/scripts/app/entities/_entity.js', webappDir + 'scripts/app/entities/entity.js', this, {});

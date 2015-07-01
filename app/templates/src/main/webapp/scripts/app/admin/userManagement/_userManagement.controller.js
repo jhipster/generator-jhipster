@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('UserManagementController', function ($scope, UserManagement, Authority, ParseLinks) {
-        $scope.users = [];
-        $scope.authorities = Authority.query();
+    .controller('UserManagementController', function ($scope, UserManagement<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>, Authority<% } %>, ParseLinks) {
+        $scope.users = [];<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+        $scope.authorities = Authority.query();<% } %>
 
         $scope.page = 1;
         $scope.loadAll = function() {
@@ -50,7 +50,7 @@ angular.module('<%=angularAppName%>')
             $scope.user = { login: null, firstName: null, lastName: null, email: null,
                             activated: null, langKey: null, createdBy: null, createdDate: null,
                             lastModifiedBy: null, lastModifiedDate: null, resetDate: null,
-                            resetKey: null, authorities: null };
+                            resetKey: null<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>, authorities: null<% } %> };
             $scope.editForm.$setPristine();
             $scope.editForm.$setUntouched();
         };

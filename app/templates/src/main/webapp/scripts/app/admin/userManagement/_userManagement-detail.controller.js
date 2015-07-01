@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('UserManagementDetailController', function ($scope, $stateParams, UserManagement, Authority) {
+    .controller('UserManagementDetailController', function ($scope, $stateParams, UserManagement<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>, Authority<% } %>) {
         $scope.user = {};
         $scope.load = function (login) {
             UserManagement.get({login: login}, function(result) {

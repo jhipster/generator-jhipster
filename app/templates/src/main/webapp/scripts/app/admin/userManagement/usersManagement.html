@@ -97,8 +97,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label translate="userManagement.authorities">authorities</label>
-                            <select class="form-control" multiple name="authority" ng-model="user.authorities" ng-options="authority as authority.name for authority in authorities track by authority.name">
+                            <label translate="userManagement.authorities">authorities</label><% if (databaseType == 'cassandra') { %>
+                            <select class="form-control" multiple name="authority" ng-model="user.authorities" ng-options="authority in authorities"><% } else { %>
+															<select class="form-control" multiple name="authority" ng-model="user.authorities" ng-options="authority as authority.name for authority in authorities track by authority.name"><% } %>
                             </select>
                         </div>
                     </div>
@@ -167,8 +168,9 @@
                     </td>
                     <td>{{user.langKey}}</td>
                     <td>
-                    	<div ng-repeat="authority in user.authorities">
-                    		<span class="label label-info">{{ authority.name }}</span>
+                    	<div ng-repeat="authority in user.authorities"><% if (databaseType == 'cassandra') { %>
+                    		<span class="label label-info">{{ authority }}</span><% } else { %>
+													<span class="label label-info">{{ authority.name }}</span><% } %>
                     	</div>
                     </td>
                     <td>{{user.createdDate | date:'dd/MM/yy HH:mm'}}</td>
