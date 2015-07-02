@@ -9,7 +9,6 @@ import org.joda.time.DateTime;<% if (databaseType == 'sql') { %>
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;<% if (javaVersion == '8') { %>
 import java.util.Optional;<%}%><% if (databaseType == 'cassandra') { %>
