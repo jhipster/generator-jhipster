@@ -89,7 +89,17 @@
                     <td>
                         <input type="text" class="input-sm form-control" value="{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}" readonly>
                     </td>
-                </tr><% } %>
+                </tr><% } %>                
+                <tr>
+                    <td>
+                        <span translate="userManagement.profiles">Profiles</span>
+                    </td>
+                    <td>
+                        <ul class="list-unstyled">
+                            <li ng-repeat="auth in user.authorities"><span>{{auth.name}} </span></li>
+                        </ul>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
