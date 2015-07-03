@@ -176,8 +176,7 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     @Test<% if (databaseType == 'sql') { %>
     @Transactional<% } %>
     public void check<%= fields[fieldId].fieldInJavaBeanMethod %>IsRequired() throws Exception {
-        // Validate the database is empty
-        assertThat(<%= entityInstance %>Repository.findAll()).hasSize(0);
+        int databaseSizeBeforeTest = <%= entityInstance %>Repository.findAll().size();
         // set the field null
         <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(null);
 
@@ -187,9 +186,8 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
                 .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %>)))
                 .andExpect(status().isBadRequest());
 
-        // Validate the database is still empty
         List<<%= entityClass %>> <%= entityInstance %>s = <%= entityInstance %>Repository.findAll();
-        assertThat(<%= entityInstance %>s).hasSize(0);
+        assertThat(<%= entityInstance %>s).hasSize(databaseSizeBeforeTest);
     }
 <%  } } } %>
     @Test<% if (databaseType == 'sql') { %>
