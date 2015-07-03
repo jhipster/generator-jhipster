@@ -90,7 +90,7 @@ Generator.prototype.addChangelogToLiquibase = function (changelogName) {
             file: fullPath,
             needle: '<!-- JHipster will add liquibase changelogs here -->',
             splicable: [
-                    '<include file="config/liquibase/changelog/' + changelogName + '.xml" relativeToChangelogFile="false"/>'
+                    '<include file="classpath:config/liquibase/changelog/' + changelogName + '.xml" relativeToChangelogFile="false"/>'
             ]
         });
     } catch (e) {
@@ -195,8 +195,8 @@ Generator.prototype.copyHtml = function (source, dest, data, _opt, template) {
         // uses template method instead of copy if template boolean is set as true
         template ? this.template(source, dest, data, _opt) : this.copy(source, dest);
     } else {
-        var regex = '( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")';         
-        //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}" 
+        var regex = '( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")';
+        //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
         var body = this.stripContent(source, regex, data, _opt);
         body = this.replacePlaceholders(body, data);
         this.write(dest, body);
@@ -211,7 +211,7 @@ Generator.prototype.copyJs = function (source, dest, data, _opt, template) {
         // uses template method instead of copy if template boolean is set as true
         template ? this.template(source, dest, data, _opt) : this.copy(source, dest);
     } else {
-        var regex = '[a-zA-Z]+\:(\s)?\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\>\;\s]*\}\]'; 
+        var regex = '[a-zA-Z]+\:(\s)?\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\>\;\s]*\}\]';
         //looks for something like mainTranslatePartialLoader: [*]
         var body = this.stripContent(source, regex, data, _opt);
         body = this.replaceTitle(body, data, template);
