@@ -178,6 +178,14 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     name: 'Long'
                 },
                 {
+                    value: 'Float',
+                    name: 'Float'
+                },
+                {
+                    value: 'Double',
+                    name: 'Double'
+                },
+                {
                     value: 'BigDecimal',
                     name: 'BigDecimal'
                 },
@@ -263,6 +271,14 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     name: 'Long'
                 },
                 {
+                    value: 'Float',
+                    name: 'Float'
+                },
+                {
+                    value: 'Double',
+                    name: 'Double'
+                },
+                {
                     value: 'BigDecimal',
                     name: 'BigDecimal'
                 },
@@ -313,6 +329,8 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     response.fieldValidate == true &&
                     (response.fieldType == 'Integer' ||
                     response.fieldType == 'Long' ||
+                    response.fieldType == 'Float'||
+                    response.fieldType == 'Double'||
                     response.fieldType == 'BigDecimal');
             },
             type: 'checkbox',
@@ -391,6 +409,8 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     response.fieldValidateRules.indexOf('min') != -1 &&
                     (response.fieldType == 'Integer' ||
                     response.fieldType == 'Long' ||
+                    response.fieldType == 'Float'||
+                    response.fieldType == 'Double'||
                     response.fieldType == 'BigDecimal');
             },
             type: 'input',
@@ -409,6 +429,8 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     response.fieldValidateRules.indexOf('max') != -1 &&
                     (response.fieldType == 'Integer' ||
                     response.fieldType == 'Long' ||
+                    response.fieldType == 'Float'||
+                    response.fieldType == 'Double'||
                     response.fieldType == 'BigDecimal');
             },
             type: 'input',

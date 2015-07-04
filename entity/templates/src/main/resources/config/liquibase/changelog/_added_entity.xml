@@ -10,6 +10,10 @@
 
     <property name="autoIncrement" value="true" dbms="mysql,h2,postgresql"/>
     <property name="autoIncrement" value="false" dbms="oracle"/>
+
+    <property name="floatType" value="real" dbms="postgresql, h2"/>
+    <property name="floatType" value="float" dbms="mysql, oracle"/>
+
     <!--
         Added the entity <%= entityClass %>.
     -->
@@ -31,7 +35,9 @@
             if (fieldType == 'String' || fields[fieldId].fieldIsEnum) { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="varchar(<%= maxlength %>)"<% } else if (fieldType == 'Integer') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="integer"<% } else if (fieldType == 'Long') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bigint"<% } else if (fieldType == 'BigDecimal') { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bigint"<% } else if (fieldType == 'Float') { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="${floatType}"<% } else if (fieldType == 'Double') { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="double"<% } else if (fieldType == 'BigDecimal') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="decimal(10,2)"<% } else if (fieldType == 'LocalDate') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="date"<% } else if (fieldType == 'DateTime') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="timestamp"<% } else if (fieldType == 'Boolean') { %>
