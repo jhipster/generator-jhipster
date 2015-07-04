@@ -157,9 +157,8 @@ dependencies {
         exclude(module: 'org.slf4j')
     }<% } %>
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-jetty'<% if (javaVersion == '8') { %>
-    testCompile group: 'org.assertj', name: 'assertj-core-java8', version: assertj_core_version<% } %><% if (javaVersion == '7') { %>
-    testCompile group: 'org.assertj', name: 'assertj-core', version: assertj_core_version<% } %>
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-jetty'
+	testCompile group: 'org.assertj', name: 'assertj-core', version: assertj_core_version
     testCompile group: 'junit', name: 'junit'
     testCompile group: 'org.mockito', name: 'mockito-core'<% if (databaseType == 'sql') { %>
     testCompile group: 'com.mattbertolini', name: 'liquibase-slf4j', version: liquibase_slf4j_version<% } %><% if (databaseType == 'mongodb') { %>
