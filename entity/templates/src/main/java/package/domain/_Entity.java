@@ -38,8 +38,16 @@ import java.util.HashSet;
 import java.util.Set;<% } %>
 import java.util.Objects;<% if (databaseType == 'cassandra') { %>
 import java.util.UUID;<% } %>
-<% for (fieldId in fields) { if (fields[fieldId].fieldIsEnum == true) { %>
-import <%=packageName%>.domain.enumeration.<%= fields[fieldId].fieldType %>;<% } } %>
+<%
+var uniqueEnums = {};
+for (fieldId in fields) {
+    if (fields[fieldId].fieldIsEnum && (
+            !uniqueEnums[fields[fieldId].fieldType] || (uniqueEnums[fields[fieldId].fieldType] && fields[fieldId].fieldValues.length !== 0))) {
+        uniqueEnums[fields[fieldId].fieldType] = fields[fieldId].fieldType;
+    }
+}
+Object.keys(uniqueEnums).forEach(function(element) {%>
+import <%=packageName%>.domain.enumeration.<%= element %>;<% }); %>
 
 /**
  * A <%= entityClass %>.
