@@ -22,8 +22,8 @@
 
     <properties>
         <HikariCP.version>2.3.7</HikariCP.version><% if (javaVersion == '8') { %>
-        <assertj-core.version>1.0.0m1</assertj-core.version><% } %><% if (javaVersion == '7') { %>
-        <assertj-core.version>1.6.1</assertj-core.version><% } %>
+        <assertj-core.version>3.1.0</assertj-core.version><% } %><% if (javaVersion == '7') { %>
+        <assertj-core.version>2.1.0</assertj-core.version><% } %>
         <awaitility.version>1.4.0</awaitility.version><% if (databaseType == 'cassandra') { %>
         <cassandra.version>2.0.12</cassandra.version><% } %>
         <commons-io.version>2.4</commons-io.version>
@@ -266,9 +266,8 @@
             <version><% if (javaVersion == '7') { %>6<% }else { %>7<% } %></version>
         </dependency><% } %>
         <dependency>
-            <groupId>org.assertj</groupId><% if (javaVersion == '8') { %>
-            <artifactId>assertj-core-java8</artifactId><% } %><% if (javaVersion == '7') { %>
-            <artifactId>assertj-core</artifactId><% } %>
+            <groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
             <version>${assertj-core.version}</version>
             <scope>test</scope>
         </dependency><% if (databaseType == 'cassandra') { %>
