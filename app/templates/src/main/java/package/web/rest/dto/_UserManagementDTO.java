@@ -12,7 +12,7 @@ import java.util.Set;
 
 public class UserManagementDTO {
     <% if (databaseType == 'sql') { %>
-    private Long id;<% } %><% if (databaseType == 'mongodb') { %>
+    private Long id;<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>
     private String id;<% } %>
 
     @Pattern(regexp = "^[a-z0-9]*$|(anonymousUser)")
@@ -44,7 +44,7 @@ public class UserManagementDTO {
     private DateTime lastModifiedDate;<% } %>
 
     public UserManagementDTO() {}
-    public UserManagementDTO(<% if (databaseType == 'sql') { %>Long id<% } %><% if (databaseType == 'mongodb') { %>String id<% }%>, String login, String firstName,
+    public UserManagementDTO(<% if (databaseType == 'sql') { %>Long id,<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String id,<% }%> String login, String firstName,
             String lastName, String email, boolean activated, String langKey<% if (databaseType == 'cassandra') { %>, Set<String> authorities<% } %>
             <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>, Set<Authority> authorities, String createdBy, DateTime createdDate,
             String lastModifiedBy, DateTime lastModifiedDate<% } %>) {
@@ -67,7 +67,7 @@ public class UserManagementDTO {
     public Long getId() {
         return id;
     }
-    <% } %><% if (databaseType == 'mongodb') { %>
+    <% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>
     public String getId() {
         return id;
     }

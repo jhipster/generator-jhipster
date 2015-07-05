@@ -200,16 +200,22 @@ public class UserService {
         log.debug("Changed password for User: {}", currentUser);<% } %>
     }
 
-    public User getUserWithAuthorities() {
-      return getUserWithAuthorities(SecurityUtils.getCurrentLogin());
+<% if (databaseType == 'sql') { %>
+    @Transactional(readOnly = true)<% } %>
+    public User getUserWithAuthorities(<% if (databaseType == 'cassandra' || databaseType == 'mongodb') { %>String id<% } else { %>Long id<% } %>) {
+        User user = userRepository.findOne(<% if (databaseType == 'cassandra') { %>UUID.fromString(id)<% } else { %>id<% } %>);
+        user.getAuthorities().size(); // eagerly load the association
+        return user;
     }
+
+
 
 <% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true)<% } %>
-    public User getUserWithAuthorities(String login) {<% if (javaVersion == '8') { %>
-        User user = userRepository.findOneByLogin(login).get();
+    public User getUserWithAuthorities() {<% if (javaVersion == '8') { %>
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).get();
         user.getAuthorities().size(); // eagerly load the association<% } else { %>
-        User user = userRepository.findOneByLogin(login);
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
         user.getAuthorities().size(); // eagerly load the association<% } %>
         return user;
     }<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>

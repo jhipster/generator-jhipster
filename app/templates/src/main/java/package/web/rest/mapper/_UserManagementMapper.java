@@ -4,9 +4,9 @@ import <%=packageName%>.domain.User;
 import <%=packageName%>.service.UserService;
 import <%=packageName%>.web.rest.dto.UserManagementDTO;
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Mapping;<% if (javaVersion == '7') { %>
-import org.mapstruct.Mappings;<% } %><% } %><% if (javaVersion == '8') { %>
+import org.mapstruct.Mappings;<% } %><% if (javaVersion == '8') { %>
 import java.util.Optional;<% } %>
 
 import javax.inject.Inject;
@@ -21,13 +21,13 @@ public abstract class UserManagementMapper {
     public abstract UserManagementDTO userToUserManagementDTO(User user);
     public abstract List<UserManagementDTO> usersToUserManagementsDTO(List<User> users);
 
-    <% if (databaseType == 'sql' || databaseType == 'mongodb') { %><% if (javaVersion == '8') { %>
+    <% if (javaVersion == '8') { %><% if (databaseType != 'cassandra') { %>
     @Mapping(target = "createdBy", ignore=true)
     @Mapping(target = "createdDate", ignore=true)
     @Mapping(target = "lastModifiedBy", ignore=true)
-    @Mapping(target = "lastModifiedDate", ignore=true)
-    @Mapping(target = "resetDate", ignore=true)<% if (authenticationType == 'session' && databaseType == 'sql') { %>
-    @Mapping(target = "persistentTokens", ignore=true)<% } %>
+    @Mapping(target = "lastModifiedDate", ignore=true)<% if (authenticationType == 'session' && databaseType == 'sql') { %>
+    @Mapping(target = "persistentTokens", ignore=true)<% } %><% } %>
+    @Mapping(target = "resetDate", ignore=true)
     @Mapping(target = "activationKey", ignore=true)
     @Mapping(target = "resetKey", ignore=true)
     @Mapping(target = "password", ignore=true)<% } else { %>
@@ -41,14 +41,16 @@ public abstract class UserManagementMapper {
       @Mapping(target = "activationKey", ignore=true),
       @Mapping(target = "resetKey", ignore=true),
       @Mapping(target = "password", ignore=true)
-    })<% } %><% } %>
+    })<% } %>
     public abstract User updateUserFromDto(UserManagementDTO userManagementDTO, @MappingTarget User user);
 
+
+
     public User userManagementDTOToUser(UserManagementDTO userManagementDTO) {<% if (javaVersion == '8') { %>
-        return  Optional.ofNullable(userService.getUserWithAuthorities(userManagementDTO.getLogin()))
+        return  Optional.ofNullable(userService.getUserWithAuthorities(userManagementDTO.getId()))
             .map(user -> this.updateUserFromDto(userManagementDTO, user))
             .orElse(null);<% } else { %>
-        User user = userService.getUserWithAuthorities(userManagementDTO.getLogin());
+        User user = userService.getUserWithAuthorities(userManagementDTO.getId());
         return updateUserFromDto(userManagementDTO, user);<% } %>
     }
 }

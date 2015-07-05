@@ -53,7 +53,7 @@ public class UserManagementResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @RolesAllowed(AuthoritiesConstants.ADMIN)<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-    @Transactional(readOnly = true)<% } %>
+    @Transactional(readOnly = true)
     public ResponseEntity<List<UserManagementDTO>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
                                                          @RequestParam(value = "per_page", required = false) Integer limit)
         throws URISyntaxException {
@@ -64,26 +64,32 @@ public class UserManagementResource {
                  .collect(Collectors.toCollection(LinkedList::new)), headers, HttpStatus.OK);<% } else { %>
         List<UserManagementDTO> usersManagementDTO = userManagementMapper.usersToUserManagementsDTO(page.getContent());
         return new ResponseEntity<List<UserManagementDTO>>(usersManagementDTO, headers, HttpStatus.OK);<% } %>
-    }
+    }<% } if (databaseType == 'cassandra') { %>
+    public List<UserManagementDTO> getAll() {
+        return userRepository.findAll().stream()
+            .map(userManagementMapper::userToUserManagementDTO)
+            .collect(Collectors.toList());
+    }<% } %>
+
 
     /**
      * GET  /userManagement/:id -> get id user to manage.
      */
-    @RequestMapping(value = "/userManagement/{login}",
+    @RequestMapping(value = "/userManagement/{id}",
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @RolesAllowed(AuthoritiesConstants.ADMIN)
     @Transactional(readOnly = true)
-    ResponseEntity<UserManagementDTO> getUser(@PathVariable String login) {
-       log.debug("REST request to get User to manage : {}", login);<% if (javaVersion == '8') { %>
-       return  Optional.ofNullable(userService.getUserWithAuthorities(login))
+    ResponseEntity<UserManagementDTO> getUser(@PathVariable <% if (databaseType == 'cassandra' || databaseType == 'mongodb') { %>String id<% } else { %>Long id<% } %>) {
+       log.debug("REST request to get User to manage : {}", id);<% if (javaVersion == '8') { %>
+       return  Optional.ofNullable(userService.getUserWithAuthorities(id))
                .map(userManagementMapper::userToUserManagementDTO)
                .map(userManagementDTO -> new ResponseEntity<>(
                     userManagementDTO,
                     HttpStatus.OK))
                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));<% } else { %>
-       User user = userService.getUserWithAuthorities(login);
+       User user = userService.getUserWithAuthorities(id);
        if (user == null) {
            return new ResponseEntity<UserManagementDTO>(HttpStatus.NOT_FOUND);
        }

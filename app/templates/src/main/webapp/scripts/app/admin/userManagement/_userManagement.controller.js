@@ -26,8 +26,8 @@ angular.module('<%=angularAppName%>')
             });
         };
 
-        $scope.showUpdate = function (login) {
-            UserManagement.get({login: login}, function(result) {
+        $scope.showUpdate = function (id) {
+            UserManagement.get({id: id}, function(result) {
                 $scope.user = result;
                 $('#saveUserModal').modal('show');
             });
@@ -47,7 +47,7 @@ angular.module('<%=angularAppName%>')
         };
 
         $scope.clear = function () {
-            $scope.user = { login: null, firstName: null, lastName: null, email: null,
+            $scope.user = { id: null, login: null, firstName: null, lastName: null, email: null,
                             activated: null, langKey: null, createdBy: null, createdDate: null,
                             lastModifiedBy: null, lastModifiedDate: null, resetDate: null,
                             resetKey: null<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>, authorities: null<% } %> };

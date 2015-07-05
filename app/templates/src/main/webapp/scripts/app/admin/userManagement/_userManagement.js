@@ -25,7 +25,7 @@ angular.module('<%=angularAppName%>')
             })
             .state('userManagementDetail', {
                 parent: 'admin',
-                url: '/user-management/:login',
+                url: '/user-management/:id',
                 data: {
                     roles: ['ROLE_ADMIN'],
                     pageTitle: 'userManagement.detail.title'

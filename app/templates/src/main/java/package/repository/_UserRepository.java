@@ -20,7 +20,8 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;<%}%>
+import java.util.Optional;
+import java.util.UUID;<%}%>
 
 <% if (databaseType == 'sql') { %>/**
  * Spring Data JPA repository for the User entity.
@@ -174,6 +175,10 @@ public class UserRepository {
         stmt.setString("login", login);
         return findOneFromIndex(stmt);
     }
+
+    public User findOne(UUID id) {
+       return mapper.get(id);
+   }
 
     public List<User> findAll() {
         return mapper.map(session.execute(findAllStmt.bind())).all();
