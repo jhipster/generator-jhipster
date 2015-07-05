@@ -50,7 +50,7 @@ public class SwaggerConfiguration implements EnvironmentAware {
         log.debug("Starting Swagger");
         StopWatch watch = new StopWatch();
         watch.start();
-        Docket swaggerSpringMvcPlugin = new Docket(DocumentationType.SWAGGER_2)
+        Docket docket = new Docket(DocumentationType.SWAGGER_2)
             .apiInfo(apiInfo())
             .genericModelSubstitutes(ResponseEntity.class)
             .forCodeGeneration(true)
@@ -66,7 +66,7 @@ public class SwaggerConfiguration implements EnvironmentAware {
             .build();
         watch.stop();
         log.debug("Started Swagger in {} ms", watch.getTotalTimeMillis());
-        return swaggerSpringMvcPlugin;
+        return docket;
     }
 
     /**
