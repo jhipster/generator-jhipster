@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
 /**
- * Custom Jackson serializer for displaying Joda DateTime objects.
+ * Custom Jackson serializer for transforming a Joda DateTime object to JSON.
  */
 public class CustomDateTimeSerializer extends JsonSerializer<DateTime> {
 
