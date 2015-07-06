@@ -48,49 +48,49 @@ angular.module('<%=angularAppName%>')
                 }
             })
             .state('<%= entityInstance %>.new', {
-              parent: '<%= entityInstance %>',
-              url: '/new',
-              data: {
-                  roles: ['ROLE_USER'],
-              },
-              onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
-                $modal.open({
-                  templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-dialog.html',
-                  controller: '<%= entityClass %>DialogController',
-                  size: 'lg',
-                  resolve: {
-                      entity: function () {
-                          return {<% for (fieldId in fields) { %><%= fields[fieldId].fieldName %>: null, <% } %>id: null};
-                      }
-                  }
-                }).result.then(function(result) {
-                  $state.go('<%= entityInstance %>Detail', {id: result.id});
-                }, function() {
-                  $state.go('<%= entityInstance %>');
-                })
-              }]
+                parent: '<%= entityInstance %>',
+                url: '/new',
+                data: {
+                    roles: ['ROLE_USER'],
+                },
+                onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
+                    $modal.open({
+                        templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-dialog.html',
+                        controller: '<%= entityClass %>DialogController',
+                        size: 'lg',
+                        resolve: {
+                            entity: function () {
+                                return {<% for (fieldId in fields) { %><%= fields[fieldId].fieldName %>: null, <% } %>id: null};
+                            }
+                        }
+                    }).result.then(function(result) {
+                        $state.go('<%= entityInstance %>', null, { reload: true });
+                    }, function() {
+                        $state.go('<%= entityInstance %>');
+                    })
+                }]
             })
             .state('<%= entityInstance %>.edit', {
-              parent: '<%= entityInstance %>',
-              url: '/{id}/edit',
-              data: {
-                  roles: ['ROLE_USER'],
-              },
-              onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
-                $modal.open({
-                  templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-dialog.html',
-                  controller: '<%= entityClass %>DialogController',
-                  size: 'lg',
-                  resolve: {
-                      entity: ['<%= entityClass %>', function(<%= entityClass %>) {
-                          return <%= entityClass %>.get({id : $stateParams.id});
-                      }]
-                  }
-                }).result.then(function(result) {
-                  $state.go('<%= entityInstance %>Detail', {id: result.id});
-                }, function() {
-                  $state.go('^');
-                })
-              }]
+                parent: '<%= entityInstance %>',
+                url: '/{id}/edit',
+                data: {
+                    roles: ['ROLE_USER'],
+                },
+                onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
+                    $modal.open({
+                        templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-dialog.html',
+                        controller: '<%= entityClass %>DialogController',
+                        size: 'lg',
+                        resolve: {
+                            entity: ['<%= entityClass %>', function(<%= entityClass %>) {
+                                return <%= entityClass %>.get({id : $stateParams.id});
+                            }]
+                        }
+                    }).result.then(function(result) {
+                        $state.go('<%= entityInstance %>', null, { reload: true });
+                    }, function() {
+                        $state.go('^');
+                    })
+                }]
             });
     });

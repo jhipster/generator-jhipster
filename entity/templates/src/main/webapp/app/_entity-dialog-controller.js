@@ -7,9 +7,9 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>DialogContro
       $scope.<%= entityInstance %> = entity;<% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) { %>
       $scope.<%= differentTypes[idx].toLowerCase() %>s = <%= differentTypes[idx] %>.query();<% } } %>
       $scope.load = function(id) {
-        <%= entityClass %>.get({id : id}, function(result) {
-          $scope.<%= entityInstance %> = result;
-        });
+          <%= entityClass %>.get({id : id}, function(result) {
+                $scope.<%= entityInstance %> = result;
+          });
       };
 
       var onSaveFinished = function (result) {
