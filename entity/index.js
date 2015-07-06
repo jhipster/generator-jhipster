@@ -932,6 +932,8 @@ EntityGenerator.prototype.files = function files() {
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + 's.html', this, {}, true);
     this.copyHtml('src/main/webapp/app/_entity-detail.html',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + '-detail.html', this, {}, true);
+    this.copyHtml('src/main/webapp/app/_entity-dialog.html',
+        'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + '-dialog.html', this, {}, true);
 
     this.addRouterToMenu(this.entityInstance, this.enableTranslation);
 
@@ -941,6 +943,9 @@ EntityGenerator.prototype.files = function files() {
     this.template('src/main/webapp/app/_entity-controller.js',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '.controller' + '.js', this, {});
     this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.controller' + '.js');
+    this.template('src/main/webapp/app/_entity-dialog-controller.js',
+        'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '-dialog.controller' + '.js', this, {});
+    this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '-dialog.controller' + '.js');
 
     this.template('src/main/webapp/app/_entity-detail-controller.js',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '-detail.controller' + '.js', this, {});
