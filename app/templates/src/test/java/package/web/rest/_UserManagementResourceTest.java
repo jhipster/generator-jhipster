@@ -4,6 +4,7 @@ import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.Application;<% if (databaseType == 'mongodb') { %>
 import <%=packageName%>.config.MongoConfiguration;<% } %>
 import <%=packageName%>.repository.UserRepository;
+import <%=packageName%>.web.rest.dto.UserManagementDTO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +20,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import javax.inject.Inject;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -56,7 +59,7 @@ public class UserManagementResourceTest <% if (databaseType == 'cassandra') { %>
 
     @Test
     public void testGetAllUser() throws Exception {
-        restUserManagementMockMvc.perform(get("/api/userManagement")
+        restUserManagementMockMvc.perform(get("/api/userManagement"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.[0].id").exists())
@@ -75,7 +78,7 @@ public class UserManagementResourceTest <% if (databaseType == 'cassandra') { %>
 
     @Test
     public void testGetUser() throws Exception {
-        restUserManagementMockMvc.perform(get("/api/userManagement/{login}", "admin")
+        restUserManagementMockMvc.perform(get("/api/userManagement/{login}", "admin"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").exists())
@@ -101,7 +104,7 @@ public class UserManagementResourceTest <% if (databaseType == 'cassandra') { %>
         userManagementDTO.setActivated(UPDATED_ACTIVATED);
         userManagementDTO.setLangKey(UPDATED_LANG_KEY);
 
-        restAuthorMockMvc.perform(put("/api/userManagement")
+        restUserManagementMockMvc.perform(put("/api/userManagement")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(userManagementDTO)))
                 .andExpect(status().isOk());
@@ -111,7 +114,7 @@ public class UserManagementResourceTest <% if (databaseType == 'cassandra') { %>
         assertThat(user.getFirstName()).isEqualTo(UPDATED_FIRST_NAME);
         assertThat(user.getLastName()).isEqualTo(UPDATED_LAST_NAME);
         assertThat(user.getEmail()).isEqualTo(UPDATED_EMAIL);
-        assertThat(user.isActivated()).isEqualTo(UPDATED_ACTIVATED);
+        assertThat(user.getActivated()).isEqualTo(UPDATED_ACTIVATED);
         assertThat(user.getLangKey()).isEqualTo(UPDATED_LANG_KEY);
     }
 }

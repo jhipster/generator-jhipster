@@ -11,8 +11,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class UserManagementDTO {
-
-    private Long id;
+    <% if (databaseType == 'sql') { %>
+    private Long id;<% } %><% if (databaseType == 'mongodb') { %>
+    private String id;<% } %>
 
     @Pattern(regexp = "^[a-z0-9]*$|(anonymousUser)")
     @NotNull
@@ -43,7 +44,7 @@ public class UserManagementDTO {
     private DateTime lastModifiedDate;<% } %>
 
     public UserManagementDTO() {}
-    public UserManagementDTO(Long id, String login, String firstName,
+    public UserManagementDTO(<% if (databaseType == 'sql') { %>Long id<% } %><% if (databaseType == 'mongodb') { %>String id<% }%>, String login, String firstName,
             String lastName, String email, boolean activated, String langKey<% if (databaseType == 'cassandra') { %>, Set<String> authorities<% } %>
             <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>, Set<Authority> authorities, String createdBy, DateTime createdDate,
             String lastModifiedBy, DateTime lastModifiedDate<% } %>) {
@@ -62,10 +63,15 @@ public class UserManagementDTO {
         this.lastModifiedDate = lastModifiedDate;<% } %>
     }
 
-
+    <% if (databaseType == 'sql') { %>
     public Long getId() {
         return id;
     }
+    <% } %><% if (databaseType == 'mongodb') { %>
+    public String getId() {
+        return id;
+    }
+    <% } %>
 
     public String getLogin() {
         return login;
@@ -114,10 +120,13 @@ public class UserManagementDTO {
     public DateTime getLastModifiedDate() {
         return lastModifiedDate;
     }<% } %>
-
+    <% if (databaseType == 'sql') { %>
     public void setId(Long id) {
         this.id = id;
-    }
+    }<% } %><% if (databaseType == 'mongodb') { %>
+    public void setId(String id) {
+      this.id = id;
+    }<% } %>
 
     public void setLogin(String login) {
         this.login = login;

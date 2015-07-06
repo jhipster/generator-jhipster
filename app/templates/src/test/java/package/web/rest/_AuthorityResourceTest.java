@@ -3,6 +3,7 @@ package <%=packageName%>.web.rest;
 import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.Application;<% if (databaseType == 'mongodb') { %>
 import <%=packageName%>.config.MongoConfiguration;<% } %>
+import <%=packageName%>.web.rest.dto.UserManagementDTO;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
