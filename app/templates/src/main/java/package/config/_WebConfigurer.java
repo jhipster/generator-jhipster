@@ -18,16 +18,14 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomi
 import org.springframework.boot.context.embedded.MimeMappings;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;<% if (clusteredHttpSession == 'hazelcast') { %>
-import org.springframework.web.context.support.WebApplicationContextUtils;<% } %>
+import org.springframework.core.env.Environment;
 
 import javax.inject.Inject;
 import javax.servlet.*;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;
-import java.util.Map;<% if (clusteredHttpSession == 'hazelcast') { %>
-import java.util.Properties;<% } %>
+import java.util.Map;
 
 /**
  * Configuration of web application with Servlet 3.0 APIs.
@@ -42,7 +40,11 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     private Environment env;
 
     @Autowired(required = false)
-    private MetricRegistry metricRegistry;
+    private MetricRegistry metricRegistry;<% if (clusteredHttpSession == 'hazelcast') { %>
+
+    // Hazelcast instance is injected to force its initialization before the Servlet filter uses it.
+    @Inject
+    private HazelcastInstance hazelcastInstance;<% } %>
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
