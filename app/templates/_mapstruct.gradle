@@ -8,7 +8,6 @@ configurations {
 }
 
 dependencies {
-    compile group: 'org.mapstruct', name: 'mapstruct', version: mapstruct_version
     mapstruct group: 'org.mapstruct', name: 'mapstruct-processor', version: mapstruct_version
 }
 

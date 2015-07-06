@@ -26,7 +26,7 @@ public abstract class UserManagementMapper {
     @Mapping(target = "createdDate", ignore=true)
     @Mapping(target = "lastModifiedBy", ignore=true)
     @Mapping(target = "lastModifiedDate", ignore=true)
-    @Mapping(target = "resetDate", ignore=true)<% if (databaseType == 'sql') { %>
+    @Mapping(target = "resetDate", ignore=true)<% if (authenticationType == 'session' && databaseType == 'sql') { %>
     @Mapping(target = "persistentTokens", ignore=true)<% } %>
     @Mapping(target = "activationKey", ignore=true)
     @Mapping(target = "resetKey", ignore=true)
@@ -36,7 +36,7 @@ public abstract class UserManagementMapper {
       @Mapping(target = "createdDate", ignore=true),
       @Mapping(target = "lastModifiedBy", ignore=true),
       @Mapping(target = "lastModifiedDate", ignore=true),
-      @Mapping(target = "resetDate", ignore=true),<% if (databaseType == 'sql') { %>
+      @Mapping(target = "resetDate", ignore=true),<% if (authenticationType == 'session' && databaseType == 'sql') { %>
       @Mapping(target = "persistentTokens", ignore=true),<% } %>
       @Mapping(target = "activationKey", ignore=true),
       @Mapping(target = "resetKey", ignore=true),
