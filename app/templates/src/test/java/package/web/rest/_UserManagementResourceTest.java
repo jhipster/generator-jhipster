@@ -3,8 +3,10 @@ package <%=packageName%>.web.rest;
 import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.Application;<% if (databaseType == 'mongodb') { %>
 import <%=packageName%>.config.MongoConfiguration;<% } %>
+import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.web.rest.dto.UserManagementDTO;
+import <%=packageName%>.web.rest.mapper.UserManagementMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,10 +43,12 @@ public class UserManagementResourceTest <% if (databaseType == 'cassandra') { %>
     private static final String UPDATED_LAST_NAME = "UPDATED_LAST_NAME";
     private static final String UPDATED_EMAIL = "updated@email.com";
     private static final Boolean UPDATED_ACTIVATED = false;
-    private static final String UPDATED_LANG_KEY = "UPDATED_LANG_KEY";
+    private static final String UPDATED_LANG_KEY = "en";
 
     @Inject
     private UserRepository userRepository;
+    @Inject
+    private UserManagementMapper userManagementMapper;
 
     private MockMvc restUserManagementMockMvc;
 
@@ -54,6 +58,7 @@ public class UserManagementResourceTest <% if (databaseType == 'cassandra') { %>
     public void setup() {
         UserManagementResource userManagementResource = new UserManagementResource();
         ReflectionTestUtils.setField(userManagementResource, "userRepository", userRepository);
+        ReflectionTestUtils.setField(userManagementResource, "userManagementMapper", userManagementMapper);
         this.restUserManagementMockMvc = MockMvcBuilders.standaloneSetup(userManagementResource).build();
     }
 
@@ -72,32 +77,12 @@ public class UserManagementResourceTest <% if (databaseType == 'cassandra') { %>
                 .andExpect(jsonPath("$.[0].authorities").exists())
                 .andExpect(jsonPath("$.[0].createdBy").exists())
                 .andExpect(jsonPath("$.[0].createdDate").exists())
-                .andExpect(jsonPath("$.[0].lastModifiedBy").exists())
                 .andExpect(jsonPath("$.[0].lastModifiedDate").exists());
     }
 
     @Test
-    public void testGetUser() throws Exception {
-        restUserManagementMockMvc.perform(get("/api/userManagement/{login}", "admin"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.login").exists())
-                .andExpect(jsonPath("$.firstName").exists())
-                .andExpect(jsonPath("$.lastName").exists())
-                .andExpect(jsonPath("$.email").exists())
-                .andExpect(jsonPath("$.activated").exists())
-                .andExpect(jsonPath("$.langKey").exists())
-                .andExpect(jsonPath("$.authorities").exists())
-                .andExpect(jsonPath("$.createdBy").exists())
-                .andExpect(jsonPath("$.createdDate").exists())
-                .andExpect(jsonPath("$.lastModifiedBy").exists())
-                .andExpect(jsonPath("$.lastModifiedDate").exists());
-    }
-
-    @Test
     public void updateUser() throws Exception {
-        userManagementDTO = new UserManagementDTO();
+        UserManagementDTO userManagementDTO = userManagementMapper.userToUserManagementDTO(userRepository.findOneByLogin("user").get());
         userManagementDTO.setFirstName(UPDATED_FIRST_NAME);
         userManagementDTO.setLastName(UPDATED_LAST_NAME);
         userManagementDTO.setEmail(UPDATED_EMAIL);
@@ -110,7 +95,7 @@ public class UserManagementResourceTest <% if (databaseType == 'cassandra') { %>
                 .andExpect(status().isOk());
 
         // Validate the Author in the database
-        User user = userRepository.findOneByLogin();
+        User user = userRepository.findOneByLogin("user").get();
         assertThat(user.getFirstName()).isEqualTo(UPDATED_FIRST_NAME);
         assertThat(user.getLastName()).isEqualTo(UPDATED_LAST_NAME);
         assertThat(user.getEmail()).isEqualTo(UPDATED_EMAIL);
