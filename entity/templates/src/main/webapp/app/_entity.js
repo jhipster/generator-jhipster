@@ -24,7 +24,7 @@ angular.module('<%=angularAppName%>')
                     }]<% } %>
                 }
             })
-            .state('<%= entityInstance %>Detail', {
+            .state('<%= entityInstance %>.detail', {
                 parent: 'entity',
                 url: '/<%= entityInstance %>/{id}',
                 data: {

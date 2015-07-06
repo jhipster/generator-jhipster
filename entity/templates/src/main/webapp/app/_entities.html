@@ -59,7 +59,7 @@
             </thead>
             <tbody<% if (pagination == 'infinite-scroll') { %> infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page"<% } %>>
                 <tr ng-repeat="<%=entityInstance %> in <%=entityInstance %>s">
-                    <td><a ui-sref="<%= entityInstance %>Detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td><% for (fieldId in fields) { %>
+                    <td><a ui-sref="<%= entityInstance %>.detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td><% for (fieldId in fields) { %>
                     <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%>}}</td><% } %><% for (relationshipId in relationships) {
                         if (relationships[relationshipId].relationshipType == 'many-to-one') {
                             var relationShipValue = entityInstance + "." + relationships[relationshipId].relationshipFieldName + "." + relationships[relationshipId].otherEntityField;
@@ -69,7 +69,7 @@
                     <td>{{<%=relationShipValue %>}}</td><% } } %>
                     <td>
                         <button type="submit"
-                                ui-sref="<%= entityInstance %>Detail({id:<%= entityInstance %>.id})"
+                                ui-sref="<%= entityInstance %>.detail({id:<%= entityInstance %>.id})"
                                 class="btn btn-info btn-sm">
                             <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span translate="entity.action.view"> View</span>
                         </button>
