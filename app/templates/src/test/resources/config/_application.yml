@@ -24,7 +24,7 @@ spring:<% if (databaseType == 'sql') { %>
         password:
 
     jpa:
-        database-platform: org.hibernate.dialect.H2Dialect
+        database-platform: <%=packageName%>.domain.util.FixedH2Dialect
         database: H2
         openInView: false
         show_sql: true

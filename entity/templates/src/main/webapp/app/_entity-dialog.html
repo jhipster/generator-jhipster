@@ -16,7 +16,7 @@
     var fieldInputType = 'text';
     var ngModelOption = '';
     var translationKey = keyPrefix + fields[fieldId].fieldName;
-    if (fields[fieldId].fieldType == 'Integer' || fields[fieldId].fieldType == 'Long' || fields[fieldId].fieldType == 'BigDecimal') {
+    if (fields[fieldId].fieldType == 'Integer' || fields[fieldId].fieldType == 'Long' || fields[fieldId].fieldType == 'Float' || fields[fieldId].fieldType == 'Double' || fields[fieldId].fieldType == 'BigDecimal') {
         fieldInputType = 'number';
     } else if (fields[fieldId].fieldType == 'LocalDate') {
         fieldInputType = 'date';
@@ -98,7 +98,7 @@
                 <p class="help-block"
                     ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.pattern" translate="entity.validation.pattern" translate-value-pattern="<%= fields[fieldId].fieldValidateRulesPattern %>">
                     This field should follow pattern "<%= fields[fieldId].fieldValidateRulesPattern %>".
-                </p><% } %><% if (fields[fieldId].fieldType == 'Integer' || fields[fieldId].fieldType == 'Long' || fields[fieldId].fieldType == 'BigDecimal') { %>
+                </p><% } %><% if (fields[fieldId].fieldType == 'Integer' || fields[fieldId].fieldType == 'Long' || fields[fieldId].fieldType == 'Float' || fields[fieldId].fieldType == 'Double' || fields[fieldId].fieldType == 'BigDecimal') { %>
                 <p class="help-block"
                     ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.number" translate="entity.validation.number">
                     This field should be a number.
