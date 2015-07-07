@@ -14,24 +14,25 @@ angular.module('<%=angularAppName%>')
     .filter('findLanguageFromKey', function () {
         return function (lang) {
             return {
-                "en": "English",
-                "fr": "Français",
-                "de": "Deutsch",
-                "it": "Italiano",
-                "ru": "Русский",
-                "tr": "Türkçe",
                 "ca": "Català",
                 "da": "Dansk",
+                "de": "Deutsch",
+                "en": "English",
                 "es": "Español",
+                "fr": "Français",
                 "hu": "Magyar",
+                "it": "Italiano",
                 "ja": "日本語",
                 "kr": "한국어",
+                "nl": "Dutch",
                 "pl": "Polski",
                 "pt-br": "Português (Brasil)",
                 "ro": "Română",
+                "ru": "Русский",
                 "sv": "Svenska",
+                "tr": "Türkçe",
                 "zh-cn": "中文（简体）",
-                "zh-tw": "繁體中文",
+                "zh-tw": "繁體中文"
             }[lang];
         }
     });
