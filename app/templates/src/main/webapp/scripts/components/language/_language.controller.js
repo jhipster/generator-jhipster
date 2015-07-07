@@ -24,7 +24,7 @@ angular.module('<%=angularAppName%>')
                 "it": "Italiano",
                 "ja": "日本語",
                 "kr": "한국어",
-                "nl": "Dutch",
+                "nl": "Nederlands",
                 "pl": "Polski",
                 "pt-br": "Português (Brasil)",
                 "ro": "Română",
