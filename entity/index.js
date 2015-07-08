@@ -205,7 +205,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 },
                 {
                     value: 'byte[]',
-                    name: 'Blob'
+                    name: '[BETA] Blob'
                 }
             ],
             default: 0
