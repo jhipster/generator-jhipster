@@ -43,6 +43,5 @@ task gatlingRun(dependsOn:'manifestJar', type: JavaExec) {
     args '-rf', gatlingReportsFolder
     args '-bdf', gatlingBodiesFolder
     args "-sf", gatlingSimulationsFolder
-    args "-rd", ""
 
 }
