@@ -273,7 +273,7 @@
         </dependency><% } %>
         <dependency>
             <groupId>org.assertj</groupId>
-	    <artifactId>assertj-core</artifactId>
+	        <artifactId>assertj-core</artifactId>
             <version>${assertj-core.version}</version>
             <scope>test</scope>
         </dependency><% if (databaseType == 'cassandra') { %>
