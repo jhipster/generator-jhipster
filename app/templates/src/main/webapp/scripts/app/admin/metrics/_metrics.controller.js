@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('MetricsController', function ($scope, MonitoringService) {
+    .controller('MetricsController', function ($scope, MonitoringService, $modal) {
         $scope.metrics = {};
         $scope.updatingMetrics = true;
 
@@ -41,31 +41,50 @@ angular.module('<%=angularAppName%>')
 
         $scope.refresh();
 
-        $scope.refreshThreadDumpData = function () {
-            MonitoringService.threadDump().then(function (data) {
-                $scope.threadDump = data;
+        $scope.refreshThreadDumpData = function() {
+            MonitoringService.threadDump().then(function(data) {
 
-                $scope.threadDumpRunnable = 0;
-                $scope.threadDumpWaiting = 0;
-                $scope.threadDumpTimedWaiting = 0;
-                $scope.threadDumpBlocked = 0;
+                var modalInstance = $modal.open({
+                    templateUrl: 'metrics.modal.html',
+                    controller: 'MetricsModalInstanceCtrl',
+                    size: 'lg',
+                    resolve: {
+                        threadDump: function() {
+                            return data;
+                        }
 
-                angular.forEach(data, function (value) {
-                    if (value.threadState === 'RUNNABLE') {
-                        $scope.threadDumpRunnable += 1;
-                    } else if (value.threadState === 'WAITING') {
-                        $scope.threadDumpWaiting += 1;
-                    } else if (value.threadState === 'TIMED_WAITING') {
-                        $scope.threadDumpTimedWaiting += 1;
-                    } else if (value.threadState === 'BLOCKED') {
-                        $scope.threadDumpBlocked += 1;
                     }
                 });
-
-                $scope.threadDumpAll = $scope.threadDumpRunnable + $scope.threadDumpWaiting +
-                    $scope.threadDumpTimedWaiting + $scope.threadDumpBlocked;
-
             });
+        };
+
+
+    })
+    .controller('MetricsModalInstanceCtrl', function($scope, $modalInstance, threadDump) {
+
+        $scope.threadDump = threadDump;
+        $scope.threadDumpRunnable = 0;
+        $scope.threadDumpWaiting = 0;
+        $scope.threadDumpTimedWaiting = 0;
+        $scope.threadDumpBlocked = 0;
+
+        angular.forEach(threadDump, function(value) {
+            if (value.threadState === 'RUNNABLE') {
+                $scope.threadDumpRunnable += 1;
+            } else if (value.threadState === 'WAITING') {
+                $scope.threadDumpWaiting += 1;
+            } else if (value.threadState === 'TIMED_WAITING') {
+                $scope.threadDumpTimedWaiting += 1;
+            } else if (value.threadState === 'BLOCKED') {
+                $scope.threadDumpBlocked += 1;
+            }
+        });
+
+        $scope.threadDumpAll = $scope.threadDumpRunnable + $scope.threadDumpWaiting +
+            $scope.threadDumpTimedWaiting + $scope.threadDumpBlocked;
+
+        $scope.cancel = function() {
+            $modalInstance.dismiss('cancel');
         };
 
         $scope.getLabelClass = function (threadState) {

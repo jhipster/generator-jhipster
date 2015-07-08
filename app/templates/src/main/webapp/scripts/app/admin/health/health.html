@@ -1,50 +1,6 @@
 <div>
 
-    <h2 translate="health.title">Health Check</h2>
-
-    <div class="modal fade" id="showHealthModal" tabindex="-1" role="dialog" aria-labelledby="showHealthLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form name="form" role="form" novalidate
-                      class="ng-scope ng-invalid ng-invalid-required ng-dirty ng-valid-minlength"
-                      ng-submit="create()">
-
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                                ng-click="clear()">&times;</button>
-                        <h4 class="modal-title" id="showHealthLabel">
-                            <% if (enableTranslation){ %>{{'health.indicator.' + baseName(currentHealth.name) | translate}}<% }else{ %><span class="text-capitalize">{{ baseName(currentHealth.name) }}</span><% } %>
-                            {{subSystemName(currentHealth.name)}}
-                        </h4>
-                    </div>
-                    <div class="modal-body">
-                        <div ng-show="currentHealth.details">
-                            <h4 translate="health.details.properties">Properties</h4>
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th class="col-md-6 text-left" translate="health.details.name">Name</th>
-                                        <th class="col-md-6 text-left" translate="health.details.value">Value</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="(k,v) in currentHealth.details">
-                                        <td class="col-md-6 text-left">{{k}}</td>
-                                        <td class="col-md-6 text-left">{{v}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div ng-show="currentHealth.error">
-                            <h4 translate="health.details.error">Error</h4>
-                                <pre>{{currentHealth.error}}</pre>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    <h2 translate="health.title">Health Checks</h2>
 
     <p>
         <button type="button" class="btn btn-primary" ng-click="refresh()"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span translate="health.refresh.button">Refresh</span>
@@ -57,7 +13,7 @@
                 <th class="col-md-7" translate="health.table.service">Service Name</th>
                 <th class="col-md-2 text-center" translate="health.table.status">Status</th>
                 <th class="col-md-2 text-center" translate="health.details.details">Details</th>
-                <th class="col-md-1 text-center"></th>
+                
             </tr>
         </thead>
         <tbody>
@@ -73,8 +29,43 @@
                         <i class="glyphicon glyphicon-eye-open"></i>
                     </a>
                 </td>
-                <td></td>
             </tr>
         </tbody>
     </table>
 </div>
+<script type="text/ng-template" id="health.modal.html">
+	<div class="modal-header">
+	    <button aria-label="Close" data-dismiss="modal" class="close" type="button" ng-click="cancel()"><span aria-hidden="true">&times;</span>
+	    </button>
+        <h4 class="modal-title" id="showHealthLabel"><% if (enableTranslation){ %>
+			{{'health.indicator.' + baseName(currentHealth.name) | translate}}<% }else{ %><span class="text-capitalize">{{ baseName(currentHealth.name) }}</span><% } %>
+	        {{subSystemName(currentHealth.name)}}
+	    </h4>
+	</div>
+	<div class="modal-body pad">
+        <div ng-show="currentHealth.details">
+            <h4 translate="health.details.properties">Properties</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="col-md-6 text-left" translate="health.details.name">Name</th>
+                        <th class="col-md-6 text-left" translate="health.details.value">Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="(k,v) in currentHealth.details">
+                        <td class="col-md-6 text-left">{{k}}</td>
+                        <td class="col-md-6 text-left">{{v}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div ng-show="currentHealth.error">
+            <h4 translate="health.details.error">Error</h4>
+                <pre>{{currentHealth.error}}</pre>
+        </div>
+	</div>
+	<div class="modal-footer">
+	    <button data-dismiss="modal" class="btn btn-default pull-left" type="button" ng-click="cancel()">Done</button>
+	</div>
+</script>

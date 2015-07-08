@@ -6,8 +6,8 @@
     <table class="table table-condensed table-striped table-bordered table-responsive" style="table-layout:fixed">
         <thead>
         <tr>
-            <th ng-click="predicate = 'prefix'; reverse=!reverse"><span translate="configuration.table.prefix">Prefix</span></th>
-            <th translate="configuration.table.properties">Properties</th>
+            <th ng-click="predicate = 'prefix'; reverse=!reverse" class="col-sm-4"><span translate="configuration.table.prefix">Prefix</span></th>
+            <th translate="configuration.table.properties" class="col-sm-8">Properties</th>
         </tr>
         </thead>
         
@@ -15,8 +15,8 @@
             <td><span>{{entry.prefix}}</span></td>
             <td>
                 <div class="row" ng-repeat="(key, value) in entry.properties">
-                    <div class="col-md-6">{{key}}</div>
-                    <div class="col-md-6"><span class="pull-right label label-info" style="white-space: normal;word-break:break-all">{{value}}</span></div>
+                    <div class="col-md-4">{{key}}</div>
+                    <div class="col-md-8"><span class="pull-right label label-info" style="white-space: normal;word-break:break-all">{{value}}</span></div>
                 </div>
             </td>
         </tr>
