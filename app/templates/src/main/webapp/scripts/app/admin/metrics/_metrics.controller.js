@@ -45,8 +45,8 @@ angular.module('<%=angularAppName%>')
             MonitoringService.threadDump().then(function(data) {
 
                 var modalInstance = $modal.open({
-                    templateUrl: 'metrics.modal.html',
-                    controller: 'MetricsModalInstanceCtrl',
+                    templateUrl: 'scripts/app/admin/metrics/metrics.modal.html',
+                    controller: 'MetricsModalController',
                     size: 'lg',
                     resolve: {
                         threadDump: function() {
@@ -59,43 +59,4 @@ angular.module('<%=angularAppName%>')
         };
 
 
-    })
-    .controller('MetricsModalInstanceCtrl', function($scope, $modalInstance, threadDump) {
-
-        $scope.threadDump = threadDump;
-        $scope.threadDumpRunnable = 0;
-        $scope.threadDumpWaiting = 0;
-        $scope.threadDumpTimedWaiting = 0;
-        $scope.threadDumpBlocked = 0;
-
-        angular.forEach(threadDump, function(value) {
-            if (value.threadState === 'RUNNABLE') {
-                $scope.threadDumpRunnable += 1;
-            } else if (value.threadState === 'WAITING') {
-                $scope.threadDumpWaiting += 1;
-            } else if (value.threadState === 'TIMED_WAITING') {
-                $scope.threadDumpTimedWaiting += 1;
-            } else if (value.threadState === 'BLOCKED') {
-                $scope.threadDumpBlocked += 1;
-            }
-        });
-
-        $scope.threadDumpAll = $scope.threadDumpRunnable + $scope.threadDumpWaiting +
-            $scope.threadDumpTimedWaiting + $scope.threadDumpBlocked;
-
-        $scope.cancel = function() {
-            $modalInstance.dismiss('cancel');
-        };
-
-        $scope.getLabelClass = function (threadState) {
-            if (threadState === 'RUNNABLE') {
-                return 'label-success';
-            } else if (threadState === 'WAITING') {
-                return 'label-info';
-            } else if (threadState === 'TIMED_WAITING') {
-                return 'label-warning';
-            } else if (threadState === 'BLOCKED') {
-                return 'label-danger';
-            }
-        };
     });

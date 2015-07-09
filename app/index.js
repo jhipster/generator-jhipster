@@ -911,14 +911,18 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(webappDir + '/scripts/app/admin/docs/docs.html', webappDir + 'scripts/app/admin/docs/docs.html');
     this.copyJs(webappDir + '/scripts/app/admin/docs/_docs.js', webappDir + 'scripts/app/admin/docs/docs.js', this, {});
     this.copyHtml(webappDir + '/scripts/app/admin/health/health.html', webappDir + 'scripts/app/admin/health/health.html');
+    this.copyHtml(webappDir + '/scripts/app/admin/health/_health.modal.html', webappDir + 'scripts/app/admin/health/health.modal.html');
     this.copyJs(webappDir + '/scripts/app/admin/health/_health.js', webappDir + 'scripts/app/admin/health/health.js', this, {});
     this.template(webappDir + '/scripts/app/admin/health/_health.controller.js', webappDir + 'scripts/app/admin/health/health.controller.js', this, {});
+    this.template(webappDir + '/scripts/app/admin/health/_health.modal.controller.js', webappDir + 'scripts/app/admin/health/health.modal.controller.js', this, {});
     this.copyHtml(webappDir + '/scripts/app/admin/logs/logs.html', webappDir + 'scripts/app/admin/logs/logs.html');
     this.copyJs(webappDir + '/scripts/app/admin/logs/_logs.js', webappDir + 'scripts/app/admin/logs/logs.js', this, {});
     this.template(webappDir + '/scripts/app/admin/logs/_logs.controller.js', webappDir + 'scripts/app/admin/logs/logs.controller.js', this, {});
     this.copyHtml(webappDir + '/scripts/app/admin/metrics/_metrics.html', webappDir + 'scripts/app/admin/metrics/metrics.html', this, {}, true);
+    this.copyHtml(webappDir + '/scripts/app/admin/metrics/_metrics.modal.html', webappDir + 'scripts/app/admin/metrics/metrics.modal.html', this, {}, true);
     this.copyJs(webappDir + '/scripts/app/admin/metrics/_metrics.js', webappDir + 'scripts/app/admin/metrics/metrics.js', this, {});
     this.template(webappDir + '/scripts/app/admin/metrics/_metrics.controller.js', webappDir + 'scripts/app/admin/metrics/metrics.controller.js', this, {});
+    this.template(webappDir + '/scripts/app/admin/metrics/_metrics.modal.controller.js', webappDir + 'scripts/app/admin/metrics/metrics.modal.controller.js', this, {});
     if (this.websocket == 'spring-websocket') {
         this.copyHtml(webappDir + '/scripts/app/admin/tracker/tracker.html', webappDir + 'scripts/app/admin/tracker/tracker.html');
         this.copyJs(webappDir + '/scripts/app/admin/tracker/_tracker.js', webappDir + 'scripts/app/admin/tracker/tracker.js', this, {});
@@ -1009,10 +1013,12 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/app/admin/docs/docs.js',
         'scripts/app/admin/health/health.js',
         'scripts/app/admin/health/health.controller.js',
+        'scripts/app/admin/health/health.modal.controller.js',
         'scripts/app/admin/logs/logs.js',
         'scripts/app/admin/logs/logs.controller.js',
         'scripts/app/admin/metrics/metrics.js',
         'scripts/app/admin/metrics/metrics.controller.js',
+        'scripts/app/admin/metrics/metrics.modal.controller.js',
         'scripts/app/entities/entity.js',
         'scripts/app/error/error.js',
         'scripts/app/main/main.js',

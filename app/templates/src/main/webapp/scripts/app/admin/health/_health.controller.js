@@ -63,8 +63,8 @@ angular.module('<%=angularAppName%>')
 
         $scope.showHealth = function(health) {
             var modalInstance = $modal.open({
-                templateUrl: 'health.modal.html',
-                controller: 'HealthModalInstanceCtrl',
+                templateUrl: 'scripts/app/admin/health/health.modal.html',
+                controller: 'HealthModalController',
                 size: 'lg',
                 resolve: {
                     currentHealth: function() {
@@ -146,14 +146,5 @@ angular.module('<%=angularAppName%>')
               var remainder = split.join('.');
               return remainder ? ' - ' + remainder : '';
             }
-        };
-    })
-    .controller('HealthModalInstanceCtrl', function($scope, $modalInstance, currentHealth, baseName, subSystemName) {
-
-        $scope.currentHealth = currentHealth;
-        $scope.baseName = baseName, $scope.subSystemName = subSystemName;
-
-        $scope.cancel = function() {
-            $modalInstance.dismiss('cancel');
         };
     });

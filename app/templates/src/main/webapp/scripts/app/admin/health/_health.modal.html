@@ -1,0 +1,34 @@
+<div class="modal-header">
+    <button aria-label="Close" data-dismiss="modal" class="close" type="button" ng-click="cancel()"><span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title" id="showHealthLabel"><% if (enableTranslation){ %>
+		{{'health.indicator.' + baseName(currentHealth.name) | translate}}<% }else{ %><span class="text-capitalize">{{ baseName(currentHealth.name) }}</span><% } %>
+        {{subSystemName(currentHealth.name)}}
+    </h4>
+</div>
+<div class="modal-body pad">
+    <div ng-show="currentHealth.details">
+        <h4 translate="health.details.properties">Properties</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="col-md-6 text-left" translate="health.details.name">Name</th>
+                    <th class="col-md-6 text-left" translate="health.details.value">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="(k,v) in currentHealth.details">
+                    <td class="col-md-6 text-left">{{k}}</td>
+                    <td class="col-md-6 text-left">{{v}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div ng-show="currentHealth.error">
+        <h4 translate="health.details.error">Error</h4>
+            <pre>{{currentHealth.error}}</pre>
+    </div>
+</div>
+<div class="modal-footer">
+    <button data-dismiss="modal" class="btn btn-default pull-left" type="button" ng-click="cancel()">Done</button>
+</div>
