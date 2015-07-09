@@ -27,7 +27,7 @@
     } else if (fields[fieldId].fieldType == 'byte[]') {
         fieldInputType = 'hidden';
     } %>
-        <div class="form-group"<% if (fields[fieldId].fieldType == 'byte[]') { %> ngf-drop ngf-change="set<%= fields[fieldId].fieldNameCapitalized %>($files, <%= entityInstance %>)"<% } %>>
+        <div class="form-group"<% if (fields[fieldId].fieldType == 'byte[]') { %> ngf-drop ngf-change="set<%= fields[fieldId].fieldNameCapitalized %>($files, <%= entityInstance %>)"<% if (fields[fieldId].fieldTypeBlobContent == 'image') { %> ngf-accept="'image/*'"<% } %><% } %>>
             <label translate="<%= translationKey %>" for="field_<%= fields[fieldId].fieldName %>"><%=fields[fieldId].fieldNameCapitalized%></label><%
             if (fields[fieldId].fieldIsEnum) { %>
             <select class="form-control" name="<%= fields[fieldId].fieldName %>" ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>" id="field_<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) { %> required<% } %>><%
@@ -37,9 +37,11 @@
                <option value="<%= value %>"><%= value %></option><%
                } %>
             </select><% } else { %><% if (fields[fieldId].fieldType == 'byte[]') { %>
-            <div>
-                <div class="help-block clearfix">
-                    <span class="pull-left">{{formatBase64String(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}</span>
+            <div><% if (fields[fieldId].fieldTypeBlobContent == 'image') { %>
+                <img data-ng-src="{{'data:image/*;base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-height: 100px;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/><% } %>
+                <div class="help-block clearfix"><% if (fields[fieldId].fieldTypeBlobContent == 'any') { %>
+                    <span class="pull-left">{{abbreviate(<%= entityInstance %>.<%= fields[fieldId].fieldName %>) + ' ' + byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}</span><% } else { %>
+                    <span class="pull-left">{{byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}</span><% } %>
                     <button ng-click="<%= entityInstance %>.<%= fields[fieldId].fieldName %>=null"
                             ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"
                             class="btn btn-default btn-xs pull-right">
@@ -47,7 +49,7 @@
                     </button>
                 </div>
                 <button type="file" ngf-select class="btn btn-default btn-block"
-                        ngf-change="set<%= fields[fieldId].fieldNameCapitalized %>($files, <%= entityInstance %>)" translate="entity.action.addblob">Add blob</button>
+                        ngf-change="set<%= fields[fieldId].fieldNameCapitalized %>($files, <%= entityInstance %>)" <% if (fields[fieldId].fieldTypeBlobContent == 'image') { %> accept="image/*"<% } %> translate="entity.action.addblob">Add blob</button>
             </div><% } %>
             <input type="<%= fieldInputType %>" class="form-control" name="<%= fields[fieldId].fieldName %>" id="field_<%= fields[fieldId].fieldName %>"
                     ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldType == 'DateTime') { %> ng-model-options="{timezone: 'UTC'}"<% } %><% if (fields[fieldId].fieldValidate == true) {

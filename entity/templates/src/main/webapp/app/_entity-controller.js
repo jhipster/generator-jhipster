@@ -72,9 +72,19 @@ angular.module('<%=angularAppName%>')
             $scope.<%= entityInstance %> = {<% for (fieldId in fields) { %><%= fields[fieldId].fieldName %>: null, <% } %>id: null};
         };<% if (fieldsContainBlob) { %>
 
-        $scope.formatBase64String = function (base64String) {
+        $scope.abbreviate = function (text) {
+            if (!angular.isString(text)) {
+                return '';
+            }
+            if (text.length < 30) {
+                return text;
+            }
+            return text ? (text.substring(0, 15) + '...' + text.slice(-10)) : '';
+        };
+
+        $scope.byteSize = function (base64String) {
             if (!angular.isString(base64String)) {
-                return base64String;
+                return '';
             }
             function endsWith(suffix, str) {
                 return str.indexOf(suffix, str.length - suffix.length) !== -1;
@@ -88,13 +98,13 @@ angular.module('<%=angularAppName%>')
                 }
                 return 0;
             }
-            var bytes = base64String.length / 4 * 3 - paddingSize(base64String);
-            var size = bytes.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " bytes";
-
-            if (base64String.length < 30) {
-                return base64String + ' size:' + size;
+            function size(base64String) {
+                return base64String.length / 4 * 3 - paddingSize(base64String);
+            }
+            function formatAsBytes(size) {
+                return size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " bytes";
             }
 
-            return base64String.substring(0, 10) + '...' + base64String.slice(-10) + ' size:' + size;
+            return formatAsBytes(size(base64String));
         };<% } %>
     });

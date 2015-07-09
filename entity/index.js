@@ -301,6 +301,26 @@ EntityGenerator.prototype.askForFields = function askForFields() {
         },
         {
             when: function (response) {
+                return response.fieldAdd == true &&
+                    response.fieldType == 'byte[]';
+            },
+            type: 'list',
+            name: 'fieldTypeBlobContent',
+            message: 'What is the content of the blob field?',
+            choices: [
+                {
+                    value: 'image',
+                    name: 'Image'
+                },
+                {
+                    value: 'any',
+                    name: 'Any'
+                }
+            ],
+            default: 0
+        },
+        {
+            when: function (response) {
                 if (response.fieldType == 'Boolean') {
                     response.fieldValidate = false;
                     return false;
@@ -517,6 +537,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 fieldId: this.fieldId,
                 fieldName: props.fieldName,
                 fieldType: props.fieldType,
+                fieldTypeBlobContent: props.fieldTypeBlobContent,
                 fieldIsEnum: props.fieldIsEnum,
                 fieldValues: props.fieldValues,
                 fieldNameCapitalized: _s.capitalize(props.fieldName),
@@ -586,7 +607,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     validationDetails += 'maxbytes=\'' + this.fields[id].fieldValidateRulesMaxbytes + '\' ';
                 }
             }
-            console.log(chalk.red(this.fields[id].fieldName) + chalk.white(' (' + this.fields[id].fieldType + ') ') + chalk.cyan(validationDetails));
+            console.log(chalk.red(this.fields[id].fieldName) + chalk.white(' (' + this.fields[id].fieldType + (this.fields[id].fieldTypeBlobContent ? ' ' + this.fields[id].fieldTypeBlobContent : '') + ') ') + chalk.cyan(validationDetails));
         }
         if (props.fieldAdd) {
             this.askForFields();
@@ -766,7 +787,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
         }
         console.log(chalk.red('===========' + _s.capitalize(this.name) + '=============='));
         for (var id in this.fields) {
-            console.log(chalk.red(this.fields[id].fieldName + ' (' + this.fields[id].fieldType + ')'));
+            console.log(chalk.red(this.fields[id].fieldName + ' (' + this.fields[id].fieldType + (this.fields[id].fieldTypeBlobContent ? ' ' + this.fields[id].fieldTypeBlobContent : '') + ')'));
         }
         console.log(chalk.red('-------------------'));
         for (var id in this.relationships) {

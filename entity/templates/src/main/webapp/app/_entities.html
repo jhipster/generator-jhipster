@@ -60,7 +60,11 @@
             <tbody<% if (pagination == 'infinite-scroll') { %> infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page"<% } %>>
                 <tr ng-repeat="<%=entityInstance %> in <%=entityInstance %>s">
                     <td><a ui-sref="<%= entityInstance %>.detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td><% for (fieldId in fields) { %><% if (fields[fieldId].fieldType == 'byte[]') { %>
-                    <td>{{formatBase64String(<%=entityInstance %>.<%=fields[fieldId].fieldName%>)}}</td><% } else { %>
+                    <td><% if (fields[fieldId].fieldTypeBlobContent == 'image') { %>
+                        <img data-ng-src="{{'data:image/*;base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-height: 30px;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/><% } %><% if (fields[fieldId].fieldTypeBlobContent == 'any') { %>
+                        {{abbreviate(<%= entityInstance %>.<%= fields[fieldId].fieldName %>) + ' ' + byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}<% } else { %>
+                        {{byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}<% } %>
+                    </td><% } else { %>
                     <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%>}}</td><% } %><% } %><% for (relationshipId in relationships) {
                         if (relationships[relationshipId].relationshipType == 'many-to-one') {
                             var relationShipValue = entityInstance + "." + relationships[relationshipId].relationshipFieldName + "." + relationships[relationshipId].otherEntityField;
