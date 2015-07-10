@@ -67,7 +67,7 @@
                     "maxlength": "O e-mail não pode ter mais de 50 caracteres"
                 }
             }
-        }, 
+        },
         "field": {
             "id" : "Código"
         }
@@ -75,6 +75,7 @@
     "entity": {
         "action": {
             "addblob": "Add blob",
+            "addimage": "Add image",
             "back": "Voltar",
             "cancel": "Cancelar",
             "delete": "Excluir",

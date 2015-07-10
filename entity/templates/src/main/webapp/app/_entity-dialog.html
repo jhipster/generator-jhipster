@@ -49,7 +49,9 @@
                     </button>
                 </div>
                 <button type="file" ngf-select class="btn btn-default btn-block"
-                        ngf-change="set<%= fields[fieldId].fieldNameCapitalized %>($files, <%= entityInstance %>)" <% if (fields[fieldId].fieldTypeBlobContent == 'image') { %> accept="image/*"<% } %> translate="entity.action.addblob">Add blob</button>
+                        ngf-change="set<%= fields[fieldId].fieldNameCapitalized %>($files, <%= entityInstance %>)"<% if (fields[fieldId].fieldTypeBlobContent == 'image') { %> accept="image/*" translate="entity.action.addimage"<% } else { %> translate="entity.action.addblob"<% } %>>
+                    <% if (fields[fieldId].fieldTypeBlobContent == 'image') { %>Add image<% } else { %>Add blob<% } %>
+                </button>
             </div><% } %>
             <input type="<%= fieldInputType %>" class="form-control" name="<%= fields[fieldId].fieldName %>" id="field_<%= fields[fieldId].fieldName %>"
                     ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldType == 'DateTime') { %> ng-model-options="{timezone: 'UTC'}"<% } %><% if (fields[fieldId].fieldValidate == true) {

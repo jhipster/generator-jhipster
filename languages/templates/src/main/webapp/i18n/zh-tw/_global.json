@@ -67,7 +67,7 @@
                     "maxlength": "您的電子郵件長度不能超過50個字元"
                 }
             }
-        }, 
+        },
         "field": {
             "id" : "ID"
         }
@@ -75,6 +75,7 @@
     "entity": {
         "action": {
             "addblob": "Add blob",
+            "addimage": "Add image",
             "back": "返回",
             "cancel": "取消",
             "delete": "刪除",

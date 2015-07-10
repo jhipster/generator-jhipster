@@ -67,7 +67,7 @@
                     "maxlength": "Din e-post får inte vara längre än 50 tecken"
                 }
             }
-        }, 
+        },
         "field": {
             "id" : "ID"
         }
@@ -75,6 +75,7 @@
     "entity": {
         "action": {
             "addblob": "Lägg till blob",
+            "addimage": "Lägg till bild",
             "back": "Tillbaka",
             "cancel": "Avbryt",
             "delete": "Ta bort",

@@ -67,7 +67,7 @@
                     "maxlength": "이메일은 최대 50자 까지입니다."
                 }
             }
-        }, 
+        },
         "field": {
             "id" : "ID"
         }
@@ -75,6 +75,7 @@
     "entity": {
         "action": {
             "addblob": "Add blob",
+            "addimage": "Add image",
             "back": "Back",
             "cancel": "Cancel",
             "delete": "Delete",

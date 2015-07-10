@@ -76,7 +76,7 @@
                     "maxlength": "E-mailul dumneavoastră nu poate avea mai mult de 50 de caractere."
                 }
             }
-        }, 
+        },
         "field": {
             "id" : "ID"
         }
@@ -84,6 +84,7 @@
     "entity": {
         "action": {
             "addblob": "Add blob",
+            "addimage": "Add image",
             "back": "Înapoi",
             "cancel": "Anulează",
             "delete": "Șterge",

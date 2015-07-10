@@ -67,7 +67,7 @@
                     "maxlength": "Il tuo indirizzo email non può essere più di 50 caratteri"
                 }
             }
-        }, 
+        },
         "field": {
             "id" : "ID"
         }
@@ -75,6 +75,7 @@
     "entity": {
         "action": {
             "addblob": "Add blob",
+            "addimage": "Add image",
             "back": "Indietro",
             "cancel": "Annulla",
             "delete": "Elimina",

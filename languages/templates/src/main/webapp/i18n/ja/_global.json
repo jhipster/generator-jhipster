@@ -67,7 +67,7 @@
                     "maxlength": "メールアドレスは50文字以下で入力してください。"
                 }
             }
-        }, 
+        },
         "field": {
             "id" : "ID"
         }
@@ -75,6 +75,7 @@
     "entity": {
         "action": {
             "addblob": "Add blob",
+            "addimage": "Add image",
             "back": "戻る",
             "cancel": "キャンセル",
             "delete": "削除",

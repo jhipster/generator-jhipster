@@ -67,7 +67,7 @@
                     "maxlength": "El seu compte de correu electrònic no pot tenir més de 50 caràcters"
                 }
             }
-        }, 
+        },
         "field": {
             "id" : "ID"
         }
@@ -75,6 +75,7 @@
     "entity": {
         "action": {
             "addblob": "Add blob",
+            "addimage": "Add image",
             "back": "Back",
             "cancel": "Cancel",
             "delete": "Delete",

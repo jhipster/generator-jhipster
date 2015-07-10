@@ -67,7 +67,7 @@
                     "invalid": "Votre email n'est pas valide."
                 }
             }
-        }, 
+        },
         "field": {
             "id" : "ID"
         }
@@ -75,6 +75,7 @@
     "entity": {
         "action": {
             "addblob": "Ajouter blob",
+            "addimage": "ajouter image",
             "back": "Retour",
             "cancel": "Annuler",
             "edit": "Editer",
