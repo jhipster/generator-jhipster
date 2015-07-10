@@ -20,7 +20,7 @@ angular.module('<%=angularAppName%>')
                 return _identity.roles.indexOf(role) !== -1;
             },
             isInAnyRole: function (roles) {
-                if (!_authenticated || !_identity.roles) {
+                if (!_authenticated || !_identity || !_identity.roles) {
                     return false;
                 }
 
