@@ -67,13 +67,15 @@
                     "invalid": "Votre email n'est pas valide."
                 }
             }
-        }, 
+        },
         "field": {
             "id" : "ID"
         }
     },
     "entity": {
         "action": {
+            "addblob": "Ajouter blob",
+            "addimage": "ajouter image",
             "back": "Retour",
             "cancel": "Annuler",
             "edit": "Editer",
@@ -94,6 +96,8 @@
             "maxlength": "Ce champs doit faire moins de {{max}} caractères.",
             "min": "Ce champs doit être inférieur à {{min}}.",
             "max": "Ce champs doit être supérieur à {{max}}.",
+            "minbytes": "Ce champs doit être inférieur à {{min}} bytes.",
+            "maxbytes": "Ce champs doit être supérieur à {{max}} bytes.",
             "pattern": "Ce champs doit suivre l'expression régulière {{pattern}}.",
             "number": "Ce champs doit être un nombre.",
             "datetimelocal": "Ce champs doit être une date et une heure."

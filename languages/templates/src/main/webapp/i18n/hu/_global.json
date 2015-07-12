@@ -67,13 +67,15 @@
                     "maxlength": "Az email cím nem lehet hosszabb mint 50 betű"
                 }
             }
-        }, 
+        },
         "field": {
             "id" : "ID"
         }
     },
     "entity": {
         "action": {
+            "addblob": "Add blob",
+            "addimage": "Add image",
             "back": "Vissza",
             "cancel": "Mégsem",
             "delete": "Törlés",
@@ -94,6 +96,8 @@
             "maxlength": "Ez a mező nem lehet hosszabb mint {{max}} karakter.",
             "min": "Ennek a mezőnek a megengedett minimum értéke {{min}}.",
             "max": "Ennek a mezőnek a megengedett maximum értéke {{max}}.",
+            "minbytes": "Ennek a mezőnek a megengedett minimum értéke {{min}} bytes.",
+            "maxbytes": "Ennek a mezőnek a megengedett maximum értéke {{max}} bytes.",
             "pattern": "Ennek a mezőnek meg kell felelni a {{pattern}} mintának.",
             "number": "Ennek a mezőnek számnak kéne lennie.",
             "datetimelocal": "Ennek a mezőnek dátumnak vagy időpontnak kéne lennie."
