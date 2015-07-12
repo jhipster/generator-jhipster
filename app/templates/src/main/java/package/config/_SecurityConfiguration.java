@@ -138,6 +138,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/api/**").authenticated()<% if (websocket == 'spring-websocket') { %>
             .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/websocket/**").permitAll()<% } %>
+            .antMatchers("/webjars/**").permitAll()
             .antMatchers("/metrics/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/health/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/trace/**").hasAuthority(AuthoritiesConstants.ADMIN)

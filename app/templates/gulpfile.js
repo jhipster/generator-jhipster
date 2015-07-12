@@ -124,6 +124,7 @@ gulp.task('serve', function() {
             '/configuration/security',
             '/configuration/ui',
             '/swagger-resources',
+            '/webjars',
             '/metrics',
             '/websocket/tracker',
             '/dump'<% if (authenticationType == 'oauth2') { %>,
