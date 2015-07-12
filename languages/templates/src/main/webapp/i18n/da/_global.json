@@ -67,13 +67,15 @@
                     "maxlength": "Din e-mail adresse må ikke overskride 50 tegn"
                 }
             }
-        }, 
+        },
         "field": {
             "id" : "ID"
         }
     },
     "entity": {
         "action": {
+            "addblob": "Add blob",
+            "addimage": "Add image",
             "back": "Tilbage",
             "cancel": "Annuller",
             "delete": "Slet",
@@ -94,6 +96,8 @@
             "maxlength": "Dette felt kan ikke være længere end {{max}} karakterer.",
             "min": "Dette felt skal være større end {{min}}.",
             "max": "Dette felt kan ikke være større end {{max}}.",
+            "minbytes": "This field should be more than {{min}} bytes.",
+            "maxbytes": "This field cannot be more than {{max}} bytes.",
             "pattern": "Dette felt skal følge mønsteret {{pattern}}.",
             "number": "Dette felt skal være et nummer.",
             "datetimelocal": "Dette felt skal være dato og tid."

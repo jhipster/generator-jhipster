@@ -15,8 +15,9 @@
                     <td>
                         <span translate="<%= keyPrefix %>.<%=fields[fieldId].fieldName%>"><%=fields[fieldId].fieldNameCapitalized%></span>
                     </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{<%= entityInstance %>.<%=fields[fieldId].fieldName%>}}" readonly>
+                    <td><% if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'image') { %>
+                        <img data-ng-src="{{'data:image/*;base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-width: 100%;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/><% } else { %>
+                        <input type="text" class="input-sm form-control" value="{{<%= entityInstance %>.<%=fields[fieldId].fieldName%>}}" readonly><% } %>
                     </td>
                 </tr><% } %><% for (relationshipId in relationships) {
                                  if (relationships[relationshipId].relationshipType == 'many-to-one') {
