@@ -306,15 +306,15 @@ EntityGenerator.prototype.askForFields = function askForFields() {
             },
             type: 'list',
             name: 'fieldTypeBlobContent',
-            message: 'What is the content of the blob field?',
+            message: 'What is the content of the Blob field?',
             choices: [
                 {
                     value: 'image',
-                    name: 'Image'
+                    name: 'An image'
                 },
                 {
                     value: 'any',
-                    name: 'Any'
+                    name: 'A binary file'
                 }
             ],
             default: 0
