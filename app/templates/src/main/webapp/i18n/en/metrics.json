@@ -27,8 +27,8 @@
                     "waitedcount": "Waited Count",
                     "lockname": "Lock name",
                     "stacktrace": "Stacktrace",
-                    "show": "Show",
-                    "hide": "Hide"
+                    "show": "Show Stacktrace",
+                    "hide": "Hide Stacktrace"
                 }
             },
             "gc": {
