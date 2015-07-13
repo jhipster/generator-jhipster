@@ -90,7 +90,7 @@ Generator.prototype.addChangelogToLiquibase = function (changelogName) {
             file: fullPath,
             needle: '<!-- JHipster will add liquibase changelogs here -->',
             splicable: [
-                    '<include file="config/liquibase/changelog/' + changelogName + '.xml" relativeToChangelogFile="false"/>'
+                    '<include file="classpath:config/liquibase/changelog/' + changelogName + '.xml" relativeToChangelogFile="false"/>'
             ]
         });
     } catch (e) {
