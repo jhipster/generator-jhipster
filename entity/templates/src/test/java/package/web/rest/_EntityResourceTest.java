@@ -20,7 +20,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;<% if (databaseType == 'sql') { %>
-import org.springframework.transaction.annotation.Transactional;<% } %>
+import org.springframework.transaction.annotation.Transactional;<% } %><% if (fieldsContainBlob == true) { %>
+import org.springframework.util.Base64Utils;<% } %>
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;<% if (fieldsContainLocalDate == true) { %>
@@ -114,7 +115,10 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     private static final String <%=defaultValueName %>_STR = dateTimeFormatter.print(<%= defaultValueName %>);<% } else if (fieldType == 'Boolean') { %>
 
     private static final Boolean <%=defaultValueName %> = false;
-    private static final Boolean <%=updatedValueName %> = true;<% } else if (isEnum) { %>
+    private static final Boolean <%=updatedValueName %> = true;<% } else if (fieldType == 'byte[]') { %>
+
+    private static final byte[] <%=defaultValueName %> = new byte[]{1,2,3};
+    private static final byte[] <%=updatedValueName %> = new byte[]{3,2,1};<% } else if (isEnum) { %>
 
     private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%=enumValue1 %>;
     private static final <%=fieldType %> <%=updatedValueName %> = <%=fieldType %>.<%=enumValue2 %>;<% } } %>
@@ -176,8 +180,7 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     @Test<% if (databaseType == 'sql') { %>
     @Transactional<% } %>
     public void check<%= fields[fieldId].fieldInJavaBeanMethod %>IsRequired() throws Exception {
-        // Validate the database is empty
-        assertThat(<%= entityInstance %>Repository.findAll()).hasSize(0);
+        int databaseSizeBeforeTest = <%= entityInstance %>Repository.findAll().size();
         // set the field null
         <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(null);
 
@@ -187,9 +190,8 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
                 .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %>)))
                 .andExpect(status().isBadRequest());
 
-        // Validate the database is still empty
         List<<%= entityClass %>> <%= entityInstance %>s = <%= entityInstance %>Repository.findAll();
-        assertThat(<%= entityInstance %>s).hasSize(0);
+        assertThat(<%= entityInstance %>s).hasSize(databaseSizeBeforeTest);
     }
 <%  } } } %>
     @Test<% if (databaseType == 'sql') { %>
@@ -205,7 +207,7 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
                 .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().intValue())))<% } %><% if (databaseType == 'mongodb') { %>
                 .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId())))<% } %><% if (databaseType == 'cassandra') { %>
                 .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().toString())))<% } %><% for (fieldId in fields) {%>
-                .andExpect(jsonPath("$.[*].<%=fields[fieldId].fieldName%>").value(hasItem(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[fieldId].fieldType == 'DateTime') { %>_STR<% } else if (fields[fieldId].fieldType == 'Date') { %>.getTime()<% } else { %>.toString()<% } %>)))<% } %>;
+                .andExpect(jsonPath("$.[*].<%=fields[fieldId].fieldName%>").value(hasItem(<% if (fields[fieldId].fieldType == 'byte[]') { %>Base64Utils.encodeToString(<% } %><%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'byte[]') { %>)<% } else if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[fieldId].fieldType == 'DateTime') { %>_STR<% } else if (fields[fieldId].fieldType == 'Date') { %>.getTime()<% } else { %>.toString()<% } %>)))<% } %>;
     }
 
     @Test<% if (databaseType == 'sql') { %>
@@ -221,7 +223,7 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().intValue()))<% } %><% if (databaseType == 'mongodb') { %>
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId()))<% } %><% if (databaseType == 'cassandra') { %>
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().toString()))<% } %><% for (fieldId in fields) {%>
-            .andExpect(jsonPath("$.<%=fields[fieldId].fieldName%>").value(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[fieldId].fieldType == 'DateTime') { %>_STR<% } else if (fields[fieldId].fieldType == 'Date') { %>.getTime()<% } else { %>.toString()<% } %>))<% } %>;
+            .andExpect(jsonPath("$.<%=fields[fieldId].fieldName%>").value(<% if (fields[fieldId].fieldType == 'byte[]') { %>Base64Utils.encodeToString(<% } %><%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'byte[]') { %>)<% } else if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[fieldId].fieldType == 'DateTime') { %>_STR<% } else if (fields[fieldId].fieldType == 'Date') { %>.getTime()<% } else { %>.toString()<% } %>))<% } %>;
     }
 
     @Test<% if (databaseType == 'sql') { %>

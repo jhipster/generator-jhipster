@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTranslation) { %>'tmh.dynamicLocale', 'pascalprecht.translate', <% } %>
-    'ngResource', 'ui.router', 'ngCookies', 'ngCacheBuster', 'infinite-scroll'])
+               'ui.bootstrap', // for modal dialogs
+    'ngResource', 'ui.router', 'ngCookies', 'ngCacheBuster', 'ngFileUpload', 'infinite-scroll'])
 
     .run(function ($rootScope, $location, $window, $http, $state, <% if (enableTranslation) { %>$translate, Language,<% } %> Auth, Principal, ENV, VERSION) {
         $rootScope.ENV = ENV;
@@ -66,7 +67,7 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTransl
                 return config;
             }
         };
-    })<% } %><% if (authenticationType == 'oauth2') { %>
+    })<% } %><% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
     .factory('authExpiredInterceptor', function ($rootScope, $q, $injector, localStorageService) {
         return {
             responseError: function (response) {
@@ -88,7 +89,7 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTransl
             responseError: function(response) {
                 // If we have an unauthorized request we redirect to the login page
                 // Don't do this check on the account API to avoid infinite loop
-                if (response.status == 401 && response.data.path !== undefined && response.data.path.indexOf("/api/account") == -1){  
+                if (response.status == 401 && response.data.path !== undefined && response.data.path.indexOf("/api/account") == -1){
                     var Auth = $injector.get('Auth');
                     var $state = $injector.get('$state');
                     var to = $rootScope.toState;
@@ -96,8 +97,8 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTransl
                     Auth.logout();
                     $rootScope.returnToState = to;
                     $rootScope.returnToStateParams = params;
-                    $state.go('login');    
-                }       
+                    $state.go('login');
+                }
                 return $q.reject(response);
             }
         };
@@ -132,12 +133,9 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTransl
             }
         });
 
-<% if (authenticationType == 'session') { %>
-        $httpProvider.interceptors.push('authExpiredInterceptor');<% } %>
-
+        $httpProvider.interceptors.push('authExpiredInterceptor');
 <% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
-        $httpProvider.interceptors.push('authInterceptor');<% } %><% if (authenticationType == 'oauth2') { %>
-        $httpProvider.interceptors.push('authExpiredInterceptor');<% } %>
+        $httpProvider.interceptors.push('authInterceptor');<% } %>
         <% if (enableTranslation) { %>
         // Initialize angular-translate
         $translateProvider.useLoader('$translatePartialLoader', {

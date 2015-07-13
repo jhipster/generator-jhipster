@@ -17,10 +17,13 @@
                     <td><% if (fields[fieldId].fieldIsEnum) {
                             var enumPrefix = angularAppName + '.'+ fields[fieldId].fieldType; %>
                             <span class="input-sm form-control readonly" translate="<%=enumPrefix%>.SELECT"
-                                  translate-interpolation="messageformat" translate-values="{ VALUE: <%= entityInstance %>.<%=fields[fieldId].fieldName%> }"></span>
-                        <% } else { %>
-                            <input type="text" class="input-sm form-control" value="{{<%= entityInstance %>.<%=fields[fieldId].fieldName%>}}" readonly>
-                    <% } %></td>
+                                  translate-interpolation="messageformat" translate-values="{ VALUE: <%= entityInstance %>.<%=fields[fieldId].fieldName%> }"></span><%
+                           } else if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'image') { %>
+                        <img data-ng-src="{{'data:image/*;base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-width: 100%;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/><%
+                           } else { %>
+                        <input type="text" class="input-sm form-control" value="{{<%= entityInstance %>.<%=fields[fieldId].fieldName%>}}" readonly><%
+                           } %>
+                    </td>
                 </tr><% } %><% for (relationshipId in relationships) {
                                  if (relationships[relationshipId].relationshipType == 'many-to-one') {
                                      var relationshipName = relationships[relationshipId].relationshipName;

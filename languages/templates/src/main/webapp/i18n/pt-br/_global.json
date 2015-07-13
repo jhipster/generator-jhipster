@@ -67,13 +67,15 @@
                     "maxlength": "O e-mail não pode ter mais de 50 caracteres"
                 }
             }
-        }, 
+        },
         "field": {
             "id" : "Código"
         }
     },
     "entity": {
         "action": {
+            "addblob": "Add blob",
+            "addimage": "Add image",
             "back": "Voltar",
             "cancel": "Cancelar",
             "delete": "Excluir",
@@ -94,6 +96,8 @@
             "maxlength": "Este campo não pode ter mais que {{max}} caracteres.",
             "min": "Este campo deve ser maior que {{min}}.",
             "max": "Este campo não pode ser maior que {{max}}.",
+            "minbytes": "Este campo deve ter ao menos {{min}} bytes.",
+            "maxbytes": "Este campo não pode ter mais que {{max}} bytes.",
             "pattern": "Este campo deve estar dentro do seguinte padrão {{pattern}}.",
             "number": "Este campo é do tipo número.",
             "datetimelocal": "Este campo é do tipo data/hora."

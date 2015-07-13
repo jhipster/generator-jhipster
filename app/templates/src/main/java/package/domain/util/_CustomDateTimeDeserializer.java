@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
 /**
- * Custom Jackson deserializer for displaying Joda DateTime objects.
+ * Custom Jackson deserializer for transforming a JSON object to a Joda DateTime object.
  */
 public class CustomDateTimeDeserializer extends JsonDeserializer<DateTime> {
 
