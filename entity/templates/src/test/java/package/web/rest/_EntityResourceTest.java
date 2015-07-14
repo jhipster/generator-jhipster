@@ -5,6 +5,7 @@ import <%=packageName%>.Application;
 import <%=packageName%>.domain.<%= entityClass %>;
 import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } %><% if (dto == 'mapstruct') { %>
+import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
 import <%=packageName%>.web.rest.mapper.<%= entityClass %>Mapper;<% } %>
 
 import org.junit.Before;
@@ -158,10 +159,12 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     public void create<%= entityClass %>() throws Exception {
         int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll().size();
 
-        // Create the <%= entityClass %>
+        // Create the <%= entityClass %><% if (dto == 'mapstruct') { %>
+        <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(<%= entityInstance %>);<% } %>
+
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityInstance %>s")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %>)))
+                .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>)))
                 .andExpect(status().isCreated());
 
         // Validate the <%= entityClass %> in the database
@@ -184,10 +187,12 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
         // set the field null
         <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(null);
 
-        // Create the <%= entityClass %>, which fails.
+        // Create the <%= entityClass %>, which fails.<% if (dto == 'mapstruct') { %>
+        <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(<%= entityInstance %>);<% } %>
+
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityInstance %>s")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %>)))
+                .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>)))
                 .andExpect(status().isBadRequest());
 
         List<<%= entityClass %>> <%= entityInstance %>s = <%= entityInstance %>Repository.findAll();
@@ -244,9 +249,12 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
 
         // Update the <%= entityInstance %><% for (fieldId in fields) { %>
         <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>
+        <% if (dto == 'mapstruct') { %>
+        <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(<%= entityInstance %>);<% } %>
+
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityInstance %>s")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %>)))
+                .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>)))
                 .andExpect(status().isOk());
 
         // Validate the <%= entityClass %> in the database
