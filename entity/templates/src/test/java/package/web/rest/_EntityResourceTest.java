@@ -15,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -132,6 +133,9 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     @Inject
     private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;<% } %>
 
+    @Inject
+    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+
     private MockMvc rest<%= entityClass %>MockMvc;
 
     private <%= entityClass %> <%= entityInstance %>;
@@ -143,7 +147,7 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
         ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Repository", <%= entityInstance %>Repository);<% if (dto == 'mapstruct') { %>
         ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Mapper", <%= entityInstance %>Mapper);<% } %><% if (searchEngine == 'elasticsearch') { %>
         ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>SearchRepository", <%= entityInstance %>SearchRepository);<% } %>
-        this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource).build();
+        this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource).setMessageConverters(jacksonMessageConverter).build();
     }
 
     @Before
@@ -275,3 +279,4 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
         assertThat(<%= entityInstance %>s).hasSize(databaseSizeBeforeDelete - 1);
     }
 }
+

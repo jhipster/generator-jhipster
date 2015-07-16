@@ -389,6 +389,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     response.fieldValidate == true &&
                     (response.fieldType == 'LocalDate' ||
                     response.fieldType == 'DateTime' ||
+                    response.fieldType == 'Date' ||
                     response.fieldType == 'UUID' ||
                     response.fieldType == 'TimeUUID' ||
                     response.fieldIsEnum == true);
@@ -1124,3 +1125,4 @@ EntityGenerator.prototype.copyEnumI18n = function(language, enumInfo) {
         // do nothing
     }
 };
+
