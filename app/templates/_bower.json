@@ -13,11 +13,11 @@
     "json3": "3.3.2",
     "angular-bootstrap": "0.13.0",
     "angular-ui-router": "0.2.13",
-    "angular": "1.4.0",
-    "angular-resource": "1.4.0",
-    "angular-cookies": "1.4.0",
-    "angular-sanitize": "1.4.0",<% if (enableTranslation) { %>
-    "angular-i18n": "1.4.0",
+    "angular": "1.4.3",
+    "angular-resource": "1.4.3",
+    "angular-cookies": "1.4.3",
+    "angular-sanitize": "1.4.3",<% if (enableTranslation) { %>
+    "angular-i18n": "1.4.3",
     "angular-translate": "2.7.0",
     "angular-translate-interpolation-messageformat": "2.7.0",
     "angular-translate-storage-cookie": "2.7.0",
@@ -29,12 +29,12 @@
     "ng-file-upload": "5.0.9"
   },
   "devDependencies": {
-    "angular-mocks": "1.4.0",
-    "angular-scenario": "1.4.0"
+    "angular-mocks": "1.4.3",
+    "angular-scenario": "1.4.3"
   },
   "resolutions": {
-    "angular": "1.4.0",
-    "angular-cookies": "1.4.0",
+    "angular": "1.4.3",
+    "angular-cookies": "1.4.3",
     "jquery": "2.1.3"
   }
 }
