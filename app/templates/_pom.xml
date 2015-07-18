@@ -165,6 +165,12 @@
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
+            <artifactId>springfox-staticdocs</artifactId>
+            <version>${springfox.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
             <version>${springfox.version}</version>
         </dependency>
@@ -241,6 +247,12 @@
             <groupId>io.gatling.highcharts</groupId>
             <artifactId>gatling-charts-highcharts</artifactId>
             <version>${gatling.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-staticdocs</artifactId>
+            <version>${springfox.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -640,6 +652,56 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>${sonar-maven-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.asciidoctor</groupId>
+                <artifactId>asciidoctor-maven-plugin</artifactId>
+                <version>1.5.2</version>
+                <!-- Since each execution can only handle one backend, run
+                     separate executions for each desired output type -->
+                <executions>
+                    <execution>
+                        <id>output-html</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                        <configuration>
+                            <backend>html5</backend>
+                            <outputDirectory>${project.build.directory}/docs/html</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>output-pdf</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>process-asciidoc</goal>
+                        </goals>
+                        <configuration>
+                            <backend>pdf</backend>
+                            <outputDirectory>${project.build.directory}/docs/pdf</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+                <!-- Include Asciidoctor PDF for pdf generation -->
+                <dependencies>
+                    <dependency>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoctorj-pdf</artifactId>
+                        <version>1.5.0-alpha.8</version>
+                    </dependency>
+                </dependencies>
+                <!-- Configure generic document generation settings -->
+                <configuration>
+                    <sourceDirectory>src/docs/asciidoc</sourceDirectory>
+                    <sourceDocumentName>index.adoc</sourceDocumentName>
+                    <attributes>
+                        <doctype>book</doctype>
+                        <toc>left</toc>
+                        <toclevels>2</toclevels>
+                        <generated>${project.build.directory}/docs/asciidoc/generated</generated>
+                    </attributes>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.bsc.maven</groupId>

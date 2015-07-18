@@ -478,6 +478,7 @@ JhipsterGenerator.prototype.app = function app() {
     var packageFolder = this.packageName.replace(/\./g, '/');
     var javaDir = 'src/main/java/' + packageFolder + '/';
     var resourceDir = 'src/main/resources/';
+    var docsDir = 'src/docs/asciidoc/';
     var webappDir = 'src/main/webapp/';
     var interpolateRegex = /<%=([\s\S]+?)%>/g; // so that tags in templates do not get mistreated as _ templates
 
@@ -521,6 +522,7 @@ JhipsterGenerator.prototype.app = function app() {
             this.template('_profile_fast.gradle', 'profile_fast.gradle', this, { 'interpolate': interpolateRegex });
             this.template('_mapstruct.gradle', 'mapstruct.gradle', this, { 'interpolate': interpolateRegex });
             this.template('_gatling.gradle', 'gatling.gradle', this, {});
+            this.template('_asciidoc.gradle', 'asciidoc.gradle', this, {});
           if (this.databaseType == "sql") {
             this.template('_liquibase.gradle', 'liquibase.gradle', this, {});
           }
@@ -771,6 +773,10 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/main/java/package/web/websocket/dto/_ActivityDTO.java', javaDir + 'web/websocket/dto/ActivityDTO.java', this, {});
     }
 
+    // Create docs index file
+    mkdirp(docsDir);
+    this.copy('src/docs/asciidoc/index.adoc', docsDir + 'index.adoc');
+
     // Create Test Java files
     var testDir = 'src/test/java/' + packageFolder + '/';
     var testResourceDir = 'src/test/resources/';
@@ -788,6 +794,7 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/test/java/package/service/_UserServiceTest.java', testDir + 'service/UserServiceTest.java', this, {});
     }
     this.template('src/test/java/package/web/rest/_AccountResourceTest.java', testDir + 'web/rest/AccountResourceTest.java', this, {});
+    this.template('src/test/java/package/web/rest/_Swagger2MarkupTest.java', testDir + 'web/rest/Swagger2MarkupTest.java', this, {});
     this.template('src/test/java/package/web/rest/_TestUtil.java', testDir + 'web/rest/TestUtil.java', this, {});
     this.template('src/test/java/package/web/rest/_UserResourceTest.java', testDir + 'web/rest/UserResourceTest.java', this, {});
 
@@ -826,7 +833,7 @@ JhipsterGenerator.prototype.app = function app() {
     }else{
         this.template(resourceDir + '/i18n/_messages_en.properties', resourceDir + 'i18n/messages_en.properties', this, {});
     }
-    
+
     // Angular JS views
 
     this.template(webappDir + '/scripts/app/_app.js', webappDir + 'scripts/app/app.js', this, {});
