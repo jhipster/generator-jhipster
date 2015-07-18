@@ -681,6 +681,7 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.authenticationType == 'session') {
         this.template('src/main/java/package/domain/_PersistentToken.java', javaDir + 'domain/PersistentToken.java', this, {});
     }
+    this.template('src/main/java/package/domain/_KeyAndPassword.java', javaDir + 'domain/KeyAndPassword.java', this, {});
     this.template('src/main/java/package/domain/_User.java', javaDir + 'domain/User.java', this, {});
     this.template('src/main/java/package/domain/util/_CustomLocalDateSerializer.java', javaDir + 'domain/util/CustomLocalDateSerializer.java', this, {});
     this.template('src/main/java/package/domain/util/_CustomDateTimeSerializer.java', javaDir + 'domain/util/CustomDateTimeSerializer.java', this, {});
