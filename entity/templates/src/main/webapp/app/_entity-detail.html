@@ -15,11 +15,11 @@
                         <span translate="<%= keyPrefix %>.<%=fields[fieldId].fieldName%>"><%=fields[fieldId].fieldNameCapitalized%></span>
                     </td>
                     <td><% if (fields[fieldId].fieldIsEnum) {
-                            var enumPrefix = angularAppName + '.'+ fields[fieldId].fieldType; 
-                            var enumValue  = entityInstance + '.'+ fields[fieldId].fieldName; 
+                            var enumPrefix = angularAppName + '.'+ fields[fieldId].fieldType;
+                            var enumValue  = entityInstance + '.'+ fields[fieldId].fieldName;
                             %>
                             <span translate="<%=enumPrefix%>.SELECT"
-                                  translate-interpolation="messageformat" 
+                                  translate-interpolation="messageformat"
                                   translate-values="{ VALUE: <%= enumValue %> }"></span><%
                            } else if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'image') { %>
                         <img data-ng-src="{{'data:image/*;base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-width: 100%;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/><%
