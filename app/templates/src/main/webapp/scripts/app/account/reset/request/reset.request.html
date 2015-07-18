@@ -17,8 +17,8 @@
 
             <form ng-show="!success" name="form" role="form" novalidate ng-submit="requestReset()" show-validation>
                 <div class="form-group">
-                    <label translate="global.form.email">E-mail</label>
-                    <input type="email" class="form-control" name="email" placeholder="{{'global.form.email.placeholder' | translate}}"
+                    <label for="email" translate="global.form.email">E-mail</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="{{'global.form.email.placeholder' | translate}}"
                            ng-model="resetAccount.email" ng-minlength=5 ng-maxlength=100 required>
                     <div ng-show="form.email.$dirty && form.email.$invalid">
                         <p class="help-block"
