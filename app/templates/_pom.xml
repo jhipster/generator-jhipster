@@ -333,12 +333,12 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${postgresql.version}</version>
-        </dependency><% } %>
+        </dependency><% } %><% if (javaVersion == '8') { %>
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-jdk8</artifactId>
             <version>${mapstruct.version}</version>
-        </dependency>
+        </dependency><% } %>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
@@ -640,7 +640,7 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>${sonar-maven-plugin.version}</version>
-            </plugin>
+            </plugin><% if (javaVersion == '8') { %>
             <plugin>
                 <groupId>org.bsc.maven</groupId>
                 <artifactId>maven-processor-plugin</artifactId>
@@ -673,7 +673,7 @@
                         <version>${mapstruct.version}</version>
                     </dependency>
                 </dependencies>
-            </plugin><% if (databaseType == 'sql') { %>
+            </plugin><% } %><% if (databaseType == 'sql') { %>
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
