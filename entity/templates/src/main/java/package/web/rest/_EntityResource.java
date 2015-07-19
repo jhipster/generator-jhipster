@@ -99,7 +99,15 @@ public class <%= entityClass %>Resource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed<% if (dto == 'mapstruct') { %>
     @Transactional(readOnly = true)<% } %><% if (pagination == 'no') { %>
-    public List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> getAll() {
+    public List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> getAll(<% if (fieldsContainOneToOne && fieldsContainOwnerOneToOne == false) { %>@RequestParam(required = false) String filter<% } %>) {<% for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { %>
+        if ("<%= relationships[idx].relationshipName.toLowerCase() %>-is-null".equals(filter)) {
+            log.debug("REST request to get all <%= entityClass %>s where <%= relationships[idx].relationshipName %> is null");
+            return StreamSupport
+                .stream(<%= entityInstance %>Repository.findAll().spliterator(), false)
+                .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationships[idx].relationshipNameCapitalized %>() == null)
+                .collect(Collectors.toList());
+        }
+<% } } %>
         log.debug("REST request to get all <%= entityClass %>s");
         return <%= entityInstance %>Repository.findAll()<% if (dto == 'mapstruct') { %>.stream()
             .map(<%= entityInstance %> -> <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(<%= entityInstance %>))

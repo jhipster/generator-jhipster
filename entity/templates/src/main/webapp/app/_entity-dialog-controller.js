@@ -4,8 +4,20 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>DialogContro
     ['$scope', '$stateParams', '$modalInstance', 'entity', '<%= entityClass %>'<% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) {%>, '<%= differentTypes[idx] %>'<% } } %>,
         function($scope, $stateParams, $modalInstance, entity, <%= entityClass %><% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) {%>, <%= differentTypes[idx] %><% } } %>) {
 
-        $scope.<%= entityInstance %> = entity;<% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) { %>
-        $scope.<%= differentTypes[idx].toLowerCase() %>s = <%= differentTypes[idx] %>.query();<% } } %>
+        $scope.<%= entityInstance %> = entity;<%
+            var queries = [];
+            for (idx in relationships) {
+                var query;
+                if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide == true) {
+                    query = '$scope.' + relationships[idx].relationshipFieldName.toLowerCase() + 's = ' + relationships[idx].otherEntityNameCapitalized + ".query({filter: '" + relationships[idx].otherEntityRelationshipName.toLowerCase() + "-is-null'});";
+                } else {
+                    query = '$scope.' + relationships[idx].otherEntityNameCapitalized.toLowerCase() + 's = ' + relationships[idx].otherEntityNameCapitalized + '.query();';
+                }
+                if (!util.contains(queries, query)) {
+                    queries.push(query);
+                }
+            } %><% for (idx in queries) { %>
+        <%- queries[idx] %><% } %>
         $scope.load = function(id) {
             <%= entityClass %>.get({id : id}, function(result) {
                 $scope.<%= entityInstance %> = result;

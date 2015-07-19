@@ -4,6 +4,7 @@ var util = require('util'),
         path = require('path'),
         yeoman = require('yeoman-generator'),
         chalk = require('chalk'),
+        _ = require('underscore'),
         _s = require('underscore.string'),
         shelljs = require('shelljs'),
         html = require("html-wiring"),
@@ -101,6 +102,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.fieldsContainBigDecimal = false;
     this.fieldsContainBlob = false;
     this.fieldsContainOwnerManyToMany = false;
+    this.fieldsContainOneToOne = false;
     this.fieldsContainOwnerOneToOne = false;
     this.fieldsContainOneToMany = false;
     this.relationshipId = 0;
@@ -749,7 +751,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             when: function (response) {
                 return (response.relationshipAdd == true && (response.relationshipType == 'one-to-many' ||
                     (response.relationshipType == 'many-to-many' && response.ownerSide == false) ||
-                    (response.relationshipType == 'one-to-one' && response.ownerSide == false)));
+                    (response.relationshipType == 'one-to-one')));
             },
             type: 'input',
             name: 'otherEntityRelationshipName',
@@ -769,7 +771,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
         },
         {
             when: function (response) {
-                return (!(response.noOtherEntity == false || response.noOtherEntity2 == false) && response.relationshipAdd == true && (response.relationshipType == 'many-to-one' || (response.relationshipType == 'many-to-many' && response.ownerSide == true)));
+                return (!(response.noOtherEntity == false || response.noOtherEntity2 == false) && response.relationshipAdd == true && (response.relationshipType == 'many-to-one' || (response.relationshipType == 'many-to-many' && response.ownerSide == true) || (response.relationshipType == 'one-to-one' && response.ownerSide == true)));
             },
             type: 'input',
             name: 'otherEntityField',
@@ -798,6 +800,9 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             }
             if (props.relationshipType == 'many-to-many' && props.ownerSide == true) {
                 this.fieldsContainOwnerManyToMany = true;
+            }
+            if (props.relationshipType == 'one-to-one') {
+                this.fieldsContainOneToOne = true;
             }
             if (props.relationshipType == 'one-to-one' && props.ownerSide == true) {
                 this.fieldsContainOwnerOneToOne = true;
@@ -907,6 +912,7 @@ EntityGenerator.prototype.files = function files() {
         this.data.fields = this.fields;
         this.data.fieldNamesUnderscored = this.fieldNamesUnderscored;
         this.data.fieldsContainOwnerManyToMany = this.fieldsContainOwnerManyToMany;
+        this.data.fieldsContainOneToOne = this.fieldsContainOneToOne;
         this.data.fieldsContainOwnerOneToOne = this.fieldsContainOwnerOneToOne;
         this.data.fieldsContainOneToMany = this.fieldsContainOneToMany;
         this.data.fieldsContainLocalDate = this.fieldsContainLocalDate;
@@ -937,6 +943,7 @@ EntityGenerator.prototype.files = function files() {
         }
         this.fieldNamesUnderscored = this.fileData.fieldNamesUnderscored;
         this.fieldsContainOwnerManyToMany = this.fileData.fieldsContainOwnerManyToMany;
+        this.fieldsContainOneToOne = this.fileData.fieldsContainOneToOne;
         this.fieldsContainOwnerOneToOne = this.fileData.fieldsContainOwnerOneToOne;
         this.fieldsContainOneToMany = this.fileData.fieldsContainOneToMany;
         this.fieldsContainLocalDate = this.fileData.fieldsContainLocalDate;
@@ -965,6 +972,11 @@ EntityGenerator.prototype.files = function files() {
             this.validation = false;
         }
     }
+
+    // Expose utility methods in templates
+    this.util = {};
+    this.util.contains = _.contains;
+
     this.entityClass = _s.capitalize(this.name);
     this.entityInstance = this.name.charAt(0).toLowerCase() + this.name.slice(1);
 
