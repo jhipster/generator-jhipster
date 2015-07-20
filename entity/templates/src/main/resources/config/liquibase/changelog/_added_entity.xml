@@ -41,8 +41,11 @@
                 <constraints nullable="false" />
             </column><% } %><%
 
-            } %><% for (relationshipId in relationships) { %><% if ((relationships[relationshipId].relationshipType == 'many-to-one') || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) { %>
-            <column name="<%=relationships[relationshipId].relationshipName.toLowerCase() %>_id" type="bigint"/><% } } %>
+            } %><% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
+            <column name="<%=relationships[relationshipId].relationshipName.toLowerCase() %>_id" type="bigint"/><% } else if (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true) %>
+            <column name="<%=relationships[relationshipId].relationshipName.toLowerCase() %>_id" type="bigint">
+                <constraints unique="true"/>
+            </column><% } %>
         </createTable><% for (fieldId in fields) {
             if (fields[fieldId].fieldType == 'DateTime') { %>
         <dropDefaultValue tableName="<%= name.toUpperCase() %>" columnName="<%=fields[fieldId].fieldNameUnderscored %>" columnDataType="datetime"/>
