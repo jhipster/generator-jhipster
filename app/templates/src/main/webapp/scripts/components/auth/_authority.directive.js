@@ -43,17 +43,19 @@ angular.module('<%=angularAppName%>')
                         element.addClass('hidden');
                     },
                     defineVisibility = function (reset) {
-                        var result;
+
                         if (reset) {
                             setVisible();
                         }
 
-                        result = Principal.isInRole(role);
-                        if (result) {
-                            setVisible();
-                        } else {
-                            setHidden();
-                        }
+                        Principal.isInRole(role)
+                            .then(function(result) {
+                                if (result) {
+                                    setVisible();
+                                } else {
+                                    setHidden();
+                                }
+                            });
                     },
                     role = attrs.hasRole.replace(/\s+/g, '');
 

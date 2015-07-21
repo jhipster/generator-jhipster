@@ -1084,6 +1084,7 @@ EntityGenerator.prototype.files = function files() {
         this.copyI18n('zh-cn');
         this.copyI18n('zh-tw');
         this.copyI18n('da');
+        this.copyI18n('nl');
         this.copyI18n('de');
         this.copyI18n('en');
         this.copyI18n('fr');
