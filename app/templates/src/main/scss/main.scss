@@ -91,6 +91,28 @@ a:hover {
   cursor: pointer;
 }
 
+.hand {
+    cursor: pointer;
+}
+
+#threadDump .popover, #healthCheck .popover {
+    top: inherit;
+    display: block;
+    font-size: 10px;
+    max-width: 1024px;
+}
+
+#healthCheck .popover {
+    margin-left: -50px;
+}
+
+.health-details {
+    min-width: 400px;
+}
+
+.alert .popover pre {
+    font-size: 10px;
+}
 
 /* start Password strength bar style */
 ul#strength {
@@ -114,3 +136,29 @@ ul#strength {
     width:20px;
 }
 /* end Password strength bar style */
+/* Custom alerts for notification */
+.alerts {
+    position: fixed;
+    top: 50px;
+    width: 100%;
+    z-index: 1100;
+    right: 0px;
+    min-width: 200px;
+    padding: 5px;
+}
+.alerts .alert{
+    opacity: 0.9;
+    min-width: 60%;
+    text-overflow: ellipsis;
+    float: right;
+    z-index: 1100;
+}
+.alert pre{
+    background: none;
+    border: none;
+    font: inherit;
+    color: inherit;
+    padding: 0;
+    margin: 0;
+}
+/* end of Custom alerts for notification */

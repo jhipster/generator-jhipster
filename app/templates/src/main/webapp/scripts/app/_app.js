@@ -103,6 +103,17 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTransl
             }
         };
     })<% } %>
+    .factory('notificationInterceptor', function ($q, AlertService) {
+        return {
+            response: function(response) {
+                var alertKey = response.headers('X-<%=angularAppName%>-alert');
+                if (angular.isString(alertKey)) {
+                    AlertService.success(alertKey, { param : response.headers('X-<%=angularAppName%>-params')});
+                }
+                return response;
+            },
+        };
+    })
     .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, <% if (enableTranslation) { %>$translateProvider, tmhDynamicLocaleProvider,<% } %> httpRequestInterceptorCacheBusterProvider) {
 <% if (authenticationType == 'session') { %>
         //enable CSRF
@@ -133,9 +144,10 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTransl
             }
         });
 
-        $httpProvider.interceptors.push('authExpiredInterceptor');
-<% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
+        $httpProvider.interceptors.push('errorHandlerInterceptor');
+        $httpProvider.interceptors.push('authExpiredInterceptor');<% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
         $httpProvider.interceptors.push('authInterceptor');<% } %>
+        $httpProvider.interceptors.push('notificationInterceptor');
         <% if (enableTranslation) { %>
         // Initialize angular-translate
         $translateProvider.useLoader('$translatePartialLoader', {
