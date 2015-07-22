@@ -24,7 +24,7 @@ angular.module('<%=angularAppName%>')
                });
             },
             isInAnyRole: function (roles) {
-                if (!_authenticated || !_identity.roles) {
+                if (!_authenticated || !_identity || !_identity.roles) {
                     return false;
                 }
 
