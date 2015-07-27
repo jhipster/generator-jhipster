@@ -16,8 +16,8 @@
                 </td>
                 <td><% if (fields[fieldId].fieldIsEnum) {
                     var enumPrefix = angularAppName + '.'+ fields[fieldId].fieldType; %>
-                            <span class="input-sm form-control readonly" translate="<%=enumPrefix%>.SELECT"
-                                  translate-interpolation="messageformat" translate-values="{ VALUE: <%= entityInstance %>.<%=fields[fieldId].fieldName%> }"></span><%
+                    <span class="input-sm form-control readonly" translate="<%=enumPrefix%>.SELECT"
+                          translate-interpolation="messageformat" translate-values="{ VALUE: <%= entityInstance %>.<%=fields[fieldId].fieldName%> }"></span><%
                     } else if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'image') { %>
                     <img data-ng-src="{{'data:image/*;base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-width: 100%;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/><%
                     } else { %>
@@ -25,13 +25,14 @@
                     } %>
                 </td>
             </tr><% } %><% for (relationshipId in relationships) {
-            if (relationships[relationshipId].relationshipType == 'many-to-one') {
-            var relationshipName = relationships[relationshipId].relationshipName;
-            var otherEntityName = relationships[relationshipId].otherEntityName;
-            var relationShipValue = entityInstance + "." + relationshipName + "." + relationships[relationshipId].otherEntityField;
-            if (dto == 'mapstruct') {
-            relationShipValue = entityInstance + "." + relationshipName + relationships[relationshipId].otherEntityFieldCapitalized;
-            }%>
+            if (relationships[relationshipId].relationshipType == 'many-to-one'
+                || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) {
+                var relationshipName = relationships[relationshipId].relationshipName;
+                var otherEntityName = relationships[relationshipId].otherEntityName;
+                var relationShipValue = entityInstance + "." + relationshipName + "." + relationships[relationshipId].otherEntityField;
+                if (dto == 'mapstruct') {
+                    relationShipValue = entityInstance + "." + relationshipName + relationships[relationshipId].otherEntityFieldCapitalized;
+                } %>
             <tr>
                 <td>
                     <span translate="<%= keyPrefix %>.<%= relationshipName %>"><%=relationshipName%></span>
