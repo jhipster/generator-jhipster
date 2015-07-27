@@ -59,8 +59,8 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     var defaultValueName = 'DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase();
     var updatedValueName = 'UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase();
 
-    var defaultValue = 0;
-    var updatedValue = 1;
+    var defaultValue = 1;
+    var updatedValue = 2;
 
     if (fields[fieldId].fieldValidate == true) {
         if (fields[fieldId].fieldValidateRules.indexOf('max') != -1) {
@@ -70,6 +70,13 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
         if (fields[fieldId].fieldValidateRules.indexOf('min') != -1) {
             defaultValue = fields[fieldId].fieldValidateRulesMin;
             updatedValue = parseInt(fields[fieldId].fieldValidateRulesMin) + 1;
+        }
+        if (fields[fieldId].fieldValidateRules.indexOf('minbytes') != -1) {
+            defaultValue = fields[fieldId].fieldValidateRulesMinbytes;
+            updatedValue = fields[fieldId].fieldValidateRulesMinbytes;
+        }
+        if (fields[fieldId].fieldValidateRules.indexOf('maxbytes') != -1) {
+            updatedValue = fields[fieldId].fieldValidateRulesMaxbytes;
         }
     }
 
@@ -125,8 +132,8 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     private static final Boolean <%=defaultValueName %> = false;
     private static final Boolean <%=updatedValueName %> = true;<% } else if (fieldType == 'byte[]') { %>
 
-    private static final byte[] <%=defaultValueName %> = new byte[]{1,2,3};
-    private static final byte[] <%=updatedValueName %> = new byte[]{3,2,1};<% } else if (isEnum) { %>
+    private static final byte[] <%=defaultValueName %> = TestUtil.createByteArray(<%= defaultValue %>, "0");
+    private static final byte[] <%=updatedValueName %> = TestUtil.createByteArray(<%= updatedValue %>, "1");<% } else if (isEnum) { %>
 
     private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%=enumValue1 %>;
     private static final <%=fieldType %> <%=updatedValueName %> = <%=fieldType %>.<%=enumValue2 %>;<% } } %>
@@ -293,4 +300,3 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
         assertThat(<%= entityInstance %>s).hasSize(databaseSizeBeforeDelete - 1);
     }
 }
-
