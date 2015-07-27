@@ -1,0 +1,5 @@
+<div class="errorDisplay" collapse="collapsed">
+    <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)" class="fade-in">
+        <strong ng-show="alert.important">{{alert.important}} </strong>{{alert.msg}}
+    </alert>
+</div>

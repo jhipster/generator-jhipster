@@ -114,6 +114,31 @@ only screen and (                min-resolution: 2dppx) {
 .alert .popover pre {
     font-size: 10px;
 }
+/*Custom alerts for notification*/
+.alerts {
+    position: fixed;
+    top: 50px;
+    width: 100%;
+    z-index: 1100;
+    right: 0px;
+    min-width: 200px;
+    padding: 5px;
+}
+.alerts .alert{
+    opacity: 0.9;
+    min-width: 60%;
+    text-overflow: ellipsis;
+    float: right;
+    z-index: 1100;
+}
+.alert pre{
+    background: none;
+    border: none;
+    font: inherit;
+    color: inherit;
+    padding: 0;
+    margin: 0;
+}
 
 .voffset  { margin-top: 2px; }
 .voffset1 { margin-top: 5px; }

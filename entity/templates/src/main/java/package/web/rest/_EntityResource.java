@@ -3,14 +3,15 @@ package <%=packageName%>.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import <%=packageName%>.domain.<%= entityClass %>;
 import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine == 'elasticsearch') { %>
-import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } %><% if (pagination != 'no') { %>
+import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } %>
+import <%=packageName%>.web.rest.util.HeaderUtil;<% if (pagination != 'no') { %>
 import <%=packageName%>.web.rest.util.PaginationUtil;<% } %><% if (dto == 'mapstruct') { %>
 import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
 import <%=packageName%>.web.rest.mapper.<%= entityClass %>Mapper;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (pagination != 'no') { %>
-import org.springframework.data.domain.Page;
-import org.springframework.http.HttpHeaders;<% } %>
+import org.springframework.data.domain.Page;<% } %>
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;<% if (dto == 'mapstruct') { %>
@@ -70,7 +71,9 @@ public class <%= entityClass %>Resource {
         <%= entityClass %> <%= entityInstance %> = <%= dtoToEntity %>(<%= instanceName %>);<% } %>
         <%= entityClass %> result = <%= entityInstance %>Repository.save(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
         <%= entityInstance %>SearchRepository.save(result);<% } %>
-        return ResponseEntity.created(new URI("/api/<%= entityInstance %>s/" + <%= instanceName %>.getId())).body(<% if (dto == 'mapstruct') { %><%= entityToDto %>(result)<% } else { %>result<% } %>);
+        return ResponseEntity.created(new URI("/api/<%= entityInstance %>s/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert("<%= entityInstance %>", result.getId().toString()))
+                .body(<% if (dto == 'mapstruct') { %><%= entityToDto %>(result)<% } else { %>result<% } %>);
     }
 
     /**
@@ -88,7 +91,9 @@ public class <%= entityClass %>Resource {
         <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Mapper.<%= entityInstance %>DTOTo<%= entityClass %>(<%= instanceName %>);<% } %>
         <%= entityClass %> result = <%= entityInstance %>Repository.save(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
         <%= entityInstance %>SearchRepository.save(<%= entityInstance %>);<% } %>
-        return ResponseEntity.ok().body(<% if (dto == 'mapstruct') { %><%= entityToDto %>(result)<% } else { %>result<% } %>);
+        return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert("<%= entityInstance %>", <%= instanceName %>.getId().toString()))
+                .body(<% if (dto == 'mapstruct') { %><%= entityToDto %>(result)<% } else { %>result<% } %>);
     }
 
     /**
@@ -144,12 +149,13 @@ public class <%= entityClass %>Resource {
             method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public void delete(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id) {
+    public ResponseEntity<Void> delete(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id) {
         log.debug("REST request to delete <%= entityClass %> : {}", id);<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         <%= entityInstance %>Repository.delete(id);<% } %><% if (databaseType == 'cassandra') { %>
         <%= entityInstance %>Repository.delete(UUID.fromString(id));<% } %><% if (searchEngine == 'elasticsearch') { %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         <%= entityInstance %>SearchRepository.delete(id);<% } %><% if (databaseType == 'cassandra') { %>
         <%= entityInstance %>SearchRepository.delete(UUID.fromString(id));<% } %><% } %>
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("<%= entityInstance %>", id.toString())).build();
     }<% if (searchEngine == 'elasticsearch') { %>
 
     /**
