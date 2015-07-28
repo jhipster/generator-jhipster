@@ -880,7 +880,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/scripts/components/navbar/_navbar.controller.js', webappDir + 'scripts/components/navbar/navbar.controller.js', this, {});
     this.template(webappDir + '/scripts/components/user/_user.service.js', webappDir + 'scripts/components/user/user.service.js', this, {});
     this.template(webappDir + '/scripts/components/util/_base64.service.js', webappDir + 'scripts/components/util/base64.service.js', this, {});
-    this.template(webappDir + '/scripts/components/util/_alert.service.js', webappDir + 'scripts/components/util/alert.service.js', this, {});
     this.template(webappDir + '/scripts/components/util/_parse-links.service.js', webappDir + 'scripts/components/util/parse-links.service.js', this, {});
     this.template(webappDir + '/scripts/components/util/_truncate.filter.js', webappDir + 'scripts/components/util/truncate.filter.js', this, {});
     this.template(webappDir + '/scripts/components/util/_dateutil.service.js', webappDir + 'scripts/components/util/dateutil.service.js', this, {});
@@ -952,10 +951,14 @@ JhipsterGenerator.prototype.app = function app() {
     this.copyJs(webappDir + '/scripts/app/main/_main.js', webappDir + 'scripts/app/main/main.js', this, {});
     this.template(webappDir + '/scripts/app/main/_main.controller.js', webappDir + 'scripts/app/main/main.controller.js', this, {});
 
-        // error handler code - server side
-    this.template(webappDir + '/scripts/components/errorhandler/_errorDisplay.directive.js', webappDir + 'scripts/components/errorhandler/errorDisplay.directive.js', this, {});
-    this.template(webappDir + '/scripts/components/errorhandler/_errorDisplay.html', webappDir + 'scripts/components/errorhandler/errorDisplay.html', this, {});
-    this.template(webappDir + '/scripts/components/errorhandler/_errorhandler.service.js', webappDir + 'scripts/components/errorhandler/errorhandler.service.js', this, {});
+     // interceptor code
+    this.template(webappDir + '/scripts/components/interceptor/_auth.interceptor.js', webappDir + 'scripts/components/interceptor/auth.interceptor.js', this, {});
+    this.template(webappDir + '/scripts/components/interceptor/_errorhandler.interceptor.js', webappDir + 'scripts/components/interceptor/errorhandler.interceptor.js', this, {});
+    this.template(webappDir + '/scripts/components/interceptor/_notification.interceptor.js', webappDir + 'scripts/components/interceptor/notification.interceptor.js', this, {});
+
+    //alert service code
+    this.template(webappDir + '/scripts/components/alert/_alert.service.js', webappDir + 'scripts/components/alert/alert.service.js', this, {});
+    this.template(webappDir + '/scripts/components/alert/_alert.directive.js', webappDir + 'scripts/components/alert/alert.directive.js', this, {});
 
     // Index page
     this.indexFile = html.readFileAsString(path.join(this.sourceRoot(), webappDir + '_index.html'));
@@ -1002,14 +1005,16 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/components/admin/logs.service.js',
         'scripts/components/admin/configuration.service.js',
         'scripts/components/admin/monitoring.service.js',
-        'scripts/components/errorhandler/errorDisplay.directive.js',
-        'scripts/components/errorhandler/errorhandler.service.js',
+        'scripts/components/interceptor/auth.interceptor.js',
+        'scripts/components/interceptor/errorhandler.interceptor.js',
+        'scripts/components/interceptor/notification.interceptor.js',
         'scripts/components/navbar/navbar.directive.js',
         'scripts/components/navbar/navbar.controller.js',
         'scripts/components/user/user.service.js',
         'scripts/components/util/truncate.filter.js',
         'scripts/components/util/base64.service.js',
-        'scripts/components/util/alert.service.js',
+        'scripts/components/alert/alert.service.js',
+        'scripts/components/alert/alert.directive.js',
         'scripts/components/util/parse-links.service.js',
         'scripts/components/util/dateutil.service.js',
         'scripts/app/account/account.js',
