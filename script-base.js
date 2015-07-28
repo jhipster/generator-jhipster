@@ -226,6 +226,8 @@ Generator.prototype.stripContent = function (source, regex, data, _opt) {
 
     var body = html.readFileAsString(path.join(that.sourceRoot(), source));
     this.engine = require('ejs').render;
+    //temp hack to fix error thrown by ejs during entity creation, this needs a permannent fix when we add more .ejs files
+    _opt.filename = path.join(that.sourceRoot(), "src/main/webapp/app/ng_validators.ejs");
     body = this.engine(body, data, _opt);
     body = body.replace(re, '');
 
