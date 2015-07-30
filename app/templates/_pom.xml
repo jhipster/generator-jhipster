@@ -51,11 +51,26 @@
         <metrics-spring.version>3.0.4</metrics-spring.version><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
         <postgresql.version>9.3-1102-jdbc41</postgresql.version><% } %>
         <run.addResources>false</run.addResources>
-        <sonar-maven-plugin.version>2.3</sonar-maven-plugin.version>
         <spring-security.version>4.0.1.RELEASE</spring-security.version><% if (authenticationType == 'oauth2') { %>
         <spring-security-oauth2.version>2.0.7.RELEASE</spring-security-oauth2.version><% } %>
         <springfox.version>2.0.3</springfox.version>
         <usertype-core.version>4.0.0.GA</usertype-core.version>
+        <!-- Sonar properties --> 
+        <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
+        <sonar-maven-plugin.version>2.5</sonar-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.7.4.201502262128<jacoco-maven-plugin.version>
+        <sonar.exclusions>src/main/webapp/assets/**/*.*, src/main/webapp/bower_components/**/*.*</sonar.exclusions>
+        <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
+        <sonar.jacoco.itReportPath>${project.testresult.directory}/coverage/jacoco/jacoco-it.exec</sonar.jacoco.itReportPath>
+        <sonar.jacoco.reportPath>${project.testresult.directory}/coverage/jacoco/jacoco.exec</sonar.jacoco.reportPath>
+        
+        <sonar.javascript.jstestdriver.reportsPath>${project.testresult.directory}/karma</sonar.javascript.jstestdriver.reportsPath>
+        <sonar.javascript.lcov.reportPath>${project.testresult.directory}/coverage/report-lcov/lcov.info</sonar.javascript.lcov.reportPath>
+
+        <sonar.sources>${project.basedir}/src/main/</sonar.sources>
+        <sonar.surefire.reportsPath>${project.testresult.directory}/surefire-reports</sonar.surefire.reportsPath>
+        <sonar.tests>${project.basedir}/src/test/</sonar.tests>
+
     </properties>
 
     <dependencies>
@@ -215,12 +230,12 @@
             </exclusions>
         </dependency>
         <!-- The HikariCP Java Agent is disabled by default, as it is experimental
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP-agent</artifactId>
-            <version>${HikariCP.version}</version>
-        </dependency>
-        -->
+          <dependency>
+              <groupId>com.zaxxer</groupId>
+                  <artifactId>HikariCP-agent</artifactId>
+                      <version>${HikariCP.version}</version>
+                      </dependency>
+                  -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -273,7 +288,7 @@
         </dependency><% } %>
         <dependency>
             <groupId>org.assertj</groupId>
-	        <artifactId>assertj-core</artifactId>
+            <artifactId>assertj-core</artifactId>
             <version>${assertj-core.version}</version>
             <scope>test</scope>
         </dependency><% if (databaseType == 'cassandra') { %>
@@ -496,7 +511,7 @@
         <pluginManagement>
             <plugins>
                 <!--This plugin's configuration is used to store Eclipse m2e settings
-                only. It has no influence on the Maven build itself.-->
+                  only. It has no influence on the Maven build itself.-->
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
                     <artifactId>lifecycle-mapping</artifactId>
@@ -583,7 +598,7 @@
                     <bodiesFolder>src/test/gatling/bodies</bodiesFolder>
                     <simulationsFolder>src/test/gatling/simulations</simulationsFolder>
                     <!-- This will force Gatling to ask which simulation to run
-                         This is useful when you have multiple simulations -->
+                      This is useful when you have multiple simulations -->
                     <simulationClass>*</simulationClass>
                 </configuration>
             </plugin>
@@ -624,7 +639,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <argLine><% if (javaVersion == '7') { %>-XX:MaxPermSize=128m <% } %>-Xmx256m</argLine>
+                    <argLine><% if (javaVersion == '7') { %>-XX:MaxPermSize=128m <% } %>-Xmx256m ${surefireArgLine}</argLine>
                     <!-- Force alphabetical order to have a reproducible build -->
                     <runOrder>alphabetical</runOrder>
                 </configuration>
@@ -635,6 +650,37 @@
                 <configuration>
                     <packagingExcludes>WEB-INF/lib/tomcat-*.jar</packagingExcludes>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>pre-unit-tests</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Sets the path to the file which contains the execution data. -->
+                            <destFile>${project.testresult.directory}/coverage/jacoco/jacoco.exec</destFile>
+                            <!-- Sets the name of the property containing the settings for JaCoCo runtime agent. -->
+                            <propertyName>surefireArgLine</propertyName>
+                        </configuration>
+                    </execution>
+                    <!-- Ensures that the code coverage report for unit tests is created after unit tests have been run -->
+                    <execution>
+                        <id>post-unit-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${project.testresult.directory}/coverage/jacoco/jacoco.exec</dataFile>
+                            <outputDirectory>${project.testresult.directory}/coverage/jacoco</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -861,5 +907,5 @@
             <id>Local-lib</id>
             <url>file://${project.basedir}/lib</url>
         </repository>
-      </repositories><% } %>
+    </repositories><% } %>
 </project>
