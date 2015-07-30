@@ -33,9 +33,9 @@
     "ejs": "2.3.1",
     "html-wiring": "1.1.0",
     "insight": "0.6.0",
+    "lodash": "3.10.0",
     "mkdirp": "0.5.1",
     "shelljs": "0.5.0",
-    "underscore": "1.8.3",
     "underscore.string": "3.0.3",
     "yeoman-generator": "0.20.1",
     "yo": "1.4.6"
