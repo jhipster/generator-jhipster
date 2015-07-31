@@ -5,9 +5,6 @@ package <%=packageName%>.config;
  */
 public final class Constants {
 
-    private Constants() {
-    }
-
     // Spring profile for development, production and "fast", see http://jhipster.github.io/profiles.html
     public static final String SPRING_PROFILE_DEVELOPMENT = "dev";
     public static final String SPRING_PROFILE_PRODUCTION = "prod";
@@ -19,4 +16,6 @@ public final class Constants {
 
     public static final String SYSTEM_ACCOUNT = "system";
 
+    private Constants() {
+    }
 }
