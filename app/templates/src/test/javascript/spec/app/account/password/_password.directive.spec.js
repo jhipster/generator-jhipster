@@ -14,13 +14,13 @@ describe('Directive Tests ', function () {
         elm = angular.element(html);
         $compile(elm)(scope);
 
-        $httpBackend.expectGET(/api\/account\?cacheBuster=\d+/).respond({});
-        $httpBackend.expectGET('scripts/components/navbar/navbar.html').respond({});
-        <% if (enableTranslation) { %>
-        $httpBackend.expectGET('i18n/en/global.json').respond({});
-        $httpBackend.expectGET('i18n/en/main.json').respond({});
-        <% } %>
-        $httpBackend.expectGET('scripts/app/main/main.html').respond({});
+        $httpBackend.whenGET(/api\/account\?cacheBuster=\d+/).respond({});
+        $httpBackend.whenGET('scripts/app/main/main.html').respond({});
+        $httpBackend.whenGET('scripts/components/navbar/navbar.html').respond({});
+<% if (enableTranslation) { -%>
+        $httpBackend.whenGET('i18n/en/global.json').respond({});
+        $httpBackend.whenGET('i18n/en/main.json').respond({});
+<% } -%>
     }));
 
     afterEach(function() {
