@@ -62,6 +62,8 @@
     "karma-phantomjs-launcher": "0.2.0",
     "phantomjs": "1.9.17",
     "karma": "0.12.35",
+    "karma-coverage": "^0.4.2",
+    "karma-jenkins-reporter": "0.0.2",
     "generator-jhipster": "<%= packagejs.version %>",
     "lodash": "3.3.1",<% if (buildTool == 'maven') { %>
     "xml2js": "0.4.5",<% } %>

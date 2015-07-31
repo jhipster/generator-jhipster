@@ -23,6 +23,24 @@ module.exports = function (config) {
         // list of files / patterns to exclude
         exclude: [],
 
+        preprocessors: {
+            './**/*.js': ['coverage']
+        },
+
+        reporters: ['dots', 'jenkins', 'coverage', 'progress'],
+
+        jenkinsReporter: {
+            outputFile: '../target/test-results/karma/TESTS-results.xml'
+        },
+
+        coverageReporter: {
+            dir: '../target/test-results/coverage',
+
+            reporters: [
+                {type: 'lcov', subdir: 'report-lcov'}
+            ]
+        },
+
         // web server port
         port: 9876,
 
