@@ -1,0 +1,23 @@
+apply plugin: 'org.asciidoctor.convert'
+
+ext {
+    generatedAsciidoc = file("${buildDir}/docs/asciidoc/generated")
+}
+
+asciidoctor {
+    dependsOn test
+    sources {
+        include 'index.adoc'
+    }
+    backends = ['html5', 'pdf']
+    attributes = [
+        doctype: 'book',
+        toc: 'left',
+        toclevels: '2',
+        numbered: '',
+        sectlinks: '',
+        sectanchors: '',
+        hardbreaks: '',
+        generated: generatedAsciidoc
+    ]
+}
