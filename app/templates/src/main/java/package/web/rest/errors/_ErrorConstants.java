@@ -1,4 +1,4 @@
-package <%=packageName%>.api;
+package <%=packageName%>.web.rest.errors;
 
 public final class ErrorConstants {
 
@@ -9,5 +9,5 @@ public final class ErrorConstants {
 
     private ErrorConstants() {
     }
-    
+
 }

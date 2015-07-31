@@ -636,7 +636,7 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     // error handler code - server side
-    this.template('src/main/java/package/api/_ErrorConstants.java', javaDir + 'api/ErrorConstants.java', this, {});
+    this.template('src/main/java/package/web/rest/errors/_ErrorConstants.java', javaDir + 'web/rest/errors/ErrorConstants.java', this, {});
     this.template('src/main/java/package/web/rest/errors/_CustomParameterizedException.java', javaDir + 'web/rest/errors/CustomParameterizedException.java', this, {});
     this.template('src/main/java/package/web/rest/errors/_ErrorDTO.java', javaDir + 'web/rest/errors/ErrorDTO.java', this, {});
     this.template('src/main/java/package/web/rest/errors/_ExceptionTranslator.java', javaDir + 'web/rest/errors/ExceptionTranslator.java', this, {});
@@ -838,7 +838,7 @@ JhipsterGenerator.prototype.app = function app() {
     }else{
         this.template(resourceDir + '/i18n/_messages_en.properties', resourceDir + 'i18n/messages_en.properties', this, {});
     }
-    
+
     // Angular JS views
 
     this.template(webappDir + '/scripts/app/_app.js', webappDir + 'scripts/app/app.js', this, {});

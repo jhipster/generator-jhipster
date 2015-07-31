@@ -13,11 +13,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import <%=packageName%>.api.ErrorConstants;
 
 /**
  * Controller advice to translate the server side exceptions to client-friendly json structures.
- */ 
+ */
 @ControllerAdvice
 public class ExceptionTranslator {
 
