@@ -18,8 +18,10 @@ describe('Directive Tests ', function () {
         $httpBackend.whenGET('scripts/app/main/main.html').respond({});
         $httpBackend.whenGET('scripts/components/navbar/navbar.html').respond({});
 <% if (enableTranslation) { -%>
-        $httpBackend.whenGET('i18n/en/global.json').respond({});
-        $httpBackend.whenGET('i18n/en/main.json').respond({});
+        var globalJson = new RegExp('i18n\/.*\/global.json')
+        var mainJson = new RegExp('i18n\/.*\/main.json');
+        $httpBackend.whenGET(globalJson).respond({});
+        $httpBackend.whenGET(mainJson).respond({});
 <% } -%>
     }));
 

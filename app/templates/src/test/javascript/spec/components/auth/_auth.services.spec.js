@@ -17,8 +17,10 @@ describe('Services Tests ', function () {
             $httpBackend.whenGET('scripts/app/main/main.html').respond({});<% if (authenticationType == 'session') { %>
             $httpBackend.whenGET('scripts/components/navbar/navbar.html').respond({});
 <% if (enableTranslation) { -%>
-            $httpBackend.whenGET('i18n/en/global.json').respond(200, '');
-            $httpBackend.whenGET('i18n/en/main.json').respond(200, '');
+            var globalJson = new RegExp('i18n\/.*\/global.json')
+            var mainJson = new RegExp('i18n\/.*\/main.json');
+            $httpBackend.whenGET(globalJson).respond(200, '');
+            $httpBackend.whenGET(mainJson).respond(200, '');
 <% } -%>
             $httpBackend.expectPOST(/api\/logout\?cacheBuster=\d+/).respond(200, ''); <% } %>
           }));
