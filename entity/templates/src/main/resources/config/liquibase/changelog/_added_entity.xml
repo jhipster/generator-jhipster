@@ -18,9 +18,9 @@
         Added the entity <%= entityClass %>.
     -->
     <changeSet id="<%= changelogDate %>" author="jhipster"><% if(prodDatabaseType === 'oracle') {%>
-        <createSequence sequenceName="SEQ_<%= name.toUpperCase() %>" startValue="1000" incrementBy="1"/><% } %>
-        <createTable tableName="<%= name.toUpperCase() %>">
-            <column name="id" type="bigint" autoIncrement="${autoIncrement}" <% if(prodDatabaseType === 'oracle') {%>defaultValueComputed="SEQ_<%= name.toUpperCase() %>.NEXTVAL"<% } %>>
+        <createSequence sequenceName="SEQ_<%= entityTableName %>" startValue="1000" incrementBy="1"/><% } %>
+        <createTable tableName="<%= entityTableName %>">
+            <column name="id" type="bigint" autoIncrement="${autoIncrement}" <% if(prodDatabaseType === 'oracle') {%>defaultValueComputed="SEQ_<%= entityTableName %>.NEXTVAL"<% } %>>
                 <constraints primaryKey="true" nullable="false"/>
             </column><% for (fieldId in fields) {
             var required = false;
@@ -54,7 +54,7 @@
             </column><% } %><% } %>
         </createTable><% for (fieldId in fields) {
             if (fields[fieldId].fieldType == 'DateTime') { %>
-        <dropDefaultValue tableName="<%= name.toUpperCase() %>" columnName="<%=fields[fieldId].fieldNameUnderscored %>" columnDataType="datetime"/>
+        <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%=fields[fieldId].fieldNameUnderscored %>" columnDataType="datetime"/>
 <% } } %>
         <% for (relationshipId in relationships) { %><% if ((relationships[relationshipId].relationshipType == 'many-to-one') || ((relationships[relationshipId].relationshipType == 'one-to-one')) && (relationships[relationshipId].ownerSide == true)) {
             var constraintName = 'fk_' + name.toLowerCase() + '_' + relationships[relationshipId].relationshipName.toLowerCase() + '_id';
@@ -62,22 +62,25 @@
                 constraintName = 'fk_' + name.toLowerCase().substring(0, 3) + '_' + relationships[relationshipId].relationshipName.toLowerCase().substring(0, 3) + '_id';
             }%>
         <addForeignKeyConstraint baseColumnNames="<%= relationships[relationshipId].relationshipName.toLowerCase() %>_id"
-                                 baseTableName="<%= name.toUpperCase() %>"
+                                 baseTableName="<%= entityTableName %>"
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="id"
                                  referencedTableName="<%
-                                 var otherEntityTable = relationships[relationshipId].otherEntityName.toUpperCase();
+                                 var otherEntityTable = getTableName(relationships[relationshipId].otherEntityName);
                                  if (otherEntityTable == 'USER') { %>JHI_USER<% } else { %><%=otherEntityTable %><% } %>"/>
 <% } else if ((relationships[relationshipId].relationshipType == 'many-to-many') && (relationships[relationshipId].ownerSide == true)) {
-   var relationshipName = relationships[relationshipId].relationshipName;
-   var otherEntityName = relationships[relationshipId].otherEntityName;
-   var joinTableName = name.toUpperCase() + '_'+ relationshipName.toUpperCase();
-   var constraintName = 'fk_' + name.toLowerCase() + '_' + relationshipName.toLowerCase() + '_' + otherEntityName.toLowerCase() + '_id';
-   var otherEntityConstraintName = 'fk_' + otherEntityName.toLowerCase() + '_' + relationshipName.toLowerCase() + '_' + name.toLowerCase() + '_id';
-            if(prodDatabaseType === 'oracle' && constraintName.length > 30) {
-                constraintName = 'fk_' + name.toLowerCase().substring(0, 3) + '_' + relationshipName.toLowerCase().substring(0, 3) +  '_' + otherEntityName.toLowerCase().substring(0, 3) + '_id';
-                otherEntityConstraintName = 'fk_' + otherEntityName.toLowerCase().substring(0, 3) + '_' + relationshipName.toLowerCase().substring(0, 3) +  '_' + name.toLowerCase().substring(0, 3) + '_id';
-            }
+    var relationshipName = relationships[relationshipId].relationshipName,
+    otherEntityName = relationships[relationshipId].otherEntityName,
+    joinTableName = entityTableName + '_'+ getTableName(relationshipName);
+    if(prodDatabaseType === 'oracle' && joinTableName.length > 30) {
+        joinTableName = getTableName(name.substring(0, 5)) + '_' + getTableName(relationshipName.substring(0, 5)) + '_MAPPING';
+    }
+    var constraintName = 'fk_' + name.toLowerCase() + '_' + relationshipName.toLowerCase() + '_' + otherEntityName.toLowerCase() + '_id';
+    var otherEntityConstraintName = 'fk_' + otherEntityName.toLowerCase() + '_' + relationshipName.toLowerCase() + '_' + name.toLowerCase() + '_id';
+    if(prodDatabaseType === 'oracle' && constraintName.length > 30) {
+        constraintName = 'fk_' + name.toLowerCase().substring(0, 3) + '_' + relationshipName.toLowerCase().substring(0, 3) +  '_' + otherEntityName.toLowerCase().substring(0, 3) + '_id';
+        otherEntityConstraintName = 'fk_' + otherEntityName.toLowerCase().substring(0, 3) + '_' + relationshipName.toLowerCase().substring(0, 3) +  '_' + name.toLowerCase().substring(0, 3) + '_id';
+    }
   %>
         <createTable tableName="<%= joinTableName %>">
             <column name="<%= relationshipName.toLowerCase() %>s_id" type="bigint">
@@ -94,14 +97,14 @@
                                  baseTableName="<%= joinTableName %>"
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="id"
-                                 referencedTableName="<%= name.toUpperCase() %>"/>
+                                 referencedTableName="<%= entityTableName %>"/>
 
         <addForeignKeyConstraint baseColumnNames="<%= relationshipName.toLowerCase() %>s_id"
                                  baseTableName="<%= joinTableName %>"
                                  constraintName="<%= otherEntityConstraintName %>"
                                  referencedColumnNames="id"
                                  referencedTableName="<%
-                                 var otherEntityTable = otherEntityName.toUpperCase();
+                                 var otherEntityTable = getTableName(otherEntityName);
                                  if (otherEntityTable == 'USER') { %>JHI_USER<% } else { %><%=otherEntityTable %><% } %>"/>
         <% } %><% } %>
     </changeSet>
