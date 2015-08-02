@@ -50,7 +50,10 @@ angular.module('<%=angularAppName%>')
 					});
 
 					var addErrorAlert = function (message, key, data) {
-						AlertService.error(<% if (enableTranslation) { %>key, data<%}else { %>message<% } %>);
+						<% if (enableTranslation) { %>
+						key = key && key != null ? key : message;
+						AlertService.error(key, data); <%} else { %> AlertService.error(message); <% } %>
+						
 					}
 
 	            }
