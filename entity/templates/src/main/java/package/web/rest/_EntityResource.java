@@ -110,7 +110,7 @@ public class <%= entityClass %>Resource {
             log.debug("REST request to get all <%= entityClass %>s where <%= relationships[idx].relationshipName %> is null");<% if (javaVersion == '7') { %>
             List <%= entityInstance %>s = new ArrayList<<%= entityClass %>>();
             for (<%= entityClass %> <%= entityInstance %> : <%= entityInstance %>Repository.findAll()) {
-                if (<%= entityInstance %>.getSecond() == null) {
+                if (<%= entityInstance %>.get<%= relationships[idx].relationshipNameCapitalized %>() == null) {
                     <%= entityInstance %>s.add(<%= entityInstance %>);
                 }
             }
