@@ -9,7 +9,8 @@ import java.util.Date;<% } %><% if (relationships.length > 0) { %>
 import java.util.HashSet;
 import java.util.Set;<% } %>
 import java.util.Objects;<% if (databaseType == 'cassandra') { %>
-import java.util.UUID;<% } %>
+import java.util.UUID;<% } %><% if (fieldsContainBlob == true) { %>
+import javax.persistence.Lob;<% } %>
 <% for (fieldId in fields) { if (fields[fieldId].fieldIsEnum == true) { %>
 import <%=packageName%>.domain.enumeration.<%= fields[fieldId].fieldType %>;<% } } %>
 
