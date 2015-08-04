@@ -516,6 +516,7 @@ JhipsterGenerator.prototype.app = function app() {
             this.template('_settings.gradle', 'settings.gradle', this, {});
             this.template('_gradle.properties', 'gradle.properties', this, {});
             this.template('_yeoman.gradle', 'yeoman.gradle', this, {});
+            this.template('_sonar.gradle', 'sonar.gradle', this, {});
             this.template('_profile_dev.gradle', 'profile_dev.gradle', this, { 'interpolate': interpolateRegex });
             this.template('_profile_prod.gradle', 'profile_prod.gradle', this, { 'interpolate': interpolateRegex });
             this.template('_profile_fast.gradle', 'profile_fast.gradle', this, { 'interpolate': interpolateRegex });
