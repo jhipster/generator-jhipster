@@ -1060,11 +1060,11 @@ EntityGenerator.prototype.files = function files() {
             this.fieldsContainOwnerManyToMany = true;
         }
     }
-    this.fieldsContainOneToOne = false;
+    this.fieldsContainNoOwnerOneToOne = false;
     for (var idx in this.relationships) {
         var relationship = this.relationships[idx];
-        if (relationship.relationshipType == 'one-to-one') {
-            this.fieldsContainOneToOne = true;
+        if (relationship.relationshipType == 'one-to-one' && relationship.ownerSide == false) {
+            this.fieldsContainNoOwnerOneToOne = true;
         }
     }
     this.fieldsContainOwnerOneToOne = false;

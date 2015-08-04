@@ -22,13 +22,13 @@ import javax.inject.Inject;<% if (validation) { %>
 import javax.validation.Valid;<% } %>
 import java.net.URI;
 import java.net.URISyntaxException;<% if (javaVersion == '7') { %>
-import javax.servlet.http.HttpServletResponse;<% } %><% if (javaVersion == '7' && fieldsContainOneToOne == true && fieldsContainOwnerOneToOne == false) { %>
+import javax.servlet.http.HttpServletResponse;<% } %><% if (javaVersion == '7' && fieldsContainNoOwnerOneToOne == true) { %>
 import java.util.ArrayList;<% } %><% if (dto == 'mapstruct') { %>
 import java.util.LinkedList;<% } %>
 import java.util.List;<% if (javaVersion == '8') { %>
 import java.util.Optional;<% } %><% if (databaseType == 'cassandra') { %>
-import java.util.UUID;<% } %><% if (searchEngine == 'elasticsearch' || dto == 'mapstruct' || (javaVersion == '8' && fieldsContainOneToOne == true && fieldsContainOwnerOneToOne == false)) { %>
-import java.util.stream.Collectors;<% } %><% if (searchEngine == 'elasticsearch' || (javaVersion == '8' && fieldsContainOneToOne == true && fieldsContainOwnerOneToOne == false)) { %>
+import java.util.UUID;<% } %><% if (searchEngine == 'elasticsearch' || dto == 'mapstruct' || (javaVersion == '8' && fieldsContainNoOwnerOneToOne == true)) { %>
+import java.util.stream.Collectors;<% } %><% if (searchEngine == 'elasticsearch' || (javaVersion == '8' && fieldsContainNoOwnerOneToOne == true)) { %>
 import java.util.stream.StreamSupport;<% } %><% if (searchEngine == 'elasticsearch') { %>
 
 import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
@@ -105,7 +105,7 @@ public class <%= entityClass %>Resource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed<% if (dto == 'mapstruct') { %>
     @Transactional(readOnly = true)<% } %><% if (pagination == 'no') { %>
-    public List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> getAll(<% if (fieldsContainOneToOne == true && fieldsContainOwnerOneToOne == false) { %>@RequestParam(required = false) String filter<% } %>) {<% for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { %>
+    public List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> getAll(<% if (fieldsContainNoOwnerOneToOne == true) { %>@RequestParam(required = false) String filter<% } %>) {<% for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { %>
         if ("<%= relationships[idx].relationshipName.toLowerCase() %>-is-null".equals(filter)) {
             log.debug("REST request to get all <%= entityClass %>s where <%= relationships[idx].relationshipName %> is null");<% if (javaVersion == '7') { %>
             List <%= entityInstance %>s = new ArrayList<<%= entityClass %>>();
