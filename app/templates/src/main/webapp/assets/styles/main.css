@@ -115,22 +115,10 @@ only screen and (                min-resolution: 2dppx) {
     font-size: 10px;
 }
 /*Custom alerts for notification*/
-.alerts {
-    position: fixed;
-    top: 50px;
-    width: 100%;
-    z-index: 1100;
-    right: 0px;
-    min-width: 200px;
-    padding: 5px;
-}
 .alerts .alert{
-    opacity: 0.9;
-    min-width: 60%;
     text-overflow: ellipsis;
-    float: right;
-    z-index: 1100;
 }
+
 .alert pre{
     background: none;
     border: none;
