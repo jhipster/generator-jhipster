@@ -9,6 +9,7 @@ import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.UserService;
+import <%=packageName%>.web.rest.dto.KeyAndPasswordDTO;
 import <%=packageName%>.web.rest.dto.UserDTO;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -302,7 +303,7 @@ public class AccountResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<String> finishPasswordReset(@RequestBody KeyAndPassword keyAndPassword) {
+    public ResponseEntity<String> finishPasswordReset(@RequestBody KeyAndPasswordDTO keyAndPassword) {
         if (!checkPasswordLength(keyAndPassword.getNewPassword())) {
             return new ResponseEntity<>("Incorrect password", HttpStatus.BAD_REQUEST);
         }<% if (javaVersion == '8') { %>
@@ -320,27 +321,4 @@ public class AccountResource {
       return (!StringUtils.isEmpty(password) && password.length() >= UserDTO.PASSWORD_MIN_LENGTH && password.length() <= UserDTO.PASSWORD_MAX_LENGTH);
     }
 
-    private static class KeyAndPassword {
-
-        private String key;
-        private String newPassword;
-
-        public KeyAndPassword() {}
-
-        public String getKey() {
-            return key;
-        }
-
-        public void setKey(String key) {
-            this.key = key;
-        }
-
-        public String getNewPassword() {
-            return newPassword;
-        }
-
-        public void setNewPassword(String newPassword) {
-            this.newPassword = newPassword;
-        }
-    }
 }
