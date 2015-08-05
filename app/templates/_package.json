@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
   },
-  "devDependencies": {<% if(frontendBuilder == 'grunt') { %>
+  "devDependencies": {<% if (frontendBuilder == 'grunt') { %>
     "grunt": "0.4.5",
     "grunt-autoprefixer": "2.2.0",
     "grunt-build-control": "0.3.0",
@@ -31,7 +31,7 @@
     "load-grunt-tasks": "3.1.0",
     "grunt-karma": "0.11.0",
     "time-grunt": "1.1.0",<% if (useCompass) { %>
-    "grunt-contrib-compass": "1.0.1",<% }} if(frontendBuilder == 'gulp') { %>
+    "grunt-contrib-compass": "1.0.1",<% }} if (frontendBuilder == 'gulp') { %>
     "browser-sync": "2.7.6",
     "del": "1.1.1",
     "gulp": "3.8.11",
@@ -76,7 +76,8 @@
   "engines": {
     "node": ">=0.12.0"
   },
-  "scripts": {
-    "test": "grunt test"
+  "scripts": {<% if (frontendBuilder == 'grunt') { %>
+    "test": "grunt test"<% } if (frontendBuilder == 'gulp') { %>
+    "test": "gulp test"<% } %>
   }
 }
