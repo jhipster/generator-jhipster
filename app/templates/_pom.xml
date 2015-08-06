@@ -472,7 +472,6 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-data</artifactId>
-            <version>${spring-security.version}</version>
         </dependency><% if (websocket == 'spring-websocket') { %>
         <dependency>
             <groupId>org.springframework.security</groupId>
