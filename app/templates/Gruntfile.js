@@ -230,17 +230,7 @@ module.exports = function (grunt) {
                 options: {
                     module: '<%= angularAppName%>',
                     usemin: 'scripts/app.js',
-                    htmlmin:  {
-                        removeCommentsFromCDATA: true,
-                        // https://github.com/yeoman/grunt-usemin/issues/44
-                        collapseWhitespace: true,
-                        collapseBooleanAttributes: true,
-                        conservativeCollapse: true,
-                        removeAttributeQuotes: true,
-                        removeRedundantAttributes: true,
-                        useShortDoctype: true,
-                        removeEmptyAttributes: true
-                    }
+                    htmlmin: '<%%= htmlmin.dist.options %>'
                 }
             }
         },

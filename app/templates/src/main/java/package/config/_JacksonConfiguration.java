@@ -1,13 +1,15 @@
 package <%=packageName%>.config;
 
-import com.fasterxml.jackson.datatype.joda.JodaModule;
-import com.fasterxml.jackson.datatype.joda.ser.DateTimeSerializer;
-import com.fasterxml.jackson.datatype.joda.ser.JacksonJodaFormat;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.datetime.joda.DateTimeFormatterFactory;
+
+import <%=packageName%>.domain.util.CustomDateTimeDeserializer;
+import <%=packageName%>.domain.util.CustomDateTimeSerializer;
+import <%=packageName%>.domain.util.CustomLocalDateSerializer;
+import <%=packageName%>.domain.util.ISO8601LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 
 @Configuration
 public class JacksonConfiguration {
@@ -15,11 +17,10 @@ public class JacksonConfiguration {
     @Bean
     public JodaModule jacksonJodaModule() {
         JodaModule module = new JodaModule();
-        DateTimeFormatterFactory formatterFactory = new DateTimeFormatterFactory();
-        formatterFactory.setIso(DateTimeFormat.ISO.DATE);
-        module.addSerializer(DateTime.class, new DateTimeSerializer(
-                new JacksonJodaFormat(formatterFactory.createDateTimeFormatter()
-                        .withZoneUTC())));
+        module.addSerializer(DateTime.class, new CustomDateTimeSerializer());
+        module.addDeserializer(DateTime.class, new CustomDateTimeDeserializer());
+        module.addSerializer(LocalDate.class, new CustomLocalDateSerializer());
+        module.addDeserializer(LocalDate.class, new ISO8601LocalDateDeserializer());
         return module;
     }
 }

@@ -1,11 +1,5 @@
 package <%=packageName%>.web.rest.dto;
-<% if (fieldsContainCustomTime == true) { %>
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;<% } %><% if (fieldsContainLocalDate == true) { %>
-import <%=packageName%>.domain.util.CustomLocalDateSerializer;
-import <%=packageName%>.domain.util.ISO8601LocalDateDeserializer;<% } %><% if (fieldsContainDateTime == true) { %>
-import <%=packageName%>.domain.util.CustomDateTimeDeserializer;
-import <%=packageName%>.domain.util.CustomDateTimeSerializer;<% } %><% if (fieldsContainLocalDate == true) { %>
+<% if (fieldsContainLocalDate == true) { %>
 import org.joda.time.LocalDate;<% } %><% if (fieldsContainDateTime == true) { %>
 import org.joda.time.DateTime;<% } %><% if (validation) { %>
 import javax.validation.constraints.*;<% } %>
@@ -15,7 +9,8 @@ import java.util.Date;<% } %><% if (relationships.length > 0) { %>
 import java.util.HashSet;
 import java.util.Set;<% } %>
 import java.util.Objects;<% if (databaseType == 'cassandra') { %>
-import java.util.UUID;<% } %>
+import java.util.UUID;<% } %><% if (fieldsContainBlob == true) { %>
+import javax.persistence.Lob;<% } %>
 <% for (fieldId in fields) { if (fields[fieldId].fieldIsEnum == true) { %>
 import <%=packageName%>.domain.enumeration.<%= fields[fieldId].fieldType %>;<% } } %>
 
@@ -42,12 +37,8 @@ public class <%= entityClass %>DTO implements Serializable {
     @Size(min = <%= fields[fieldId].fieldValidateRulesMinbytes %>, max = <%= fields[fieldId].fieldValidateRulesMaxbytes %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('min') != -1) { %>
     @Min(value = <%= fields[fieldId].fieldValidateRulesMin %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('max') != -1) { %>
     @Max(value = <%= fields[fieldId].fieldValidateRulesMax %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('pattern') != -1) { %>
-    @Pattern(regexp = "<%= fields[fieldId].fieldValidateRulesPattern %>")<% } } %><% if (fields[fieldId].fieldType == 'DateTime') { %><% if (fields[fieldId].fieldType == 'byte[]') { %>
+    @Pattern(regexp = "<%= fields[fieldId].fieldValidateRulesPattern %>")<% } } %><% if (fields[fieldId].fieldType == 'byte[]') { %>
     @Lob<% } %>
-    @JsonSerialize(using = CustomDateTimeSerializer.class)
-    @JsonDeserialize(using = CustomDateTimeDeserializer.class)<% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
-    @JsonSerialize(using = CustomLocalDateSerializer.class)
-    @JsonDeserialize(using = ISO8601LocalDateDeserializer.class)<% } %>
     private <%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>;<% } %><% for (relationshipId in relationships) {
     otherEntityRelationshipName = relationships[relationshipId].otherEntityRelationshipName;%><% if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %>
     private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>DTO> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();<% } else if (relationships[relationshipId].relationshipType == 'many-to-one') { %>

@@ -1,7 +1,7 @@
 <div>
 <% var keyPrefix = angularAppName + '.'+ entityInstance + '.'; %>
     <h2 translate="<%= keyPrefix %>home.title"><%= entityClass %>s</h2>
-
+    <jh-alert></jh-alert>
     <div class="container">
         <div class="row">
             <div class="col-md-4">
@@ -52,7 +52,8 @@
                 <tr>
                     <th translate="global.field.id">ID</th><% for (fieldId in fields) { %>
                     <th translate="<%=keyPrefix + fields[fieldId].fieldName %>"><%=fields[fieldId].fieldNameCapitalized%></th><% } %><% for (relationshipId in relationships) {
-                        if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
+                        if (relationships[relationshipId].relationshipType == 'many-to-one'
+                           || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) { %>
                     <th translate="<%= keyPrefix + relationships[relationshipId].relationshipName%>"><%=relationships[relationshipId].relationshipName%></th><% } } %>
                     <th></th>
                 </tr>
@@ -60,13 +61,17 @@
             <tbody<% if (pagination == 'infinite-scroll') { %> infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page"<% } %>>
                 <tr ng-repeat="<%=entityInstance %> in <%=entityInstance %>s">
                     <td><a ui-sref="<%= entityInstance %>.detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td><% for (fieldId in fields) { %><% if (fields[fieldId].fieldType == 'byte[]') { %>
-                    <td><% if (fields[fieldId].fieldTypeBlobContent == 'image') { %>
+                    <td><% if (fields[fieldId].fieldIsEnum) {
+                        var enumPrefix = angularAppName + '.'+ fields[fieldId].fieldType;%>
+                        <td translate="<%=enumPrefix%>.SELECT" translate-values="{ VALUE: <%= entityInstance %>.<%=fields[fieldId].fieldName%> }" translate-interpolation="messageformat"></td>
+                        <% } else if (fields[fieldId].fieldTypeBlobContent == 'image') { %>
                         <img data-ng-src="{{'data:image/*;base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-height: 30px;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/><% } %><% if (fields[fieldId].fieldTypeBlobContent == 'any') { %>
                         {{abbreviate(<%= entityInstance %>.<%= fields[fieldId].fieldName %>) + ' ' + byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}<% } else { %>
                         {{byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}<% } %>
                     </td><% } else { %>
                     <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%>}}</td><% } %><% } %><% for (relationshipId in relationships) {
-                        if (relationships[relationshipId].relationshipType == 'many-to-one') {
+                        if (relationships[relationshipId].relationshipType == 'many-to-one'
+                           || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) {
                             var relationShipValue = entityInstance + "." + relationships[relationshipId].relationshipFieldName + "." + relationships[relationshipId].otherEntityField;
                             if (dto == 'mapstruct') {
                                 relationShipValue = entityInstance + "." + relationships[relationshipId].relationshipFieldName + relationships[relationshipId].otherEntityFieldCapitalized;

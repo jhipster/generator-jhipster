@@ -75,11 +75,12 @@ public class <%= entityClass %>Repository {
         return mapper.get(id);
     }
 
-    public void save(<%= entityClass %> <%= entityInstance %>) {
+    public <%= entityClass %> save(<%= entityClass %> <%= entityInstance %>) {
         if (<%= entityInstance %>.getId() == null) {
             <%= entityInstance %>.setId(UUID.randomUUID());
         }
         mapper.save(<%= entityInstance %>);
+        return <%= entityInstance %>;
     }
 
     public void delete(UUID id) {

@@ -49,6 +49,22 @@ Generator.prototype.addComponentsScriptToIndex = function (script) {
     }
 };
 
+Generator.prototype.addMessageformatLocaleToIndex = function (script) {
+    try {
+        var appPath = this.env.options.appPath;
+        var fullPath = path.join(appPath, 'index.html');
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: '<!-- endbuild -->',
+            splicable: [
+                    '<script src="bower_components/messageformat/locale/' + script + '"></script>'
+            ]
+        });
+    } catch (e) {
+        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + script + '.js ' + 'not added.\n'.yellow);
+    }
+};
+
 Generator.prototype.addRouterToMenu = function (entityName,enableTranslation) {
     try {
         var appPath = this.env.options.appPath;
@@ -179,8 +195,8 @@ Generator.prototype.copyHtml = function (source, dest, data, _opt, template) {
         // uses template method instead of copy if template boolean is set as true
         template ? this.template(source, dest, data, _opt) : this.copy(source, dest);
     } else {
-        var regex = '( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")';         
-        //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}" 
+        var regex = '( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")';
+        //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
         var body = this.stripContent(source, regex, data, _opt);
         body = this.replacePlaceholders(body, data);
         this.write(dest, body);
@@ -195,7 +211,7 @@ Generator.prototype.copyJs = function (source, dest, data, _opt, template) {
         // uses template method instead of copy if template boolean is set as true
         template ? this.template(source, dest, data, _opt) : this.copy(source, dest);
     } else {
-        var regex = '[a-zA-Z]+\:(\s)?\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\>\;\s]*\}\]'; 
+        var regex = '[a-zA-Z]+\:(\s)?\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\>\;\s]*\}\]';
         //looks for something like mainTranslatePartialLoader: [*]
         var body = this.stripContent(source, regex, data, _opt);
         body = this.replaceTitle(body, data, template);
@@ -210,6 +226,8 @@ Generator.prototype.stripContent = function (source, regex, data, _opt) {
 
     var body = html.readFileAsString(path.join(that.sourceRoot(), source));
     this.engine = require('ejs').render;
+    //temp hack to fix error thrown by ejs during entity creation, this needs a permanent fix when we add more .ejs files
+    _opt.filename = path.join(that.sourceRoot(), "src/main/webapp/app/ng_validators.ejs");
     body = this.engine(body, data, _opt);
     body = body.replace(re, '');
 

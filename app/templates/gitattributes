@@ -17,3 +17,6 @@
 *.ttf binary
 *.gzip binary
 *.gz binary
+*.ai binary
+*.eps binary
+*.swf binary

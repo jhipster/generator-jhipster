@@ -7,16 +7,17 @@
         <h4 class="modal-title" id="my<%= entityClass %>Label" translate="<%= keyPrefix %>home.createOrEditLabel">Create or edit a <%= entityClass %></h4>
     </div>
     <div class="modal-body">
+        <jh-alert-error></jh-alert-error>
         <div class="form-group">
-            <label translate="global.field.id">ID</label>
-            <input type="text" class="form-control" name="id"
+            <label for="id" translate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
                     ng-model="<%=entityInstance %>.id" readonly>
         </div>
 <% for (fieldId in fields) {
     var fieldInputType = 'text';
     var ngModelOption = '';
     var translationKey = keyPrefix + fields[fieldId].fieldName;
-    if (fields[fieldId].fieldType == 'Integer' || fields[fieldId].fieldType == 'Long' || fields[fieldId].fieldType == 'BigDecimal') {
+    if (fields[fieldId].fieldType == 'Integer' || fields[fieldId].fieldType == 'Long' || fields[fieldId].fieldType == 'Float' || fields[fieldId].fieldType == 'Double' || fields[fieldId].fieldType == 'BigDecimal') {
         fieldInputType = 'number';
     } else if (fields[fieldId].fieldType == 'LocalDate') {
         fieldInputType = 'date';
@@ -31,10 +32,11 @@
             <label translate="<%= translationKey %>" for="field_<%= fields[fieldId].fieldName %>"><%=fields[fieldId].fieldNameCapitalized%></label><%
             if (fields[fieldId].fieldIsEnum) { %>
             <select class="form-control" name="<%= fields[fieldId].fieldName %>" ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>" id="field_<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) { %> required<% } %>><%
+               var enumPrefix = angularAppName + '.'+ fields[fieldId].fieldType;
                var values = fields[fieldId].fieldValues.split(",");
                for (key in values) {
                  var value = values[key]; %>
-               <option value="<%= value %>"><%= value %></option><%
+               <option value="<%= value %>" translate="<%=enumPrefix%>.<%=value%>"><%= value %></option><%
                } %>
             </select><% } else { %><% if (fields[fieldId].fieldType == 'byte[]') { %>
             <div><% if (fields[fieldId].fieldTypeBlobContent == 'image') { %>
@@ -54,16 +56,8 @@
                 </button>
             </div><% } %>
             <input type="<%= fieldInputType %>" class="form-control" name="<%= fields[fieldId].fieldName %>" id="field_<%= fields[fieldId].fieldName %>"
-                    ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldType == 'DateTime') { %> ng-model-options="{timezone: 'UTC'}"<% } %><% if (fields[fieldId].fieldValidate == true) {
-                        if (fields[fieldId].fieldValidateRules.indexOf('required') != -1) {
-                        %> required<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('minlength') != -1) {
-                        %> ng-minlength="<%= fields[fieldId].fieldValidateRulesMinlength %>"<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('maxlength') != -1) {
-                        %> ng-maxlength="<%= fields[fieldId].fieldValidateRulesMaxlength %>"<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('min') != -1) {
-                        %> min="<%= fields[fieldId].fieldValidateRulesMin %>"<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('max') != -1) {
-                        %> max="<%= fields[fieldId].fieldValidateRulesMax %>"<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('minbytes') != -1) {
-                        %> minbytes="<%= fields[fieldId].fieldValidateRulesMinbytes %>"<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('maxbytes') != -1) {
-                        %> maxbytes="<%= fields[fieldId].fieldValidateRulesMaxbytes %>"<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('pattern') != -1) {
-                        %> ng-pattern="/<%= fields[fieldId].fieldValidateRulesPattern %>/"<% } } %>><% } %>
+                    ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldType == 'DateTime') { %> ng-model-options="{timezone: 'UTC'}"<% } %>
+                    <%- include ng_validators -%>><% } %>
 <% if (fields[fieldId].fieldValidate == true) { %>
             <div ng-show="editForm.<%= fields[fieldId].fieldName %>.$invalid"><% if (fields[fieldId].fieldValidateRules.indexOf('required') != -1) { %>
                 <p class="help-block"
@@ -97,7 +91,7 @@
                 <p class="help-block"
                     ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.pattern" translate="entity.validation.pattern" translate-value-pattern="<%= fields[fieldId].fieldValidateRulesPattern %>">
                     This field should follow pattern "<%= fields[fieldId].fieldValidateRulesPattern %>".
-                </p><% } %><% if (fields[fieldId].fieldType == 'Integer' || fields[fieldId].fieldType == 'Long' || fields[fieldId].fieldType == 'BigDecimal') { %>
+                </p><% } %><% if (fields[fieldId].fieldType == 'Integer' || fields[fieldId].fieldType == 'Long' || fields[fieldId].fieldType == 'Float' || fields[fieldId].fieldType == 'Double' || fields[fieldId].fieldType == 'BigDecimal') { %>
                 <p class="help-block"
                     ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.number" translate="entity.validation.number">
                     This field should be a number.
@@ -113,11 +107,16 @@
     var relationshipName = relationships[relationshipId].relationshipName;
     var relationshipFieldName = relationships[relationshipId].relationshipFieldName;
     var translationKey = keyPrefix + relationshipName;
-     if (relationships[relationshipId].relationshipType == 'many-to-one') {
-                        %>
+     if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
         <div class="form-group">
             <label translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%=relationshipName %></label>
             <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="<%=entityInstance %>.<%=relationshipFieldName %>.id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=relationships[relationshipId].otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName.toLowerCase() %>s">
+            </select>
+        </div><% } else if (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true) {
+            %>
+        <div class="form-group">
+            <label translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%=relationshipName %></label>
+            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="<%=entityInstance %>.<%=relationshipFieldName %>.id" ng-options="<%=relationshipFieldName %>.id as <%=relationshipFieldName %>.<%=relationships[relationshipId].otherEntityField %> for <%=relationshipFieldName %> in <%=relationshipFieldName.toLowerCase() %>s">
             </select>
         </div><% } else if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) {
             %>

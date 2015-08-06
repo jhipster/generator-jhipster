@@ -1,0 +1,32 @@
+{
+    "settings": {
+        "title": "Gebruikersinstellingen voor [<b>{{username}}</b>]",
+        "form": {
+            "firstname": "Voornaam",
+            "firstname.placeholder": "Uw voornaam",
+            "lastname": "Achternaam",
+            "lastname.placeholder": "Uw achternaam",
+            "language": "Taal",
+            "button": "Opslaan"
+        },
+        "messages": {
+            "error": {
+                "fail": "<strong>Er is een fout opgetreden!</strong> Instellingen kunnen niet worden opgeslagen.",
+                "emailexists": "<strong>E-mail is al in gebruik!</strong> Gelieve een andere te kiezen."
+            },
+            "success": "<strong>Instellingen opgeslagen!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "Uw voornaam is vereist.",
+                    "minlength": "Uw voornaam moet minstens 1 tekens lang zijn",
+                    "maxlength": "Uw voornaam kan niet langer zijn dan 50 tekens"
+                },
+                "lastname": {
+                    "required": "Uw achternaam is vereist.",
+                    "minlength": "Uw achternaam moet minstens 1 tekens lang zijn",
+                    "maxlength": "Uw achternaam kan niet langer zijn dan 50 tekens"
+                }
+            }
+        }
+    }
+}

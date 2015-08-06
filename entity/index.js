@@ -4,6 +4,7 @@ var util = require('util'),
         path = require('path'),
         yeoman = require('yeoman-generator'),
         chalk = require('chalk'),
+        _ = require('lodash'),
         _s = require('underscore.string'),
         shelljs = require('shelljs'),
         html = require("html-wiring"),
@@ -22,6 +23,8 @@ var reservedWords_Postgresql = ["USER"];
 var reservedWords_Cassandra = ["ADD", "ALL", "ALTER", "AND", "ANY", "APPLY", "AS", "ASC", "ASCII", "AUTHORIZE", "BATCH", "BEGIN", "BIGINT", "BLOB", "BOOLEAN", "BY", "CLUSTERING", "COLUMNFAMILY", "COMPACT", "CONSISTENCY", "COUNT", "COUNTER", "CREATE", "DECIMAL", "DELETE", "DESC", "DOUBLE", "DROP", "EACH_QUORUM", "FLOAT", "FROM", "GRANT", "IN", "INDEX", "CUSTOM", "INSERT", "INT", "INTO", "KEY", "KEYSPACE", "LEVEL", "LIMIT", "LOCAL_ONE", "LOCAL_QUORUM", "MODIFY", "NORECURSIVE", "NOSUPERUSER", "OF", "ON", "ONE", "ORDER", "PASSWORD", "PERMISSION", "PERMISSIONS", "PRIMARY", "QUORUM", "REVOKE", "SCHEMA", "SELECT", "SET", "STORAGE", "SUPERUSER", "TABLE", "TEXT", "TIMESTAMP", "TIMEUUID", "THREE", "TOKEN", "TRUNCATE", "TTL", "TWO", "TYPE", "UPDATE", "USE", "USER", "USERS", "USING", "UUID", "VALUES", "VARCHAR", "VARINT", "WHERE", "WITH", "WRITETIME", "DISTINCT", "BYTE", "SMALLINT", "COMPLEX", "ENUM", "DATE", "INTERVAL", "MACADDR", "BITSTRING"];
 
 var reservedWords_Oracle = ["ACCESS", "ACCOUNT", "ACTIVATE", "ADD", "ADMIN", "ADVISE", "AFTER", "ALL", "ALL_ROWS", "ALLOCATE", "ALTER", "ANALYZE", "AND", "ANY", "ARCHIVE", "ARCHIVELOG", "ARRAY", "AS", "ASC", "AT", "AUDIT", "AUTHENTICATED", "AUTHORIZATION", "AUTOEXTEND", "AUTOMATIC", "BACKUP", "BECOME", "BEFORE", "BEGIN", "BETWEEN", "BFILE", "BITMAP", "BLOB", "BLOCK", "BODY", "BY", "CACHE", "CACHE_INSTANCES", "CANCEL", "CASCADE", "CAST", "CFILE", "CHAINED", "CHANGE", "CHAR", "CHAR_CS", "CHARACTER", "CHECK", "CHECKPOINT", "CHOOSE", "CHUNK", "CLEAR", "CLOB", "CLONE", "CLOSE", "CLOSE_CACHED_OPEN_CURSORS", "CLUSTER", "COALESCE", "COLUMN", "COLUMNS", "COMMENT", "COMMIT", "COMMITTED", "COMPATIBILITY", "COMPILE", "COMPLETE", "COMPOSITE_LIMIT", "COMPRESS", "COMPUTE", "CONNECT", "CONNECT_TIME", "CONSTRAINT", "CONSTRAINTS", "CONTENTS", "CONTINUE", "CONTROLFILE", "CONVERT", "COST", "CPU_PER_CALL", "CPU_PER_SESSION", "CREATE", "CURRENT", "CURRENT_SCHEMA", "CURREN_USER", "CURSOR", "CYCLE", " ", "DANGLING", "DATABASE", "DATAFILE", "DATAFILES", "DATAOBJNO", "DATE", "DBA", "DBHIGH", "DBLOW", "DBMAC", "DEALLOCATE", "DEBUG", "DEC", "DECIMAL", "DECLARE", "DEFAULT", "DEFERRABLE", "DEFERRED", "DEGREE", "DELETE", "DEREF", "DESC", "DIRECTORY", "DISABLE", "DISCONNECT", "DISMOUNT", "DISTINCT", "DISTRIBUTED", "DML", "DOUBLE", "DROP", "DUMP", "EACH", "ELSE", "ENABLE", "END", "ENFORCE", "ENTRY", "ESCAPE", "EXCEPT", "EXCEPTIONS", "EXCHANGE", "EXCLUDING", "EXCLUSIVE", "EXECUTE", "EXISTS", "EXPIRE", "EXPLAIN", "EXTENT", "EXTENTS", "EXTERNALLY", "FAILED_LOGIN_ATTEMPTS", "FALSE", "FAST", "FILE", "FIRST_ROWS", "FLAGGER", "FLOAT", "FLOB", "FLUSH", "FOR", "FORCE", "FOREIGN", "FREELIST", "FREELISTS", "FROM", "FULL", "FUNCTION", "GLOBAL", "GLOBALLY", "GLOBAL_NAME", "GRANT", "GROUP", "GROUPS", "HASH", "HASHKEYS", "HAVING", "HEADER", "HEAP", "IDENTIFIED", "IDGENERATORS", "IDLE_TIME", "IF", "IMMEDIATE", "IN", "INCLUDING", "INCREMENT", "INDEX", "INDEXED", "INDEXES", "INDICATOR", "IND_PARTITION", "INITIAL", "INITIALLY", "INITRANS", "INSERT", "INSTANCE", "INSTANCES", "INSTEAD", "INT", "INTEGER", "INTERMEDIATE", "INTERSECT", "INTO", "IS", "ISOLATION", "ISOLATION_LEVEL", "KEEP", "KEY", "KILL", "LABEL", "LAYER", "LESS", "LEVEL", "LIBRARY", "LIKE", "LIMIT", "LINK", "LIST", "LOB", "LOCAL", "LOCK", "LOCKED", "LOG", "LOGFILE", "LOGGING", "LOGICAL_READS_PER_CALL", "LOGICAL_READS_PER_SESSION", "LONG", "MANAGE", "MASTER", "MAX", "MAXARCHLOGS", "MAXDATAFILES", "MAXEXTENTS", "MAXINSTANCES", "MAXLOGFILES", "MAXLOGHISTORY", "MAXLOGMEMBERS", "MAXSIZE", "MAXTRANS", "MAXVALUE", "MIN", "MEMBER", "MINIMUM", "MINEXTENTS", "MINUS", "MINVALUE", "MLSLABEL", "MLS_LABEL_FORMAT", "MODE", "MODIFY", "MOUNT", "MOVE", "MTS_DISPATCHERS", "MULTISET", "NATIONAL", "NCHAR", "NCHAR_CS", "NCLOB", "NEEDED", "NESTED", "NETWORK", "NEW", "NEXT", "NOARCHIVELOG", "NOAUDIT", "NOCACHE", "NOCOMPRESS", "NOCYCLE", "NOFORCE", "NOLOGGING", "NOMAXVALUE", "NOMINVALUE", "NONE", "NOORDER", "NOOVERRIDE", "NOPARALLEL", "NOPARALLEL", "NOREVERSE", "NORMAL", "NOSORT", "NOT", "NOTHING", "NOWAIT", "NULL", "NUMBER", "NUMERIC", "NVARCHAR2", "OBJECT", "OBJNO", "OBJNO_REUSE", "OF", "OFF", "OFFLINE", "OID", "OIDINDEX", "OLD", "ON", "ONLINE", "ONLY", "OPCODE", "OPEN", "OPTIMAL", "OPTIMIZER_GOAL", "OPTION", "OR", "ORDER", "ORGANIZATION", "OSLABEL", "OVERFLOW", "OWN", "PACKAGE", "PARALLEL", "PARTITION", "PASSWORD", "PASSWORD_GRACE_TIME", "PASSWORD_LIFE_TIME", "PASSWORD_LOCK_TIME", "PASSWORD_REUSE_MAX", "PASSWORD_REUSE_TIME", "PASSWORD_VERIFY_FUNCTION", "PCTFREE", "PCTINCREASE", "PCTTHRESHOLD", "PCTUSED", "PCTVERSION", "PERCENT", "PERMANENT", "PLAN", "PLSQL_DEBUG", "POST_TRANSACTION", "PRECISION", "PRESERVE", "PRIMARY", "PRIOR", "PRIVATE", "PRIVATE_SGA", "PRIVILEGE", "PRIVILEGES", "PROCEDURE", "PROFILE", "PUBLIC", "PURGE", "QUEUE", "QUOTA", "RANGE", "RAW", "RBA", "READ", "READUP", "REAL", "REBUILD", "RECOVER", "RECOVERABLE", "RECOVERY", "REF", "REFERENCES", "REFERENCING", "REFRESH", "RENAME", "REPLACE", "RESET", "RESETLOGS", "RESIZE", "RESOURCE", "RESTRICTED", "RETURN", "RETURNING", "REUSE", "REVERSE", "REVOKE", "ROLE", "ROLES", "ROLLBACK", "ROW", "ROWID", "ROWNUM", "ROWS", "RULE", "SAMPLE", "SAVEPOINT", "SB4", "SCAN_INSTANCES", "SCHEMA", "SCN", "SCOPE", "SD_ALL", "SD_INHIBIT", "SD_SHOW", "SEGMENT", "SEG_BLOCK", "SEG_FILE", "SELECT", "SEQUENCE", "SERIALIZABLE", "SESSION", "SESSION_CACHED_CURSORS", "SESSIONS_PER_USER", "SET", "SHARE", "SHARED", "SHARED_POOL", "SHRINK", "SIZE", "SKIP", "SKIP_UNUSABLE_INDEXES", "SMALLINT", "SNAPSHOT", "SOME", "SORT", "SPECIFICATION", "SPLIT", "SQL_TRACE", "STANDBY", "START", "STATEMENT_ID", "STATISTICS", "STOP", "STORAGE", "STORE", "STRUCTURE", "SUCCESSFUL", "SWITCH", "SYS_OP_ENFORCE_NOT_NULL$", "SYS_OP_NTCIMG$", "SYNONYM", "SYSDATE", "SYSDBA", "SYSOPER", "SYSTEM", "TABLE", "TABLES", "TABLESPACE", "TABLESPACE_NO", "TABNO", "TEMPORARY", "THAN", "THE", "THEN", "THREAD", "TIMESTAMP", "TIME", "TO", "TOPLEVEL", "TRACE", "TRACING", "TRANSACTION", "TRANSITIONAL", "TRIGGER", "TRIGGERS", "TRUE", "TRUNCATE", "TX", "TYPE", "UB2", "UBA", "UID", "UNARCHIVED", "UNDO", "UNION", "UNIQUE", "UNLIMITED", "UNLOCK", "UNRECOVERABLE", "UNTIL", "UNUSABLE", "UNUSED", "UPDATABLE", "UPDATE", "USAGE", "USE", "USER", "USING", "VALIDATE", "VALIDATION", "VALUE", "VALUES", "VARCHAR", "VARCHAR2", "VARYING", "VIEW", "WHEN", "WHENEVER", "WHERE", "WITH", "WITHOUT", "WORK", "WRITE", "WRITEDOWN", "WRITEUP", "XID", "YEAR", "ZONE"];
+
+var supportedValidationRules = ['required', 'max', 'min', 'maxlength', 'minlength', 'maxbytes', 'minbytes', 'pattern'];
 
 // enum-specific vars
 var enums = [];
@@ -94,15 +97,6 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     // Specific Entity sub-generator variables
     this.fieldId = 0;
     this.fields = [];
-    this.fieldsContainDate = false; // Java 8 Date
-    this.fieldsContainLocalDate = false; // JodaTime
-    this.fieldsContainDateTime = false; // JodaTime
-    this.fieldsContainCustomTime = false;
-    this.fieldsContainBigDecimal = false;
-    this.fieldsContainBlob = false;
-    this.fieldsContainOwnerManyToMany = false;
-    this.fieldsContainOwnerOneToOne = false;
-    this.fieldsContainOneToMany = false;
     this.relationshipId = 0;
     this.relationships = [];
     this.pagination = 'no';
@@ -182,6 +176,14 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 {
                     value: 'Long',
                     name: 'Long'
+                },
+                {
+                    value: 'Float',
+                    name: 'Float'
+                },
+                {
+                    value: 'Double',
+                    name: 'Double'
                 },
                 {
                     value: 'BigDecimal',
@@ -285,6 +287,14 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     name: 'Long'
                 },
                 {
+                    value: 'Float',
+                    name: 'Float'
+                },
+                {
+                    value: 'Double',
+                    name: 'Double'
+                },
+                {
                     value: 'BigDecimal',
                     name: 'BigDecimal'
                 },
@@ -355,6 +365,8 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     response.fieldValidate == true &&
                     (response.fieldType == 'Integer' ||
                     response.fieldType == 'Long' ||
+                    response.fieldType == 'Float' ||
+                    response.fieldType == 'Double' ||
                     response.fieldType == 'BigDecimal');
             },
             type: 'checkbox',
@@ -389,6 +401,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     response.fieldValidate == true &&
                     (response.fieldType == 'LocalDate' ||
                     response.fieldType == 'DateTime' ||
+                    response.fieldType == 'Date' ||
                     response.fieldType == 'UUID' ||
                     response.fieldType == 'TimeUUID' ||
                     response.fieldIsEnum == true);
@@ -449,6 +462,8 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     response.fieldValidateRules.indexOf('min') != -1 &&
                     (response.fieldType == 'Integer' ||
                     response.fieldType == 'Long' ||
+                    response.fieldType == 'Float' ||
+                    response.fieldType == 'Double' ||
                     response.fieldType == 'BigDecimal');
             },
             type: 'input',
@@ -467,6 +482,8 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     response.fieldValidateRules.indexOf('max') != -1 &&
                     (response.fieldType == 'Integer' ||
                     response.fieldType == 'Long' ||
+                    response.fieldType == 'Float' ||
+                    response.fieldType == 'Double' ||
                     response.fieldType == 'BigDecimal');
             },
             type: 'input',
@@ -513,22 +530,6 @@ EntityGenerator.prototype.askForFields = function askForFields() {
     ];
     this.prompt(prompts, function (props) {
         if (props.fieldAdd) {
-
-            // Handle the specific case when the second letter is capitalized
-            // See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
-            var fieldInJavaBeanMethod = props.fieldName;
-            if (fieldInJavaBeanMethod.length > 1) {
-                var firstLetter = fieldInJavaBeanMethod.charAt(0);
-                var secondLetter = fieldInJavaBeanMethod.charAt(1);
-                if (firstLetter == firstLetter.toLowerCase() && secondLetter == secondLetter.toUpperCase()) {
-                    fieldInJavaBeanMethod  = firstLetter.toLowerCase() + fieldInJavaBeanMethod.slice(1);
-                } else {
-                    fieldInJavaBeanMethod = _s.capitalize(props.fieldName);
-                }
-            } else {
-                fieldInJavaBeanMethod = _s.capitalize(props.fieldName);
-            }
-
             if (props.fieldIsEnum) {
                 props.fieldType = _s.capitalize(props.fieldType);
             }
@@ -538,12 +539,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 fieldName: props.fieldName,
                 fieldType: props.fieldType,
                 fieldTypeBlobContent: props.fieldTypeBlobContent,
-                fieldIsEnum: props.fieldIsEnum,
                 fieldValues: props.fieldValues,
-                fieldNameCapitalized: _s.capitalize(props.fieldName),
-                fieldNameUnderscored: _s.underscored(props.fieldName),
-                fieldInJavaBeanMethod: fieldInJavaBeanMethod,
-                fieldValidate: props.fieldValidate,
                 fieldValidateRules: props.fieldValidateRules,
                 fieldValidateRulesMinlength: props.fieldValidateRulesMinlength,
                 fieldValidateRulesMaxlength: props.fieldValidateRulesMaxlength,
@@ -556,32 +552,12 @@ EntityGenerator.prototype.askForFields = function askForFields() {
 
             fieldNamesUnderscored.push(_s.underscored(props.fieldName));
             this.fields.push(field);
-            if (props.fieldType == 'LocalDate') {
-                this.fieldsContainLocalDate = true;
-                this.fieldsContainCustomTime = true;
-            }
-            if (props.fieldType == 'BigDecimal') {
-                this.fieldsContainBigDecimal = true;
-            }
-            if (props.fieldType == 'DateTime') {
-                this.fieldsContainDateTime = true;
-                this.fieldsContainCustomTime = true;
-            }
-            if (props.fieldType == 'Date') {
-                this.fieldsContainDate = true;
-                this.fieldsContainCustomTime = true;
-            }
-            if (props.fieldType == 'byte[]') {
-                this.fieldsContainBlob = true;
-            }
-            if (props.fieldValidate) {
-                this.validation = true;
-            }
         }
         console.log(chalk.red('=================' + _s.capitalize(this.name) + '================='));
         for (var id in this.fields) {
             var validationDetails = '';
-            if (this.fields[id].fieldValidate == true) {
+            var fieldValidate = _.isArray(this.fields[id].fieldValidateRules) && this.fields[id].fieldValidateRules.length >= 1;
+            if (fieldValidate == true) {
                 if (this.fields[id].fieldValidateRules.indexOf('required') != -1) {
                     validationDetails = 'required ';
                 }
@@ -674,7 +650,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             },
             message: 'What is the name of the relationship?',
             default: function (response) {
-                 return response.otherEntityName.charAt(0).toLowerCase() + response.otherEntityName.slice(1);
+                 return _s.decapitalize(response.otherEntityName);
             }
         },
         {
@@ -726,13 +702,13 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             when: function (response) {
                 return (response.relationshipAdd == true && (response.relationshipType == 'one-to-many' ||
                     (response.relationshipType == 'many-to-many' && response.ownerSide == false) ||
-                    (response.relationshipType == 'one-to-one' && response.ownerSide == false)));
+                    (response.relationshipType == 'one-to-one')));
             },
             type: 'input',
             name: 'otherEntityRelationshipName',
             message: 'What is the name of this relationship in the other entity?',
             default: function (response) {
-                 return name.charAt(0).toLowerCase() + name.slice(1);
+                 return _s.decapitalize(name);
             }
         },
         {
@@ -746,7 +722,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
         },
         {
             when: function (response) {
-                return (!(response.noOtherEntity == false || response.noOtherEntity2 == false) && response.relationshipAdd == true && (response.relationshipType == 'many-to-one' || (response.relationshipType == 'many-to-many' && response.ownerSide == true)));
+                return (!(response.noOtherEntity == false || response.noOtherEntity2 == false) && response.relationshipAdd == true && (response.relationshipType == 'many-to-one' || (response.relationshipType == 'many-to-many' && response.ownerSide == true) || (response.relationshipType == 'one-to-one' && response.ownerSide == true)));
             },
             type: 'input',
             name: 'otherEntityField',
@@ -762,25 +738,14 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             return;
         }
         if (props.relationshipAdd) {
-            var relationship = {relationshipId: this.relationshipId,
+            var relationship = {
+                relationshipId: this.relationshipId,
                 relationshipName: props.relationshipName,
-                relationshipNameCapitalized: _s.capitalize(props.relationshipName),
-                relationshipFieldName: props.relationshipName.charAt(0).toLowerCase() + props.relationshipName.slice(1),
-                otherEntityName: props.otherEntityName.charAt(0).toLowerCase() + props.otherEntityName.slice(1),
+                otherEntityName: _s.decapitalize(props.otherEntityName),
                 relationshipType: props.relationshipType,
-                otherEntityNameCapitalized: _s.capitalize(props.otherEntityName),
                 otherEntityField: props.otherEntityField,
                 ownerSide: props.ownerSide,
                 otherEntityRelationshipName: props.otherEntityRelationshipName
-            }
-            if (props.relationshipType == 'many-to-many' && props.ownerSide == true) {
-                this.fieldsContainOwnerManyToMany = true;
-            }
-            if (props.relationshipType == 'one-to-one' && props.ownerSide == true) {
-                this.fieldsContainOwnerOneToOne = true;
-            }
-            if (props.relationshipType == 'one-to-many') {
-                this.fieldsContainOneToMany = true;
             }
             fieldNamesUnderscored.push(_s.underscored(props.relationshipName));
             this.relationships.push(relationship);
@@ -875,75 +840,299 @@ EntityGenerator.prototype.askForPagination = function askForPagination() {
 };
 
 EntityGenerator.prototype.files = function files() {
-    if (this.databaseType == "sql" || this.databaseType == "cassandra") {
-        this.changelogDate = this.dateFormatForLiquibase();
-    }
+    // Expose utility methods in templates
+    this.util = {};
+    this.util.contains = _.contains;
+
     if (this.useConfigurationFile == false) { // store informations in a file for further use.
+        if (this.databaseType == "sql" || this.databaseType == "cassandra") {
+            this.changelogDate = this.dateFormatForLiquibase();
+        }
         this.data = {};
         this.data.relationships = this.relationships;
         this.data.fields = this.fields;
-        this.data.fieldNamesUnderscored = this.fieldNamesUnderscored;
-        this.data.fieldsContainOwnerManyToMany = this.fieldsContainOwnerManyToMany;
-        this.data.fieldsContainOwnerOneToOne = this.fieldsContainOwnerOneToOne;
-        this.data.fieldsContainOneToMany = this.fieldsContainOneToMany;
-        this.data.fieldsContainLocalDate = this.fieldsContainLocalDate;
-        this.data.fieldsContainCustomTime = this.fieldsContainCustomTime;
-        this.data.fieldsContainBigDecimal = this.fieldsContainBigDecimal;
-        this.data.fieldsContainDateTime = this.fieldsContainDateTime;
-        this.data.fieldsContainDate = this.fieldsContainDate;
-        this.data.fieldsContainBlob = this.fieldsContainBlob;
         this.data.changelogDate = this.changelogDate;
         this.data.dto = this.dto;
-        this.data.pagination = this.pagination;
-        this.data.validation = this.validation;
+        if (databaseType == 'sql' || databaseType == 'mongodb') {
+            this.data.pagination = this.pagination;
+        }
         this.write(this.filename, JSON.stringify(this.data, null, 4));
     } else  {
         this.relationships = this.fileData.relationships;
-        for (var relationshipIdx in this.relationships) {
-            var relationship = this.relationships[relationshipIdx];
-            if (relationship.otherEntityRelationshipName == null) {
-                relationship.otherEntityRelationshipName = this.name.charAt(0).toLowerCase() + this.name.slice(1);
+        this.fields = this.fileData.fields;
+        this.changelogDate = this.fileData.changelogDate;
+        this.dto = this.fileData.dto;
+        this.pagination = this.fileData.pagination;
+
+        // Validate entity json feild content
+        for (var idx in this.fields) {
+            var field = this.fields[idx];
+            if (_.isUndefined(field.fieldId)) {
+                console.log(chalk.red('ERROR fieldId is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
+                process.exit(1);
+            }
+
+            if (_.isUndefined(field.fieldName)) {
+                console.log(chalk.red('ERROR fieldName is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
+                process.exit(1);
+            }
+
+            if (_.isUndefined(field.fieldType)) {
+                console.log(chalk.red('ERROR fieldType is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
+                process.exit(1);
+            }
+
+            if (!_.isUndefined(field.fieldValidateRules)) {
+                if (!_.isArray(field.fieldValidateRules)) {
+                    console.log(chalk.red('ERROR fieldValidateRules is not an array in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
+                    process.exit(1);
+                }
+                for (var idxRules in field.fieldValidateRules) {
+                    var fieldValidateRule = field.fieldValidateRules[idxRules];
+                    if (!_.contains(supportedValidationRules, fieldValidateRule)) {
+                        console.log(chalk.red('ERROR fieldValidateRules contains unknown validation rule ' + fieldValidateRule + ' in .jhipster/' + this.name + '.json for field with id ' + field.fieldId + ' [supported validation rules ' + supportedValidationRules + ']'));
+                        process.exit(1);
+                    }
+                }
+                if (_.contains(field.fieldValidateRules, 'max') && _.isUndefined(field.fieldValidateRulesMax)) {
+                    console.log(chalk.red('ERROR fieldValidateRulesMax is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
+                    process.exit(1);
+                }
+                if (_.contains(field.fieldValidateRules, 'min') && _.isUndefined(field.fieldValidateRulesMin)) {
+                    console.log(chalk.red('ERROR fieldValidateRulesMin is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
+                    process.exit(1);
+                }
+                if (_.contains(field.fieldValidateRules, 'maxlength') && _.isUndefined(field.fieldValidateRulesMaxlength)) {
+                    console.log(chalk.red('ERROR fieldValidateRulesMaxlength is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
+                    process.exit(1);
+                }
+                if (_.contains(field.fieldValidateRules, 'minlength') && _.isUndefined(field.fieldValidateRulesMinlength)) {
+                    console.log(chalk.red('ERROR fieldValidateRulesMinlength is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
+                    process.exit(1);
+                }
+                if (_.contains(field.fieldValidateRules, 'maxbytes') && _.isUndefined(field.fieldValidateRulesMaxbytes)) {
+                    console.log(chalk.red('ERROR fieldValidateRulesMaxbytes is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
+                    process.exit(1);
+                }
+                if (_.contains(field.fieldValidateRules, 'minbytes') && _.isUndefined(field.fieldValidateRulesMinbytes)) {
+                    console.log(chalk.red('ERROR fieldValidateRulesMinbytes is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
+                    process.exit(1);
+                }
+                if (_.contains(field.fieldValidateRules, 'pattern') && _.isUndefined(field.fieldValidateRulesPattern)) {
+                    console.log(chalk.red('ERROR fieldValidateRulesPattern is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
+                    process.exit(1);
+                }
             }
         }
-        this.fields = this.fileData.fields;
-        for (var fieldIdx in this.fields) {
-            var field = this.fields[fieldIdx];
-            if (field.fieldInJavaBeanMethod == null) {
+
+        // Validate entity json relationship content
+        for (var idx in this.relationships) {
+            var relationship = this.relationships[idx];
+            if (_.isUndefined(relationship.relationshipId)) {
+                console.log(chalk.red('ERROR relationshipId is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4)));
+                process.exit(1);
+            }
+
+            if (_.isUndefined(relationship.relationshipName)) {
+                relationship.relationshipName = relationship.otherEntityName;
+                console.log(chalk.yellow('WARNING relationshipName is missing in .jhipster/' + this.name + '.json for relationship with id ' + relationship.relationshipId + ', using ' + relationship.otherEntityName + ' as fallback'));
+            }
+
+            if (_.isUndefined(relationship.otherEntityName)) {
+                console.log(chalk.red('ERROR otherEntityName is missing in .jhipster/' + this.name + '.json for relationship with id ' + relationship.relationshipId));
+                process.exit(1);
+            }
+
+            if (_.isUndefined(relationship.otherEntityRelationshipName)
+                && (relationship.relationshipType == 'one-to-many' || (relationship.relationshipType == 'many-to-many' && relationship.ownerSide == false) || (relationship.relationshipType == 'one-to-one'))) {
+                relationship.otherEntityRelationshipName = _s.decapitalize(this.name);
+                console.log(chalk.yellow('WARNING otherEntityRelationshipName is missing in .jhipster/' + this.name + '.json for relationship with id ' + relationship.relationshipId + ', using ' + _s.decapitalize(this.name) + ' as fallback'));
+            }
+
+            if (_.isUndefined(relationship.otherEntityField)
+                && (relationship.relationshipType == 'many-to-one' || (relationship.relationshipType == 'many-to-many' && relationship.ownerSide == true) || (relationship.relationshipType == 'one-to-one' && relationship.ownerSide == true))) {
+                console.log(chalk.red('ERROR otherEntityField is missing in .jhipster/' + this.name + '.json for relationship with id ' + relationship.relationshipId));
+                process.exit(1);
+            }
+
+            if (_.isUndefined(relationship.relationshipType)) {
+                console.log(chalk.red('ERROR relationshipType is missing in .jhipster/' + this.name + '.json for relationship with id ' + relationship.relationshipId));
+                process.exit(1);
+            }
+
+            if (_.isUndefined(relationship.ownerSide)
+                && (relationship.relationshipType == 'one-to-one' || relationship.relationshipType == 'many-to-many')) {
+                console.log(chalk.red('ERROR ownerSide is missing in .jhipster/' + this.name + '.json for relationship with id ' + relationship.relationshipId));
+                process.exit(1);
+            }
+        }
+
+        // Validate root entity json content
+        if (_.isUndefined(this.changelogDate)
+            && (this.databaseType == "sql" || this.databaseType == "cassandra")) {
+            var currentDate = this.dateFormatForLiquibase();
+            console.log(chalk.yellow('WARNING changelogDate is missing in .jhipster/' + this.name + '.json, using ' + currentDate + ' as fallback'));
+            this.changelogDate = currentDate;
+        }
+        if (_.isUndefined(this.dto)) {
+            console.log(chalk.yellow('WARNING dto is missing in .jhipster/' + this.name + '.json, using no as fallback'));
+            this.dto = 'no';
+        }
+        if (_.isUndefined(this.pagination)) {
+            if (databaseType == 'sql' || databaseType == 'mongodb') {
+                console.log(chalk.yellow('WARNING pagination is missing in .jhipster/' + this.name + '.json, using no as fallback'));
+                this.pagination = 'no';
+            } else {
+                this.pagination = 'no';
+            }
+        }
+    }
+
+    // Load in-memory data for fields
+    for (var idx in this.fields) {
+        var field = this.fields[idx];
+
+        if ((databaseType == 'sql' || databaseType == 'mongodb') && !_.contains([
+            'String', 'Integer', 'Long', 'Float', 'Double', 'BigDecimal',
+            'LocalDate', 'DateTime', 'Boolean', 'byte[]'], field.fieldType)) {
+            field.fieldIsEnum = true;
+        } else {
+            field.fieldIsEnum = false;
+        }
+
+        if (_.isUndefined(field.fieldNameCapitalized)) {
+            field.fieldNameCapitalized = _s.capitalize(field.fieldName);
+        }
+
+        if (_.isUndefined(field.fieldNameUnderscored)) {
+            field.fieldNameUnderscored = _s.underscored(field.fieldName);
+        }
+
+        if (_.isUndefined(field.fieldInJavaBeanMethod)) {
+            // Handle the specific case when the second letter is capitalized
+            // See http://stackoverflow.com/questions/2948083/naming-convention-for-getters-setters-in-java
+            if (field.fieldName.length > 1) {
+                var firstLetter = field.fieldName.charAt(0);
+                var secondLetter = field.fieldName.charAt(1);
+                if (firstLetter == firstLetter.toLowerCase() && secondLetter == secondLetter.toUpperCase()) {
+                    field.fieldInJavaBeanMethod = firstLetter.toLowerCase() + field.fieldName.slice(1);
+                } else {
+                    field.fieldInJavaBeanMethod = _s.capitalize(field.fieldName);
+                }
+            } else {
                 field.fieldInJavaBeanMethod = _s.capitalize(field.fieldName);
             }
         }
-        this.fieldNamesUnderscored = this.fileData.fieldNamesUnderscored;
-        this.fieldsContainOwnerManyToMany = this.fileData.fieldsContainOwnerManyToMany;
-        this.fieldsContainOwnerOneToOne = this.fileData.fieldsContainOwnerOneToOne;
-        this.fieldsContainOneToMany = this.fileData.fieldsContainOneToMany;
-        this.fieldsContainLocalDate = this.fileData.fieldsContainLocalDate;
-        this.fieldsContainCustomTime = this.fileData.fieldsContainCustomTime;
-        this.fieldsContainBigDecimal = this.fileData.fieldsContainBigDecimal;
-        this.fieldsContainDateTime = this.fileData.fieldsContainDateTime;
-        this.fieldsContainDate = this.fileData.fieldsContainDate;
-        this.fieldsContainBlob = this.fileData.fieldsContainBlob;
-        this.changelogDate = this.fileData.changelogDate;
-        for (var idx in this.relationships) {
-          var rel = this.relationships[idx];
-          rel.relationshipName = rel.relationshipName || rel.otherEntityName;
-          rel.relationshipNameCapitalized = rel.relationshipNameCapitalized || _s.capitalize(rel.relationshipName);
-          rel.relationshipFieldName = rel.relationshipFieldName || rel.relationshipName.charAt(0).toLowerCase() + rel.relationshipName.slice(1);
-        }
-        this.dto = this.fileData.dto;
-        if (this.dto == undefined) {
-            this.dto = 'no';
-        }
-        this.pagination = this.fileData.pagination;
-        if (this.pagination == undefined) {
-            this.pagination = 'no';
-        }
-        this.validation = this.fileData.validation;
-        if (this.validation == undefined) {
-            this.validation = false;
+
+        if (_.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1) {
+            field.fieldValidate = true;
+        } else {
+            field.fieldValidate = false;
         }
     }
+
+    // Load in-memory data for relationships
+    for (var idx in this.relationships) {
+        var relationship = this.relationships[idx];
+
+        if (_.isUndefined(relationship.relationshipNameCapitalized)) {
+            relationship.relationshipNameCapitalized = _s.capitalize(relationship.relationshipName);
+        }
+
+        if (_.isUndefined(relationship.relationshipFieldName)) {
+            relationship.relationshipFieldName = _s.decapitalize(relationship.relationshipName);
+        }
+
+        if (_.isUndefined(relationship.otherEntityNameCapitalized)) {
+            relationship.otherEntityNameCapitalized = _s.capitalize(relationship.otherEntityName);
+        }
+
+        if (_.isUndefined(relationship.otherEntityFieldCapitalized)) {
+            relationship.otherEntityFieldCapitalized = _s.capitalize(relationship.otherEntityField);
+        }
+    }
+
+    // Load in-memory data for root
+    this.fieldsContainOwnerManyToMany = false;
+    for (var idx in this.relationships) {
+        var relationship = this.relationships[idx];
+        if (relationship.relationshipType == 'many-to-many' && relationship.ownerSide == true) {
+            this.fieldsContainOwnerManyToMany = true;
+        }
+    }
+    this.fieldsContainNoOwnerOneToOne = false;
+    for (var idx in this.relationships) {
+        var relationship = this.relationships[idx];
+        if (relationship.relationshipType == 'one-to-one' && relationship.ownerSide == false) {
+            this.fieldsContainNoOwnerOneToOne = true;
+        }
+    }
+    this.fieldsContainOwnerOneToOne = false;
+    for (var idx in this.relationships) {
+        var relationship = this.relationships[idx];
+        if (relationship.relationshipType == 'one-to-one' && relationship.ownerSide == true) {
+            this.fieldsContainOwnerOneToOne = true;
+        }
+    }
+    this.fieldsContainOneToMany = false;
+    for (var idx in this.relationships) {
+        var relationship = this.relationships[idx];
+        if (relationship.relationshipType == 'one-to-many') {
+            this.fieldsContainOneToMany = true;
+        }
+    }
+    this.fieldsContainCustomTime = false;
+    for (var idx in this.fields) {
+        var field = this.fields[idx];
+        if (field.fieldType == 'LocalDate' || field.fieldType == 'DateTime' || field.fieldType == 'Date') {
+            this.fieldsContainCustomTime = true;
+        }
+    }
+    this.fieldsContainLocalDate = false;
+    for (var idx in this.fields) {
+        var field = this.fields[idx];
+        if (field.fieldType == 'LocalDate') {
+            this.fieldsContainLocalDate = true;
+        }
+    }
+    this.fieldsContainDateTime = false;
+    for (var idx in this.fields) {
+        var field = this.fields[idx];
+        if (field.fieldType == 'DateTime') {
+            this.fieldsContainDateTime = true;
+        }
+    }
+    this.fieldsContainDate = false;
+    for (var idx in this.fields) {
+        var field = this.fields[idx];
+        if (field.fieldType == 'Date') {
+            this.fieldsContainDate = true;
+        }
+    }
+    this.fieldsContainBigDecimal = false;
+    for (var idx in this.fields) {
+        var field = this.fields[idx];
+        if (field.fieldType == 'BigDecimal') {
+            this.fieldsContainBigDecimal = true;
+        }
+    }
+    this.fieldsContainBlob = false;
+    for (var idx in this.fields) {
+        var field = this.fields[idx];
+        if (field.fieldType == 'byte[]') {
+            this.fieldsContainBlob = true;
+        }
+    }
+    this.validation = false;
+    for (var idx in this.fields) {
+        var field = this.fields[idx];
+        if (field.fieldValidate == true) {
+            this.validation = true;
+        }
+    }
+
     this.entityClass = _s.capitalize(this.name);
-    this.entityInstance = this.name.charAt(0).toLowerCase() + this.name.slice(1);
+    this.entityInstance = _s.decapitalize(this.name);
 
     this.differentTypes = [this.entityClass];
     var relationshipId;
@@ -951,11 +1140,6 @@ EntityGenerator.prototype.files = function files() {
         var entityType = this.relationships[relationshipId].otherEntityNameCapitalized;
         if (this.differentTypes.indexOf(entityType) == -1) {
             this.differentTypes.push(entityType);
-        }
-        if (this.relationships[relationshipId].otherEntityField != null) {
-            this.relationships[relationshipId].otherEntityFieldCapitalized =
-            this.relationships[relationshipId].otherEntityField.charAt(0).toUpperCase() +
-            this.relationships[relationshipId].otherEntityField.slice(1);
         }
     }
 
@@ -977,8 +1161,32 @@ EntityGenerator.prototype.files = function files() {
             enumInfo.packageName = this.packageName;
             enumInfo.enumName = fieldType;
             enumInfo.enumValues = field.fieldValues;
+            enumInfo.enumInstance = _s.decapitalize(enumInfo.enumName);
+            enumInfo.angularAppName = this.angularAppName;
+            enumInfo.enums = enumInfo.enumValues.split(',');
             this.template('src/main/java/package/domain/enumeration/_Enum.java',
                 'src/main/java/' + this.packageFolder + '/domain/enumeration/' + fieldType + '.java', enumInfo, {});
+
+            // Copy for each
+            if (this.enableTranslation) {
+                this.copyEnumI18n('ca', enumInfo);
+                this.copyEnumI18n('zh-cn', enumInfo);
+                this.copyEnumI18n('zh-tw', enumInfo);
+                this.copyEnumI18n('da', enumInfo);
+                this.copyEnumI18n('de', enumInfo);
+                this.copyEnumI18n('en', enumInfo);
+                this.copyEnumI18n('fr', enumInfo);
+                this.copyEnumI18n('hu', enumInfo);
+                this.copyEnumI18n('it', enumInfo);
+                this.copyEnumI18n('ja', enumInfo);
+                this.copyEnumI18n('kr', enumInfo);
+                this.copyEnumI18n('pl', enumInfo);
+                this.copyEnumI18n('pt-br', enumInfo);
+                this.copyEnumI18n('ru', enumInfo);
+                this.copyEnumI18n('es', enumInfo);
+                this.copyEnumI18n('sv', enumInfo);
+                this.copyEnumI18n('tr', enumInfo);
+            }
         }
     }
 
@@ -1060,6 +1268,7 @@ EntityGenerator.prototype.files = function files() {
         this.copyI18n('zh-cn');
         this.copyI18n('zh-tw');
         this.copyI18n('da');
+        this.copyI18n('nl');
         this.copyI18n('de');
         this.copyI18n('en');
         this.copyI18n('fr');
@@ -1082,6 +1291,18 @@ EntityGenerator.prototype.copyI18n = function(language) {
         if (stats.isDirectory()) {
             this.template('src/main/webapp/i18n/_entity_' + language + '.json', 'src/main/webapp/i18n/' + language + '/' + this.entityInstance + '.json', this, {});
             this.addNewEntityToMenu(language, this.entityInstance, this.entityClass);
+        }
+    } catch(e) {
+        // An exception is thrown if the folder doesn't exist
+        // do nothing
+    }
+};
+
+EntityGenerator.prototype.copyEnumI18n = function(language, enumInfo) {
+    try {
+        var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
+        if (stats.isDirectory()) {
+            this.template('src/main/webapp/i18n/_enum_' + language + '.json', 'src/main/webapp/i18n/' + language + '/' + enumInfo.enumInstance + '.json', enumInfo, {});
         }
     } catch(e) {
         // An exception is thrown if the folder doesn't exist

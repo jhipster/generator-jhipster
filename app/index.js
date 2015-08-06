@@ -635,6 +635,14 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/main/java/package/config/_WebsocketSecurityConfiguration.java', javaDir + 'config/WebsocketSecurityConfiguration.java', this, {});
     }
 
+    // error handler code - server side
+    this.template('src/main/java/package/web/rest/errors/_ErrorConstants.java', javaDir + 'web/rest/errors/ErrorConstants.java', this, {});
+    this.template('src/main/java/package/web/rest/errors/_CustomParameterizedException.java', javaDir + 'web/rest/errors/CustomParameterizedException.java', this, {});
+    this.template('src/main/java/package/web/rest/errors/_ErrorDTO.java', javaDir + 'web/rest/errors/ErrorDTO.java', this, {});
+    this.template('src/main/java/package/web/rest/errors/_ExceptionTranslator.java', javaDir + 'web/rest/errors/ExceptionTranslator.java', this, {});
+    this.template('src/main/java/package/web/rest/errors/_FieldErrorDTO.java', javaDir + 'web/rest/errors/FieldErrorDTO.java', this, {});
+    this.template('src/main/java/package/web/rest/errors/_ParameterizedErrorDTO.java', javaDir + 'web/rest/errors/ParameterizedErrorDTO.java', this, {});
+
     if (this.databaseType == "cassandra") {
         this.template('src/main/java/package/config/cassandra/_CassandraAutoConfiguration.java', javaDir + 'config/cassandra/CassandraAutoConfiguration.java', this, {});
         this.template('src/main/java/package/config/cassandra/_CassandraDataAutoConfiguration.java', javaDir + 'config/cassandra/CassandraDataAutoConfiguration.java', this, {});
@@ -678,6 +686,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/domain/util/_CustomDateTimeSerializer.java', javaDir + 'domain/util/CustomDateTimeSerializer.java', this, {});
     this.template('src/main/java/package/domain/util/_CustomDateTimeDeserializer.java', javaDir + 'domain/util/CustomDateTimeDeserializer.java', this, {});
     this.template('src/main/java/package/domain/util/_ISO8601LocalDateDeserializer.java', javaDir + 'domain/util/ISO8601LocalDateDeserializer.java', this, {});
+    if (this.databaseType == "sql") {
+        this.template('src/main/java/package/domain/util/_FixedH2Dialect.java', javaDir + 'domain/util/FixedH2Dialect.java', this, {});
+    }
 
     if (this.searchEngine == 'elasticsearch') {
         this.template('src/main/java/package/repository/search/_package-info.java', javaDir + 'repository/search/package-info.java', this, {});
@@ -755,6 +766,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/web/rest/dto/_package-info.java', javaDir + 'web/rest/dto/package-info.java', this, {});
     this.template('src/main/java/package/web/rest/dto/_LoggerDTO.java', javaDir + 'web/rest/dto/LoggerDTO.java', this, {});
     this.template('src/main/java/package/web/rest/dto/_UserDTO.java', javaDir + 'web/rest/dto/UserDTO.java', this, {});
+    this.template('src/main/java/package/web/rest/util/_HeaderUtil.java', javaDir + 'web/rest/util/HeaderUtil.java', this, {});
     this.template('src/main/java/package/web/rest/util/_PaginationUtil.java', javaDir + 'web/rest/util/PaginationUtil.java', this, {});
     this.template('src/main/java/package/web/rest/_package-info.java', javaDir + 'web/rest/package-info.java', this, {});
     this.template('src/main/java/package/web/rest/_AccountResource.java', javaDir + 'web/rest/AccountResource.java', this, {});
@@ -826,7 +838,7 @@ JhipsterGenerator.prototype.app = function app() {
     }else{
         this.template(resourceDir + '/i18n/_messages_en.properties', resourceDir + 'i18n/messages_en.properties', this, {});
     }
-    
+
     // Angular JS views
 
     this.template(webappDir + '/scripts/app/_app.js', webappDir + 'scripts/app/app.js', this, {});
@@ -939,6 +951,15 @@ JhipsterGenerator.prototype.app = function app() {
     this.copyJs(webappDir + '/scripts/app/main/_main.js', webappDir + 'scripts/app/main/main.js', this, {});
     this.template(webappDir + '/scripts/app/main/_main.controller.js', webappDir + 'scripts/app/main/main.controller.js', this, {});
 
+     // interceptor code
+    this.template(webappDir + '/scripts/components/interceptor/_auth.interceptor.js', webappDir + 'scripts/components/interceptor/auth.interceptor.js', this, {});
+    this.template(webappDir + '/scripts/components/interceptor/_errorhandler.interceptor.js', webappDir + 'scripts/components/interceptor/errorhandler.interceptor.js', this, {});
+    this.template(webappDir + '/scripts/components/interceptor/_notification.interceptor.js', webappDir + 'scripts/components/interceptor/notification.interceptor.js', this, {});
+
+    //alert service code
+    this.template(webappDir + '/scripts/components/alert/_alert.service.js', webappDir + 'scripts/components/alert/alert.service.js', this, {});
+    this.template(webappDir + '/scripts/components/alert/_alert.directive.js', webappDir + 'scripts/components/alert/alert.directive.js', this, {});
+
     // Index page
     this.indexFile = html.readFileAsString(path.join(this.sourceRoot(), webappDir + '_index.html'));
     this.engine = require('ejs').render;
@@ -984,11 +1005,16 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/components/admin/logs.service.js',
         'scripts/components/admin/configuration.service.js',
         'scripts/components/admin/monitoring.service.js',
+        'scripts/components/interceptor/auth.interceptor.js',
+        'scripts/components/interceptor/errorhandler.interceptor.js',
+        'scripts/components/interceptor/notification.interceptor.js',
         'scripts/components/navbar/navbar.directive.js',
         'scripts/components/navbar/navbar.controller.js',
         'scripts/components/user/user.service.js',
         'scripts/components/util/truncate.filter.js',
         'scripts/components/util/base64.service.js',
+        'scripts/components/alert/alert.service.js',
+        'scripts/components/alert/alert.directive.js',
         'scripts/components/util/parse-links.service.js',
         'scripts/components/util/dateutil.service.js',
         'scripts/app/account/account.js',
@@ -1030,6 +1056,8 @@ JhipsterGenerator.prototype.app = function app() {
         ];
     if (this.enableTranslation) {
         appScripts = appScripts.concat([
+          'bower_components/messageformat/locale/en.js',
+          'bower_components/messageformat/locale/fr.js',
           'scripts/components/language/language.service.js',
           'scripts/components/language/language.controller.js']);
     }
@@ -1092,6 +1120,7 @@ JhipsterGenerator.prototype.app = function app() {
 JhipsterGenerator.prototype.projectfiles = function projectfiles() {
     this.copy('editorconfig', '.editorconfig');
     this.copy('jshintrc', '.jshintrc');
+    this.template('_travis.yml', '.travis.yml', this, {});
 };
 
 function removefile(file) {

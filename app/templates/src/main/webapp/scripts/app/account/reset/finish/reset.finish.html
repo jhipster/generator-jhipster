@@ -26,8 +26,8 @@
             <div ng-hide="keyMissing">
                 <form ng-show="!success" name="form" role="form" novalidate ng-submit="finishReset()" show-validation>
                     <div class="form-group">
-                        <label translate="global.form.newpassword">New password</label>
-                        <input type="password" class="form-control" name="password" placeholder="{{'global.form.newpassword.placeholder' | translate}}"
+                        <label for="password" translate="global.form.newpassword">New password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="{{'global.form.newpassword.placeholder' | translate}}"
                                ng-model="resetAccount.password" ng-minlength=5 ng-maxlength=50 required>
                         <div ng-show="form.password.$dirty && form.password.$invalid">
                             <p class="help-block"
@@ -47,8 +47,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label translate="global.form.confirmpassword">New password confirmation</label>
-                        <input type="password" class="form-control" name="confirmPassword" placeholder="{{'global.form.confirmpassword.placeholder' | translate}}"
+                        <label for="confirmPassword" translate="global.form.confirmpassword">New password confirmation</label>
+                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="{{'global.form.confirmpassword.placeholder' | translate}}"
                                ng-model="confirmPassword" ng-minlength=5 ng-maxlength=50 required>
                         <div ng-show="form.confirmPassword.$dirty && form.confirmPassword.$invalid">
                             <p class="help-block"

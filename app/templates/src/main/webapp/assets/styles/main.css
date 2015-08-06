@@ -114,6 +114,19 @@ only screen and (                min-resolution: 2dppx) {
 .alert .popover pre {
     font-size: 10px;
 }
+/*Custom alerts for notification*/
+.alerts .alert{
+    text-overflow: ellipsis;
+}
+
+.alert pre{
+    background: none;
+    border: none;
+    font: inherit;
+    color: inherit;
+    padding: 0;
+    margin: 0;
+}
 
 .voffset  { margin-top: 2px; }
 .voffset1 { margin-top: 5px; }
@@ -148,3 +161,8 @@ ul#strengthBar {
     width:20px;
 }
 /* end Password strength bar style */
+
+.readonly {
+    background-color: #eee;
+    opacity: 1;
+}
