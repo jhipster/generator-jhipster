@@ -951,8 +951,8 @@ EntityGenerator.prototype.files = function files() {
 
             if (_.isUndefined(relationship.otherEntityField)
                 && (relationship.relationshipType == 'many-to-one' || (relationship.relationshipType == 'many-to-many' && relationship.ownerSide == true) || (relationship.relationshipType == 'one-to-one' && relationship.ownerSide == true))) {
-                console.log(chalk.red('ERROR otherEntityField is missing in .jhipster/' + this.name + '.json for relationship with id ' + relationship.relationshipId));
-                process.exit(1);
+                console.log(chalk.yellow('WARNING otherEntityField is missing in .jhipster/' + this.name + '.json for relationship with id ' + relationship.relationshipId + ', using id as fallback'));
+                relationship.otherEntityField = 'id';
             }
 
             if (_.isUndefined(relationship.relationshipType)) {
@@ -1060,11 +1060,11 @@ EntityGenerator.prototype.files = function files() {
             this.fieldsContainOwnerManyToMany = true;
         }
     }
-    this.fieldsContainOneToOne = false;
+    this.fieldsContainNoOwnerOneToOne = false;
     for (var idx in this.relationships) {
         var relationship = this.relationships[idx];
-        if (relationship.relationshipType == 'one-to-one') {
-            this.fieldsContainOneToOne = true;
+        if (relationship.relationshipType == 'one-to-one' && relationship.ownerSide == false) {
+            this.fieldsContainNoOwnerOneToOne = true;
         }
     }
     this.fieldsContainOwnerOneToOne = false;

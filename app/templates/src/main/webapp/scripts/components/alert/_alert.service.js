@@ -69,7 +69,7 @@ angular.module('<%=angularAppName%>')
                 id: alertOptions.alertId,
                 timeout: alertOptions.timeout,
                 close: function () {
-                    return exports.closeAlert(this);
+                    return exports.closeAlert(this.id);
                 }
             });
         }
@@ -87,7 +87,7 @@ angular.module('<%=angularAppName%>')
         }
 
         function closeAlert(id) {
-            return this.closeAlertByIndex(alerts.indexOf(id));
+            return this.closeAlertByIndex(alerts.map(function(e) { return e.id; }).indexOf(id));
         }
 
         function closeAlertByIndex(index) {

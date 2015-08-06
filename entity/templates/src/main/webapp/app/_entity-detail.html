@@ -21,7 +21,7 @@
                     } else if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'image') { %>
                     <img data-ng-src="{{'data:image/*;base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-width: 100%;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/><%
                     } else { %>
-                    <input type="text" class="input-sm form-control" value="{{<%= entityInstance %>.<%=fields[fieldId].fieldName%>}}" readonly><%
+                    <span class="form-control-static">{{<%= entityInstance %>.<%=fields[fieldId].fieldName%>}}</span><%
                     } %>
                 </td>
             </tr><% } %><% for (relationshipId in relationships) {
@@ -38,7 +38,7 @@
                     <span translate="<%= keyPrefix %>.<%= relationshipName %>"><%=relationshipName%></span>
                 </td>
                 <td>
-                    <input type="text" class="input-sm form-control" value="{{<%= relationShipValue %>}}" readonly>
+                    <span class="form-control-static">{{<%= relationShipValue%>}}</span>
                 </td>
             </tr><% } } %>
             </tbody>

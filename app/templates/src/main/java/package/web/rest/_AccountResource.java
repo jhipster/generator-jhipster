@@ -9,6 +9,7 @@ import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.UserService;
+import <%=packageName%>.web.rest.dto.KeyAndPasswordDTO;
 import <%=packageName%>.web.rest.dto.UserDTO;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -302,13 +303,13 @@ public class AccountResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<String> finishPasswordReset(@RequestParam(value = "key") String key, @RequestParam(value = "newPassword") String newPassword) {
-        if (!checkPasswordLength(newPassword)) {
+    public ResponseEntity<String> finishPasswordReset(@RequestBody KeyAndPasswordDTO keyAndPassword) {
+        if (!checkPasswordLength(keyAndPassword.getNewPassword())) {
             return new ResponseEntity<>("Incorrect password", HttpStatus.BAD_REQUEST);
         }<% if (javaVersion == '8') { %>
-        return userService.completePasswordReset(newPassword, key)
+        return userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey())
               .map(user -> new ResponseEntity<String>(HttpStatus.OK)).orElse(new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else {%>
-        User user = userService.completePasswordReset(newPassword, key);
+        User user = userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
         if (user != null) {
           return new ResponseEntity<String>(HttpStatus.OK);
         } else {
@@ -319,4 +320,5 @@ public class AccountResource {
     private boolean checkPasswordLength(String password) {
       return (!StringUtils.isEmpty(password) && password.length() >= UserDTO.PASSWORD_MIN_LENGTH && password.length() <= UserDTO.PASSWORD_MAX_LENGTH);
     }
+
 }
