@@ -4,13 +4,13 @@ import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.Application;<% if (databaseType == 'mongodb') { %>
 import <%=packageName%>.config.MongoConfiguration;<% } %>
 import <%=packageName%>.repository.UserRepository;
+import <%=packageName%>.config.ApplicationMediaType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;<% if (databaseType == 'mongodb') { %>
 import org.springframework.context.annotation.Import;<% } %>
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -49,16 +49,16 @@ public class UserResourceTest <% if (databaseType == 'cassandra') { %>extends Ab
     @Test
     public void testGetExistingUser() throws Exception {
         restUserMockMvc.perform(get("/api/users/admin")
-                .accept(MediaType.APPLICATION_JSON))
+                .accept(ApplicationMediaType.APPLICATION_JSON_V1))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(ApplicationMediaType.APPLICATION_JSON_V1))
                 .andExpect(jsonPath("$.lastName").value("Administrator"));
     }
 
     @Test
     public void testGetUnknownUser() throws Exception {
         restUserMockMvc.perform(get("/api/users/unknown")
-                .accept(MediaType.APPLICATION_JSON))
+                .accept(ApplicationMediaType.APPLICATION_JSON_V1))
                 .andExpect(status().isNotFound());
     }
 }

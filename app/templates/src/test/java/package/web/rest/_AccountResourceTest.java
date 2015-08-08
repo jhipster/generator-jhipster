@@ -11,6 +11,7 @@ import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.UserService;
 import <%=packageName%>.web.rest.dto.UserDTO;
+import <%=packageName%>.config.ApplicationMediaType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,8 +19,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;<% if (databaseType == 'mongodb') { %>
-import org.springframework.context.annotation.Import;<% } %>
-import org.springframework.http.MediaType;<% if (javaVersion == '7') { %>
+import org.springframework.context.annotation.Import;<% } %> <% if (javaVersion == '7') { %>
 import org.springframework.mock.web.MockHttpServletRequest;<% } %>
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -97,7 +97,7 @@ public class AccountResourceTest <% if (databaseType == 'cassandra') { %>extends
     @Test
     public void testNonAuthenticatedUser() throws Exception {
         restUserMockMvc.perform(get("/api/authenticate")
-                .accept(MediaType.APPLICATION_JSON))
+                .accept(ApplicationMediaType.APPLICATION_JSON_V1))
                 .andExpect(status().isOk())
                 .andExpect(content().string(""));
     }
@@ -113,7 +113,7 @@ public class AccountResourceTest <% if (databaseType == 'cassandra') { %>extends
                         return request;
                     }<% } %>
                 })
-                .accept(MediaType.APPLICATION_JSON))
+                .accept(ApplicationMediaType.APPLICATION_JSON_V1))
                 .andExpect(status().isOk())
                 .andExpect(content().string("test"));
     }
@@ -136,9 +136,9 @@ public class AccountResourceTest <% if (databaseType == 'cassandra') { %>extends
         when(mockUserService.getUserWithAuthorities()).thenReturn(user);
 
         restUserMockMvc.perform(get("/api/account")
-                .accept(MediaType.APPLICATION_JSON))
+                .accept(ApplicationMediaType.APPLICATION_JSON_V1))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(ApplicationMediaType.APPLICATION_JSON_V1))
                 .andExpect(jsonPath("$.login").value("test"))
                 .andExpect(jsonPath("$.firstName").value("john"))
                 .andExpect(jsonPath("$.lastName").value("doe"))
@@ -151,7 +151,7 @@ public class AccountResourceTest <% if (databaseType == 'cassandra') { %>extends
         when(mockUserService.getUserWithAuthorities()).thenReturn(null);
 
         restUserMockMvc.perform(get("/api/account")
-                .accept(MediaType.APPLICATION_JSON))
+                .accept(ApplicationMediaType.APPLICATION_JSON_V1))
                 .andExpect(status().isInternalServerError());
     }
 

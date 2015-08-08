@@ -3,9 +3,9 @@ package <%=packageName%>.web.rest;
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.AuditEventService;
 import <%=packageName%>.web.propertyeditors.LocaleDateTimeEditor;
+import <%=packageName%>.config.ApplicationMediaType;
 import org.joda.time.LocalDateTime;
 import org.springframework.boot.actuate.audit.AuditEvent;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,14 +29,14 @@ public class AuditResource {
 
     @RequestMapping(value = "/audits/all",
             method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+            produces = ApplicationMediaType.APPLICATION_JSON_V1_VALUE)
     public List<AuditEvent> findAll() {
         return auditEventService.findAll();
     }
 
     @RequestMapping(value = "/audits/byDates",
             method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+            produces = ApplicationMediaType.APPLICATION_JSON_V1_VALUE)
     public List<AuditEvent> findByDates(@RequestParam(value = "fromDate") LocalDateTime fromDate,
                                     @RequestParam(value = "toDate") LocalDateTime toDate) {
         return auditEventService.findByDates(fromDate, toDate);

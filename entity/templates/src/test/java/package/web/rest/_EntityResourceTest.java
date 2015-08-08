@@ -7,6 +7,7 @@ import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEng
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } %><% if (dto == 'mapstruct') { %>
 import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
 import <%=packageName%>.web.rest.mapper.<%= entityClass %>Mapper;<% } %>
+import <%=packageName%>.config.ApplicationMediaType;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,7 +16,6 @@ import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -225,7 +225,7 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
         // Get all the <%= entityInstance %>s
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityInstance %>s"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
+                .andExpect(content().contentType(ApplicationMediaType.APPLICATION_JSON_V1))<% if (databaseType == 'sql') { %>
                 .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().intValue())))<% } %><% if (databaseType == 'mongodb') { %>
                 .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId())))<% } %><% if (databaseType == 'cassandra') { %>
                 .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().toString())))<% } %><% for (fieldId in fields) {%>
@@ -241,7 +241,7 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
         // Get the <%= entityInstance %>
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityInstance %>s/{id}", <%= entityInstance %>.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
+            .andExpect(content().contentType(ApplicationMediaType.APPLICATION_JSON_V1))<% if (databaseType == 'sql') { %>
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().intValue()))<% } %><% if (databaseType == 'mongodb') { %>
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId()))<% } %><% if (databaseType == 'cassandra') { %>
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().toString()))<% } %><% for (fieldId in fields) {%>

@@ -605,6 +605,8 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
         this.template('src/main/java/package/config/_DatabaseConfiguration.java', javaDir + 'config/DatabaseConfiguration.java', this, {});
     }
+    this.template('src/main/java/package/config/_ApplicationMediaType.java', javaDir + 'config/ApplicationMediaType.java', this, {});
+    this.template('src/main/java/package/config/_ContentNegotiationConfiguration.java', javaDir + 'config/ContentNegotiationConfiguration.java', this, {});
     this.template('src/main/java/package/config/_JacksonConfiguration.java', javaDir + 'config/JacksonConfiguration.java', this, {});
     this.template('src/main/java/package/config/_LocaleConfiguration.java', javaDir + 'config/LocaleConfiguration.java', this, {});
     this.template('src/main/java/package/config/_LoggingAspectConfiguration.java', javaDir + 'config/LoggingAspectConfiguration.java', this, {});
