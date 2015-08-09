@@ -1161,7 +1161,8 @@ EntityGenerator.prototype.files = function files() {
             enumInfo.packageName = this.packageName;
             enumInfo.enumName = fieldType;
             enumInfo.enumValues = field.fieldValues;
-            enumInfo.enumInstance = _s.decapitalize(enumInfo.enumName);
+            field.enumInstance = _s.decapitalize(enumInfo.enumName);
+            enumInfo.enumInstance = field.enumInstance;
             enumInfo.angularAppName = this.angularAppName;
             enumInfo.enums = enumInfo.enumValues.split(',');
             this.template('src/main/java/package/domain/enumeration/_Enum.java',
