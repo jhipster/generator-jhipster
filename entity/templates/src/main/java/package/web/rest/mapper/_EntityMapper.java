@@ -14,7 +14,7 @@ public interface <%= entityClass %>Mapper {
 <%
 // entity -> DTO mapping
 for (relationshipId in relationships) {
-        if (relationships[relationshipId].relationshipType == 'many-to-one') {
+        if (relationships[relationshipId].relationshipType == 'many-to-one' || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) {
         %>
     @Mapping(source = "<%= relationships[relationshipId].relationshipName %>.id", target = "<%= relationships[relationshipId].relationshipFieldName %>Id")<% if (relationships[relationshipId].otherEntityFieldCapitalized !='Id' && relationships[relationshipId].otherEntityFieldCapitalized != '') { %>
     @Mapping(source = "<%= relationships[relationshipId].relationshipName %>.<%=relationships[relationshipId].otherEntityField %>", target = "<%= relationships[relationshipId].relationshipFieldName %><%= relationships[relationshipId].otherEntityFieldCapitalized %>")<% } } } %>
@@ -22,15 +22,15 @@ for (relationshipId in relationships) {
 <%
 // DTO -> entity mapping
 for (relationshipId in relationships) {
-        if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
+        if (relationships[relationshipId].relationshipType == 'many-to-one' || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) { %>
     @Mapping(source = "<%= relationships[relationshipId].relationshipName %>Id", target = "<%= relationships[relationshipId].relationshipName %>")<% } else if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == false) { %>
-    @Mapping(target = "<%= relationships[relationshipId].relationshipName %>s", ignore = true)<% } else if (relationships[relationshipId].relationshipType == 'one-to-many') { %>
+    @Mapping(target = "<%= relationships[relationshipId].relationshipName %>s", ignore = true)<% } else if (relationships[relationshipId].relationshipType == 'one-to-many'  || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == false)) { %>
     @Mapping(target = "<%= relationships[relationshipId].relationshipName %>s", ignore = true)<% } } %>
     <%= entityClass %> <%= entityInstance %>DTOTo<%= entityClass %>(<%= entityClass %>DTO <%= entityInstance %>DTO);<%
 
 for (relationshipId in relationships) {
     var existingMappings = [];
-    if (relationships[relationshipId].relationshipType == 'many-to-one' || (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true)) {
+    if (relationships[relationshipId].relationshipType == 'many-to-one' || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true) || (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true)) {
         // if the entity is mapped twice, we should implement the mapping once
         if (existingMappings.indexOf(relationships[relationshipId].otherEntityName) == -1) {
             existingMappings.push(relationships[relationshipId].otherEntityName);

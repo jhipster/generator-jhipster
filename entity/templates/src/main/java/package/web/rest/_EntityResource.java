@@ -117,8 +117,10 @@ public class <%= entityClass %>Resource {
             return <%= entityInstance %>s;<% } else { %>
             return StreamSupport
                 .stream(<%= entityInstance %>Repository.findAll().spliterator(), false)
-                .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationships[idx].relationshipNameCapitalized %>() == null)
-                .collect(Collectors.toList());<% } %>
+                .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationships[idx].relationshipNameCapitalized %>() == null)<% if (dto == 'mapstruct') { %>
+                .map(<%= entityInstance %> -> <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(<%= entityInstance %>))
+                .collect(Collectors.toCollection(LinkedList::new));<% } else { %>
+                .collect(Collectors.toList());<% } %><% } %>
         }
 <% } } %>
         log.debug("REST request to get all <%= entityClass %>s");
