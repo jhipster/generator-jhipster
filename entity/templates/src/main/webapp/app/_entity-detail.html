@@ -29,16 +29,16 @@
                 || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) {
                 var relationshipName = relationships[relationshipId].relationshipName;
                 var otherEntityName = relationships[relationshipId].otherEntityName;
-                var relationShipValue = entityInstance + "." + relationshipName + "." + relationships[relationshipId].otherEntityField;
+                var relationshipNgModel = entityInstance + "." + relationshipName + "." + relationships[relationshipId].otherEntityField;
                 if (dto == 'mapstruct') {
-                    relationShipValue = entityInstance + "." + relationshipName + relationships[relationshipId].otherEntityFieldCapitalized;
+                    relationshipNgModel = entityInstance + "." + relationshipName + relationships[relationshipId].otherEntityFieldCapitalized;
                 } %>
             <tr>
                 <td>
                     <span translate="<%= keyPrefix %>.<%= relationshipName %>"><%=relationshipName%></span>
                 </td>
                 <td>
-                    <span class="form-control-static">{{<%= relationShipValue%>}}</span>
+                    <span class="form-control-static">{{<%= relationshipNgModel %>}}</span>
                 </td>
             </tr><% } } %>
             </tbody>
