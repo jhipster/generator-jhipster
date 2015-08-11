@@ -246,9 +246,27 @@ EntityGenerator.prototype.askForFields = function askForFields() {
             validate: function (input) {
                 if (input == '' && existingEnum) {
                     existingEnum = false;
-                } else if (input == '') {
-                    return 'You must specify values for your enumeration.';
+                    return true;
                 }
+                if (input == '') {
+                    return 'You must specify values for your enumeration';
+                }
+                if (!/^[A-Za-z0-9_,\s]*$/.test(input)) {
+                    return 'Enum values cannot contain special characters (allowed characters: A-Z, a-z, 0-9 and _)';
+                }
+                var enums = input.replace(/\s/g, '').split(',');
+                if (_.uniq(enums).length !== enums.length) {
+                    return 'Enum values cannot contain duplicates (typed values: ' + input + ')';
+                }
+                for (var i = 0; i < enums.length; i++) {
+                    if (/^[0-9].*/.test(enums[i])) {
+                        return 'Enum value "' + enums[i] + '" cannot start with a number';
+                    }
+                    if (enums[i] == '') {
+                        return 'Enum value cannot be empty (did you accidently type "," twice in a row?)';
+                    }
+                }
+
                 return true;
             },
             message: function(answers) {
@@ -1164,7 +1182,7 @@ EntityGenerator.prototype.files = function files() {
             field.enumInstance = _s.decapitalize(enumInfo.enumName);
             enumInfo.enumInstance = field.enumInstance;
             enumInfo.angularAppName = this.angularAppName;
-            enumInfo.enums = enumInfo.enumValues.split(',');
+            enumInfo.enums = enumInfo.enumValues.replace(/\s/g, '').split(',');
             this.template('src/main/java/package/domain/enumeration/_Enum.java',
                 'src/main/java/' + this.packageFolder + '/domain/enumeration/' + fieldType + '.java', enumInfo, {});
 
