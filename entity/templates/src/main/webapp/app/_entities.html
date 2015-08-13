@@ -72,11 +72,18 @@
                     <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%>}}</td><% } %><% } %><% for (relationshipId in relationships) {
                         if (relationships[relationshipId].relationshipType == 'many-to-one'
                            || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) {
-                            var relationshipNgModel = entityInstance + "." + relationships[relationshipId].relationshipFieldName + "." + relationships[relationshipId].otherEntityField;
-                            if (dto == 'mapstruct') {
-                                relationshipNgModel = entityInstance + "." + relationships[relationshipId].relationshipFieldName + relationships[relationshipId].otherEntityFieldCapitalized;
-                            }%>
-                    <td>{{<%= relationshipNgModel %>}}</td><% } } %>
+                            var relationshipFieldName = relationships[relationshipId].relationshipFieldName;
+                            var otherEntityName = relationships[relationshipId].otherEntityName;
+                            var otherEntityField = relationships[relationshipId].otherEntityField;
+                            var otherEntityFieldCapitalized = relationships[relationshipId].otherEntityFieldCapitalized; 
+                        %>
+                    <td>
+<% if (dto == 'no') { -%>
+                        <a ui-sref="<%= otherEntityName %>.detail({id:<%= entityInstance + "." + relationshipFieldName + ".id" %>})">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</a>
+<% } else { -%>
+                        <a ui-sref="<%= otherEntityName %>.detail({id:<%= entityInstance + "." + relationshipFieldName + "Id" %>})">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
+<% } -%>
+                    </td><% } } %>
                     <td>
                         <button type="submit"
                                 ui-sref="<%= entityInstance %>.detail({id:<%= entityInstance %>.id})"
