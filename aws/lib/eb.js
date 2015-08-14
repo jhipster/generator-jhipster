@@ -176,7 +176,7 @@ var createEnvironment = function createEnvironment(params, callback) {
                 Value: 'aws-elasticbeanstalk-ec2-role'
             }
         ],
-        SolutionStackName: '64bit Amazon Linux 2015.03 v1.4.1 running Tomcat 8 Java 8',
+        SolutionStackName: '64bit Amazon Linux 2015.03 v2.0.0 running Tomcat 8 Java 8',
         VersionLabel: versionLabel,
         Tier: {
             Name: 'WebServer',
