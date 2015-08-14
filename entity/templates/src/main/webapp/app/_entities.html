@@ -72,11 +72,11 @@
                     <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%>}}</td><% } %><% } %><% for (relationshipId in relationships) {
                         if (relationships[relationshipId].relationshipType == 'many-to-one'
                            || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) {
-                            var relationShipValue = entityInstance + "." + relationships[relationshipId].relationshipFieldName + "." + relationships[relationshipId].otherEntityField;
+                            var relationshipNgModel = entityInstance + "." + relationships[relationshipId].relationshipFieldName + "." + relationships[relationshipId].otherEntityField;
                             if (dto == 'mapstruct') {
-                                relationShipValue = entityInstance + "." + relationships[relationshipId].relationshipFieldName + relationships[relationshipId].otherEntityFieldCapitalized;
+                                relationshipNgModel = entityInstance + "." + relationships[relationshipId].relationshipFieldName + relationships[relationshipId].otherEntityFieldCapitalized;
                             }%>
-                    <td>{{<%=relationShipValue %>}}</td><% } } %>
+                    <td>{{<%= relationshipNgModel %>}}</td><% } } %>
                     <td>
                         <button type="submit"
                                 ui-sref="<%= entityInstance %>.detail({id:<%= entityInstance %>.id})"
