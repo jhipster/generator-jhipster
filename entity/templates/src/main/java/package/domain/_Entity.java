@@ -67,14 +67,14 @@ public class <%= entityClass %> implements Serializable {
     private String id;<% } %><% if (databaseType == 'cassandra') { %>
     @PartitionKey
     private UUID id;<% } %>
+    
 <% for (fieldId in fields) { %><% if (fields[fieldId].fieldValidate == true) {
     var required = false;
     if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) {
         required = true;
     } %>
     <%- include field_validators -%>
-    <% } %>
-
+    <% } -%>
     <% if (databaseType == 'sql') { %><% if (fields[fieldId].fieldIsEnum) { %>
     @Enumerated(EnumType.STRING)<% } %><% if (fields[fieldId].fieldType == 'byte[]') { %>
     @Lob<% } %><% if (fields[fieldId].fieldType == 'DateTime') { %>
