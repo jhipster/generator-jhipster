@@ -2,7 +2,7 @@
 var exec = require('child_process').exec;
 
 exports.buildProduction = function (buildTool, err) {
-    var buildCmd = 'mvn package -Pprod -DskipTests=true';
+    var buildCmd = 'mvn package -Pprod -DskipTests=true -B';
 
     if (buildTool === 'gradle') {
         buildCmd = './gradlew -Pprod bootRepackage -x test';
