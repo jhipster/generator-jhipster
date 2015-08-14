@@ -48,7 +48,15 @@ spring:<% if (databaseType == 'sql') { %>
             port: 9142
             protocolVersion: V2
             compression: NONE
-            keyspaceName: cassandra_unit_keyspace<% } %>
+            keyspaceName: cassandra_unit_keyspace<% } %><% if (searchEngine == 'elasticsearch') { %>
+    data:
+        elasticsearch:
+            cluster-name:
+            cluster-nodes:
+            properties:
+                path:
+                  logs: target/elasticsearch/log
+                  data: target/elasticsearch/data <% } %>
 
 mail:
     host: localhost
