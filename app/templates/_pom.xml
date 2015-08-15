@@ -703,7 +703,7 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-tomcat</artifactId>
                 </dependency>
-            </dependencies><% if(frontendBuilder == 'grunt' && useCompass) { %>
+            </dependencies><% if(frontendBuilder == 'grunt' && useSass) { %>
             <build>
                 <plugins>
                     <plugin>
@@ -720,7 +720,7 @@
                                 <configuration>
                                     <skipTests>true</skipTests>
                                     <buildTool>grunt</buildTool>
-                                    <buildArgs>compass:server --force</buildArgs>
+                                    <buildArgs>sass:server --force</buildArgs>
                                 </configuration>
                             </execution>
                         </executions>

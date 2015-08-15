@@ -7,7 +7,7 @@ var gulp = require('gulp'),
     prefix = require('gulp-autoprefixer'),
     minifyCss = require('gulp-minify-css'),
     usemin = require('gulp-usemin'),
-    uglify = require('gulp-uglify'),<% if(useCompass) { %>
+    uglify = require('gulp-uglify'),<% if(useSass) { %>
     compass = require('gulp-compass'),<% } %>
     htmlmin = require('gulp-htmlmin'),
     imagemin = require('gulp-imagemin'),
@@ -31,7 +31,7 @@ var yeoman = {
     app: 'src/main/webapp/',
     dist: 'src/main/webapp/dist/',
     test: 'src/test/javascript/spec/',
-    tmp: '.tmp/'<% if(useCompass) { %>,
+    tmp: '.tmp/'<% if(useSass) { %>,
     scss: 'src/main/scss/'<% } %>,
     port: 9000,
     apiPort: 8080,
@@ -85,7 +85,7 @@ gulp.task('images', function() {
         pipe(gulp.dest(yeoman.dist + 'assets/images')).
         pipe(browserSync.reload({stream: true}));
 });
-<% if(useCompass) { %>
+<% if(useSass) { %>
 gulp.task('compass', function() {
     return gulp.src(yeoman.scss + '**/*.scss').
         pipe(compass({
@@ -102,14 +102,14 @@ gulp.task('compass', function() {
         pipe(gulp.dest(yeoman.tmp + 'styles'));
 });
 <% } %>
-gulp.task('styles', [<% if(useCompass) { %>'compass'<% } %>], function() {
+gulp.task('styles', [<% if(useSass) { %>'compass'<% } %>], function() {
     return gulp.src(yeoman.app + 'assets/styles/**/*.css').
         pipe(gulp.dest(yeoman.tmp)).
         pipe(browserSync.reload({stream: true}));
 });
 
 gulp.task('serve', function() {
-    runSequence('wiredep:test', 'wiredep:app', 'ngconstant:dev'<% if(useCompass) { %>, 'compass'<% } %>, function () {
+    runSequence('wiredep:test', 'wiredep:app', 'ngconstant:dev'<% if(useSass) { %>, 'compass'<% } %>, function () {
         var baseUri = 'http://localhost:' + yeoman.apiPort;
         // Routes to proxy to the backend. Routes ending with a / will setup
         // a redirect so that if accessed without a trailing slash, will
@@ -176,7 +176,7 @@ gulp.task('serve', function() {
 gulp.task('watch', function() {
     gulp.watch('bower.json', ['wiredep:test', 'wiredep:app']);
     gulp.watch(['gulpfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>], ['ngconstant:dev']);
-    gulp.watch(<% if(useCompass) { %>yeoman.scss + '**/*.scss'<% } else { %>yeoman.app + 'assets/styles/**/*.css'<% } %>, ['styles']);
+    gulp.watch(<% if(useSass) { %>yeoman.scss + '**/*.scss'<% } else { %>yeoman.app + 'assets/styles/**/*.css'<% } %>, ['styles']);
     gulp.watch(yeoman.app + 'assets/images/**', ['images']);
     gulp.watch([yeoman.app + '*.html', yeoman.app + 'scripts/**', yeoman.app + 'i18n/**']).on('change', browserSync.reload);
 });
@@ -190,7 +190,7 @@ gulp.task('wiredep:app', function () {
         }))
         .pipe(gulp.dest('src/main/webapp'));
 
-    return <% if (useCompass) { %>es.merge(s, gulp.src('src/main/scss/main.scss')
+    return <% if (useSass) { %>es.merge(s, gulp.src('src/main/scss/main.scss')
         .pipe(wiredep({
             exclude: [
                 /angular-i18n/,  // localizations are loaded dynamically
