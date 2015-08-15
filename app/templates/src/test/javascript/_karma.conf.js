@@ -30,12 +30,15 @@ module.exports = function (config) {
         reporters: ['dots', 'jenkins', 'coverage', 'progress'],
 
         jenkinsReporter: {
-            outputFile: '../target/test-results/karma/TESTS-results.xml'
+            <% if (buildTool == 'maven') { %>
+            outputFile: '../target/test-results/karma/TESTS-results.xml'<% } else { %>
+            outputFile: '../build/test-results/karma/TESTS-results.xml'<% } %>
         },
 
         coverageReporter: {
-            dir: '../target/test-results/coverage',
-
+            <% if (buildTool == 'maven') { %>
+            dir: '../target/test-results/coverage',<% } else { %>
+            dir: '../build/test-results/coverage',<% } %>
             reporters: [
                 {type: 'lcov', subdir: 'report-lcov'}
             ]

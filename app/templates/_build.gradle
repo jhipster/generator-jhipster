@@ -32,7 +32,7 @@ bootRun {
 }
 
 apply from: 'yeoman.gradle'
-
+apply from: 'sonar.gradle'
 <% if (databaseType == 'sql') { %>
 apply from: 'liquibase.gradle'<% } %>
 apply from: 'gatling.gradle'
