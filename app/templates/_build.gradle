@@ -48,7 +48,7 @@ if (project.hasProperty('prod')) {
 }
 
 group = '<%= packageName %>'
-version = '0.1-SNAPSHOT'
+version = '0.0.1-SNAPSHOT'
 
 description = ''
 
