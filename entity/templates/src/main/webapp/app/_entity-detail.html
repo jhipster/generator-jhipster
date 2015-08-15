@@ -25,23 +25,32 @@
                     } %>
                 </td>
             </tr><% } %><% for (relationshipId in relationships) {
-            if (relationships[relationshipId].relationshipType == 'many-to-one'
-                || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) {
-                var relationshipName = relationships[relationshipId].relationshipName;
-                var relationshipFieldName = relationships[relationshipId].relationshipFieldName;
-                var otherEntityName = relationships[relationshipId].otherEntityName;
-                var otherEntityField = relationships[relationshipId].otherEntityField;
-                var otherEntityFieldCapitalized = relationships[relationshipId].otherEntityFieldCapitalized;
+            var relationshipType = relationships[relationshipId].relationshipType;
+            var ownerSide = relationships[relationshipId].ownerSide;
+            var relationshipName = relationships[relationshipId].relationshipName;
+            var relationshipFieldName = relationships[relationshipId].relationshipFieldName;
+            var otherEntityName = relationships[relationshipId].otherEntityName;
+            var otherEntityField = relationships[relationshipId].otherEntityField;
+            var otherEntityFieldCapitalized = relationships[relationshipId].otherEntityFieldCapitalized;
+            if (relationshipType == 'many-to-one'
+                || (relationshipType == 'one-to-one' && ownerSide == true)
+                || (relationshipType == 'many-to-many' && ownerSide == true)) {
                 %>
             <tr>
                 <td>
                     <span translate="<%= keyPrefix %>.<%= relationshipName %>"><%=relationshipName%></span>
                 </td>
                 <td>
+<% if (relationshipType == 'many-to-many') { -%>
+                    <span ng-repeat="manyToMany in <%= entityInstance %>.<%= relationshipFieldName %>s">
+                        <a class="form-control-static" ui-sref="<%= otherEntityName %>.detail({id: {{manyToMany.id}}})">{{manyToMany.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
+                    <span>
+<% } else { -%>
 <% if (dto == 'no') { -%>
                     <a class="form-control-static" ui-sref="<%= otherEntityName %>.detail({id:<%= entityInstance + "." + relationshipFieldName + ".id" %>})">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</a>
 <% } else { -%>
                     <a class="form-control-static" ui-sref="<%= otherEntityName %>.detail({id:<%= entityInstance + "." + relationshipFieldName + "Id" %>})">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
+<% } -%>
 <% } -%>
                 </td>
             </tr><% } } %>
