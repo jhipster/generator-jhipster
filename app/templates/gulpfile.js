@@ -8,7 +8,7 @@ var gulp = require('gulp'),
     minifyCss = require('gulp-minify-css'),
     usemin = require('gulp-usemin'),
     uglify = require('gulp-uglify'),<% if(useSass) { %>
-    compass = require('gulp-compass'),<% } %>
+    sass = require('gulp-sass'),<% } %>
     htmlmin = require('gulp-htmlmin'),
     imagemin = require('gulp-imagemin'),
     ngAnnotate = require('gulp-ng-annotate'),
@@ -32,6 +32,7 @@ var yeoman = {
     dist: 'src/main/webapp/dist/',
     test: 'src/test/javascript/spec/',
     tmp: '.tmp/'<% if(useSass) { %>,
+    importPath: 'src/main/webapp/bower_components',
     scss: 'src/main/scss/'<% } %>,
     port: 9000,
     apiPort: 8080,
@@ -86,30 +87,20 @@ gulp.task('images', function() {
         pipe(browserSync.reload({stream: true}));
 });
 <% if(useSass) { %>
-gulp.task('compass', function() {
-    return gulp.src(yeoman.scss + '**/*.scss').
-        pipe(compass({
-                project: __dirname,
-                sass: 'src/main/scss',
-                css: 'src/main/webapp/assets/styles',
-                generated_images: '.tmp/images/generated',
-                image: 'src/main/webapp/assets/images',
-                javascript: 'src/main/webapp/scripts',
-                font: 'src/main/webapp/assets/fonts',
-                import_path: 'src/main/webapp/bower_components',
-                relative: false
-        })).
-        pipe(gulp.dest(yeoman.tmp + 'styles'));
+gulp.task('sass', function () {
+    return gulp.src(yeoman.scss + '**/*.scss')
+        .pipe(sass({includePaths:yeoman.importPath}).on('error', sass.logError))
+        .pipe(gulp.dest(yeoman.app + 'assets/styles'));
 });
 <% } %>
-gulp.task('styles', [<% if(useSass) { %>'compass'<% } %>], function() {
+gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function() {
     return gulp.src(yeoman.app + 'assets/styles/**/*.css').
         pipe(gulp.dest(yeoman.tmp)).
         pipe(browserSync.reload({stream: true}));
 });
 
 gulp.task('serve', function() {
-    runSequence('wiredep:test', 'wiredep:app', 'ngconstant:dev'<% if(useSass) { %>, 'compass'<% } %>, function () {
+    runSequence('wiredep:test', 'wiredep:app', 'ngconstant:dev'<% if(useSass) { %>, 'sass'<% } %>, function () {
         var baseUri = 'http://localhost:' + yeoman.apiPort;
         // Routes to proxy to the backend. Routes ending with a / will setup
         // a redirect so that if accessed without a trailing slash, will
