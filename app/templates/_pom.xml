@@ -21,7 +21,7 @@
     </prerequisites>
 
     <properties>
-        <hikaricp.version><% if (javaVersion == '8') { %>2.4.0<% } else { %>2.3.9<% } %></hikaricp.version><% if (javaVersion == '8') { %>
+        <hikaricp.version>2.4.0</hikaricp.version><% if (javaVersion == '8') { %>
         <assertj-core.version>3.1.0</assertj-core.version><% } %><% if (javaVersion == '7') { %>
         <assertj-core.version>2.1.0</assertj-core.version><% } %>
         <awaitility.version>1.4.0</awaitility.version>
@@ -213,7 +213,7 @@
         </dependency>
         <dependency>
             <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP<% if (javaVersion == '7') { %>-java6<% } %></artifactId>
+            <artifactId>HikariCP</artifactId>
             <exclusions>
                 <exclusion>
                     <artifactId>tools</artifactId>
