@@ -24,8 +24,9 @@ for (relationshipId in relationships) {
 for (relationshipId in relationships) {
         if (relationships[relationshipId].relationshipType == 'many-to-one' || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) { %>
     @Mapping(source = "<%= relationships[relationshipId].relationshipName %>Id", target = "<%= relationships[relationshipId].relationshipName %>")<% } else if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == false) { %>
-    @Mapping(target = "<%= relationships[relationshipId].relationshipName %>s", ignore = true)<% } else if (relationships[relationshipId].relationshipType == 'one-to-many'  || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == false)) { %>
-    @Mapping(target = "<%= relationships[relationshipId].relationshipName %>s", ignore = true)<% } } %>
+    @Mapping(target = "<%= relationships[relationshipId].relationshipName %>s", ignore = true)<% } else if (relationships[relationshipId].relationshipType == 'one-to-many') { %>
+    @Mapping(target = "<%= relationships[relationshipId].relationshipName %>s", ignore = true)<% } else if (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == false) { %>
+    @Mapping(target = "<%= relationships[relationshipId].relationshipName %>", ignore = true)<% } } %>
     <%= entityClass %> <%= entityInstance %>DTOTo<%= entityClass %>(<%= entityClass %>DTO <%= entityInstance %>DTO);<%
 
 for (relationshipId in relationships) {

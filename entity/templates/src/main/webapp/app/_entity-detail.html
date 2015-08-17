@@ -28,17 +28,21 @@
             if (relationships[relationshipId].relationshipType == 'many-to-one'
                 || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) {
                 var relationshipName = relationships[relationshipId].relationshipName;
+                var relationshipFieldName = relationships[relationshipId].relationshipFieldName;
                 var otherEntityName = relationships[relationshipId].otherEntityName;
-                var relationShipValue = entityInstance + "." + relationshipName + "." + relationships[relationshipId].otherEntityField;
-                if (dto == 'mapstruct') {
-                    relationShipValue = entityInstance + "." + relationshipName + relationships[relationshipId].otherEntityFieldCapitalized;
-                } %>
+                var otherEntityField = relationships[relationshipId].otherEntityField;
+                var otherEntityFieldCapitalized = relationships[relationshipId].otherEntityFieldCapitalized;
+                %>
             <tr>
                 <td>
                     <span translate="<%= keyPrefix %>.<%= relationshipName %>"><%=relationshipName%></span>
                 </td>
                 <td>
-                    <span class="form-control-static">{{<%= relationShipValue%>}}</span>
+<% if (dto == 'no') { -%>
+                    <a class="form-control-static" ui-sref="<%= otherEntityName %>.detail({id:<%= entityInstance + "." + relationshipFieldName + ".id" %>})">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</a>
+<% } else { -%>
+                    <a class="form-control-static" ui-sref="<%= otherEntityName %>.detail({id:<%= entityInstance + "." + relationshipFieldName + "Id" %>})">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
+<% } -%>
                 </td>
             </tr><% } } %>
             </tbody>
@@ -46,7 +50,7 @@
     </div>
 
     <button type="submit"
-            ui-sref="<%= entityInstance %>"
+            onclick="window.history.back()"
             class="btn btn-info">
         <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
     </button>

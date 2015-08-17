@@ -103,28 +103,40 @@
             </div><% } %>
         </div><% } %>
 <% for (relationshipId in relationships) {
+    var relationshipType = relationships[relationshipId].relationshipType;
+    var ownerSide = relationships[relationshipId].ownerSide;
     var otherEntityName = relationships[relationshipId].otherEntityName;
     var relationshipName = relationships[relationshipId].relationshipName;
     var relationshipFieldName = relationships[relationshipId].relationshipFieldName;
-    var translationKey = keyPrefix + relationshipName;
-     if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
+    var otherEntityField = relationships[relationshipId].otherEntityField;
+    var otherEntityFieldCapitalized = relationships[relationshipId].otherEntityFieldCapitalized;
+    var translationKey = keyPrefix + relationshipName; 
+-%>
+<% if (relationshipType == 'many-to-one') { -%>
         <div class="form-group">
             <label translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%=relationshipName %></label>
-            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="<%=entityInstance %>.<%=relationshipFieldName %>.id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=relationships[relationshipId].otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName.toLowerCase() %>s">
-            </select>
-        </div><% } else if (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true) {
-            %>
+            <% if (dto == 'no') { %>
+            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName.toLowerCase() %>s track by <%=otherEntityName %>.id"></select>
+            <% } else { %>
+            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="<%= entityInstance %>.<%=relationshipFieldName %>Id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName.toLowerCase() %>s"></select>
+            <% } %>
+        </div>
+<% } else if (relationshipType == 'one-to-one' && ownerSide == true) { -%>
         <div class="form-group">
             <label translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%=relationshipName %></label>
-            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="<%=entityInstance %>.<%=relationshipFieldName %>.id" ng-options="<%=relationshipFieldName %>.id as <%=relationshipFieldName %>.<%=relationships[relationshipId].otherEntityField %> for <%=relationshipFieldName %> in <%=relationshipFieldName.toLowerCase() %>s">
-            </select>
-        </div><% } else if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) {
-            %>
+            <% if (dto == 'no') { %>
+            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in <%=relationshipFieldName.toLowerCase() %>s track by <%=otherEntityName %>.id"></select>
+            <% } else { %>
+            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="<%= entityInstance %>.<%=relationshipFieldName %>Id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in <%=relationshipFieldName.toLowerCase() %>s"></select>
+            <% } %>
+        </div>
+<% } else if (relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { -%>
         <div class="form-group">
             <label translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%=relationshipName %></label>
-            <select class="form-control" id="field_<%= relationshipName %>" multiple name="<%= relationshipName %>" ng-model="<%=entityInstance %>.<%=relationshipFieldName %>s" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=relationships[relationshipId].otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName.toLowerCase() %>s track by <%=otherEntityName %>.id">
-            </select>
-        </div><% } } %>
+            <select class="form-control" id="field_<%= relationshipName %>" multiple name="<%= relationshipName %>" ng-model="<%=entityInstance %>.<%=relationshipFieldName %>s" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName.toLowerCase() %>s track by <%=otherEntityName %>.id"></select>
+        </div>
+<% } -%>
+<% } -%>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
