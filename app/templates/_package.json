@@ -30,8 +30,8 @@
     "grunt-angular-templates":"0.5.7",
     "load-grunt-tasks": "3.1.0",
     "grunt-karma": "0.11.0",
-    "time-grunt": "1.1.0",<% if (useCompass) { %>
-    "grunt-contrib-compass": "1.0.1",<% }} if (frontendBuilder == 'gulp') { %>
+    "time-grunt": "1.1.0",<% if (useSass) { %>
+    "grunt-sass": "1.0.0",<% }} if (frontendBuilder == 'gulp') { %>
     "browser-sync": "2.7.6",
     "del": "1.1.1",
     "gulp": "3.8.11",
@@ -48,8 +48,8 @@
     "gulp-karma": "https://github.com/lazd/gulp-karma/tarball/helper",
     "gulp-rev": "3.0.0",
     "gulp-jshint": "1.9.0",
-    "gulp-browserify": "0.5.1",<% if (useCompass) { %>
-    "gulp-compass": "2.0.3",<% } %>
+    "gulp-browserify": "0.5.1",<% if (useSass) { %>
+    "gulp-sass": "2.0.4",<% } %>
     "proxy-middleware": "0.13.1",
     "run-sequence": "1.1.0",<% } %>
     "event-stream": "3.3.1",

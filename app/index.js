@@ -349,8 +349,8 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             type: 'confirm',
-            name: 'useCompass',
-            message: '(14/' + questions + ') Would you like to use the Compass CSS Authoring Framework?',
+            name: 'useSass',
+            message: '(14/' + questions + ') Would you like to use SASS CSS Authoring Framework?',
             default: false
         },
         {
@@ -381,7 +381,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         this.prodDatabaseType = this.config.get('prodDatabaseType');
         this.hibernateCache = this.config.get('hibernateCache');
     }
-    this.useCompass = this.config.get('useCompass');
+    this.useSass = this.config.get('useSass') || this.config.get('useCompass'); // backward compatibility for existing compass users
     this.javaVersion = this.config.get('javaVersion');
     this.buildTool = this.config.get('buildTool');
     this.frontendBuilder = this.config.get('frontendBuilder');
@@ -399,7 +399,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         this.devDatabaseType != null &&
         this.prodDatabaseType != null &&
         this.searchEngine != null &&
-        this.useCompass != null &&
+        this.useSass != null &&
         this.buildTool != null &&
         this.frontendBuilder != null &&
         this.javaVersion != null) {
@@ -433,7 +433,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             this.devDatabaseType = props.devDatabaseType;
             this.prodDatabaseType = props.prodDatabaseType;
             this.searchEngine = props.searchEngine;
-            this.useCompass = props.useCompass;
+            this.useSass = props.useSass;
             this.buildTool = props.buildTool;
             this.frontendBuilder = props.frontendBuilder;
             this.javaVersion = props.javaVersion;
@@ -469,7 +469,7 @@ JhipsterGenerator.prototype.app = function app() {
     insight.track('app/devDatabaseType', this.devDatabaseType);
     insight.track('app/prodDatabaseType', this.prodDatabaseType);
     insight.track('app/searchEngine', this.searchEngine);
-    insight.track('app/useCompass', this.useCompass);
+    insight.track('app/useSass', this.useSass);
     insight.track('app/buildTool', this.buildTool);
     insight.track('app/frontendBuilder', this.frontendBuilder);
     insight.track('app/javaVersion', this.javaVersion);
@@ -822,7 +822,7 @@ JhipsterGenerator.prototype.app = function app() {
     mkdirp(webappDir);
 
     // normal CSS or SCSS?
-    if (this.useCompass) {
+    if (this.useSass) {
         this.copy('src/main/scss/main.scss', 'src/main/scss/main.scss');
     } else {
         this.copy('src/main/webapp/assets/styles/main.css', 'src/main/webapp/assets/styles/main.css');
@@ -1116,7 +1116,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.config.set('devDatabaseType', this.devDatabaseType);
     this.config.set('prodDatabaseType', this.prodDatabaseType);
     this.config.set('searchEngine', this.searchEngine);
-    this.config.set('useCompass', this.useCompass);
+    this.config.set('useSass', this.useSass);
     this.config.set('buildTool', this.buildTool);
     this.config.set('frontendBuilder', this.frontendBuilder);
     this.config.set('javaVersion', this.javaVersion);

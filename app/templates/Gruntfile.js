@@ -49,17 +49,17 @@ module.exports = function (grunt) {
             ngconstant: {
                 files: ['Gruntfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>],
                 tasks: ['ngconstant:dev']
-            }<% if (useCompass) { %>,
-            compass: {
+            }<% if (useSass) { %>,
+            sass: {
                 files: ['src/main/scss/**/*.{scss,sass}'],
-                tasks: ['compass:server']
+                tasks: ['sass:server']
             }<% } %>
         },
         autoprefixer: {
             // src and dest is configured in a subtask called "generated" by usemin
         },
         wiredep: {
-            app: {<% if (useCompass) { %>
+            app: {<% if (useSass) { %>
                 src: ['src/main/webapp/index.html', 'src/main/scss/main.scss'],
                 exclude: [
                     /angular-i18n/, // localizations are loaded dynamically
@@ -130,26 +130,21 @@ module.exports = function (grunt) {
                 'src/main/webapp/scripts/app/**/*.js',
                 'src/main/webapp/scripts/components/**/*.js'
             ]
-        },<% if (useCompass) { %>
-        compass: {
+        },<% if (useSass) { %>
+        sass: {
             options: {
-                sassDir: 'src/main/scss',
-                cssDir: 'src/main/webapp/assets/styles',
-                generatedImagesDir: '.tmp/assets/images/generated',
-                imagesDir: 'src/main/webapp/assets/images',
-                javascriptsDir: 'src/main/webapp/scripts',
-                fontsDir: 'src/main/webapp/assets/fonts',
-                importPath: 'src/main/webapp/bower_components',
-                httpImagesPath: '/assets/images',
-                httpGeneratedImagesPath: '/assets/images/generated',
-                httpFontsPath: '/assets/fonts',
-                relativeAssets: false
+                includePaths: [
+                    'src/main/webapp/bower_components'
+                ]
             },
-            dist: {},
             server: {
-                options: {
-                    debugInfo: true
-                }
+                files: [{
+                    expand: true,
+                    cwd: 'src/main/scss',
+                    src: ['*.scss'],
+                    dest: 'src/main/webapp/assets/styles',
+                    ext: '.css'
+                }]
             }
         },<% } %>
         concat: {
@@ -361,8 +356,8 @@ module.exports = function (grunt) {
     grunt.registerTask('serve', [
         'clean:server',
         'wiredep',
-        'ngconstant:dev',<% if (useCompass) { %>
-        'compass:server',<% } %>
+        'ngconstant:dev',<% if (useSass) { %>
+        'sass:server',<% } %>
         'browserSync',
         'watch'
     ]);
@@ -375,8 +370,8 @@ module.exports = function (grunt) {
     grunt.registerTask('test', [
         'clean:server',
         'wiredep:test',
-        'ngconstant:dev',<% if (useCompass) { %>
-        'compass',<% } %>
+        'ngconstant:dev',<% if (useSass) { %>
+        'sass:server',<% } %>
         'karma'
     ]);
 
@@ -385,8 +380,8 @@ module.exports = function (grunt) {
         'wiredep:app',
         'ngconstant:prod',
         'useminPrepare',
-        'ngtemplates',<% if (useCompass) { %>
-        'compass:dist',<% } %>
+        'ngtemplates',<% if (useSass) { %>
+        'sass:server',<% } %>
         'imagemin',
         'svgmin',
         'concat',
