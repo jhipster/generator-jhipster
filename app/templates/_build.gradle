@@ -70,12 +70,13 @@ dependencies {
     compile group: 'io.dropwizard.metrics', name: 'metrics-annotation', version: dropwizard_metrics_version
     compile group: 'io.dropwizard.metrics', name: 'metrics-ehcache', version: dropwizard_metrics_version<% } %>
     compile group: 'io.dropwizard.metrics', name: 'metrics-graphite'
-    compile group: 'io.dropwizard.metrics', name: 'metrics-healthchecks'
+    compile group: 'io.dropwizard.metrics', name: 'metrics-healthchecks', version: dropwizard_metrics_version
     compile group: 'io.dropwizard.metrics', name: 'metrics-jvm', version: dropwizard_metrics_version
     compile group: 'io.dropwizard.metrics', name: 'metrics-servlet', version: dropwizard_metrics_version
     compile group: 'io.dropwizard.metrics', name: 'metrics-json', version: dropwizard_metrics_version
-    compile group: 'io.dropwizard.metrics', name: 'metrics-servlets'
-
+    compile group: 'io.dropwizard.metrics', name: 'metrics-servlets', version: dropwizard_metrics_version {
+      exlude(module: 'metrics-healthchecks')
+    }
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-json-org', version: jackson_version
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hppc', version: jackson_version
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-joda'
