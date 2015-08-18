@@ -128,8 +128,24 @@ public class <%= entityClass %>Resource {
             .map(<%= entityInstance %> -> <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(<%= entityInstance %>))
             .collect(Collectors.toCollection(LinkedList::new))<% } %>;<% } %><% if (pagination != 'no') { %>
     public ResponseEntity<List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
-                                  @RequestParam(value = "per_page", required = false) Integer limit)
-        throws URISyntaxException {
+                                  @RequestParam(value = "per_page", required = false) Integer limit<% if (fieldsContainNoOwnerOneToOne == true) { %>, @RequestParam(required = false) String filter<% } %>)
+        throws URISyntaxException {<% for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { %>
+        if ("<%= relationships[idx].relationshipName.toLowerCase() %>-is-null".equals(filter)) {
+            log.debug("REST request to get all <%= entityClass %>s where <%= relationships[idx].relationshipName %> is null");<% if (javaVersion == '7') { %>
+            List<<%= entityClass %>> <%= entityInstance %>s = new ArrayList<<%= entityClass %>>();
+            for (<%= entityClass %> <%= entityInstance %> : <%= entityInstance %>Repository.findAll()) {
+                if (<%= entityInstance %>.get<%= relationships[idx].relationshipNameCapitalized %>() == null) {
+                    <%= entityInstance %>s.add(<%= entityInstance %>);
+                }
+            }
+            return new ResponseEntity<>(<%= entityInstance %>s, HttpStatus.OK);<% } else { %>
+            return new ResponseEntity<>(StreamSupport
+                .stream(<%= entityInstance %>Repository.findAll().spliterator(), false)
+                .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationships[idx].relationshipNameCapitalized %>() == null)<% if (dto == 'mapstruct') { %>
+                .map(<%= entityInstance %> -> <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(<%= entityInstance %>))<% } %>
+                .collect(Collectors.toList()), HttpStatus.OK);<% } %>
+        }
+        <% } } %>
         Page<<%= entityClass %>> page = <%= entityInstance %>Repository.findAll(PaginationUtil.generatePageRequest(offset, limit));
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityInstance %>s", offset, limit);
         return new ResponseEntity<<% if (javaVersion == '7') { %>List<<%= entityClass %>><% } %>>(page.getContent()<% if (dto == 'mapstruct') { %>.stream()
