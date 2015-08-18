@@ -6,18 +6,18 @@
     "dependencies": {<% if (websocket == 'spring-websocket') { %>
     "stomp-websocket": "2.3.4",
     "sockjs-client": "0.3.4",<% } %><% if (useSass) { %>
-    "bootstrap-sass": "3.3.4",<% } else { %>
-    "bootstrap": "3.3.4",<% } %>
+    "bootstrap-sass": "3.3.5",<% } else { %>
+    "bootstrap": "3.3.5",<% } %>
     "modernizr": "2.8.3",
     "jquery": "2.1.4",
     "json3": "3.3.2",
-    "angular-bootstrap": "0.13.1",
+    "angular-bootstrap": "0.13.3",
     "angular-ui-router": "0.2.15",
-    "angular": "1.4.3",
-    "angular-resource": "1.4.3",
-    "angular-cookies": "1.4.3",
-    "angular-sanitize": "1.4.3",<% if (enableTranslation) { %>
-    "angular-i18n": "1.4.3",
+    "angular": "1.4.4",
+    "angular-resource": "1.4.4",
+    "angular-cookies": "1.4.4",
+    "angular-sanitize": "1.4.4",<% if (enableTranslation) { %>
+    "angular-i18n": "1.4.4",
     "angular-translate": "2.7.0",
     "angular-translate-interpolation-messageformat": "2.7.0",
     "angular-translate-storage-cookie": "2.7.0",
@@ -30,12 +30,12 @@
     "swagger-ui": "2.1.1"
   },
   "devDependencies": {
-    "angular-mocks": "1.4.3",
-    "angular-scenario": "1.4.3"
+    "angular-mocks": "1.4.4",
+    "angular-scenario": "1.4.4"
   },
   "resolutions": {
-    "angular": "1.4.3",
-    "angular-cookies": "1.4.3",
+    "angular": "1.4.4",
+    "angular-cookies": "1.4.4",
     "jquery": "2.1.4"
   }
 }
