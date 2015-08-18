@@ -33,6 +33,17 @@
         "angular-mocks": "1.4.4",
         "angular-scenario": "1.4.4"
     },
+<% if (!useSass) { -%>
+    "overrides": {
+        "bootstrap": {
+            "main": [
+                "dist/js/bootstrap.js",
+                "dist/css/bootstrap.css",
+                "less/bootstrap.less"
+            ]
+        }
+    },
+<% } -%>
     "resolutions": {
         "angular": "1.4.4",
         "angular-cookies": "1.4.4",
