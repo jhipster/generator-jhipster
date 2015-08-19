@@ -262,7 +262,6 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     public String toString() {
         return "User{" +
                 "login='" + login + '\'' +
-                ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
