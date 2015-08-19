@@ -97,7 +97,7 @@ public class AccountResourceTest <% if (databaseType == 'cassandra') { %>extends
     @Test
     public void testNonAuthenticatedUser() throws Exception {
         restUserMockMvc.perform(get("/api/authenticate")
-                .accept(ApplicationMediaType.APPLICATION_JSON_V1))
+                .accept(ApplicationMediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(""));
     }
@@ -113,7 +113,7 @@ public class AccountResourceTest <% if (databaseType == 'cassandra') { %>extends
                         return request;
                     }<% } %>
                 })
-                .accept(ApplicationMediaType.APPLICATION_JSON_V1))
+                .accept(ApplicationMediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string("test"));
     }
@@ -136,9 +136,9 @@ public class AccountResourceTest <% if (databaseType == 'cassandra') { %>extends
         when(mockUserService.getUserWithAuthorities()).thenReturn(user);
 
         restUserMockMvc.perform(get("/api/account")
-                .accept(ApplicationMediaType.APPLICATION_JSON_V1))
+                .accept(ApplicationMediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(ApplicationMediaType.APPLICATION_JSON_V1))
+                .andExpect(content().contentType(ApplicationMediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.login").value("test"))
                 .andExpect(jsonPath("$.firstName").value("john"))
                 .andExpect(jsonPath("$.lastName").value("doe"))
@@ -151,7 +151,7 @@ public class AccountResourceTest <% if (databaseType == 'cassandra') { %>extends
         when(mockUserService.getUserWithAuthorities()).thenReturn(null);
 
         restUserMockMvc.perform(get("/api/account")
-                .accept(ApplicationMediaType.APPLICATION_JSON_V1))
+                .accept(ApplicationMediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError());
     }
 

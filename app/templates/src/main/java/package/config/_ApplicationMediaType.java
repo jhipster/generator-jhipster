@@ -5,13 +5,21 @@ import org.springframework.http.MediaType;
 /**
  * Defines application specific MIME types.
  */
-public interface ApplicationMediaType {
+public final class ApplicationMediaType {
 
-    MediaType APPLICATION_JSON_V1 = new MediaType("application", "vnd.<%=baseName%>.v1+json");
+    public static final MediaType APPLICATION_JSON;
 
-    String APPLICATION_JSON_V1_VALUE = "application/vnd.<%=baseName%>.v1+json";
+    public static final String APPLICATION_JSON_VALUE = <% if(versionApi) { %>"application/vnd.<%=baseName%>.v1+json"<% } else { %>MediaType.APPLICATION_JSON_VALUE<% } %>;
 
-    MediaType TEXT_PLAIN_V1 = new MediaType("text", "vnd.<%=baseName%>.v1+plain");
+    public static final MediaType TEXT_PLAIN;
 
-    String TEXT_PLAIN_V1_VALUE = "text/vnd.<%=baseName%>.v1+plain";
+    public static final String TEXT_PLAIN_VALUE = <% if(versionApi) { %>"text/vnd.<%=baseName%>.v1+plain"<% } else { %>MediaType.TEXT_PLAIN_VALUE<% } %>;
+
+    static {
+        APPLICATION_JSON = MediaType.parseMediaType(APPLICATION_JSON_VALUE);
+        TEXT_PLAIN = MediaType.parseMediaType(TEXT_PLAIN_VALUE);
+    }
+
+    private ApplicationMediaType() {
+    }
 }

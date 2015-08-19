@@ -22,7 +22,7 @@ public class LogsResource {
 
     @RequestMapping(value = "/logs",
             method = RequestMethod.GET,
-            produces = ApplicationMediaType.APPLICATION_JSON_V1_VALUE)
+            produces = ApplicationMediaType.APPLICATION_JSON_VALUE)
     @Timed
     public List<LoggerDTO> getList() {
         LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();<% if (javaVersion == '8') { %>

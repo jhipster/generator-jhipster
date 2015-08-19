@@ -225,7 +225,7 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
         // Get all the <%= entityInstance %>s
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityInstance %>s"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(ApplicationMediaType.APPLICATION_JSON_V1))<% if (databaseType == 'sql') { %>
+                .andExpect(content().contentType(ApplicationMediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
                 .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().intValue())))<% } %><% if (databaseType == 'mongodb') { %>
                 .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId())))<% } %><% if (databaseType == 'cassandra') { %>
                 .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().toString())))<% } %><% for (fieldId in fields) {%>
@@ -241,7 +241,7 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
         // Get the <%= entityInstance %>
         rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityInstance %>s/{id}", <%= entityInstance %>.getId()))
             .andExpect(status().isOk())
-            .andExpect(content().contentType(ApplicationMediaType.APPLICATION_JSON_V1))<% if (databaseType == 'sql') { %>
+            .andExpect(content().contentType(ApplicationMediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().intValue()))<% } %><% if (databaseType == 'mongodb') { %>
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId()))<% } %><% if (databaseType == 'cassandra') { %>
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().toString()))<% } %><% for (fieldId in fields) {%>

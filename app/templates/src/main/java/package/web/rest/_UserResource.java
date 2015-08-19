@@ -43,7 +43,7 @@ public class UserResource {
      */
     @RequestMapping(value = "/users",
         method = RequestMethod.GET,
-        produces = ApplicationMediaType.APPLICATION_JSON_V1_VALUE)
+        produces = ApplicationMediaType.APPLICATION_JSON_VALUE)
     @Timed
     public List<User> getAll() {
         log.debug("REST request to get all Users");
@@ -55,7 +55,7 @@ public class UserResource {
      */
     @RequestMapping(value = "/users/{login}",
             method = RequestMethod.GET,
-            produces = ApplicationMediaType.APPLICATION_JSON_V1_VALUE)
+            produces = ApplicationMediaType.APPLICATION_JSON_VALUE)
     @Timed<% if (javaVersion == '8') { %>
     ResponseEntity<User> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
@@ -78,7 +78,7 @@ public class UserResource {
      */
     @RequestMapping(value = "/_search/users/{query}",
         method = RequestMethod.GET,
-        produces = ApplicationMediaType.APPLICATION_JSON_V1_VALUE)
+        produces = ApplicationMediaType.APPLICATION_JSON_VALUE)
     @Timed
     public List<User> search(@PathVariable String query) {
         return StreamSupport

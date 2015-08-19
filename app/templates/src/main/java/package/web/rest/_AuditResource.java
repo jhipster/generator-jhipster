@@ -29,14 +29,14 @@ public class AuditResource {
 
     @RequestMapping(value = "/audits/all",
             method = RequestMethod.GET,
-            produces = ApplicationMediaType.APPLICATION_JSON_V1_VALUE)
+            produces = ApplicationMediaType.APPLICATION_JSON_VALUE)
     public List<AuditEvent> findAll() {
         return auditEventService.findAll();
     }
 
     @RequestMapping(value = "/audits/byDates",
             method = RequestMethod.GET,
-            produces = ApplicationMediaType.APPLICATION_JSON_V1_VALUE)
+            produces = ApplicationMediaType.APPLICATION_JSON_VALUE)
     public List<AuditEvent> findByDates(@RequestParam(value = "fromDate") LocalDateTime fromDate,
                                     @RequestParam(value = "toDate") LocalDateTime toDate) {
         return auditEventService.findByDates(fromDate, toDate);

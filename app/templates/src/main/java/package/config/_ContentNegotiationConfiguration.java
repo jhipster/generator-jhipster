@@ -12,6 +12,6 @@ public class ContentNegotiationConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-        configurer.defaultContentType(ApplicationMediaType.APPLICATION_JSON_V1);
+        configurer.defaultContentType(ApplicationMediaType.APPLICATION_JSON);
     }
 }

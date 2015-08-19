@@ -56,7 +56,7 @@ public class <%= entityClass %>Resource {
      */
     @RequestMapping(value = "/<%= entityInstance %>s",
             method = RequestMethod.POST,
-            produces = ApplicationMediaType.APPLICATION_JSON_V1_VALUE)
+            produces = ApplicationMediaType.APPLICATION_JSON_VALUE)
     @Timed<%
     var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
     var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
@@ -82,7 +82,7 @@ public class <%= entityClass %>Resource {
      */
     @RequestMapping(value = "/<%= entityInstance %>s",
         method = RequestMethod.PUT,
-        produces = ApplicationMediaType.APPLICATION_JSON_V1_VALUE)
+        produces = ApplicationMediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<<%= instanceType %>> update(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
         log.debug("REST request to update <%= entityClass %> : {}", <%= instanceName %>);
@@ -102,7 +102,7 @@ public class <%= entityClass %>Resource {
      */
     @RequestMapping(value = "/<%= entityInstance %>s",
             method = RequestMethod.GET,
-            produces = ApplicationMediaType.APPLICATION_JSON_V1_VALUE)
+            produces = ApplicationMediaType.APPLICATION_JSON_VALUE)
     @Timed<% if (dto == 'mapstruct') { %>
     @Transactional(readOnly = true)<% } %><% if (pagination == 'no') { %>
     public List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> getAll(<% if (fieldsContainNoOwnerOneToOne == true) { %>@RequestParam(required = false) String filter<% } %>) {<% for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { %>
@@ -158,7 +158,7 @@ public class <%= entityClass %>Resource {
      */
     @RequestMapping(value = "/<%= entityInstance %>s/{id}",
             method = RequestMethod.GET,
-            produces = ApplicationMediaType.APPLICATION_JSON_V1_VALUE)
+            produces = ApplicationMediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> get(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id<% if (javaVersion == '7') { %>, HttpServletResponse response<% } %>) {
         log.debug("REST request to get <%= entityClass %> : {}", id);<% if (javaVersion == '8') { %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
@@ -181,7 +181,7 @@ public class <%= entityClass %>Resource {
      */
     @RequestMapping(value = "/<%= entityInstance %>s/{id}",
             method = RequestMethod.DELETE,
-            produces = ApplicationMediaType.APPLICATION_JSON_V1_VALUE)
+            produces = ApplicationMediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<Void> delete(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id) {
         log.debug("REST request to delete <%= entityClass %> : {}", id);<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
@@ -198,7 +198,7 @@ public class <%= entityClass %>Resource {
      */
     @RequestMapping(value = "/_search/<%= entityInstance %>s/{query}",
         method = RequestMethod.GET,
-        produces = ApplicationMediaType.APPLICATION_JSON_V1_VALUE)
+        produces = ApplicationMediaType.APPLICATION_JSON_VALUE)
     @Timed
     public List<<%= entityClass %>> search(@PathVariable String query) {
         return StreamSupport

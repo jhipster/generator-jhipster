@@ -21,8 +21,8 @@ public class TestUtil {
 
     /** MediaType for JSON UTF8 */
     public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(
-            ApplicationMediaType.APPLICATION_JSON_V1.getType(),
-            ApplicationMediaType.APPLICATION_JSON_V1.getSubtype(), Charset.forName("utf8"));
+            ApplicationMediaType.APPLICATION_JSON.getType(),
+            ApplicationMediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
     /**
      * Convert an object to JSON byte array.

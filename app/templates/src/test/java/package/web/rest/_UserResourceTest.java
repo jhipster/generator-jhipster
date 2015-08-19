@@ -49,16 +49,16 @@ public class UserResourceTest <% if (databaseType == 'cassandra') { %>extends Ab
     @Test
     public void testGetExistingUser() throws Exception {
         restUserMockMvc.perform(get("/api/users/admin")
-                .accept(ApplicationMediaType.APPLICATION_JSON_V1))
+                .accept(ApplicationMediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(ApplicationMediaType.APPLICATION_JSON_V1))
+                .andExpect(content().contentType(ApplicationMediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.lastName").value("Administrator"));
     }
 
     @Test
     public void testGetUnknownUser() throws Exception {
         restUserMockMvc.perform(get("/api/users/unknown")
-                .accept(ApplicationMediaType.APPLICATION_JSON_V1))
+                .accept(ApplicationMediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 }
