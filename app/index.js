@@ -381,7 +381,10 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         this.prodDatabaseType = this.config.get('prodDatabaseType');
         this.hibernateCache = this.config.get('hibernateCache');
     }
-    this.useSass = this.config.get('useSass') || this.config.get('useCompass'); // backward compatibility for existing compass users
+    this.useSass = this.config.get('useSass');
+    if (this.useSass == undefined) { // backward compatibility for existing compass users
+        this.useSass = this.config.get('useCompass');
+    }
     this.javaVersion = this.config.get('javaVersion');
     this.buildTool = this.config.get('buildTool');
     this.frontendBuilder = this.config.get('frontendBuilder');
