@@ -124,7 +124,7 @@ public class <%= entityClass %>Resource {
         }
 <% } } %>
         log.debug("REST request to get all <%= entityClass %>s");
-        return <%= entityInstance %>Repository.findAll()<% if (dto == 'mapstruct') { %>.stream()
+        return <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (dto == 'mapstruct') { %>.stream()
             .map(<%= entityInstance %> -> <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(<%= entityInstance %>))
             .collect(Collectors.toCollection(LinkedList::new))<% } %>;<% } %><% if (pagination != 'no') { %>
     public ResponseEntity<List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>>> getAll(@RequestParam(value = "page" , required = false) Integer offset,

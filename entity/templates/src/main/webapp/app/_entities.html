@@ -53,7 +53,8 @@
                     <th translate="global.field.id">ID</th><% for (fieldId in fields) { %>
                     <th translate="<%=keyPrefix + fields[fieldId].fieldName %>"><%=fields[fieldId].fieldNameCapitalized%></th><% } %><% for (relationshipId in relationships) {
                         if (relationships[relationshipId].relationshipType == 'many-to-one'
-                           || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) { %>
+                           || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)
+                           || (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true && pagination == 'no')) { %>
                     <th translate="<%= keyPrefix + relationships[relationshipId].relationshipName%>"><%=relationships[relationshipId].relationshipName%></th><% } } %>
                     <th></th>
                 </tr>
@@ -70,18 +71,27 @@
                         {{byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}<% } %>
                     </td><% } else { %>
                     <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%>}}</td><% } %><% } %><% for (relationshipId in relationships) {
-                        if (relationships[relationshipId].relationshipType == 'many-to-one'
-                           || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) {
-                            var relationshipFieldName = relationships[relationshipId].relationshipFieldName;
-                            var otherEntityName = relationships[relationshipId].otherEntityName;
-                            var otherEntityField = relationships[relationshipId].otherEntityField;
-                            var otherEntityFieldCapitalized = relationships[relationshipId].otherEntityFieldCapitalized; 
+                        var relationshipType = relationships[relationshipId].relationshipType;
+                        var ownerSide = relationships[relationshipId].ownerSide;
+                        var relationshipFieldName = relationships[relationshipId].relationshipFieldName;
+                        var otherEntityName = relationships[relationshipId].otherEntityName;
+                        var otherEntityField = relationships[relationshipId].otherEntityField;
+                        var otherEntityFieldCapitalized = relationships[relationshipId].otherEntityFieldCapitalized;
+                        if (relationshipType == 'many-to-one'
+                            || (relationshipType == 'one-to-one' && ownerSide == true)
+                            || (relationshipType == 'many-to-many' && ownerSide == true && pagination == 'no')) {
                         %>
                     <td>
+<% if (relationshipType == 'many-to-many') { -%>
+                        <span ng-repeat="manyToMany in <%= entityInstance %>.<%= relationshipFieldName %>s">
+                            <a class="form-control-static" ui-sref="<%= otherEntityName %>.detail({id: {{manyToMany.id}}})">{{manyToMany.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
+                        <span>
+<% } else { -%>
 <% if (dto == 'no') { -%>
                         <a ui-sref="<%= otherEntityName %>.detail({id:<%= entityInstance + "." + relationshipFieldName + ".id" %>})">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</a>
 <% } else { -%>
                         <a ui-sref="<%= otherEntityName %>.detail({id:<%= entityInstance + "." + relationshipFieldName + "Id" %>})">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
+<% } -%>
 <% } -%>
                     </td><% } } %>
                     <td>

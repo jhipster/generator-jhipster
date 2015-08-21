@@ -29,6 +29,10 @@ public interface <%=entityClass%>Repository extends <% if (databaseType=='sql') 
     @Query("select <%= entityInstance %> from <%= entityClass %> <%= entityInstance %> where <%= entityInstance %>.<%= relationships[relationshipId].relationshipFieldName %>.login = ?#{principal.username}")
     List<<%= entityClass %>> findBy<%= relationships[relationshipId].relationshipNameCapitalized %>IsCurrentUser();<% } } %>
 <% if (fieldsContainOwnerManyToMany==true) { %>
+    @Query("select distinct <%= entityInstance %> from <%= entityClass %> <%= entityInstance %><% for (relationshipId in relationships) {
+    if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %> left join fetch <%=entityInstance%>.<%=relationships[relationshipId].relationshipFieldName%>s<%} }%>")
+    List<<%=entityClass%>> findAllWithEagerRelationships();
+
     @Query("select <%= entityInstance %> from <%= entityClass %> <%= entityInstance %><% for (relationshipId in relationships) {
     if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %> left join fetch <%=entityInstance%>.<%=relationships[relationshipId].relationshipFieldName%>s<%} }%> where <%=entityInstance%>.id =:id")
     <%=entityClass%> findOneWithEagerRelationships(@Param("id") Long id);
