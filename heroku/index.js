@@ -173,6 +173,8 @@ HerokuGenerator.prototype.herokuCreate = function herokuCreate() {
 
 HerokuGenerator.prototype.copyHerokuFiles = function copyHerokuFiles() {
     if(this.abort) return;
+    var insight = this.insight();
+    insight.track('generator', 'heroku');
     var done = this.async();
     this.log(chalk.bold('\nCreating Heroku deployment files'));
 

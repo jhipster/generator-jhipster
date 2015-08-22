@@ -118,6 +118,8 @@ AwsGenerator.prototype.askFor = function askFor() {
 
 AwsGenerator.prototype.productionBuild = function productionBuild() {
     if (this.abort) return;
+    var insight = this.insight();
+    insight.track('generator', 'aws');
     var done = this.async();
     this.log();
     this.log(chalk.bold('Building application'));
