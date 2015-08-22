@@ -11,11 +11,11 @@ import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.UserService;
 import <%=packageName%>.web.rest.dto.KeyAndPasswordDTO;
 import <%=packageName%>.web.rest.dto.UserDTO;
+import <%=packageName%>.config.ApplicationMediaType;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,7 +53,7 @@ public class AccountResource {
      */
     @RequestMapping(value = "/register",
             method = RequestMethod.POST,
-            produces = MediaType.TEXT_PLAIN_VALUE)
+            produces = ApplicationMediaType.TEXT_PLAIN_VALUE)
     @Timed
     public ResponseEntity<?> registerAccount(@Valid @RequestBody UserDTO userDTO, HttpServletRequest request) {<% if (javaVersion == '8') { %>
         return userRepository.findOneByLogin(userDTO.getLogin())
@@ -76,10 +76,10 @@ public class AccountResource {
         );<% } else { %>
         User user = userRepository.findOneByLogin(userDTO.getLogin());
         if (user != null) {
-            return ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body("login already in use");
+            return ResponseEntity.badRequest().contentType(ApplicationMediaType.TEXT_PLAIN).body("login already in use");
         } else {
             if (userRepository.findOneByEmail(userDTO.getEmail()) != null) {
-                return ResponseEntity.badRequest().contentType(MediaType.TEXT_PLAIN).body("e-mail address already in use");
+                return ResponseEntity.badRequest().contentType(ApplicationMediaType.TEXT_PLAIN).body("e-mail address already in use");
             }
             user = userService.createUserInformation(userDTO.getLogin(), userDTO.getPassword(),
             userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail().toLowerCase(),
@@ -100,7 +100,7 @@ public class AccountResource {
      */
     @RequestMapping(value = "/activate",
             method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+            produces = ApplicationMediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<String> activateAccount(@RequestParam(value = "key") String key) {<% if (javaVersion == '8') { %>
         return Optional.ofNullable(userService.activateRegistration(key))
@@ -118,7 +118,7 @@ public class AccountResource {
      */
     @RequestMapping(value = "/authenticate",
             method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+            produces = ApplicationMediaType.APPLICATION_JSON_VALUE)
     @Timed
     public String isAuthenticated(HttpServletRequest request) {
         log.debug("REST request to check if the current user is authenticated");
@@ -130,7 +130,7 @@ public class AccountResource {
      */
     @RequestMapping(value = "/account",
             method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+            produces = ApplicationMediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<UserDTO> getAccount() {<% if (javaVersion == '8') { %>
         return Optional.ofNullable(userService.getUserWithAuthorities())
@@ -176,7 +176,7 @@ public class AccountResource {
      */
     @RequestMapping(value = "/account",
             method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+            produces = ApplicationMediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<String> saveAccount(@RequestBody UserDTO userDTO) {<% if (javaVersion == '8') { %>
         return userRepository
@@ -202,7 +202,7 @@ public class AccountResource {
      */
     @RequestMapping(value = "/account/change_password",
             method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+            produces = ApplicationMediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<?> changePassword(@RequestBody String password) {
         if (!checkPasswordLength(password)) {
@@ -217,7 +217,7 @@ public class AccountResource {
      */
     @RequestMapping(value = "/account/sessions",
             method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+            produces = ApplicationMediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<List<PersistentToken>> getCurrentSessions() {<% if (javaVersion == '8') { %>
         return userRepository.findOneByLogin(SecurityUtils.getCurrentLogin())
@@ -268,7 +268,7 @@ public class AccountResource {
 
     @RequestMapping(value = "/account/reset_password/init",
         method = RequestMethod.POST,
-        produces = MediaType.TEXT_PLAIN_VALUE)
+        produces = ApplicationMediaType.TEXT_PLAIN_VALUE)
     @Timed
     public ResponseEntity<?> requestPasswordReset(@RequestBody String mail, HttpServletRequest request) {
         <% if (javaVersion == '8') { %>
@@ -279,8 +279,8 @@ public class AccountResource {
                     request.getServerName() +
                     ":" +
                     request.getServerPort();
-            mailService.sendPasswordResetMail(user, baseUrl);
-            return new ResponseEntity<>("e-mail was sent", HttpStatus.OK);
+                mailService.sendPasswordResetMail(user, baseUrl);
+                return new ResponseEntity<>("e-mail was sent", HttpStatus.OK);
             }).orElse(new ResponseEntity<>("e-mail address not registered", HttpStatus.BAD_REQUEST));
         <% } else {%>
         User user = userService.requestPasswordReset(mail);
@@ -301,7 +301,7 @@ public class AccountResource {
 
     @RequestMapping(value = "/account/reset_password/finish",
         method = RequestMethod.POST,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = ApplicationMediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<String> finishPasswordReset(@RequestBody KeyAndPasswordDTO keyAndPassword) {
         if (!checkPasswordLength(keyAndPassword.getNewPassword())) {

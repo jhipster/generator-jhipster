@@ -2,7 +2,7 @@
 
 angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTranslation) { %>'tmh.dynamicLocale', 'pascalprecht.translate', <% } %>
                'ui.bootstrap', // for modal dialogs
-    'ngResource', 'ui.router', 'ngCookies', 'ngCacheBuster', 'ngFileUpload', 'infinite-scroll'])
+    'ngResource', 'ui.router', 'ngCookies', 'ngCacheBuster', 'ngFileUpload', 'infinite-scroll', 'ngVendorMediaType'])
 
     .run(function ($rootScope, $location, $window, $http, $state, <% if (enableTranslation) { %>$translate, Language,<% } %> Auth, Principal, ENV, VERSION) {
         $rootScope.ENV = ENV;
@@ -49,7 +49,7 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTransl
             }
         };
     })
-    .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, <% if (enableTranslation) { %>$translateProvider, tmhDynamicLocaleProvider,<% } %> httpRequestInterceptorCacheBusterProvider) {
+    .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, <% if (enableTranslation) { %>$translateProvider, tmhDynamicLocaleProvider,<% } %> httpRequestInterceptorCacheBusterProvider <% if (versionApi) { %>, httpRequestInterceptorVendorMediaTypeProvider <% } %>) {
 <% if (authenticationType == 'session') { %>
         //enable CSRF
         $httpProvider.defaults.xsrfCookieName = 'CSRF-TOKEN';
@@ -58,6 +58,17 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTransl
         //Cache everything except rest api requests
         httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*api.*/, /.*protected.*/], true);
 
+<% if (versionApi) { %>
+        //Configures application specific versioned media types
+        httpRequestInterceptorVendorMediaTypeProvider
+            .matchingRequests([/.*api.*/])
+            .matchingMediaTypes(['text/plain', 'application/json'])
+            .withVendor({
+                name: 'vnd',
+                application: '<%=baseName%>',
+                version: '1'
+            });
+<% } %>
         $urlRouterProvider.otherwise('/');
         $stateProvider.state('site', {
             'abstract': true,

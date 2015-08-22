@@ -5,11 +5,11 @@ import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.UserRepository;<% if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
 import <%=packageName%>.security.AuthoritiesConstants;
+import <%=packageName%>.config.ApplicationMediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (javaVersion == '8') { %>
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;<% } %>
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,7 +43,7 @@ public class UserResource {
      */
     @RequestMapping(value = "/users",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = ApplicationMediaType.APPLICATION_JSON_VALUE)
     @Timed
     public List<User> getAll() {
         log.debug("REST request to get all Users");
@@ -55,7 +55,7 @@ public class UserResource {
      */
     @RequestMapping(value = "/users/{login}",
             method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+            produces = ApplicationMediaType.APPLICATION_JSON_VALUE)
     @Timed<% if (javaVersion == '8') { %>
     ResponseEntity<User> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
@@ -78,7 +78,7 @@ public class UserResource {
      */
     @RequestMapping(value = "/_search/users/{query}",
         method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
+        produces = ApplicationMediaType.APPLICATION_JSON_VALUE)
     @Timed
     public List<User> search(@PathVariable String query) {
         return StreamSupport

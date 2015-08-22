@@ -27,7 +27,8 @@ describe('JHipster generator ', function () {
                 "frontendBuilder": "grunt",
                 "javaVersion": "8",
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
-                "searchEngine": "no"
+                "searchEngine": "no",
+                "versionApi": false
             })
         .on('end', done);
     });
@@ -305,7 +306,8 @@ describe('JHipster generator ', function () {
                 "frontendBuilder": "grunt",
                 "javaVersion": "8",
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
-                "searchEngine": "no"
+                "searchEngine": "no",
+                "versionApi": false
             })
         .on('end', done);
     });
@@ -339,7 +341,9 @@ describe('JHipster generator ', function () {
                 "frontendBuilder": "grunt",
                 "javaVersion": "8",
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
-                "searchEngine": "no" })
+                "searchEngine": "no",
+                "versionApi": false
+            })
       .on('end', done);
   });
 
@@ -372,7 +376,9 @@ describe('JHipster generator ', function () {
                 "frontendBuilder": "grunt",
                 "javaVersion": "8",
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
-                "searchEngine": "no" })
+                "searchEngine": "no",
+                "versionApi": false
+            })
       .on('end', done);
   });
 
@@ -404,7 +410,9 @@ describe('JHipster generator ', function () {
                 "frontendBuilder": "grunt",
                 "javaVersion": "8",
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
-                "searchEngine": "no" })
+                "searchEngine": "no",
+                "versionApi": false
+            })
       .on('end', done);
   });
 
@@ -437,7 +445,9 @@ describe('JHipster generator ', function () {
                 "frontendBuilder": "grunt",
                 "javaVersion": "8",
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
-                "searchEngine": "no" })
+                "searchEngine": "no",
+                "versionApi": false
+            })
       .on('end', done);
   });
 

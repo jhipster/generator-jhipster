@@ -51,7 +51,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
 
     console.log('\nWelcome to the JHipster Generator v' + packagejs.version + '\n');
     var insight = this.insight();
-    var questions = 15; // making questions a variable to avoid updating each question by hand when adding additional options
+    var questions = 16; // making questions a variable to avoid updating each question by hand when adding additional options
 
     var prompts = [
         {
@@ -358,6 +358,12 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             name: 'enableTranslation',
             message: '(15/' + questions + ') Would you like to enable translation support with Angular Translate?',
             default: true
+        },
+        {
+            type: 'confirm',
+            name: 'versionApi',
+            message: '(16/' + questions + ') Would you like to enable API media type versioning?',
+            default: false
         }
     ];
 
@@ -390,6 +396,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     this.frontendBuilder = this.config.get('frontendBuilder');
     this.rememberMeKey = this.config.get('rememberMeKey');
     this.enableTranslation = this.config.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
+    this.versionApi = this.config.get('versionApi');
     this.packagejs = packagejs;
 
     if (this.baseName != null &&
@@ -417,6 +424,11 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             this.enableTranslation = true;
         }
 
+        // disables the API versioning by default
+        if (this.versionApi == null) {
+            this.versionApi = false;
+        }
+
         console.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
             'to re-generate the project...\n'));
 
@@ -441,6 +453,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             this.frontendBuilder = props.frontendBuilder;
             this.javaVersion = props.javaVersion;
             this.enableTranslation = props.enableTranslation;
+            this.versionApi = props.versionApi;
             this.rememberMeKey = crypto.randomBytes(20).toString('hex');
 
             if (this.databaseType == 'mongodb') {
@@ -608,6 +621,8 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
         this.template('src/main/java/package/config/_DatabaseConfiguration.java', javaDir + 'config/DatabaseConfiguration.java', this, {});
     }
+    this.template('src/main/java/package/config/_ApplicationMediaType.java', javaDir + 'config/ApplicationMediaType.java', this, {});
+    this.template('src/main/java/package/config/_ContentNegotiationConfiguration.java', javaDir + 'config/ContentNegotiationConfiguration.java', this, {});
     this.template('src/main/java/package/config/_JacksonConfiguration.java', javaDir + 'config/JacksonConfiguration.java', this, {});
     this.template('src/main/java/package/config/_LocaleConfiguration.java', javaDir + 'config/LocaleConfiguration.java', this, {});
     this.template('src/main/java/package/config/_LoggingAspectConfiguration.java', javaDir + 'config/LoggingAspectConfiguration.java', this, {});
