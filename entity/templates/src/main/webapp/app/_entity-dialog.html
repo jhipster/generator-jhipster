@@ -36,7 +36,7 @@
                var values = fields[fieldId].fieldValues.split(",");
                for (key in values) {
                  var value = values[key]; %>
-               <option value="<%= value %>" translate="<%=enumPrefix%>.<%=value%>"><%= value %></option><%
+                <option value="<%= value %>" translate="<%=enumPrefix%>.<%=value%>"><%= value %></option><%
                } %>
             </select><% } else { %><% if (fields[fieldId].fieldType == 'byte[]') { %>
             <div><% if (fields[fieldId].fieldTypeBlobContent == 'image') { %>
@@ -116,18 +116,26 @@
         <div class="form-group">
             <label translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%=relationshipName %></label>
             <% if (dto == 'no') { %>
-            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName.toLowerCase() %>s track by <%=otherEntityName %>.id"></select>
+            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName.toLowerCase() %>s track by <%=otherEntityName %>.id">
+                <option value=""></option>
+            </select>
             <% } else { %>
-            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="<%= entityInstance %>.<%=relationshipFieldName %>Id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName.toLowerCase() %>s"></select>
+            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="<%= entityInstance %>.<%=relationshipFieldName %>Id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName.toLowerCase() %>s">
+                <option value=""></option>
+            </select>
             <% } %>
         </div>
 <% } else if (relationshipType == 'one-to-one' && ownerSide == true) { -%>
         <div class="form-group">
             <label translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%=relationshipName %></label>
             <% if (dto == 'no') { %>
-            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in <%=relationshipFieldName.toLowerCase() %>s track by <%=otherEntityName %>.id"></select>
+            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in <%=relationshipFieldName.toLowerCase() %>s track by <%=otherEntityName %>.id">
+                <option value=""></option>
+            </select>
             <% } else { %>
-            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="<%= entityInstance %>.<%=relationshipFieldName %>Id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in <%=relationshipFieldName.toLowerCase() %>s"></select>
+            <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="<%= entityInstance %>.<%=relationshipFieldName %>Id" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in <%=relationshipFieldName.toLowerCase() %>s">
+                <option value=""></option>
+            </select>
             <% } %>
         </div>
 <% } else if (relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { -%>
