@@ -82,6 +82,19 @@
                             || (relationshipType == 'many-to-many' && ownerSide == true && pagination == 'no')) {
                         %>
                     <td>
+<% if (otherEntityName == 'user') { -%>
+<% if (relationshipType == 'many-to-many') { -%>
+                        <span ng-repeat="manyToMany in <%= entityInstance %>.<%= relationshipFieldName %>s">
+                            {{manyToMany.<%= otherEntityField %>}}{{$last ? '' : ', '}}
+                        <span>
+<% } else { -%>
+<% if (dto == 'no') { -%>
+                        {{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}
+<% } else { -%>
+                        {{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}
+<% } -%>
+<% } -%>
+<% } else { -%>
 <% if (relationshipType == 'many-to-many') { -%>
                         <span ng-repeat="manyToMany in <%= entityInstance %>.<%= relationshipFieldName %>s">
                             <a class="form-control-static" ui-sref="<%= otherEntityName %>.detail({id: {{manyToMany.id}}})">{{manyToMany.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
@@ -91,6 +104,7 @@
                         <a ui-sref="<%= otherEntityName %>.detail({id:<%= entityInstance + "." + relationshipFieldName + ".id" %>})">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</a>
 <% } else { -%>
                         <a ui-sref="<%= otherEntityName %>.detail({id:<%= entityInstance + "." + relationshipFieldName + "Id" %>})">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
+<% } -%>
 <% } -%>
 <% } -%>
                     </td><% } } %>
