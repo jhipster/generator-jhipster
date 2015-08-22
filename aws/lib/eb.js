@@ -5,7 +5,7 @@ try {
     var uuid = require('node-uuid');
 } catch (e) {
     console.log(
-        'You don\'t have the AWS SDK installed. Please install it in the jhipster generator directory.\n\n' +
+        'You don\'t have the AWS SDK installed. Please install it in the JHipster generator directory.\n\n' +
         'WINDOWS\n' +
         'cd %USERPROFILE%\\AppData\\Roaming\\npm\\node_modules\\generator-jhipster\n' +
         'npm install aws-sdk progress node-uuid\n\n' +
@@ -220,4 +220,3 @@ var updateEnvironment = function updateEnvironment(params, callback) {
         }
     });
 };
-
