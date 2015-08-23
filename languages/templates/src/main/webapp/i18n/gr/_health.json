@@ -1,0 +1,29 @@
+{
+    "health": {
+        "title": "Ηγεία Συστήματος",
+        "refresh.button": "Ανανέωση",
+        "stacktrace": "Stacktrace",        
+        "details": {
+            "details": "Λεπτομέρειες",
+            "properties": "Ιδιότητες",
+            "name": "Όνομα",
+            "value": "Τιμή",
+            "error": "Σφάλμα"
+        },
+        "indicator": {
+            "diskSpace": "Χώρος Δίσκου",
+            "mail": "Email",<% if (databaseType == 'sql') { %>
+            "db": "Βάση Δεδομένων"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
+        },
+        "table": {
+            "service": "Υπηρεσία",
+            "status": "Status"
+        },
+        "status": {
+            "UP": "UP",
+            "DOWN": "DOWN"
+        }
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "main": {
+        "title": "Καλώς όρισες, Java Hipster!",
+        "subtitle": "Αυτή είναι η αρχική σας σελίδα",
+        "logged": {
+            "message": "Είστε συνδεδεμένος ως χρήστης με όνομα λογαριασμού \"{{username}}\"."
+        },
+        "question": "Εἀν έχετε οποιαδήποτε ερώτηση σχετικά με το JHipster:",
+        "link": {
+            "homepage": "JHipster ιστοσελίδα",
+            "stackoverflow": "JHipster στο Stack Overflow",
+            "bugtracker": "JHipster bug tracker",
+            "chat": "JHipster public chat room",
+            "contact": "επικοινωνήστε με το χρήστη @java_hipster μέσω Twitter"
+        },
+        "like": "Εάν σας αρέσει το JHipster, μην ξεχάσετε να μας βαθμολογήσετε στο",
+        "github": "Github"
+    }
+}

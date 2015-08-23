@@ -1,0 +1,11 @@
+{
+    "logs": {
+        "title": "Logs",
+        "nbloggers": "Υπἀρχουν συνολικά {{ total }} loggers.",
+        "filter": "Φίλτρο",
+        "table": {
+            "name": "Ὀνομα",
+            "level": "Level"
+        }
+    }
+}

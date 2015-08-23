@@ -1,0 +1,10 @@
+{
+    "configuration": {
+        "title": "Διαμόρφωση",
+        "filter": "Φίλτρο (ανά πρόθεμα)",
+        "table": {
+            "prefix": "Πρόθεμα",
+            "properties": "Ιδιότητες"
+        }
+    }
+}

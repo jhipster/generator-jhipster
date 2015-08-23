@@ -20,6 +20,7 @@ angular.module('<%=angularAppName%>')
                 "en": "English",
                 "es": "Español",
                 "fr": "Français",
+                "gr": "Greek",
                 "hu": "Magyar",
                 "it": "Italiano",
                 "ja": "日本語",

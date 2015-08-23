@@ -35,6 +35,7 @@ LanguagesGenerator.prototype.askFor = function askFor() {
             {name: 'Danish', value: 'da'},            
             {name: 'Dutch', value: 'nl'},            
             {name: 'German', value: 'de'},
+            {name: 'Greek', value: 'gr'},
             {name: 'Hungarian', value: 'hu'},
             {name: 'Italian', value: 'it'},
             {name: 'Japanese', value: 'ja'},

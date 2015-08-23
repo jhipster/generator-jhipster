@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "Ενεργές συνδέσεις σχετικά με [<b>{{username}}</b>]",
+        "table": {
+            "ipaddress": "IP διεύθυνση",
+            "useragent": "User Agent",
+            "date": "Ημερομηνία",
+            "button": "Ακύρωση"
+        },
+        "messages": {
+            "success": "<strong>Η δύνδεση ακυρώθηκε με επιτυχία!</strong>",
+            "error": "<strong>Ἐνα σφάλμα συνέβη!</strong> Η σύνδεση δεν ακυρώθηκε με επιτυχία."
+        }
+    }
+}

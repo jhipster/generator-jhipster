@@ -1,0 +1,95 @@
+{
+    "metrics": {
+        "title": "Μετρήσεις Εφαρμογής",
+        "refresh.button": "Ανανέωση",
+        "updating": "Αλλαγή...",
+        "jvm": {
+            "title": "JVM Metrics",
+            "memory": {
+                "title": "Μνήμη",
+                "total": "Συνολική Μνήμη",
+                "heap": "Heap Memory",
+                "nonheap": "Non-Heap Memory"
+            },
+            "threads": {
+                "title": "Threads",
+                "all": "Ὀλα",
+                "runnable": "Runnable",
+                "timedwaiting": "Χρονομετρούμενη αναμονή",
+                "waiting": "Αναμονή",
+                "blocked": "Blocked",
+                "dump": {
+                    "title": "Threads dump",
+                    "id": "Id: ",
+                    "blockedtime": "Blocked Time",
+                    "blockedcount": "Blocked Count",
+                    "waitedtime": "Waited Time",
+                    "waitedcount": "Waited Count",
+                    "lockname": "Lock name",
+                    "stacktrace": "Stacktrace",
+                    "show": "Εμφάνιση Stacktrace",
+                    "hide": "Απόκρυψη Stacktrace"
+                }
+            },
+            "gc": {
+                "title": "Garbage collections",
+                "marksweepcount": "Mark Sweep count",
+                "marksweeptime": "Mark Sweep time",
+                "scavengecount": "Scavenge count",
+                "scavengetime": "Scavenge time"
+            },
+            "http": {
+                "title": "HTTP requests (events ανα δευτερόλεπτο)",
+                "active": "Ενεργές requests:",
+                "total": "Συνολικές requests:",
+                "table": {
+                    "code": "Code",
+                    "count": "Count",
+                    "mean": "Mean",
+                    "average": "Average"
+                },
+                "code": {
+                    "ok": "Ok",
+                    "notfound": "Not found",
+                    "servererror": "Σφάλμα Διακομιστή"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Στατιστικά υπηρεσιών (χρόνος σε χιλιοστά του δευτερολέπτου)",
+            "table": {
+                "name": "Όνομα υπηρεσίας",
+                "count": "Count",
+                "mean": "Mean",
+                "min": "Ελάχιστο",
+                "max": "Μέγιστο",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "ehcache": {
+            "title": "Ehcache στατιστκά",
+            "cachename": "Cache όνομα",
+            "objects": "Objects",
+            "hits": "Hits",
+            "misses": "Misses",
+            "evictioncount": "Eviction count",
+            "mean": "Mean get time (ms)"
+        },
+        "datasource": {
+        	"usage": "Χρήση",
+            "title": "DataSource στατιστικά (χρόνος σε χιλιοστά του δευτερολέπτου)",
+            "name": "Pool χρήση",
+            "count": "Count",
+            "mean": "Mean",
+            "min": "Ελάχιστο",
+            "max": "Μέγιστο",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}
