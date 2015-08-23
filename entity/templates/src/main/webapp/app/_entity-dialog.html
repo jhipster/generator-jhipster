@@ -112,7 +112,7 @@
     var otherEntityFieldCapitalized = relationships[relationshipId].otherEntityFieldCapitalized;
     var translationKey = keyPrefix + relationshipName; 
 -%>
-<% if (relationshipType == 'many-to-one') { -%>
+<% if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true && otherEntityName == 'user')) { -%>
         <div class="form-group">
             <label translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%=relationshipName %></label>
             <% if (dto == 'no') { %>
