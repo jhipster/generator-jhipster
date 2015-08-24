@@ -37,7 +37,7 @@
     "mkdirp": "0.5.1",
     "shelljs": "0.5.0",
     "underscore.string": "3.0.3",
-    "yeoman-generator": "0.20.1",
+    "yeoman-generator": "0.20.3",
     "yo": "1.4.6"
   },
   "devDependencies": {
