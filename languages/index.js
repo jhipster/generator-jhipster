@@ -41,6 +41,7 @@ LanguagesGenerator.prototype.askFor = function askFor() {
             {name: 'Korean', value: 'kr'},
             {name: 'Polish', value: 'pl'},
             {name: 'Portuguese (Brazilian)', value: 'pt-br'},
+            {name: 'Portuguese', value: 'pt-pt'},
             {name: 'Romanian', value: 'ro'},
             {name: 'Russian', value: 'ru'},
             {name: 'Spanish', value: 'es'},

@@ -1,0 +1,15 @@
+{
+    "sessions": {
+        "title": "Sessões ativas para [<b>{{username}}</b>]",
+        "table": {
+            "ipaddress": "IP",
+            "useragent": "Agente",
+            "date": "Data",
+            "button": "Terminar sessão"
+        },
+        "messages": {
+            "success": "<strong>Sessão terminada com sucesso!</strong>",
+            "error": "<strong>Ocorreu um erro!</strong> A sessão não pode ser terminada."
+        }
+    }
+}

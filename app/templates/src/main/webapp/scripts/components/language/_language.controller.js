@@ -27,6 +27,7 @@ angular.module('<%=angularAppName%>')
                 "nl": "Nederlands",
                 "pl": "Polski",
                 "pt-br": "Português (Brasil)",
+                "pt-pt": "Português",
                 "ro": "Română",
                 "ru": "Русский",
                 "sv": "Svenska",
