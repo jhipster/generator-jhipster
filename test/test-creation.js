@@ -77,6 +77,7 @@ describe('JHipster generator ', function () {
             'src/main/java/com/mycompany/myapp/config/MetricsConfiguration.java',
             'src/main/java/com/mycompany/myapp/config/SecurityConfiguration.java',
             'src/main/java/com/mycompany/myapp/config/ThymeleafConfiguration.java',
+            'src/main/java/com/mycompany/myapp/config/WebMvcConfiguration.java',
             'src/main/java/com/mycompany/myapp/config/WebConfigurer.java',
             'src/main/java/com/mycompany/myapp/config/audit/package-info.java',
             'src/main/java/com/mycompany/myapp/config/audit/AuditEventConverter.java',

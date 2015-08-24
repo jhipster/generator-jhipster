@@ -17,6 +17,7 @@ import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -150,6 +151,9 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
+    @Inject
+    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+
     private MockMvc rest<%= entityClass %>MockMvc;
 
     private <%= entityClass %> <%= entityInstance %>;
@@ -161,7 +165,9 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
         ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Repository", <%= entityInstance %>Repository);<% if (dto == 'mapstruct') { %>
         ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Mapper", <%= entityInstance %>Mapper);<% } %><% if (searchEngine == 'elasticsearch') { %>
         ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>SearchRepository", <%= entityInstance %>SearchRepository);<% } %>
-        this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource).setMessageConverters(jacksonMessageConverter).build();
+        this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
+            .setCustomArgumentResolvers(pageableArgumentResolver)
+            .setMessageConverters(jacksonMessageConverter).build();
     }
 
     @Before

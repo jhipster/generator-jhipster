@@ -633,6 +633,7 @@ JhipsterGenerator.prototype.app = function app() {
 
     this.template('src/main/java/package/config/_SecurityConfiguration.java', javaDir + 'config/SecurityConfiguration.java', this, {});
     this.template('src/main/java/package/config/_ThymeleafConfiguration.java', javaDir + 'config/ThymeleafConfiguration.java', this, {});
+    this.template('src/main/java/package/config/_WebMvcConfiguration.java', javaDir + 'config/WebMvcConfiguration.java', this, {});
     this.template('src/main/java/package/config/_WebConfigurer.java', javaDir + 'config/WebConfigurer.java', this, {});
     if (this.websocket == 'spring-websocket') {
         this.template('src/main/java/package/config/_WebsocketConfiguration.java', javaDir + 'config/WebsocketConfiguration.java', this, {});
