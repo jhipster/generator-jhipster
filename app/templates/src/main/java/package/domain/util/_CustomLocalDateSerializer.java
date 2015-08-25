@@ -9,6 +9,9 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.io.IOException;
 
+/**
+ * Custom Jackson serializer for transforming a Joda LocalDate object to JSON.
+ */
 public class CustomLocalDateSerializer extends JsonSerializer<LocalDate> {
 
     private static DateTimeFormatter formatter = DateTimeFormat

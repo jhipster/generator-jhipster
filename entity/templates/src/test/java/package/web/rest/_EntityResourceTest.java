@@ -5,6 +5,7 @@ import <%=packageName%>.Application;
 import <%=packageName%>.domain.<%= entityClass %>;
 import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } %><% if (dto == 'mapstruct') { %>
+import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
 import <%=packageName%>.web.rest.mapper.<%= entityClass %>Mapper;<% } %>
 
 import org.junit.Before;
@@ -15,12 +16,14 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;<% if (databaseType == 'sql') { %>
-import org.springframework.transaction.annotation.Transactional;<% } %>
+import org.springframework.transaction.annotation.Transactional;<% } %><% if (fieldsContainBlob == true) { %>
+import org.springframework.util.Base64Utils;<% } %>
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;<% if (fieldsContainLocalDate == true) { %>
@@ -56,8 +59,8 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     var defaultValueName = 'DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase();
     var updatedValueName = 'UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase();
 
-    var defaultValue = 0;
-    var updatedValue = 1;
+    var defaultValue = 1;
+    var updatedValue = 2;
 
     if (fields[fieldId].fieldValidate == true) {
         if (fields[fieldId].fieldValidateRules.indexOf('max') != -1) {
@@ -67,6 +70,13 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
         if (fields[fieldId].fieldValidateRules.indexOf('min') != -1) {
             defaultValue = fields[fieldId].fieldValidateRulesMin;
             updatedValue = parseInt(fields[fieldId].fieldValidateRulesMin) + 1;
+        }
+        if (fields[fieldId].fieldValidateRules.indexOf('minbytes') != -1) {
+            defaultValue = fields[fieldId].fieldValidateRulesMinbytes;
+            updatedValue = fields[fieldId].fieldValidateRulesMinbytes;
+        }
+        if (fields[fieldId].fieldValidateRules.indexOf('maxbytes') != -1) {
+            updatedValue = fields[fieldId].fieldValidateRulesMaxbytes;
         }
     }
 
@@ -92,7 +102,13 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     private static final Integer <%=updatedValueName %> = <%= updatedValue %>;<% } else if (fieldType == 'Long') { %>
 
     private static final Long <%=defaultValueName %> = <%= defaultValue %>L;
-    private static final Long <%=updatedValueName %> = <%= updatedValue %>L;<% } else if (fieldType == 'BigDecimal') { %>
+    private static final Long <%=updatedValueName %> = <%= updatedValue %>L;<% } else if (fieldType == 'Float') { %>
+
+    private static final <%=fieldType %> <%=defaultValueName %> = <%= defaultValue %>F;
+    private static final <%=fieldType %> <%=updatedValueName %> = <%= updatedValue %>F;<% } else if (fieldType == 'Double') { %>
+
+    private static final <%=fieldType %> <%=defaultValueName %> = <%= defaultValue %>D;
+    private static final <%=fieldType %> <%=updatedValueName %> = <%= updatedValue %>D;<% } else if (fieldType == 'BigDecimal') { %>
 
     private static final BigDecimal <%=defaultValueName %> = new BigDecimal(<%= defaultValue %>);
     private static final BigDecimal <%=updatedValueName %> = new BigDecimal(<%= updatedValue %>);<% } else if (fieldType == 'UUID') { %>
@@ -114,7 +130,10 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     private static final String <%=defaultValueName %>_STR = dateTimeFormatter.print(<%= defaultValueName %>);<% } else if (fieldType == 'Boolean') { %>
 
     private static final Boolean <%=defaultValueName %> = false;
-    private static final Boolean <%=updatedValueName %> = true;<% } else if (isEnum) { %>
+    private static final Boolean <%=updatedValueName %> = true;<% } else if (fieldType == 'byte[]') { %>
+
+    private static final byte[] <%=defaultValueName %> = TestUtil.createByteArray(<%= defaultValue %>, "0");
+    private static final byte[] <%=updatedValueName %> = TestUtil.createByteArray(<%= updatedValue %>, "1");<% } else if (isEnum) { %>
 
     private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%=enumValue1 %>;
     private static final <%=fieldType %> <%=updatedValueName %> = <%=fieldType %>.<%=enumValue2 %>;<% } } %>
@@ -128,6 +147,9 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     @Inject
     private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;<% } %>
 
+    @Inject
+    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
+
     private MockMvc rest<%= entityClass %>MockMvc;
 
     private <%= entityClass %> <%= entityInstance %>;
@@ -139,7 +161,7 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
         ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Repository", <%= entityInstance %>Repository);<% if (dto == 'mapstruct') { %>
         ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Mapper", <%= entityInstance %>Mapper);<% } %><% if (searchEngine == 'elasticsearch') { %>
         ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>SearchRepository", <%= entityInstance %>SearchRepository);<% } %>
-        this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource).build();
+        this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource).setMessageConverters(jacksonMessageConverter).build();
     }
 
     @Before
@@ -154,10 +176,12 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     public void create<%= entityClass %>() throws Exception {
         int databaseSizeBeforeCreate = <%= entityInstance %>Repository.findAll().size();
 
-        // Create the <%= entityClass %>
+        // Create the <%= entityClass %><% if (dto == 'mapstruct') { %>
+        <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(<%= entityInstance %>);<% } %>
+
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityInstance %>s")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %>)))
+                .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>)))
                 .andExpect(status().isCreated());
 
         // Validate the <%= entityClass %> in the database
@@ -176,20 +200,20 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     @Test<% if (databaseType == 'sql') { %>
     @Transactional<% } %>
     public void check<%= fields[fieldId].fieldInJavaBeanMethod %>IsRequired() throws Exception {
-        // Validate the database is empty
-        assertThat(<%= entityInstance %>Repository.findAll()).hasSize(0);
+        int databaseSizeBeforeTest = <%= entityInstance %>Repository.findAll().size();
         // set the field null
         <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(null);
 
-        // Create the <%= entityClass %>, which fails.
+        // Create the <%= entityClass %>, which fails.<% if (dto == 'mapstruct') { %>
+        <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(<%= entityInstance %>);<% } %>
+
         rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityInstance %>s")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %>)))
+                .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>)))
                 .andExpect(status().isBadRequest());
 
-        // Validate the database is still empty
         List<<%= entityClass %>> <%= entityInstance %>s = <%= entityInstance %>Repository.findAll();
-        assertThat(<%= entityInstance %>s).hasSize(0);
+        assertThat(<%= entityInstance %>s).hasSize(databaseSizeBeforeTest);
     }
 <%  } } } %>
     @Test<% if (databaseType == 'sql') { %>
@@ -205,7 +229,7 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
                 .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().intValue())))<% } %><% if (databaseType == 'mongodb') { %>
                 .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId())))<% } %><% if (databaseType == 'cassandra') { %>
                 .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().toString())))<% } %><% for (fieldId in fields) {%>
-                .andExpect(jsonPath("$.[*].<%=fields[fieldId].fieldName%>").value(hasItem(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[fieldId].fieldType == 'DateTime') { %>_STR<% } else if (fields[fieldId].fieldType == 'Date') { %>.getTime()<% } else { %>.toString()<% } %>)))<% } %>;
+                .andExpect(jsonPath("$.[*].<%=fields[fieldId].fieldName%>").value(hasItem(<% if (fields[fieldId].fieldType == 'byte[]') { %>Base64Utils.encodeToString(<% } %><%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'byte[]') { %>)<% } else if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Float' || fields[fieldId].fieldType == 'Double') { %>.doubleValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[fieldId].fieldType == 'DateTime') { %>_STR<% } else if (fields[fieldId].fieldType == 'Date') { %>.getTime()<% } else { %>.toString()<% } %>)))<% } %>;
     }
 
     @Test<% if (databaseType == 'sql') { %>
@@ -221,7 +245,7 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().intValue()))<% } %><% if (databaseType == 'mongodb') { %>
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId()))<% } %><% if (databaseType == 'cassandra') { %>
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().toString()))<% } %><% for (fieldId in fields) {%>
-            .andExpect(jsonPath("$.<%=fields[fieldId].fieldName%>").value(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[fieldId].fieldType == 'DateTime') { %>_STR<% } else if (fields[fieldId].fieldType == 'Date') { %>.getTime()<% } else { %>.toString()<% } %>))<% } %>;
+            .andExpect(jsonPath("$.<%=fields[fieldId].fieldName%>").value(<% if (fields[fieldId].fieldType == 'byte[]') { %>Base64Utils.encodeToString(<% } %><%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'byte[]') { %>)<% } else if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Float' || fields[fieldId].fieldType == 'Double') { %>.doubleValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[fieldId].fieldType == 'DateTime') { %>_STR<% } else if (fields[fieldId].fieldType == 'Date') { %>.getTime()<% } else { %>.toString()<% } %>))<% } %>;
     }
 
     @Test<% if (databaseType == 'sql') { %>
@@ -242,9 +266,12 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
 
         // Update the <%= entityInstance %><% for (fieldId in fields) { %>
         <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);<% } %>
+        <% if (dto == 'mapstruct') { %>
+        <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(<%= entityInstance %>);<% } %>
+
         rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityInstance %>s")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %>)))
+                .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>)))
                 .andExpect(status().isOk());
 
         // Validate the <%= entityClass %> in the database

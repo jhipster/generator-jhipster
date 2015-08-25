@@ -1,0 +1,16 @@
+apply plugin: 'sonar-runner'
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = '0.7.4.201502262128'
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+    }
+}
+
+sonarRunner {
+    toolVersion = '2.4'
+}

@@ -4,8 +4,8 @@ angular.module('<%=angularAppName%>')
     .factory('AuthServerProvider', function loginService($http, localStorageService, Base64) {
         return {
             login: function(credentials) {
-                var data = "username=" + credentials.username + "&password="
-                    + credentials.password + "&grant_type=password&scope=read%20write&" +
+                var data = "username=" +  encodeURIComponent(credentials.username) + "&password="
+                    + encodeURIComponent(credentials.password) + "&grant_type=password&scope=read%20write&" +
                     "client_secret=mySecretOAuthSecret&client_id=<%= baseName%>app";
                 return $http.post('oauth/token', data, {
                     headers: {

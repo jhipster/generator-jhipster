@@ -349,8 +349,8 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             type: 'confirm',
-            name: 'useCompass',
-            message: '(14/' + questions + ') Would you like to use the Compass CSS Authoring Framework?',
+            name: 'useSass',
+            message: '(14/' + questions + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
             default: false
         },
         {
@@ -381,7 +381,10 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         this.prodDatabaseType = this.config.get('prodDatabaseType');
         this.hibernateCache = this.config.get('hibernateCache');
     }
-    this.useCompass = this.config.get('useCompass');
+    this.useSass = this.config.get('useSass');
+    if (this.useSass == undefined) { // backward compatibility for existing compass users
+        this.useSass = this.config.get('useCompass');
+    }
     this.javaVersion = this.config.get('javaVersion');
     this.buildTool = this.config.get('buildTool');
     this.frontendBuilder = this.config.get('frontendBuilder');
@@ -399,7 +402,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         this.devDatabaseType != null &&
         this.prodDatabaseType != null &&
         this.searchEngine != null &&
-        this.useCompass != null &&
+        this.useSass != null &&
         this.buildTool != null &&
         this.frontendBuilder != null &&
         this.javaVersion != null) {
@@ -433,7 +436,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             this.devDatabaseType = props.devDatabaseType;
             this.prodDatabaseType = props.prodDatabaseType;
             this.searchEngine = props.searchEngine;
-            this.useCompass = props.useCompass;
+            this.useSass = props.useSass;
             this.buildTool = props.buildTool;
             this.frontendBuilder = props.frontendBuilder;
             this.javaVersion = props.javaVersion;
@@ -469,7 +472,7 @@ JhipsterGenerator.prototype.app = function app() {
     insight.track('app/devDatabaseType', this.devDatabaseType);
     insight.track('app/prodDatabaseType', this.prodDatabaseType);
     insight.track('app/searchEngine', this.searchEngine);
-    insight.track('app/useCompass', this.useCompass);
+    insight.track('app/useSass', this.useSass);
     insight.track('app/buildTool', this.buildTool);
     insight.track('app/frontendBuilder', this.frontendBuilder);
     insight.track('app/javaVersion', this.javaVersion);
@@ -516,6 +519,7 @@ JhipsterGenerator.prototype.app = function app() {
             this.template('_settings.gradle', 'settings.gradle', this, {});
             this.template('_gradle.properties', 'gradle.properties', this, {});
             this.template('_yeoman.gradle', 'yeoman.gradle', this, {});
+            this.template('_sonar.gradle', 'sonar.gradle', this, {});
             this.template('_profile_dev.gradle', 'profile_dev.gradle', this, { 'interpolate': interpolateRegex });
             this.template('_profile_prod.gradle', 'profile_prod.gradle', this, { 'interpolate': interpolateRegex });
             this.template('_profile_fast.gradle', 'profile_fast.gradle', this, { 'interpolate': interpolateRegex });
@@ -635,6 +639,14 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/main/java/package/config/_WebsocketSecurityConfiguration.java', javaDir + 'config/WebsocketSecurityConfiguration.java', this, {});
     }
 
+    // error handler code - server side
+    this.template('src/main/java/package/web/rest/errors/_ErrorConstants.java', javaDir + 'web/rest/errors/ErrorConstants.java', this, {});
+    this.template('src/main/java/package/web/rest/errors/_CustomParameterizedException.java', javaDir + 'web/rest/errors/CustomParameterizedException.java', this, {});
+    this.template('src/main/java/package/web/rest/errors/_ErrorDTO.java', javaDir + 'web/rest/errors/ErrorDTO.java', this, {});
+    this.template('src/main/java/package/web/rest/errors/_ExceptionTranslator.java', javaDir + 'web/rest/errors/ExceptionTranslator.java', this, {});
+    this.template('src/main/java/package/web/rest/errors/_FieldErrorDTO.java', javaDir + 'web/rest/errors/FieldErrorDTO.java', this, {});
+    this.template('src/main/java/package/web/rest/errors/_ParameterizedErrorDTO.java', javaDir + 'web/rest/errors/ParameterizedErrorDTO.java', this, {});
+
     if (this.databaseType == "cassandra") {
         this.template('src/main/java/package/config/cassandra/_CassandraAutoConfiguration.java', javaDir + 'config/cassandra/CassandraAutoConfiguration.java', this, {});
         this.template('src/main/java/package/config/cassandra/_CassandraDataAutoConfiguration.java', javaDir + 'config/cassandra/CassandraDataAutoConfiguration.java', this, {});
@@ -678,6 +690,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/domain/util/_CustomDateTimeSerializer.java', javaDir + 'domain/util/CustomDateTimeSerializer.java', this, {});
     this.template('src/main/java/package/domain/util/_CustomDateTimeDeserializer.java', javaDir + 'domain/util/CustomDateTimeDeserializer.java', this, {});
     this.template('src/main/java/package/domain/util/_ISO8601LocalDateDeserializer.java', javaDir + 'domain/util/ISO8601LocalDateDeserializer.java', this, {});
+    if (this.databaseType == "sql") {
+        this.template('src/main/java/package/domain/util/_FixedH2Dialect.java', javaDir + 'domain/util/FixedH2Dialect.java', this, {});
+    }
 
     if (this.searchEngine == 'elasticsearch') {
         this.template('src/main/java/package/repository/search/_package-info.java', javaDir + 'repository/search/package-info.java', this, {});
@@ -755,7 +770,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/web/rest/dto/_package-info.java', javaDir + 'web/rest/dto/package-info.java', this, {});
     this.template('src/main/java/package/web/rest/dto/_LoggerDTO.java', javaDir + 'web/rest/dto/LoggerDTO.java', this, {});
     this.template('src/main/java/package/web/rest/dto/_UserDTO.java', javaDir + 'web/rest/dto/UserDTO.java', this, {});
-
+    this.template('src/main/java/package/web/rest/util/_HeaderUtil.java', javaDir + 'web/rest/util/HeaderUtil.java', this, {});
+    this.template('src/main/java/package/web/rest/dto/_KeyAndPasswordDTO.java', javaDir + 'web/rest/dto/KeyAndPasswordDTO.java', this, {});
+    
     if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
        this.template('src/main/java/package/web/rest/dto/_UserManagementDTO.java', javaDir + 'web/rest/dto/UserManagementDTO.java', this, {});
        this.template('src/main/java/package/web/rest/mapper/_UserManagementMapper.java', javaDir + 'web/rest/mapper/UserManagementMapper.java', this, {});
@@ -816,7 +833,7 @@ JhipsterGenerator.prototype.app = function app() {
     mkdirp(webappDir);
 
     // normal CSS or SCSS?
-    if (this.useCompass) {
+    if (this.useSass) {
         this.copy('src/main/scss/main.scss', 'src/main/scss/main.scss');
     } else {
         this.copy('src/main/webapp/assets/styles/main.css', 'src/main/webapp/assets/styles/main.css');
@@ -826,6 +843,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(webappDir + 'favicon.ico', webappDir + 'favicon.ico');
     this.copy(webappDir + 'robots.txt', webappDir + 'robots.txt');
     this.copy(webappDir + 'htaccess.txt', webappDir + '.htaccess');
+    this.copy(webappDir + '404.html', webappDir + '404.html');
 
     // install all files related to i18n if translation is enabled
     if (this.enableTranslation) {
@@ -834,6 +852,10 @@ JhipsterGenerator.prototype.app = function app() {
     }else{
         this.template(resourceDir + '/i18n/_messages_en.properties', resourceDir + 'i18n/messages_en.properties', this, {});
     }
+
+    // Swagger-ui for Jhipster
+    this.template(webappDir + '/swagger-ui/_index.html', webappDir + 'swagger-ui/index.html', this, {});
+    this.copy(webappDir + '/swagger-ui/images/throbber.gif', webappDir + 'swagger-ui/images/throbber.gif');
 
     // Angular JS views
 
@@ -861,6 +883,8 @@ JhipsterGenerator.prototype.app = function app() {
         this.template(webappDir + '/scripts/components/auth/services/_sessions.service.js', webappDir + 'scripts/components/auth/services/sessions.service.js', this, {});
     }
     this.template(webappDir + '/scripts/components/form/_form.directive.js', webappDir + 'scripts/components/form/form.directive.js', this, {});
+    this.template(webappDir + '/scripts/components/form/_maxbytes.directive.js', webappDir + 'scripts/components/form/maxbytes.directive.js', this, {});
+    this.template(webappDir + '/scripts/components/form/_minbytes.directive.js', webappDir + 'scripts/components/form/minbytes.directive.js', this, {});
     this.template(webappDir + '/scripts/components/form/_pager.directive.js', webappDir + 'scripts/components/form/pager.directive.js', this, {});
     this.template(webappDir + '/scripts/components/form/_pager.html', webappDir + 'scripts/components/form/pager.html', this, {});
     this.template(webappDir + '/scripts/components/form/_pagination.directive.js', webappDir + 'scripts/components/form/pagination.directive.js', this, {});
@@ -919,14 +943,18 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy(webappDir + '/scripts/app/admin/docs/docs.html', webappDir + 'scripts/app/admin/docs/docs.html');
     this.copyJs(webappDir + '/scripts/app/admin/docs/_docs.js', webappDir + 'scripts/app/admin/docs/docs.js', this, {});
     this.copyHtml(webappDir + '/scripts/app/admin/health/health.html', webappDir + 'scripts/app/admin/health/health.html');
+    this.copyHtml(webappDir + '/scripts/app/admin/health/_health.modal.html', webappDir + 'scripts/app/admin/health/health.modal.html');
     this.copyJs(webappDir + '/scripts/app/admin/health/_health.js', webappDir + 'scripts/app/admin/health/health.js', this, {});
     this.template(webappDir + '/scripts/app/admin/health/_health.controller.js', webappDir + 'scripts/app/admin/health/health.controller.js', this, {});
+    this.template(webappDir + '/scripts/app/admin/health/_health.modal.controller.js', webappDir + 'scripts/app/admin/health/health.modal.controller.js', this, {});
     this.copyHtml(webappDir + '/scripts/app/admin/logs/logs.html', webappDir + 'scripts/app/admin/logs/logs.html');
     this.copyJs(webappDir + '/scripts/app/admin/logs/_logs.js', webappDir + 'scripts/app/admin/logs/logs.js', this, {});
     this.template(webappDir + '/scripts/app/admin/logs/_logs.controller.js', webappDir + 'scripts/app/admin/logs/logs.controller.js', this, {});
     this.copyHtml(webappDir + '/scripts/app/admin/metrics/_metrics.html', webappDir + 'scripts/app/admin/metrics/metrics.html', this, {}, true);
+    this.copyHtml(webappDir + '/scripts/app/admin/metrics/_metrics.modal.html', webappDir + 'scripts/app/admin/metrics/metrics.modal.html', this, {}, true);
     this.copyJs(webappDir + '/scripts/app/admin/metrics/_metrics.js', webappDir + 'scripts/app/admin/metrics/metrics.js', this, {});
     this.template(webappDir + '/scripts/app/admin/metrics/_metrics.controller.js', webappDir + 'scripts/app/admin/metrics/metrics.controller.js', this, {});
+    this.template(webappDir + '/scripts/app/admin/metrics/_metrics.modal.controller.js', webappDir + 'scripts/app/admin/metrics/metrics.modal.controller.js', this, {});
     if (this.websocket == 'spring-websocket') {
         this.copyHtml(webappDir + '/scripts/app/admin/tracker/tracker.html', webappDir + 'scripts/app/admin/tracker/tracker.html');
         this.copyJs(webappDir + '/scripts/app/admin/tracker/_tracker.js', webappDir + 'scripts/app/admin/tracker/tracker.js', this, {});
@@ -949,6 +977,15 @@ JhipsterGenerator.prototype.app = function app() {
     this.copyHtml(webappDir + '/scripts/app/main/main.html', webappDir + 'scripts/app/main/main.html');
     this.copyJs(webappDir + '/scripts/app/main/_main.js', webappDir + 'scripts/app/main/main.js', this, {});
     this.template(webappDir + '/scripts/app/main/_main.controller.js', webappDir + 'scripts/app/main/main.controller.js', this, {});
+
+     // interceptor code
+    this.template(webappDir + '/scripts/components/interceptor/_auth.interceptor.js', webappDir + 'scripts/components/interceptor/auth.interceptor.js', this, {});
+    this.template(webappDir + '/scripts/components/interceptor/_errorhandler.interceptor.js', webappDir + 'scripts/components/interceptor/errorhandler.interceptor.js', this, {});
+    this.template(webappDir + '/scripts/components/interceptor/_notification.interceptor.js', webappDir + 'scripts/components/interceptor/notification.interceptor.js', this, {});
+
+    //alert service code
+    this.template(webappDir + '/scripts/components/alert/_alert.service.js', webappDir + 'scripts/components/alert/alert.service.js', this, {});
+    this.template(webappDir + '/scripts/components/alert/_alert.directive.js', webappDir + 'scripts/components/alert/alert.directive.js', this, {});
 
     // Index page
     this.indexFile = html.readFileAsString(path.join(this.sourceRoot(), webappDir + '_index.html'));
@@ -987,17 +1024,24 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/components/auth/services/password.service.js',
         'scripts/components/auth/services/register.service.js',
         'scripts/components/form/form.directive.js',
+        'scripts/components/form/maxbytes.directive.js',
+        'scripts/components/form/minbytes.directive.js',
         'scripts/components/form/pager.directive.js',
         'scripts/components/form/pagination.directive.js',
         'scripts/components/admin/audits.service.js',
         'scripts/components/admin/logs.service.js',
         'scripts/components/admin/configuration.service.js',
         'scripts/components/admin/monitoring.service.js',
+        'scripts/components/interceptor/auth.interceptor.js',
+        'scripts/components/interceptor/errorhandler.interceptor.js',
+        'scripts/components/interceptor/notification.interceptor.js',
         'scripts/components/navbar/navbar.directive.js',
         'scripts/components/navbar/navbar.controller.js',
         'scripts/components/user/user.service.js',
         'scripts/components/util/truncate.filter.js',
         'scripts/components/util/base64.service.js',
+        'scripts/components/alert/alert.service.js',
+        'scripts/components/alert/alert.directive.js',
         'scripts/components/util/parse-links.service.js',
         'scripts/components/util/dateutil.service.js',
         'scripts/app/account/account.js',
@@ -1026,10 +1070,12 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/app/admin/docs/docs.js',
         'scripts/app/admin/health/health.js',
         'scripts/app/admin/health/health.controller.js',
+        'scripts/app/admin/health/health.modal.controller.js',
         'scripts/app/admin/logs/logs.js',
         'scripts/app/admin/logs/logs.controller.js',
         'scripts/app/admin/metrics/metrics.js',
         'scripts/app/admin/metrics/metrics.controller.js',
+        'scripts/app/admin/metrics/metrics.modal.controller.js',
         'scripts/app/entities/entity.js',
         'scripts/app/error/error.js',
         'scripts/app/main/main.js',
@@ -1045,6 +1091,8 @@ JhipsterGenerator.prototype.app = function app() {
     }
     if (this.enableTranslation) {
         appScripts = appScripts.concat([
+          'bower_components/messageformat/locale/en.js',
+          'bower_components/messageformat/locale/fr.js',
           'scripts/components/language/language.service.js',
           'scripts/components/language/language.controller.js']);
     }
@@ -1096,7 +1144,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.config.set('devDatabaseType', this.devDatabaseType);
     this.config.set('prodDatabaseType', this.prodDatabaseType);
     this.config.set('searchEngine', this.searchEngine);
-    this.config.set('useCompass', this.useCompass);
+    this.config.set('useSass', this.useSass);
     this.config.set('buildTool', this.buildTool);
     this.config.set('frontendBuilder', this.frontendBuilder);
     this.config.set('javaVersion', this.javaVersion);
@@ -1107,6 +1155,7 @@ JhipsterGenerator.prototype.app = function app() {
 JhipsterGenerator.prototype.projectfiles = function projectfiles() {
     this.copy('editorconfig', '.editorconfig');
     this.copy('jshintrc', '.jshintrc');
+    this.template('_travis.yml', '.travis.yml', this, {});
 };
 
 function removefile(file) {

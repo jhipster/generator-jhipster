@@ -5,7 +5,7 @@
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
-        <version>1.2.4.RELEASE</version>
+        <version>1.2.5.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -21,25 +21,23 @@
     </prerequisites>
 
     <properties>
-        <HikariCP.version>2.3.7</HikariCP.version><% if (javaVersion == '8') { %>
-        <assertj-core.version>1.0.0m1</assertj-core.version><% } %><% if (javaVersion == '7') { %>
-        <assertj-core.version>1.6.1</assertj-core.version><% } %>
-        <awaitility.version>1.4.0</awaitility.version><% if (databaseType == 'cassandra') { %>
-        <cassandra.version>2.0.12</cassandra.version><% } %>
+        <hikaricp.version>2.4.0</hikaricp.version><% if (javaVersion == '8') { %>
+        <assertj-core.version>3.1.0</assertj-core.version><% } %><% if (javaVersion == '7') { %>
+        <assertj-core.version>2.1.0</assertj-core.version><% } %>
+        <awaitility.version>1.4.0</awaitility.version>
         <commons-io.version>2.4</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
-        <gatling.version>2.1.5</gatling.version>
-        <gatling-maven-plugin.version>2.1.5</gatling-maven-plugin.version><% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
-        <hazelcast.version>3.4.3</hazelcast.version><% } %><% if (databaseType == 'sql') { %>
-        <hibernate.version>4.3.6.Final</hibernate.version><% } %><% if (databaseType == 'cassandra') { %>
-        <datastax-driver.version>2.1.4</datastax-driver.version><% } %>
+        <gatling.version>2.1.6</gatling.version>
+        <gatling-maven-plugin.version>2.1.6</gatling-maven-plugin.version><% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
+        <hazelcast.version>3.5.1</hazelcast.version><% } %><% if (databaseType == 'sql') { %>
+        <hibernate.version>4.3.10.Final</hibernate.version><% } %><% if (databaseType == 'cassandra') { %>
+        <datastax-driver.version>2.1.7.1</datastax-driver.version><% } %>
         <java.version>1.<%= javaVersion %></java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <javax.inject.version>1</javax.inject.version><% if (databaseType == 'sql') { %>
-        <joda-time-hibernate.version>1.3</joda-time-hibernate.version><% } %>
-        <json-path.version>0.9.1</json-path.version><% if (databaseType == 'sql') { %>
-        <liquibase.version>3.3.2</liquibase.version>
+        <joda-time-hibernate.version>1.4</joda-time-hibernate.version><% } %><% if (databaseType == 'sql') { %>
+        <liquibase.version>3.4.1</liquibase.version>
         <liquibase-slf4j.version>1.2.1</liquibase-slf4j.version>
         <liquibase-hibernate4.version>3.5</liquibase-hibernate4.version><% } %><% if (databaseType == 'cassandra') { %>
         <lz4.version>1.3.0</lz4.version><% } %>
@@ -48,14 +46,29 @@
         <maven-enforcer-plugin.version>1.3.1</maven-enforcer-plugin.version>
         <maven-sortpom-plugin.version>2.3.0</maven-sortpom-plugin.version>
         <metrics-spark-reporter.version>1.2</metrics-spark-reporter.version>
-        <metrics-spring.version>3.0.4</metrics-spring.version><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
-        <postgresql.version>9.3-1102-jdbc41</postgresql.version><% } %>
+        <metrics-spring.version>3.1.2</metrics-spring.version><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
+        <postgresql.version>9.4-1201-jdbc41</postgresql.version><% } %>
         <run.addResources>false</run.addResources>
-        <sonar-maven-plugin.version>2.3</sonar-maven-plugin.version>
-        <spring-security.version>4.0.1.RELEASE</spring-security.version><% if (authenticationType == 'oauth2') { %>
+        <spring-security.version>4.0.2.RELEASE</spring-security.version><% if (authenticationType == 'oauth2') { %>
         <spring-security-oauth2.version>2.0.7.RELEASE</spring-security-oauth2.version><% } %>
         <springfox.version>2.0.3</springfox.version>
-        <usertype-core.version>3.2.0.GA</usertype-core.version>
+        <usertype-core.version>4.0.0.GA</usertype-core.version>
+        <!-- Sonar properties -->
+        <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
+        <sonar-maven-plugin.version>2.6</sonar-maven-plugin.version>
+        <jacoco-maven-plugin.version>0.7.4.201502262128</jacoco-maven-plugin.version>
+        <sonar.exclusions>src/main/webapp/assets/**/*.*, src/main/webapp/bower_components/**/*.*, src/main/webapp/dist/**/*.*</sonar.exclusions>
+        <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
+        <sonar.jacoco.itReportPath>${project.testresult.directory}/coverage/jacoco/jacoco-it.exec</sonar.jacoco.itReportPath>
+        <sonar.jacoco.reportPath>${project.testresult.directory}/coverage/jacoco/jacoco.exec</sonar.jacoco.reportPath>
+
+        <sonar.javascript.jstestdriver.reportsPath>${project.testresult.directory}/karma</sonar.javascript.jstestdriver.reportsPath>
+        <sonar.javascript.lcov.reportPath>${project.testresult.directory}/coverage/report-lcov/lcov.info</sonar.javascript.lcov.reportPath>
+
+        <sonar.sources>${project.basedir}/src/main/</sonar.sources>
+        <sonar.surefire.reportsPath>${project.testresult.directory}/surefire-reports</sonar.surefire.reportsPath>
+        <sonar.tests>${project.basedir}/src/test/</sonar.tests>
+
     </properties>
 
     <dependencies>
@@ -160,13 +173,8 @@
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
-            <version>${json-path.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${springfox.version}</version>
+            <!-- parent POM declares this dependency in default (compile) scope -->
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
@@ -205,8 +213,7 @@
         </dependency>
         <dependency>
             <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP<% if (javaVersion == '7') { %>-java6<% } %></artifactId>
-            <version>${HikariCP.version}</version>
+            <artifactId>HikariCP</artifactId>
             <exclusions>
                 <exclusion>
                     <artifactId>tools</artifactId>
@@ -215,12 +222,12 @@
             </exclusions>
         </dependency>
         <!-- The HikariCP Java Agent is disabled by default, as it is experimental
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP-agent</artifactId>
-            <version>${HikariCP.version}</version>
-        </dependency>
-        -->
+          <dependency>
+              <groupId>com.zaxxer</groupId>
+                  <artifactId>HikariCP-agent</artifactId>
+                      <version>${HikariCP.version}</version>
+                      </dependency>
+                  -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -272,16 +279,15 @@
             <version><% if (javaVersion == '7') { %>6<% }else { %>7<% } %></version>
         </dependency><% } %>
         <dependency>
-            <groupId>org.assertj</groupId><% if (javaVersion == '8') { %>
-            <artifactId>assertj-core-java8</artifactId><% } %><% if (javaVersion == '7') { %>
-            <artifactId>assertj-core</artifactId><% } %>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
             <version>${assertj-core.version}</version>
             <scope>test</scope>
         </dependency><% if (databaseType == 'cassandra') { %>
         <dependency>
             <groupId>org.cassandraunit</groupId>
             <artifactId>cassandra-unit-spring</artifactId>
-            <version>2.0.2.2</version>
+            <version>2.1.3.1</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -317,7 +323,6 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version>${liquibase.version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>jetty-servlet</artifactId>
@@ -334,12 +339,12 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${postgresql.version}</version>
-        </dependency><% } %>
+        </dependency><% } %><% if (javaVersion == '8') { %>
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-jdk8</artifactId>
             <version>${mapstruct.version}</version>
-        </dependency>
+        </dependency><% } %>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
@@ -351,12 +356,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
-            <version>${spring-boot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-loader-tools</artifactId>
-            <version>${spring-boot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -418,17 +421,6 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-cassandra</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.apache.cassandra</groupId>
-            <artifactId>cassandra-all</artifactId>
-            <version>${cassandra.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
         <!-- DataStax driver -->
         <dependency>
             <groupId>com.datastax.cassandra</groupId>
@@ -463,7 +455,6 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-data</artifactId>
-            <version>${spring-security.version}</version>
         </dependency><% if (websocket == 'spring-websocket') { %>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -494,63 +485,6 @@
                 </excludes>
             </resource>
         </resources>
-        <pluginManagement>
-            <plugins>
-                <!--This plugin's configuration is used to store Eclipse m2e settings
-                only. It has no influence on the Maven build itself.-->
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.apache.maven.plugins</groupId>
-                                        <artifactId>maven-dependency-plugin</artifactId>
-                                        <versionRange>[1.0,)</versionRange>
-                                        <goals>
-                                            <goal>copy</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <execute />
-                                    </action>
-                                </pluginExecution>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.apache.maven.plugins</groupId>
-                                        <artifactId>maven-enforcer-plugin</artifactId>
-                                        <versionRange>[1.0,)</versionRange>
-                                        <goals>
-                                            <goal>enforce</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <execute />
-                                    </action>
-                                </pluginExecution>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.codehaus.mojo</groupId>
-                                        <artifactId>exec-maven-plugin</artifactId>
-                                        <versionRange>[1.2.1,)</versionRange>
-                                        <goals>
-                                            <goal>java</goal>
-                                            <goal>exec</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore />
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>com.google.code.sortpom</groupId>
@@ -584,7 +518,7 @@
                     <bodiesFolder>src/test/gatling/bodies</bodiesFolder>
                     <simulationsFolder>src/test/gatling/simulations</simulationsFolder>
                     <!-- This will force Gatling to ask which simulation to run
-                         This is useful when you have multiple simulations -->
+                      This is useful when you have multiple simulations -->
                     <simulationClass>*</simulationClass>
                 </configuration>
             </plugin>
@@ -625,7 +559,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <argLine><% if (javaVersion == '7') { %>-XX:MaxPermSize=128m <% } %>-Xmx256m</argLine>
+                    <argLine><% if (javaVersion == '7') { %>-XX:MaxPermSize=128m <% } %>-Xmx256m ${surefireArgLine}</argLine>
                     <!-- Force alphabetical order to have a reproducible build -->
                     <runOrder>alphabetical</runOrder>
                 </configuration>
@@ -638,10 +572,41 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>pre-unit-tests</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Sets the path to the file which contains the execution data. -->
+                            <destFile>${project.testresult.directory}/coverage/jacoco/jacoco.exec</destFile>
+                            <!-- Sets the name of the property containing the settings for JaCoCo runtime agent. -->
+                            <propertyName>surefireArgLine</propertyName>
+                        </configuration>
+                    </execution>
+                    <!-- Ensures that the code coverage report for unit tests is created after unit tests have been run -->
+                    <execution>
+                        <id>post-unit-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${project.testresult.directory}/coverage/jacoco/jacoco.exec</dataFile>
+                            <outputDirectory>${project.testresult.directory}/coverage/jacoco</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>${sonar-maven-plugin.version}</version>
-            </plugin>
+            </plugin><% if (javaVersion == '8') { %>
             <plugin>
                 <groupId>org.bsc.maven</groupId>
                 <artifactId>maven-processor-plugin</artifactId>
@@ -674,7 +639,7 @@
                         <version>${mapstruct.version}</version>
                     </dependency>
                 </dependencies>
-            </plugin><% if (databaseType == 'sql') { %>
+            </plugin><% } %><% if (databaseType == 'sql') { %>
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
@@ -738,7 +703,7 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-tomcat</artifactId>
                 </dependency>
-            </dependencies><% if(frontendBuilder == 'grunt' && useCompass) { %>
+            </dependencies><% if(frontendBuilder == 'grunt' && useSass) { %>
             <build>
                 <plugins>
                     <plugin>
@@ -755,7 +720,7 @@
                                 <configuration>
                                     <skipTests>true</skipTests>
                                     <buildTool>grunt</buildTool>
-                                    <buildArgs>compass:server --force</buildArgs>
+                                    <buildArgs>sass:server --force</buildArgs>
                                 </configuration>
                             </execution>
                         </executions>
@@ -862,5 +827,5 @@
             <id>Local-lib</id>
             <url>file://${project.basedir}/lib</url>
         </repository>
-      </repositories><% } %>
+    </repositories><% } %>
 </project>

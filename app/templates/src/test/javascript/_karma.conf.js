@@ -23,6 +23,27 @@ module.exports = function (config) {
         // list of files / patterns to exclude
         exclude: [],
 
+        preprocessors: {
+            './**/*.js': ['coverage']
+        },
+
+        reporters: ['dots', 'jenkins', 'coverage', 'progress'],
+
+        jenkinsReporter: {
+            <% if (buildTool == 'maven') { %>
+            outputFile: '../target/test-results/karma/TESTS-results.xml'<% } else { %>
+            outputFile: '../build/test-results/karma/TESTS-results.xml'<% } %>
+        },
+
+        coverageReporter: {
+            <% if (buildTool == 'maven') { %>
+            dir: '../target/test-results/coverage',<% } else { %>
+            dir: '../build/test-results/coverage',<% } %>
+            reporters: [
+                {type: 'lcov', subdir: 'report-lcov'}
+            ]
+        },
+
         // web server port
         port: 9876,
 

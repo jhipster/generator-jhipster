@@ -68,6 +68,10 @@ body {
     background-size: contain;
 }
 
+.pad {
+    padding: 10px;
+}
+
 /* wait autoprefixer update to allow simple generation of high pixel density media query */
 @media
 only screen and (-webkit-min-device-pixel-ratio: 2),
@@ -87,6 +91,28 @@ a:hover {
   cursor: pointer;
 }
 
+.hand {
+    cursor: pointer;
+}
+
+#threadDump .popover, #healthCheck .popover {
+    top: inherit;
+    display: block;
+    font-size: 10px;
+    max-width: 1024px;
+}
+
+#healthCheck .popover {
+    margin-left: -50px;
+}
+
+.health-details {
+    min-width: 400px;
+}
+
+.alert .popover pre {
+    font-size: 10px;
+}
 
 /* start Password strength bar style */
 ul#strength {
@@ -110,3 +136,16 @@ ul#strength {
     width:20px;
 }
 /* end Password strength bar style */
+/* Custom alerts for notification */
+.alerts .alert{
+    text-overflow: ellipsis;
+}
+.alert pre{
+    background: none;
+    border: none;
+    font: inherit;
+    color: inherit;
+    padding: 0;
+    margin: 0;
+}
+/* end of Custom alerts for notification */

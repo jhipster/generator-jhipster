@@ -173,6 +173,8 @@ HerokuGenerator.prototype.herokuCreate = function herokuCreate() {
 
 HerokuGenerator.prototype.copyHerokuFiles = function copyHerokuFiles() {
     if(this.abort) return;
+    var insight = this.insight();
+    insight.track('generator', 'heroku');
     var done = this.async();
     this.log(chalk.bold('\nCreating Heroku deployment files'));
 
@@ -190,7 +192,7 @@ HerokuGenerator.prototype.productionDeploy = function productionDeploy() {
         var done = this.async();
         this.log(chalk.bold('\nBuilding and deploying application'));
 
-        var herokuDeployCommand = 'mvn package -Pprod -DskipTests=true && heroku deploy:jar --jar target/*.war';
+        var herokuDeployCommand = 'mvn package -Pprod -DskipTests=true && heroku deploy:jar --jar target/*.war --app ' + this.herokuDeployedName;
         if (this.buildTool == 'gradle') {
             herokuDeployCommand = './gradlew -Pprod bootRepackage -x test && heroku deploy:jar --jar build/libs/*.war'
         }

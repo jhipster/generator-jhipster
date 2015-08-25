@@ -210,7 +210,9 @@
         <createTable tableName="oauth_access_token">
             <column name="token_id" type="varchar(255)"/>
             <column name="token" type="BLOB"/>
-            <column name="authentication_id" type="varchar(255)"/>
+            <column name="authentication_id" type="varchar(255)">
+                 <constraints nullable="false" primaryKey="true"/>
+            </column>
             <column name="user_name" type="varchar(255)"/>
             <column name="client_id" type="varchar(255)"/>
             <column name="authentication" type="BLOB"/>

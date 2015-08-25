@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
   },
-  "devDependencies": {<% if(frontendBuilder == 'grunt') { %>
+  "devDependencies": {<% if (frontendBuilder == 'grunt') { %>
     "grunt": "0.4.5",
     "grunt-autoprefixer": "2.2.0",
     "grunt-build-control": "0.3.0",
@@ -30,8 +30,8 @@
     "grunt-angular-templates":"0.5.7",
     "load-grunt-tasks": "3.1.0",
     "grunt-karma": "0.11.0",
-    "time-grunt": "1.1.0",<% if (useCompass) { %>
-    "grunt-contrib-compass": "1.0.1",<% }} if(frontendBuilder == 'gulp') { %>
+    "time-grunt": "1.1.0",<% if (useSass) { %>
+    "grunt-sass": "1.0.0",<% }} if (frontendBuilder == 'gulp') { %>
     "browser-sync": "2.7.6",
     "del": "1.1.1",
     "gulp": "3.8.11",
@@ -48,9 +48,9 @@
     "gulp-karma": "https://github.com/lazd/gulp-karma/tarball/helper",
     "gulp-rev": "3.0.0",
     "gulp-jshint": "1.9.0",
-    "gulp-browserify": "0.5.1",<% if (useCompass) { %>
-    "gulp-compass": "2.0.3",<% } %>
-    "proxy-middleware": "0.9.0",
+    "gulp-browserify": "0.5.1",<% if (useSass) { %>
+    "gulp-sass": "2.0.4",<% } %>
+    "proxy-middleware": "0.13.1",
     "run-sequence": "1.1.0",<% } %>
     "event-stream": "3.3.1",
     "jshint-stylish": "1.0.1",
@@ -62,6 +62,8 @@
     "karma-phantomjs-launcher": "0.2.0",
     "phantomjs": "1.9.17",
     "karma": "0.12.35",
+    "karma-coverage": "0.4.2",
+    "karma-jenkins-reporter": "0.0.2",
     "generator-jhipster": "<%= packagejs.version %>",
     "lodash": "3.3.1",<% if (buildTool == 'maven') { %>
     "xml2js": "0.4.5",<% } %>
@@ -73,5 +75,9 @@
   },
   "engines": {
     "node": ">=0.12.0"
+  },
+  "scripts": {<% if (frontendBuilder == 'grunt') { %>
+    "test": "grunt test"<% } if (frontendBuilder == 'gulp') { %>
+    "test": "gulp test"<% } %>
   }
 }

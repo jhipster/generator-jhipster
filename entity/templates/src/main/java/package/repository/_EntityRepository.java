@@ -27,8 +27,12 @@ import java.util.UUID;<% } %>
 public interface <%=entityClass%>Repository extends <% if (databaseType=='sql') { %>JpaRepository<% } %><% if (databaseType=='mongodb') { %>MongoRepository<% } %><<%=entityClass%>,<% if (databaseType=='sql') {%>Long<%}%><% if (databaseType=='mongodb') { %>String<%}%>> {<% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'many-to-one' && relationships[relationshipId].otherEntityName == 'user') { %>
 
     @Query("select <%= entityInstance %> from <%= entityClass %> <%= entityInstance %> where <%= entityInstance %>.<%= relationships[relationshipId].relationshipFieldName %>.login = ?#{principal.username}")
-    List<<%= entityClass %>> findAllForCurrentUser();<% } } %>
+    List<<%= entityClass %>> findBy<%= relationships[relationshipId].relationshipNameCapitalized %>IsCurrentUser();<% } } %>
 <% if (fieldsContainOwnerManyToMany==true) { %>
+    @Query("select distinct <%= entityInstance %> from <%= entityClass %> <%= entityInstance %><% for (relationshipId in relationships) {
+    if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %> left join fetch <%=entityInstance%>.<%=relationships[relationshipId].relationshipFieldName%>s<%} }%>")
+    List<<%=entityClass%>> findAllWithEagerRelationships();
+
     @Query("select <%= entityInstance %> from <%= entityClass %> <%= entityInstance %><% for (relationshipId in relationships) {
     if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %> left join fetch <%=entityInstance%>.<%=relationships[relationshipId].relationshipFieldName%>s<%} }%> where <%=entityInstance%>.id =:id")
     <%=entityClass%> findOneWithEagerRelationships(@Param("id") Long id);
@@ -75,11 +79,12 @@ public class <%= entityClass %>Repository {
         return mapper.get(id);
     }
 
-    public void save(<%= entityClass %> <%= entityInstance %>) {
+    public <%= entityClass %> save(<%= entityClass %> <%= entityInstance %>) {
         if (<%= entityInstance %>.getId() == null) {
             <%= entityInstance %>.setId(UUID.randomUUID());
         }
         mapper.save(<%= entityInstance %>);
+        return <%= entityInstance %>;
     }
 
     public void delete(UUID id) {

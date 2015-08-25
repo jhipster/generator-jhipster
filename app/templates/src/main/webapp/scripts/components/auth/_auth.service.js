@@ -112,10 +112,10 @@ angular.module('<%=angularAppName%>')
                 }).$promise;
             },
 
-            resetPasswordFinish: function(key, newPassword, callback) {
+            resetPasswordFinish: function(keyAndPassword, callback) {
                 var cb = callback || angular.noop;
 
-                return PasswordResetFinish.save(key, newPassword, function () {
+                return PasswordResetFinish.save(keyAndPassword, function () {
                     return cb();
                 }, function (err) {
                     return cb(err);

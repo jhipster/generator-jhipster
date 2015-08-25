@@ -12,16 +12,21 @@ describe('Services Tests ', function () {
             spiedLocalStorageService = localStorageService;
             authService = Auth;
             spiedAuthServerProvider = AuthServerProvider;
-            //Request on app init<% if (authenticationType == 'session' || authenticationType == 'oauth2') { %>
-            $httpBackend.expectPOST(/api\/logout\?cacheBuster=\d+/).respond(200, ''); <% } %>
-
-            $httpBackend.expectGET('scripts/components/navbar/navbar.html').respond({});
-            <% if (enableTranslation) { %>
-            $httpBackend.expectGET('i18n/en/global.json').respond(200, '');
-            $httpBackend.expectGET('i18n/en/main.json').respond(200, '');
-	     <% } %>
-            $httpBackend.expectGET('scripts/app/main/main.html').respond({});<% if (authenticationType == 'session') { %>
-            $httpBackend.expectGET(/api\/account\?cacheBuster=\d+/).respond({});<% } %>
+            //Request on app init
+<% if (authenticationType == 'session') { -%>
+            $httpBackend.whenGET(/api\/account\?cacheBuster=\d+/).respond({});
+<% } -%>
+            $httpBackend.whenGET('scripts/app/main/main.html').respond({});
+            $httpBackend.whenGET('scripts/components/navbar/navbar.html').respond({});
+<% if (enableTranslation) { -%>
+            var globalJson = new RegExp('i18n\/.*\/global.json')
+            var mainJson = new RegExp('i18n\/.*\/main.json');
+            $httpBackend.whenGET(globalJson).respond({});
+            $httpBackend.whenGET(mainJson).respond({});
+<% } -%>
+<% if (authenticationType == 'session' || authenticationType == 'oauth2') { -%>
+            $httpBackend.expectPOST(/api\/logout\?cacheBuster=\d+/).respond(200, '');
+<% } -%>
           }));
         //make sure no expectations were missed in your tests.
         //(e.g. expectGET or expectPOST)

@@ -4,41 +4,76 @@
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
-                <tr>
-                    <th translate="entity.detail.field">Field</th>
-                    <th translate="entity.detail.value">Value</th>
-                </tr>
+            <tr>
+                <th translate="entity.detail.field">Field</th>
+                <th translate="entity.detail.value">Value</th>
+            </tr>
             </thead>
             <tbody><% for (fieldId in fields) { %>
-                <tr>
-                    <td>
-                        <span translate="<%= keyPrefix %>.<%=fields[fieldId].fieldName%>"><%=fields[fieldId].fieldNameCapitalized%></span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{<%= entityInstance %>.<%=fields[fieldId].fieldName%>}}" readonly>
-                    </td>
-                </tr><% } %><% for (relationshipId in relationships) {
-                                 if (relationships[relationshipId].relationshipType == 'many-to-one') {
-                                     var relationshipName = relationships[relationshipId].relationshipName;
-                                     var otherEntityName = relationships[relationshipId].otherEntityName;
-                                     var relationShipValue = entityInstance + "." + relationshipName + "." + relationships[relationshipId].otherEntityField;
-                                     if (dto == 'mapstruct') {
-                                         relationShipValue = entityInstance + "." + relationshipName + relationships[relationshipId].otherEntityFieldCapitalized;
-                                     }%>
-                <tr>
-                    <td>
-                        <span translate="<%= keyPrefix %>.<%= relationshipName %>"><%=relationshipName%></span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{<%= relationShipValue %>}}" readonly>
-                    </td>
-                </tr><% } } %>
+            <tr>
+                <td>
+                    <span translate="<%= keyPrefix %>.<%=fields[fieldId].fieldName%>"><%=fields[fieldId].fieldNameCapitalized%></span>
+                </td>
+                <td><% if (fields[fieldId].fieldIsEnum) {
+                    var enumPrefix = angularAppName + '.'+ fields[fieldId].fieldType; %>
+                    <span class="input-sm form-control readonly" translate="<%=enumPrefix%>.SELECT"
+                          translate-interpolation="messageformat" translate-values="{ VALUE: <%= entityInstance %>.<%=fields[fieldId].fieldName%> }"></span><%
+                    } else if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'image') { %>
+                    <img data-ng-src="{{'data:image/*;base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-width: 100%;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/><%
+                    } else { %>
+                    <span class="form-control-static">{{<%= entityInstance %>.<%=fields[fieldId].fieldName%>}}</span><%
+                    } %>
+                </td>
+            </tr><% } %><% for (relationshipId in relationships) {
+            var relationshipType = relationships[relationshipId].relationshipType;
+            var ownerSide = relationships[relationshipId].ownerSide;
+            var relationshipName = relationships[relationshipId].relationshipName;
+            var relationshipFieldName = relationships[relationshipId].relationshipFieldName;
+            var otherEntityName = relationships[relationshipId].otherEntityName;
+            var otherEntityField = relationships[relationshipId].otherEntityField;
+            var otherEntityFieldCapitalized = relationships[relationshipId].otherEntityFieldCapitalized;
+            if (relationshipType == 'many-to-one'
+                || (relationshipType == 'one-to-one' && ownerSide == true)
+                || (relationshipType == 'many-to-many' && ownerSide == true)) {
+                %>
+            <tr>
+                <td>
+                    <span translate="<%= keyPrefix %>.<%= relationshipName %>"><%=relationshipName%></span>
+                </td>
+                <td>
+<% if (otherEntityName == 'user') { -%>
+<% if (relationshipType == 'many-to-many') { -%>
+                    <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldName %>s">
+                        {{<%= relationshipFieldName %>.<%= otherEntityField %>}}{{$last ? '' : ', '}}
+                    <span>
+<% } else { -%>
+<% if (dto == 'no') { -%>
+                    {{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}
+<% } else { -%>
+                    {{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}
+<% } -%>
+<% } -%>
+<% } else { -%>
+<% if (relationshipType == 'many-to-many') { -%>
+                    <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldName %>s">
+                        <a class="form-control-static" ui-sref="<%= otherEntityName %>.detail({id: {{<%= relationshipFieldName %>.id}}})">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
+                    <span>
+<% } else { -%>
+<% if (dto == 'no') { -%>
+                    <a class="form-control-static" ui-sref="<%= otherEntityName %>.detail({id:<%= entityInstance + "." + relationshipFieldName + ".id" %>})">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</a>
+<% } else { -%>
+                    <a class="form-control-static" ui-sref="<%= otherEntityName %>.detail({id:<%= entityInstance + "." + relationshipFieldName + "Id" %>})">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
+<% } -%>
+<% } -%>
+<% } -%>
+                </td>
+            </tr><% } } %>
             </tbody>
         </table>
     </div>
 
     <button type="submit"
-            ui-sref="<%= entityInstance %>"
+            onclick="window.history.back()"
             class="btn btn-info">
         <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
     </button>

@@ -38,8 +38,16 @@ import java.util.HashSet;
 import java.util.Set;<% } %>
 import java.util.Objects;<% if (databaseType == 'cassandra') { %>
 import java.util.UUID;<% } %>
-<% for (fieldId in fields) { if (fields[fieldId].fieldIsEnum == true) { %>
-import <%=packageName%>.domain.enumeration.<%= fields[fieldId].fieldType %>;<% } } %>
+<%
+var uniqueEnums = {};
+for (fieldId in fields) {
+    if (fields[fieldId].fieldIsEnum && (
+            !uniqueEnums[fields[fieldId].fieldType] || (uniqueEnums[fields[fieldId].fieldType] && fields[fieldId].fieldValues.length !== 0))) {
+        uniqueEnums[fields[fieldId].fieldType] = fields[fieldId].fieldType;
+    }
+}
+Object.keys(uniqueEnums).forEach(function(element) {%>
+import <%=packageName%>.domain.enumeration.<%= element %>;<% }); %>
 
 /**
  * A <%= entityClass %>.
@@ -59,20 +67,17 @@ public class <%= entityClass %> implements Serializable {
     private String id;<% } %><% if (databaseType == 'cassandra') { %>
     @PartitionKey
     private UUID id;<% } %>
+    
 <% for (fieldId in fields) { %><% if (fields[fieldId].fieldValidate == true) {
     var required = false;
     if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) {
         required = true;
-    }
-    if (required) { %>
-    @NotNull<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('minlength') != -1 && fields[fieldId].fieldValidateRules.indexOf('maxlength') == -1) { %>
-    @Size(min = <%= fields[fieldId].fieldValidateRulesMinlength %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('maxlength') != -1 && fields[fieldId].fieldValidateRules.indexOf('minlength') == -1) { %>
-    @Size(max = <%= fields[fieldId].fieldValidateRulesMaxlength %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('minlength') != -1 && fields[fieldId].fieldValidateRules.indexOf('maxlength') != -1) { %>
-    @Size(min = <%= fields[fieldId].fieldValidateRulesMinlength %>, max = <%= fields[fieldId].fieldValidateRulesMaxlength %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('min') != -1) { %>
-    @Min(value = <%= fields[fieldId].fieldValidateRulesMin %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('max') != -1) { %>
-    @Max(value = <%= fields[fieldId].fieldValidateRulesMax %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('pattern') != -1) { %>
-    @Pattern(regexp = "<%= fields[fieldId].fieldValidateRulesPattern %>")<% } } %><% if (databaseType == 'sql') { %><% if (fields[fieldId].fieldIsEnum) { %>
-    @Enumerated(EnumType.STRING)<% } %><% if (fields[fieldId].fieldType == 'DateTime') { %>
+    } %>
+    <%- include field_validators -%>
+    <% } -%>
+    <% if (databaseType == 'sql') { %><% if (fields[fieldId].fieldIsEnum) { %>
+    @Enumerated(EnumType.STRING)<% } %><% if (fields[fieldId].fieldType == 'byte[]') { %>
+    @Lob<% } %><% if (fields[fieldId].fieldType == 'DateTime') { %>
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     @JsonDeserialize(using = CustomDateTimeDeserializer.class)

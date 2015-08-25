@@ -32,7 +32,8 @@ LanguagesGenerator.prototype.askFor = function askFor() {
             {name: 'Catalan', value: 'ca'},
             {name: 'Chinese (Simplified)', value: 'zh-cn'},
             {name: 'Chinese (Traditional)', value: 'zh-tw'},
-            {name: 'Danish', value: 'da'},
+            {name: 'Danish', value: 'da'},            
+            {name: 'Dutch', value: 'nl'},            
             {name: 'German', value: 'de'},
             {name: 'Hungarian', value: 'hu'},
             {name: 'Italian', value: 'it'},
@@ -69,6 +70,7 @@ LanguagesGenerator.prototype.files = function files() {
         var language = this.languages[id];
         this.installI18nFilesByLanguage(this, webappDir, resourceDir, language);
         this.installNewLanguage(language);
+        this.addMessageformatLocaleToIndex(language.split("-")[0] + '.js');
         insight.track('languages/language', language);
     }
 };

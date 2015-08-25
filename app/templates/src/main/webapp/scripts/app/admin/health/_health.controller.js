@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('HealthController', function ($scope, MonitoringService) {
+    .controller('HealthController', function ($scope, MonitoringService, $modal) {
         $scope.updatingHealth = true;
         $scope.separator = '.';
 
@@ -61,9 +61,24 @@ angular.module('<%=angularAppName%>')
         };
 
 
-        $scope.showHealth = function (health) {
-            $scope.currentHealth = health;
-            $('#showHealthModal').modal('show');
+        $scope.showHealth = function(health) {
+            var modalInstance = $modal.open({
+                templateUrl: 'scripts/app/admin/health/health.modal.html',
+                controller: 'HealthModalController',
+                size: 'lg',
+                resolve: {
+                    currentHealth: function() {
+                        return health;
+                    },
+                    baseName: function() {
+                        return $scope.baseName;
+                    },
+                    subSystemName: function() {
+                        return $scope.subSystemName;
+                    }
+
+                }
+            });
         };
 
         $scope.addHealthObject = function (result, isLeaf, healthObject, name) {

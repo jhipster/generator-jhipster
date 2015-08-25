@@ -1,11 +1,11 @@
 <div>
 <% var keyPrefix = angularAppName + '.'+ entityInstance + '.'; %>
     <h2 translate="<%= keyPrefix %>home.title"><%= entityClass %>s</h2>
-
+    <jh-alert></jh-alert>
     <div class="container">
         <div class="row">
             <div class="col-md-4">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#save<%= entityClass %>Modal" ng-click="clear()">
+                <button class="btn btn-primary" ui-sref="<%= entityInstance %>.new">
                     <span class="glyphicon glyphicon-flash"></span> <span translate="<%= keyPrefix %>home.createLabel">Create a new <%= entityClass %></span>
                 </button>
             </div><% if (searchEngine == 'elasticsearch') { %>
@@ -18,127 +18,6 @@
                     </button>
                 </form>
             </div><% } %>
-        </div>
-    </div>
-
-    <div class="modal fade" id="save<%= entityClass %>Modal" tabindex="-1" role="dialog" aria-labelledby="my<%= entityClass %>Label"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form name="editForm" role="form" novalidate ng-submit="save()"<% if (validation) { %> show-validation<% } %>>
-
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                                ng-click="clear()">&times;</button>
-                        <h4 class="modal-title" id="my<%= entityClass %>Label" translate="<%= keyPrefix %>home.createOrEditLabel">Create or edit a <%= entityClass %></h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label translate="global.field.id">ID</label>
-                            <input type="text" class="form-control" name="id"
-                                   ng-model="<%=entityInstance %>.id" readonly>
-                        </div>
-<% for (fieldId in fields) {
-    var fieldInputType = 'text';
-    var ngModelOption = '';
-    var translationKey = keyPrefix + fields[fieldId].fieldName;
-    if (fields[fieldId].fieldType == 'Integer' || fields[fieldId].fieldType == 'Long' || fields[fieldId].fieldType == 'BigDecimal') {
-        fieldInputType = 'number';
-    } else if (fields[fieldId].fieldType == 'LocalDate') {
-        fieldInputType = 'date';
-    } else if (fields[fieldId].fieldType == 'DateTime') {
-        fieldInputType = 'datetime-local';
-    } else if (fields[fieldId].fieldType == 'Boolean') {
-        fieldInputType = 'checkbox';
-    } %>
-                        <div class="form-group">
-                            <label translate="<%= translationKey %>"><%=fields[fieldId].fieldNameCapitalized%></label><% if (fields[fieldId].fieldIsEnum) { %>
-                            <select class="form-control" name="<%= fields[fieldId].fieldName %>" ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) { %> required<% } %>><%
-                                var values = fields[fieldId].fieldValues.split(",");
-                                for (key in values) {
-                                    var value = values[key]; %>
-                                <option value="<%= value %>"><%= value %></option><%
-                                } %>
-                            </select><% } else { %>
-                            <input type="<%= fieldInputType %>" class="form-control" name="<%= fields[fieldId].fieldName %>"
-                                   ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldType == 'DateTime') { %> ng-model-options="{timezone: 'UTC'}"<% } %><% if (fields[fieldId].fieldValidate == true) {
-                                       if (fields[fieldId].fieldValidateRules.indexOf('required') != -1) {
-                                       %> required<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('minlength') != -1) {
-                                       %> ng-minlength="<%= fields[fieldId].fieldValidateRulesMinlength %>"<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('maxlength') != -1) {
-                                       %> ng-maxlength="<%= fields[fieldId].fieldValidateRulesMaxlength %>"<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('min') != -1) {
-                                       %> min="<%= fields[fieldId].fieldValidateRulesMin %>"<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('max') != -1) {
-                                       %> max="<%= fields[fieldId].fieldValidateRulesMax %>"<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('pattern') != -1) {
-                                       %> ng-pattern="/<%= fields[fieldId].fieldValidateRulesPattern %>/"<% } } %>><% } %>
-<% if (fields[fieldId].fieldValidate == true) { %>
-                            <div ng-show="editForm.<%= fields[fieldId].fieldName %>.$invalid"><% if (fields[fieldId].fieldValidateRules.indexOf('required') != -1) { %>
-                                <p class="help-block"
-                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.required" translate="entity.validation.required">
-                                    This field is required.
-                                </p><% } %><% if (fields[fieldId].fieldValidateRules.indexOf('minlength') != -1) { %>
-                                <p class="help-block"
-                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.minlength" translate="entity.validation.minlength" translate-value-min="<%= fields[fieldId].fieldValidateRulesMinlength %>">
-                                    This field is required to be at least <%= fields[fieldId].fieldValidateRulesMinlength %> characters.
-                                </p><% } %><% if (fields[fieldId].fieldValidateRules.indexOf('maxlength') != -1) { %>
-                                <p class="help-block"
-                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.maxlength" translate="entity.validation.maxlength" translate-value-max="<%= fields[fieldId].fieldValidateRulesMaxlength %>">
-                                    This field cannot be longer than <%= fields[fieldId].fieldValidateRulesMaxlength %> characters.
-                                </p><% } %><% if (fields[fieldId].fieldValidateRules.indexOf('min') != -1) { %>
-                                <p class="help-block"
-                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.min" translate="entity.validation.min" translate-value-min="<%= fields[fieldId].fieldValidateRulesMin %>">
-                                    This field should be more than <%= fields[fieldId].fieldValidateRulesMin %>.
-                                </p><% } %><% if (fields[fieldId].fieldValidateRules.indexOf('max') != -1) { %>
-                                <p class="help-block"
-                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.max" translate="entity.validation.max" translate-value-max="<%= fields[fieldId].fieldValidateRulesMax %>">
-                                    This field cannot be more than <%= fields[fieldId].fieldValidateRulesMax %>.
-                                </p><% } %><% if (fields[fieldId].fieldValidateRules.indexOf('pattern') != -1) { %>
-                                <p class="help-block"
-                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.pattern" translate="entity.validation.pattern" translate-value-pattern="<%= fields[fieldId].fieldValidateRulesPattern %>">
-                                    This field should follow pattern "<%= fields[fieldId].fieldValidateRulesPattern %>".
-                                </p><% } %><% if (fields[fieldId].fieldType == 'Integer' || fields[fieldId].fieldType == 'Long' || fields[fieldId].fieldType == 'BigDecimal') { %>
-                                <p class="help-block"
-                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.number" translate="entity.validation.number">
-                                    This field should be a number.
-                                </p><% } %><% if (fields[fieldId].fieldType == 'DateTime') { %>
-                                <p class="help-block"
-                                   ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.datetimelocal" translate="entity.validation.datetimelocal">
-                                    This field should be a date and time.
-                                </p><% } %>
-                            </div><% } %>
-                        </div><% } %>
-<% for (relationshipId in relationships) {
-    var otherEntityName = relationships[relationshipId].otherEntityName;
-    var relationshipName = relationships[relationshipId].relationshipName;
-    var relationshipFieldName = relationships[relationshipId].relationshipFieldName;
-    var translationKey = keyPrefix + relationshipName;
-    var relationShipValue = entityInstance + "." + relationships[relationshipId].relationshipFieldName + ".id";
-    if (dto == 'mapstruct') {
-        relationShipValue = entityInstance + "." + relationships[relationshipId].relationshipFieldName + "Id";
-    }
-    if (relationships[relationshipId].relationshipType == 'many-to-one') {
-                        %>
-                        <div class="form-group">
-                            <label translate="<%= translationKey %>"><%=relationshipName %></label>
-                            <select class="form-control" name="<%= relationshipName %>" ng-model="<%=relationShipValue %>" ng-options="<%=otherEntityName %>.id as <%=otherEntityName %>.<%=relationships[relationshipId].otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName.toLowerCase() %>s">
-                            </select>
-                        </div><% } else if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) {
-                            relationShipValue = entityInstance + "." + relationshipFieldName + "s";
-                            %>
-                        <div class="form-group">
-                            <label translate="<%= translationKey %>"><%=relationshipName %></label>
-                            <select class="form-control" multiple name="<%= relationshipName %>" ng-model="<%=relationShipValue %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=relationships[relationshipId].otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName.toLowerCase() %>s track by <%=otherEntityName %>.id">
-                            </select>
-                        </div><% } } %>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
-                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
-                        </button>
-                        <button type="submit" ng-disabled="editForm.$invalid" class="btn btn-primary">
-                            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
-                        </button>
-                    </div>
-                </form>
-            </div>
         </div>
     </div>
 
@@ -173,29 +52,70 @@
                 <tr>
                     <th translate="global.field.id">ID</th><% for (fieldId in fields) { %>
                     <th translate="<%=keyPrefix + fields[fieldId].fieldName %>"><%=fields[fieldId].fieldNameCapitalized%></th><% } %><% for (relationshipId in relationships) {
-                        if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
+                        if (relationships[relationshipId].relationshipType == 'many-to-one'
+                           || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)
+                           || (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true && pagination == 'no')) { %>
                     <th translate="<%= keyPrefix + relationships[relationshipId].relationshipName%>"><%=relationships[relationshipId].relationshipName%></th><% } } %>
                     <th></th>
                 </tr>
             </thead>
             <tbody<% if (pagination == 'infinite-scroll') { %> infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page"<% } %>>
                 <tr ng-repeat="<%=entityInstance %> in <%=entityInstance %>s">
-                    <td><a ui-sref="<%= entityInstance %>Detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td><% for (fieldId in fields) { %>
-                    <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%>}}</td><% } %><% for (relationshipId in relationships) {
-                        if (relationships[relationshipId].relationshipType == 'many-to-one') {
-                            var relationShipValue = entityInstance + "." + relationships[relationshipId].relationshipFieldName + "." + relationships[relationshipId].otherEntityField;
-                            if (dto == 'mapstruct') {
-                                relationShipValue = entityInstance + "." + relationships[relationshipId].relationshipFieldName + relationships[relationshipId].otherEntityFieldCapitalized;
-                            }%>
-                    <td>{{<%=relationShipValue %>}}</td><% } } %>
+                    <td><a ui-sref="<%= entityInstance %>.detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td><% for (fieldId in fields) { %><% if (fields[fieldId].fieldType == 'byte[]') { %>
+                    <td><% if (fields[fieldId].fieldIsEnum) {
+                        var enumPrefix = angularAppName + '.'+ fields[fieldId].fieldType;%>
+                        <td translate="<%=enumPrefix%>.SELECT" translate-values="{ VALUE: <%= entityInstance %>.<%=fields[fieldId].fieldName%> }" translate-interpolation="messageformat"></td>
+                        <% } else if (fields[fieldId].fieldTypeBlobContent == 'image') { %>
+                        <img data-ng-src="{{'data:image/*;base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-height: 30px;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/><% } %><% if (fields[fieldId].fieldTypeBlobContent == 'any') { %>
+                        {{abbreviate(<%= entityInstance %>.<%= fields[fieldId].fieldName %>) + ' ' + byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}<% } else { %>
+                        {{byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}<% } %>
+                    </td><% } else { %>
+                    <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%>}}</td><% } %><% } %><% for (relationshipId in relationships) {
+                        var relationshipType = relationships[relationshipId].relationshipType;
+                        var ownerSide = relationships[relationshipId].ownerSide;
+                        var relationshipFieldName = relationships[relationshipId].relationshipFieldName;
+                        var otherEntityName = relationships[relationshipId].otherEntityName;
+                        var otherEntityField = relationships[relationshipId].otherEntityField;
+                        var otherEntityFieldCapitalized = relationships[relationshipId].otherEntityFieldCapitalized;
+                        if (relationshipType == 'many-to-one'
+                            || (relationshipType == 'one-to-one' && ownerSide == true)
+                            || (relationshipType == 'many-to-many' && ownerSide == true && pagination == 'no')) {
+                        %>
+                    <td>
+<% if (otherEntityName == 'user') { -%>
+<% if (relationshipType == 'many-to-many') { -%>
+                        <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldName %>s">
+                            {{<%= relationshipFieldName %>.<%= otherEntityField %>}}{{$last ? '' : ', '}}
+                        <span>
+<% } else { -%>
+<% if (dto == 'no') { -%>
+                        {{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}
+<% } else { -%>
+                        {{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}
+<% } -%>
+<% } -%>
+<% } else { -%>
+<% if (relationshipType == 'many-to-many') { -%>
+                        <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldName %>s">
+                            <a class="form-control-static" ui-sref="<%= otherEntityName %>.detail({id: {{<%= relationshipFieldName %>.id}}})">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
+                        <span>
+<% } else { -%>
+<% if (dto == 'no') { -%>
+                        <a ui-sref="<%= otherEntityName %>.detail({id:<%= entityInstance + "." + relationshipFieldName + ".id" %>})">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</a>
+<% } else { -%>
+                        <a ui-sref="<%= otherEntityName %>.detail({id:<%= entityInstance + "." + relationshipFieldName + "Id" %>})">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
+<% } -%>
+<% } -%>
+<% } -%>
+                    </td><% } } %>
                     <td>
                         <button type="submit"
-                                ui-sref="<%= entityInstance %>Detail({id:<%= entityInstance %>.id})"
+                                ui-sref="<%= entityInstance %>.detail({id:<%= entityInstance %>.id})"
                                 class="btn btn-info btn-sm">
                             <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span translate="entity.action.view"> View</span>
                         </button>
                         <button type="submit"
-                                ng-click="showUpdate(<%=entityInstance %>.id)"
+                                ui-sref="<%= entityInstance %>.edit({id:<%=entityInstance %>.id})"
                                 class="btn btn-primary btn-sm">
                             <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span translate="entity.action.edit"> Edit</span>
                         </button>
