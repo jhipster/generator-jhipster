@@ -350,7 +350,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'confirm',
             name: 'useSass',
-            message: '(14/' + questions + ') Would you like to use SASS CSS Authoring Framework?',
+            message: '(14/' + questions + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
             default: false
         },
         {
