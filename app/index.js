@@ -756,18 +756,17 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/web/rest/dto/_LoggerDTO.java', javaDir + 'web/rest/dto/LoggerDTO.java', this, {});
     this.template('src/main/java/package/web/rest/dto/_UserDTO.java', javaDir + 'web/rest/dto/UserDTO.java', this, {});
 
-
-    this.template('src/main/java/package/web/rest/dto/_UserManagementDTO.java', javaDir + 'web/rest/dto/UserManagementDTO.java', this, {});
-    this.template('src/main/java/package/web/rest/mapper/_UserManagementMapper.java', javaDir + 'web/rest/mapper/UserManagementMapper.java', this, {});
+    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+       this.template('src/main/java/package/web/rest/dto/_UserManagementDTO.java', javaDir + 'web/rest/dto/UserManagementDTO.java', this, {});
+       this.template('src/main/java/package/web/rest/mapper/_UserManagementMapper.java', javaDir + 'web/rest/mapper/UserManagementMapper.java', this, {});
+    }
     this.template('src/main/java/package/web/rest/util/_PaginationUtil.java', javaDir + 'web/rest/util/PaginationUtil.java', this, {});
     this.template('src/main/java/package/web/rest/_package-info.java', javaDir + 'web/rest/package-info.java', this, {});
     this.template('src/main/java/package/web/rest/_AccountResource.java', javaDir + 'web/rest/AccountResource.java', this, {});
     if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
         this.template('src/main/java/package/web/rest/_AuditResource.java', javaDir + 'web/rest/AuditResource.java', this, {});
-    }
-    this.template('src/main/java/package/web/rest/_UserManagementResource.java', javaDir + 'web/rest/UserManagementResource.java', this, {});
-    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
-      this.template('src/main/java/package/web/rest/_AuthorityResource.java', javaDir + 'web/rest/AuthorityResource.java', this, {});
+        this.template('src/main/java/package/web/rest/_UserManagementResource.java', javaDir + 'web/rest/UserManagementResource.java', this, {});
+        this.template('src/main/java/package/web/rest/_AuthorityResource.java', javaDir + 'web/rest/AuthorityResource.java', this, {});
     }
     this.template('src/main/java/package/web/rest/_LogsResource.java', javaDir + 'web/rest/LogsResource.java', this, {});
     this.template('src/main/java/package/web/rest/_UserResource.java', javaDir + 'web/rest/UserResource.java', this, {});
@@ -793,14 +792,12 @@ JhipsterGenerator.prototype.app = function app() {
     }
     this.template('src/test/java/package/security/_SecurityUtilsTest.java', testDir + 'security/SecurityUtilsTest.java', this, {});
     if (this.databaseType == "sql" || this.databaseType == "mongodb") {
-      //this.template('src/test/java/package/web/rest/_AccountResourceTest.java', testDir + 'web/rest/AccountResourceTest.java', this, {});
-        this.template('src/test/java/package/web/rest/_AuthorityResourceTest.java', testDir + 'web/rest/AuthorityResourceTest.java', this, {});
         this.template('src/test/java/package/service/_UserServiceTest.java', testDir + 'service/UserServiceTest.java', this, {});
+        this.template('src/test/java/package/web/rest/_UserManagementResourceTest.java', testDir + 'web/rest/UserManagementResourceTest.java', this, {});
     }
     this.template('src/test/java/package/web/rest/_AccountResourceTest.java', testDir + 'web/rest/AccountResourceTest.java', this, {});
     this.template('src/test/java/package/web/rest/_TestUtil.java', testDir + 'web/rest/TestUtil.java', this, {});
     this.template('src/test/java/package/web/rest/_UserResourceTest.java', testDir + 'web/rest/UserResourceTest.java', this, {});
-    this.template('src/test/java/package/web/rest/_UserManagementResourceTest.java', testDir + 'web/rest/UserManagementResourceTest.java', this, {});
 
     this.template(testResourceDir + 'config/_application.yml', testResourceDir + 'config/application.yml', this, {});
     this.template(testResourceDir + '_logback-test.xml', testResourceDir + 'logback-test.xml', this, {});
@@ -837,7 +834,7 @@ JhipsterGenerator.prototype.app = function app() {
     }else{
         this.template(resourceDir + '/i18n/_messages_en.properties', resourceDir + 'i18n/messages_en.properties', this, {});
     }
-    
+
     // Angular JS views
 
     this.template(webappDir + '/scripts/app/_app.js', webappDir + 'scripts/app/app.js', this, {});
@@ -936,15 +933,14 @@ JhipsterGenerator.prototype.app = function app() {
         this.template(webappDir + '/scripts/app/admin/tracker/_tracker.controller.js', webappDir + 'scripts/app/admin/tracker/tracker.controller.js', this, {});
         this.template(webappDir + '/scripts/components/tracker/_tracker.service.js', webappDir + '/scripts/components/tracker/tracker.service.js', this, {});
     }
-    this.copyHtml(webappDir + '/scripts/app/admin/userManagement/usersManagement.html', webappDir + 'scripts/app/admin/userManagement/usersManagement.html');
-    this.copyHtml(webappDir + '/scripts/app/admin/userManagement/_userManagement-detail.html', webappDir + 'scripts/app/admin/userManagement/userManagement-detail.html');
-    this.copyJs(webappDir + '/scripts/app/admin/userManagement/_userManagement.js', webappDir + 'scripts/app/admin/userManagement/userManagement.js', this, {});
-    this.template(webappDir + '/scripts/app/admin/userManagement/_userManagement.controller.js', webappDir + 'scripts/app/admin/userManagement/userManagement.controller.js', this, {});
-    this.template(webappDir + '/scripts/app/admin/userManagement/_userManagement-detail.controller.js', webappDir + 'scripts/app/admin/userManagement/userManagement-detail.controller.js', this, {});
-    this.template(webappDir + '/scripts/components/admin/_userManagement.service.js', webappDir + '/scripts/components/admin/userManagement.service.js', this, {});
-
     if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
-      this.template(webappDir + '/scripts/components/admin/_authority.service.js', webappDir + '/scripts/components/admin/authority.service.js', this, {});
+        this.copyHtml(webappDir + '/scripts/app/admin/userManagement/usersManagement.html', webappDir + 'scripts/app/admin/userManagement/usersManagement.html');
+        this.copyHtml(webappDir + '/scripts/app/admin/userManagement/_userManagement-detail.html', webappDir + 'scripts/app/admin/userManagement/userManagement-detail.html');
+        this.copyJs(webappDir + '/scripts/app/admin/userManagement/_userManagement.js', webappDir + 'scripts/app/admin/userManagement/userManagement.js', this, {});
+        this.template(webappDir + '/scripts/app/admin/userManagement/_userManagement.controller.js', webappDir + 'scripts/app/admin/userManagement/userManagement.controller.js', this, {});
+        this.template(webappDir + '/scripts/app/admin/userManagement/_userManagement-detail.controller.js', webappDir + 'scripts/app/admin/userManagement/userManagement-detail.controller.js', this, {});
+        this.template(webappDir + '/scripts/components/admin/_userManagement.service.js', webappDir + '/scripts/components/admin/userManagement.service.js', this, {});
+        this.template(webappDir + '/scripts/components/admin/_authority.service.js', webappDir + '/scripts/components/admin/authority.service.js', this, {});
     }
     this.copyHtml(webappDir + '/scripts/app/error/error.html', webappDir + 'scripts/app/error/error.html');
     this.copyHtml(webappDir + '/scripts/app/error/accessdenied.html', webappDir + 'scripts/app/error/accessdenied.html');
@@ -997,8 +993,6 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/components/admin/logs.service.js',
         'scripts/components/admin/configuration.service.js',
         'scripts/components/admin/monitoring.service.js',
-        'scripts/components/admin/authority.service.js',
-        'scripts/components/admin/userManagement.service.js',
         'scripts/components/navbar/navbar.directive.js',
         'scripts/components/navbar/navbar.controller.js',
         'scripts/components/user/user.service.js',
@@ -1036,14 +1030,19 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/app/admin/logs/logs.controller.js',
         'scripts/app/admin/metrics/metrics.js',
         'scripts/app/admin/metrics/metrics.controller.js',
-        'scripts/app/admin/userManagement/userManagement-detail.controller.js',
-        'scripts/app/admin/userManagement/userManagement.controller.js',
-        'scripts/app/admin/userManagement/userManagement.js',
         'scripts/app/entities/entity.js',
         'scripts/app/error/error.js',
         'scripts/app/main/main.js',
         'scripts/app/main/main.controller.js'
         ];
+    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+        appScripts = appScripts.concat([
+          'scripts/components/admin/authority.service.js',
+          'scripts/components/admin/userManagement.service.js',
+          'scripts/app/admin/userManagement/userManagement-detail.controller.js',
+          'scripts/app/admin/userManagement/userManagement.controller.js',
+          'scripts/app/admin/userManagement/userManagement.js']);
+    }
     if (this.enableTranslation) {
         appScripts = appScripts.concat([
           'scripts/components/language/language.service.js',

@@ -12,7 +12,7 @@ import java.util.Set;
 
 public class UserManagementDTO {
     <% if (databaseType == 'sql') { %>
-    private Long id;<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>
+    private Long id;<% } %><% if (databaseType == 'mongodb') { %>
     private String id;<% } %>
 
     @Pattern(regexp = "^[a-z0-9]*$|(anonymousUser)")
@@ -35,8 +35,7 @@ public class UserManagementDTO {
     @Size(min = 2, max = 5)
     private String langKey;
     <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-    private Set<Authority> authorities = new HashSet<>();<% } %><% if (databaseType == 'cassandra') { %>
-    private Set<String> authorities = new HashSet<>();<% } %>
+    private Set<Authority> authorities = new HashSet<>();<% } %>
     <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     private String createdBy;
     private DateTime createdDate;
@@ -44,8 +43,8 @@ public class UserManagementDTO {
     private DateTime lastModifiedDate;<% } %>
 
     public UserManagementDTO() {}
-    public UserManagementDTO(<% if (databaseType == 'sql') { %>Long id,<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String id,<% }%> String login, String firstName,
-            String lastName, String email, boolean activated, String langKey<% if (databaseType == 'cassandra') { %>, Set<String> authorities<% } %>
+    public UserManagementDTO(<% if (databaseType == 'sql') { %>Long id,<% } %><% if (databaseType == 'mongodb') { %>String id,<% }%> String login, String firstName,
+            String lastName, String email, boolean activated, String langKey
             <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>, Set<Authority> authorities, String createdBy, DateTime createdDate,
             String lastModifiedBy, DateTime lastModifiedDate<% } %>) {
         super();
@@ -67,7 +66,7 @@ public class UserManagementDTO {
     public Long getId() {
         return id;
     }
-    <% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>
+    <% } %><% if (databaseType == 'mongodb') { %>
     public String getId() {
         return id;
     }
@@ -96,10 +95,6 @@ public class UserManagementDTO {
     public String getLangKey() {
         return langKey;
     }
-    <% if (databaseType == 'cassandra') { %>
-    public Set<String> getAuthorities() {
-        return authorities;
-    }<% } %>
     <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     public Set<Authority> getAuthorities() {
         return authorities;
@@ -151,10 +146,6 @@ public class UserManagementDTO {
     public void setLangKey(String langKey) {
         this.langKey = langKey;
     }
-    <% if (databaseType == 'cassandra') { %>
-    public void setAuthorities(Set<String> authorities) {
-        this.authorities = authorities;
-    }<% } %>
     <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;

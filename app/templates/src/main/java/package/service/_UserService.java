@@ -202,8 +202,8 @@ public class UserService {
 
 <% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true)<% } %>
-    public User getUserWithAuthorities(<% if (databaseType == 'cassandra' || databaseType == 'mongodb') { %>String id<% } else { %>Long id<% } %>) {
-        User user = userRepository.findOne(<% if (databaseType == 'cassandra') { %>UUID.fromString(id)<% } else { %>id<% } %>);
+    public User getUserWithAuthorities(<% if (databaseType == 'mongodb') { %>String id<% } else { %>Long id<% } %>) {
+        User user = userRepository.findOne(id);
         user.getAuthorities().size(); // eagerly load the association
         return user;
     }

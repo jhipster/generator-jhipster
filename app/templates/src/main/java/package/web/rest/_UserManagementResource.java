@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.security.RolesAllowed;
 import java.net.URISyntaxException;
@@ -64,13 +65,7 @@ public class UserManagementResource {
                  .collect(Collectors.toCollection(LinkedList::new)), headers, HttpStatus.OK);<% } else { %>
         List<UserManagementDTO> usersManagementDTO = userManagementMapper.usersToUserManagementsDTO(page.getContent());
         return new ResponseEntity<List<UserManagementDTO>>(usersManagementDTO, headers, HttpStatus.OK);<% } %>
-    }<% } if (databaseType == 'cassandra') { %>
-    public List<UserManagementDTO> getAll() {
-        return userRepository.findAll().stream()
-            .map(userManagementMapper::userToUserManagementDTO)
-            .collect(Collectors.toList());
     }<% } %>
-
 
     /**
      * GET  /userManagement/:id -> get id user to manage.
@@ -81,7 +76,7 @@ public class UserManagementResource {
     @Timed
     @RolesAllowed(AuthoritiesConstants.ADMIN)
     @Transactional(readOnly = true)
-    ResponseEntity<UserManagementDTO> getUser(@PathVariable <% if (databaseType == 'cassandra' || databaseType == 'mongodb') { %>String id<% } else { %>Long id<% } %>) {
+    ResponseEntity<UserManagementDTO> getUser(@PathVariable <% if (databaseType == 'mongodb') { %>String id<% } else { %>Long id<% } %>) {
        log.debug("REST request to get User to manage : {}", id);<% if (javaVersion == '8') { %>
        return  Optional.ofNullable(userService.getUserWithAuthorities(id))
                .map(userManagementMapper::userToUserManagementDTO)

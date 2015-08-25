@@ -21,7 +21,7 @@ public abstract class UserManagementMapper {
     public abstract UserManagementDTO userToUserManagementDTO(User user);
     public abstract List<UserManagementDTO> usersToUserManagementsDTO(List<User> users);
 
-    <% if (javaVersion == '8') { %><% if (databaseType != 'cassandra') { %>
+    <% if (javaVersion == '8') { %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Mapping(target = "createdBy", ignore=true)
     @Mapping(target = "createdDate", ignore=true)
     @Mapping(target = "lastModifiedBy", ignore=true)

@@ -1,6 +1,5 @@
 package <%=packageName%>.web.rest;
-<% if (databaseType == 'cassandra') { %>
-import <%=packageName%>.AbstractCassandraTest;<% } %>
+
 import <%=packageName%>.Application;<% if (databaseType == 'mongodb') { %>
 import <%=packageName%>.config.MongoConfiguration;<% } %>
 import <%=packageName%>.domain.User;
@@ -19,6 +18,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 
@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @IntegrationTest<% if (databaseType == 'mongodb') { %>
 @Import(MongoConfiguration.class)<% } %>
-public class UserManagementResourceTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{
+public class UserManagementResourceTest {
 
     private static final String UPDATED_FIRST_NAME = "UPDATED_FIRST_NAME";
     private static final String UPDATED_LAST_NAME = "UPDATED_LAST_NAME";
@@ -63,6 +63,7 @@ public class UserManagementResourceTest <% if (databaseType == 'cassandra') { %>
     }
 
     @Test
+    @Transactional
     public void testGetAllUser() throws Exception {
         restUserManagementMockMvc.perform(get("/api/userManagement"))
                 .andExpect(status().isOk())
@@ -76,13 +77,14 @@ public class UserManagementResourceTest <% if (databaseType == 'cassandra') { %>
                 .andExpect(jsonPath("$.[0].langKey").exists())
                 .andExpect(jsonPath("$.[0].authorities").exists())
                 .andExpect(jsonPath("$.[0].createdBy").exists())
-                .andExpect(jsonPath("$.[0].createdDate").exists())
-                .andExpect(jsonPath("$.[0].lastModifiedDate").exists());
+                .andExpect(jsonPath("$.[0].createdDate").exists());
     }
 
     @Test
+    @Transactional
     public void updateUser() throws Exception {
-        UserManagementDTO userManagementDTO = userManagementMapper.userToUserManagementDTO(userRepository.findOneByLogin("user").get());
+        UserManagementDTO userManagementDTO = userManagementMapper.userToUserManagementDTO(userRepository.findOneByLogin("user")<% if (javaVersion == '8') {%>.get()<% } %>);
+
         userManagementDTO.setFirstName(UPDATED_FIRST_NAME);
         userManagementDTO.setLastName(UPDATED_LAST_NAME);
         userManagementDTO.setEmail(UPDATED_EMAIL);
@@ -95,7 +97,7 @@ public class UserManagementResourceTest <% if (databaseType == 'cassandra') { %>
                 .andExpect(status().isOk());
 
         // Validate the Author in the database
-        User user = userRepository.findOneByLogin("user").get();
+        User user = userRepository.findOneByLogin("user")<% if (javaVersion == '8') {%>.get()<% } %>;
         assertThat(user.getFirstName()).isEqualTo(UPDATED_FIRST_NAME);
         assertThat(user.getLastName()).isEqualTo(UPDATED_LAST_NAME);
         assertThat(user.getEmail()).isEqualTo(UPDATED_EMAIL);
