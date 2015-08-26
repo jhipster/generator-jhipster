@@ -34,7 +34,7 @@ chances of your issue being dealt with quickly:
 * **Overview of the issue** - if an error is being thrown a stack trace helps
 * **Motivation for or Use Case** - explain why this is a bug for you
 * **JHipster Version(s)** - is it a regression?
-* **JHipster configuration, a `.yo-rc.json` file generated in the root folder** - this will help us to replicate the scenario, yo can remove the rememberMe key.
+* **JHipster configuration, a `.yo-rc.json` file generated in the root folder** - this will help us to replicate the scenario, you can remove the rememberMe key.
 * **Entity configuration(s) `entityName.json` files generated in the `.jhipster` directory** - if the error is during an entity creation or associated with a specific entity
 * **Browsers and Operating System** - is this a problem with all browsers or only IE8?
 * **Reproduce the error** - an unambiguous set of steps to reproduce the error. If you have a JavaScript error, maybe you can provide a live example with
