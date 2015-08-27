@@ -142,6 +142,7 @@ describe('JHipster generator ', function () {
             'src/test/java/com/mycompany/myapp/security/SecurityUtilsTest.java',
             'src/test/java/com/mycompany/myapp/service/UserServiceTest.java',
             'src/test/java/com/mycompany/myapp/web/rest/AccountResourceTest.java',
+            'src/test/java/com/mycompany/myapp/web/rest/AuditResourceTest.java',
             'src/test/java/com/mycompany/myapp/web/rest/TestUtil.java',
             'src/test/java/com/mycompany/myapp/web/rest/UserResourceTest.java',
             'src/test/resources/config/application.yml',

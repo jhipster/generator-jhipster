@@ -12,7 +12,7 @@ import java.util.List;
  */<% } %><% if (databaseType == 'mongodb') { %>/**
  * Spring Data MongoDB repository for the PersistentAuditEvent entity.
  */<% } %>
-public interface PersistenceAuditEventRepository extends <% if (databaseType == 'sql') { %>JpaRepository<% } %><% if (databaseType == 'mongodb') { %>MongoRepository<% } %><PersistentAuditEvent, String> {
+public interface PersistenceAuditEventRepository extends <% if (databaseType == 'sql') { %>JpaRepository<PersistentAuditEvent, Long><% } %><% if (databaseType == 'mongodb') { %>MongoRepository<PersistentAuditEvent, String><% } %> {
 
     List<PersistentAuditEvent> findByPrincipal(String principal);
 
