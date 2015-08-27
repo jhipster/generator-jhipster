@@ -27,17 +27,17 @@ Add the `-h` flag on any command to see how you can use it. For example, `bower 
 # Building
 
 To optimize the <%= baseName %> client for production, run:
-
-    grunt build
     
+    gradlew -Pprod bootRepackage
+
 This will concatenate and minify CSS and JavaScript files. It will also modify `index.html` so it references
 these new files. 
-    
-To ensure everything worked, cd into the `src/main/webapp/dist` directory and run:
 
-    python -m SimpleHTTPServer $1
-    
-Then navigate to [http://localhost:8000](http://localhost:8000) in your browser.
+To ensure everything worked, run:
+
+    java -jar build/libs/*.war
+
+Then navigate to [http://localhost:8080](http://localhost:8080) in your browser.
 
 # Testing
 
