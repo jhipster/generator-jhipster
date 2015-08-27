@@ -51,15 +51,15 @@ To setup this project in Jenkins, use the following configuration:
 
 * Project name: `<%= baseName %>`
 * Source Code Management
-** Git Repository: `git@github.com:xxxx/<%= baseName %>.git`
-** Branches to build: `*/master`
-** Additional Behaviours: `Wipe out repository & force clone`
+    * Git Repository: `git@github.com:xxxx/<%= baseName %>.git`
+    * Branches to build: `*/master`
+    * Additional Behaviours: `Wipe out repository & force clone`
 * Build Triggers
-** Poll SCM / Schedule: `H/5 * * * *`
+    * Poll SCM / Schedule: `H/5 * * * *`
 * Build
-** Invoke Gradle script / Use Gradle Wrapper / Tasks: `-Pprod clean test bootRepackage`
+    * Invoke Gradle script / Use Gradle Wrapper / Tasks: `-Pprod clean test bootRepackage`
 * Post-build Actions
-** Publish JUnit test result report / Test Report XMLs: `build/test-results/*.xml`
+    * Publish JUnit test result report / Test Report XMLs: `build/test-results/*.xml`
 
 [Node.js]: https://nodejs.org/
 [Bower]: http://bower.io/
