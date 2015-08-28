@@ -50,6 +50,7 @@
                     <input type="text" class="input-sm form-control" value="{{user.activated}}" readonly>
                 </td>
             </tr>
+            <% if (enableTranslation) { %>
             <tr>
                 <td>
                     <span translate="userManagement.langKey">LangKey</span>
@@ -58,6 +59,7 @@
                     <input type="text" class="input-sm form-control" value="{{user.langKey}}" readonly>
                 </td>
             </tr>
+            <% } %>
             <tr>
                 <td>
                     <span translate="userManagement.createdBy">CreatedBy</span>
