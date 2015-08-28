@@ -1,105 +1,107 @@
-
 <div>
     <h2><span translate="userManagement.detail.title">User</span> {{user.id}}</h2>
+
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
-                <tr>
-                    <th translate="entity.detail.field">Field</th>
-                    <th translate="entity.detail.value">Value</th>
-                </tr>
+            <tr>
+                <th translate="entity.detail.field">Field</th>
+                <th translate="entity.detail.value">Value</th>
+            </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>
-                        <span translate="userManagement.login">Login</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{user.login}}" readonly>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="userManagement.firstName">FirstName</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{user.firstName}}" readonly>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="userManagement.lastName">LastName</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{user.lastName}}" readonly>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="userManagement.email">Email</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{user.email}}" readonly>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="userManagement.activated">Activated</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{user.activated}}" readonly>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="userManagement.langKey">LangKey</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{user.langKey}}" readonly>
-                    </td>
-                </tr><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-                <tr>
-                    <td>
-                        <span translate="userManagement.createdBy">CreatedBy</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{user.createdBy}}" readonly>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="userManagement.createdDate">CreatedDate</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{user.createdDate | date:'dd/MM/yy HH:mm' }}" readonly>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="userManagement.lastModifiedBy">LastModifiedBy</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{user.lastModifiedBy}}" readonly>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <span translate="userManagement.lastModifiedDate">LastCreatedDate</span>
-                    </td>
-                    <td>
-                        <input type="text" class="input-sm form-control" value="{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}" readonly>
-                    </td>
-                </tr><% } %>
-                <tr>
-                    <td>
-                        <span translate="userManagement.profiles">Profiles</span>
-                    </td>
-                    <td>
-                        <ul class="list-unstyled">
-                            <li ng-repeat="auth in user.authorities"><span>{{auth.name}} </span></li>
-                        </ul>
-                    </td>
-                </tr>
+            <tr>
+                <td>
+                    <span translate="userManagement.login">Login</span>
+                </td>
+                <td>
+                    <input type="text" class="input-sm form-control" value="{{user.login}}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="userManagement.firstName">FirstName</span>
+                </td>
+                <td>
+                    <input type="text" class="input-sm form-control" value="{{user.firstName}}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="userManagement.lastName">LastName</span>
+                </td>
+                <td>
+                    <input type="text" class="input-sm form-control" value="{{user.lastName}}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="userManagement.email">Email</span>
+                </td>
+                <td>
+                    <input type="text" class="input-sm form-control" value="{{user.email}}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="userManagement.activated">Activated</span>
+                </td>
+                <td>
+                    <input type="text" class="input-sm form-control" value="{{user.activated}}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="userManagement.langKey">LangKey</span>
+                </td>
+                <td>
+                    <input type="text" class="input-sm form-control" value="{{user.langKey}}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="userManagement.createdBy">CreatedBy</span>
+                </td>
+                <td>
+                    <input type="text" class="input-sm form-control" value="{{user.createdBy}}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="userManagement.createdDate">CreatedDate</span>
+                </td>
+                <td>
+                    <input type="text" class="input-sm form-control"
+                           value="{{user.createdDate | date:'dd/MM/yy HH:mm' }}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="userManagement.lastModifiedBy">LastModifiedBy</span>
+                </td>
+                <td>
+                    <input type="text" class="input-sm form-control" value="{{user.lastModifiedBy}}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="userManagement.lastModifiedDate">LastCreatedDate</span>
+                </td>
+                <td>
+                    <input type="text" class="input-sm form-control"
+                           value="{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="userManagement.profiles">Profiles</span>
+                </td>
+                <td>
+                    <ul class="list-unstyled">
+                        <li ng-repeat="auth in user.authorities"><span>{{auth.name}} </span></li>
+                    </ul>
+                </td>
+            </tr>
             </tbody>
         </table>
     </div>
