@@ -70,7 +70,7 @@
 <% } else if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'any') { -%>
                     <td>{{abbreviate(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}} {{byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}</td>
 <% } else if (fields[fieldId].fieldIsEnum) { -%>
-                    <td translate="<%= angularAppName + '.'+ fields[fieldId].fieldType %>.SELECT" translate-values="{ VALUE: <%= entityInstance %>.<%=fields[fieldId].fieldName%> }" translate-interpolation="messageformat"></td>
+                    <td translate="{{'<%= angularAppName %>.<%= fields[fieldId].fieldType %>.' + <%= entityInstance %>.<%= fields[fieldId].fieldName %>}}">{{<%= entityInstance %>.<%= fields[fieldId].fieldName %>}}</td>
 <% } else { -%>
                     <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%>}}</td>
 <% } -%>
