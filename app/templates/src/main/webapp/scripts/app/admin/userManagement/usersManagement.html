@@ -93,16 +93,9 @@
                         <% if (enableTranslation) { %>
                         <div class="form-group">
                             <label translate="userManagement.langKey">LangKey</label>
-                            <input type="text" class="form-control" name="langKey"
-                                   ng-model="user.langKey" ng-maxlength="5">
-
-                            <div ng-show="editForm.langKey.$invalid">
-                                <p class="help-block"
-                                   ng-show="editForm.langKey.$error.maxlength" translate="entity.validation.maxlength"
-                                   translate-value-max="5">
-                                    This field cannot be longer than 5 characters.
-                                </p>
-                            </div>
+                            <select class="form-control" name="langKey" ng-model="user.langKey"
+                                    ng-options="language as language for language in languages track by language">
+                            </select>
                         </div>
                         <% } %>
                         <div class="form-group">

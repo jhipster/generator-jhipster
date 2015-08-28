@@ -1,33 +1,38 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('UserManagementController', function ($scope, UserManagement<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>, Authority<% } %>, ParseLinks) {
-        $scope.users = [];<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-        $scope.authorities = Authority.query();<% } %>
+    .controller('UserManagementController', function ($scope, UserManagement, Authority, ParseLinks, Language) {
+        $scope.users = [];
+        $scope.authorities = Authority.query();
+        Language.getAll().then(function (languages) {
+            $scope.languages = languages;
+        });
 
         $scope.page = 1;
-        $scope.loadAll = function() {
-            UserManagement.query({page: $scope.page, per_page: 20}, function(result, headers) {
+        $scope.loadAll = function () {
+            UserManagement.query({page: $scope.page, per_page: 20}, function (result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 $scope.users = result;
             });
+
+
         };
-        $scope.loadPage = function(page) {
+        $scope.loadPage = function (page) {
             $scope.page = page;
             $scope.loadAll();
         };
         $scope.loadAll();
 
         $scope.setActive = function (user, isActivated) {
-        	user.activated = isActivated;
-        	UserManagement.update(user, function () {
+            user.activated = isActivated;
+            UserManagement.update(user, function () {
                 $scope.loadAll();
                 $scope.clear();
             });
         };
 
         $scope.showUpdate = function (id) {
-            UserManagement.get({id: id}, function(result) {
+            UserManagement.get({id: id}, function (result) {
                 $scope.user = result;
                 $('#saveUserModal').modal('show');
             });
@@ -47,10 +52,12 @@ angular.module('<%=angularAppName%>')
         };
 
         $scope.clear = function () {
-            $scope.user = { id: null, login: null, firstName: null, lastName: null, email: null,
-                            activated: null, langKey: null, createdBy: null, createdDate: null,
-                            lastModifiedBy: null, lastModifiedDate: null, resetDate: null,
-                            resetKey: null<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>, authorities: null<% } %> };
+            $scope.user = {
+                id: null, login: null, firstName: null, lastName: null, email: null,
+                activated: null, langKey: null, createdBy: null, createdDate: null,
+                lastModifiedBy: null, lastModifiedDate: null, resetDate: null,
+                resetKey: null, authorities: null
+            };
             $scope.editForm.$setPristine();
             $scope.editForm.$setUntouched();
         };
