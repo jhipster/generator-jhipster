@@ -150,7 +150,7 @@ describe('JHipster generator ', function () {
             'src/test/resources/ehcache.xml',
             'src/test/gatling/conf/gatling.conf',
             'src/main/webapp/assets/styles/main.css',
-            'src/main/webapp/favicon.ico',
+            'src/main/webapp/assets/static/favicon.ico',
             'src/main/webapp/robots.txt',
             'src/main/webapp/.htaccess',
             'src/main/webapp/i18n/en/activate.json',
