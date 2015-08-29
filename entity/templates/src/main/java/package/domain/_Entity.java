@@ -49,9 +49,14 @@ Object.keys(uniqueEnums).forEach(function(element) { %>
 
 import <%=packageName%>.domain.enumeration.<%= element %>;<% }); %>
 
+<% if (typeof javadoc == 'undefined') { -%>
 /**
  * A <%= entityClass %>.
- */<% if (databaseType == 'sql') { %>
+ */
+<% } else { -%>
+<%- util.formatAsClassJavadoc(javadoc) %>
+<% } -%>
+<% if (databaseType == 'sql') { -%>
 @Entity
 @Table(name = "<%= entityTableName %>")<% if (hibernateCache != 'no') { %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType == 'mongodb') { %>
@@ -67,7 +72,10 @@ public class <%= entityClass %> implements Serializable {
     private String id;<% } %><% if (databaseType == 'cassandra') { %>
     @PartitionKey
     private UUID id;<% } %>
-<% for (fieldId in fields) { %><% if (fields[fieldId].fieldValidate == true) {
+
+<% for (fieldId in fields) { %><% if (typeof fields[fieldId].javadoc != 'undefined') { %>
+<%- util.formatAsFieldJavadoc(fields[fieldId].javadoc) -%>
+<% } %><% if (fields[fieldId].fieldValidate == true) {
     var required = false;
     if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) {
         required = true;
@@ -103,7 +111,9 @@ public class <%= entityClass %> implements Serializable {
     if (otherEntityRelationshipName != null) {
         mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
     }
-    %><% if (relationships[relationshipId].relationshipType == 'one-to-many') { %>
+    %><% if (typeof relationships[relationshipId].javadoc != 'undefined') { %>
+<%- util.formatAsFieldJavadoc(relationships[relationshipId].javadoc) -%>
+<% } %><% if (relationships[relationshipId].relationshipType == 'one-to-many') { %>
     @OneToMany(mappedBy = "<%= relationships[relationshipId].otherEntityRelationshipName %>")
     @JsonIgnore<% if (hibernateCache != 'no') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
