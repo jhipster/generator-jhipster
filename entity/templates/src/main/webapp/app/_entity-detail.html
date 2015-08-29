@@ -14,15 +14,14 @@
                 <td>
                     <span translate="<%= keyPrefix %>.<%=fields[fieldId].fieldName%>"><%=fields[fieldId].fieldNameCapitalized%></span>
                 </td>
-                <td><% if (fields[fieldId].fieldIsEnum) {
-                    var enumPrefix = angularAppName + '.'+ fields[fieldId].fieldType; %>
-                    <span class="input-sm form-control readonly" translate="<%=enumPrefix%>.SELECT"
-                          translate-interpolation="messageformat" translate-values="{ VALUE: <%= entityInstance %>.<%=fields[fieldId].fieldName%> }"></span><%
-                    } else if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'image') { %>
-                    <img data-ng-src="{{'data:image/*;base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-width: 100%;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/><%
-                    } else { %>
-                    <span class="form-control-static">{{<%= entityInstance %>.<%=fields[fieldId].fieldName%>}}</span><%
-                    } %>
+                <td>
+<% if (fields[fieldId].fieldIsEnum) { -%>
+                    <span class="form-control-static" translate="{{'<%= angularAppName %>.<%= fields[fieldId].fieldType %>.' + <%= entityInstance %>.<%= fields[fieldId].fieldName %>}}">{{<%= entityInstance %>.<%= fields[fieldId].fieldName %>}}</span>
+<% } else if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'image') { -%>
+                    <img data-ng-src="{{'data:image/*;base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-width: 100%;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/>
+<% } else { -%>
+                    <span class="form-control-static">{{<%= entityInstance %>.<%=fields[fieldId].fieldName%>}}</span>
+<% } -%>
                 </td>
             </tr><% } %><% for (relationshipId in relationships) {
             var relationshipType = relationships[relationshipId].relationshipType;
