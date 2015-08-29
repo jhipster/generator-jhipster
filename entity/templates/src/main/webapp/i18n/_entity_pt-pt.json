@@ -3,11 +3,11 @@
         "<%= entityInstance %>" : {
             "home": {
                 "title": "<%= entityClass %>s",
-                "createLabel": "<%= entityClass %> を追加",
-                "createOrEditLabel": "<%= entityClass %>を追加または編集"
+                "createLabel": "Criar um(a) novo(a) <%= entityClass %>",
+                "createOrEditLabel": "Criar ou editar um(a) <%= entityClass %>"
             },
             "delete": {
-                "question": "<%= entityClass %> {{ id }}を削除してもよろしいですか？"
+                "question": "Tem a certeza que pretende eliminar o(a) <%= entityClass %> {{ id }}?"
             },
             "detail": {
                 "title": "<%= entityClass %>"

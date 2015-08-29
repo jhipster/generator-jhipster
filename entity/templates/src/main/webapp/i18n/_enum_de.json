@@ -1,7 +1,7 @@
 {
     "<%= angularAppName %>": {
         "<%= enumName %>" : {
-            "SELECT": "{VALUE, select, <% for (enumId in enums) { %><%=enums[enumId]%>{<%=enums[enumId]%>} <% } %>other{}}"<% for (enumId in enums) { %>,
+            "null": ""<% for (enumId in enums) { %>,
             "<%=enums[enumId]%>": "<%=enums[enumId]%>"<% } %>
         }
     }
