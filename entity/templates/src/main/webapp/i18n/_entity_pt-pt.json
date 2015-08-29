@@ -1,0 +1,19 @@
+{
+    "<%= angularAppName %>": {
+        "<%= entityInstance %>" : {
+            "home": {
+                "title": "<%= entityClass %>s",
+                "createLabel": "Criar um(a) novo(a) <%= entityClass %>",
+                "createOrEditLabel": "Criar ou editar um(a) <%= entityClass %>"
+            },
+            "delete": {
+                "question": "Tem a certeza que pretende eliminar o(a) <%= entityClass %> {{ id }}?"
+            },
+            "detail": {
+                "title": "<%= entityClass %>"
+            }<% for (fieldId in fields) { %>,
+            "<%=fields[fieldId].fieldName%>": "<%=fields[fieldId].fieldNameCapitalized%>"<% } %><% for (relationshipId in relationships) { %>,
+            "<%=relationships[relationshipId].relationshipName%>": "<%= relationships[relationshipId].relationshipNameCapitalized %>"<% } %>
+        }
+    }
+}
