@@ -15,6 +15,7 @@
         "angular-ui-router": "0.2.15",
         "angular": "1.4.4",
         "angular-resource": "1.4.4",
+        "angular-aria": "1.4.4",
         "angular-cookies": "1.4.4",
         "angular-sanitize": "1.4.4",<% if (enableTranslation) { %>
         "angular-i18n": "1.4.4",
