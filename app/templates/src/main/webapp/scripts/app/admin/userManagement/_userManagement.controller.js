@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('UserManagementController', function ($scope, UserManagement, Authority, ParseLinks, Language) {
+    .controller('UserManagementController', function ($scope, UserManagement, Authority, ParseLinks<% if (enableTranslation) { %>, Language<% } %>) {
         $scope.users = [];
-        $scope.authorities = Authority.query();
+        $scope.authorities = Authority.query();<% if (enableTranslation) { %>
         Language.getAll().then(function (languages) {
             $scope.languages = languages;
-        });
+        });<% } %>
 
         $scope.page = 1;
         $scope.loadAll = function () {
