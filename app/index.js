@@ -322,7 +322,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             choices: [
                 {
                     value: 'maven',
-                    name: 'Maven (recommended)'
+                    name: 'Maven'
                 },
                 {
                     value: 'gradle',
