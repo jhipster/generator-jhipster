@@ -115,8 +115,8 @@ public class <%= entityClass %> implements Serializable {
     @JsonIgnore<% } %><% if (hibernateCache != 'no') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (relationships[relationshipId].ownerSide == true) { %>
     @JoinTable(name = "<%= joinTableName %>",
-               joinColumns = @JoinColumn(name="<%= getTableName(name) %>s_id", referencedColumnName="ID"),
-               inverseJoinColumns = @JoinColumn(name="<%= getTableName(relationships[relationshipId].relationshipName) %>s_id", referencedColumnName="ID"))<% } %>
+               joinColumns = @JoinColumn(name="<%= getColumnName(name) %>s_id", referencedColumnName="ID"),
+               inverseJoinColumns = @JoinColumn(name="<%= getColumnName(relationships[relationshipId].relationshipName) %>s_id", referencedColumnName="ID"))<% } %>
     private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();<% } else { %>
     @OneToOne<% if (relationships[relationshipId].ownerSide == false) { %>(mappedBy = "<%= relationships[relationshipId].otherEntityRelationshipName %>")
     @JsonIgnore<% } %>

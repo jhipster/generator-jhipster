@@ -48,8 +48,8 @@
             </column><% } %><%
 
             } %><% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
-            <column name="<%=getTableName(relationships[relationshipId].relationshipName) %>_id" type="bigint"/><% } else if (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true) { %>
-            <column name="<%=getTableName(relationships[relationshipId].relationshipName) %>_id" type="bigint">
+            <column name="<%=getColumnName(relationships[relationshipId].relationshipName) %>_id" type="bigint"/><% } else if (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true) { %>
+            <column name="<%=getColumnName(relationships[relationshipId].relationshipName) %>_id" type="bigint">
                 <constraints unique="true"/>
             </column><% } %><% } %>
         </createTable><% for (fieldId in fields) {
@@ -61,7 +61,7 @@
             if(prodDatabaseType === 'oracle' && constraintName.length > 30) {
                 constraintName = 'fk_' + name.toLowerCase().substring(0, 3) + '_' + relationships[relationshipId].relationshipName.toLowerCase().substring(0, 3) + '_id';
             }%>
-        <addForeignKeyConstraint baseColumnNames="<%= getTableName(relationships[relationshipId].relationshipName) %>_id"
+        <addForeignKeyConstraint baseColumnNames="<%= getColumnName(relationships[relationshipId].relationshipName) %>_id"
                                  baseTableName="<%= entityTableName %>"
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="id"
@@ -83,23 +83,23 @@
     }
   %>
         <createTable tableName="<%= joinTableName %>">
-            <column name="<%= getTableName(relationshipName) %>s_id" type="bigint">
+            <column name="<%= getColumnName(relationshipName) %>s_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="<%= getTableName(name) %>s_id" type="bigint">
+            <column name="<%= getColumnName(name) %>s_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="<%= getTableName(name) %>s_id, <%= getTableName(relationshipName) %>s_id" tableName="<%= joinTableName %>"/>
+        <addPrimaryKey columnNames="<%= getColumnName(name) %>s_id, <%= getColumnName(relationshipName) %>s_id" tableName="<%= joinTableName %>"/>
 
-        <addForeignKeyConstraint baseColumnNames="<%= getTableName(name) %>s_id"
+        <addForeignKeyConstraint baseColumnNames="<%= getColumnName(name) %>s_id"
                                  baseTableName="<%= joinTableName %>"
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="id"
                                  referencedTableName="<%= entityTableName %>"/>
 
-        <addForeignKeyConstraint baseColumnNames="<%= getTableName(relationshipName) %>s_id"
+        <addForeignKeyConstraint baseColumnNames="<%= getColumnName(relationshipName) %>s_id"
                                  baseTableName="<%= joinTableName %>"
                                  constraintName="<%= otherEntityConstraintName %>"
                                  referencedColumnNames="id"
