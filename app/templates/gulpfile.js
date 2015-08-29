@@ -284,5 +284,5 @@ gulp.task('server', ['serve'], function () {
 });
 
 gulp.task('default', function() {
-    runSequence('test', 'build');
+    runSequence('serve');
 });

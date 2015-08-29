@@ -61,31 +61,35 @@
             </thead>
             <tbody<% if (pagination == 'infinite-scroll') { %> infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page"<% } %>>
                 <tr ng-repeat="<%=entityInstance %> in <%=entityInstance %>s">
-                    <td><a ui-sref="<%= entityInstance %>.detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td><% for (fieldId in fields) { %><% if (fields[fieldId].fieldType == 'byte[]') { %>
-                    <td><% if (fields[fieldId].fieldIsEnum) {
-                        var enumPrefix = angularAppName + '.'+ fields[fieldId].fieldType;%>
-                        <td translate="<%=enumPrefix%>.SELECT" translate-values="{ VALUE: <%= entityInstance %>.<%=fields[fieldId].fieldName%> }" translate-interpolation="messageformat"></td>
-                        <% } else if (fields[fieldId].fieldTypeBlobContent == 'image') { %>
-                        <img data-ng-src="{{'data:image/*;base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-height: 30px;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/><% } %><% if (fields[fieldId].fieldTypeBlobContent == 'any') { %>
-                        {{abbreviate(<%= entityInstance %>.<%= fields[fieldId].fieldName %>) + ' ' + byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}<% } else { %>
-                        {{byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}<% } %>
-                    </td><% } else { %>
-                    <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%>}}</td><% } %><% } %><% for (relationshipId in relationships) {
-                        var relationshipType = relationships[relationshipId].relationshipType;
-                        var ownerSide = relationships[relationshipId].ownerSide;
-                        var relationshipFieldName = relationships[relationshipId].relationshipFieldName;
-                        var otherEntityName = relationships[relationshipId].otherEntityName;
-                        var otherEntityField = relationships[relationshipId].otherEntityField;
-                        var otherEntityFieldCapitalized = relationships[relationshipId].otherEntityFieldCapitalized;
-                        if (relationshipType == 'many-to-one'
-                            || (relationshipType == 'one-to-one' && ownerSide == true)
-                            || (relationshipType == 'many-to-many' && ownerSide == true && pagination == 'no')) {
-                        %>
+                    <td><a ui-sref="<%= entityInstance %>.detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td>
+<% for (fieldId in fields) { -%>
+<% if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'image') { -%>
+                    <td>
+                        <img data-ng-src="{{'data:image/*;base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-height: 30px;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/> {{byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}
+                    </td>
+<% } else if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'any') { -%>
+                    <td>{{abbreviate(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}} {{byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}</td>
+<% } else if (fields[fieldId].fieldIsEnum) { -%>
+                    <td translate="{{'<%= angularAppName %>.<%= fields[fieldId].fieldType %>.' + <%= entityInstance %>.<%= fields[fieldId].fieldName %>}}">{{<%= entityInstance %>.<%= fields[fieldId].fieldName %>}}</td>
+<% } else { -%>
+                    <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%>}}</td>
+<% } -%>
+<% } -%>
+<% for (relationshipId in relationships) {
+       var relationshipType = relationships[relationshipId].relationshipType;
+       var ownerSide = relationships[relationshipId].ownerSide;
+       var relationshipFieldName = relationships[relationshipId].relationshipFieldName;
+       var otherEntityName = relationships[relationshipId].otherEntityName;
+       var otherEntityField = relationships[relationshipId].otherEntityField;
+       var otherEntityFieldCapitalized = relationships[relationshipId].otherEntityFieldCapitalized; -%>
+<% if (relationshipType == 'many-to-one'
+       || (relationshipType == 'one-to-one' && ownerSide == true)
+       || (relationshipType == 'many-to-many' && ownerSide == true && pagination == 'no')) { -%>
                     <td>
 <% if (otherEntityName == 'user') { -%>
 <% if (relationshipType == 'many-to-many') { -%>
-                        <span ng-repeat="manyToMany in <%= entityInstance %>.<%= relationshipFieldName %>s">
-                            {{manyToMany.<%= otherEntityField %>}}{{$last ? '' : ', '}}
+                        <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldName %>s">
+                            {{<%= relationshipFieldName %>.<%= otherEntityField %>}}{{$last ? '' : ', '}}
                         <span>
 <% } else { -%>
 <% if (dto == 'no') { -%>
@@ -96,8 +100,8 @@
 <% } -%>
 <% } else { -%>
 <% if (relationshipType == 'many-to-many') { -%>
-                        <span ng-repeat="manyToMany in <%= entityInstance %>.<%= relationshipFieldName %>s">
-                            <a class="form-control-static" ui-sref="<%= otherEntityName %>.detail({id: {{manyToMany.id}}})">{{manyToMany.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
+                        <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldName %>s">
+                            <a class="form-control-static" ui-sref="<%= otherEntityName %>.detail({id: {{<%= relationshipFieldName %>.id}}})">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
                         <span>
 <% } else { -%>
 <% if (dto == 'no') { -%>
@@ -107,7 +111,9 @@
 <% } -%>
 <% } -%>
 <% } -%>
-                    </td><% } } %>
+                    </td>
+<% } -%>
+<% } -%>
                     <td>
                         <button type="submit"
                                 ui-sref="<%= entityInstance %>.detail({id:<%= entityInstance %>.id})"

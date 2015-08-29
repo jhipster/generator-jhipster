@@ -322,7 +322,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             choices: [
                 {
                     value: 'maven',
-                    name: 'Maven (recommended)'
+                    name: 'Maven'
                 },
                 {
                     value: 'gradle',
@@ -350,7 +350,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'confirm',
             name: 'useSass',
-            message: '(14/' + questions + ') Would you like to use SASS CSS Authoring Framework?',
+            message: '(14/' + questions + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
             default: false
         },
         {
@@ -805,6 +805,9 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/test/java/package/service/_UserServiceTest.java', testDir + 'service/UserServiceTest.java', this, {});
     }
     this.template('src/test/java/package/web/rest/_AccountResourceTest.java', testDir + 'web/rest/AccountResourceTest.java', this, {});
+    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+        this.template('src/test/java/package/web/rest/_AuditResourceTest.java', testDir + 'web/rest/AuditResourceTest.java', this, {});
+    }
     this.template('src/test/java/package/web/rest/_TestUtil.java', testDir + 'web/rest/TestUtil.java', this, {});
     this.template('src/test/java/package/web/rest/_UserResourceTest.java', testDir + 'web/rest/UserResourceTest.java', this, {});
 
