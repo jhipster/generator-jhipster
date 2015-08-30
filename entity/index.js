@@ -862,11 +862,20 @@ EntityGenerator.prototype.files = function files() {
     // Expose utility methods in templates
     this.util = {};
     this.util.contains = _.contains;
+    var wordwrap = function(text, width){
+        var wrappedText = '';
+        var rows = text.split('\n');
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            wrappedText = wrappedText + '\n' + _s.wrap(row, { width: width });
+        }
+        return wrappedText;
+    }
     this.util.formatAsClassJavadoc = function (text) {
-        return '/**\n * ' + text.replace(/\n/g, '\n * ') + '\n */';
+        return '/**' + wordwrap(text, 76).replace(/\n/g, '\n * ') + '\n */';
     };
     this.util.formatAsFieldJavadoc = function (text) {
-        return '    /**\n     * ' + text.replace(/\n/g, '\n     * ') + '\n     */';
+        return '    /**' + wordwrap(text, 72).replace(/\n/g, '\n     * ') + '\n     */';
     };
 
     if (this.useConfigurationFile == false) { // store informations in a file for further use.
