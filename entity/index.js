@@ -871,11 +871,12 @@ EntityGenerator.prototype.files = function files() {
         }
         return wrappedText;
     }
+    var wordwrapWidth = 80;
     this.util.formatAsClassJavadoc = function (text) {
-        return '/**' + wordwrap(text, 76).replace(/\n/g, '\n * ') + '\n */';
+        return '/**' + wordwrap(text, wordwrapWidth - 4).replace(/\n/g, '\n * ') + '\n */';
     };
     this.util.formatAsFieldJavadoc = function (text) {
-        return '    /**' + wordwrap(text, 72).replace(/\n/g, '\n     * ') + '\n     */';
+        return '    /**' + wordwrap(text, wordwrapWidth - 8).replace(/\n/g, '\n     * ') + '\n     */';
     };
 
     if (this.useConfigurationFile == false) { // store informations in a file for further use.
