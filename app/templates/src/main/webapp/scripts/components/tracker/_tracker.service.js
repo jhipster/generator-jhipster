@@ -19,11 +19,13 @@ angular.module('<%=angularAppName%>')
             connect: function () {
                 //building absolute path so that websocket doesnt fail when deploying with a context path
                 var loc = window.location;
-                var url = '//' + loc.host + loc.pathname + 'websocket/tracker';
+                var url = '//' + loc.host + loc.pathname + 'websocket/tracker';<% if (authenticationType == 'oauth2') { %>
+                var authToken = JSON.parse(localStorage.getItem("ls.token")).access_token;
+                url += '?access_token=' + authToken;<% } %>
                 var socket = new SockJS(url);
                 stompClient = Stomp.over(socket);
-                var headers = {};
-                headers['X-CSRF-TOKEN'] = $cookies[$http.defaults.xsrfCookieName];
+                var headers = {};<% if (authenticationType == 'session') { %>
+                headers['X-CSRF-TOKEN'] = $cookies[$http.defaults.xsrfCookieName];<% } %>
                 stompClient.connect(headers, function(frame) {
                     connected.resolve("success");
                     sendActivity();

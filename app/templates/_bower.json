@@ -5,7 +5,7 @@
     "testPath": "src/test/javascript/spec",
     "dependencies": {<% if (websocket == 'spring-websocket') { %>
         "stomp-websocket": "2.3.4",
-        "sockjs-client": "0.3.4",<% } %><% if (useSass) { %>
+        "sockjs-client": "1.0.3",<% } %><% if (useSass) { %>
         "bootstrap-sass": "3.3.5",<% } else { %>
         "bootstrap": "3.3.5",<% } %>
         "modernizr": "2.8.3",
