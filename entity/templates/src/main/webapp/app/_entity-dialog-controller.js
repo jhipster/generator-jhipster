@@ -85,11 +85,15 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>DialogContro
             return formatAsBytes(size(base64String));
         };<% } %><% for (fieldId in fields) { if (fields[fieldId].fieldType === 'byte[]') { %>
 
-        $scope.set<%= fields[fieldId].fieldNameCapitalized %> = function ($files, <%= entityInstance %>) {
-            if ($files[0]) {
-                var file = $files[0];
+        $scope.set<%= fields[fieldId].fieldNameCapitalized %> = function ($file, <%= entityInstance %>) {
+<% if (fields[fieldId].fieldTypeBlobContent == 'image') { -%>
+            if ($file && $file.$error == 'pattern') {
+                return;
+            }
+<% } -%>
+            if ($file) {
                 var fileReader = new FileReader();
-                fileReader.readAsDataURL(file);
+                fileReader.readAsDataURL($file);
                 fileReader.onload = function (e) {
                     var data = e.target.result;
                     var base64Data = data.substr(data.indexOf('base64,') + 'base64,'.length);
