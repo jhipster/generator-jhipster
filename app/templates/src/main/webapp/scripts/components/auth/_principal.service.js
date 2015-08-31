@@ -29,7 +29,7 @@ angular.module('<%=angularAppName%>')
                 }
 
                 for (var i = 0; i < roles.length; i++) {
-                    if (this.isInRole(roles[i])) {
+                    if (_identity.roles.indexOf(roles[i]) !== -1) {
                         return true;
                     }
                 }
