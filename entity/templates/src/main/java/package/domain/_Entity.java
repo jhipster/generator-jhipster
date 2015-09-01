@@ -53,9 +53,9 @@ import <%=packageName%>.domain.enumeration.<%= element %>;<% }); %>
  * A <%= entityClass %>.
  */<% if (databaseType == 'sql') { %>
 @Entity
-@Table(name = "<%= name.toUpperCase() %>")<% if (hibernateCache != 'no') { %>
+@Table(name = "<%= entityTableName %>")<% if (hibernateCache != 'no') { %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType == 'mongodb') { %>
-@Document(collection = "<%= name.toUpperCase() %>")<% } %><% if (databaseType == 'cassandra') { %>
+@Document(collection = "<%= entityTableName %>")<% } %><% if (databaseType == 'cassandra') { %>
 @Table(name = "<%= entityInstance %>")<% } %><% if (searchEngine == 'elasticsearch') { %>
 @Document(indexName="<%= entityInstance.toLowerCase() %>")<% } %>
 public class <%= entityClass %> implements Serializable {
@@ -95,7 +95,12 @@ public class <%= entityClass %> implements Serializable {
     @Field("<%=fields[fieldId].fieldNameUnderscored %>")<% } %>
     private <%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>;
 <% } %><% for (relationshipId in relationships) {
-    otherEntityRelationshipName = relationships[relationshipId].otherEntityRelationshipName;
+    var otherEntityRelationshipName = relationships[relationshipId].otherEntityRelationshipName,
+    relationshipName = relationships[relationshipId].relationshipName,
+    joinTableName = entityTableName + '_'+ getTableName(relationshipName);
+    if(prodDatabaseType === 'oracle' && joinTableName.length > 30) {
+        joinTableName = getTableName(name.substring(0, 5)) + '_' + getTableName(relationshipName.substring(0, 5)) + '_MAPPING';
+    }
     if (otherEntityRelationshipName != null) {
         mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
     }
@@ -109,9 +114,9 @@ public class <%= entityClass %> implements Serializable {
     @ManyToMany<% if (relationships[relationshipId].ownerSide == false) { %>(mappedBy = "<%= relationships[relationshipId].otherEntityRelationshipName %>s")
     @JsonIgnore<% } %><% if (hibernateCache != 'no') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (relationships[relationshipId].ownerSide == true) { %>
-    @JoinTable(name = "<%= name.toUpperCase() + '_' + relationships[relationshipId].relationshipName.toUpperCase() %>",
-               joinColumns = @JoinColumn(name="<%= name.toLowerCase() %>s_id", referencedColumnName="ID"),
-               inverseJoinColumns = @JoinColumn(name="<%= relationships[relationshipId].relationshipName.toLowerCase() %>s_id", referencedColumnName="ID"))<% } %>
+    @JoinTable(name = "<%= joinTableName %>",
+               joinColumns = @JoinColumn(name="<%= getColumnName(name) %>s_id", referencedColumnName="ID"),
+               inverseJoinColumns = @JoinColumn(name="<%= getColumnName(relationships[relationshipId].relationshipName) %>s_id", referencedColumnName="ID"))<% } %>
     private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();<% } else { %>
     @OneToOne<% if (relationships[relationshipId].ownerSide == false) { %>(mappedBy = "<%= relationships[relationshipId].otherEntityRelationshipName %>")
     @JsonIgnore<% } %>

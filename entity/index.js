@@ -88,8 +88,8 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     } else if (prodDatabaseType == 'oracle' && reservedWords_Oracle.indexOf(this.name.toUpperCase()) != -1) {
         console.log(chalk.red('The entity name cannot contain a Oracle reserved keyword'));
         throw new Error("Validation error");
-    } else if (prodDatabaseType == 'oracle' && this.name.length > 26) {
-        console.log(chalk.red('The entity name cannot be of more than 26 characters'));
+    } else if (prodDatabaseType == 'oracle' && _s.underscored(this.name).length > 26) {
+        console.log(chalk.red('The entity name is too long for Oracle, try a shorter name'));
         throw new Error("Validation error");
     }
 
@@ -1151,6 +1151,7 @@ EntityGenerator.prototype.files = function files() {
 
     this.entityClass = _s.capitalize(this.name);
     this.entityInstance = _s.decapitalize(this.name);
+    this.entityTableName = _s.underscored(this.name).toUpperCase();
 
     this.differentTypes = [this.entityClass];
     var relationshipId;
@@ -1327,4 +1328,12 @@ EntityGenerator.prototype.copyEnumI18n = function(language, enumInfo) {
         // An exception is thrown if the folder doesn't exist
         // do nothing
     }
+};
+
+EntityGenerator.prototype.getTableName = function(value) {
+    return _s.underscored(value).toUpperCase();
+};
+
+EntityGenerator.prototype.getColumnName = function(value) {
+    return _s.underscored(value).toLowerCase();
 };
