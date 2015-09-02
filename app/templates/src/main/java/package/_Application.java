@@ -9,8 +9,7 @@ import org.springframework.boot.actuate.autoconfigure.MetricRepositoryAutoConfig
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
-import org.springframework.core.env.SimpleCommandLinePropertySource;<% if (databaseType == 'sql') { %>
-import com.google.common.base.Joiner;<% } %>
+import org.springframework.core.env.SimpleCommandLinePropertySource;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -94,12 +93,11 @@ public class Application {
      * Set the liquibases.scan.packages to avoid an exception from ServiceLocator.
      */
     private static void addLiquibaseScanPackages() {
-        System.setProperty("liquibase.scan.packages", Joiner.on(",").join(
-            "liquibase.change", "liquibase.database", "liquibase.parser",
-            "liquibase.precondition", "liquibase.datatype",
-            "liquibase.serializer", "liquibase.sqlgenerator", "liquibase.executor",
-            "liquibase.snapshot", "liquibase.logging", "liquibase.diff",
-            "liquibase.structure", "liquibase.structurecompare", "liquibase.lockservice",
-            "liquibase.ext", "liquibase.changelog"));
+        System.setProperty("liquibase.scan.packages", "liquibase.change,liquibase.database," +
+            "liquibase.parser,liquibase.precondition,liquibase.datatype," +
+            "liquibase.serializer,liquibase.sqlgenerator,liquibase.executor," +
+            "liquibase.snapshot,liquibase.logging,liquibase.diff," +
+            "liquibase.structure,liquibase.structurecompare,liquibase.lockservice," +
+            "liquibase.ext,liquibase.changelog");
     }<% } %>
 }
