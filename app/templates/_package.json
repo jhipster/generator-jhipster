@@ -10,7 +10,7 @@
     "grunt-autoprefixer": "2.2.0",
     "grunt-build-control": "0.3.0",
     "grunt-wiredep": "2.0.0",
-    "grunt-browser-sync": "2.1.2",
+    "grunt-browser-sync": "2.1.3",
     "grunt-contrib-copy": "0.8.0",
     "grunt-contrib-clean": "0.6.0",
     "grunt-contrib-concat": "0.5.1",
