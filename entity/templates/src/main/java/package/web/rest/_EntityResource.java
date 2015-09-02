@@ -200,7 +200,7 @@ public class <%= entityClass %>Resource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<<%= entityClass %>> search<%= entityClass %>(@PathVariable String query) {
+    public List<<%= entityClass %>> search<%= entityClass %>s(@PathVariable String query) {
         return StreamSupport
             .stream(<%= entityInstance %>SearchRepository.search(queryString(query)).spliterator(), false)
             .collect(Collectors.toList());
