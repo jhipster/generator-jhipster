@@ -1,5 +1,13 @@
 package <%=packageName%>.web.rest;
-
+<% if (javaVersion != '7') { %>
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
+import <%=packageName%>.domain.util.JSR310DateTimeSerializer;
+import <%=packageName%>.domain.util.JSR310LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+<% } %>
 import java.io.IOException;
 import java.nio.charset.Charset;
 
@@ -38,7 +46,16 @@ public class TestUtil {
         JodaModule module = new JodaModule();
         module.addSerializer(DateTime.class, new CustomDateTimeSerializer());
         module.addSerializer(LocalDate.class, new CustomLocalDateSerializer());
-        mapper.registerModule(module);
+        mapper.registerModule(module);<% if (javaVersion != '7') { %>
+
+        JSR310Module jsr310Module = new JSR310Module();
+        jsr310Module.addSerializer(OffsetDateTime.class, JSR310DateTimeSerializer.INSTANCE);
+        jsr310Module.addSerializer(ZonedDateTime.class, JSR310DateTimeSerializer.INSTANCE);
+        jsr310Module.addSerializer(LocalDateTime.class, JSR310DateTimeSerializer.INSTANCE);
+        jsr310Module.addSerializer(Instant.class, JSR310DateTimeSerializer.INSTANCE);
+        jsr310Module.addDeserializer(java.time.LocalDate.class, JSR310LocalDateDeserializer.INSTANCE);
+        mapper.registerModule(jsr310Module);
+<% } %>
         return mapper.writeValueAsBytes(object);
     }
 

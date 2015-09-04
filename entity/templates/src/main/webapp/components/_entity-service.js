@@ -8,7 +8,7 @@ angular.module('<%=angularAppName%>')
                 method: 'GET',
                 transformResponse: function (data) {
                     data = angular.fromJson(data);<% for (fieldId in fields) { if (fields[fieldId].fieldType == 'LocalDate') { %>
-                    data.<%=fields[fieldId].fieldName%> = DateUtils.convertLocaleDateFromServer(data.<%=fields[fieldId].fieldName%>);<% }if (fields[fieldId].fieldType == 'DateTime') { %>
+                    data.<%=fields[fieldId].fieldName%> = DateUtils.convertLocaleDateFromServer(data.<%=fields[fieldId].fieldName%>);<% }if (fields[fieldId].fieldType == 'DateTime' || fields[fieldId].fieldType == 'ZonedDateTime') { %>
                     data.<%=fields[fieldId].fieldName%> = DateUtils.convertDateTimeFromServer(data.<%=fields[fieldId].fieldName%>);<% } }%>
                     return data;
                 }

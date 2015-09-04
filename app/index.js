@@ -693,6 +693,12 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.databaseType == "sql") {
         this.template('src/main/java/package/domain/util/_FixedH2Dialect.java', javaDir + 'domain/util/FixedH2Dialect.java', this, {});
     }
+    if (this.javaversion != "7") {
+        this.template('src/main/java/package/domain/util/_JSR310DateConverters.java', javaDir + 'domain/util/JSR310DateConverters.java', this, {});
+        this.template('src/main/java/package/domain/util/_JSR310PersistenceConverters.java', javaDir + 'domain/util/JSR310PersistenceConverters.java', this, {});
+        this.template('src/main/java/package/domain/util/_JSR310DateTimeSerializer.java', javaDir + 'domain/util/JSR310DateTimeSerializer.java', this, {});
+        this.template('src/main/java/package/domain/util/_JSR310LocalDateDeserializer.java', javaDir + 'domain/util/JSR310LocalDateDeserializer.java', this, {});
+    }
 
     if (this.searchEngine == 'elasticsearch') {
         this.template('src/main/java/package/repository/search/_package-info.java', javaDir + 'repository/search/package-info.java', this, {});

@@ -14,14 +14,14 @@ for (relationshipId in relationships) {
 if (importJsonignore) { %>
 import com.fasterxml.jackson.annotation.JsonIgnore;<% } %><% if (fieldsContainCustomTime == true) { %>
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;<% } %><% if (fieldsContainLocalDate == true) { %>
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;<% } %><% if (fieldsContainLocalDate == true && javaVersion == '7') { %>
 import <%=packageName%>.domain.util.CustomLocalDateSerializer;
 import <%=packageName%>.domain.util.ISO8601LocalDateDeserializer;<% } %><% if (fieldsContainDateTime == true) { %>
 import <%=packageName%>.domain.util.CustomDateTimeDeserializer;
 import <%=packageName%>.domain.util.CustomDateTimeSerializer;<% } %><% if (hibernateCache != 'no') { %>
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (fieldsContainCustomTime == true && databaseType == 'sql') { %>
-import org.hibernate.annotations.Type;<% } %><% if (fieldsContainLocalDate == true) { %>
+import org.hibernate.annotations.Type;<% } %><% if (fieldsContainLocalDate == true && javaVersion == '7') { %>
 import org.joda.time.LocalDate;<% } %><% if (fieldsContainDateTime == true) { %>
 import org.joda.time.DateTime;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.annotation.Id;
@@ -32,7 +32,9 @@ import org.springframework.data.elasticsearch.annotations.Document;<% } %>
 import javax.persistence.*;<% } %><% if (validation) { %>
 import javax.validation.constraints.*;<% } %>
 import java.io.Serializable;<% if (fieldsContainBigDecimal == true) { %>
-import java.math.BigDecimal;<% } %><% if (fieldsContainDate == true) { %>
+import java.math.BigDecimal;<% } %><% if (fieldsContainZonedDateTime == true) { %>
+import java.time.ZonedDateTime;<% } %><% if (fieldsContainLocalDate == true && javaVersion != '7') { %>
+import java.time.LocalDate;<% } %><% if (fieldsContainDate == true) { %>
 import java.util.Date;<% } %><% if (relationships.length > 0) { %>
 import java.util.HashSet;
 import java.util.Set;<% } %>
@@ -81,7 +83,7 @@ public class <%= entityClass %> implements Serializable {
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     @JsonDeserialize(using = CustomDateTimeDeserializer.class)
-    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>"<% if (required) { %>, nullable = false<% } %>)<% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
+    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>"<% if (required) { %>, nullable = false<% } %>)<% } else if (fieldsContainLocalDate == true && javaVersion == '7') { %>
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     @JsonDeserialize(using = ISO8601LocalDateDeserializer.class)
@@ -89,7 +91,7 @@ public class <%= entityClass %> implements Serializable {
     @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>", precision=10, scale=2<% if (required) { %>, nullable = false<% } %>)<% } else { %>
     @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>"<% if (fields[fieldId].fieldValidate == true) { %><% if (fields[fieldId].fieldValidateRules.indexOf('maxlength') != -1) { %>, length = <%= fields[fieldId].fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% } %>)<% } } %><% if (databaseType == 'mongodb') { %><% if (fields[fieldId].fieldType == 'DateTime') { %>
     @JsonSerialize(using = CustomDateTimeSerializer.class)
-    @JsonDeserialize(using = CustomDateTimeDeserializer.class)<% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
+    @JsonDeserialize(using = CustomDateTimeDeserializer.class)<% } else if (fieldsContainLocalDate == true && javaVersion == '7') { %>
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     @JsonDeserialize(using = ISO8601LocalDateDeserializer.class)<% } %>
     @Field("<%=fields[fieldId].fieldNameUnderscored %>")<% } %>

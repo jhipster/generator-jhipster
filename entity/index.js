@@ -39,6 +39,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.packageName = this.config.get('packageName');
     this.packageFolder = this.config.get('packageFolder');
     this.javaVersion = this.config.get('javaVersion');
+    javaVersion = this.javaVersion;
     this.authenticationType = this.config.get('authenticationType');
     this.hibernateCache = this.config.get('hibernateCache');
     this.databaseType = this.config.get('databaseType');
@@ -107,6 +108,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
 var fieldNamesUnderscored = ['id'];
 var databaseType;
 var prodDatabaseType;
+var javaVersion;
 
 util.inherits(EntityGenerator, yeoman.generators.Base);
 util.inherits(EntityGenerator, scriptBase);
@@ -159,7 +161,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
         },
         {
             when: function (response) {
-                return response.fieldAdd == true && (databaseType == 'sql' || databaseType == 'mongodb');
+                return response.fieldAdd == true && (databaseType == 'sql' || databaseType == 'mongodb') && javaVersion == '7';
             },
             type: 'list',
             name: 'fieldType',
@@ -196,6 +198,61 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 {
                     value: 'DateTime',
                     name: 'DateTime'
+                },
+                {
+                    value: 'Boolean',
+                    name: 'Boolean'
+                },
+                {
+                    value: 'enum',
+                    name: 'Enumeration (Java enum type)'
+                },
+                {
+                    value: 'byte[]',
+                    name: '[BETA] Blob'
+                }
+            ],
+            default: 0
+        },
+        {
+            when: function (response) {
+                return response.fieldAdd == true && (databaseType == 'sql' || databaseType == 'mongodb') && javaVersion != '7';
+            },
+            type: 'list',
+            name: 'fieldType',
+            message: 'What is the type of your field?',
+            choices: [
+                {
+                    value: 'String',
+                    name: 'String'
+                },
+                {
+                    value: 'Integer',
+                    name: 'Integer'
+                },
+                {
+                    value: 'Long',
+                    name: 'Long'
+                },
+                {
+                    value: 'Float',
+                    name: 'Float'
+                },
+                {
+                    value: 'Double',
+                    name: 'Double'
+                },
+                {
+                    value: 'BigDecimal',
+                    name: 'BigDecimal'
+                },
+                {
+                    value: 'LocalDate',
+                    name: 'LocalDate'
+                },
+                {
+                    value: 'ZonedDateTime',
+                    name: 'ZonedDateTime'
                 },
                 {
                     value: 'Boolean',
@@ -419,6 +476,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     response.fieldValidate == true &&
                     (response.fieldType == 'LocalDate' ||
                     response.fieldType == 'DateTime' ||
+                    response.fieldType == 'ZonedDateTime' ||
                     response.fieldType == 'Date' ||
                     response.fieldType == 'UUID' ||
                     response.fieldType == 'TimeUUID' ||
@@ -1012,7 +1070,7 @@ EntityGenerator.prototype.files = function files() {
 
         if ((databaseType == 'sql' || databaseType == 'mongodb') && !_.contains([
             'String', 'Integer', 'Long', 'Float', 'Double', 'BigDecimal',
-            'LocalDate', 'DateTime', 'Boolean', 'byte[]'], field.fieldType)) {
+            'LocalDate', 'DateTime', 'ZonedDateTime', 'Boolean', 'byte[]'], field.fieldType)) {
             field.fieldIsEnum = true;
         } else {
             field.fieldIsEnum = false;
@@ -1118,6 +1176,13 @@ EntityGenerator.prototype.files = function files() {
         var field = this.fields[idx];
         if (field.fieldType == 'DateTime') {
             this.fieldsContainDateTime = true;
+        }
+    }
+    this.fieldsContainZonedDateTime = false;
+    for (var idx in this.fields) {
+        var field = this.fields[idx];
+        if (field.fieldType == 'ZonedDateTime') {
+            this.fieldsContainZonedDateTime = true;
         }
     }
     this.fieldsContainDate = false;

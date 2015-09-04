@@ -26,13 +26,17 @@ import org.springframework.transaction.annotation.Transactional;<% } %><% if (fi
 import org.springframework.util.Base64Utils;<% } %>
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;<% if (fieldsContainLocalDate == true) { %>
+import javax.inject.Inject;<% if (fieldsContainLocalDate == true && javaVersion == '7') { %>
 import org.joda.time.LocalDate;<% } %><% if (fieldsContainDateTime == true) { %>
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;<% } %><% if (fieldsContainBigDecimal == true) { %>
-import java.math.BigDecimal;<% } %><% if (fieldsContainDate == true) { %>
+import java.math.BigDecimal;<% } %><% if (fieldsContainLocalDate == true && javaVersion != '7') { %>
+import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;<% } %><% if (fieldsContainDate == true) { %>
 import java.util.Date;<% } %>
 import java.util.List;<% if (databaseType == 'cassandra') { %>
 import java.util.UUID;<% } %>
@@ -54,7 +58,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{<% if (fieldsContainDateTime == true) { %>
 
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");<% } %>
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");<% } %><% if (fieldsContainZonedDateTime == true) { %>
+
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").withZone(ZoneId.of("UTC"));<% } %>
 <% for (fieldId in fields) {
     var defaultValueName = 'DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase();
     var updatedValueName = 'UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase();
@@ -120,14 +126,21 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     private static final UUID <%=updatedValueName %> = UUID.randomUUID();<% } else if (fieldType == 'Date') { %>
 
     private static final Date <%=defaultValueName %> = new Date();
-    private static final Date <%=updatedValueName %> = new Date();<% } else if (fieldType == 'LocalDate') { %>
+    private static final Date <%=updatedValueName %> = new Date();<% } else if (fieldType == 'LocalDate' && javaVersion == '7') { %>
 
     private static final LocalDate <%=defaultValueName %> = new LocalDate(0L);
-    private static final LocalDate <%=updatedValueName %> = new LocalDate();<% } else if (fieldType == 'DateTime') { %>
+    private static final LocalDate <%=updatedValueName %> = new LocalDate();<% } else if (fieldType == 'LocalDate' && javaVersion != '7') { %>
+
+    private static final LocalDate <%=defaultValueName %> = LocalDate.ofEpochDay(0L);
+    private static final LocalDate <%=updatedValueName %> = LocalDate.now();<% } else if (fieldType == 'DateTime') { %>
 
     private static final DateTime <%=defaultValueName %> = new DateTime(0L, DateTimeZone.UTC);
     private static final DateTime <%=updatedValueName %> = new DateTime(DateTimeZone.UTC).withMillisOfSecond(0);
-    private static final String <%=defaultValueName %>_STR = dateTimeFormatter.print(<%= defaultValueName %>);<% } else if (fieldType == 'Boolean') { %>
+    private static final String <%=defaultValueName %>_STR = dateTimeFormatter.print(<%= defaultValueName %>);<% } else if (fieldType == 'ZonedDateTime') { %>
+
+    private static final ZonedDateTime <%=defaultValueName %> = ZonedDateTime.now().withNano(0);
+    private static final ZonedDateTime <%=updatedValueName %> = ZonedDateTime.now().minusDays(1L).withNano(0);
+    private static final String <%=defaultValueName %>_STR = dateTimeFormatter.format(<%= defaultValueName %>);<% } else if (fieldType == 'Boolean') { %>
 
     private static final Boolean <%=defaultValueName %> = false;
     private static final Boolean <%=updatedValueName %> = true;<% } else if (fieldType == 'byte[]') { %>
@@ -229,7 +242,7 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
                 .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().intValue())))<% } %><% if (databaseType == 'mongodb') { %>
                 .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId())))<% } %><% if (databaseType == 'cassandra') { %>
                 .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().toString())))<% } %><% for (fieldId in fields) {%>
-                .andExpect(jsonPath("$.[*].<%=fields[fieldId].fieldName%>").value(hasItem(<% if (fields[fieldId].fieldType == 'byte[]') { %>Base64Utils.encodeToString(<% } %><%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'byte[]') { %>)<% } else if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Float' || fields[fieldId].fieldType == 'Double') { %>.doubleValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[fieldId].fieldType == 'DateTime') { %>_STR<% } else if (fields[fieldId].fieldType == 'Date') { %>.getTime()<% } else { %>.toString()<% } %>)))<% } %>;
+                .andExpect(jsonPath("$.[*].<%=fields[fieldId].fieldName%>").value(hasItem(<% if (fields[fieldId].fieldType == 'byte[]') { %>Base64Utils.encodeToString(<% } %><%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'byte[]') { %>)<% } else if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Float' || fields[fieldId].fieldType == 'Double') { %>.doubleValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[fieldId].fieldType == 'DateTime' || fields[fieldId].fieldType == 'ZonedDateTime') { %>_STR<% } else if (fields[fieldId].fieldType == 'Date') { %>.getTime()<% } else { %>.toString()<% } %>)))<% } %>;
     }
 
     @Test<% if (databaseType == 'sql') { %>
@@ -245,7 +258,7 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().intValue()))<% } %><% if (databaseType == 'mongodb') { %>
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId()))<% } %><% if (databaseType == 'cassandra') { %>
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().toString()))<% } %><% for (fieldId in fields) {%>
-            .andExpect(jsonPath("$.<%=fields[fieldId].fieldName%>").value(<% if (fields[fieldId].fieldType == 'byte[]') { %>Base64Utils.encodeToString(<% } %><%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'byte[]') { %>)<% } else if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Float' || fields[fieldId].fieldType == 'Double') { %>.doubleValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[fieldId].fieldType == 'DateTime') { %>_STR<% } else if (fields[fieldId].fieldType == 'Date') { %>.getTime()<% } else { %>.toString()<% } %>))<% } %>;
+            .andExpect(jsonPath("$.<%=fields[fieldId].fieldName%>").value(<% if (fields[fieldId].fieldType == 'byte[]') { %>Base64Utils.encodeToString(<% } %><%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'byte[]') { %>)<% } else if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Float' || fields[fieldId].fieldType == 'Double') { %>.doubleValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[fieldId].fieldType == 'DateTime' || fields[fieldId].fieldType == 'ZonedDateTime') { %>_STR<% } else if (fields[fieldId].fieldType == 'Date') { %>.getTime()<% } else { %>.toString()<% } %>))<% } %>;
     }
 
     @Test<% if (databaseType == 'sql') { %>
