@@ -562,11 +562,12 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 fieldValidateRulesMinlength: props.fieldValidateRulesMinlength,
                 fieldValidateRulesMaxlength: props.fieldValidateRulesMaxlength,
                 fieldValidateRulesPattern: props.fieldValidateRulesPattern,
+                fieldValidateRulesPatternJava: props.fieldValidateRulesPattern ? props.fieldValidateRulesPattern.replace(/\\/g, '\\\\') : props.fieldValidateRulesPattern,
                 fieldValidateRulesMin: props.fieldValidateRulesMin,
                 fieldValidateRulesMax: props.fieldValidateRulesMax,
                 fieldValidateRulesMinbytes: props.fieldValidateRulesMinbytes,
                 fieldValidateRulesMaxbytes: props.fieldValidateRulesMaxbytes
-                }
+                };
 
             fieldNamesUnderscored.push(_s.underscored(props.fieldName));
             this.fields.push(field);

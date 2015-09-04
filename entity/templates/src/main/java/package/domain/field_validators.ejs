@@ -35,7 +35,7 @@ if (field.fieldValidate == true) {
         validators.push('@Max(value = ' + field.fieldValidateRulesMax + ')');
     }
     if (rules.indexOf('pattern') != -1) {
-        validators.push('@Pattern(regexp = "' + field.fieldValidateRulesPattern  + '")');
+        validators.push('@Pattern(regexp = "' + field.fieldValidateRulesPatternJava  + '")');
     }
     result =  validators.join('\n    ');
 } -%>
