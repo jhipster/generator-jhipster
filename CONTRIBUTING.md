@@ -172,11 +172,11 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 The template engine used by yeoman is [EJS](http://ejs.co/), its syntax is fairly simple.
 For simple code (few lines), logic can be embedded in the main file but if logic becomes more complex it's better to externalise the JS fragment to a sub template included by the first one and located in same folder.
 
-Sub templates should be named with the `ejs` extension because it's the default one, it enables editors to apply correct syntax hilighting and it enables us to use a very concise syntax:
+Sub templates should be named with the `ejs` extension because it's the default one, it enables editors to apply correct syntax highlighting and it enables us to use a very concise syntax:
 
     <%- include field_validators -%>
 
-[_Entity.java](https://github.com/gmarziou/generator-jhipster/blob/validators/entity/templates/src/main/java/package/domain/_Entity.java) includes [field_validators.ejs](https://github.com/gmarziou/generator-jhipster/blob/validators/entity/templates/src/main/java/package/domain/field_validators.ejs)
+This staement means that [_Entity.java](entity/templates/src/main/java/package/domain/_Entity.java) template includes [field_validators.ejs](entity/templates/src/main/java/package/domain/field_validators.ejs) sub template.
 
 Sub templates can be unit tested.
 
