@@ -37,8 +37,7 @@ import java.util.Date;<% } %><% if (relationships.length > 0) { %>
 import java.util.HashSet;
 import java.util.Set;<% } %>
 import java.util.Objects;<% if (databaseType == 'cassandra') { %>
-import java.util.UUID;<% } %>
-<%
+import java.util.UUID;<% } %><%
 var uniqueEnums = {};
 for (fieldId in fields) {
     if (fields[fieldId].fieldIsEnum && (
@@ -46,7 +45,8 @@ for (fieldId in fields) {
         uniqueEnums[fields[fieldId].fieldType] = fields[fieldId].fieldType;
     }
 }
-Object.keys(uniqueEnums).forEach(function(element) {%>
+Object.keys(uniqueEnums).forEach(function(element) { %>
+
 import <%=packageName%>.domain.enumeration.<%= element %>;<% }); %>
 
 /**
@@ -67,7 +67,6 @@ public class <%= entityClass %> implements Serializable {
     private String id;<% } %><% if (databaseType == 'cassandra') { %>
     @PartitionKey
     private UUID id;<% } %>
-    
 <% for (fieldId in fields) { %><% if (fields[fieldId].fieldValidate == true) {
     var required = false;
     if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) {
