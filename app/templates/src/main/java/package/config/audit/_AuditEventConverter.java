@@ -78,8 +78,10 @@ public class AuditEventConverter {
                     WebAuthenticationDetails authenticationDetails = (WebAuthenticationDetails) object;
                     results.put("remoteAddress", authenticationDetails.getRemoteAddress());
                     results.put("sessionId", authenticationDetails.getSessionId());
-                } else {
+                } else if (object != null) {
                     results.put(key, object.toString());
+                } else {
+                    results.put(key, "null");
                 }
             }
         }
