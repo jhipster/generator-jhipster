@@ -49,7 +49,7 @@ angular.module('<%=angularAppName%>')
                         }
 
                         Principal.isInRole(role)
-                            .then(function(result) {
+                            .then(function (result) {
                                 if (result) {
                                     setVisible();
                                 } else {

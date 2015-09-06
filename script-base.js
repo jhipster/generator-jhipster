@@ -125,6 +125,7 @@ Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, res
     this.copyI18nFilesByName(_this, webappDir, 'sessions.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'settings.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'reset.json', lang);
+    this.copyI18nFilesByName(_this, webappDir, 'userManagement.json', lang);
 
     // tracker.json for Websocket
     if (this.websocket == 'spring-websocket') {
