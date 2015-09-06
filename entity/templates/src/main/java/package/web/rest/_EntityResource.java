@@ -10,7 +10,8 @@ import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
 import <%=packageName%>.web.rest.mapper.<%= entityClass %>Mapper;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (pagination != 'no') { %>
-import org.springframework.data.domain.Page;<% } %>
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;<% } %>
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -127,8 +128,7 @@ public class <%= entityClass %>Resource {
         return <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (dto == 'mapstruct') { %>.stream()
             .map(<%= entityInstance %> -> <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(<%= entityInstance %>))
             .collect(Collectors.toCollection(LinkedList::new))<% } %>;<% } %><% if (pagination != 'no') { %>
-    public ResponseEntity<List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>>> getAll<%= entityClass %>s(@RequestParam(value = "page" , required = false) Integer offset,
-                                  @RequestParam(value = "per_page", required = false) Integer limit<% if (fieldsContainNoOwnerOneToOne == true) { %>, @RequestParam(required = false) String filter<% } %>)
+    public ResponseEntity<List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>>> getAll<%= entityClass %>s(Pageable pageable<% if (fieldsContainNoOwnerOneToOne == true) { %>, @RequestParam(required = false) String filter<% } %>)
         throws URISyntaxException {<% for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { %>
         if ("<%= relationships[idx].relationshipName.toLowerCase() %>-is-null".equals(filter)) {
             log.debug("REST request to get all <%= entityClass %>s where <%= relationships[idx].relationshipName %> is null");<% if (javaVersion == '7') { %>
@@ -146,8 +146,8 @@ public class <%= entityClass %>Resource {
                 .collect(Collectors.toList()), HttpStatus.OK);<% } %>
         }
         <% } } %>
-        Page<<%= entityClass %>> page = <%= entityInstance %>Repository.findAll(PaginationUtil.generatePageRequest(offset, limit));
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityInstance %>s", offset, limit);
+        Page<<%= entityClass %>> page = <%= entityInstance %>Repository.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityInstance %>s");
         return new ResponseEntity<<% if (javaVersion == '7') { %>List<<%= entityClass %>><% } %>>(page.getContent()<% if (dto == 'mapstruct') { %>.stream()
             .map(<%= entityInstance %>Mapper::<%= entityInstance %>To<%= entityClass %>DTO)
             .collect(Collectors.toCollection(LinkedList::new))<% } %>, headers, HttpStatus.OK);<% } %>
