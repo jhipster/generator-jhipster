@@ -1,12 +1,12 @@
 {
-    "userManagement": {
+    "user-management": {
         "home": {
             "title": "Utilisateurs",
             "createLabel": "Créer un nouvel utilisateur",
             "createOrEditLabel": "Créer ou éditer un utilisateur"
         },
         "delete": {
-            "question": "Etes-vous certain de vouloir supprimer l'utilisateur {{ id }} ?"
+            "question": "Etes-vous certain de vouloir supprimer l'utilisateur {{ login }} ?"
         },
         "detail": {
             "title": "Utilisateur"

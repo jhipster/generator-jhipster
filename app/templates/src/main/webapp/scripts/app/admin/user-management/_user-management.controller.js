@@ -1,22 +1,21 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('UserManagementController', function ($scope, UserManagement, Authority, ParseLinks<% if (enableTranslation) { %>, Language<% } %>) {
+    .controller('user-managementController', function ($scope, User, ParseLinks<% if (enableTranslation) { %>, Language<% } %>) {
         $scope.users = [];
-        $scope.authorities = Authority.query();<% if (enableTranslation) { %>
+        $scope.authorities = ["ROLE_USER", "ROLE_ADMIN"];<% if (enableTranslation) { %>
         Language.getAll().then(function (languages) {
             $scope.languages = languages;
         });<% } %>
 
-        $scope.page = 1;
+        $scope.page = 0;
         $scope.loadAll = function () {
-            UserManagement.query({page: $scope.page, per_page: 20}, function (result, headers) {
+            User.query({page: $scope.page, per_page: 20}, function (result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 $scope.users = result;
             });
-
-
         };
+
         $scope.loadPage = function (page) {
             $scope.page = page;
             $scope.loadAll();
@@ -25,21 +24,21 @@ angular.module('<%=angularAppName%>')
 
         $scope.setActive = function (user, isActivated) {
             user.activated = isActivated;
-            UserManagement.update(user, function () {
+            User.update(user, function () {
                 $scope.loadAll();
                 $scope.clear();
             });
         };
 
-        $scope.showUpdate = function (id) {
-            UserManagement.get({id: id}, function (result) {
+        $scope.showUpdate = function (login) {
+            User.get({login: login}, function (result) {
                 $scope.user = result;
                 $('#saveUserModal').modal('show');
             });
         };
 
         $scope.save = function () {
-            UserManagement.update($scope.user,
+            User.update($scope.user,
                 function () {
                     $scope.refresh();
                 });

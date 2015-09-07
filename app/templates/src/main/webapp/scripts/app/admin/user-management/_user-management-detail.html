@@ -1,5 +1,5 @@
 <div>
-    <h2><span translate="userManagement.detail.title">User</span> {{user.id}}</h2>
+    <h2><span translate="user-management.detail.title">User</span> "{{user.login}}"</h2>
 
     <div class="table-responsive">
         <table class="table table-striped">
@@ -12,7 +12,7 @@
             <tbody>
             <tr>
                 <td>
-                    <span translate="userManagement.login">Login</span>
+                    <span translate="user-management.login">Login</span>
                 </td>
                 <td>
                     <input type="text" class="input-sm form-control" value="{{user.login}}" readonly>
@@ -20,7 +20,7 @@
             </tr>
             <tr>
                 <td>
-                    <span translate="userManagement.firstName">FirstName</span>
+                    <span translate="user-management.firstName">FirstName</span>
                 </td>
                 <td>
                     <input type="text" class="input-sm form-control" value="{{user.firstName}}" readonly>
@@ -28,7 +28,7 @@
             </tr>
             <tr>
                 <td>
-                    <span translate="userManagement.lastName">LastName</span>
+                    <span translate="user-management.lastName">LastName</span>
                 </td>
                 <td>
                     <input type="text" class="input-sm form-control" value="{{user.lastName}}" readonly>
@@ -36,7 +36,7 @@
             </tr>
             <tr>
                 <td>
-                    <span translate="userManagement.email">Email</span>
+                    <span translate="user-management.email">Email</span>
                 </td>
                 <td>
                     <input type="text" class="input-sm form-control" value="{{user.email}}" readonly>
@@ -44,7 +44,7 @@
             </tr>
             <tr>
                 <td>
-                    <span translate="userManagement.activated">Activated</span>
+                    <span translate="user-management.activated">Activated</span>
                 </td>
                 <td>
                     <input type="text" class="input-sm form-control" value="{{user.activated}}" readonly>
@@ -53,7 +53,7 @@
             <% if (enableTranslation) { %>
             <tr>
                 <td>
-                    <span translate="userManagement.langKey">LangKey</span>
+                    <span translate="user-management.langKey">LangKey</span>
                 </td>
                 <td>
                     <input type="text" class="input-sm form-control" value="{{user.langKey}}" readonly>
@@ -62,7 +62,7 @@
             <% } %>
             <tr>
                 <td>
-                    <span translate="userManagement.createdBy">CreatedBy</span>
+                    <span translate="user-management.createdBy">CreatedBy</span>
                 </td>
                 <td>
                     <input type="text" class="input-sm form-control" value="{{user.createdBy}}" readonly>
@@ -70,7 +70,7 @@
             </tr>
             <tr>
                 <td>
-                    <span translate="userManagement.createdDate">CreatedDate</span>
+                    <span translate="user-management.createdDate">CreatedDate</span>
                 </td>
                 <td>
                     <input type="text" class="input-sm form-control"
@@ -79,7 +79,7 @@
             </tr>
             <tr>
                 <td>
-                    <span translate="userManagement.lastModifiedBy">LastModifiedBy</span>
+                    <span translate="user-management.lastModifiedBy">LastModifiedBy</span>
                 </td>
                 <td>
                     <input type="text" class="input-sm form-control" value="{{user.lastModifiedBy}}" readonly>
@@ -87,7 +87,7 @@
             </tr>
             <tr>
                 <td>
-                    <span translate="userManagement.lastModifiedDate">LastCreatedDate</span>
+                    <span translate="user-management.lastModifiedDate">LastCreatedDate</span>
                 </td>
                 <td>
                     <input type="text" class="input-sm form-control"
@@ -96,7 +96,7 @@
             </tr>
             <tr>
                 <td>
-                    <span translate="userManagement.profiles">Profiles</span>
+                    <span translate="user-management.profiles">Profiles</span>
                 </td>
                 <td>
                     <ul class="list-unstyled">
@@ -109,7 +109,7 @@
     </div>
 
     <button type="submit"
-            ui-sref="userManagement"
+            ui-sref="user-management"
             class="btn btn-info">
         <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
     </button>
