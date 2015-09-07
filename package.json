@@ -30,7 +30,7 @@
   "dependencies": {
     "chalk": "1.0.0",
     "cheerio": "0.19.0",
-    "ejs": "2.3.1",
+    "ejs": "2.3.4",
     "html-wiring": "1.1.0",
     "insight": "0.6.0",
     "lodash": "3.10.0",

@@ -2,14 +2,17 @@
 
 angular.module('<%=angularAppName%>')
     .controller('<%= entityClass %>Controller', function ($scope, <%= entityClass %><% if (searchEngine == 'elasticsearch') { %>, <%= entityClass %>Search<% } %><% if (pagination != 'no') { %>, ParseLinks<% } %>) {
-        $scope.<%= entityInstance %>s = [];<% if (pagination == 'pager' || pagination == 'pagination') { %>
+        $scope.<%= entityInstance %>s = [];
+        <%_ if (pagination == 'pager' || pagination == 'pagination') { _%>
         $scope.page = 0;
         $scope.loadAll = function() {
             <%= entityClass %>.query({page: $scope.page, size: 20}, function(result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 $scope.<%= entityInstance %>s = result;
             });
-        };<% } %><% if (pagination == 'infinite-scroll') { %>
+        };
+        <%_ } _%>
+        <%_ if (pagination == 'infinite-scroll') { _%>
         $scope.page = 0;
         $scope.loadAll = function() {
             <%= entityClass %>.query({page: $scope.page, size: 20}, function(result, headers) {
@@ -23,16 +26,21 @@ angular.module('<%=angularAppName%>')
             $scope.page = 0;
             $scope.<%= entityInstance %>s = [];
             $scope.loadAll();
-        };<% } %><% if (pagination != 'no') { %>
+        };
+        <%_ } _%>
+        <%_ if (pagination != 'no') { _%>
         $scope.loadPage = function(page) {
             $scope.page = page;
             $scope.loadAll();
-        };<% } %><% if (pagination == 'no') { %>
+        };
+        <%_ } _%>
+        <%_ if (pagination == 'no') { _%>
         $scope.loadAll = function() {
             <%= entityClass %>.query(function(result) {
                $scope.<%= entityInstance %>s = result;
             });
-        };<% } %>
+        };
+        <%_ } _%>
         $scope.loadAll();
 
         $scope.delete = function (id) {
@@ -44,13 +52,17 @@ angular.module('<%=angularAppName%>')
 
         $scope.confirmDelete = function (id) {
             <%= entityClass %>.delete({id: id},
-                function () {<% if (pagination != 'infinite-scroll') { %>
-                    $scope.loadAll();<% } else { %>
-                    $scope.reset();<% } %>
+                function () {
+                    <%_ if (pagination != 'infinite-scroll') { _%>
+                    $scope.loadAll();
+                    <%_ } else { _%>
+                    $scope.reset();
+                    <%_ } _%>
                     $('#delete<%= entityClass %>Confirmation').modal('hide');
                     $scope.clear();
                 });
-        };<% if (searchEngine == 'elasticsearch') { %>
+        };
+        <%_ if (searchEngine == 'elasticsearch') { _%>
 
         $scope.search = function () {
             <%= entityClass %>Search.query({query: $scope.searchQuery}, function(result) {
@@ -60,17 +72,22 @@ angular.module('<%=angularAppName%>')
                     $scope.loadAll();
                 }
             });
-        };<% } %>
+        };
+        <%_ } _%>
 
-        $scope.refresh = function () {<% if (pagination != 'infinite-scroll') { %>
-            $scope.loadAll();<% } else { %>
-            $scope.reset();<% } %>
+        $scope.refresh = function () {
+            <%_ if (pagination != 'infinite-scroll') { _%>
+            $scope.loadAll();
+            <%_ } else { _%>
+            $scope.reset();
+            <%_ } _%>
             $scope.clear();
         };
 
         $scope.clear = function () {
             $scope.<%= entityInstance %> = {<% for (fieldId in fields) { %><%= fields[fieldId].fieldName %>: null, <% } %>id: null};
-        };<% if (fieldsContainBlob) { %>
+        };
+        <%_ if (fieldsContainBlob) { _%>
 
         $scope.abbreviate = function (text) {
             if (!angular.isString(text)) {
@@ -106,5 +123,6 @@ angular.module('<%=angularAppName%>')
             }
 
             return formatAsBytes(size(base64String));
-        };<% } %>
+        };
+        <%_ } _%>
     });

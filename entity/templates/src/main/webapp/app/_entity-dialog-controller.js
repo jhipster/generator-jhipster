@@ -86,11 +86,11 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>DialogContro
         };<% } %><% for (fieldId in fields) { if (fields[fieldId].fieldType === 'byte[]') { %>
 
         $scope.set<%= fields[fieldId].fieldNameCapitalized %> = function ($file, <%= entityInstance %>) {
-<% if (fields[fieldId].fieldTypeBlobContent == 'image') { -%>
+            <%_ if (fields[fieldId].fieldTypeBlobContent == 'image') { _%>
             if ($file && $file.$error == 'pattern') {
                 return;
             }
-<% } -%>
+            <%_ } _%>
             if ($file) {
                 var fileReader = new FileReader();
                 fileReader.readAsDataURL($file);
