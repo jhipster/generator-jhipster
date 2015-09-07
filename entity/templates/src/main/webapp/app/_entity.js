@@ -25,14 +25,54 @@ angular.module('<%=angularAppName%>')
             })
             .state('<%= entityInstance %>Detail', {
                 parent: 'entity',
-                url: '/<%= entityInstance %>/:id',
+                url: '/<%= entityInstance %>/detail/:id',
                 data: {
                     roles: ['ROLE_USER'],
                     pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>.detail.title'<% }else{ %>'<%= entityClass %>'<% } %>
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-detail.html',
+                        templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-create-edit-detail.html',
+                        controller: '<%= entityClass %>DetailController'
+                    }
+                },
+                resolve: {<% if (enableTranslation){ %>
+                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                        $translatePartialLoader.addPart('<%= entityInstance %>');
+                        return $translate.refresh();
+                    }]<% } %>
+                }
+            })
+            .state('<%= entityInstance %>Edit', {
+                parent: 'entity',
+                url: '/<%= entityInstance %>/edit/:id',
+                data: {
+                    roles: ['ROLE_USER'],
+                    pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>.detail.title'<% }else{ %>'<%= entityClass %>'<% } %>
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-create-edit-detail.html',
+                        controller: '<%= entityClass %>DetailController'
+                    }
+                },
+                resolve: {<% if (enableTranslation){ %>
+                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                        $translatePartialLoader.addPart('<%= entityInstance %>');
+                        return $translate.refresh();
+                    }]<% } %>
+                }
+            })
+            .state('<%= entityInstance %>Create', {
+                parent: 'entity',
+                url: '/<%= entityInstance %>/create',
+                data: {
+                    roles: ['ROLE_USER'],
+                    pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>.detail.title'<% }else{ %>'<%= entityClass %>'<% } %>
+                },
+                views: {
+                    'content@': {
+                        templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-create-edit-detail.html',
                         controller: '<%= entityClass %>DetailController'
                     }
                 },

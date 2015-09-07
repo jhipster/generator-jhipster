@@ -1,7 +1,10 @@
 <div>
 <% var keyPrefix = angularAppName + '.'+ entityInstance + '.'; %>
     <h2 translate="<%= keyPrefix %>home.title"><%= entityClass %>s</h2>
-
+    <div class="sw4_notify">
+      <alert ng-repeat="alert in alerts" style=˜width : 100%˜ type="alert.type" 
+        class="alert alert-{{alert.type}}">{{ alert.msg }} <button type="button" class="close" ng-click="closeAlert($index)"><span aria-hidden="true">&times;</span></button></alert>
+    </div>
     <div class="container">
         <div class="row">
             <div class="col-md-4">

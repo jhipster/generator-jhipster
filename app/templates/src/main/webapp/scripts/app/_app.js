@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTranslation) { %>'tmh.dynamicLocale', 'pascalprecht.translate', <% } %>
+var app = angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTranslation) { %>'tmh.dynamicLocale', 'pascalprecht.translate', <% } %>
     'ngResource', 'ui.router', 'ngCookies', 'ngCacheBuster', 'infinite-scroll'])
 
     .run(function ($rootScope, $location, $window, $http, $state, <% if (enableTranslation) { %>$translate, Language,<% } %> Auth, Principal, ENV, VERSION) {
@@ -131,3 +131,37 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTransl
         tmhDynamicLocaleProvider.storageKey('NG_TRANSLATE_LANG_KEY');
         <% } %>
     });
+
+app.factory('alertService', function($rootScope, $timeout) {
+    var alertService = {};
+    
+
+    // create an array of alerts available globally
+    $rootScope.alerts = [];
+
+    alertService.add = function(type, msg, timeout) {
+     
+     $rootScope.alerts.push({
+            type: type,
+            msg: msg,
+            close: function() {
+                return alertService.closeAlert(this);
+            }
+        });
+
+        if (timeout) {
+        console.log("Inside Timeout :" + timeout) ;
+            $timeout(function(){ 
+               
+                alertService.closeAlert(this); 
+            }, timeout); 
+        }
+    };
+
+    alertService.closeAlert = function(index) {
+     
+      $rootScope.alerts.splice(index, 1);
+    };
+
+    return alertService;
+  });

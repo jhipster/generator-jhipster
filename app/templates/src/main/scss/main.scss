@@ -110,3 +110,18 @@ ul#strength {
     width:20px;
 }
 /* end Password strength bar style */
+
+
+
+.sw4_notify {
+    top: 0;
+    width: 100%;
+    z-index: 999999;
+    border-radius: 0 !important;
+}
+.sw4_notify > alert{
+    width: 100% ;
+    display: block;
+    border-radius: 0 !important;
+    margin-bottom: 10px;
+}
