@@ -201,12 +201,19 @@ public class UserService {
     }
 <% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true)<% } %>
+    public User getUserWithAuthorities(<% if (databaseType == 'mongodb') { %>String id<% } else { %>Long id<% } %>) {
+        User user = userRepository.findOne(id);
+        user.getAuthorities().size(); // eagerly load the association
+        return user;
+    }
+<% if (databaseType == 'sql') { %>
+    @Transactional(readOnly = true)<% } %>
     public User getUserWithAuthorities() {<% if (javaVersion == '8') { %>
-        User currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).get();
-        currentUser.getAuthorities().size(); // eagerly load the association<% } else { %>
-        User currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
-        currentUser.getAuthorities().size(); // eagerly load the association<% } %>
-        return currentUser;
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).get();
+        user.getAuthorities().size(); // eagerly load the association<% } else { %>
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
+        user.getAuthorities().size(); // eagerly load the association<% } %>
+        return user;
     }<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 
     /**

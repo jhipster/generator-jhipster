@@ -48,7 +48,7 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     private String id;<% } %>
 
     @NotNull
-    @Pattern(regexp = "^[a-z0-9]*$")
+    @Pattern(regexp = "^[a-z0-9]*$|(anonymousUser)")
     @Size(min = 1, max = 50)<% if (databaseType == 'sql') { %>
     @Column(length = 50, unique = true, nullable = false)<% } %>
     private String login;
