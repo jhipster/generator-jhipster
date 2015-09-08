@@ -142,6 +142,7 @@ public class AccountResource {
                         user.getFirstName(),
                         user.getLastName(),
                         user.getEmail(),
+                        user.getActivated(),
                         user.getLangKey(),<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
                         user.getAuthorities().stream().map(Authority::getName)
                             .collect(Collectors.toList())),<% } %><% if (databaseType == 'cassandra') { %>
@@ -166,6 +167,7 @@ public class AccountResource {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
+                user.getActivated(),
                 user.getLangKey(),
                 roles),
             HttpStatus.OK);<% } %>

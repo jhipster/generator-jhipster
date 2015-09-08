@@ -1,10 +1,12 @@
 package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import <%=packageName%>.domain.Authority;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.UserRepository;<% if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
 import <%=packageName%>.security.AuthoritiesConstants;
+import <%=packageName%>.web.rest.dto.UserDTO;
 import <%=packageName%>.web.rest.util.HeaderUtil;
 import <%=packageName%>.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
@@ -15,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
@@ -22,8 +25,9 @@ import javax.inject.Inject;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;<% if (javaVersion == '7') { %>
-import javax.servlet.http.HttpServletResponse;<% } %><% if (searchEngine == 'elasticsearch') { %>
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import javax.servlet.http.HttpServletResponse;<% } %><% if (javaVersion == '8') { %>
+import java.util.stream.Collectors;<% } %><% if (searchEngine == 'elasticsearch') { %>
 import java.util.stream.StreamSupport;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
@@ -88,11 +92,43 @@ public class UserResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<User>> getAllUsers(Pageable pageable)
+    @Transactional
+    public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable)
         throws URISyntaxException {
-        Page<User> page = userRepository.findAll(pageable);
+        Page<User> page = userRepository.findAll(pageable);<% if (javaVersion == '8') { %>
+        List<UserDTO> userDTOs = page.getContent().stream().map(user -> {
+            return new UserDTO(
+                user.getLogin(),
+                null,
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getActivated(),
+                user.getLangKey(),
+                user.getAuthorities().stream().map(Authority::getName)
+                    .collect(Collectors.toList()));
+        }).collect(Collectors.toList());<% } else { %>
+        List<UserDTO> userDTOs = new ArrayList<>();
+        for (User user : page.getContent()) {
+            List<String> roles = new ArrayList<>();
+            for (Authority authority : user.getAuthorities()) {
+                roles.add(authority.getName());
+            }
+            UserDTO userDTO = new UserDTO(
+                user.getLogin(),
+                null,
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getActivated(),
+                user.getLangKey(),
+                roles);
+
+            userDTOs.add(userDTO);
+        }<% } %>
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return new ResponseEntity<>(userDTOs, headers, HttpStatus.OK);
     }
 
     /**

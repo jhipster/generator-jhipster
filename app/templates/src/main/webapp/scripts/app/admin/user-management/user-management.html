@@ -89,19 +89,18 @@
                                 <input type="checkbox" id="activated" ng-model="user.activated">
                                 <span translate="user-management.activated">Activated</span>
                             </label>
-                        </div>
-                        <% if (enableTranslation) { %>
+                        </div><% if (enableTranslation) { %>
+
                         <div class="form-group">
                             <label translate="user-management.langKey">LangKey</label>
                             <select class="form-control" name="langKey" ng-model="user.langKey"
                                     ng-options="language as language for language in languages track by language">
                             </select>
-                        </div>
-                        <% } %>
+                        </div><% } %>
+
                         <div class="form-group">
                             <label translate="user-management.profiles">Profiles</label>
-                            <select class="form-control" multiple name="authority" ng-model="user.authorities"
-                                    ng-options="authority as authority.name for authority in authorities track by authority.name">
+                            <select class="form-control" multiple name="role" ng-model="user.roles">
                             </select>
                         </div>
                     </div>
@@ -176,8 +175,8 @@
                 </td>
                 <% if (enableTranslation) { %><td>{{user.langKey}}</td><% } %>
                 <td>
-                    <div ng-repeat="authority in user.authorities">
-                        <span class="label label-info">{{ authority.name }}</span>
+                    <div ng-repeat="role in user.roles">
+                        <span class="label label-info">{{ role }}</span>
                     </div>
                 </td>
                 <td>{{user.createdDate | date:'dd/MM/yy HH:mm'}}</td>
