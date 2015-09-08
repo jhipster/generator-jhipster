@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('user-managementController', function ($scope, User, ParseLinks<% if (enableTranslation) { %>, Language<% } %>) {
+    .controller('UserManagementController', function ($scope, User, ParseLinks<% if (enableTranslation) { %>, Language<% } %>) {
         $scope.users = [];
         $scope.authorities = ["ROLE_USER", "ROLE_ADMIN"];<% if (enableTranslation) { %>
         Language.getAll().then(function (languages) {
