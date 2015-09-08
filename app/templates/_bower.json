@@ -3,11 +3,16 @@
     "version": "0.0.0",
     "appPath": "src/main/webapp",
     "testPath": "src/test/javascript/spec",
-    "dependencies": {<% if (websocket == 'spring-websocket') { %>
+    "dependencies": {
+        <%_ if (websocket == 'spring-websocket') { _%>
         "stomp-websocket": "2.3.4",
-        "sockjs-client": "1.0.3",<% } %><% if (useSass) { %>
-        "bootstrap-sass": "3.3.5",<% } else { %>
-        "bootstrap": "3.3.5",<% } %>
+        "sockjs-client": "1.0.3",
+        <%_ } _%>
+        <%_ if (useSass) { _%>
+        "bootstrap-sass": "3.3.5",
+        <%_ } else { _%>
+        "bootstrap": "3.3.5",
+        <%_ } _%>
         "modernizr": "2.8.3",
         "jquery": "2.1.4",
         "json3": "3.3.2",
@@ -17,13 +22,15 @@
         "angular-resource": "1.4.4",
         "angular-aria": "1.4.4",
         "angular-cookies": "1.4.4",
-        "angular-sanitize": "1.4.4",<% if (enableTranslation) { %>
+        "angular-sanitize": "1.4.4",
+        <%_ if (enableTranslation) { _%>
         "angular-i18n": "1.4.4",
         "angular-translate": "2.7.0",
         "angular-translate-interpolation-messageformat": "2.7.0",
         "angular-translate-storage-cookie": "2.7.0",
         "angular-translate-loader-partial": "2.7.0",
-        "angular-dynamic-locale": "0.1.27",<% } %>
+        "angular-dynamic-locale": "0.1.27",
+        <%_ } _%>
         "angular-local-storage": "0.2.0",
         "angular-cache-buster": "0.4.3",
         "ngInfiniteScroll": "1.2.0",
@@ -34,7 +41,7 @@
         "angular-mocks": "1.4.4",
         "angular-scenario": "1.4.4"
     },
-<% if (!useSass) { -%>
+    <%_ if (!useSass) { _%>
     "overrides": {
         "bootstrap": {
             "main": [
@@ -44,7 +51,7 @@
             ]
         }
     },
-<% } -%>
+    <%_ } _%>
     "resolutions": {
         "angular": "1.4.4",
         "angular-cookies": "1.4.4",
