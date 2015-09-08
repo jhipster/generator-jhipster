@@ -21,36 +21,56 @@
     </prerequisites>
 
     <properties>
-        <hikaricp.version>2.4.0</hikaricp.version><% if (javaVersion == '8') { %>
-        <assertj-core.version>3.1.0</assertj-core.version><% } %><% if (javaVersion == '7') { %>
-        <assertj-core.version>2.1.0</assertj-core.version><% } %>
+        <hikaricp.version>2.4.0</hikaricp.version>
+        <%_ if (javaVersion == '8') { _%>
+        <assertj-core.version>3.1.0</assertj-core.version>
+        <%_ } _%>
+        <%_ if (javaVersion == '7') { _%>
+        <assertj-core.version>2.1.0</assertj-core.version>
+        <%_ } _%>
         <awaitility.version>1.4.0</awaitility.version>
         <commons-io.version>2.4</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
         <gatling.version>2.1.6</gatling.version>
-        <gatling-maven-plugin.version>2.1.6</gatling-maven-plugin.version><% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
-        <hazelcast.version>3.5.1</hazelcast.version><% } %><% if (databaseType == 'sql') { %>
-        <hibernate.version>4.3.10.Final</hibernate.version><% } %><% if (databaseType == 'cassandra') { %>
-        <datastax-driver.version>2.1.7.1</datastax-driver.version><% } %>
+        <gatling-maven-plugin.version>2.1.6</gatling-maven-plugin.version>
+        <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
+        <hazelcast.version>3.5.1</hazelcast.version>
+        <%_ } _%>
+        <%_ if (databaseType == 'sql') { _%>
+        <hibernate.version>4.3.10.Final</hibernate.version>
+        <%_ } _%>
+        <%_ if (databaseType == 'cassandra') { _%>
+        <datastax-driver.version>2.1.7.1</datastax-driver.version>
+        <%_ } _%>
         <java.version>1.<%= javaVersion %></java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
-        <javax.inject.version>1</javax.inject.version><% if (databaseType == 'sql') { %>
-        <joda-time-hibernate.version>1.4</joda-time-hibernate.version><% } %><% if (databaseType == 'sql') { %>
+        <javax.inject.version>1</javax.inject.version>
+        <%_ if (databaseType == 'sql') { _%>
+        <joda-time-hibernate.version>1.4</joda-time-hibernate.version>
+        <%_ } _%>
+        <%_ if (databaseType == 'sql') { _%>
         <liquibase.version>3.4.1</liquibase.version>
         <liquibase-slf4j.version>1.2.1</liquibase-slf4j.version>
-        <liquibase-hibernate4.version>3.5</liquibase-hibernate4.version><% } %><% if (databaseType == 'cassandra') { %>
-        <lz4.version>1.3.0</lz4.version><% } %>
+        <liquibase-hibernate4.version>3.5</liquibase-hibernate4.version>
+        <%_ } _%>
+        <%_ if (databaseType == 'cassandra') { _%>
+        <lz4.version>1.3.0</lz4.version>
+        <%_ } _%>
         <mapstruct.version>1.0.0.CR1</mapstruct.version>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <maven-enforcer-plugin.version>1.3.1</maven-enforcer-plugin.version>
         <maven-sortpom-plugin.version>2.3.0</maven-sortpom-plugin.version>
         <metrics-spark-reporter.version>1.2</metrics-spark-reporter.version>
-        <metrics-spring.version>3.1.2</metrics-spring.version><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
-        <postgresql.version>9.4-1201-jdbc41</postgresql.version><% } %>
+        <metrics-spring.version>3.1.2</metrics-spring.version>
+        <%_ if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { _%>
+        <postgresql.version>9.4-1201-jdbc41</postgresql.version>
+        <%_ } _%>
         <run.addResources>false</run.addResources>
-        <spring-security.version>4.0.2.RELEASE</spring-security.version><% if (authenticationType == 'oauth2') { %>
-        <spring-security-oauth2.version>2.0.7.RELEASE</spring-security-oauth2.version><% } %>
+        <spring-security.version>4.0.2.RELEASE</spring-security.version>
+        <%_ if (authenticationType == 'oauth2') { _%>
+        <spring-security-oauth2.version>2.0.7.RELEASE</spring-security-oauth2.version>
+        <%_ } _%>
         <springfox.version>2.0.3</springfox.version>
         <usertype-core.version>4.0.0.GA</usertype-core.version>
         <!-- Sonar properties -->
@@ -80,12 +100,14 @@
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-annotation</artifactId>
             <version>${dropwizard-metrics.version}</version>
-        </dependency><% if (hibernateCache == 'ehcache') { %>
+        </dependency>
+        <%_ if (hibernateCache == 'ehcache') { _%>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-ehcache</artifactId>
             <version>${dropwizard-metrics.version}</version>
-        </dependency><% } %>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-graphite</artifactId>
@@ -119,12 +141,14 @@
                     <groupId>io.dropwizard.metrics</groupId>
                 </exclusion>
             </exclusions>
-        </dependency><% if (databaseType == 'sql') { %>
+        </dependency>
+        <%_ if (databaseType == 'sql') { _%>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-hibernate4</artifactId>
             <version>${jackson.version}</version>
-        </dependency><% } %>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-hppc</artifactId>
@@ -141,14 +165,19 @@
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId><% if (devDatabaseType != 'h2Memory') { %>
-            <scope>test</scope><% } %>
-        </dependency><% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
+            <artifactId>h2</artifactId>
+            <%_ if (devDatabaseType != 'h2Memory') { _%>
+            <scope>test</scope>
+            <%_ } _%>
+        </dependency>
+        <%_ if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
             <version>${hazelcast.version}</version>
-        </dependency><% } %><% if (hibernateCache == 'hazelcast') { %>
+        </dependency>
+        <%_ } _%>
+        <%_ if (hibernateCache == 'hazelcast') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-hibernate4</artifactId>
@@ -158,12 +187,15 @@
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-spring</artifactId>
             <version>${hazelcast.version}</version>
-        </dependency><% } %><% if (clusteredHttpSession == 'hazelcast') { %>
+        </dependency>
+        <%_ } _%>
+        <%_ if (clusteredHttpSession == 'hazelcast') { _%>
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-wm</artifactId>
             <version>${hazelcast.version}</version>
-        </dependency><% } %>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>com.jayway.awaitility</groupId>
             <artifactId>awaitility</artifactId>
@@ -186,12 +218,14 @@
                     <artifactId>mapstruct</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency><% if (databaseType == 'sql') { %>
+        </dependency>
+        <%_ if (databaseType == 'sql') { _%>
         <dependency>
             <groupId>com.mattbertolini</groupId>
             <artifactId>liquibase-slf4j</artifactId>
             <version>${liquibase-slf4j.version}</version>
-        </dependency><% } %>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>com.ryantenney.metrics</groupId>
             <artifactId>metrics-spring</artifactId>
@@ -237,13 +271,15 @@
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>${commons-lang.version}</version>
-        </dependency><% if (databaseType == 'mongodb') { %>
+        </dependency>
+        <%_ if (databaseType == 'mongodb') { _%>
         <dependency>
             <groupId>cz.jirutka.spring</groupId>
             <artifactId>embedmongo-spring</artifactId>
             <version>1.3.0</version>
             <scope>test</scope>
-        </dependency><% } %>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>io.gatling.highcharts</groupId>
             <artifactId>gatling-charts-highcharts</artifactId>
@@ -258,32 +294,41 @@
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
-        </dependency><% if (databaseType == 'sql') { %>
+        </dependency>
+        <%_ if (databaseType == 'sql') { _%>
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time-hibernate</artifactId>
             <version>${joda-time-hibernate.version}</version>
-        </dependency><% } %><% if (devDatabaseType == 'mysql' || prodDatabaseType == 'mysql') { %>
+        </dependency>
+        <%_ } _%>
+        <%_ if (devDatabaseType == 'mysql' || prodDatabaseType == 'mysql') { _%>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-        </dependency><% } %><% if (databaseType == 'cassandra') { %>
+        </dependency>
+        <%_ } _%>
+        <%_ if (databaseType == 'cassandra') { _%>
         <dependency>
             <groupId>net.jpountz.lz4</groupId>
             <artifactId>lz4</artifactId>
             <version>${lz4.version}</version>
-        </dependency><% } %><% if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { %>
+        </dependency>
+        <%_ } _%>
+        <%_ if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { _%>
         <dependency>
             <groupId>oracle</groupId>
             <artifactId>ojdbc</artifactId>
             <version><% if (javaVersion == '7') { %>6<% }else { %>7<% } %></version>
-        </dependency><% } %>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <version>${assertj-core.version}</version>
             <scope>test</scope>
-        </dependency><% if (databaseType == 'cassandra') { %>
+        </dependency>
+        <%_ if (databaseType == 'cassandra') { _%>
         <dependency>
             <groupId>org.cassandraunit</groupId>
             <artifactId>cassandra-unit-spring</artifactId>
@@ -295,7 +340,9 @@
                     <artifactId>slf4j-log4j12</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency><% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
+        </dependency>
+        <%_ } _%>
+        <%_ if (hibernateCache == 'ehcache' && databaseType == 'sql') { _%>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-ehcache</artifactId>
@@ -306,7 +353,8 @@
                     <artifactId>ehcache-core</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency><% } %>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-envers</artifactId>
@@ -314,7 +362,8 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-        </dependency><% if (databaseType == 'sql') { %>
+        </dependency>
+        <%_ if (databaseType == 'sql') { _%>
         <dependency>
             <groupId>org.jadira.usertype</groupId>
             <artifactId>usertype.core</artifactId>
@@ -329,22 +378,29 @@
                     <groupId>org.eclipse.jetty</groupId>
                 </exclusion>
             </exclusions>
-        </dependency><% } %><% if (databaseType == 'mongodb') { %>
+        </dependency>
+        <%_ } _%>
+        <%_ if (databaseType == 'mongodb') { _%>
         <dependency>
             <groupId>org.mongeez</groupId>
             <artifactId>mongeez</artifactId>
             <version>0.9.4</version>
-        </dependency><% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
+        </dependency>
+        <%_ } _%>
+        <%_ if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { _%>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${postgresql.version}</version>
-        </dependency><% } %><% if (javaVersion == '8') { %>
+        </dependency>
+        <%_ } _%>
+        <%_ if (javaVersion == '8') { _%>
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-jdk8</artifactId>
             <version>${mapstruct.version}</version>
-        </dependency><% } %>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
@@ -364,19 +420,25 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency><% if (databaseType == 'sql') { %>
+        </dependency>
+        <%_ if (databaseType == 'sql') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency><% } %><% if (searchEngine == 'elasticsearch') { %>
+        </dependency>
+        <%_ } _%>
+        <%_ if (searchEngine == 'elasticsearch') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
-        </dependency><% } %><% if (databaseType == 'mongodb') { %>
+        </dependency>
+        <%_ } _%>
+        <%_ if (databaseType == 'mongodb') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
-        </dependency><% } %>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
@@ -407,16 +469,21 @@
                     <artifactId>spring-boot-starter-tomcat</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency><% if (websocket == 'spring-websocket') { %>
+        </dependency>
+        <%_ if (websocket == 'spring-websocket') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
-        </dependency><% } %><% if (authenticationType == 'oauth2') { %>
+        </dependency>
+        <%_ } _%>
+        <%_ if (authenticationType == 'oauth2') { _%>
         <dependency>
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
             <version>${spring-security-oauth2.version}</version>
-        </dependency><% } %><% if (databaseType == 'cassandra') { %>
+        </dependency>
+        <%_ } _%>
+        <%_ if (databaseType == 'cassandra') { _%>
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-cassandra</artifactId>
@@ -437,7 +504,8 @@
             <groupId>com.datastax.cassandra</groupId>
             <artifactId>cassandra-driver-mapping</artifactId>
             <version>${datastax-driver.version}</version>
-        </dependency><% } %>
+        </dependency>
+        <%_ } _%>
         <!-- Spring Cloud -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -455,18 +523,22 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-data</artifactId>
-        </dependency><% if (websocket == 'spring-websocket') { %>
+        </dependency>
+        <%_ if (websocket == 'spring-websocket') { _%>
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-messaging</artifactId>
             <version>${spring-security.version}</version>
-        </dependency><% } %>
-        <!-- reporting --><% if (javaVersion == '8') { %>
+        </dependency>
+        <%_ } _%>
+        <!-- reporting -->
+        <%_ if (javaVersion == '8') { _%>
         <dependency>
             <groupId>fr.ippon.spark.metrics</groupId>
             <artifactId>metrics-spark-reporter</artifactId>
             <version>${metrics-spark-reporter.version}</version>
-        </dependency><% } %>
+        </dependency>
+        <%_ } _%>
     </dependencies>
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
@@ -607,7 +679,8 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>${sonar-maven-plugin.version}</version>
-            </plugin><% if (javaVersion == '8') { %>
+            </plugin>
+            <%_ if (javaVersion == '8') { _%>
             <plugin>
                 <groupId>org.bsc.maven</groupId>
                 <artifactId>maven-processor-plugin</artifactId>
@@ -640,7 +713,9 @@
                         <version>${mapstruct.version}</version>
                     </dependency>
                 </dependencies>
-            </plugin><% } %><% if (databaseType == 'sql') { %>
+            </plugin>
+            <%_ } _%>
+            <%_ if (databaseType == 'sql') { _%>
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
@@ -655,8 +730,10 @@
                     <password></password>
                     <referenceUrl>hibernate:spring:<%=packageName%>.domain?dialect=<% if (devDatabaseType == 'mysql') { %>org.hibernate.dialect.MySQLInnoDBDialect<% } else if (devDatabaseType == 'postgresql') { %>org.hibernate.dialect.PostgreSQL82Dialect<% } %></referenceUrl>
                     <verbose>true</verbose>
-                    <logging>debug</logging><% if (authenticationType == 'oauth2') { %>
-                    <diffExcludeObjects>oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token</diffExcludeObjects><% } %>
+                    <logging>debug</logging>
+                    <%_ if (authenticationType == 'oauth2') { _%>
+                    <diffExcludeObjects>oauth_access_token, oauth_approvals, oauth_client_details, oauth_client_token, oauth_code, oauth_refresh_token</diffExcludeObjects>
+                    <%_ } _%>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -675,7 +752,8 @@
                         <version>${project.parent.version}</version>
                     </dependency>
                 </dependencies>
-            </plugin><% } %>
+            </plugin>
+            <%_ } _%>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -704,7 +782,8 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-tomcat</artifactId>
                 </dependency>
-            </dependencies><% if(frontendBuilder == 'grunt' && useSass) { %>
+            </dependencies>
+            <%_ if(frontendBuilder == 'grunt' && useSass) { _%>
             <build>
                 <plugins>
                     <plugin>
@@ -730,7 +809,8 @@
                         </configuration>
                     </plugin>
                 </plugins>
-            </build><% } %>
+            </build>
+            <%_ } _%>
         </profile>
         <profile>
             <id>fast</id>
@@ -780,8 +860,10 @@
                                     <goal>build</goal>
                                 </goals>
                                 <configuration>
-                                    <buildTool><%= frontendBuilder %></buildTool><% if (frontendBuilder == 'grunt') { %>
-                                    <buildArgs>build --force --no-color</buildArgs><% } %>
+                                    <buildTool><%= frontendBuilder %></buildTool>
+                                    <%_ if (frontendBuilder == 'grunt') { _%>
+                                    <buildArgs>build --force --no-color</buildArgs>
+                                    <%_ } _%>
                                 </configuration>
                             </execution>
                         </executions>
@@ -822,11 +904,13 @@
                 <logback.loglevel>INFO</logback.loglevel>
             </properties>
         </profile>
-    </profiles><% if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { %>
+    </profiles>
+    <%_ if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { _%>
     <repositories>
         <repository>
             <id>Local-lib</id>
             <url>file://${project.basedir}/lib</url>
         </repository>
-    </repositories><% } %>
+    </repositories>
+    <%_ } _%>
 </project>
