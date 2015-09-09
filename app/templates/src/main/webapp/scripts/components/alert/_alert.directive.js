@@ -1,32 +1,19 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .directive('jhAlert', function(AlertService) {
+    .directive('jhAlertToast', function(AlertService, $rootScope<% if (enableTranslation) { %>, $translate<% } %>, $window) {
 		return {
             restrict: 'E',
-            template: '<div class="alerts" ng-cloak="">' +
-			                '<alert ng-cloak="" ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()"><pre>{{ alert.msg }}</pre></alert>' +
-			            '</div>',
+            template: '<toaster-container toaster-options="{\'close-button\': true, \'position-class\': positionClass}"></toaster-container>',
 			controller: ['$scope', 
 	            function($scope) {
-	                $scope.alerts = AlertService.get();
-	                $scope.$on('$destroy', function () {
-						$scope.alerts = [];
-					});
-	            }
-	        ]
-        }
-    })
-    .directive('jhAlertError', function(AlertService, $rootScope<% if (enableTranslation) { %>, $translate<% } %>) {
-		return {
-            restrict: 'E',
-            template: '<div class="alerts" ng-cloak="">' +
-			                '<alert ng-cloak="" ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()"><pre>{{ alert.msg }}</pre></alert>' +
-			            '</div>',
-			controller: ['$scope', 
-	            function($scope) {
-	                $scope.alerts = AlertService.get();
-
+	                // default location
+	                $scope.positionClass = 'toast-bottom-right';
+	                // full-width on smart devices
+                    if (isSmartDevice($window)) {
+                        $scope.positionClass = 'toast-bottom-full-width';
+                    }
+	                
 					var cleanHttpErrorListener = $rootScope.$on('<%=angularAppName%>.httpError', function (event, httpResponse) {
 					    var i;
 					    event.stopPropagation();
@@ -71,9 +58,14 @@ angular.module('<%=angularAppName%>')
 						<% if (enableTranslation) { %>
 						key = key && key != null ? key : message;
 						AlertService.error(key, data); <%} else { %> AlertService.error(message); <% } %>
-						
 					}
-
+					
+					function isSmartDevice( $window ) {
+                        // Adapted from http://www.detectmobilebrowsers.com
+                        var ua = $window['navigator']['userAgent'] || $window['navigator']['vendor'] || $window['opera'];
+                        // Checks for iOs, Android, Blackberry, Opera Mini, and Windows mobile devices
+                        return (/iPhone|iPod|iPad|Silk|Android|BlackBerry|Opera Mini|IEMobile/).test(ua);
+                    }
 	            }
 	        ]
         }

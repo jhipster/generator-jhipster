@@ -26,6 +26,7 @@
         "angular-dynamic-locale": "0.1.27",<% } %>
         "angular-local-storage": "0.2.0",
         "angular-cache-buster": "0.4.3",
+        "angularjs-toaster": "0.4.15",
         "ngInfiniteScroll": "1.2.0",
         "ng-file-upload": "7.0.15",
         "swagger-ui": "2.1.1"
