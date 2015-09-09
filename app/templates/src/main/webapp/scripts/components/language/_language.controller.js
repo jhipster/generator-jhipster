@@ -23,7 +23,7 @@ angular.module('<%=angularAppName%>')
                 "hu": "Magyar",
                 "it": "Italiano",
                 "ja": "日本語",
-                "kr": "한국어",
+                "ko": "한국어",
                 "nl": "Nederlands",
                 "pl": "Polski",
                 "pt-br": "Português (Brasil)",

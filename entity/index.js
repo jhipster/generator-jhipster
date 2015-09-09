@@ -1200,7 +1200,7 @@ EntityGenerator.prototype.files = function files() {
                 this.copyEnumI18n('hu', enumInfo);
                 this.copyEnumI18n('it', enumInfo);
                 this.copyEnumI18n('ja', enumInfo);
-                this.copyEnumI18n('kr', enumInfo);
+                this.copyEnumI18n('ko', enumInfo);
                 this.copyEnumI18n('pl', enumInfo);
                 this.copyEnumI18n('pt-br', enumInfo);
                 this.copyEnumI18n('pt-pt', enumInfo);
@@ -1297,7 +1297,7 @@ EntityGenerator.prototype.files = function files() {
         this.copyI18n('hu');
         this.copyI18n('it');
         this.copyI18n('ja');
-        this.copyI18n('kr');
+        this.copyI18n('ko');
         this.copyI18n('pl');
         this.copyI18n('pt-br');
         this.copyI18n('pt-pt');
