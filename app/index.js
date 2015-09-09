@@ -747,6 +747,9 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/main/java/package/service/_AuditEventService.java', javaDir + 'service/AuditEventService.java', this, {});
     }
     this.template('src/main/java/package/service/_UserService.java', javaDir + 'service/UserService.java', this, {});
+    this.template('src/main/java/package/service/_UserManagementService.java', javaDir + 'service/UserManagementService.java', this, {});
+    this.template('src/main/java/package/service/mapper/_AbstractMapper.java', javaDir + 'service/mapper/AbstractMapper.java', this, {});
+    this.template('src/main/java/package/service/mapper/_UserManagementMapper.java', javaDir + 'service/mapper/UserManagementMapper.java', this, {});
     this.template('src/main/java/package/service/_MailService.java', javaDir + 'service/MailService.java', this, {});
     this.template('src/main/java/package/service/util/_RandomUtil.java', javaDir + 'service/util/RandomUtil.java', this, {});
 
@@ -770,6 +773,8 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/web/rest/dto/_package-info.java', javaDir + 'web/rest/dto/package-info.java', this, {});
     this.template('src/main/java/package/web/rest/dto/_LoggerDTO.java', javaDir + 'web/rest/dto/LoggerDTO.java', this, {});
     this.template('src/main/java/package/web/rest/dto/_UserDTO.java', javaDir + 'web/rest/dto/UserDTO.java', this, {});
+    this.template('src/main/java/package/web/rest/dto/_PageDTO.java', javaDir + 'web/rest/dto/PageDTO.java', this, {});
+    this.template('src/main/java/package/web/rest/dto/_UserManagementDTO.java', javaDir + 'web/rest/dto/UserManagementDTO.java', this, {});
     this.template('src/main/java/package/web/rest/util/_HeaderUtil.java', javaDir + 'web/rest/util/HeaderUtil.java', this, {});
     this.template('src/main/java/package/web/rest/dto/_KeyAndPasswordDTO.java', javaDir + 'web/rest/dto/KeyAndPasswordDTO.java', this, {});
 
@@ -781,6 +786,7 @@ JhipsterGenerator.prototype.app = function app() {
     }
     this.template('src/main/java/package/web/rest/_LogsResource.java', javaDir + 'web/rest/LogsResource.java', this, {});
     this.template('src/main/java/package/web/rest/_UserResource.java', javaDir + 'web/rest/UserResource.java', this, {});
+    this.template('src/main/java/package/web/rest/_UserManagementResource.java', javaDir + 'web/rest/UserManagementResource.java', this, {});
 
     if (this.websocket == 'spring-websocket') {
         this.template('src/main/java/package/web/websocket/_package-info.java', javaDir + 'web/websocket/package-info.java', this, {});
@@ -958,6 +964,7 @@ JhipsterGenerator.prototype.app = function app() {
         this.template(webappDir + '/scripts/components/tracker/_tracker.service.js', webappDir + '/scripts/components/tracker/tracker.service.js', this, {});
     }
     if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+        this.template(webappDir + '/scripts/components/admin/_user-management.service.js', webappDir + 'scripts/components/admin/user-management.service.js', this, {});
         this.copyHtml(webappDir + '/scripts/app/admin/user-management/user-management.html', webappDir + 'scripts/app/admin/user-management/user-management.html');
         this.copyHtml(webappDir + '/scripts/app/admin/user-management/_user-management-detail.html', webappDir + 'scripts/app/admin/user-management/user-management-detail.html');
         this.copyJs(webappDir + '/scripts/app/admin/user-management/_user-management.js', webappDir + 'scripts/app/admin/user-management/user-management.js', this, {});
@@ -1077,6 +1084,7 @@ JhipsterGenerator.prototype.app = function app() {
     ];
     if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
         appScripts = appScripts.concat([
+            'scripts/components/admin/user-management.service.js',
             'scripts/app/admin/user-management/user-management-detail.controller.js',
             'scripts/app/admin/user-management/user-management.controller.js',
             'scripts/app/admin/user-management/user-management.js']);
