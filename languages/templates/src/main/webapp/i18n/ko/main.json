@@ -3,7 +3,7 @@
         "title": "Java Hipster 에 오신 것을 환영합니다!",
         "subtitle": "이것은 당신의 홈페이지입니다.",
         "logged": {
-            "message": "\"{{username}}\"로 로그인하셨습니다."
+            "message": "\"{{username}}\"(으)로 로그인하셨습니다."
         },
         "question": "JHipster에 질문이 있다면:",
         "link": {

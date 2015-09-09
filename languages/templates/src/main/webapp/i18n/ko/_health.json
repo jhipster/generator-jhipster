@@ -3,7 +3,7 @@
         "title": "상태 확인",
         "refresh.button": "새로고침",
         "indicator": {
-            "diskSpace": "Disk space",
+            "diskSpace": "디스크 공간",
             "mail": "이메일",<% if (databaseType == 'sql') { %>
             "db": "데이터베이스"<% } %><% if (databaseType == 'mongodb') { %>
             "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
