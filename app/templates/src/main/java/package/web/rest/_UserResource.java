@@ -17,10 +17,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -54,7 +54,7 @@ public class UserResource {
             method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    @RolesAllowed(AuthoritiesConstants.ADMIN)
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<User> createUser(@RequestBody User user) throws URISyntaxException {
         log.debug("REST request to save User : {}", user);
         if (user.getId() != null) {
@@ -73,7 +73,7 @@ public class UserResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    @RolesAllowed(AuthoritiesConstants.ADMIN)
+    @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<User> updateUser(@RequestBody User user) throws URISyntaxException {
         log.debug("REST request to update User : {}", user);
         if (user.getId() == null) {
