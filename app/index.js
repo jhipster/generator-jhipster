@@ -836,7 +836,7 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     // HTML5 BoilerPlate
-    this.copy(webappDir + 'favicon.ico', webappDir + 'favicon.ico');
+    this.copy(webappDir + 'assets/static/favicon.ico', webappDir + 'assets/static/favicon.ico');
     this.copy(webappDir + 'robots.txt', webappDir + 'robots.txt');
     this.copy(webappDir + 'htaccess.txt', webappDir + '.htaccess');
     this.copy(webappDir + '404.html', webappDir + '404.html');
