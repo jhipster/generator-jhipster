@@ -32,6 +32,11 @@ authentication:<% if (authenticationType == 'xauth') { %>
         # Token is valid 30 minutes
         tokenValidityInSeconds: 1800<% } %>
 
+spring:
+    mvc:
+        favicon:
+            enabled: false
+
 swagger:
     title: <%=baseName%> API
     description: <%=baseName%> applications and beyond!
