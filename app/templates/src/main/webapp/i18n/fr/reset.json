@@ -20,7 +20,7 @@
             },
             "messages": {
                 "info": "Choisir un nouveau mot de passe",
-                "success": "<strong>Votre mot de passe a été réinitialisé.</strong> Merci de <a href=\"#/login\">vous authentifier</a>.",
+                "success": "<strong>Votre mot de passe a été réinitialisé.</strong> Merci de <a class=\"alert-link\" href=\"#/login\">vous authentifier</a>.",
                 "keymissing": "La clef de réinitilisation est manquante",
                 "error": "Votre mot de passe n'a pas pu être réinitialisée. La demande de réinitialisation n'est valable que 24 heures."
             }
