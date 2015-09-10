@@ -32,7 +32,7 @@
     "grunt-karma": "0.11.0",
     "time-grunt": "1.1.0",<% if (useSass) { %>
     "grunt-sass": "1.0.0",<% }} if (frontendBuilder == 'gulp') { %>
-    "browser-sync": "2.7.6",
+    "browser-sync": "2.9.1",
     "del": "1.1.1",
     "gulp": "3.8.11",
     "gulp-util": "3.0.2",
