@@ -42,8 +42,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Si desea <a href=\"#/login\">iniciar una sesión</a>, puede intentar con las cuentas predeterminadas:<br/>- Administrator (usuario=\"admin\" y contraseña=\"admin\") <br/>- Usuario (usuario=\"user\" y contraseña=\"user\").",
-                "register": "¿No tienes una cuenta todavía? <a href=\"#/register\">Crear una cuenta</a>"
+                "authenticated": "Si desea <a class=\"alert-link\" href=\"#/login\">iniciar una sesión</a>, puede intentar con las cuentas predeterminadas:<br/>- Administrator (usuario=\"admin\" y contraseña=\"admin\") <br/>- Usuario (usuario=\"user\" y contraseña=\"user\").",
+                "register": "¿No tienes una cuenta todavía? <a class=\"alert-link\" href=\"#/register\">Crear una cuenta</a>"
             },
             "error": {
                 "dontmatch" : "¡La contraseña y la confirmación no coinciden!"
