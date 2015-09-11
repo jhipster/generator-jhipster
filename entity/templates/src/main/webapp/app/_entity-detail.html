@@ -9,64 +9,68 @@
                 <th translate="entity.detail.value">Value</th>
             </tr>
             </thead>
-            <tbody><% for (fieldId in fields) { %>
+            <tbody>
+            <%_ for (fieldId in fields) { _%>
             <tr>
                 <td>
                     <span translate="<%= keyPrefix %>.<%=fields[fieldId].fieldName%>"><%=fields[fieldId].fieldNameCapitalized%></span>
                 </td>
                 <td>
-<% if (fields[fieldId].fieldIsEnum) { -%>
+                    <%_ if (fields[fieldId].fieldIsEnum) { _%>
                     <span class="form-control-static" translate="{{'<%= angularAppName %>.<%= fields[fieldId].fieldType %>.' + <%= entityInstance %>.<%= fields[fieldId].fieldName %>}}">{{<%= entityInstance %>.<%= fields[fieldId].fieldName %>}}</span>
-<% } else if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'image') { -%>
+                    <%_ } else if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'image') { _%>
                     <img data-ng-src="{{'data:image/*;base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-width: 100%;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/>
-<% } else { -%>
+                    <%_ } else { _%>
                     <span class="form-control-static">{{<%= entityInstance %>.<%=fields[fieldId].fieldName%>}}</span>
-<% } -%>
+                    <%_ } _%>
                 </td>
-            </tr><% } %><% for (relationshipId in relationships) {
-            var relationshipType = relationships[relationshipId].relationshipType;
-            var ownerSide = relationships[relationshipId].ownerSide;
-            var relationshipName = relationships[relationshipId].relationshipName;
-            var relationshipFieldName = relationships[relationshipId].relationshipFieldName;
-            var otherEntityName = relationships[relationshipId].otherEntityName;
-            var otherEntityField = relationships[relationshipId].otherEntityField;
-            var otherEntityFieldCapitalized = relationships[relationshipId].otherEntityFieldCapitalized;
-            if (relationshipType == 'many-to-one'
-                || (relationshipType == 'one-to-one' && ownerSide == true)
-                || (relationshipType == 'many-to-many' && ownerSide == true)) {
-                %>
+            </tr>
+            <%_ } _%>
+            <%_ for (relationshipId in relationships) {
+                    var relationshipType = relationships[relationshipId].relationshipType;
+                    var ownerSide = relationships[relationshipId].ownerSide;
+                    var relationshipName = relationships[relationshipId].relationshipName;
+                    var relationshipFieldName = relationships[relationshipId].relationshipFieldName;
+                    var otherEntityName = relationships[relationshipId].otherEntityName;
+                    var otherEntityField = relationships[relationshipId].otherEntityField;
+                    var otherEntityFieldCapitalized = relationships[relationshipId].otherEntityFieldCapitalized;
+                    if (relationshipType == 'many-to-one'
+                        || (relationshipType == 'one-to-one' && ownerSide == true)
+                        || (relationshipType == 'many-to-many' && ownerSide == true)) { _%>
             <tr>
                 <td>
                     <span translate="<%= keyPrefix %>.<%= relationshipName %>"><%=relationshipName%></span>
                 </td>
                 <td>
-<% if (otherEntityName == 'user') { -%>
-<% if (relationshipType == 'many-to-many') { -%>
+                    <%_ if (otherEntityName == 'user') { _%>
+                        <%_ if (relationshipType == 'many-to-many') { _%>
                     <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldName %>s">
                         {{<%= relationshipFieldName %>.<%= otherEntityField %>}}{{$last ? '' : ', '}}
                     <span>
-<% } else { -%>
-<% if (dto == 'no') { -%>
+                        <%_ } else { _%>
+                            <%_ if (dto == 'no') { _%>
                     {{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}
-<% } else { -%>
+                            <%_ } else { _%>
                     {{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}
-<% } -%>
-<% } -%>
-<% } else { -%>
-<% if (relationshipType == 'many-to-many') { -%>
+                            <%_ } _%>
+                        <%_ } _%>
+                    <%_ } else { _%>
+                        <%_ if (relationshipType == 'many-to-many') { _%>
                     <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldName %>s">
                         <a class="form-control-static" ui-sref="<%= otherEntityName %>.detail({id: {{<%= relationshipFieldName %>.id}}})">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
                     <span>
-<% } else { -%>
-<% if (dto == 'no') { -%>
+                        <%_ } else { _%>
+                            <%_ if (dto == 'no') { _%>
                     <a class="form-control-static" ui-sref="<%= otherEntityName %>.detail({id:<%= entityInstance + "." + relationshipFieldName + ".id" %>})">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</a>
-<% } else { -%>
+                            <%_ } else { _%>
                     <a class="form-control-static" ui-sref="<%= otherEntityName %>.detail({id:<%= entityInstance + "." + relationshipFieldName + "Id" %>})">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
-<% } -%>
-<% } -%>
-<% } -%>
+                            <%_ } _%>
+                        <%_ } _%>
+                    <%_ } _%>
                 </td>
-            </tr><% } } %>
+            </tr>
+            <%_ } _%>
+            <%_ } _%>
             </tbody>
         </table>
     </div>

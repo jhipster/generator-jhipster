@@ -19,6 +19,7 @@
             },
             "admin": {
                 "main": "Administration",
+                "user-management": "Gestion utilisateur",
                 "tracker": "Suivi des utilisateurs",
                 "metrics": "Métriques",
                 "health": "Diagnostics",
@@ -42,8 +43,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Si vous voulez vous <a href=\"#/login\">connecter</a>, vous pouvez utiliser les comptes par défaut : <br/> - Administrateur (nom d'utilisateur=\"admin\" et mot de passe =\"admin\") <br/> - Utilisateur (nom d'utilisateur=\"user\" et mot de passe =\"user\").",
-                "register": "Vous n'avez pas encore de compte ? <a href=\"#/register\">Créer un compte</a>"
+                "authenticated": "Si vous voulez vous <a class=\"alert-link\" href=\"#/login\">connecter</a>, vous pouvez utiliser les comptes par défaut : <br/> - Administrateur (nom d'utilisateur=\"admin\" et mot de passe =\"admin\") <br/> - Utilisateur (nom d'utilisateur=\"user\" et mot de passe =\"user\").",
+                "register": "Vous n'avez pas encore de compte ? <a class=\"alert-link\" href=\"#/register\">Créer un compte</a>"
             },
             "error": {
                 "dontmatch": "Le nouveau mot de passe et sa confirmation ne sont pas égaux!"
@@ -69,7 +70,7 @@
             }
         },
         "field": {
-            "id" : "ID"
+            "id": "ID"
         }
     },
     "entity": {

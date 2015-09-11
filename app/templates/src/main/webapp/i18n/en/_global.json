@@ -19,6 +19,7 @@
             },
             "admin": {
                 "main": "Administration",
+                "user-management": "User management",
                 "tracker": "User tracker",
                 "metrics": "Metrics",
                 "health": "Health",
@@ -42,11 +43,11 @@
         },
         "messages": {
             "info": {
-                "authenticated": "If you want to <a href=\"#/login\">authenticate</a>, you can try the default accounts:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\").",
-                "register": "You don't have an account yet? <a href=\"#/register\">Register a new account</a>"
+                "authenticated": "If you want to <a class=\"alert-link\" href=\"#/login\">authenticate</a>, you can try the default accounts:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\").",
+                "register": "You don't have an account yet? <a class=\"alert-link\" href=\"#/register\">Register a new account</a>"
             },
             "error": {
-                "dontmatch" : "The password and its confirmation do not match!"
+                "dontmatch": "The password and its confirmation do not match!"
             },
             "validate": {
                 "newpassword": {
@@ -69,7 +70,7 @@
             }
         },
         "field": {
-            "id" : "ID"
+            "id": "ID"
         }
     },
     "entity": {
@@ -103,9 +104,9 @@
             "datetimelocal": "This field should be a date and time."
         }
     },
-    "error" : {
-        "serverNotReachable" : "Server not reachable",
-        "NotNull" : "Field {{fieldName}} cannot be empty!"
+    "error": {
+        "serverNotReachable": "Server not reachable",
+        "NotNull": "Field {{fieldName}} cannot be empty!"
     },
     "footer": "This is your footer"
 }

@@ -1,0 +1,107 @@
+{
+    "global": {
+        "title": "<%= baseName %>",
+        "browsehappy": "Está a usar um navegador <strong>desatualizado</strong>. Por favor <a href=\"http://browsehappy.com/?locale=pt_PT\">atualize o seu navegador</a> para ter uma experiência melhor.",
+        "menu": {
+            "home": "Início",
+            "entities": {
+                "main": "Entidades",
+                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
+            },
+            "account": {
+                "main": "Conta",
+                "settings": "Configuração",
+                "password": "Palavra-passe",
+                "sessions": "Sessões",
+                "login": "Entrar",
+                "logout": "Sair",
+                "register": "Registar"
+            },
+            "admin": {
+                "main": "Administração",
+                "tracker": "Atividade dos utilizadores",
+                "metrics": "Métricas",
+                "health": "Estado do Sistema",
+                "configuration": "Configuração",
+                "logs": "Logs",
+                "audits": "Auditorias",
+                "apidocs": "API",
+                "database": "Base de Dados"
+            },
+            "language": "Idioma"
+        },
+        "form": {
+            "username": "Nome de utilizador",
+            "username.placeholder": "O seu nome de utilizador",
+            "newpassword": "Nova palavra-passe",
+            "newpassword.placeholder": "Nova palavra-passe",
+            "confirmpassword": "Confirmação de nova palavra-passe",
+            "confirmpassword.placeholder": "Confirme a nova palavra-passe",
+            "email": "E-mail",
+            "email.placeholder": "O seu e-mail"
+        },
+        "messages": {
+            "info": {
+                "authenticated": "Para <a class=\"alert-link\" href=\"#/login\">entrar</a>, utilize as seguintes contas:<br/>- Administrador (utilizador=\"admin\" e palavra-passe=\"admin\") <br/>- Utilizador (utilizador=\"user\" e palavra-passe=\"user\").",
+                "register": "Ainda não tem uma conta? <a class=\"alert-link\" href=\"#/register\">Crie uma nova conta</a>"
+            },
+            "error": {
+                "dontmatch" : "A palavra-passe e a sua confirmação devem ser iguais!"
+            },
+            "validate": {
+                "newpassword": {
+                    "required": "A palavra-passe é obrigatória.",
+                    "minlength": "A palavra-passe deve ter pelo menos 5 caracteres",
+                    "maxlength": "A palavra-passe não pode ter mais de 50 caracteres",
+                    "strength": "Nível de dificuldade da palavra-passe:"
+                },
+                "confirmpassword": {
+                    "required": "A confirmação da palavra-passe é obrigatória.",
+                    "minlength": "A confirmação da palavra-passe deve ter pelo menos 5 caracteres",
+                    "maxlength": "A confirmação da palavra-passe não pode ter mais de 50 caracteres"
+                },
+                "email": {
+                    "required": "O e-mail é obrigatório.",
+                    "invalid": "E-mail inválido.",
+                    "minlength": "O e-mail deve ter pelo menos 5 caracteres",
+                    "maxlength": "O e-mail não pode ter mais de 50 caracteres"
+                }
+            }
+        },
+        "field": {
+            "id" : "Código"
+        }
+    },
+    "entity": {
+        "action": {
+            "addblob": "Adicionar blob",
+            "addimage": "Adicionar imagem",
+            "back": "Voltar",
+            "cancel": "Cancelar",
+            "delete": "Eliminar",
+            "edit": "Editar",
+            "save": "Guardar",
+            "view": "Visualizar"
+        },
+        "detail": {
+            "field": "Campo",
+            "value": "Valor"
+        },
+        "delete": {
+            "title": "Confirme a eliminação"
+        },
+        "validation": {
+            "required": "O campo é obrigatório.",
+            "minlength": "Este campo deve ter pelo menos {{min}} caracteres.",
+            "maxlength": "Este campo não pode ter mais que {{max}} caracteres.",
+            "min": "Este campo deve ser maior que {{min}}.",
+            "max": "Este campo não pode ser maior que {{max}}.",
+            "minbytes": "Este campo deve ter pelo menos {{min}} bytes.",
+            "maxbytes": "Este campo não pode ter mais que {{max}} bytes.",
+            "pattern": "Este campo deve estar dentro do seguinte padrão {{pattern}}.",
+            "number": "Este campo é do tipo número.",
+            "datetimelocal": "Este campo é do tipo data/hora."
+        }
+    },
+    "footer": "Este é o seu rodapé"
+}

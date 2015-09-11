@@ -10,7 +10,7 @@
             <a class="navbar-brand" href="#/"><span translate="global.title">jhipster</span> <span class="navbar-version">v{{VERSION}}</span></a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse" ng-switch="isAuthenticated()">
-            <ul class="nav navbar-nav nav-pills navbar-right">
+            <ul class="nav navbar-nav navbar-right">
                 <li ui-sref-active="active">
                     <a ui-sref="home">
                         <span class="glyphicon glyphicon-home"></span>
@@ -65,7 +65,9 @@
                                     <b class="caret"></b>
                                 </span>
                     </a>
-                    <ul class="dropdown-menu"><% if (websocket == 'spring-websocket') { %>
+                    <ul class="dropdown-menu"><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+                        <li ui-sref-active="active"><a ui-sref="user-management"><span class="glyphicon glyphicon-user"></span>
+                            &#xA0;<span translate="global.menu.admin.user-management">user-management</span></a></li><% } %><% if (websocket == 'spring-websocket') { %>
                         <li ui-sref-active="active"><a ui-sref="tracker"><span class="glyphicon glyphicon-eye-open"></span>
                                 &nbsp;<span translate="global.menu.admin.tracker">User tracker</span></a></li><% } %>
                         <li ui-sref-active="active"><a ui-sref="metrics"><span class="glyphicon glyphicon-dashboard"></span>

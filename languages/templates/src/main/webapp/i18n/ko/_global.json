@@ -22,11 +22,11 @@
                 "tracker": "사용자 트랙커",
                 "metrics": "메트릭스",
                 "health": "상태 확인",
-                "configuration": "Configuration",
+                "configuration": "설정",
                 "logs": "로그",
                 "audits": "Audit",
                 "apidocs": "API",
-                "database": "Database"
+                "database": "데이터베이스"
             },
             "language": "언어"
         },
@@ -42,8 +42,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "<a href=\"#/login\">인증</a>을 원하시면, 기본 계정을 사용할 수 있습니다:<br/>- 관리자 (아이디=\"admin\", 비밀번호=\"admin\") <br/>- 사용자 (아이디=\"user\", 비밀번호=\"user\").",
-                "register": "아직 계정이 없습니까? <a href=\"#/register\">새로운 계정을 등록하세요</a>"
+                "authenticated": "<a class=\"alert-link\" href=\"#/login\">인증</a>을 원하시면, 기본 계정을 사용할 수 있습니다:<br/>- 관리자 (아이디=\"admin\", 비밀번호=\"admin\") <br/>- 사용자 (아이디=\"user\", 비밀번호=\"user\").",
+                "register": "아직 계정이 없습니까? <a class=\"alert-link\" href=\"#/register\">새로운 계정을 등록하세요</a>"
             },
             "error": {
                 "dontmatch" : "비밀번호가 일치하지 않습니다!"
@@ -74,33 +74,33 @@
     },
     "entity": {
         "action": {
-            "addblob": "Add blob",
-            "addimage": "Add image",
-            "back": "Back",
-            "cancel": "Cancel",
-            "delete": "Delete",
-            "edit": "Edit",
-            "save": "Save",
-            "view": "View"
+            "addblob": "Blob 추가",
+            "addimage": "이미지 추가",
+            "back": "뒤로",
+            "cancel": "취소",
+            "delete": "삭제",
+            "edit": "수정",
+            "save": "저장",
+            "view": "보기"
         },
         "detail": {
-            "field": "Field",
-            "value": "Value"
+            "field": "필드",
+            "value": "값"
         },
         "delete": {
-            "title": "Confirm delete operation"
+            "title": "삭제 확인"
         },
         "validation": {
-            "required": "This field is required.",
-            "minlength": "This field is required to be at least {{min}} characters.",
-            "maxlength": "This field cannot be longer than {{max}} characters.",
-            "min": "This field should be more than {{min}}.",
-            "max": "This field cannot be more than {{max}}.",
-            "minbytes": "This field should be more than {{min}} bytes.",
-            "maxbytes": "This field cannot be more than {{max}} bytes.",
-            "pattern": "This field should follow pattern {{pattern}}.",
-            "number": "This field should be a number.",
-            "datetimelocal": "This field should be a date and time."
+            "required": "필수항목입니다.",
+            "minlength": "최소 {{min}}자 이상 입력해야 합니다.",
+            "maxlength": "최대 {{max}}자 이하까지만 입력 가능합니다.",
+            "min": "최소 {{min}} 이상의 값만 입력 가능합니다.",
+            "max": "최대 {{max}} 이하의 값만 입력 가능합니다.",
+            "minbytes": "최소 {{min}} 바이트 이상이어야 합니다.",
+            "maxbytes": "최대 {{max}} 바이트 미만이어야 합니다.",
+            "pattern": "{{pattern}} 패턴에 따라 입력해야 합니다.",
+            "number": "숫자만 입력 가능합니다.",
+            "datetimelocal": "날짜와 시간만 입력 가능합니다."
         }
     },
     "footer": "하단영역"

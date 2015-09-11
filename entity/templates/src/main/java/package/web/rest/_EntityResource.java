@@ -10,7 +10,8 @@ import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
 import <%=packageName%>.web.rest.mapper.<%= entityClass %>Mapper;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (pagination != 'no') { %>
-import org.springframework.data.domain.Page;<% } %>
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;<% } %>
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -64,7 +65,7 @@ public class <%= entityClass %>Resource {
     var dtoToEntity = mapper + '.'+ entityInstance +'DTOTo' + entityClass;
     var entityToDto = mapper + '.'+ entityInstance +'To' + entityClass + 'DTO';
     %>
-    public ResponseEntity<<%= instanceType %>> create(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
+    public ResponseEntity<<%= instanceType %>> create<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
         log.debug("REST request to save <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() != null) {
             return ResponseEntity.badRequest().header("Failure", "A new <%= entityInstance %> cannot already have an ID").body(null);
@@ -84,10 +85,10 @@ public class <%= entityClass %>Resource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<<%= instanceType %>> update(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
+    public ResponseEntity<<%= instanceType %>> update<%= entityClass %>(<% if (validation) { %>@Valid <% } %>@RequestBody <%= instanceType %> <%= instanceName %>) throws URISyntaxException {
         log.debug("REST request to update <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() == null) {
-            return create(<%= instanceName %>);
+            return create<%= entityClass %>(<%= instanceName %>);
         }<% if (dto == 'mapstruct') { %>
         <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Mapper.<%= entityInstance %>DTOTo<%= entityClass %>(<%= instanceName %>);<% } %>
         <%= entityClass %> result = <%= entityInstance %>Repository.save(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
@@ -105,7 +106,7 @@ public class <%= entityClass %>Resource {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed<% if (dto == 'mapstruct') { %>
     @Transactional(readOnly = true)<% } %><% if (pagination == 'no') { %>
-    public List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> getAll(<% if (fieldsContainNoOwnerOneToOne == true) { %>@RequestParam(required = false) String filter<% } %>) {<% for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { %>
+    public List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> getAll<%= entityClass %>s(<% if (fieldsContainNoOwnerOneToOne == true) { %>@RequestParam(required = false) String filter<% } %>) {<% for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { %>
         if ("<%= relationships[idx].relationshipName.toLowerCase() %>-is-null".equals(filter)) {
             log.debug("REST request to get all <%= entityClass %>s where <%= relationships[idx].relationshipName %> is null");<% if (javaVersion == '7') { %>
             List <%= entityInstance %>s = new ArrayList<<%= entityClass %>>();
@@ -127,8 +128,7 @@ public class <%= entityClass %>Resource {
         return <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (dto == 'mapstruct') { %>.stream()
             .map(<%= entityInstance %> -> <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(<%= entityInstance %>))
             .collect(Collectors.toCollection(LinkedList::new))<% } %>;<% } %><% if (pagination != 'no') { %>
-    public ResponseEntity<List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>>> getAll(@RequestParam(value = "page" , required = false) Integer offset,
-                                  @RequestParam(value = "per_page", required = false) Integer limit<% if (fieldsContainNoOwnerOneToOne == true) { %>, @RequestParam(required = false) String filter<% } %>)
+    public ResponseEntity<List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>>> getAll<%= entityClass %>s(Pageable pageable<% if (fieldsContainNoOwnerOneToOne == true) { %>, @RequestParam(required = false) String filter<% } %>)
         throws URISyntaxException {<% for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { %>
         if ("<%= relationships[idx].relationshipName.toLowerCase() %>-is-null".equals(filter)) {
             log.debug("REST request to get all <%= entityClass %>s where <%= relationships[idx].relationshipName %> is null");<% if (javaVersion == '7') { %>
@@ -146,8 +146,8 @@ public class <%= entityClass %>Resource {
                 .collect(Collectors.toList()), HttpStatus.OK);<% } %>
         }
         <% } } %>
-        Page<<%= entityClass %>> page = <%= entityInstance %>Repository.findAll(PaginationUtil.generatePageRequest(offset, limit));
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityInstance %>s", offset, limit);
+        Page<<%= entityClass %>> page = <%= entityInstance %>Repository.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityInstance %>s");
         return new ResponseEntity<<% if (javaVersion == '7') { %>List<<%= entityClass %>><% } %>>(page.getContent()<% if (dto == 'mapstruct') { %>.stream()
             .map(<%= entityInstance %>Mapper::<%= entityInstance %>To<%= entityClass %>DTO)
             .collect(Collectors.toCollection(LinkedList::new))<% } %>, headers, HttpStatus.OK);<% } %>
@@ -160,7 +160,7 @@ public class <%= entityClass %>Resource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> get(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id<% if (javaVersion == '7') { %>, HttpServletResponse response<% } %>) {
+    public ResponseEntity<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> get<%= entityClass %>(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id<% if (javaVersion == '7') { %>, HttpServletResponse response<% } %>) {
         log.debug("REST request to get <%= entityClass %> : {}", id);<% if (javaVersion == '8') { %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         return Optional.ofNullable(<%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findOneWithEagerRelationships<% } else { %>findOne<% } %>(id))<% } %><% if (databaseType == 'cassandra') { %>
         return Optional.ofNullable(<%= entityInstance %>Repository.findOne(UUID.fromString(id)))<% } %><% if (dto == 'mapstruct') { %>
@@ -183,7 +183,7 @@ public class <%= entityClass %>Resource {
             method = RequestMethod.DELETE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Void> delete(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id) {
+    public ResponseEntity<Void> delete<%= entityClass %>(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id) {
         log.debug("REST request to delete <%= entityClass %> : {}", id);<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         <%= entityInstance %>Repository.delete(id);<% } %><% if (databaseType == 'cassandra') { %>
         <%= entityInstance %>Repository.delete(UUID.fromString(id));<% } %><% if (searchEngine == 'elasticsearch') { %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
@@ -200,7 +200,7 @@ public class <%= entityClass %>Resource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<<%= entityClass %>> search(@PathVariable String query) {
+    public List<<%= entityClass %>> search<%= entityClass %>s(@PathVariable String query) {
         return StreamSupport
             .stream(<%= entityInstance %>SearchRepository.search(queryString(query)).spliterator(), false)
             .collect(Collectors.toList());
