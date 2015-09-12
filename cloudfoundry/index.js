@@ -81,7 +81,7 @@ CloudFoundryGenerator.prototype.checkInstallation = function checkInstallation()
     if(this.abort) return;
     var done = this.async();
 
-    exec('cf --version', function (err) {
+    exec('cf -v', function (err) {
         if (err) {
             this.log.error('cloudfoundry\'s cf command line interface is not available. ' +
             'You can install it via https://github.com/cloudfoundry/cli/releases');
