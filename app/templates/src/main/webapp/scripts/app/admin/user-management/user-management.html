@@ -16,6 +16,8 @@
                             Create or edit a User</h4>
                     </div>
                     <div class="modal-body">
+                        <jh-alert-error></jh-alert-error>
+
                         <div class="form-group">
                             <label translate="global.field.id">ID</label>
                             <input type="text" class="form-control" name="id"
@@ -23,8 +25,8 @@
                         </div>
 
                         <div class="form-group" ng-show="user.id == null">
-                            <label translate="user-management.login">Login</label>
-                            <input type="text" class="form-control" name="login"
+                            <label translate="user-management.login" for="login">Login</label>
+                            <input type="text" class="form-control" name="login" id="login"
                                    ng-model="user.login" ng-required="user.id == null" ng-maxlength="50">
 
                             <div ng-show="editForm.login.$invalid">
@@ -41,8 +43,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label translate="user-management.firstName">FirstName</label>
-                            <input type="text" class="form-control" name="firstName"
+                            <label translate="user-management.firstName" for="firstName">FirstName</label>
+                            <input type="text" class="form-control" name="firstName" id="firstName"
                                    ng-model="user.firstName" ng-maxlength="50">
 
                             <div ng-show="editForm.firstName.$invalid">
@@ -54,8 +56,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label translate="user-management.lastName">LastName</label>
-                            <input type="text" class="form-control" name="lastName"
+                            <label translate="user-management.lastName" for="lastName">LastName</label>
+                            <input type="text" class="form-control" name="lastName" id="lastName"
                                    ng-model="user.lastName" ng-maxlength="50">
 
                             <div ng-show="editForm.lastName.$invalid">
@@ -67,8 +69,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label translate="user-management.email">Email</label>
-                            <input type="text" class="form-control" name="email"
+                            <label translate="user-management.email" for="email">Email</label>
+                            <input type="text" class="form-control" name="email" id="email"
                                    ng-model="user.email" required ng-maxlength="100">
 
                             <div ng-show="editForm.email.$invalid">
@@ -85,6 +87,17 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label translate="user-management.password" for="password">Password</label>
+                            <input type="text" class="form-control" id="password" name="password"
+                                   ng-model="user.password" ng-maxlength="50">
+                        </div>
+
+                        <div class="form-group">
+                            <label translate="user-management.confirmPassword" for="confirmPassword">Password</label>
+                            <input type="text" class="form-control" id="confirmPassword" name="confirmPassword"
+                                   ng-model="user.confirmPassword" ng-maxlength="50">
+                        </div>
+                        <div class="form-group">
                             <label for="activated">
                                 <input type="checkbox" id="activated" ng-model="user.activated">
                                 <span translate="user-management.activated">Activated</span>
@@ -92,15 +105,15 @@
                         </div><% if (enableTranslation) { %>
 
                         <div class="form-group">
-                            <label translate="user-management.langKey">LangKey</label>
-                            <select class="form-control" name="langKey" ng-model="user.langKey"
+                            <label translate="user-management.langKey" for="langKey">LangKey</label>
+                            <select class="form-control" name="langKey" id="langKey" ng-model="user.langKey"
                                     ng-options="language as language for language in languages track by language">
                             </select>
                         </div><% } %>
 
                         <div class="form-group">
-                            <label translate="user-management.profiles">Profiles</label>
-                            <select class="form-control" multiple name="role" ng-model="user.roles">
+                            <label translate="user-management.profiles" for="authority">Profiles</label>
+                            <select class="form-control" multiple id="authority" name="authority" ng-model="user.authorities" ng-options="authority as authorityName(authority.name) for authority in roles track by authority.name">
                             </select>
                         </div>
                     </div>
@@ -175,8 +188,8 @@
                 </td>
                 <% if (enableTranslation) { %><td>{{user.langKey}}</td><% } %>
                 <td>
-                    <div ng-repeat="role in user.roles">
-                        <span class="label label-info">{{ role }}</span>
+                    <div ng-repeat="authority in user.authorities">
+                         <span class="label label-info">{{ authorityName(authority.name) }}</span>
                     </div>
                 </td>
                 <td>{{user.createdDate | date:'dd/MM/yy HH:mm'}}</td>
@@ -189,7 +202,7 @@
                         <span class="glyphicon glyphicon-eye-open"></span>
                     </button>
                     <button type="submit"
-                            ng-click="showUpdate(user.login)"
+                            ng-click="showUpdate(user.id)"
                             class="btn btn-primary btn-sm">
                         <span class="glyphicon glyphicon-pencil"></span>
                     </button>

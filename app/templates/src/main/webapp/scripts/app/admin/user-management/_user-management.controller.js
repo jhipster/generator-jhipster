@@ -1,16 +1,27 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('UserManagementController', function ($scope, User, ParseLinks<% if (enableTranslation) { %>, Language<% } %>) {
+    .controller('UserManagementController', function ($scope, UserManagement, ParseLinks<% if (enableTranslation) { %>, Language, $translate<% } %>) {
         $scope.users = [];
-        $scope.roles = ["ROLE_USER", "ROLE_ADMIN"];<% if (enableTranslation) { %>
+        $scope.roles = UserManagement.authorities();<% if (enableTranslation) { %>
         Language.getAll().then(function (languages) {
             $scope.languages = languages;
-        });<% } %>
+        });
+        $scope.authorityName = function(name) {
+            return $translate.instant('user-management.roles.'+name);
+        };<% } else { %>
+        $scope.authorityName = function(name) {
+            if (name.startsWith("ROLE_") {
+                return name.substring(5);
+            } else {
+                return name;
+            }
+        };
+        <% } %>
 
         $scope.page = 0;
         $scope.loadAll = function () {
-            User.query({page: $scope.page, per_page: 20}, function (result, headers) {
+            UserManagement.query({page: $scope.page, per_page: 20}, function (result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 $scope.users = result;
             });
@@ -24,21 +35,21 @@ angular.module('<%=angularAppName%>')
 
         $scope.setActive = function (user, isActivated) {
             user.activated = isActivated;
-            User.update(user, function () {
+            UserManagement.update(user, function () {
                 $scope.loadAll();
                 $scope.clear();
             });
         };
 
-        $scope.showUpdate = function (login) {
-            User.get({login: login}, function (result) {
+        $scope.showUpdate = function (id) {
+            UserManagement.get({id: id}, function (result) {
                 $scope.user = result;
                 $('#saveUserModal').modal('show');
             });
         };
 
         $scope.save = function () {
-            User.update($scope.user,
+            UserManagement.update($scope.user,
                 function () {
                     $scope.refresh();
                 });

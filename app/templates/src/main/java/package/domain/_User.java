@@ -235,6 +235,17 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         this.persistentTokens = persistentTokens;
     }<% } %>
 
+    public boolean hasRole(String role) {
+        if (authorities != null) {<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+            for (final Authority auth : authorities) {
+                if (role.equals(auth.getName())) {
+                    return true;
+                }
+            }<% } %><% if (databaseType == 'cassandra') { %>return authorities.contains(role);<% } %>
+        }
+        return false;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
