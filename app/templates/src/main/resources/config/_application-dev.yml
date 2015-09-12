@@ -45,7 +45,7 @@ spring:
         <%_ if (devDatabaseType == 'mysql') { _%>
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
         <%_ } else if (devDatabaseType == 'postgresql') { _%>
-        database-platform: org.hibernate.dialect.PostgreSQL82Dialect
+        database-platform: <%=packageName%>.domain.util.FixedPostgreSQL82Dialect
         <%_ } else if (devDatabaseType == 'oracle') { _%>
         database-platform: org.hibernate.dialect.Oracle10gDialect
         <%_ } else { _%>
