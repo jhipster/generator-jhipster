@@ -1,11 +1,16 @@
 package <%=packageName%>.web.rest.dto;
 
+import <%=packageName%>.domain.Authority;
+import <%=packageName%>.domain.User;
+
 import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.List;
+import java.util.List;<% if (javaVersion == '8') { %>
+import java.util.stream.Collectors;<% } else { %>
+import java.util.ArrayList;<% } %>
 
 public class UserDTO {
 
@@ -39,6 +44,21 @@ public class UserDTO {
     private List<String> roles;
 
     public UserDTO() {
+    }
+
+    public UserDTO(User user) {<% if (javaVersion == '8') { %>
+        this(user.getLogin(), null, user.getFirstName(), user.getLastName(),
+            user.getEmail(), user.getActivated(), user.getLangKey(),
+            user.getAuthorities().stream().map(Authority::getName)
+                .collect(Collectors.toList()));<% } else { %>
+        this(user.getLogin(), null, user.getFirstName(), user.getLastName(),
+            user.getEmail(), user.getActivated(), user.getLangKey(),
+            null);
+        List<String> roles = new ArrayList<>();
+        for (Authority authority : user.getAuthorities()) {
+            roles.add(authority.getName());
+        }
+        this.roles = roles;<% } %>
     }
 
     public UserDTO(String login, String password, String firstName, String lastName,

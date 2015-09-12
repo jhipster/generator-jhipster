@@ -199,6 +199,24 @@ public class UserService {
         userSearchRepository.save(user);<% } %>
         log.debug("Changed password for User: {}", currentUser);<% } %>
     }
+<% if (javaVersion == '8') { %><% if (databaseType == 'sql') { %>
+    @Transactional(readOnly = true)<% } %>
+    public Optional<User> getUserWithAuthoritiesByLogin(String login) {
+        return userRepository.findOneByLogin(login).map(u -> {
+            u.getAuthorities().size();
+            return u;
+        });
+    }<% } else { %><% if (databaseType == 'sql') { %>
+    @Transactional(readOnly = true)<% } %>
+    public User getUserWithAuthoritiesByLogin(String login) {
+        User user = userRepository.findOneByLogin(login);
+        if (user == null) {
+            return null;
+        }
+        user.getAuthorities().size();
+        return user;
+    }<% } %>
+
 <% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true)<% } %>
     public User getUserWithAuthorities(<% if (databaseType == 'mongodb') { %>String id<% } else { %>Long id<% } %>) {

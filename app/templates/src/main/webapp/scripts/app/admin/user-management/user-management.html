@@ -100,7 +100,8 @@
 
                         <div class="form-group">
                             <label translate="user-management.profiles">Profiles</label>
-                            <select class="form-control" multiple name="role" ng-model="user.roles">
+                            <select class="form-control" multiple name="role" ng-model="user.roles"
+                                    ng-options="role for role in roles">
                             </select>
                         </div>
                     </div>

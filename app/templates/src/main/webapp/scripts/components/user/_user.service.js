@@ -10,6 +10,7 @@ angular.module('<%=angularAppName%>')
                         data = angular.fromJson(data);
                         return data;
                     }
-                }
+                },
+                'update': { method:'PUT' }
             });
         });

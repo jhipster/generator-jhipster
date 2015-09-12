@@ -3,9 +3,12 @@ package <%=packageName%>.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import <%=packageName%>.domain.Authority;
 import <%=packageName%>.domain.User;
+import <%=packageName%>.repository.AuthorityRepository;
 import <%=packageName%>.repository.UserRepository;<% if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
 import <%=packageName%>.security.AuthoritiesConstants;
+import <%=packageName%>.service.UserService;
+import <%=packageName%>.web.rest.dto.ManagedUserDTO;
 import <%=packageName%>.web.rest.dto.UserDTO;
 import <%=packageName%>.web.rest.util.HeaderUtil;
 import <%=packageName%>.web.rest.util.PaginationUtil;
@@ -24,9 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;<% if (javaVersion == '7') { %>
-import java.util.ArrayList;
-import javax.servlet.http.HttpServletResponse;<% } %><% if (javaVersion == '8') { %>
+import java.util.*;<% if (javaVersion == '8') { %>
 import java.util.stream.Collectors;<% } %><% if (searchEngine == 'elasticsearch') { %>
 import java.util.stream.StreamSupport;
 
@@ -42,7 +43,13 @@ public class UserResource {
     private final Logger log = LoggerFactory.getLogger(UserResource.class);
 
     @Inject
-    private UserRepository userRepository;<% if (searchEngine == 'elasticsearch') { %>
+    private UserRepository userRepository;
+
+    @Inject
+    private AuthorityRepository authorityRepository;
+
+    @Inject
+    private UserService userService;<% if (searchEngine == 'elasticsearch') { %>
 
     @Inject
     private UserSearchRepository userSearchRepository;<% } %>
@@ -73,16 +80,48 @@ public class UserResource {
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
+    @Transactional
     @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity<User> updateUser(@RequestBody User user) throws URISyntaxException {
-        log.debug("REST request to update User : {}", user);
-        if (user.getId() == null) {
-            return createUser(user);
-        }
-        User result = userRepository.save(user);
-        return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert("user", user.getId().toString()))
-                .body(result);
+    public ResponseEntity<ManagedUserDTO> updateUser(@RequestBody UserDTO userDTO) throws URISyntaxException {
+        log.debug("REST request to update User : {}", userDTO);<% if (javaVersion == '8') { %>
+        return userRepository
+            .findOneByLogin(userDTO.getLogin())
+            .map(u -> {
+                u.setFirstName(userDTO.getFirstName());
+                u.setLastName(userDTO.getLastName());
+                u.setEmail(userDTO.getEmail());
+                u.setActivated(userDTO.isActivated());
+                u.setLangKey(userDTO.getLangKey());
+                Set<Authority> authorities = u.getAuthorities();
+                authorities.clear();
+                userDTO.getRoles().stream().forEach(
+                    role -> authorities.add(authorityRepository.findOne(role))
+                );
+                return ResponseEntity.ok()
+                    .headers(HeaderUtil.createEntityUpdateAlert("user", userDTO.getLogin()))
+                    .body(new ManagedUserDTO(userRepository
+                        .findOneByLogin(userDTO.getLogin()).get()));
+            })
+            .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else {%>
+        User user = userRepository.findOneByLogin(userDTO.getLogin());
+        if (user != null) {
+            user.setFirstName(userDTO.getFirstName());
+            user.setLastName(userDTO.getLastName());
+            user.setEmail(userDTO.getEmail());
+            user.setActivated(userDTO.isActivated());
+            user.setLangKey(userDTO.getLangKey());
+            Set<Authority> authorities = user.getAuthorities();
+            authorities.clear();
+            for (String role : userDTO.getRoles()) {
+                authorities.add(authorityRepository.findOne(role));
+            }
+            return ResponseEntity.ok()
+                .headers(HeaderUtil.createEntityUpdateAlert("user", userDTO.getLogin()))
+                .body(new ManagedUserDTO(userRepository
+                    .findOneByLogin(userDTO.getLogin())));
+        } else {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }<% } %>
     }
 
     /**
@@ -92,43 +131,20 @@ public class UserResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    @Transactional
-    public ResponseEntity<List<UserDTO>> getAllUsers(Pageable pageable)
+    @Transactional(readOnly = true)
+    public ResponseEntity<List<ManagedUserDTO>> getAllUsers(Pageable pageable)
         throws URISyntaxException {
         Page<User> page = userRepository.findAll(pageable);<% if (javaVersion == '8') { %>
-        List<UserDTO> userDTOs = page.getContent().stream().map(user -> {
-            return new UserDTO(
-                user.getLogin(),
-                null,
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getActivated(),
-                user.getLangKey(),
-                user.getAuthorities().stream().map(Authority::getName)
-                    .collect(Collectors.toList()));
-        }).collect(Collectors.toList());<% } else { %>
-        List<UserDTO> userDTOs = new ArrayList<>();
+        List<ManagedUserDTO> managedUserDTOs = page.getContent().stream()
+            .map(user -> new ManagedUserDTO(user))
+            .collect(Collectors.toList());<% } else { %>
+        List<ManagedUserDTO> managedUserDTOs = new ArrayList<>();
         for (User user : page.getContent()) {
-            List<String> roles = new ArrayList<>();
-            for (Authority authority : user.getAuthorities()) {
-                roles.add(authority.getName());
-            }
-            UserDTO userDTO = new UserDTO(
-                user.getLogin(),
-                null,
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getActivated(),
-                user.getLangKey(),
-                roles);
-
-            userDTOs.add(userDTO);
+            ManagedUserDTO managedUserDTO = new ManagedUserDTO(user);
+            managedUserDTOs.add(managedUserDTO);
         }<% } %>
-
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
-        return new ResponseEntity<>(userDTOs, headers, HttpStatus.OK);
+        return new ResponseEntity<>(managedUserDTOs, headers, HttpStatus.OK);
     }
 
     /**
@@ -138,19 +154,20 @@ public class UserResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed<% if (javaVersion == '8') { %>
-    ResponseEntity<User> getUser(@PathVariable String login) {
+    public ResponseEntity<ManagedUserDTO> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
-        return userRepository.findOneByLogin(login)
-                .map(user -> new ResponseEntity<>(user, HttpStatus.OK))
+        return userService.getUserWithAuthoritiesByLogin(login)
+                .map(user -> new ManagedUserDTO(user))
+                .map(userDTO -> new ResponseEntity<>(userDTO, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }<% } else { %>
-    public User getUser(@PathVariable String login, HttpServletResponse response) {
+    public ResponseEntity<ManagedUserDTO> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
-        User user = userRepository.findOneByLogin(login);
+        User user = userService.getUserWithAuthoritiesByLogin(login);
         if (user == null) {
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return user;
+        return new ResponseEntity<>(new ManagedUserDTO(user), HttpStatus.OK);
     }<% } %><% if (searchEngine == 'elasticsearch') { %>
 
     /**
