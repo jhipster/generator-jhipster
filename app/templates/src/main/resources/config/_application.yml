@@ -22,15 +22,23 @@ mail:
     tls: false
     auth: false
     from: <%= baseName %>@localhost
-<% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
-authentication:<% if (authenticationType == 'xauth') { %>
+
+<%_ if (authenticationType == 'oauth2' || authenticationType == 'xauth') { _%>
+authentication:
+    <%_ if (authenticationType == 'xauth') { _%>
     xauth:
-        secret: myXAuthSecret<% } %><% if (authenticationType == 'oauth2') { %>
+        secret: myXAuthSecret
+        # Token is valid 30 minutes
+        tokenValidityInSeconds: 1800
+    <%_ } _%>
+    <%_ if (authenticationType == 'oauth2') { _%>
     oauth:
         clientid: <%= baseName %>app
-        secret: mySecretOAuthSecret<% } %>
+        secret: mySecretOAuthSecret
         # Token is valid 30 minutes
-        tokenValidityInSeconds: 1800<% } %>
+        tokenValidityInSeconds: 1800
+    <%_ } _%>
+<%_ } _%>
 
 spring:
     mvc:

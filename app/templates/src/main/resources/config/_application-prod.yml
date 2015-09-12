@@ -6,23 +6,62 @@ liquibase:
 
 spring:
     profiles:
-        active: prod<% if (databaseType == 'sql') { %>
-    datasource:<% if (prodDatabaseType == 'oracle') { %>
-        driverClassName: oracle.jdbc.OracleDriver<% } %>
-        dataSourceClassName: <% if (prodDatabaseType == 'mysql') { %>com.mysql.jdbc.jdbc2.optional.MysqlDataSource<% } else if (prodDatabaseType == 'postgresql') { %>org.postgresql.ds.PGSimpleDataSource<% } else if (prodDatabaseType == 'oracle') { %>oracle.jdbc.pool.OracleDataSource<% } else { %>org.hsqldb.jdbc.JDBCDataSource<% } %>
-        url: <% if (prodDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8<% } else if (prodDatabaseType == 'postgresql') { %><% } else if (prodDatabaseType == 'oracle') { %>jdbc:oracle:thin:@localhost:1521:<%= baseName %><% } %>
+        active: prod
+    <%_ if (databaseType == 'sql') { _%>
+    datasource:
+        <%_ if (prodDatabaseType == 'oracle') { _%>
+        driverClassName: oracle.jdbc.OracleDriver
+        <%_ } _%>
+        <%_ if (prodDatabaseType == 'mysql') { _%>
+        dataSourceClassName: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
+        <%_ } else if (prodDatabaseType == 'postgresql') { _%>
+        dataSourceClassName: org.postgresql.ds.PGSimpleDataSource
+        <%_ } else if (prodDatabaseType == 'oracle') { _%>
+        dataSourceClassName: oracle.jdbc.pool.OracleDataSource
+        <%_ } else { _%>
+        dataSourceClassName: org.hsqldb.jdbc.JDBCDataSource
+        <%_ } _%>
+        <%_ if (prodDatabaseType == 'mysql') { _%>
+        url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8
+        <%_ } else if (prodDatabaseType == 'postgresql') { _%>
+        url: 
+        <%_ } else if (prodDatabaseType == 'oracle') { _%>
+        url: jdbc:oracle:thin:@localhost:1521:<%= baseName %>
+        <%_ } _%>
         databaseName: <% if (prodDatabaseType == 'postgresql') { %><%= baseName %><% } %>
         serverName: <% if (prodDatabaseType == 'postgresql') { %>localhost<% } %>
-        username: <% if (prodDatabaseType == 'mysql') { %>root<% } else if (prodDatabaseType == 'postgresql') { %><%= baseName %><% } %>
-        password: <% if (prodDatabaseType == 'mysql') { %>
+        <%_ if (prodDatabaseType == 'mysql') { _%>
+        username: root
+        <%_ } else if (prodDatabaseType == 'postgresql') { _%>
+        username: <%= baseName %>
+        <%_ } _%>
+        password: 
+        <%_ if (prodDatabaseType == 'mysql') { _%>
         cachePrepStmts: true
         prepStmtCacheSize: 250
         prepStmtCacheSqlLimit: 2048
-        useServerPrepStmts: true<% } %>
+        useServerPrepStmts: true
+        <%_ } _%>
 
     jpa:
-        database-platform: <% if (prodDatabaseType == 'mysql') { %>org.hibernate.dialect.MySQLInnoDBDialect<% } else if (prodDatabaseType == 'postgresql') { %>org.hibernate.dialect.PostgreSQL82Dialect<% } else if (prodDatabaseType == 'oracle') { %>org.hibernate.dialect.Oracle10gDialect<% } else { %>org.hibernate.dialect.HSQLDialect<% } %>
-        database: <% if (prodDatabaseType == 'mysql') { %>MYSQL<% } else if (prodDatabaseType == 'postgresql') { %>POSTGRESQL<% } else if (prodDatabaseType == 'oracle') { %>ORACLE<% } else { %>HSQL<% } %>
+        <%_ if (prodDatabaseType == 'mysql') { _%>
+        database-platform: org.hibernate.dialect.MySQLInnoDBDialect
+        <%_ } else if (prodDatabaseType == 'postgresql') { _%>
+        database-platform: org.hibernate.dialect.PostgreSQL82Dialect
+        <%_ } else if (prodDatabaseType == 'oracle') { _%>
+        database-platform: org.hibernate.dialect.Oracle10gDialect
+        <%_ } else { _%>
+        database-platform: org.hibernate.dialect.HSQLDialect
+        <%_ } _%> 
+        <%_ if (prodDatabaseType == 'mysql') { _%>
+        database: MYSQL
+        <%_ } else if (prodDatabaseType == 'postgresql') { _%>
+        database: POSTGRESQL
+        <%_ } else if (prodDatabaseType == 'oracle') { _%>
+        database: ORACLE
+        <%_ } else { _%>
+        database: HSQL
+        <%_ } _%>
         openInView: false
         show_sql: false
         generate-ddl: false
@@ -33,34 +72,51 @@ spring:
             hibernate.cache.use_second_level_cache: <% if (hibernateCache == 'ehcache' || hibernateCache == 'hazelcast') { %>true<% } else { %>false<% } %>
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: false
-            <% if (hibernateCache == 'ehcache') { %>hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory<% } else if (hibernateCache == 'hazelcast') { %>hibernate.cache.region.factory_class: <%=packageName%>.config.hazelcast.HazelcastCacheRegionFactory<% } %>
-            <% if (hibernateCache == 'hazelcast') { %>hibernate.cache.use_minimal_puts: true
-            hibernate.cache.hazelcast.use_lite_member: true<% } %><% } %><% if (databaseType == 'mongodb') { %>
+            <%_ if (hibernateCache == 'ehcache') { _%>
+            hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
+            <%_ } else if (hibernateCache == 'hazelcast') { _%>
+            hibernate.cache.region.factory_class: <%=packageName%>.config.hazelcast.HazelcastCacheRegionFactory
+            <%_ } _%>
+            <%_ if (hibernateCache == 'hazelcast') { _%>
+            hibernate.cache.use_minimal_puts: true
+            hibernate.cache.hazelcast.use_lite_member: true
+            <%_ } _%>
+    <%_ } _%>
+
+    <%_ if (databaseType == 'mongodb') { _%>
     data:
         mongodb:
             host: localhost
             port: 27017
-            database: <%= baseName %><% } %><% if (databaseType == 'cassandra') { %>
+            database: <%= baseName %>
+    
+    <%_ } _%>
+    <%_ if (databaseType == 'cassandra') { _%>
     data:
         cassandra:
             contactPoints: localhost
             protocolVersion: V2
             compression: LZ4
-            keyspaceName: <%= baseName %><% } %><% if (searchEngine == 'elasticsearch') { %>
+            keyspaceName: <%= baseName %>
+    <%_ } _%>
+    <%_ if (searchEngine == 'elasticsearch') { _%>
     data:
         elasticsearch:
             cluster-name:
-            cluster-nodes: localhost:9200<% } %>
+            cluster-nodes: localhost:9200
+    <%_ } _%>
     thymeleaf:
         mode: XHTML
         cache: true
 
 metrics:
-    jmx.enabled: true<% if (javaVersion == '8') { %>
+    jmx.enabled: true
+    <%_ if (javaVersion == '8') { _%>
     spark:
         enabled: false
         host: localhost
-        port: 9999<% } %>
+        port: 9999
+    <%_ } _%>
     graphite:
         enabled: false
         host: localhost
@@ -71,11 +127,17 @@ http:
     cache:
         timeToLiveInDays: 31
 
-<% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast' || hibernateCache == 'ehcache') {%>cache:
-    timeToLiveSeconds: 3600<% } if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') {%>
+<%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast' || hibernateCache == 'ehcache') { _%>
+cache:
+    timeToLiveSeconds: 3600
+    <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
     hazelcast:
         debug: false
         stickySession: false
-        backupCount: 1<% } if (hibernateCache == 'ehcache') { %>
+        backupCount: 1
+    <%_ } _%>
+    <%_ if (hibernateCache == 'ehcache') { _%>
     ehcache:
-        maxBytesLocalHeap: 256M<% } %>
+        maxBytesLocalHeap: 256M
+    <%_ } _%>
+<%_ } _%>
