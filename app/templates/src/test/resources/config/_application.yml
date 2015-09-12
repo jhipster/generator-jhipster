@@ -14,7 +14,8 @@ async:
 liquibase:
     context: test
 
-spring:<% if (databaseType == 'sql') { %>
+spring:
+    <%_ if (databaseType == 'sql') { _%>
     datasource:
         dataSourceClassName: org.h2.jdbcx.JdbcDataSource
         url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1
@@ -36,19 +37,25 @@ spring:<% if (databaseType == 'sql') { %>
             hibernate.cache.use_second_level_cache: false
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
-            hibernate.hbm2ddl.auto: validate<% } %><% if (databaseType == 'mongodb') { %>
+            hibernate.hbm2ddl.auto: validate
+    <%_ } _%>
+    <%_ if (databaseType == 'mongodb') { _%>
     data:
         mongodb:
             host: localhost
             port: 27017
-            database: <%= baseName %><% } %><% if (databaseType == 'cassandra') { %>
+            database: <%= baseName %>
+    <%_ } _%>
+    <%_ if (databaseType == 'cassandra') { _%>
     data:
         cassandra:
             contactPoints: localhost
             port: 9142
             protocolVersion: V2
             compression: NONE
-            keyspaceName: cassandra_unit_keyspace<% } %><% if (searchEngine == 'elasticsearch') { %>
+            keyspaceName: cassandra_unit_keyspace
+    <%_ } _%>
+    <%_ if (searchEngine == 'elasticsearch') { _%>
     data:
         elasticsearch:
             cluster-name:
@@ -56,7 +63,8 @@ spring:<% if (databaseType == 'sql') { %>
             properties:
                 path:
                   logs: target/elasticsearch/log
-                  data: target/elasticsearch/data <% } %>
+                  data: target/elasticsearch/data
+    <%_ } _%>
 
 mail:
     host: localhost
