@@ -3,8 +3,8 @@ package <%=packageName%>.service;
 import <%=packageName%>.domain.Authority;<% if (authenticationType == 'session') { %>
 import <%=packageName%>.domain.PersistentToken;<% } %><% } %>
 import <%=packageName%>.domain.User;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import <%=packageName%>.repository.AuthorityRepository;<% } %><% if (authenticationType == 'session') { %>
-import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
+import <%=packageName%>.repository.AuthorityRepository;<% if (authenticationType == 'session') { %>
+import <%=packageName%>.repository.PersistentTokenRepository;<% } %><% } %>
 import <%=packageName%>.repository.UserRepository;<% if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.UserSearchRepository;<% } %><% if (databaseType == 'cassandra') { %>
 import <%=packageName%>.security.AuthoritiesConstants;<% } %>
@@ -42,10 +42,10 @@ public class UserService {
     private UserRepository userRepository;<% if (searchEngine == 'elasticsearch') { %>
 
     @Inject
-    private UserSearchRepository userSearchRepository;<% } %><% if (authenticationType == 'session') { %>
+    private UserSearchRepository userSearchRepository;<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %><% if (authenticationType == 'session') { %>
 
     @Inject
-    private PersistentTokenRepository persistentTokenRepository;<% } %>
+    private PersistentTokenRepository persistentTokenRepository;<% } %><% } %>
 <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Inject
     private AuthorityRepository authorityRepository;<% } %>
@@ -218,12 +218,12 @@ public class UserService {
     }<% } %>
 
 <% if (databaseType == 'sql') { %>
-    @Transactional(readOnly = true)<% } %>
+    @Transactional(readOnly = true)<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     public User getUserWithAuthorities(<% if (databaseType == 'mongodb') { %>String id<% } else { %>Long id<% } %>) {
         User user = userRepository.findOne(id);
         user.getAuthorities().size(); // eagerly load the association
         return user;
-    }
+    }<% } %>
 <% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true)<% } %>
     public User getUserWithAuthorities() {<% if (javaVersion == '8') { %>

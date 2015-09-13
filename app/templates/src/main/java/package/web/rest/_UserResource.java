@@ -1,27 +1,27 @@
 package <%=packageName%>.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import <%=packageName%>.domain.Authority;
-import <%=packageName%>.domain.User;
-import <%=packageName%>.repository.AuthorityRepository;
+import com.codahale.metrics.annotation.Timed;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import <%=packageName%>.domain.Authority;<% } %>
+import <%=packageName%>.domain.User;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import <%=packageName%>.repository.AuthorityRepository;<% } %>
 import <%=packageName%>.repository.UserRepository;<% if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
 import <%=packageName%>.security.AuthoritiesConstants;
-import <%=packageName%>.service.UserService;
-import <%=packageName%>.web.rest.dto.ManagedUserDTO;
+import <%=packageName%>.service.UserService;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import <%=packageName%>.web.rest.dto.ManagedUserDTO;<% } %>
 import <%=packageName%>.web.rest.dto.UserDTO;
-import <%=packageName%>.web.rest.util.HeaderUtil;
-import <%=packageName%>.web.rest.util.PaginationUtil;
+import <%=packageName%>.web.rest.util.HeaderUtil;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.LoggerFactory;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpHeaders;<% } %>
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.access.annotation.Secured;<% if (databaseType == 'sql') { %>
+import org.springframework.transaction.annotation.Transactional;<% } %>
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
@@ -44,9 +44,9 @@ public class UserResource {
 
     @Inject
     private UserRepository userRepository;
-
+<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Inject
-    private AuthorityRepository authorityRepository;
+    private AuthorityRepository authorityRepository;<% } %>
 
     @Inject
     private UserService userService;<% if (searchEngine == 'elasticsearch') { %>
@@ -79,10 +79,10 @@ public class UserResource {
     @RequestMapping(value = "/users",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    @Transactional
+    @Timed<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>
     @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity<ManagedUserDTO> updateUser(@RequestBody UserDTO userDTO) throws URISyntaxException {
+    public ResponseEntity<<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>ManagedUserDTO<% } else { %>UserDTO<% } %>> updateUser(@RequestBody UserDTO userDTO) throws URISyntaxException {
         log.debug("REST request to update User : {}", userDTO);<% if (javaVersion == '8') { %>
         return userRepository
             .findOneByLogin(userDTO.getLogin())
@@ -91,16 +91,23 @@ public class UserResource {
                 u.setLastName(userDTO.getLastName());
                 u.setEmail(userDTO.getEmail());
                 u.setActivated(userDTO.isActivated());
-                u.setLangKey(userDTO.getLangKey());
+                u.setLangKey(userDTO.getLangKey());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
                 Set<Authority> authorities = u.getAuthorities();
                 authorities.clear();
                 userDTO.getAuthorities().stream().forEach(
                     authority -> authorities.add(authorityRepository.findOne(authority))
-                );
+                );<% if (databaseType == 'mongodb') { %>
+                userRepository.save(u);<% } %>
                 return ResponseEntity.ok()
                     .headers(HeaderUtil.createEntityUpdateAlert("user", userDTO.getLogin()))
                     .body(new ManagedUserDTO(userRepository
-                        .findOneByLogin(userDTO.getLogin()).get()));
+                        .findOneByLogin(userDTO.getLogin()).get()));<% } else { %>
+                u.setAuthorities(userDTO.getAuthorities());
+                userRepository.save(u);
+                return ResponseEntity.ok()
+                    .headers(HeaderUtil.createEntityUpdateAlert("user", userDTO.getLogin()))
+                    .body(new UserDTO(userRepository
+                        .findOneByLogin(userDTO.getLogin()).get()));<% } %>
             })
             .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else {%>
         User user = userRepository.findOneByLogin(userDTO.getLogin());
@@ -130,8 +137,8 @@ public class UserResource {
     @RequestMapping(value = "/users",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    @Transactional(readOnly = true)
+    @Timed<% if (databaseType == 'sql') { %>
+    @Transactional(readOnly = true)<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     public ResponseEntity<List<ManagedUserDTO>> getAllUsers(Pageable pageable)
         throws URISyntaxException {
         Page<User> page = userRepository.findAll(pageable);<% if (javaVersion == '8') { %>
@@ -145,7 +152,15 @@ public class UserResource {
         }<% } %>
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
         return new ResponseEntity<>(managedUserDTOs, headers, HttpStatus.OK);
-    }
+    }<% } else { %>
+    public ResponseEntity<List<UserDTO>> getAllUsers()
+        throws URISyntaxException {
+        List<User> users = userRepository.findAll();
+        List<UserDTO> userDTOs = users.stream()
+            .map(user -> new UserDTO(user))
+            .collect(Collectors.toList());
+        return new ResponseEntity<>(userDTOs, HttpStatus.OK);
+    }<% } %>
 
     /**
      * GET  /users/:login -> get the "login" user.
@@ -154,10 +169,10 @@ public class UserResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed<% if (javaVersion == '8') { %>
-    public ResponseEntity<ManagedUserDTO> getUser(@PathVariable String login) {
+    public ResponseEntity<<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>ManagedUserDTO<% } else { %>UserDTO<% } %>> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
         return userService.getUserWithAuthoritiesByLogin(login)
-                .map(user -> new ManagedUserDTO(user))
+                .map(user -> new <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>ManagedUserDTO<% } else { %>UserDTO<% } %>(user))
                 .map(userDTO -> new ResponseEntity<>(userDTO, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }<% } else { %>

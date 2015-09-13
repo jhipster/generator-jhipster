@@ -770,7 +770,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/web/rest/dto/_package-info.java', javaDir + 'web/rest/dto/package-info.java', this, {});
     this.template('src/main/java/package/web/rest/dto/_LoggerDTO.java', javaDir + 'web/rest/dto/LoggerDTO.java', this, {});
     this.template('src/main/java/package/web/rest/dto/_UserDTO.java', javaDir + 'web/rest/dto/UserDTO.java', this, {});
-    this.template('src/main/java/package/web/rest/dto/_ManagedUserDTO.java', javaDir + 'web/rest/dto/ManagedUserDTO.java', this, {});
+    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+        this.template('src/main/java/package/web/rest/dto/_ManagedUserDTO.java', javaDir + 'web/rest/dto/ManagedUserDTO.java', this, {});
+    }
     this.template('src/main/java/package/web/rest/util/_HeaderUtil.java', javaDir + 'web/rest/util/HeaderUtil.java', this, {});
     this.template('src/main/java/package/web/rest/dto/_KeyAndPasswordDTO.java', javaDir + 'web/rest/dto/KeyAndPasswordDTO.java', this, {});
 
@@ -958,13 +960,11 @@ JhipsterGenerator.prototype.app = function app() {
         this.template(webappDir + '/scripts/app/admin/tracker/_tracker.controller.js', webappDir + 'scripts/app/admin/tracker/tracker.controller.js', this, {});
         this.template(webappDir + '/scripts/components/tracker/_tracker.service.js', webappDir + '/scripts/components/tracker/tracker.service.js', this, {});
     }
-    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
-        this.copyHtml(webappDir + '/scripts/app/admin/user-management/user-management.html', webappDir + 'scripts/app/admin/user-management/user-management.html');
-        this.copyHtml(webappDir + '/scripts/app/admin/user-management/_user-management-detail.html', webappDir + 'scripts/app/admin/user-management/user-management-detail.html');
-        this.copyJs(webappDir + '/scripts/app/admin/user-management/_user-management.js', webappDir + 'scripts/app/admin/user-management/user-management.js', this, {});
-        this.template(webappDir + '/scripts/app/admin/user-management/_user-management.controller.js', webappDir + 'scripts/app/admin/user-management/user-management.controller.js', this, {});
-        this.template(webappDir + '/scripts/app/admin/user-management/_user-management-detail.controller.js', webappDir + 'scripts/app/admin/user-management/user-management-detail.controller.js', this, {});
-    }
+    this.copyHtml(webappDir + '/scripts/app/admin/user-management/user-management.html', webappDir + 'scripts/app/admin/user-management/user-management.html');
+    this.copyHtml(webappDir + '/scripts/app/admin/user-management/_user-management-detail.html', webappDir + 'scripts/app/admin/user-management/user-management-detail.html');
+    this.copyJs(webappDir + '/scripts/app/admin/user-management/_user-management.js', webappDir + 'scripts/app/admin/user-management/user-management.js', this, {});
+    this.template(webappDir + '/scripts/app/admin/user-management/_user-management.controller.js', webappDir + 'scripts/app/admin/user-management/user-management.controller.js', this, {});
+    this.template(webappDir + '/scripts/app/admin/user-management/_user-management-detail.controller.js', webappDir + 'scripts/app/admin/user-management/user-management-detail.controller.js', this, {});
     this.copyHtml(webappDir + '/scripts/app/error/error.html', webappDir + 'scripts/app/error/error.html');
     this.copyHtml(webappDir + '/scripts/app/error/accessdenied.html', webappDir + 'scripts/app/error/accessdenied.html');
     this.copyJs(webappDir + '/scripts/app/entities/_entity.js', webappDir + 'scripts/app/entities/entity.js', this, {});
@@ -1071,17 +1071,14 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/app/admin/metrics/metrics.js',
         'scripts/app/admin/metrics/metrics.controller.js',
         'scripts/app/admin/metrics/metrics.modal.controller.js',
+        'scripts/app/admin/user-management/user-management-detail.controller.js',
+        'scripts/app/admin/user-management/user-management.controller.js',
+        'scripts/app/admin/user-management/user-management.js',
         'scripts/app/entities/entity.js',
         'scripts/app/error/error.js',
         'scripts/app/main/main.js',
         'scripts/app/main/main.controller.js'
     ];
-    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
-        appScripts = appScripts.concat([
-            'scripts/app/admin/user-management/user-management-detail.controller.js',
-            'scripts/app/admin/user-management/user-management.controller.js',
-            'scripts/app/admin/user-management/user-management.js']);
-    }
     if (this.enableTranslation) {
         appScripts = appScripts.concat([
             'bower_components/messageformat/locale/en.js',

@@ -28,12 +28,14 @@
 -->
 
     <logger name="<%=packageName%>" level="${logback.loglevel}"/>
-
+<% if (databaseType == 'cassandra') { %>
+    <logger name="io.netty" level="WARN"/><% } %>
     <logger name="javax.activation" level="WARN"/>
     <logger name="javax.mail" level="WARN"/>
     <logger name="javax.xml.bind" level="WARN"/>
     <logger name="ch.qos.logback" level="WARN"/>
-    <logger name="com.codahale.metrics" level="WARN"/>
+    <logger name="com.codahale.metrics" level="WARN"/><% if (databaseType == 'cassandra') { %>
+    <logger name="com.datastax" level="WARN"/><% } %>
     <logger name="com.ryantenney" level="WARN"/>
     <logger name="com.sun.xml.internal.bind" level="WARN"/>
     <logger name="com.zaxxer" level="WARN"/>

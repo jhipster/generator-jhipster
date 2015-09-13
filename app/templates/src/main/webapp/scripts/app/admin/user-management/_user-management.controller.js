@@ -9,9 +9,10 @@ angular.module('<%=angularAppName%>')
         });<% } %>
 
         $scope.page = 0;
-        $scope.loadAll = function () {
+        $scope.loadAll = function () {<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
             User.query({page: $scope.page, per_page: 20}, function (result, headers) {
-                $scope.links = ParseLinks.parse(headers('link'));
+                $scope.links = ParseLinks.parse(headers('link'));<% } else { %>
+            User.query({}, function (result) {<% } %>
                 $scope.users = result;
             });
         };

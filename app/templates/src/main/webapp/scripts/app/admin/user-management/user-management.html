@@ -156,10 +156,10 @@
                 <th translate="user-management.email">Email</th>
                 <th></th>
                 <% if (enableTranslation) { %><th translate="user-management.langKey">LangKey</th><% } %>
-                <th translate="user-management.profiles">Profiles</th>
+                <th translate="user-management.profiles">Profiles</th><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
                 <th translate="user-management.createdDate">CreatedDate</th>
                 <th translate="user-management.lastModifiedBy">LastModifiedBy</th>
-                <th translate="user-management.lastModifiedDate">LastModifiedDate</th>
+                <th translate="user-management.lastModifiedDate">LastModifiedDate</th><% } %>
                 <th></th>
             </tr>
             </thead>
@@ -179,10 +179,10 @@
                     <div ng-repeat="authority in user.authorities">
                         <span class="label label-info">{{ authority }}</span>
                     </div>
-                </td>
+                </td><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
                 <td>{{user.createdDate | date:'dd/MM/yy HH:mm'}}</td>
                 <td>{{user.lastModifiedBy}}</td>
-                <td>{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td>
+                <td>{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td><% } %>
                 <td class="text-right">
                     <button type="submit"
                             ui-sref="user-management-detail({login:user.login})"
@@ -197,7 +197,7 @@
                 </td>
             </tr>
             </tbody>
-        </table>
+        </table><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         <nav>
             <ul class="pagination">
                 <li ng-show="links['first'] >= 0" ng-click="loadPage(links['first'])"><a>&lt;&lt;</a></li>
@@ -210,6 +210,6 @@
                 <li ng-show="links['next']" ng-click="loadPage(links['next'])"><a>&gt;</a></li>
                 <li ng-show="links['last'] > 0" ng-click="loadPage(links['last'])"><a>&gt;&gt;</a></li>
             </ul>
-        </nav>
+        </nav><% } %>
     </div>
 </div>
