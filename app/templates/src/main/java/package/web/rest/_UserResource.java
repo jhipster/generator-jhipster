@@ -97,6 +97,8 @@ public class UserResource {
                 userDTO.getAuthorities().stream().forEach(
                     authority -> authorities.add(authorityRepository.findOne(authority))
                 );
+                <% if (databaseType == 'mongodb') { %>
+                userRepository.save(u);<% }%>
                 return ResponseEntity.ok()
                     .headers(HeaderUtil.createEntityUpdateAlert("user", userDTO.getLogin()))
                     .body(new ManagedUserDTO(userRepository
@@ -115,6 +117,8 @@ public class UserResource {
             for (String authority : userDTO.getAuthorities()) {
                 authorities.add(authorityRepository.findOne(authority));
             }
+            <% if (databaseType == 'mongodb') { %>
+            userRepository.save(u);<% }%>
             return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert("user", userDTO.getLogin()))
                 .body(new ManagedUserDTO(userRepository
