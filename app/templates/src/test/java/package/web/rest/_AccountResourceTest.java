@@ -143,7 +143,7 @@ public class AccountResourceTest <% if (databaseType == 'cassandra') { %>extends
                 .andExpect(jsonPath("$.firstName").value("john"))
                 .andExpect(jsonPath("$.lastName").value("doe"))
                 .andExpect(jsonPath("$.email").value("john.doe@jhipter.com"))
-                .andExpect(jsonPath("$.roles").value(AuthoritiesConstants.ADMIN));
+                .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
     }
 
     @Test
@@ -166,7 +166,7 @@ public class AccountResourceTest <% if (databaseType == 'cassandra') { %>extends
             "joe@example.com",      // e-mail
             true,                   // activated
             "en",                   // langKey
-            Arrays.asList(AuthoritiesConstants.USER)
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))
         );
 
         restMvc.perform(
@@ -191,7 +191,7 @@ public class AccountResourceTest <% if (databaseType == 'cassandra') { %>extends
             "funky@example.com",    // e-mail
             true,                   // activated
             "en",                   // langKey
-            Arrays.asList(AuthoritiesConstants.USER)
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))
         );
 
         restUserMockMvc.perform(
@@ -216,7 +216,7 @@ public class AccountResourceTest <% if (databaseType == 'cassandra') { %>extends
             "invalid",          // e-mail <-- invalid
             true,               // activated
             "en",               // langKey
-            Arrays.asList(AuthoritiesConstants.USER)
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))
         );
 
         restUserMockMvc.perform(
@@ -242,12 +242,12 @@ public class AccountResourceTest <% if (databaseType == 'cassandra') { %>extends
             "alice@example.com",    // e-mail
             true,                   // activated
             "en",                   // langKey
-            Arrays.asList(AuthoritiesConstants.USER)
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))
         );
 
         // Duplicate login, different e-mail
         UserDTO dup = new UserDTO(u.getLogin(), u.getPassword(), u.getLogin(), u.getLastName(),
-            "alicejr@example.com", true, u.getLangKey(), u.getRoles());
+            "alicejr@example.com", true, u.getLangKey(), u.getAuthorities());
 
         // Good user
         restMvc.perform(
@@ -280,12 +280,12 @@ public class AccountResourceTest <% if (databaseType == 'cassandra') { %>extends
             "john@example.com",     // e-mail
             true,                   // activated
             "en",                   // langKey
-            Arrays.asList(AuthoritiesConstants.USER)
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))
         );
 
         // Duplicate e-mail, different login
         UserDTO dup = new UserDTO("johnjr", u.getPassword(), u.getLogin(), u.getLastName(),
-            u.getEmail(), true, u.getLangKey(), u.getRoles());
+            u.getEmail(), true, u.getLangKey(), u.getAuthorities());
 
         // Good user
         restMvc.perform(
@@ -317,7 +317,7 @@ public class AccountResourceTest <% if (databaseType == 'cassandra') { %>extends
             "badguy@example.com",   // e-mail
             true,                   // activated
             "en",                   // langKey
-            Arrays.asList(AuthoritiesConstants.ADMIN) // <-- only admin should be able to do that
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.ADMIN)) // <-- only admin should be able to do that
         );
 
         restMvc.perform(

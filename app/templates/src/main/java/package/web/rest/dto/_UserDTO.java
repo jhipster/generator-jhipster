@@ -1,6 +1,6 @@
 package <%=packageName%>.web.rest.dto;
-
-import <%=packageName%>.domain.Authority;
+<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import <%=packageName%>.domain.Authority;<% } %>
 import <%=packageName%>.domain.User;
 
 import org.hibernate.validator.constraints.Email;
@@ -8,9 +8,9 @@ import org.hibernate.validator.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.List;<% if (javaVersion == '8') { %>
+import java.util.Set;<% if (javaVersion == '8') { %>
 import java.util.stream.Collectors;<% } else { %>
-import java.util.ArrayList;<% } %>
+import java.util.HashSet;<% } %>
 
 public class UserDTO {
 
@@ -41,28 +41,29 @@ public class UserDTO {
     @Size(min = 2, max = 5)
     private String langKey;
 
-    private List<String> roles;
+    private Set<String> authorities;
 
     public UserDTO() {
     }
 
     public UserDTO(User user) {<% if (javaVersion == '8') { %>
         this(user.getLogin(), null, user.getFirstName(), user.getLastName(),
-            user.getEmail(), user.getActivated(), user.getLangKey(),
+            user.getEmail(), user.getActivated(), user.getLangKey(),<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
             user.getAuthorities().stream().map(Authority::getName)
-                .collect(Collectors.toList()));<% } else { %>
+                .collect(Collectors.toSet()));<% } else { %>
+            user.getAuthorities());<% } %><% } else { %>
         this(user.getLogin(), null, user.getFirstName(), user.getLastName(),
             user.getEmail(), user.getActivated(), user.getLangKey(),
             null);
-        List<String> roles = new ArrayList<>();
+        Set<String> authorities = new HashSet<>();
         for (Authority authority : user.getAuthorities()) {
-            roles.add(authority.getName());
+            authorities.add(authority.getName());
         }
-        this.roles = roles;<% } %>
+        this.authorities = authorities;<% } %>
     }
 
     public UserDTO(String login, String password, String firstName, String lastName,
-            String email, boolean activated, String langKey, List<String> roles) {
+            String email, boolean activated, String langKey, Set<String> authorities) {
 
         this.login = login;
         this.password = password;
@@ -71,7 +72,7 @@ public class UserDTO {
         this.email = email;
         this.activated = activated;
         this.langKey = langKey;
-        this.roles = roles;
+        this.authorities = authorities;
     }
 
     public String getPassword() {
@@ -102,8 +103,8 @@ public class UserDTO {
         return langKey;
     }
 
-    public List<String> getRoles() {
-        return roles;
+    public Set<String> getAuthorities() {
+        return authorities;
     }
 
     @Override
@@ -116,7 +117,7 @@ public class UserDTO {
         ", email='" + email + '\'' +
         ", activated=" + activated +
         ", langKey='" + langKey + '\'' +
-        ", roles=" + roles +
+        ", authorities=" + authorities +
         '}';
     }
 }

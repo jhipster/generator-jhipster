@@ -7,7 +7,7 @@ angular.module('<%=angularAppName%>')
                 parent: 'admin',
                 url: '/user-management',
                 data: {
-                    roles: ['ROLE_ADMIN'],
+                    authorities: ['ROLE_ADMIN'],
                     pageTitle: 'user-management.home.title'
                 },
                 views: {
@@ -27,7 +27,7 @@ angular.module('<%=angularAppName%>')
                 parent: 'admin',
                 url: '/user-management/:login',
                 data: {
-                    roles: ['ROLE_ADMIN'],
+                    authorities: ['ROLE_ADMIN'],
                     pageTitle: 'user-management.detail.title'
                 },
                 views: {

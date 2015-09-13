@@ -94,8 +94,8 @@ public class UserResource {
                 u.setLangKey(userDTO.getLangKey());
                 Set<Authority> authorities = u.getAuthorities();
                 authorities.clear();
-                userDTO.getRoles().stream().forEach(
-                    role -> authorities.add(authorityRepository.findOne(role))
+                userDTO.getAuthorities().stream().forEach(
+                    authority -> authorities.add(authorityRepository.findOne(authority))
                 );
                 return ResponseEntity.ok()
                     .headers(HeaderUtil.createEntityUpdateAlert("user", userDTO.getLogin()))
@@ -112,8 +112,8 @@ public class UserResource {
             user.setLangKey(userDTO.getLangKey());
             Set<Authority> authorities = user.getAuthorities();
             authorities.clear();
-            for (String role : userDTO.getRoles()) {
-                authorities.add(authorityRepository.findOne(role));
+            for (String authority : userDTO.getAuthorities()) {
+                authorities.add(authorityRepository.findOne(authority));
             }
             return ResponseEntity.ok()
                 .headers(HeaderUtil.createEntityUpdateAlert("user", userDTO.getLogin()))
