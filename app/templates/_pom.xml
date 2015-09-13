@@ -34,7 +34,7 @@
         <gatling.version>2.1.6</gatling.version>
         <gatling-maven-plugin.version>2.1.6</gatling-maven-plugin.version>
         <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
-        <hazelcast.version>3.5.1</hazelcast.version>
+        <hazelcast.version>3.5.2</hazelcast.version>
         <%_ } _%>
         <%_ if (databaseType == 'sql') { _%>
         <hibernate.version>4.3.10.Final</hibernate.version>
