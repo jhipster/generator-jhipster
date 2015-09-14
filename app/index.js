@@ -692,6 +692,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/domain/util/_ISO8601LocalDateDeserializer.java', javaDir + 'domain/util/ISO8601LocalDateDeserializer.java', this, {});
     if (this.databaseType == "sql") {
         this.template('src/main/java/package/domain/util/_FixedH2Dialect.java', javaDir + 'domain/util/FixedH2Dialect.java', this, {});
+        if (this.prodDatabaseType == 'postgresql') {
+            this.template('src/main/java/package/domain/util/_FixedPostgreSQL82Dialect.java', javaDir + 'domain/util/FixedPostgreSQL82Dialect.java', this, {});
+        }
     }
 
     if (this.searchEngine == 'elasticsearch') {
