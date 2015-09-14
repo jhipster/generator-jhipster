@@ -33,7 +33,7 @@
             <%_ if (fields[fieldId].fieldIsEnum) { _%>
             <select class="form-control" name="<%= fields[fieldId].fieldName %>" ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>" id="field_<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) { %> required<% } %>>
                 <%_ var enumPrefix = angularAppName + '.'+ fields[fieldId].fieldType;
-                    var values = fields[fieldId].fieldValues.split(",");
+                    var values = fields[fieldId].fieldValues.replace(/\s/g, '').split(',');
                     for (key in values) {
                         var value = values[key]; _%>
                 <option value="<%= value %>" translate="<%=enumPrefix%>.<%=value%>"><%= value %></option>
