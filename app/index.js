@@ -51,7 +51,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
 
     console.log('\nWelcome to the JHipster Generator v' + packagejs.version + '\n');
     var insight = this.insight();
-    var questions = 15; // making questions a variable to avoid updating each question by hand when adding additional options
+    var questions = 16; // making questions a variable to avoid updating each question by hand when adding additional options
 
     var prompts = [
         {
@@ -358,7 +358,13 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             name: 'enableTranslation',
             message: '(15/' + questions + ') Would you like to enable translation support with Angular Translate?',
             default: true
-        }
+        },
+        {
+          type: 'confirm',
+          name: 'useCucumber',
+          message: '(16/' + questions + ') Would you like to use Cucumber as a testing framework?',
+          default: false
+      }
     ];
 
     this.baseName = this.config.get('baseName');
@@ -390,6 +396,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     this.frontendBuilder = this.config.get('frontendBuilder');
     this.rememberMeKey = this.config.get('rememberMeKey');
     this.enableTranslation = this.config.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
+    this.useCucumber = this.config.get('useCucumber');
     this.packagejs = packagejs;
 
     if (this.baseName != null &&
@@ -441,6 +448,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             this.frontendBuilder = props.frontendBuilder;
             this.javaVersion = props.javaVersion;
             this.enableTranslation = props.enableTranslation;
+            this.useCucumber = props.useCucumber;
             this.rememberMeKey = crypto.randomBytes(20).toString('hex');
 
             if (this.databaseType == 'mongodb') {
@@ -477,6 +485,7 @@ JhipsterGenerator.prototype.app = function app() {
     insight.track('app/frontendBuilder', this.frontendBuilder);
     insight.track('app/javaVersion', this.javaVersion);
     insight.track('app/enableTranslation', this.enableTranslation);
+    insight.track('app/useCucumber', this.useCucumber);
 
     var packageFolder = this.packageName.replace(/\./g, '/');
     var javaDir = 'src/main/java/' + packageFolder + '/';
@@ -824,6 +833,13 @@ JhipsterGenerator.prototype.app = function app() {
     mkdirp('src/test/gatling/data');
     mkdirp('src/test/gatling/bodies');
     mkdirp('src/test/gatling/simulations');
+
+    // Create Cucumber test files
+    if (this.useCucumber) {
+        this.template('src/test/java/package/cucumber/_CucumberTest.java', testDir + 'cucumber/CucumberTest.java', this, {});
+        this.template('src/test/java/package/cucumber/_UserStepDefs.java', testDir + 'cucumber/UserStepDefs.java', this, {});
+        this.copy('src/test/features/user.feature', 'src/test/features/user.feature');
+    }
 
     // Create Webapp
     mkdirp(webappDir);
