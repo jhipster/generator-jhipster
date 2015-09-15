@@ -108,7 +108,7 @@ public class UserResource {
                 return ResponseEntity.ok()
                     .headers(HeaderUtil.createEntityUpdateAlert("user", managedUserDTO.getLogin()))
                     .body(new ManagedUserDTO(userRepository
-                        .findOne(userDTO.getId())));<% } %>
+                        .findOne(managedUserDTO.getId())));<% } %>
             })
             .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else {%>
         User user = userRepository.findOne(managedUserDTO.getId());
