@@ -3,8 +3,15 @@
         "title": "Statuskontroller",
         "refresh.button": "Uppdatera",
         "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Detaljer",
+            "properties": "Egenskaper",
+            "name": "Namn",
+            "value": "Värde",
+            "error": "Fel"
+        },
         "indicator": {
-            "diskSpace": "Disk space",
+            "diskSpace": "Diskutrymme",
             "mail": "E-post",<% if (databaseType == 'sql') { %>
             "db": "Databas"<% } %><% if (databaseType == 'mongodb') { %>
             "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
