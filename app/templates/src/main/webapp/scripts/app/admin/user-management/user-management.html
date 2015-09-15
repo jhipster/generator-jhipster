@@ -22,7 +22,7 @@
                                    ng-model="user.id" readonly>
                         </div>
 
-                        <div class="form-group" ng-show="user.id == null">
+                        <div class="form-group">
                             <label translate="user-management.login">Login</label>
                             <input type="text" class="form-control" name="login"
                                    ng-model="user.login" ng-required="user.id == null" ng-maxlength="50">
@@ -165,7 +165,7 @@
             </thead>
             <tbody>
             <tr ng-repeat="user in users">
-                <td><a ui-sref="user-management-detail({login:user.login})">{{user.login}}</a></td>
+                <td><a ui-sref="user-management-detail({login:user.login})">{{user.id}}</a></td>
                 <td>{{user.login}}</td>
                 <td>{{user.email}}</td>
                 <td>

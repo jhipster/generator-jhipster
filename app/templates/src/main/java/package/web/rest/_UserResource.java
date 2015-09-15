@@ -82,50 +82,52 @@ public class UserResource {
     @Timed<% if (databaseType == 'sql') { %>
     @Transactional<% } %>
     @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity<<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>ManagedUserDTO<% } else { %>UserDTO<% } %>> updateUser(@RequestBody UserDTO userDTO) throws URISyntaxException {
-        log.debug("REST request to update User : {}", userDTO);<% if (javaVersion == '8') { %>
-        return userRepository
-            .findOneByLogin(userDTO.getLogin())
-            .map(u -> {
-                u.setFirstName(userDTO.getFirstName());
-                u.setLastName(userDTO.getLastName());
-                u.setEmail(userDTO.getEmail());
-                u.setActivated(userDTO.isActivated());
-                u.setLangKey(userDTO.getLangKey());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-                Set<Authority> authorities = u.getAuthorities();
+    public ResponseEntity<<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>ManagedUserDTO<% } else { %>UserDTO<% } %>> updateUser(@RequestBody ManagedUserDTO managedUserDTO) throws URISyntaxException {
+        log.debug("REST request to update User : {}", managedUserDTO);<% if (javaVersion == '8') { %>
+        return Optional.of(userRepository
+            .findOne(managedUserDTO.getId()))
+            .map(user -> {
+                user.setLogin(managedUserDTO.getLogin());
+                user.setFirstName(managedUserDTO.getFirstName());
+                user.setLastName(managedUserDTO.getLastName());
+                user.setEmail(managedUserDTO.getEmail());
+                user.setActivated(managedUserDTO.isActivated());
+                user.setLangKey(managedUserDTO.getLangKey());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+                Set<Authority> authorities = user.getAuthorities();
                 authorities.clear();
-                userDTO.getAuthorities().stream().forEach(
+                managedUserDTO.getAuthorities().stream().forEach(
                     authority -> authorities.add(authorityRepository.findOne(authority))
                 );<% if (databaseType == 'mongodb') { %>
-                userRepository.save(u);<% } %>
+                userRepository.save(user);<% } %>
                 return ResponseEntity.ok()
-                    .headers(HeaderUtil.createEntityUpdateAlert("user", userDTO.getLogin()))
+                    .headers(HeaderUtil.createEntityUpdateAlert("user", managedUserDTO.getLogin()))
                     .body(new ManagedUserDTO(userRepository
-                        .findOneByLogin(userDTO.getLogin()).get()));<% } else { %>
-                u.setAuthorities(userDTO.getAuthorities());
-                userRepository.save(u);
+                        .findOne(managedUserDTO.getId())));<% } else { %>
+                user.setAuthorities(managedUserDTO.getAuthorities());
+                userRepository.save(user);
                 return ResponseEntity.ok()
-                    .headers(HeaderUtil.createEntityUpdateAlert("user", userDTO.getLogin()))
-                    .body(new UserDTO(userRepository
-                        .findOneByLogin(userDTO.getLogin()).get()));<% } %>
+                    .headers(HeaderUtil.createEntityUpdateAlert("user", managedUserDTO.getLogin()))
+                    .body(new ManagedUserDTO(userRepository
+                        .findOne(userDTO.getId())));<% } %>
             })
             .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else {%>
-        User user = userRepository.findOneByLogin(userDTO.getLogin());
+        User user = userRepository.findOne(managedUserDTO.getId());
         if (user != null) {
-            user.setFirstName(userDTO.getFirstName());
-            user.setLastName(userDTO.getLastName());
-            user.setEmail(userDTO.getEmail());
-            user.setActivated(userDTO.isActivated());
-            user.setLangKey(userDTO.getLangKey());
+            user.setId(managedUserDTO.getId());
+            user.setFirstName(managedUserDTO.getFirstName());
+            user.setLastName(managedUserDTO.getLastName());
+            user.setEmail(managedUserDTO.getEmail());
+            user.setActivated(managedUserDTO.isActivated());
+            user.setLangKey(managedUserDTO.getLangKey());
             Set<Authority> authorities = user.getAuthorities();
             authorities.clear();
-            for (String authority : userDTO.getAuthorities()) {
+            for (String authority : managedUserDTO.getAuthorities()) {
                 authorities.add(authorityRepository.findOne(authority));
             }
             return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert("user", userDTO.getLogin()))
+                .headers(HeaderUtil.createEntityUpdateAlert("user", managedUserDTO.getLogin()))
                 .body(new ManagedUserDTO(userRepository
-                    .findOneByLogin(userDTO.getLogin())));
+                    .findOne(userDTO.getId())));
         } else {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }<% } %>
