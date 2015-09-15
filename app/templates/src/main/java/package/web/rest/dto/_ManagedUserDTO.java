@@ -6,7 +6,7 @@ import <%=packageName%>.domain.User;
 
 public class ManagedUserDTO extends UserDTO {
 
-    private Long id;
+    private <% if (databaseType == 'mongodb') { %>String<% } else { %>Long<% } %> id;
 
     private DateTime createdDate;
 
@@ -25,11 +25,11 @@ public class ManagedUserDTO extends UserDTO {
         this.lastModifiedDate = user.getLastModifiedDate();
     }
 
-    public Long getId() {
+    public <% if (databaseType == 'mongodb') { %>String<% } else { %>Long<% } %> getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(<% if (databaseType == 'mongodb') { %>String<% } else { %>Long<% } %> id) {
         this.id = id;
     }
 
