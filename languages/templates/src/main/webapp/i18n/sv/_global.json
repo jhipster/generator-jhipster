@@ -19,10 +19,11 @@
             },
             "admin": {
                 "main": "Administration",
+                "user-management": "Hantera användare",
                 "tracker": "Användarspårning",
                 "metrics": "Mätningar",
                 "health": "Status",
-                "configuration": "Configuration",
+                "configuration": "Konfigurering",
                 "logs": "Loggar",
                 "audits": "Granskningar",
                 "apidocs": "API",
