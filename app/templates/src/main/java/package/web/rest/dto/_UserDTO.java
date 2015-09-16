@@ -12,6 +12,9 @@ import java.util.Set;<% if (javaVersion == '8') { %>
 import java.util.stream.Collectors;<% } else { %>
 import java.util.HashSet;<% } %>
 
+/**
+ * A DTO representing a user, with his authorities.
+ */
 public class UserDTO {
 
     public static final int PASSWORD_MIN_LENGTH = 5;

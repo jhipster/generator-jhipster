@@ -4,6 +4,9 @@ import org.joda.time.DateTime;
 
 import <%=packageName%>.domain.User;
 
+/**
+ * A DTO extending the UserDTO, which is meant to be used in the user management UI.
+ */
 public class ManagedUserDTO extends UserDTO {
 
     private <% if (databaseType == 'mongodb') { %>String<% } else { %>Long<% } %> id;
