@@ -1,6 +1,7 @@
 ---
 path: .
 instances: 1
+buildpack: https://github.com/cloudfoundry/java-buildpack
 services:
 - <%= cloudfoundryDeployedName %>
 applications:
