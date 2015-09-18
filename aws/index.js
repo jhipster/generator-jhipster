@@ -1,7 +1,6 @@
 'use strict';
 var util = require('util'),
     path = require('path'),
-    fs = require('fs'),
     yeoman = require('yeoman-generator'),
     chalk = require('chalk'),
     _ = require('underscore.string'),
@@ -22,7 +21,23 @@ var AwsGenerator = module.exports = function AwsGenerator(args, options, config)
 util.inherits(AwsGenerator, yeoman.generators.Base);
 util.inherits(AwsGenerator, scriptBase);
 
+AwsGenerator.prototype.checkDatabase = function checkDatabase() {
+    var prodDatabaseType = this.config.get('prodDatabaseType');
+
+    switch (prodDatabaseType.toLowerCase()) {
+        case 'mysql':
+            this.dbEngine = 'mysql';
+            break;
+        case 'postgresql':
+            this.dbEngine = 'postgres';
+            break;
+        default:
+            this._errorHandling({message: 'Sorry deployment for this database is not possible'})
+    }
+};
+
 AwsGenerator.prototype.askFor = function askFor() {
+    if (this.abort) return;
     var done = this.async();
 
     var prompts = [
@@ -55,7 +70,7 @@ AwsGenerator.prototype.askFor = function askFor() {
             name: 'dbUsername',
             message: 'Database username:',
             validate: function (input) {
-                if (input === "") return "Please provide a username";
+                if (input === '') return 'Please provide a username';
                 else return true;
             }
         },
@@ -64,36 +79,36 @@ AwsGenerator.prototype.askFor = function askFor() {
             name: 'dbPassword',
             message: 'Database password:',
             validate: function (input) {
-                if (input === "") return "Please provide a password";
-                else if (input.length < 8) return "Password must contain minimum 8 chars";
+                if (input === '') return 'Please provide a password';
+                else if (input.length < 8) return 'Password must contain minimum 8 chars';
                 else return true;
             }
         },
         {
-            type: "list",
+            type: 'list',
             name: 'instanceType',
             message: 'On which EC2 instance type do you want to deploy?',
-            choices: ["t2.micro", "t2.small", "t2.medium", "m3.large", "m3.xlarge", "m3.2xlarge", "c3.large", "c3.xlarge",
-                "c3.2xlarge", "c3.4xlarge", "c3.8xlarge", "hs1.8xlarge", "i2.xlarge", "i2.2xlarge", "i2.4xlarge",
-                "i2.8xlarge", "r3.large", "r3.xlarge", "r3.2xlarge"],
+            choices: ['t2.micro', 't2.small', 't2.medium', 'm3.large', 'm3.xlarge', 'm3.2xlarge', 'c3.large', 'c3.xlarge',
+                'c3.2xlarge', 'c3.4xlarge', 'c3.8xlarge', 'hs1.8xlarge', 'i2.xlarge', 'i2.2xlarge', 'i2.4xlarge',
+                'i2.8xlarge', 'r3.large', 'r3.xlarge', 'r3.2xlarge'],
             default: 0
         },
         {
-            type: "list",
+            type: 'list',
             name: 'dbInstanceClass',
             message: 'On which RDS instance class do you want to deploy?',
-            choices: ["db.t1.micro", "db.m1.small", "db.m1.medium", "db.m1.large", "db.m1.xlarge", "db.m2.xlarge ",
-                "db.m2.2xlarge", "db.m2.4xlarge", "db.m3.medium", "db.m3.large", "db.m3.xlarge", "db.m3.2xlarge",
-                "db.r3.large", "db.r3.xlarge", "db.r3.2xlarge", "db.r3.4xlarge", "db.r3.8xlarge", "db.t2.micro",
-                "db.t2.small", "db.t2.medium"],
+            choices: ['db.t1.micro', 'db.m1.small', 'db.m1.medium', 'db.m1.large', 'db.m1.xlarge', 'db.m2.xlarge ',
+                'db.m2.2xlarge', 'db.m2.4xlarge', 'db.m3.medium', 'db.m3.large', 'db.m3.xlarge', 'db.m3.2xlarge',
+                'db.r3.large', 'db.r3.xlarge', 'db.r3.2xlarge', 'db.r3.4xlarge', 'db.r3.8xlarge', 'db.t2.micro',
+                'db.t2.small', 'db.t2.medium'],
             default: 17
         },
         {
-            type: "list",
+            type: 'list',
             name: 'awsRegion',
             message: 'On which region do you want to deploy?',
-            choices: ["ap-northeast-1", "ap-southeast-1", "ap-southeast-2", "eu-central-1", "eu-west-1", "sa-east-1",
-                "us-east-1", "us-west-1", "us-west-2"],
+            choices: ['ap-northeast-1', 'ap-southeast-1', 'ap-southeast-2', 'eu-central-1', 'eu-west-1', 'sa-east-1',
+                'us-east-1', 'us-west-1', 'us-west-2'],
             default: 3
         }];
 
@@ -108,11 +123,7 @@ AwsGenerator.prototype.askFor = function askFor() {
         this.dbPassword = props.dbPassword;
         this.dbInstanceClass = props.dbInstanceClass;
 
-        //TODO Grab database from jhipster config and validate compatibility
-        this.dbEngine = 'mysql';
-
         done();
-
     }.bind(this));
 };
 
@@ -214,6 +225,10 @@ AwsGenerator.prototype.createDatabaseUrl = function createDatabaseUrl() {
     var done = this.async();
     this.log();
     this.log(chalk.bold('Waiting for database (This may take several minutes)'));
+
+    if(this.dbEngine === 'postgres') {
+        this.dbEngine = 'postgresql';
+    }
 
     var rds = this.awsFactory.getRds();
 
