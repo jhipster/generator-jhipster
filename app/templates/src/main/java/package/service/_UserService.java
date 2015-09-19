@@ -216,7 +216,6 @@ public class UserService {
         user.getAuthorities().size();
         return user;
     }<% } %>
-
 <% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true)<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     public User getUserWithAuthorities(<% if (databaseType == 'mongodb') { %>String id<% } else { %>Long id<% } %>) {
