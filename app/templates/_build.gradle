@@ -169,7 +169,9 @@ dependencies {
     testCompile group: 'com.jayway.jsonpath', name: 'json-path'<% if (databaseType == 'cassandra') { %>
     testCompile(group: 'org.cassandraunit', name: 'cassandra-unit-spring', version: cassandra_unit_spring_version) {
         exclude(module: 'org.slf4j')
-    }<% } %>
+    }<% } %><% if (useCucumber) { %>
+    testCompile group: 'info.cukes', name: 'cucumber-junit', version: cucumber_version
+    testCompile group: 'info.cukes', name: 'cucumber-spring', version: cucumber_version<% } %>
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-jetty'
 	testCompile group: 'org.assertj', name: 'assertj-core', version: assertj_core_version
