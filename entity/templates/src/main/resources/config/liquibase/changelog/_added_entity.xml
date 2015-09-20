@@ -68,7 +68,7 @@
                                  referencedColumnNames="id"
                                  referencedTableName="<%
                                  var otherEntityTable = getTableName(relationships[relationshipId].otherEntityName);
-                                 if (otherEntityTable == 'USER') { %>JHI_USER<% } else { %><%=otherEntityTable %><% } %>"/>
+                                 if (otherEntityTable == 'USER') { %>jhi_user<% } else { %><%=otherEntityTable %><% } %>"/>
 <% } else if ((relationships[relationshipId].relationshipType == 'many-to-many') && (relationships[relationshipId].ownerSide == true)) {
     var relationshipName = relationships[relationshipId].relationshipName,
     otherEntityName = relationships[relationshipId].otherEntityName,
@@ -106,7 +106,7 @@
                                  referencedColumnNames="id"
                                  referencedTableName="<%
                                  var otherEntityTable = getTableName(otherEntityName);
-                                 if (otherEntityTable == 'USER') { %>JHI_USER<% } else { %><%=otherEntityTable %><% } %>"/>
+                                 if (otherEntityTable == 'USER') { %>jhi_user<% } else { %><%=otherEntityTable %><% } %>"/>
         <% } %><% } %>
     </changeSet>
 </databaseChangeLog>
