@@ -16,9 +16,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import com.mycompany.myapp.Application;
-import com.mycompany.myapp.repository.UserRepository;
-import com.mycompany.myapp.web.rest.UserResource;
+import <%=packageName%>.Application;
+import <%=packageName%>.repository.UserRepository;
+import <%=packageName%>.web.rest.UserResource;
 
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Then;
