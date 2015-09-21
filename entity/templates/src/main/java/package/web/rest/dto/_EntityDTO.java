@@ -24,6 +24,7 @@ public class <%= entityClass %>DTO implements Serializable {
     private UUID id;<% } %><% for (fieldId in fields) { %>
 <% if (fields[fieldId].fieldValidate == true) {
     var required = false;
+    var MAX_VALUE = 2147483647;
     if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) {
         required = true;
     }
@@ -36,7 +37,7 @@ public class <%= entityClass %>DTO implements Serializable {
     @Size(max = <%= fields[fieldId].fieldValidateRulesMaxbytes %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('minbytes') != -1 && fields[fieldId].fieldValidateRules.indexOf('maxbytes') != -1) { %>
     @Size(min = <%= fields[fieldId].fieldValidateRulesMinbytes %>, max = <%= fields[fieldId].fieldValidateRulesMaxbytes %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('min') != -1) { %>
     @Min(value = <%= fields[fieldId].fieldValidateRulesMin %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('max') != -1) { %>
-    @Max(value = <%= fields[fieldId].fieldValidateRulesMax %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('pattern') != -1) { %>
+    @Max(value = <%= fields[fieldId].fieldValidateRulesMax %><%= (fields[fieldId].fieldValidateRulesMax > MAX_VALUE) ? 'L' : '' %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('pattern') != -1) { %>
     @Pattern(regexp = "<%= fields[fieldId].fieldValidateRulesPatternJava %>")<% } } %><% if (fields[fieldId].fieldType == 'byte[]') { %>
     @Lob<% } %>
     private <%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>;<% } %><% for (relationshipId in relationships) {
