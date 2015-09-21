@@ -37,7 +37,7 @@
         <hazelcast.version>3.5.2</hazelcast.version>
         <%_ } _%>
         <%_ if (databaseType == 'sql') { _%>
-        <hibernate.version>4.3.10.Final</hibernate.version>
+        <hibernate.version>4.3.11.Final</hibernate.version>
         <%_ } _%>
         <%_ if (databaseType == 'cassandra') { _%>
         <datastax-driver.version>2.1.7.1</datastax-driver.version>
