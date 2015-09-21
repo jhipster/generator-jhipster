@@ -21,7 +21,7 @@
     </prerequisites>
 
     <properties>
-        <hikaricp.version>2.4.0</hikaricp.version>
+        <hikaricp.version>2.4.1</hikaricp.version>
         <%_ if (javaVersion == '8') { _%>
         <assertj-core.version>3.1.0</assertj-core.version>
         <%_ } _%>
