@@ -5,7 +5,7 @@
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
-        <version>1.2.5.RELEASE</version>
+        <version>1.2.6.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -21,7 +21,7 @@
     </prerequisites>
 
     <properties>
-        <hikaricp.version>2.4.0</hikaricp.version>
+        <hikaricp.version>2.4.1</hikaricp.version>
         <%_ if (javaVersion == '8') { _%>
         <assertj-core.version>3.1.0</assertj-core.version>
         <%_ } _%>
@@ -37,7 +37,7 @@
         <hazelcast.version>3.5.2</hazelcast.version>
         <%_ } _%>
         <%_ if (databaseType == 'sql') { _%>
-        <hibernate.version>4.3.10.Final</hibernate.version>
+        <hibernate.version>4.3.11.Final</hibernate.version>
         <%_ } _%>
         <%_ if (databaseType == 'cassandra') { _%>
         <datastax-driver.version>2.1.7.1</datastax-driver.version>
@@ -64,7 +64,7 @@
         <metrics-spark-reporter.version>1.2</metrics-spark-reporter.version>
         <metrics-spring.version>3.1.2</metrics-spring.version>
         <%_ if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { _%>
-        <postgresql.version>9.4-1201-jdbc41</postgresql.version>
+        <postgresql.version>9.4-1203-jdbc42</postgresql.version>
         <%_ } _%>
         <run.addResources>false</run.addResources>
         <spring-security.version>4.0.2.RELEASE</spring-security.version>
