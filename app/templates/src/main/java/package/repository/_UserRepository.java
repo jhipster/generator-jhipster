@@ -151,6 +151,10 @@ public class UserRepository {
                 "WHERE email = :email");
     }
 
+    public Optional<User> findOne(String id) {
+        return Optional.of(mapper.get(id));
+    }
+
     public Optional<User> findOneByActivationKey(String activationKey) {
         BoundStatement stmt = findOneByActivationKeyStmt.bind();
         stmt.setString("activation_key", activationKey);

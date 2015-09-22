@@ -7,8 +7,8 @@ import <%=packageName%>.repository.AuthorityRepository;<% } %>
 import <%=packageName%>.repository.UserRepository;<% if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
 import <%=packageName%>.security.AuthoritiesConstants;
-import <%=packageName%>.service.UserService;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import <%=packageName%>.web.rest.dto.ManagedUserDTO;<% } %>
+import <%=packageName%>.service.UserService;
+import <%=packageName%>.web.rest.dto.ManagedUserDTO;
 import <%=packageName%>.web.rest.dto.UserDTO;
 import <%=packageName%>.web.rest.util.HeaderUtil;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import <%=packageName%>.web.rest.util.PaginationUtil;<% } %>
@@ -103,10 +103,12 @@ public class UserResource {
     @Timed<% if (databaseType == 'sql') { %>
     @Transactional<% } %>
     @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity<<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>ManagedUserDTO<% } else { %>UserDTO<% } %>> updateUser(@RequestBody ManagedUserDTO managedUserDTO) throws URISyntaxException {
-        log.debug("REST request to update User : {}", managedUserDTO);<% if (javaVersion == '8') { %>
+    public ResponseEntity<ManagedUserDTO> updateUser(@RequestBody ManagedUserDTO managedUserDTO) throws URISyntaxException {
+        log.debug("REST request to update User : {}", managedUserDTO);<% if (javaVersion == '8') { %><% if (databaseType == 'cassandra') { %>
+        return userRepository
+            .findOne(managedUserDTO.getId())<% } else { %>
         return Optional.of(userRepository
-            .findOne(managedUserDTO.getId()))
+            .findOne(managedUserDTO.getId()))<% } %>
             .map(user -> {
                 user.setLogin(managedUserDTO.getLogin());
                 user.setFirstName(managedUserDTO.getFirstName());
@@ -129,7 +131,7 @@ public class UserResource {
                 return ResponseEntity.ok()
                     .headers(HeaderUtil.createEntityUpdateAlert("user", managedUserDTO.getLogin()))
                     .body(new ManagedUserDTO(userRepository
-                        .findOne(managedUserDTO.getId())));<% } %>
+                        .findOne(managedUserDTO.getId())<% if (databaseType == 'cassandra') { %>.get()<% } %>));<% } %>
             })
             .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));<% } else {%>
         User user = userRepository.findOne(managedUserDTO.getId());
@@ -176,13 +178,13 @@ public class UserResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
         return new ResponseEntity<>(managedUserDTOs, headers, HttpStatus.OK);
     }<% } else { %>
-    public ResponseEntity<List<UserDTO>> getAllUsers()
+    public ResponseEntity<List<ManagedUserDTO>> getAllUsers()
         throws URISyntaxException {
         List<User> users = userRepository.findAll();
-        List<UserDTO> userDTOs = users.stream()
-            .map(user -> new UserDTO(user))
+        List<ManagedUserDTO> managedUserDTOs = users.stream()
+            .map(user -> new ManagedUserDTO(user))
             .collect(Collectors.toList());
-        return new ResponseEntity<>(userDTOs, HttpStatus.OK);
+        return new ResponseEntity<>(managedUserDTOs, HttpStatus.OK);
     }<% } %>
 
     /**
@@ -192,11 +194,11 @@ public class UserResource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed<% if (javaVersion == '8') { %>
-    public ResponseEntity<<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>ManagedUserDTO<% } else { %>UserDTO<% } %>> getUser(@PathVariable String login) {
+    public ResponseEntity<ManagedUserDTO> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
         return userService.getUserWithAuthoritiesByLogin(login)
-                .map(user -> new <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>ManagedUserDTO<% } else { %>UserDTO<% } %>(user))
-                .map(userDTO -> new ResponseEntity<>(userDTO, HttpStatus.OK))
+                .map(user -> new ManagedUserDTO(user))
+                .map(managedUserDTO -> new ResponseEntity<>(managedUserDTO, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }<% } else { %>
     public ResponseEntity<ManagedUserDTO> getUser(@PathVariable String login) {

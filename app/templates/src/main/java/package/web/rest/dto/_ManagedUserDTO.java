@@ -1,6 +1,6 @@
 package <%=packageName%>.web.rest.dto;
-
-import org.joda.time.DateTime;
+<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
+import org.joda.time.DateTime;<% } %>
 
 import <%=packageName%>.domain.User;
 
@@ -9,32 +9,32 @@ import <%=packageName%>.domain.User;
  */
 public class ManagedUserDTO extends UserDTO {
 
-    private <% if (databaseType == 'mongodb') { %>String<% } else { %>Long<% } %> id;
+    private <% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id;<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
 
     private DateTime createdDate;
 
     private String lastModifiedBy;
 
-    private DateTime lastModifiedDate;
+    private DateTime lastModifiedDate;<% } %>
 
     public ManagedUserDTO() {
     }
 
     public ManagedUserDTO(User user) {
         super(user);
-        this.id = user.getId();
+        this.id = user.getId();<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
         this.createdDate = user.getCreatedDate();
         this.lastModifiedBy = user.getLastModifiedBy();
-        this.lastModifiedDate = user.getLastModifiedDate();
+        this.lastModifiedDate = user.getLastModifiedDate();<% } %>
     }
 
-    public <% if (databaseType == 'mongodb') { %>String<% } else { %>Long<% } %> getId() {
+    public <% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> getId() {
         return id;
     }
 
-    public void setId(<% if (databaseType == 'mongodb') { %>String<% } else { %>Long<% } %> id) {
+    public void setId(<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id) {
         this.id = id;
-    }
+    }<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
 
     public DateTime getCreatedDate() {
         return createdDate;
@@ -58,15 +58,15 @@ public class ManagedUserDTO extends UserDTO {
 
     public void setLastModifiedDate(DateTime lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
-    }
+    }<% } %>
 
     @Override
     public String toString() {
         return "ManagedUserDTO{" +
-            "id=" + id +
+            "id=" + id +<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
             ", createdDate=" + createdDate +
             ", lastModifiedBy='" + lastModifiedBy + '\'' +
-            ", lastModifiedDate=" + lastModifiedDate +
+            ", lastModifiedDate=" + lastModifiedDate +<% } %>
             "} " + super.toString();
     }
 }
