@@ -19,6 +19,7 @@
             },
             "admin": {
                 "main": "管理",
+                "user-management": "User management",
                 "tracker": "ユーザートラッカー",
                 "metrics": "メトリクス",
                 "health": "ヘルスステータス",

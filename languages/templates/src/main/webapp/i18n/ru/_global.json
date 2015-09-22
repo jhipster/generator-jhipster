@@ -19,6 +19,7 @@
             },
             "admin": {
                 "main": "Администрирование",
+                "user-management": "User management",
                 "tracker": "Трекер польз.",
                 "metrics": "Метрики",
                 "health": "Состояние",
