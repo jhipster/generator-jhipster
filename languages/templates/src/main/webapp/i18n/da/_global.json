@@ -19,6 +19,7 @@
             },
             "admin": {
                 "main": "Administration",
+                "user-management": "User management",
                 "tracker": "Brugersporing",
                 "metrics": "Målinger",
                 "health": "Sundheds",

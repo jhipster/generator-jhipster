@@ -19,6 +19,7 @@
             },
             "admin": {
                 "main": "Administrator",
+                "user-management": "User management",
                 "tracker": "User tracker",
                 "metrics": "Statistieken",
                 "health": "Status",
@@ -67,7 +68,7 @@
                     "maxlength": "Uw e-mail kan niet langer zijn dan 50 tekens."
                 }
             }
-        }, 
+        },
         "field": {
             "id" : "ID"
         }
