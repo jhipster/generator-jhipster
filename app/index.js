@@ -504,6 +504,14 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy('gitignore', '.gitignore');
     this.copy('gitattributes', '.gitattributes');
 
+    // Create docker-compose file
+    if (this.devDatabaseType != "h2Memory" && this.devDatabaseType != "oracle") {
+        this.template('_docker-compose.yml', 'docker-compose.yml', this, {});
+    }
+    if (this.devDatabaseType == "cassandra") {
+        this.template('_Dockerfile_cassandra', 'Dockerfile', this, {});
+    }
+
     switch (this.frontendBuilder) {
         case 'gulp':
             this.template('gulpfile.js', 'gulpfile.js', this, {});
