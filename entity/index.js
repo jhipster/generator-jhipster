@@ -1155,6 +1155,9 @@ EntityGenerator.prototype.files = function files() {
     this.entityTableName = _s.underscored(this.name).toUpperCase();
 
     this.differentTypes = [this.entityClass];
+    if (this.relationships == undefined) {
+        this.relationships = [];
+    }
     var relationshipId;
     for (relationshipId in this.relationships) {
         var entityType = this.relationships[relationshipId].otherEntityNameCapitalized;
