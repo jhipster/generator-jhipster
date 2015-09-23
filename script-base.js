@@ -206,21 +206,15 @@ Generator.prototype.copyHtml = function (source, dest, data, _opt, template) {
 
 
 Generator.prototype.copyJs = function (source, dest, data, _opt, template) {
-  console.log("CopyJs " + source + " " + dest);
     _opt = _opt !== undefined ? _opt : {};
     data = data !== undefined ? data : this;
     if (this.enableTranslation) {
         // uses template method instead of copy if template boolean is set as true
         template ? this.template(source, dest, data, _opt) : this.copy(source, dest);
     } else {
-
-
         var regex = '[a-zA-Z]+\:(\s)?\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\>\;\s]*\}\]';
         //looks for something like mainTranslatePartialLoader: [*]
         var body = this.stripContent(source, regex, data, _opt);
-          console.log(body);
-
-
         body = this.replaceTitle(body, data, template);
         this.write(dest, body);
     }
