@@ -45,9 +45,11 @@
                         <li ui-sref-active="active" ng-switch-when="true"><a ui-sref="settings" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-wrench"></span>
                             &#xA0;<span translate="global.menu.account.settings">Settings</span></a></li>
                         <li ui-sref-active="active" ng-switch-when="true"><a ui-sref="password" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-lock"></span>
-                            &#xA0;<span translate="global.menu.account.password">Password</span></a></li><% if (authenticationType == 'session') { %>
+                            &#xA0;<span translate="global.menu.account.password">Password</span></a></li>
+                        <%_ if (authenticationType == 'session') { _%>
                         <li ui-sref-active="active" ng-switch-when="true"><a ui-sref="sessions" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-cloud"></span>
-                            &#xA0;<span translate="global.menu.account.sessions">Sessions</span></a></li><% } %>
+                            &#xA0;<span translate="global.menu.account.sessions">Sessions</span></a></li>
+                        <%_ } _%>
                         <li ui-sref-active="active" ng-switch-when="true"><a href="" ng-click="logout()" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-log-out"></span>
                             &#xA0;<span translate="global.menu.account.logout">Log out</span></a></li>
                         <li ui-sref-active="active" ng-switch-when="false"><a ui-sref="login" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-log-in"></span>
@@ -66,9 +68,11 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li ui-sref-active="active"><a ui-sref="user-management" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-user"></span>
-                            &#xA0;<span translate="global.menu.admin.user-management">User management</span></a></li><% if (websocket == 'spring-websocket') { %>
+                            &#xA0;<span translate="global.menu.admin.user-management">User management</span></a></li>
+                        <%_ if (websocket == 'spring-websocket') { _%>
                         <li ui-sref-active="active"><a ui-sref="tracker" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-eye-open"></span>
-                                &nbsp;<span translate="global.menu.admin.tracker">User tracker</span></a></li><% } %>
+                                &nbsp;<span translate="global.menu.admin.tracker">User tracker</span></a></li>
+                        <%_ } _%>
                         <li ui-sref-active="active"><a ui-sref="metrics" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-dashboard"></span>
                             &#xA0;<span translate="global.menu.admin.metrics">Metrics</span></a></li>
                         <li ui-sref-active="active"><a ui-sref="health" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-heart"></span>
@@ -80,11 +84,14 @@
                         <li ui-sref-active="active"><a ui-sref="logs" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-tasks"></span>
                             &#xA0;<span translate="global.menu.admin.logs">Logs</span></a></li>
                         <li ng-hide="inProduction" ui-sref-active="active"><a ui-sref="docs" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-book"></span>
-                            &#xA0;<span translate="global.menu.admin.apidocs">API</span></a></li><% if (devDatabaseType == 'h2Memory') { %>
+                            &#xA0;<span translate="global.menu.admin.apidocs">API</span></a></li>
+                        <%_ if (devDatabaseType == 'h2Memory') { _%>
                         <li ng-hide="inProduction"><a href='/console' target="_tab" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-hdd"></span>
-                            &#xA0;<span translate="global.menu.admin.database">Database</span></a></li><% } %>
+                            &#xA0;<span translate="global.menu.admin.database">Database</span></a></li>
+                        <%_ } _%>
                     </ul>
-                </li><% if (enableTranslation){ %>
+                </li>
+                <%_ if (enableTranslation){ _%>
                 <li ui-sref-active="active" class="dropdown pointer" ng-controller="LanguageController">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="">
                         <span>
@@ -98,7 +105,8 @@
                             <a href="" ng-click="changeLanguage(language)" data-toggle="collapse" data-target=".navbar-collapse.in">{{language | findLanguageFromKey}}</a>
                         </li>
                     </ul>
-                </li><% } %>
+                </li>
+                <%_ } _%>
             </ul>
         </div>
     </div>
