@@ -32,32 +32,22 @@ public class HerokuDatabaseConfiguration implements EnvironmentAware {
     public DataSource dataSource(<% if (hibernateCache == 'hazelcast') { %>CacheManager cacheManager<% } %>) {
         log.debug("Configuring Heroku Datasource");
 
-        String herokuUrl = propertyResolver.getProperty("heroku-url");
+        String herokuUrl = System.getenv("JDBC_DATABASE_URL");
         if (herokuUrl != null) {
-            log.info("Using Heroku, parsing their $DATABASE_URL to use it with JDBC");
-            URI dbUri = null;
-            try {
-                dbUri = new URI(herokuUrl);
-            } catch (URISyntaxException e) {
-                throw new ApplicationContextException("Heroku database connection pool is not configured correctly");
-            }
-            String username = dbUri.getUserInfo().split(":")[0];
-            String password = dbUri.getUserInfo().split(":")[1];
-            String dbUrl = "jdbc:postgresql://" +
-                    dbUri.getHost() +
-                    ':' +
-                    dbUri.getPort() +
-                    dbUri.getPath() +
-                    "?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory";
+	    HikariConfig config = new HikariConfig();
 
-            HikariConfig config = new HikariConfig();
+	    //MySQL optimizations, see https://github.com/brettwooldridge/HikariCP/wiki/MySQL-Configuration
+	    if ("com.mysql.jdbc.jdbc2.optional.MysqlDataSource".equals(propertyResolver.getProperty("dataSourceClassName"))) {
+                config.addDataSourceProperty("cachePrepStmts", propertyResolver.getProperty("cachePrepStmts", "true"));
+                config.addDataSourceProperty("prepStmtCacheSize", propertyResolver.getProperty("prepStmtCacheSize", "250"));
+                config.addDataSourceProperty("prepStmtCacheSqlLimit", propertyResolver.getProperty("prepStmtCacheSqlLimit", "2048"));
+            }
+
             config.setDataSourceClassName(propertyResolver.getProperty("dataSourceClassName"));
-            config.addDataSourceProperty("url", dbUrl);
-            config.addDataSourceProperty("user", username);
-            config.addDataSourceProperty("password", password);
+            config.addDataSourceProperty("url", herokuUrl);
             return new HikariDataSource(config);
         } else {
-            throw new ApplicationContextException("Heroku database URL is not configured, you must set --spring.datasource.heroku-url=$DATABASE_URL");
+            throw new ApplicationContextException("Heroku database URL is not configured, you must set $JDBC_DATABASE_URL");
         }
     }
 }
