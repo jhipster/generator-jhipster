@@ -73,7 +73,7 @@ Generator.prototype.addRouterToMenu = function (entityName,enableTranslation) {
             file: fullPath,
             needle: '<!-- JHipster will add entities to the menu here -->',
             splicable: [
-                    '<li ui-sref-active="active" ><a ui-sref="' + entityName + '"><span class="glyphicon glyphicon-asterisk"></span>\n' +
+                    '<li ui-sref-active="active" ><a ui-sref="' + entityName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-asterisk"></span>\n' +
                     '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.entities.' + entityName + '"':'' ) + '>' + entityName + '</span></a></li>'
             ]
         });
