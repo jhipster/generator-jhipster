@@ -14,14 +14,14 @@ angular.module('<%=angularAppName%>')
             },
             hasAuthority: function (authority) {
                 if (!_authenticated) {
-                   return false;
-               }
+                    return $q.when(false);
+                }
 
-               return this.identity().then(function(_id) {
-                   return _id.authorities && _id.authorities.indexOf(authority) !== -1;
-               }, function(err){
-                   return false;
-               });
+                return this.identity().then(function(_id) {
+                    return _id.authorities && _id.authorities.indexOf(authority) !== -1;
+                }, function(err){
+                    return false;
+                });
             },
             hasAnyAuthority: function (authorities) {
                 if (!_authenticated || !_identity || !_identity.authorities) {
