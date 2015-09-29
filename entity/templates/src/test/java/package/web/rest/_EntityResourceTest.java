@@ -115,9 +115,6 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
     private static final BigDecimal <%=updatedValueName %> = new BigDecimal(<%= updatedValue %>);<% } else if (fieldType == 'UUID') { %>
 
     private static final UUID <%=defaultValueName %> = UUID.randomUUID();
-    private static final UUID <%=updatedValueName %> = UUID.randomUUID();<% } else if (fieldType == 'TimeUUID') { %>
-
-    private static final UUID <%=defaultValueName %> = UUID.randomUUID();
     private static final UUID <%=updatedValueName %> = UUID.randomUUID();<% } else if (fieldType == 'Date') { %>
 
     private static final Date <%=defaultValueName %> = new Date();

@@ -289,10 +289,6 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     name: 'UUID'
                 },
                 {
-                    value: 'TimeUUID',
-                    name: 'TimeUUID'
-                },
-                {
                     value: 'String',
                     name: 'String'
                 },
@@ -421,7 +417,6 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     response.fieldType == 'DateTime' ||
                     response.fieldType == 'Date' ||
                     response.fieldType == 'UUID' ||
-                    response.fieldType == 'TimeUUID' ||
                     response.fieldIsEnum == true);
             },
             type: 'checkbox',
