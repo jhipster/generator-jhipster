@@ -2,7 +2,7 @@
     "activate": {
         "title": "Activation",
         "messages": {
-            "success": "<strong>Your user has been activated.</strong> Please <a class=\"alert-link\" href=\"#/login\">authenticate</a>.",
+            "success": "<strong>Your user has been activated.</strong> Please <a class=\"alert-link\" href=\"#/login\">sign in</a>.",
             "error": "<strong>Your user could not be activated.</strong> Please use the registration form to sign up."
         }
     }

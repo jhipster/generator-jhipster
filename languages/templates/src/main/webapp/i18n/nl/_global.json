@@ -32,8 +32,8 @@
             "language": "Taal"
         },
         "form": {
-            "username": "Login",
-            "username.placeholder": "Uw login",
+            "username": "Username",
+            "username.placeholder": "Uw username",
             "newpassword": "Nieuw wachtwoord",
             "newpassword.placeholder": "Nieuw wachtwoord",
             "confirmpassword": "Nieuw wachtwoord bevestigen",
