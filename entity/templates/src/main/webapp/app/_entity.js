@@ -66,7 +66,15 @@ angular.module('<%=angularAppName%>')
                         size: 'lg',
                         resolve: {
                             entity: function () {
-                                return {<% for (fieldId in fields) { %><%= fields[fieldId].fieldName %>: null, <% } %>id: null};
+                                return {
+                                    <%_ for (fieldId in fields) { _%>
+                                    <%= fields[fieldId].fieldName %>: null,
+                                        <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
+                                    <%= fields[fieldId].fieldName %>ContentType: null,
+                                        <%_ } _%>
+                                    <%_ } _%>
+                                    id: null
+                                };
                             }
                         }
                     }).result.then(function(result) {
