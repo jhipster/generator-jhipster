@@ -144,6 +144,8 @@ HerokuGenerator.prototype.herokuCreate = function herokuCreate() {
                   this.abort = true;
                   this.log.error(err);
                 } else {
+                  // Extract from "Created random-app-name-1234... done"
+                  this.herokuDeployedName = stdout.substring(9, stdout.indexOf('...'));
                   this.log(stdout);
                 }
                 done();
