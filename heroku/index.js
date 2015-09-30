@@ -106,17 +106,12 @@ HerokuGenerator.prototype.herokuCreate = function herokuCreate() {
     if(this.abort) return;
     var done = this.async();
 
-    if (this.prodDatabaseType != 'postgresql') {
-      this.log.error('Only PostgreSQL is Supported for Heroku generator');
-      this.abort = true;
-      done();
-      return;
-    }
-
     var regionParams = (this.herokuRegion !== 'us') ? ' --region ' + this.herokuRegion : '';
 
+    var dbAddOn = (this.prodDatabaseType != 'postgresql') ? ' --addons cleardb' : ' --addons heroku-postgresql';
+
     this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
-    var herokuCreateCmd = 'heroku create ' + this.herokuDeployedName + regionParams + ' --addons heroku-postgresql:hobby-dev';
+    var herokuCreateCmd = 'heroku create ' + this.herokuDeployedName + regionParams + dbAddOn;
 
     console.log(herokuCreateCmd);
     var child = exec(herokuCreateCmd, {}, function (err, stdout, stderr) {
@@ -149,6 +144,8 @@ HerokuGenerator.prototype.herokuCreate = function herokuCreate() {
                   this.abort = true;
                   this.log.error(err);
                 } else {
+                  // Extract from "Created random-app-name-1234... done"
+                  this.herokuDeployedName = stdout.substring(9, stdout.indexOf('...'));
                   this.log(stdout);
                 }
                 done();
