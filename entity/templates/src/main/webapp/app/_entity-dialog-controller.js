@@ -95,8 +95,7 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>DialogContro
                 var fileReader = new FileReader();
                 fileReader.readAsDataURL($file);
                 fileReader.onload = function (e) {
-                    var data = e.target.result;
-                    var base64Data = data.substr(data.indexOf('base64,') + 'base64,'.length);
+                    var base64Data = e.target.result.substr(e.target.result.indexOf('base64,') + 'base64,'.length);
                     $scope.$apply(function() {
                         <%= entityInstance %>.<%= fields[fieldId].fieldName %> = base64Data;
                     });
