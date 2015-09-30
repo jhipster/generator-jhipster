@@ -1,37 +1,37 @@
-<% if (devDatabaseType == 'mysql') { %>jhipster-mysql:
-  container_name: jhipster-<%=baseName%>-mysql
+<% if (devDatabaseType == 'mysql') { %>jhipster-dev-mysql:
+  container_name: <%=baseName%>-dev-mysql
   image : mysql
   # volumes:
-  # - ~/volumes/jhipster/<%=baseName%>/mysql/:/var/lib/mysql/
+  # - ~/volumes/jhipster/<%=baseName%>/dev-mysql/:/var/lib/mysql/
   environment:
   - MYSQL_USER=root
   - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-  - MYSQL_DATABASE=<%=baseName%>
+  - MYSQL_DATABASE=<%=baseName.toLowerCase()%>
   ports:
   - "3306:3306"
   command: mysqld --lower_case_table_name=1
-<% } if (devDatabaseType == 'postgresql') { %>jhipster-postgresql:
-  container_name: jhipster-<%=baseName%>-postgresql
+<% } if (devDatabaseType == 'postgresql') { %>jhipster-dev-postgresql:
+  container_name: <%=baseName%>-dev-postgresql
   image : postgres
   # volumes:
-  # - ~/volumes/jhipster/<%=baseName%>/postgresql/:/var/lib/postgresql/
+  # - ~/volumes/jhipster/<%=baseName%>/dev-postgresql/:/var/lib/postgresql/
   environment:
   - POSTGRES_USER=<%=baseName%>
   - POSTGRES_PASSWORD=
   ports:
   - "5432:5432"
-<% } if (devDatabaseType == 'mongodb') { %>jhipster-mongodb:
-  container_name: jhipster-<%=baseName%>-mongodb
+<% } if (devDatabaseType == 'mongodb') { %>jhipster-dev-mongodb:
+  container_name: <%=baseName%>-dev-mongodb
   image: mongo
   # volumes:
-  # - ~/volumes/jhipster/<%=baseName%>/mongodb/:/data/db/
+  # - ~/volumes/jhipster/<%=baseName%>/dev-mongodb/:/data/db/
   ports:
   - "27017:27017"
-<% } if (devDatabaseType == 'cassandra') { %>jhipster-cassandra:
-  container_name: jhipster-<%=baseName%>-cassandra
+<% } if (devDatabaseType == 'cassandra') { %>jhipster-dev-cassandra:
+  container_name: <%=baseName%>-dev-cassandra
   build: .
   # volumes:
-  # - ~/volumes/jhipster/<%=baseName%>/cassandra/:/var/lib/cassandra/data
+  # - ~/volumes/jhipster/<%=baseName%>/dev-cassandra/:/var/lib/cassandra/data
   ports:
   - "7000:7000"
   - "7001:7001"
