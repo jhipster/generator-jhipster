@@ -16,16 +16,10 @@ var JhipsterGenerator = module.exports = function JhipsterGenerator(args, option
 
     yeoman.generators.Base.apply(this, arguments);
 
-    this.installDependencies({
-        skipInstall: options['skip-install'],
-        callback: this._injectDependenciesAndConstants.bind(this)
-    });
-
     this.on('end', function () {
         if (this.prodDatabaseType === 'oracle') {
             console.log(chalk.yellow.bold('\n\nYou have selected Oracle database.\n') + 'Please place the ' + chalk.yellow.bold('ojdbc-' + this.ojdbcVersion + '.jar') + ' in the `' + chalk.yellow.bold(this.libFolder) + '` folder under the project root. \n');
         }
-
     });
 
     this.pkg = JSON.parse(html.readFileAsString(path.join(__dirname, '../package.json')));
@@ -1178,7 +1172,15 @@ function removefolder(folder) {
     }
 }
 
+JhipsterGenerator.prototype.install = function install() {
+  this.installDependencies({
+      skipInstall: this.options['skip-install'],
+      callback: this._injectDependenciesAndConstants.bind(this)
+  });
+};
+
 JhipsterGenerator.prototype._injectDependenciesAndConstants = function _injectDependenciesAndConstants() {
+    this.log("_injectDependenciesAndConstants");
     if (this.options['skip-install']) {
         this.log(
             'After running `npm install & bower install`, inject your front end dependencies' +
