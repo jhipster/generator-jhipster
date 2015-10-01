@@ -35,7 +35,7 @@ public class AsyncConfiguration implements AsyncConfigurer, EnvironmentAware {
     }
 
     @Override
-    @Bean
+    @Bean(name = "taskExecutor")
     public Executor getAsyncExecutor() {
         log.debug("Creating Async Task Executor");
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
