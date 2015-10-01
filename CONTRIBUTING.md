@@ -223,7 +223,7 @@ For example, here is a good commit message:
 ```
 upgrade to Spring Boot 1.1.7
 
-upgraded the Maven and Gradle builds to use the new Spring Boot 1.1.7,
+upgrade the Maven and Gradle builds to use the new Spring Boot 1.1.7,
 see http://spring.io/blog/2014/09/26/spring-boot-1-1-7-released
 
 Fix #1234
