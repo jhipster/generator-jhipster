@@ -1177,7 +1177,6 @@ JhipsterGenerator.prototype.install = function install() {
 };
 
 JhipsterGenerator.prototype._injectDependenciesAndConstants = function _injectDependenciesAndConstants() {
-    this.log("_injectDependenciesAndConstants");
     if (this.options['skip-install']) {
         this.log(
             'After running `npm install & bower install`, inject your front end dependencies' +
