@@ -28,7 +28,6 @@ var JhipsterGenerator = module.exports = function JhipsterGenerator(args, option
 
     });
 
-
     this.pkg = JSON.parse(html.readFileAsString(path.join(__dirname, '../package.json')));
 };
 
@@ -674,6 +673,11 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.hibernateCache == "hazelcast") {
         this.template('src/main/java/package/config/hazelcast/_HazelcastCacheRegionFactory.java', javaDir + 'config/hazelcast/HazelcastCacheRegionFactory.java', this, {});
         this.template('src/main/java/package/config/hazelcast/_package-info.java', javaDir + 'config/hazelcast/package-info.java', this, {});
+    }
+
+    if (this.databaseType == "sql") {
+        this.template('src/main/java/package/config/liquibase/_AsyncSpringLiquibase.java', javaDir + 'config/liquibase/AsyncSpringLiquibase.java', this, {});
+        this.template('src/main/java/package/config/liquibase/_package-info.java', javaDir + 'config/liquibase/package-info.java', this, {});
     }
 
     this.template('src/main/java/package/domain/_package-info.java', javaDir + 'domain/package-info.java', this, {});
