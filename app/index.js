@@ -31,18 +31,15 @@ util.inherits(JhipsterGenerator, scriptBase);
 JhipsterGenerator.prototype.askFor = function askFor() {
     var cb = this.async();
 
-    console.log(chalk.red('\n' +
-        ' _     _   ___   __  _____  ____  ___       __  _____   __    __    _    \n' +
-        '| |_| | | | |_) ( (`  | |  | |_  | |_)     ( (`  | |   / /\\  / /`  | |_/ \n' +
-        '|_| | |_| |_|   _)_)  |_|  |_|__ |_| \\     _)_)  |_|  /_/--\\ \\_\\_, |_| \\ \n' +
-        '                             ____  ___   ___                             \n' +
-        '                            | |_  / / \\ | |_)                            \n' +
-        '                            |_|   \\_\\_/ |_| \\                            \n' +
-        '              _    __    _       __        ___   ____  _      __        \n' +
-        '             | |  / /\\  \\ \\  /  / /\\      | | \\ | |_  \\ \\  / ( (`       \n' +
-        '           \\_|_| /_/--\\  \\_\\/  /_/--\\     |_|_/ |_|__  \\_\\/  _)_)       \n'));
-
-    console.log('\nWelcome to the JHipster Generator v' + packagejs.version + '\n');
+    console.log(chalk.white(
+        '       __   __    __   __  .______     _______.___________. _______ .______\n' +
+        '      |  | |  |  |  | |  | |   _  \\   /       |           ||   ____||   _  \\\n' +
+        '      |  | |  |__|  | |  | |  |_)  | |   (----`---|  |----`|  |__   |  |_)  |\n' +
+        '.--.  |  | |   __   | |  | |   ___/   \\   \\       |  |     |   __|  |      /\n' +
+        '|  `--\'  | |  |  |  | |  | |  |   .----)   |      |  |     |  |____ |  |\\  \\----.\n' +
+        ' \\______/  |__|  |__| |__| | _|   |_______/       |__|     |_______|| _| `._____|\n'));
+    console.log(chalk.white.bold('                            http://jhipster.github.io\n'));
+    console.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version + '\n'));
     var insight = this.insight();
     var questions = 15; // making questions a variable to avoid updating each question by hand when adding additional options
 
