@@ -95,9 +95,24 @@ public class <%= entityClass %>ResourceTest <% if (databaseType == 'cassandra') 
         }
     }
 
-    if (fieldType == 'String') { %>
-    private static final String <%=defaultValueName %> = "SAMPLE_TEXT";
-    private static final String <%=updatedValueName %> = "UPDATED_TEXT";<% } else if (fieldType == 'Integer') { %>
+    if (fieldType == 'String') {
+        // Generate Strings, using the min and max string length if they are configured
+        var sampleTextString = "";
+        var updatedTextString = "";
+        var sampleTextMinLength = fields[fieldId].fieldValidateRulesMinlength;
+        if (sampleTextMinLength == undefined) {
+            sampleTextMinLength == fields[fieldId].fieldValidateRulesMaxlength;
+            if (sampleTextMinLength == undefined) {
+                sampleTextMinLength = 5;
+            }
+        }
+        for( var i = 0; i < sampleTextMinLength; i++ ) {
+            sampleTextString += "A";
+            updatedTextString += "B";
+        }
+        %>
+    private static final String <%=defaultValueName %> = "<%=sampleTextString %>";
+    private static final String <%=updatedValueName %> = "<%=updatedTextString %>";<% } else if (fieldType == 'Integer') { %>
 
     private static final Integer <%=defaultValueName %> = <%= defaultValue %>;
     private static final Integer <%=updatedValueName %> = <%= updatedValue %>;<% } else if (fieldType == 'Long') { %>
