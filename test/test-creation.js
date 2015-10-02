@@ -221,8 +221,6 @@ describe('JHipster generator ', function () {
             'src/main/webapp/scripts/app/account/login/login.html',
             'src/main/webapp/scripts/app/account/login/login.js',
             'src/main/webapp/scripts/app/account/login/login.controller.js',
-            'src/main/webapp/scripts/app/account/logout/logout.js',
-            'src/main/webapp/scripts/app/account/logout/logout.controller.js',
             'src/main/webapp/scripts/app/account/password/password.html',
             'src/main/webapp/scripts/app/account/password/password.js',
             'src/main/webapp/scripts/app/account/password/password.controller.js',
