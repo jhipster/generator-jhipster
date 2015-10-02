@@ -1120,6 +1120,8 @@ JhipsterGenerator.prototype.app = function app() {
     // Remove old files, from previous JHipster versions
     removefile(testJsDir + 'spec/app/account/health/healthControllerSpec.js');
     removefile(testJsDir + 'spec/app/account/login/loginControllerSpec.js');
+    removefile(testJsDir + 'spec/app/account/logout/logout.js');
+    removefile(testJsDir + 'spec/app/account/logout/logout.controller.js');
     removefile(testJsDir + 'spec/app/account/password/passwordControllerSpec.js');
     removefile(testJsDir + 'spec/app/account/password/passwordDirectiveSpec.js');
     removefile(testJsDir + 'spec/app/account/sessions/sessionsControllerSpec.js');
