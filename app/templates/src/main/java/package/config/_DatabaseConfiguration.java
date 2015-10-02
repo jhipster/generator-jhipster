@@ -6,7 +6,11 @@ import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import liquibase.integration.spring.SpringLiquibase;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'oauth2') { %>
-import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;<% } %><% if (databaseType == 'mongodb') { %>
+import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;<% } %><% if (databaseType == 'mongodb' && javaVersion != '7') { %>
+import <%=packageName%>.domain.util.JSR310DateConverters.DateToLocalDateConverter;
+import <%=packageName%>.domain.util.JSR310DateConverters.LocalDateToDateConverter;
+import <%=packageName%>.domain.util.JSR310DateConverters.DateToZonedDateTimeConverter;
+import <%=packageName%>.domain.util.JSR310DateConverters.ZonedDateTimeToDateConverter;<% } %><% if (databaseType == 'mongodb') { %>
 import com.mongodb.Mongo;
 import org.mongeez.Mongeez;<% } %>
 import org.slf4j.Logger;
@@ -23,13 +27,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;<% if (databaseType == 'mongodb') { %>
 import org.springframework.context.annotation.Import;<% } %><% if (databaseType == 'sql') { %>
-import org.springframework.core.env.Environment;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'oauth2') { %>
-import org.springframework.core.convert.converter.Converter;<% } %><% if (databaseType == 'mongodb') { %>
+import org.springframework.core.env.Environment;<% } %><% if (databaseType == 'mongodb') { %><% if (javaVersion != '7' || authenticationType == 'oauth2' ) { %>
+import org.springframework.core.convert.converter.Converter;<% } %>
 import org.springframework.core.io.ClassPathResource;<% } %><% if (searchEngine == 'elasticsearch') { %>
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
-import org.springframework.data.mongodb.config.EnableMongoAuditing;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'oauth2') { %>
-import org.springframework.data.mongodb.core.convert.CustomConversions;<% } %><% if (databaseType == 'mongodb') { %>
+import org.springframework.data.mongodb.config.EnableMongoAuditing;<% if (javaVersion != '7' || authenticationType == 'oauth2' ) { %>
+import org.springframework.data.mongodb.core.convert.CustomConversions;<% } %>
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;<% } %><% if (databaseType == 'sql') { %>
@@ -40,9 +44,9 @@ import org.springframework.util.StringUtils;
 
 import javax.sql.DataSource;
 import java.util.Arrays;<% } %><% if (databaseType == 'mongodb') { %>
-import javax.inject.Inject;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'oauth2') { %>
+import javax.inject.Inject;<% if (javaVersion != '7' || authenticationType == 'oauth2') { %>
 import java.util.ArrayList;
-import java.util.List;<% } %>
+import java.util.List;<% } %><% } %>
 
 @Configuration<% if (databaseType == 'sql') { %>
 @EnableJpaRepositories("<%=packageName%>.repository")
@@ -157,13 +161,16 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
     @Override
     public Mongo mongo() throws Exception {
         return mongo;
-    }<% if (authenticationType == 'oauth2') { %>
+    }<% if (authenticationType == 'oauth2' || javaVersion != '7') { %>
 
     @Bean
     public CustomConversions customConversions() {
-        List<Converter<?, ?>> converterList = new ArrayList<>();
-        OAuth2AuthenticationReadConverter converter = new OAuth2AuthenticationReadConverter();
-        converterList.add(converter);
+        List<Converter<?, ?>> converterList = new ArrayList<>();<% if (authenticationType == 'oauth2') { %>
+        converterList.add(new OAuth2AuthenticationReadConverter());<% } %><% if (javaVersion != '7') { %>
+        converterList.add(DateToZonedDateTimeConverter.INSTANCE);
+        converterList.add(ZonedDateTimeToDateConverter.INSTANCE);
+        converterList.add(DateToLocalDateConverter.INSTANCE);
+        converterList.add(LocalDateToDateConverter.INSTANCE);<% } %>
         return new CustomConversions(converterList);
     }<% } %>
 
