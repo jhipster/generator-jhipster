@@ -916,8 +916,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.copyHtml(webappDir + '/scripts/app/account/login/login.html', webappDir + 'scripts/app/account/login/login.html');
     this.copyJs(webappDir + '/scripts/app/account/login/_login.js', webappDir + 'scripts/app/account/login/login.js', this, {});
     this.template(webappDir + '/scripts/app/account/login/_login.controller.js', webappDir + 'scripts/app/account/login/login.controller.js', this, {});
-    this.copyJs(webappDir + '/scripts/app/account/logout/_logout.js', webappDir + 'scripts/app/account/logout/logout.js', this, {});
-    this.template(webappDir + '/scripts/app/account/logout/_logout.controller.js', webappDir + 'scripts/app/account/logout/logout.controller.js', this, {});
     this.copyHtml(webappDir + '/scripts/app/account/password/password.html', webappDir + 'scripts/app/account/password/password.html');
     this.copyJs(webappDir + '/scripts/app/account/password/_password.js', webappDir + 'scripts/app/account/password/password.js', this, {});
     this.template(webappDir + '/scripts/app/account/password/_password.controller.js', webappDir + 'scripts/app/account/password/password.controller.js', this, {});
@@ -1051,8 +1049,6 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/app/account/activate/activate.controller.js',
         'scripts/app/account/login/login.js',
         'scripts/app/account/login/login.controller.js',
-        'scripts/app/account/logout/logout.js',
-        'scripts/app/account/logout/logout.controller.js',
         'scripts/app/account/password/password.js',
         'scripts/app/account/password/password.controller.js',
         'scripts/app/account/password/password.directive.js',
