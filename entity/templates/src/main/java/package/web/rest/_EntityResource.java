@@ -200,9 +200,10 @@ public class <%= entityClass %>Resource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<<%= entityClass %>> search<%= entityClass %>s(@PathVariable String query) {
+    public List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> search<%= entityClass %>s(@PathVariable String query) {
         return StreamSupport
-            .stream(<%= entityInstance %>SearchRepository.search(queryString(query)).spliterator(), false)
+            .stream(<%= entityInstance %>SearchRepository.search(queryString(query)).spliterator(), false)<% if (dto == 'mapstruct') { %>
+            .map(<%= entityInstance %>Mapper::<%= entityInstance %>To<%= entityClass %>DTO)<% } %>
             .collect(Collectors.toList());
     }<% } %>
 }
