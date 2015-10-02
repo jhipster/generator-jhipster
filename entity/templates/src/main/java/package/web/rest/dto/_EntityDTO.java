@@ -42,6 +42,7 @@ public class <%= entityClass %>DTO implements Serializable {
     @Lob<% } %>
     private <%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>;<% } %><% for (relationshipId in relationships) {
     otherEntityRelationshipName = relationships[relationshipId].otherEntityRelationshipName;%><% if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %>
+
     private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>DTO> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();<% } else if (relationships[relationshipId].relationshipType == 'many-to-one' || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) { %>
 
     private Long <%= relationships[relationshipId].relationshipFieldName %>Id;<% if (relationships[relationshipId].otherEntityFieldCapitalized !='Id' && relationships[relationshipId].otherEntityFieldCapitalized != '') { %>
