@@ -96,7 +96,7 @@ spring:
     data:
         elasticsearch:
             cluster-name:
-            cluster-nodes: localhost:9200
+            cluster-nodes: localhost:9300
     <%_ } _%>
     thymeleaf:
         cache: true
