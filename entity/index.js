@@ -857,6 +857,22 @@ EntityGenerator.prototype.files = function files() {
     // Expose utility methods in templates
     this.util = {};
     this.util.contains = _.contains;
+    var wordwrap = function(text, width){
+        var wrappedText = '';
+        var rows = text.split('\n');
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            wrappedText = wrappedText + '\n' + _s.wrap(row, { width: width });
+        }
+        return wrappedText;
+    }
+    var wordwrapWidth = 80;
+    this.util.formatAsClassJavadoc = function (text) {
+        return '/**' + wordwrap(text, wordwrapWidth - 4).replace(/\n/g, '\n * ') + '\n */';
+    };
+    this.util.formatAsFieldJavadoc = function (text) {
+        return '    /**' + wordwrap(text, wordwrapWidth - 8).replace(/\n/g, '\n     * ') + '\n     */';
+    };
 
     if (this.useConfigurationFile == false) { // store informations in a file for further use.
         if (this.databaseType == "sql" || this.databaseType == "cassandra") {
@@ -877,6 +893,7 @@ EntityGenerator.prototype.files = function files() {
         this.changelogDate = this.fileData.changelogDate;
         this.dto = this.fileData.dto;
         this.pagination = this.fileData.pagination;
+        this.javadoc = this.fileData.javadoc;
 
         // Validate entity json feild content
         for (var idx in this.fields) {
