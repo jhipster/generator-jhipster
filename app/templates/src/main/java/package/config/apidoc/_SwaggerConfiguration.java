@@ -39,7 +39,7 @@ public class SwaggerConfiguration implements EnvironmentAware {
 
     @Override
     public void setEnvironment(Environment environment) {
-        this.propertyResolver = new RelaxedPropertyResolver(environment, "swagger.");
+        this.propertyResolver = new RelaxedPropertyResolver(environment, "jhipster.swagger.");
     }
 
     /**

@@ -21,11 +21,14 @@ public class HerokuDatabaseConfiguration implements EnvironmentAware {
 
     private final Logger log = LoggerFactory.getLogger(HerokuDatabaseConfiguration.class);
 
-    private RelaxedPropertyResolver propertyResolver;
+    private RelaxedPropertyResolver dataSourcePropertyResolver;
+
+    private RelaxedPropertyResolver jhipsterPropertyResolver;
 
     @Override
     public void setEnvironment(Environment environment) {
-        this.propertyResolver = new RelaxedPropertyResolver(environment, "spring.datasource.");
+        this.dataSourcePropertyResolver = new RelaxedPropertyResolver(environment, "spring.datasource.");
+        this.jhipsterPropertyResolver = new RelaxedPropertyResolver(environment, "jhipster.datasource.");
     }
 
     @Bean
@@ -37,13 +40,13 @@ public class HerokuDatabaseConfiguration implements EnvironmentAware {
 	    HikariConfig config = new HikariConfig();
 
 	    //MySQL optimizations, see https://github.com/brettwooldridge/HikariCP/wiki/MySQL-Configuration
-	    if ("com.mysql.jdbc.jdbc2.optional.MysqlDataSource".equals(propertyResolver.getProperty("dataSourceClassName"))) {
-                config.addDataSourceProperty("cachePrepStmts", propertyResolver.getProperty("cachePrepStmts", "true"));
-                config.addDataSourceProperty("prepStmtCacheSize", propertyResolver.getProperty("prepStmtCacheSize", "250"));
-                config.addDataSourceProperty("prepStmtCacheSqlLimit", propertyResolver.getProperty("prepStmtCacheSqlLimit", "2048"));
+	    if ("com.mysql.jdbc.jdbc2.optional.MysqlDataSource".equals(dataSourcePropertyResolver.getProperty("driver-class-name"))) {
+                config.addDataSourceProperty("cachePrepStmts", jhipsterPropertyResolver.getProperty("cachePrepStmts", "true"));
+                config.addDataSourceProperty("prepStmtCacheSize", jhipsterPropertyResolver.getProperty("prepStmtCacheSize", "250"));
+                config.addDataSourceProperty("prepStmtCacheSqlLimit", jhipsterPropertyResolver.getProperty("prepStmtCacheSqlLimit", "2048"));
             }
 
-            config.setDataSourceClassName(propertyResolver.getProperty("dataSourceClassName"));
+            config.setDataSourceClassName(dataSourcePropertyResolver.getProperty("driver-class-name"));
             config.addDataSourceProperty("url", herokuUrl);
             return new HikariDataSource(config);
         } else {

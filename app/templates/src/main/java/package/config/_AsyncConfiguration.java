@@ -29,7 +29,7 @@ public class AsyncConfiguration implements AsyncConfigurer, EnvironmentAware {
 
     @Override
     public void setEnvironment(Environment environment) {
-        this.propertyResolver = new RelaxedPropertyResolver(environment, "async.");
+        this.propertyResolver = new RelaxedPropertyResolver(environment, "jhipster.async.");
     }
 
     @Override

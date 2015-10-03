@@ -61,6 +61,8 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
 
     private RelaxedPropertyResolver liquiBasePropertyResolver;
 
+    private RelaxedPropertyResolver jhipsterPropertyResolver;
+
     private Environment env;
 
     @Autowired(required = false)
@@ -77,13 +79,14 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
         this.env = env;
         this.dataSourcePropertyResolver = new RelaxedPropertyResolver(env, "spring.datasource.");
         this.liquiBasePropertyResolver = new RelaxedPropertyResolver(env, "liquiBase.");
+        this.jhipsterPropertyResolver = new RelaxedPropertyResolver(env, "jhipster.datasource.");
     }
 
     @Bean(destroyMethod = "close")
     @ConditionalOnExpression("#{!environment.acceptsProfiles('cloud') && !environment.acceptsProfiles('heroku')}")
     public DataSource dataSource(<% if (hibernateCache == 'hazelcast') { %>CacheManager cacheManager<% } %>) {
         log.debug("Configuring Datasource");
-        if (dataSourcePropertyResolver.getProperty("url") == null && dataSourcePropertyResolver.getProperty("databaseName") == null) {
+        if (dataSourcePropertyResolver.getProperty("url") == null && dataSourcePropertyResolver.getProperty("name") == null) {
             log.error("Your database connection pool configuration is incorrect! The application" +
                     " cannot start. Please check your Spring profile, current profiles are: {}",
                     Arrays.toString(env.getActiveProfiles()));
@@ -91,10 +94,10 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
             throw new ApplicationContextException("Database connection pool is not configured correctly");
         }
         HikariConfig config = new HikariConfig();
-        config.setDataSourceClassName(dataSourcePropertyResolver.getProperty("dataSourceClassName"));
+        config.setDataSourceClassName(dataSourcePropertyResolver.getProperty("driver-class-name"));
         if(StringUtils.isEmpty(dataSourcePropertyResolver.getProperty("url"))) {
-            config.addDataSourceProperty("databaseName", dataSourcePropertyResolver.getProperty("databaseName"));
-            config.addDataSourceProperty("serverName", dataSourcePropertyResolver.getProperty("serverName"));
+            config.addDataSourceProperty("databaseName", dataSourcePropertyResolver.getProperty("name"));
+            config.addDataSourceProperty("serverName", jhipsterPropertyResolver.getProperty("serverName"));
         } else {
             config.addDataSourceProperty("url", dataSourcePropertyResolver.getProperty("url"));
         }
@@ -102,10 +105,10 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
         config.addDataSourceProperty("password", dataSourcePropertyResolver.getProperty("password"));
 <% if (prodDatabaseType == 'mysql' || devDatabaseType == 'mysql') { %>
         //MySQL optimizations, see https://github.com/brettwooldridge/HikariCP/wiki/MySQL-Configuration
-        if ("com.mysql.jdbc.jdbc2.optional.MysqlDataSource".equals(dataSourcePropertyResolver.getProperty("dataSourceClassName"))) {
-            config.addDataSourceProperty("cachePrepStmts", dataSourcePropertyResolver.getProperty("cachePrepStmts", "true"));
-            config.addDataSourceProperty("prepStmtCacheSize", dataSourcePropertyResolver.getProperty("prepStmtCacheSize", "250"));
-            config.addDataSourceProperty("prepStmtCacheSqlLimit", dataSourcePropertyResolver.getProperty("prepStmtCacheSqlLimit", "2048"));
+        if ("com.mysql.jdbc.jdbc2.optional.MysqlDataSource".equals(dataSourcePropertyResolver.getProperty("driver-class-name"))) {
+            config.addDataSourceProperty("cachePrepStmts", jhipsterPropertyResolver.getProperty("cachePrepStmts", "true"));
+            config.addDataSourceProperty("prepStmtCacheSize", jhipsterPropertyResolver.getProperty("prepStmtCacheSize", "250"));
+            config.addDataSourceProperty("prepStmtCacheSqlLimit", jhipsterPropertyResolver.getProperty("prepStmtCacheSqlLimit", "2048"));
         }<% } %>
         if (metricRegistry != null) {
             config.setMetricRegistry(metricRegistry);
@@ -119,9 +122,9 @@ public class DatabaseConfiguration <% if (databaseType == 'sql') { %>implements 
         SpringLiquibase liquibase = new AsyncSpringLiquibase();
         liquibase.setDataSource(dataSource);
         liquibase.setChangeLog("classpath:config/liquibase/master.xml");
-        liquibase.setContexts(liquiBasePropertyResolver.getProperty("context"));
+        liquibase.setContexts(liquiBasePropertyResolver.getProperty("contexts"));
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_FAST)) {
-            if ("org.h2.jdbcx.JdbcDataSource".equals(dataSourcePropertyResolver.getProperty("dataSourceClassName"))) {
+            if ("org.h2.jdbcx.JdbcDataSource".equals(dataSourcePropertyResolver.getProperty("driver-class-name"))) {
                 liquibase.setShouldRun(true);
                 log.warn("Using '{}' profile with H2 database in memory is not optimal, you should consider switching to" +
                     " MySQL or Postgresql to avoid rebuilding your database upon each start.", Constants.SPRING_PROFILE_FAST);

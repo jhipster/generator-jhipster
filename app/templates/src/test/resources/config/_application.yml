@@ -1,35 +1,34 @@
-server:
-    port: 10344
-    address: localhost
+# ===================================================================
+# Spring Boot configuration.
+#
+# This configuration is used for unit/integration tests.
+# ===================================================================
+
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
 
 
-# security configuration (this key should be unique for your application, and kept secret)
-jhipster.security.rememberme.key: <%= rememberMeKey %>
 
-async:
-    corePoolSize: 2
-    maxPoolSize: 50
-    queueCapacity: 10000
-
-liquibase:
-    context: test
+# ===================================================================
+# JHipster specific properties
+# ===================================================================
 
 spring:
     <%_ if (databaseType == 'sql') { _%>
     datasource:
-        dataSourceClassName: org.h2.jdbcx.JdbcDataSource
+        driver-class-name: org.h2.jdbcx.JdbcDataSource
         url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1
-        databaseName:
-        serverName:
+        name:
         username:
         password:
-
     jpa:
         database-platform: <%=packageName%>.domain.util.FixedH2Dialect
         database: H2
-        openInView: false
+        open-in-view: false
         show_sql: true
-        generate-ddl: false
         hibernate:
             ddl-auto: none
             naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
@@ -49,6 +48,8 @@ spring:
     <%_ if (databaseType == 'cassandra') { _%>
     data:
         cassandra:
+            # Note this is not an official Spring Boot configuration yet
+            # JHipster's Cassandra support is in the process of being merged in Spring Boot
             contactPoints: localhost
             port: 9142
             protocolVersion: V2
@@ -65,25 +66,68 @@ spring:
                   logs: target/elasticsearch/log
                   data: target/elasticsearch/data
     <%_ } _%>
+    mvc:
+        favicon:
+            enabled: false
+    thymeleaf:
+        mode: XHTML
 
-mail:
-    host: localhost
-    port: 25
-    username:
-    password:
-    protocol: smtp
-    tls: false
-    auth: false
+liquibase:
+    contexts: test
 
-metrics:
-    jmx.enabled: false
+security:
+    basic:
+        enabled: false
 
-swagger:
-    apiDocsLocation: http://localhost:8080
-    title: jhipster API
-    version: 0.0.1
-    description: jhipster applications and beyond!
-    termsOfServiceUrl: http://jhipster.github.io/
-    contact:
-    license: Apache 2.0
-    licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.html
+server:
+    port: 10344
+    address: localhost
+
+# ===================================================================
+# JHipster specific properties
+# ===================================================================
+
+jhipster:
+    async:
+        corePoolSize: 2
+        maxPoolSize: 50
+        queueCapacity: 10000
+    mail:
+        host: localhost
+        port: 25
+        username:
+        password:
+        protocol: smtp
+        tls: false
+        auth: false
+        from: <%= baseName %>@localhost
+    security:
+<%_ if (authenticationType == 'oauth2' || authenticationType == 'xauth') { _%>
+        authentication:
+    <%_ if (authenticationType == 'xauth') { _%>
+            xauth:
+                secret: myXAuthSecret
+                # Token is valid 30 minutes
+                tokenValidityInSeconds: 1800
+    <%_ } _%>
+    <%_ if (authenticationType == 'oauth2') { _%>
+            oauth:
+                clientid: <%= baseName %>app
+                secret: mySecretOAuthSecret
+                # Token is valid 30 minutes
+                tokenValidityInSeconds: 1800
+    <%_ } _%>
+<%_ } _%>
+        rememberme:
+            # security key (this key should be unique for your application, and kept secret)
+            key: <%= rememberMeKey %>
+    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
+        jmx.enabled: true
+    swagger:
+        title: <%=baseName%> API
+        description: <%=baseName%> API documentation
+        version: 0.0.1
+        termsOfServiceUrl:
+        contact:
+        license:
+        licenseUrl:

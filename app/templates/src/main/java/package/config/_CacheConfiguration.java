@@ -70,7 +70,7 @@ public class CacheConfiguration {
     public CacheManager cacheManager(<% if (hibernateCache == 'hazelcast') { %>HazelcastInstance hazelcastInstance<% } %>) {<% if (hibernateCache == 'ehcache') { %>
         log.debug("Starting Ehcache");
         cacheManager = net.sf.ehcache.CacheManager.create();
-        cacheManager.getConfiguration().setMaxBytesLocalHeap(env.getProperty("cache.ehcache.maxBytesLocalHeap", String.class, "16M"));
+        cacheManager.getConfiguration().setMaxBytesLocalHeap(env.getProperty("jhipster.cache.ehcache.maxBytesLocalHeap", String.class, "16M"));
         log.debug("Registering Ehcache Metrics gauges");<% if (databaseType == 'sql') { %>
         Set<EntityType<?>> entities = entityManager.getMetamodel().getEntities();
         for (EntityType<?> entity : entities) {
@@ -83,7 +83,7 @@ public class CacheConfiguration {
 
             net.sf.ehcache.Cache cache = cacheManager.getCache(name);
             if (cache != null) {
-                cache.getCacheConfiguration().setTimeToLiveSeconds(env.getProperty("cache.timeToLiveSeconds", Long.class, 3600L));
+                cache.getCacheConfiguration().setTimeToLiveSeconds(env.getProperty("jhipster.cache.timeToLiveSeconds", Long.class, 3600L));
                 net.sf.ehcache.Ehcache decoratedCache = InstrumentedEhcache.instrument(metricRegistry, cache);
                 cacheManager.replaceCacheWithDecoratedCache(cache, decoratedCache);
             }
@@ -165,7 +165,7 @@ public class CacheConfiguration {
     private MapConfig initializeDomainMapConfig() {
         MapConfig mapConfig = new MapConfig();
 
-        mapConfig.setTimeToLiveSeconds(env.getProperty("cache.timeToLiveSeconds", Integer.class, 3600));
+        mapConfig.setTimeToLiveSeconds(env.getProperty("jhipster.cache.timeToLiveSeconds", Integer.class, 3600));
         return mapConfig;
     }
     <% } %><% if (clusteredHttpSession == 'hazelcast') { %>
@@ -173,8 +173,8 @@ public class CacheConfiguration {
     private MapConfig initializeClusteredSession() {
         MapConfig mapConfig = new MapConfig();
 
-        mapConfig.setBackupCount(env.getProperty("cache.hazelcast.backupCount", Integer.class, 1));
-        mapConfig.setTimeToLiveSeconds(env.getProperty("cache.timeToLiveSeconds", Integer.class, 3600));
+        mapConfig.setBackupCount(env.getProperty("jhipster.cache.hazelcast.backupCount", Integer.class, 1));
+        mapConfig.setTimeToLiveSeconds(env.getProperty("jhipster.cache.timeToLiveSeconds", Integer.class, 3600));
         return mapConfig;
     }<% } %><% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
 

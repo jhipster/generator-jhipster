@@ -17,7 +17,7 @@ public class XAuthConfiguration implements EnvironmentAware {
 
     @Override
     public void setEnvironment(Environment environment) {
-        this.propertyResolver = new RelaxedPropertyResolver(environment, "authentication.xauth.");
+        this.propertyResolver = new RelaxedPropertyResolver(environment, "jhipster.security.authentication.xauth.");
     }
 
     @Bean

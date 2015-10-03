@@ -30,9 +30,9 @@ import java.util.concurrent.TimeUnit;
 @Profile("!" + Constants.SPRING_PROFILE_FAST)
 public class MetricsConfiguration extends MetricsConfigurerAdapter implements EnvironmentAware {
 
-    private static final String ENV_METRICS = "metrics.";
-    private static final String ENV_METRICS_GRAPHITE = "metrics.graphite.";<% if (javaVersion == '8') { %>
-    private static final String ENV_METRICS_SPARK = "metrics.spark.";<% } %>
+    private static final String ENV_METRICS = "jhipster.metrics.";
+    private static final String ENV_METRICS_GRAPHITE = "jhipster.metrics.graphite.";<% if (javaVersion == '8') { %>
+    private static final String ENV_METRICS_SPARK = "jhipster.metrics.spark.";<% } %>
     private static final String PROP_JMX_ENABLED = "jmx.enabled";
     private static final String PROP_GRAPHITE_ENABLED = "enabled";<% if (javaVersion == '8') { %>
     private static final String PROP_SPARK_ENABLED = "enabled";<% } %>

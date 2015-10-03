@@ -88,7 +88,7 @@ public class OAuth2ServerConfiguration {
     @EnableAuthorizationServer
     protected static class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter implements EnvironmentAware {
 
-        private static final String ENV_OAUTH = "authentication.oauth.";
+        private static final String ENV_OAUTH = "jhipster.security.authentication.oauth.";
         private static final String PROP_CLIENTID = "clientid";
         private static final String PROP_SECRET = "secret";
         private static final String PROP_TOKEN_VALIDITY_SECONDS = "tokenValidityInSeconds";
