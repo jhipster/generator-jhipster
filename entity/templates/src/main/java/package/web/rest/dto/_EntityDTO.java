@@ -40,7 +40,10 @@ public class <%= entityClass %>DTO implements Serializable {
     @Max(value = <%= fields[fieldId].fieldValidateRulesMax %><%= (fields[fieldId].fieldValidateRulesMax > MAX_VALUE) ? 'L' : '' %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('pattern') != -1) { %>
     @Pattern(regexp = "<%= fields[fieldId].fieldValidateRulesPatternJava %>")<% } } %><% if (fields[fieldId].fieldType == 'byte[]') { %>
     @Lob<% } %>
-    private <%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>;<% } %><% for (relationshipId in relationships) {
+    private <%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>;
+    <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
+
+    private String <%= fields[fieldId].fieldName %>ContentType;<% } %><% } %><% for (relationshipId in relationships) {
     otherEntityRelationshipName = relationships[relationshipId].otherEntityRelationshipName;%><% if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %>
 
     private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>DTO> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();<% } else if (relationships[relationshipId].relationshipType == 'many-to-one' || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) { %>
@@ -63,7 +66,16 @@ public class <%= entityClass %>DTO implements Serializable {
 
     public void set<%= fields[fieldId].fieldInJavaBeanMethod %>(<%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>) {
         this.<%= fields[fieldId].fieldName %> = <%= fields[fieldId].fieldName %>;
-    }<% } %><% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %>
+    }
+    <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
+
+    public String get<%= fields[fieldId].fieldInJavaBeanMethod %>ContentType() {
+        return <%= fields[fieldId].fieldName %>ContentType;
+    }
+
+    public void set<%= fields[fieldId].fieldInJavaBeanMethod %>ContentType(String <%= fields[fieldId].fieldName %>ContentType) {
+        this.<%= fields[fieldId].fieldName %>ContentType = <%= fields[fieldId].fieldName %>ContentType;
+    }<% } %><% } %><% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %>
 
     public Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>DTO> get<%= relationships[relationshipId].relationshipNameCapitalized %>s() {
         return <%= relationships[relationshipId].relationshipFieldName %>s;

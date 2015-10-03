@@ -98,6 +98,7 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>DialogContro
                     var base64Data = e.target.result.substr(e.target.result.indexOf('base64,') + 'base64,'.length);
                     $scope.$apply(function() {
                         <%= entityInstance %>.<%= fields[fieldId].fieldName %> = base64Data;
+                        <%= entityInstance %>.<%= fields[fieldId].fieldName %>ContentType = $file.type;
                     });
                 };
             }

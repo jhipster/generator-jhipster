@@ -85,7 +85,15 @@ angular.module('<%=angularAppName%>')
         };
 
         $scope.clear = function () {
-            $scope.<%= entityInstance %> = {<% for (fieldId in fields) { %><%= fields[fieldId].fieldName %>: null, <% } %>id: null};
+            $scope.<%= entityInstance %> = {
+                <%_ for (fieldId in fields) { _%>
+                <%= fields[fieldId].fieldName %>: null,
+                    <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
+                <%= fields[fieldId].fieldName %>ContentType: null,
+                    <%_ } _%>
+                <%_ } _%>
+                id: null
+            };
         };
         <%_ if (fieldsContainBlob) { _%>
 

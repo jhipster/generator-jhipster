@@ -93,6 +93,11 @@ public class <%= entityClass %> implements Serializable {
     @JsonDeserialize(using = ISO8601LocalDateDeserializer.class)<% } %>
     @Field("<%=fields[fieldId].fieldNameUnderscored %>")<% } %>
     private <%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>;
+    <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
+
+    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>_content_type"<% if (required) { %>, nullable = false<% } %>)
+    private String <%= fields[fieldId].fieldName %>ContentType;
+    <%_ } _%>
 <% } %><% for (relationshipId in relationships) {
     var otherEntityRelationshipName = relationships[relationshipId].otherEntityRelationshipName,
     relationshipName = relationships[relationshipId].relationshipName,
@@ -136,6 +141,16 @@ public class <%= entityClass %> implements Serializable {
     public void set<%= fields[fieldId].fieldInJavaBeanMethod %>(<%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>) {
         this.<%= fields[fieldId].fieldName %> = <%= fields[fieldId].fieldName %>;
     }
+    <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
+
+    public String get<%= fields[fieldId].fieldInJavaBeanMethod %>ContentType() {
+        return <%= fields[fieldId].fieldName %>ContentType;
+    }
+
+    public void set<%= fields[fieldId].fieldInJavaBeanMethod %>ContentType(String <%= fields[fieldId].fieldName %>ContentType) {
+        this.<%= fields[fieldId].fieldName %>ContentType = <%= fields[fieldId].fieldName %>ContentType;
+    }
+    <%_ } _%>
 <% } %><% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'one-to-many' || relationships[relationshipId].relationshipType == 'many-to-many') { %>
     public Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> get<%= relationships[relationshipId].relationshipNameCapitalized %>s() {
         return <%= relationships[relationshipId].relationshipFieldName %>s;
@@ -176,8 +191,13 @@ public class <%= entityClass %> implements Serializable {
     @Override
     public String toString() {
         return "<%= entityClass %>{" +
-                "id=" + id +<% for (fieldId in fields) { %>
-                ", <%= fields[fieldId].fieldName %>='" + <%= fields[fieldId].fieldName %> + "'" +<% } %>
+                "id=" + id +
+                <%_ for (fieldId in fields) { _%>
+                ", <%= fields[fieldId].fieldName %>='" + <%= fields[fieldId].fieldName %> + "'" +
+                    <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
+                ", <%= fields[fieldId].fieldName %>ContentType='" + <%= fields[fieldId].fieldName %>ContentType + "'" +
+                    <%_ } _%>
+                <%_ } _%>
                 '}';
     }
 }
