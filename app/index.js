@@ -1118,7 +1118,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.write(webappDir + 'index.html', this.indexFile);
 
     // Remove old files, from previous JHipster versions
-    removefile(webappDir + 'scripts/app/account/logoutt/logout.js');
+    removefile(webappDir + 'scripts/app/account/logout/logout.js');
     removefile(webappDir + 'scripts/app/account/logout/logout.controller.js');
     removefolder(webappDir + 'scripts/app/account/logout');
 
