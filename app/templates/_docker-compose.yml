@@ -1,6 +1,6 @@
 <% if (devDatabaseType == 'mysql') { %>jhipster-dev-mysql:
   container_name: <%=baseName%>-dev-mysql
-  image : mysql
+  image: mysql
   # volumes:
   # - ~/volumes/jhipster/<%=baseName%>/dev-mysql/:/var/lib/mysql/
   environment:
@@ -12,7 +12,7 @@
   command: mysqld --lower_case_table_name=1
 <% } if (devDatabaseType == 'postgresql') { %>jhipster-dev-postgresql:
   container_name: <%=baseName%>-dev-postgresql
-  image : postgres
+  image: postgres
   # volumes:
   # - ~/volumes/jhipster/<%=baseName%>/dev-postgresql/:/var/lib/postgresql/
   environment:
