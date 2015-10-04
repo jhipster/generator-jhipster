@@ -34,7 +34,7 @@ spring:
         <%_ } else if (prodDatabaseType == 'oracle') { _%>
         url: jdbc:oracle:thin:@localhost:1521:<%= baseName %>
         <%_ } _%>
-        databaseName: <% if (prodDatabaseType == 'postgresql') { %><%= baseName %><% } %>
+        name: <% if (prodDatabaseType == 'postgresql') { %><%= baseName %><% } %>
         <%_ if (prodDatabaseType == 'mysql') { _%>
         username: root
         <%_ } else if (prodDatabaseType == 'postgresql') { _%>
@@ -96,7 +96,7 @@ spring:
     data:
         elasticsearch:
             cluster-name:
-            cluster-nodes: localhost:9200
+            cluster-nodes: localhost:9300
     <%_ } _%>
     thymeleaf:
         cache: true
