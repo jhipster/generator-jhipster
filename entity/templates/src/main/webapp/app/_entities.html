@@ -67,7 +67,7 @@
                 </tr>
             </thead>
             <tbody<% if (pagination == 'infinite-scroll') { %> infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page"<% } %>>
-                <tr ng-repeat="<%=entityInstance %> in <%=entityInstance %>s">
+                <tr ng-repeat="<%=entityInstance %> in <%=entityInstance %>s track by <%=entityInstance %>.id">
                     <td><a ui-sref="<%= entityInstance %>.detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td>
                     <%_ for (fieldId in fields) { _%>
                         <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'image') { _%>
