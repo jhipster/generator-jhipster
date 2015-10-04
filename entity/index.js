@@ -1349,7 +1349,7 @@ EntityGenerator.prototype.copyEnumI18n = function(language, enumInfo) {
 };
 
 EntityGenerator.prototype.getTableName = function(value) {
-    return _s.underscored(value).toUpperCase();
+    return _s.underscored(value).toLowerCase();
 };
 
 EntityGenerator.prototype.getColumnName = function(value) {
