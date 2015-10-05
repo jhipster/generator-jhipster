@@ -1164,7 +1164,7 @@ EntityGenerator.prototype.files = function files() {
 
     this.entityClass = _s.capitalize(this.name);
     this.entityInstance = _s.decapitalize(this.name);
-    this.entityTableName = _s.underscored(this.name).toUpperCase();
+    this.entityTableName = _s.underscored(this.name).toLowerCase();
 
     this.differentTypes = [this.entityClass];
     if (this.relationships == undefined) {
@@ -1349,7 +1349,7 @@ EntityGenerator.prototype.copyEnumI18n = function(language, enumInfo) {
 };
 
 EntityGenerator.prototype.getTableName = function(value) {
-    return _s.underscored(value).toUpperCase();
+    return _s.underscored(value).toLowerCase();
 };
 
 EntityGenerator.prototype.getColumnName = function(value) {

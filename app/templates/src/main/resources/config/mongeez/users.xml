@@ -1,9 +1,9 @@
 <mongoChangeLog>
     <changeSet changeId="ChangeSet-2" author="jhipster">
         <script>
-            db.JHI_USER.ensureIndex({"login" : 1});
-            db.JHI_USER.ensureIndex({"email" : 1});
-            db.JHI_USER.insert(
+            db.jhi_user.ensureIndex({"login" : 1});
+            db.jhi_user.ensureIndex({"email" : 1});
+            db.jhi_user.insert(
             {
                 "_id" : "user-0",
                 "login" : "system",
@@ -17,7 +17,7 @@
                 "created_date": new Date(),
                 "authorities": [{"_id": "ROLE_ADMIN"}, {"_id": "ROLE_USER"}]
             });
-            db.JHI_USER.insert(
+            db.jhi_user.insert(
             {
                 "_id" : "user-1",
                 "login" : "anonymousUser",
@@ -31,7 +31,7 @@
                 "created_date": new Date(),
                 "authorities": []
             });
-            db.JHI_USER.insert(
+            db.jhi_user.insert(
             {
                 "_id" : "user-2",
                 "login" : "admin",
@@ -45,7 +45,7 @@
                 "created_date": new Date(),
                 "authorities": [{"_id": "ROLE_ADMIN"}, {"_id": "ROLE_USER"}]
             });
-            db.JHI_USER.insert(
+            db.jhi_user.insert(
             {
                 "_id" : "user-3",
                 "login" : "user",
