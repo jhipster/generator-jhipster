@@ -129,8 +129,6 @@ jhipster:
         timeToLiveSeconds: 3600
         <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
         hazelcast:
-            debug: true
-            stickySession: false
             backupCount: 1
         <%_ } _%>
         <%_ if (hibernateCache == 'ehcache') { _%>

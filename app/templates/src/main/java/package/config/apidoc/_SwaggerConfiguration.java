@@ -1,15 +1,14 @@
 package <%=packageName%>.config.apidoc;
 
 import <%=packageName%>.config.Constants;
+import <%=packageName%>.config.JHipsterProperties;
+
 import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.bind.RelaxedPropertyResolver;
-import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
-import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StopWatch;
 import springfox.documentation.service.ApiInfo;
@@ -29,29 +28,31 @@ import static springfox.documentation.builders.PathSelectors.regex;
 @Configuration
 @EnableSwagger2
 @Profile("!"+Constants.SPRING_PROFILE_PRODUCTION)
-public class SwaggerConfiguration implements EnvironmentAware {
+public class SwaggerConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(SwaggerConfiguration.class);
 
     public static final String DEFAULT_INCLUDE_PATTERN = "/api/.*";
 
-    private RelaxedPropertyResolver propertyResolver;
-
-    @Override
-    public void setEnvironment(Environment environment) {
-        this.propertyResolver = new RelaxedPropertyResolver(environment, "jhipster.swagger.");
-    }
-
     /**
      * Swagger Springfox configuration.
      */
     @Bean
-    public Docket swaggerSpringfoxDocket() {
+    public Docket swaggerSpringfoxDocket(JHipsterProperties jHipsterProperties) {
         log.debug("Starting Swagger");
         StopWatch watch = new StopWatch();
         watch.start();
+        ApiInfo apiInfo = new ApiInfo(
+            jHipsterProperties.getSwagger().getTitle(),
+            jHipsterProperties.getSwagger().getDescription(),
+            jHipsterProperties.getSwagger().getVersion(),
+            jHipsterProperties.getSwagger().getTermsOfServiceUrl(),
+            jHipsterProperties.getSwagger().getContact(),
+            jHipsterProperties.getSwagger().getLicense(),
+            jHipsterProperties.getSwagger().getLicenseUrl());
+
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
-            .apiInfo(apiInfo())
+            .apiInfo(apiInfo)
             .genericModelSubstitutes(ResponseEntity.class)
             .forCodeGeneration(true)
             .genericModelSubstitutes(ResponseEntity.class)
@@ -67,19 +68,5 @@ public class SwaggerConfiguration implements EnvironmentAware {
         watch.stop();
         log.debug("Started Swagger in {} ms", watch.getTotalTimeMillis());
         return docket;
-    }
-
-    /**
-     * API Info as it appears on the swagger-ui page.
-     */
-    private ApiInfo apiInfo() {
-        return new ApiInfo(
-            propertyResolver.getProperty("title"),
-            propertyResolver.getProperty("description"),
-            propertyResolver.getProperty("version"),
-            propertyResolver.getProperty("termsOfServiceUrl"),
-            propertyResolver.getProperty("contact"),
-            propertyResolver.getProperty("license"),
-            propertyResolver.getProperty("licenseUrl"));
     }
 }

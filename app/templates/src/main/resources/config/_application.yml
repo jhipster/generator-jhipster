@@ -17,6 +17,8 @@ spring:
         hibernate:
             ddl-auto: none
             naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
+    messages:
+        basename: classpath:/i18n/messages
     mvc:
         favicon:
             enabled: false
