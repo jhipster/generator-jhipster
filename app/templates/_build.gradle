@@ -2,9 +2,11 @@ buildscript {
     repositories {
         mavenLocal()
         jcenter()
+        maven { url 'http://repo.spring.io/plugins-release' }
     }
     dependencies {
-        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE')
+        classpath group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: spring_boot_version
+        classpath group: 'org.springframework.build.gradle', name: 'propdeps-plugin', version: '0.0.7'
         classpath('com.moowork.gradle:gradle-node-plugin:0.10')<% if(frontendBuilder == 'grunt') {%>
         classpath('com.moowork.gradle:gradle-grunt-plugin:0.10')<% }  if(frontendBuilder == 'gulp') {%>
   	    classpath('com.moowork.gradle:gradle-gulp-plugin:0.10')
@@ -18,6 +20,7 @@ targetCompatibility=1.<%= javaVersion %>
 apply plugin: 'maven'
 apply plugin: 'spring-boot'
 apply plugin: 'war'
+apply plugin: 'propdeps'
 defaultTasks 'bootRun'
 
 bootRepackage {
@@ -183,8 +186,11 @@ dependencies {
     testCompile group: 'com.h2database', name: 'h2'<% } %><% if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { %>
     runtime files('lib/oracle/ojdbc/<% if (javaVersion == '7') { %>6/ojdbc-6<% }else { %>7/ojdbc-7<% } %>.jar')
     runtime fileTree(dir: 'lib', include: '*.jar')<% } %>
+    optional group: 'org.springframework.boot', name:'spring-boot-configuration-processor', version: spring_boot_version
 
 }
+
+compileJava.dependsOn(processResources)
 
 clean {
     delete "target"
