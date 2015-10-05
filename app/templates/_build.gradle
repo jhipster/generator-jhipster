@@ -7,9 +7,9 @@ buildscript {
     dependencies {
         classpath group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: spring_boot_version
         classpath group: 'org.springframework.build.gradle', name: 'propdeps-plugin', version: '0.0.7'
-        classpath('com.moowork.gradle:gradle-node-plugin:0.10')<% if(frontendBuilder == 'grunt') {%>
-        classpath('com.moowork.gradle:gradle-grunt-plugin:0.10')<% }  if(frontendBuilder == 'gulp') {%>
-  	    classpath('com.moowork.gradle:gradle-gulp-plugin:0.10')
+        classpath group: 'com.moowork.gradle', name: 'gradle-node-plugin', version: '0.11'<% if(frontendBuilder == 'grunt') {%>
+        classpath group: 'com.moowork.gradle', name: 'gradle-grunt-plugin', version: '0.11'<% }  if(frontendBuilder == 'gulp') {%>
+  	    classpath group: 'com.moowork.gradle', name: 'gradle-gulp-plugin', version: '0.11'
         <% } %>
     }
 }
