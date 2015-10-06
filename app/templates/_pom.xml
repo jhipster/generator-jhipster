@@ -31,8 +31,8 @@
         <awaitility.version>1.4.0</awaitility.version>
         <commons-io.version>2.4</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
-        <gatling.version>2.1.6</gatling.version>
-        <gatling-maven-plugin.version>2.1.6</gatling-maven-plugin.version>
+        <gatling.version>2.1.7</gatling.version>
+        <gatling-maven-plugin.version>2.1.7</gatling-maven-plugin.version>
         <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
         <hazelcast.version>3.5.2</hazelcast.version>
         <%_ } _%>
