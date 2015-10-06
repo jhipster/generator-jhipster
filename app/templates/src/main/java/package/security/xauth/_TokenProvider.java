@@ -51,7 +51,7 @@ public class TokenProvider {
         long expires = Long.parseLong(parts[1]);
         String signature = parts[2];
         String signatureToMatch = computeSignature(userDetails, expires);
-        return expires >= System.currentTimeMillis() && constantTimeEquals(signature, signatureToMatch));
+        return expires >= System.currentTimeMillis() && constantTimeEquals(signature, signatureToMatch);
     }
 
     /**
