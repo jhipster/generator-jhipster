@@ -7,17 +7,17 @@
         "messages": {
             "validate": {
                 "login": {
-                    "required": "Se requiere que ingrese un usuario.",
-                    "minlength": "Se requiere que su usuario tenga por lo menos 1 carácter",
-                    "maxlength": "Su usuario no puede tener mas de 50 carácteres",
-                    "pattern": "Your login can only contain lower-case letters and digits"
+                    "required": "Su nombre de usuario es obligatorio.",
+                    "minlength": "Su nombre de usuario debe tener al menos 1 caracter.",
+                    "maxlength": "Su usuario no puede tener más de 50 caracteres.",
+                    "pattern": "Su nombre de usuario sólo puede contener letras minúsculas y dígitos."
                 }
             },
-            "success": "<strong>¡El registro de la cuenta ha sido guardado!</strong> Por favor revisa su correo electrónico para confirmar.",
+            "success": "<strong>¡Registro guardado!</strong> Por favor revise su correo electrónico para confirmar.",
             "error": {
-                "fail": "<strong>¡El registro de la cuenta ha fallado!</strong> Por favor intente de nuevo mas tarde.",
-                "userexists": "<strong>¡El nombre del usuario ya esta registrada!</strong> Por favor escoja otro usuario.",
-                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+                "fail": "<strong>¡El registro ha fallado!</strong> Por favor inténtelo de nuevo más tarde.",
+                "userexists": "<strong>¡El nombre de usuario ya está registrado!</strong> Por favor escoja otro usuario.",
+                "emailexists": "<strong>¡El correo electrónico ya está en uso!</strong> Por favor escoja otro email."
             }
         }
     }

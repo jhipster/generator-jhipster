@@ -5,7 +5,7 @@
         "menu": {
             "home": "Inicio",
             "entities": {
-                "main": "Entities",
+                "main": "Entidades",
                 "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
@@ -19,15 +19,15 @@
             },
             "admin": {
                 "main": "Administración",
-                "user-management": "User management",
-                "tracker": "Rastreador de los usarios",
+                "user-management": "Gestión de usuarios",
+                "tracker": "Rastreador de los usuarios",
                 "metrics": "Métricas",
-                "health": "Health",
-                "configuration": "Configuration",
+                "health": "Salud",
+                "configuration": "Configuración",
                 "logs": "Logs",
                 "audits": "Auditorías",
                 "apidocs": "API",
-                "database": "Database"
+                "database": "Base de datos"
             },
             "language": "Idioma"
         },
@@ -47,25 +47,25 @@
                 "register": "¿No tienes una cuenta todavía? <a class=\"alert-link\" href=\"#/register\">Crear una cuenta</a>"
             },
             "error": {
-                "dontmatch" : "¡La contraseña y la confirmación no coinciden!"
+                "dontmatch" : "¡La contraseña y la confirmación de contraseña no coinciden!"
             },
             "validate": {
                 "newpassword": {
                     "required": "Se requiere que ingrese una contraseña.",
-                    "minlength": "Se requiere que su contraseña tenga por lo menos 5 carácteres",
-                    "maxlength": "Su contraseña no puede tener mas de 50 carácteres",
+                    "minlength": "Se requiere que su contraseña tenga por lo menos 5 caracteres",
+                    "maxlength": "Su contraseña no puede tener más de 50 caracteres",
                     "strength": "Seguridad de la contraseña:"
                 },
                 "confirmpassword": {
                     "required": "Se requiere que confirme la contraseña.",
-                    "minlength": "Se requiere que su contraseña de confirmación tenga por lo menos 5 carácteres",
-                    "maxlength": "Su contraseña de confirmación no puede tener mas de 50 carácteres"
+                    "minlength": "Se requiere que su contraseña de confirmación tenga por lo menos 5 caracteres",
+                    "maxlength": "Su contraseña de confirmación no puede tener más de 50 caracteres"
                 },
                 "email": {
                     "required": "Se requiere un correo electrónico.",
                     "invalid": "Su correo electrónico no es válido.",
-                    "minlength": "Se requiere que su correo electrónico tenga por lo menos 5 carácteres",
-                    "maxlength": "Su correo electrónico no puede tener mas de 50 carácteres"
+                    "minlength": "Se requiere que su correo electrónico tenga por lo menos 5 caracteres",
+                    "maxlength": "Su correo electrónico no puede tener más de 50 caracteres"
                 }
             }
         },
@@ -75,33 +75,33 @@
     },
     "entity": {
         "action": {
-            "addblob": "Add blob",
-            "addimage": "Add image",
-            "back": "Back",
-            "cancel": "Cancel",
-            "delete": "Delete",
-            "edit": "Edit",
-            "save": "Save",
-            "view": "View"
+            "addblob": "Añadir blob",
+            "addimage": "Añadir imagen",
+            "back": "Volver",
+            "cancel": "Cancelar",
+            "delete": "Eliminar",
+            "edit": "Editar",
+            "save": "Guardar",
+            "view": "Vista"
         },
         "detail": {
-            "field": "Field",
-            "value": "Value"
+            "field": "Campo",
+            "value": "Valor"
         },
         "delete": {
-            "title": "Confirm delete operation"
+            "title": "Confirmar operación de borrado"
         },
         "validation": {
-            "required": "This field is required.",
-            "minlength": "This field is required to be at least {{min}} characters.",
-            "maxlength": "This field cannot be longer than {{max}} characters.",
-            "min": "This field should be more than {{min}}.",
-            "max": "This field cannot be more than {{max}}.",
-            "minbytes": "This field should be more than {{min}} bytes.",
-            "maxbytes": "This field cannot be more than {{max}} bytes.",
-            "pattern": "This field should follow pattern {{pattern}}.",
-            "number": "This field should be a number.",
-            "datetimelocal": "This field should be a date and time."
+            "required": "Este campo es obligatorio.",
+            "minlength": "Este campo require al menos {{min}} caracteres.",
+            "maxlength": "Este campo no puede superar más de {{max}} caracteres.",
+            "min": "Este campo debe ser mayor que {{min}}.",
+            "max": "Este campo no puede sera mayor que {{max}}.",
+            "minbytes": "Este campo debe tener como mínimo {{min}} bytes.",
+            "maxbytes": "Este campo no puede tener más de {{max}} bytes.",
+            "pattern": "Este campo debe seguir el patrón {{pattern}}.",
+            "number": "Este campo debe ser un número.",
+            "datetimelocal": "Este campo debe ser una fecha y hora."
         }
     },
     "footer": "pie de página"
