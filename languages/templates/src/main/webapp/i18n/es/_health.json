@@ -2,6 +2,7 @@
     "health": {
         "title": "Control de salud",
         "refresh.button": "Refrescar",
+        "health.details.details": "Detalles",
         "stacktrace": "Stacktrace",
         "indicator": {
             "diskSpace": "Espacio en disco",
