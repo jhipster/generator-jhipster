@@ -79,11 +79,7 @@
     },
     "entity": {
         "action": {
-<<<<<<< HEAD
             "addblob": "Añadir fichero",
-=======
-            "addblob": "Añadir blob",
->>>>>>> Added and fixed some i18n spanish labels.
             "addimage": "Añadir imagen",
             "back": "Volver",
             "cancel": "Cancelar",
