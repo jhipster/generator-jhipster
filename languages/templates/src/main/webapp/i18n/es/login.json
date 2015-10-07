@@ -3,7 +3,7 @@
         "title": "Iniciar la sesión",
         "form": {
             "password": "Contraseña",
-            "password.placeholder": "Su Contraseña",
+            "password.placeholder": "Su contraseña",
             "rememberme": "Iniciar la sesión automáticamente",
             "button": "Iniciar sesión"
         },

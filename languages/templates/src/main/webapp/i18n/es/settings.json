@@ -1,11 +1,11 @@
 {
     "settings": {
-        "title": "Ajustes del usuario para [<b>{{username}}</b>]",
+        "title": "Ajustes del usuario [<b>{{username}}</b>]",
         "form": {
             "firstname": "Nombre",
             "firstname.placeholder": "Su nombre",
             "lastname": "Apellidos",
-            "lastname.placeholder": "Sus Apellidos",
+            "lastname.placeholder": "Sus apellidos",
             "language": "Idioma",
             "button": "Guardar"
         },
