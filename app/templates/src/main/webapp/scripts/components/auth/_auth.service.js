@@ -10,12 +10,16 @@ angular.module('<%=angularAppName%>')
                 AuthServerProvider.login(credentials).then(function (data) {
                     // retrieve the logged account information
                     Principal.identity(true).then(function(account) {
-                      <% if (enableTranslation){ %>
+                        <%_ if (enableTranslation){ _%>
                         // After the login the language will be changed to
                         // the language selected by the user during his registration
-                        $translate.use(account.langKey);
-                        $translate.refresh();<% } %><% if (websocket == 'spring-websocket') { %>
-                        Tracker.sendActivity();<% } %>
+                        $translate.use(account.langKey).then(function(){
+                            $translate.refresh();
+                        });
+                        <%_ } _%>
+                        <%_ if (websocket == 'spring-websocket') { _%>
+                        Tracker.sendActivity();
+                        <%_ } _%>
                         deferred.resolve(data);
                     });
                     return cb();
@@ -31,6 +35,9 @@ angular.module('<%=angularAppName%>')
             logout: function () {
                 AuthServerProvider.logout();
                 Principal.authenticate(null);
+                // Reset state memory
+                $rootScope.previousStateName = undefined;
+                $rootScope.previousStateNameParams = undefined;
             },
 
             authorize: function(force) {
@@ -43,7 +50,7 @@ angular.module('<%=angularAppName%>')
                             $state.go('home');
                         }
 
-                        if ($rootScope.toState.data.roles && $rootScope.toState.data.roles.length > 0 && !Principal.isInAnyRole($rootScope.toState.data.roles)) {
+                        if ($rootScope.toState.data.authorities && $rootScope.toState.data.authorities.length > 0 && !Principal.hasAnyAuthority($rootScope.toState.data.authorities)) {
                             if (isAuthenticated) {
                                 // user is signed in but not authorized for desired state
                                 $state.go('accessdenied');
@@ -51,8 +58,8 @@ angular.module('<%=angularAppName%>')
                             else {
                                 // user is not authenticated. stow the state they wanted before you
                                 // send them to the signin state, so you can return them when you're done
-                                $rootScope.returnToState = $rootScope.toState;
-                                $rootScope.returnToStateParams = $rootScope.toStateParams;
+                                $rootScope.previousStateName = $rootScope.toState;
+                                $rootScope.previousStateNameParams = $rootScope.toStateParams;
 
                                 // now, send them to the signin state so they can log in
                                 $state.go('login');

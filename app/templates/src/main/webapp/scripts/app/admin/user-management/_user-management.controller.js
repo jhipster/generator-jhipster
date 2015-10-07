@@ -3,15 +3,16 @@
 angular.module('<%=angularAppName%>')
     .controller('UserManagementController', function ($scope, User, ParseLinks<% if (enableTranslation) { %>, Language<% } %>) {
         $scope.users = [];
-        $scope.roles = ["ROLE_USER", "ROLE_ADMIN"];<% if (enableTranslation) { %>
+        $scope.authorities = ["ROLE_USER", "ROLE_ADMIN"];<% if (enableTranslation) { %>
         Language.getAll().then(function (languages) {
             $scope.languages = languages;
         });<% } %>
 
         $scope.page = 0;
-        $scope.loadAll = function () {
+        $scope.loadAll = function () {<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
             User.query({page: $scope.page, per_page: 20}, function (result, headers) {
-                $scope.links = ParseLinks.parse(headers('link'));
+                $scope.links = ParseLinks.parse(headers('link'));<% } else { %>
+            User.query({}, function (result) {<% } %>
                 $scope.users = result;
             });
         };
@@ -55,7 +56,7 @@ angular.module('<%=angularAppName%>')
                 id: null, login: null, firstName: null, lastName: null, email: null,
                 activated: null, langKey: null, createdBy: null, createdDate: null,
                 lastModifiedBy: null, lastModifiedDate: null, resetDate: null,
-                resetKey: null, roles: null
+                resetKey: null, authorities: null
             };
             $scope.editForm.$setPristine();
             $scope.editForm.$setUntouched();

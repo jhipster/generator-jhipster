@@ -7,6 +7,11 @@ describe('Directive Tests ', function () {
     var elm, scope, $httpBackend;
 
     beforeEach(inject(function($compile, $rootScope, $injector) {
+<% if (websocket == 'spring-websocket' && authenticationType == 'oauth2') { -%>
+        spyOn(localStorage, 'getItem').and.callFake(function (key) {
+            return "{\"access_token\":\"79b4ddc8-eb1c-4e7f-82e0-0dc2038a56fd\"}";
+        });
+<% } -%>
         $httpBackend = $injector.get('$httpBackend');
 
         var html = '<password-strength-bar password-to-check="password"></password-strength-bar>';

@@ -22,7 +22,7 @@
                                    ng-model="user.id" readonly>
                         </div>
 
-                        <div class="form-group" ng-show="user.id == null">
+                        <div class="form-group">
                             <label translate="user-management.login">Login</label>
                             <input type="text" class="form-control" name="login"
                                    ng-model="user.login" ng-required="user.id == null" ng-maxlength="50">
@@ -100,7 +100,8 @@
 
                         <div class="form-group">
                             <label translate="user-management.profiles">Profiles</label>
-                            <select class="form-control" multiple name="role" ng-model="user.roles">
+                            <select class="form-control" multiple name="authority" ng-model="user.authorities"
+                                    ng-options="authority for authority in authorities">
                             </select>
                         </div>
                     </div>
@@ -155,16 +156,16 @@
                 <th translate="user-management.email">Email</th>
                 <th></th>
                 <% if (enableTranslation) { %><th translate="user-management.langKey">LangKey</th><% } %>
-                <th translate="user-management.profiles">Profiles</th>
+                <th translate="user-management.profiles">Profiles</th><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
                 <th translate="user-management.createdDate">CreatedDate</th>
                 <th translate="user-management.lastModifiedBy">LastModifiedBy</th>
-                <th translate="user-management.lastModifiedDate">LastModifiedDate</th>
+                <th translate="user-management.lastModifiedDate">LastModifiedDate</th><% } %>
                 <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="user in users">
-                <td><a ui-sref="user-management-detail({login:user.login})">{{user.login}}</a></td>
+            <tr ng-repeat="user in users track by user.id">
+                <td><a ui-sref="user-management-detail({login:user.login})">{{user.id}}</a></td>
                 <td>{{user.login}}</td>
                 <td>{{user.email}}</td>
                 <td>
@@ -175,13 +176,13 @@
                 </td>
                 <% if (enableTranslation) { %><td>{{user.langKey}}</td><% } %>
                 <td>
-                    <div ng-repeat="role in user.roles">
-                        <span class="label label-info">{{ role }}</span>
+                    <div ng-repeat="authority in user.authorities">
+                        <span class="label label-info">{{ authority }}</span>
                     </div>
-                </td>
+                </td><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
                 <td>{{user.createdDate | date:'dd/MM/yy HH:mm'}}</td>
                 <td>{{user.lastModifiedBy}}</td>
-                <td>{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td>
+                <td>{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td><% } %>
                 <td class="text-right">
                     <button type="submit"
                             ui-sref="user-management-detail({login:user.login})"
@@ -196,7 +197,7 @@
                 </td>
             </tr>
             </tbody>
-        </table>
+        </table><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         <nav>
             <ul class="pagination">
                 <li ng-show="links['first'] >= 0" ng-click="loadPage(links['first'])"><a>&lt;&lt;</a></li>
@@ -209,6 +210,6 @@
                 <li ng-show="links['next']" ng-click="loadPage(links['next'])"><a>&gt;</a></li>
                 <li ng-show="links['last'] > 0" ng-click="loadPage(links['last'])"><a>&gt;&gt;</a></li>
             </ul>
-        </nav>
+        </nav><% } %>
     </div>
 </div>

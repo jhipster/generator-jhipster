@@ -17,7 +17,6 @@ var OpenshiftGenerator = module.exports = function OpenshiftGenerator() {
     this.baseName = this.config.get('baseName');
     this.packageName = this.config.get('packageName');
     this.packageFolder = this.config.get('packageFolder');
-    this.javaVersion = this.config.get('javaVersion');
     this.hibernateCache = this.config.get('hibernateCache');
     this.databaseType = this.config.get('databaseType');
     this.prodDatabaseType = this.config.get('prodDatabaseType');
@@ -194,9 +193,7 @@ OpenshiftGenerator.prototype.copyOpenshiftFiles = function copyOpenshiftFiles() 
     this.template('openshift/action_hooks/_build', 'deploy/openshift/.openshift/action_hooks/build', null, { 'interpolate': /<%=([\s\S]+?)%>/g });
     this.template('openshift/action_hooks/_start', 'deploy/openshift/.openshift/action_hooks/start', null, { 'interpolate': /<%=([\s\S]+?)%>/g });
     this.copy('openshift/action_hooks/stop', 'deploy/openshift/.openshift/action_hooks/stop');
-    if (this.javaVersion === "8") {
-        this.copy('openshift/action_hooks/pre_build', 'deploy/openshift/.openshift/action_hooks/pre_build');
-    }
+    this.copy('openshift/action_hooks/pre_build', 'deploy/openshift/.openshift/action_hooks/pre_build');
     this.conflicter.resolve(function (err) {
         done();
     });
@@ -248,7 +245,7 @@ OpenshiftGenerator.prototype.gitChmod = function gitChmod() {
     var child = exec('git update-index --chmod=+x .openshift/action_hooks/build && '+
         'git update-index --chmod=+x .openshift/action_hooks/start && '+
         'git update-index --chmod=+x .openshift/action_hooks/stop && ' +
-        (this.javaVersion === "8" ? 'git update-index --chmod=+x .openshift/action_hooks/pre_build && ' : '') +
+        'git update-index --chmod=+x .openshift/action_hooks/pre_build && ' +
         'git commit -m "Chmod"', { cwd: 'deploy/openshift' }, function (err, stdout, stderr) {
         if (stdout.search('nothing to commit') >= 0) {
             this.log('+x already set');

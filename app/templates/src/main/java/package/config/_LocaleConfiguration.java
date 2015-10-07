@@ -20,7 +20,7 @@ public class LocaleConfiguration extends WebMvcConfigurerAdapter implements Envi
 
     @Override
     public void setEnvironment(Environment environment) {
-        this.propertyResolver = new RelaxedPropertyResolver(environment, "spring.messageSource.");
+        this.propertyResolver = new RelaxedPropertyResolver(environment, "spring.messages.");
     }
 
     @Bean(name = "localeResolver")
@@ -35,7 +35,7 @@ public class LocaleConfiguration extends WebMvcConfigurerAdapter implements Envi
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasename("classpath:/i18n/messages");
         messageSource.setDefaultEncoding("UTF-8");
-        messageSource.setCacheSeconds(propertyResolver.getProperty("cacheSeconds", Integer.class, 1));
+        messageSource.setCacheSeconds(propertyResolver.getProperty("cache-seconds", Integer.class, -1));
         return messageSource;
     }
 

@@ -33,7 +33,7 @@
             <%_ if (fields[fieldId].fieldIsEnum) { _%>
             <select class="form-control" name="<%= fields[fieldId].fieldName %>" ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>" id="field_<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) { %> required<% } %>>
                 <%_ var enumPrefix = angularAppName + '.'+ fields[fieldId].fieldType;
-                    var values = fields[fieldId].fieldValues.split(",");
+                    var values = fields[fieldId].fieldValues.replace(/\s/g, '').split(',');
                     for (key in values) {
                         var value = values[key]; _%>
                 <option value="<%= value %>" translate="<%=enumPrefix%>.<%=value%>"><%= value %></option>
@@ -43,15 +43,15 @@
                 <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
             <div>
                     <%_ if (fields[fieldId].fieldTypeBlobContent == 'image') { _%>
-                <img data-ng-src="{{'data:image/*;base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-height: 100px;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/>
+                <img data-ng-src="{{'data:' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-height: 100px;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/>
                     <%_ } _%>
                 <div class="help-block clearfix">
                     <%_ if (fields[fieldId].fieldTypeBlobContent == 'any') { _%>
-                    <span class="pull-left">{{abbreviate(<%= entityInstance %>.<%= fields[fieldId].fieldName %>) + ' ' + byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}</span>
+                    <span class="pull-left">{{abbreviate(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}} {{<%= entityInstance %>.<%= fields[fieldId].fieldName %>ContentType}} {{byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}</span>
                     <%_ } else { _%>
-                    <span class="pull-left">{{byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}</span>
+                    <span class="pull-left">{{<%= entityInstance %>.<%= fields[fieldId].fieldName %>ContentType}} {{byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}</span>
                     <%_ } _%>
-                    <button ng-click="<%= entityInstance %>.<%= fields[fieldId].fieldName %>=null"
+                    <button ng-click="<%= entityInstance %>.<%= fields[fieldId].fieldName %>=null;<%= entityInstance %>.<%= fields[fieldId].fieldName %>ContentType=null;"
                             ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"
                             class="btn btn-default btn-xs pull-right">
                         <span class="glyphicon glyphicon-remove"></span>
@@ -66,6 +66,10 @@
             <input type="<%= fieldInputType %>" class="form-control" name="<%= fields[fieldId].fieldName %>" id="field_<%= fields[fieldId].fieldName %>"
                     ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldType == 'DateTime') { %> ng-model-options="{timezone: 'UTC'}"<% } %>
                     <%- include ng_validators %>>
+                <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
+            <input type="hidden" class="form-control" name="<%= fields[fieldId].fieldName %>ContentType" id="field_<%= fields[fieldId].fieldName %>ContentType"
+                    ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>ContentType">
+                <%_ } _%>
             <%_ } _%>
             <%_ if (fields[fieldId].fieldValidate == true) { _%>
             <div ng-show="editForm.<%= fields[fieldId].fieldName %>.$invalid">

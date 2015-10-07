@@ -3,8 +3,8 @@ package <%=packageName%>.service;
 import <%=packageName%>.domain.Authority;<% if (authenticationType == 'session') { %>
 import <%=packageName%>.domain.PersistentToken;<% } %><% } %>
 import <%=packageName%>.domain.User;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import <%=packageName%>.repository.AuthorityRepository;<% } %><% if (authenticationType == 'session') { %>
-import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
+import <%=packageName%>.repository.AuthorityRepository;<% if (authenticationType == 'session') { %>
+import <%=packageName%>.repository.PersistentTokenRepository;<% } %><% } %>
 import <%=packageName%>.repository.UserRepository;<% if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.UserSearchRepository;<% } %><% if (databaseType == 'cassandra') { %>
 import <%=packageName%>.security.AuthoritiesConstants;<% } %>
@@ -19,12 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 
-import javax.inject.Inject;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import java.util.HashSet;
-import java.util.List;<% if (javaVersion == '8') { %>
-import java.util.Optional;<% } %>
-import java.util.Set;<% } %><% if (databaseType == 'cassandra') { %>
-import java.util.*;<% } %>
+import javax.inject.Inject;
+import java.util.*;
 
 /**
  * Service class for managing users.
@@ -42,14 +38,14 @@ public class UserService {
     private UserRepository userRepository;<% if (searchEngine == 'elasticsearch') { %>
 
     @Inject
-    private UserSearchRepository userSearchRepository;<% } %><% if (authenticationType == 'session') { %>
+    private UserSearchRepository userSearchRepository;<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %><% if (authenticationType == 'session') { %>
 
     @Inject
-    private PersistentTokenRepository persistentTokenRepository;<% } %>
+    private PersistentTokenRepository persistentTokenRepository;<% } %><% } %>
 <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Inject
     private AuthorityRepository authorityRepository;<% } %>
-<% if (javaVersion == '8') { %>
+
     public Optional<User> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
         userRepository.findOneByActivationKey(key)
@@ -91,49 +87,7 @@ public class UserService {
                userRepository.save(user);
                return user;
            });
-    }<% } else { %>
-    public  User activateRegistration(String key) {
-        log.debug("Activating user for activation key {}", key);
-        User user = userRepository.findOneByActivationKey(key);
-        // activate given user for the registration key.
-        if (user != null) {
-            user.setActivated(true);
-            user.setActivationKey(null);
-            userRepository.save(user);<% if (searchEngine == 'elasticsearch') { %>
-            userSearchRepository.save(user);<% } %>
-            log.debug("Activated user: {}", user);
-        }
-        return user;
     }
-
-    public User completePasswordReset(String newPassword, String key) {
-        log.debug("Reset user password for reset key {}", key);
-        User user = userRepository.findOneByResetKey(key);
-        DateTime oneDayAgo = DateTime.now().minusHours(24);
-        if (user != null && user.getActivated()) {
-            if (user.getResetDate().isAfter(oneDayAgo.toInstant().getMillis())) {
-                user.setPassword(passwordEncoder.encode(newPassword));
-                user.setResetKey(null);
-                user.setResetDate(null);
-                userRepository.save(user);
-                return user;
-            } else {
-                return null;
-            }
-        }
-        return null;
-    }
-
-    public User requestPasswordReset(String mail) {
-        User user = userRepository.findOneByEmail(mail);
-        if (user != null && user.getActivated()) {
-            user.setResetKey(RandomUtil.generateResetKey());
-            user.setResetDate(DateTime.now());
-            userRepository.save(user);
-            return user;
-        }
-        return null;
-    }<% } %>
 
     public User createUserInformation(String login, String password, String firstName, String lastName, String email,
                                       String langKey) {
@@ -164,7 +118,7 @@ public class UserService {
         return newUser;
     }
 
-    public void updateUserInformation(String firstName, String lastName, String email, String langKey) {<% if (javaVersion == '8') { %>
+    public void updateUserInformation(String firstName, String lastName, String email, String langKey) {
         userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).ifPresent(u -> {
             u.setFirstName(firstName);
             u.setLastName(lastName);
@@ -173,46 +127,38 @@ public class UserService {
             userRepository.save(u);<% if (searchEngine == 'elasticsearch') { %>
             userSearchRepository.save(u);<% } %>
             log.debug("Changed Information for User: {}", u);
-        });<%} else {%>
-        User currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
-        currentUser.setFirstName(firstName);
-        currentUser.setLastName(lastName);
-        currentUser.setEmail(email);
-        currentUser.setLangKey(langKey);
-        userRepository.save(currentUser);<% if (searchEngine == 'elasticsearch') { %>
-        userSearchRepository.save(user);<% } %>
-        log.debug("Changed Information for User: {}", currentUser);<%}%>
+        });
     }
 
-    public void changePassword(String password) {<% if (javaVersion == '8') { %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+    public void changePassword(String password) {<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).ifPresent(u-> {<% } %><% if (databaseType == 'cassandra') { %>
         userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).ifPresent(u -> {<% } %>
             String encryptedPassword = passwordEncoder.encode(password);
             u.setPassword(encryptedPassword);
             userRepository.save(u);
             log.debug("Changed password for User: {}", u);
-        });<%} else {%>
-        User currentUser = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
-        String encryptedPassword = passwordEncoder.encode(password);
-        currentUser.setPassword(encryptedPassword);
-        userRepository.save(currentUser);<% if (searchEngine == 'elasticsearch') { %>
-        userSearchRepository.save(user);<% } %>
-        log.debug("Changed password for User: {}", currentUser);<% } %>
+        });
     }
 <% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true)<% } %>
+    public Optional<User> getUserWithAuthoritiesByLogin(String login) {
+        return userRepository.findOneByLogin(login).map(u -> {
+            u.getAuthorities().size();
+            return u;
+        });
+    }
+<% if (databaseType == 'sql') { %>
+    @Transactional(readOnly = true)<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     public User getUserWithAuthorities(<% if (databaseType == 'mongodb') { %>String id<% } else { %>Long id<% } %>) {
         User user = userRepository.findOne(id);
         user.getAuthorities().size(); // eagerly load the association
         return user;
-    }
+    }<% } %>
 <% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true)<% } %>
-    public User getUserWithAuthorities() {<% if (javaVersion == '8') { %>
+    public User getUserWithAuthorities() {
         User user = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin()).get();
-        user.getAuthorities().size(); // eagerly load the association<% } else { %>
-        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentLogin());
-        user.getAuthorities().size(); // eagerly load the association<% } %>
+        user.getAuthorities().size(); // eagerly load the association
         return user;
     }<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 
@@ -226,20 +172,13 @@ public class UserService {
      */
     @Scheduled(cron = "0 0 0 * * ?")
     public void removeOldPersistentTokens() {
-        LocalDate now = new LocalDate();<% if (javaVersion == '8') { %>
+        LocalDate now = new LocalDate();
         persistentTokenRepository.findByTokenDateBefore(now.minusMonths(1)).stream().forEach(token ->{
             log.debug("Deleting token {}", token.getSeries());<% if (databaseType == 'sql') { %>
             User user = token.getUser();
             user.getPersistentTokens().remove(token);<% } %>
             persistentTokenRepository.delete(token);
-        });<% }else { %>
-        List<PersistentToken> tokens = persistentTokenRepository.findByTokenDateBefore(now.minusMonths(1));
-        for (PersistentToken token : tokens) {
-            log.debug("Deleting token {}", token.getSeries());<% if (databaseType == 'sql') { %>
-            User user = token.getUser();
-            user.getPersistentTokens().remove(token);<% } %>
-            persistentTokenRepository.delete(token);
-        }<% } %>
+        });
     }<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 
     /**

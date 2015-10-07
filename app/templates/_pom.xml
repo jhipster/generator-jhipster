@@ -5,7 +5,7 @@
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
-        <version>1.2.5.RELEASE</version>
+        <version>1.2.6.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -21,26 +21,21 @@
     </prerequisites>
 
     <properties>
-        <hikaricp.version>2.4.0</hikaricp.version>
-        <%_ if (javaVersion == '8') { _%>
+        <hikaricp.version>2.4.1</hikaricp.version>
         <assertj-core.version>3.1.0</assertj-core.version>
-        <%_ } _%>
-        <%_ if (javaVersion == '7') { _%>
-        <assertj-core.version>2.1.0</assertj-core.version>
-        <%_ } _%>
         <awaitility.version>1.4.0</awaitility.version>
         <commons-io.version>2.4</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
         <%_ if (useCucumber) { _%>
         <cucumber.version>1.2.4</cucumber.version>
         <%_ } _%>
-        <gatling.version>2.1.6</gatling.version>
-        <gatling-maven-plugin.version>2.1.6</gatling-maven-plugin.version>
+        <gatling.version>2.1.7</gatling.version>
+        <gatling-maven-plugin.version>2.1.7</gatling-maven-plugin.version>
         <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
-        <hazelcast.version>3.5.1</hazelcast.version>
+        <hazelcast.version>3.5.2</hazelcast.version>
         <%_ } _%>
         <%_ if (databaseType == 'sql') { _%>
-        <hibernate.version>4.3.10.Final</hibernate.version>
+        <hibernate.version>4.3.11.Final</hibernate.version>
         <%_ } _%>
         <%_ if (databaseType == 'cassandra') { _%>
         <datastax-driver.version>2.1.7.1</datastax-driver.version>
@@ -67,7 +62,7 @@
         <metrics-spark-reporter.version>1.2</metrics-spark-reporter.version>
         <metrics-spring.version>3.1.2</metrics-spring.version>
         <%_ if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { _%>
-        <postgresql.version>9.4-1201-jdbc41</postgresql.version>
+        <postgresql.version>9.4-1203-jdbc42</postgresql.version>
         <%_ } _%>
         <run.addResources>false</run.addResources>
         <spring-security.version>4.0.2.RELEASE</spring-security.version>
@@ -322,7 +317,7 @@
         <dependency>
             <groupId>oracle</groupId>
             <artifactId>ojdbc</artifactId>
-            <version><% if (javaVersion == '7') { %>6<% }else { %>7<% } %></version>
+            <version>7</version>
         </dependency>
         <%_ } _%>
         <dependency>
@@ -397,13 +392,11 @@
             <version>${postgresql.version}</version>
         </dependency>
         <%_ } _%>
-        <%_ if (javaVersion == '8') { _%>
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-jdk8</artifactId>
             <version>${mapstruct.version}</version>
         </dependency>
-        <%_ } _%>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
@@ -415,6 +408,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -535,13 +533,11 @@
         </dependency>
         <%_ } _%>
         <!-- reporting -->
-        <%_ if (javaVersion == '8') { _%>
         <dependency>
             <groupId>fr.ippon.spark.metrics</groupId>
             <artifactId>metrics-spark-reporter</artifactId>
             <version>${metrics-spark-reporter.version}</version>
         </dependency>
-        <%_ } _%>
         <%_ if (useCucumber) { _%>
         <!-- cucumber -->
         <dependency>
@@ -660,7 +656,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <argLine><% if (javaVersion == '7') { %>-XX:MaxPermSize=128m <% } %>-Xmx256m ${surefireArgLine}</argLine>
+                    <argLine>-Xmx256m ${surefireArgLine}</argLine>
                     <!-- Force alphabetical order to have a reproducible build -->
                     <runOrder>alphabetical</runOrder>
                 </configuration>
@@ -708,7 +704,6 @@
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>${sonar-maven-plugin.version}</version>
             </plugin>
-            <%_ if (javaVersion == '8') { _%>
             <plugin>
                 <groupId>org.bsc.maven</groupId>
                 <artifactId>maven-processor-plugin</artifactId>
@@ -742,7 +737,6 @@
                     </dependency>
                 </dependencies>
             </plugin>
-            <%_ } _%>
             <%_ if (databaseType == 'sql') { _%>
             <plugin>
                 <groupId>org.liquibase</groupId>

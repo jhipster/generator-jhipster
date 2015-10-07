@@ -7,7 +7,7 @@ angular.module('<%=angularAppName%>')
                 parent: 'admin',
                 url: '/user-management',
                 data: {
-                    roles: ['ROLE_ADMIN'],
+                    authorities: ['ROLE_ADMIN'],
                     pageTitle: 'user-management.home.title'
                 },
                 views: {
@@ -18,7 +18,7 @@ angular.module('<%=angularAppName%>')
                 },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('user-management');
+                        $translatePartialLoader.addPart('user.management');
                         return $translate.refresh();
                     }]
                 }
@@ -27,7 +27,7 @@ angular.module('<%=angularAppName%>')
                 parent: 'admin',
                 url: '/user-management/:login',
                 data: {
-                    roles: ['ROLE_ADMIN'],
+                    authorities: ['ROLE_ADMIN'],
                     pageTitle: 'user-management.detail.title'
                 },
                 views: {
@@ -38,7 +38,7 @@ angular.module('<%=angularAppName%>')
                 },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('user-management');
+                        $translatePartialLoader.addPart('user.management');
                         return $translate.refresh();
                     }]
                 }

@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 
 import javax.inject.Inject;
-import java.util.List;<% if (javaVersion == '8') { %>
-import java.util.Optional;<% } %>
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Service for managing audit events.
@@ -45,15 +45,7 @@ public class AuditEventService {
         return auditEventConverter.convertToAuditEvent(persistentAuditEvents);
     }
 
-    <% if (javaVersion == '7') { %>public AuditEvent find(<% if (databaseType == 'sql') { %>Long <% } %><% if (databaseType == 'mongodb') { %>String <% } %>id) {
-        PersistentAuditEvent event =  persistenceAuditEventRepository.findOne(id);
-        AuditEvent auditEvent = null;
-        if(event != null){
-            auditEvent = auditEventConverter.convertToAuditEvent(event);
-        }
-        return auditEvent;
-    }<% } %><% if (javaVersion == '8') { %>public Optional<AuditEvent> find(<% if (databaseType == 'sql') { %>Long <% } %><% if (databaseType == 'mongodb') { %>String <% } %>id) {
+    public Optional<AuditEvent> find(<% if (databaseType == 'sql') { %>Long <% } %><% if (databaseType == 'mongodb') { %>String <% } %>id) {
         return Optional.ofNullable(persistenceAuditEventRepository.findOne(id)).map(auditEventConverter::convertToAuditEvent);
-    }<% } %>
-
+    }
 }

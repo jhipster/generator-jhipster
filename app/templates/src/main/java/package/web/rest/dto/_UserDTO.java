@@ -1,12 +1,18 @@
 package <%=packageName%>.web.rest.dto;
+<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import <%=packageName%>.domain.Authority;<% } %>
+import <%=packageName%>.domain.User;
 
 import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.List;
-
+import java.util.Set;
+import java.util.stream.Collectors;
+/**
+ * A DTO representing a user, with his authorities.
+ */
 public class UserDTO {
 
     public static final int PASSWORD_MIN_LENGTH = 5;
@@ -36,13 +42,21 @@ public class UserDTO {
     @Size(min = 2, max = 5)
     private String langKey;
 
-    private List<String> roles;
+    private Set<String> authorities;
 
     public UserDTO() {
     }
 
+    public UserDTO(User user) {
+        this(user.getLogin(), null, user.getFirstName(), user.getLastName(),
+            user.getEmail(), user.getActivated(), user.getLangKey(),<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+            user.getAuthorities().stream().map(Authority::getName)
+                .collect(Collectors.toSet()));<% } else { %>
+            user.getAuthorities());<% } %>
+    }
+
     public UserDTO(String login, String password, String firstName, String lastName,
-            String email, boolean activated, String langKey, List<String> roles) {
+            String email, boolean activated, String langKey, Set<String> authorities) {
 
         this.login = login;
         this.password = password;
@@ -51,7 +65,7 @@ public class UserDTO {
         this.email = email;
         this.activated = activated;
         this.langKey = langKey;
-        this.roles = roles;
+        this.authorities = authorities;
     }
 
     public String getPassword() {
@@ -82,8 +96,8 @@ public class UserDTO {
         return langKey;
     }
 
-    public List<String> getRoles() {
-        return roles;
+    public Set<String> getAuthorities() {
+        return authorities;
     }
 
     @Override
@@ -96,7 +110,7 @@ public class UserDTO {
         ", email='" + email + '\'' +
         ", activated=" + activated +
         ", langKey='" + langKey + '\'' +
-        ", roles=" + roles +
+        ", authorities=" + authorities +
         '}';
     }
 }

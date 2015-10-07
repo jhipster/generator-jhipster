@@ -1,19 +1,19 @@
 {
     "login": {
-        "title": "Autentisering",
+        "title": "Logga in",
         "form": {
             "password": "Lösenord",
             "password.placeholder": "Ditt lösenord",
-            "rememberme": "Automatisk inloggning",
-            "button": "Autentisera"
+            "rememberme": "Kom ihåg mig",
+            "button": "Logga in"
         },
         "messages": {
             "error": {
-                "authentication": "<strong>Autentisering misslyckades!</strong> Kontrollera ditt användarnamn och lösenord och prova igen."
+                "authentication": "<strong>Inloggningen misslyckades!</strong> Kontrollera ditt användarnamn och lösenord och prova igen."
             }
         },
         "password" : {
-            "forgot": "Did you forget your password?"
+            "forgot": "Har du glömt ditt lösenord?"
         }
     }
 }

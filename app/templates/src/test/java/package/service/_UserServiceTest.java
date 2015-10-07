@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;<% } %>
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import javax.inject.Inject;<% if ((databaseType == 'sql' || databaseType == 'mongodb') && javaVersion == '8') { %>
+import javax.inject.Inject;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import java.util.Optional;<%}%>
 import java.util.List;
 
@@ -48,9 +48,8 @@ public class UserServiceTest <% if (databaseType == 'cassandra') { %>extends Abs
     private UserService userService;<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 
     @Test
-    public void testRemoveOldPersistentTokens() {<% if (javaVersion == '8') { %>
-        User admin = userRepository.findOneByLogin("admin").get();<% } else { %>
-        User admin = userRepository.findOneByLogin("admin");<% } %>
+    public void testRemoveOldPersistentTokens() {
+        User admin = userRepository.findOneByLogin("admin").get();
         int existingCount = persistentTokenRepository.findByUser(admin).size();
         generateUserToken(admin, "1111-1111", new LocalDate());
         LocalDate now = new LocalDate();
@@ -62,7 +61,6 @@ public class UserServiceTest <% if (databaseType == 'cassandra') { %>extends Abs
 
     @Test
     public void assertThatUserMustExistToResetPassword() {
-        <% if (javaVersion == '8') { %>
         Optional<User> maybeUser = userService.requestPasswordReset("john.doe@localhost");
         assertThat(maybeUser.isPresent()).isFalse();
 
@@ -72,31 +70,18 @@ public class UserServiceTest <% if (databaseType == 'cassandra') { %>extends Abs
         assertThat(maybeUser.get().getEmail()).isEqualTo("admin@localhost");
         assertThat(maybeUser.get().getResetDate()).isNotNull();
         assertThat(maybeUser.get().getResetKey()).isNotNull();
-        <% } else { %>
-        User user = userService.requestPasswordReset("john.doe@localhost");
-        assertThat(user).isNull();
-
-        user = userService.requestPasswordReset("admin@localhost");
-        assertThat(user).isNotNull();
-        assertThat(user.getEmail()).isEqualTo("admin@localhost");
-        assertThat(user.getResetDate()).isNotNull();
-        assertThat(user.getResetKey()).isNotNull();
-        <% } %>
     }
 
     @Test
     public void assertThatOnlyActivatedUserCanRequestPasswordReset() {
-        User user = userService.createUserInformation("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "en-US");<% if (javaVersion == '8') { %>
+        User user = userService.createUserInformation("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "en-US");
         Optional<User> maybeUser = userService.requestPasswordReset("john.doe@localhost");
-        assertThat(maybeUser.isPresent()).isFalse();<% } else { %>
-        User maybeUser = userService.requestPasswordReset("john.doe@localhost");
-        assertThat(maybeUser).isNull();<% } %>
+        assertThat(maybeUser.isPresent()).isFalse();
         userRepository.delete(user);
     }
 
     @Test
     public void assertThatResetKeyMustNotBeOlderThan24Hours() {
-        <% if (javaVersion == '8') { %>
         User user = userService.createUserInformation("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "en-US");
 
         DateTime daysAgo = DateTime.now().minusHours(25);
@@ -112,105 +97,37 @@ public class UserServiceTest <% if (databaseType == 'cassandra') { %>extends Abs
         assertThat(maybeUser.isPresent()).isFalse();
 
         userRepository.delete(user);
-        <% } else { %>
-        User user = userService.createUserInformation("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "en-US");
-
-        DateTime daysAgo = DateTime.now().minusHours(25);
-        String resetKey = RandomUtil.generateResetKey();
-        user.setActivated(true);
-        user.setResetDate(daysAgo);
-        user.setResetKey(resetKey);
-
-        userRepository.save(user);
-
-        User maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
-
-        assertThat(maybeUser).isNull();
-
-        userRepository.delete(user);
-        <% } %>
     }
 
     @Test
     public void assertThatResetKeyMustBeValid() {
-        <% if (javaVersion == '8') { %>
         User user = userService.createUserInformation("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "en-US");
-
         DateTime daysAgo = DateTime.now().minusHours(25);
         user.setActivated(true);
         user.setResetDate(daysAgo);
         user.setResetKey("1234");
-
         userRepository.save(user);
-
         Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
-
         assertThat(maybeUser.isPresent()).isFalse();
-
         userRepository.delete(user);
-        <% } else { %>
-        User user = userService.createUserInformation("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "en-US");
-
-        DateTime daysAgo = DateTime.now().minusHours(25);
-        user.setActivated(true);
-        user.setResetDate(daysAgo);
-        user.setResetKey("1234");
-
-        userRepository.save(user);
-
-        User maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
-
-        assertThat(maybeUser).isNull();
-
-        userRepository.delete(user);
-        <% } %>
     }
 
     @Test
     public void assertThatUserCanResetPassword() {
-        <% if (javaVersion == '8') { %>
         User user = userService.createUserInformation("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "en-US");
-
         String oldPassword = user.getPassword();
-
         DateTime daysAgo = DateTime.now().minusHours(2);
         String resetKey = RandomUtil.generateResetKey();
         user.setActivated(true);
         user.setResetDate(daysAgo);
         user.setResetKey(resetKey);
-
         userRepository.save(user);
-
         Optional<User> maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
-
         assertThat(maybeUser.isPresent()).isTrue();
         assertThat(maybeUser.get().getResetDate()).isNull();
         assertThat(maybeUser.get().getResetKey()).isNull();
         assertThat(maybeUser.get().getPassword()).isNotEqualTo(oldPassword);
-
         userRepository.delete(user);
-        <% } else { %>
-        User user = userService.createUserInformation("johndoe", "johndoe", "John", "Doe", "john.doe@localhost", "en-US");
-
-        String oldPassword = user.getPassword();
-
-        DateTime daysAgo = DateTime.now().minusHours(2);
-        String resetKey = RandomUtil.generateResetKey();
-        user.setActivated(true);
-        user.setResetDate(daysAgo);
-        user.setResetKey(resetKey);
-
-        userRepository.save(user);
-
-        User maybeUser = userService.completePasswordReset("johndoe2", user.getResetKey());
-
-        assertThat(maybeUser).isNotNull();
-        assertThat(maybeUser.getResetDate()).isNull();
-        assertThat(maybeUser.getResetKey()).isNull();
-        assertThat(maybeUser.getPassword()).isNotEqualTo(oldPassword);
-
-        userRepository.delete(user);
-        <% } %>
     }
 
     @Test

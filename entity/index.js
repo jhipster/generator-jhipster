@@ -14,7 +14,7 @@ var reservedWords_Java = ["ABSTRACT", "CONTINUE", "FOR", "NEW", "SWITCH", "ASSER
 
 // The JHipster reserved keywords are only for the entity names.
 // They are used to generate AngularJS routes, so we cannot create an entity using one of the JHipster default routes.
-var reservedWords_JHipster = ["ADMIN", "ACCOUNT", "LOGIN", "LOGOUT", "ACTIVATE", "SETTINGS", "PASSWORD", "SESSIONS", "METRICS", "HEALTH", "CONFIGURATION", "AUDITS", "LOGS", "REGISTER", "RESET", "TEST"];
+var reservedWords_JHipster = ["ADMIN", "ACCOUNT", "LOGIN", "LOGOUT", "ACTIVATE", "SETTINGS", "PASSWORD", "SESSIONS", "METRICS", "HEALTH", "CONFIGURATION", "AUDITS", "LOGS", "REGISTER", "RESET", "TEST", "LOAD"];
 
 var reservedWords_MySQL = ["ACCESSIBLE", "ADD", "ALL", "ALTER", "ANALYZE", "AND", "AS", "ASC", "ASENSITIVE", "BEFORE", "BETWEEN", "BIGINT", "BINARY", "BLOB", "BOTH", "BY", "CALL", "CASCADE", "CASE", "CHANGE", "CHAR", "CHARACTER", "CHECK", "COLLATE", "COLUMN", "CONDITION", "CONSTRAINT", "CONTINUE", "CONVERT", "CREATE", "CROSS", "CURRENT_DATE", "CURRENT_TIME", "CURRENT_TIMESTAMP", "CURRENT_USER", "CURSOR", "DATABASE", "DATABASES", "DAY_HOUR", "DAY_MICROSECOND", "DAY_MINUTE", "DAY_SECOND", "DEC", "DECIMAL", "DECLARE", "DEFAULT", "DELAYED", "DELETE", "DESC", "DESCRIBE", "DETERMINISTIC", "DISTINCT", "DISTINCTROW", "DIV", "DOUBLE", "DROP", "DUAL", "EACH", "ELSE", "ELSEIF", "ENCLOSED", "ESCAPED", "EXISTS", "EXIT", "EXPLAIN", "FALSE", "FETCH", "FLOAT", "FLOAT4", "FLOAT8", "FOR", "FORCE", "FOREIGN", "FROM", "FULLTEXT", "GRANT", "GROUP", "HAVING", "HIGH_PRIORITY", "HOUR_MICROSECOND", "HOUR_MINUTE", "HOUR_SECOND", "IF", "IGNORE", "IN", "INDEX", "INFILE", "INNER", "INOUT", "INSENSITIVE", "INSERT", "INT", "INT1", "INT2", "INT3", "INT4", "INT8", "INTEGER", "INTERVAL", "INTO", "IS", "ITERATE", "JOIN", "KEY", "KEYS", "KILL", "LEADING", "LEAVE", "LEFT", "LIKE", "LIMIT", "LINEAR", "LINES", "LOAD", "LOCALTIME", "LOCALTIMESTAMP", "LOCK", "LONG", "LONGBLOB", "LONGTEXT", "LOOP", "LOW_PRIORITY", "MASTER_SSL_VERIFY_SERVER_CERT", "MATCH", "MAXVALUE", "MEDIUMBLOB", "MEDIUMINT", "MEDIUMTEXT", "MIDDLEINT", "MINUTE_MICROSECOND", "MINUTE_SECOND", "MOD", "MODIFIES", "NATURAL", "NOT", "NO_WRITE_TO_BINLOG", "NULL", "NUMERIC", "ON", "OPTIMIZE", "OPTION", "OPTIONALLY", "OR", "ORDER", "OUT", "OUTER", "OUTFILE", "PRECISION", "PRIMARY", "PROCEDURE", "PURGE", "RANGE", "READ", "READS", "READ_WRITE", "REAL", "REFERENCES", "REGEXP", "RELEASE", "RENAME", "REPEAT", "REPLACE", "REQUIRE", "RESIGNAL", "RESTRICT", "RETURN", "REVOKE", "RIGHT", "RLIKE", "SCHEMA", "SCHEMAS", "SECOND_MICROSECOND", "SELECT", "SENSITIVE", "SEPARATOR", "SET", "SHOW", "SIGNAL", "SMALLINT", "SPATIAL", "SPECIFIC", "SQL", "SQLEXCEPTION", "SQLSTATE", "SQLWARNING", "SQL_BIG_RESULT", "SQL_CALC_FOUND_ROWS", "SQL_SMALL_RESULT", "SSL", "STARTING", "STRAIGHT_JOIN", "TABLE", "TERMINATED", "THEN", "TINYBLOB", "TINYINT", "TINYTEXT", "TO", "TRAILING", "TRIGGER", "TRUE", "UNDO", "UNION", "UNIQUE", "UNLOCK", "UNSIGNED", "UPDATE", "USAGE", "USE", "USING", "UTC_DATE", "UTC_TIME", "UTC_TIMESTAMP", "VALUES", "VARBINARY", "VARCHAR", "VARCHARACTER", "VARYING", "WHEN", "WHERE", "WHILE", "WITH", "WRITE", "XOR", "YEAR_MONTH", "ZEROFILL", "GENERAL", "IGNORE_SERVER_IDS", "MASTER_HEARTBEAT_PERIOD", "MAXVALUE", "RESIGNAL", "SIGNAL", "SLOW"];
 
@@ -38,7 +38,6 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.baseName = this.config.get('baseName');
     this.packageName = this.config.get('packageName');
     this.packageFolder = this.config.get('packageFolder');
-    this.javaVersion = this.config.get('javaVersion');
     this.authenticationType = this.config.get('authenticationType');
     this.hibernateCache = this.config.get('hibernateCache');
     this.databaseType = this.config.get('databaseType');
@@ -289,10 +288,6 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     name: 'UUID'
                 },
                 {
-                    value: 'TimeUUID',
-                    name: 'TimeUUID'
-                },
-                {
                     value: 'String',
                     name: 'String'
                 },
@@ -421,7 +416,6 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     response.fieldType == 'DateTime' ||
                     response.fieldType == 'Date' ||
                     response.fieldType == 'UUID' ||
-                    response.fieldType == 'TimeUUID' ||
                     response.fieldIsEnum == true);
             },
             type: 'checkbox',
@@ -789,9 +783,6 @@ EntityGenerator.prototype.askForDTO = function askForDTO() {
     if (this.useConfigurationFile == true) { // don't prompt if data are imported from a file
         return;
     }
-    if (this.javaVersion == '7') {
-        return;
-    }
     var cb = this.async();
     var prompts = [
         {
@@ -862,6 +853,22 @@ EntityGenerator.prototype.files = function files() {
     // Expose utility methods in templates
     this.util = {};
     this.util.contains = _.contains;
+    var wordwrap = function(text, width){
+        var wrappedText = '';
+        var rows = text.split('\n');
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            wrappedText = wrappedText + '\n' + _s.wrap(row, { width: width });
+        }
+        return wrappedText;
+    }
+    var wordwrapWidth = 80;
+    this.util.formatAsClassJavadoc = function (text) {
+        return '/**' + wordwrap(text, wordwrapWidth - 4).replace(/\n/g, '\n * ') + '\n */';
+    };
+    this.util.formatAsFieldJavadoc = function (text) {
+        return '    /**' + wordwrap(text, wordwrapWidth - 8).replace(/\n/g, '\n     * ') + '\n     */';
+    };
 
     if (this.useConfigurationFile == false) { // store informations in a file for further use.
         if (this.databaseType == "sql" || this.databaseType == "cassandra") {
@@ -882,6 +889,7 @@ EntityGenerator.prototype.files = function files() {
         this.changelogDate = this.fileData.changelogDate;
         this.dto = this.fileData.dto;
         this.pagination = this.fileData.pagination;
+        this.javadoc = this.fileData.javadoc;
 
         // Validate entity json feild content
         for (var idx in this.fields) {
@@ -1152,9 +1160,12 @@ EntityGenerator.prototype.files = function files() {
 
     this.entityClass = _s.capitalize(this.name);
     this.entityInstance = _s.decapitalize(this.name);
-    this.entityTableName = _s.underscored(this.name).toUpperCase();
+    this.entityTableName = _s.underscored(this.name).toLowerCase();
 
     this.differentTypes = [this.entityClass];
+    if (this.relationships == undefined) {
+        this.relationships = [];
+    }
     var relationshipId;
     for (relationshipId in this.relationships) {
         var entityType = this.relationships[relationshipId].otherEntityNameCapitalized;
@@ -1334,7 +1345,7 @@ EntityGenerator.prototype.copyEnumI18n = function(language, enumInfo) {
 };
 
 EntityGenerator.prototype.getTableName = function(value) {
-    return _s.underscored(value).toUpperCase();
+    return _s.underscored(value).toLowerCase();
 };
 
 EntityGenerator.prototype.getColumnName = function(value) {

@@ -1,0 +1,49 @@
+<% if (searchEngine == 'elasticsearch') { %>jhipster-prod-elasticsearch:
+  container_name: <%=baseName%>-prod-elasticsearch
+  image: elasticsearch
+  # volumes:
+  # - ~/volumes/jhipster/<%=baseName%>/prod-elasticsearch/:/usr/share/elasticsearch/data/
+  ports:
+  - "9200:9200"
+  - "9300:9300"
+<% } if (prodDatabaseType == 'mysql') { %>jhipster-prod-mysql:
+  container_name: <%=baseName%>-prod-mysql
+  image: mysql
+  # volumes:
+  # - ~/volumes/jhipster/<%=baseName%>/prod-mysql/:/var/lib/mysql/
+  environment:
+  - MYSQL_USER=root
+  - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+  - MYSQL_DATABASE=<%=baseName.toLowerCase()%>
+  ports:
+  - "3306:3306"
+  command: mysqld --lower_case_table_name=1
+<% } if (prodDatabaseType == 'postgresql') { %>jhipster-prod-postgresql:
+  container_name: <%=baseName%>-prod-postgresql
+  image: postgres
+  # volumes:
+  # - ~/volumes/jhipster/<%=baseName%>/prod-postgresql/:/var/lib/postgresql/
+  environment:
+  - POSTGRES_USER=<%=baseName%>
+  - POSTGRES_PASSWORD=
+  ports:
+  - "5432:5432"
+<% } if (prodDatabaseType == 'mongodb') { %>jhipster-prod-mongodb:
+  container_name: <%=baseName%>-prod-mongodb
+  image: mongo
+  # volumes:
+  # - ~/volumes/jhipster/<%=baseName%>/prod-mongodb/:/data/db/
+  ports:
+  - "27017:27017"
+<% } if (prodDatabaseType == 'cassandra') { %>jhipster-prod-cassandra:
+  container_name: <%=baseName%>-prod-cassandra
+  build: .
+  # volumes:
+  # - ~/volumes/jhipster/<%=baseName%>/prod-cassandra/:/var/lib/cassandra/data
+  ports:
+  - "7000:7000"
+  - "7001:7001"
+  - "7199:7199"
+  - "9042:9042"
+  - "9160:9160"
+<% } %>

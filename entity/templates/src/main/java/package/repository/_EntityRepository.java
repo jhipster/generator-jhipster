@@ -63,8 +63,7 @@ public class <%= entityClass %>Repository {
         session.execute(stmt).all().stream().map(
             row -> {
                 <%= entityClass %> <%= entityInstance %> = new <%= entityClass %>();
-                <%= entityInstance %>.setId(row.getUUID("id"));<% for (fieldId in fields) { %><% if (fields[fieldId].fieldType == 'TimeUUID') { %>
-                <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(row.getUUID("<%= fields[fieldId].fieldName %>"));<% } else if (fields[fieldId].fieldType == 'Integer') { %>
+                <%= entityInstance %>.setId(row.getUUID("id"));<% for (fieldId in fields) { %><% if (fields[fieldId].fieldType == 'Integer') { %>
                 <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(row.getInt("<%= fields[fieldId].fieldName %>"));<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
                 <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(row.getDecimal("<%= fields[fieldId].fieldName %>"));<% } else if (fields[fieldId].fieldType == 'Boolean') { %>
                 <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(row.getBool("<%= fields[fieldId].fieldName %>"));<% } else { %>

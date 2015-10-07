@@ -19,6 +19,7 @@
             },
             "admin": {
                 "main": "Administrator",
+                "user-management": "User management",
                 "tracker": "User tracker",
                 "metrics": "Statistieken",
                 "health": "Status",
@@ -31,8 +32,8 @@
             "language": "Taal"
         },
         "form": {
-            "username": "Login",
-            "username.placeholder": "Uw login",
+            "username": "Username",
+            "username.placeholder": "Uw username",
             "newpassword": "Nieuw wachtwoord",
             "newpassword.placeholder": "Nieuw wachtwoord",
             "confirmpassword": "Nieuw wachtwoord bevestigen",
@@ -67,7 +68,7 @@
                     "maxlength": "Uw e-mail kan niet langer zijn dan 50 tekens."
                 }
             }
-        }, 
+        },
         "field": {
             "id" : "ID"
         }

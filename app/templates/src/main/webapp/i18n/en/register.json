@@ -7,10 +7,10 @@
         "messages": {
             "validate": {
                 "login": {
-                    "required": "Your login is required.",
-                    "minlength": "Your login is required to be at least 1 character.",
-                    "maxlength": "Your login cannot be longer than 50 characters.",
-                    "pattern": "Your login can only contain lower-case letters and digits."
+                    "required": "Your username is required.",
+                    "minlength": "Your username is required to be at least 1 character.",
+                    "maxlength": "Your username cannot be longer than 50 characters.",
+                    "pattern": "Your username can only contain lower-case letters and digits."
                 }
             },
             "success": "<strong>Registration saved!</strong> Please check your email for confirmation.",

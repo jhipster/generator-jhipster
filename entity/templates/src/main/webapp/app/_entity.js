@@ -7,7 +7,7 @@ angular.module('<%=angularAppName%>')
                 parent: 'entity',
                 url: '/<%= entityInstance %>s',
                 data: {
-                    roles: ['ROLE_USER'],
+                    authorities: ['ROLE_USER'],
                     pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>.home.title'<% }else{ %>'<%= entityClass %>s'<% } %>
                 },
                 views: {
@@ -31,7 +31,7 @@ angular.module('<%=angularAppName%>')
                 parent: 'entity',
                 url: '/<%= entityInstance %>/{id}',
                 data: {
-                    roles: ['ROLE_USER'],
+                    authorities: ['ROLE_USER'],
                     pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>.detail.title'<% }else{ %>'<%= entityClass %>'<% } %>
                 },
                 views: {
@@ -57,7 +57,7 @@ angular.module('<%=angularAppName%>')
                 parent: '<%= entityInstance %>',
                 url: '/new',
                 data: {
-                    roles: ['ROLE_USER'],
+                    authorities: ['ROLE_USER'],
                 },
                 onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
                     $modal.open({
@@ -66,7 +66,15 @@ angular.module('<%=angularAppName%>')
                         size: 'lg',
                         resolve: {
                             entity: function () {
-                                return {<% for (fieldId in fields) { %><%= fields[fieldId].fieldName %>: null, <% } %>id: null};
+                                return {
+                                    <%_ for (fieldId in fields) { _%>
+                                    <%= fields[fieldId].fieldName %>: null,
+                                        <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
+                                    <%= fields[fieldId].fieldName %>ContentType: null,
+                                        <%_ } _%>
+                                    <%_ } _%>
+                                    id: null
+                                };
                             }
                         }
                     }).result.then(function(result) {
@@ -80,7 +88,7 @@ angular.module('<%=angularAppName%>')
                 parent: '<%= entityInstance %>',
                 url: '/{id}/edit',
                 data: {
-                    roles: ['ROLE_USER'],
+                    authorities: ['ROLE_USER'],
                 },
                 onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
                     $modal.open({

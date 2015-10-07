@@ -13,16 +13,17 @@
                 "settings": "Inställningar",
                 "password": "Lösenord",
                 "sessions": "Sessioner",
-                "login": "Inloggning",
-                "logout": "Utloggning",
+                "login": "Logga in",
+                "logout": "Logga ut",
                 "register": "Registrera"
             },
             "admin": {
                 "main": "Administration",
+                "user-management": "Hantera användare",
                 "tracker": "Användarspårning",
                 "metrics": "Mätningar",
                 "health": "Status",
-                "configuration": "Configuration",
+                "configuration": "Konfigurering",
                 "logs": "Loggar",
                 "audits": "Granskningar",
                 "apidocs": "API",
@@ -31,8 +32,8 @@
             "language": "Språk"
         },
         "form": {
-            "username": "Inloggning",
-            "username.placeholder": "Din inloggning",
+            "username": "Användarnamn",
+            "username.placeholder": "Ditt användarnamn",
             "newpassword": "Nytt lösenord",
             "newpassword.placeholder": "Nytt lösenord",
             "confirmpassword": "Konfirmera nytt lösenord",
@@ -50,18 +51,18 @@
             },
             "validate": {
                 "newpassword": {
-                    "required": "Ditt lösenord krävs.",
+                    "required": "Du måste fylla i ett lösenord",
                     "minlength": "Ditt lösenord måste vara 5 tecken",
                     "maxlength": "Ditt lösenord kan inte vara längre än 50 tecken",
                     "strength": "Lösenordsstyrka:"
                 },
                 "confirmpassword": {
-                    "required": "Din konfirmation krävs.",
+                    "required": "Du måste bekräfta ditt lösenord",
                     "minlength": "Ditt konfirmationslösenord måste vara 5 tecken långt",
                     "maxlength": "Ditt konfirmationslösenord kan inte vara längre än 50 tecken"
                 },
                 "email": {
-                    "required": "Din e-post krävs.",
+                    "required": "Din måste fylla i din e-post",
                     "invalid": "Din e-post adress är inte giltig.",
                     "minlength": "Din e-post måste vara minst 5 tecken",
                     "maxlength": "Din e-post får inte vara längre än 50 tecken"
@@ -91,16 +92,16 @@
             "title": "Bekräfta bortagningen"
         },
         "validation": {
-            "required": "Detta fält krävs.",
-            "minlength": "Detta fält måste vara {{min}} tecken.",
-            "maxlength": "Detta fält kan inte vara längre än {{max}} tecken.",
-            "min": "Detta fält måste vara större än {{min}}.",
-            "max": "Detta fält måste vara mindre än {{max}}.",
-            "minbytes": "Detta fält måste vara större än {{min}} bytes.",
-            "maxbytes": "Detta fält måste vara mindre än {{max}} bytes.",
-            "pattern": "Detta fält måste följa mönstret {{pattern}}.",
-            "number": "Detta fält måste vara ett tal.",
-            "datetimelocal": "Detta fält måste vara ett datum och en tid."
+            "required": "Du måste fylla i detta fält",
+            "minlength": "Detta fält måste vara {{min}} tecken",
+            "maxlength": "Detta fält kan inte vara längre än {{max}} tecken",
+            "min": "Detta fält måste vara större än {{min}}",
+            "max": "Detta fält måste vara mindre än {{max}}",
+            "minbytes": "Detta fält måste vara större än {{min}} bytes",
+            "maxbytes": "Detta fält måste vara mindre än {{max}} bytes",
+            "pattern": "Detta fält måste följa mönstret {{pattern}}",
+            "number": "Detta fält måste vara ett tal",
+            "datetimelocal": "Detta fält måste vara ett datum och en tid"
         }
     },
     "footer": "Detta är din footer"

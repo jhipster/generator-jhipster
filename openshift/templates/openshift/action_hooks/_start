@@ -4,10 +4,8 @@ set -x
 
 jar=$(ls ${OPENSHIFT_REPO_DIR}target/*.war | head -n1)
 
-<% if (javaVersion === '8') { %>
 export JAVA_HOME=${OPENSHIFT_DATA_DIR}jdk1.8.0_40
 export PATH=$JAVA_HOME/bin:$PATH
-<% } %>
 
 nohup java -server \
      -jar ${jar} \

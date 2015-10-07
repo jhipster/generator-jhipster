@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;<% if (javaVersion == '8') {%>
-import org.springframework.security.core.userdetails.UsernameNotFoundException;<%}%>
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.CookieTheftException;
@@ -110,17 +110,17 @@ public class CustomPersistentRememberMeServices extends
     protected void onLoginSuccess(HttpServletRequest request, HttpServletResponse response, Authentication successfulAuthentication) {
         String login = successfulAuthentication.getName();
 
-        log.debug("Creating new persistent login for user {}", login);<% if (javaVersion == '8') {%>
+        log.debug("Creating new persistent login for user {}", login);
         PersistentToken token = userRepository.findOneByLogin(login).map(u -> {
             PersistentToken t = new PersistentToken();
             t.setSeries(generateSeriesData());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
             t.setUser(u);
             t.setTokenValue(generateTokenData());
-            t.setTokenDate(new LocalDate());<%}%><% if (databaseType == 'cassandra') { %>
+            t.setTokenDate(new LocalDate());<% } %><% if (databaseType == 'cassandra') { %>
             t.setLogin(login);
             t.setUserId(u.getId());
             t.setTokenValue(generateTokenData());
-            t.setTokenDate(new Date());<%}%>
+            t.setTokenDate(new Date());<% } %>
             t.setIpAddress(request.getRemoteAddr());
             t.setUserAgent(request.getHeader("User-Agent"));
             return t;
@@ -130,22 +130,7 @@ public class CustomPersistentRememberMeServices extends
             addCookie(token, request, response);
         } catch (DataAccessException e) {
             log.error("Failed to save persistent token ", e);
-        }<% }else { %>
-        User user = userRepository.findOneByLogin(login);
-
-        PersistentToken token = new PersistentToken();
-        token.setSeries(generateSeriesData());
-        token.setUser(user);
-        token.setTokenValue(generateTokenData());
-        token.setTokenDate(new LocalDate());
-        token.setIpAddress(request.getRemoteAddr());
-        token.setUserAgent(request.getHeader("User-Agent"));
-        try {
-            <% if (databaseType == 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'mongodb') { %>persistentTokenRepository.save(token);<% } %>
-            addCookie(token, request, response);
-        } catch (DataAccessException e) {
-            log.error("Failed to save persistent token ", e);
-        }<% } %>
+        }
     }
 
     /**

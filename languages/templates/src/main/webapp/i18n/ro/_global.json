@@ -22,6 +22,7 @@
             },
             "admin": {
                 "main": "Administrare",
+                "user-management": "User management",
                 "tracker": "Informații utilizatori",
                 "metrics": "Metrici",
                 "health": "Stare",

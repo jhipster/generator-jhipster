@@ -17,7 +17,6 @@ var CloudFoundryGenerator = module.exports = function CloudFoundryGenerator() {
     this.baseName = this.config.get('baseName');
     this.packageName = this.config.get('packageName');
     this.packageFolder = this.config.get('packageFolder');
-    this.javaVersion = this.config.get('javaVersion');
     this.hibernateCache = this.config.get('hibernateCache');
     this.databaseType = this.config.get('databaseType');
     this.devDatabaseType = this.config.get('devDatabaseType');
@@ -81,7 +80,7 @@ CloudFoundryGenerator.prototype.checkInstallation = function checkInstallation()
     if(this.abort) return;
     var done = this.async();
 
-    exec('cf --version', function (err) {
+    exec('cf -v', function (err) {
         if (err) {
             this.log.error('cloudfoundry\'s cf command line interface is not available. ' +
             'You can install it via https://github.com/cloudfoundry/cli/releases');

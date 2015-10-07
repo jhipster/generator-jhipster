@@ -1,47 +1,77 @@
-# Disable the spring security default configuration from spring-boot-actuator
-management.security.enabled: true
-security.basic.enabled: false
+# ===================================================================
+# Spring Boot configuration.
+#
+# This configuration will be overriden by the Spring profile you use,
+# for example application-dev.yml if you use the "dev" profile.
+# ===================================================================
 
-# Disable Jolokia - An http/json bridge for remote JMX access
-endpoints.jolokia.enabled: false
-
-# security configuration (this key should be unique for your application, and kept secret)
-jhipster.security.rememberme.key: <%= rememberMeKey %>
-
-async:
-    corePoolSize: 2
-    maxPoolSize: 50
-    queueCapacity: 10000
-
-mail:
-    host: localhost
-    port: 25
-    username:
-    password:
-    protocol: smtp
-    tls: false
-    auth: false
-    from: <%= baseName %>@localhost
-<% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
-authentication:<% if (authenticationType == 'xauth') { %>
-    xauth:
-        secret: myXAuthSecret<% } %><% if (authenticationType == 'oauth2') { %>
-    oauth:
-        clientid: <%= baseName %>app
-        secret: mySecretOAuthSecret<% } %>
-        # Token is valid 30 minutes
-        tokenValidityInSeconds: 1800<% } %>
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
 
 spring:
+    jpa:
+        open-in-view: false
+        hibernate:
+            ddl-auto: none
+            naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
+    messages:
+        basename: classpath:/i18n/messages
     mvc:
         favicon:
             enabled: false
+    thymeleaf:
+        mode: XHTML
 
-swagger:
-    title: <%=baseName%> API
-    description: <%=baseName%> applications and beyond!
-    version: 0.0.1
-    termsOfServiceUrl: http://jhipster.github.io/
-    contact:
-    license: Apache 2.0
-    licenseUrl: http://www.apache.org/licenses/LICENSE-2.0.html
+security:
+    basic:
+        enabled: false
+
+# ===================================================================
+# JHipster specific properties
+# ===================================================================
+
+jhipster:
+    async:
+        corePoolSize: 2
+        maxPoolSize: 50
+        queueCapacity: 10000
+    mail:
+        host: localhost
+        port: 25
+        username:
+        password:
+        protocol: smtp
+        tls: false
+        auth: false
+        from: <%= baseName %>@localhost
+    security:
+<%_ if (authenticationType == 'oauth2' || authenticationType == 'xauth') { _%>
+        authentication:
+    <%_ if (authenticationType == 'xauth') { _%>
+            xauth:
+                secret: myXAuthSecret
+                # Token is valid 30 minutes
+                tokenValidityInSeconds: 1800
+    <%_ } _%>
+    <%_ if (authenticationType == 'oauth2') { _%>
+            oauth:
+                clientid: <%= baseName %>app
+                secret: mySecretOAuthSecret
+                # Token is valid 30 minutes
+                tokenValidityInSeconds: 1800
+    <%_ } _%>
+<%_ } _%>
+        rememberme:
+            # security key (this key should be unique for your application, and kept secret)
+            key: <%= rememberMeKey %>
+    swagger:
+        title: <%=baseName%> API
+        description: <%=baseName%> API documentation
+        version: 0.0.1
+        termsOfServiceUrl:
+        contact:
+        license:
+        licenseUrl:

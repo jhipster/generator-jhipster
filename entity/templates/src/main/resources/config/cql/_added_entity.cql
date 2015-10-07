@@ -1,8 +1,7 @@
 
 CREATE TABLE IF NOT EXISTS <%= entityInstance %> (
     id uuid,<% for (fieldId in fields) { %><% if (fields[fieldId].fieldType == 'UUID') { %>
-    <%= fields[fieldId].fieldName %> uuid,<% } else if (fields[fieldId].fieldType == 'TimeUUID') { %>
-    <%= fields[fieldId].fieldName %> timeuuid,<% } else if (fields[fieldId].fieldType == 'String') { %>
+    <%= fields[fieldId].fieldName %> uuid,<% } else if (fields[fieldId].fieldType == 'String') { %>
     <%= fields[fieldId].fieldName %> text,<% } else if (fields[fieldId].fieldType == 'Integer') { %>
     <%= fields[fieldId].fieldName %> int,<% } else if (fields[fieldId].fieldType == 'Long') { %>
     <%= fields[fieldId].fieldName %> bigint,<% } else if (fields[fieldId].fieldType == 'Float') { %>

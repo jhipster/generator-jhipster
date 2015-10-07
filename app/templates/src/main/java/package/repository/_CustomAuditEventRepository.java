@@ -27,6 +27,10 @@ public class CustomAuditEventRepository {
     public AuditEventRepository auditEventRepository() {
         return new AuditEventRepository() {
 
+            private static final String AUTHORIZATION_FAILURE = "AUTHORIZATION_FAILURE";
+
+            private static final String ANONYMOUS_USER = "anonymousUser";
+
             @Inject
             private AuditEventConverter auditEventConverter;
 
@@ -47,13 +51,16 @@ public class CustomAuditEventRepository {
             @Override
             @Transactional(propagation = Propagation.REQUIRES_NEW)
             public void add(AuditEvent event) {
-                PersistentAuditEvent persistentAuditEvent = new PersistentAuditEvent();
-                persistentAuditEvent.setPrincipal(event.getPrincipal());
-                persistentAuditEvent.setAuditEventType(event.getType());
-                persistentAuditEvent.setAuditEventDate(new LocalDateTime(event.getTimestamp()));
-                persistentAuditEvent.setData(auditEventConverter.convertDataToStrings(event.getData()));
+                if(!AUTHORIZATION_FAILURE.equals(event.getType()) &&
+                    !ANONYMOUS_USER.equals(event.getPrincipal().toString())){
 
-                persistenceAuditEventRepository.save(persistentAuditEvent);
+                    PersistentAuditEvent persistentAuditEvent = new PersistentAuditEvent();
+                    persistentAuditEvent.setPrincipal(event.getPrincipal());
+                    persistentAuditEvent.setAuditEventType(event.getType());
+                    persistentAuditEvent.setAuditEventDate(new LocalDateTime(event.getTimestamp()));
+                    persistentAuditEvent.setData(auditEventConverter.convertDataToStrings(event.getData()));
+                    persistenceAuditEventRepository.save(persistentAuditEvent);
+                }
             }
         };
     }

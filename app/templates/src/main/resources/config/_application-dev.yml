@@ -1,53 +1,96 @@
-server:
-    port: 8080
+# ===================================================================
+# Spring Boot configuration for the "dev" profile.
+#
+# This configuration overrides the application.yml file.
+# ===================================================================
 
-liquibase:
-    context: dev
+# ===================================================================
+# Standard Spring Boot properties.
+# Full reference is available at:
+# http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+# ===================================================================
 
 spring:
     profiles:
-        active: dev<% if (databaseType == 'sql') { %>
-    datasource:<% if (devDatabaseType == 'oracle') { %>
-        driverClassName: oracle.jdbc.OracleDriver<% } %>
-        dataSourceClassName: <% if (devDatabaseType == 'mysql') { %>com.mysql.jdbc.jdbc2.optional.MysqlDataSource<% } else if (devDatabaseType == 'postgresql') { %>org.postgresql.ds.PGSimpleDataSource<% } else if (devDatabaseType == 'oracle') { %>oracle.jdbc.pool.OracleDataSource<% } else { %>org.h2.jdbcx.JdbcDataSource<% } %>
-        url: <% if (devDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8<% } else if (devDatabaseType == 'postgresql') { %><% } else if (devDatabaseType == 'oracle') { %>jdbc:oracle:thin:@localhost:1521:<%= baseName %><% } else { %>jdbc:h2:mem:jhipster;DB_CLOSE_DELAY=-1<% } %>
-        databaseName: <% if (devDatabaseType == 'postgresql') { %><%= baseName %><% } %>
-        serverName: <% if (devDatabaseType == 'postgresql') { %>localhost<% } %>
+        active: dev
+    <%_ if (databaseType == 'sql') { _%>
+    datasource:
+        <%_ if (devDatabaseType == 'oracle') { _%>
+        driver-class-name: oracle.jdbc.OracleDriver
+        <%_ } _%>
+        <%_ if (devDatabaseType == 'mysql') { _%>
+        driver-class-name: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
+        <%_ } else if (devDatabaseType == 'postgresql') { _%>
+        driver-class-name: org.postgresql.ds.PGSimpleDataSource
+        <%_ } else if (devDatabaseType == 'oracle') { _%>
+        driver-class-name: oracle.jdbc.pool.OracleDataSource
+        <%_ } else { _%>
+        driver-class-name: org.h2.jdbcx.JdbcDataSource
+        <%_ } _%>
+        <%_ if (devDatabaseType == 'mysql') { _%>
+        url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8
+        <%_ } else if (devDatabaseType == 'postgresql') { _%>
+        url:
+        <%_ } else if (devDatabaseType == 'oracle') { _%>
+        url: jdbc:oracle:thin:@localhost:1521:<%= baseName %>
+        <%_ } else { _%>
+        url: jdbc:h2:mem:jhipster;DB_CLOSE_DELAY=-1
+        <%_ } _%>
+        name: <% if (devDatabaseType == 'postgresql') { %><%= baseName %><% } %>
         username: <% if (devDatabaseType == 'mysql') { %>root<% } else if (devDatabaseType == 'postgresql') { %><%= baseName %><% } %>
-        password: <% if (devDatabaseType == 'mysql') { %>
-        cachePrepStmts: true
-        prepStmtCacheSize: 250
-        prepStmtCacheSqlLimit: 2048
-        useServerPrepStmts: true<% } %>
-
+        password:
     jpa:
-        database-platform: <% if (devDatabaseType == 'mysql') { %>org.hibernate.dialect.MySQLInnoDBDialect<% } else if (devDatabaseType == 'postgresql') { %>org.hibernate.dialect.PostgreSQL82Dialect<% } else if (devDatabaseType == 'oracle') { %>org.hibernate.dialect.Oracle10gDialect<% } else { %><%=packageName%>.domain.util.FixedH2Dialect<% } %>
-        database: <% if (devDatabaseType == 'mysql') { %>MYSQL<% } else if (devDatabaseType == 'postgresql') { %>POSTGRESQL<% } else if (devDatabaseType == 'oracle') { %>ORACLE<% } else { %>H2<% } %>
-        openInView: false
+        <%_ if (devDatabaseType == 'mysql') { _%>
+        database-platform: org.hibernate.dialect.MySQLInnoDBDialect
+        <%_ } else if (devDatabaseType == 'postgresql') { _%>
+        database-platform: <%=packageName%>.domain.util.FixedPostgreSQL82Dialect
+        <%_ } else if (devDatabaseType == 'oracle') { _%>
+        database-platform: org.hibernate.dialect.Oracle10gDialect
+        <%_ } else { _%>
+        database-platform: <%=packageName%>.domain.util.FixedH2Dialect
+        <%_ } _%>
+        <%_ if (devDatabaseType == 'mysql') { _%>
+        database: MYSQL
+        <%_ } else if (devDatabaseType == 'postgresql') { _%>
+        database: POSTGRESQL
+        <%_ } else if (devDatabaseType == 'oracle') { _%>
+        database: ORACLE
+        <%_ } else { _%>
+        database: H2
+        <%_ } _%>
         show_sql: true
-        generate-ddl: false
-        hibernate:
-            ddl-auto: none
-            naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
         properties:
             hibernate.cache.use_second_level_cache: <% if (hibernateCache == 'ehcache' || hibernateCache == 'hazelcast') { %>true<% } else { %>false<% } %>
             hibernate.cache.use_query_cache: false
-            hibernate.generate_statistics: true<% if (hibernateCache == 'ehcache') { %>
-            hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory<% } else if (hibernateCache == 'hazelcast') { %>
-            hibernate.cache.region.factory_class: <%=packageName%>.config.hazelcast.HazelcastCacheRegionFactory<% } %><% if (hibernateCache == 'hazelcast') { %>
+            hibernate.generate_statistics: true
+            <%_ if (hibernateCache == 'ehcache') { _%>
+            hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
+            <%_ } else if (hibernateCache == 'hazelcast') { _%>
+            hibernate.cache.region.factory_class: <%=packageName%>.config.hazelcast.HazelcastCacheRegionFactory
+            <%_ } _%>
+            <%_ if (hibernateCache == 'hazelcast') { _%>
             hibernate.cache.use_minimal_puts: true
-            hibernate.cache.hazelcast.use_lite_member: true<% } %><% } %><% if (databaseType == 'mongodb') { %>
+            hibernate.cache.hazelcast.use_lite_member: true
+            <%_ } _%>
+    <%_ } _%>
+    <%_ if (databaseType == 'mongodb') { _%>
     data:
         mongodb:
             host: localhost
             port: 27017
-            database: <%= baseName %><% } %><% if (databaseType == 'cassandra') { %>
+            database: <%= baseName %>
+    <%_ } _%>
+    <%_ if (databaseType == 'cassandra') { _%>
     data:
         cassandra:
+            # Note this is not an official Spring Boot configuration yet
+            # JHipster's Cassandra support is in the process of being merged in Spring Boot
             contactPoints: localhost
             protocolVersion: V2
             compression: LZ4
-            keyspaceName: <%= baseName %><% } %><% if (searchEngine == 'elasticsearch') { %>
+            keyspaceName: <%= baseName %>
+    <%_ } _%>
+    <%_ if (searchEngine == 'elasticsearch') { _%>
     data:
         elasticsearch:
             cluster-name:
@@ -55,30 +98,52 @@ spring:
             properties:
                 path:
                   logs: target/elasticsearch/log
-                  data: target/elasticsearch/data <% } %>
+                  data: target/elasticsearch/data
+    <%_ } _%>
     messages:
         cache-seconds: 1
     thymeleaf:
-        mode: XHTML
         cache: false
 
-metrics:
-    jmx.enabled: true<% if (javaVersion == '8') { %>
-    spark:
-        enabled: false
-        host: localhost
-        port: 9999<% } %>
-    graphite:
-        enabled: false
-        host: localhost
-        port: 2003
-        prefix: <%= baseName %>
+liquibase:
+    contexts: dev
 
-<% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast' || hibernateCache == 'ehcache') { %>cache:
-    timeToLiveSeconds: 3600<% } if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
-    hazelcast:
-        debug: true
-        stickySession: false
-        backupCount: 1<% } if (hibernateCache == 'ehcache') { %>
-    ehcache:
-        maxBytesLocalHeap: 16M<% } %>
+server:
+    port: 8080
+
+# ===================================================================
+# JHipster specific properties
+# ===================================================================
+
+jhipster:
+    datasource: # JHipster-specific configuration, in addition to the standard spring.datasource properties
+        serverName: <% if (devDatabaseType == 'postgresql') { %>localhost<% } %>
+        <%_ if (devDatabaseType == 'mysql') { _%>
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+        <%_ } _%>
+    <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast' || hibernateCache == 'ehcache') { _%>
+    cache: # Hibernate 2nd level cache, used by CacheConfiguration
+        timeToLiveSeconds: 3600
+        <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
+        hazelcast:
+            backupCount: 1
+        <%_ } _%>
+        <%_ if (hibernateCache == 'ehcache') { _%>
+        ehcache:
+            maxBytesLocalHeap: 16M
+        <%_ } _%>
+    <%_ } _%>
+    metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
+        jmx.enabled: true
+        spark:
+            enabled: false
+            host: localhost
+            port: 9999
+        graphite:
+            enabled: false
+            host: localhost
+            port: 2003
+            prefix: <%= baseName %>

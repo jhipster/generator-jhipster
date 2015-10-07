@@ -2,12 +2,14 @@ buildscript {
     repositories {
         mavenLocal()
         jcenter()
+        maven { url 'http://repo.spring.io/plugins-release' }
     }
     dependencies {
-        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.2.5.RELEASE')
-        classpath('com.moowork.gradle:gradle-node-plugin:0.10')<% if(frontendBuilder == 'grunt') {%>
-        classpath('com.moowork.gradle:gradle-grunt-plugin:0.10')<% }  if(frontendBuilder == 'gulp') {%>
-  	    classpath('com.moowork.gradle:gradle-gulp-plugin:0.10')
+        classpath group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: spring_boot_version
+        classpath group: 'org.springframework.build.gradle', name: 'propdeps-plugin', version: '0.0.7'
+        classpath group: 'com.moowork.gradle', name: 'gradle-node-plugin', version: '0.11'<% if(frontendBuilder == 'grunt') {%>
+        classpath group: 'com.moowork.gradle', name: 'gradle-grunt-plugin', version: '0.11'<% }  if(frontendBuilder == 'gulp') {%>
+  	    classpath group: 'com.moowork.gradle', name: 'gradle-gulp-plugin', version: '0.11'
         <% } %>
     }
 }
@@ -18,6 +20,7 @@ targetCompatibility=1.<%= javaVersion %>
 apply plugin: 'maven'
 apply plugin: 'spring-boot'
 apply plugin: 'war'
+apply plugin: 'propdeps'
 defaultTasks 'bootRun'
 
 bootRepackage {
@@ -37,8 +40,7 @@ apply from: 'sonar.gradle'
 <% if (databaseType == 'sql') { %>
 apply from: 'liquibase.gradle'<% } %>
 apply from: 'gatling.gradle'
-<% if (javaVersion == '8') { %>
-apply from: 'mapstruct.gradle'<% } %>
+apply from: 'mapstruct.gradle'
 
 if (project.hasProperty('prod')) {
     apply from: 'profile_prod.gradle'
@@ -162,9 +164,9 @@ dependencies {
     <% if (devDatabaseType == 'mysql' || prodDatabaseType == 'mysql') { %>
     compile group: 'mysql', name: 'mysql-connector-java'<% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
     compile group: 'org.postgresql', name: 'postgresql', version: postgresql_version<% } %><% if (devDatabaseType == 'h2Memory') { %>
-    compile group: 'com.h2database', name: 'h2'<% } %><% if (javaVersion == '8') { %>
-    compile group: 'fr.ippon.spark.metrics', name: 'metrics-spark-reporter', version: metrics_spark_reporter_version<% } %><% if (javaVersion == '8') { %>
-    compile group: 'org.mapstruct', name: 'mapstruct-jdk8', version: mapstruct_version<% } %>
+    compile group: 'com.h2database', name: 'h2'<% } %>
+    compile group: 'fr.ippon.spark.metrics', name: 'metrics-spark-reporter', version: metrics_spark_reporter_version
+    compile group: 'org.mapstruct', name: 'mapstruct-jdk8', version: mapstruct_version
     testCompile group: 'com.jayway.awaitility', name: 'awaitility', version: awaility_version
     testCompile group: 'com.jayway.jsonpath', name: 'json-path'<% if (databaseType == 'cassandra') { %>
     testCompile(group: 'org.cassandraunit', name: 'cassandra-unit-spring', version: cassandra_unit_spring_version) {
@@ -183,17 +185,20 @@ dependencies {
     testCompile group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version: gatling_version
     <% if (devDatabaseType != 'h2Memory') { %>
     testCompile group: 'com.h2database', name: 'h2'<% } %><% if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { %>
-    runtime files('lib/oracle/ojdbc/<% if (javaVersion == '7') { %>6/ojdbc-6<% }else { %>7/ojdbc-7<% } %>.jar')
+    runtime files('lib/oracle/ojdbc/7/ojdbc-7.jar')
     runtime fileTree(dir: 'lib', include: '*.jar')<% } %>
+    optional group: 'org.springframework.boot', name:'spring-boot-configuration-processor', version: spring_boot_version
 
 }
+
+compileJava.dependsOn(processResources)
 
 clean {
     delete "target"
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.6'
+    gradleVersion = '2.7'
 }
 
 task stage(dependsOn: 'bootRepackage') {

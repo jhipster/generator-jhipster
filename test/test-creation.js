@@ -25,7 +25,6 @@ describe('JHipster generator ', function () {
                 "enableTranslation" : true,
                 "buildTool": "maven",
                 "frontendBuilder": "grunt",
-                "javaVersion": "8",
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                 "searchEngine": "no"
             })
@@ -221,8 +220,6 @@ describe('JHipster generator ', function () {
             'src/main/webapp/scripts/app/account/login/login.html',
             'src/main/webapp/scripts/app/account/login/login.js',
             'src/main/webapp/scripts/app/account/login/login.controller.js',
-            'src/main/webapp/scripts/app/account/logout/logout.js',
-            'src/main/webapp/scripts/app/account/logout/logout.controller.js',
             'src/main/webapp/scripts/app/account/password/password.html',
             'src/main/webapp/scripts/app/account/password/password.js',
             'src/main/webapp/scripts/app/account/password/password.controller.js',
@@ -304,7 +301,6 @@ describe('JHipster generator ', function () {
                 "enableTranslation" : true,
                 "buildTool": "maven",
                 "frontendBuilder": "grunt",
-                "javaVersion": "8",
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                 "searchEngine": "no"
             })
@@ -338,7 +334,6 @@ describe('JHipster generator ', function () {
                 "enableTranslation" : true,
                 "buildTool": "maven",
                 "frontendBuilder": "grunt",
-                "javaVersion": "8",
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                 "searchEngine": "no" })
       .on('end', done);
@@ -371,7 +366,6 @@ describe('JHipster generator ', function () {
                 "enableTranslation" : true,
                 "buildTool": "maven",
                 "frontendBuilder": "grunt",
-                "javaVersion": "8",
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                 "searchEngine": "no" })
       .on('end', done);
@@ -403,7 +397,6 @@ describe('JHipster generator ', function () {
                 "enableTranslation" : true,
                 "buildTool": "maven",
                 "frontendBuilder": "grunt",
-                "javaVersion": "8",
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                 "searchEngine": "no" })
       .on('end', done);
@@ -436,7 +429,6 @@ describe('JHipster generator ', function () {
                 "enableTranslation" : false,
                 "buildTool": "maven",
                 "frontendBuilder": "grunt",
-                "javaVersion": "8",
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                 "searchEngine": "no" })
       .on('end', done);

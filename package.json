@@ -1,6 +1,6 @@
 {
   "name": "generator-jhipster",
-  "version": "2.20.0",
+  "version": "2.22.0",
   "description": "Java + Spring + JPA + AngularJS complete dev stack",
   "keywords": [
     "yeoman-generator",
@@ -36,7 +36,8 @@
     "lodash": "3.10.0",
     "mkdirp": "0.5.1",
     "shelljs": "0.5.0",
-    "underscore.string": "3.0.3",
+    "underscore.string": "3.2.0",
+    "wordwrap": "1.0.0",
     "yeoman-generator": "0.20.3",
     "yo": "1.4.6"
   },

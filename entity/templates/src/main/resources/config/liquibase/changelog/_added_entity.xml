@@ -41,7 +41,8 @@
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="decimal(10,2)"<% } else if (fieldType == 'LocalDate') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="date"<% } else if (fieldType == 'DateTime') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="timestamp"<% } else if (fieldType == 'byte[]') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="blob"<% } else if (fieldType == 'Boolean') { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="blob"/>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>_content_type" type="varchar(50)"<% } else if (fieldType == 'Boolean') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bit"<% } %><% if (required == false) {
                  %>/><% } else { %>>
                 <constraints nullable="false" />
@@ -67,7 +68,7 @@
                                  referencedColumnNames="id"
                                  referencedTableName="<%
                                  var otherEntityTable = getTableName(relationships[relationshipId].otherEntityName);
-                                 if (otherEntityTable == 'USER') { %>JHI_USER<% } else { %><%=otherEntityTable %><% } %>"/>
+                                 if (otherEntityTable == 'user') { %>jhi_user<% } else { %><%=otherEntityTable %><% } %>"/>
 <% } else if ((relationships[relationshipId].relationshipType == 'many-to-many') && (relationships[relationshipId].ownerSide == true)) {
     var relationshipName = relationships[relationshipId].relationshipName,
     otherEntityName = relationships[relationshipId].otherEntityName,
@@ -105,7 +106,7 @@
                                  referencedColumnNames="id"
                                  referencedTableName="<%
                                  var otherEntityTable = getTableName(otherEntityName);
-                                 if (otherEntityTable == 'USER') { %>JHI_USER<% } else { %><%=otherEntityTable %><% } %>"/>
+                                 if (otherEntityTable == 'user') { %>jhi_user<% } else { %><%=otherEntityTable %><% } %>"/>
         <% } %><% } %>
     </changeSet>
 </databaseChangeLog>

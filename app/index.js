@@ -16,18 +16,11 @@ var JhipsterGenerator = module.exports = function JhipsterGenerator(args, option
 
     yeoman.generators.Base.apply(this, arguments);
 
-    this.installDependencies({
-        skipInstall: options['skip-install'],
-        callback: this._injectDependenciesAndConstants.bind(this)
-    });
-
     this.on('end', function () {
         if (this.prodDatabaseType === 'oracle') {
             console.log(chalk.yellow.bold('\n\nYou have selected Oracle database.\n') + 'Please place the ' + chalk.yellow.bold('ojdbc-' + this.ojdbcVersion + '.jar') + ' in the `' + chalk.yellow.bold(this.libFolder) + '` folder under the project root. \n');
         }
-
     });
-
 
     this.pkg = JSON.parse(html.readFileAsString(path.join(__dirname, '../package.json')));
 };
@@ -38,19 +31,17 @@ util.inherits(JhipsterGenerator, scriptBase);
 JhipsterGenerator.prototype.askFor = function askFor() {
     var cb = this.async();
 
-    console.log(chalk.red('\n' +
-        ' _     _   ___   __  _____  ____  ___       __  _____   __    __    _    \n' +
-        '| |_| | | | |_) ( (`  | |  | |_  | |_)     ( (`  | |   / /\\  / /`  | |_/ \n' +
-        '|_| | |_| |_|   _)_)  |_|  |_|__ |_| \\     _)_)  |_|  /_/--\\ \\_\\_, |_| \\ \n' +
-        '                             ____  ___   ___                             \n' +
-        '                            | |_  / / \\ | |_)                            \n' +
-        '                            |_|   \\_\\_/ |_| \\                            \n' +
-        '              _    __    _       __        ___   ____  _      __        \n' +
-        '             | |  / /\\  \\ \\  /  / /\\      | | \\ | |_  \\ \\  / ( (`       \n' +
-        '           \\_|_| /_/--\\  \\_\\/  /_/--\\     |_|_/ |_|__  \\_\\/  _)_)       \n'));
-
-    console.log('\nWelcome to the JHipster Generator v' + packagejs.version + '\n');
+    console.log(chalk.white(
+        '       __   __    __   __  .______     _______.___________. _______ .______\n' +
+        '      |  | |  |  |  | |  | |   _  \\   /       |           ||   ____||   _  \\\n' +
+        '      |  | |  |__|  | |  | |  |_)  | |   (----`---|  |----`|  |__   |  |_)  |\n' +
+        '.--.  |  | |   __   | |  | |   ___/   \\   \\       |  |     |   __|  |      /\n' +
+        '|  `--\'  | |  |  |  | |  | |  |   .----)   |      |  |     |  |____ |  |\\  \\----.\n' +
+        ' \\______/  |__|  |__| |__| | _|   |_______/       |__|     |_______|| _| `._____|\n'));
+    console.log(chalk.white.bold('                            http://jhipster.github.io\n'));
+    console.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version + '\n'));
     var insight = this.insight();
+    this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
     var questions = 16; // making questions a variable to avoid updating each question by hand when adding additional options
 
     var prompts = [
@@ -85,22 +76,6 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             type: 'list',
-            name: 'javaVersion',
-            message: '(3/' + questions + ') Do you want to use Java 8?',
-            choices: [
-                {
-                    value: '8',
-                    name: 'Yes (use Java 8)'
-                },
-                {
-                    value: '7',
-                    name: 'No (use Java 7 - Warning! Cassandra and ElasticSearch support will not be available)'
-                }
-            ],
-            default: 0
-        },
-        {
-            type: 'list',
             name: 'authenticationType',
             message: '(4/' + questions + ') Which *type* of authentication would you like to use?',
             choices: [
@@ -121,7 +96,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             when: function (response) {
-                return (!(response.authenticationType == 'oauth2' || response.javaVersion == '7'));
+                return (response.authenticationType != 'oauth2');
             },
             type: 'list',
             name: 'databaseType',
@@ -144,7 +119,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             when: function (response) {
-                return (response.authenticationType == 'oauth2' || response.javaVersion == '7');
+                return (response.authenticationType == 'oauth2');
             },
             type: 'list',
             name: 'databaseType',
@@ -265,9 +240,6 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             default: 1
         },
         {
-            when: function (response) {
-                return (!(response.javaVersion == '7') && response.databaseType == 'sql');
-            },
             type: 'list',
             name: 'searchEngine',
             message: '(9/' + questions + ') Do you want to use a search engine in your application?',
@@ -364,7 +336,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
           name: 'useCucumber',
           message: '(16/' + questions + ') Would you like to use Cucumber as a testing framework?',
           default: false
-      }
+        }
     ];
 
     this.baseName = this.config.get('baseName');
@@ -391,7 +363,6 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     if (this.useSass == undefined) { // backward compatibility for existing compass users
         this.useSass = this.config.get('useCompass');
     }
-    this.javaVersion = this.config.get('javaVersion');
     this.buildTool = this.config.get('buildTool');
     this.frontendBuilder = this.config.get('frontendBuilder');
     this.rememberMeKey = this.config.get('rememberMeKey');
@@ -411,8 +382,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         this.searchEngine != null &&
         this.useSass != null &&
         this.buildTool != null &&
-        this.frontendBuilder != null &&
-        this.javaVersion != null) {
+        this.frontendBuilder != null) {
 
         // Generate key if key does not already exist in config
         if (this.rememberMeKey == null) {
@@ -446,7 +416,6 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             this.useSass = props.useSass;
             this.buildTool = props.buildTool;
             this.frontendBuilder = props.frontendBuilder;
-            this.javaVersion = props.javaVersion;
             this.enableTranslation = props.enableTranslation;
             this.useCucumber = props.useCucumber;
             this.rememberMeKey = crypto.randomBytes(20).toString('hex');
@@ -483,7 +452,6 @@ JhipsterGenerator.prototype.app = function app() {
     insight.track('app/useSass', this.useSass);
     insight.track('app/buildTool', this.buildTool);
     insight.track('app/frontendBuilder', this.frontendBuilder);
-    insight.track('app/javaVersion', this.javaVersion);
     insight.track('app/enableTranslation', this.enableTranslation);
     insight.track('app/useCucumber', this.useCucumber);
 
@@ -501,7 +469,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.slugifiedBaseName = _.slugify(this.baseName);
 
     if (this.prodDatabaseType === 'oracle') { // create a folder for users to place ojdbc jar
-        this.ojdbcVersion = this.javaVersion == '7' ? '6' : '7';
+        this.ojdbcVersion = '7';
         this.libFolder = 'lib/oracle/ojdbc/' + this.ojdbcVersion + '/';
         mkdirp(this.libFolder);
     }
@@ -512,6 +480,17 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('bowerrc', '.bowerrc', this, {});
     this.copy('gitignore', '.gitignore');
     this.copy('gitattributes', '.gitattributes');
+
+    // Create docker-compose file
+    if (this.devDatabaseType != "h2Memory" && this.devDatabaseType != "oracle") {
+        this.template('_docker-compose.yml', 'docker-compose.yml', this, {});
+    }
+    if (this.prodDatabaseType != "oracle" || this.searchEngine == "elasticsearch") {
+        this.template('_docker-compose-prod.yml', 'docker-compose-prod.yml', this, {});
+    }
+    if (this.devDatabaseType == "cassandra") {
+        this.template('_Dockerfile_cassandra', 'Dockerfile', this, {});
+    }
 
     switch (this.frontendBuilder) {
         case 'gulp':
@@ -618,6 +597,7 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/main/java/package/config/_DatabaseConfiguration.java', javaDir + 'config/DatabaseConfiguration.java', this, {});
     }
     this.template('src/main/java/package/config/_JacksonConfiguration.java', javaDir + 'config/JacksonConfiguration.java', this, {});
+    this.template('src/main/java/package/config/_JHipsterProperties.java', javaDir + 'config/JHipsterProperties.java', this, {});
     this.template('src/main/java/package/config/_LocaleConfiguration.java', javaDir + 'config/LocaleConfiguration.java', this, {});
     this.template('src/main/java/package/config/_LoggingAspectConfiguration.java', javaDir + 'config/LoggingAspectConfiguration.java', this, {});
     this.template('src/main/java/package/config/_MailConfiguration.java', javaDir + 'config/MailConfiguration.java', this, {});
@@ -685,6 +665,11 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/main/java/package/config/hazelcast/_package-info.java', javaDir + 'config/hazelcast/package-info.java', this, {});
     }
 
+    if (this.databaseType == "sql") {
+        this.template('src/main/java/package/config/liquibase/_AsyncSpringLiquibase.java', javaDir + 'config/liquibase/AsyncSpringLiquibase.java', this, {});
+        this.template('src/main/java/package/config/liquibase/_package-info.java', javaDir + 'config/liquibase/package-info.java', this, {});
+    }
+
     this.template('src/main/java/package/domain/_package-info.java', javaDir + 'domain/package-info.java', this, {});
     if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
         this.template('src/main/java/package/domain/_AbstractAuditingEntity.java', javaDir + 'domain/AbstractAuditingEntity.java', this, {});
@@ -701,6 +686,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/domain/util/_ISO8601LocalDateDeserializer.java', javaDir + 'domain/util/ISO8601LocalDateDeserializer.java', this, {});
     if (this.databaseType == "sql") {
         this.template('src/main/java/package/domain/util/_FixedH2Dialect.java', javaDir + 'domain/util/FixedH2Dialect.java', this, {});
+        if (this.prodDatabaseType == 'postgresql') {
+            this.template('src/main/java/package/domain/util/_FixedPostgreSQL82Dialect.java', javaDir + 'domain/util/FixedPostgreSQL82Dialect.java', this, {});
+        }
     }
 
     if (this.searchEngine == 'elasticsearch') {
@@ -779,6 +767,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/web/rest/dto/_package-info.java', javaDir + 'web/rest/dto/package-info.java', this, {});
     this.template('src/main/java/package/web/rest/dto/_LoggerDTO.java', javaDir + 'web/rest/dto/LoggerDTO.java', this, {});
     this.template('src/main/java/package/web/rest/dto/_UserDTO.java', javaDir + 'web/rest/dto/UserDTO.java', this, {});
+    this.template('src/main/java/package/web/rest/dto/_ManagedUserDTO.java', javaDir + 'web/rest/dto/ManagedUserDTO.java', this, {});
     this.template('src/main/java/package/web/rest/util/_HeaderUtil.java', javaDir + 'web/rest/util/HeaderUtil.java', this, {});
     this.template('src/main/java/package/web/rest/dto/_KeyAndPasswordDTO.java', javaDir + 'web/rest/dto/KeyAndPasswordDTO.java', this, {});
 
@@ -922,8 +911,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.copyHtml(webappDir + '/scripts/app/account/login/login.html', webappDir + 'scripts/app/account/login/login.html');
     this.copyJs(webappDir + '/scripts/app/account/login/_login.js', webappDir + 'scripts/app/account/login/login.js', this, {});
     this.template(webappDir + '/scripts/app/account/login/_login.controller.js', webappDir + 'scripts/app/account/login/login.controller.js', this, {});
-    this.copyJs(webappDir + '/scripts/app/account/logout/_logout.js', webappDir + 'scripts/app/account/logout/logout.js', this, {});
-    this.template(webappDir + '/scripts/app/account/logout/_logout.controller.js', webappDir + 'scripts/app/account/logout/logout.controller.js', this, {});
     this.copyHtml(webappDir + '/scripts/app/account/password/password.html', webappDir + 'scripts/app/account/password/password.html');
     this.copyJs(webappDir + '/scripts/app/account/password/_password.js', webappDir + 'scripts/app/account/password/password.js', this, {});
     this.template(webappDir + '/scripts/app/account/password/_password.controller.js', webappDir + 'scripts/app/account/password/password.controller.js', this, {});
@@ -973,13 +960,11 @@ JhipsterGenerator.prototype.app = function app() {
         this.template(webappDir + '/scripts/app/admin/tracker/_tracker.controller.js', webappDir + 'scripts/app/admin/tracker/tracker.controller.js', this, {});
         this.template(webappDir + '/scripts/components/tracker/_tracker.service.js', webappDir + '/scripts/components/tracker/tracker.service.js', this, {});
     }
-    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
-        this.copyHtml(webappDir + '/scripts/app/admin/user-management/user-management.html', webappDir + 'scripts/app/admin/user-management/user-management.html');
-        this.copyHtml(webappDir + '/scripts/app/admin/user-management/_user-management-detail.html', webappDir + 'scripts/app/admin/user-management/user-management-detail.html');
-        this.copyJs(webappDir + '/scripts/app/admin/user-management/_user-management.js', webappDir + 'scripts/app/admin/user-management/user-management.js', this, {});
-        this.template(webappDir + '/scripts/app/admin/user-management/_user-management.controller.js', webappDir + 'scripts/app/admin/user-management/user-management.controller.js', this, {});
-        this.template(webappDir + '/scripts/app/admin/user-management/_user-management-detail.controller.js', webappDir + 'scripts/app/admin/user-management/user-management-detail.controller.js', this, {});
-    }
+    this.copyHtml(webappDir + '/scripts/app/admin/user-management/user-management.html', webappDir + 'scripts/app/admin/user-management/user-management.html');
+    this.copyHtml(webappDir + '/scripts/app/admin/user-management/_user-management-detail.html', webappDir + 'scripts/app/admin/user-management/user-management-detail.html');
+    this.copyJs(webappDir + '/scripts/app/admin/user-management/_user-management.js', webappDir + 'scripts/app/admin/user-management/user-management.js', this, {});
+    this.template(webappDir + '/scripts/app/admin/user-management/_user-management.controller.js', webappDir + 'scripts/app/admin/user-management/user-management.controller.js', this, {});
+    this.template(webappDir + '/scripts/app/admin/user-management/_user-management-detail.controller.js', webappDir + 'scripts/app/admin/user-management/user-management-detail.controller.js', this, {});
     this.copyHtml(webappDir + '/scripts/app/error/error.html', webappDir + 'scripts/app/error/error.html');
     this.copyHtml(webappDir + '/scripts/app/error/accessdenied.html', webappDir + 'scripts/app/error/accessdenied.html');
     this.copyJs(webappDir + '/scripts/app/entities/_entity.js', webappDir + 'scripts/app/entities/entity.js', this, {});
@@ -1059,8 +1044,6 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/app/account/activate/activate.controller.js',
         'scripts/app/account/login/login.js',
         'scripts/app/account/login/login.controller.js',
-        'scripts/app/account/logout/logout.js',
-        'scripts/app/account/logout/logout.controller.js',
         'scripts/app/account/password/password.js',
         'scripts/app/account/password/password.controller.js',
         'scripts/app/account/password/password.directive.js',
@@ -1086,17 +1069,14 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/app/admin/metrics/metrics.js',
         'scripts/app/admin/metrics/metrics.controller.js',
         'scripts/app/admin/metrics/metrics.modal.controller.js',
+        'scripts/app/admin/user-management/user-management-detail.controller.js',
+        'scripts/app/admin/user-management/user-management.controller.js',
+        'scripts/app/admin/user-management/user-management.js',
         'scripts/app/entities/entity.js',
         'scripts/app/error/error.js',
         'scripts/app/main/main.js',
         'scripts/app/main/main.controller.js'
     ];
-    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
-        appScripts = appScripts.concat([
-            'scripts/app/admin/user-management/user-management-detail.controller.js',
-            'scripts/app/admin/user-management/user-management.controller.js',
-            'scripts/app/admin/user-management/user-management.js']);
-    }
     if (this.enableTranslation) {
         appScripts = appScripts.concat([
             'bower_components/messageformat/locale/en.js',
@@ -1133,6 +1113,10 @@ JhipsterGenerator.prototype.app = function app() {
     this.write(webappDir + 'index.html', this.indexFile);
 
     // Remove old files, from previous JHipster versions
+    removefile(webappDir + 'scripts/app/account/logout/logout.js');
+    removefile(webappDir + 'scripts/app/account/logout/logout.controller.js');
+    removefolder(webappDir + 'scripts/app/account/logout');
+
     removefile(testJsDir + 'spec/app/account/health/healthControllerSpec.js');
     removefile(testJsDir + 'spec/app/account/login/loginControllerSpec.js');
     removefile(testJsDir + 'spec/app/account/password/passwordControllerSpec.js');
@@ -1155,7 +1139,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.config.set('useSass', this.useSass);
     this.config.set('buildTool', this.buildTool);
     this.config.set('frontendBuilder', this.frontendBuilder);
-    this.config.set('javaVersion', this.javaVersion);
     this.config.set('enableTranslation', this.enableTranslation);
     this.config.set('rememberMeKey', this.rememberMeKey);
 };
@@ -1179,6 +1162,13 @@ function removefolder(folder) {
         shelljs.rm("-rf", folder);
     }
 }
+
+JhipsterGenerator.prototype.install = function install() {
+  this.installDependencies({
+      skipInstall: this.options['skip-install'],
+      callback: this._injectDependenciesAndConstants.bind(this)
+  });
+};
 
 JhipsterGenerator.prototype._injectDependenciesAndConstants = function _injectDependenciesAndConstants() {
     if (this.options['skip-install']) {

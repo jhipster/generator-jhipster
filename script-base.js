@@ -73,7 +73,7 @@ Generator.prototype.addRouterToMenu = function (entityName,enableTranslation) {
             file: fullPath,
             needle: '<!-- JHipster will add entities to the menu here -->',
             splicable: [
-                    '<li ui-sref-active="active" ><a ui-sref="' + entityName + '"><span class="glyphicon glyphicon-asterisk"></span>\n' +
+                    '<li ui-sref-active="active" ><a ui-sref="' + entityName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-asterisk"></span>\n' +
                     '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.entities.' + entityName + '"':'' ) + '>' + entityName + '</span></a></li>'
             ]
         });
@@ -125,7 +125,7 @@ Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, res
     this.copyI18nFilesByName(_this, webappDir, 'sessions.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'settings.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'reset.json', lang);
-    this.copyI18nFilesByName(_this, webappDir, 'user-management.json', lang);
+    this.copyI18nFilesByName(_this, webappDir, 'user.management.json', lang);
 
     // tracker.json for Websocket
     if (this.websocket == 'spring-websocket') {
