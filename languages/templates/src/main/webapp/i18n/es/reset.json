@@ -1,28 +1,28 @@
 {
     "reset": {
         "request": {
-            "title": "Reset your password",
+            "title": "Restablecer su contraseña",
             "form": {
-                "button": "Reset password"
+                "button": "Restablecer la contraseña"
             },
             "messages": {
-                "info": "Enter the e-mail address you used to register",
-                "success": "Check your e-mails for details on how to reset your password.",
-                "notfound": "<strong>E-Mail address isn't registered!</strong> Please check and try again"
+                "info": "Introduzca la dirección de correo electrónico que utilizó para registrarse",
+                "success": "Revise su correo electrónico para obtener más información sobre cómo restablecer su contraseña.",
+                "notfound": "<strong>¡Dirección de correo no registrada!</strong>Por favor compruebe e inténtelo de nuevo"
 
             }
 
         },
         "finish" : {
-            "title": "Reset password",
+            "title": "Restablecer la contraseña",
             "form": {
-                "button": "Validate new password"
+                "button": "Validar la nueva contraseña"
             },
             "messages": {
-                "info": "Choose a new password",
-                "success": "<strong>Your password has been reset.</strong> Please <a class=\"alert-link\" href=\"#/login\">sign in</a>.",
-                "keymissing": "The reset key is missing.",
-                "error": "Your password couldn't be reset. Remember a password request is only valid for 24 hours."
+                "info": "Elija una contraseña nueva",
+                "success": "<strong>Su contraseña ha sido restablecida.</strong> Por favor <a class=\"alert-link\" href=\"#/login\">inicie sesión</a>.",
+                "keymissing": "Falta la clave de reinicio.",
+                "error": "Su contraseña no puede ser restablecida. Recuerde que una solicitud de reinicio de contraseña sólo es válida durante 24 horas."
             }
         }
     }
