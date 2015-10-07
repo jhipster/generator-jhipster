@@ -22,12 +22,7 @@
 
     <properties>
         <hikaricp.version>2.4.1</hikaricp.version>
-        <%_ if (javaVersion == '8') { _%>
         <assertj-core.version>3.1.0</assertj-core.version>
-        <%_ } _%>
-        <%_ if (javaVersion == '7') { _%>
-        <assertj-core.version>2.1.0</assertj-core.version>
-        <%_ } _%>
         <awaitility.version>1.4.0</awaitility.version>
         <commons-io.version>2.4</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
@@ -319,7 +314,7 @@
         <dependency>
             <groupId>oracle</groupId>
             <artifactId>ojdbc</artifactId>
-            <version><% if (javaVersion == '7') { %>6<% }else { %>7<% } %></version>
+            <version>7</version>
         </dependency>
         <%_ } _%>
         <dependency>
@@ -394,13 +389,11 @@
             <version>${postgresql.version}</version>
         </dependency>
         <%_ } _%>
-        <%_ if (javaVersion == '8') { _%>
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-jdk8</artifactId>
             <version>${mapstruct.version}</version>
         </dependency>
-        <%_ } _%>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
@@ -537,13 +530,11 @@
         </dependency>
         <%_ } _%>
         <!-- reporting -->
-        <%_ if (javaVersion == '8') { _%>
         <dependency>
             <groupId>fr.ippon.spark.metrics</groupId>
             <artifactId>metrics-spark-reporter</artifactId>
             <version>${metrics-spark-reporter.version}</version>
         </dependency>
-        <%_ } _%>
     </dependencies>
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
@@ -637,7 +628,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <argLine><% if (javaVersion == '7') { %>-XX:MaxPermSize=128m <% } %>-Xmx256m ${surefireArgLine}</argLine>
+                    <argLine>-Xmx256m ${surefireArgLine}</argLine>
                     <!-- Force alphabetical order to have a reproducible build -->
                     <runOrder>alphabetical</runOrder>
                 </configuration>
@@ -685,7 +676,6 @@
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>${sonar-maven-plugin.version}</version>
             </plugin>
-            <%_ if (javaVersion == '8') { _%>
             <plugin>
                 <groupId>org.bsc.maven</groupId>
                 <artifactId>maven-processor-plugin</artifactId>
@@ -719,7 +709,6 @@
                     </dependency>
                 </dependencies>
             </plugin>
-            <%_ } _%>
             <%_ if (databaseType == 'sql') { _%>
             <plugin>
                 <groupId>org.liquibase</groupId>

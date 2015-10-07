@@ -22,14 +22,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;<% if (validation) { %>
 import javax.validation.Valid;<% } %>
 import java.net.URI;
-import java.net.URISyntaxException;<% if (javaVersion == '7') { %>
-import javax.servlet.http.HttpServletResponse;<% } %><% if (javaVersion == '7' && fieldsContainNoOwnerOneToOne == true) { %>
-import java.util.ArrayList;<% } %><% if (dto == 'mapstruct') { %>
+import java.net.URISyntaxException;<% if (dto == 'mapstruct') { %>
 import java.util.LinkedList;<% } %>
-import java.util.List;<% if (javaVersion == '8') { %>
-import java.util.Optional;<% } %><% if (databaseType == 'cassandra') { %>
-import java.util.UUID;<% } %><% if (searchEngine == 'elasticsearch' || dto == 'mapstruct' || (javaVersion == '8' && fieldsContainNoOwnerOneToOne == true)) { %>
-import java.util.stream.Collectors;<% } %><% if (searchEngine == 'elasticsearch' || (javaVersion == '8' && fieldsContainNoOwnerOneToOne == true)) { %>
+import java.util.List;
+import java.util.Optional;<% if (databaseType == 'cassandra') { %>
+import java.util.UUID;<% } %><% if (searchEngine == 'elasticsearch' || dto == 'mapstruct' || fieldsContainNoOwnerOneToOne == true) { %>
+import java.util.stream.Collectors;<% } %><% if (searchEngine == 'elasticsearch' || fieldsContainNoOwnerOneToOne == true) { %>
 import java.util.stream.StreamSupport;<% } %><% if (searchEngine == 'elasticsearch') { %>
 
 import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
@@ -108,20 +106,13 @@ public class <%= entityClass %>Resource {
     @Transactional(readOnly = true)<% } %><% if (pagination == 'no') { %>
     public List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> getAll<%= entityClass %>s(<% if (fieldsContainNoOwnerOneToOne == true) { %>@RequestParam(required = false) String filter<% } %>) {<% for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { %>
         if ("<%= relationships[idx].relationshipName.toLowerCase() %>-is-null".equals(filter)) {
-            log.debug("REST request to get all <%= entityClass %>s where <%= relationships[idx].relationshipName %> is null");<% if (javaVersion == '7') { %>
-            List <%= entityInstance %>s = new ArrayList<<%= entityClass %>>();
-            for (<%= entityClass %> <%= entityInstance %> : <%= entityInstance %>Repository.findAll()) {
-                if (<%= entityInstance %>.get<%= relationships[idx].relationshipNameCapitalized %>() == null) {
-                    <%= entityInstance %>s.add(<%= entityInstance %>);
-                }
-            }
-            return <%= entityInstance %>s;<% } else { %>
+            log.debug("REST request to get all <%= entityClass %>s where <%= relationships[idx].relationshipName %> is null");
             return StreamSupport
                 .stream(<%= entityInstance %>Repository.findAll().spliterator(), false)
                 .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationships[idx].relationshipNameCapitalized %>() == null)<% if (dto == 'mapstruct') { %>
                 .map(<%= entityInstance %> -> <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(<%= entityInstance %>))
                 .collect(Collectors.toCollection(LinkedList::new));<% } else { %>
-                .collect(Collectors.toList());<% } %><% } %>
+                .collect(Collectors.toList());<% } %>
         }
 <% } } %>
         log.debug("REST request to get all <%= entityClass %>s");
@@ -131,24 +122,17 @@ public class <%= entityClass %>Resource {
     public ResponseEntity<List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>>> getAll<%= entityClass %>s(Pageable pageable<% if (fieldsContainNoOwnerOneToOne == true) { %>, @RequestParam(required = false) String filter<% } %>)
         throws URISyntaxException {<% for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { %>
         if ("<%= relationships[idx].relationshipName.toLowerCase() %>-is-null".equals(filter)) {
-            log.debug("REST request to get all <%= entityClass %>s where <%= relationships[idx].relationshipName %> is null");<% if (javaVersion == '7') { %>
-            List<<%= entityClass %>> <%= entityInstance %>s = new ArrayList<<%= entityClass %>>();
-            for (<%= entityClass %> <%= entityInstance %> : <%= entityInstance %>Repository.findAll()) {
-                if (<%= entityInstance %>.get<%= relationships[idx].relationshipNameCapitalized %>() == null) {
-                    <%= entityInstance %>s.add(<%= entityInstance %>);
-                }
-            }
-            return new ResponseEntity<>(<%= entityInstance %>s, HttpStatus.OK);<% } else { %>
+            log.debug("REST request to get all <%= entityClass %>s where <%= relationships[idx].relationshipName %> is null");
             return new ResponseEntity<>(StreamSupport
                 .stream(<%= entityInstance %>Repository.findAll().spliterator(), false)
                 .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationships[idx].relationshipNameCapitalized %>() == null)<% if (dto == 'mapstruct') { %>
                 .map(<%= entityInstance %> -> <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(<%= entityInstance %>))<% } %>
-                .collect(Collectors.toList()), HttpStatus.OK);<% } %>
+                .collect(Collectors.toList()), HttpStatus.OK);
         }
         <% } } %>
         Page<<%= entityClass %>> page = <%= entityInstance %>Repository.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityInstance %>s");
-        return new ResponseEntity<<% if (javaVersion == '7') { %>List<<%= entityClass %>><% } %>>(page.getContent()<% if (dto == 'mapstruct') { %>.stream()
+        return new ResponseEntity<>(page.getContent()<% if (dto == 'mapstruct') { %>.stream()
             .map(<%= entityInstance %>Mapper::<%= entityInstance %>To<%= entityClass %>DTO)
             .collect(Collectors.toCollection(LinkedList::new))<% } %>, headers, HttpStatus.OK);<% } %>
     }
@@ -160,20 +144,15 @@ public class <%= entityClass %>Resource {
             method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> get<%= entityClass %>(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id<% if (javaVersion == '7') { %>, HttpServletResponse response<% } %>) {
-        log.debug("REST request to get <%= entityClass %> : {}", id);<% if (javaVersion == '8') { %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+    public ResponseEntity<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> get<%= entityClass %>(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id) {
+        log.debug("REST request to get <%= entityClass %> : {}", id);<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         return Optional.ofNullable(<%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findOneWithEagerRelationships<% } else { %>findOne<% } %>(id))<% } %><% if (databaseType == 'cassandra') { %>
         return Optional.ofNullable(<%= entityInstance %>Repository.findOne(UUID.fromString(id)))<% } %><% if (dto == 'mapstruct') { %>
             .map(<%= entityInstance %>Mapper::<%= entityInstance %>To<%= entityClass %>DTO)<% } %>
             .map(<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %> -> new ResponseEntity<>(
                 <%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>,
                 HttpStatus.OK))
-            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));<% } else { %>
-        <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findOneWithEagerRelationships<% } else { %>findOne<% } %>(id);
-        if (<%= entityInstance %> == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(<%= entityInstance %>, HttpStatus.OK);<% } %>
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     /**

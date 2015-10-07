@@ -7,8 +7,8 @@ import com.codahale.metrics.graphite.GraphiteReporter;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.codahale.metrics.jvm.*;
 import com.ryantenney.metrics.spring.config.annotation.EnableMetrics;
-import com.ryantenney.metrics.spring.config.annotation.MetricsConfigurerAdapter;<% if (javaVersion == '8') { %>
-import fr.ippon.spark.metrics.SparkReporter;<% } %>
+import com.ryantenney.metrics.spring.config.annotation.MetricsConfigurerAdapter;
+import fr.ippon.spark.metrics.SparkReporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -98,7 +98,7 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
                 graphiteReporter.start(1, TimeUnit.MINUTES);
             }
         }
-    }<% if (javaVersion == '8') { %>
+    }
 
     @Configuration
     @ConditionalOnClass(SparkReporter.class)
@@ -126,5 +126,5 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
                 sparkReporter.start(1, TimeUnit.MINUTES);
             }
         }
-    }<% } %>
+    }
 }

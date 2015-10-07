@@ -30,7 +30,7 @@ public class ExceptionHandlingAsyncTaskExecutor implements AsyncTaskExecutor,
         executor.execute(createWrappedRunnable(task), startTimeout);
     }
 
-    private <T> Callable<T> createCallable(final Callable<T> task) {<% if (javaVersion == '8') { %>
+    private <T> Callable<T> createCallable(final Callable<T> task) {
         return () -> {
             try {
                 return task.call();
@@ -38,40 +38,17 @@ public class ExceptionHandlingAsyncTaskExecutor implements AsyncTaskExecutor,
                 handle(e);
                 throw e;
             }
-        };<% } else { %>
-        return new Callable<T>() {
-
-            @Override
-            public T call() throws Exception {
-                try {
-                    return task.call();
-                } catch (Exception e) {
-                    handle(e);
-                    throw e;
-                }
-            }
-        };<% } %>
+        };
     }
 
-    private Runnable createWrappedRunnable(final Runnable task) {<% if (javaVersion == '8') { %>
+    private Runnable createWrappedRunnable(final Runnable task) {
         return () -> {
             try {
                 task.run();
             } catch (Exception e) {
                 handle(e);
             }
-        };<% } else { %>
-        return new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    task.run();
-                } catch (Exception e) {
-                    handle(e);
-                }
-            }
-        };<% } %>
+        };
     }
 
     protected void handle(Exception e) {

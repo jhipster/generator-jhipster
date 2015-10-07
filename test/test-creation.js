@@ -25,7 +25,6 @@ describe('JHipster generator ', function () {
                 "enableTranslation" : true,
                 "buildTool": "maven",
                 "frontendBuilder": "grunt",
-                "javaVersion": "8",
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                 "searchEngine": "no"
             })
@@ -302,7 +301,6 @@ describe('JHipster generator ', function () {
                 "enableTranslation" : true,
                 "buildTool": "maven",
                 "frontendBuilder": "grunt",
-                "javaVersion": "8",
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                 "searchEngine": "no"
             })
@@ -336,7 +334,6 @@ describe('JHipster generator ', function () {
                 "enableTranslation" : true,
                 "buildTool": "maven",
                 "frontendBuilder": "grunt",
-                "javaVersion": "8",
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                 "searchEngine": "no" })
       .on('end', done);
@@ -369,7 +366,6 @@ describe('JHipster generator ', function () {
                 "enableTranslation" : true,
                 "buildTool": "maven",
                 "frontendBuilder": "grunt",
-                "javaVersion": "8",
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                 "searchEngine": "no" })
       .on('end', done);
@@ -401,7 +397,6 @@ describe('JHipster generator ', function () {
                 "enableTranslation" : true,
                 "buildTool": "maven",
                 "frontendBuilder": "grunt",
-                "javaVersion": "8",
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                 "searchEngine": "no" })
       .on('end', done);
@@ -434,7 +429,6 @@ describe('JHipster generator ', function () {
                 "enableTranslation" : false,
                 "buildTool": "maven",
                 "frontendBuilder": "grunt",
-                "javaVersion": "8",
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                 "searchEngine": "no" })
       .on('end', done);

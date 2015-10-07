@@ -41,6 +41,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     console.log(chalk.white.bold('                            http://jhipster.github.io\n'));
     console.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version + '\n'));
     var insight = this.insight();
+    this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
     var questions = 15; // making questions a variable to avoid updating each question by hand when adding additional options
 
     var prompts = [
@@ -75,22 +76,6 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             type: 'list',
-            name: 'javaVersion',
-            message: '(3/' + questions + ') Do you want to use Java 8?',
-            choices: [
-                {
-                    value: '8',
-                    name: 'Yes (use Java 8)'
-                },
-                {
-                    value: '7',
-                    name: 'No (use Java 7 - Warning! Cassandra and ElasticSearch support will not be available)'
-                }
-            ],
-            default: 0
-        },
-        {
-            type: 'list',
             name: 'authenticationType',
             message: '(4/' + questions + ') Which *type* of authentication would you like to use?',
             choices: [
@@ -111,7 +96,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             when: function (response) {
-                return (!(response.authenticationType == 'oauth2' || response.javaVersion == '7'));
+                return (response.authenticationType != 'oauth2');
             },
             type: 'list',
             name: 'databaseType',
@@ -134,7 +119,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             when: function (response) {
-                return (response.authenticationType == 'oauth2' || response.javaVersion == '7');
+                return (response.authenticationType == 'oauth2');
             },
             type: 'list',
             name: 'databaseType',
@@ -255,9 +240,6 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             default: 1
         },
         {
-            when: function (response) {
-                return (!(response.javaVersion == '7') && response.databaseType == 'sql');
-            },
             type: 'list',
             name: 'searchEngine',
             message: '(9/' + questions + ') Do you want to use a search engine in your application?',
@@ -375,7 +357,6 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     if (this.useSass == undefined) { // backward compatibility for existing compass users
         this.useSass = this.config.get('useCompass');
     }
-    this.javaVersion = this.config.get('javaVersion');
     this.buildTool = this.config.get('buildTool');
     this.frontendBuilder = this.config.get('frontendBuilder');
     this.rememberMeKey = this.config.get('rememberMeKey');
@@ -394,8 +375,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         this.searchEngine != null &&
         this.useSass != null &&
         this.buildTool != null &&
-        this.frontendBuilder != null &&
-        this.javaVersion != null) {
+        this.frontendBuilder != null) {
 
         // Generate key if key does not already exist in config
         if (this.rememberMeKey == null) {
@@ -429,7 +409,6 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             this.useSass = props.useSass;
             this.buildTool = props.buildTool;
             this.frontendBuilder = props.frontendBuilder;
-            this.javaVersion = props.javaVersion;
             this.enableTranslation = props.enableTranslation;
             this.rememberMeKey = crypto.randomBytes(20).toString('hex');
 
@@ -465,7 +444,6 @@ JhipsterGenerator.prototype.app = function app() {
     insight.track('app/useSass', this.useSass);
     insight.track('app/buildTool', this.buildTool);
     insight.track('app/frontendBuilder', this.frontendBuilder);
-    insight.track('app/javaVersion', this.javaVersion);
     insight.track('app/enableTranslation', this.enableTranslation);
 
     var packageFolder = this.packageName.replace(/\./g, '/');
@@ -482,7 +460,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.slugifiedBaseName = _.slugify(this.baseName);
 
     if (this.prodDatabaseType === 'oracle') { // create a folder for users to place ojdbc jar
-        this.ojdbcVersion = this.javaVersion == '7' ? '6' : '7';
+        this.ojdbcVersion = '7';
         this.libFolder = 'lib/oracle/ojdbc/' + this.ojdbcVersion + '/';
         mkdirp(this.libFolder);
     }
@@ -1145,7 +1123,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.config.set('useSass', this.useSass);
     this.config.set('buildTool', this.buildTool);
     this.config.set('frontendBuilder', this.frontendBuilder);
-    this.config.set('javaVersion', this.javaVersion);
     this.config.set('enableTranslation', this.enableTranslation);
     this.config.set('rememberMeKey', this.rememberMeKey);
 };

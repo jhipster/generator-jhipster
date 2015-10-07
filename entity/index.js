@@ -38,7 +38,6 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.baseName = this.config.get('baseName');
     this.packageName = this.config.get('packageName');
     this.packageFolder = this.config.get('packageFolder');
-    this.javaVersion = this.config.get('javaVersion');
     this.authenticationType = this.config.get('authenticationType');
     this.hibernateCache = this.config.get('hibernateCache');
     this.databaseType = this.config.get('databaseType');
@@ -782,9 +781,6 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
 
 EntityGenerator.prototype.askForDTO = function askForDTO() {
     if (this.useConfigurationFile == true) { // don't prompt if data are imported from a file
-        return;
-    }
-    if (this.javaVersion == '7') {
         return;
     }
     var cb = this.async();

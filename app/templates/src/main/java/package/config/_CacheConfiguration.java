@@ -54,11 +54,8 @@ public class CacheConfiguration {
     @PreDestroy
     public void destroy() {<% if (hibernateCache == 'ehcache') { %>
         log.info("Remove Cache Manager metrics");
-        SortedSet<String> names = metricRegistry.getNames();<% if (javaVersion == '8') { %>
-        names.forEach(metricRegistry::remove);<% } else { %>
-        for (String name : names) {
-            metricRegistry.remove(name);
-        }<% } %><% } %>
+        SortedSet<String> names = metricRegistry.getNames();
+        names.forEach(metricRegistry::remove);<% } %>
         log.info("Closing Cache Manager");<% if (hibernateCache == 'ehcache') { %>
         cacheManager.shutdown();<% } %><% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
         Hazelcast.shutdownAll();<% } %>

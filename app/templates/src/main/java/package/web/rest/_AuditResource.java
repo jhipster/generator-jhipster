@@ -47,14 +47,8 @@ public class AuditResource {
     @RequestMapping(value = "/{id:.+}",
             method = RequestMethod.GET)
     public ResponseEntity<AuditEvent> get(@PathVariable <% if (databaseType == 'sql') { %>Long <% } %><% if (databaseType == 'mongodb') { %>String <% } %>id) {
-        <% if (javaVersion == '7') { %>AuditEvent event = auditEventService.find(id);
-        if(event != null){
-            return new ResponseEntity<AuditEvent>(event, HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }<% } %>
-        <% if (javaVersion == '8') { %>return auditEventService.find(id)
+        return auditEventService.find(id)
                 .map((entity) -> new ResponseEntity<>(entity, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));<% } else { %><% } %>
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }

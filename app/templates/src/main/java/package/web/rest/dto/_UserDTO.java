@@ -8,10 +8,8 @@ import org.hibernate.validator.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.util.Set;<% if (javaVersion == '8') { %>
-import java.util.stream.Collectors;<% } else { %>
-import java.util.HashSet;<% } %>
-
+import java.util.Set;
+import java.util.stream.Collectors;
 /**
  * A DTO representing a user, with his authorities.
  */
@@ -49,20 +47,12 @@ public class UserDTO {
     public UserDTO() {
     }
 
-    public UserDTO(User user) {<% if (javaVersion == '8') { %>
+    public UserDTO(User user) {
         this(user.getLogin(), null, user.getFirstName(), user.getLastName(),
             user.getEmail(), user.getActivated(), user.getLangKey(),<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
             user.getAuthorities().stream().map(Authority::getName)
                 .collect(Collectors.toSet()));<% } else { %>
-            user.getAuthorities());<% } %><% } else { %>
-        this(user.getLogin(), null, user.getFirstName(), user.getLastName(),
-            user.getEmail(), user.getActivated(), user.getLangKey(),
-            null);
-        Set<String> authorities = new HashSet<>();
-        for (Authority authority : user.getAuthorities()) {
-            authorities.add(authority.getName());
-        }
-        this.authorities = authorities;<% } %>
+            user.getAuthorities());<% } %>
     }
 
     public UserDTO(String login, String password, String firstName, String lastName,
