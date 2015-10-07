@@ -44,7 +44,7 @@
                 "total": "Peticiones totales:",
                 "table": {
                     "code": "Código",
-                    "count": "Contador",
+                    "count": "Recuento",
                     "mean": "Media",
                     "average": "Promedio"
                 },
@@ -82,7 +82,7 @@
         	"usage": "Uso",
             "title": "Estadísticas de la fuente de datos (tiempo en milisegundos)",
             "name": "Uso del pool",
-            "count": "Contador",
+            "count": "Recuento",
             "mean": "Media",
             "min": "Min",
             "max": "Max",
