@@ -22,9 +22,9 @@
                     "title": "Threads dump",
                     "id": "Id: ",
                     "blockedtime": "Tiempo bloqueado",
-                    "blockedcount": "Blocked Count",
+                    "blockedcount": "Contador bloqueados",
                     "waitedtime": "Tiempo en espera",
-                    "waitedcount": "Contador esperado",
+                    "waitedcount": "Contador en espera",
                     "lockname": "Lock name",
                     "stacktrace": "Stacktrace",
                     "show": "Mostrar",
@@ -44,7 +44,7 @@
                 "total": "Peticiones totales:",
                 "table": {
                     "code": "Código",
-                    "count": "Recuento",
+                    "count": "Contador",
                     "mean": "Media",
                     "average": "Promedio"
                 },
@@ -59,7 +59,7 @@
             "title": "Estadísticas de servicios (tiempo en milisegundos)",
             "table": {
                 "name": "Nombre del servicio",
-                "count": "Recuento",
+                "count": "Contador",
                 "mean": "Media",
                 "min": "Min",
                 "max": "Max",
@@ -75,14 +75,14 @@
             "objects": "Objetos",
             "hits": "Accesos",
             "misses": "Fallos",
-            "evictioncount": "Recuento desalojo",
+            "evictioncount": "Contador desalojo",
             "mean": "Tiempo medio de respuesta (ms)"
         },
         "datasource": {
         	"usage": "Uso",
             "title": "Estadísticas de la fuente de datos (tiempo en milisegundos)",
             "name": "Uso del pool",
-            "count": "Recuento",
+            "count": "Contador",
             "mean": "Media",
             "min": "Min",
             "max": "Max",
