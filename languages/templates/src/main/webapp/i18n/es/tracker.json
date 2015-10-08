@@ -4,7 +4,7 @@
         "table": {
             "userlogin": "Usuario",
             "ipaddress": "Dirección IP",
-            "userAgent": "Agente de usario",
+            "userAgent": "Agente de usuario",
             "page": "Página actual",
             "time": "Tiempo"
         }
