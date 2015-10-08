@@ -20,11 +20,7 @@
             "admin": {
                 "main": "Administración",
                 "user-management": "Gestión de usuarios",
-<<<<<<< HEAD
                 "tracker": "Registro de los usuarios",
-=======
-                "tracker": "Rastreador de los usuarios",
->>>>>>> Added and fixed some i18n spanish labels.
                 "metrics": "Métricas",
                 "health": "Salud",
                 "configuration": "Configuración",
