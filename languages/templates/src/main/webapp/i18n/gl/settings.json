@@ -1,0 +1,32 @@
+{
+    "settings": {
+        "title": "Axustes do usuario para [<b>{{username}}</b>]",
+        "form": {
+            "firstname": "Nome",
+            "firstname.placeholder": "O seu nome",
+            "lastname": "Apelido",
+            "lastname.placeholder": "O seu apelido",
+            "language": "Idioma",
+            "button": "Gardar"
+        },
+        "messages": {
+            "error": {
+                "fail": "<strong>Ocorreu un erro!</strong> Os axustes non se puideron guardar.",
+                "emailexists": "<strong>O correo electrónico xa está en uso!</strong> Por favor, elixa outro."
+            },
+            "success": "<strong>¡Axustes gardados!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "Requírese que ingrese o seu nome.",
+                    "minlength": "Requírese que o seu nome teña por o menos 1 carácter",
+                    "maxlength": "O seu nome non pode tener máis de 50 carácteres"
+                },
+                "lastname": {
+                    "required": "Requírese que ingrese o seu apelido.",
+                    "minlength": "Requírese que o seu apelido teña por o menos 1 carácter",
+                    "maxlength": "O seu apelido non pode tener máis de 50 carácteres"
+                }
+            }
+        }
+    }
+}
