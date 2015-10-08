@@ -72,7 +72,7 @@
         "ehcache": {
             "title": "Estadísticas de Ehcache",
             "cachename": "Nombre cache",
-            "objects": "Objectos",
+            "objects": "Objetos",
             "hits": "Accesos",
             "misses": "Fallos",
             "evictioncount": "Recuento desalojo",
