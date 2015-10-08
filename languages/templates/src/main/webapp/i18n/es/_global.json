@@ -20,7 +20,7 @@
             "admin": {
                 "main": "Administración",
                 "user-management": "Gestión de usuarios",
-                "tracker": "Rastreador de los usuarios",
+                "tracker": "Registro de los usuarios",
                 "metrics": "Métricas",
                 "health": "Salud",
                 "configuration": "Configuración",
@@ -93,10 +93,10 @@
         },
         "validation": {
             "required": "Este campo es obligatorio.",
-            "minlength": "Este campo require al menos {{min}} caracteres.",
+            "minlength": "Este campo requiere al menos {{min}} caracteres.",
             "maxlength": "Este campo no puede superar más de {{max}} caracteres.",
             "min": "Este campo debe ser mayor que {{min}}.",
-            "max": "Este campo no puede sera mayor que {{max}}.",
+            "max": "Este campo no puede ser mayor que {{max}}.",
             "minbytes": "Este campo debe tener como mínimo {{min}} bytes.",
             "maxbytes": "Este campo no puede tener más de {{max}} bytes.",
             "pattern": "Este campo debe seguir el patrón {{pattern}}.",
