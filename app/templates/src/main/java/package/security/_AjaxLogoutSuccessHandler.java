@@ -19,7 +19,7 @@ import java.io.IOException;
  */
 @Component
 public class AjaxLogoutSuccessHandler extends AbstractAuthenticationTargetUrlRequestHandler
-        implements LogoutSuccessHandler {<% if (authenticationType == 'oauth2') { %>
+    implements LogoutSuccessHandler {<% if (authenticationType == 'oauth2') { %>
 
     public static final String BEARER_AUTHENTICATION = "Bearer ";
 
@@ -28,8 +28,8 @@ public class AjaxLogoutSuccessHandler extends AbstractAuthenticationTargetUrlReq
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
-                                Authentication authentication)
-            throws IOException, ServletException {<% if (authenticationType == 'oauth2') { %>
+        Authentication authentication)
+        throws IOException, ServletException {<% if (authenticationType == 'oauth2') { %>
 
         // Request the token
         String token = request.getHeader("authorization");

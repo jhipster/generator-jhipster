@@ -36,7 +36,7 @@ import org.joda.time.DateTime;<% } %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'mongodb') { %>
 @Document(collection = "jhi_user")<% } %><% if (databaseType == 'cassandra') { %>
 @Table(name = "user")<% } %><% if (searchEngine == 'elasticsearch') { %>
-@Document(indexName="user")<% } %>
+@Document(indexName = "user")<% } %>
 public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %> extends AbstractAuditingEntity<% } %> implements Serializable {
 <% if (databaseType == 'sql') { %>
     @Id
@@ -111,9 +111,9 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @JsonIgnore<% if (databaseType == 'sql') { %>
     @ManyToMany
     @JoinTable(
-            name = "jhi_user_authority",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})<% if (hibernateCache != 'no') { %>
+        name = "jhi_user_authority",
+        joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+        inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})<% if (hibernateCache != 'no') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     private Set<Authority> authorities = new HashSet<>();<% } %><% if (databaseType == 'cassandra') { %>
     private Set<String> authorities = new HashSet<>();<% } %><% if (authenticationType == 'session' && databaseType == 'sql') { %>
@@ -196,11 +196,11 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     }<% if (databaseType == 'sql' || databaseType == 'mongodb') {%>
 
     public DateTime getResetDate() {
-       return resetDate;
+        return resetDate;
     }
 
     public void setResetDate(DateTime resetDate) {
-       this.resetDate = resetDate;
+        this.resetDate = resetDate;
     }<% }%><% if (databaseType == 'cassandra') { %>
 
     public Date getResetDate() {
@@ -261,13 +261,13 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Override
     public String toString() {
         return "User{" +
-                "login='" + login + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", activated='" + activated + '\'' +
-                ", langKey='" + langKey + '\'' +
-                ", activationKey='" + activationKey + '\'' +
-                "}";
+            "login='" + login + '\'' +
+            ", firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            ", email='" + email + '\'' +
+            ", activated='" + activated + '\'' +
+            ", langKey='" + langKey + '\'' +
+            ", activationKey='" + activationKey + '\'' +
+            "}";
     }
 }

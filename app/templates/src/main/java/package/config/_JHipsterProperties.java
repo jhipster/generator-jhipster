@@ -3,7 +3,6 @@ package <%=packageName%>.config;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 /**
  * Properties specific to JHipster.
@@ -252,7 +251,7 @@ public class JHipsterProperties {
         }
 
         public void setHost(String host) {
-                this.host = host;
+            this.host = host;
         }
 
         public int getPort() {

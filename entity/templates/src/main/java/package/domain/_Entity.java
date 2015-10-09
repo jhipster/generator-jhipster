@@ -62,7 +62,7 @@ import <%=packageName%>.domain.enumeration.<%= element %>;<% }); %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType == 'mongodb') { %>
 @Document(collection = "<%= entityTableName %>")<% } %><% if (databaseType == 'cassandra') { %>
 @Table(name = "<%= entityInstance %>")<% } %><% if (searchEngine == 'elasticsearch') { %>
-@Document(indexName="<%= entityInstance.toLowerCase() %>")<% } %>
+@Document(indexName = "<%= entityInstance.toLowerCase() %>")<% } %>
 public class <%= entityClass %> implements Serializable {
 <% if (databaseType == 'sql') { %>
     @Id
@@ -201,13 +201,13 @@ public class <%= entityClass %> implements Serializable {
     @Override
     public String toString() {
         return "<%= entityClass %>{" +
-                "id=" + id +
-                <%_ for (fieldId in fields) { _%>
-                ", <%= fields[fieldId].fieldName %>='" + <%= fields[fieldId].fieldName %> + "'" +
-                    <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
-                ", <%= fields[fieldId].fieldName %>ContentType='" + <%= fields[fieldId].fieldName %>ContentType + "'" +
-                    <%_ } _%>
+            "id=" + id +
+            <%_ for (fieldId in fields) { _%>
+            ", <%= fields[fieldId].fieldName %>='" + <%= fields[fieldId].fieldName %> + "'" +
+                <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
+            ", <%= fields[fieldId].fieldName %>ContentType='" + <%= fields[fieldId].fieldName %>ContentType + "'" +
                 <%_ } _%>
-                '}';
+            <%_ } _%>
+            '}';
     }
 }

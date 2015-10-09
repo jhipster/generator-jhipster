@@ -1,9 +1,10 @@
 package <%=packageName%>.repository;
+
+import <%=packageName%>.domain.<%=entityClass%>;
 <% if (databaseType == 'cassandra') { %>
 import com.datastax.driver.core.*;
 import com.datastax.driver.mapping.Mapper;
-import com.datastax.driver.mapping.MappingManager;<% } %>
-import <%=packageName%>.domain.<%=entityClass%>;<% if (databaseType=='sql') { %>
+import com.datastax.driver.mapping.MappingManager;<% } %><% if (databaseType=='sql') { %>
 import org.springframework.data.jpa.repository.*;<% if (fieldsContainOwnerManyToMany==true) { %>
 import org.springframework.data.repository.query.Param;<% } %>
 

@@ -30,7 +30,7 @@ import java.util.SortedSet;<% } %>
 
 @Configuration
 @EnableCaching
-@AutoConfigureAfter(value = {MetricsConfiguration.class<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>, DatabaseConfiguration.class<% } %>})<% if (hibernateCache != 'hazelcast' && clusteredHttpSession != 'hazelcast') { %>
+@AutoConfigureAfter(value = { MetricsConfiguration.class<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>, DatabaseConfiguration.class<% } %> })<% if (hibernateCache != 'hazelcast' && clusteredHttpSession != 'hazelcast') { %>
 @Profile("!" + Constants.SPRING_PROFILE_FAST)<% } %>
 public class CacheConfiguration {
 

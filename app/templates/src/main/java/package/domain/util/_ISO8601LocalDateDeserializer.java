@@ -17,7 +17,8 @@ public class ISO8601LocalDateDeserializer extends JsonDeserializer<LocalDate> {
 
     @Override
     public LocalDate deserialize(JsonParser jp, DeserializationContext ctxt)
-            throws IOException {
+        throws IOException {
+
         JsonToken t = jp.getCurrentToken();
         if (t == JsonToken.VALUE_STRING) {
             String str = jp.getText().trim();

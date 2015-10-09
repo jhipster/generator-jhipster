@@ -65,32 +65,32 @@ public class UserService {
        log.debug("Reset user password for reset key {}", key);
 
        return userRepository.findOneByResetKey(key)
-           .filter(user -> {
-               DateTime oneDayAgo = DateTime.now().minusHours(24);
-               return user.getResetDate()<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>.isAfter(oneDayAgo.toInstant().getMillis());<% } %><% if (databaseType == 'cassandra') { %>.after(oneDayAgo.toDate());<% } %>
+            .filter(user -> {
+                DateTime oneDayAgo = DateTime.now().minusHours(24);
+                return user.getResetDate()<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>.isAfter(oneDayAgo.toInstant().getMillis());<% } %><% if (databaseType == 'cassandra') { %>.after(oneDayAgo.toDate());<% } %>
            })
            .map(user -> {
-               user.setPassword(passwordEncoder.encode(newPassword));
-               user.setResetKey(null);
-               user.setResetDate(null);
-               userRepository.save(user);
-               return user;
+                user.setPassword(passwordEncoder.encode(newPassword));
+                user.setResetKey(null);
+                user.setResetDate(null);
+                userRepository.save(user);
+                return user;
            });
     }
 
     public Optional<User> requestPasswordReset(String mail) {
-       return userRepository.findOneByEmail(mail)
-           .filter(user -> user.getActivated() == true)
-           .map(user -> {
-               user.setResetKey(RandomUtil.generateResetKey());
-               user.<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>setResetDate(DateTime.now());<% } %><% if (databaseType == 'cassandra') { %>setResetDate(new Date());<% } %>
-               userRepository.save(user);
-               return user;
-           });
+        return userRepository.findOneByEmail(mail)
+            .filter(user -> user.getActivated())
+            .map(user -> {
+                user.setResetKey(RandomUtil.generateResetKey());
+                user.<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>setResetDate(DateTime.now());<% } %><% if (databaseType == 'cassandra') { %>setResetDate(new Date());<% } %>
+                userRepository.save(user);
+                return user;
+            });
     }
 
     public User createUserInformation(String login, String password, String firstName, String lastName, String email,
-                                      String langKey) {
+        String langKey) {
 
         User newUser = new User();<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         Authority authority = authorityRepository.findOne("ROLE_USER");
@@ -173,7 +173,7 @@ public class UserService {
     @Scheduled(cron = "0 0 0 * * ?")
     public void removeOldPersistentTokens() {
         LocalDate now = new LocalDate();
-        persistentTokenRepository.findByTokenDateBefore(now.minusMonths(1)).stream().forEach(token ->{
+        persistentTokenRepository.findByTokenDateBefore(now.minusMonths(1)).stream().forEach(token -> {
             log.debug("Deleting token {}", token.getSeries());<% if (databaseType == 'sql') { %>
             User user = token.getUser();
             user.getPersistentTokens().remove(token);<% } %>
