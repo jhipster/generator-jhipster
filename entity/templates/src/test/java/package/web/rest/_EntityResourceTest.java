@@ -191,7 +191,7 @@ private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%
         <%= entityInstance %> = new <%= entityClass %>();
         <%_ for (fieldId in fields) { _%>
         <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);
-            <%_ if (fieldType == 'byte[]') { _%>
+            <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
         <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>ContentType(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE);
             <%_ } _%>
         <%_ } _%>
@@ -216,7 +216,7 @@ private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%
         <%= entityClass %> test<%= entityClass %> = <%= entityInstance %>s.get(<%= entityInstance %>s.size() - 1);
         <%_ for (fieldId in fields) { if (fields[fieldId].fieldType == 'DateTime') { _%>
         assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldInJavaBeanMethod%>().toDateTime(DateTimeZone.UTC)).isEqualTo(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);
-        <%_ } else if (fieldType == 'byte[]') { _%>
+        <%_ } else if (fields[fieldId].fieldType == 'byte[]') { _%>
         assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldInJavaBeanMethod%>()).isEqualTo(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);
         assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldInJavaBeanMethod%>ContentType()).isEqualTo(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE);
         <%_ } else { _%>
@@ -261,7 +261,7 @@ private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%
                 .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().intValue())))<% } %><% if (databaseType == 'mongodb') { %>
                 .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId())))<% } %><% if (databaseType == 'cassandra') { %>
                 .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().toString())))<% } %><% for (fieldId in fields) {%>
-                <%_ if (fieldType == 'byte[]') { _%>
+                <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
                 .andExpect(jsonPath("$.[*].<%=fields[fieldId].fieldName%>ContentType").value(hasItem(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE)))
                 <%_ } _%>
                 .andExpect(jsonPath("$.[*].<%=fields[fieldId].fieldName%>").value(hasItem(<% if (fields[fieldId].fieldType == 'byte[]') { %>Base64Utils.encodeToString(<% } %><%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'byte[]') { %>)<% } else if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Float' || fields[fieldId].fieldType == 'Double') { %>.doubleValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[fieldId].fieldType == 'DateTime') { %>_STR<% } else if (fields[fieldId].fieldType == 'Date') { %>.getTime()<% } else { %>.toString()<% } %>)))<% } %>;
@@ -280,7 +280,7 @@ private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().intValue()))<% } %><% if (databaseType == 'mongodb') { %>
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId()))<% } %><% if (databaseType == 'cassandra') { %>
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().toString()))<% } %><% for (fieldId in fields) {%>
-            <%_ if (fieldType == 'byte[]') { _%>
+            <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
             .andExpect(jsonPath("$.<%=fields[fieldId].fieldName%>ContentType").value(<%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE))
             <%_ } _%>
             .andExpect(jsonPath("$.<%=fields[fieldId].fieldName%>").value(<% if (fields[fieldId].fieldType == 'byte[]') { %>Base64Utils.encodeToString(<% } %><%='DEFAULT_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%><% if (fields[fieldId].fieldType == 'byte[]') { %>)<% } else if (fields[fieldId].fieldType == 'Integer') { %><% } else if (fields[fieldId].fieldType == 'Long') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Float' || fields[fieldId].fieldType == 'Double') { %>.doubleValue()<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>.intValue()<% } else if (fields[fieldId].fieldType == 'Boolean') { %>.booleanValue()<% } else if (fields[fieldId].fieldType == 'DateTime') { %>_STR<% } else if (fields[fieldId].fieldType == 'Date') { %>.getTime()<% } else { %>.toString()<% } %>))<% } %>;
@@ -305,7 +305,7 @@ private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%
         // Update the <%= entityInstance %>
         <%_ for (fieldId in fields) { _%>
         <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);
-            <%_ if (fieldType == 'byte[]') { _%>
+            <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
         <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>ContentType(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE);
             <%_ } _%>
         <%_ } _%>
@@ -324,7 +324,7 @@ private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%
         <%= entityClass %> test<%= entityClass %> = <%= entityInstance %>s.get(<%= entityInstance %>s.size() - 1);
         <%_ for (fieldId in fields) { if (fields[fieldId].fieldType == 'DateTime') { _%>
         assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldInJavaBeanMethod%>().toDateTime(DateTimeZone.UTC)).isEqualTo(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);
-        <%_ } else if (fieldType == 'byte[]') { _%>
+        <%_ } else if (fields[fieldId].fieldType == 'byte[]') { _%>
         assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldInJavaBeanMethod%>()).isEqualTo(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>);
         assertThat(test<%= entityClass %>.get<%=fields[fieldId].fieldInJavaBeanMethod%>ContentType()).isEqualTo(<%='UPDATED_' + fields[fieldId].fieldNameUnderscored.toUpperCase()%>_CONTENT_TYPE);
         <%_ } else { _%>
