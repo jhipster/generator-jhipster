@@ -13,6 +13,11 @@
 spring:
     profiles:
         active: prod
+    devtools:
+        restart:
+            enabled: false
+        livereload:
+            enabled: false
     <%_ if (databaseType == 'sql') { _%>
     datasource:
         <%_ if (prodDatabaseType == 'oracle') { _%>
