@@ -13,39 +13,43 @@ import java.util.List;
 
 /**
  * Custom implementation of Spring UserDetails
+ * Can be used by the application to store extra information.
  */
 public final class UserPrincipal extends UserDetails {
 
-    private String login;
+    private  <%= pkType %> login;
     private String password;
     private List<GrantedAuthority> grantedAuthorities;
     private String userId;
+    private boolean activated;
 
     /**
      * Instantiate a Custom UserPrincipal
      */
-     public UserPrincipal(String login, String password, List<GrantedAuthority> grantedAuthorities , String userId) {
+     public UserPrincipal(String login, List<GrantedAuthority> grantedAuthorities ,  <%= pkType %>  userId , boolean activated) {
          this.login = login;
-         this.password = password;
          this.grantedAuthorities = grantedAuthorities;
          this.userId = userId;
+         this.activated = activated;
      }
 
      public String getLogin() {
         return login;
      }
 
-     public String getPassword() {
-       return password;
-     }
-
      public List<GrantedAuthority> getGrantedAuthorities() {
           return grantedAuthorities;
      }
 
-     public String getUserId() {
+     public  <%= pkType %>  getUserId() {
          return userId;
      }
 
+     public boolean isUserInRole(String authority) {
+        return authorities.contains(new SimpleGrantedAuthority(authority));
+    }
 
+    public boolean isActivated() {
+      return activated;
+    }
 }
