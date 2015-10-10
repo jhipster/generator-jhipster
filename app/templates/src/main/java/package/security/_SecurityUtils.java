@@ -38,14 +38,14 @@ public final class SecurityUtils {
     /**
      * Get the UserDetails associated with the Current User.
      */
-    public static UserDetails getCurrentUserDetails() {
+    public static Optional<UserDetails> getCurrentUserDetails() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
         String userName = null;
         if (authentication != null) {
             if (authentication.getPrincipal() instanceof UserDetails) {
                 UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
-                return Optional.of(springSecurityUser)
+                return Optional.of(springSecurityUser);
             }
         }
         return Optional.empty();
