@@ -17,16 +17,16 @@ import java.util.List;
  */
 public final class UserPrincipal extends UserDetails {
 
-    private  <%= pkType %> login;
+    private  String login;
     private String password;
     private List<GrantedAuthority> grantedAuthorities;
-    private String userId;
+    private <% if (databaseType == 'sql') { %>Long<% } else if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> userId;
     private boolean activated;
 
     /**
      * Instantiate a Custom UserPrincipal.
      */
-     public UserPrincipal(String login, List<GrantedAuthority> grantedAuthorities ,  <%= pkType %>  userId , boolean activated) {
+     public UserPrincipal(String login, List<GrantedAuthority> grantedAuthorities ,  <% if (databaseType == 'sql') { %>Long<% } else if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> userId , boolean activated) {
          this.login = login;
          this.grantedAuthorities = grantedAuthorities;
          this.userId = userId;
@@ -41,7 +41,7 @@ public final class UserPrincipal extends UserDetails {
           return grantedAuthorities;
      }
 
-     public  <%= pkType %>  getUserId() {
+     public  <% if (databaseType == 'sql') { %>Long<% } else if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %>  getUserId() {
          return userId;
      }
 
