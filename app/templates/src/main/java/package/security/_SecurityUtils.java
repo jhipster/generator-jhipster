@@ -38,7 +38,7 @@ public final class SecurityUtils {
     /**
      * Get the UserDetails associated with the Current User.
      */
-    public static UserDetails getCurrentLoginId() {
+    public static UserDetails getCurrentUserDetails() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
         String userName = null;

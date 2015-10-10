@@ -12,7 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.List;
 
 /**
- * Custom implementation of Spring UserDetails
+ * Custom implementation of Spring UserDetails.
  * Can be used by the application to store extra information.
  */
 public final class UserPrincipal extends UserDetails {
@@ -24,7 +24,7 @@ public final class UserPrincipal extends UserDetails {
     private boolean activated;
 
     /**
-     * Instantiate a Custom UserPrincipal
+     * Instantiate a Custom UserPrincipal.
      */
      public UserPrincipal(String login, List<GrantedAuthority> grantedAuthorities ,  <%= pkType %>  userId , boolean activated) {
          this.login = login;
