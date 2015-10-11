@@ -87,9 +87,13 @@ angular.module('<%=angularAppName%>')
         $scope.clear = function () {
             $scope.<%= entityInstance %> = {
                 <%_ for (fieldId in fields) { _%>
+            		<%_ if (fields[fieldId].fieldType == 'Boolean' && fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) { _%>
+                <%= fields[fieldId].fieldName %>: false,
+                	<%_ } else { _%>
                 <%= fields[fieldId].fieldName %>: null,
-                    <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
+                    	<%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
                 <%= fields[fieldId].fieldName %>ContentType: null,
+                    	<%_ } _%>
                     <%_ } _%>
                 <%_ } _%>
                 id: null
