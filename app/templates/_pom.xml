@@ -774,7 +774,7 @@
                 <configuration>
                     <karmaExecutable>${basedir}/node_modules/.bin/karma</karmaExecutable>
                     <configFile>src/test/javascript/karma.conf.js</configFile>
-                    <reportsDirectory>${project.build.directory}/test-results/karma</reportsDirectory>
+                    <reportsDirectory>${project.testresult.directory}/karma</reportsDirectory>
                     <browsers>PhantomJS</browsers>
                     <autoWatch>false</autoWatch>
                     <singleRun>true</singleRun>
