@@ -44,6 +44,7 @@
         <%_ if (databaseType == 'sql') { _%>
         <joda-time-hibernate.version>1.4</joda-time-hibernate.version>
         <%_ } _%>
+        <karma-maven-plugin.version>1.6</karma-maven-plugin.version>
         <%_ if (databaseType == 'sql') { _%>
         <liquibase.version>3.4.1</liquibase.version>
         <liquibase-slf4j.version>1.2.1</liquibase-slf4j.version>
@@ -756,6 +757,31 @@
                     <arguments>
                         <argument>--spring.profiles.active=dev</argument>
                     </arguments>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.kelveden</groupId>
+                <artifactId>maven-karma-plugin</artifactId>
+                <version>${karma-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <karmaExecutable>${basedir}/node_modules/.bin/karma</karmaExecutable>
+                    <configFile>src/test/javascript/karma.conf.js</configFile>
+                    <reportsDirectory>${project.build.directory}/test-results/karma</reportsDirectory>
+                    <browsers>PhantomJS</browsers>
+                    <autoWatch>false</autoWatch>
+                    <singleRun>true</singleRun>
+                    <colors>true</colors>
+                    <skipKarma>false</skipKarma>
+                    <skipTests>${skipTests}</skipTests>
+                    <karmaFailureIgnore>false</karmaFailureIgnore>
                 </configuration>
             </plugin>
         </plugins>
