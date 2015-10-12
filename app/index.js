@@ -531,7 +531,7 @@ JhipsterGenerator.prototype.app = function app() {
     // Thymeleaf templates
     this.copy(resourceDir + '/templates/error.html', resourceDir + 'templates/error.html');
 
-    this.template(resourceDir + '_logback.xml', resourceDir + 'logback.xml', this, {'interpolate': interpolateRegex});
+    this.template(resourceDir + '_logback-spring.xml', resourceDir + 'logback-spring.xml', this, {'interpolate': interpolateRegex});
 
     this.template(resourceDir + '/config/_application.yml', resourceDir + 'config/application.yml', this, {});
     this.template(resourceDir + '/config/_application-dev.yml', resourceDir + 'config/application-dev.yml', this, {});
@@ -1090,6 +1090,8 @@ JhipsterGenerator.prototype.app = function app() {
     // Remove old files, from previous JHipster versions
     removefile(javaDir + 'config/MailConfiguration.java');
     removefile(javaDir + 'config/metrics/JavaMailHealthIndicator.java');
+
+    removefile(resourceDir + 'logback.xml');
 
     removefile(webappDir + 'scripts/app/account/logout/logout.js');
     removefile(webappDir + 'scripts/app/account/logout/logout.controller.js');

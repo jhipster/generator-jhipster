@@ -45,7 +45,7 @@ describe('JHipster generator ', function () {
             'src/main/resources/ehcache.xml',
             'src/main/resources/.h2.server.properties',
             'src/main/resources/templates/error.html',
-            'src/main/resources/logback.xml',
+            'src/main/resources/logback-spring.xml',
             'src/main/resources/config/application.yml',
             'src/main/resources/config/application-dev.yml',
             'src/main/resources/config/application-prod.yml',
