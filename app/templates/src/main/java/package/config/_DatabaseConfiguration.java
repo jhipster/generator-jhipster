@@ -123,6 +123,9 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
         liquibase.setDataSource(dataSource);
         liquibase.setChangeLog("classpath:config/liquibase/master.xml");
         liquibase.setContexts(liquibaseProperties.getContexts());
+        liquibase.setDefaultSchema(liquibaseProperties.getDefaultSchema());
+        liquibase.setDropFirst(liquibaseProperties.isDropFirst());
+        liquibase.setShouldRun(liquibaseProperties.isEnabled());
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_FAST)) {
             if ("org.h2.jdbcx.JdbcDataSource".equals(dataSourceProperties.getDriverClassName())) {
                 liquibase.setShouldRun(true);
