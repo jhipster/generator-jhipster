@@ -40,5 +40,6 @@ if (field.fieldValidate == true) {
         validators.push('@Pattern(regexp = "' + field.fieldValidateRulesPatternJava  + '")');
     }
     result =  validators.join('\n    ');
+    result += '\n';
 } -%>
 <%- result -%>

@@ -73,69 +73,105 @@ public class <%= entityClass %> implements Serializable {
     @PartitionKey
     private UUID id;<% } %>
 
-<% for (fieldId in fields) { %><% if (typeof fields[fieldId].javadoc != 'undefined') { %>
+<%_ for (fieldId in fields) {
+    if (typeof fields[fieldId].javadoc != 'undefined') { _%>
 <%- util.formatAsFieldJavadoc(fields[fieldId].javadoc) -%>
-<% } %><% if (fields[fieldId].fieldValidate == true) {
-    var required = false;
-    if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) {
-        required = true;
-    } %>
+    <%_ }
+    if (fields[fieldId].fieldValidate == true) {
+        var required = false;
+        if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) {
+            required = true;
+        } _%>
     <%- include field_validators -%>
-    <% } -%>
-    <% if (databaseType == 'sql') { %><% if (fields[fieldId].fieldIsEnum) { %>
-    @Enumerated(EnumType.STRING)<% } %><% if (fields[fieldId].fieldType == 'byte[]') { %>
-    @Lob<% } %><% if (fields[fieldId].fieldType == 'DateTime') { %>
+    <%_ } _%>
+    <%_ if (databaseType == 'sql') {
+        if (fields[fieldId].fieldIsEnum) { _%>
+    @Enumerated(EnumType.STRING)
+        <%_ }
+        if (fields[fieldId].fieldType == 'byte[]') { _%>
+    @Lob
+        <%_ }
+        if (fields[fieldId].fieldType == 'DateTime') { _%>
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     @JsonDeserialize(using = CustomDateTimeDeserializer.class)
-    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>"<% if (required) { %>, nullable = false<% } %>)<% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
+    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>"<% if (required) { %>, nullable = false<% } %>)
+        <%_ } else if (fields[fieldId].fieldType == 'LocalDate') { _%>
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     @JsonSerialize(using = CustomLocalDateSerializer.class)
     @JsonDeserialize(using = ISO8601LocalDateDeserializer.class)
-    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>"<% if (required) { %>, nullable = false<% } %>)<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
-    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>", precision=10, scale=2<% if (required) { %>, nullable = false<% } %>)<% } else { %>
-    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>"<% if (fields[fieldId].fieldValidate == true) { %><% if (fields[fieldId].fieldValidateRules.indexOf('maxlength') != -1) { %>, length = <%= fields[fieldId].fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% } %>)<% } } %><% if (databaseType == 'mongodb') { %><% if (fields[fieldId].fieldType == 'DateTime') { %>
+    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>"<% if (required) { %>, nullable = false<% } %>)
+        <%_ } else if (fields[fieldId].fieldType == 'BigDecimal') { _%>
+    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>", precision=10, scale=2<% if (required) { %>, nullable = false<% } %>)
+        <%_ } else { _%>
+    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>"<% if (fields[fieldId].fieldValidate == true) { %><% if (fields[fieldId].fieldValidateRules.indexOf('maxlength') != -1) { %>, length = <%= fields[fieldId].fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% } %>)
+    <%_     }
+        } _%>
+    <%_ if (databaseType == 'mongodb') {
+            if (fields[fieldId].fieldType == 'DateTime') { _%>
     @JsonSerialize(using = CustomDateTimeSerializer.class)
-    @JsonDeserialize(using = CustomDateTimeDeserializer.class)<% } else if (fields[fieldId].fieldType == 'LocalDate') { %>
+    @JsonDeserialize(using = CustomDateTimeDeserializer.class)
+    <%_     } else if (fields[fieldId].fieldType == 'LocalDate') { _%>
     @JsonSerialize(using = CustomLocalDateSerializer.class)
-    @JsonDeserialize(using = ISO8601LocalDateDeserializer.class)<% } %>
-    @Field("<%=fields[fieldId].fieldNameUnderscored %>")<% } %>
+    @JsonDeserialize(using = ISO8601LocalDateDeserializer.class)
+    <%_     } _%>
+    @Field("<%=fields[fieldId].fieldNameUnderscored %>")
+    <%_ } _%>
     private <%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>;
+
     <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
 
     @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>_content_type"<% if (required) { %>, nullable = false<% } %>)
     private String <%= fields[fieldId].fieldName %>ContentType;
-    <%_ } _%>
-<% } %><% for (relationshipId in relationships) {
-    var otherEntityRelationshipName = relationships[relationshipId].otherEntityRelationshipName,
-    relationshipName = relationships[relationshipId].relationshipName,
-    joinTableName = entityTableName + '_'+ getTableName(relationshipName);
-    if(prodDatabaseType === 'oracle' && joinTableName.length > 30) {
-        joinTableName = getTableName(name.substring(0, 5)) + '_' + getTableName(relationshipName.substring(0, 5)) + '_MAPPING';
+    <%_ }
     }
-    if (otherEntityRelationshipName != null) {
-        mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
-    }
-    %><% if (typeof relationships[relationshipId].javadoc != 'undefined') { %>
+    for (relationshipId in relationships) {
+        var otherEntityRelationshipName = relationships[relationshipId].otherEntityRelationshipName,
+        relationshipName = relationships[relationshipId].relationshipName,
+        joinTableName = entityTableName + '_'+ getTableName(relationshipName);
+        if(prodDatabaseType === 'oracle' && joinTableName.length > 30) {
+            joinTableName = getTableName(name.substring(0, 5)) + '_' + getTableName(relationshipName.substring(0, 5)) + '_MAPPING';
+        }
+        if (otherEntityRelationshipName != null) {
+            mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
+        }
+        if (typeof relationships[relationshipId].javadoc != 'undefined') { _%>
 <%- util.formatAsFieldJavadoc(relationships[relationshipId].javadoc) -%>
-<% } %><% if (relationships[relationshipId].relationshipType == 'one-to-many') { %>
+    <%_ }
+        if (relationships[relationshipId].relationshipType == 'one-to-many') {
+    _%>
     @OneToMany(mappedBy = "<%= relationships[relationshipId].otherEntityRelationshipName %>")
-    @JsonIgnore<% if (hibernateCache != 'no') { %>
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %>
-    private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();<% } else if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
+    @JsonIgnore
+    <%_     if (hibernateCache != 'no') { _%>
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    <%_     } _%>
+    private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();
+
+    <%_ } else if (relationships[relationshipId].relationshipType == 'many-to-one') { _%>
     @ManyToOne
-    private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].relationshipFieldName %>;<% } else if (relationships[relationshipId].relationshipType == 'many-to-many') { %>
+    private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].relationshipFieldName %>;
+
+    <%_ } else if (relationships[relationshipId].relationshipType == 'many-to-many') { _%>
     @ManyToMany<% if (relationships[relationshipId].ownerSide == false) { %>(mappedBy = "<%= relationships[relationshipId].otherEntityRelationshipName %>s")
-    @JsonIgnore<% } %><% if (hibernateCache != 'no') { %>
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (relationships[relationshipId].ownerSide == true) { %>
+    @JsonIgnore
+    <%_     }
+            if (hibernateCache != 'no') { _%>
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    <%_     }
+            if (relationships[relationshipId].ownerSide == true) { _%>
     @JoinTable(name = "<%= joinTableName %>",
                joinColumns = @JoinColumn(name="<%= getColumnName(name) %>s_id", referencedColumnName="ID"),
-               inverseJoinColumns = @JoinColumn(name="<%= getColumnName(relationships[relationshipId].relationshipName) %>s_id", referencedColumnName="ID"))<% } %>
-    private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();<% } else { %>
+               inverseJoinColumns = @JoinColumn(name="<%= getColumnName(relationships[relationshipId].relationshipName) %>s_id", referencedColumnName="ID"))
+    <%_     } _%>
+    private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();
+
+    <%_ } else { _%>
     @OneToOne<% if (relationships[relationshipId].ownerSide == false) { %>(mappedBy = "<%= relationships[relationshipId].otherEntityRelationshipName %>")
-    @JsonIgnore<% } %>
-    private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].relationshipFieldName %>;<% } %>
-<% } %>
+    @JsonIgnore
+    <%_} _%>
+    private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].relationshipFieldName %>;
+
+    <%_ } } _%>
     public <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %><% if (databaseType == 'cassandra') { %>UUID<% } %> getId() {
         return id;
     }
