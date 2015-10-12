@@ -21,14 +21,16 @@ public class <%= entityClass %>DTO implements Serializable {
 <% if (databaseType == 'sql') { %>
     private Long id;<% } %><% if (databaseType == 'mongodb') { %>
     private String id;<% } %><% if (databaseType == 'cassandra') { %>
-    private UUID id;<% } %><% for (fieldId in fields) { %>
-<% if (fields[fieldId].fieldValidate == true) {
-    var required = false;
-    var MAX_VALUE = 2147483647;
-    if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) {
-        required = true;
-    }
-    if (required) { %>
+    private UUID id;<% } %>
+    <%_ for (fieldId in fields) {
+        if (fields[fieldId].fieldValidate == true) {
+            var required = false;
+            var MAX_VALUE = 2147483647;
+            if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) {
+                required = true;
+            }
+            if (required) { _%>
+
     @NotNull<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('minlength') != -1 && fields[fieldId].fieldValidateRules.indexOf('maxlength') == -1) { %>
     @Size(min = <%= fields[fieldId].fieldValidateRulesMinlength %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('maxlength') != -1 && fields[fieldId].fieldValidateRules.indexOf('minlength') == -1) { %>
     @Size(max = <%= fields[fieldId].fieldValidateRulesMaxlength %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('minlength') != -1 && fields[fieldId].fieldValidateRules.indexOf('maxlength') != -1) { %>
@@ -41,16 +43,21 @@ public class <%= entityClass %>DTO implements Serializable {
     @Pattern(regexp = "<%= fields[fieldId].fieldValidateRulesPatternJava %>")<% } } %><% if (fields[fieldId].fieldType == 'byte[]') { %>
     @Lob<% } %>
     private <%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>;
-    <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
+        <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
 
-    private String <%= fields[fieldId].fieldName %>ContentType;<% } %><% } %><% for (relationshipId in relationships) {
-    otherEntityRelationshipName = relationships[relationshipId].otherEntityRelationshipName;%><% if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %>
+    private String <%= fields[fieldId].fieldName %>ContentType;
+        <%_ } _%>
+    <%_ } _%>
+    <%_ for (relationshipId in relationships) {
+    otherEntityRelationshipName = relationships[relationshipId].otherEntityRelationshipName;%><% if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { _%>
 
-    private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>DTO> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();<% } else if (relationships[relationshipId].relationshipType == 'many-to-one' || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) { %>
+    private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>DTO> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();
+    <%_ } else if (relationships[relationshipId].relationshipType == 'many-to-one' || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) { _%>
 
     private Long <%= relationships[relationshipId].relationshipFieldName %>Id;<% if (relationships[relationshipId].otherEntityFieldCapitalized !='Id' && relationships[relationshipId].otherEntityFieldCapitalized != '') { %>
 
-    private String <%= relationships[relationshipId].relationshipFieldName %><%= relationships[relationshipId].otherEntityFieldCapitalized %>;<% } } } %>
+    private String <%= relationships[relationshipId].relationshipFieldName %><%= relationships[relationshipId].otherEntityFieldCapitalized %>;
+    <%_ } } } _%>
 
     public <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %><% if (databaseType == 'cassandra') { %>UUID<% } %> getId() {
         return id;
@@ -58,7 +65,8 @@ public class <%= entityClass %>DTO implements Serializable {
 
     public void setId(<% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %><% if (databaseType == 'cassandra') { %>UUID<% } %> id) {
         this.id = id;
-    }<% for (fieldId in fields) { %>
+    }
+    <%_ for (fieldId in fields) { _%>
 
     public <%= fields[fieldId].fieldType %> get<%= fields[fieldId].fieldInJavaBeanMethod %>() {
         return <%= fields[fieldId].fieldName %>;
@@ -75,7 +83,10 @@ public class <%= entityClass %>DTO implements Serializable {
 
     public void set<%= fields[fieldId].fieldInJavaBeanMethod %>ContentType(String <%= fields[fieldId].fieldName %>ContentType) {
         this.<%= fields[fieldId].fieldName %>ContentType = <%= fields[fieldId].fieldName %>ContentType;
-    }<% } %><% } %><% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %>
+    }
+    <%_ } } _%>
+    <%_ for (relationshipId in relationships) {
+        if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { _%>
 
     public Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>DTO> get<%= relationships[relationshipId].relationshipNameCapitalized %>s() {
         return <%= relationships[relationshipId].relationshipFieldName %>s;
@@ -83,7 +94,8 @@ public class <%= entityClass %>DTO implements Serializable {
 
     public void set<%= relationships[relationshipId].relationshipNameCapitalized %>s(Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>DTO> <%= relationships[relationshipId].otherEntityName %>s) {
         this.<%= relationships[relationshipId].relationshipFieldName %>s = <%= relationships[relationshipId].otherEntityName %>s;
-    }<% } else if (relationships[relationshipId].relationshipType == 'many-to-one' || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) { %>
+    }
+    <%_ } else if (relationships[relationshipId].relationshipType == 'many-to-one' || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) { _%>
 
     public Long get<%= relationships[relationshipId].relationshipNameCapitalized %>Id() {
         return <%= relationships[relationshipId].relationshipFieldName %>Id;
@@ -99,7 +111,8 @@ public class <%= entityClass %>DTO implements Serializable {
 
     public void set<%= relationships[relationshipId].relationshipNameCapitalized %><%= relationships[relationshipId].otherEntityFieldCapitalized %>(String <%= relationships[relationshipId].otherEntityName %><%= relationships[relationshipId].otherEntityFieldCapitalized %>) {
         this.<%= relationships[relationshipId].relationshipFieldName %><%= relationships[relationshipId].otherEntityFieldCapitalized %> = <%= relationships[relationshipId].otherEntityName %><%= relationships[relationshipId].otherEntityFieldCapitalized %>;
-    }<% } } } %>
+    }
+    <%_ } } } _%>
 
     @Override
     public boolean equals(Object o) {
