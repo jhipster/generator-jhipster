@@ -344,10 +344,6 @@ EntityGenerator.prototype.askForFields = function askForFields() {
         },
         {
             when: function (response) {
-                if (response.fieldType == 'Boolean') {
-                    response.fieldValidate = false;
-                    return false;
-                }
                 return response.fieldAdd == true;
             },
             type: 'confirm',
@@ -416,6 +412,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     response.fieldType == 'DateTime' ||
                     response.fieldType == 'Date' ||
                     response.fieldType == 'UUID' ||
+                    response.fieldType == 'Boolean' ||
                     response.fieldIsEnum == true);
             },
             type: 'checkbox',
@@ -715,7 +712,7 @@ EntityGenerator.prototype.askForRelationships = function askForRelationships() {
             when: function (response) {
                 return (response.relationshipAdd == true && (response.relationshipType == 'one-to-many' ||
                     (response.relationshipType == 'many-to-many' && response.ownerSide == false) ||
-                    (response.relationshipType == 'one-to-one')));
+                    (response.relationshipType == 'one-to-one' && response.otherEntityName.toLowerCase() != "user")));
             },
             type: 'input',
             name: 'otherEntityRelationshipName',

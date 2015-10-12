@@ -11,7 +11,7 @@
         <div class="form-group">
             <label for="id" translate="global.field.id">ID</label>
             <input type="text" class="form-control" id="id" name="id"
-                    ng-model="<%=entityInstance %>.id" readonly>
+                    ng-model="<%=entityInstance %>.id" readonly />
         </div>
         <%_ for (fieldId in fields) {
             var fieldInputType = 'text';
@@ -65,10 +65,10 @@
                 <%_ } _%>
             <input type="<%= fieldInputType %>" class="form-control" name="<%= fields[fieldId].fieldName %>" id="field_<%= fields[fieldId].fieldName %>"
                     ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldType == 'DateTime') { %> ng-model-options="{timezone: 'UTC'}"<% } %>
-                    <%- include ng_validators %>>
+                    <%- include ng_validators %> />
                 <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
             <input type="hidden" class="form-control" name="<%= fields[fieldId].fieldName %>ContentType" id="field_<%= fields[fieldId].fieldName %>ContentType"
-                    ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>ContentType">
+                    ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>ContentType" />
                 <%_ } _%>
             <%_ } _%>
             <%_ if (fields[fieldId].fieldValidate == true) { _%>
