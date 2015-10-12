@@ -35,11 +35,11 @@ spring:
         <%_ if (prodDatabaseType == 'mysql') { _%>
         url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8
         <%_ } else if (prodDatabaseType == 'postgresql') { _%>
-        url:
+        url: jdbc:postgresql://localhost:5432/<%= baseName %>
         <%_ } else if (prodDatabaseType == 'oracle') { _%>
         url: jdbc:oracle:thin:@localhost:1521:<%= baseName %>
         <%_ } _%>
-        name: <% if (prodDatabaseType == 'postgresql') { %><%= baseName %><% } %>
+        name:
         <%_ if (prodDatabaseType == 'mysql') { _%>
         username: root
         <%_ } else if (prodDatabaseType == 'postgresql') { _%>
@@ -129,14 +129,13 @@ jhipster:
         cache: # Used by the CachingHttpHeadersFilter
             timeToLiveInDays: 31
     <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast' || hibernateCache == 'ehcache') { _%>
+    <%_ if (devDatabaseType == 'mysql') { _%>
     datasource: # JHipster-specific configuration, in addition to the standard spring.datasource properties
-        serverName: <% if (devDatabaseType == 'postgresql') { %>localhost<% } %>
-        <%_ if (devDatabaseType == 'mysql') { _%>
         cachePrepStmts: true
         prepStmtCacheSize: 250
         prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: true
-        <%_ } _%>
+    <%_ } _%>
     cache: # Hibernate 2nd level cache, used by CacheConfiguration
         timeToLiveSeconds: 3600
         <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>

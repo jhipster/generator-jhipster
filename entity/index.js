@@ -344,10 +344,6 @@ EntityGenerator.prototype.askForFields = function askForFields() {
         },
         {
             when: function (response) {
-                if (response.fieldType == 'Boolean') {
-                    response.fieldValidate = false;
-                    return false;
-                }
                 return response.fieldAdd == true;
             },
             type: 'confirm',
@@ -416,6 +412,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     response.fieldType == 'DateTime' ||
                     response.fieldType == 'Date' ||
                     response.fieldType == 'UUID' ||
+                    response.fieldType == 'Boolean' ||
                     response.fieldIsEnum == true);
             },
             type: 'checkbox',

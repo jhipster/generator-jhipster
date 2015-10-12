@@ -119,8 +119,6 @@ public class JHipsterProperties {
 
     public static class Datasource {
 
-        private String serverName;
-
         private boolean cachePrepStmts = true;
 
         private int prepStmtCacheSize = 250;
@@ -128,14 +126,6 @@ public class JHipsterProperties {
         private int prepStmtCacheSqlLimit = 2048;
 
         private boolean useServerPrepStmts = true;
-
-        public String getServerName() {
-            return serverName;
-        }
-
-        public void setServerName(String serverName) {
-            this.serverName = serverName;
-        }
 
         public boolean isCachePrepStmts() {
             return cachePrepStmts;
