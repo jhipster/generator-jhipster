@@ -103,6 +103,11 @@ spring:
             cluster-name:
             cluster-nodes: localhost:9300
     <%_ } _%>
+    mail:
+        host: localhost
+        port: 25
+        username:
+        password:
     thymeleaf:
         cache: true
 
@@ -143,6 +148,8 @@ jhipster:
             maxBytesLocalHeap: 256M
         <%_ } _%>
     <%_ } _%>
+    mail: # specific JHipster mail property, for standard properties see MailProperties
+        from: <%= baseName %>@localhost
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         spark:

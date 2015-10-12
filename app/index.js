@@ -591,7 +591,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/_JHipsterProperties.java', javaDir + 'config/JHipsterProperties.java', this, {});
     this.template('src/main/java/package/config/_LocaleConfiguration.java', javaDir + 'config/LocaleConfiguration.java', this, {});
     this.template('src/main/java/package/config/_LoggingAspectConfiguration.java', javaDir + 'config/LoggingAspectConfiguration.java', this, {});
-    this.template('src/main/java/package/config/_MailConfiguration.java', javaDir + 'config/MailConfiguration.java', this, {});
     this.template('src/main/java/package/config/_MetricsConfiguration.java', javaDir + 'config/MetricsConfiguration.java', this, {});
 
     if (this.authenticationType == 'oauth2') {
@@ -648,7 +647,6 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
         this.template('src/main/java/package/config/metrics/_DatabaseHealthIndicator.java', javaDir + 'config/metrics/DatabaseHealthIndicator.java', this, {});
     }
-    this.template('src/main/java/package/config/metrics/_JavaMailHealthIndicator.java', javaDir + 'config/metrics/JavaMailHealthIndicator.java', this, {});
     this.template('src/main/java/package/config/metrics/_JHipsterHealthIndicatorConfiguration.java', javaDir + 'config/metrics/JHipsterHealthIndicatorConfiguration.java', this, {});
 
     if (this.hibernateCache == "hazelcast") {
@@ -1090,6 +1088,9 @@ JhipsterGenerator.prototype.app = function app() {
     this.write(webappDir + 'index.html', this.indexFile);
 
     // Remove old files, from previous JHipster versions
+    removefile(javaDir + 'config/MailConfiguration.java');
+    removefile(javaDir + 'config/metrics/JavaMailHealthIndicator.java');
+
     removefile(webappDir + 'scripts/app/account/logout/logout.js');
     removefile(webappDir + 'scripts/app/account/logout/logout.controller.js');
     removefolder(webappDir + 'scripts/app/account/logout');

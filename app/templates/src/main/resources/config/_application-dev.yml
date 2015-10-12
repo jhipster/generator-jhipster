@@ -105,6 +105,8 @@ spring:
                   logs: target/elasticsearch/log
                   data: target/elasticsearch/data
     <%_ } _%>
+    mail:
+        host: localhost
     messages:
         cache-seconds: 1
     thymeleaf:
@@ -141,6 +143,8 @@ jhipster:
             maxBytesLocalHeap: 16M
         <%_ } _%>
     <%_ } _%>
+    mail: # specific JHipster mail property, for standard properties see MailProperties
+        from: <%= baseName %>@localhost
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         spark:
