@@ -17,7 +17,7 @@ import java.util.Map;
 @Entity
 @Table(name = "jhi_persistent_audit_event")<% } %><% if (databaseType == 'mongodb') { %>
 @Document(collection = "jhi_persistent_audit_event")<% } %>
-public class PersistentAuditEvent  {
+public class PersistentAuditEvent {
 
     @Id<% if (databaseType == 'sql') { %>
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,9 +38,9 @@ public class PersistentAuditEvent  {
     private String auditEventType;
 <% if (databaseType == 'sql') { %>
     @ElementCollection
-    @MapKeyColumn(name="name")
-    @Column(name="value")
-    @CollectionTable(name="jhi_persistent_audit_evt_data", joinColumns=@JoinColumn(name="event_id"))<% } %>
+    @MapKeyColumn(name = "name")
+    @Column(name = "value")
+    @CollectionTable(name = "jhi_persistent_audit_evt_data", joinColumns=@JoinColumn(name="event_id"))<% } %>
     private Map<String, String> data = new HashMap<>();
 <% if (databaseType == 'sql') { %>
     public Long getId() {

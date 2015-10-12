@@ -14,7 +14,7 @@ import java.util.Map;<% } %>
  * SpringBoot Actuator HealthIndicator check for the Database.
  */
 public class DatabaseHealthIndicator extends AbstractHealthIndicator {
-    <% if (databaseType == 'sql') { %>
+<% if (databaseType == 'sql') { %>
     private JdbcTemplate jdbcTemplate;
 
     private static Map<String, String> queries = new HashMap<>();

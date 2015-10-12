@@ -1,14 +1,12 @@
 package <%=packageName%>.config;
 
+import <%=packageName%>.domain.util.*;
+
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import <%=packageName%>.domain.util.CustomDateTimeDeserializer;
-import <%=packageName%>.domain.util.CustomDateTimeSerializer;
-import <%=packageName%>.domain.util.CustomLocalDateSerializer;
-import <%=packageName%>.domain.util.ISO8601LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
 
 @Configuration

@@ -13,10 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.codec.Base64;
-import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
-import org.springframework.security.web.authentication.rememberme.CookieTheftException;
-import org.springframework.security.web.authentication.rememberme.InvalidCookieException;
-import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationException;
+import org.springframework.security.web.authentication.rememberme.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,7 +51,7 @@ import java.util.Date;<%}%>
  */
 @Service
 public class CustomPersistentRememberMeServices extends
-        AbstractRememberMeServices {
+    AbstractRememberMeServices {
 
     private final Logger log = LoggerFactory.getLogger(CustomPersistentRememberMeServices.class);
 
@@ -76,14 +73,17 @@ public class CustomPersistentRememberMeServices extends
     private UserRepository userRepository;
 
     @Inject
-    public CustomPersistentRememberMeServices(Environment env, org.springframework.security.core.userdetails.UserDetailsService userDetailsService) {
+    public CustomPersistentRememberMeServices(Environment env, org.springframework.security.core.userdetails
+        .UserDetailsService userDetailsService) {
+
         super(env.getProperty("jhipster.security.rememberme.key"), userDetailsService);
         random = new SecureRandom();
     }
 
     @Override
     @Transactional
-    protected UserDetails processAutoLoginCookie(String[] cookieTokens, HttpServletRequest request, HttpServletResponse response) {
+    protected UserDetails processAutoLoginCookie(String[] cookieTokens, HttpServletRequest request,
+        HttpServletResponse response) {
 
         PersistentToken token = getPersistentToken(cookieTokens);<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         String login = token.getUser().getLogin();<%}%><% if (databaseType == 'cassandra') { %>
@@ -107,7 +107,9 @@ public class CustomPersistentRememberMeServices extends
     }
 
     @Override
-    protected void onLoginSuccess(HttpServletRequest request, HttpServletResponse response, Authentication successfulAuthentication) {
+    protected void onLoginSuccess(HttpServletRequest request, HttpServletResponse response, Authentication
+        successfulAuthentication) {
+
         String login = successfulAuthentication.getName();
 
         log.debug("Creating new persistent login for user {}", login);
@@ -163,7 +165,7 @@ public class CustomPersistentRememberMeServices extends
     private PersistentToken getPersistentToken(String[] cookieTokens) {
         if (cookieTokens.length != 2) {
             throw new InvalidCookieException("Cookie token did not contain " + 2 +
-                    " tokens, but contained '" + Arrays.asList(cookieTokens) + "'");
+                " tokens, but contained '" + Arrays.asList(cookieTokens) + "'");
         }
         String presentedSeries = cookieTokens[0];
         String presentedToken = cookieTokens[1];
@@ -179,7 +181,8 @@ public class CustomPersistentRememberMeServices extends
         if (!presentedToken.equals(token.getTokenValue())) {
             // Token doesn't match series value. Delete this session and throw an exception.
             persistentTokenRepository.delete(token);
-            throw new CookieTheftException("Invalid remember-me token (Series/token) mismatch. Implies previous cookie theft attack.");
+            throw new CookieTheftException("Invalid remember-me token (Series/token) mismatch. Implies previous " +
+                "cookie theft attack.");
         }
 <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         if (token.getTokenDate().plusDays(TOKEN_VALIDITY_DAYS).isBefore(LocalDate.now())) {<%}%><% if (databaseType == 'cassandra') { %>
@@ -204,7 +207,7 @@ public class CustomPersistentRememberMeServices extends
 
     private void addCookie(PersistentToken token, HttpServletRequest request, HttpServletResponse response) {
         setCookie(
-                new String[]{token.getSeries(), token.getTokenValue()},
-                TOKEN_VALIDITY_SECONDS, request, response);
+            new String[]{token.getSeries(), token.getTokenValue()},
+            TOKEN_VALIDITY_SECONDS, request, response);
     }
 }

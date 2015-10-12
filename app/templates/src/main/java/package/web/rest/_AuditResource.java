@@ -38,14 +38,14 @@ public class AuditResource {
     }
 
     @RequestMapping(method = RequestMethod.GET,
-            params = {"fromDate", "toDate"})
+        params = {"fromDate", "toDate"})
     public List<AuditEvent> getByDates(@RequestParam(value = "fromDate") LocalDateTime fromDate,
                                        @RequestParam(value = "toDate") LocalDateTime toDate) {
         return auditEventService.findByDates(fromDate, toDate);
     }
 
     @RequestMapping(value = "/{id:.+}",
-            method = RequestMethod.GET)
+        method = RequestMethod.GET)
     public ResponseEntity<AuditEvent> get(@PathVariable <% if (databaseType == 'sql') { %>Long <% } %><% if (databaseType == 'mongodb') { %>String <% } %>id) {
         return auditEventService.find(id)
                 .map((entity) -> new ResponseEntity<>(entity, HttpStatus.OK))

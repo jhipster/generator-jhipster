@@ -54,8 +54,8 @@ public class <%= entityClass %>Resource {
      * POST  /<%= entityInstance %>s -> Create a new <%= entityInstance %>.
      */
     @RequestMapping(value = "/<%= entityInstance %>s",
-            method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+        method = RequestMethod.POST,
+        produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed<%
     var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
     var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
@@ -72,8 +72,8 @@ public class <%= entityClass %>Resource {
         <%= entityClass %> result = <%= entityInstance %>Repository.save(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
         <%= entityInstance %>SearchRepository.save(result);<% } %>
         return ResponseEntity.created(new URI("/api/<%= entityInstance %>s/" + result.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert("<%= entityInstance %>", result.getId().toString()))
-                .body(<% if (dto == 'mapstruct') { %><%= entityToDto %>(result)<% } else { %>result<% } %>);
+            .headers(HeaderUtil.createEntityCreationAlert("<%= entityInstance %>", result.getId().toString()))
+            .body(<% if (dto == 'mapstruct') { %><%= entityToDto %>(result)<% } else { %>result<% } %>);
     }
 
     /**
@@ -92,16 +92,16 @@ public class <%= entityClass %>Resource {
         <%= entityClass %> result = <%= entityInstance %>Repository.save(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
         <%= entityInstance %>SearchRepository.save(<%= entityInstance %>);<% } %>
         return ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert("<%= entityInstance %>", <%= instanceName %>.getId().toString()))
-                .body(<% if (dto == 'mapstruct') { %><%= entityToDto %>(result)<% } else { %>result<% } %>);
+            .headers(HeaderUtil.createEntityUpdateAlert("<%= entityInstance %>", <%= instanceName %>.getId().toString()))
+            .body(<% if (dto == 'mapstruct') { %><%= entityToDto %>(result)<% } else { %>result<% } %>);
     }
 
     /**
      * GET  /<%= entityInstance %>s -> get all the <%= entityInstance %>s.
      */
     @RequestMapping(value = "/<%= entityInstance %>s",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed<% if (dto == 'mapstruct') { %>
     @Transactional(readOnly = true)<% } %><% if (pagination == 'no') { %>
     public List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> getAll<%= entityClass %>s(<% if (fieldsContainNoOwnerOneToOne == true) { %>@RequestParam(required = false) String filter<% } %>) {<% for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { %>
@@ -141,8 +141,8 @@ public class <%= entityClass %>Resource {
      * GET  /<%= entityInstance %>s/:id -> get the "id" <%= entityInstance %>.
      */
     @RequestMapping(value = "/<%= entityInstance %>s/{id}",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> get<%= entityClass %>(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id) {
         log.debug("REST request to get <%= entityClass %> : {}", id);<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
@@ -159,8 +159,8 @@ public class <%= entityClass %>Resource {
      * DELETE  /<%= entityInstance %>s/:id -> delete the "id" <%= entityInstance %>.
      */
     @RequestMapping(value = "/<%= entityInstance %>s/{id}",
-            method = RequestMethod.DELETE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+        method = RequestMethod.DELETE,
+        produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<Void> delete<%= entityClass %>(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id) {
         log.debug("REST request to delete <%= entityClass %> : {}", id);<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>

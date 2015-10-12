@@ -7,14 +7,14 @@ import org.springframework.http.HttpHeaders;
  *
  */
 public class HeaderUtil {
- 
+
     public static HttpHeaders createAlert(String message, String param) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-<%=angularAppName%>-alert", message);
         headers.add("X-<%=angularAppName%>-params", param);
         return headers;
     }
-    <%
+<%
     if(enableTranslation) {
         var createdMessage = '"' + angularAppName + '." + entityName + ".created"';
         var updatedMessage = '"' + angularAppName + '." + entityName + ".updated"';
@@ -24,7 +24,7 @@ public class HeaderUtil {
         var updatedMessage = '"A " + entityName + " is updated with identifier " + param';
         var deletedMessage = '"A " + entityName + " is deleted with identifier " + param';
     }
-    %>
+%>
     public static HttpHeaders createEntityCreationAlert(String entityName, String param) {
         return createAlert(<%- createdMessage %>, param);
     }
@@ -36,5 +36,4 @@ public class HeaderUtil {
     public static HttpHeaders createEntityDeletionAlert(String entityName, String param) {
         return createAlert(<%- deletedMessage %>, param);
     }
-
 }

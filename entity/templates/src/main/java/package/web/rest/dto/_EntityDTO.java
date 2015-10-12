@@ -125,8 +125,8 @@ public class <%= entityClass %>DTO implements Serializable {
     @Override
     public String toString() {
         return "<%= entityClass %>DTO{" +
-                "id=" + id +<% for (fieldId in fields) { %>
-                ", <%= fields[fieldId].fieldName %>='" + <%= fields[fieldId].fieldName %> + "'" +<% } %>
-                '}';
+            "id=" + id +<% for (fieldId in fields) { %>
+            ", <%= fields[fieldId].fieldName %>='" + <%= fields[fieldId].fieldName %> + "'" +<% } %>
+            '}';
     }
 }

@@ -24,12 +24,14 @@ import java.util.Optional;
 public class AuditEventService {
 
     private PersistenceAuditEventRepository persistenceAuditEventRepository;
+
     private AuditEventConverter auditEventConverter;
 
     @Inject
     public AuditEventService(
-            PersistenceAuditEventRepository persistenceAuditEventRepository,
-            AuditEventConverter auditEventConverter) {
+        PersistenceAuditEventRepository persistenceAuditEventRepository,
+        AuditEventConverter auditEventConverter) {
+
         this.persistenceAuditEventRepository = persistenceAuditEventRepository;
         this.auditEventConverter = auditEventConverter;
     }
@@ -40,12 +42,13 @@ public class AuditEventService {
 
     public List<AuditEvent> findByDates(LocalDateTime fromDate, LocalDateTime toDate) {
         List<PersistentAuditEvent> persistentAuditEvents =
-                persistenceAuditEventRepository.findAllByAuditEventDateBetween(fromDate, toDate);
+            persistenceAuditEventRepository.findAllByAuditEventDateBetween(fromDate, toDate);
 
         return auditEventConverter.convertToAuditEvent(persistentAuditEvents);
     }
 
     public Optional<AuditEvent> find(<% if (databaseType == 'sql') { %>Long <% } %><% if (databaseType == 'mongodb') { %>String <% } %>id) {
-        return Optional.ofNullable(persistenceAuditEventRepository.findOne(id)).map(auditEventConverter::convertToAuditEvent);
+        return Optional.ofNullable(persistenceAuditEventRepository.findOne(id)).map
+            (auditEventConverter::convertToAuditEvent);
     }
 }

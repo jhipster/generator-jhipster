@@ -1,6 +1,7 @@
 package <%=packageName%>.config;
 <% if (databaseType == 'sql') { %>
 import <%=packageName%>.config.liquibase.AsyncSpringLiquibase;
+
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 import com.zaxxer.hikari.HikariConfig;
@@ -54,7 +55,7 @@ import java.util.List;<% } %>
 @EnableMongoRepositories("<%=packageName%>.repository")
 @Import(value = MongoAutoConfiguration.class)
 @EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")<% } %>
-public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends AbstractMongoConfiguration <% } %> {
+public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends AbstractMongoConfiguration <% } %>{
 
     private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);<% if (databaseType == 'sql') { %>
 
@@ -78,13 +79,13 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
         if (dataSourceProperties.getUrl() == null && databaseName == null) {
             log.error("Your database connection pool configuration is incorrect! The application" +
                     " cannot start. Please check your Spring profile, current profiles are: {}",
-                    Arrays.toString(env.getActiveProfiles()));
+                Arrays.toString(env.getActiveProfiles()));
 
             throw new ApplicationContextException("Database connection pool is not configured correctly");
         }
         HikariConfig config = new HikariConfig();
         config.setDataSourceClassName(dataSourceProperties.getDriverClassName());
-        if(StringUtils.isEmpty(dataSourceProperties.getUrl())) {
+        if (StringUtils.isEmpty(dataSourceProperties.getUrl())) {
             config.addDataSourceProperty("databaseName", databaseName);
             config.addDataSourceProperty("serverName", jHipsterProperties.getDatasource().getServerName());
         } else {
