@@ -29,8 +29,10 @@
         <%_ if (useCucumber) { _%>
         <cucumber.version>1.2.4</cucumber.version>
         <%_ } _%>
+        <%_ if (useGatling) { _%>
         <gatling.version>2.1.7</gatling.version>
         <gatling-maven-plugin.version>2.1.7</gatling-maven-plugin.version>
+        <%_ } _%>
         <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
         <hazelcast.version>3.5.2</hazelcast.version>
         <%_ } _%>
@@ -278,12 +280,14 @@
             <scope>test</scope>
         </dependency>
         <%_ } _%>
+        <%_ if (useGatling) { _%>
         <dependency>
             <groupId>io.gatling.highcharts</groupId>
             <artifactId>gatling-charts-highcharts</artifactId>
             <version>${gatling.version}</version>
             <scope>test</scope>
         </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
@@ -604,6 +608,7 @@
                     <expandEmptyElements>false</expandEmptyElements>
                 </configuration>
             </plugin>
+        	<%_ if (useGatling) { _%>
             <plugin>
                 <groupId>io.gatling</groupId>
                 <artifactId>gatling-maven-plugin</artifactId>
@@ -619,6 +624,7 @@
                     <simulationClass>*</simulationClass>
                 </configuration>
             </plugin>
+        	<%_ } _%>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>

@@ -39,7 +39,8 @@ apply from: 'yeoman.gradle'
 apply from: 'sonar.gradle'
 <% if (databaseType == 'sql') { %>
 apply from: 'liquibase.gradle'<% } %>
-apply from: 'gatling.gradle'
+<% if (useGatling) { %>
+apply from: 'gatling.gradle'<% } %>
 apply from: 'mapstruct.gradle'
 
 if (project.hasProperty('prod')) {
@@ -182,7 +183,8 @@ dependencies {
     testCompile group: 'com.mattbertolini', name: 'liquibase-slf4j', version: liquibase_slf4j_version<% } %><% if (databaseType == 'mongodb') { %>
     testCompile group: 'cz.jirutka.spring', name: 'embedmongo-spring', version: embedmongo_spring_version<% } %>
     testCompile group: 'org.hamcrest', name: 'hamcrest-library'
-    testCompile group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version: gatling_version
+    <% if (useGatling) { %>
+    testCompile group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version: gatling_version<% } %>
     <% if (devDatabaseType != 'h2Memory') { %>
     testCompile group: 'com.h2database', name: 'h2'<% } %><% if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { %>
     runtime files('lib/oracle/ojdbc/7/ojdbc-7.jar')

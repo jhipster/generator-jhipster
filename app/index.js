@@ -332,10 +332,14 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             default: true
         },
         {
-          type: 'confirm',
-          name: 'useCucumber',
-          message: '(16/' + questions + ') Would you like to use Cucumber as a testing framework?',
-          default: false
+          type: 'checkbox',
+          name: 'testingFrameworks',
+          message: '(16/' + questions + ') Which testing frameworks would you like to use?',
+          choices: [
+                    {name: 'Gatling', value: 'gatling'},
+                    {name: 'Cucumber', value: 'cucumber'}
+          ],
+          default: [ 'gatling' ]
         }
     ];
 
@@ -367,6 +371,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     this.frontendBuilder = this.config.get('frontendBuilder');
     this.rememberMeKey = this.config.get('rememberMeKey');
     this.enableTranslation = this.config.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
+    this.useGatling = this.config.get('useGatling');
     this.useCucumber = this.config.get('useCucumber');
     this.packagejs = packagejs;
 
@@ -393,6 +398,14 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         if (this.enableTranslation == null) {
             this.enableTranslation = true;
         }
+        
+        // backward compatibility on testing frameworks
+        if (this.useGatling == null) {
+            this.useGatling = true;
+        }
+        if (this.useCucumber == null) {
+            this.useCucumber = false;
+        }
 
         console.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
             'to re-generate the project...\n'));
@@ -417,7 +430,8 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             this.buildTool = props.buildTool;
             this.frontendBuilder = props.frontendBuilder;
             this.enableTranslation = props.enableTranslation;
-            this.useCucumber = props.useCucumber;
+            this.useGatling = props.testingFrameworks.indexOf('gatling') != -1;
+            this.useCucumber = props.testingFrameworks.indexOf('cucumber') != -1;
             this.rememberMeKey = crypto.randomBytes(20).toString('hex');
 
             if (this.databaseType == 'mongodb') {
@@ -453,6 +467,7 @@ JhipsterGenerator.prototype.app = function app() {
     insight.track('app/buildTool', this.buildTool);
     insight.track('app/frontendBuilder', this.frontendBuilder);
     insight.track('app/enableTranslation', this.enableTranslation);
+    insight.track('app/useGatling', this.useGatling);
     insight.track('app/useCucumber', this.useCucumber);
 
     var packageFolder = this.packageName.replace(/\./g, '/');
@@ -512,7 +527,9 @@ JhipsterGenerator.prototype.app = function app() {
             this.template('_profile_prod.gradle', 'profile_prod.gradle', this, {'interpolate': interpolateRegex});
             this.template('_profile_fast.gradle', 'profile_fast.gradle', this, {'interpolate': interpolateRegex});
             this.template('_mapstruct.gradle', 'mapstruct.gradle', this, {'interpolate': interpolateRegex});
-            this.template('_gatling.gradle', 'gatling.gradle', this, {});
+            if (this.useGatling) {
+        	this.template('_gatling.gradle', 'gatling.gradle', this, {});
+            }
             if (this.databaseType == "sql") {
                 this.template('_liquibase.gradle', 'liquibase.gradle', this, {});
             }
@@ -818,10 +835,12 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     // Create Gatling test files
-    this.copy('src/test/gatling/conf/gatling.conf', 'src/test/gatling/conf/gatling.conf');
-    mkdirp('src/test/gatling/data');
-    mkdirp('src/test/gatling/bodies');
-    mkdirp('src/test/gatling/simulations');
+    if (this.useGatling) {
+        this.copy('src/test/gatling/conf/gatling.conf', 'src/test/gatling/conf/gatling.conf');
+        mkdirp('src/test/gatling/data');
+        mkdirp('src/test/gatling/bodies');
+        mkdirp('src/test/gatling/simulations');
+    }
 
     // Create Cucumber test files
     if (this.useCucumber) {
@@ -1141,6 +1160,8 @@ JhipsterGenerator.prototype.app = function app() {
     this.config.set('frontendBuilder', this.frontendBuilder);
     this.config.set('enableTranslation', this.enableTranslation);
     this.config.set('rememberMeKey', this.rememberMeKey);
+    this.config.set('useGatling', this.useGatling);
+    this.config.set('useCucumber', this.useCucumber);
 };
 
 JhipsterGenerator.prototype.projectfiles = function projectfiles() {
