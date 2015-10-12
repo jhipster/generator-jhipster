@@ -5,7 +5,8 @@
         "stacktrace": "Stos wywołań",
         "indicator": {
             "diskSpace": "Przestrzeń dyskowa",
-            "mail": "E-mail",<% if (databaseType == 'sql') { %>
+            "mail": "E-mail",<% if (searchEngine == 'elasticsearch') { %>
+            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
             "db": "Baza danych"<% } %><% if (databaseType == 'mongodb') { %>
             "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
             "cassandra": "Cassandra"<% } %>
