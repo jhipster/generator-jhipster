@@ -1266,6 +1266,8 @@ EntityGenerator.prototype.files = function files() {
 
     this.template('src/main/webapp/app/_entity-detail-controller.js',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '-detail.controller' + '.js', this, {});
+    this.template('src/test/javascript/spec/app/_entity-detail-controller.spec.js',
+        'src/test/javascript/spec/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '-detail.controller.spec.js', this, {});
     this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '-detail.controller' + '.js');
 
     this.template('src/main/webapp/components/_entity-service.js',
