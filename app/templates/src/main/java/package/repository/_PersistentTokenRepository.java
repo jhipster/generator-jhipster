@@ -5,10 +5,10 @@ import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;<% } %>
 import <%=packageName%>.domain.PersistentToken;
 import <%=packageName%>.domain.User;<% if (databaseType == 'sql') { %>
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 import org.springframework.data.jpa.repository.JpaRepository;
 <% } %><% if (databaseType == 'mongodb') { %>
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 import org.springframework.data.mongodb.repository.MongoRepository;
 <% } %><% if (databaseType == 'cassandra') { %>
 import org.springframework.stereotype.Repository;

@@ -21,7 +21,7 @@
                 fieldInputType = 'number';
             } else if (fields[fieldId].fieldType == 'LocalDate') {
                 fieldInputType = 'date';
-            } else if (fields[fieldId].fieldType == 'DateTime') {
+            } else if (fields[fieldId].fieldType == 'ZonedDateTime') {
                 fieldInputType = 'datetime-local';
             } else if (fields[fieldId].fieldType == 'Boolean') {
                 fieldInputType = 'checkbox';
@@ -64,7 +64,7 @@
             </div>
                 <%_ } _%>
             <input type="<%= fieldInputType %>" class="form-control" name="<%= fields[fieldId].fieldName %>" id="field_<%= fields[fieldId].fieldName %>"
-                    ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldType == 'DateTime') { %> ng-model-options="{timezone: 'UTC'}"<% } %>
+                    ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldType == 'ZonedDateTime') { %> ng-model-options="{timezone: 'UTC'}"<% } %>
                     <%- include ng_validators %> />
                 <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
             <input type="hidden" class="form-control" name="<%= fields[fieldId].fieldName %>ContentType" id="field_<%= fields[fieldId].fieldName %>ContentType"
@@ -127,9 +127,9 @@
                     This field should be a number.
                 </p>
                 <%_ } _%>
-                <%_ if (fields[fieldId].fieldType == 'DateTime') { _%>
+                <%_ if (fields[fieldId].fieldType == 'ZonedDateTime') { _%>
                 <p class="help-block"
-                    ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.datetimelocal" translate="entity.validation.datetimelocal">
+                    ng-show="editForm.<%= fields[fieldId].fieldName %>.$error.ZonedDateTimelocal" translate="entity.validation.ZonedDateTimelocal">
                     This field should be a date and time.
                 </p>
                 <%_ } _%>

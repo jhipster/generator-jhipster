@@ -193,8 +193,8 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     name: 'LocalDate'
                 },
                 {
-                    value: 'DateTime',
-                    name: 'DateTime'
+                    value: 'ZonedDateTime',
+                    name: 'ZonedDateTime'
                 },
                 {
                     value: 'Boolean',
@@ -409,8 +409,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 return response.fieldAdd == true &&
                     response.fieldValidate == true &&
                     (response.fieldType == 'LocalDate' ||
-                    response.fieldType == 'DateTime' ||
-                    response.fieldType == 'Date' ||
+                    response.fieldType == 'ZonedDateTime' ||
                     response.fieldType == 'UUID' ||
                     response.fieldType == 'Boolean' ||
                     response.fieldIsEnum == true);
@@ -1018,7 +1017,7 @@ EntityGenerator.prototype.files = function files() {
 
         if ((databaseType == 'sql' || databaseType == 'mongodb') && !_.contains([
             'String', 'Integer', 'Long', 'Float', 'Double', 'BigDecimal',
-            'LocalDate', 'DateTime', 'Boolean', 'byte[]'], field.fieldType)) {
+            'LocalDate', 'ZonedDateTime', 'Boolean', 'byte[]'], field.fieldType)) {
             field.fieldIsEnum = true;
         } else {
             field.fieldIsEnum = false;
@@ -1105,11 +1104,11 @@ EntityGenerator.prototype.files = function files() {
             this.fieldsContainOneToMany = true;
         }
     }
-    this.fieldsContainCustomTime = false;
+    this.fieldsContainZonedDateTime = false;
     for (var idx in this.fields) {
         var field = this.fields[idx];
-        if (field.fieldType == 'LocalDate' || field.fieldType == 'DateTime' || field.fieldType == 'Date') {
-            this.fieldsContainCustomTime = true;
+        if (field.fieldType == 'ZonedDateTime') {
+            this.fieldsContainZonedDateTime = true;
         }
     }
     this.fieldsContainLocalDate = false;
@@ -1117,13 +1116,6 @@ EntityGenerator.prototype.files = function files() {
         var field = this.fields[idx];
         if (field.fieldType == 'LocalDate') {
             this.fieldsContainLocalDate = true;
-        }
-    }
-    this.fieldsContainDateTime = false;
-    for (var idx in this.fields) {
-        var field = this.fields[idx];
-        if (field.fieldType == 'DateTime') {
-            this.fieldsContainDateTime = true;
         }
     }
     this.fieldsContainDate = false;

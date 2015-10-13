@@ -6,10 +6,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;<% if (hibernateCache != 'no'
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (databaseType == 'sql') { %>
 import org.hibernate.annotations.Type;<% } %>
-import org.joda.time.LocalDate;<% if (databaseType == 'cassandra') { %>
-import org.joda.time.DateTime;<% } %>
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;<% if (databaseType == 'mongodb') { %>
+import java.time.LocalDate;<% if (databaseType == 'cassandra') { %>
+import java.time.ZonedDateTime;<% } %>
+import java.time.format.DateTimeFormatter;<% if (databaseType == 'mongodb') { %>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;<% } %>
@@ -18,7 +17,8 @@ import org.springframework.data.mongodb.core.mapping.Document;<% } %>
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;<% if (databaseType == 'cassandra') { %>
-import java.util.Date;<% } %>
+import java.util.Date;
+import java.text.SimpleDateFormat;<% } %>
 
 /**
  * Persistent tokens are used by Spring Security to automatically log in users.
@@ -32,7 +32,12 @@ import java.util.Date;<% } %>
 @Table(name = "persistent_token")<% } %>
 public class PersistentToken implements Serializable {
 
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat.forPattern("d MMMM yyyy");
+    <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("d MMMM yyyy");
+    <% } %>
+    <% if (databaseType == 'cassandra') { %>
+    private static final SimpleDateFormat DATE_TIME_FORMATTER = new SimpleDateFormat("d MMMM yyyy");
+    <% } %>
 
     private static final int MAX_USER_AGENT_LEN = 255;
 <% if (databaseType == 'sql' || databaseType == 'mongodb')  { %>
@@ -48,7 +53,7 @@ public class PersistentToken implements Serializable {
 
     @JsonIgnore<% if (databaseType == 'sql') { %>
     @Column(name = "token_date")
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
+    @Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDate")
     private LocalDate tokenDate;<% } %><% if (databaseType == 'mongodb') { %>
     private LocalDate tokenDate;<% } %><% if (databaseType == 'cassandra') { %>
     @Column(name = "token_date")
@@ -99,7 +104,7 @@ public class PersistentToken implements Serializable {
 
     @JsonGetter
     public String getFormattedTokenDate() {
-        <% if (databaseType == 'sql' || databaseType == 'mongodb')  { %>return DATE_TIME_FORMATTER.print(this.tokenDate);<% } %><% if (databaseType == 'cassandra') { %>return DATE_TIME_FORMATTER.print(new DateTime(this.tokenDate));<% } %>
+        <% if (databaseType == 'sql' || databaseType == 'mongodb')  { %>return DATE_TIME_FORMATTER.format(this.tokenDate);<% } %><% if (databaseType == 'cassandra') { %>return DATE_TIME_FORMATTER.format(this.tokenDate);<% } %>
     }
 
     public String getIpAddress() {

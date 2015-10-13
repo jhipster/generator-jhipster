@@ -12,18 +12,18 @@ for (relationshipId in relationships) {
     }
 }
 if (importJsonignore) { %>
-import com.fasterxml.jackson.annotation.JsonIgnore;<% } %><% if (fieldsContainCustomTime == true) { %>
+import com.fasterxml.jackson.annotation.JsonIgnore;<% } %><% if (fieldsContainLocalDate == true || fieldsContainZonedDateTime == true) { %>
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;<% } %><% if (fieldsContainLocalDate == true) { %>
 import <%=packageName%>.domain.util.CustomLocalDateSerializer;
-import <%=packageName%>.domain.util.ISO8601LocalDateDeserializer;<% } %><% if (fieldsContainDateTime == true) { %>
+import <%=packageName%>.domain.util.CustomLocalDateDeserializer;<% } %><% if (fieldsContainZonedDateTime == true) { %>
 import <%=packageName%>.domain.util.CustomDateTimeDeserializer;
 import <%=packageName%>.domain.util.CustomDateTimeSerializer;<% } %><% if (hibernateCache != 'no') { %>
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (fieldsContainCustomTime == true && databaseType == 'sql') { %>
+import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (fieldsContainZonedDateTime == true && databaseType == 'sql') { %>
 import org.hibernate.annotations.Type;<% } %><% if (fieldsContainLocalDate == true) { %>
-import org.joda.time.LocalDate;<% } %><% if (fieldsContainDateTime == true) { %>
-import org.joda.time.DateTime;<% } %><% if (databaseType == 'mongodb') { %>
+import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
+import java.time.ZonedDateTime;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;<% } %><% if (searchEngine == 'elasticsearch') { %>
@@ -91,15 +91,15 @@ public class <%= entityClass %> implements Serializable {
         if (fields[fieldId].fieldType == 'byte[]') { _%>
     @Lob
         <%_ }
-        if (fields[fieldId].fieldType == 'DateTime') { _%>
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+        if (fields[fieldId].fieldType == 'ZonedDateTime') { _%>
+    @Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime")
     @JsonSerialize(using = CustomDateTimeSerializer.class)
     @JsonDeserialize(using = CustomDateTimeDeserializer.class)
     @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>"<% if (required) { %>, nullable = false<% } %>)
         <%_ } else if (fields[fieldId].fieldType == 'LocalDate') { _%>
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
+    @Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDate")
     @JsonSerialize(using = CustomLocalDateSerializer.class)
-    @JsonDeserialize(using = ISO8601LocalDateDeserializer.class)
+    @JsonDeserialize(using = CustomLocalDateDeserializer.class)
     @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>"<% if (required) { %>, nullable = false<% } %>)
         <%_ } else if (fields[fieldId].fieldType == 'BigDecimal') { _%>
     @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>", precision=10, scale=2<% if (required) { %>, nullable = false<% } %>)
@@ -113,7 +113,7 @@ public class <%= entityClass %> implements Serializable {
     @JsonDeserialize(using = CustomDateTimeDeserializer.class)
     <%_     } else if (fields[fieldId].fieldType == 'LocalDate') { _%>
     @JsonSerialize(using = CustomLocalDateSerializer.class)
-    @JsonDeserialize(using = ISO8601LocalDateDeserializer.class)
+    @JsonDeserialize(using = CustomLocalDateDeserializer.class)
     <%_     } _%>
     @Field("<%=fields[fieldId].fieldNameUnderscored %>")
     <%_ } _%>

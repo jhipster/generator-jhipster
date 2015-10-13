@@ -583,11 +583,14 @@ JhipsterGenerator.prototype.app = function app() {
     }
     if (this.databaseType == 'mongodb') {
         this.template('src/main/java/package/config/_CloudMongoDbConfiguration.java', javaDir + 'config/CloudMongoDbConfiguration.java', this, {});
+        this.template('src/main/java/package/domain/util/_DateToZonedDateTimeConverter.java', javaDir + 'domain/util/DateToZonedDateTimeConverter.java', this, {});
+        this.template('src/main/java/package/domain/util/_ZonedDateTimeToDateConverter.java', javaDir + 'domain/util/ZonedDateTimeToDateConverter.java', this, {});
+        this.template('src/main/java/package/domain/util/_DateToLocalDateConverter.java', javaDir + 'domain/util/DateToLocalDateConverter.java', this, {});
+        this.template('src/main/java/package/domain/util/_LocalDateToDateConverter.java', javaDir + 'domain/util/LocalDateToDateConverter.java', this, {});
     }
     if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
         this.template('src/main/java/package/config/_DatabaseConfiguration.java', javaDir + 'config/DatabaseConfiguration.java', this, {});
     }
-    this.template('src/main/java/package/config/_JacksonConfiguration.java', javaDir + 'config/JacksonConfiguration.java', this, {});
     this.template('src/main/java/package/config/_JHipsterProperties.java', javaDir + 'config/JHipsterProperties.java', this, {});
     this.template('src/main/java/package/config/_LocaleConfiguration.java', javaDir + 'config/LocaleConfiguration.java', this, {});
     this.template('src/main/java/package/config/_LoggingAspectConfiguration.java', javaDir + 'config/LoggingAspectConfiguration.java', this, {});
@@ -672,7 +675,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/domain/util/_CustomLocalDateSerializer.java', javaDir + 'domain/util/CustomLocalDateSerializer.java', this, {});
     this.template('src/main/java/package/domain/util/_CustomDateTimeSerializer.java', javaDir + 'domain/util/CustomDateTimeSerializer.java', this, {});
     this.template('src/main/java/package/domain/util/_CustomDateTimeDeserializer.java', javaDir + 'domain/util/CustomDateTimeDeserializer.java', this, {});
-    this.template('src/main/java/package/domain/util/_ISO8601LocalDateDeserializer.java', javaDir + 'domain/util/ISO8601LocalDateDeserializer.java', this, {});
+    this.template('src/main/java/package/domain/util/_CustomLocalDateDeserializer.java', javaDir + 'domain/util/CustomLocalDateDeserializer.java', this, {});
     if (this.databaseType == "sql") {
         this.template('src/main/java/package/domain/util/_FixedH2Dialect.java', javaDir + 'domain/util/FixedH2Dialect.java', this, {});
         if (this.prodDatabaseType == 'postgresql') {
@@ -742,9 +745,6 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.authenticationType == 'session') {
         this.template('src/main/java/package/web/filter/_CsrfCookieGeneratorFilter.java', javaDir + 'web/filter/CsrfCookieGeneratorFilter.java', this, {});
     }
-
-    this.template('src/main/java/package/web/propertyeditors/_package-info.java', javaDir + 'web/propertyeditors/package-info.java', this, {});
-    this.template('src/main/java/package/web/propertyeditors/_LocaleDateTimeEditor.java', javaDir + 'web/propertyeditors/LocaleDateTimeEditor.java', this, {});
 
     this.template('src/main/java/package/web/rest/dto/_package-info.java', javaDir + 'web/rest/dto/package-info.java', this, {});
     this.template('src/main/java/package/web/rest/dto/_LoggerDTO.java', javaDir + 'web/rest/dto/LoggerDTO.java', this, {});
@@ -1090,6 +1090,9 @@ JhipsterGenerator.prototype.app = function app() {
     // Remove old files, from previous JHipster versions
     removefile(javaDir + 'config/MailConfiguration.java');
     removefile(javaDir + 'config/metrics/JavaMailHealthIndicator.java');
+    removefile(javaDir + 'config/JacksonConfiguration.java');
+    removefile(javaDir + 'domain/util/ISO8601LocalDateDeserializer.java');
+    removefolder(javaDir + 'web/propertyeditors');
 
     removefile(resourceDir + 'logback.xml');
 

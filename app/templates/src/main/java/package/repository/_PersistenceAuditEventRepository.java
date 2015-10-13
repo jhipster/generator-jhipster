@@ -2,7 +2,7 @@ package <%=packageName%>.repository;
 
 import <%=packageName%>.domain.PersistentAuditEvent;
 
-import org.joda.time.LocalDateTime;<% if (databaseType == 'sql') { %>
+import java.time.LocalDateTime;<% if (databaseType == 'sql') { %>
 import org.springframework.data.jpa.repository.JpaRepository;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
 
