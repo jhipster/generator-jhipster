@@ -464,6 +464,7 @@ JhipsterGenerator.prototype.app = function app() {
         this.libFolder = 'lib/oracle/ojdbc/' + this.ojdbcVersion + '/';
         mkdirp(this.libFolder);
     }
+
     // Create application
     this.template('_package.json', 'package.json', this, {});
     this.template('_bower.json', 'bower.json', this, {});

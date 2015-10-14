@@ -29,7 +29,7 @@ public class UserDetailsService implements org.springframework.security.core.use
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(final String login) {
+    public UserPrincipal loadUserByUsername(final String login) {
         log.debug("Authenticating {}", login);
         String lowercaseLogin = login.toLowerCase();
         Optional<User> userFromDatabase = userRepository.findOneByLogin(lowercaseLogin);
@@ -41,9 +41,8 @@ public class UserDetailsService implements org.springframework.security.core.use
                     .map(authority -> new SimpleGrantedAuthority(authority.getName()))<% } %><% if (databaseType == 'cassandra') { %>
                 .map(authority -> new SimpleGrantedAuthority(authority))<% } %>
                 .collect(Collectors.toList());
-            return new org.springframework.security.core.userdetails.User(lowercaseLogin,
-                user.getPassword(),
-                grantedAuthorities);
+            return new UserPrincipal(lowercaseLogin,
+                grantedAuthorities,user.getUserId(), user.getActivated());
         }).orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the " +
         "database"));
     }
