@@ -8,7 +8,7 @@ import java.util.Date;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
-import com.mycompany.myapp.domain.util.JSR310DateConverters.*;
+import <%=packageName%>.domain.util.JSR310DateConverters.*;
 
 public final class JSR310PersistenceConverters {
 
