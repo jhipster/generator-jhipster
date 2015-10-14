@@ -774,9 +774,6 @@ JhipsterGenerator.prototype.app = function app() {
     var testResourceDir = 'src/test/resources/';
     mkdirp(testDir);
 
-    if (this.databaseType == "mongodb") {
-        this.template('src/test/java/package/config/_MongoConfiguration.java', testDir + 'config/MongoConfiguration.java', this, {});
-    }
     if (this.databaseType == "cassandra") {
         this.template('src/test/java/package/_CassandraKeyspaceTest.java', testDir + 'CassandraKeyspaceTest.java', this, {});
         this.template('src/test/java/package/_AbstractCassandraTest.java', testDir + 'AbstractCassandraTest.java', this, {});

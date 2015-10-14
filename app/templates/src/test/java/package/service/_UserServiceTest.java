@@ -1,8 +1,7 @@
 package <%=packageName%>.service;
 <% if (databaseType == 'cassandra') { %>
 import <%=packageName%>.AbstractCassandraTest;<% } %>
-import <%=packageName%>.Application;<% if (databaseType == 'mongodb') { %>
-import <%=packageName%>.config.MongoConfiguration;<% } %><% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
+import <%=packageName%>.Application;<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 import <%=packageName%>.domain.PersistentToken;<% } %>
 import <%=packageName%>.domain.User;<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
@@ -13,8 +12,7 @@ import java.time.LocalDate;<% } %>
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;<% if (databaseType == 'mongodb') { %>
-import org.springframework.context.annotation.Import;<% } %><% if (databaseType == 'sql') { %>
+import org.springframework.boot.test.SpringApplicationConfiguration;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -33,8 +31,7 @@ import static org.assertj.core.api.Assertions.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-@IntegrationTest<% if (databaseType == 'mongodb') { %>
-@Import(MongoConfiguration.class)<% } %><% if (databaseType == 'sql') { %>
+@IntegrationTest<% if (databaseType == 'sql') { %>
 @Transactional<% } %>
 public class UserServiceTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 
