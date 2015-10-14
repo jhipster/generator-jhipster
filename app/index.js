@@ -464,6 +464,13 @@ JhipsterGenerator.prototype.app = function app() {
         this.libFolder = 'lib/oracle/ojdbc/' + this.ojdbcVersion + '/';
         mkdirp(this.libFolder);
     }
+
+    if (this.databaseType === 'cassandra' || this.databaseType === 'mongodb') {
+        this.pkType = 'String';
+    } else {
+        this.pkType = 'Long';
+    }
+
     // Create application
     this.template('_package.json', 'package.json', this, {});
     this.template('_bower.json', 'bower.json', this, {});
@@ -720,6 +727,7 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
         this.template('src/main/java/package/security/_SpringSecurityAuditorAware.java', javaDir + 'security/SpringSecurityAuditorAware.java', this, {});
     }
+    this.template('src/main/java/package/security/_CustomUserDetails.java', javaDir + 'security/CustomUserDetails.java', this, {});
     this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java', this, {});
     this.template('src/main/java/package/security/_UserNotActivatedException.java', javaDir + 'security/UserNotActivatedException.java', this, {});
 
