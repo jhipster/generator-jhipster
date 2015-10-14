@@ -1,8 +1,6 @@
 package <%=packageName%>.web.rest;
 
-import <%=packageName%>.Application;<% if (databaseType == 'mongodb') { %>
-import <%=packageName%>.config.MongoConfiguration;
-import org.springframework.context.annotation.Import;<% } %>
+import <%=packageName%>.Application;
 import <%=packageName%>.config.audit.AuditEventConverter;
 import <%=packageName%>.domain.PersistentAuditEvent;
 import <%=packageName%>.repository.PersistenceAuditEventRepository;
@@ -35,8 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-@IntegrationTest<% if (databaseType == 'mongodb') { %>
-@Import(MongoConfiguration.class)<% } %><% if (databaseType == 'sql') { %>
+@IntegrationTest<% if (databaseType == 'sql') { %>
 @Transactional<% } %>
 public class AuditResourceTest {
 
