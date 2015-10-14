@@ -8,9 +8,11 @@ angular.module('<%=angularAppName%>')
                 $scope.<%= entityInstance %> = result;
             });
         };
-        $rootScope.$on('<%=angularAppName%>:<%= entityInstance %>Update', function(event, result) {
+        var unsubscribe = $rootScope.$on('<%=angularAppName%>:<%= entityInstance %>Update', function(event, result) {
             $scope.<%= entityInstance %> = result;
         });
+        $scope.$on('$destroy', unsubscribe);
+
         <%_ if (fieldsContainBlob) { _%>
 
         $scope.byteSize = function (base64String) {
