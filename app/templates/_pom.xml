@@ -76,7 +76,6 @@
         <spring-security-oauth2.version>2.0.7.RELEASE</spring-security-oauth2.version>
         <%_ } _%>
         <springfox.version>2.0.3</springfox.version>
-        <usertype-core.version>4.0.0.GA</usertype-core.version>
         <!-- Sonar properties -->
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
         <sonar-maven-plugin.version>2.6</sonar-maven-plugin.version>
@@ -356,16 +355,6 @@
             <artifactId>hibernate-validator</artifactId>
         </dependency>
         <%_ if (databaseType == 'sql') { _%>
-        <dependency>
-            <groupId>org.jadira.usertype</groupId>
-            <artifactId>usertype.core</artifactId>
-            <version>${usertype-core.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jadira.usertype</groupId>
-            <artifactId>usertype.extended</artifactId>
-            <version>${usertype-core.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>

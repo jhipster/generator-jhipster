@@ -1,6 +1,4 @@
 package <%=packageName%>.domain;
-<% if (databaseType == 'sql') { %>
-import org.hibernate.annotations.Type;<% } %>
 <% if (databaseType == 'mongodb') { %>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -31,8 +29,7 @@ public class PersistentAuditEvent {
     @Column(nullable = false)<% } %>
     private String principal;
 <% if (databaseType == 'sql') { %>
-    @Column(name = "event_date")
-    @Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDateTime")<% } %>
+    @Column(name = "event_date")<% } %>
     private LocalDateTime auditEventDate;<% if (databaseType == 'sql') { %>
     @Column(name = "event_type")<% } %><% if (databaseType == 'mongodb') { %>
     @Field("event_type")<% } %>
