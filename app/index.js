@@ -42,7 +42,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     console.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version + '\n'));
     var insight = this.insight();
     this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
-    var questions = 15; // making questions a variable to avoid updating each question by hand when adding additional options
+    var questions = 16; // making questions a variable to avoid updating each question by hand when adding additional options
 
     var prompts = [
         {
@@ -330,6 +330,12 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             name: 'enableTranslation',
             message: '(15/' + questions + ') Would you like to enable translation support with Angular Translate?',
             default: true
+        },
+        {
+            type: 'confirm',
+            name: 'enableSocialSignIn',
+            message: '(16/' + questions + ') Would you like to enable social sign in (Google, Facebook, Twitter)?',
+            default: true
         }
     ];
 
@@ -361,6 +367,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     this.frontendBuilder = this.config.get('frontendBuilder');
     this.rememberMeKey = this.config.get('rememberMeKey');
     this.enableTranslation = this.config.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
+    this.enableSocialSignIn = this.config.get('enableSocialSignIn');
     this.packagejs = packagejs;
 
     if (this.baseName != null &&
@@ -387,6 +394,11 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             this.enableTranslation = true;
         }
 
+        // If social sign in is not defined, it is desable by default
+        if (this.enableSocialSignIn == null) {
+            this.enableSocialSignIn = false;
+        }
+
         console.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
             'to re-generate the project...\n'));
 
@@ -410,6 +422,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             this.buildTool = props.buildTool;
             this.frontendBuilder = props.frontendBuilder;
             this.enableTranslation = props.enableTranslation;
+            this.enableSocialSignIn = props.enableSocialSignIn;
             this.rememberMeKey = crypto.randomBytes(20).toString('hex');
 
             if (this.databaseType == 'mongodb') {
@@ -445,6 +458,7 @@ JhipsterGenerator.prototype.app = function app() {
     insight.track('app/buildTool', this.buildTool);
     insight.track('app/frontendBuilder', this.frontendBuilder);
     insight.track('app/enableTranslation', this.enableTranslation);
+    insight.track('app/enableSocialSignIn', this.enableSocialSignIn);
 
     var packageFolder = this.packageName.replace(/\./g, '/');
     var javaDir = 'src/main/java/' + packageFolder + '/';
@@ -568,6 +582,9 @@ JhipsterGenerator.prototype.app = function app() {
     // Create mail templates
     this.copy(resourceDir + '/mails/activationEmail.html', resourceDir + 'mails/activationEmail.html');
     this.copy(resourceDir + '/mails/passwordResetEmail.html', resourceDir + 'mails/passwordResetEmail.html');
+    if (this.enableSocialSignIn) {
+        this.copy(resourceDir + '/mails/socialRegistrationValidationEmail.html', resourceDir + 'mails/socialRegistrationValidationEmail.html');
+    }
 
     // Create Java files
     this.template('src/main/java/package/_Application.java', javaDir + '/Application.java', this, {});
@@ -1128,6 +1145,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.config.set('buildTool', this.buildTool);
     this.config.set('frontendBuilder', this.frontendBuilder);
     this.config.set('enableTranslation', this.enableTranslation);
+    this.config.set('enableSocialSignIn', this.enableSocialSignIn);
     this.config.set('rememberMeKey', this.rememberMeKey);
 };
 

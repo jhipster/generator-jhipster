@@ -77,6 +77,14 @@
         <%_ } _%>
         <springfox.version>2.0.3</springfox.version>
         <usertype-core.version>4.0.0.GA</usertype-core.version>
+        <%_ if (enableSocialSignIn) { _%>
+        <!-- Spring social -->
+        <httpclient.version>4.5.1</httpclient.version>
+        <spring-social-security.version>1.1.2.RELEASE</spring-social-security.version>
+        <spring-social-google.version>1.0.0.RELEASE</spring-social-google.version>
+        <spring-social-facebook.version>2.0.2.RELEASE</spring-social-facebook.version>
+        <spring-social-twitter.version>1.1.1.RELEASE</spring-social-twitter.version>
+        <%_ } _%>
         <!-- Sonar properties -->
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
         <sonar-maven-plugin.version>2.6</sonar-maven-plugin.version>
@@ -541,6 +549,34 @@
             <artifactId>metrics-spark-reporter</artifactId>
             <version>${metrics-spark-reporter.version}</version>
         </dependency>
+        <%_ if (enableSocialSignIn) { _%>
+        <!-- social -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.social</groupId>
+            <artifactId>spring-social-security</artifactId>
+            <version>${spring-social-security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.social</groupId>
+            <artifactId>spring-social-google</artifactId>
+            <version>${spring-social-google.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.social</groupId>
+            <artifactId>spring-social-facebook</artifactId>
+            <version>${spring-social-facebook.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.social</groupId>
+            <artifactId>spring-social-twitter</artifactId>
+            <version>${spring-social-twitter.version}</version>
+        </dependency>
+        <%_ } _%>
     </dependencies>
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>

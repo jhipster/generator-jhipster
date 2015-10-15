@@ -37,6 +37,10 @@
         "sockjs-client": "1.0.3",
         "stomp-websocket": "2.3.4",
         <%_ } _%>
+        <%_ if (enableSocialSignIn) { _%>
+        "bootstrap-social": "4.10.1",
+        "font-awesome": "4.4.0",
+        <%_ } _%>
         "swagger-ui": "2.1.2"
     },
     "devDependencies": {
