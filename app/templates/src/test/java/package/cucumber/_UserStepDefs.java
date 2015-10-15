@@ -11,13 +11,11 @@ import org.springframework.boot.test.SpringApplicationContextLoader;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import <%=packageName%>.Application;
-import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.web.rest.UserResource;
 
 import cucumber.api.java.Before;
@@ -29,7 +27,7 @@ import cucumber.api.java.en.When;
 public class UserStepDefs {
 
     @Inject
-    private UserRepository userRepository;
+    private UserResource userResource;
 
     private MockMvc restUserMockMvc;
 
@@ -37,8 +35,6 @@ public class UserStepDefs {
 
     @Before
     public void setup() {
-        UserResource userResource = new UserResource();
-        ReflectionTestUtils.setField(userResource, "userRepository", userRepository);
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource).build();
     }
 
