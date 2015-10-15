@@ -25,7 +25,7 @@
             <column name="id" type="bigint" autoIncrement="${autoIncrement}" <% if(prodDatabaseType === 'oracle') {%>defaultValueComputed="seq_user.NEXTVAL"<% } %>>
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="login" type="varchar(50)">
+            <column name="login" type="varchar(<% if (enableSocialSignIn) { %>100<% } else { %>50<% } %>)">
                 <constraints unique="true" nullable="false"/>
             </column>
             <column name="PASSWORD" type="varchar(60)"/>
@@ -173,6 +173,36 @@
                                  constraintName="fk_evt_pers_audit_evt_data"
                                  referencedColumnNames="event_id"
                                  referencedTableName="jhi_persistent_audit_event"/>
+    <% if (enableSocialSignIn) { %>
+    <!-- Social -->
+    <createTable tableName="jhi_UserConnection">
+          <column name="userId" type="varchar(255)">
+              <constraints nullable="false"/>
+          </column>
+          <column name="providerId" type="varchar(255)">
+              <constraints nullable="false"/>
+          </column>
+          <column name="providerUserId" type="varchar(255)">
+              <constraints nullable="false"/>
+          </column>
+          <column name="rank" type="bigint">
+              <constraints nullable="false"/>
+          </column>
+          <column name="displayName" type="varchar(255)"/>
+          <column name="profileUrl" type="varchar(255)"/>
+          <column name="imageUrl" type="varchar(255)"/>
+          <column name="accessToken" type="varchar(255)">
+              <constraints nullable="false"/>
+          </column>
+          <column name="secret" type="varchar(255)"/>
+          <column name="refreshToken" type="varchar(255)"/>
+          <column name="expireTime" type="bigint"/>
+    </createTable>
+
+    <addPrimaryKey tableName="JHI_UserConnection" columnNames="userId, providerId, providerUserId"/>
+
+    <addUniqueConstraint tableName="JHI_UserConnection" columnNames="userId, providerId, rank"/>
+    <% } %>
     </changeSet>
     <% if (authenticationType == 'oauth2') { %>
     <!-- Manage the OAuth authentication -->

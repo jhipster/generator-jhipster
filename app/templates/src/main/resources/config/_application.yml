@@ -24,6 +24,23 @@ spring:
             enabled: false
     thymeleaf:
         mode: XHTML
+<%_ if (enableSocialSignIn) { _%>
+    social:
+        # see https://developers.google.com/+/web/signin/server-side-flow#step_1_create_a_client_id_and_client_secret
+        google:
+            clientId: 265902152073-t5btnbi1vjqiil0aadpgvq0v0c32j1r5.apps.googleusercontent.com
+            clientSecret: YdB6HmeEAGZD_qNSHHtk0lCr
+
+        # see https://developers.facebook.com/docs/facebook-login/v2.2
+        facebook:
+            clientId: 526986260792976
+            clientSecret: d9a9dd358f7f56cab17f5a0f0b3f5179
+
+        # see https://apps.twitter.com/app/
+        twitter:
+            clientId: Ur2i77DLVRfqJCZj592b1tG07
+            clientSecret: Jyug5gSA3xLgEzERCzhAjjcUMyshCk2IOzpmns0515UvJSf2hS
+<%_ } _%>
 
 security:
     basic:
@@ -75,3 +92,7 @@ jhipster:
         contact:
         license:
         licenseUrl:
+<%_ if (enableSocialSignIn) { _%>
+    social:
+        redirectAfterSignIn: "/#/home"
+<%_ } _%>

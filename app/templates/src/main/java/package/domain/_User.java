@@ -47,10 +47,12 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @PartitionKey
     private String id;<% } %>
 
-    @NotNull
+    @NotNull<% if (enableSocialSignIn) { %>
+    @Size(min = 1, max = 100)<% if (databaseType == 'sql') { %>
+    @Column(length = 100, unique = true, nullable = false)<% } %><% } else { %>
     @Pattern(regexp = "^[a-z0-9]*$|(anonymousUser)")
     @Size(min = 1, max = 50)<% if (databaseType == 'sql') { %>
-    @Column(length = 50, unique = true, nullable = false)<% } %>
+    @Column(length = 50, unique = true, nullable = false)<% } %><% } %>
     private String login;
 
     @JsonIgnore

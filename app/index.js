@@ -778,6 +778,13 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/main/java/package/web/websocket/dto/_ActivityDTO.java', javaDir + 'web/websocket/dto/ActivityDTO.java', this, {});
     }
 
+    if (this.enableSocialSignIn) {
+        this.template('src/main/java/package/social/_SocialController.java', javaDir + 'social/SocialController.java', this, {});
+        this.template('src/main/java/package/social/_SocialService.java', javaDir + 'social/SocialService.java', this, {});
+        this.template('src/main/java/package/social/config/_SimpleSignInAdapter.java', javaDir + 'social/SimpleSignInAdapter.java', this, {});
+        this.template('src/main/java/package/social/config/_SocialConfiguration.java', javaDir + 'social/SocialConfiguration.java', this, {});
+    }
+
     // Create Test Java files
     var testDir = 'src/test/java/' + packageFolder + '/';
     var testResourceDir = 'src/test/resources/';
@@ -806,6 +813,10 @@ JhipsterGenerator.prototype.app = function app() {
 
     if (this.hibernateCache == "ehcache") {
         this.template(testResourceDir + '_ehcache.xml', testResourceDir + 'ehcache.xml', this, {});
+    }
+
+    if (this.enableSocialSignIn) {
+        this.template('src/test/java/package/social/_SocialServiceTest.java', testDir + 'social/SocialServiceTest.java', this, {});
     }
 
     // Create Gatling test files
@@ -883,6 +894,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/scripts/components/navbar/_navbar.controller.js', webappDir + 'scripts/components/navbar/navbar.controller.js', this, {});
     this.template(webappDir + '/scripts/components/user/_user.service.js', webappDir + 'scripts/components/user/user.service.js', this, {});
     this.template(webappDir + '/scripts/components/util/_base64.service.js', webappDir + 'scripts/components/util/base64.service.js', this, {});
+    this.template(webappDir + '/scripts/components/util/_capitalize.filter.js', webappDir + 'scripts/components/util/capitalize.filter.js', this, {});
     this.template(webappDir + '/scripts/components/util/_parse-links.service.js', webappDir + 'scripts/components/util/parse-links.service.js', this, {});
     this.template(webappDir + '/scripts/components/util/_truncate.filter.js', webappDir + 'scripts/components/util/truncate.filter.js', this, {});
     this.template(webappDir + '/scripts/components/util/_dateutil.service.js', webappDir + 'scripts/components/util/dateutil.service.js', this, {});
@@ -957,6 +969,16 @@ JhipsterGenerator.prototype.app = function app() {
     this.copyJs(webappDir + '/scripts/app/main/_main.js', webappDir + 'scripts/app/main/main.js', this, {});
     this.template(webappDir + '/scripts/app/main/_main.controller.js', webappDir + 'scripts/app/main/main.controller.js', this, {});
 
+    // Social
+    if (this.enableSocialSignIn) {
+        this.copyHtml(webappDir + '/scripts/app/account/social/directive/_social.html', webappDir + 'scripts/app/account/social/directive/social.html');
+        this.template(webappDir + '/scripts/app/account/social/directive/_social.directive.js', webappDir + 'scripts/app/account/social/directive/social.directive.js', this, {});
+        this.copyHtml(webappDir + '/scripts/app/account/social/_social-register.html', webappDir + 'scripts/app/account/social/_social-register.html');
+        this.template(webappDir + '/scripts/app/account/social/_social-register.controller.js', webappDir + 'scripts/app/account/social/social-register.controller.js', this, {});
+        this.template(webappDir + '/scripts/app/account/social/_social.service.js', webappDir + 'scripts/app/account/social/social.service.js', this, {});
+        this.copyJs(webappDir + '/scripts/app/account/social/_social-register.js', webappDir + 'scripts/app/account/social/social-register.js', this, {});
+    }
+
     // interceptor code
     this.template(webappDir + '/scripts/components/interceptor/_auth.interceptor.js', webappDir + 'scripts/components/interceptor/auth.interceptor.js', this, {});
     this.template(webappDir + '/scripts/components/interceptor/_errorhandler.interceptor.js', webappDir + 'scripts/components/interceptor/errorhandler.interceptor.js', this, {});
@@ -1019,6 +1041,7 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/components/user/user.service.js',
         'scripts/components/util/truncate.filter.js',
         'scripts/components/util/base64.service.js',
+        'scripts/components/util/capitalize.filter.js',
         'scripts/components/alert/alert.service.js',
         'scripts/components/alert/alert.directive.js',
         'scripts/components/util/parse-links.service.js',
@@ -1067,6 +1090,13 @@ JhipsterGenerator.prototype.app = function app() {
             'bower_components/messageformat/locale/fr.js',
             'scripts/components/language/language.service.js',
             'scripts/components/language/language.controller.js']);
+    }
+    if (this.enableSocialSignIn) {
+        appScripts = appScripts.concat([
+            'scripts/app/account/social/directive/social.directive.js',
+            'scripts/app/account/social/social-register.js',
+            'scripts/app/account/social/social-register.controller.js',
+            'scripts/app/account/social/social.service.js']);
     }
     if (this.authenticationType == 'xauth') {
         appScripts = appScripts.concat([
@@ -1148,10 +1178,10 @@ function removefolder(folder) {
 }
 
 JhipsterGenerator.prototype.install = function install() {
-  this.installDependencies({
-      skipInstall: this.options['skip-install'],
-      callback: this._injectDependenciesAndConstants.bind(this)
-  });
+    this.installDependencies({
+        skipInstall: this.options['skip-install'],
+        callback: this._injectDependenciesAndConstants.bind(this)
+    });
 };
 
 JhipsterGenerator.prototype._injectDependenciesAndConstants = function _injectDependenciesAndConstants() {
