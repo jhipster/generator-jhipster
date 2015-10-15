@@ -590,14 +590,12 @@ JhipsterGenerator.prototype.app = function app() {
     }
     if (this.databaseType == 'mongodb') {
         this.template('src/main/java/package/config/_CloudMongoDbConfiguration.java', javaDir + 'config/CloudMongoDbConfiguration.java', this, {});
-        this.template('src/main/java/package/domain/util/_DateToZonedDateTimeConverter.java', javaDir + 'domain/util/DateToZonedDateTimeConverter.java', this, {});
-        this.template('src/main/java/package/domain/util/_ZonedDateTimeToDateConverter.java', javaDir + 'domain/util/ZonedDateTimeToDateConverter.java', this, {});
-        this.template('src/main/java/package/domain/util/_DateToLocalDateConverter.java', javaDir + 'domain/util/DateToLocalDateConverter.java', this, {});
-        this.template('src/main/java/package/domain/util/_LocalDateToDateConverter.java', javaDir + 'domain/util/LocalDateToDateConverter.java', this, {});
+        this.template('src/main/java/package/domain/util/_JSR310DateConverters.java', javaDir + 'domain/util/JSR310DateConverters.java', this, {});
     }
     if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
         this.template('src/main/java/package/config/_DatabaseConfiguration.java', javaDir + 'config/DatabaseConfiguration.java', this, {});
     }
+    this.template('src/main/java/package/config/_JacksonConfiguration.java', javaDir + 'config/JacksonConfiguration.java', this, {});
     this.template('src/main/java/package/config/_JHipsterProperties.java', javaDir + 'config/JHipsterProperties.java', this, {});
     this.template('src/main/java/package/config/_LocaleConfiguration.java', javaDir + 'config/LocaleConfiguration.java', this, {});
     this.template('src/main/java/package/config/_LoggingAspectConfiguration.java', javaDir + 'config/LoggingAspectConfiguration.java', this, {});
@@ -679,10 +677,10 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/main/java/package/domain/_PersistentToken.java', javaDir + 'domain/PersistentToken.java', this, {});
     }
     this.template('src/main/java/package/domain/_User.java', javaDir + 'domain/User.java', this, {});
-    this.template('src/main/java/package/domain/util/_CustomLocalDateSerializer.java', javaDir + 'domain/util/CustomLocalDateSerializer.java', this, {});
-    this.template('src/main/java/package/domain/util/_CustomDateTimeSerializer.java', javaDir + 'domain/util/CustomDateTimeSerializer.java', this, {});
-    this.template('src/main/java/package/domain/util/_CustomDateTimeDeserializer.java', javaDir + 'domain/util/CustomDateTimeDeserializer.java', this, {});
-    this.template('src/main/java/package/domain/util/_CustomLocalDateDeserializer.java', javaDir + 'domain/util/CustomLocalDateDeserializer.java', this, {});
+    this.template('src/main/java/package/domain/util/_JSR310DateConverters.java', javaDir + 'domain/util/JSR310DateConverters.java', this, {});
+    this.template('src/main/java/package/domain/util/_JSR310PersistenceConverters.java', javaDir + 'domain/util/JSR310PersistenceConverters.java', this, {});
+    this.template('src/main/java/package/domain/util/_JSR310DateTimeSerializer.java', javaDir + 'domain/util/JSR310DateTimeSerializer.java', this, {});
+    this.template('src/main/java/package/domain/util/_JSR310LocalDateDeserializer.java', javaDir + 'domain/util/JSR310LocalDateDeserializer.java', this, {});
     if (this.databaseType == "sql") {
         this.template('src/main/java/package/domain/util/_FixedH2Dialect.java', javaDir + 'domain/util/FixedH2Dialect.java', this, {});
         if (this.prodDatabaseType == 'postgresql') {
@@ -1095,7 +1093,15 @@ JhipsterGenerator.prototype.app = function app() {
     // Remove old files, from previous JHipster versions
     removefile(javaDir + 'config/MailConfiguration.java');
     removefile(javaDir + 'config/metrics/JavaMailHealthIndicator.java');
-    removefile(javaDir + 'config/JacksonConfiguration.java');
+    
+    removefile(javaDir + 'domain/util/CustomLocalDateSerializer.java');
+    removefile(javaDir + 'domain/util/CustomDateTimeSerializer.java');
+    removefile(javaDir + 'domain/util/CustomDateTimeDeserializer.java');
+    removefile(javaDir + 'domain/util/CustomLocalDateDeserializer.java');
+    removefile(javaDir + 'domain/util/DateToZonedDateTimeConverter.java');
+    removefile(javaDir + 'domain/util/ZonedDateTimeToDateConverter.java');
+    removefile(javaDir + 'domain/util/DateToLocalDateConverter.java');
+    removefile(javaDir + 'domain/util/LocalDateToDateConverter.java');
     removefile(javaDir + 'domain/util/ISO8601LocalDateDeserializer.java');
     removefolder(javaDir + 'web/propertyeditors');
 
