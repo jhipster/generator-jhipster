@@ -969,16 +969,27 @@ JhipsterGenerator.prototype.app = function app() {
 
     // Create Test Javascript files
     var testJsDir = 'src/test/javascript/';
-    this.template(testJsDir + '_karma.conf.js', testJsDir + 'karma.conf.js');
-    this.template(testJsDir + 'spec/app/account/admin/health/_health.controller.spec.js', testJsDir + 'spec/app/account/health/health.controller.spec.js', this, {});
-    this.template(testJsDir + 'spec/app/account/login/_login.controller.spec.js', testJsDir + 'spec/app/account/login/login.controller.spec.js', this, {});
-    this.template(testJsDir + 'spec/app/account/password/_password.controller.spec.js', testJsDir + 'spec/app/account/password/password.controller.spec.js', this, {});
-    this.template(testJsDir + 'spec/app/account/password/_password.directive.spec.js', testJsDir + 'spec/app/account/password/password.directive.spec.js', this, {});
+    var testTemplates = [
+      '_karma.conf.js',
+      'spec/helpers/_module.js',
+      'spec/helpers/_httpBackend.js',
+      'spec/app/admin/health/_health.controller.spec.js',
+      'spec/app/account/login/_login.controller.spec.js',
+      'spec/app/account/password/_password.controller.spec.js',
+      'spec/app/account/password/_password.directive.spec.js',
+      'spec/app/account/settings/_settings.controller.spec.js',
+      'spec/app/account/activate/_activate.controller.spec.js',
+      'spec/app/account/register/_register.controller.spec.js',
+      'spec/app/account/reset/finish/_reset.finish.controller.spec.js',
+      'spec/app/account/reset/request/_reset.request.controller.spec.js',
+      'spec/components/auth/_auth.services.spec.js'
+    ];
     if (this.authenticationType == 'session') {
-        this.template(testJsDir + 'spec/app/account/sessions/_sessions.controller.spec.js', testJsDir + 'spec/app/account/sessions/sessions.controller.spec.js', this, {});
+      testTemplates.push('spec/app/account/sessions/_sessions.controller.spec.js');
     }
-    this.template(testJsDir + 'spec/app/account/settings/_settings.controller.spec.js', testJsDir + 'spec/app/account/settings/settings.controller.spec.js', this, {});
-    this.template(testJsDir + 'spec/components/auth/_auth.services.spec.js', testJsDir + 'spec/components/auth/auth.services.spec.js', this, {});
+    testTemplates.map(function(testTemplatePath) {
+      this.template(testJsDir + testTemplatePath, testJsDir + testTemplatePath.replace(/_/,''), this, {});
+    }.bind(this));
 
     // CSS
     this.copy(webappDir + 'assets/styles/documentation.css', webappDir + 'assets/styles/documentation.css');
