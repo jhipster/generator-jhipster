@@ -181,7 +181,7 @@ public class <%= entityClass %>Resource {
     @Timed
     public List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> search<%= entityClass %>s(@PathVariable String query) {
         return StreamSupport
-            .stream(<%= entityInstance %>SearchRepository.search(queryString(query)).spliterator(), false)<% if (dto == 'mapstruct') { %>
+            .stream(<%= entityInstance %>SearchRepository.search(queryStringQuery(query)).spliterator(), false)<% if (dto == 'mapstruct') { %>
             .map(<%= entityInstance %>Mapper::<%= entityInstance %>To<%= entityClass %>DTO)<% } %>
             .collect(Collectors.toList());
     }<% } %>

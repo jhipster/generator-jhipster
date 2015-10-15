@@ -33,8 +33,8 @@ spring:
 
         # see https://developers.facebook.com/docs/facebook-login/v2.2
         facebook:
-            clientId: 526986260792976
-            clientSecret: d9a9dd358f7f56cab17f5a0f0b3f5179
+            clientId: 863734150377703
+            clientSecret: c39e4cb40e1404232303f661b94e5afc
 
         # see https://apps.twitter.com/app/
         twitter:
@@ -56,13 +56,6 @@ jhipster:
         maxPoolSize: 50
         queueCapacity: 10000
     mail:
-        host: localhost
-        port: 25
-        username:
-        password:
-        protocol: smtp
-        tls: false
-        auth: false
         from: <%= baseName %>@localhost
     security:
 <%_ if (authenticationType == 'oauth2' || authenticationType == 'xauth') { _%>

@@ -1,11 +1,12 @@
 package <%=packageName%>.service;
 
+import <%=packageName%>.config.JHipsterProperties;
 import <%=packageName%>.domain.User;
+
 import org.apache.commons.lang.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
-import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -15,7 +16,6 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 <% if (enableSocialSignIn) { %>import org.apache.commons.lang.WordUtils;<% } %>
 
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.mail.internet.MimeMessage;
 import java.util.Locale;
@@ -33,7 +33,7 @@ public class MailService {
     private final Logger log = LoggerFactory.getLogger(MailService.class);
 
     @Inject
-    private Environment env;
+    private JHipsterProperties jHipsterProperties;
 
     @Inject
     private JavaMailSenderImpl javaMailSender;
@@ -49,11 +49,6 @@ public class MailService {
      */
     private String from;
 
-    @PostConstruct
-    public void init() {
-        this.from = env.getProperty("mail.from");
-    }
-
     @Async
     public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
         log.debug("Send e-mail[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
@@ -64,7 +59,7 @@ public class MailService {
         try {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, isMultipart, CharEncoding.UTF_8);
             message.setTo(to);
-            message.setFrom(from);
+            message.setFrom(jHipsterProperties.getMail().getFrom());
             message.setSubject(subject);
             message.setText(content, isHtml);
             javaMailSender.send(mimeMessage);

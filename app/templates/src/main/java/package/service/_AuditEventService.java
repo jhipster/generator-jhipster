@@ -3,7 +3,7 @@ package <%=packageName%>.service;
 import <%=packageName%>.config.audit.AuditEventConverter;
 import <%=packageName%>.domain.PersistentAuditEvent;
 import <%=packageName%>.repository.PersistenceAuditEventRepository;
-import org.joda.time.LocalDateTime;
+import java.time.LocalDateTime;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.stereotype.Service;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>

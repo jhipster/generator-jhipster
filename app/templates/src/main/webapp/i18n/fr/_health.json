@@ -12,7 +12,8 @@
         },
         "indicator": {
             "diskSpace": "Espace disque",
-            "mail": "Email",<% if (databaseType == 'sql') { %>
+            "mail": "Email",<% if (searchEngine == 'elasticsearch') { %>
+            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
             "db": "Base de données"<% } %><% if (databaseType == 'mongodb') { %>
             "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
             "cassandra": "Cassandra"<% } %>

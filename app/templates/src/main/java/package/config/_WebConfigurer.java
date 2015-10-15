@@ -8,7 +8,6 @@ import com.hazelcast.web.SessionListener;
 import com.hazelcast.web.WebFilter;<% } %>
 import <%=packageName%>.web.filter.CachingHttpHeadersFilter;
 import <%=packageName%>.web.filter.StaticResourcesProductionFilter;
-import <%=packageName%>.web.filter.gzip.GZipServletFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
@@ -54,7 +53,6 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
             initCachingHttpHeadersFilter(servletContext, disps);
             initStaticResourcesProductionFilter(servletContext, disps);
-            initGzipFilter(servletContext, disps);
         }<% if (devDatabaseType == 'h2Memory') { %>
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
             initH2Console(servletContext);
@@ -117,25 +115,6 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         // CloudFoundry issue, see https://github.com/cloudfoundry/gorouter/issues/64
         mappings.add("json", "text/html;charset=utf-8");
         container.setMimeMappings(mappings);
-    }
-
-    /**
-     * Initializes the GZip filter.
-     */
-    private void initGzipFilter(ServletContext servletContext, EnumSet<DispatcherType> disps) {
-        log.debug("Registering GZip Filter");
-        FilterRegistration.Dynamic compressingFilter = servletContext.addFilter("gzipFilter", new GZipServletFilter());
-        Map<String, String> parameters = new HashMap<>();
-        compressingFilter.setInitParameters(parameters);
-        compressingFilter.addMappingForUrlPatterns(disps, true, "*.css");
-        compressingFilter.addMappingForUrlPatterns(disps, true, "*.json");
-        compressingFilter.addMappingForUrlPatterns(disps, true, "*.html");
-        compressingFilter.addMappingForUrlPatterns(disps, true, "*.js");
-        compressingFilter.addMappingForUrlPatterns(disps, true, "*.svg");
-        compressingFilter.addMappingForUrlPatterns(disps, true, "*.ttf");
-        compressingFilter.addMappingForUrlPatterns(disps, true, "/api/*");
-        compressingFilter.addMappingForUrlPatterns(disps, true, "/metrics/*");
-        compressingFilter.setAsyncSupported(true);
     }
 
     /**

@@ -12,7 +12,8 @@
         },
         "indicator": {
             "diskSpace": "Diskutrymme",
-            "mail": "E-post",<% if (databaseType == 'sql') { %>
+            "mail": "E-post",<% if (searchEngine == 'elasticsearch') { %>
+            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
             "db": "Databas"<% } %><% if (databaseType == 'mongodb') { %>
             "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
             "cassandra": "Cassandra"<% } %>

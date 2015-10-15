@@ -13,6 +13,11 @@
 spring:
     profiles:
         active: dev
+    devtools:
+        restart:
+            enabled: true
+        livereload:
+            enabled: false # we use Grunt + BrowserSync for livereload
     <%_ if (databaseType == 'sql') { _%>
     datasource:
         <%_ if (devDatabaseType == 'oracle') { _%>
@@ -30,13 +35,13 @@ spring:
         <%_ if (devDatabaseType == 'mysql') { _%>
         url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8
         <%_ } else if (devDatabaseType == 'postgresql') { _%>
-        url:
+        url: jdbc:postgresql://localhost:5432/<%= baseName %>
         <%_ } else if (devDatabaseType == 'oracle') { _%>
         url: jdbc:oracle:thin:@localhost:1521:<%= baseName %>
         <%_ } else { _%>
         url: jdbc:h2:mem:jhipster;DB_CLOSE_DELAY=-1
         <%_ } _%>
-        name: <% if (devDatabaseType == 'postgresql') { %><%= baseName %><% } %>
+        name:
         username: <% if (devDatabaseType == 'mysql') { %>root<% } else if (devDatabaseType == 'postgresql') { %><%= baseName %><% } %>
         password:
     jpa:
@@ -100,6 +105,8 @@ spring:
                   logs: target/elasticsearch/log
                   data: target/elasticsearch/data
     <%_ } _%>
+    mail:
+        host: localhost
     messages:
         cache-seconds: 1
     thymeleaf:
@@ -116,14 +123,13 @@ server:
 # ===================================================================
 
 jhipster:
+    <%_ if (devDatabaseType == 'mysql') { _%>
     datasource: # JHipster-specific configuration, in addition to the standard spring.datasource properties
-        serverName: <% if (devDatabaseType == 'postgresql') { %>localhost<% } %>
-        <%_ if (devDatabaseType == 'mysql') { _%>
         cachePrepStmts: true
         prepStmtCacheSize: 250
         prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: true
-        <%_ } _%>
+    <%_ } _%>
     <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast' || hibernateCache == 'ehcache') { _%>
     cache: # Hibernate 2nd level cache, used by CacheConfiguration
         timeToLiveSeconds: 3600
@@ -136,6 +142,8 @@ jhipster:
             maxBytesLocalHeap: 16M
         <%_ } _%>
     <%_ } _%>
+    mail: # specific JHipster mail property, for standard properties see MailProperties
+        from: <%= baseName %>@localhost
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         spark:

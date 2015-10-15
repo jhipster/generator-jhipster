@@ -5,7 +5,8 @@
         "stacktrace": "Traça d'error",
         "indicator": {
             "diskSpace": "Disk space",
-            "mail": "Compte de correu electrònic",<% if (databaseType == 'sql') { %>
+            "mail": "Compte de correu electrònic",<% if (searchEngine == 'elasticsearch') { %>
+            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
             "db": "Base de dades"<% } %><% if (databaseType == 'mongodb') { %>
             "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
             "cassandra": "Cassandra"<% } %>
