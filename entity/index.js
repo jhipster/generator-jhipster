@@ -887,7 +887,7 @@ EntityGenerator.prototype.files = function files() {
         this.pagination = this.fileData.pagination;
         this.javadoc = this.fileData.javadoc;
 
-        // Validate entity json feild content
+        // Validate entity json field content
         for (var idx in this.fields) {
             var field = this.fields[idx];
             if (_.isUndefined(field.fieldId)) {
