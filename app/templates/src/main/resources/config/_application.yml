@@ -33,8 +33,8 @@ spring:
 
         # see https://developers.facebook.com/docs/facebook-login/v2.2
         facebook:
-            clientId: 863734150377703
-            clientSecret: c39e4cb40e1404232303f661b94e5afc
+            clientId: waitingUpdateOfSpringSocialFacebook
+            clientSecret: waitingUpdateOfSpringSocialFacebook
 
         # see https://apps.twitter.com/app/
         twitter:
