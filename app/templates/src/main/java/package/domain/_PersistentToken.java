@@ -4,8 +4,7 @@ import com.datastax.driver.mapping.annotations.*;<% } %>
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;<% if (hibernateCache != 'no' && databaseType == 'sql') { %>
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (databaseType == 'sql') { %>
-import org.hibernate.annotations.Type;<% } %>
+import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
 import java.time.LocalDate;<% if (databaseType == 'cassandra') { %>
 import java.time.ZonedDateTime;<% } %>
 import java.time.format.DateTimeFormatter;<% if (databaseType == 'mongodb') { %>
@@ -53,7 +52,6 @@ public class PersistentToken implements Serializable {
 
     @JsonIgnore<% if (databaseType == 'sql') { %>
     @Column(name = "token_date")
-    @Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentLocalDate")
     private LocalDate tokenDate;<% } %><% if (databaseType == 'mongodb') { %>
     private LocalDate tokenDate;<% } %><% if (databaseType == 'cassandra') { %>
     @Column(name = "token_date")

@@ -2,6 +2,8 @@ package <%=packageName%>.config;
 
 import com.mongodb.Mongo;<% if (authenticationType == 'oauth2') { %>
 import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;<% } %>
+import <%=packageName%>.domain.util.JSR310DateConverters.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -37,15 +39,20 @@ public class CloudMongoDbConfiguration extends AbstractMongoConfiguration  {
     @Bean
     public LocalValidatorFactoryBean validator() {
         return new LocalValidatorFactoryBean();
-    }<% if (authenticationType == 'oauth2') { %>
+    }
 
     @Bean
     public CustomConversions customConversions() {
-        List<Converter<?, ?>> converterList = new ArrayList<>();
-        OAuth2AuthenticationReadConverter converter = new OAuth2AuthenticationReadConverter();
-        converterList.add(converter);
+        List<Converter<?, ?>> converterList = new ArrayList<>();;<% if (authenticationType == 'oauth2') { %>
+        converterList.add(new OAuth2AuthenticationReadConverter());<% } %>
+        converterList.add(DateToZonedDateTimeConverter.INSTANCE);
+        converterList.add(ZonedDateTimeToDateConverter.INSTANCE);
+        converterList.add(DateToLocalDateConverter.INSTANCE);
+        converterList.add(LocalDateToDateConverter.INSTANCE);
+        converterList.add(DateToLocalDateTimeConverter.INSTANCE);
+        converterList.add(LocalDateTimeToDateConverter.INSTANCE);
         return new CustomConversions(converterList);
-    }<% } %>
+    }
 
     @Override
     protected String getDatabaseName() {

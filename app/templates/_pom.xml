@@ -76,7 +76,6 @@
         <spring-security-oauth2.version>2.0.7.RELEASE</spring-security-oauth2.version>
         <%_ } _%>
         <springfox.version>2.0.3</springfox.version>
-        <usertype-core.version>4.0.0.GA</usertype-core.version>
         <%_ if (enableSocialSignIn) { _%>
         <!-- Spring social -->
         <httpclient.version>4.5.1</httpclient.version>
@@ -363,16 +362,6 @@
             <artifactId>hibernate-validator</artifactId>
         </dependency>
         <%_ if (databaseType == 'sql') { _%>
-        <dependency>
-            <groupId>org.jadira.usertype</groupId>
-            <artifactId>usertype.core</artifactId>
-            <version>${usertype-core.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jadira.usertype</groupId>
-            <artifactId>usertype.extended</artifactId>
-            <version>${usertype-core.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>

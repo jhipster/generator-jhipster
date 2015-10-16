@@ -879,7 +879,7 @@ EntityGenerator.prototype.files = function files() {
             this.data.pagination = this.pagination;
         }
         this.write(this.filename, JSON.stringify(this.data, null, 4));
-    } else  {
+    } else {
         this.relationships = this.fileData.relationships;
         this.fields = this.fileData.fields;
         this.changelogDate = this.fileData.changelogDate;
@@ -887,7 +887,7 @@ EntityGenerator.prototype.files = function files() {
         this.pagination = this.fileData.pagination;
         this.javadoc = this.fileData.javadoc;
 
-        // Validate entity json feild content
+        // Validate entity json field content
         for (var idx in this.fields) {
             var field = this.fields[idx];
             if (_.isUndefined(field.fieldId)) {
@@ -1014,6 +1014,11 @@ EntityGenerator.prototype.files = function files() {
     // Load in-memory data for fields
     for (var idx in this.fields) {
         var field = this.fields[idx];
+
+        // Migration from JodaTime to Java Time
+        if (field.fieldType == 'DateTime') {
+            field.fieldType = 'ZonedDateTime';
+        }
 
         if ((databaseType == 'sql' || databaseType == 'mongodb') && !_.contains([
             'String', 'Integer', 'Long', 'Float', 'Double', 'BigDecimal',

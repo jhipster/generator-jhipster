@@ -15,8 +15,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 <% } %><% if (databaseType == 'sql') { %>
-import javax.persistence.*;
-import org.hibernate.annotations.Type;<% } %>
+import javax.persistence.*;<% } %>
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -95,7 +94,6 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Column(name = "reset_key")<% } %>
     private String resetKey;<%if (databaseType == 'sql') {%>
 
-    @Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime")
     @Column(name = "reset_date", nullable = true)
     private ZonedDateTime resetDate = null;<% }%><%if (databaseType == 'mongodb') {%>
 

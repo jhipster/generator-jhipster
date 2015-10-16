@@ -1,7 +1,6 @@
 package <%=packageName%>.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;<% if (databaseType == 'sql') { %>
-import org.hibernate.annotations.Type;
 import org.hibernate.envers.Audited;<% } %>
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -35,7 +34,6 @@ public abstract class AbstractAuditingEntity {
 
     @CreatedDate<% if (databaseType == 'sql') { %>
     @NotNull
-    @Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime")
     @Column(name = "created_date", nullable = false)<% } %><% if (databaseType == 'mongodb') { %>
     @Field("created_date")<% } %>
     @JsonIgnore
@@ -48,7 +46,6 @@ public abstract class AbstractAuditingEntity {
     private String lastModifiedBy;
 
     @LastModifiedDate<% if (databaseType == 'sql') { %>
-    @Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime")
     @Column(name = "last_modified_date")<% } %><% if (databaseType == 'mongodb') { %>
     @Field("last_modified_date  ")<% } %>
     @JsonIgnore
