@@ -1093,7 +1093,7 @@ JhipsterGenerator.prototype.app = function app() {
     // Remove old files, from previous JHipster versions
     removefile(javaDir + 'config/MailConfiguration.java');
     removefile(javaDir + 'config/metrics/JavaMailHealthIndicator.java');
-    
+
     removefile(javaDir + 'domain/util/CustomLocalDateSerializer.java');
     removefile(javaDir + 'domain/util/CustomDateTimeSerializer.java');
     removefile(javaDir + 'domain/util/CustomDateTimeDeserializer.java');
@@ -1111,6 +1111,7 @@ JhipsterGenerator.prototype.app = function app() {
     removefile(webappDir + 'scripts/app/account/logout/logout.controller.js');
     removefolder(webappDir + 'scripts/app/account/logout');
 
+    removefile(testDir + 'config/MongoConfiguration.java');
     removefile(testJsDir + 'spec/app/account/health/healthControllerSpec.js');
     removefile(testJsDir + 'spec/app/account/login/loginControllerSpec.js');
     removefile(testJsDir + 'spec/app/account/password/passwordControllerSpec.js');
