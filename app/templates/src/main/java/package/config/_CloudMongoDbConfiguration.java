@@ -3,6 +3,7 @@ package <%=packageName%>.config;
 import com.mongodb.Mongo;<% if (authenticationType == 'oauth2') { %>
 import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;<% } %>
 import <%=packageName%>.domain.util.JSR310DateConverters.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;

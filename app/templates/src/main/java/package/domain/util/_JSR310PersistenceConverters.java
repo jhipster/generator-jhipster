@@ -1,14 +1,12 @@
 package <%=packageName%>.domain.util;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
+import <%=packageName%>.domain.util.JSR310DateConverters.*;
+
+import java.time.*;
 import java.util.Date;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-
-import <%=packageName%>.domain.util.JSR310DateConverters.*;
 
 public final class JSR310PersistenceConverters {
 
@@ -55,6 +53,4 @@ public final class JSR310PersistenceConverters {
             return DateToLocalDateTimeConverter.INSTANCE.convert(date);
         }
     }
-
 }
-

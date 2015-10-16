@@ -1,9 +1,6 @@
 package <%=packageName%>.domain.util;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.Date;
 
 import org.springframework.core.convert.converter.Converter;
@@ -13,7 +10,9 @@ public final class JSR310DateConverters {
     private JSR310DateConverters() {}
 
     public static class LocalDateToDateConverter implements Converter<LocalDate, Date> {
+
         public static final LocalDateToDateConverter INSTANCE = new LocalDateToDateConverter();
+
         private LocalDateToDateConverter() {}
 
         @Override
@@ -72,4 +71,3 @@ public final class JSR310DateConverters {
         }
     }
 }
-

@@ -1,13 +1,10 @@
 package <%=packageName%>.config;
 
-import <%=packageName%>.domain.util.*;<% if (databaseType != 'cassandra') { %>
+import <%=packageName%>.domain.util.*;
+<% if (databaseType != 'cassandra') { %>
 import com.fasterxml.jackson.databind.SerializationFeature;<% } %>
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
+import java.time.*;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class JacksonConfiguration {
 
-    @Bean 
+    @Bean
     Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
         JavaTimeModule module = new JavaTimeModule();
         module.addSerializer(OffsetDateTime.class, JSR310DateTimeSerializer.INSTANCE);
@@ -28,6 +25,4 @@ public class JacksonConfiguration {
                 .findModulesViaServiceLoader(true)
                 .modulesToInstall(module);
     }
-
 }
-
