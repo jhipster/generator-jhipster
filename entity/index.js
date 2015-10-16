@@ -879,7 +879,7 @@ EntityGenerator.prototype.files = function files() {
             this.data.pagination = this.pagination;
         }
         this.write(this.filename, JSON.stringify(this.data, null, 4));
-    } else  {
+    } else {
         this.relationships = this.fileData.relationships;
         this.fields = this.fileData.fields;
         this.changelogDate = this.fileData.changelogDate;
