@@ -1015,6 +1015,11 @@ EntityGenerator.prototype.files = function files() {
     for (var idx in this.fields) {
         var field = this.fields[idx];
 
+        // Migration from JodaTime to Java Time
+        if (field.fieldType == 'DateTime') {
+            field.fieldType = 'ZonedDateTime';
+        }
+
         if ((databaseType == 'sql' || databaseType == 'mongodb') && !_.contains([
             'String', 'Integer', 'Long', 'Float', 'Double', 'BigDecimal',
             'LocalDate', 'ZonedDateTime', 'Boolean', 'byte[]'], field.fieldType)) {
