@@ -69,15 +69,6 @@ repositories {
     maven { url 'http://repo.maven.apache.org/maven2' }
 }
 
-configurations.all {
-  resolutionStrategy {
-    // force certain versions of dependencies (including transitive)
-    //  *append new forced modules:
-    force group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: jackson_version
-    force group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jackson_version
-  }
-}
-
 dependencies {
     compile group: 'io.dropwizard.metrics', name: 'metrics-core'<% if (hibernateCache == 'ehcache') { %>
     compile group: 'io.dropwizard.metrics', name: 'metrics-annotation', version: dropwizard_metrics_version
@@ -92,9 +83,10 @@ dependencies {
     }
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-json-org', version: jackson_version
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hppc', version: jackson_version
-    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310'
+    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: jackson_version
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-hibernate4', version: jackson_version
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: jackson_version
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: jackson_version
     compile (group: 'com.ryantenney.metrics', name: 'metrics-spring', version: metrics_spring_version) {
         exclude(module: 'metrics-core')
         exclude(module: 'metrics-healthchecks')
