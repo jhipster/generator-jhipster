@@ -1288,7 +1288,7 @@ EntityGenerator.prototype.files = function files() {
     this.template('src/test/java/package/web/rest/_EntityResourceTest.java',
         'src/test/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'ResourceTest.java', this, {});
 
-    if (this.useGatling) {
+    if (this.testFrameworks.indexOf('gatling') != -1) {
         this.template('src/test/gatling/simulations/_EntityGatlingTest.scala',
             'src/test/gatling/simulations/' + this.entityClass + 'GatlingTest.scala', this, { 'interpolate': /<%=([\s\S]+?)%>/g });
     }

@@ -314,7 +314,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
           type: 'checkbox',
-          name: 'testingFrameworks',
+          name: 'testFrameworks',
           message: '(15/' + questions + ') Which testing frameworks would you like to use?',
           choices: [
                     {name: 'Gatling', value: 'gatling'},
@@ -352,8 +352,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     this.frontendBuilder = this.config.get('frontendBuilder');
     this.rememberMeKey = this.config.get('rememberMeKey');
     this.enableTranslation = this.config.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
-    this.useGatling = this.config.get('useGatling');
-    this.useCucumber = this.config.get('useCucumber');
+    this.testFrameworks = this.config.get('testFrameworks');
     this.packagejs = packagejs;
 
     if (this.baseName != null &&
@@ -381,11 +380,8 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         }
         
         // backward compatibility on testing frameworks
-        if (this.useGatling == null) {
-            this.useGatling = true;
-        }
-        if (this.useCucumber == null) {
-            this.useCucumber = false;
+        if (this.testFrameworks == null) {
+            this.testFrameworks = [ 'gatling' ];
         }
 
         console.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
@@ -411,8 +407,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             this.buildTool = props.buildTool;
             this.frontendBuilder = props.frontendBuilder;
             this.enableTranslation = props.enableTranslation;
-            this.useGatling = props.testingFrameworks.indexOf('gatling') != -1;
-            this.useCucumber = props.testingFrameworks.indexOf('cucumber') != -1;
+            this.testFrameworks = props.testFrameworks;
             this.rememberMeKey = crypto.randomBytes(20).toString('hex');
 
             if (this.databaseType == 'mongodb') {
@@ -448,8 +443,7 @@ JhipsterGenerator.prototype.app = function app() {
     insight.track('app/buildTool', this.buildTool);
     insight.track('app/frontendBuilder', this.frontendBuilder);
     insight.track('app/enableTranslation', this.enableTranslation);
-    insight.track('app/useGatling', this.useGatling);
-    insight.track('app/useCucumber', this.useCucumber);
+    insight.track('app/testFrameworks', this.testFrameworks);
 
     var packageFolder = this.packageName.replace(/\./g, '/');
     var javaDir = 'src/main/java/' + packageFolder + '/';
@@ -515,7 +509,7 @@ JhipsterGenerator.prototype.app = function app() {
             this.template('_profile_prod.gradle', 'profile_prod.gradle', this, {'interpolate': interpolateRegex});
             this.template('_profile_fast.gradle', 'profile_fast.gradle', this, {'interpolate': interpolateRegex});
             this.template('_mapstruct.gradle', 'mapstruct.gradle', this, {'interpolate': interpolateRegex});
-            if (this.useGatling) {
+            if (this.testFrameworks.indexOf('gatling') != -1) {
                 this.template('_gatling.gradle', 'gatling.gradle', this, {});
             }
             if (this.databaseType == "sql") {
@@ -810,7 +804,7 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     // Create Gatling test files
-    if (this.useGatling) {
+    if (this.testFrameworks.indexOf('gatling') != -1) {
         this.copy('src/test/gatling/conf/gatling.conf', 'src/test/gatling/conf/gatling.conf');
         mkdirp('src/test/gatling/data');
         mkdirp('src/test/gatling/bodies');
@@ -818,7 +812,7 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     // Create Cucumber test files
-    if (this.useCucumber) {
+    if (this.testFrameworks.indexOf('cucumber') != -1) {
         this.template('src/test/java/package/cucumber/_CucumberTest.java', testDir + 'cucumber/CucumberTest.java', this, {});
         this.template('src/test/java/package/cucumber/_UserStepDefs.java', testDir + 'cucumber/UserStepDefs.java', this, {});
         this.copy('src/test/features/user.feature', 'src/test/features/user.feature');
@@ -1152,8 +1146,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.config.set('frontendBuilder', this.frontendBuilder);
     this.config.set('enableTranslation', this.enableTranslation);
     this.config.set('rememberMeKey', this.rememberMeKey);
-    this.config.set('useGatling', this.useGatling);
-    this.config.set('useCucumber', this.useCucumber);
+    this.config.set('testFrameworks', this.testFrameworks);
 };
 
 JhipsterGenerator.prototype.projectfiles = function projectfiles() {

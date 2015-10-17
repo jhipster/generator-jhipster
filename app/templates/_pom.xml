@@ -38,10 +38,10 @@
         <awaitility.version>1.4.0</awaitility.version>
         <commons-io.version>2.4</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
-        <%_ if (useCucumber) { _%>
+        <%_ if (testFrameworks.indexOf('cucumber') != -1) { _%>
         <cucumber.version>1.2.4</cucumber.version>
         <%_ } _%>
-        <%_ if (useGatling) { _%>
+        <%_ if (testFrameworks.indexOf('gatling') != -1) { _%>
         <gatling.version>2.1.7</gatling.version>
         <gatling-maven-plugin.version>2.1.7</gatling-maven-plugin.version>
         <%_ } _%>
@@ -286,7 +286,7 @@
             <scope>test</scope>
         </dependency>
         <%_ } _%>
-        <%_ if (useGatling) { _%>
+        <%_ if (testFrameworks.indexOf('gatling') != -1) { _%>
         <dependency>
             <groupId>io.gatling.highcharts</groupId>
             <artifactId>gatling-charts-highcharts</artifactId>
@@ -537,7 +537,7 @@
             <artifactId>metrics-spark-reporter</artifactId>
             <version>${metrics-spark-reporter.version}</version>
         </dependency>
-        <%_ if (useCucumber) { _%>
+        <%_ if (testFrameworks.indexOf('cucumber') != -1) { _%>
         <!-- cucumber -->
         <dependency>
             <groupId>info.cukes</groupId>
@@ -571,7 +571,7 @@
                 </excludes>
             </resource>
         </resources>
-        <%_ if (useCucumber) { _%>
+        <%_ if (testFrameworks.indexOf('cucumber') != -1) { _%>
         <testResources>
         	<testResource>
                 <directory>src/test/resources</directory>
@@ -603,7 +603,7 @@
                     <expandEmptyElements>false</expandEmptyElements>
                 </configuration>
             </plugin>
-        	<%_ if (useGatling) { _%>
+        	<%_ if (testFrameworks.indexOf('gatling') != -1) { _%>
             <plugin>
                 <groupId>io.gatling</groupId>
                 <artifactId>gatling-maven-plugin</artifactId>

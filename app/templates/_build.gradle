@@ -40,7 +40,7 @@ apply from: 'yeoman.gradle'
 apply from: 'sonar.gradle'
 <% if (databaseType == 'sql') { %>
 apply from: 'liquibase.gradle'<% } %>
-<% if (useGatling) { %>
+<% if (testFrameworks.indexOf('gatling') != -1) { %>
 apply from: 'gatling.gradle'<% } %>
 apply from: 'mapstruct.gradle'
 
@@ -161,7 +161,7 @@ dependencies {
     testCompile group: 'com.jayway.jsonpath', name: 'json-path'<% if (databaseType == 'cassandra') { %>
     testCompile(group: 'org.cassandraunit', name: 'cassandra-unit-spring', version: cassandra_unit_spring_version) {
         exclude(module: 'org.slf4j')
-    }<% } %><% if (useCucumber) { %>
+    }<% } %><% if (testFrameworks.indexOf('cucumber') != -1) { %>
     testCompile group: 'info.cukes', name: 'cucumber-junit', version: cucumber_version
     testCompile group: 'info.cukes', name: 'cucumber-spring', version: cucumber_version<% } %>
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
@@ -172,7 +172,7 @@ dependencies {
     testCompile group: 'com.mattbertolini', name: 'liquibase-slf4j', version: liquibase_slf4j_version<% } %><% if (databaseType == 'mongodb') { %>
     testCompile group: 'cz.jirutka.spring', name: 'embedmongo-spring', version: embedmongo_spring_version<% } %>
     testCompile group: 'org.hamcrest', name: 'hamcrest-library'
-    <% if (useGatling) { %>
+    <% if (testFrameworks.indexOf('gatling') != -1) { %>
     testCompile group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version: gatling_version<% } %>
     <% if (devDatabaseType != 'h2Memory') { %>
     testCompile group: 'com.h2database', name: 'h2'<% } %><% if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { %>
