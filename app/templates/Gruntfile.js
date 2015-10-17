@@ -396,23 +396,6 @@ module.exports = function (grunt) {
         'htmlmin'
     ]);
 
-	grunt.registerTask('appendSkipBower', 'Force skip of bower for Gradle', function () {
-
-		if (!grunt.file.exists(filepath)) {
-			// Assume this is a maven project
-			return true;
-		}
-
-		var fileContent = grunt.file.read(filepath);
-		var skipBowerIndex = fileContent.indexOf("skipBower=true");
-
-		if (skipBowerIndex != -1) {
-			return true;
-		}
-
-		grunt.file.write(filepath, fileContent + "\nskipBower=true\n");
-	});
-
     grunt.registerTask('buildOpenshift', [
         'test',
         'build',
