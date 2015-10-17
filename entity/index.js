@@ -383,8 +383,8 @@ EntityGenerator.prototype.askForFields = function askForFields() {
             message: 'Which validation rules do you want to add?',
             choices: [
                 {name: 'Required', value: 'required'},
-                {name: 'Minimum size', value: 'min'},
-                {name: 'Maximum size', value: 'max'}
+                {name: 'Minimum', value: 'min'},
+                {name: 'Maximum', value: 'max'}
             ],
             default: 0
         },
@@ -476,10 +476,10 @@ EntityGenerator.prototype.askForFields = function askForFields() {
             },
             type: 'input',
             name: 'fieldValidateRulesMin',
-            message: 'What is the minimum size of your field?',
+            message: 'What is the minimum of your field?',
             validate: function (input) {
                 if (/^([0-9]*)$/.test(input)) return true;
-                return 'Minimum size must be a number';
+                return 'Minimum must be a number';
             },
             default: 0
         },
@@ -496,10 +496,10 @@ EntityGenerator.prototype.askForFields = function askForFields() {
             },
             type: 'input',
             name: 'fieldValidateRulesMax',
-            message: 'What is the maximum size of your field?',
+            message: 'What is the maximum of your field?',
             validate: function (input) {
                 if (/^([0-9]*)$/.test(input)) return true;
-                return 'Maximum size must be a number';
+                return 'Maximum must be a number';
             },
             default: 100
         },
