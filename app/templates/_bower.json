@@ -39,23 +39,29 @@
         <%_ } _%> <%_ if (enableSocialSignIn) { _%>
         "bootstrap-social": "4.10.1",
         <%_ } _%>
+        "font-awesome": "4.4.0",
         "swagger-ui": "2.1.2"
     },
     "devDependencies": {
         "angular-mocks": "1.4.5",
         "angular-scenario": "1.4.5"
     },
-    <%_ if (!useSass) { _%>
     "overrides": {
+        <%_ if (!useSass) { _%>
         "bootstrap": {
             "main": [
                 "dist/js/bootstrap.js",
                 "dist/css/bootstrap.css",
                 "less/bootstrap.less"
             ]
+        },
+        <%_ } _%>
+        "font-awesome": {
+            "main": [
+                "css/font-awesome.css"
+            ]
         }
     },
-    <%_ } _%>
     "resolutions": {
         "angular": "1.4.5",
         "angular-cookies": "1.4.5",
