@@ -95,12 +95,18 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             default: 0
         },
         {
+            type: 'confirm',
+            name: 'enableSocialSignIn',
+            message: '(4/' + questions + ') Would you like to enable social sign in (Google, Facebook, Twitter)?',
+            default: false
+        },
+        {
             when: function (response) {
                 return (response.authenticationType != 'oauth2');
             },
             type: 'list',
             name: 'databaseType',
-            message: '(4/' + questions + ') Which *type* of database would you like to use?',
+            message: '(5/' + questions + ') Which *type* of database would you like to use?',
             choices: [
                 {
                     value: 'sql',
@@ -123,7 +129,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'prodDatabaseType',
-            message: '(5/' + questions + ') Which *production* database would you like to use?',
+            message: '(6/' + questions + ') Which *production* database would you like to use?',
             choices: [
                 {
                     value: 'mysql',
@@ -146,7 +152,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'devDatabaseType',
-            message: '(6/' + questions + ') Which *development* database would you like to use?',
+            message: '(7/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'h2Memory',
@@ -165,7 +171,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'devDatabaseType',
-            message: '(6/' + questions + ') Which *development* database would you like to use?',
+            message: '(7/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'h2Memory',
@@ -184,7 +190,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'devDatabaseType',
-            message: '(6/' + questions + ') Which *development* database would you like to use?',
+            message: '(7/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'h2Memory',
@@ -203,7 +209,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'hibernateCache',
-            message: '(7/' + questions + ') Do you want to use Hibernate 2nd level cache?',
+            message: '(8/' + questions + ') Do you want to use Hibernate 2nd level cache?',
             choices: [
                 {
                     value: 'no',
@@ -223,7 +229,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'searchEngine',
-            message: '(8/' + questions + ') Do you want to use a search engine in your application?',
+            message: '(9/' + questions + ') Do you want to use a search engine in your application?',
             choices: [
                 {
                     value: 'no',
@@ -239,7 +245,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'clusteredHttpSession',
-            message: '(9/' + questions + ') Do you want to use clustered HTTP sessions?',
+            message: '(10/' + questions + ') Do you want to use clustered HTTP sessions?',
             choices: [
                 {
                     value: 'no',
@@ -255,7 +261,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'websocket',
-            message: '(10/' + questions + ') Do you want to use WebSockets?',
+            message: '(11/' + questions + ') Do you want to use WebSockets?',
             choices: [
                 {
                     value: 'no',
@@ -271,7 +277,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'buildTool',
-            message: '(11/' + questions + ') Would you like to use Maven or Gradle for building the backend?',
+            message: '(12/' + questions + ') Would you like to use Maven or Gradle for building the backend?',
             choices: [
                 {
                     value: 'maven',
@@ -297,26 +303,20 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                     name: 'Gulp.js'
                 }
             ],
-            message: '(12/' + questions + ') Would you like to use Grunt or Gulp.js for building the frontend?',
+            message: '(13/' + questions + ') Would you like to use Grunt or Gulp.js for building the frontend?',
             default: 'grunt'
         },
         {
             type: 'confirm',
             name: 'useSass',
-            message: '(13/' + questions + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
+            message: '(14/' + questions + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
             default: false
         },
         {
             type: 'confirm',
             name: 'enableTranslation',
-            message: '(14/' + questions + ') Would you like to enable translation support with Angular Translate?',
+            message: '(15/' + questions + ') Would you like to enable translation support with Angular Translate?',
             default: true
-        },
-        {
-            type: 'confirm',
-            name: 'enableSocialSignIn',
-            message: '(15/' + questions + ') Would you like to enable social sign in (Google, Facebook, Twitter)?',
-            default: false
         }
     ];
 
