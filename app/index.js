@@ -970,25 +970,25 @@ JhipsterGenerator.prototype.app = function app() {
     // Create Test Javascript files
     var testJsDir = 'src/test/javascript/';
     var testTemplates = [
-      '_karma.conf.js',
-      'spec/helpers/_module.js',
-      'spec/helpers/_httpBackend.js',
-      'spec/app/admin/health/_health.controller.spec.js',
-      'spec/app/account/login/_login.controller.spec.js',
-      'spec/app/account/password/_password.controller.spec.js',
-      'spec/app/account/password/_password.directive.spec.js',
-      'spec/app/account/settings/_settings.controller.spec.js',
-      'spec/app/account/activate/_activate.controller.spec.js',
-      'spec/app/account/register/_register.controller.spec.js',
-      'spec/app/account/reset/finish/_reset.finish.controller.spec.js',
-      'spec/app/account/reset/request/_reset.request.controller.spec.js',
-      'spec/components/auth/_auth.services.spec.js'
+        '_karma.conf.js',
+        'spec/helpers/_module.js',
+        'spec/helpers/_httpBackend.js',
+        'spec/app/admin/health/_health.controller.spec.js',
+        'spec/app/account/login/_login.controller.spec.js',
+        'spec/app/account/password/_password.controller.spec.js',
+        'spec/app/account/password/_password.directive.spec.js',
+        'spec/app/account/settings/_settings.controller.spec.js',
+        'spec/app/account/activate/_activate.controller.spec.js',
+        'spec/app/account/register/_register.controller.spec.js',
+        'spec/app/account/reset/finish/_reset.finish.controller.spec.js',
+        'spec/app/account/reset/request/_reset.request.controller.spec.js',
+        'spec/components/auth/_auth.services.spec.js'
     ];
     if (this.authenticationType == 'session') {
-      testTemplates.push('spec/app/account/sessions/_sessions.controller.spec.js');
+        testTemplates.push('spec/app/account/sessions/_sessions.controller.spec.js');
     }
     testTemplates.map(function(testTemplatePath) {
-      this.template(testJsDir + testTemplatePath, testJsDir + testTemplatePath.replace(/_/,''), this, {});
+        this.template(testJsDir + testTemplatePath, testJsDir + testTemplatePath.replace(/_/,''), this, {});
     }.bind(this));
 
     // CSS
