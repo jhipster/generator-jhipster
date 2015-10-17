@@ -1,6 +1,5 @@
 <form action="{{ providerURL }}" method="POST">
     <button type="submit" class="btn btn-block btn-social btn-{{ provider }}">
-        <i class="fa fa-{{ provider }}"></i>
         <span translate="social.btnLabel" translate-values="{ label: label }">Sign in with {{ label }}</span>
     </button>
     <input name="scope" type="hidden" value="{{ providerSetting }}"/>
