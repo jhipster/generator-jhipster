@@ -42,7 +42,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     console.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version + '\n'));
     var insight = this.insight();
     this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
-    var questions = 16; // making questions a variable to avoid updating each question by hand when adding additional options
+    var questions = 15; // making questions a variable to avoid updating each question by hand when adding additional options
 
     var prompts = [
         {
@@ -77,7 +77,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'authenticationType',
-            message: '(4/' + questions + ') Which *type* of authentication would you like to use?',
+            message: '(3/' + questions + ') Which *type* of authentication would you like to use?',
             choices: [
                 {
                     value: 'session',
@@ -100,7 +100,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'databaseType',
-            message: '(5/' + questions + ') Which *type* of database would you like to use?',
+            message: '(4/' + questions + ') Which *type* of database would you like to use?',
             choices: [
                 {
                     value: 'sql',
@@ -119,30 +119,11 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             when: function (response) {
-                return (response.authenticationType == 'oauth2');
-            },
-            type: 'list',
-            name: 'databaseType',
-            message: '(5/' + questions + ') Which *type* of database would you like to use? (Note that you cannot choose Cassandra as you selected either OAuth2 authentication or Java 7, which are not supported)',
-            choices: [
-                {
-                    value: 'sql',
-                    name: 'SQL (H2, MySQL, PostgreSQL)'
-                },
-                {
-                    value: 'mongodb',
-                    name: 'MongoDB'
-                }
-            ],
-            default: 0
-        },
-        {
-            when: function (response) {
                 return response.databaseType == 'sql';
             },
             type: 'list',
             name: 'prodDatabaseType',
-            message: '(6/' + questions + ') Which *production* database would you like to use?',
+            message: '(5/' + questions + ') Which *production* database would you like to use?',
             choices: [
                 {
                     value: 'mysql',
@@ -165,7 +146,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'devDatabaseType',
-            message: '(7/' + questions + ') Which *development* database would you like to use?',
+            message: '(6/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'h2Memory',
@@ -184,7 +165,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'devDatabaseType',
-            message: '(7/' + questions + ') Which *development* database would you like to use?',
+            message: '(6/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'h2Memory',
@@ -203,7 +184,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'devDatabaseType',
-            message: '(7/' + questions + ') Which *development* database would you like to use?',
+            message: '(6/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'h2Memory',
@@ -222,7 +203,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'hibernateCache',
-            message: '(8/' + questions + ') Do you want to use Hibernate 2nd level cache?',
+            message: '(7/' + questions + ') Do you want to use Hibernate 2nd level cache?',
             choices: [
                 {
                     value: 'no',
@@ -242,7 +223,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'searchEngine',
-            message: '(9/' + questions + ') Do you want to use a search engine in your application?',
+            message: '(8/' + questions + ') Do you want to use a search engine in your application?',
             choices: [
                 {
                     value: 'no',
@@ -258,7 +239,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'clusteredHttpSession',
-            message: '(10/' + questions + ') Do you want to use clustered HTTP sessions?',
+            message: '(9/' + questions + ') Do you want to use clustered HTTP sessions?',
             choices: [
                 {
                     value: 'no',
@@ -274,7 +255,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'websocket',
-            message: '(11/' + questions + ') Do you want to use WebSockets?',
+            message: '(10/' + questions + ') Do you want to use WebSockets?',
             choices: [
                 {
                     value: 'no',
@@ -290,7 +271,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'buildTool',
-            message: '(12/' + questions + ') Would you like to use Maven or Gradle for building the backend?',
+            message: '(11/' + questions + ') Would you like to use Maven or Gradle for building the backend?',
             choices: [
                 {
                     value: 'maven',
@@ -316,25 +297,25 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                     name: 'Gulp.js'
                 }
             ],
-            message: '(13/' + questions + ') Would you like to use Grunt or Gulp.js for building the frontend?',
+            message: '(12/' + questions + ') Would you like to use Grunt or Gulp.js for building the frontend?',
             default: 'grunt'
         },
         {
             type: 'confirm',
             name: 'useSass',
-            message: '(14/' + questions + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
+            message: '(13/' + questions + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
             default: false
         },
         {
             type: 'confirm',
             name: 'enableTranslation',
-            message: '(15/' + questions + ') Would you like to enable translation support with Angular Translate?',
+            message: '(14/' + questions + ') Would you like to enable translation support with Angular Translate?',
             default: true
         },
         {
           type: 'checkbox',
           name: 'testingFrameworks',
-          message: '(16/' + questions + ') Which testing frameworks would you like to use?',
+          message: '(15/' + questions + ') Which testing frameworks would you like to use?',
           choices: [
                     {name: 'Gatling', value: 'gatling'},
                     {name: 'Cucumber', value: 'cucumber'}
@@ -488,6 +469,13 @@ JhipsterGenerator.prototype.app = function app() {
         this.libFolder = 'lib/oracle/ojdbc/' + this.ojdbcVersion + '/';
         mkdirp(this.libFolder);
     }
+
+    if (this.databaseType === 'cassandra' || this.databaseType === 'mongodb') {
+        this.pkType = 'String';
+    } else {
+        this.pkType = 'Long';
+    }
+
     // Create application
     this.template('_package.json', 'package.json', this, {});
     this.template('_bower.json', 'bower.json', this, {});
@@ -557,7 +545,7 @@ JhipsterGenerator.prototype.app = function app() {
     // Thymeleaf templates
     this.copy(resourceDir + '/templates/error.html', resourceDir + 'templates/error.html');
 
-    this.template(resourceDir + '_logback.xml', resourceDir + 'logback.xml', this, {'interpolate': interpolateRegex});
+    this.template(resourceDir + '_logback-spring.xml', resourceDir + 'logback-spring.xml', this, {'interpolate': interpolateRegex});
 
     this.template(resourceDir + '/config/_application.yml', resourceDir + 'config/application.yml', this, {});
     this.template(resourceDir + '/config/_application-dev.yml', resourceDir + 'config/application-dev.yml', this, {});
@@ -609,6 +597,7 @@ JhipsterGenerator.prototype.app = function app() {
     }
     if (this.databaseType == 'mongodb') {
         this.template('src/main/java/package/config/_CloudMongoDbConfiguration.java', javaDir + 'config/CloudMongoDbConfiguration.java', this, {});
+        this.template('src/main/java/package/domain/util/_JSR310DateConverters.java', javaDir + 'domain/util/JSR310DateConverters.java', this, {});
     }
     if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
         this.template('src/main/java/package/config/_DatabaseConfiguration.java', javaDir + 'config/DatabaseConfiguration.java', this, {});
@@ -617,7 +606,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/_JHipsterProperties.java', javaDir + 'config/JHipsterProperties.java', this, {});
     this.template('src/main/java/package/config/_LocaleConfiguration.java', javaDir + 'config/LocaleConfiguration.java', this, {});
     this.template('src/main/java/package/config/_LoggingAspectConfiguration.java', javaDir + 'config/LoggingAspectConfiguration.java', this, {});
-    this.template('src/main/java/package/config/_MailConfiguration.java', javaDir + 'config/MailConfiguration.java', this, {});
     this.template('src/main/java/package/config/_MetricsConfiguration.java', javaDir + 'config/MetricsConfiguration.java', this, {});
 
     if (this.authenticationType == 'oauth2') {
@@ -674,7 +662,6 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
         this.template('src/main/java/package/config/metrics/_DatabaseHealthIndicator.java', javaDir + 'config/metrics/DatabaseHealthIndicator.java', this, {});
     }
-    this.template('src/main/java/package/config/metrics/_JavaMailHealthIndicator.java', javaDir + 'config/metrics/JavaMailHealthIndicator.java', this, {});
     this.template('src/main/java/package/config/metrics/_JHipsterHealthIndicatorConfiguration.java', javaDir + 'config/metrics/JHipsterHealthIndicatorConfiguration.java', this, {});
 
     if (this.hibernateCache == "hazelcast") {
@@ -697,10 +684,10 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/main/java/package/domain/_PersistentToken.java', javaDir + 'domain/PersistentToken.java', this, {});
     }
     this.template('src/main/java/package/domain/_User.java', javaDir + 'domain/User.java', this, {});
-    this.template('src/main/java/package/domain/util/_CustomLocalDateSerializer.java', javaDir + 'domain/util/CustomLocalDateSerializer.java', this, {});
-    this.template('src/main/java/package/domain/util/_CustomDateTimeSerializer.java', javaDir + 'domain/util/CustomDateTimeSerializer.java', this, {});
-    this.template('src/main/java/package/domain/util/_CustomDateTimeDeserializer.java', javaDir + 'domain/util/CustomDateTimeDeserializer.java', this, {});
-    this.template('src/main/java/package/domain/util/_ISO8601LocalDateDeserializer.java', javaDir + 'domain/util/ISO8601LocalDateDeserializer.java', this, {});
+    this.template('src/main/java/package/domain/util/_JSR310DateConverters.java', javaDir + 'domain/util/JSR310DateConverters.java', this, {});
+    this.template('src/main/java/package/domain/util/_JSR310PersistenceConverters.java', javaDir + 'domain/util/JSR310PersistenceConverters.java', this, {});
+    this.template('src/main/java/package/domain/util/_JSR310DateTimeSerializer.java', javaDir + 'domain/util/JSR310DateTimeSerializer.java', this, {});
+    this.template('src/main/java/package/domain/util/_JSR310LocalDateDeserializer.java', javaDir + 'domain/util/JSR310LocalDateDeserializer.java', this, {});
     if (this.databaseType == "sql") {
         this.template('src/main/java/package/domain/util/_FixedH2Dialect.java', javaDir + 'domain/util/FixedH2Dialect.java', this, {});
         if (this.prodDatabaseType == 'postgresql') {
@@ -745,6 +732,7 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
         this.template('src/main/java/package/security/_SpringSecurityAuditorAware.java', javaDir + 'security/SpringSecurityAuditorAware.java', this, {});
     }
+    this.template('src/main/java/package/security/_CustomUserDetails.java', javaDir + 'security/CustomUserDetails.java', this, {});
     this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java', this, {});
     this.template('src/main/java/package/security/_UserNotActivatedException.java', javaDir + 'security/UserNotActivatedException.java', this, {});
 
@@ -770,16 +758,6 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.authenticationType == 'session') {
         this.template('src/main/java/package/web/filter/_CsrfCookieGeneratorFilter.java', javaDir + 'web/filter/CsrfCookieGeneratorFilter.java', this, {});
     }
-
-    this.template('src/main/java/package/web/filter/gzip/_package-info.java', javaDir + 'web/filter/gzip/package-info.java', this, {});
-    this.template('src/main/java/package/web/filter/gzip/_GzipResponseHeadersNotModifiableException.java', javaDir + 'web/filter/gzip/GzipResponseHeadersNotModifiableException.java', this, {});
-    this.template('src/main/java/package/web/filter/gzip/_GZipResponseUtil.java', javaDir + 'web/filter/gzip/GZipResponseUtil.java', this, {});
-    this.template('src/main/java/package/web/filter/gzip/_GZipServletFilter.java', javaDir + 'web/filter/gzip/GZipServletFilter.java', this, {});
-    this.template('src/main/java/package/web/filter/gzip/_GZipServletOutputStream.java', javaDir + 'web/filter/gzip/GZipServletOutputStream.java', this, {});
-    this.template('src/main/java/package/web/filter/gzip/_GZipServletResponseWrapper.java', javaDir + 'web/filter/gzip/GZipServletResponseWrapper.java', this, {});
-
-    this.template('src/main/java/package/web/propertyeditors/_package-info.java', javaDir + 'web/propertyeditors/package-info.java', this, {});
-    this.template('src/main/java/package/web/propertyeditors/_LocaleDateTimeEditor.java', javaDir + 'web/propertyeditors/LocaleDateTimeEditor.java', this, {});
 
     this.template('src/main/java/package/web/rest/dto/_package-info.java', javaDir + 'web/rest/dto/package-info.java', this, {});
     this.template('src/main/java/package/web/rest/dto/_LoggerDTO.java', javaDir + 'web/rest/dto/LoggerDTO.java', this, {});
@@ -809,9 +787,6 @@ JhipsterGenerator.prototype.app = function app() {
     var testResourceDir = 'src/test/resources/';
     mkdirp(testDir);
 
-    if (this.databaseType == "mongodb") {
-        this.template('src/test/java/package/config/_MongoConfiguration.java', testDir + 'config/MongoConfiguration.java', this, {});
-    }
     if (this.databaseType == "cassandra") {
         this.template('src/test/java/package/_CassandraKeyspaceTest.java', testDir + 'CassandraKeyspaceTest.java', this, {});
         this.template('src/test/java/package/_AbstractCassandraTest.java', testDir + 'AbstractCassandraTest.java', this, {});
@@ -1132,10 +1107,27 @@ JhipsterGenerator.prototype.app = function app() {
     this.write(webappDir + 'index.html', this.indexFile);
 
     // Remove old files, from previous JHipster versions
+    removefile(javaDir + 'config/MailConfiguration.java');
+    removefile(javaDir + 'config/metrics/JavaMailHealthIndicator.java');
+
+    removefile(javaDir + 'domain/util/CustomLocalDateSerializer.java');
+    removefile(javaDir + 'domain/util/CustomDateTimeSerializer.java');
+    removefile(javaDir + 'domain/util/CustomDateTimeDeserializer.java');
+    removefile(javaDir + 'domain/util/CustomLocalDateDeserializer.java');
+    removefile(javaDir + 'domain/util/DateToZonedDateTimeConverter.java');
+    removefile(javaDir + 'domain/util/ZonedDateTimeToDateConverter.java');
+    removefile(javaDir + 'domain/util/DateToLocalDateConverter.java');
+    removefile(javaDir + 'domain/util/LocalDateToDateConverter.java');
+    removefile(javaDir + 'domain/util/ISO8601LocalDateDeserializer.java');
+    removefolder(javaDir + 'web/propertyeditors');
+
+    removefile(resourceDir + 'logback.xml');
+
     removefile(webappDir + 'scripts/app/account/logout/logout.js');
     removefile(webappDir + 'scripts/app/account/logout/logout.controller.js');
     removefolder(webappDir + 'scripts/app/account/logout');
 
+    removefile(testDir + 'config/MongoConfiguration.java');
     removefile(testJsDir + 'spec/app/account/health/healthControllerSpec.js');
     removefile(testJsDir + 'spec/app/account/login/loginControllerSpec.js');
     removefile(testJsDir + 'spec/app/account/password/passwordControllerSpec.js');

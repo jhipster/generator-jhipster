@@ -1,16 +1,14 @@
 package <%=packageName%>.web.rest;
 <% if (databaseType == 'cassandra') { %>
 import <%=packageName%>.AbstractCassandraTest;<% } %>
-import <%=packageName%>.Application;<% if (databaseType == 'mongodb') { %>
-import <%=packageName%>.config.MongoConfiguration;<% } %>
+import <%=packageName%>.Application;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;<% if (databaseType == 'mongodb') { %>
-import org.springframework.context.annotation.Import;<% } %>
+import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -31,8 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-@IntegrationTest<% if (databaseType == 'mongodb') { %>
-@Import(MongoConfiguration.class)<% } %>
+@IntegrationTest
 public class UserResourceTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     @Inject

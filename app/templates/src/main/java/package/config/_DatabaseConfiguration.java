@@ -8,6 +8,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import liquibase.integration.spring.SpringLiquibase;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'oauth2') { %>
 import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;<% } %><% if (databaseType == 'mongodb') { %>
+import <%=packageName%>.domain.util.JSR310DateConverters.*;
 import com.mongodb.Mongo;
 import org.mongeez.Mongeez;<% } %>
 import org.slf4j.Logger;
@@ -24,12 +25,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;<% if (databaseType == 'mongodb') { %>
 import org.springframework.context.annotation.Import;<% } %><% if (databaseType == 'sql') { %>
-import org.springframework.core.env.Environment;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'oauth2') { %>
-import org.springframework.core.convert.converter.Converter;<% } %><% if (databaseType == 'mongodb') { %>
-import org.springframework.core.io.ClassPathResource;<% } %><% if (searchEngine == 'elasticsearch') { %>
+import org.springframework.core.env.Environment;<% } %><% if (databaseType == 'mongodb') { %>
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.convert.converter.Converter;<% } %><% if (searchEngine == 'elasticsearch') { %>
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
-import org.springframework.data.mongodb.config.EnableMongoAuditing;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'oauth2') { %>
+import org.springframework.data.mongodb.config.EnableMongoAuditing;
+import org.springframework.data.mongodb.core.convert.CustomConversions;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'oauth2') { %>
 import org.springframework.data.mongodb.core.convert.CustomConversions;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
@@ -42,9 +44,10 @@ import org.springframework.util.StringUtils;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.util.Arrays;<% } %><% if (databaseType == 'mongodb') { %>
-import javax.inject.Inject;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'oauth2') { %>
+import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.List;<% } %>
+import java.util.List;
+<% } %>
 
 @Configuration<% if (databaseType == 'sql') { %>
 @EnableJpaRepositories("<%=packageName%>.repository")
@@ -117,6 +120,9 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
         liquibase.setDataSource(dataSource);
         liquibase.setChangeLog("classpath:config/liquibase/master.xml");
         liquibase.setContexts(liquibaseProperties.getContexts());
+        liquibase.setDefaultSchema(liquibaseProperties.getDefaultSchema());
+        liquibase.setDropFirst(liquibaseProperties.isDropFirst());
+        liquibase.setShouldRun(liquibaseProperties.isEnabled());
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_FAST)) {
             if ("org.h2.jdbcx.JdbcDataSource".equals(dataSourceProperties.getDriverClassName())) {
                 liquibase.setShouldRun(true);
@@ -154,15 +160,20 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
     @Override
     public Mongo mongo() throws Exception {
         return mongo;
-    }<% if (authenticationType == 'oauth2') { %>
+    }
 
     @Bean
     public CustomConversions customConversions() {
-        List<Converter<?, ?>> converterList = new ArrayList<>();
-        OAuth2AuthenticationReadConverter converter = new OAuth2AuthenticationReadConverter();
-        converterList.add(converter);
-        return new CustomConversions(converterList);
-    }<% } %>
+        List<Converter<?, ?>> converters = new ArrayList<>();<% if (authenticationType == 'oauth2') { %>
+        converters.add(new OAuth2AuthenticationReadConverter());<% } %>
+        converters.add(DateToZonedDateTimeConverter.INSTANCE);
+        converters.add(ZonedDateTimeToDateConverter.INSTANCE);
+        converters.add(DateToLocalDateConverter.INSTANCE);
+        converters.add(LocalDateToDateConverter.INSTANCE);
+        converters.add(DateToLocalDateTimeConverter.INSTANCE);
+        converters.add(LocalDateTimeToDateConverter.INSTANCE);
+        return new CustomConversions(converters);
+    }
 
     @Bean
     @Profile("!" + Constants.SPRING_PROFILE_FAST)

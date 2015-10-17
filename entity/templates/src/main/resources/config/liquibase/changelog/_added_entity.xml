@@ -39,7 +39,7 @@
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="${floatType}"<% } else if (fieldType == 'Double') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="double"<% } else if (fieldType == 'BigDecimal') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="decimal(10,2)"<% } else if (fieldType == 'LocalDate') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="date"<% } else if (fieldType == 'DateTime') { %>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="date"<% } else if (fieldType == 'ZonedDateTime') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="timestamp"<% } else if (fieldType == 'byte[]') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="blob"/>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>_content_type" type="varchar(50)"<% } else if (fieldType == 'Boolean') { %>
@@ -54,7 +54,7 @@
                 <constraints unique="true"/>
             </column><% } %><% } %>
         </createTable><% for (fieldId in fields) {
-            if (fields[fieldId].fieldType == 'DateTime') { %>
+            if (fields[fieldId].fieldType == 'ZonedDateTime') { %>
         <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%=fields[fieldId].fieldNameUnderscored %>" columnDataType="datetime"/>
 <% } } %>
         <% for (relationshipId in relationships) { %><% if ((relationships[relationshipId].relationshipType == 'many-to-one') || ((relationships[relationshipId].relationshipType == 'one-to-one')) && (relationships[relationshipId].ownerSide == true)) {

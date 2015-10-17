@@ -13,6 +13,11 @@
 spring:
     profiles:
         active: prod
+    devtools:
+        restart:
+            enabled: false
+        livereload:
+            enabled: false
     <%_ if (databaseType == 'sql') { _%>
     datasource:
         <%_ if (prodDatabaseType == 'oracle') { _%>
@@ -98,6 +103,11 @@ spring:
             cluster-name:
             cluster-nodes: localhost:9300
     <%_ } _%>
+    mail:
+        host: localhost
+        port: 25
+        username:
+        password:
     thymeleaf:
         cache: true
 
@@ -106,6 +116,9 @@ liquibase:
 
 server:
     port: 8080
+    compression:
+        enabled: true
+        mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
 
 # ===================================================================
 # JHipster specific properties
@@ -134,6 +147,8 @@ jhipster:
             maxBytesLocalHeap: 256M
         <%_ } _%>
     <%_ } _%>
+    mail: # specific JHipster mail property, for standard properties see MailProperties
+        from: <%= baseName %>@localhost
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         spark:

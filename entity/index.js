@@ -18,7 +18,7 @@ var reservedWords_JHipster = ["ADMIN", "ACCOUNT", "LOGIN", "LOGOUT", "ACTIVATE",
 
 var reservedWords_MySQL = ["ACCESSIBLE", "ADD", "ALL", "ALTER", "ANALYZE", "AND", "AS", "ASC", "ASENSITIVE", "BEFORE", "BETWEEN", "BIGINT", "BINARY", "BLOB", "BOTH", "BY", "CALL", "CASCADE", "CASE", "CHANGE", "CHAR", "CHARACTER", "CHECK", "COLLATE", "COLUMN", "CONDITION", "CONSTRAINT", "CONTINUE", "CONVERT", "CREATE", "CROSS", "CURRENT_DATE", "CURRENT_TIME", "CURRENT_TIMESTAMP", "CURRENT_USER", "CURSOR", "DATABASE", "DATABASES", "DAY_HOUR", "DAY_MICROSECOND", "DAY_MINUTE", "DAY_SECOND", "DEC", "DECIMAL", "DECLARE", "DEFAULT", "DELAYED", "DELETE", "DESC", "DESCRIBE", "DETERMINISTIC", "DISTINCT", "DISTINCTROW", "DIV", "DOUBLE", "DROP", "DUAL", "EACH", "ELSE", "ELSEIF", "ENCLOSED", "ESCAPED", "EXISTS", "EXIT", "EXPLAIN", "FALSE", "FETCH", "FLOAT", "FLOAT4", "FLOAT8", "FOR", "FORCE", "FOREIGN", "FROM", "FULLTEXT", "GRANT", "GROUP", "HAVING", "HIGH_PRIORITY", "HOUR_MICROSECOND", "HOUR_MINUTE", "HOUR_SECOND", "IF", "IGNORE", "IN", "INDEX", "INFILE", "INNER", "INOUT", "INSENSITIVE", "INSERT", "INT", "INT1", "INT2", "INT3", "INT4", "INT8", "INTEGER", "INTERVAL", "INTO", "IS", "ITERATE", "JOIN", "KEY", "KEYS", "KILL", "LEADING", "LEAVE", "LEFT", "LIKE", "LIMIT", "LINEAR", "LINES", "LOAD", "LOCALTIME", "LOCALTIMESTAMP", "LOCK", "LONG", "LONGBLOB", "LONGTEXT", "LOOP", "LOW_PRIORITY", "MASTER_SSL_VERIFY_SERVER_CERT", "MATCH", "MAXVALUE", "MEDIUMBLOB", "MEDIUMINT", "MEDIUMTEXT", "MIDDLEINT", "MINUTE_MICROSECOND", "MINUTE_SECOND", "MOD", "MODIFIES", "NATURAL", "NOT", "NO_WRITE_TO_BINLOG", "NULL", "NUMERIC", "ON", "OPTIMIZE", "OPTION", "OPTIONALLY", "OR", "ORDER", "OUT", "OUTER", "OUTFILE", "PRECISION", "PRIMARY", "PROCEDURE", "PURGE", "RANGE", "READ", "READS", "READ_WRITE", "REAL", "REFERENCES", "REGEXP", "RELEASE", "RENAME", "REPEAT", "REPLACE", "REQUIRE", "RESIGNAL", "RESTRICT", "RETURN", "REVOKE", "RIGHT", "RLIKE", "SCHEMA", "SCHEMAS", "SECOND_MICROSECOND", "SELECT", "SENSITIVE", "SEPARATOR", "SET", "SHOW", "SIGNAL", "SMALLINT", "SPATIAL", "SPECIFIC", "SQL", "SQLEXCEPTION", "SQLSTATE", "SQLWARNING", "SQL_BIG_RESULT", "SQL_CALC_FOUND_ROWS", "SQL_SMALL_RESULT", "SSL", "STARTING", "STRAIGHT_JOIN", "TABLE", "TERMINATED", "THEN", "TINYBLOB", "TINYINT", "TINYTEXT", "TO", "TRAILING", "TRIGGER", "TRUE", "UNDO", "UNION", "UNIQUE", "UNLOCK", "UNSIGNED", "UPDATE", "USAGE", "USE", "USING", "UTC_DATE", "UTC_TIME", "UTC_TIMESTAMP", "VALUES", "VARBINARY", "VARCHAR", "VARCHARACTER", "VARYING", "WHEN", "WHERE", "WHILE", "WITH", "WRITE", "XOR", "YEAR_MONTH", "ZEROFILL", "GENERAL", "IGNORE_SERVER_IDS", "MASTER_HEARTBEAT_PERIOD", "MAXVALUE", "RESIGNAL", "SIGNAL", "SLOW"];
 
-var reservedWords_Postgresql = ["USER"];
+var reservedWords_Postgresql = ["ALL", "ANALYSE", "ANALYZE", "AND", "ANY", "ARRAY", "AS", "ASC", "ASYMMETRIC", "AUTHORIZATION", "BINARY", "BOTH", "CASE", "CAST", "CHECK", "COLLATE", "COLLATION", "COLUMN", "CONCURRENTLY",  "CONSTRAINT", "CREATE", "CROSS", "CURRENT_CATALOG", "CURRENT_DATE", "CURRENT_ROLE", "CURRENT_SCHEMA", "CURRENT_TIME", "CURRENT_TIMESTAMP", "CURRENT_USER", "DEFAULT", "DEFERRABLE", "DESC", "DISTINCT", "DO", "ELSE", "END", "EXCEPT", "FALSE", "FETCH", "FOR", "FOREIGN", "FROM", "FULL", "GRANT", "GROUP", "HAVING", "ILIKE", "IN", "INITIALLY", "INNER", "INTERSECT", "INTO", "IS", "ISNULL", "JOIN", "LATERAL", "LEADING", "LEFT", "LIKE", "LIMIT", "LOCALTIME", "LOCALTIMESTAMP", "NATURAL", "NOT", "NOTNULL", "NULL", "OFFSET", "ON", "ONLY", "OR", "ORDER", "OUTER", "OVERLAPS", "PLACING", "PRIMARY", "REFERENCES", "RETURNING", "RIGHT", "SELECT", "SESSION_USER", "SIMILAR", "SOME", "SYMMETRIC", "TABLE", "THEN", "TO", "TRAILING", "TRUE", "UNION", "UNIQUE", "USER", "USING", "VARIADIC", "VERBOSE", "WHEN", "WHERE", "WINDOW", "WITH"];
 
 var reservedWords_Cassandra = ["ADD", "ALL", "ALTER", "AND", "ANY", "APPLY", "AS", "ASC", "ASCII", "AUTHORIZE", "BATCH", "BEGIN", "BIGINT", "BLOB", "BOOLEAN", "BY", "CLUSTERING", "COLUMNFAMILY", "COMPACT", "CONSISTENCY", "COUNT", "COUNTER", "CREATE", "DECIMAL", "DELETE", "DESC", "DOUBLE", "DROP", "EACH_QUORUM", "FLOAT", "FROM", "GRANT", "IN", "INDEX", "CUSTOM", "INSERT", "INT", "INTO", "KEY", "KEYSPACE", "LEVEL", "LIMIT", "LOCAL_ONE", "LOCAL_QUORUM", "MODIFY", "NORECURSIVE", "NOSUPERUSER", "OF", "ON", "ONE", "ORDER", "PASSWORD", "PERMISSION", "PERMISSIONS", "PRIMARY", "QUORUM", "REVOKE", "SCHEMA", "SELECT", "SET", "STORAGE", "SUPERUSER", "TABLE", "TEXT", "TIMESTAMP", "TIMEUUID", "THREE", "TOKEN", "TRUNCATE", "TTL", "TWO", "TYPE", "UPDATE", "USE", "USER", "USERS", "USING", "UUID", "VALUES", "VARCHAR", "VARINT", "WHERE", "WITH", "WRITETIME", "DISTINCT", "BYTE", "SMALLINT", "COMPLEX", "ENUM", "DATE", "INTERVAL", "MACADDR", "BITSTRING"];
 
@@ -193,8 +193,8 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     name: 'LocalDate'
                 },
                 {
-                    value: 'DateTime',
-                    name: 'DateTime'
+                    value: 'ZonedDateTime',
+                    name: 'ZonedDateTime'
                 },
                 {
                     value: 'Boolean',
@@ -409,8 +409,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 return response.fieldAdd == true &&
                     response.fieldValidate == true &&
                     (response.fieldType == 'LocalDate' ||
-                    response.fieldType == 'DateTime' ||
-                    response.fieldType == 'Date' ||
+                    response.fieldType == 'ZonedDateTime' ||
                     response.fieldType == 'UUID' ||
                     response.fieldType == 'Boolean' ||
                     response.fieldIsEnum == true);
@@ -880,7 +879,7 @@ EntityGenerator.prototype.files = function files() {
             this.data.pagination = this.pagination;
         }
         this.write(this.filename, JSON.stringify(this.data, null, 4));
-    } else  {
+    } else {
         this.relationships = this.fileData.relationships;
         this.fields = this.fileData.fields;
         this.changelogDate = this.fileData.changelogDate;
@@ -888,7 +887,7 @@ EntityGenerator.prototype.files = function files() {
         this.pagination = this.fileData.pagination;
         this.javadoc = this.fileData.javadoc;
 
-        // Validate entity json feild content
+        // Validate entity json field content
         for (var idx in this.fields) {
             var field = this.fields[idx];
             if (_.isUndefined(field.fieldId)) {
@@ -1016,9 +1015,14 @@ EntityGenerator.prototype.files = function files() {
     for (var idx in this.fields) {
         var field = this.fields[idx];
 
+        // Migration from JodaTime to Java Time
+        if (field.fieldType == 'DateTime') {
+            field.fieldType = 'ZonedDateTime';
+        }
+
         if ((databaseType == 'sql' || databaseType == 'mongodb') && !_.contains([
             'String', 'Integer', 'Long', 'Float', 'Double', 'BigDecimal',
-            'LocalDate', 'DateTime', 'Boolean', 'byte[]'], field.fieldType)) {
+            'LocalDate', 'ZonedDateTime', 'Boolean', 'byte[]'], field.fieldType)) {
             field.fieldIsEnum = true;
         } else {
             field.fieldIsEnum = false;
@@ -1105,11 +1109,11 @@ EntityGenerator.prototype.files = function files() {
             this.fieldsContainOneToMany = true;
         }
     }
-    this.fieldsContainCustomTime = false;
+    this.fieldsContainZonedDateTime = false;
     for (var idx in this.fields) {
         var field = this.fields[idx];
-        if (field.fieldType == 'LocalDate' || field.fieldType == 'DateTime' || field.fieldType == 'Date') {
-            this.fieldsContainCustomTime = true;
+        if (field.fieldType == 'ZonedDateTime') {
+            this.fieldsContainZonedDateTime = true;
         }
     }
     this.fieldsContainLocalDate = false;
@@ -1117,13 +1121,6 @@ EntityGenerator.prototype.files = function files() {
         var field = this.fields[idx];
         if (field.fieldType == 'LocalDate') {
             this.fieldsContainLocalDate = true;
-        }
-    }
-    this.fieldsContainDateTime = false;
-    for (var idx in this.fields) {
-        var field = this.fields[idx];
-        if (field.fieldType == 'DateTime') {
-            this.fieldsContainDateTime = true;
         }
     }
     this.fieldsContainDate = false;
@@ -1274,6 +1271,8 @@ EntityGenerator.prototype.files = function files() {
 
     this.template('src/main/webapp/app/_entity-detail-controller.js',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '-detail.controller' + '.js', this, {});
+    this.template('src/test/javascript/spec/app/_entity-detail-controller.spec.js',
+        'src/test/javascript/spec/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '-detail.controller.spec.js', this, {});
     this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '-detail.controller' + '.js');
 
     this.template('src/main/webapp/components/_entity-service.js',

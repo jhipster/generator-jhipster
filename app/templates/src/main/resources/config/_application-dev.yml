@@ -13,6 +13,11 @@
 spring:
     profiles:
         active: dev
+    devtools:
+        restart:
+            enabled: true
+        livereload:
+            enabled: false # we use Grunt + BrowserSync for livereload
     <%_ if (databaseType == 'sql') { _%>
     datasource:
         <%_ if (devDatabaseType == 'oracle') { _%>
@@ -100,6 +105,8 @@ spring:
                   logs: target/elasticsearch/log
                   data: target/elasticsearch/data
     <%_ } _%>
+    mail:
+        host: localhost
     messages:
         cache-seconds: 1
     thymeleaf:
@@ -135,6 +142,8 @@ jhipster:
             maxBytesLocalHeap: 16M
         <%_ } _%>
     <%_ } _%>
+    mail: # specific JHipster mail property, for standard properties see MailProperties
+        from: <%= baseName %>@localhost
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         spark:

@@ -5,7 +5,8 @@
         "stacktrace": "スタックトレース",
         "indicator": {
             "diskSpace": "ディスクスペース",
-            "mail": "メール",<% if (databaseType == 'sql') { %>
+            "mail": "メール",<% if (searchEngine == 'elasticsearch') { %>
+            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
             "db": "データベース"<% } %><% if (databaseType == 'mongodb') { %>
             "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
             "cassandra": "Cassandra"<% } %>

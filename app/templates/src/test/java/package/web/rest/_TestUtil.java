@@ -1,17 +1,19 @@
 package <%=packageName%>.web.rest;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
-import org.springframework.http.MediaType;
-
+import <%=packageName%>.domain.util.JSR310DateTimeSerializer;
+import <%=packageName%>.domain.util.JSR310LocalDateDeserializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.joda.JodaModule;
-import <%=packageName%>.domain.util.CustomDateTimeSerializer;
-import <%=packageName%>.domain.util.CustomLocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.springframework.http.MediaType;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 
 /**
  * Utility class for testing REST controllers.
@@ -26,7 +28,8 @@ public class TestUtil {
     /**
      * Convert an object to JSON byte array.
      *
-     * @param object the object to convert
+     * @param object
+     *            the object to convert
      * @return the JSON byte array
      * @throws IOException
      */
@@ -34,10 +37,15 @@ public class TestUtil {
             throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        JodaModule module = new JodaModule();
-        module.addSerializer(DateTime.class, new CustomDateTimeSerializer());
-        module.addSerializer(LocalDate.class, new CustomLocalDateSerializer());
+
+        JavaTimeModule module = new JavaTimeModule();
+        module.addSerializer(OffsetDateTime.class, JSR310DateTimeSerializer.INSTANCE);
+        module.addSerializer(ZonedDateTime.class, JSR310DateTimeSerializer.INSTANCE);
+        module.addSerializer(LocalDateTime.class, JSR310DateTimeSerializer.INSTANCE);
+        module.addSerializer(Instant.class, JSR310DateTimeSerializer.INSTANCE);
+        module.addDeserializer(LocalDate.class, JSR310LocalDateDeserializer.INSTANCE);
         mapper.registerModule(module);
+
         return mapper.writeValueAsBytes(object);
     }
 

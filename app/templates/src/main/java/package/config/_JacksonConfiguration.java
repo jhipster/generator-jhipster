@@ -1,24 +1,28 @@
 package <%=packageName%>.config;
 
 import <%=packageName%>.domain.util.*;
-
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
+<% if (databaseType != 'cassandra') { %>
+import com.fasterxml.jackson.databind.SerializationFeature;<% } %>
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.time.*;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.fasterxml.jackson.datatype.joda.JodaModule;
 
 @Configuration
 public class JacksonConfiguration {
 
     @Bean
-    public JodaModule jacksonJodaModule() {
-        JodaModule module = new JodaModule();
-        module.addSerializer(DateTime.class, new CustomDateTimeSerializer());
-        module.addDeserializer(DateTime.class, new CustomDateTimeDeserializer());
-        module.addSerializer(LocalDate.class, new CustomLocalDateSerializer());
-        module.addDeserializer(LocalDate.class, new ISO8601LocalDateDeserializer());
-        return module;
+    Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
+        JavaTimeModule module = new JavaTimeModule();
+        module.addSerializer(OffsetDateTime.class, JSR310DateTimeSerializer.INSTANCE);
+        module.addSerializer(ZonedDateTime.class, JSR310DateTimeSerializer.INSTANCE);
+        module.addSerializer(LocalDateTime.class, JSR310DateTimeSerializer.INSTANCE);
+        module.addSerializer(Instant.class, JSR310DateTimeSerializer.INSTANCE);
+        module.addDeserializer(LocalDate.class, JSR310LocalDateDeserializer.INSTANCE);
+        return new Jackson2ObjectMapperBuilder()<% if (databaseType != 'cassandra') { %>
+                .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)<% } %>
+                .findModulesViaServiceLoader(true)
+                .modulesToInstall(module);
     }
 }

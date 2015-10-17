@@ -66,6 +66,8 @@ spring:
                   logs: target/elasticsearch/log
                   data: target/elasticsearch/data
     <%_ } _%>
+    mail:
+        host: localhost
     mvc:
         favicon:
             enabled: false
@@ -92,15 +94,6 @@ jhipster:
         corePoolSize: 2
         maxPoolSize: 50
         queueCapacity: 10000
-    mail:
-        host: localhost
-        port: 25
-        username:
-        password:
-        protocol: smtp
-        tls: false
-        auth: false
-        from: <%= baseName %>@localhost
     security:
 <%_ if (authenticationType == 'oauth2' || authenticationType == 'xauth') { _%>
         authentication:

@@ -13,6 +13,7 @@ var LanguagesGenerator = module.exports = function LanguagesGenerator(args, opti
     this.baseName = this.config.get('baseName');
     this.websocket = this.config.get('websocket');
     this.databaseType = this.config.get('databaseType');
+    this.searchEngine = this.config.get('searchEngine');
     this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
     this.enableTranslation = this.config.get('enableTranslation');
 };

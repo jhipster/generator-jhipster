@@ -1,6 +1,6 @@
 package <%=packageName%>.web.rest.dto;
 <% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
-import org.joda.time.DateTime;<% } %>
+import java.time.ZonedDateTime;<% } %>
 
 import <%=packageName%>.domain.User;
 
@@ -11,11 +11,11 @@ public class ManagedUserDTO extends UserDTO {
 
     private <% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id;<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
 
-    private DateTime createdDate;
+    private ZonedDateTime createdDate;
 
     private String lastModifiedBy;
 
-    private DateTime lastModifiedDate;<% } %>
+    private ZonedDateTime lastModifiedDate;<% } %>
 
     public ManagedUserDTO() {
     }
@@ -36,11 +36,11 @@ public class ManagedUserDTO extends UserDTO {
         this.id = id;
     }<% if (databaseType == 'mongodb' || databaseType == 'sql') { %>
 
-    public DateTime getCreatedDate() {
+    public ZonedDateTime getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(DateTime createdDate) {
+    public void setCreatedDate(ZonedDateTime createdDate) {
         this.createdDate = createdDate;
     }
 
@@ -52,11 +52,11 @@ public class ManagedUserDTO extends UserDTO {
         this.lastModifiedBy = lastModifiedBy;
     }
 
-    public DateTime getLastModifiedDate() {
+    public ZonedDateTime getLastModifiedDate() {
         return lastModifiedDate;
     }
 
-    public void setLastModifiedDate(DateTime lastModifiedDate) {
+    public void setLastModifiedDate(ZonedDateTime lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }<% } %>
 
