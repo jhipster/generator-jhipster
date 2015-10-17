@@ -78,7 +78,7 @@ public class SocialServiceTest {
     @Test(expected = IllegalArgumentException.class)
     public void testCreateSocialUserShouldThrowExceptionIfConnectionHasNoEmailAndNoLogin() {
         // Setup
-        final Connection<?> connection = createConnection("",
+        Connection<?> connection = createConnection("",
             "",
             "FIRST_NAME",
             "LAST_NAME",
@@ -91,11 +91,11 @@ public class SocialServiceTest {
     @Test(expected = IllegalArgumentException.class)
     public void testCreateSocialUserShouldThrowExceptionIfConnectionHasNoEmailAndLoginAlreadyExist() {
         // Setup
-        final User user = createExistingUser("@LOGIN",
+        User user = createExistingUser("@LOGIN",
             "mail@mail.com",
             "OTHER_FIRST_NAME",
             "OTHER_LAST_NAME");
-        final Connection<?> connection = createConnection("@LOGIN",
+        Connection<?> connection = createConnection("@LOGIN",
             "",
             "FIRST_NAME",
             "LAST_NAME",
@@ -111,7 +111,7 @@ public class SocialServiceTest {
     @Test
     public void testCreateSocialUserShouldCreateUserIfNotExist() {
         // Setup
-        final Connection<?> connection = createConnection("@LOGIN",
+        Connection<?> connection = createConnection("@LOGIN",
             "mail@mail.com",
             "FIRST_NAME",
             "LAST_NAME",
@@ -131,7 +131,7 @@ public class SocialServiceTest {
     @Test
     public void testCreateSocialUserShouldCreateUserWithSocialInformation() {
         // Setup
-        final Connection<?> connection = createConnection("@LOGIN",
+        Connection<?> connection = createConnection("@LOGIN",
             "mail@mail.com",
             "FIRST_NAME",
             "LAST_NAME",
@@ -141,7 +141,7 @@ public class SocialServiceTest {
         socialService.createSocialUser(connection, "fr");
 
         //Verify
-        final User user = userRepository.findOneByEmail("mail@mail.com").get();
+        User user = userRepository.findOneByEmail("mail@mail.com").get();
         assertThat(user.getFirstName()).isEqualTo("FIRST_NAME");
         assertThat(user.getLastName()).isEqualTo("LAST_NAME");
 
@@ -152,7 +152,7 @@ public class SocialServiceTest {
     @Test
     public void testCreateSocialUserShouldCreateActivatedUserWithRoleUserAndPassword() {
         // Setup
-        final Connection<?> connection = createConnection("@LOGIN",
+        Connection<?> connection = createConnection("@LOGIN",
             "mail@mail.com",
             "FIRST_NAME",
             "LAST_NAME",
@@ -162,10 +162,10 @@ public class SocialServiceTest {
         socialService.createSocialUser(connection, "fr");
 
         //Verify
-        final User user = userRepository.findOneByEmail("mail@mail.com").get();
+        User user = userRepository.findOneByEmail("mail@mail.com").get();
         assertThat(user.getActivated()).isEqualTo(true);
         assertThat(user.getPassword()).isNotEmpty();
-        final Authority userAuthority = authorityRepository.findOne("ROLE_USER");
+        Authority userAuthority = authorityRepository.findOne("ROLE_USER");
         assertThat(user.getAuthorities().toArray()).containsExactly(userAuthority);
 
         // Teardown
@@ -175,7 +175,7 @@ public class SocialServiceTest {
     @Test
     public void testCreateSocialUserShouldCreateUserWithExactLangKey() {
         // Setup
-        final Connection<?> connection = createConnection("@LOGIN",
+        Connection<?> connection = createConnection("@LOGIN",
             "mail@mail.com",
             "FIRST_NAME",
             "LAST_NAME",
@@ -195,7 +195,7 @@ public class SocialServiceTest {
     @Test
     public void testCreateSocialUserShouldCreateUserWithLoginSameAsEmailIfNotTwitter() {
         // Setup
-        final Connection<?> connection = createConnection("@LOGIN",
+        Connection<?> connection = createConnection("@LOGIN",
             "mail@mail.com",
             "FIRST_NAME",
             "LAST_NAME",
@@ -205,7 +205,7 @@ public class SocialServiceTest {
         socialService.createSocialUser(connection, "fr");
 
         //Verify
-        final User user = userRepository.findOneByEmail("mail@mail.com").get();
+        User user = userRepository.findOneByEmail("mail@mail.com").get();
         assertThat(user.getLogin()).isEqualTo("mail@mail.com");
 
         // Teardown
@@ -215,7 +215,7 @@ public class SocialServiceTest {
     @Test
     public void testCreateSocialUserShouldCreateUserWithSocialLoginWhenIsTwitter() {
         // Setup
-        final Connection<?> connection = createConnection("@LOGIN",
+        Connection<?> connection = createConnection("@LOGIN",
             "mail@mail.com",
             "FIRST_NAME",
             "LAST_NAME",
@@ -225,7 +225,7 @@ public class SocialServiceTest {
         socialService.createSocialUser(connection, "fr");
 
         //Verify
-        final User user = userRepository.findOneByEmail("mail@mail.com").get();
+        User user = userRepository.findOneByEmail("mail@mail.com").get();
         assertThat(user.getLogin()).isEqualTo("@LOGIN");
 
         // Teardown
@@ -235,7 +235,7 @@ public class SocialServiceTest {
     @Test
     public void testCreateSocialUserShouldCreateSocialConnection() {
         // Setup
-        final Connection<?> connection = createConnection("@LOGIN",
+        Connection<?> connection = createConnection("@LOGIN",
             "mail@mail.com",
             "FIRST_NAME",
             "LAST_NAME",
@@ -248,19 +248,19 @@ public class SocialServiceTest {
         verify(mockConnectionRepository, times(1)).addConnection(connection);
 
         // Teardown
-        final User userToDelete = userRepository.findOneByEmail("mail@mail.com").get();
+        User userToDelete = userRepository.findOneByEmail("mail@mail.com").get();
         userRepository.delete(userToDelete);
     }
 
     @Test
     public void testCreateSocialUserShouldNotCreateUserIfEmailAlreadyExist() {
         // Setup
-        final User user = createExistingUser("@OTHER_LOGIN",
+        User user = createExistingUser("@OTHER_LOGIN",
             "mail@mail.com",
             "OTHER_FIRST_NAME",
             "OTHER_LAST_NAME");
-        final long initialUserCount = userRepository.count();
-        final Connection<?> connection = createConnection("@LOGIN",
+        long initialUserCount = userRepository.count();
+        Connection<?> connection = createConnection("@LOGIN",
             "mail@mail.com",
             "FIRST_NAME",
             "LAST_NAME",
@@ -273,19 +273,19 @@ public class SocialServiceTest {
         assertThat(userRepository.count()).isEqualTo(initialUserCount);
 
         // Teardown
-        final User userToDelete = userRepository.findOneByEmail("mail@mail.com").get();
+        User userToDelete = userRepository.findOneByEmail("mail@mail.com").get();
         userRepository.delete(userToDelete);
     }
 
     @Test
     public void testCreateSocialUserShouldNotChangeUserIfEmailAlreadyExist() {
         // Setup
-        final long initialUserCount = userRepository.count();
-        final User user = createExistingUser("@OTHER_LOGIN",
+        long initialUserCount = userRepository.count();
+        User user = createExistingUser("@OTHER_LOGIN",
             "mail@mail.com",
             "OTHER_FIRST_NAME",
             "OTHER_LAST_NAME");
-        final Connection<?> connection = createConnection("@LOGIN",
+        Connection<?> connection = createConnection("@LOGIN",
             "mail@mail.com",
             "FIRST_NAME",
             "LAST_NAME",
@@ -295,7 +295,7 @@ public class SocialServiceTest {
         socialService.createSocialUser(connection, "fr");
 
         //Verify
-        final User userToVerify = userRepository.findOneByEmail("mail@mail.com").get();
+        User userToVerify = userRepository.findOneByEmail("mail@mail.com").get();
         assertThat(userToVerify.getLogin()).isEqualTo("@OTHER_LOGIN");
         assertThat(userToVerify.getFirstName()).isEqualTo("OTHER_FIRST_NAME");
         assertThat(userToVerify.getLastName()).isEqualTo("OTHER_LAST_NAME");
@@ -307,7 +307,7 @@ public class SocialServiceTest {
     @Test
     public void testCreateSocialUserShouldSendRegistrationValidationEmail() {
         // Setup
-        final Connection<?> connection = createConnection("@LOGIN",
+        Connection<?> connection = createConnection("@LOGIN",
             "mail@mail.com",
             "FIRST_NAME",
             "LAST_NAME",
@@ -320,7 +320,7 @@ public class SocialServiceTest {
         verify(mockMailService, times(1)).sendSocialRegistrationValidationEmail(anyObject(), anyString());
 
         // Teardown
-        final User userToDelete = userRepository.findOneByEmail("mail@mail.com").get();
+        User userToDelete = userRepository.findOneByEmail("mail@mail.com").get();
         userRepository.delete(userToDelete);
     }
 
@@ -329,14 +329,14 @@ public class SocialServiceTest {
                                            String firstName,
                                            String lastName,
                                            String providerId) {
-        final UserProfile userProfile = mock(UserProfile.class);
+        UserProfile userProfile = mock(UserProfile.class);
         when(userProfile.getEmail()).thenReturn(email);
         when(userProfile.getUsername()).thenReturn(login);
         when(userProfile.getFirstName()).thenReturn(firstName);
         when(userProfile.getLastName()).thenReturn(lastName);
 
-        final Connection<?> connection = mock(Connection.class);
-        final ConnectionKey key = new ConnectionKey(providerId, "PROVIDER_USER_ID");
+        Connection<?> connection = mock(Connection.class);
+        ConnectionKey key = new ConnectionKey(providerId, "PROVIDER_USER_ID");
         when(connection.fetchUserProfile()).thenReturn(userProfile);
         when(connection.getKey()).thenReturn(key);
 
@@ -347,7 +347,7 @@ public class SocialServiceTest {
                                     String email,
                                     String firstName,
                                     String lastName) {
-        final User user = new User();
+        User user = new User();
         user.setLogin(login);
         user.setPassword(passwordEncoder.encode("password"));
         user.setEmail(email);

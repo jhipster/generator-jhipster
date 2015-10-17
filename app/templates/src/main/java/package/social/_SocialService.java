@@ -5,6 +5,7 @@ import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.AuthorityRepository;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.service.MailService;
+
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -45,16 +46,16 @@ public class SocialService {
             log.error("Cannot create social user because connection is null");
             throw new IllegalArgumentException("Connection cannot be null");
         }
-        final UserProfile userProfile = connection.fetchUserProfile();
-        final String providerId = connection.getKey().getProviderId();
-        final User user = createUserIfNotExist(userProfile, langKey, providerId);
+        UserProfile userProfile = connection.fetchUserProfile();
+        String providerId = connection.getKey().getProviderId();
+        User user = createUserIfNotExist(userProfile, langKey, providerId);
         createSocialConnection(user.getLogin(), connection);
         mailService.sendSocialRegistrationValidationEmail(user, providerId);
     }
 
     private User createUserIfNotExist(UserProfile userProfile, String langKey, String providerId) {
-        final String email = userProfile.getEmail();
-        final String userName = userProfile.getUsername();
+        String email = userProfile.getEmail();
+        String userName = userProfile.getUsername();
         if (StringUtils.isBlank(email) && StringUtils.isBlank(userName)) {
             log.error("Cannot create social user because email and login are null");
             throw new IllegalArgumentException("Email and login cannot be null");
@@ -63,18 +64,18 @@ public class SocialService {
             log.error("Cannot create social user because email is null and login already exist, login -> {}", userName);
             throw new IllegalArgumentException("Email cannot be null with an existing login");
         }
-        final Optional<User> user = userRepository.findOneByEmail(email);
+        Optional<User> user = userRepository.findOneByEmail(email);
         if (user.isPresent()) {
             log.info("User already exist associate the connection to this account");
             return user.get();
         }
 
-        final String login = getLoginDependingOnProviderId(userProfile, providerId);
-        final String encryptedPassword = passwordEncoder.encode(RandomStringUtils.random(10));
-        final Set<Authority> authorities = new HashSet<>(1);
+        String login = getLoginDependingOnProviderId(userProfile, providerId);
+        String encryptedPassword = passwordEncoder.encode(RandomStringUtils.random(10));
+        Set<Authority> authorities = new HashSet<>(1);
         authorities.add(authorityRepository.findOne("ROLE_USER"));
 
-        final User newUser = new User();
+        User newUser = new User();
         newUser.setLogin(login);
         newUser.setPassword(encryptedPassword);
         newUser.setFirstName(userProfile.getFirstName());
@@ -103,7 +104,7 @@ public class SocialService {
     }
 
     private void createSocialConnection(String login, Connection<?> connection) {
-        final ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(login);
+        ConnectionRepository connectionRepository = usersConnectionRepository.createConnectionRepository(login);
         connectionRepository.addConnection(connection);
     }
 }

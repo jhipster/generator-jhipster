@@ -1,6 +1,7 @@
 package <%=packageName%>.social.config;
 
 import <%=packageName%>.config.JHipsterProperties;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
