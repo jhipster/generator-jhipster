@@ -50,6 +50,9 @@ public class SocialConfiguration implements SocialConfigurer {
                 )
             );
         }
+        else {
+            log.error("Cannot configure GoogleConnectionFactory id or secret null");
+        }
 
         // Facebook configuration
         String facebookClientId = environment.getProperty("spring.social.facebook.clientId");
@@ -63,6 +66,9 @@ public class SocialConfiguration implements SocialConfigurer {
                 )
             );
         }
+        else {
+            log.error("Cannot configure FacebookConnectionFactory id or secret null");
+        }
 
         // Twitter configuration
         String twitterClientId = environment.getProperty("spring.social.twitter.clientId");
@@ -75,6 +81,9 @@ public class SocialConfiguration implements SocialConfigurer {
                     twitterClientSecret
                 )
             );
+        }
+        else {
+            log.error("Cannot configure TwitterConnectionFactory id or secret null");
         }
     }
 
