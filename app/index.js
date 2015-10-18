@@ -101,9 +101,6 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             default: false
         },
         {
-            when: function (response) {
-                return (response.authenticationType != 'oauth2');
-            },
             type: 'list',
             name: 'databaseType',
             message: '(5/' + questions + ') Which *type* of database would you like to use?',

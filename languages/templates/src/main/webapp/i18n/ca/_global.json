@@ -5,7 +5,7 @@
         "menu": {
             "home": "Inici",
             "entities": {
-                "main": "Entities",
+                "main": "Entitats",
                 "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
@@ -19,15 +19,15 @@
             },
             "admin": {
                 "main": "Administració",
-                "user-management": "User management",
-                "tracker": "User tracker",
+                "user-management": "Administració d'usuaris",
+                "tracker": "Seguidor d'usuaris",
                 "metrics": "Mètriques",
                 "health": "Salud",
-                "configuration": "Configuration",
+                "configuration": "Configuració",
                 "logs": "Registres",
                 "audits": "Auditories",
                 "apidocs": "API",
-                "database": "Database"
+                "database": "Base de dades"
             },
             "language": "Idioma"
         },
@@ -75,34 +75,34 @@
     },
     "entity": {
         "action": {
-            "addblob": "Add blob",
-            "addimage": "Add image",
-            "back": "Back",
-            "cancel": "Cancel",
-            "delete": "Delete",
-            "edit": "Edit",
-            "save": "Save",
-            "view": "View"
+            "addblob": "Afegir blob",
+            "addimage": "Afegir imatge",
+            "back": "Enrera",
+            "cancel": "Anul.la",
+            "delete": "Elimina",
+            "edit": "Edita",
+            "save": "Desa",
+            "view": "Visualitza"
         },
         "detail": {
-            "field": "Field",
-            "value": "Value"
+            "field": "Camp",
+            "value": "Valor"
         },
         "delete": {
-            "title": "Confirm delete operation"
+            "title": "Confirma eliminació"
         },
         "validation": {
-            "required": "This field is required.",
-            "minlength": "This field is required to be at least {{min}} characters.",
-            "maxlength": "This field cannot be longer than {{max}} characters.",
-            "min": "This field should be more than {{min}}.",
-            "max": "This field cannot be more than {{max}}.",
-            "minbytes": "This field should be more than {{min}} bytes.",
-            "maxbytes": "This field cannot be more than {{max}} bytes.",
-            "pattern": "This field should follow pattern {{pattern}}.",
-            "number": "This field should be a number.",
-            "datetimelocal": "This field should be a date and time."
+            "required": "Aquest camp és obligatori.",
+            "minlength": "Aquest camp ha de tenir, com a mínim {{min}} caràcters.",
+            "maxlength": "Aquest camp no pot tenir més de {{max}} caràcters.",
+            "min": "Aquest camp ha de ser major que {{min}}.",
+            "max": "Aquest camp no pot ser major que {{max}}.",
+            "minbytes": "Aquest camp ha de tenir més de {{min}} bytes.",
+            "maxbytes": "Aquest camp no pot tenir més de {{max}} bytes.",
+            "pattern": "Aquest camp ha de tenir el seguent patró {{pattern}}.",
+            "number": "Aquest camp ha de ser numèric.",
+            "datetimelocal": "Aquest camp ha de ser una data/hora."
         }
     },
-    "footer": "Aquest és el teu footer"
+    "footer": "Aquest és el teu peu de pàgina"
 }

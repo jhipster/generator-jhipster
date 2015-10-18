@@ -32,7 +32,7 @@
                 }
             },
             "gc": {
-                "title": "Re-col-lector de broça",
+                "title": "Re-col.lector de brossa",
                 "marksweepcount": "Mark Sweep count",
                 "marksweeptime": "Mark Sweep time",
                 "scavengecount": "Scavenge count",
@@ -49,7 +49,7 @@
                     "average": "mitjana"
                 },
                 "code": {
-                    "ok": "Ok",
+                    "ok": "Correcte",
                     "notfound": "No s'ha trobat",
                     "servererror": "Error de servidor"
                 }
@@ -62,7 +62,7 @@
                 "count": "Contador",
                 "mean": "Mitja",
                 "min": "Min",
-                "max": "Max",
+                "max": "Màx",
                 "p50": "p50",
                 "p75": "p75",
                 "p95": "p95",
@@ -79,13 +79,13 @@
             "mean": "Temps d'obtenció mig (ms)"
         },
         "datasource": {
-        	"usage": "Usage",
-            "title": "DataSource statistics (time in millisecond)",
-            "name": "Pool usage",
-            "count": "Count",
-            "mean": "Mean",
+        	"usage": "Utilització",
+            "title": "Estadístiques de l'origen de dades (en milisegons)",
+            "name": "Utilització de la bateria de connexions",
+            "count": "Total",
+            "mean": "Mitjana",
             "min": "Min",
-            "max": "Max",
+            "max": "Màx",
             "p50": "p50",
             "p75": "p75",
             "p95": "p95",

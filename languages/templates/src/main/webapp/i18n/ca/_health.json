@@ -4,7 +4,7 @@
         "refresh.button": "Actualitzar",
         "stacktrace": "Traça d'error",
         "indicator": {
-            "diskSpace": "Disk space",
+            "diskSpace": "Espai al disc",
             "mail": "Compte de correu electrònic",<% if (searchEngine == 'elasticsearch') { %>
             "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
             "db": "Base de dades"<% } %><% if (databaseType == 'mongodb') { %>
