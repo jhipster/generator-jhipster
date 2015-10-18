@@ -106,6 +106,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.pagination = 'no';
     this.validation = false;
     this.dto = 'no';
+    this.service = 'no';
 };
 
 var fieldNamesUnderscored = ['id'];
@@ -810,6 +811,38 @@ EntityGenerator.prototype.askForDTO = function askForDTO() {
     }.bind(this));
 };
 
+EntityGenerator.prototype.askForService = function askForService() {
+    if (this.useConfigurationFile == true) { // don't prompt if data are imported from a file
+        return;
+    }
+    if (this.dto == 'no') {
+        return;
+    }
+    var cb = this.async();
+    var prompts = [
+        {
+            type: 'list',
+            name: 'service',
+            message: 'Do you want to use separate service class for your business logic?',
+            choices: [
+                {
+                    value: 'no',
+                    name: 'No, implement it in the http resource class'
+                },
+                {
+                    value: 'separate',
+                    name: '[BETA] Yes, generate a separate service class'
+                }
+            ],
+            default: 0
+        }
+    ];
+    this.prompt(prompts, function (props) {
+        this.service = props.service;
+        cb();
+    }.bind(this));
+};
+
 EntityGenerator.prototype.askForPagination = function askForPagination() {
     if (this.useConfigurationFile == true) { // don't prompt if data are imported from a file
         return;
@@ -881,6 +914,7 @@ EntityGenerator.prototype.files = function files() {
         this.data.fields = this.fields;
         this.data.changelogDate = this.changelogDate;
         this.data.dto = this.dto;
+        this.data.service = this.service;
         if (databaseType == 'sql' || databaseType == 'mongodb') {
             this.data.pagination = this.pagination;
         }
@@ -890,6 +924,7 @@ EntityGenerator.prototype.files = function files() {
         this.fields = this.fileData.fields;
         this.changelogDate = this.fileData.changelogDate;
         this.dto = this.fileData.dto;
+        this.service = this.fileData.service;
         this.pagination = this.fileData.pagination;
         this.javadoc = this.fileData.javadoc;
 
@@ -1006,6 +1041,10 @@ EntityGenerator.prototype.files = function files() {
         if (_.isUndefined(this.dto)) {
             console.log(chalk.yellow('WARNING dto is missing in .jhipster/' + this.name + '.json, using no as fallback'));
             this.dto = 'no';
+        }
+        if (_.isUndefined(this.service)) {
+            console.log(chalk.yellow('WARNING service is missing in .jhipster/' + this.name + '.json, using no as fallback'));
+            this.service = 'no';
         }
         if (_.isUndefined(this.pagination)) {
             if (databaseType == 'sql' || databaseType == 'mongodb') {
@@ -1158,6 +1197,12 @@ EntityGenerator.prototype.files = function files() {
         }
     }
 
+    if (this.databaseType === 'cassandra' || this.databaseType === 'mongodb') {
+        this.pkType = 'String';
+    } else {
+        this.pkType = 'Long';
+    }
+
     this.entityClass = _s.capitalize(this.name);
     this.entityInstance = _s.decapitalize(this.name);
     this.entityTableName = _s.underscored(this.name).toLowerCase();
@@ -1181,6 +1226,7 @@ EntityGenerator.prototype.files = function files() {
     insight.track('entity/relationships', this.relationships.length);
     insight.track('entity/pagination', this.pagination);
     insight.track('entity/dto', this.dto);
+    insight.track('entity/service', this.service);
 
     var resourceDir = 'src/main/resources/';
 
@@ -1234,8 +1280,15 @@ EntityGenerator.prototype.files = function files() {
             'src/main/java/' + this.packageFolder + '/repository/search/' +    this.entityClass + 'SearchRepository.java', this, {});
     }
 
-    this.template('src/main/java/package/web/rest/_EntityResource.java',
-        'src/main/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'Resource.java', this, {});
+    if (this.service == 'separate') {
+        this.template('src/main/java/package/web/rest/_EntityResourceWithService.java',
+            'src/main/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'Resource.java', this, {});
+        this.template('src/main/java/package/service/_EntityService.java',
+            'src/main/java/' + this.packageFolder + '/service/' +    this.entityClass + 'Service.java', this, {});
+    } else {
+        this.template('src/main/java/package/web/rest/_EntityResource.java',
+            'src/main/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'Resource.java', this, {});
+    }
 
     if (this.dto == 'mapstruct') {
         this.template('src/main/java/package/web/rest/dto/_EntityDTO.java',

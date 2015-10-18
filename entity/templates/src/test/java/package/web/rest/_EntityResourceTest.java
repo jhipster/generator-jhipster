@@ -6,7 +6,8 @@ import <%=packageName%>.domain.<%= entityClass %>;
 import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } %><% if (dto == 'mapstruct') { %>
 import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
-import <%=packageName%>.web.rest.mapper.<%= entityClass %>Mapper;<% } %>
+import <%=packageName%>.web.rest.mapper.<%= entityClass %>Mapper;<% } %><% if (service == 'separate') { %>
+import <%=packageName%>.service.<%= entityClass %>Service;<% } %>
 
 import org.junit.Before;
 import org.junit.Test;
@@ -161,7 +162,10 @@ private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%
     private <%= entityClass %>Mapper <%= entityInstance %>Mapper;<% } %><% if (searchEngine == 'elasticsearch') { %>
 
     @Inject
-    private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;<% } %>
+    private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;<% } %><% if (service == 'separate') { %>
+
+    @Inject
+    private <%= entityClass %>Service service;<% } %>
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -176,10 +180,11 @@ private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource();
+        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource();<% if (service == 'separate') { %>
+        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Service", service);<% } else { %>
         ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Repository", <%= entityInstance %>Repository);<% if (dto == 'mapstruct') { %>
         ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Mapper", <%= entityInstance %>Mapper);<% } %><% if (searchEngine == 'elasticsearch') { %>
-        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>SearchRepository", <%= entityInstance %>SearchRepository);<% } %>
+        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>SearchRepository", <%= entityInstance %>SearchRepository);<% } } %>
         this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();

@@ -27,7 +27,12 @@ for (relationshipId in relationships) {
     @Mapping(target = "<%= relationships[relationshipId].relationshipName %>s", ignore = true)<% } else if (relationships[relationshipId].relationshipType == 'one-to-many') { %>
     @Mapping(target = "<%= relationships[relationshipId].relationshipName %>s", ignore = true)<% } else if (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == false) { %>
     @Mapping(target = "<%= relationships[relationshipId].relationshipName %>", ignore = true)<% } } %>
-    <%= entityClass %> <%= entityInstance %>DTOTo<%= entityClass %>(<%= entityClass %>DTO <%= entityInstance %>DTO);<%
+    <%= entityClass %> update(<%= entityClass %>DTO <%= entityInstance %>DTO, @MappingTarget <%= entityClass %> entity);
+
+    default <%= entityClass %> <%= entityInstance %>DTOTo<%= entityClass %>(<%= entityClass %>DTO <%= entityInstance %>DTO) {
+        return update(<%= entityInstance %>DTO, new <%= entityClass %>());
+    }
+<%
 
 for (relationshipId in relationships) {
     var existingMappings = [];
