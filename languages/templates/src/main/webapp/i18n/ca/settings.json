@@ -12,7 +12,7 @@
         "messages": {
             "error": {
                 "fail": "<strong>S'ha produït un error!</strong> Els seus ajustos no s'han pogut guardar.",
-                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+                "emailexists": "<strong>L'adreca de correu electronic ja existeix!</strong> Si us plau, esculli'n una altre."
             },
             "success": "<strong>Ajustos guardats!</strong>",
             "validate": {
