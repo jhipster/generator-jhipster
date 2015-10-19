@@ -39,7 +39,7 @@
     "underscore.string": "3.2.0",
     "wordwrap": "1.0.0",
     "yeoman-generator": "0.20.3",
-    "yo": "1.4.6"
+    "yo": "1.4.8"
   },
   "devDependencies": {
     "grunt": "0.4.5",
