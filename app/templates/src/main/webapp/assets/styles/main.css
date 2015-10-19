@@ -166,7 +166,7 @@ ul#strengthBar {
     background-color: #eee;
     opacity: 1;
 }
-
+<%_ if (enableSocialSignIn) { _%>
 /* ==========================================================================
 Social Buttons
 ========================================================================== */
@@ -209,3 +209,4 @@ Social Buttons
     border-color: rgba(0, 0, 0, 0.2);
     color: #fff;
 }
+<%_ } _%>
