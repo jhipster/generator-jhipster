@@ -20,15 +20,12 @@ spring:
             enabled: false # we use Grunt + BrowserSync for livereload
     <%_ if (databaseType == 'sql') { _%>
     datasource:
-        <%_ if (devDatabaseType == 'oracle') { _%>
-        driver-class-name: oracle.jdbc.OracleDriver
-        <%_ } _%>
         <%_ if (devDatabaseType == 'mysql') { _%>
         driver-class-name: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
         <%_ } else if (devDatabaseType == 'postgresql') { _%>
         driver-class-name: org.postgresql.ds.PGSimpleDataSource
         <%_ } else if (devDatabaseType == 'oracle') { _%>
-        driver-class-name: oracle.jdbc.pool.OracleDataSource
+        driver-class-name: oracle.jdbc.OracleDriver
         <%_ } else { _%>
         driver-class-name: org.h2.jdbcx.JdbcDataSource
         <%_ } _%>
