@@ -20,6 +20,12 @@
             <id>spring-milestones</id>
             <url>http://repo.spring.io/milestone</url>
         </repository>
+        <%_ if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { _%>
+        <repository>
+            <id>Local-lib</id>
+            <url>file://${project.basedir}/lib</url>
+        </repository>
+        <%_ } _%>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
@@ -894,12 +900,4 @@
             </properties>
         </profile>
     </profiles>
-    <%_ if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { _%>
-    <repositories>
-        <repository>
-            <id>Local-lib</id>
-            <url>file://${project.basedir}/lib</url>
-        </repository>
-    </repositories>
-    <%_ } _%>
 </project>
