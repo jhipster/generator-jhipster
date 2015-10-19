@@ -44,8 +44,13 @@
         <awaitility.version>1.4.0</awaitility.version>
         <commons-io.version>2.4</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
+        <%_ if (testFrameworks.indexOf('cucumber') != -1) { _%>
+        <cucumber.version>1.2.4</cucumber.version>
+        <%_ } _%>
+        <%_ if (testFrameworks.indexOf('gatling') != -1) { _%>
         <gatling.version>2.1.7</gatling.version>
         <gatling-maven-plugin.version>2.1.7</gatling-maven-plugin.version>
+        <%_ } _%>
         <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
         <hazelcast.version>3.5.2</hazelcast.version>
         <%_ } _%>
@@ -287,12 +292,14 @@
             <scope>test</scope>
         </dependency>
         <%_ } _%>
+        <%_ if (testFrameworks.indexOf('gatling') != -1) { _%>
         <dependency>
             <groupId>io.gatling.highcharts</groupId>
             <artifactId>gatling-charts-highcharts</artifactId>
             <version>${gatling.version}</version>
             <scope>test</scope>
         </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
@@ -536,6 +543,21 @@
             <artifactId>metrics-spark-reporter</artifactId>
             <version>${metrics-spark-reporter.version}</version>
         </dependency>
+        <%_ if (testFrameworks.indexOf('cucumber') != -1) { _%>
+        <!-- cucumber -->
+        <dependency>
+            <groupId>info.cukes</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>info.cukes</groupId>
+            <artifactId>cucumber-spring</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <%_ } _%>
     </dependencies>
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
@@ -555,6 +577,16 @@
                 </excludes>
             </resource>
         </resources>
+        <%_ if (testFrameworks.indexOf('cucumber') != -1) { _%>
+        <testResources>
+        	<testResource>
+                <directory>src/test/resources</directory>
+        	</testResource>
+        	<testResource>
+                <directory>src/test/features</directory>
+        	</testResource>
+        </testResources>
+        <%_ } _%>
         <plugins>
             <plugin>
                 <groupId>com.google.code.sortpom</groupId>
@@ -577,6 +609,7 @@
                     <expandEmptyElements>false</expandEmptyElements>
                 </configuration>
             </plugin>
+        	<%_ if (testFrameworks.indexOf('gatling') != -1) { _%>
             <plugin>
                 <groupId>io.gatling</groupId>
                 <artifactId>gatling-maven-plugin</artifactId>
@@ -592,6 +625,7 @@
                     <simulationClass>*</simulationClass>
                 </configuration>
             </plugin>
+        	<%_ } _%>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
