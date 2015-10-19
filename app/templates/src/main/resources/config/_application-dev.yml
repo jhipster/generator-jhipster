@@ -25,7 +25,7 @@ spring:
         <%_ } else if (devDatabaseType == 'postgresql') { _%>
         driver-class-name: org.postgresql.ds.PGSimpleDataSource
         <%_ } else if (devDatabaseType == 'oracle') { _%>
-        driver-class-name: oracle.jdbc.OracleDriver
+        driver-class-name: oracle.jdbc.pool.OracleDataSource
         <%_ } else { _%>
         driver-class-name: org.h2.jdbcx.JdbcDataSource
         <%_ } _%>
