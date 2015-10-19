@@ -11,6 +11,9 @@ import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;<% } %><
 import <%=packageName%>.domain.util.JSR310DateConverters.*;
 import com.mongodb.Mongo;
 import org.mongeez.Mongeez;<% } %>
+<%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
+import org.h2.tools.Server;
+<%_ } _%>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (databaseType == 'sql') { %><% if (hibernateCache == 'hazelcast') { %>
 import org.springframework.cache.CacheManager;<% } %>
@@ -39,10 +42,12 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;<
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.util.StringUtils;
 
 import javax.inject.Inject;
 import javax.sql.DataSource;
+<%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
+import java.sql.SQLException;
+<%_ } _%>
 import java.util.Arrays;<% } %><% if (databaseType == 'mongodb') { %>
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -110,7 +115,16 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
         }
         return new HikariDataSource(config);
     }
+<%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
+    /**
+     * Open the TCP port for the H2 database, so it is available remotely.
+     */
+    @Bean(initMethod = "start", destroyMethod = "stop")
+    public Server h2TCPServer() throws SQLException {
+        return Server.createTcpServer("-tcp","-tcpAllowOthers");
+    }
 
+<%_ } _%>
     @Bean
     public SpringLiquibase liquibase(DataSource dataSource, DataSourceProperties dataSourceProperties,
         LiquibaseProperties liquibaseProperties) {
