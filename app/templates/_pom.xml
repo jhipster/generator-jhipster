@@ -20,6 +20,12 @@
             <id>spring-milestones</id>
             <url>http://repo.spring.io/milestone</url>
         </repository>
+        <%_ if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { _%>
+        <repository>
+            <id>Local-lib</id>
+            <url>file://${project.basedir}/lib</url>
+        </repository>
+        <%_ } _%>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
@@ -38,8 +44,13 @@
         <awaitility.version>1.4.0</awaitility.version>
         <commons-io.version>2.4</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
+        <%_ if (testFrameworks.indexOf('cucumber') != -1) { _%>
+        <cucumber.version>1.2.4</cucumber.version>
+        <%_ } _%>
+        <%_ if (testFrameworks.indexOf('gatling') != -1) { _%>
         <gatling.version>2.1.7</gatling.version>
         <gatling-maven-plugin.version>2.1.7</gatling-maven-plugin.version>
+        <%_ } _%>
         <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
         <hazelcast.version>3.5.2</hazelcast.version>
         <%_ } _%>
@@ -176,7 +187,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <%_ if (devDatabaseType != 'h2Memory') { _%>
+            <%_ if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { _%>
             <scope>test</scope>
             <%_ } _%>
         </dependency>
@@ -289,12 +300,14 @@
             <scope>test</scope>
         </dependency>
         <%_ } _%>
+        <%_ if (testFrameworks.indexOf('gatling') != -1) { _%>
         <dependency>
             <groupId>io.gatling.highcharts</groupId>
             <artifactId>gatling-charts-highcharts</artifactId>
             <version>${gatling.version}</version>
             <scope>test</scope>
         </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
@@ -566,6 +579,21 @@
             <version>${spring-social-twitter.version}</version>
         </dependency>
         <%_ } _%>
+        <%_ if (testFrameworks.indexOf('cucumber') != -1) { _%>
+        <!-- cucumber -->
+        <dependency>
+            <groupId>info.cukes</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>info.cukes</groupId>
+            <artifactId>cucumber-spring</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <%_ } _%>
     </dependencies>
     <build>
         <defaultGoal>spring-boot:run</defaultGoal>
@@ -585,6 +613,16 @@
                 </excludes>
             </resource>
         </resources>
+        <%_ if (testFrameworks.indexOf('cucumber') != -1) { _%>
+        <testResources>
+        	<testResource>
+                <directory>src/test/resources</directory>
+        	</testResource>
+        	<testResource>
+                <directory>src/test/features</directory>
+        	</testResource>
+        </testResources>
+        <%_ } _%>
         <plugins>
             <plugin>
                 <groupId>com.google.code.sortpom</groupId>
@@ -607,6 +645,7 @@
                     <expandEmptyElements>false</expandEmptyElements>
                 </configuration>
             </plugin>
+        	<%_ if (testFrameworks.indexOf('gatling') != -1) { _%>
             <plugin>
                 <groupId>io.gatling</groupId>
                 <artifactId>gatling-maven-plugin</artifactId>
@@ -622,6 +661,7 @@
                     <simulationClass>*</simulationClass>
                 </configuration>
             </plugin>
+        	<%_ } _%>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
@@ -748,12 +788,12 @@
                 <configuration>
                     <changeLogFile>src/main/resources/config/liquibase/master.xml</changeLogFile>
                     <diffChangeLogFile>src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
-                    <driver><% if (devDatabaseType == 'mysql') { %>com.mysql.jdbc.Driver<% } else if (devDatabaseType == 'postgresql') { %>org.postgresql.Driver<% } %></driver>
-                    <url><% if (devDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType == 'postgresql') { %>jdbc:postgresql://localhost/<%= baseName %><% } %></url>
+                    <driver><% if (devDatabaseType == 'mysql') { %>com.mysql.jdbc.Driver<% } else if (devDatabaseType == 'postgresql') { %>org.postgresql.Driver<% } else if (devDatabaseType == 'h2Disk') { %>org.h2.Driver<% } %></driver>
+                    <url><% if (devDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType == 'postgresql') { %>jdbc:postgresql://localhost/<%= baseName %><% } else if (devDatabaseType == 'h2Disk') { %>jdbc:h2:tcp://localhost:9092/./target/h2db/db:jhipster<% } %></url>
                     <defaultSchemaName><% if (devDatabaseType == 'mysql') { %><%= baseName %><% } else if (devDatabaseType == 'postgresql') { %><% } %></defaultSchemaName>
                     <username><% if (devDatabaseType == 'mysql') { %>root<% } else if (devDatabaseType == 'postgresql') { %><%= baseName %><% } %></username>
                     <password></password>
-                    <referenceUrl>hibernate:spring:<%=packageName%>.domain?dialect=<% if (devDatabaseType == 'mysql') { %>org.hibernate.dialect.MySQLInnoDBDialect<% } else if (devDatabaseType == 'postgresql') { %>org.hibernate.dialect.PostgreSQL82Dialect<% } %></referenceUrl>
+                    <referenceUrl>hibernate:spring:<%=packageName%>.domain?dialect=<% if (devDatabaseType == 'mysql') { %>org.hibernate.dialect.MySQLInnoDBDialect<% } else if (devDatabaseType == 'postgresql') { %>org.hibernate.dialect.PostgreSQL82Dialect<% } else if (devDatabaseType == 'h2Disk') { %>org.hibernate.dialect.H2Dialect<% } %></referenceUrl>
                     <verbose>true</verbose>
                     <logging>debug</logging>
                     <%_ if (authenticationType == 'oauth2') { _%>
@@ -930,12 +970,4 @@
             </properties>
         </profile>
     </profiles>
-    <%_ if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { _%>
-    <repositories>
-        <repository>
-            <id>Local-lib</id>
-            <url>file://${project.basedir}/lib</url>
-        </repository>
-    </repositories>
-    <%_ } _%>
 </project>

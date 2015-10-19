@@ -118,7 +118,7 @@ gulp.task('serve', function() {
             '/metrics',
             '/websocket/tracker',
             '/dump'<% if (authenticationType == 'oauth2') { %>,
-            '/oauth/token'<% } %><% if (devDatabaseType == 'h2Memory') { %>,
+            '/oauth/token'<% } %><% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>,
             '/console/'<% } %>
         ];
 

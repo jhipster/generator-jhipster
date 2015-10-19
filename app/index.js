@@ -152,8 +152,12 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             message: '(7/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
+                    value: 'h2Disk',
+                    name: 'H2 with disk-based persistence'
+                },
+                {
                     value: 'h2Memory',
-                    name: 'H2 in-memory with Web console'
+                    name: 'H2 with in-memory persistence'
                 },
                 {
                     value: 'mysql',
@@ -171,8 +175,12 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             message: '(7/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
+                    value: 'h2Disk',
+                    name: 'H2 with disk-based persistence'
+                },
+                {
                     value: 'h2Memory',
-                    name: 'H2 in-memory with Web console'
+                    name: 'H2 with in-memory persistence'
                 },
                 {
                     value: 'postgresql',
@@ -190,8 +198,12 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             message: '(7/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
+                    value: 'h2Disk',
+                    name: 'H2 with disk-based persistence'
+                },
+                {
                     value: 'h2Memory',
-                    name: 'H2 in-memory with Web console'
+                    name: 'H2 with in-memory persistence'
                 },
                 {
                     value: 'oracle',
@@ -314,6 +326,16 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             name: 'enableTranslation',
             message: '(15/' + questions + ') Would you like to enable translation support with Angular Translate?',
             default: true
+        },
+        {
+          type: 'checkbox',
+          name: 'testFrameworks',
+          message: '(15/' + questions + ') Which testing frameworks would you like to use?',
+          choices: [
+                    {name: 'Gatling', value: 'gatling'},
+                    {name: 'Cucumber', value: 'cucumber'}
+          ],
+          default: [ 'gatling' ]
         }
     ];
 
@@ -345,6 +367,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     this.frontendBuilder = this.config.get('frontendBuilder');
     this.rememberMeKey = this.config.get('rememberMeKey');
     this.enableTranslation = this.config.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
+    this.testFrameworks = this.config.get('testFrameworks');
     this.enableSocialSignIn = this.config.get('enableSocialSignIn');
     this.packagejs = packagejs;
 
@@ -370,6 +393,11 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         // If translation is not defined, it is enabled by default
         if (this.enableTranslation == null) {
             this.enableTranslation = true;
+        }
+
+        // backward compatibility on testing frameworks
+        if (this.testFrameworks == null) {
+            this.testFrameworks = [ 'gatling' ];
         }
 
         // If social sign in is not defined, it is desable by default
@@ -401,6 +429,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             this.frontendBuilder = props.frontendBuilder;
             this.enableTranslation = props.enableTranslation;
             this.enableSocialSignIn = props.enableSocialSignIn;
+            this.testFrameworks = props.testFrameworks;
             this.rememberMeKey = crypto.randomBytes(20).toString('hex');
 
             if (this.databaseType == 'mongodb') {
@@ -437,6 +466,7 @@ JhipsterGenerator.prototype.app = function app() {
     insight.track('app/frontendBuilder', this.frontendBuilder);
     insight.track('app/enableTranslation', this.enableTranslation);
     insight.track('app/enableSocialSignIn', this.enableSocialSignIn);
+    insight.track('app/testFrameworks', this.testFrameworks);
 
     var packageFolder = this.packageName.replace(/\./g, '/');
     var javaDir = 'src/main/java/' + packageFolder + '/';
@@ -472,7 +502,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy('gitattributes', '.gitattributes');
 
     // Create docker-compose file
-    if (this.devDatabaseType != "h2Memory" && this.devDatabaseType != "oracle") {
+    if (this.devDatabaseType != "h2Disk" && this.devDatabaseType != "h2Memory" && this.devDatabaseType != "oracle") {
         this.template('_docker-compose.yml', 'docker-compose.yml', this, {});
     }
     if (this.prodDatabaseType != "oracle" || this.searchEngine == "elasticsearch") {
@@ -502,7 +532,9 @@ JhipsterGenerator.prototype.app = function app() {
             this.template('_profile_prod.gradle', 'profile_prod.gradle', this, {'interpolate': interpolateRegex});
             this.template('_profile_fast.gradle', 'profile_fast.gradle', this, {'interpolate': interpolateRegex});
             this.template('_mapstruct.gradle', 'mapstruct.gradle', this, {'interpolate': interpolateRegex});
-            this.template('_gatling.gradle', 'gatling.gradle', this, {});
+            if (this.testFrameworks.indexOf('gatling') != -1) {
+                this.template('_gatling.gradle', 'gatling.gradle', this, {});
+            }
             if (this.databaseType == "sql") {
                 this.template('_liquibase.gradle', 'liquibase.gradle', this, {});
             }
@@ -523,7 +555,7 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.hibernateCache == "ehcache") {
         this.template(resourceDir + '_ehcache.xml', resourceDir + 'ehcache.xml', this, {});
     }
-    if (this.devDatabaseType == "h2Memory") {
+    if (this.devDatabaseType == "h2Disk" || this.devDatabaseType == "h2Memory") {
         this.copy(resourceDir + 'h2.server.properties', resourceDir + '.h2.server.properties');
     }
 
@@ -809,10 +841,19 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     // Create Gatling test files
-    this.copy('src/test/gatling/conf/gatling.conf', 'src/test/gatling/conf/gatling.conf');
-    mkdirp('src/test/gatling/data');
-    mkdirp('src/test/gatling/bodies');
-    mkdirp('src/test/gatling/simulations');
+    if (this.testFrameworks.indexOf('gatling') != -1) {
+        this.copy('src/test/gatling/conf/gatling.conf', 'src/test/gatling/conf/gatling.conf');
+        mkdirp('src/test/gatling/data');
+        mkdirp('src/test/gatling/bodies');
+        mkdirp('src/test/gatling/simulations');
+    }
+
+    // Create Cucumber test files
+    if (this.testFrameworks.indexOf('cucumber') != -1) {
+        this.template('src/test/java/package/cucumber/_CucumberTest.java', testDir + 'cucumber/CucumberTest.java', this, {});
+        this.template('src/test/java/package/cucumber/_UserStepDefs.java', testDir + 'cucumber/UserStepDefs.java', this, {});
+        this.copy('src/test/features/user.feature', 'src/test/features/user.feature');
+    }
 
     // Create Webapp
     mkdirp(webappDir);
@@ -984,16 +1025,27 @@ JhipsterGenerator.prototype.app = function app() {
 
     // Create Test Javascript files
     var testJsDir = 'src/test/javascript/';
-    this.template(testJsDir + '_karma.conf.js', testJsDir + 'karma.conf.js');
-    this.template(testJsDir + 'spec/app/account/admin/health/_health.controller.spec.js', testJsDir + 'spec/app/account/health/health.controller.spec.js', this, {});
-    this.template(testJsDir + 'spec/app/account/login/_login.controller.spec.js', testJsDir + 'spec/app/account/login/login.controller.spec.js', this, {});
-    this.template(testJsDir + 'spec/app/account/password/_password.controller.spec.js', testJsDir + 'spec/app/account/password/password.controller.spec.js', this, {});
-    this.template(testJsDir + 'spec/app/account/password/_password.directive.spec.js', testJsDir + 'spec/app/account/password/password.directive.spec.js', this, {});
+    var testTemplates = [
+        '_karma.conf.js',
+        'spec/helpers/_module.js',
+        'spec/helpers/_httpBackend.js',
+        'spec/app/admin/health/_health.controller.spec.js',
+        'spec/app/account/login/_login.controller.spec.js',
+        'spec/app/account/password/_password.controller.spec.js',
+        'spec/app/account/password/_password.directive.spec.js',
+        'spec/app/account/settings/_settings.controller.spec.js',
+        'spec/app/account/activate/_activate.controller.spec.js',
+        'spec/app/account/register/_register.controller.spec.js',
+        'spec/app/account/reset/finish/_reset.finish.controller.spec.js',
+        'spec/app/account/reset/request/_reset.request.controller.spec.js',
+        'spec/components/auth/_auth.services.spec.js'
+    ];
     if (this.authenticationType == 'session') {
-        this.template(testJsDir + 'spec/app/account/sessions/_sessions.controller.spec.js', testJsDir + 'spec/app/account/sessions/sessions.controller.spec.js', this, {});
+        testTemplates.push('spec/app/account/sessions/_sessions.controller.spec.js');
     }
-    this.template(testJsDir + 'spec/app/account/settings/_settings.controller.spec.js', testJsDir + 'spec/app/account/settings/settings.controller.spec.js', this, {});
-    this.template(testJsDir + 'spec/components/auth/_auth.services.spec.js', testJsDir + 'spec/components/auth/auth.services.spec.js', this, {});
+    testTemplates.map(function(testTemplatePath) {
+        this.template(testJsDir + testTemplatePath, testJsDir + testTemplatePath.replace(/_/,''), this, {});
+    }.bind(this));
 
     // CSS
     this.copy(webappDir + 'assets/styles/documentation.css', webappDir + 'assets/styles/documentation.css');
@@ -1162,6 +1214,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.config.set('enableTranslation', this.enableTranslation);
     this.config.set('enableSocialSignIn', this.enableSocialSignIn);
     this.config.set('rememberMeKey', this.rememberMeKey);
+    this.config.set('testFrameworks', this.testFrameworks);
 };
 
 JhipsterGenerator.prototype.projectfiles = function projectfiles() {

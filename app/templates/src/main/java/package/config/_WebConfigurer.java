@@ -53,7 +53,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
             initCachingHttpHeadersFilter(servletContext, disps);
             initStaticResourcesProductionFilter(servletContext, disps);
-        }<% if (devDatabaseType == 'h2Memory') { %>
+        }<% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
             initH2Console(servletContext);
         }<% } %>
@@ -174,7 +174,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         metricsAdminServlet.addMapping("/metrics/metrics/*");
         metricsAdminServlet.setAsyncSupported(true);
         metricsAdminServlet.setLoadOnStartup(2);
-    }<% if (devDatabaseType == 'h2Memory') { %>
+    }<% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>
 
     /**
      * Initializes H2 console

@@ -85,7 +85,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/api/activate")
             .antMatchers("/api/account/reset_password/init")
             .antMatchers("/api/account/reset_password/finish")<% } %>
-            .antMatchers("/test/**")<% if (devDatabaseType != 'h2Memory') { %>;<% } else { %>
+            .antMatchers("/test/**")<% if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { %>;<% } else { %>
             .antMatchers("/console/**");<% } %>
     }<% if (authenticationType == 'session' || authenticationType == 'xauth') { %>
 

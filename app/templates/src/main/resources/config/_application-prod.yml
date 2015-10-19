@@ -20,9 +20,6 @@ spring:
             enabled: false
     <%_ if (databaseType == 'sql') { _%>
     datasource:
-        <%_ if (prodDatabaseType == 'oracle') { _%>
-        driver-class-name: oracle.jdbc.OracleDriver
-        <%_ } _%>
         <%_ if (prodDatabaseType == 'mysql') { _%>
         driver-class-name: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
         <%_ } else if (prodDatabaseType == 'postgresql') { _%>

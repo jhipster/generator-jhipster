@@ -1,15 +1,19 @@
 'use strict';
-
 describe('Controllers Tests ', function () {
 
-    beforeEach(module('<%= angularAppName %>'));
-
     describe('HealthController', function () {
-        var $scope;
+        var $scope; // actual implementations
+        var createController; // local utility functions
 
-        beforeEach(inject(function ($rootScope, $controller) {
-            $scope = $rootScope.$new();
-            $controller('HealthController', { $scope: $scope });
+        beforeEach(inject(function ($injector) {
+            $scope = $injector.get('$rootScope').$new();
+            var locals = {
+                '$scope': $scope
+            };
+            createController = function() {
+                $injector.get('$controller')('HealthController', locals);
+            };
+            createController();
         }));
 
         describe('isHealthObject and hasSubSystem', function () {
@@ -279,7 +283,7 @@ describe('Controllers Tests ', function () {
 
         describe('getModuleName(path, name)', function () {
             it('should show both path and name if defined', function () {
-                expect($scope.getModuleName('path', 'name')).toEqual('path' +  $scope.separator + 'name');
+                expect($scope.getModuleName('path', 'name')).toEqual('path' + $scope.separator + 'name');
             });
 
             it('should show only path if name is not defined', function () {
