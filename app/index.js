@@ -42,7 +42,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     console.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version + '\n'));
     var insight = this.insight();
     this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
-    var questions = 14; // making questions a variable to avoid updating each question by hand when adding additional options
+    var questions = 15; // making questions a variable to avoid updating each question by hand when adding additional options
 
     var prompts = [
         {
@@ -320,6 +320,16 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             name: 'enableTranslation',
             message: '(14/' + questions + ') Would you like to enable translation support with Angular Translate?',
             default: true
+        },
+        {
+          type: 'checkbox',
+          name: 'testFrameworks',
+          message: '(15/' + questions + ') Which testing frameworks would you like to use?',
+          choices: [
+                    {name: 'Gatling', value: 'gatling'},
+                    {name: 'Cucumber', value: 'cucumber'}
+          ],
+          default: [ 'gatling' ]
         }
     ];
 
@@ -351,6 +361,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     this.frontendBuilder = this.config.get('frontendBuilder');
     this.rememberMeKey = this.config.get('rememberMeKey');
     this.enableTranslation = this.config.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
+    this.testFrameworks = this.config.get('testFrameworks');
     this.packagejs = packagejs;
 
     if (this.baseName != null &&
@@ -376,6 +387,11 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         if (this.enableTranslation == null) {
             this.enableTranslation = true;
         }
+        
+        // backward compatibility on testing frameworks
+        if (this.testFrameworks == null) {
+            this.testFrameworks = [ 'gatling' ];
+        }
 
         console.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
             'to re-generate the project...\n'));
@@ -400,6 +416,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             this.buildTool = props.buildTool;
             this.frontendBuilder = props.frontendBuilder;
             this.enableTranslation = props.enableTranslation;
+            this.testFrameworks = props.testFrameworks;
             this.rememberMeKey = crypto.randomBytes(20).toString('hex');
 
             if (this.databaseType == 'mongodb') {
@@ -435,6 +452,7 @@ JhipsterGenerator.prototype.app = function app() {
     insight.track('app/buildTool', this.buildTool);
     insight.track('app/frontendBuilder', this.frontendBuilder);
     insight.track('app/enableTranslation', this.enableTranslation);
+    insight.track('app/testFrameworks', this.testFrameworks);
 
     var packageFolder = this.packageName.replace(/\./g, '/');
     var javaDir = 'src/main/java/' + packageFolder + '/';
@@ -500,7 +518,9 @@ JhipsterGenerator.prototype.app = function app() {
             this.template('_profile_prod.gradle', 'profile_prod.gradle', this, {'interpolate': interpolateRegex});
             this.template('_profile_fast.gradle', 'profile_fast.gradle', this, {'interpolate': interpolateRegex});
             this.template('_mapstruct.gradle', 'mapstruct.gradle', this, {'interpolate': interpolateRegex});
-            this.template('_gatling.gradle', 'gatling.gradle', this, {});
+            if (this.testFrameworks.indexOf('gatling') != -1) {
+                this.template('_gatling.gradle', 'gatling.gradle', this, {});
+            }
             if (this.databaseType == "sql") {
                 this.template('_liquibase.gradle', 'liquibase.gradle', this, {});
             }
@@ -793,10 +813,19 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     // Create Gatling test files
-    this.copy('src/test/gatling/conf/gatling.conf', 'src/test/gatling/conf/gatling.conf');
-    mkdirp('src/test/gatling/data');
-    mkdirp('src/test/gatling/bodies');
-    mkdirp('src/test/gatling/simulations');
+    if (this.testFrameworks.indexOf('gatling') != -1) {
+        this.copy('src/test/gatling/conf/gatling.conf', 'src/test/gatling/conf/gatling.conf');
+        mkdirp('src/test/gatling/data');
+        mkdirp('src/test/gatling/bodies');
+        mkdirp('src/test/gatling/simulations');
+    }
+
+    // Create Cucumber test files
+    if (this.testFrameworks.indexOf('cucumber') != -1) {
+        this.template('src/test/java/package/cucumber/_CucumberTest.java', testDir + 'cucumber/CucumberTest.java', this, {});
+        this.template('src/test/java/package/cucumber/_UserStepDefs.java', testDir + 'cucumber/UserStepDefs.java', this, {});
+        this.copy('src/test/features/user.feature', 'src/test/features/user.feature');
+    }
 
     // Create Webapp
     mkdirp(webappDir);
@@ -957,16 +986,27 @@ JhipsterGenerator.prototype.app = function app() {
 
     // Create Test Javascript files
     var testJsDir = 'src/test/javascript/';
-    this.template(testJsDir + '_karma.conf.js', testJsDir + 'karma.conf.js');
-    this.template(testJsDir + 'spec/app/account/admin/health/_health.controller.spec.js', testJsDir + 'spec/app/account/health/health.controller.spec.js', this, {});
-    this.template(testJsDir + 'spec/app/account/login/_login.controller.spec.js', testJsDir + 'spec/app/account/login/login.controller.spec.js', this, {});
-    this.template(testJsDir + 'spec/app/account/password/_password.controller.spec.js', testJsDir + 'spec/app/account/password/password.controller.spec.js', this, {});
-    this.template(testJsDir + 'spec/app/account/password/_password.directive.spec.js', testJsDir + 'spec/app/account/password/password.directive.spec.js', this, {});
+    var testTemplates = [
+        '_karma.conf.js',
+        'spec/helpers/_module.js',
+        'spec/helpers/_httpBackend.js',
+        'spec/app/admin/health/_health.controller.spec.js',
+        'spec/app/account/login/_login.controller.spec.js',
+        'spec/app/account/password/_password.controller.spec.js',
+        'spec/app/account/password/_password.directive.spec.js',
+        'spec/app/account/settings/_settings.controller.spec.js',
+        'spec/app/account/activate/_activate.controller.spec.js',
+        'spec/app/account/register/_register.controller.spec.js',
+        'spec/app/account/reset/finish/_reset.finish.controller.spec.js',
+        'spec/app/account/reset/request/_reset.request.controller.spec.js',
+        'spec/components/auth/_auth.services.spec.js'
+    ];
     if (this.authenticationType == 'session') {
-        this.template(testJsDir + 'spec/app/account/sessions/_sessions.controller.spec.js', testJsDir + 'spec/app/account/sessions/sessions.controller.spec.js', this, {});
+        testTemplates.push('spec/app/account/sessions/_sessions.controller.spec.js');
     }
-    this.template(testJsDir + 'spec/app/account/settings/_settings.controller.spec.js', testJsDir + 'spec/app/account/settings/settings.controller.spec.js', this, {});
-    this.template(testJsDir + 'spec/components/auth/_auth.services.spec.js', testJsDir + 'spec/components/auth/auth.services.spec.js', this, {});
+    testTemplates.map(function(testTemplatePath) {
+        this.template(testJsDir + testTemplatePath, testJsDir + testTemplatePath.replace(/_/,''), this, {});
+    }.bind(this));
 
     // CSS
     this.copy(webappDir + 'assets/styles/documentation.css', webappDir + 'assets/styles/documentation.css');
@@ -1126,6 +1166,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.config.set('frontendBuilder', this.frontendBuilder);
     this.config.set('enableTranslation', this.enableTranslation);
     this.config.set('rememberMeKey', this.rememberMeKey);
+    this.config.set('testFrameworks', this.testFrameworks);
 };
 
 JhipsterGenerator.prototype.projectfiles = function projectfiles() {

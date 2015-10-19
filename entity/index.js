@@ -47,6 +47,11 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     this.enableTranslation = this.config.get('enableTranslation');
     prodDatabaseType = this.prodDatabaseType;
     this.buildTool = this.config.get('buildTool');
+    this.testFrameworks = this.config.get('testFrameworks');
+    // backward compatibility on testing frameworks
+    if (this.testFrameworks == null) {
+        this.testFrameworks = [ 'gatling' ];
+    }
     this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
     this.jhipsterConfigDirectory = '.jhipster';
     this.filename = this.jhipsterConfigDirectory + '/' + _s.capitalize(this.name) + '.json';
@@ -1288,8 +1293,10 @@ EntityGenerator.prototype.files = function files() {
     this.template('src/test/java/package/web/rest/_EntityResourceTest.java',
         'src/test/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'ResourceTest.java', this, {});
 
-    this.template('src/test/gatling/simulations/_EntityGatlingTest.scala',
-        'src/test/gatling/simulations/' + this.entityClass + 'GatlingTest.scala', this, { 'interpolate': /<%=([\s\S]+?)%>/g });
+    if (this.testFrameworks.indexOf('gatling') != -1) {
+        this.template('src/test/gatling/simulations/_EntityGatlingTest.scala',
+            'src/test/gatling/simulations/' + this.entityClass + 'GatlingTest.scala', this, { 'interpolate': /<%=([\s\S]+?)%>/g });
+    }
 
     // Copy for each
     if(this.enableTranslation) {
