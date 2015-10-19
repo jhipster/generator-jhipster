@@ -146,8 +146,12 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             message: '(6/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
+                    value: 'h2Disk',
+                    name: 'H2 with disk-based persistence'
+                },
+                {
                     value: 'h2Memory',
-                    name: 'H2 in-memory with Web console'
+                    name: 'H2 with in-memory persistence'
                 },
                 {
                     value: 'mysql',
