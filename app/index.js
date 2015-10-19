@@ -165,8 +165,12 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             message: '(6/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
+                    value: 'h2Disk',
+                    name: 'H2 with disk-based persistence'
+                },
+                {
                     value: 'h2Memory',
-                    name: 'H2 in-memory with Web console'
+                    name: 'H2 with in-memory persistence'
                 },
                 {
                     value: 'postgresql',
@@ -184,8 +188,12 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             message: '(6/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
+                    value: 'h2Disk',
+                    name: 'H2 with disk-based persistence'
+                },
+                {
                     value: 'h2Memory',
-                    name: 'H2 in-memory with Web console'
+                    name: 'H2 with in-memory persistence'
                 },
                 {
                     value: 'oracle',
@@ -458,7 +466,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy('gitattributes', '.gitattributes');
 
     // Create docker-compose file
-    if (this.devDatabaseType != "h2Memory" && this.devDatabaseType != "oracle") {
+    if (this.devDatabaseType != "h2Disk" && this.devDatabaseType != "h2Memory" && this.devDatabaseType != "oracle") {
         this.template('_docker-compose.yml', 'docker-compose.yml', this, {});
     }
     if (this.prodDatabaseType != "oracle" || this.searchEngine == "elasticsearch") {
@@ -509,7 +517,7 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.hibernateCache == "ehcache") {
         this.template(resourceDir + '_ehcache.xml', resourceDir + 'ehcache.xml', this, {});
     }
-    if (this.devDatabaseType == "h2Memory") {
+    if (this.devDatabaseType == "h2Disk" || this.devDatabaseType == "h2Memory") {
         this.copy(resourceDir + 'h2.server.properties', resourceDir + '.h2.server.properties');
     }
 

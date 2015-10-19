@@ -174,7 +174,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <%_ if (devDatabaseType != 'h2Memory') { _%>
+            <%_ if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { _%>
             <scope>test</scope>
             <%_ } _%>
         </dependency>

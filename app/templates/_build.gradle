@@ -152,7 +152,7 @@ dependencies {
     }
     <% if (devDatabaseType == 'mysql' || prodDatabaseType == 'mysql') { %>
     compile group: 'mysql', name: 'mysql-connector-java'<% } %><% if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { %>
-    compile group: 'org.postgresql', name: 'postgresql', version: postgresql_version<% } %><% if (devDatabaseType == 'h2Memory') { %>
+    compile group: 'org.postgresql', name: 'postgresql', version: postgresql_version<% } %><% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>
     compile group: 'com.h2database', name: 'h2'<% } %>
     compile group: 'fr.ippon.spark.metrics', name: 'metrics-spark-reporter', version: metrics_spark_reporter_version
     compile group: 'org.mapstruct', name: 'mapstruct-jdk8', version: mapstruct_version
@@ -170,7 +170,7 @@ dependencies {
     testCompile group: 'cz.jirutka.spring', name: 'embedmongo-spring', version: embedmongo_spring_version<% } %>
     testCompile group: 'org.hamcrest', name: 'hamcrest-library'
     testCompile group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version: gatling_version
-    <% if (devDatabaseType != 'h2Memory') { %>
+    <% if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { %>
     testCompile group: 'com.h2database', name: 'h2'<% } %><% if (devDatabaseType == 'oracle' || prodDatabaseType == 'oracle') { %>
     runtime files('lib/oracle/ojdbc/7/ojdbc-7.jar')
     runtime fileTree(dir: 'lib', include: '*.jar')<% } %>
