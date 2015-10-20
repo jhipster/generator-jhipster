@@ -1,6 +1,6 @@
 # Developing <%= baseName %>
 
-<%= baseName %> was generated using JHipster, you can find documentation and help at [JHipster][].
+This application was generated using JHipster, you can find documentation and help at [https://jhipster.gitub.io][].
 
 Before you can build this project, you must install and configure the following dependencies on your machine:
 
