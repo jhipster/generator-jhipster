@@ -129,7 +129,7 @@
                   file="config/liquibase/users_authorities.csv"
                   separator=";"
                   tableName="jhi_user_authority"/>
-                  
+
         <createTable tableName="jhi_persistent_audit_event">
             <column name="event_id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
@@ -172,33 +172,36 @@
                                  referencedTableName="jhi_persistent_audit_event"/>
     <% if (enableSocialSignIn) { %>
     <!-- Social -->
-    <createTable tableName="jhi_UserConnection">
-          <column name="userId" type="varchar(255)">
-              <constraints nullable="false"/>
-          </column>
-          <column name="providerId" type="varchar(255)">
-              <constraints nullable="false"/>
-          </column>
-          <column name="providerUserId" type="varchar(255)">
-              <constraints nullable="false"/>
-          </column>
-          <column name="rank" type="bigint">
-              <constraints nullable="false"/>
-          </column>
-          <column name="displayName" type="varchar(255)"/>
-          <column name="profileUrl" type="varchar(255)"/>
-          <column name="imageUrl" type="varchar(255)"/>
-          <column name="accessToken" type="varchar(255)">
-              <constraints nullable="false"/>
-          </column>
-          <column name="secret" type="varchar(255)"/>
-          <column name="refreshToken" type="varchar(255)"/>
-          <column name="expireTime" type="bigint"/>
+    <createTable tableName="jhi_social_user_connection">
+        <column name="id" type="bigint" autoIncrement="${autoIncrement}">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="user_id" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="provider_id" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="provider_user_id" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="rank" type="bigint">
+            <constraints nullable="false"/>
+        </column>
+        <column name="display_name" type="varchar(255)"/>
+        <column name="profile_url" type="varchar(255)"/>
+        <column name="image_url" type="varchar(255)"/>
+        <column name="access_token" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="secret" type="varchar(255)"/>
+        <column name="refresh_token" type="varchar(255)"/>
+        <column name="expire_time" type="bigint"/>
     </createTable>
 
-    <addPrimaryKey tableName="JHI_UserConnection" columnNames="userId, providerId, providerUserId"/>
+    <addUniqueConstraint tableName="jhi_social_user_connection" columnNames="user_id, provider_id, provider_user_id"/>
 
-    <addUniqueConstraint tableName="JHI_UserConnection" columnNames="userId, providerId, rank"/>
+    <addUniqueConstraint tableName="jhi_social_user_connection" columnNames="user_id, provider_id, rank"/>
     <% } %>
     </changeSet>
     <% if (authenticationType == 'oauth2') { %>

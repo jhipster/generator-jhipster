@@ -1,18 +1,18 @@
 package <%=packageName%>.social.config;
 
+import com.mycompany.myapp.social.repository.SocialUserConnectionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.social.UserIdSource;
 import org.springframework.social.config.annotation.ConnectionFactoryConfigurer;
 import org.springframework.social.config.annotation.EnableSocial;
 import org.springframework.social.config.annotation.SocialConfigurer;
 import org.springframework.social.connect.ConnectionFactoryLocator;
 import org.springframework.social.connect.UsersConnectionRepository;
-import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 import org.springframework.social.connect.web.ProviderSignInController;
 import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.social.connect.web.SignInAdapter;
@@ -22,7 +22,6 @@ import org.springframework.social.security.AuthenticationNameUserIdSource;
 import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
 import javax.inject.Inject;
-import javax.sql.DataSource;
 
 /**
  * Basic Spring Social configuration.  Creates the beans necessary to manage Connections to social services and
@@ -30,11 +29,12 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableSocial
+@EnableJpaRepositories("<%=packageName%>.social.repository")
 public class SocialConfiguration implements SocialConfigurer {
     private final Logger log = LoggerFactory.getLogger(SocialConfiguration.class);
 
     @Inject
-    private DataSource dataSource;
+    private SocialUserConnectionRepository socialUserConnectionRepository;
 
     @Override
     public void addConnectionFactories(ConnectionFactoryConfigurer connectionFactoryConfigurer, Environment environment) {
@@ -94,9 +94,7 @@ public class SocialConfiguration implements SocialConfigurer {
 
     @Override
     public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
-        JdbcUsersConnectionRepository usersConnectionRepository = new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator, Encryptors.noOpText());
-        usersConnectionRepository.setTablePrefix("jhi_");
-        return usersConnectionRepository;
+        return new SimpleUsersConnectionRepository(socialUserConnectionRepository, connectionFactoryLocator);
     }
 
     @Bean

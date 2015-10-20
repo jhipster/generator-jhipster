@@ -85,16 +85,19 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 },
                 {
                     value: 'oauth2',
-                    name: 'OAuth2 Authentication (stateless, with an OAuth2 server implementation)'
+                    name: 'OAuth2 Authentication (stateless, with an OAuth2 server implementation - Warning! Social sign in will not be available)'
                 },
                 {
                     value: 'xauth',
-                    name: 'Token-based authentication (stateless, with a token)'
+                    name: 'Token-based authentication (stateless, with a token - Warning! Social sign in will not be available)'
                 }
             ],
             default: 0
         },
         {
+            when: function (response) {
+                return response.authenticationType == 'session';
+            },
             type: 'confirm',
             name: 'enableSocialSignIn',
             message: '(4/' + questions + ') Would you like to enable social sign in (Google, Facebook, Twitter)?',
@@ -803,10 +806,17 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     if (this.enableSocialSignIn) {
+        this.template('src/main/java/package/social/_package-info.java', javaDir + 'social/package-info.java', this, {});
         this.template('src/main/java/package/social/_SocialController.java', javaDir + 'social/SocialController.java', this, {});
         this.template('src/main/java/package/social/_SocialService.java', javaDir + 'social/SocialService.java', this, {});
+        this.template('src/main/java/package/social/_SocialUserConnection.java', javaDir + 'social/SocialUserConnection.java', this, {});
+        this.template('src/main/java/package/social/config/_package-info.java', javaDir + 'social/config/package-info.java', this, {});
         this.template('src/main/java/package/social/config/_SimpleSignInAdapter.java', javaDir + 'social/config/SimpleSignInAdapter.java', this, {});
         this.template('src/main/java/package/social/config/_SocialConfiguration.java', javaDir + 'social/config/SocialConfiguration.java', this, {});
+        this.template('src/main/java/package/social/config/_SimpleConnectionRepository.java', javaDir + 'social/config/SimpleConnectionRepository.java', this, {});
+        this.template('src/main/java/package/social/config/_SimpleUsersConnectionRepository.java', javaDir + 'social/config/SimpleUsersConnectionRepository.java', this, {});
+        this.template('src/main/java/package/social/repository/_package-info.java', javaDir + 'social/repository/package-info.java', this, {});
+        this.template('src/main/java/package/social/repository/_SocialUserConnectionRepository.java', javaDir + 'social/repository/SocialUserConnectionRepository.java', this, {});
     }
 
     // Create Test Java files
@@ -860,9 +870,9 @@ JhipsterGenerator.prototype.app = function app() {
 
     // normal CSS or SCSS?
     if (this.useSass) {
-        this.copy('src/main/scss/main.scss', 'src/main/scss/main.scss');
+        this.template('src/main/scss/main.scss', 'src/main/scss/main.scss');
     } else {
-        this.copy('src/main/webapp/assets/styles/main.css', 'src/main/webapp/assets/styles/main.css');
+        this.template('src/main/webapp/assets/styles/main.css', 'src/main/webapp/assets/styles/main.css');
     }
 
     // HTML5 BoilerPlate
