@@ -1,6 +1,7 @@
 package <%=packageName%>.social.config;
 
-import com.mycompany.myapp.social.repository.SocialUserConnectionRepository;
+import <%=packageName%>.social.repository.SocialUserConnectionRepository;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
