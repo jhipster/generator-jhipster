@@ -153,6 +153,8 @@ Now, running the 'yo jhipster' command should use your specific JHipster version
 yo jhipster
 ```
 
+TIP: If this doesn't work, try running `npm link generator-jhipster` in your project. See [this guide](http://justjs.com/posts/npm-link-developing-your-own-npm-modules-without-tears) for more information.
+
 You should see your changes reflected in the JHipster project.
 
 ### Use a text editor

@@ -30,9 +30,9 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;<% if (fieldsContainLocalDate == true) { %>
 import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
 import java.time.Instant;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;<% } %><% if (fieldsContainBigDecimal == true) { %>
+import java.time.format.DateTimeFormatter;<% } %><% if (fieldsContainLocalDate == true || fieldsContainZonedDateTime == true) { %>
+import java.time.ZoneId;<% } %><% if (fieldsContainBigDecimal == true) { %>
 import java.math.BigDecimal;<% } %><% if (fieldsContainDate == true) { %>
 import java.util.Date;<% } %>
 import java.util.List;<% if (databaseType == 'cassandra') { %>
