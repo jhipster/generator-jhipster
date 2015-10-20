@@ -20,7 +20,7 @@ public interface SocialUserConnectionRepository extends JpaRepository<SocialUser
 
     List<SocialUserConnection> findAllByUserIdAndProviderIdOrderByRankAsc(String userId, String providerId);
 
-    List<SocialUserConnection> findAllByUserIdAndProviderIdAndProviderUserIdInOrderByRankAsc(String userId, String providerId, List<String> provideUserId);
+    List<SocialUserConnection> findAllByUserIdAndProviderIdAndProviderUserIdIn(String userId, String providerId, List<String> provideUserId);
 
     SocialUserConnection findOneByUserIdAndProviderIdAndProviderUserId(String userId, String providerId, String providerUserId);
 

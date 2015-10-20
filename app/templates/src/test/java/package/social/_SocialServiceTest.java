@@ -6,6 +6,7 @@ import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.AuthorityRepository;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.service.MailService;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

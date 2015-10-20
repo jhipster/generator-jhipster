@@ -172,7 +172,7 @@ public class SimpleConnectionRepository implements ConnectionRepository {
     }
 
     private List<Connection<?>> providerUserIdsToConnections(String providerId, List<String> providerUserIds) {
-        List<SocialUserConnection> socialUserConnections = socialUserConnectionRepository.findAllByUserIdAndProviderIdAndProviderUserIdInOrderByRankAsc(userId, providerId, providerUserIds);
+        List<SocialUserConnection> socialUserConnections = socialUserConnectionRepository.findAllByUserIdAndProviderIdAndProviderUserIdIn(userId, providerId, providerUserIds);
         return socialUserConnectionsToConnections(socialUserConnections);
     }
 

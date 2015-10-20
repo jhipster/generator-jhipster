@@ -848,6 +848,7 @@ JhipsterGenerator.prototype.app = function app() {
 
     if (this.enableSocialSignIn) {
         this.template('src/test/java/package/social/_SocialServiceTest.java', testDir + 'social/SocialServiceTest.java', this, {});
+        this.template('src/test/java/package/social/config/_SimpleUsersConnectionRepositoryTest.java', testDir + 'social/config/SimpleUsersConnectionRepositoryTest.java', this, {});
     }
 
     // Create Gatling test files
