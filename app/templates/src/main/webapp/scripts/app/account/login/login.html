@@ -6,6 +6,13 @@
             <div class="alert alert-danger" ng-show="authenticationError" translate="login.messages.error.authentication">
                 <strong>Failed to sign in!</strong> Please check your credentials and try again.
             </div>
+            <%_ if (enableSocialSignIn) { _%>
+            <jh-social ng-provider="google"></jh-social>
+            <jh-social ng-provider="facebook"></jh-social>
+            <jh-social ng-provider="twitter"></jh-social>
+            <br/>
+            <br/>
+            <%_ } _%>
             <form class="form" role="form" ng-submit="login($event)">
                 <div class="form-group">
                     <label for="username" translate="global.form.username">Login</label>

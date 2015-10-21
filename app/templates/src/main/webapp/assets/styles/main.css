@@ -166,3 +166,47 @@ ul#strengthBar {
     background-color: #eee;
     opacity: 1;
 }
+<%_ if (enableSocialSignIn) { _%>
+/* ==========================================================================
+Social Buttons
+========================================================================== */
+.jh-btn-social {
+    margin-bottom: 5px;
+}
+
+.jh-btn-google {
+    background-color: #dd4b39;
+    border-color: rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
+
+.jh-btn-google:hover, .jh-btn-google:focus, .jh-btn-google:active, .jh-btn-google.active, .open > .dropdown-toggle.jh-btn-google {
+    background-color: #c23321;
+    border-color: rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
+
+.jh-btn-facebook {
+    background-color: #3b5998;
+    border-color: rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
+
+.jh-btn-facebook:hover, .jh-btn-facebook:focus, .jh-btn-facebook:active, .jh-btn-facebook.active, .open > .dropdown-toggle.jh-btn-facebook {
+    background-color: #2d4373;
+    border-color: rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
+
+.jh-btn-twitter {
+    background-color: #55acee;
+    border-color: rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
+
+.jh-btn-twitter:hover, .jh-btn-twitter:focus, .jh-btn-twitter:active, .jh-btn-twitter.active, .open > .dropdown-toggle.jh-btn-twitter {
+    background-color: #2795e9;
+    border-color: rgba(0, 0, 0, 0.2);
+    color: #fff;
+}
+<%_ } _%>

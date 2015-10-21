@@ -85,19 +85,28 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 },
                 {
                     value: 'oauth2',
-                    name: 'OAuth2 Authentication (stateless, with an OAuth2 server implementation)'
+                    name: 'OAuth2 Authentication (stateless, with an OAuth2 server implementation - Warning! Social sign in will not be available)'
                 },
                 {
                     value: 'xauth',
-                    name: 'Token-based authentication (stateless, with a token)'
+                    name: 'Token-based authentication (stateless, with a token - Warning! Social sign in will not be available)'
                 }
             ],
             default: 0
         },
         {
+            when: function (response) {
+                return response.authenticationType == 'session';
+            },
+            type: 'confirm',
+            name: 'enableSocialSignIn',
+            message: '(4/' + questions + ') Would you like to enable social sign in (Google, Facebook, Twitter)?',
+            default: false
+        },
+        {
             type: 'list',
             name: 'databaseType',
-            message: '(4/' + questions + ') Which *type* of database would you like to use?',
+            message: '(5/' + questions + ') Which *type* of database would you like to use?',
             choices: [
                 {
                     value: 'sql',
@@ -120,7 +129,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'prodDatabaseType',
-            message: '(5/' + questions + ') Which *production* database would you like to use?',
+            message: '(6/' + questions + ') Which *production* database would you like to use?',
             choices: [
                 {
                     value: 'mysql',
@@ -143,7 +152,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'devDatabaseType',
-            message: '(6/' + questions + ') Which *development* database would you like to use?',
+            message: '(7/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'h2Disk',
@@ -166,7 +175,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'devDatabaseType',
-            message: '(6/' + questions + ') Which *development* database would you like to use?',
+            message: '(7/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'h2Disk',
@@ -189,7 +198,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'devDatabaseType',
-            message: '(6/' + questions + ') Which *development* database would you like to use?',
+            message: '(7/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'h2Disk',
@@ -212,7 +221,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'hibernateCache',
-            message: '(7/' + questions + ') Do you want to use Hibernate 2nd level cache?',
+            message: '(8/' + questions + ') Do you want to use Hibernate 2nd level cache?',
             choices: [
                 {
                     value: 'no',
@@ -232,7 +241,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'searchEngine',
-            message: '(8/' + questions + ') Do you want to use a search engine in your application?',
+            message: '(9/' + questions + ') Do you want to use a search engine in your application?',
             choices: [
                 {
                     value: 'no',
@@ -248,7 +257,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'clusteredHttpSession',
-            message: '(9/' + questions + ') Do you want to use clustered HTTP sessions?',
+            message: '(10/' + questions + ') Do you want to use clustered HTTP sessions?',
             choices: [
                 {
                     value: 'no',
@@ -264,7 +273,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'websocket',
-            message: '(10/' + questions + ') Do you want to use WebSockets?',
+            message: '(11/' + questions + ') Do you want to use WebSockets?',
             choices: [
                 {
                     value: 'no',
@@ -280,7 +289,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'buildTool',
-            message: '(11/' + questions + ') Would you like to use Maven or Gradle for building the backend?',
+            message: '(12/' + questions + ') Would you like to use Maven or Gradle for building the backend?',
             choices: [
                 {
                     value: 'maven',
@@ -306,19 +315,19 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                     name: 'Gulp.js'
                 }
             ],
-            message: '(12/' + questions + ') Would you like to use Grunt or Gulp.js for building the frontend?',
+            message: '(13/' + questions + ') Would you like to use Grunt or Gulp.js for building the frontend?',
             default: 'grunt'
         },
         {
             type: 'confirm',
             name: 'useSass',
-            message: '(13/' + questions + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
+            message: '(14/' + questions + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
             default: false
         },
         {
             type: 'confirm',
             name: 'enableTranslation',
-            message: '(14/' + questions + ') Would you like to enable translation support with Angular Translate?',
+            message: '(15/' + questions + ') Would you like to enable translation support with Angular Translate?',
             default: true
         },
         {
@@ -362,6 +371,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     this.rememberMeKey = this.config.get('rememberMeKey');
     this.enableTranslation = this.config.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
     this.testFrameworks = this.config.get('testFrameworks');
+    this.enableSocialSignIn = this.config.get('enableSocialSignIn');
     this.packagejs = packagejs;
 
     if (this.baseName != null &&
@@ -387,10 +397,15 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         if (this.enableTranslation == null) {
             this.enableTranslation = true;
         }
-        
+
         // backward compatibility on testing frameworks
         if (this.testFrameworks == null) {
             this.testFrameworks = [ 'gatling' ];
+        }
+
+        // If social sign in is not defined, it is desable by default
+        if (this.enableSocialSignIn == null) {
+            this.enableSocialSignIn = false;
         }
 
         console.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
@@ -416,6 +431,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             this.buildTool = props.buildTool;
             this.frontendBuilder = props.frontendBuilder;
             this.enableTranslation = props.enableTranslation;
+            this.enableSocialSignIn = props.enableSocialSignIn;
             this.testFrameworks = props.testFrameworks;
             this.rememberMeKey = crypto.randomBytes(20).toString('hex');
 
@@ -452,6 +468,7 @@ JhipsterGenerator.prototype.app = function app() {
     insight.track('app/buildTool', this.buildTool);
     insight.track('app/frontendBuilder', this.frontendBuilder);
     insight.track('app/enableTranslation', this.enableTranslation);
+    insight.track('app/enableSocialSignIn', this.enableSocialSignIn);
     insight.track('app/testFrameworks', this.testFrameworks);
 
     var packageFolder = this.packageName.replace(/\./g, '/');
@@ -578,6 +595,9 @@ JhipsterGenerator.prototype.app = function app() {
     // Create mail templates
     this.copy(resourceDir + '/mails/activationEmail.html', resourceDir + 'mails/activationEmail.html');
     this.copy(resourceDir + '/mails/passwordResetEmail.html', resourceDir + 'mails/passwordResetEmail.html');
+    if (this.enableSocialSignIn) {
+        this.copy(resourceDir + '/mails/socialRegistrationValidationEmail.html', resourceDir + 'mails/socialRegistrationValidationEmail.html');
+    }
 
     // Create Java files
     this.template('src/main/java/package/_Application.java', javaDir + '/Application.java', this, {});
@@ -785,6 +805,20 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/main/java/package/web/websocket/dto/_ActivityDTO.java', javaDir + 'web/websocket/dto/ActivityDTO.java', this, {});
     }
 
+    if (this.enableSocialSignIn) {
+        this.template('src/main/java/package/social/_package-info.java', javaDir + 'social/package-info.java', this, {});
+        this.template('src/main/java/package/social/_SocialController.java', javaDir + 'social/SocialController.java', this, {});
+        this.template('src/main/java/package/social/_SocialService.java', javaDir + 'social/SocialService.java', this, {});
+        this.template('src/main/java/package/social/_SocialUserConnection.java', javaDir + 'social/SocialUserConnection.java', this, {});
+        this.template('src/main/java/package/social/config/_package-info.java', javaDir + 'social/config/package-info.java', this, {});
+        this.template('src/main/java/package/social/config/_SimpleSignInAdapter.java', javaDir + 'social/config/SimpleSignInAdapter.java', this, {});
+        this.template('src/main/java/package/social/config/_SocialConfiguration.java', javaDir + 'social/config/SocialConfiguration.java', this, {});
+        this.template('src/main/java/package/social/config/_SimpleConnectionRepository.java', javaDir + 'social/config/SimpleConnectionRepository.java', this, {});
+        this.template('src/main/java/package/social/config/_SimpleUsersConnectionRepository.java', javaDir + 'social/config/SimpleUsersConnectionRepository.java', this, {});
+        this.template('src/main/java/package/social/repository/_package-info.java', javaDir + 'social/repository/package-info.java', this, {});
+        this.template('src/main/java/package/social/repository/_SocialUserConnectionRepository.java', javaDir + 'social/repository/SocialUserConnectionRepository.java', this, {});
+    }
+
     // Create Test Java files
     var testDir = 'src/test/java/' + packageFolder + '/';
     var testResourceDir = 'src/test/resources/';
@@ -812,6 +846,11 @@ JhipsterGenerator.prototype.app = function app() {
         this.template(testResourceDir + '_ehcache.xml', testResourceDir + 'ehcache.xml', this, {});
     }
 
+    if (this.enableSocialSignIn) {
+        this.template('src/test/java/package/social/_SocialServiceTest.java', testDir + 'social/SocialServiceTest.java', this, {});
+        this.template('src/test/java/package/social/config/_SimpleUsersConnectionRepositoryTest.java', testDir + 'social/config/SimpleUsersConnectionRepositoryTest.java', this, {});
+    }
+
     // Create Gatling test files
     if (this.testFrameworks.indexOf('gatling') != -1) {
         this.copy('src/test/gatling/conf/gatling.conf', 'src/test/gatling/conf/gatling.conf');
@@ -832,9 +871,9 @@ JhipsterGenerator.prototype.app = function app() {
 
     // normal CSS or SCSS?
     if (this.useSass) {
-        this.copy('src/main/scss/main.scss', 'src/main/scss/main.scss');
+        this.template('src/main/scss/main.scss', 'src/main/scss/main.scss');
     } else {
-        this.copy('src/main/webapp/assets/styles/main.css', 'src/main/webapp/assets/styles/main.css');
+        this.template('src/main/webapp/assets/styles/main.css', 'src/main/webapp/assets/styles/main.css');
     }
 
     // HTML5 BoilerPlate
@@ -896,6 +935,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/scripts/components/navbar/_navbar.controller.js', webappDir + 'scripts/components/navbar/navbar.controller.js', this, {});
     this.template(webappDir + '/scripts/components/user/_user.service.js', webappDir + 'scripts/components/user/user.service.js', this, {});
     this.template(webappDir + '/scripts/components/util/_base64.service.js', webappDir + 'scripts/components/util/base64.service.js', this, {});
+    this.template(webappDir + '/scripts/components/util/_capitalize.filter.js', webappDir + 'scripts/components/util/capitalize.filter.js', this, {});
     this.template(webappDir + '/scripts/components/util/_parse-links.service.js', webappDir + 'scripts/components/util/parse-links.service.js', this, {});
     this.template(webappDir + '/scripts/components/util/_truncate.filter.js', webappDir + 'scripts/components/util/truncate.filter.js', this, {});
     this.template(webappDir + '/scripts/components/util/_dateutil.service.js', webappDir + 'scripts/components/util/dateutil.service.js', this, {});
@@ -970,6 +1010,16 @@ JhipsterGenerator.prototype.app = function app() {
     this.copyJs(webappDir + '/scripts/app/main/_main.js', webappDir + 'scripts/app/main/main.js', this, {});
     this.template(webappDir + '/scripts/app/main/_main.controller.js', webappDir + 'scripts/app/main/main.controller.js', this, {});
 
+    // Social
+    if (this.enableSocialSignIn) {
+        this.copyHtml(webappDir + '/scripts/app/account/social/directive/_social.html', webappDir + 'scripts/app/account/social/directive/social.html');
+        this.template(webappDir + '/scripts/app/account/social/directive/_social.directive.js', webappDir + 'scripts/app/account/social/directive/social.directive.js', this, {});
+        this.copyHtml(webappDir + '/scripts/app/account/social/_social-register.html', webappDir + 'scripts/app/account/social/social-register.html');
+        this.template(webappDir + '/scripts/app/account/social/_social-register.controller.js', webappDir + 'scripts/app/account/social/social-register.controller.js', this, {});
+        this.template(webappDir + '/scripts/app/account/social/_social.service.js', webappDir + 'scripts/app/account/social/social.service.js', this, {});
+        this.copyJs(webappDir + '/scripts/app/account/social/_social-register.js', webappDir + 'scripts/app/account/social/social-register.js', this, {});
+    }
+
     // interceptor code
     this.template(webappDir + '/scripts/components/interceptor/_auth.interceptor.js', webappDir + 'scripts/components/interceptor/auth.interceptor.js', this, {});
     this.template(webappDir + '/scripts/components/interceptor/_errorhandler.interceptor.js', webappDir + 'scripts/components/interceptor/errorhandler.interceptor.js', this, {});
@@ -1043,6 +1093,7 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/components/user/user.service.js',
         'scripts/components/util/truncate.filter.js',
         'scripts/components/util/base64.service.js',
+        'scripts/components/util/capitalize.filter.js',
         'scripts/components/alert/alert.service.js',
         'scripts/components/alert/alert.directive.js',
         'scripts/components/util/parse-links.service.js',
@@ -1091,6 +1142,13 @@ JhipsterGenerator.prototype.app = function app() {
             'bower_components/messageformat/locale/fr.js',
             'scripts/components/language/language.service.js',
             'scripts/components/language/language.controller.js']);
+    }
+    if (this.enableSocialSignIn) {
+        appScripts = appScripts.concat([
+            'scripts/app/account/social/directive/social.directive.js',
+            'scripts/app/account/social/social-register.js',
+            'scripts/app/account/social/social-register.controller.js',
+            'scripts/app/account/social/social.service.js']);
     }
     if (this.authenticationType == 'xauth') {
         appScripts = appScripts.concat([
@@ -1165,6 +1223,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.config.set('buildTool', this.buildTool);
     this.config.set('frontendBuilder', this.frontendBuilder);
     this.config.set('enableTranslation', this.enableTranslation);
+    this.config.set('enableSocialSignIn', this.enableSocialSignIn);
     this.config.set('rememberMeKey', this.rememberMeKey);
     this.config.set('testFrameworks', this.testFrameworks);
 };
@@ -1190,10 +1249,10 @@ function removefolder(folder) {
 }
 
 JhipsterGenerator.prototype.install = function install() {
-  this.installDependencies({
-      skipInstall: this.options['skip-install'],
-      callback: this._injectDependenciesAndConstants.bind(this)
-  });
+    this.installDependencies({
+        skipInstall: this.options['skip-install'],
+        callback: this._injectDependenciesAndConstants.bind(this)
+    });
 };
 
 JhipsterGenerator.prototype._injectDependenciesAndConstants = function _injectDependenciesAndConstants() {
