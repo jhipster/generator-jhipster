@@ -440,3 +440,44 @@ describe('JHipster generator ', function () {
     ]);
   });
 });
+
+describe('JHipster generator ', function () {
+    before(function (done) {
+        helpers.run(path.join(__dirname, '../app'))
+            .withOptions({ skipInstall: true })
+            .withPrompts({
+                "baseName": "jhipster",
+                "packageName": "com.mycompany.myapp",
+                "packageFolder": "com/mycompany/myapp",
+                "authenticationType": "session",
+                "enableSocialSignIn": true,
+                "hibernateCache": "ehcache",
+                "clusteredHttpSession": "no",
+                "websocket": "no",
+                "databaseType": "sql",
+                "devDatabaseType": "h2Memory",
+                "prodDatabaseType": "mysql",
+                "useSass": false,
+                "enableTranslation" : true,
+                "buildTool": "maven",
+                "frontendBuilder": "grunt",
+                "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
+                "searchEngine": "no" })
+      .on('end', done);
+  });
+
+  it('creates expected files with social login enabled', function () {
+    assert.file([
+        'src/main/java/com/mycompany/myapp/config/social/SocialConfiguration.java',
+        'src/main/java/com/mycompany/myapp/domain/SocialUserConnection.java',
+        'src/main/java/com/mycompany/myapp/repository/CustomSocialConnectionRepository.java',
+        'src/main/java/com/mycompany/myapp/repository/CustomSocialUsersConnectionRepository.java',
+        'src/main/java/com/mycompany/myapp/repository/SocialUserConnectionRepository.java',
+        'src/main/java/com/mycompany/myapp/security/social/CustomSignInAdapter.java',
+        'src/main/java/com/mycompany/myapp/service/SocialService.java',
+        'src/main/java/com/mycompany/myapp/web/rest/SocialController.java',
+        'src/test/java/com/mycompany/myapp/repository/CustomSocialUsersConnectionRepositoryTest.java',
+        'src/test/java/com/mycompany/myapp/service/SocialServiceTest.java'
+    ]);
+  });
+});

@@ -806,17 +806,16 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     if (this.enableSocialSignIn) {
-        this.template('src/main/java/package/social/_package-info.java', javaDir + 'social/package-info.java', this, {});
-        this.template('src/main/java/package/social/_SocialController.java', javaDir + 'social/SocialController.java', this, {});
-        this.template('src/main/java/package/social/_SocialService.java', javaDir + 'social/SocialService.java', this, {});
-        this.template('src/main/java/package/social/_SocialUserConnection.java', javaDir + 'social/SocialUserConnection.java', this, {});
-        this.template('src/main/java/package/social/config/_package-info.java', javaDir + 'social/config/package-info.java', this, {});
-        this.template('src/main/java/package/social/config/_SimpleSignInAdapter.java', javaDir + 'social/config/SimpleSignInAdapter.java', this, {});
-        this.template('src/main/java/package/social/config/_SocialConfiguration.java', javaDir + 'social/config/SocialConfiguration.java', this, {});
-        this.template('src/main/java/package/social/config/_SimpleConnectionRepository.java', javaDir + 'social/config/SimpleConnectionRepository.java', this, {});
-        this.template('src/main/java/package/social/config/_SimpleUsersConnectionRepository.java', javaDir + 'social/config/SimpleUsersConnectionRepository.java', this, {});
-        this.template('src/main/java/package/social/repository/_package-info.java', javaDir + 'social/repository/package-info.java', this, {});
-        this.template('src/main/java/package/social/repository/_SocialUserConnectionRepository.java', javaDir + 'social/repository/SocialUserConnectionRepository.java', this, {});
+        this.template('src/main/java/package/security/social/_package-info.java', javaDir + 'security/social/package-info.java', this, {});
+        this.template('src/main/java/package/config/social/_SocialConfiguration.java', javaDir + 'config/social/SocialConfiguration.java', this, {});
+        this.template('src/main/java/package/domain/_SocialUserConnection.java', javaDir + 'domain/SocialUserConnection.java', this, {});
+        this.template('src/main/java/package/repository/_CustomSocialConnectionRepository.java', javaDir + 'repository/CustomSocialConnectionRepository.java', this, {});
+        this.template('src/main/java/package/repository/_CustomSocialUsersConnectionRepository.java', javaDir + 'repository/CustomSocialUsersConnectionRepository.java', this, {});
+        this.template('src/main/java/package/repository/_SocialUserConnectionRepository.java', javaDir + 'repository/SocialUserConnectionRepository.java', this, {});
+        this.template('src/main/java/package/security/social/_CustomSignInAdapter.java', javaDir + 'security/social/CustomSignInAdapter.java', this, {});
+        this.template('src/main/java/package/security/social/_package-info.java', javaDir + 'security/social/package-info.java', this, {});
+        this.template('src/main/java/package/service/_SocialService.java', javaDir + 'service/SocialService.java', this, {});
+        this.template('src/main/java/package/web/rest/_SocialController.java', javaDir + 'web/rest/SocialController.java', this, {});
     }
 
     // Create Test Java files
@@ -847,8 +846,8 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     if (this.enableSocialSignIn) {
-        this.template('src/test/java/package/social/_SocialServiceTest.java', testDir + 'social/SocialServiceTest.java', this, {});
-        this.template('src/test/java/package/social/config/_SimpleUsersConnectionRepositoryTest.java', testDir + 'social/config/SimpleUsersConnectionRepositoryTest.java', this, {});
+        this.template('src/test/java/package/repository/_CustomSocialUsersConnectionRepositoryTest.java', testDir + 'repository/CustomSocialUsersConnectionRepositoryTest.java', this, {});
+        this.template('src/test/java/package/service/_SocialServiceTest.java', testDir + 'service/SocialServiceTest.java', this, {});
     }
 
     // Create Gatling test files

@@ -1,7 +1,6 @@
-package <%=packageName%>.social.config;
+package <%=packageName%>.repository;
 
-import <%=packageName%>.social.SocialUserConnection;
-import <%=packageName%>.social.repository.SocialUserConnectionRepository;
+import <%=packageName%>.domain.SocialUserConnection;
 
 import org.springframework.social.connect.*;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,15 +10,15 @@ import org.springframework.util.MultiValueMap;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SimpleConnectionRepository implements ConnectionRepository {
+public class CustomSocialConnectionRepository implements ConnectionRepository {
 
-    private final String userId;
+    private String userId;
 
-    private final SocialUserConnectionRepository socialUserConnectionRepository;
+    private SocialUserConnectionRepository socialUserConnectionRepository;
 
-    private final ConnectionFactoryLocator connectionFactoryLocator;
+    private ConnectionFactoryLocator connectionFactoryLocator;
 
-    public SimpleConnectionRepository(String userId, SocialUserConnectionRepository socialUserConnectionRepository, ConnectionFactoryLocator connectionFactoryLocator) {
+    public CustomSocialConnectionRepository(String userId, SocialUserConnectionRepository socialUserConnectionRepository, ConnectionFactoryLocator connectionFactoryLocator) {
         this.userId = userId;
         this.socialUserConnectionRepository = socialUserConnectionRepository;
         this.connectionFactoryLocator = connectionFactoryLocator;

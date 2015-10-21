@@ -1,4 +1,4 @@
-package <%=packageName%>.social;
+package <%=packageName%>.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;

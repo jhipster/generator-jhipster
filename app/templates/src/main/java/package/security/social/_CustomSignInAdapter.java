@@ -1,4 +1,4 @@
-package <%=packageName%>.social.config;
+package <%=packageName%>.security.social;
 
 import <%=packageName%>.config.JHipsterProperties;
 
@@ -13,7 +13,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 
 import javax.inject.Inject;
 
-public final class SimpleSignInAdapter implements SignInAdapter {
+public class CustomSignInAdapter implements SignInAdapter {
 
     @Inject
     private UserDetailsService userDetailsService;
@@ -31,5 +31,4 @@ public final class SimpleSignInAdapter implements SignInAdapter {
         SecurityContextHolder.getContext().setAuthentication(newAuth);
         return jHipsterProperties.getSocial().getRedirectAfterSignIn();
     }
-
 }

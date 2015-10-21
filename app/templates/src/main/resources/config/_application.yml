@@ -28,18 +28,18 @@ spring:
     social:
         # see https://developers.google.com/+/web/signin/server-side-flow#step_1_create_a_client_id_and_client_secret
         google:
-            clientId: 265902152073-t5btnbi1vjqiil0aadpgvq0v0c32j1r5.apps.googleusercontent.com
-            clientSecret: YdB6HmeEAGZD_qNSHHtk0lCr
+            clientId: xxx
+            clientSecret: xxx
 
         # see https://developers.facebook.com/docs/facebook-login/v2.2
         facebook:
-            clientId: waitingUpdateOfSpringSocialFacebook
-            clientSecret: waitingUpdateOfSpringSocialFacebook
+            clientId: xxx
+            clientSecret: xxx
 
         # see https://apps.twitter.com/app/
         twitter:
-            clientId: Ur2i77DLVRfqJCZj592b1tG07
-            clientSecret: Jyug5gSA3xLgEzERCzhAjjcUMyshCk2IOzpmns0515UvJSf2hS
+            clientId: xxx
+            clientSecret: xxx
 <%_ } _%>
 
 security:

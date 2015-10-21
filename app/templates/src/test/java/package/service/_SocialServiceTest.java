@@ -1,4 +1,4 @@
-package <%=packageName%>.social;
+package <%=packageName%>.service;
 
 import <%=packageName%>.Application;
 import <%=packageName%>.domain.Authority;
@@ -68,7 +68,6 @@ public class SocialServiceTest {
         ReflectionTestUtils.setField(socialService, "userRepository", userRepository);
         ReflectionTestUtils.setField(socialService, "usersConnectionRepository", mockUsersConnectionRepository);
     }
-
 
     @Test(expected = IllegalArgumentException.class)
     public void testCreateSocialUserShouldThrowExceptionIfConnectionIsNull() {

@@ -1,10 +1,9 @@
-package <%=packageName%>.social;
+package <%=packageName%>.service;
 
 import <%=packageName%>.domain.Authority;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.AuthorityRepository;
 import <%=packageName%>.repository.UserRepository;
-import <%=packageName%>.service.MailService;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -89,8 +88,6 @@ public class SocialService {
     }
 
     /**
-     * @param userProfile
-     * @param providerId
      * @return login if provider manage a login like Twitter or Github otherwise email address.
      *         Because provider like Google or Facebook didn't provide login or login like "12099388847393"
      */

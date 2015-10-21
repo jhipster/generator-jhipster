@@ -1,7 +1,6 @@
-package <%=packageName%>.social.config;
+package <%=packageName%>.repository;
 
-import <%=packageName%>.social.SocialUserConnection;
-import <%=packageName%>.social.repository.SocialUserConnectionRepository;
+import <%=packageName%>.domain.SocialUserConnection;
 
 import org.springframework.social.connect.*;
 
@@ -9,13 +8,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class SimpleUsersConnectionRepository implements UsersConnectionRepository {
+public class CustomSocialUsersConnectionRepository implements UsersConnectionRepository {
 
-    private final SocialUserConnectionRepository socialUserConnectionRepository;
+    private SocialUserConnectionRepository socialUserConnectionRepository;
 
-    private final ConnectionFactoryLocator connectionFactoryLocator;
+    private ConnectionFactoryLocator connectionFactoryLocator;
 
-    public SimpleUsersConnectionRepository(SocialUserConnectionRepository socialUserConnectionRepository, ConnectionFactoryLocator connectionFactoryLocator) {
+    public CustomSocialUsersConnectionRepository(SocialUserConnectionRepository socialUserConnectionRepository, ConnectionFactoryLocator connectionFactoryLocator) {
         this.socialUserConnectionRepository = socialUserConnectionRepository;
         this.connectionFactoryLocator = connectionFactoryLocator;
     }
@@ -44,6 +43,6 @@ public class SimpleUsersConnectionRepository implements UsersConnectionRepositor
         if (userId == null) {
             throw new IllegalArgumentException("userId cannot be null");
         }
-        return new SimpleConnectionRepository(userId, socialUserConnectionRepository, connectionFactoryLocator);
+        return new CustomSocialConnectionRepository(userId, socialUserConnectionRepository, connectionFactoryLocator);
     };
 }

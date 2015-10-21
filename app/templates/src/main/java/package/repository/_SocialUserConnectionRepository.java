@@ -1,6 +1,6 @@
-package <%=packageName%>.social.repository;
+package <%=packageName%>.repository;
 
-import <%=packageName%>.social.SocialUserConnection;
+import <%=packageName%>.domain.SocialUserConnection;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,8 +1,7 @@
-package <%=packageName%>.social.config;
+package <%=packageName%>.repository;
 
 import <%=packageName%>.Application;
-import <%=packageName%>.social.SocialUserConnection;
-import <%=packageName%>.social.repository.SocialUserConnectionRepository;
+import <%=packageName%>.domain.SocialUserConnection;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -37,13 +36,13 @@ import static org.junit.Assert.*;
 @WebAppConfiguration
 @IntegrationTest
 @Transactional
-public class SimpleUsersConnectionRepositoryTest {
+public class CustomSocialUsersConnectionRepositoryTest {
 
     private ConnectionFactoryRegistry connectionFactoryRegistry;
 
     private TestFacebookConnectionFactory connectionFactory;
 
-    private SimpleUsersConnectionRepository usersConnectionRepository;
+    private CustomSocialUsersConnectionRepository usersConnectionRepository;
 
     private ConnectionRepository connectionRepository;
 
@@ -55,7 +54,7 @@ public class SimpleUsersConnectionRepositoryTest {
         connectionFactoryRegistry = new ConnectionFactoryRegistry();
         connectionFactory = new TestFacebookConnectionFactory();
         connectionFactoryRegistry.addConnectionFactory(connectionFactory);
-        usersConnectionRepository = new SimpleUsersConnectionRepository(socialUserConnectionRepository, connectionFactoryRegistry);
+        usersConnectionRepository = new CustomSocialUsersConnectionRepository(socialUserConnectionRepository, connectionFactoryRegistry);
         connectionRepository = usersConnectionRepository.createConnectionRepository("1");
     }
 
@@ -457,13 +456,11 @@ public class SimpleUsersConnectionRepositoryTest {
     }
 
     // test facebook provider
-
     private static class TestFacebookConnectionFactory extends OAuth2ConnectionFactory<TestFacebookApi> {
 
         public TestFacebookConnectionFactory() {
             super("facebook", new TestFacebookServiceProvider(), new TestFacebookApiAdapter());
         }
-
     }
 
     private static class TestFacebookServiceProvider implements OAuth2ServiceProvider<TestFacebookApi> {
@@ -553,17 +550,14 @@ public class SimpleUsersConnectionRepositoryTest {
         public void updateStatus(TestFacebookApi api, String message) {
 
         }
-
     }
 
     // test twitter provider
-
     private static class TestTwitterConnectionFactory extends OAuth1ConnectionFactory<TestTwitterApi> {
 
         public TestTwitterConnectionFactory() {
             super("twitter", new TestTwitterServiceProvider(), new TestTwitterApiAdapter());
         }
-
     }
 
     private static class TestTwitterServiceProvider implements OAuth1ServiceProvider<TestTwitterApi> {

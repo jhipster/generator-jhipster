@@ -11,6 +11,7 @@ import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.UserService;
 import <%=packageName%>.web.rest.dto.KeyAndPasswordDTO;
 import <%=packageName%>.web.rest.dto.UserDTO;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
