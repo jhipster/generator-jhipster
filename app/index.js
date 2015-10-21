@@ -84,29 +84,31 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                     name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)'
                 },
                 {
+                    value: 'session-social',
+                    name: 'HTTP Session Authentication with social login enabled (Google, Facebook, Twitter). Warning, this only works with SQL databases!'
+                },
+                {
                     value: 'oauth2',
-                    name: 'OAuth2 Authentication (stateless, with an OAuth2 server implementation - Warning! Social sign in will not be available)'
+                    name: 'OAuth2 Authentication (stateless, with an OAuth2 server implementation)'
                 },
                 {
                     value: 'xauth',
-                    name: 'Token-based authentication (stateless, with a token - Warning! Social sign in will not be available)'
+                    name: 'Token-based authentication (stateless, with a token)'
                 }
             ],
             default: 0
         },
         {
             when: function (response) {
-                return response.authenticationType == 'session';
+                if (response.authenticationType == 'session-social') {
+                    response.databaseType = 'sql';
+                    return false;
+                }
+                return true;
             },
-            type: 'confirm',
-            name: 'enableSocialSignIn',
-            message: '(4/' + questions + ') Would you like to enable social sign in (Google, Facebook, Twitter)?',
-            default: false
-        },
-        {
             type: 'list',
             name: 'databaseType',
-            message: '(5/' + questions + ') Which *type* of database would you like to use?',
+            message: '(4/' + questions + ') Which *type* of database would you like to use?',
             choices: [
                 {
                     value: 'sql',
@@ -129,7 +131,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'prodDatabaseType',
-            message: '(6/' + questions + ') Which *production* database would you like to use?',
+            message: '(5/' + questions + ') Which *production* database would you like to use?',
             choices: [
                 {
                     value: 'mysql',
@@ -152,7 +154,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'devDatabaseType',
-            message: '(7/' + questions + ') Which *development* database would you like to use?',
+            message: '(6/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'h2Disk',
@@ -175,7 +177,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'devDatabaseType',
-            message: '(7/' + questions + ') Which *development* database would you like to use?',
+            message: '(6/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'h2Disk',
@@ -198,7 +200,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'devDatabaseType',
-            message: '(7/' + questions + ') Which *development* database would you like to use?',
+            message: '(6/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
                     value: 'h2Disk',
@@ -221,7 +223,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             },
             type: 'list',
             name: 'hibernateCache',
-            message: '(8/' + questions + ') Do you want to use Hibernate 2nd level cache?',
+            message: '(7/' + questions + ') Do you want to use Hibernate 2nd level cache?',
             choices: [
                 {
                     value: 'no',
@@ -241,7 +243,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'searchEngine',
-            message: '(9/' + questions + ') Do you want to use a search engine in your application?',
+            message: '(8/' + questions + ') Do you want to use a search engine in your application?',
             choices: [
                 {
                     value: 'no',
@@ -257,7 +259,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'clusteredHttpSession',
-            message: '(10/' + questions + ') Do you want to use clustered HTTP sessions?',
+            message: '(9/' + questions + ') Do you want to use clustered HTTP sessions?',
             choices: [
                 {
                     value: 'no',
@@ -273,7 +275,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'websocket',
-            message: '(11/' + questions + ') Do you want to use WebSockets?',
+            message: '(10/' + questions + ') Do you want to use WebSockets?',
             choices: [
                 {
                     value: 'no',
@@ -289,7 +291,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         {
             type: 'list',
             name: 'buildTool',
-            message: '(12/' + questions + ') Would you like to use Maven or Gradle for building the backend?',
+            message: '(11/' + questions + ') Would you like to use Maven or Gradle for building the backend?',
             choices: [
                 {
                     value: 'maven',
@@ -315,19 +317,19 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                     name: 'Gulp.js'
                 }
             ],
-            message: '(13/' + questions + ') Would you like to use Grunt or Gulp.js for building the frontend?',
+            message: '(12/' + questions + ') Would you like to use Grunt or Gulp.js for building the frontend?',
             default: 'grunt'
         },
         {
             type: 'confirm',
             name: 'useSass',
-            message: '(14/' + questions + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
+            message: '(13/' + questions + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
             default: false
         },
         {
             type: 'confirm',
             name: 'enableTranslation',
-            message: '(15/' + questions + ') Would you like to enable translation support with Angular Translate?',
+            message: '(14/' + questions + ') Would you like to enable translation support with Angular Translate?',
             default: true
         },
         {
@@ -403,7 +405,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             this.testFrameworks = [ 'gatling' ];
         }
 
-        // If social sign in is not defined, it is desable by default
+        // If social sign in is not defined, it is disabled by default
         if (this.enableSocialSignIn == null) {
             this.enableSocialSignIn = false;
         }
@@ -417,9 +419,19 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             if (props.insight !== undefined) {
                 insight.optOut = !props.insight;
             }
+            // Read the authenticationType to extract the enableSocialSignIn
+            // This allows to have only one authenticationType question for the moment
+            if (props.authenticationType == 'session-social') {
+                this.authenticationType = 'session';
+                this.enableSocialSignIn = true;
+            } else {
+                this.authenticationType = props.authenticationType;
+                this.enableSocialSignIn = false;
+            }
+            props.enableSocialSignIn = this.enableSocialSignIn;
+
             this.baseName = props.baseName;
             this.packageName = props.packageName;
-            this.authenticationType = props.authenticationType;
             this.hibernateCache = props.hibernateCache;
             this.clusteredHttpSession = props.clusteredHttpSession;
             this.websocket = props.websocket;
