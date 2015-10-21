@@ -10,11 +10,11 @@ Example:
         src/main/java/package/repository/FooRepository.java
         src/main/java/package/web/rest/FooResource.java
         src/main/resources/config/liquibase/changelog/20150128232313_added_entity_Foo.xml
-        src/main/webapp/scripts/app/entities/foo/foos.html
-        src/main/webapp/scripts/app/entities/foo/foo-detail.html
-        src/main/webapp/scripts/app/entities/foo/foo.js
-        src/main/webapp/scripts/app/entities/foo/foo.controller.js
-        src/main/webapp/scripts/app/entities/foo/foo-detail.controller.js
+        src/main/webapp/scripts/app/foo/foos.html
+        src/main/webapp/scripts/app/foo/foo-detail.html
+        src/main/webapp/scripts/app/foo/foo.js
+        src/main/webapp/scripts/app/foo/foo.controller.js
+        src/main/webapp/scripts/app/foo/foo-detail.controller.js
         src/main/webapp/scripts/components/entities/foo/foo.service.js
         src/test/java/package/web/rest/FooResourceTest.java
         src/main/webapp/i18n/en/foo.json

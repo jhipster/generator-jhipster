@@ -25,7 +25,7 @@ Generator.prototype.addAppScriptToIndex = function (script) {
             file: fullPath,
             needle: '<!-- endbuild -->',
             splicable: [
-                    '<script src="scripts/app/entities/' + script + '"></script>'
+                    '<script src="scripts/app/' + script + '"></script>'
             ]
         });
     } catch (e) {

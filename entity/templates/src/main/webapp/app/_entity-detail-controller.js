@@ -1,44 +1,63 @@
-'use strict';
+(function () {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('<%= entityClass %>DetailController', function ($scope, $rootScope, $stateParams, entity<% for (idx in differentTypes) { %>, <%= differentTypes[idx] %><% } %>) {
-        $scope.<%= entityInstance %> = entity;
-        $scope.load = function (id) {
-            <%= entityClass %>.get({id: id}, function(result) {
-                $scope.<%= entityInstance %> = result;
+    angular
+        .module('<%=angularAppName%>')
+        .controller('<%= entityClass %>DetailController', controller);
+
+    controller.$inject = ['$rootScope',
+        '$stateParams',
+        'entity'<% for (idx in differentTypes) { %>,
+        '<%= differentTypes[idx] %>'<% } %>];
+    /* @ngInject */
+
+    function controller($rootScope,
+            $stateParams,
+            entity<% for (idx in differentTypes) { %>,
+            <%= differentTypes[idx] %><% } %>){
+
+            var vm = this;
+            vm.<%= entityInstance %> = entity;
+
+            vm.load = function (id) {
+                <%= entityClass %>.get({id: id}, function(result) {
+                    vm.<%= entityInstance %> = result;
+                });
+            };
+
+            var unsubscribe = $rootScope.$on('<%=angularAppName%>:<%= entityInstance %>Update', function(event, result) {
+                vm.<%= entityInstance %> = result;
             });
-        };
-        var unsubscribe = $rootScope.$on('<%=angularAppName%>:<%= entityInstance %>Update', function(event, result) {
-            $scope.<%= entityInstance %> = result;
-        });
-        $scope.$on('$destroy', unsubscribe);
+            vm.$on('$destroy', unsubscribe);
 
-        <%_ if (fieldsContainBlob) { _%>
+            <%_ if (fieldsContainBlob) { _%>
 
-        $scope.byteSize = function (base64String) {
-            if (!angular.isString(base64String)) {
-                return '';
-            }
-            function endsWith(suffix, str) {
-                return str.indexOf(suffix, str.length - suffix.length) !== -1;
-            }
-            function paddingSize(base64String) {
-                if (endsWith('==', base64String)) {
-                    return 2;
+            vm.byteSize = function (base64String) {
+                if (!angular.isString(base64String)) {
+                    return '';
                 }
-                if (endsWith('=', base64String)) {
-                    return 1;
+                function endsWith(suffix, str) {
+                    return str.indexOf(suffix, str.length - suffix.length) !== -1;
                 }
-                return 0;
-            }
-            function size(base64String) {
-                return base64String.length / 4 * 3 - paddingSize(base64String);
-            }
-            function formatAsBytes(size) {
-                return size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " bytes";
-            }
+                function paddingSize(base64String) {
+                    if (endsWith('==', base64String)) {
+                        return 2;
+                    }
+                    if (endsWith('=', base64String)) {
+                        return 1;
+                    }
+                    return 0;
+                }
+                function size(base64String) {
+                    return base64String.length / 4 * 3 - paddingSize(base64String);
+                }
+                function formatAsBytes(size) {
+                    return size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " bytes";
+                }
 
-            return formatAsBytes(size(base64String));
-        };
-        <%_ } _%>
-    });
+                return formatAsBytes(size(base64String));
+            };
+            <%_ } _%>
+    }
+})();
+

@@ -1256,38 +1256,44 @@ EntityGenerator.prototype.files = function files() {
     }
 
     this.copyHtml('src/main/webapp/app/_entities.html',
-        'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + 's.html', this, {}, true);
+        'src/main/webapp/scripts/app/' +    this.entityInstance  + '/views/' + this.entityInstance + 's.html', this, {}, true);
     this.copyHtml('src/main/webapp/app/_entity-detail.html',
-        'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + '-detail.html', this, {}, true);
+        'src/main/webapp/scripts/app/' +    this.entityInstance  + '/views/' + this.entityInstance + '-detail.html', this, {}, true);
     this.copyHtml('src/main/webapp/app/_entity-dialog.html',
-        'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + '-dialog.html', this, {}, true);
+        'src/main/webapp/scripts/app/' +    this.entityInstance  + '/views/' + this.entityInstance + '-dialog.html', this, {}, true);
 
     this.addRouterToMenu(this.entityInstance, this.enableTranslation);
 
+    //Route
     this.template('src/main/webapp/app/_entity.js',
-        'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '.js', this, {});
-    this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.js');
+        'src/main/webapp/scripts/app/' +    this.entityInstance + '/config/' +  this.entityInstance + '.client.routes' + '.js', this, {});
+    this.addAppScriptToIndex(this.entityInstance + '/config/' +  this.entityInstance + '.client.routes' + '.js');
+
+    //Controller List
     this.template('src/main/webapp/app/_entity-controller.js',
-        'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '.controller' + '.js', this, {});
-    this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.controller' + '.js');
-    this.template('src/main/webapp/app/_entity-dialog-controller.js',
-        'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '-dialog.controller' + '.js', this, {});
-    this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '-dialog.controller' + '.js');
+        'src/main/webapp/scripts/app/' +    this.entityInstance + '/controllers/' + this.entityInstance + '.client.list.controller' + '.js', this, {});
+    this.addAppScriptToIndex(this.entityInstance + '/controllers/' + this.entityInstance + '.client.list.controller' + '.js');
 
+    //Controller Detail
     this.template('src/main/webapp/app/_entity-detail-controller.js',
-        'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '-detail.controller' + '.js', this, {});
-    this.template('src/test/javascript/spec/app/_entity-detail-controller.spec.js',
-        'src/test/javascript/spec/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '-detail.controller.spec.js', this, {});
-    this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '-detail.controller' + '.js');
+        'src/main/webapp/scripts/app/' +    this.entityInstance + '/controllers/' + this.entityInstance + '.client.detail.controller' + '.js', this, {});
+    this.addAppScriptToIndex(this.entityInstance + '/controllers/' + this.entityInstance + '.client.detail.controller' + '.js');
 
+    //Controller Edit/Create
+    this.template('src/main/webapp/app/_entity-dialog-controller.js',
+        'src/main/webapp/scripts/app/' +    this.entityInstance + '/controllers/' + this.entityInstance + '.client.dialog.controller' + '.js', this, {});
+    this.addAppScriptToIndex(this.entityInstance + '/controllers/' + this.entityInstance + '.client.dialog.controller' + '.js');
+
+    //Services
     this.template('src/main/webapp/components/_entity-service.js',
-        'src/main/webapp/scripts/components/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js', this, {});
-    this.addComponentsScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.service' + '.js');
+        'src/main/webapp/scripts/app/' +    this.entityInstance + '/services/' + this.entityInstance + '.client.services' + '.js', this, {});
+    this.addComponentsScriptToIndex(this.entityInstance + '/services/' + this.entityInstance + '.client.services' + '.js');
 
+    //Services ElasticSearch
     if (this.searchEngine == 'elasticsearch') {
         this.template('src/main/webapp/components/_entity-search-service.js',
-            'src/main/webapp/scripts/components/entities/' + this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js', this, {});
-        this.addComponentsScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js');
+            'src/main/webapp/scripts/app/' + this.entityInstance + '/services/' + this.entityInstance + '.client.search.services' + '.js', this, {});
+        this.addComponentsScriptToIndex(this.entityInstance + '/services/' + this.entityInstance + '.client.search.services' + '.js');
     }
 
     this.template('src/test/java/package/web/rest/_EntityResourceTest.java',
