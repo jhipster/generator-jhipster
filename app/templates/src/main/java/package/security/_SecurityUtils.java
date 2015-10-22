@@ -58,7 +58,7 @@ public final class SecurityUtils {
      * 
      * @return the current user id
      */
-    public static <%= pkType %> getCurrentLoginId() {
+    public static <%= pkType %> getCurrentUserId() {
         return getCurrentUser().getId();
     }
 
