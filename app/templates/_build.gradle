@@ -30,6 +30,7 @@ bootRepackage {
 
 springBoot {
     mainClass = '<%= packageName %>.Application'
+    executable = true
 }
 
 bootRun {
