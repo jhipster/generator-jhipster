@@ -16,6 +16,7 @@ var LanguagesGenerator = module.exports = function LanguagesGenerator(args, opti
     this.searchEngine = this.config.get('searchEngine');
     this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
     this.enableTranslation = this.config.get('enableTranslation');
+    this.enableSocialSignIn = this.config.get('enableSocialSignIn');
 };
 
 util.inherits(LanguagesGenerator, yeoman.generators.Base);
