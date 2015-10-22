@@ -1266,34 +1266,34 @@ EntityGenerator.prototype.files = function files() {
 
     //Route
     this.template('src/main/webapp/app/_entity.js',
-        'src/main/webapp/scripts/app/' +    this.entityInstance + '/config/' +  this.entityInstance + '.client.routes' + '.js', this, {});
-    this.addAppScriptToIndex(this.entityInstance + '/config/' +  this.entityInstance + '.client.routes' + '.js');
+        'src/main/webapp/scripts/app/' +    this.entityInstance + '/config/' +  this.entityInstance + '.routes' + '.js', this, {});
+    this.addAppScriptToIndex(this.entityInstance + '/config/' +  this.entityInstance + '.routes' + '.js');
 
     //Controller List
     this.template('src/main/webapp/app/_entity-controller.js',
-        'src/main/webapp/scripts/app/' +    this.entityInstance + '/controllers/' + this.entityInstance + '.client.list.controller' + '.js', this, {});
-    this.addAppScriptToIndex(this.entityInstance + '/controllers/' + this.entityInstance + '.client.list.controller' + '.js');
+        'src/main/webapp/scripts/app/' +    this.entityInstance + '/controllers/' + this.entityInstance + '.list.controller' + '.js', this, {});
+    this.addAppScriptToIndex(this.entityInstance + '/controllers/' + this.entityInstance + '.list.controller' + '.js');
 
     //Controller Detail
     this.template('src/main/webapp/app/_entity-detail-controller.js',
-        'src/main/webapp/scripts/app/' +    this.entityInstance + '/controllers/' + this.entityInstance + '.client.detail.controller' + '.js', this, {});
-    this.addAppScriptToIndex(this.entityInstance + '/controllers/' + this.entityInstance + '.client.detail.controller' + '.js');
+        'src/main/webapp/scripts/app/' +    this.entityInstance + '/controllers/' + this.entityInstance + '.detail.controller' + '.js', this, {});
+    this.addAppScriptToIndex(this.entityInstance + '/controllers/' + this.entityInstance + '.detail.controller' + '.js');
 
     //Controller Edit/Create
     this.template('src/main/webapp/app/_entity-dialog-controller.js',
-        'src/main/webapp/scripts/app/' +    this.entityInstance + '/controllers/' + this.entityInstance + '.client.dialog.controller' + '.js', this, {});
-    this.addAppScriptToIndex(this.entityInstance + '/controllers/' + this.entityInstance + '.client.dialog.controller' + '.js');
+        'src/main/webapp/scripts/app/' +    this.entityInstance + '/controllers/' + this.entityInstance + '.dialog.controller' + '.js', this, {});
+    this.addAppScriptToIndex(this.entityInstance + '/controllers/' + this.entityInstance + '.dialog.controller' + '.js');
 
     //Services
-    this.template('src/main/webapp/components/_entity-service.js',
-        'src/main/webapp/scripts/app/' +    this.entityInstance + '/services/' + this.entityInstance + '.client.services' + '.js', this, {});
-    this.addComponentsScriptToIndex(this.entityInstance + '/services/' + this.entityInstance + '.client.services' + '.js');
+    this.template('src/main/webapp/app/_entity-service.js',
+        'src/main/webapp/scripts/app/' +    this.entityInstance + '/services/' + this.entityInstance + '.services' + '.js', this, {});
+    this.addComponentsScriptToIndex(this.entityInstance + '/services/' + this.entityInstance + '.services' + '.js');
 
     //Services ElasticSearch
     if (this.searchEngine == 'elasticsearch') {
-        this.template('src/main/webapp/components/_entity-search-service.js',
-            'src/main/webapp/scripts/app/' + this.entityInstance + '/services/' + this.entityInstance + '.client.search.services' + '.js', this, {});
-        this.addComponentsScriptToIndex(this.entityInstance + '/services/' + this.entityInstance + '.client.search.services' + '.js');
+        this.template('src/main/webapp/app/_entity-search-service.js',
+            'src/main/webapp/scripts/app/' + this.entityInstance + '/services/' + this.entityInstance + '.search.services' + '.js', this, {});
+        this.addComponentsScriptToIndex(this.entityInstance + '/services/' + this.entityInstance + '.search.services' + '.js');
     }
 
     this.template('src/test/java/package/web/rest/_EntityResourceTest.java',

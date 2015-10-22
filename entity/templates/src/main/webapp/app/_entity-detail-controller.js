@@ -6,58 +6,59 @@
         .controller('<%= entityClass %>DetailController', controller);
 
     controller.$inject = ['$rootScope',
-        '$stateParams',
         'entity'<% for (idx in differentTypes) { %>,
         '<%= differentTypes[idx] %>'<% } %>];
     /* @ngInject */
-
     function controller($rootScope,
-            $stateParams,
-            entity<% for (idx in differentTypes) { %>,
-            <%= differentTypes[idx] %><% } %>){
+        entity<% for (idx in differentTypes) { %>,
+        <%= differentTypes[idx] %><% } %>){
 
-            var vm = this;
-            vm.<%= entityInstance %> = entity;
+        var vm = this;
+        vm.<%= entityInstance %> = entity;
 
-            vm.load = function (id) {
-                <%= entityClass %>.get({id: id}, function(result) {
-                    vm.<%= entityInstance %> = result;
-                });
-            };
+        activate();
+        function activate() {
 
-            var unsubscribe = $rootScope.$on('<%=angularAppName%>:<%= entityInstance %>Update', function(event, result) {
+        }
+
+        vm.load = function (id) {
+            <%= entityClass %>.get({id: id}, function(result) {
                 vm.<%= entityInstance %> = result;
             });
-            vm.$on('$destroy', unsubscribe);
+        };
 
-            <%_ if (fieldsContainBlob) { _%>
+        var unsubscribe = $rootScope.$on('<%=angularAppName%>:<%= entityInstance %>Update', function(event, result) {
+            vm.<%= entityInstance %> = result;
+        });
 
-            vm.byteSize = function (base64String) {
-                if (!angular.isString(base64String)) {
-                    return '';
-                }
-                function endsWith(suffix, str) {
-                    return str.indexOf(suffix, str.length - suffix.length) !== -1;
-                }
-                function paddingSize(base64String) {
-                    if (endsWith('==', base64String)) {
-                        return 2;
-                    }
-                    if (endsWith('=', base64String)) {
-                        return 1;
-                    }
-                    return 0;
-                }
-                function size(base64String) {
-                    return base64String.length / 4 * 3 - paddingSize(base64String);
-                }
-                function formatAsBytes(size) {
-                    return size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " bytes";
-                }
+        <%_ if (fieldsContainBlob) { _%>
 
-                return formatAsBytes(size(base64String));
-            };
-            <%_ } _%>
+        vm.byteSize = function (base64String) {
+            if (!angular.isString(base64String)) {
+                return '';
+            }
+            function endsWith(suffix, str) {
+                return str.indexOf(suffix, str.length - suffix.length) !== -1;
+            }
+            function paddingSize(base64String) {
+                if (endsWith('==', base64String)) {
+                    return 2;
+                }
+                if (endsWith('=', base64String)) {
+                    return 1;
+                }
+                return 0;
+            }
+            function size(base64String) {
+                return base64String.length / 4 * 3 - paddingSize(base64String);
+            }
+            function formatAsBytes(size) {
+                return size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " bytes";
+            }
+
+            return formatAsBytes(size(base64String));
+        };
+        <%_ } _%>
     }
 })();
 

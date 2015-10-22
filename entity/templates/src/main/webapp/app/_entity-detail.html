@@ -1,6 +1,6 @@
 <% var keyPrefix = angularAppName + '.'+ entityInstance; %>
-<div ng-init="load();">
-    <h2><span translate="<%= keyPrefix %>.detail.title"><%= entityClass %></span> {{<%= entityInstance %>.id}}</h2>
+<div ng-init="vm.load();">
+    <h2><span translate="<%= keyPrefix %>.detail.title"><%= entityClass %></span> {{vm.<%= entityInstance %>.id}}</h2>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -17,14 +17,14 @@
                 </td>
                 <td>
                     <%_ if (fields[fieldId].fieldIsEnum) { _%>
-                    <span class="form-control-static" translate="{{'<%= angularAppName %>.<%= fields[fieldId].fieldType %>.' + <%= entityInstance %>.<%= fields[fieldId].fieldName %>}}">{{<%= entityInstance %>.<%= fields[fieldId].fieldName %>}}</span>
+                    <span class="form-control-static" translate="{{'<%= angularAppName %>.<%= fields[fieldId].fieldType %>.' + vm.<%= entityInstance %>.<%= fields[fieldId].fieldName %>}}">{{vm.<%= entityInstance %>.<%= fields[fieldId].fieldName %>}}</span>
                     <%_ } else if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'image') { _%>
-                    <img data-ng-src="{{'data:' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-width: 100%;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/>
+                    <img data-ng-src="{{'data:' + vm.<%=entityInstance %>.<%=fields[fieldId].fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-width: 100%;" ng-if="vm.<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/>
                     <%_ } else { _%>
-                    <span class="form-control-static">{{<%= entityInstance %>.<%=fields[fieldId].fieldName%>}}</span>
+                    <span class="form-control-static">{{ vm.<%= entityInstance %>.<%=fields[fieldId].fieldName%> }}</span>
                     <%_ } _%>
                     <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
-                    <div>{{<%= entityInstance %>.<%= fields[fieldId].fieldName %>ContentType}}  {{byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}</div>
+                    <div>{{vm.<%= entityInstance %>.<%= fields[fieldId].fieldName %>ContentType}}  {{byteSize(vm.<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}</div>
                     <%_ } _%>
                 </td>
             </tr>
@@ -47,7 +47,7 @@
                 <td>
                     <%_ if (otherEntityName == 'user') { _%>
                         <%_ if (relationshipType == 'many-to-many') { _%>
-                    <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldName %>s">
+                    <span ng-repeat="<%= relationshipFieldName %> in vm.<%= entityInstance %>.<%= relationshipFieldName %>s">
                         {{<%= relationshipFieldName %>.<%= otherEntityField %>}}{{$last ? '' : ', '}}
                     <span>
                         <%_ } else { _%>
@@ -59,7 +59,7 @@
                         <%_ } _%>
                     <%_ } else { _%>
                         <%_ if (relationshipType == 'many-to-many') { _%>
-                    <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldName %>s">
+                    <span ng-repeat="<%= relationshipFieldName %> in vm.<%= entityInstance %>.<%= relationshipFieldName %>s">
                         <a class="form-control-static" ui-sref="<%= otherEntityName %>.detail({id: {{<%= relationshipFieldName %>.id}}})">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
                     <span>
                         <%_ } else { _%>

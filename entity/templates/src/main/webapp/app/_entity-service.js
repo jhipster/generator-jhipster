@@ -1,8 +1,15 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .factory('<%= entityClass %>', function ($resource, DateUtils) {
-        return $resource('api/<%= entityInstance %>s/:id', {}, {
+    angular
+        .module('<%=angularAppName%>')
+        .factory('<%= entityClass %>', factory);
+
+    factory.$inject = ['$resource', 'DateUtils'];
+    /* @ngInject */
+    function factory($resource, DateUtils) {
+
+        var actions = {
             'query': { method: 'GET', isArray: true},
             'get': {
                 method: 'GET',
@@ -28,5 +35,12 @@ angular.module('<%=angularAppName%>')
                 }
             }<% } else { %>
             'update': { method:'PUT' }<% } %>
-        });
-    });
+        };
+
+        var API_URL = 'api/<%= entityInstance %>s/:id';
+
+        var params = {};
+
+        return $resource(API_URL, params, actions);
+    }
+})();

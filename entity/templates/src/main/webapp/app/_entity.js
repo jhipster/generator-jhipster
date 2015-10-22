@@ -3,13 +3,10 @@
 
     var module = angular.module('<%=angularAppName%>');
 
-
     module.config(configure);
 
-    /* @ngInject */
     configure.$inject = ['$stateProvider'];
-
-
+    /* @ngInject */
     function configure($stateProvider) {
         $stateProvider
             .state('<%= entityInstance %>', {
@@ -23,7 +20,7 @@
                     'content@': {
                         templateUrl: 'scripts/app/<%= entityInstance %>/views/<%= entityInstance %>s.html',
                         controller: '<%= entityClass %>Controller',
-                        controllerAs: 'vm',
+                        controllerAs: 'vm'
                     }
                 },
                 resolve: {<% if (enableTranslation){ %>
@@ -48,7 +45,7 @@
                     'content@': {
                         templateUrl: 'scripts/app/<%= entityInstance %>/views/<%= entityInstance %>-detail.html',
                         controller: '<%= entityClass %>DetailController',
-                        controllerAs: 'vm',
+                        controllerAs: 'vm'
                     }
                 },
                 resolve: {<% if (enableTranslation){ %>
@@ -125,5 +122,4 @@
 
             });
     }
-
 })();

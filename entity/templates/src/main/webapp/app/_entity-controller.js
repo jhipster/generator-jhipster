@@ -9,12 +9,14 @@
         '<%= entityClass %>Search \' <% } %><% if (pagination != 'no') { %>,
         'ParseLinks' <% } %>];
     /* @ngInject */
-
     function controller(<%= entityClass %><% if (searchEngine == 'elasticsearch') { %><%= entityClass %>Search<% } %><% if (pagination != 'no') { %>,
             ParseLinks<% } %>){
 
             var vm = this;
             vm.<%= entityInstance %>s = [];
+            <%_ if (pagination == 'pager' || pagination == 'pagination' || pagination == 'infinite-scroll') { _%>
+            vm.page = 0;
+             <%_ } _%>
 
             activate();
             function activate() {
@@ -22,7 +24,6 @@
             }
 
             <%_ if (pagination == 'pager' || pagination == 'pagination') { _%>
-            vm.page = 0;
             vm.loadAll = function() {
                 <%= entityClass %>.query({page: vm.page, size: 20}, function(result, headers) {
                     vm.links = ParseLinks.parse(headers('link'));
@@ -31,7 +32,6 @@
             };
             <%_ } _%>
             <%_ if (pagination == 'infinite-scroll') { _%>
-            vm.page = 0;
             vm.loadAll = function() {
                 <%= entityClass %>.query({page: vm.page, size: 20}, function(result, headers) {
                     vm.links = ParseLinks.parse(headers('link'));
