@@ -416,6 +416,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     (response.fieldType == 'LocalDate' ||
                     response.fieldType == 'ZonedDateTime' ||
                     response.fieldType == 'UUID' ||
+                    response.fieldType == 'Date' ||
                     response.fieldType == 'Boolean' ||
                     response.fieldIsEnum == true);
             },
