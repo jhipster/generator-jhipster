@@ -12,7 +12,7 @@
         <%_ } else { _%>
         <div class="col-md-4 col-md-offset-4">
         <%_ } _%>
-            <form class="form" role="form" ng-submit="login($event)">
+            <form class="form" role="form" ng-submit="login($event)" name="form">
                 <div class="form-group">
                     <label for="username" translate="global.form.username">Login</label>
                     <input type="text" class="form-control" id="username" placeholder="{{'global.form.username.placeholder' | translate}}" ng-model="username">
@@ -30,7 +30,9 @@
                     </label>
                 </div>
                 <%_ } _%>
-                <button type="submit" class="btn btn-primary" translate="login.form.button">Sign in</button>
+                <button type="submit" class="btn btn-primary" ladda="form.$submitted">
+                    <span translate="login.form.button">Sign in</span>
+                </button>
             </form>
             <p></p>
             <div class="alert alert-warning">

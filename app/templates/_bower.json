@@ -13,6 +13,7 @@
         "angular-dynamic-locale": "0.1.27",
         "angular-i18n": "1.4.5",
         <%_ } _%>
+        "angular-ladda": "0.3.1",
         "angular-local-storage": "0.2.2",
         "angular-resource": "1.4.5",
         "angular-sanitize": "1.4.5",
