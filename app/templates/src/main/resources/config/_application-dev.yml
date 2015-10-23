@@ -36,6 +36,7 @@ spring:
         <%_ } else if (devDatabaseType == 'oracle') { _%>
         url: jdbc:oracle:thin:@localhost:1521:<%= baseName %>
         <%_ } else if (devDatabaseType == 'h2Disk') { _%>
+        # Warning! We have reports this does not work on Windows, see https://github.com/jhipster/generator-jhipster/issues/2202
         url: jdbc:h2:file:./target/h2db/db:jhipster;DB_CLOSE_DELAY=-1
         <%_ } else if (devDatabaseType == 'h2Memory') { _%>
         url: jdbc:h2:mem:jhipster;DB_CLOSE_DELAY=-1
