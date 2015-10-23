@@ -1,13 +1,23 @@
 'use strict';
 
-angular.module('<%=angularAppName%>')
-    .config(function ($stateProvider) {
+
+(function () {
+    'use strict';
+    angular
+        .module('<%=angularAppName%>.account.login')
+        .controller('LoginController', controller);
+    config.inject = [];
+    /* @ngInject */
+    function controller($stateProvider) {
+
+        var vm = this;
+
         $stateProvider
             .state('login', {
                 parent: 'account',
                 url: '/login',
                 data: {
-                    authorities: [], 
+                    authorities: [],
                     pageTitle: 'login.title'
                 },
                 views: {
@@ -23,4 +33,6 @@ angular.module('<%=angularAppName%>')
                     }]
                 }
             });
-    });
+
+    }
+})();

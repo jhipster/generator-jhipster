@@ -1,27 +1,41 @@
-'use strict';
+(function () {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('LoginController', function ($rootScope, $scope, $state, $timeout, Auth) {
-        $scope.user = {};
-        $scope.errors = {};
+    angular.module('<%=angularAppName%>.account.login')
+        .controller('LoginController', controller);
 
-        $scope.rememberMe = true;
+    controller.inject = ['$rootScope', '$state', '$timeout', 'Auth'];
+    /* @ngInject */
+    function controller($rootScope, $state, $timeout, Auth){
+
+        var vm = this;
+        vm.user = {};
+        vm.errors = {};
+        vm.rememberMe = true;
+
+        activate();
+        function activate() {
+
+        }
+
+
         $timeout(function (){angular.element('[ng-model="username"]').focus();});
-        $scope.login = function (event) {
+        vm.login = function (event) {
             event.preventDefault();
             Auth.login({
-                username: $scope.username,
-                password: $scope.password,
-                rememberMe: $scope.rememberMe
+                username: vm.username,
+                password: vm.password,
+                rememberMe: vm.rememberMe
             }).then(function () {
-                $scope.authenticationError = false;
+                vm.authenticationError = false;
                 if ($rootScope.previousStateName === 'register') {
                     $state.go('home');
                 } else {
                     $rootScope.back();
                 }
             }).catch(function () {
-                $scope.authenticationError = true;
+                vm.authenticationError = true;
             });
         };
-    });
+    }
+})();

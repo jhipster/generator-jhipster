@@ -1,13 +1,25 @@
-'use strict';
+(function () {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('ActivationController', function ($scope, $stateParams, Auth) {
+    angular
+        .module('<%=angularAppName%>.account.activate')
+        .controller('ActivationController', controller);
+
+    controller.$inject = [
+        '$stateParams',
+        'Auth'];
+    /* @ngInject */
+    function controller ($stateParams, Auth){
+
+        var vm = this;
+
         Auth.activateAccount({key: $stateParams.key}).then(function () {
-            $scope.error = null;
-            $scope.success = 'OK';
+            vm.error = null;
+            vm.success = 'OK';
         }).catch(function () {
-            $scope.success = null;
-            $scope.error = 'ERROR';
+            vm.success = null;
+            vm.error = 'ERROR';
         });
-    });
+    }
+})();
 
