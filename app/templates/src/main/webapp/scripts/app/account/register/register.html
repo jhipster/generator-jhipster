@@ -22,7 +22,12 @@
             <div class="alert alert-danger" ng-show="doNotMatch" translate="global.messages.error.dontmatch">
                 The password and its confirmation do not match!
             </div>
-
+        </div>
+        <%_ if (enableSocialSignIn) { _%>
+        <div class="col-md-4 col-md-offset-2">
+        <%_ } else { _%>
+        <div class="col-md-8 col-md-offset-2">
+        <%_ } _%>
             <form ng-show="!success" name="form" role="form" novalidate ng-submit="register()" show-validation>
 
                 <div class="form-group">
@@ -118,5 +123,12 @@
                 If you want to <a class="alert-link" href="#/login">sign in</a>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").
             </div>
         </div>
+        <%_ if (enableSocialSignIn) { _%>
+        <div class="col-md-4">
+            <br/>
+            <jh-social ng-provider="google"></jh-social>
+            <jh-social ng-provider="facebook"></jh-social>
+            <jh-social ng-provider="twitter"></jh-social>
+        <%_ } _%>
     </div>
 </div>

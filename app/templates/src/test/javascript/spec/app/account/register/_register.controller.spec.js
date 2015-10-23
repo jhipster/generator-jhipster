@@ -8,7 +8,7 @@ describe('Controllers Tests ', function() {
     describe('RegisterController', function() {
 
         var $scope, $q; // actual implementations
-        var MockTimeout, MockTranslate, MockAuth; // mocks
+        var MockTimeout,<% if(enableTranslation) { %> MockTranslate,<%}%> MockAuth; // mocks
         var createController; // local utility function
 
         beforeEach(inject(function($injector) {
@@ -16,11 +16,11 @@ describe('Controllers Tests ', function() {
             $scope = $injector.get('$rootScope').$new();
             MockTimeout = jasmine.createSpy('MockTimeout');
             MockAuth = jasmine.createSpyObj('MockAuth', ['createAccount']);
-            MockTranslate = jasmine.createSpyObj('MockTranslate', ['use']);
+            <% if(enableTranslation) { %>MockTranslate = jasmine.createSpyObj('MockTranslate', ['use']);<% } %>
 
             var locals = {
-                'Auth': MockAuth,
-                '$translate': MockTranslate,
+                'Auth': MockAuth,<% if(enableTranslation) { %>
+                '$translate': MockTranslate,<% } %>
                 '$timeout': MockTimeout,
                 '$scope': $scope,
             };
@@ -42,7 +42,7 @@ describe('Controllers Tests ', function() {
 
         it('should update success to OK after creating an account', function() {
             // given
-            MockTranslate.use.and.returnValue('en');
+            <% if(enableTranslation) { %>MockTranslate.use.and.returnValue('en');<% } %>
             MockAuth.createAccount.and.returnValue($q.resolve());
             createController();
             $scope.registerAccount.password = $scope.confirmPassword = 'password';
@@ -55,7 +55,7 @@ describe('Controllers Tests ', function() {
             });
             expect($scope.success).toEqual('OK');
             expect($scope.registerAccount.langKey).toEqual('en');
-            expect(MockTranslate.use).toHaveBeenCalled();
+            <% if(enableTranslation) { %>expect(MockTranslate.use).toHaveBeenCalled();<% } %>
             expect($scope.errorUserExists).toBeNull();
             expect($scope.errorEmailExists).toBeNull();
             expect($scope.error).toBeNull();

@@ -30,6 +30,11 @@ public class JHipsterProperties {
 
     private final Metrics metrics = new Metrics();
 
+    <%_ if (enableSocialSignIn) { _%>
+    private final Social social = new Social();
+    <%_ } _%>
+
+
     public Async getAsync() {
         return async;
     }
@@ -61,6 +66,12 @@ public class JHipsterProperties {
     public Metrics getMetrics() {
         return metrics;
     }
+
+    <%_ if (enableSocialSignIn) { _%>
+    public Social getSocial() {
+        return social;
+    }
+    <%_ } _%>
 
     public static class Async {
 
@@ -527,4 +538,17 @@ public class JHipsterProperties {
             }
         }
     }
+    <%_ if (enableSocialSignIn) { _%>
+    public static class Social {
+
+        private String redirectAfterSignIn = "/#/home";
+
+        public String getRedirectAfterSignIn() {
+            return redirectAfterSignIn;
+        }
+
+        public void setRedirectAfterSignIn(String redirectAfterSignIn) {
+            this.redirectAfterSignIn = redirectAfterSignIn;
+        }
+    }<%_ } _%>
 }

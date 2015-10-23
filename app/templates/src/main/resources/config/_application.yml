@@ -24,6 +24,23 @@ spring:
             enabled: false
     thymeleaf:
         mode: XHTML
+<%_ if (enableSocialSignIn) { _%>
+    social:
+        # see https://developers.google.com/+/web/signin/server-side-flow#step_1_create_a_client_id_and_client_secret
+        google:
+            clientId: xxx
+            clientSecret: xxx
+
+        # see https://developers.facebook.com/docs/facebook-login/v2.2
+        facebook:
+            clientId: xxx
+            clientSecret: xxx
+
+        # see https://apps.twitter.com/app/
+        twitter:
+            clientId: xxx
+            clientSecret: xxx
+<%_ } _%>
 
 security:
     basic:
@@ -68,3 +85,7 @@ jhipster:
         contact:
         license:
         licenseUrl:
+<%_ if (enableSocialSignIn) { _%>
+    social:
+        redirectAfterSignIn: "/#/home"
+<%_ } _%>

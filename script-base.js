@@ -132,6 +132,10 @@ Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, res
         this.copyI18nFilesByName(_this, webappDir, 'tracker.json', lang);
     }
 
+    if (this.enableSocialSignIn) {
+        this.copyI18nFilesByName(_this, webappDir, 'social.json', lang);
+    }
+
     // Templates
     _this.template(webappDir + '/i18n/' + lang + '/_global.json', webappDir + 'i18n/' + lang + '/global.json', this, {});
     _this.template(webappDir + '/i18n/' + lang + '/_health.json', webappDir + 'i18n/' + lang + '/health.json', this, {});
