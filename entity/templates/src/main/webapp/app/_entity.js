@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    var module = angular.module('<%=angularAppName%>');
+    var module = angular.module('<%=angularAppName%>.<%= entityClass %>');
 
     module.config(configure);
 

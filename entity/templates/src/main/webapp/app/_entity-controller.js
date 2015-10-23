@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('<%=angularAppName%>')
+        .module('<%=angularAppName%>.<%= entityClass %>')
         .controller('<%= entityClass %>Controller', controller);
 
     controller.$inject = ['<%= entityClass %>'<% if (searchEngine == 'elasticsearch') { %>,

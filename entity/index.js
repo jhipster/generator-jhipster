@@ -1269,6 +1269,11 @@ EntityGenerator.prototype.files = function files() {
         'src/main/webapp/scripts/app/' +    this.entityInstance + '/config/' +  this.entityInstance + '.routes' + '.js', this, {});
     this.addAppScriptToIndex(this.entityInstance + '/config/' +  this.entityInstance + '.routes' + '.js');
 
+    //Module
+    this.template('src/main/webapp/app/_entity.module.js',
+        'src/main/webapp/scripts/app/' +    this.entityInstance + '/' +  this.entityInstance  + '.module' + '.js', this, {});
+    this.addAppScriptToIndex(this.entityInstance + '/' +  this.entityInstance + '.module' + '.js');
+
     //Controller List
     this.template('src/main/webapp/app/_entity-controller.js',
         'src/main/webapp/scripts/app/' +    this.entityInstance + '/controllers/' + this.entityInstance + '.list.controller' + '.js', this, {});

@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('<%=angularAppName%>')
+        .module('<%=angularAppName%>.<%= entityClass %>')
         .factory('<%= entityClass %>', factory);
 
     factory.$inject = ['$resource', 'DateUtils'];
