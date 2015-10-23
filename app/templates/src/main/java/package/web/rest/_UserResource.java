@@ -157,7 +157,7 @@ public class UserResource {
         throws URISyntaxException {
         List<User> users = userRepository.findAll();
         List<ManagedUserDTO> managedUserDTOs = users.stream()
-            .map(user -> new ManagedUserDTO(user))
+            .map(ManagedUserDTO::new)
             .collect(Collectors.toList());
         return new ResponseEntity<>(managedUserDTOs, HttpStatus.OK);
     }<% } %>
@@ -172,7 +172,7 @@ public class UserResource {
     public ResponseEntity<ManagedUserDTO> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
         return userService.getUserWithAuthoritiesByLogin(login)
-                .map(user -> new ManagedUserDTO(user))
+                .map(ManagedUserDTO::new)
                 .map(managedUserDTO -> new ResponseEntity<>(managedUserDTO, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }<% if (searchEngine == 'elasticsearch') { %>
