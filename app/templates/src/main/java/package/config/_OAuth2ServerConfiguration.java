@@ -126,7 +126,7 @@ public class OAuth2ServerConfiguration {
         @Override
         public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
             clients
-                .inMemory()
+                <% if (databaseType == 'sql') { %>.jdbc(dataSource)<% } else { %>.inMemory()<% } %>
                 .withClient(jHipsterProperties.getSecurity().getAuthentication().getOauth().getClientid())
                 .scopes("read", "write")
                 .authorities(AuthoritiesConstants.ADMIN, AuthoritiesConstants.USER)
