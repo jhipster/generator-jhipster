@@ -495,6 +495,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
     this.camelizedBaseName = _.camelize(this.baseName);
     this.slugifiedBaseName = _.slugify(this.baseName);
+    this.lowercaseBaseName = this.baseName.toLowerCase();
 
     if (this.prodDatabaseType === 'oracle') { // create a folder for users to place ojdbc jar
         this.ojdbcVersion = '7';
