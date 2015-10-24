@@ -560,6 +560,10 @@ JhipsterGenerator.prototype.app = function app() {
             break;
         case 'maven':
         default :
+            this.copy('mvnw', 'mvnw');
+            this.copy('mvnw.cmd', 'mvnw.cmd');
+            this.copy('.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.jar');
+            this.copy('.mvn/wrapper/maven-wrapper.properties', '.mvn/wrapper/maven-wrapper.properties');
             this.template('_pom.xml', 'pom.xml', null, {'interpolate': interpolateRegex});
     }
 
