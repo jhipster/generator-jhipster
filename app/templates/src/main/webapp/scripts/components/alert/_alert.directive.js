@@ -5,8 +5,10 @@ angular.module('<%=angularAppName%>')
         return {
             restrict: 'E',
             template: '<div class="alerts" ng-cloak="">' +
-                            '<alert ng-cloak="" ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()"><pre>{{ alert.msg }}</pre></alert>' +
-                        '</div>',
+                            '<div ng-repeat="alert in alerts" ng-class="[alert.position, {\'toast\': alert.toast}]">' +
+                                '<alert ng-cloak="" type="{{alert.type}}" close="alert.close()"><pre>{{ alert.msg }}</pre></alert>' +
+                            '</div>' +
+                      '</div>',
             controller: ['$scope',
                 function($scope) {
                     $scope.alerts = AlertService.get();
@@ -21,10 +23,13 @@ angular.module('<%=angularAppName%>')
         return {
             restrict: 'E',
             template: '<div class="alerts" ng-cloak="">' +
-                            '<alert ng-cloak="" ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()"><pre>{{ alert.msg }}</pre></alert>' +
-                        '</div>',
+                            '<div ng-repeat="alert in alerts" ng-class="[alert.position, {\'toast\': alert.toast}]">' +
+                                '<alert ng-cloak="" type="{{alert.type}}" close="alert.close()"><pre>{{ alert.msg }}</pre></alert>' +
+                            '</div>' +
+                      '</div>',
             controller: ['$scope',
                 function($scope) {
+                    AlertService.clear();
                     $scope.alerts = AlertService.get();
 
                     var cleanHttpErrorListener = $rootScope.$on('<%=angularAppName%>.httpError', function (event, httpResponse) {
@@ -64,6 +69,7 @@ angular.module('<%=angularAppName%>')
                     $scope.$on('$destroy', function () {
                         if(cleanHttpErrorListener !== undefined && cleanHttpErrorListener !== null){
                             cleanHttpErrorListener();
+                            $scope.alerts = [];
                         }
                     });
 
