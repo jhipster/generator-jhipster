@@ -28,5 +28,6 @@ angular.module('<%=angularAppName%>')
                 }
             }<% } else { %>
             'update': { method:'PUT' }<% } %>
+				
         });
     });

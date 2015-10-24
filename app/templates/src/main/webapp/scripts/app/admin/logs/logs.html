@@ -1,9 +1,13 @@
 <div>
-    <h2 translate="logs.title">Logs</h2>
-
-    <p translate="logs.nbloggers" translate-values="{total: '{{ loggers.length }}'}">There are {{ loggers.length }} loggers.</p>
-
-    <span translate="logs.filter">Filter</span> <input type="text" ng-model="filter" class="form-control">
+    <div class="row">
+        <div class="col-md-5">
+            <h2 translate="logs.title">Logs</h2>
+            <p translate="logs.nbloggers" translate-values="{total: '{{ loggers.length }}'}">There are {{ loggers.length }} loggers.</p>
+        </div>
+        <div class="col-md-7">
+            <span translate="logs.filter">Filter</span> <input type="text" ng-model="filter" class="form-control">
+        </div>
+    </div>
 
     <table class="table table-condensed table-striped table-bordered table-responsive">
         <thead>

@@ -82,7 +82,12 @@
             "edit": "Editer",
             "delete": "Supprimer",
             "save": "Sauvegarder",
-            "view": "Voir"
+            "view": "Voir",
+			"found": "[<b>{{found}}</b>] items retrieved from total of [<b>{{total}}</b>] items.",
+			"search": "Search",
+            "export": "Export",
+            "import": "Import",
+            "sync": "Sync"						
         },
         "detail": {
             "field": "Champs",
@@ -104,5 +109,5 @@
             "datetimelocal": "Ce champs doit être une date et une heure."
         }
     },
-    "footer": "Ceci est votre pied de page"
+    "footer": "&copy;2015 <%= baseName %>, Inc."
 }

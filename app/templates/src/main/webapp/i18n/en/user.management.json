@@ -3,7 +3,12 @@
         "home": {
             "title": "Users",
             "createLabel": "Create a new user",
-            "createOrEditLabel": "Create or edit a user"
+            "createOrEditLabel": "Create or edit a user",
+            "searchLabel": "Search",
+            "searchPlaceholder": "Search for...",
+            "sync": "Sync",
+            "export": "Export",
+            "import": "Import"			
         },
         "delete": {
             "question": "Are you sure you want to delete user {{ login }}?"

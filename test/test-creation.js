@@ -199,6 +199,7 @@ describe('JHipster generator ', function () {
             'src/main/webapp/scripts/components/navbar/navbar.html',
             'src/main/webapp/scripts/components/navbar/navbar.controller.js',
             'src/main/webapp/scripts/components/user/user.service.js',
+			'src/main/webapp/scripts/components/user/user.search.service.js',
             'src/main/webapp/scripts/components/util/base64.service.js',
             'src/main/webapp/scripts/components/util/parse-links.service.js',
             'src/main/webapp/scripts/components/util/truncate.filter.js',
