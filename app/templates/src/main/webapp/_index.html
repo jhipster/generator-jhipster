@@ -1,6 +1,32 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" ng-app="<%= angularAppName %>" xmlns:ng="http://angularjs.org">
     <head>
+	    <!--
+	        IE8 support, see AngularJS Internet Explorer Compatibility http://docs.angularjs.org/guide/ie
+	        For Firefox 3.6, you will also need to include jQuery and ECMAScript 5 shim
+	    -->
+	    <!--[if lt IE 9]>
+	    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+	    <script src="http://cdnjs.cloudflare.com/ajax/libs/es5-shim/2.2.0/es5-shim.js"></script>
+	    <script>
+	        document.createElement('ui-select');
+	        document.createElement('ui-select-match');
+	        document.createElement('ui-select-choices');
+	    </script>
+	    <![endif]-->
+	    <!--[if lte IE 8]>
+	    <script>
+	        document.createElement('ng-include');
+	        document.createElement('ng-pluralize');
+	        document.createElement('ng-view');
+
+	        // Optionally these for CSS
+	        document.createElement('ng:include');
+	        document.createElement('ng:pluralize');
+	        document.createElement('ng:view');
+	    </script>
+	    <![endif]-->
+			
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title><%= baseName %></title>
@@ -18,7 +44,7 @@
         <link rel="stylesheet" href="assets/styles/main.css">
         <!-- endbuild -->
     </head>
-    <body ng-app="<%= angularAppName %>">
+    <body>
         <!--[if lt IE 9]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -47,5 +73,6 @@
         <!-- endbower -->
         <!-- endbuild -->
 
+		<div data-ng-show="$root.loading" class="loading-indicator"></div>
     </body>
 </html>

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('<%= entityClass %>Controller', function ($scope, <%= entityClass %><% if (searchEngine == 'elasticsearch') { %>, <%= entityClass %>Search<% } %><% if (pagination != 'no') { %>, ParseLinks<% } %>) {
+    .controller('<%= entityClass %>Controller', function ($scope, $state, <%= entityClass %><% if (searchEngine == 'elasticsearch') { %>, <%= entityClass %>Search<% } %><% if (pagination != 'no') { %>, ParseLinks<% } %>) {
         $scope.<%= entityInstance %>s = [];
         <%_ if (pagination == 'pager' || pagination == 'pagination') { _%>
         $scope.page = 0;
@@ -9,6 +9,7 @@ angular.module('<%=angularAppName%>')
             <%= entityClass %>.query({page: $scope.page, size: 20}, function(result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 $scope.<%= entityInstance %>s = result;
+                $scope.total = headers('x-total-count');				
             });
         };
         <%_ } _%>
@@ -137,4 +138,61 @@ angular.module('<%=angularAppName%>')
             return formatAsBytes(size(base64String));
         };
         <%_ } _%>
+	        
+		//==================|
+		// bulk actions		|
+		//==================|
+        $scope.areAll<%= entityClass %>sSelected = false;
+		
+        $scope.update<%= entityClass %>sSelection = function (<%= entityInstance %>Array, selectionValue) {
+            for (var i = 0; i < <%= entityInstance %>Array.length; i++)
+            {
+                <%= entityInstance %>Array[i].isSelected = selectionValue;
+            }
+        };
+		
+        $scope.export = function () {
+            for (var i = 0; i < $scope.<%= entityInstance %>s.length; i++) {
+                var <%= entityInstance %> = $scope.<%= entityInstance %>s[i];
+                console.info('TODO: export selected item with id: ' + <%= entityInstance %>.id);
+            }
+        };
+
+        $scope.import = function () {
+            for (var i = 0; i < $scope.<%= entityInstance %>s.length; i++) {
+                var <%= entityInstance %> = $scope.<%= entityInstance %>s[i];
+                console.info('TODO: import selected item with id: ' + <%= entityInstance %>.id);
+            }
+        };
+		
+        $scope.deleteSelected = function (){
+            for (var i = 0; i < $scope.<%= entityInstance %>s.length; i++){
+                var <%= entityInstance %> = $scope.<%= entityInstance %>s[i];
+                if(<%= entityInstance %>.isSelected){
+                    <%= entityClass %>.delete(cat);
+                }
+            }
+            $state.go('<%= entityInstance %>', null, {reload: true});
+        };
+		
+        $scope.sync = function (){
+            for (var i = 0; i < $scope.<%= entityInstance %>s.length; i++){
+                var <%= entityInstance %> = $scope.<%= entityInstance %>s[i];
+                if(<%= entityInstance %>.isSelected){
+                    <%= entityClass %>.update(<%= entityInstance %>);
+                }
+            }
+        };
+
+        $scope.order = function (predicate, reverse) {
+            $scope.predicate = predicate;
+            $scope.reverse = reverse;
+            <%= entityClass %>.query({page: $scope.page, size: 20}, function (result, headers) {
+                $scope.links = ParseLinks.parse(headers('link'));
+				$scope.<%= entityInstance %>s = result;
+                $scope.total = headers('x-total-count');
+            });
+        };
+		
+		
     });
