@@ -119,7 +119,7 @@ public class UserService {
     }
 
     public void updateUserInformation(String firstName, String lastName, String email, String langKey) {
-        userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(u -> {
+        userRepository.findOneById(SecurityUtils.getCurrentUserId()).ifPresent(u -> {
             u.setFirstName(firstName);
             u.setLastName(lastName);
             u.setEmail(email);
@@ -130,9 +130,8 @@ public class UserService {
         });
     }
 
-    public void changePassword(String password) {<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-        userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(u-> {<% } %><% if (databaseType == 'cassandra') { %>
-        userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(u -> {<% } %>
+    public void changePassword(String password) {
+        userRepository.findOneById(SecurityUtils.getCurrentUserId()).ifPresent(u -> {
             String encryptedPassword = passwordEncoder.encode(password);
             u.setPassword(encryptedPassword);
             userRepository.save(u);
@@ -149,7 +148,7 @@ public class UserService {
     }
 <% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true)<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-    public User getUserWithAuthorities(<% if (databaseType == 'mongodb') { %>String id<% } else { %>Long id<% } %>) {
+    public User getUserWithAuthorities(<%= pkType %> id) {
         User user = userRepository.findOne(id);
         user.getAuthorities().size(); // eagerly load the association
         return user;
@@ -157,7 +156,7 @@ public class UserService {
 <% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true)<% } %>
     public User getUserWithAuthorities() {
-        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+        User user = userRepository.findOneById(SecurityUtils.getCurrentUserId()).get();
         user.getAuthorities().size(); // eagerly load the association
         return user;
     }<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
