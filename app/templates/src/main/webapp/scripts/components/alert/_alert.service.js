@@ -38,7 +38,7 @@ angular.module('<%=angularAppName%>')
             }
 
             function success(msg, params, position) {
-                this.add({
+                return this.add({
                     type: "success",
                     msg: msg,
                     params: params,
@@ -49,7 +49,7 @@ angular.module('<%=angularAppName%>')
             }
 
             function error(msg, params, position) {
-                this.add({
+                return this.add({
                     type: "danger",
                     msg: msg,
                     params: params,
@@ -60,7 +60,7 @@ angular.module('<%=angularAppName%>')
             }
 
             function warning(msg, params, position) {
-                this.add({
+                return this.add({
                     type: "warning",
                     msg: msg,
                     params: params,
@@ -71,7 +71,7 @@ angular.module('<%=angularAppName%>')
             }
 
             function info(msg, params, position) {
-                this.add({
+                return this.add({
                     type: "info",
                     msg: msg,
                     params: params,
@@ -82,39 +82,46 @@ angular.module('<%=angularAppName%>')
             }
 
             function factory(alertOptions) {
-                return alerts.push({
+                var alert = {
                     type: alertOptions.type,
                     msg: $sce.trustAsHtml(alertOptions.msg),
                     id: alertOptions.alertId,
                     timeout: alertOptions.timeout,
                     toast: alertOptions.toast,
                     position: alertOptions.position ? alertOptions.position : 'top right',
-                    close: function () {
-                        return exports.closeAlert(this.id);
+                    scoped: alertOptions.scoped,
+                    close: function (alerts) {
+                        return exports.closeAlert(this.id, alerts);
                     }
-                });
+                }
+                if(!alert.scoped) {
+                    alerts.push(alert);
+                }
+                return alert;
             }
 
-            function addAlert(alertOptions) {
+            function addAlert(alertOptions, extAlerts) {
                 alertOptions.alertId = alertId++;
-                <%_ if (enableTranslation) { _%>
+            <%_ if (enableTranslation) { _%>
                 alertOptions.msg = $translate.instant(alertOptions.msg, alertOptions.params);
-                <%_ } _%>
+            <%_ } _%>
                 var that = this;
-                this.factory(alertOptions);
+                var alert = this.factory(alertOptions);
                 if (alertOptions.timeout && alertOptions.timeout > 0) {
                     $timeout(function () {
-                        that.closeAlert(alertOptions.alertId);
+                        that.closeAlert(alertOptions.alertId, extAlerts);
                     }, alertOptions.timeout);
                 }
+                return alert;
             }
 
-            function closeAlert(id) {
-                return this.closeAlertByIndex(alerts.map(function(e) { return e.id; }).indexOf(id));
+            function closeAlert(id, extAlerts) {
+                var thisAlerts = extAlerts ? extAlerts : alerts;
+                return this.closeAlertByIndex(thisAlerts.map(function(e) { return e.id; }).indexOf(id), thisAlerts);
             }
 
-            function closeAlertByIndex(index) {
-                return alerts.splice(index, 1);
+            function closeAlertByIndex(index, thisAlerts) {
+                return thisAlerts.splice(index, 1);
             }
 
             return exports;
@@ -123,6 +130,5 @@ angular.module('<%=angularAppName%>')
         this.showAsToast = function(isToast) {
             this.toast = isToast;
         };
-
 
     });

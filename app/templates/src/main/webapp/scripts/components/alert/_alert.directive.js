@@ -24,13 +24,13 @@ angular.module('<%=angularAppName%>')
             restrict: 'E',
             template: '<div class="alerts" ng-cloak="">' +
                             '<div ng-repeat="alert in alerts" ng-class="[alert.position, {\'toast\': alert.toast}]">' +
-                                '<alert ng-cloak="" type="{{alert.type}}" close="alert.close()"><pre>{{ alert.msg }}</pre></alert>' +
+                                '<alert ng-cloak="" type="{{alert.type}}" close="alert.close(alerts)"><pre>{{ alert.msg }}</pre></alert>' +
                             '</div>' +
                       '</div>',
             controller: ['$scope',
                 function($scope) {
-                    AlertService.clear();
-                    $scope.alerts = AlertService.get();
+
+                    $scope.alerts = [];
 
                     var cleanHttpErrorListener = $rootScope.$on('<%=angularAppName%>.httpError', function (event, httpResponse) {
                         var i;
@@ -74,9 +74,35 @@ angular.module('<%=angularAppName%>')
                     });
 
                     var addErrorAlert = function (message, key, data) {
-                        <% if (enableTranslation) { %>
+                    <%_ if (enableTranslation) { _%>
                         key = key && key != null ? key : message;
-                        AlertService.error(key, data); <%} else { %> AlertService.error(message); <% } %>
+                        $scope.alerts.push(
+                            AlertService.add(
+                                {
+                                    type: "danger",
+                                    msg: key,
+                                    params: data,
+                                    timeout: 5000,
+                                    toast: AlertService.isToast(),
+                                    scoped: true
+                                },
+                                $scope.alerts
+                            )
+                        );
+                    <%_ } else { _%> 
+                        $scope.alerts.push(
+                            AlertService.add(
+                                {
+                                    type: "danger",
+                                    msg: message,
+                                    timeout: 5000,
+                                    toast: AlertService.isToast(),
+                                    scoped: true
+                                },
+                                $scope.alerts
+                            )
+                        );
+                    <%_ } _%>
 
                     }
                 }
