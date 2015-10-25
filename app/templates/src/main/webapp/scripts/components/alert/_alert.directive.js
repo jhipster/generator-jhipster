@@ -46,9 +46,9 @@ angular.module('<%=angularAppName%>')
                                         addErrorAlert('Field ' + fieldName + ' cannot be empty', 'error.' + fieldError.message, {fieldName: fieldName});
                                     }
                                 } else if (httpResponse.data && httpResponse.data.message) {
-                                  addErrorAlert(httpResponse.data.message, httpResponse.data.message, httpResponse.data);
+                                    addErrorAlert(httpResponse.data.message, httpResponse.data.message, httpResponse.data);
                                 } else {
-                                  addErrorAlert(httpResponse.data);
+                                    addErrorAlert(httpResponse.data);
                                 }
                                 break;
 
@@ -71,7 +71,6 @@ angular.module('<%=angularAppName%>')
                         <% if (enableTranslation) { %>
                         key = key && key != null ? key : message;
                         AlertService.error(key, data); <%} else { %> AlertService.error(message); <% } %>
-
                     }
                 }
             ]
