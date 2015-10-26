@@ -176,7 +176,7 @@ dependencies {
     testCompile group: 'junit', name: 'junit'
     testCompile group: 'org.mockito', name: 'mockito-core'<% if (databaseType == 'sql') { %>
     testCompile group: 'com.mattbertolini', name: 'liquibase-slf4j', version: liquibase_slf4j_version<% } %><% if (databaseType == 'mongodb') { %>
-    testCompile group: 'cz.jirutka.spring', name: 'embedmongo-spring', version: embedmongo_spring_version<% } %>
+    testCompile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo'<% } %>
     testCompile group: 'org.hamcrest', name: 'hamcrest-library'
     <% if (testFrameworks.indexOf('gatling') != -1) { %>
     testCompile group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version: gatling_version<% } %>
