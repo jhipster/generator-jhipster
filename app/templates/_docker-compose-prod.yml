@@ -1,6 +1,6 @@
 <% if (searchEngine == 'elasticsearch') { %>jhipster-prod-elasticsearch:
   container_name: <%=baseName%>-prod-elasticsearch
-  image: elasticsearch
+  image: elasticsearch:1.7.3
   # volumes:
   # - ~/volumes/jhipster/<%=baseName%>/prod-elasticsearch/:/usr/share/elasticsearch/data/
   ports:
@@ -8,7 +8,7 @@
   - "9300:9300"
 <% } if (prodDatabaseType == 'mysql') { %>jhipster-prod-mysql:
   container_name: <%=baseName%>-prod-mysql
-  image: mysql
+  image: mysql:5.7.9
   # volumes:
   # - ~/volumes/jhipster/<%=baseName%>/prod-mysql/:/var/lib/mysql/
   environment:
@@ -17,10 +17,10 @@
   - MYSQL_DATABASE=<%=baseName.toLowerCase()%>
   ports:
   - "3306:3306"
-  command: mysqld --lower_case_table_name=1
+  command: mysqld --lower_case_table_names=1
 <% } if (prodDatabaseType == 'postgresql') { %>jhipster-prod-postgresql:
   container_name: <%=baseName%>-prod-postgresql
-  image: postgres
+  image: postgres:9.4.5
   # volumes:
   # - ~/volumes/jhipster/<%=baseName%>/prod-postgresql/:/var/lib/postgresql/
   environment:
@@ -30,7 +30,7 @@
   - "5432:5432"
 <% } if (prodDatabaseType == 'mongodb') { %>jhipster-prod-mongodb:
   container_name: <%=baseName%>-prod-mongodb
-  image: mongo
+  image: mongo:3.0.7
   # volumes:
   # - ~/volumes/jhipster/<%=baseName%>/prod-mongodb/:/data/db/
   ports:
