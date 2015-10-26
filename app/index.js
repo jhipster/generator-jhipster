@@ -157,12 +157,12 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             message: '(6/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
-                    value: 'h2Memory',
-                    name: 'H2 with in-memory persistence'
+                    value: 'h2Disk',
+                    name: 'H2 with disk-based persistence'
                 },
                 {
-                    value: 'h2Disk',
-                    name: 'H2 with disk-based persistence (Warning: does not work on Windows)'
+                    value: 'h2Memory',
+                    name: 'H2 with in-memory persistence'
                 },
                 {
                     value: 'mysql',
@@ -180,12 +180,12 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             message: '(6/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
-                    value: 'h2Memory',
-                    name: 'H2 with in-memory persistence'
+                    value: 'h2Disk',
+                    name: 'H2 with disk-based persistence'
                 },
                 {
-                    value: 'h2Disk',
-                    name: 'H2 with disk-based persistence (Warning: does not work on Windows)'
+                    value: 'h2Memory',
+                    name: 'H2 with in-memory persistence'
                 },
                 {
                     value: 'postgresql',
@@ -203,12 +203,12 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             message: '(6/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
-                    value: 'h2Memory',
-                    name: 'H2 with in-memory persistence'
+                    value: 'h2Disk',
+                    name: 'H2 with disk-based persistence'
                 },
                 {
-                    value: 'h2Disk',
-                    name: 'H2 with disk-based persistence (Warning: does not work on Windows)'
+                    value: 'h2Memory',
+                    name: 'H2 with in-memory persistence'
                 },
                 {
                     value: 'oracle',
@@ -495,6 +495,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
     this.camelizedBaseName = _.camelize(this.baseName);
     this.slugifiedBaseName = _.slugify(this.baseName);
+    this.lowercaseBaseName = this.baseName.toLowerCase();
 
     if (this.prodDatabaseType === 'oracle') { // create a folder for users to place ojdbc jar
         this.ojdbcVersion = '7';
