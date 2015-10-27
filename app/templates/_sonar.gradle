@@ -1,4 +1,4 @@
-apply plugin: 'sonar-runner'
+apply plugin: "org.sonarqube"
 apply plugin: 'jacoco'
 
 jacoco {
@@ -11,6 +11,8 @@ jacocoTestReport {
     }
 }
 
-sonarRunner {
-    toolVersion = '2.4'
+sonarqube {
+    properties {
+        toolVersion = '2.4'
+    }
 }
