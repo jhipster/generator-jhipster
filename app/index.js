@@ -685,15 +685,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/locale/_package-info.java', javaDir + 'config/locale/package-info.java', this, {});
     this.template('src/main/java/package/config/locale/_AngularCookieLocaleResolver.java', javaDir + 'config/locale/AngularCookieLocaleResolver.java', this, {});
 
-    this.template('src/main/java/package/config/metrics/_package-info.java', javaDir + 'config/metrics/package-info.java', this, {});
-    if (this.databaseType == 'cassandra') {
-        this.template('src/main/java/package/config/metrics/_CassandraHealthIndicator.java', javaDir + 'config/metrics/CassandraHealthIndicator.java', this, {});
-    }
-    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
-        this.template('src/main/java/package/config/metrics/_DatabaseHealthIndicator.java', javaDir + 'config/metrics/DatabaseHealthIndicator.java', this, {});
-    }
-    this.template('src/main/java/package/config/metrics/_JHipsterHealthIndicatorConfiguration.java', javaDir + 'config/metrics/JHipsterHealthIndicatorConfiguration.java', this, {});
-
     if (this.hibernateCache == "hazelcast") {
         this.template('src/main/java/package/config/hazelcast/_HazelcastCacheRegionFactory.java', javaDir + 'config/hazelcast/HazelcastCacheRegionFactory.java', this, {});
         this.template('src/main/java/package/config/hazelcast/_package-info.java', javaDir + 'config/hazelcast/package-info.java', this, {});
@@ -1186,7 +1177,7 @@ JhipsterGenerator.prototype.app = function app() {
 
     // Remove old files, from previous JHipster versions
     removefile(javaDir + 'config/MailConfiguration.java');
-    removefile(javaDir + 'config/metrics/JavaMailHealthIndicator.java');
+    removefolder(javaDir + 'config/metrics');
 
     removefile(javaDir + 'domain/util/CustomLocalDateSerializer.java');
     removefile(javaDir + 'domain/util/CustomDateTimeSerializer.java');
