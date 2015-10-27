@@ -169,7 +169,7 @@ angular.module('<%=angularAppName%>')
             for (var i = 0; i < $scope.<%= entityInstance %>s.length; i++){
                 var <%= entityInstance %> = $scope.<%= entityInstance %>s[i];
                 if(<%= entityInstance %>.isSelected){
-                    <%= entityClass %>.delete(cat);
+                    <%= entityClass %>.delete(<%= entityInstance %>);
                 }
             }
             $state.go('<%= entityInstance %>', null, {reload: true});

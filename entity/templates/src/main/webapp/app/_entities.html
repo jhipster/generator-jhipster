@@ -14,7 +14,7 @@
                 <div class="form-group">
                     <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="search for..." required>
                 </div>
-                <button ng-disabled="searchForm.$invalid" class="btn btn-info" ng-click="search()"><span class="glyphicon glyphicon-search"></span> <span>Search a <%= entityClass %></span>
+                <button ng-disabled="searchForm.$invalid" class="btn btn-info" ng-click="search()"><span class="glyphicon glyphicon-search"></span> <span translate="entity.action.search">Search a <%= entityClass %></span>
                 </button>
                 <button ng-disabled="!areAll<%= entityClass %>sSelected" class="btn btn-default" ng-click="sync()">
                     <i class="glyphicon glyphicon-refresh" aria-label="sync"></i>
