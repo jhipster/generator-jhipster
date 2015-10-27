@@ -14,6 +14,7 @@
         "angular-i18n": "1.4.5",
         <%_ } _%>
         "angular-local-storage": "0.2.2",
+        "angular-loading-bar": "0.8.0",
         "angular-resource": "1.4.5",
         "angular-sanitize": "1.4.5",
         <%_ if (enableTranslation) { _%>

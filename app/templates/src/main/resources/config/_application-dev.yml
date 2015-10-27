@@ -36,9 +36,9 @@ spring:
         <%_ } else if (devDatabaseType == 'oracle') { _%>
         url: jdbc:oracle:thin:@localhost:1521:<%= baseName %>
         <%_ } else if (devDatabaseType == 'h2Disk') { _%>
-        url: jdbc:h2:file:./target/h2db/db:jhipster;DB_CLOSE_DELAY=-1
+        url: jdbc:h2:file:./target/h2db/db/<%= lowercaseBaseName %>;DB_CLOSE_DELAY=-1
         <%_ } else if (devDatabaseType == 'h2Memory') { _%>
-        url: jdbc:h2:mem:jhipster;DB_CLOSE_DELAY=-1
+        url: jdbc:h2:mem:<%= lowercaseBaseName %>;DB_CLOSE_DELAY=-1
         <%_ } _%>
         name:
         username: <% if (devDatabaseType == 'mysql') { %>root<% } else if (devDatabaseType == 'postgresql') { %><%= baseName %><% } %>
@@ -87,8 +87,6 @@ spring:
     <%_ if (databaseType == 'cassandra') { _%>
     data:
         cassandra:
-            # Note this is not an official Spring Boot configuration yet
-            # JHipster's Cassandra support is in the process of being merged in Spring Boot
             contactPoints: localhost
             protocolVersion: V2
             compression: LZ4

@@ -495,6 +495,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
     this.camelizedBaseName = _.camelize(this.baseName);
     this.slugifiedBaseName = _.slugify(this.baseName);
+    this.lowercaseBaseName = this.baseName.toLowerCase();
 
     if (this.prodDatabaseType === 'oracle') { // create a folder for users to place ojdbc jar
         this.ojdbcVersion = '7';
@@ -675,12 +676,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/web/rest/errors/_ExceptionTranslator.java', javaDir + 'web/rest/errors/ExceptionTranslator.java', this, {});
     this.template('src/main/java/package/web/rest/errors/_FieldErrorDTO.java', javaDir + 'web/rest/errors/FieldErrorDTO.java', this, {});
     this.template('src/main/java/package/web/rest/errors/_ParameterizedErrorDTO.java', javaDir + 'web/rest/errors/ParameterizedErrorDTO.java', this, {});
-
-    if (this.databaseType == "cassandra") {
-        this.template('src/main/java/package/config/cassandra/_CassandraAutoConfiguration.java', javaDir + 'config/cassandra/CassandraAutoConfiguration.java', this, {});
-        this.template('src/main/java/package/config/cassandra/_CassandraDataAutoConfiguration.java', javaDir + 'config/cassandra/CassandraDataAutoConfiguration.java', this, {});
-        this.template('src/main/java/package/config/cassandra/_CassandraProperties.java', javaDir + 'config/cassandra/CassandraProperties.java', this, {});
-    }
 
     if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
         this.template('src/main/java/package/config/audit/_package-info.java', javaDir + 'config/audit/package-info.java', this, {});

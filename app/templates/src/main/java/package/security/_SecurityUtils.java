@@ -20,7 +20,7 @@ public final class SecurityUtils {
     /**
      * Get the login of the current user.
      */
-    public static String getCurrentLogin() {
+    public static String getCurrentUserLogin() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
         String userName = null;
@@ -58,7 +58,7 @@ public final class SecurityUtils {
      * 
      * @return the current user id
      */
-    public static <%= pkType %> getCurrentLoginId() {
+    public static <%= pkType %> getCurrentUserId() {
         return getCurrentUser().getId();
     }
 

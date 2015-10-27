@@ -19,7 +19,11 @@
                     <%_ if (fields[fieldId].fieldIsEnum) { _%>
                     <span class="form-control-static" translate="{{'<%= angularAppName %>.<%= fields[fieldId].fieldType %>.' + vm.<%= entityInstance %>.<%= fields[fieldId].fieldName %>}}">{{vm.<%= entityInstance %>.<%= fields[fieldId].fieldName %>}}</span>
                     <%_ } else if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'image') { _%>
-                    <img data-ng-src="{{'data:' + vm.<%=entityInstance %>.<%=fields[fieldId].fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-width: 100%;" ng-if="vm.<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/>
+                    <img data-ng-src="{{'data:' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-width: 100%;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/>
+                    <%_ } else if (fields[fieldId].fieldType == 'ZonedDateTime' || fields[fieldId].fieldType == 'Date') { _%>
+                    <span class="form-control-static">{{<%=entityInstance %>.<%=fields[fieldId].fieldName%> | date:'medium'}}</span>
+                    <%_ } else if (fields[fieldId].fieldType == 'LocalDate') { _%>
+                    <span class="form-control-static">{{<%=entityInstance %>.<%=fields[fieldId].fieldName%> | date:'mediumDate'}}</span>
                     <%_ } else { _%>
                     <span class="form-control-static">{{ vm.<%= entityInstance %>.<%=fields[fieldId].fieldName%> }}</span>
                     <%_ } _%>
