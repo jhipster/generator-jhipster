@@ -1,0 +1,12 @@
+{
+    "tracker": {
+        "title": "Real-time user activities",
+        "table": {
+            "userlogin": "User",
+            "ipaddress": "IP Address",
+            "userAgent": "User agent",
+            "page": "Current page",
+            "time": "Time"
+        }
+    }
+}
