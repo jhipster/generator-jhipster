@@ -2,32 +2,35 @@
     'use strict';
 
     angular
-        .module('<%=angularAppName%>.account.activate')
-        .configure(configure);
+        .module('<%=angularAppName%>')
+        .config(configure);
 
     configure.$inject = ['$stateProvider'];
     /* @ngInject */
     function configure($stateProvider){
+
         $stateProvider
-            .state('activate', {
+            .state('settings', {
                 parent: 'account',
-                url: '/activate?key',
+                url: '/settings',
                 data: {
-                    authorities: [],
-                    pageTitle: 'activate.title'
+                    authorities: ['ROLE_USER'],
+                    pageTitle: 'global.menu.account.settings'
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/account/activate/activate.html',
-                        controller: 'ActivationController'
+                        templateUrl: 'scripts/app/account/settings/settings.html',
+                        controller: 'SettingsController',
+                        controllerAs: 'vm'
                     }
                 },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                        $translatePartialLoader.addPart('activate');
+                        $translatePartialLoader.addPart('settings');
                         return $translate.refresh();
                     }]
                 }
             });
+
     }
 })();

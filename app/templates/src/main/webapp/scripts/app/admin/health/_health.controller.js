@@ -1,55 +1,80 @@
-'use strict';
+(function () {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('HealthController', function ($scope, MonitoringService, $modal) {
-        $scope.updatingHealth = true;
-        $scope.separator = '.';
+    angular
+        .module('<%=angularAppName%>')
+        .controller('HealthController', controller);
 
-        $scope.refresh = function () {
-            $scope.updatingHealth = true;
+    controller.$inject = [
+        'MonitoringService',
+        '$modal'
+    ];
+    /* @ngInject */
+    function controller(MonitoringService, $modal){
+
+        var vm = this;
+        vm.updatingHealth = true;
+        vm.separator = '.';
+        vm.refresh = refresh;
+        vm.getLabelClass = getLabelClass;
+        vm.transformHealthData = transformHealthData;
+        vm.flattenHealthData = flattenHealthData;
+        vm.getModuleName = getModuleName;
+        vm.showHealth = showHealth;
+        vm.addHealthObject = addHealthObject;
+        vm.hasSubSystem = hasSubSystem;
+        vm.isHealthObject = isHealthObject;
+        vm.baseName = baseName;
+        vm.subSystemName = subSystemName;
+
+            activate();
+        function activate(){
+            vm.refresh();
+        }
+
+        function refresh() {
+            vm.updatingHealth = true;
             MonitoringService.checkHealth().then(function (response) {
-                $scope.healthData = $scope.transformHealthData(response);
-                $scope.updatingHealth = false;
+                vm.healthData = vm.transformHealthData(response);
+                vm.updatingHealth = false;
             }, function (response) {
-                $scope.healthData =  $scope.transformHealthData(response.data);
-                $scope.updatingHealth = false;
+                vm.healthData =  vm.transformHealthData(response.data);
+                vm.updatingHealth = false;
             });
-        };
+        }
 
-        $scope.refresh();
-
-        $scope.getLabelClass = function (statusState) {
+        function getLabelClass(statusState) {
             if (statusState === 'UP') {
                 return 'label-success';
             } else {
                 return 'label-danger';
             }
-        };
+        }
 
-        $scope.transformHealthData = function (data) {
+        function transformHealthData(data) {
             var response = [];
-            $scope.flattenHealthData(response, null, data);
+            vm.flattenHealthData(response, null, data);
             return response;
-        };
+        }
 
-        $scope.flattenHealthData = function (result, path, data) {
+        function flattenHealthData(result, path, data) {
             angular.forEach(data, function (value, key) {
-                if ($scope.isHealthObject(value)) {
-                    if ($scope.hasSubSystem(value)) {
-                        $scope.addHealthObject(result, false, value, $scope.getModuleName(path, key));
-                        $scope.flattenHealthData(result, $scope.getModuleName(path, key), value);
+                if (vm.isHealthObject(value)) {
+                    if (vm.hasSubSystem(value)) {
+                        vm.addHealthObject(result, false, value, vm.getModuleName(path, key));
+                        vm.flattenHealthData(result, vm.getModuleName(path, key), value);
                     } else {
-                        $scope.addHealthObject(result, true, value, $scope.getModuleName(path, key));
+                        vm.addHealthObject(result, true, value, vm.getModuleName(path, key));
                     }
                 }
             });
             return result;
-        };
+        }
 
-        $scope.getModuleName = function (path, name) {
+        function getModuleName(path, name) {
             var result;
             if (path && name) {
-                result = path + $scope.separator + name;
+                result = path + vm.separator + name;
             }  else if (path) {
                 result = path;
             } else if (name) {
@@ -58,10 +83,9 @@ angular.module('<%=angularAppName%>')
                 result = '';
             }
             return result;
-        };
+        }
 
-
-        $scope.showHealth = function(health) {
+        function showHealth(health) {
             var modalInstance = $modal.open({
                 templateUrl: 'scripts/app/admin/health/health.modal.html',
                 controller: 'HealthModalController',
@@ -71,17 +95,17 @@ angular.module('<%=angularAppName%>')
                         return health;
                     },
                     baseName: function() {
-                        return $scope.baseName;
+                        return vm.baseName;
                     },
                     subSystemName: function() {
-                        return $scope.subSystemName;
+                        return vm.subSystemName;
                     }
 
                 }
             });
-        };
+        }
 
-        $scope.addHealthObject = function (result, isLeaf, healthObject, name) {
+        function addHealthObject(result, isLeaf, healthObject, name) {
 
             var healthData = {
                 'name': name
@@ -93,7 +117,7 @@ angular.module('<%=angularAppName%>')
                 if (key === 'status' || key === 'error') {
                     healthData[key] = value;
                 } else {
-                    if (!$scope.isHealthObject(value)) {
+                    if (!vm.isHealthObject(value)) {
                         details[key] = value;
                         hasDetails = true;
                     }
@@ -110,9 +134,9 @@ angular.module('<%=angularAppName%>')
                 result.push(healthData);
             }
             return healthData;
-        };
+        }
 
-        $scope.hasSubSystem = function (healthObject) {
+        function hasSubSystem(healthObject) {
             var result = false;
             angular.forEach(healthObject, function (value) {
                 if (value && value.status) {
@@ -120,9 +144,9 @@ angular.module('<%=angularAppName%>')
                 }
             });
             return result;
-        };
+        }
 
-        $scope.isHealthObject = function (healthObject) {
+        function isHealthObject(healthObject) {
             var result = false;
             angular.forEach(healthObject, function (value, key) {
                 if (key === 'status') {
@@ -130,21 +154,23 @@ angular.module('<%=angularAppName%>')
                 }
             });
             return result;
-        };
+        }
 
-        $scope.baseName = function (name) {
+        function baseName(name) {
             if (name) {
-              var split = name.split('.');
-              return split[0];
+                var split = name.split('.');
+                return split[0];
             }
-        };
+        }
 
-        $scope.subSystemName = function (name) {
+        function subSystemName(name) {
             if (name) {
-              var split = name.split('.');
-              split.splice(0, 1);
-              var remainder = split.join('.');
-              return remainder ? ' - ' + remainder : '';
+                var split = name.split('.');
+                split.splice(0, 1);
+                var remainder = split.join('.');
+                return remainder ? ' - ' + remainder : '';
             }
-        };
-    });
+        }
+
+    }
+})();

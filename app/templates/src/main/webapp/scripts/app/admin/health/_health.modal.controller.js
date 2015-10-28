@@ -1,12 +1,33 @@
-'use strict';
+(function () {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('HealthModalController', function($scope, $modalInstance, currentHealth, baseName, subSystemName) {
+    angular
+        .module('<%=angularAppName%>')
+        .controller('HealthModalController', controller);
 
-        $scope.currentHealth = currentHealth;
-        $scope.baseName = baseName, $scope.subSystemName = subSystemName;
+    controller.$inject = [
+        '$modalInstance',
+        'currentHealth',
+        'baseName',
+        'subSystemName'
+    ];
+    /* @ngInject */
+    function controller($modalInstance, currentHealth, baseName, subSystemName){
 
-        $scope.cancel = function() {
+        var vm = this;
+        vm.currentHealth = currentHealth;
+        vm.baseName = baseName;
+        vm.subSystemName = subSystemName;
+        vm.cancel = cancel;
+
+        activate();
+        function activate(){
+
+        }
+
+        function cancel() {
             $modalInstance.dismiss('cancel');
-        };
-    });
+        }
+
+    }
+})();

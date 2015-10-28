@@ -1,16 +1,13 @@
-'use strict';
-
-
 (function () {
     'use strict';
     angular
-        .module('<%=angularAppName%>.account.login')
-        .controller('LoginController', controller);
-    config.inject = [];
-    /* @ngInject */
-    function controller($stateProvider) {
+        .module('<%=angularAppName%>')
+        .config(config);
 
-        var vm = this;
+    config.inject = ['$stateProvider'];
+
+    /* @ngInject */
+    function config($stateProvider) {
 
         $stateProvider
             .state('login', {
@@ -23,7 +20,8 @@
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/account/login/login.html',
-                        controller: 'LoginController'
+                        controller: 'LoginController',
+                        controllerAs: 'vm'
                     }
                 },
                 resolve: {
@@ -31,7 +29,8 @@
                         $translatePartialLoader.addPart('login');
                         return $translate.refresh();
                     }]
-                }
+                },
+                controllerAs: 'vm'
             });
 
     }

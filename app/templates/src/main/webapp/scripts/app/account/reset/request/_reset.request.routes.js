@@ -1,7 +1,14 @@
-'use strict';
 
-angular.module('<%=angularAppName%>')
-    .config(function ($stateProvider) {
+(function () {
+    'use strict';
+
+    angular
+        .module('<%=angularAppName%>')
+        .config(configure);
+
+    configure.$inject = ['$stateProvider'];
+    /* @ngInject */
+    function configure($stateProvider){
         $stateProvider
             .state('requestReset', {
                 parent: 'account',
@@ -12,7 +19,8 @@ angular.module('<%=angularAppName%>')
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/account/reset/request/reset.request.html',
-                        controller: 'RequestResetController'
+                        controller: 'RequestResetController',
+                        controllerAs: 'vm'
                     }
                 },
                 resolve: {
@@ -22,4 +30,5 @@ angular.module('<%=angularAppName%>')
                     }]
                 }
             });
-    });
+    }
+})();

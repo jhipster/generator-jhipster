@@ -1,7 +1,15 @@
-'use strict';
 
-angular.module('<%=angularAppName%>')
-    .config(function ($stateProvider) {
+(function () {
+    'use strict';
+
+    angular
+        .module('<%=angularAppName%>')
+        .config(configure);
+
+    configure.$inject = ['$stateProvider'];
+    /* @ngInject */
+    function configure($stateProvider){
+
         $stateProvider
             .state('logs', {
                 parent: 'admin',
@@ -13,7 +21,8 @@ angular.module('<%=angularAppName%>')
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/admin/logs/logs.html',
-                        controller: 'LogsController'
+                        controller: 'LogsController',
+                        controllerAs: 'vm'
                     }
                 },
                 resolve: {
@@ -23,4 +32,6 @@ angular.module('<%=angularAppName%>')
                     }]
                 }
             });
-    });
+
+    }
+})();

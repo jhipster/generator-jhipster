@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('<%=angularAppName%>.account.login')
+    angular.module('<%=angularAppName%>')
         .controller('LoginController', controller);
 
     controller.inject = ['$rootScope', '$state', '$timeout', 'Auth'];
@@ -12,15 +12,16 @@
         vm.user = {};
         vm.errors = {};
         vm.rememberMe = true;
+        vm.login = login;
 
         activate();
         function activate() {
 
         }
 
-
         $timeout(function (){angular.element('[ng-model="username"]').focus();});
-        vm.login = function (event) {
+        function login(event) {
+            console.log("Asd")
             event.preventDefault();
             Auth.login({
                 username: vm.username,
@@ -36,6 +37,7 @@
             }).catch(function () {
                 vm.authenticationError = true;
             });
-        };
+        }
+
     }
 })();

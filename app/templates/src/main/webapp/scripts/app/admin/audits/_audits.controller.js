@@ -1,25 +1,45 @@
-'use strict';
+(function () {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('AuditsController', function ($scope, $filter, AuditsService) {
-        $scope.onChangeDate = function () {
+    angular
+        .module('<%=angularAppName%>')
+        .controller('AuditsController', controller);
+
+    controller.$inject = ['$filter', 'AuditsService'];
+    /* @ngInject */
+    function controller($filter, AuditsService){
+
+        var vm = this;
+
+        vm.onChangeDate = onChangeDate;
+        vm.today = today;
+        vm.previousMonth = previousMonth;
+
+        activate();
+        function activate(){
+            vm.today();
+            vm.previousMonth();
+            vm.onChangeDate();
+        }
+
+        function onChangeDate() {
             var dateFormat = 'yyyy-MM-dd';
-            var fromDate = $filter('date')($scope.fromDate, dateFormat);
-            var toDate = $filter('date')($scope.toDate, dateFormat);
+            var fromDate = $filter('date')(vm.fromDate, dateFormat);
+            var toDate = $filter('date')(vm.toDate, dateFormat);
 
             AuditsService.findByDates(fromDate, toDate).then(function (data) {
-                $scope.audits = data;
+                vm.audits = data;
             });
-        };
+        }
 
         // Date picker configuration
-        $scope.today = function () {
+        function today() {
             // Today + 1 day - needed if the current day must be included
             var today = new Date();
-            $scope.toDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
-        };
+            vm.toDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+        }
 
-        $scope.previousMonth = function () {
+        function previousMonth() {
             var fromDate = new Date();
             if (fromDate.getMonth() === 0) {
                 fromDate = new Date(fromDate.getFullYear() - 1, 0, fromDate.getDate());
@@ -27,10 +47,8 @@ angular.module('<%=angularAppName%>')
                 fromDate = new Date(fromDate.getFullYear(), fromDate.getMonth() - 1, fromDate.getDate());
             }
 
-            $scope.fromDate = fromDate;
-        };
+            vm.fromDate = fromDate;
+        }
 
-        $scope.today();
-        $scope.previousMonth();
-        $scope.onChangeDate();
-    });
+    }
+})();

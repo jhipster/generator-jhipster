@@ -1,29 +1,45 @@
-'use strict';
+(function () {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('RequestResetController', function ($rootScope, $scope, $state, $timeout, Auth) {
+    angular
+        .module('<%=angularAppName%>')
+        .controller('RequestResetController', controller);
 
-        $scope.success = null;
-        $scope.error = null;
-        $scope.errorEmailNotExists = null;
-        $scope.resetAccount = {};
-        $timeout(function (){angular.element('[ng-model="resetAccount.email"]').focus();});
+    controller.$inject = [
+        '$rootScope',
+        '$state',
+        '$timeout',
+        'Auth'
+    ];
+    /* @ngInject */
+    function controller($rootScope, $state, $timeout, Auth){
 
-        $scope.requestReset = function () {
+        var vm = this;
+        vm.success = null;
+        vm.error = null;
+        vm.errorEmailNotExists = null;
+        vm.resetAccount = {};
 
-            $scope.error = null;
-            $scope.errorEmailNotExists = null;
+        activate();
+        function activate(){
+            $timeout(function (){angular.element('[ng-model="resetAccount.email"]').focus();});
+        }
 
-            Auth.resetPasswordInit($scope.resetAccount.email).then(function () {
-                $scope.success = 'OK';
+        vm.requestReset = function () {
+
+            vm.error = null;
+            vm.errorEmailNotExists = null;
+
+            Auth.resetPasswordInit(vm.resetAccount.email).then(function () {
+                vm.success = 'OK';
             }).catch(function (response) {
-                $scope.success = null;
+                vm.success = null;
                 if (response.status === 400 && response.data === 'e-mail address not registered') {
-                    $scope.errorEmailNotExists = 'ERROR';
+                    vm.errorEmailNotExists = 'ERROR';
                 } else {
-                    $scope.error = 'ERROR';
+                    vm.error = 'ERROR';
                 }
             });
         }
-
-    });
+    }
+})();

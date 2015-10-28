@@ -1,64 +1,90 @@
-'use strict';
+(function () {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('UserManagementController', function ($scope, User, ParseLinks<% if (enableTranslation) { %>, Language<% } %>) {
-        $scope.users = [];
-        $scope.authorities = ["ROLE_USER", "ROLE_ADMIN"];<% if (enableTranslation) { %>
-        Language.getAll().then(function (languages) {
-            $scope.languages = languages;
-        });<% } %>
+    angular
+        .module('<%=angularAppName%>')
+        .controller('UserManagementController', controller);
 
-        $scope.page = 0;
-        $scope.loadAll = function () {<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-            User.query({page: $scope.page, per_page: 20}, function (result, headers) {
-                $scope.links = ParseLinks.parse(headers('link'));<% } else { %>
+    controller.$inject = [
+        'User',
+        'ParseLinks'<% if (enableTranslation) { %>,
+        'Language'<% } %>
+    ];
+    /* @ngInject */
+    function controller(User, ParseLinks<% if (enableTranslation) { %>, Language<% } %>){
+
+        var vm = this;
+        vm.users = [];
+        vm.authorities = ["ROLE_USER", "ROLE_ADMIN"];
+        vm.page = 0;
+        vm.loadAll = loadAll;
+        vm.loadPage = loadPage;
+        vm.setActive = setActive;
+        vm.showUpdate = showUpdate;
+        vm.save = save;
+        vm.refresh = refresh;
+        vm.clear = clear;
+
+            activate();
+        function activate(){
+        <% if (enableTranslation) { %>
+            Language.getAll().then(function (languages) {
+                vm.languages = languages;
+            });
+        <% } %>
+        vm.loadAll();
+        }
+
+       function loadAll() {
+        <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+            User.query({page: vm.page, per_page: 20}, function (result, headers) {
+                vm.links = ParseLinks.parse(headers('link'));<% } else { %>
             User.query({}, function (result) {<% } %>
-                $scope.users = result;
+                vm.users = result;
             });
         };
 
-        $scope.loadPage = function (page) {
-            $scope.page = page;
-            $scope.loadAll();
+        function loadPage(page) {
+            vm.page = page;
+            vm.loadAll();
         };
-        $scope.loadAll();
-
-        $scope.setActive = function (user, isActivated) {
+        function setActive(user, isActivated) {
             user.activated = isActivated;
             User.update(user, function () {
-                $scope.loadAll();
-                $scope.clear();
+                vm.loadAll();
+                vm.clear();
             });
         };
 
-        $scope.showUpdate = function (login) {
+        function showUpdate(login) {
             User.get({login: login}, function (result) {
-                $scope.user = result;
+                vm.user = result;
                 $('#saveUserModal').modal('show');
             });
         };
 
-        $scope.save = function () {
-            User.update($scope.user,
+        function save() {
+            User.update(vm.user,
                 function () {
-                    $scope.refresh();
+                    vm.refresh();
                 });
         };
 
-        $scope.refresh = function () {
-            $scope.loadAll();
+        function refresh() {
+            vm.loadAll();
             $('#saveUserModal').modal('hide');
-            $scope.clear();
+            vm.clear();
         };
 
-        $scope.clear = function () {
-            $scope.user = {
+        function clear() {
+            vm.user = {
                 id: null, login: null, firstName: null, lastName: null, email: null,
                 activated: null, langKey: null, createdBy: null, createdDate: null,
                 lastModifiedBy: null, lastModifiedDate: null, resetDate: null,
                 resetKey: null, authorities: null
             };
-            $scope.editForm.$setPristine();
-            $scope.editForm.$setUntouched();
+            vm.editForm.$setPristine();
+            vm.editForm.$setUntouched();
         };
-    });
+    }
+})();

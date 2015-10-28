@@ -1,12 +1,28 @@
-'use strict';
+(function () {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('LogsController', function ($scope, LogsService) {
-        $scope.loggers = LogsService.findAll();
+    angular
+        .module('<%=angularAppName%>')
+        .controller('LogsController', controller);
 
-        $scope.changeLevel = function (name, level) {
+    controller.$inject = ['LogsService'];
+    /* @ngInject */
+    function controller(LogsService){
+
+        var vm = this;
+        vm.loggers = LogsService.findAll();
+        vm.changeLevel = changeLevel;
+
+        activate();
+        function activate(){
+
+        }
+
+        function changeLevel(name, level) {
             LogsService.changeLevel({name: name, level: level}, function () {
-                $scope.loggers = LogsService.findAll();
+                vm.loggers = LogsService.findAll();
             });
-        };
-    });
+        }
+
+    }
+})();

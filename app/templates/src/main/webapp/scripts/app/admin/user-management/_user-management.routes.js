@@ -1,7 +1,15 @@
-'use strict';
 
-angular.module('<%=angularAppName%>')
-    .config(function ($stateProvider) {
+(function () {
+    'use strict';
+
+    angular
+        .module('<%=angularAppName%>')
+        .config(configure);
+
+    configure.$inject = ['$stateProvider'];
+    /* @ngInject */
+    function configure($stateProvider){
+
         $stateProvider
             .state('user-management', {
                 parent: 'admin',
@@ -13,7 +21,8 @@ angular.module('<%=angularAppName%>')
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/admin/user-management/user-management.html',
-                        controller: 'UserManagementController'
+                        controller: 'UserManagementController',
+                        controllerAs: 'vm'
                     }
                 },
                 resolve: {
@@ -43,4 +52,6 @@ angular.module('<%=angularAppName%>')
                     }]
                 }
             });
-    });
+
+    }
+})();

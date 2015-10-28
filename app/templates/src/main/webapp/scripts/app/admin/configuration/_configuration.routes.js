@@ -1,7 +1,14 @@
-'use strict';
+(function () {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .config(function ($stateProvider) {
+    angular
+        .module('<%=angularAppName%>')
+        .config(configure);
+
+    configure.$inject = ['$stateProvider'];
+    /* @ngInject */
+    function configure($stateProvider){
+
         $stateProvider
             .state('configuration', {
                 parent: 'admin',
@@ -13,7 +20,8 @@ angular.module('<%=angularAppName%>')
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/admin/configuration/configuration.html',
-                        controller: 'ConfigurationController'
+                        controller: 'ConfigurationController',
+                        controllerAs: 'vm'
                     }
                 },
                 resolve: {
@@ -23,4 +31,6 @@ angular.module('<%=angularAppName%>')
                     }]
                 }
             });
-    });
+
+    }
+})();

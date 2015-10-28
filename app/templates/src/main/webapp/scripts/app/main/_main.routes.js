@@ -1,7 +1,14 @@
-'use strict';
+(function () {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .config(function ($stateProvider) {
+    angular
+        .module('<%=angularAppName%>')
+        .config(configure);
+
+    configure.$inject = ['$stateProvider'];
+    /* @ngInject */
+    function configure($stateProvider){
+
         $stateProvider
             .state('home', {
                 parent: 'site',
@@ -12,7 +19,8 @@ angular.module('<%=angularAppName%>')
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/main/main.html',
-                        controller: 'MainController'
+                        controller: 'MainController',
+                        controllerAs: 'vm'
                     }
                 },
                 resolve: {
@@ -22,4 +30,6 @@ angular.module('<%=angularAppName%>')
                     }]
                 }
             });
-    });
+
+    }
+})();

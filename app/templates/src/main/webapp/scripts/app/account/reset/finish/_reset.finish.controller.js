@@ -1,26 +1,42 @@
-'use strict';
+(function () {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('ResetFinishController', function ($scope, $stateParams, $timeout, Auth) {
+    angular
+        .module('<%=angularAppName%>')
+        .controller('ResetFinishController', controller);
 
-        $scope.keyMissing = $stateParams.key === undefined;
-        $scope.doNotMatch = null;
+    controller.$inject = [
+        '$stateParams',
+        '$timeout',
+        'Auth'
+    ];
+    /* @ngInject */
+    function controller($stateParams, $timeout, Auth){
 
-        $scope.resetAccount = {};
-        $timeout(function (){angular.element('[ng-model="resetAccount.password"]').focus();});
+        var vm = this;
+        vm.keyMissing = $stateParams.key === undefined;
+        vm.doNotMatch = null;
+        vm.resetAccount = {};
+        vm.finishReset = finishReset;
 
-        $scope.finishReset = function() {
-            if ($scope.resetAccount.password !== $scope.confirmPassword) {
-                $scope.doNotMatch = 'ERROR';
+        activate();
+        function activate(){
+            $timeout(function (){angular.element('[ng-model="resetAccount.password"]').focus();});
+        }
+
+        function finishReset() {
+            if (vm.resetAccount.password !== vm.confirmPassword) {
+                vm.doNotMatch = 'ERROR';
             } else {
-                Auth.resetPasswordFinish({key: $stateParams.key, newPassword: $scope.resetAccount.password}).then(function () {
-                    $scope.success = 'OK';
+                Auth.resetPasswordFinish({key: $stateParams.key, newPassword: vm.resetAccount.password}).then(function () {
+                    vm.success = 'OK';
                 }).catch(function (response) {
-                    $scope.success = null;
-                    $scope.error = 'ERROR';
-
+                    vm.success = null;
+                    vm.error = 'ERROR';
                 });
             }
+        }
 
-        };
-    });
+    }
+})();
+

@@ -1,7 +1,13 @@
-'use strict';
+(function () {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .config(function ($stateProvider) {
+    angular
+        .module('<%=angularAppName%>')
+        .config(configure);
+
+    configure.$inject = ['$stateProvider'];
+    /* @ngInject */
+    function configure($stateProvider){
         $stateProvider
             .state('register', {
                 parent: 'account',
@@ -13,7 +19,8 @@ angular.module('<%=angularAppName%>')
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/account/register/register.html',
-                        controller: 'RegisterController'
+                        controller: 'RegisterController',
+                        controllerAs: 'vm'
                     }
                 },
                 resolve: {
@@ -23,4 +30,6 @@ angular.module('<%=angularAppName%>')
                     }]
                 }
             });
-    });
+    }
+})();
+

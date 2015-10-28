@@ -1,5 +1,14 @@
-angular.module('<%=angularAppName%>')
-    .config(function ($stateProvider) {
+(function () {
+    'use strict';
+
+    angular
+        .module('<%=angularAppName%>')
+        .config(configure);
+
+    configure.$inject = ['$stateProvider'];
+    /* @ngInject */
+    function configure($stateProvider){
+
         $stateProvider
             .state('tracker', {
                 parent: 'admin',
@@ -11,7 +20,8 @@ angular.module('<%=angularAppName%>')
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/admin/tracker/tracker.html',
-                        controller: 'TrackerController'
+                        controller: 'TrackerController',
+                        controllerAs: 'vm'
                     }
                 },
                 resolve: {
@@ -27,4 +37,6 @@ angular.module('<%=angularAppName%>')
                     Tracker.unsubscribe();
                 },
             });
-    });
+
+    }
+})();

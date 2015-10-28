@@ -1,26 +1,43 @@
-'use strict';
+(function () {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('PasswordController', function ($scope, Auth, Principal) {
-        Principal.identity().then(function(account) {
-            $scope.account = account;
-        });
+    angular
+        .module('<%=angularAppName%>')
+        .controller('PasswordController', controller);
 
-        $scope.success = null;
-        $scope.error = null;
-        $scope.doNotMatch = null;
-        $scope.changePassword = function () {
-            if ($scope.password !== $scope.confirmPassword) {
-                $scope.doNotMatch = 'ERROR';
+    controller.$inject = [
+        'Auth',
+        'Principal'
+    ];
+    /* @ngInject */
+    function controller(Auth, Principal){
+
+        var vm = this;
+        vm.success = null;
+        vm.error = null;
+        vm.doNotMatch = null;
+
+        activate();
+        function activate(){
+            Principal.identity().then(function(account) {
+                vm.account = account;
+            });
+        }
+
+        vm.changePassword = function () {
+            if (vm.password !== vm.confirmPassword) {
+                vm.doNotMatch = 'ERROR';
             } else {
-                $scope.doNotMatch = null;
-                Auth.changePassword($scope.password).then(function () {
-                    $scope.error = null;
-                    $scope.success = 'OK';
+                vm.doNotMatch = null;
+                Auth.changePassword(vm.password).then(function () {
+                    vm.error = null;
+                    vm.success = 'OK';
                 }).catch(function () {
-                    $scope.success = null;
-                    $scope.error = 'ERROR';
+                    vm.success = null;
+                    vm.error = 'ERROR';
                 });
             }
         };
-    });
+
+    }
+})();

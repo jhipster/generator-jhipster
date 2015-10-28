@@ -1266,7 +1266,7 @@ EntityGenerator.prototype.files = function files() {
     this.addRouterToMenu(this.entityInstance, this.enableTranslation);
 
     //Route
-    this.template('src/main/webapp/app/_entity.js',
+    this.template('src/main/webapp/app/_entity.routes.js',
         'src/main/webapp/scripts/app/' +    this.entityInstance + '/config/' +  this.entityInstance + '.routes' + '.js', this, {});
     this.addAppScriptToIndex(this.entityInstance + '/config/' +  this.entityInstance + '.routes' + '.js');
 

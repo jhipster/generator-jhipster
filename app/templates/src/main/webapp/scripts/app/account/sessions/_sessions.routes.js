@@ -1,7 +1,15 @@
-'use strict';
 
-angular.module('<%=angularAppName%>')
-    .config(function ($stateProvider) {
+(function () {
+    'use strict';
+
+    angular
+        .module('<%=angularAppName%>')
+        .config(configure);
+
+    configure.$inject = ['$stateProvider'];
+    /* @ngInject */
+    function configure($stateProvider){
+
         $stateProvider
             .state('sessions', {
                 parent: 'account',
@@ -13,7 +21,8 @@ angular.module('<%=angularAppName%>')
                 views: {
                     'content@': {
                         templateUrl: 'scripts/app/account/sessions/sessions.html',
-                        controller: 'SessionsController'
+                        controller: 'SessionsController',
+                        controllerAs: 'vm'
                     }
                 },
                 resolve: {
@@ -23,4 +32,6 @@ angular.module('<%=angularAppName%>')
                     }]
                 }
             });
-    });
+
+    }
+})();

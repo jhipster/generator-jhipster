@@ -1,7 +1,15 @@
-'use strict';
+(function () {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .config(function ($stateProvider) {
+    angular
+        .module('<%=angularAppName%>')
+        .config(configure);
+
+    configure.$inject = [
+        '$stateProvider'];
+    /* @ngInject */
+    function configure($stateProvider){
+
         $stateProvider
             .state('docs', {
                 parent: 'admin',
@@ -21,4 +29,6 @@ angular.module('<%=angularAppName%>')
                     }]
                 }
             });
-    });
+
+    }
+})();

@@ -1,26 +1,46 @@
-angular.module('<%=angularAppName%>')
-    .controller('TrackerController', function ($scope<% if (authenticationType == 'oauth2') { %>, AuthServerProvider<% } %>, $cookies, $http, Tracker) {
+(function () {
+    'use strict';
+
+    angular
+        .module('<%=angularAppName%>')
+        .controller('TrackerController', controller);
+
+    controller.$inject = [<% if (authenticationType == 'oauth2') { %>
+        'AuthServerProvider', <% } %>
+        '$cookies',
+        '$http',
+        'Tracker'
+    ];
+    /* @ngInject */
+    function controller(<% if (authenticationType == 'oauth2') { %> AuthServerProvider,<% } %> $cookies, $http, Tracker){
         // This controller uses a Websocket connection to receive user activities in real-time.
 
-        $scope.activities = [];
-        Tracker.receive().then(null, null, function(activity) {
-            showActivity(activity);
-        });
+        var vm = this;
+        vm.activities = [];
+        vm.showActivity = showActivity;
+
+        activate();
+        function activate(){
+            Tracker.receive().then(null, null, function(activity) {
+                vm.showActivity(activity);
+            });
+        }
 
         function showActivity(activity) {
             var existingActivity = false;
-            for (var index = 0; index < $scope.activities.length; index++) {
-                if($scope.activities[index].sessionId == activity.sessionId) {
+            for (var index = 0; index < vm.activities.length; index++) {
+                if(vm.activities[index].sessionId == activity.sessionId) {
                     existingActivity = true;
                     if (activity.page == 'logout') {
-                        $scope.activities.splice(index, 1);
+                        vm.activities.splice(index, 1);
                     } else {
-                        $scope.activities[index] = activity;
+                        vm.activities[index] = activity;
                     }
                 }
             }
             if (!existingActivity && (activity.page != 'logout')) {
-                $scope.activities.push(activity);
+                vm.activities.push(activity);
             }
         };
-    });
+    }
+})();
