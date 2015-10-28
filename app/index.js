@@ -241,6 +241,9 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             default: 1
         },
         {
+            when: function (response) {
+                return response.databaseType == 'sql';
+            },
             type: 'list',
             name: 'searchEngine',
             message: '(8/' + questions + ') Do you want to use a search engine in your application?',
