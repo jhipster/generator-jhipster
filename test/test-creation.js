@@ -41,6 +41,8 @@ describe('JHipster generator ', function () {
             '.gitattributes',
             'Gruntfile.js',
             'pom.xml',
+            'mvnw',
+            'mvnw.cmd',
             'src/main/resources/banner.txt',
             'src/main/resources/ehcache.xml',
             'src/main/resources/.h2.server.properties',
@@ -269,6 +271,8 @@ describe('JHipster generator ', function () {
             'src/main/webapp/assets/images/development_ribbon.png',
             'src/main/webapp/assets/images/hipster.png',
             'src/main/webapp/assets/images/hipster2x.png',
+            '.mvn/wrapper/maven-wrapper.jar',
+            '.mvn/wrapper/maven-wrapper.properties',
             '.editorconfig',
             '.jshintrc'
         ]);
