@@ -1,0 +1,23 @@
+{
+  "generator-jhipster": {
+    "baseName": "sampleGulp",
+    "packageName": "com.mycompany.myapp",
+    "packageFolder": "com/mycompany/myapp",
+    "authenticationType": "session",
+    "hibernateCache": "ehcache",
+    "clusteredHttpSession": "no",
+    "websocket": "no",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": "no",
+    "useSass": false,
+    "buildTool": "maven",
+    "frontendBuilder": "gulp",
+    "enableTranslation": true,
+    "rememberMeKey": "5b5e44a65ccb2d7ab32491bb5764f28f6013cfcb",
+    "testFrameworks": [
+      "gatling"
+    ]
+  }
+}
