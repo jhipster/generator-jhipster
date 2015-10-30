@@ -11,4 +11,6 @@ npm install -g gulp
 # Install the latest version of JHipster
 #--------------------------------------------------
 cd $TRAVIS_BUILD_DIR/
-npm install -g
+npm install
+npm link
+npm test
