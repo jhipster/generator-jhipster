@@ -157,12 +157,12 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             message: '(6/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
-                    value: 'h2Memory',
-                    name: 'H2 with in-memory persistence'
+                    value: 'h2Disk',
+                    name: 'H2 with disk-based persistence'
                 },
                 {
-                    value: 'h2Disk',
-                    name: 'H2 with disk-based persistence (Warning: does not work on Windows)'
+                    value: 'h2Memory',
+                    name: 'H2 with in-memory persistence'
                 },
                 {
                     value: 'mysql',
@@ -180,12 +180,12 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             message: '(6/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
-                    value: 'h2Memory',
-                    name: 'H2 with in-memory persistence'
+                    value: 'h2Disk',
+                    name: 'H2 with disk-based persistence'
                 },
                 {
-                    value: 'h2Disk',
-                    name: 'H2 with disk-based persistence (Warning: does not work on Windows)'
+                    value: 'h2Memory',
+                    name: 'H2 with in-memory persistence'
                 },
                 {
                     value: 'postgresql',
@@ -203,12 +203,12 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             message: '(6/' + questions + ') Which *development* database would you like to use?',
             choices: [
                 {
-                    value: 'h2Memory',
-                    name: 'H2 with in-memory persistence'
+                    value: 'h2Disk',
+                    name: 'H2 with disk-based persistence'
                 },
                 {
-                    value: 'h2Disk',
-                    name: 'H2 with disk-based persistence (Warning: does not work on Windows)'
+                    value: 'h2Memory',
+                    name: 'H2 with in-memory persistence'
                 },
                 {
                     value: 'oracle',
@@ -241,6 +241,9 @@ JhipsterGenerator.prototype.askFor = function askFor() {
             default: 1
         },
         {
+            when: function (response) {
+                return response.databaseType == 'sql';
+            },
             type: 'list',
             name: 'searchEngine',
             message: '(8/' + questions + ') Do you want to use a search engine in your application?',
@@ -495,6 +498,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
     this.camelizedBaseName = _.camelize(this.baseName);
     this.slugifiedBaseName = _.slugify(this.baseName);
+    this.lowercaseBaseName = this.baseName.toLowerCase();
 
     if (this.prodDatabaseType === 'oracle') { // create a folder for users to place ojdbc jar
         this.ojdbcVersion = '7';
@@ -560,6 +564,10 @@ JhipsterGenerator.prototype.app = function app() {
             break;
         case 'maven':
         default :
+            this.copy('mvnw', 'mvnw');
+            this.copy('mvnw.cmd', 'mvnw.cmd');
+            this.copy('.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.jar');
+            this.copy('.mvn/wrapper/maven-wrapper.properties', '.mvn/wrapper/maven-wrapper.properties');
             this.template('_pom.xml', 'pom.xml', null, {'interpolate': interpolateRegex});
     }
 
@@ -684,14 +692,11 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/config/locale/_package-info.java', javaDir + 'config/locale/package-info.java', this, {});
     this.template('src/main/java/package/config/locale/_AngularCookieLocaleResolver.java', javaDir + 'config/locale/AngularCookieLocaleResolver.java', this, {});
 
-    this.template('src/main/java/package/config/metrics/_package-info.java', javaDir + 'config/metrics/package-info.java', this, {});
     if (this.databaseType == 'cassandra') {
+        this.template('src/main/java/package/config/metrics/_package-info.java', javaDir + 'config/metrics/package-info.java', this, {});
+        this.template('src/main/java/package/config/metrics/_JHipsterHealthIndicatorConfiguration.java', javaDir + 'config/metrics/JHipsterHealthIndicatorConfiguration.java', this, {});
         this.template('src/main/java/package/config/metrics/_CassandraHealthIndicator.java', javaDir + 'config/metrics/CassandraHealthIndicator.java', this, {});
     }
-    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
-        this.template('src/main/java/package/config/metrics/_DatabaseHealthIndicator.java', javaDir + 'config/metrics/DatabaseHealthIndicator.java', this, {});
-    }
-    this.template('src/main/java/package/config/metrics/_JHipsterHealthIndicatorConfiguration.java', javaDir + 'config/metrics/JHipsterHealthIndicatorConfiguration.java', this, {});
 
     if (this.hibernateCache == "hazelcast") {
         this.template('src/main/java/package/config/hazelcast/_HazelcastCacheRegionFactory.java', javaDir + 'config/hazelcast/HazelcastCacheRegionFactory.java', this, {});
@@ -725,6 +730,7 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     if (this.searchEngine == 'elasticsearch') {
+        this.template('src/main/java/package/config/_ElasticSearchConfiguration.java', javaDir + 'config/ElasticSearchConfiguration.java', this, {});
         this.template('src/main/java/package/repository/search/_package-info.java', javaDir + 'repository/search/package-info.java', this, {});
         this.template('src/main/java/package/repository/search/_UserSearchRepository.java', javaDir + 'repository/search/UserSearchRepository.java', this, {});
     }
@@ -1186,6 +1192,9 @@ JhipsterGenerator.prototype.app = function app() {
     // Remove old files, from previous JHipster versions
     removefile(javaDir + 'config/MailConfiguration.java');
     removefile(javaDir + 'config/metrics/JavaMailHealthIndicator.java');
+    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+        removefolder(javaDir + 'config/metrics');
+    }
 
     removefile(javaDir + 'domain/util/CustomLocalDateSerializer.java');
     removefile(javaDir + 'domain/util/CustomDateTimeSerializer.java');

@@ -111,14 +111,13 @@ only screen and (                min-resolution: 2dppx) {
     min-width: 400px;
 }
 
-.alert .popover pre {
-    font-size: 10px;
-}
-/*Custom alerts for notification*/
+/* ==========================================================================
+Custom alerts for notification
+========================================================================== */
+
 .alerts .alert{
     text-overflow: ellipsis;
 }
-
 .alert pre{
     background: none;
     border: none;
@@ -127,6 +126,39 @@ only screen and (                min-resolution: 2dppx) {
     padding: 0;
     margin: 0;
 }
+
+.alert .popover pre {
+    font-size: 10px;
+}
+
+.alerts .toast {
+    position: fixed;
+    width: 100%;
+}
+
+.alerts .toast.left {
+    left: 5px;
+}
+
+.alerts .toast.right {
+    right: 5px;
+}
+
+.alerts .toast.top {
+    top: 55px;
+}
+
+.alerts .toast.bottom {
+    bottom: 55px;
+}
+
+@media screen and (min-width: 480px) {
+    .alerts .toast {
+        width: 50%;
+    }
+}
+
+/* end of Custom alerts for notification */
 
 .voffset  { margin-top: 2px; }
 .voffset1 { margin-top: 5px; }
