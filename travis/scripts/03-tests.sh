@@ -3,7 +3,7 @@ set -ev
 #--------------------------------------------------
 # Launch tests
 #--------------------------------------------------
-cd $JHIPSTER_SAMPLES/$JHIPSTER
+cd $HOME/$JHIPSTER
 if [ $JHIPSTER != "app-gradle" ]; then
   mvn test
 else

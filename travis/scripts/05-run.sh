@@ -3,7 +3,7 @@ set -ev
 #--------------------------------------------------
 # Start the application
 #--------------------------------------------------
-cd $JHIPSTER_SAMPLES/$JHIPSTER
+cd $HOME/$JHIPSTER
 if [ $RUNTASK == 1 ]; then
   if [ $JHIPSTER != "app-gradle" ]; then
     mvn -P$PROFILE &

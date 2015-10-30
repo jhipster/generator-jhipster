@@ -3,9 +3,10 @@ set -ev
 #--------------------------------------------------
 # Generate the project with yo jhipster
 #--------------------------------------------------
-cd $JHIPSTER_SAMPLES/$JHIPSTER
+mv -f $JHIPSTER_SAMPLES/$JHIPSTER $HOME/
+cd $HOME/$JHIPSTER
 npm link generator-jhipster
 yo jhipster --force --no-insight
-ls -al $JHIPSTER_SAMPLES/$JHIPSTER
-ls -al $JHIPSTER_SAMPLES/$JHIPSTER/node_modules/generator-jhipster/
-ls -al $JHIPSTER_SAMPLES/$JHIPSTER/node_modules/generator-jhipster/entity/
+ls -al $HOME/$JHIPSTER
+ls -al $HOME/$JHIPSTER/node_modules/generator-jhipster/
+ls -al $HOME/$JHIPSTER/node_modules/generator-jhipster/entity/

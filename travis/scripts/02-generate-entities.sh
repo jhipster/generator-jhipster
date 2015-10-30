@@ -3,7 +3,7 @@ set -ev
 #--------------------------------------------------
 # Generate the entities with yo jhipster:entity
 #--------------------------------------------------
-cd $JHIPSTER_SAMPLES/$JHIPSTER
+cd $HOME/$JHIPSTER
 if [ -a .jhipster/BankAccount.json ]; then
   yo jhipster:entity BankAccount --force --no-insight
 fi

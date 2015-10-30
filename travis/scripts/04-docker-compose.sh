@@ -3,7 +3,7 @@ set -ev
 #--------------------------------------------------
 # Start docker container
 #--------------------------------------------------
-cd $JHIPSTER_SAMPLES/$JHIPSTER
+cd $HOME/$JHIPSTER
 if [ -a docker-compose-prod.yml ]; then
   # travis is not stable with docker... need to start container with privileged
   echo '  privileged: true' >> docker-compose-prod.yml
