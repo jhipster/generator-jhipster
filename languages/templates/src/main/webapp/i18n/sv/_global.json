@@ -104,5 +104,10 @@
             "datetimelocal": "Detta fält måste vara ett datum och en tid"
         }
     },
+    "error": {
+        "serverNotReachable": "Server not reachable",
+        "NotNull": "Field {{fieldName}} cannot be empty!",
+        "Size": "Field {{fieldName}} does not meet min/max size requirements!"
+    },
     "footer": "Detta är din footer"
 }
