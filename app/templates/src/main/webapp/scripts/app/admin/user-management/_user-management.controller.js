@@ -38,11 +38,18 @@ angular.module('<%=angularAppName%>')
             });
         };
 
+        var onSaveSuccess = function (result) {
+            $scope.refresh();
+            $scope.isSaving = false;
+        };
+
+        var onSaveError = function (result) {
+            $scope.isSaving = false;
+        };
+
         $scope.save = function () {
-            User.update($scope.user,
-                function () {
-                    $scope.refresh();
-                });
+            $scope.isSaving = true;
+            User.update($scope.user, onSaveSuccess, onSaveError);
         };
 
         $scope.refresh = function () {
