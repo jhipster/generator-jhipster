@@ -1001,8 +1001,41 @@ module.exports = JhipsterGenerator.extend({
                     this.template('Gruntfile.js', 'Gruntfile.js', this, {});
             }
 
+
             // Create Webapp
             mkdirp(WEBAPP_DIR);
+    this.template('src/main/java/package/security/_package-info.java', javaDir + 'security/package-info.java', this, {});
+    if (this.authenticationType == 'session') {
+        this.template('src/main/java/package/security/_AjaxAuthenticationFailureHandler.java', javaDir + 'security/AjaxAuthenticationFailureHandler.java', this, {});
+        this.template('src/main/java/package/security/_AjaxAuthenticationSuccessHandler.java', javaDir + 'security/AjaxAuthenticationSuccessHandler.java', this, {});
+    }
+    if (this.authenticationType == 'session' || this.authenticationType == 'oauth2') {
+        this.template('src/main/java/package/security/_AjaxLogoutSuccessHandler.java', javaDir + 'security/AjaxLogoutSuccessHandler.java', this, {});
+    }
+    if (this.authenticationType == 'xauth') {
+        this.template('src/main/java/package/security/_AuthenticationProvider.java', javaDir + 'security/AuthenticationProvider.java', this, {});
+    }
+    this.template('src/main/java/package/security/_AuthoritiesConstants.java', javaDir + 'security/AuthoritiesConstants.java', this, {});
+    if (this.authenticationType == 'session') {
+        this.template('src/main/java/package/security/_CustomPersistentRememberMeServices.java', javaDir + 'security/CustomPersistentRememberMeServices.java', this, {});
+    }
+    this.template('src/main/java/package/security/_Http401UnauthorizedEntryPoint.java', javaDir + 'security/Http401UnauthorizedEntryPoint.java', this, {});
+    this.template('src/main/java/package/security/_SecurityUtils.java', javaDir + 'security/SecurityUtils.java', this, {});
+    if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+        this.template('src/main/java/package/security/_SpringSecurityAuditorAware.java', javaDir + 'security/SpringSecurityAuditorAware.java', this, {});
+    }
+    this.template('src/main/java/package/security/_CustomUserDetails.java', javaDir + 'security/CustomUserDetails.java', this, {});
+    this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java', this, {});
+    this.template('src/main/java/package/security/_UserNotActivatedException.java', javaDir + 'security/UserNotActivatedException.java', this, {});
+
+     if (this.authenticationType == 'xauth') {
+        this.template('src/main/java/package/security/jwt/_TokenAuthenticationService.java', javaDir + 'security/jwt/TokenAuthenticationService.java', this, {});
+        this.template('src/main/java/package/security/jwt/_TokenHandler.java', javaDir + 'security/jwt/TokenHandler.java', this, {});
+        this.template('src/main/java/package/web/rest/_UserJWTTokenController.java', javaDir + 'web/rest/UserJWTTokenController.java', this, {});
+        this.template('src/main/java/package/security/jwt/_JWTTokenConfigurer.java', javaDir + 'security/jwt/JWTTokenConfigurer.java', this, {});
+        this.template('src/main/java/package/security/jwt/_StatelessAuthenticationFilter.java', javaDir + 'security/jwt/StatelessAuthenticationFilter.java', this, {});
+    }
+>>>>>>> Initial commit
 
             // normal CSS or SCSS?
             if (this.useSass) {
