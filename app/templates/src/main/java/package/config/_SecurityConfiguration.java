@@ -59,7 +59,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     private RememberMeServices rememberMeServices;<% } %><% if (authenticationType == 'jwt') { %>
 
     @Inject
-    private TokenProvider tokenProvider;<% } %>
+    private TokenAuthenticationService tokenAuthenticationService;<% } %>
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -71,6 +71,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
         auth
             .userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
+    }
+  
+    
+    @Bean
+    AuthenticationProvider customAuthenticationProvider() {
+        CustomAuthenticationProvider impl = new CustomAuthenticationProvider();
+        impl.setUserDetailsService(customUserDetailsService());
+        /* other properties etc */
+        return impl ;
     }
 
     @Override
@@ -165,10 +174,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
-    }<% } %><% if (authenticationType == 'xauth') { %>
+    }<% } %><% if (authenticationType == 'jwt') { %>
 
-    private XAuthTokenConfigurer securityConfigurerAdapter() {
-      return new XAuthTokenConfigurer(userDetailsService, tokenProvider);
+    private JWTTokenConfigurer securityConfigurerAdapter() {
+      return new XAuthTokenConfigurer(userDetailsService, tokenAuthenticationService);
     }<% } %>
 
     @Bean
