@@ -104,5 +104,10 @@
             "datetimelocal": "Ennek a mezőnek dátumnak vagy időpontnak kéne lennie."
         }
     },
+    "error": {
+        "serverNotReachable": "Server not reachable",
+        "NotNull": "Field {{fieldName}} cannot be empty!",
+        "Size": "Field {{fieldName}} does not meet min/max size requirements!"
+    },
     "footer": "Ez a lábléc."
 }

@@ -104,5 +104,10 @@
             "datetimelocal": "Questo campo dovrebbe essere una data e l'ora."
         }
     },
+    "error": {
+        "serverNotReachable": "Server not reachable",
+        "NotNull": "Field {{fieldName}} cannot be empty!",
+        "Size": "Field {{fieldName}} does not meet min/max size requirements!"
+    },
     "footer": "pie di pagina"
 }
