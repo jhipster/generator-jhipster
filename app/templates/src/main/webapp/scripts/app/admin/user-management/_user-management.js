@@ -73,7 +73,7 @@ angular.module('<%=angularAppName%>')
             })
             .state('user-management.edit', {
                 parent: 'user-management',
-                url: '/{id}/edit',
+                url: '/{login}/edit',
                 data: {
                     authorities: ['ROLE_ADMIN'],
                 },

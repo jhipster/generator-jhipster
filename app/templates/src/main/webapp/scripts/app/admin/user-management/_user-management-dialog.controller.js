@@ -1,11 +1,16 @@
 'use strict';
 
 angular.module('<%=angularAppName%>').controller('UserManagementDialogController',
-    ['$scope', '$stateParams', '$modalInstance', 'entity', 'User',
-        function($scope, $stateParams, $modalInstance, entity, User) {
+    ['$scope', '$stateParams', '$modalInstance', 'entity', 'User', <% if (enableTranslation) { %>'Language',<% } %>
+        function($scope, $stateParams, $modalInstance, entity, User<% if (enableTranslation) { %>, Language<% } %>) {
 
         $scope.user = entity;
-
+        $scope.authorities = ["ROLE_USER", "ROLE_ADMIN"];
+        <%_ if (enableTranslation) { _%>
+        Language.getAll().then(function (languages) {
+            $scope.languages = languages;
+        });
+        <%_ } _%>
         var onSaveSuccess = function (result) {
             $scope.isSaving = false;
             $modalInstance.close(result);
