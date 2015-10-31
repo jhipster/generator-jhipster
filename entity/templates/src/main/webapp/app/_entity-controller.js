@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('<%= entityClass %>Controller', function ($scope, <%= entityClass %><% if (searchEngine == 'elasticsearch') { %>, <%= entityClass %>Search<% } %><% if (pagination != 'no') { %>, ParseLinks<% } %>) {
+    .controller('<%= entityClass %>Controller', function ($scope, $modal, <%= entityClass %><% if (searchEngine == 'elasticsearch') { %>, <%= entityClass %>Search<% } %><% if (pagination != 'no') { %>, ParseLinks<% } %>) {
         $scope.<%= entityInstance %>s = [];
         <%_ if (pagination == 'pager' || pagination == 'pagination') { _%>
         $scope.page = 0;
@@ -45,23 +45,25 @@ angular.module('<%=angularAppName%>')
 
         $scope.delete = function (id) {
             <%= entityClass %>.get({id: id}, function(result) {
-                $scope.<%= entityInstance %> = result;
-                $('#delete<%= entityClass %>Confirmation').modal('show');
+
+                var modalInstance = $modal.open({
+                    templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-delete-dialog.html',
+                    controller: '<%= entityClass %>DeleteController',
+                    size: 'md',
+                    resolve: {
+                        entity: function() {
+                            return result;
+                        }
+                    }
+                });
+                modalInstance.result.then(function(result) {
+                    $state.go('<%= entityInstance %>', null, { reload: true });
+                }, function() {
+                    $state.go('<%= entityInstance %>');
+                });
             });
         };
 
-        $scope.confirmDelete = function (id) {
-            <%= entityClass %>.delete({id: id},
-                function () {
-                    <%_ if (pagination != 'infinite-scroll') { _%>
-                    $scope.loadAll();
-                    <%_ } else { _%>
-                    $scope.reset();
-                    <%_ } _%>
-                    $('#delete<%= entityClass %>Confirmation').modal('hide');
-                    $scope.clear();
-                });
-        };
         <%_ if (searchEngine == 'elasticsearch') { _%>
 
         $scope.search = function () {
