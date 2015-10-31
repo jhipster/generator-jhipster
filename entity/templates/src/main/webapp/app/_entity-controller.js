@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('<%= entityClass %>Controller', function ($scope, $modal, <%= entityClass %><% if (searchEngine == 'elasticsearch') { %>, <%= entityClass %>Search<% } %><% if (pagination != 'no') { %>, ParseLinks<% } %>) {
+    .controller('<%= entityClass %>Controller', function ($scope, $state, $modal, <%= entityClass %><% if (searchEngine == 'elasticsearch') { %>, <%= entityClass %>Search<% } %><% if (pagination != 'no') { %>, ParseLinks<% } %>) {
         $scope.<%= entityInstance %>s = [];
         <%_ if (pagination == 'pager' || pagination == 'pagination') { _%>
         $scope.page = 0;
