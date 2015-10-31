@@ -771,12 +771,12 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java', this, {});
     this.template('src/main/java/package/security/_UserNotActivatedException.java', javaDir + 'security/UserNotActivatedException.java', this, {});
 
-    if (this.authenticationType == 'xauth') {
-        this.template('src/main/java/package/security/xauth/_Token.java', javaDir + 'security/xauth/Token.java', this, {});
-        this.template('src/main/java/package/security/xauth/_TokenProvider.java', javaDir + 'security/xauth/TokenProvider.java', this, {});
-        this.template('src/main/java/package/web/rest/_UserXAuthTokenController.java', javaDir + 'web/rest/UserXAuthTokenController.java', this, {});
-        this.template('src/main/java/package/security/xauth/_XAuthTokenConfigurer.java', javaDir + 'security/xauth/XAuthTokenConfigurer.java', this, {});
-        this.template('src/main/java/package/security/xauth/_XAuthTokenFilter.java', javaDir + 'security/xauth/XAuthTokenFilter.java', this, {});
+     if (this.authenticationType == 'xauth') {
+        this.template('src/main/java/package/security/jwt/_TokenAuthenticationService.java', javaDir + 'security/jwt/TokenAuthenticationService.java', this, {});
+        this.template('src/main/java/package/security/jwt/_TokenHandler.java', javaDir + 'security/jwt/TokenHandler.java', this, {});
+        this.template('src/main/java/package/web/rest/_UserJWTTokenController.java', javaDir + 'web/rest/UserJWTTokenController.java', this, {});
+        this.template('src/main/java/package/security/jwt/_JWTTokenConfigurer.java', javaDir + 'security/jwt/JWTTokenConfigurer.java', this, {});
+        this.template('src/main/java/package/security/jwt/_StatelessAuthenticationFilter.java', javaDir + 'security/jwt/StatelessAuthenticationFilter.java', this, {});
     }
 
     this.template('src/main/java/package/service/_package-info.java', javaDir + 'service/package-info.java', this, {});

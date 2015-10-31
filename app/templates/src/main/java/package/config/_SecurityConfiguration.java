@@ -1,8 +1,8 @@
 package <%=packageName%>.config;
-<% if (authenticationType == 'session' || authenticationType == 'xauth') { %>
+<% if (authenticationType == 'session' || authenticationType == 'jwt') { %>
 import <%=packageName%>.security.*;<% } %><% if (authenticationType == 'session') { %>
-import <%=packageName%>.web.filter.CsrfCookieGeneratorFilter;<% } %><% if (authenticationType == 'xauth') { %>
-import <%=packageName%>.security.xauth.*;<% } %>
+import <%=packageName%>.web.filter.CsrfCookieGeneratorFilter;<% } %><% if (authenticationType == 'jwt') { %>
+import <%=packageName%>.security.jwt.*;<% } %>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;<% if (authenticationType == 'session') { %>
 import org.springframework.core.env.Environment;<% } %><% if (authenticationType == 'oauth2') { %>
@@ -10,15 +10,15 @@ import org.springframework.security.access.expression.method.MethodSecurityExpre
 
 import org.springframework.data.repository.query.spi.EvaluationContextExtension;
 import org.springframework.data.repository.query.spi.EvaluationContextExtensionSupport;
-import org.springframework.security.access.expression.SecurityExpressionRoot;<% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
+import org.springframework.security.access.expression.SecurityExpressionRoot;<% if (authenticationType == 'oauth2' || authenticationType == 'jwt') { %>
 import org.springframework.security.authentication.AuthenticationManager;<% } %>
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;<% if (authenticationType == 'session' || authenticationType == 'xauth') { %>
+import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;<% if (authenticationType == 'session' || authenticationType == 'jwt') { %>
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;<% } %>
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;<% if (authenticationType == 'xauth') { %>
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;<% if (authenticationType == 'jwt') { %>
 import org.springframework.security.config.http.SessionCreationPolicy;<% } %>
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -96,7 +96,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/api/account/reset_password/finish")<% } %>
             .antMatchers("/test/**")<% if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { %>;<% } else { %>
             .antMatchers("/console/**");<% } %>
-    }<% if (authenticationType == 'session' || authenticationType == 'xauth') { %>
+    }<% if (authenticationType == 'session' || authenticationType == 'jwt') { %>
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -126,13 +126,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .logoutSuccessHandler(ajaxLogoutSuccessHandler)
             .deleteCookies("JSESSIONID"<% if (clusteredHttpSession == 'hazelcast') { %>, "hazelcast.sessionId"<% } %>)
             .permitAll()<% } %>
-        .and()<% if (authenticationType == 'xauth') { %>
+        .and()<% if (authenticationType == 'jwt') { %>
             .csrf()
             .disable()<% } %>
             .headers()
             .frameOptions()
             .disable()
-        .and()<% if (authenticationType == 'xauth') { %>
+        .and()<% if (authenticationType == 'jwt') { %>
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()<% } %>
@@ -164,7 +164,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/configuration/security").permitAll()
             .antMatchers("/configuration/ui").permitAll()
             .antMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/protected/**").authenticated() <%if (authenticationType != 'jwt') { %>;<% } %><% if (authenticationType == 'jwt') { %>
+            .antMatchers("/protected/**").authenticated() <% if (authenticationType == 'jwt') { %>
         .and()
             .apply(securityConfigurerAdapter());<% } %>
 
@@ -177,7 +177,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     }<% } %><% if (authenticationType == 'jwt') { %>
 
     private JWTTokenConfigurer securityConfigurerAdapter() {
-      return new XAuthTokenConfigurer(userDetailsService, tokenAuthenticationService);
+      return new JWTTokenConfigurer(userDetailsService, tokenAuthenticationService);
     }<% } %>
 
     @Bean
