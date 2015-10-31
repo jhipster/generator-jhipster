@@ -47,7 +47,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     private AjaxAuthenticationFailureHandler ajaxAuthenticationFailureHandler;
 
     @Inject
-    private AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler;<% } if (authenticationType == 'session' || authenticationType == 'xauth') { %>
+    private AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler;<% } if (authenticationType == 'session' || authenticationType == 'jwt') { %>
 
     @Inject
     private Http401UnauthorizedEntryPoint authenticationEntryPoint;<% } %>
@@ -56,7 +56,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     private UserDetailsService userDetailsService;<% if (authenticationType == 'session') { %>
 
     @Inject
-    private RememberMeServices rememberMeServices;<% } %><% if (authenticationType == 'xauth') { %>
+    private RememberMeServices rememberMeServices;<% } %><% if (authenticationType == 'jwt') { %>
 
     @Inject
     private TokenProvider tokenProvider;<% } %>
@@ -155,7 +155,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/configuration/security").permitAll()
             .antMatchers("/configuration/ui").permitAll()
             .antMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/protected/**").authenticated() <%if (authenticationType != 'xauth') { %>;<% } %><% if (authenticationType == 'xauth') { %>
+            .antMatchers("/protected/**").authenticated() <%if (authenticationType != 'jwt') { %>;<% } %><% if (authenticationType == 'jwt') { %>
         .and()
             .apply(securityConfigurerAdapter());<% } %>
 
