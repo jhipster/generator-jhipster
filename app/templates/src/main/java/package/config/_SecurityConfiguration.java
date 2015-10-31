@@ -41,7 +41,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     private AjaxAuthenticationFailureHandler ajaxAuthenticationFailureHandler;
 
     @Inject
-    private AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler;<% } if (authenticationType == 'session' || authenticationType == 'xauth') { %>
+    private AjaxLogoutSuccessHandler ajaxLogoutSuccessHandler;<% } if (authenticationType == 'session' || authenticationType == 'jwt') { %>
 
     @Inject
     private Http401UnauthorizedEntryPoint authenticationEntryPoint;<% } %>
@@ -49,11 +49,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     @Inject
     private UserDetailsService userDetailsService;<% if (authenticationType == 'session') { %>
 
-    @Inject
-    private RememberMeServices rememberMeServices;<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
 
-    @Inject
-    private SessionRegistry sessionRegistry;<% } %><% if (authenticationType == 'xauth') { %>
+    private RememberMeServices rememberMeServices;<% } %><% if (authenticationType == 'jwt') { %>
+
 
     @Inject
     private TokenProvider tokenProvider;<% } %>
@@ -158,7 +156,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/configuration/security").permitAll()
             .antMatchers("/configuration/ui").permitAll()
             .antMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/protected/**").authenticated() <%if (authenticationType != 'xauth') { %>;<% } %><% if (authenticationType == 'xauth') { %>
+            .antMatchers("/protected/**").authenticated() <%if (authenticationType != 'jwt') { %>;<% } %><% if (authenticationType == 'jwt') { %>
         .and()
             .apply(securityConfigurerAdapter());<% } %>
 
@@ -182,7 +180,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
-    }<% } %><% if (authenticationType == 'xauth') { %>
+    }<% } %><% if (authenticationType == 'jwt') { %>
 
     private XAuthTokenConfigurer securityConfigurerAdapter() {
       return new XAuthTokenConfigurer(userDetailsService, tokenProvider);
