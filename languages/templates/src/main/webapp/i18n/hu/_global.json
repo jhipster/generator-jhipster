@@ -75,8 +75,8 @@
     },
     "entity": {
         "action": {
-            "addblob": "Add blob",
-            "addimage": "Add image",
+            "addblob": "Fájl hozzáadása",
+            "addimage": "Kép hozzáadása",
             "back": "Vissza",
             "cancel": "Mégsem",
             "delete": "Törlés",
@@ -105,9 +105,9 @@
         }
     },
     "error": {
-        "serverNotReachable": "Server not reachable",
-        "NotNull": "Field {{fieldName}} cannot be empty!",
-        "Size": "Field {{fieldName}} does not meet min/max size requirements!"
+        "serverNotReachable": "A szerver nem elérhető",
+        "NotNull": "Az {{fieldName}} mező nem lehet üres!",
+        "Size": "A {{fieldName}} mező nem teljesíti a minimum/maximum hossz követelményeket!"
     },
     "footer": "Ez a lábléc."
 }
