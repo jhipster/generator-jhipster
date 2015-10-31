@@ -1,28 +1,28 @@
 {
     "reset": {
         "request": {
-            "title": "Reset your password",
+            "title": "Jelszó visszaállítás",
             "form": {
-                "button": "Reset password"
+                "button": "Jelszó visszaállítás"
             },
             "messages": {
-                "info": "Enter the e-mail address you used to register",
-                "success": "Check your e-mails for details on how to reset your password.",
-                "notfound": "<strong>E-Mail address isn't registered!</strong> Please check and try again"
+                "info": "Adja meg e-mail címét, amivel regisztrált",
+                "success": "E-mail címére elküldtük a leírást, hogyan állíthatja vissza jelszavát.",
+                "notfound": "<strong>Ezzel az e-mail címmel nem regisztráltak!</strong> Kérjük ellenőrizze, és próbálja újra!"
 
             }
 
         },
         "finish" : {
-            "title": "Reset password",
+            "title": "Jelszó állítás",
             "form": {
-                "button": "Validate new password"
+                "button": "Ellenőrizze új jelszavát"
             },
             "messages": {
-                "info": "Choose a new password",
-                "success": "<strong>Your password has been reset.</strong> Please <a class=\"alert-link\" href=\"#/login\">sign in</a>.",
-                "keymissing": "The reset key is missing.",
-                "error": "Your password couldn't be reset. Remember a password request is only valid for 24 hours."
+                "info": "Válasszon új jelszót",
+                "success": "<strong>Az Ön jelszava meg lett változtatva.</strong> Kérjük <a class=\"alert-link\" href=\"#/login\">lépjen be vele</a>.",
+                "keymissing": "A jelszó visszaállító kulcs hiányzik.",
+                "error": "Az Ön jelszavát nem lehetett átállítani. Kérjük vegye figyelembe, hogy a jelszó visszaállító kulcs csak 24 óráig érvényes."
             }
         }
     }
