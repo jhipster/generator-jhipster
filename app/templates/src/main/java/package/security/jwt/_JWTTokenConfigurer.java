@@ -12,7 +12,7 @@ public class JWTTokenConfigurer extends SecurityConfigurerAdapter<DefaultSecurit
 
     private UserDetailsService detailsService;
 
-    public XAuthTokenConfigurer(UserDetailsService detailsService, TokenAuthenticationService tokenAuthenticationService) {
+    public JWTTokenConfigurer(UserDetailsService detailsService, TokenAuthenticationService tokenAuthenticationService) {
         this.detailsService = detailsService;
         this.tokenAuthenticationService = tokenAuthenticationService;
     }
