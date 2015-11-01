@@ -490,7 +490,17 @@
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
             <version>${spring-security-oauth2.version}</version>
-        </dependency>
+        </dependency>   
+        <%_ } _%>
+ 
+          <%_ if (authenticationType == 'jwt') { _%>
+           <dependency>
+              <groupId>io.jsonwebtoken</groupId>
+              <artifactId>jjwt</artifactId>
+              <version>0.5</version>
+          </dependency>
+
+        
         <%_ } _%>
         <%_ if (databaseType == 'cassandra') { _%>
         <dependency>
