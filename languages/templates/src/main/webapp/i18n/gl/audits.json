@@ -2,20 +2,20 @@
     "audits": {
         "title": "Auditorías",
         "filter": {
-            "title": "Filtrar por fecha",
-            "from": "desde",
-            "to": "hasta",
+            "title": "Filtrar por data",
+            "from": "dende",
+            "to": "ata",
             "button": {
                 "weeks": "Semanas",
-                "today": "hoy",
-                "clear": "limpiar",
-                "close": "cerrar"
+                "today": "hoxe",
+                "clear": "limpar",
+                "close": "pechar"
             }
         },
         "table": {
             "header": {
                 "principal": "Usuario",
-                "date": "Fecha",
+                "date": "Data",
                 "status": "Estado",
                 "data": "Datos extra"
             },

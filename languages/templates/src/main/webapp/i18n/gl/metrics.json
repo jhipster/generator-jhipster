@@ -8,59 +8,59 @@
             "memory": {
                 "title": "Memoria",
                 "total": "Memoria total",
-                "heap": "Memoria del Heap",
-                "nonheap": "Memoria no Heap"
+                "heap": "Memoria do Heap",
+                "nonheap": "Memoria non Heap"
             },
             "threads": {
-                "title": "Hilos",
+                "title": "Fíos",
                 "all": "Todo",
-                "runnable": "Ejecutables",
+                "runnable": "Executables",
                 "timedwaiting": "Timed waiting",
                 "waiting": "Esperando",
                 "blocked": "Bloqueados",
                 "dump": {
                     "title": "Threads dump",
                     "id": "Id: ",
-                    "blockedtime": "Tiempo bloqueado",
-                    "blockedcount": "Contador bloqueados",
-                    "waitedtime": "Tiempo en espera",
-                    "waitedcount": "Contador en espera",
+                    "blockedtime": "Tempo bloqueado",
+                    "blockedcount": "Blocked Count",
+                    "waitedtime": "Tempo en espera",
+                    "waitedcount": "Contador esperando",
                     "lockname": "Lock name",
                     "stacktrace": "Stacktrace",
-                    "show": "Mostrar",
-                    "hide": "Ocultar"
+                    "show": "Amosar",
+                    "hide": "Agochar"
                 }
             },
             "gc": {
-                "title": "Colecciones de basura",
+                "title": "Colectas de lixo",
                 "marksweepcount": "Mark Sweep count",
                 "marksweeptime": "Mark Sweep time",
                 "scavengecount": "Scavenge count",
                 "scavengetime": "Scavenge time"
             },
             "http": {
-                "title": "Peticiones HTTP (eventos por segundo)",
-                "active": "Peticiones activas:",
-                "total": "Peticiones totales:",
+                "title": "Peticións HTTP (eventos por segundo)",
+                "active": "Peticións activas:",
+                "total": "Peticións totais:",
                 "table": {
                     "code": "Código",
-                    "count": "Recuento",
-                    "mean": "Media",
-                    "average": "Promedio"
+                    "count": "Reconto",
+                    "mean": "Mean",
+                    "average": "Average"
                 },
                 "code": {
                     "ok": "Ok",
-                    "notfound": "No encontrado",
-                    "servererror": "Error de servidor"
+                    "notfound": "Non atopado",
+                    "servererror": "Erro de servidor"
                 }
             }
         },
         "servicesstats": {
-            "title": "Estadísticas de servicios (tiempo en milisegundos)",
+            "title": "Estadísticas de servizos (tempo en milisegundos)",
             "table": {
-                "name": "Nombre del servicio",
-                "count": "Contador",
-                "mean": "Media",
+                "name": "Nome do servizo",
+                "count": "Reconto",
+                "mean": "Mean",
                 "min": "Min",
                 "max": "Max",
                 "p50": "p50",
@@ -71,19 +71,19 @@
         },
         "ehcache": {
             "title": "Estadísticas de Ehcache",
-            "cachename": "Nombre cache",
-            "objects": "Objetos",
+            "cachename": "Nome cache",
+            "objects": "Obxetos",
             "hits": "Accesos",
             "misses": "Fallos",
-            "evictioncount": "Contador desalojo",
-            "mean": "Tiempo medio de respuesta (ms)"
+            "evictioncount": "Reconto desaloxo",
+            "mean": "tempo medio de resposta (ms)"
         },
         "datasource": {
-        	"usage": "Uso",
-            "title": "Estadísticas de la fuente de datos (tiempo en milisegundos)",
-            "name": "Uso del pool",
-            "count": "Recuento",
-            "mean": "Media",
+            "usage": "Uso",
+            "title": "Estadísticas da fonte de datos (tempo en milisegundos)",
+            "name": "Uso do pool",
+            "count": "Reconto",
+            "mean": "Mean",
             "min": "Min",
             "max": "Max",
             "p50": "p50",
