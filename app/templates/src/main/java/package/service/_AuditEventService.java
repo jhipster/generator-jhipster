@@ -3,13 +3,14 @@ package <%=packageName%>.service;
 import <%=packageName%>.config.audit.AuditEventConverter;
 import <%=packageName%>.domain.PersistentAuditEvent;
 import <%=packageName%>.repository.PersistenceAuditEventRepository;
-import org.joda.time.LocalDateTime;
+import java.time.LocalDateTime;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.stereotype.Service;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Service for managing audit events.
@@ -22,11 +23,18 @@ import java.util.List;
 @Transactional<% } %>
 public class AuditEventService {
 
-    @Inject
     private PersistenceAuditEventRepository persistenceAuditEventRepository;
 
-    @Inject
     private AuditEventConverter auditEventConverter;
+
+    @Inject
+    public AuditEventService(
+        PersistenceAuditEventRepository persistenceAuditEventRepository,
+        AuditEventConverter auditEventConverter) {
+
+        this.persistenceAuditEventRepository = persistenceAuditEventRepository;
+        this.auditEventConverter = auditEventConverter;
+    }
 
     public List<AuditEvent> findAll() {
         return auditEventConverter.convertToAuditEvent(persistenceAuditEventRepository.findAll());
@@ -37,5 +45,10 @@ public class AuditEventService {
             persistenceAuditEventRepository.findAllByAuditEventDateBetween(fromDate, toDate);
 
         return auditEventConverter.convertToAuditEvent(persistentAuditEvents);
+    }
+
+    public Optional<AuditEvent> find(<% if (databaseType == 'sql') { %>Long <% } %><% if (databaseType == 'mongodb') { %>String <% } %>id) {
+        return Optional.ofNullable(persistenceAuditEventRepository.findOne(id)).map
+            (auditEventConverter::convertToAuditEvent);
     }
 }

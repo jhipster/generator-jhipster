@@ -11,6 +11,9 @@
             "error": {
                 "authentication": "<strong>驗證失敗!</strong> 請檢查您的認證, 並重試一次."
             }
+        },
+        "password" : {
+            "forgot": "Did you forget your password?"
         }
     }
 }

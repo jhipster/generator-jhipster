@@ -1,0 +1,23 @@
+{
+    "health": {
+        "title": "Sundhed",
+        "refresh.button": "Opdatér",
+        "stacktrace": "Stacktrace",
+        "indicator": {
+            "diskSpace": "Diskplads",
+            "mail": "Email",<% if (searchEngine == 'elasticsearch') { %>
+            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
+            "db": "Database"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
+        },
+        "table": {
+            "service": "Tjenestenavn",
+            "status": "Status"
+        },
+        "status": {
+            "UP": "OP",
+            "DOWN": "NED"
+        }
+    }
+}

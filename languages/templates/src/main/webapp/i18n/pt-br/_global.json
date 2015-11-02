@@ -6,7 +6,7 @@
             "home": "Início",
             "entities": {
                 "main": "Entidades",
-                "additionalEntity": "JHipster will add addtional entities"
+                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "Conta",
@@ -19,6 +19,7 @@
             },
             "admin": {
                 "main": "Administração",
+                "user-management": "User management",
                 "tracker": "Rastreamento de usuário",
                 "metrics": "Métricas",
                 "health": "Estado do Sistema",
@@ -42,8 +43,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Para <a href=\"#/login\">entrar</a>, utilize as seguintes contas padrões:<br/>- Administrador (usuário=\"admin\" and senha=\"admin\") <br/>- Usuário (usuário=\"user\" and senha=\"user\").",
-                "register": "Não possui uma conta ainda? <a href=\"#/register\">Crie uma nova conta</a>"
+                "authenticated": "Para <a class=\"alert-link\" href=\"#/login\">entrar</a>, utilize as seguintes contas padrões:<br/>- Administrador (usuário=\"admin\" and senha=\"admin\") <br/>- Usuário (usuário=\"user\" and senha=\"user\").",
+                "register": "Não possui uma conta ainda? <a class=\"alert-link\" href=\"#/register\">Crie uma nova conta</a>"
             },
             "error": {
                 "dontmatch" : "A senha e sua confirmação devem ser iguais!"
@@ -67,24 +68,46 @@
                     "maxlength": "O e-mail não pode ter mais de 50 caracteres"
                 }
             }
+        },
+        "field": {
+            "id" : "Código"
         }
     },
     "entity": {
         "action": {
-            "back": "Back",
-            "cancel": "Cancel",
-            "delete": "Delete",
-            "edit": "Edit",
-            "save": "Save",
-            "view": "View"
+            "addblob": "Add blob",
+            "addimage": "Add image",
+            "back": "Voltar",
+            "cancel": "Cancelar",
+            "delete": "Excluir",
+            "edit": "Editar",
+            "save": "Salvar",
+            "view": "Visualizar"
         },
         "detail": {
-            "field": "Field",
-            "value": "Value"
+            "field": "Campo",
+            "value": "Valor"
         },
         "delete": {
-            "title": "Confirm delete operation"
+            "title": "Confirme a exclusão"
+        },
+        "validation": {
+            "required": "O campo é obrigatório.",
+            "minlength": "Este campo deve ter ao menos {{min}} caracteres.",
+            "maxlength": "Este campo não pode ter mais que {{max}} caracteres.",
+            "min": "Este campo deve ser maior que {{min}}.",
+            "max": "Este campo não pode ser maior que {{max}}.",
+            "minbytes": "Este campo deve ter ao menos {{min}} bytes.",
+            "maxbytes": "Este campo não pode ter mais que {{max}} bytes.",
+            "pattern": "Este campo deve estar dentro do seguinte padrão {{pattern}}.",
+            "number": "Este campo é do tipo número.",
+            "datetimelocal": "Este campo é do tipo data/hora."
         }
+    },
+    "error": {
+        "serverNotReachable": "Server not reachable",
+        "NotNull": "Field {{fieldName}} cannot be empty!",
+        "Size": "Field {{fieldName}} does not meet min/max size requirements!"
     },
     "footer": "Este é o seu rodapé"
 }

@@ -1,0 +1,23 @@
+{
+    "health": {
+        "title": "ヘルスチェック",
+        "refresh.button": "リロード",
+        "stacktrace": "スタックトレース",
+        "indicator": {
+            "diskSpace": "ディスクスペース",
+            "mail": "メール",<% if (searchEngine == 'elasticsearch') { %>
+            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
+            "db": "データベース"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
+        },
+        "table": {
+            "service": "サービス名",
+            "status": "ステータス"
+        },
+        "status": {
+            "UP": "UP",
+            "DOWN": "DOWN"
+        }
+    }
+}

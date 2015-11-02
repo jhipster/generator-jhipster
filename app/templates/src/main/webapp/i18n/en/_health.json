@@ -1,0 +1,30 @@
+{
+    "health": {
+        "title": "Health checks",
+        "refresh.button": "Refresh",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Details",
+            "properties": "Properties",
+            "name": "Name",
+            "value": "Value",
+            "error": "Error"
+        },
+        "indicator": {
+            "diskSpace": "Disk space",
+            "mail": "Email",<% if (searchEngine == 'elasticsearch') { %>
+            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
+            "db": "Database"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
+        },
+        "table": {
+            "service": "Service name",
+            "status": "Status"
+        },
+        "status": {
+            "UP": "UP",
+            "DOWN": "DOWN"
+        }
+    }
+}

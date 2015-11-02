@@ -12,3 +12,10 @@
 *.png binary
 *.jpg binary
 *.jar binary
+*.pdf binary
+*.eot binary
+*.ttf binary
+*.gzip binary
+*.gz binary
+*.ai binary
+*.eps binary

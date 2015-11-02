@@ -1,0 +1,30 @@
+{
+    "health": {
+        "title": "Status controle",
+        "refresh.button": "Ververs",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Details",
+            "properties": "Eigenschappen",
+            "name": "Naam",
+            "value": "Waarde",
+            "error": "Fout"
+        },
+        "indicator": {
+            "diskSpace": "Schijfruimte",
+            "mail": "Email",<% if (searchEngine == 'elasticsearch') { %>
+            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
+            "db": "Databank"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
+        },
+        "table": {
+            "service": "Dienstnaam",
+            "status": "Status"
+        },
+        "status": {
+            "UP": "UP",
+            "DOWN": "DOWN"
+        }
+    }
+}

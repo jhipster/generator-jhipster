@@ -6,12 +6,13 @@
             "firstname.placeholder": "Ditt förnamn",
             "lastname": "Efternamn",
             "lastname.placeholder": "Ditt efternamn",
+            "language": "Språk",
             "button": "Save"
         },
         "messages": {
             "error": {
                 "fail": "<strong>Det blev fel!</strong> Inställningar kunde inte sparas.",
-                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+                "emailexists": "<strong>Mailadressen används redan!</strong> Vänligen använd en annan."
             },
             "success": "<strong>Inställningar sparade!</strong>",
             "validate": {

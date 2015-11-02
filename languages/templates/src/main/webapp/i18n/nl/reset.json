@@ -1,0 +1,30 @@
+{
+    "reset": {
+        "request": {
+            "title": "Reset uw wachtwoord",
+            "form": {
+                "button": "Reset wachtwoord"
+            },
+            "messages": {
+                "info": "Geef het e-mailadres dat u gebruikte om te registreren",
+                "success": "Controleer uw e-mails voor meer informatie over hoe u uw wachtwoord kan resetten.",
+                "notfound": "<strong>E-mailadres is niet geregistreerd!</strong> Gelieve het te controleren en opnieuw te proberen"
+
+            }
+
+        },
+        "finish" : {
+            "title": "Reset wachtwoord",
+            "form": {
+                "button": "Valideer nieuw wachtwoord"
+            },
+            "messages": {
+                "info": "Kies een nieuw wachtwoord",
+                "success": "<strong>Uw wachtwoord is gereset.</strong> Gelieve <a class=\"alert-link\" href=\"#/login\">authenticeer</a>.",
+                "keymissing": "De reset sleutel ontbreekt.",
+                "error": "Uw wachtwoord kon niet gereset worden. Vergeet niet dat een wachtwoord verzoek slechts 24 uur geldig is."
+            }
+        }
+    }
+
+}

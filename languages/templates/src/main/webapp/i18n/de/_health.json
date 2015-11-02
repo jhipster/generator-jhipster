@@ -1,0 +1,23 @@
+{
+    "health": {
+        "title": "Gesundheit ihrer Anwendung",
+        "refresh.button": "Aktualisieren",
+        "stacktrace": "Stacktrace",
+        "indicator": {
+            "diskSpace": "Festplattenspeicher",
+            "mail": "Email",<% if (searchEngine == 'elasticsearch') { %>
+            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
+            "db": "Datenbank"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
+        },
+        "table": {
+            "service": "Dienst Name",
+            "status": "Status"
+        },
+        "status": {
+            "UP": "UP",
+            "DOWN": "DOWN"
+        }
+    }
+}

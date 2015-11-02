@@ -1,0 +1,30 @@
+{
+    "health": {
+        "title": "Diagnostics",
+        "refresh.button": "Rafraichir",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Détails",
+            "properties": "Propriétés",
+            "name": "Nom",
+            "value": "Valeur",
+            "error": "Erreur"
+        },
+        "indicator": {
+            "diskSpace": "Espace disque",
+            "mail": "Email",<% if (searchEngine == 'elasticsearch') { %>
+            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
+            "db": "Base de données"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
+        },
+        "table": {
+            "service": "Nom du service",
+            "status": "Etat"
+        },
+        "status": {
+            "UP": "DISPONIBLE",
+            "DOWN": "HORS SERVICE"
+        }
+    }
+}

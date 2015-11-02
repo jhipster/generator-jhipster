@@ -1,13 +1,14 @@
 package <%=packageName%>;
 
 import <%=packageName%>.config.Constants;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 
 /**
- * This is an helper Java class that provides an alternative to creating a web.xml.
+ * This is a helper Java class that provides an alternative to creating a web.xml.
  */
 public class ApplicationWebXml extends SpringBootServletInitializer {
 
@@ -16,13 +17,11 @@ public class ApplicationWebXml extends SpringBootServletInitializer {
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.profiles(addDefaultProfile())
-                .showBanner(false)
-                .sources(Application.class);
+            .sources(Application.class);
     }
 
     /**
      * Set a default profile if it has not been set.
-     * <p/>
      * <p>
      * Please use -Dspring.profiles.active=dev
      * </p>

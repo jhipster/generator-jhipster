@@ -1,0 +1,8 @@
+<nav>
+    <ul class="<%=angularAppName%>-pager">
+        <li ng-show="links['first'] >= 0" ng-click="loadPage(links['first'])"><a href="#">&lt;&lt;</a></li>
+        <li ng-show="page > 0" ng-click="loadPage(links['prev'] || 0)"><a href="#">&lt;</a></li>
+        <li ng-show="links['next']" ng-click="loadPage(links['next'])"><a href="#">&gt;</a></li>
+        <li ng-show="links['last'] > 0" ng-click="loadPage(links['last'])"><a href="#">&gt;&gt;</a></li>
+    </ul>
+</nav>

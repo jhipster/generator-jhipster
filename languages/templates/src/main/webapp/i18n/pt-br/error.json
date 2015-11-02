@@ -1,5 +1,5 @@
 {
-    "errors": {
+    "error": {
         "title": "Página de erro!",
         "403": "Você não tem autorização para acessar esta página."
     }

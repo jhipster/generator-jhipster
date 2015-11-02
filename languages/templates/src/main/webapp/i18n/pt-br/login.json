@@ -11,6 +11,9 @@
             "error": {
                 "authentication": "<strong>Erro de autenticação!</strong> Por favor verifique suas credenciais e tente novamente."
             }
+        },
+        "password" : {
+            "forgot": "Did you forget your password?"
         }
     }
 }

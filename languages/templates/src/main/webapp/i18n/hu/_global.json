@@ -6,7 +6,7 @@
             "home": "Kezdőpont",
             "entities": {
                 "main": "Entitások",
-                "additionalEntity": "JHipster will add addtional entities"
+                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "Hozzáférés",
@@ -19,13 +19,15 @@
             },
             "admin": {
                 "main": "Adminisztráció",
+                "user-management": "User management",
                 "tracker": "Felhasználó követés",
                 "metrics": "Metrikák",
                 "health": "Health",
                 "configuration": "Konfiguráció",
                 "logs": "Naplók",
                 "audits": "Nyomkövetés",
-                "apidocs": "API dokumentáció"
+                "apidocs": "API dokumentáció",
+                "database": "Adatbázis"
             },
             "language": "Nyelvek"
         },
@@ -41,8 +43,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Ha be akar <a href=\"#/login\">lépni</a>, kipróbálhatja az alapértelmezett azonosítókat:<br/>- Adminisztrátori (azonosító=\"admin\" és a jelszó=\"admin\") <br/>- Felhasználó (azonosító=\"user\" és jelszó=\"user\").",
-                "register": "Nincs még hozzáférése? <a href=\"#/register\">Regisztráljon</a>"
+                "authenticated": "Ha be akar <a class=\"alert-link\" href=\"#/login\">lépni</a>, kipróbálhatja az alapértelmezett azonosítókat:<br/>- Adminisztrátori (azonosító=\"admin\" és a jelszó=\"admin\") <br/>- Felhasználó (azonosító=\"user\" és jelszó=\"user\").",
+                "register": "Nincs még hozzáférése? <a class=\"alert-link\" href=\"#/register\">Regisztráljon</a>"
             },
             "error": {
                 "dontmatch" : "A jelszó és a jelszó megerősítés nem egyezik meg!"
@@ -66,10 +68,15 @@
                     "maxlength": "Az email cím nem lehet hosszabb mint 50 betű"
                 }
             }
+        },
+        "field": {
+            "id" : "ID"
         }
     },
     "entity": {
         "action": {
+            "addblob": "Fájl hozzáadása",
+            "addimage": "Kép hozzáadása",
             "back": "Vissza",
             "cancel": "Mégsem",
             "delete": "Törlés",
@@ -83,7 +90,24 @@
         },
         "delete": {
             "title": "Erősítse meg a törlési szándékát"
+        },
+        "validation": {
+            "required": "Ez a mező kötelező.",
+            "minlength": "Ez a mező legalább {{min}} karaktert kell, hogy tartalmazzon.",
+            "maxlength": "Ez a mező nem lehet hosszabb mint {{max}} karakter.",
+            "min": "Ennek a mezőnek a megengedett minimum értéke {{min}}.",
+            "max": "Ennek a mezőnek a megengedett maximum értéke {{max}}.",
+            "minbytes": "Ennek a mezőnek a megengedett minimum értéke {{min}} bytes.",
+            "maxbytes": "Ennek a mezőnek a megengedett maximum értéke {{max}} bytes.",
+            "pattern": "Ennek a mezőnek meg kell felelni a {{pattern}} mintának.",
+            "number": "Ennek a mezőnek számnak kéne lennie.",
+            "datetimelocal": "Ennek a mezőnek dátumnak vagy időpontnak kéne lennie."
         }
+    },
+    "error": {
+        "serverNotReachable": "A szerver nem elérhető",
+        "NotNull": "Az {{fieldName}} mező nem lehet üres!",
+        "Size": "A {{fieldName}} mező nem teljesíti a minimum/maximum hossz követelményeket!"
     },
     "footer": "Ez a lábléc."
 }

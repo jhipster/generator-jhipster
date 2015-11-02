@@ -6,6 +6,7 @@
             "firstname.placeholder": "Dit fornavn",
             "lastname": "Efternavn",
             "lastname.placeholder": "Dit efternavn",
+            "language": "Sprog",
             "button": "Gem"
         },
         "messages": {

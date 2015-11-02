@@ -1,0 +1,23 @@
+{
+    "health": {
+        "title": "Rendszer ellenőrzések",
+        "refresh.button": "Frissítés",
+        "stacktrace": "Stacktrace",
+        "indicator": {
+            "diskSpace": "Szabad hely a diszken",
+            "mail": "Email",<% if (searchEngine == 'elasticsearch') { %>
+            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
+            "db": "Adatbázis"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
+        },
+        "table": {
+            "service": "Szervíz neve",
+            "status": "Státusz"
+        },
+        "status": {
+            "UP": "MŰKÖDIK",
+            "DOWN": "NEM MŰKÖDIK"
+        }
+    }
+}

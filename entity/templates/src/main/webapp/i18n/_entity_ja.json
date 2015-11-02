@@ -1,0 +1,19 @@
+{
+    "<%= angularAppName %>": {
+        "<%= entityInstance %>" : {
+            "home": {
+                "title": "<%= entityClass %>s",
+                "createLabel": "<%= entityClass %> を追加",
+                "createOrEditLabel": "<%= entityClass %>を追加または編集"
+            },
+            "delete": {
+                "question": "<%= entityClass %> {{ id }}を削除してもよろしいですか？"
+            },
+            "detail": {
+                "title": "<%= entityClass %>"
+            }<% for (fieldId in fields) { %>,
+            "<%=fields[fieldId].fieldName%>": "<%=fields[fieldId].fieldNameCapitalized%>"<% } %><% for (relationshipId in relationships) { %>,
+            "<%=relationships[relationshipId].relationshipName%>": "<%= relationships[relationshipId].relationshipNameCapitalized %>"<% } %>
+        }
+    }
+}

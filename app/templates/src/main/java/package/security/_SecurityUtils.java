@@ -2,6 +2,7 @@ package <%=packageName%>.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,14 +20,13 @@ public final class SecurityUtils {
     /**
      * Get the login of the current user.
      */
-    public static String getCurrentLogin() {
+    public static String getCurrentUserLogin() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
-        UserDetails springSecurityUser = null;
         String userName = null;
-        if(authentication != null) {
+        if (authentication != null) {
             if (authentication.getPrincipal() instanceof UserDetails) {
-                springSecurityUser = (UserDetails) authentication.getPrincipal();
+                UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
                 userName = springSecurityUser.getUsername();
             } else if (authentication.getPrincipal() instanceof String) {
                 userName = (String) authentication.getPrincipal();
@@ -51,5 +51,48 @@ public final class SecurityUtils {
             }
         }
         return true;
+    }
+
+    /**
+     * Return the current user id, or throws an exception, if the user is not authenticated yet.
+     * 
+     * @return the current user id
+     */
+    public static <%= pkType %> getCurrentUserId() {
+        return getCurrentUser().getId();
+    }
+
+    /**
+     * Return the current user, or throws an exception, if the user is not
+     * authenticated yet.
+     * 
+     * @return the current user
+     */
+    public static CustomUserDetails getCurrentUser() {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+        if (authentication != null) {
+            if (authentication.getPrincipal() instanceof CustomUserDetails) {
+                return (CustomUserDetails) authentication.getPrincipal();
+            }
+        }
+        throw new IllegalStateException("User not found!");
+    }
+
+    /**
+     * If the current user has a specific authority (security role).
+     *
+     * <p> The name of this method comes from the isUserInRole() method in the Servlet API</p>
+     */
+    public static boolean isUserInRole(String authority) {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        Authentication authentication = securityContext.getAuthentication();
+        if (authentication != null) {
+            if (authentication.getPrincipal() instanceof UserDetails) {
+                UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
+                return springSecurityUser.getAuthorities().contains(new SimpleGrantedAuthority(authority));
+            }
+        }
+        return false;
     }
 }

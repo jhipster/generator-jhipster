@@ -1,0 +1,47 @@
+<div>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <h1 translate="reset.request.title">Reset your password</h1>
+
+            <div class="alert alert-danger" translate="reset.request.messages.notfound" ng-show="errorEmailNotExists">
+                <strong>E-Mail address isn't registered!</strong> Please check and try again.
+            </div>
+
+            <div class="alert alert-warning" ng-hide="success">
+                <p translate="reset.request.messages.info">Enter the e-mail address you used to register.</p>
+            </div>
+
+            <div class="alert alert-success" ng-show="success == 'OK'">
+                <p translate="reset.request.messages.success">Check your e-mails for details on how to reset your password.</p>
+            </div>
+
+            <form ng-show="!success" name="form" role="form" novalidate ng-submit="requestReset()" show-validation>
+                <div class="form-group">
+                    <label for="email" translate="global.form.email">E-mail</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="{{'global.form.email.placeholder' | translate}}"
+                           ng-model="resetAccount.email" ng-minlength=5 ng-maxlength=100 required>
+                    <div ng-show="form.email.$dirty && form.email.$invalid">
+                        <p class="help-block"
+                           ng-show="form.email.$error.required" translate="global.messages.validate.email.required">
+                            Your e-mail is required.
+                        </p>
+                        <p class="help-block"
+                           ng-show="form.email.$error.email" translate="global.messages.validate.email.invalid">
+                            Your e-mail is invalid.
+                        </p>
+                        <p class="help-block"
+                           ng-show="form.email.$error.minlength" translate="global.messages.validate.email.minlength">
+                            Your e-mail is required to be at least 5 characters.
+                        </p>
+                        <p class="help-block"
+                           ng-show="form.email.$error.maxlength" translate="global.messages.validate.email.maxlength">
+                            Your e-mail cannot be longer than 100 characters.
+                        </p>
+                    </div>
+                </div>
+                <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary" translate="reset.request.form.button">Register</button>
+            </form>
+
+        </div>
+    </div>
+</div>

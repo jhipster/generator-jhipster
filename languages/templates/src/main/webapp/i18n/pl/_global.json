@@ -1,12 +1,12 @@
 {
     "global": {
         "title": "<%= baseName %>",
-        "browsehappy": "Używasz <strong>przestarzałej</strong> przeglądarki. Proszę <a href=\"http://browsehappy.com/\">uaktualnij swoją przeglądarkę</a> aby polepszyć doświadczenie użytkownika.",
+        "browsehappy": "Używasz <strong>przestarzałej</strong> przeglądarki. Proszę <a href=\"http://browsehappy.com/\">uaktualnij swoją przeglądarkę</a> aby poprawić wrażenia z użytkowania tej aplikacji.",
         "menu": {
             "home": "Strona domowa",
             "entities": {
-                "main": "Entities",
-                "additionalEntity": "JHipster will add addtional entities"
+                "main": "Encje",
+                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "Konto",
@@ -19,6 +19,7 @@
             },
             "admin": {
                 "main": "Administracja",
+                "user-management": "User management",
                 "tracker": "Śledzenie użytkownika",
                 "metrics": "Metryki",
                 "health": "Status",
@@ -31,7 +32,7 @@
             "language": "Język"
         },
         "form": {
-            "username": "Zaloguj się",
+            "username": "Nazwa użytkownika",
             "username.placeholder": "Twój login",
             "newpassword": "Nowe hasło",
             "newpassword.placeholder": "Nowe hasło",
@@ -42,8 +43,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Jeśli chcek <a href=\"#/login\">zalogować się</a>, możesz spróbować domyślnego konta:<br/>- Administrator (login=\"admin\" i hasło=\"admin\") <br/>- Użytkownik (login=\"user\" i hasło=\"user\").",
-                "register": "Nie masz jeszcze konta? <a href=\"#/register\">Zarejestruj się</a>"
+                "authenticated": "Jeśli chcesz się <a class=\"alert-link\" href=\"#/login\">zalogować</a>, możesz spróbować któregoś z domyślnych kont:<br/>- Administrator (login=\"admin\" i hasło=\"admin\") <br/>- Użytkownik (login=\"user\" i hasło=\"user\").",
+                "register": "Nie masz jeszcze konta? <a class=\"alert-link\" href=\"#/register\">Zarejestruj się</a>"
             },
             "error": {
                 "dontmatch": "Hasło i potwierdzenie nie zgadzają się!"
@@ -56,21 +57,26 @@
                     "strength": "Siła hasła:"
                 },
                 "confirmpassword": {
-                    "required": "Twoje hasło potwierdzające jest wymagane.",
-                    "minlength": "Twoje hasło potwierdzające powinno mieć minimum 5 character",
-                    "maxlength": "Twoje hasło potwierdzające nie powinno być dłuższe niż 50 znaków"
+                    "required": "Potwierdzenie hasła jest wymagane.",
+                    "minlength": "Potwierdzenie hasła powinno mieć minimum 5 znaków",
+                    "maxlength": "Potwierdzenie hasła nie powinno być dłuższe niż 50 znaków"
                 },
                 "email": {
                     "required": "Twój e-mail jest wymagany.",
                     "invalid": "Twój e-mail jest błędny.",
-                    "minlength": "Twój e-mail musi mieć przynajmniej 5 liter",
-                    "maxlength": "Your e-mail nie może być dłuższe niż 50 liter"
+                    "minlength": "Twój e-mail musi mieć przynajmniej 5 znaków",
+                    "maxlength": "Twój e-mail nie może być dłuższy niż 50 znaków"
                 }
             }
+        },
+        "field": {
+            "id" : "ID"
         }
     },
     "entity": {
         "action": {
+            "addblob": "Add blob",
+            "addimage": "Add image",
             "back": "Wstecz",
             "cancel": "Anuluj",
             "delete": "Usuń",
@@ -84,7 +90,24 @@
         },
         "delete": {
             "title": "Potwierdź usunięcie"
+        },
+        "validation": {
+            "required": "To pole jest wymagane.",
+            "minlength": "Wartość musi mieć długość co najmniej {{min}} znaków.",
+            "maxlength": "Wartość nie może być dłuższa niż {{max}} znaków.",
+            "min": "Wartość powinna być większa niż {{min}}.",
+            "max": "Wartość nie może być większa niż {{max}}.",
+            "minbytes": "This field should be more than {{min}} bytes.",
+            "maxbytes": "This field cannot be more than {{max}} bytes.",
+            "pattern": "Wartość powinna być zgodna ze wzorem {{pattern}}.",
+            "number": "Wartość powinna być liczbowa.",
+            "datetimelocal": "Wartość powinna zawierać datę i czas."
         }
+    },
+    "error": {
+        "serverNotReachable": "Server not reachable",
+        "NotNull": "Field {{fieldName}} cannot be empty!",
+        "Size": "Field {{fieldName}} does not meet min/max size requirements!"
     },
     "footer": "To jest stopka"
 }

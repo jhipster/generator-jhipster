@@ -1,0 +1,19 @@
+{
+    "login": {
+        "title": "認証",
+        "form": {
+            "password": "パスワード",
+            "password.placeholder": "パスワード",
+            "rememberme": "自動ログイン",
+            "button": "ログイン"
+        },
+        "messages": {
+            "error": {
+                "authentication": "<strong>ログイン失敗!</strong> パスワードをチェックして再度入力してください。"
+            }
+        },
+        "password" : {
+            "forgot": "Did you forget your password?"
+        }
+    }
+}

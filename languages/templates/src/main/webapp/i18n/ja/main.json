@@ -1,0 +1,19 @@
+{
+    "main": {
+        "title": "ようこそ, Java Hipster!",
+        "subtitle": "ここはトップページです。",
+        "logged": {
+            "message": "\"{{username}}\"としてログインしています。"
+        },
+        "question": "JHipsterに関して質問があれば:",
+        "link": {
+            "homepage": "JHipsterのサイト",
+            "stackoverflow": "Stack Overflow のJHipster",
+            "bugtracker": "JHipsterのバグトラッカー",
+            "chat": "JHipster public chat room",
+            "contact": "Twitterの @java_hipster"
+        },
+        "like": "JHipsterを気に入ったら、是非スターをつけてください。",
+        "github": "Github"
+    }
+}

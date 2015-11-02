@@ -4,62 +4,39 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.bind.RelaxedPropertyResolver;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;<% if (hibernateCache == 'hazelcast') { %>
+import org.springframework.cache.CacheManager;<% } %>
 import org.springframework.context.ApplicationContextException;
-import org.springframework.context.EnvironmentAware;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
+import org.springframework.context.annotation.*;
 
 import javax.sql.DataSource;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 @Configuration
-public class HerokuDatabaseConfiguration implements EnvironmentAware {
+@Profile(Constants.SPRING_PROFILE_HEROKU)
+public class HerokuDatabaseConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(HerokuDatabaseConfiguration.class);
 
-    private RelaxedPropertyResolver propertyResolver;
-
-    private Environment environment;
-
-    @Override
-    public void setEnvironment(Environment environment) {
-        this.environment = environment;
-        this.propertyResolver = new RelaxedPropertyResolver(environment, "spring.datasource.");
-    }
-
     @Bean
-    public DataSource dataSource() {
+    public DataSource dataSource(DataSourceProperties dataSourceProperties, JHipsterProperties jHipsterProperties<% if (hibernateCache == 'hazelcast') { %>, CacheManager cacheManager<% } %>) {
         log.debug("Configuring Heroku Datasource");
 
-        String herokuUrl = propertyResolver.getProperty("heroku-url");
+        String herokuUrl = System.getenv("JDBC_DATABASE_URL");
         if (herokuUrl != null) {
-            log.info("Using Heroku, parsing their $DATABASE_URL to use it with JDBC");
-            URI dbUri = null;
-            try {
-                dbUri = new URI(herokuUrl);
-            } catch (URISyntaxException e) {
-                throw new ApplicationContextException("Heroku database connection pool is not configured correctly");
-            }
-            String username = dbUri.getUserInfo().split(":")[0];
-            String password = dbUri.getUserInfo().split(":")[1];
-            String dbUrl = "jdbc:postgresql://" +
-                    dbUri.getHost() +
-                    ':' +
-                    dbUri.getPort() +
-                    dbUri.getPath() +
-                    "?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory";
+	    HikariConfig config = new HikariConfig();
 
-            HikariConfig config = new HikariConfig();
-            config.setDataSourceClassName(propertyResolver.getProperty("dataSourceClassName"));
-            config.addDataSourceProperty("url", dbUrl);
-            config.addDataSourceProperty("user", username);
-            config.addDataSourceProperty("password", password);
+	    //MySQL optimizations, see https://github.com/brettwooldridge/HikariCP/wiki/MySQL-Configuration
+	    if ("com.mysql.jdbc.jdbc2.optional.MysqlDataSource".equals(dataSourceProperties.getDriverClassName())) {
+                config.addDataSourceProperty("cachePrepStmts", jHipsterProperties.getDatasource().isCachePrepStmts());
+                config.addDataSourceProperty("prepStmtCacheSize", jHipsterProperties.getDatasource().getPrepStmtCacheSize());
+                config.addDataSourceProperty("prepStmtCacheSqlLimit", jHipsterProperties.getDatasource().getPrepStmtCacheSqlLimit());
+            }
+
+            config.setDataSourceClassName(dataSourceProperties.getDriverClassName());
+            config.addDataSourceProperty("url", herokuUrl);
             return new HikariDataSource(config);
         } else {
-            throw new ApplicationContextException("Heroku database URL is not configured, you must set --spring.datasource.heroku-url=$DATABASE_URL");
+            throw new ApplicationContextException("Heroku database URL is not configured, you must set $JDBC_DATABASE_URL");
         }
     }
 }

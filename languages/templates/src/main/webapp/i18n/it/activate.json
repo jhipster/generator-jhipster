@@ -1,0 +1,9 @@
+{
+    "activate": {
+        "title": "Attivazione",
+        "messages": {
+            "success": "<strong> Il tuo account è stato attivato </ strong> <a class=\"alert-link\" href=\"#/login\"> </a> sessione ha inizio.",
+            "error": "<strong> Il tuo account non può essere verificato </ strong> compilare il modulo di registrazione sopra per registrarsi."
+        }
+    }
+}

@@ -1,0 +1,27 @@
+{
+    "user-management": {
+        "home": {
+            "title": "Användare",
+            "createLabel": "Skapa en ny användare",
+            "createOrEditLabel": "Skapa eller ändra en användare"
+        },
+        "delete": {
+            "question": "Är du säker på att du vill ta bort användare {{ login }}?"
+        },
+        "detail": {
+            "title": "Användare"
+        },
+        "login": "Inloggning",
+        "firstName": "Förnamn",
+        "lastName": "Efternamn",
+        "email": "Mailadress",
+        "activated": "Aktiverad",
+        "deactivated": "Inaktiverad",
+        "profiles": "Profiler",
+        "langKey": "Språk",
+        "createdBy": "Skapad av",
+        "createdDate": "Skapad datum",
+        "lastModifiedBy": "Ändrad av",
+        "lastModifiedDate": "Ändrat datum"
+    }
+}

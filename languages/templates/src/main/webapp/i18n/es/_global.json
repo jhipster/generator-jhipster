@@ -6,7 +6,7 @@
             "home": "Inicio",
             "entities": {
                 "main": "Entities",
-                "additionalEntity": "JHipster will add addtional entities"
+                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "Cuenta",
@@ -19,6 +19,7 @@
             },
             "admin": {
                 "main": "Administración",
+                "user-management": "User management",
                 "tracker": "Rastreador de los usarios",
                 "metrics": "Métricas",
                 "health": "Health",
@@ -42,8 +43,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Si desea <a href=\"#/login\">iniciar una sesión</a>, puede intentar con las cuentas predeterminadas:<br/>- Administrator (usuario=\"admin\" y contraseña=\"admin\") <br/>- Usuario (usuario=\"user\" y contraseña=\"user\").",
-                "register": "¿No tienes una cuenta todavía? <a href=\"#/register\">Crear una cuenta</a>"
+                "authenticated": "Si desea <a class=\"alert-link\" href=\"#/login\">iniciar una sesión</a>, puede intentar con las cuentas predeterminadas:<br/>- Administrator (usuario=\"admin\" y contraseña=\"admin\") <br/>- Usuario (usuario=\"user\" y contraseña=\"user\").",
+                "register": "¿No tienes una cuenta todavía? <a class=\"alert-link\" href=\"#/register\">Crear una cuenta</a>"
             },
             "error": {
                 "dontmatch" : "¡La contraseña y la confirmación no coinciden!"
@@ -67,10 +68,15 @@
                     "maxlength": "Su correo electrónico no puede tener mas de 50 carácteres"
                 }
             }
+        },
+        "field": {
+            "id" : "ID"
         }
     },
     "entity": {
         "action": {
+            "addblob": "Add blob",
+            "addimage": "Add image",
             "back": "Back",
             "cancel": "Cancel",
             "delete": "Delete",
@@ -84,7 +90,24 @@
         },
         "delete": {
             "title": "Confirm delete operation"
+        },
+        "validation": {
+            "required": "This field is required.",
+            "minlength": "This field is required to be at least {{min}} characters.",
+            "maxlength": "This field cannot be longer than {{max}} characters.",
+            "min": "This field should be more than {{min}}.",
+            "max": "This field cannot be more than {{max}}.",
+            "minbytes": "This field should be more than {{min}} bytes.",
+            "maxbytes": "This field cannot be more than {{max}} bytes.",
+            "pattern": "This field should follow pattern {{pattern}}.",
+            "number": "This field should be a number.",
+            "datetimelocal": "This field should be a date and time."
         }
+    },
+    "error": {
+        "serverNotReachable": "Server not reachable",
+        "NotNull": "Field {{fieldName}} cannot be empty!",
+        "Size": "Field {{fieldName}} does not meet min/max size requirements!"
     },
     "footer": "pie de página"
 }

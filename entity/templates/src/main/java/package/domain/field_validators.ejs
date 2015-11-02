@@ -1,0 +1,45 @@
+<%#	Returns a string of all validator annotations for the entity field. -%>
+<%
+var field = fields[fieldId];
+var result = '';
+
+if (field.fieldValidate == true) {
+    var rules = field.fieldValidateRules;
+    var validators = [];
+  var MAX_VALUE = 2147483647;
+
+    if (rules.indexOf('required') != -1) {
+        validators.push('@NotNull');
+    }
+    if (rules.indexOf('minlength') != -1 && rules.indexOf('maxlength') == -1) {
+        validators.push('@Size(min = ' + field.fieldValidateRulesMinlength + ')');
+    }
+    if (rules.indexOf('maxlength') != -1 && rules.indexOf('minlength') == -1) {
+        validators.push('@Size(max = ' + field.fieldValidateRulesMaxlength + ')');
+    }
+    if (rules.indexOf('minlength') != -1 && rules.indexOf('maxlength') != -1) {
+        validators.push('@Size(min = ' + field.fieldValidateRulesMinlength + ', max = ' + field.fieldValidateRulesMaxlength + ')');
+    }
+    if (rules.indexOf('minbytes') != -1 && rules.indexOf('maxbytes') == -1) {
+        validators.push('@Size(min = ' + field.fieldValidateRulesMinbytes + ')');
+    }
+    if (rules.indexOf('maxbytes') != -1 && rules.indexOf('minbytes') == -1) {
+        validators.push('@Size(max = ' + field.fieldValidateRulesMaxbytes + ')');
+    }
+    if (rules.indexOf('minbytes') != -1 && rules.indexOf('maxbytes') != -1) {
+        validators.push('@Size(min = ' + field.fieldValidateRulesMinbytes + ', max = ' + field.fieldValidateRulesMaxbytes + ')');
+    }
+    if (rules.indexOf('min') != -1) {
+        validators.push('@Min(value = ' + field.fieldValidateRulesMin + ')');
+    }
+    if (rules.indexOf('max') != -1) {
+        var isLong = (field.fieldValidateRulesMax > MAX_VALUE) ? 'L' : '';
+        validators.push('@Max(value = ' + field.fieldValidateRulesMax + isLong + ')');
+    }
+    if (rules.indexOf('pattern') != -1) {
+        validators.push('@Pattern(regexp = "' + field.fieldValidateRulesPatternJava  + '")');
+    }
+    result =  validators.join('\n    ');
+    result += '\n';
+} -%>
+<%- result -%>

@@ -1,30 +1,29 @@
 package <%=packageName%>.security;
 
-import <%=packageName%>.domain.PersistentToken;
-import <%=packageName%>.domain.User;
+import <%=packageName%>.domain.PersistentToken;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import <%=packageName%>.domain.User;<%}%>
 import <%=packageName%>.repository.PersistentTokenRepository;
 import <%=packageName%>.repository.UserRepository;
-import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;<% if (javaVersion == '8') {%>
-import org.springframework.security.core.userdetails.UsernameNotFoundException;<%}%>
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.codec.Base64;
-import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
-import org.springframework.security.web.authentication.rememberme.CookieTheftException;
-import org.springframework.security.web.authentication.rememberme.InvalidCookieException;
-import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationException;
+import org.springframework.security.web.authentication.rememberme.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.security.SecureRandom;
-import java.util.Arrays;
+import java.security.SecureRandom;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import java.time.LocalDate;<%}%><% if (databaseType == 'cassandra') { %>
+import java.time.temporal.ChronoUnit;<%}%>
+import java.util.Arrays;<% if (databaseType == 'cassandra') { %>
+import java.util.Date;<%}%>
 
 /**
  * Custom implementation of Spring Security's RememberMeServices.
@@ -52,7 +51,7 @@ import java.util.Arrays;
  */
 @Service
 public class CustomPersistentRememberMeServices extends
-        AbstractRememberMeServices {
+    AbstractRememberMeServices {
 
     private final Logger log = LoggerFactory.getLogger(CustomPersistentRememberMeServices.class);
 
@@ -74,21 +73,26 @@ public class CustomPersistentRememberMeServices extends
     private UserRepository userRepository;
 
     @Inject
-    public CustomPersistentRememberMeServices(Environment env, org.springframework.security.core.userdetails.UserDetailsService userDetailsService) {
+    public CustomPersistentRememberMeServices(Environment env, org.springframework.security.core.userdetails
+        .UserDetailsService userDetailsService) {
+
         super(env.getProperty("jhipster.security.rememberme.key"), userDetailsService);
         random = new SecureRandom();
     }
 
     @Override
     @Transactional
-    protected UserDetails processAutoLoginCookie(String[] cookieTokens, HttpServletRequest request, HttpServletResponse response) {
+    protected UserDetails processAutoLoginCookie(String[] cookieTokens, HttpServletRequest request,
+        HttpServletResponse response) {
 
-        PersistentToken token = getPersistentToken(cookieTokens);
-        String login = token.getUser().getLogin();
+        PersistentToken token = getPersistentToken(cookieTokens);<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+        String login = token.getUser().getLogin();<%}%><% if (databaseType == 'cassandra') { %>
+        String login = token.getLogin();<%}%>
 
         // Token also matches, so login is valid. Update the token value, keeping the *same* series number.
-        log.debug("Refreshing persistent login token for user '{}', series '{}'", login, token.getSeries());
-        token.setTokenDate(new LocalDate());
+        log.debug("Refreshing persistent login token for user '{}', series '{}'", login, token.getSeries());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+        token.setTokenDate(LocalDate.now());<%}%><% if (databaseType == 'cassandra') { %>
+        token.setTokenDate(new Date());<%}%>
         token.setTokenValue(generateTokenData());
         token.setIpAddress(request.getRemoteAddr());
         token.setUserAgent(request.getHeader("User-Agent"));
@@ -103,16 +107,22 @@ public class CustomPersistentRememberMeServices extends
     }
 
     @Override
-    protected void onLoginSuccess(HttpServletRequest request, HttpServletResponse response, Authentication successfulAuthentication) {
+    protected void onLoginSuccess(HttpServletRequest request, HttpServletResponse response, Authentication
+        successfulAuthentication) {
+
         String login = successfulAuthentication.getName();
 
-        log.debug("Creating new persistent login for user {}", login);<% if (javaVersion == '8') {%>
+        log.debug("Creating new persistent login for user {}", login);
         PersistentToken token = userRepository.findOneByLogin(login).map(u -> {
             PersistentToken t = new PersistentToken();
-            t.setSeries(generateSeriesData());
+            t.setSeries(generateSeriesData());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
             t.setUser(u);
             t.setTokenValue(generateTokenData());
-            t.setTokenDate(new LocalDate());
+            t.setTokenDate(LocalDate.now());<%}%><% if (databaseType == 'cassandra') { %>
+            t.setLogin(login);
+            t.setUserId(u.getId());
+            t.setTokenValue(generateTokenData());
+            t.setTokenDate(new Date());<% } %>
             t.setIpAddress(request.getRemoteAddr());
             t.setUserAgent(request.getHeader("User-Agent"));
             return t;
@@ -122,22 +132,7 @@ public class CustomPersistentRememberMeServices extends
             addCookie(token, request, response);
         } catch (DataAccessException e) {
             log.error("Failed to save persistent token ", e);
-        }<% }else { %>
-        User user = userRepository.findOneByLogin(login);
-
-        PersistentToken token = new PersistentToken();
-        token.setSeries(generateSeriesData());
-        token.setUser(user);
-        token.setTokenValue(generateTokenData());
-        token.setTokenDate(new LocalDate());
-        token.setIpAddress(request.getRemoteAddr());
-        token.setUserAgent(request.getHeader("User-Agent"));
-        try {
-            <% if (databaseType == 'sql') { %>persistentTokenRepository.saveAndFlush(token);<% } %><% if (databaseType == 'mongodb') { %>persistentTokenRepository.save(token);<% } %>
-            addCookie(token, request, response);
-        } catch (DataAccessException e) {
-            log.error("Failed to save persistent token ", e);
-        }<% } %>
+        }
     }
 
     /**
@@ -170,7 +165,7 @@ public class CustomPersistentRememberMeServices extends
     private PersistentToken getPersistentToken(String[] cookieTokens) {
         if (cookieTokens.length != 2) {
             throw new InvalidCookieException("Cookie token did not contain " + 2 +
-                    " tokens, but contained '" + Arrays.asList(cookieTokens) + "'");
+                " tokens, but contained '" + Arrays.asList(cookieTokens) + "'");
         }
         String presentedSeries = cookieTokens[0];
         String presentedToken = cookieTokens[1];
@@ -186,10 +181,12 @@ public class CustomPersistentRememberMeServices extends
         if (!presentedToken.equals(token.getTokenValue())) {
             // Token doesn't match series value. Delete this session and throw an exception.
             persistentTokenRepository.delete(token);
-            throw new CookieTheftException("Invalid remember-me token (Series/token) mismatch. Implies previous cookie theft attack.");
+            throw new CookieTheftException("Invalid remember-me token (Series/token) mismatch. Implies previous " +
+                "cookie theft attack.");
         }
-
-        if (token.getTokenDate().plusDays(TOKEN_VALIDITY_DAYS).isBefore(LocalDate.now())) {
+<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+        if (token.getTokenDate().plusDays(TOKEN_VALIDITY_DAYS).isBefore(LocalDate.now())) {<%}%><% if (databaseType == 'cassandra') { %>
+        if (token.getTokenDate().toInstant().plus(TOKEN_VALIDITY_DAYS, ChronoUnit.DAYS).isBefore((new Date()).toInstant())) {<%}%>
             persistentTokenRepository.delete(token);
             throw new RememberMeAuthenticationException("Remember-me login has expired");
         }
@@ -210,7 +207,7 @@ public class CustomPersistentRememberMeServices extends
 
     private void addCookie(PersistentToken token, HttpServletRequest request, HttpServletResponse response) {
         setCookie(
-                new String[]{token.getSeries(), token.getTokenValue()},
-                TOKEN_VALIDITY_SECONDS, request, response);
+            new String[]{token.getSeries(), token.getTokenValue()},
+            TOKEN_VALIDITY_SECONDS, request, response);
     }
 }

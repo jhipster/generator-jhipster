@@ -1,9 +1,24 @@
 'use strict';
 
-angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale',
-    'ngResource', 'ui.router', 'ngCookies', 'pascalprecht.translate', 'ngCacheBuster'])
+angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTranslation) { %>'tmh.dynamicLocale', 'pascalprecht.translate', <% } %>
+               'ui.bootstrap', // for modal dialogs
+    'ngResource', 'ui.router', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload', 'infinite-scroll', 'angular-loading-bar'])
 
-    .run(function ($rootScope, $location, $http, $state, $translate, Auth, Principal, Language, ENV, VERSION) {
+    .run(function ($rootScope, $location, $window, $http, $state, <% if (enableTranslation) { %>$translate, Language,<% } %> Auth, Principal, ENV, VERSION) {
+        <% if (enableTranslation) { %>// update the window title using params in the following
+        // precendence
+        // 1. titleKey parameter
+        // 2. $state.$current.data.pageTitle (current state page title)
+        // 3. 'global.title'
+        var updateTitle = function(titleKey) {
+            if (!titleKey && $state.$current.data && $state.$current.data.pageTitle) {
+                titleKey = $state.$current.data.pageTitle;
+            }
+            $translate(titleKey || 'global.title').then(function (title) {
+                $window.document.title = title;
+            });
+        };
+        <%}%>
         $rootScope.ENV = ENV;
         $rootScope.VERSION = VERSION;
         $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
@@ -13,18 +28,37 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
             if (Principal.isIdentityResolved()) {
                 Auth.authorize();
             }
-
+            <% if (enableTranslation) { %>
             // Update the language
             Language.getCurrent().then(function (language) {
                 $translate.use(language);
             });
+            <% } %>
         });
 
         $rootScope.$on('$stateChangeSuccess',  function(event, toState, toParams, fromState, fromParams) {
-            $rootScope.previousStateName = fromState.name;
-            $rootScope.previousStateParams = fromParams;
-        });
+            var titleKey =<% if (enableTranslation) { %> 'global.title' <% }else { %> '<%= baseName %>' <% } %>;
 
+            // Remember previous state unless we've been redirected to login or we've just
+            // reset the state memory after logout. If we're redirected to login, our
+            // previousState is already set in the authExpiredInterceptor. If we're going
+            // to login directly, we don't want to be sent to some previous state anyway
+            if (toState.name != 'login' && $rootScope.previousStateName) {
+              $rootScope.previousStateName = fromState.name;
+              $rootScope.previousStateParams = fromParams;
+            }
+
+            // Set the page title key to the one configured in state or use default one
+            if (toState.data.pageTitle) {
+                titleKey = toState.data.pageTitle;
+            }
+            <% if (enableTranslation) { %>updateTitle(titleKey);<% } else { %>$window.document.title = titleKey;<% } %>
+        });
+        <% if (enableTranslation) { %>
+        // if the current translation changes, update the window title
+        $rootScope.$on('$translateChangeSuccess', function() { updateTitle(); });
+
+        <% } %>
         $rootScope.back = function() {
             // If previous state is 'activate' or do not exist go to 'home'
             if ($rootScope.previousStateName === 'activate' || $state.get($rootScope.previousStateName) === null) {
@@ -34,28 +68,9 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
             }
         };
     })
-    <% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
-    .factory('authInterceptor', function ($rootScope, $q, $location, localStorageService) {
-        return {
-            // Add authorization token to headers
-            request: function (config) {
-                config.headers = config.headers || {};
-                var token = localStorageService.get('token');
-                <% if (authenticationType == 'oauth2') { %>
-                if (token && token.expires_at && token.expires_at > new Date().getTime()) {
-                    config.headers.Authorization = 'Bearer ' + token.access_token;
-                }
-                <% } %><% if (authenticationType == 'xauth') { %>
-                if (token && token.expires && token.expires > new Date().getTime()) {
-                  config.headers['x-auth-token'] = token.token;
-                }
-                <% } %>
-                return config;
-            }
-        };
-    })
-    <% } %>
-    .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, $translateProvider, tmhDynamicLocaleProvider, httpRequestInterceptorCacheBusterProvider) {
+    .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, <% if (enableTranslation) { %>$translateProvider, tmhDynamicLocaleProvider,<% } %> httpRequestInterceptorCacheBusterProvider, AlertServiceProvider) {
+        // uncomment below to make alerts look like toast
+        //AlertServiceProvider.showAsToast(true);
 <% if (authenticationType == 'session') { %>
         //enable CSRF
         $httpProvider.defaults.xsrfCookieName = 'CSRF-TOKEN';
@@ -78,17 +93,18 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
                     function (Auth) {
                         return Auth.authorize();
                     }
-                ],
+                ]<% if (enableTranslation) { %>,
                 translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                     $translatePartialLoader.addPart('global');
-                    $translatePartialLoader.addPart('language');
-                    return $translate.refresh();
-                }]
+                }]<% } %>
             }
         });
-        <% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
-        $httpProvider.interceptors.push('authInterceptor');<% } %>
 
+        $httpProvider.interceptors.push('errorHandlerInterceptor');
+        $httpProvider.interceptors.push('authExpiredInterceptor');<% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
+        $httpProvider.interceptors.push('authInterceptor');<% } %>
+        $httpProvider.interceptors.push('notificationInterceptor');
+        <% if (enableTranslation) { %>
         // Initialize angular-translate
         $translateProvider.useLoader('$translatePartialLoader', {
             urlTemplate: 'i18n/{lang}/{part}.json'
@@ -96,7 +112,21 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', 'tmh.dynamicLocale'
 
         $translateProvider.preferredLanguage('en');
         $translateProvider.useCookieStorage();
+        $translateProvider.useSanitizeValueStrategy('escaped');
+        $translateProvider.addInterpolation('$translateMessageFormatInterpolation');
 
         tmhDynamicLocaleProvider.localeLocationPattern('bower_components/angular-i18n/angular-locale_{{locale}}.js');
-        tmhDynamicLocaleProvider.useCookieStorage('NG_TRANSLATE_LANG_KEY');
-    });
+        tmhDynamicLocaleProvider.useCookieStorage();
+        tmhDynamicLocaleProvider.storageKey('NG_TRANSLATE_LANG_KEY');
+        <% } %>
+    })
+    .config(['$urlMatcherFactoryProvider', function($urlMatcherFactory) {
+        $urlMatcherFactory.type('boolean', {
+            name : 'boolean',
+            decode: function(val) { return val == true ? true : val == "true" ? true : false },
+            encode: function(val) { return val ? 1 : 0; },
+            equals: function(a, b) { return this.is(a) && a === b; },
+            is: function(val) { return [true,false,0,1].indexOf(val) >= 0 },
+            pattern: /bool|true|0|1/
+        });
+    }]);;

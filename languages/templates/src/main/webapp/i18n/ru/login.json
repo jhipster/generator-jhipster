@@ -11,6 +11,9 @@
             "error": {
                 "authentication": "<strong>Не удалось войти!</strong> Пожалуйста, проверьте ваши учетные данные и попробуйте еще раз."
             }
+        },
+        "password" : {
+            "forgot": "Did you forget your password?"
         }
     }
 }

@@ -1,0 +1,30 @@
+{
+    "health": {
+        "title": "Statuskontroller",
+        "refresh.button": "Uppdatera",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Detaljer",
+            "properties": "Egenskaper",
+            "name": "Namn",
+            "value": "Värde",
+            "error": "Fel"
+        },
+        "indicator": {
+            "diskSpace": "Diskutrymme",
+            "mail": "E-post",<% if (searchEngine == 'elasticsearch') { %>
+            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
+            "db": "Databas"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
+        },
+        "table": {
+            "service": "Service namn",
+            "status": "Status"
+        },
+        "status": {
+            "UP": "UPP",
+            "DOWN": "NED"
+        }
+    }
+}

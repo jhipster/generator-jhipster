@@ -1,0 +1,47 @@
+apply plugin: 'scala'
+
+sourceSets {
+    test {
+        scala {
+            srcDirs = ['src/test/gatling/simulations']
+            output.classesDir = 'target/test-classes'
+        }
+    }
+}
+
+task manifestJar(dependsOn:'compileTestScala',type: Jar) {
+    dependsOn configurations.testCompile
+    archiveName 'gatlingBooter.jar'
+    doFirst {
+        manifest {
+            // uri is just needed for Windows-compatibility
+            attributes 'Class-Path': configurations.testCompile.files.collect{ project.uri(it) }.join(' ')
+        }
+    }
+}
+
+task gatlingRun(dependsOn:'manifestJar', type: JavaExec) {
+
+    group = "gatling"
+
+    standardInput = System.in
+
+    final def sourceSet = sourceSets.test
+    File configFile = file('src/test/gatling/conf/gatling.conf')
+
+    def String gatlingDataFolder = "$project.rootDir.absolutePath/src/test/gatling/data"
+    def String gatlingReportsFolder = "$project.buildDir.absolutePath/reports/gatling"
+    def String gatlingBodiesFolder = "$project.rootDir.absolutePath/src/test/gatling/bodies"
+    def String gatlingSimulationsFolder = "$project.rootDir.absolutePath/src/test/gatling/simulations"
+
+    classpath sourceSet.output + files(manifestJar.archivePath) + files("src/test/gatling/conf")
+    main = "io.gatling.app.Gatling"
+
+    environment GATLING_HOME:''
+
+    args '-df', gatlingDataFolder
+    args '-rf', gatlingReportsFolder
+    args '-bdf', gatlingBodiesFolder
+    args "-sf", gatlingSimulationsFolder
+
+}

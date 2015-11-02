@@ -1,10 +1,10 @@
 package <%=packageName%>.web.rest;
-
-import <%=packageName%>.Application;<% if (databaseType == 'mongodb') { %>
-import <%=packageName%>.config.MongoConfiguration;<% } %>
-import <%=packageName%>.domain.Authority;
-import <%=packageName%>.domain.User;
-import <%=packageName%>.repository.AuthorityRepository;
+<% if (databaseType == 'cassandra') { %>
+import <%=packageName%>.AbstractCassandraTest;<% } %>
+import <%=packageName%>.Application;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import <%=packageName%>.domain.Authority;<% } %>
+import <%=packageName%>.domain.User;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import <%=packageName%>.repository.AuthorityRepository;<% } %>
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.MailService;
@@ -16,24 +16,17 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;<% if (databaseType == 'mongodb') { %>
-import org.springframework.context.annotation.Import;<% } %>
+import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import java.util.Arrays;
-import java.util.HashSet;<% if (javaVersion == '8') { %>
-import java.util.Optional;<% } %>
-import java.util.Set;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyObject;
@@ -52,16 +45,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-@IntegrationTest<% if (databaseType == 'mongodb') { %>
-@Import(MongoConfiguration.class)<% } %>
-public class AccountResourceTest {
+@IntegrationTest
+public class AccountResourceTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{
 
     @Inject
     private UserRepository userRepository;
-
+<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Inject
     private AuthorityRepository authorityRepository;
-
+<% } %>
     @Inject
     private UserService userService;
 
@@ -78,7 +70,7 @@ public class AccountResourceTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        doNothing().when(mockMailService).sendActivationEmail(<% if (javaVersion != '8') { %>(User) <% } %>anyObject(), anyString());
+        doNothing().when(mockMailService).sendActivationEmail((User) anyObject(), anyString());
 
         AccountResource accountResource = new AccountResource();
         ReflectionTestUtils.setField(accountResource, "userRepository", userRepository);
@@ -105,13 +97,9 @@ public class AccountResourceTest {
     @Test
     public void testAuthenticatedUser() throws Exception {
         restUserMockMvc.perform(get("/api/authenticate")
-                .with(<% if (javaVersion == '8') { %>request -> {
+                .with(request -> {
                     request.setRemoteUser("test");
-                    return request;<% } else { %>new RequestPostProcessor() {
-                    public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
-                        request.setRemoteUser("test");
-                        return request;
-                    }<% } %>
+                    return request;
                 })
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -119,11 +107,13 @@ public class AccountResourceTest {
     }
 
     @Test
-    public void testGetExistingAccount() throws Exception {
+    public void testGetExistingAccount() throws Exception {<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         Set<Authority> authorities = new HashSet<>();
         Authority authority = new Authority();
         authority.setName(AuthoritiesConstants.ADMIN);
-        authorities.add(authority);
+        authorities.add(authority);<% } %><% if (databaseType == 'cassandra') { %>
+        Set<String> authorities = new HashSet<>();
+        authorities.add(AuthoritiesConstants.ADMIN);<% } %>
 
         User user = new User();
         user.setLogin("test");
@@ -141,7 +131,7 @@ public class AccountResourceTest {
                 .andExpect(jsonPath("$.firstName").value("john"))
                 .andExpect(jsonPath("$.lastName").value("doe"))
                 .andExpect(jsonPath("$.email").value("john.doe@jhipter.com"))
-                .andExpect(jsonPath("$.roles").value(AuthoritiesConstants.ADMIN));
+                .andExpect(jsonPath("$.authorities").value(AuthoritiesConstants.ADMIN));
     }
 
     @Test
@@ -162,8 +152,9 @@ public class AccountResourceTest {
             "Joe",                  // firstName
             "Shmoe",                // lastName
             "joe@example.com",      // e-mail
+            true,                   // activated
             "en",                   // langKey
-            Arrays.asList(AuthoritiesConstants.USER)
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))
         );
 
         restMvc.perform(
@@ -172,9 +163,8 @@ public class AccountResourceTest {
                 .content(TestUtil.convertObjectToJsonBytes(u)))
             .andExpect(status().isCreated());
 
-        <% if (javaVersion == '8') { %>Optional<User> user = userRepository.findOneByLogin("joe");
-        assertThat(user.isPresent()).isTrue();<% } else { %>User user = userRepository.findOneByLogin("joe");
-        assertThat(user).isNotNull();<% } %>
+        Optional<User> user = userRepository.findOneByLogin("joe");
+        assertThat(user.isPresent()).isTrue();
     }
 
     @Test
@@ -186,8 +176,9 @@ public class AccountResourceTest {
             "Funky",                // firstName
             "One",                  // lastName
             "funky@example.com",    // e-mail
+            true,                   // activated
             "en",                   // langKey
-            Arrays.asList(AuthoritiesConstants.USER)
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))
         );
 
         restUserMockMvc.perform(
@@ -196,9 +187,8 @@ public class AccountResourceTest {
                 .content(TestUtil.convertObjectToJsonBytes(u)))
             .andExpect(status().isBadRequest());
 
-        <% if (javaVersion == '8') { %>Optional<User> user = userRepository.findOneByEmail("funky@example.com");
-        assertThat(user.isPresent()).isFalse();<% } else { %>User user = userRepository.findOneByEmail("funky@example.com");
-        assertThat(user).isNull();<% } %>
+        Optional<User> user = userRepository.findOneByEmail("funky@example.com");
+        assertThat(user.isPresent()).isFalse();
     }
 
     @Test
@@ -210,8 +200,9 @@ public class AccountResourceTest {
             "Bob",              // firstName
             "Green",            // lastName
             "invalid",          // e-mail <-- invalid
+            true,               // activated
             "en",               // langKey
-            Arrays.asList(AuthoritiesConstants.USER)
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))
         );
 
         restUserMockMvc.perform(
@@ -220,9 +211,8 @@ public class AccountResourceTest {
                 .content(TestUtil.convertObjectToJsonBytes(u)))
             .andExpect(status().isBadRequest());
 
-        <% if (javaVersion == '8') { %>Optional<User> user = userRepository.findOneByLogin("bob");
-        assertThat(user.isPresent()).isFalse();<% } else { %>User user = userRepository.findOneByLogin("bob");
-        assertThat(user).isNull();<% } %>
+        Optional<User> user = userRepository.findOneByLogin("bob");
+        assertThat(user.isPresent()).isFalse();
     }
 
     @Test
@@ -235,31 +225,31 @@ public class AccountResourceTest {
             "Alice",                // firstName
             "Something",            // lastName
             "alice@example.com",    // e-mail
+            true,                   // activated
             "en",                   // langKey
-            Arrays.asList(AuthoritiesConstants.USER)
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))
         );
 
-        // Duplicate login, diff e-mail
+        // Duplicate login, different e-mail
         UserDTO dup = new UserDTO(u.getLogin(), u.getPassword(), u.getLogin(), u.getLastName(),
-            "alicejr@example.com", u.getLangKey(), u.getRoles());
+            "alicejr@example.com", true, u.getLangKey(), u.getAuthorities());
 
-        // Good
+        // Good user
         restMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(u)))
             .andExpect(status().isCreated());
 
-        // Duplicate
+        // Duplicate login
         restMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(dup)))
             .andExpect(status().is4xxClientError());
 
-        <% if (javaVersion == '8') { %>Optional<User> userDup = userRepository.findOneByEmail("alicejr@example.com");
-        assertThat(userDup.isPresent()).isFalse();<% } else { %>User userDup = userRepository.findOneByEmail("alicejr@example.com");
-        assertThat(userDup).isNull();<% } %>
+        Optional<User> userDup = userRepository.findOneByEmail("alicejr@example.com");
+        assertThat(userDup.isPresent()).isFalse();
     }
 
     @Test
@@ -272,15 +262,16 @@ public class AccountResourceTest {
             "John",                 // firstName
             "Doe",                  // lastName
             "john@example.com",     // e-mail
+            true,                   // activated
             "en",                   // langKey
-            Arrays.asList(AuthoritiesConstants.USER)
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))
         );
 
-        // Duplicate e-mail, diff login
+        // Duplicate e-mail, different login
         UserDTO dup = new UserDTO("johnjr", u.getPassword(), u.getLogin(), u.getLastName(),
-            u.getEmail(), u.getLangKey(), u.getRoles());
+            u.getEmail(), true, u.getLangKey(), u.getAuthorities());
 
-        // Good
+        // Good user
         restMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -294,9 +285,8 @@ public class AccountResourceTest {
                 .content(TestUtil.convertObjectToJsonBytes(dup)))
             .andExpect(status().is4xxClientError());
 
-        <% if (javaVersion == '8') { %>Optional<User> userDup = userRepository.findOneByLogin("johnjr");
-        assertThat(userDup.isPresent()).isFalse();<% } else { %>User userDup = userRepository.findOneByLogin("johnjr");
-        assertThat(userDup).isNull();<% } %>
+        Optional<User> userDup = userRepository.findOneByLogin("johnjr");
+        assertThat(userDup.isPresent()).isFalse();
     }
 
     @Test
@@ -308,8 +298,9 @@ public class AccountResourceTest {
             "Bad",                  // firstName
             "Guy",                  // lastName
             "badguy@example.com",   // e-mail
+            true,                   // activated
             "en",                   // langKey
-            Arrays.asList(AuthoritiesConstants.ADMIN) // <-- only admin should be able to do that
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.ADMIN)) // <-- only admin should be able to do that
         );
 
         restMvc.perform(
@@ -317,14 +308,10 @@ public class AccountResourceTest {
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(u)))
             .andExpect(status().isCreated());
-<% if (javaVersion == '8') { %>
+
         Optional<User> userDup = userRepository.findOneByLogin("badguy");
         assertThat(userDup.isPresent()).isTrue();
         assertThat(userDup.get().getAuthorities()).hasSize(1)
-            .containsExactly(authorityRepository.findOne(AuthoritiesConstants.USER));<% } else { %>
-        User userDup = userRepository.findOneByLogin("badguy");
-        assertThat(userDup).isNotNull();
-        assertThat(userDup.getAuthorities()).hasSize(1)
-            .containsExactly(authorityRepository.findOne(AuthoritiesConstants.USER));<% } %>
+            .containsExactly(<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>authorityRepository.findOne(AuthoritiesConstants.USER)<% } %><% if (databaseType == 'cassandra') { %>AuthoritiesConstants.USER<% } %>);
     }
 }

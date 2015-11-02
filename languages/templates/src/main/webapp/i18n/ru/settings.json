@@ -6,6 +6,7 @@
             "firstname.placeholder": "Ваше имя",
             "lastname": "Фамилия",
             "lastname.placeholder": "Ваша фамилия",
+            "language": "Язык",
             "button": "Сохранить"
         },
         "messages": {

@@ -6,7 +6,7 @@
             "home": "Forsiden",
             "entities": {
                 "main": "Entities",
-                "additionalEntity": "JHipster will add addtional entities"
+                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "Konto",
@@ -19,10 +19,11 @@
             },
             "admin": {
                 "main": "Administration",
+                "user-management": "User management",
                 "tracker": "Brugersporing",
                 "metrics": "Målinger",
                 "health": "Sundheds",
-                "configuration": "Configuration",
+                "configuration": "Konfiguration",
                 "logs": "Logs",
                 "audits": "Audits",
                 "apidocs": "API",
@@ -42,8 +43,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Hvis du ønsker at <a href=\"#/login\">logge ind</a>, så kan du prøve det med:<br/>- Administrator (brugernavn=\"admin\" and kodeord=\"admin\") <br/>- User (brugernavn=\"user\" and kodeord=\"user\").",
-                "register": "You don't have an account yet? <a href=\"#/register\">Register a new account</a>"
+                "authenticated": "Hvis du ønsker at <a class=\"alert-link\" href=\"#/login\">logge ind</a>, så kan du prøve det med:<br/>- Administrator (brugernavn=\"admin\" and kodeord=\"admin\") <br/>- User (brugernavn=\"user\" and kodeord=\"user\").",
+                "register": "You don't have an account yet? <a class=\"alert-link\" href=\"#/register\">Register a new account</a>"
             },
             "error": {
                 "dontmatch": "Kodeordet og dets bekræftelse matcher ikke!"
@@ -67,24 +68,46 @@
                     "maxlength": "Din e-mail adresse må ikke overskride 50 tegn"
                 }
             }
+        },
+        "field": {
+            "id" : "ID"
         }
     },
     "entity": {
         "action": {
-            "back": "Back",
-            "cancel": "Cancel",
-            "delete": "Delete",
-            "edit": "Edit",
-            "save": "Save",
-            "view": "View"
+            "addblob": "Add blob",
+            "addimage": "Add image",
+            "back": "Tilbage",
+            "cancel": "Annuller",
+            "delete": "Slet",
+            "edit": "Editér",
+            "save": "Gem",
+            "view": "Vis"
         },
         "detail": {
-            "field": "Field",
-            "value": "Value"
+            "field": "Felt",
+            "value": "Værdi"
         },
         "delete": {
-            "title": "Confirm delete operation"
+            "title": "Bekræft sletning"
+        },
+        "validation": {
+            "required": "Dette felt er påkrævet.",
+            "minlength": "Dette felt skal være på mindst {{min}} karakterer.",
+            "maxlength": "Dette felt kan ikke være længere end {{max}} karakterer.",
+            "min": "Dette felt skal være større end {{min}}.",
+            "max": "Dette felt kan ikke være større end {{max}}.",
+            "minbytes": "This field should be more than {{min}} bytes.",
+            "maxbytes": "This field cannot be more than {{max}} bytes.",
+            "pattern": "Dette felt skal følge mønsteret {{pattern}}.",
+            "number": "Dette felt skal være et nummer.",
+            "datetimelocal": "Dette felt skal være dato og tid."
         }
+    },
+    "error": {
+        "serverNotReachable": "Server not reachable",
+        "NotNull": "Field {{fieldName}} cannot be empty!",
+        "Size": "Field {{fieldName}} does not meet min/max size requirements!"
     },
     "footer": "Det her er sidefoden"
 }

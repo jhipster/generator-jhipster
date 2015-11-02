@@ -6,19 +6,20 @@
             "home": "Home",
             "entities": {
                 "main": "Entities",
-                "additionalEntity": "JHipster will add addtional entities"
+                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "Account",
                 "settings": "Settings",
                 "password": "Password",
                 "sessions": "Sessions",
-                "login": "Authenticate",
-                "logout": "Log out",
+                "login": "Sign in",
+                "logout": "Sign out",
                 "register": "Register"
             },
             "admin": {
                 "main": "Administration",
+                "user-management": "User management",
                 "tracker": "User tracker",
                 "metrics": "Metrics",
                 "health": "Health",
@@ -31,8 +32,8 @@
             "language": "Language"
         },
         "form": {
-            "username": "Login",
-            "username.placeholder": "Your login",
+            "username": "Username",
+            "username.placeholder": "Your username",
             "newpassword": "New password",
             "newpassword.placeholder": "New password",
             "confirmpassword": "New password confirmation",
@@ -42,35 +43,40 @@
         },
         "messages": {
             "info": {
-                "authenticated": "If you want to <a href=\"#/login\">authenticate</a>, you can try the default accounts:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\").",
-                "register": "You don't have an account yet? <a href=\"#/register\">Register a new account</a>"
+                "authenticated": "If you want to <a class=\"alert-link\" href=\"#/login\">sign in</a>, you can try the default accounts:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\").",
+                "register": "You don't have an account yet? <a class=\"alert-link\" href=\"#/register\">Register a new account</a>"
             },
             "error": {
-                "dontmatch" : "The password and its confirmation do not match!"
+                "dontmatch": "The password and its confirmation do not match!"
             },
             "validate": {
                 "newpassword": {
                     "required": "Your password is required.",
-                    "minlength": "Your password is required to be at least 5 characters",
-                    "maxlength": "Your password cannot be longer than 50 characters",
+                    "minlength": "Your password is required to be at least 5 characters.",
+                    "maxlength": "Your password cannot be longer than 50 characters.",
                     "strength": "Password strength:"
                 },
                 "confirmpassword": {
                     "required": "Your confirmation password is required.",
-                    "minlength": "Your confirmation password is required to be at least 5 characters",
-                    "maxlength": "Your confirmation password cannot be longer than 50 characters"
+                    "minlength": "Your confirmation password is required to be at least 5 characters.",
+                    "maxlength": "Your confirmation password cannot be longer than 50 characters."
                 },
                 "email": {
                     "required": "Your e-mail is required.",
                     "invalid": "Your e-mail is invalid.",
-                    "minlength": "Your e-mail is required to be at least 5 characters",
-                    "maxlength": "Your e-mail cannot be longer than 50 characters"
+                    "minlength": "Your e-mail is required to be at least 5 characters.",
+                    "maxlength": "Your e-mail cannot be longer than 50 characters."
                 }
             }
+        },
+        "field": {
+            "id": "ID"
         }
     },
     "entity": {
         "action": {
+            "addblob": "Add blob",
+            "addimage": "Add image",
             "back": "Back",
             "cancel": "Cancel",
             "delete": "Delete",
@@ -84,7 +90,24 @@
         },
         "delete": {
             "title": "Confirm delete operation"
+        },
+        "validation": {
+            "required": "This field is required.",
+            "minlength": "This field is required to be at least {{min}} characters.",
+            "maxlength": "This field cannot be longer than {{max}} characters.",
+            "min": "This field should be more than {{min}}.",
+            "max": "This field cannot be more than {{max}}.",
+            "minbytes": "This field should be more than {{min}} bytes.",
+            "maxbytes": "This field cannot be more than {{max}} bytes.",
+            "pattern": "This field should follow pattern {{pattern}}.",
+            "number": "This field should be a number.",
+            "datetimelocal": "This field should be a date and time."
         }
+    },
+    "error": {
+        "serverNotReachable": "Server not reachable",
+        "NotNull": "Field {{fieldName}} cannot be empty!",
+        "Size": "Field {{fieldName}} does not meet min/max size requirements!"
     },
     "footer": "This is your footer"
 }

@@ -1,0 +1,23 @@
+{
+    "health": {
+        "title": "服務狀態",
+        "refresh.button": "重整",
+        "stacktrace": "堆疊追蹤",
+        "indicator": {
+            "diskSpace": "硬碟空間",
+            "mail": "電子郵件",<% if (searchEngine == 'elasticsearch') { %>
+            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
+            "db": "資料庫"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
+        },
+        "table": {
+            "service": "服務名稱",
+            "status": "狀態"
+        },
+        "status": {
+            "UP": "正常",
+            "DOWN": "異常"
+        }
+    }
+}

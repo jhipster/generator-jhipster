@@ -6,7 +6,7 @@
             "home": "首頁",
             "entities": {
                 "main": "實體",
-                "additionalEntity": "JHipster 會新增其他實體"
+                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "帳號",
@@ -19,6 +19,7 @@
             },
             "admin": {
                 "main": "管理",
+                "user-management": "User management",
                 "tracker": "追蹤使用者",
                 "metrics": "資源監控",
                 "health": "服務狀態",
@@ -42,8 +43,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "如果您要<a href=\"#/login\">登入</a>, 您可以使用預設帳號:<br/>- 管理者 (帳號=\"admin\"與密碼=\"admin\") <br/>- 使用者 (帳號=\"user\"與密碼=\"user\").",
-                "register": "您還沒有帳號？<a href=\"#/register\">註冊一個新帳號</a>"
+                "authenticated": "如果您要<a class=\"alert-link\" href=\"#/login\">登入</a>, 您可以使用預設帳號:<br/>- 管理者 (帳號=\"admin\"與密碼=\"admin\") <br/>- 使用者 (帳號=\"user\"與密碼=\"user\").",
+                "register": "您還沒有帳號？<a class=\"alert-link\" href=\"#/register\">註冊一個新帳號</a>"
             },
             "error": {
                 "dontmatch" : "您輸入的密碼與密碼確認不符合!"
@@ -67,10 +68,15 @@
                     "maxlength": "您的電子郵件長度不能超過50個字元"
                 }
             }
+        },
+        "field": {
+            "id" : "ID"
         }
     },
     "entity": {
         "action": {
+            "addblob": "Add blob",
+            "addimage": "Add image",
             "back": "返回",
             "cancel": "取消",
             "delete": "刪除",
@@ -84,7 +90,24 @@
         },
         "delete": {
             "title": "確定刪除"
+        },
+        "validation": {
+            "required": "This field is required.",
+            "minlength": "This field is required to be at least {{min}} characters.",
+            "maxlength": "This field cannot be longer than {{max}} characters.",
+            "min": "This field should be more than {{min}}.",
+            "max": "This field cannot be more than {{max}}.",
+            "minbytes": "This field should be more than {{min}} bytes.",
+            "maxbytes": "This field cannot be more than {{max}} bytes.",
+            "pattern": "This field should follow pattern {{pattern}}.",
+            "number": "This field should be a number.",
+            "datetimelocal": "This field should be a date and time."
         }
+    },
+    "error": {
+        "serverNotReachable": "Server not reachable",
+        "NotNull": "Field {{fieldName}} cannot be empty!",
+        "Size": "Field {{fieldName}} does not meet min/max size requirements!"
     },
     "footer": "這裡是頁尾"
 }

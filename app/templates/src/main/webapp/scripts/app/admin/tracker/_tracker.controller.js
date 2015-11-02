@@ -1,15 +1,10 @@
 angular.module('<%=angularAppName%>')
-    .controller('TrackerController', function ($scope<% if (authenticationType == 'oauth2') { %>, AuthServerProvider<% } %>) {
+    .controller('TrackerController', function ($scope<% if (authenticationType == 'oauth2') { %>, AuthServerProvider<% } %>, $cookies, $http, Tracker) {
         // This controller uses a Websocket connection to receive user activities in real-time.
 
         $scope.activities = [];
-        var stompClient = null;
-        var socket = new SockJS('/websocket/tracker');
-        stompClient = Stomp.over(socket);
-        stompClient.connect({}, function(frame) {
-            stompClient.subscribe('/topic/activity', function(activity){
-                showActivity(JSON.parse(activity.body));
-            });
+        Tracker.receive().then(null, null, function(activity) {
+            showActivity(activity);
         });
 
         function showActivity(activity) {
@@ -27,6 +22,5 @@ angular.module('<%=angularAppName%>')
             if (!existingActivity && (activity.page != 'logout')) {
                 $scope.activities.push(activity);
             }
-            $scope.$apply();
         };
     });

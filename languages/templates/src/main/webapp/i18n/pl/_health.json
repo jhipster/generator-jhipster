@@ -1,0 +1,23 @@
+{
+    "health": {
+        "title": "Stan usług",
+        "refresh.button": "Odśwież",
+        "stacktrace": "Stos wywołań",
+        "indicator": {
+            "diskSpace": "Przestrzeń dyskowa",
+            "mail": "E-mail",<% if (searchEngine == 'elasticsearch') { %>
+            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
+            "db": "Baza danych"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
+        },
+        "table": {
+            "service": "Nazwa usługi",
+            "status": "Status"
+        },
+        "status": {
+            "UP": "DOSTĘPNE",
+            "DOWN": "NIEDZIAŁAJĄCY"
+        }
+    }
+}

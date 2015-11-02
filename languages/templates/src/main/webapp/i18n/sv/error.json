@@ -1,6 +1,6 @@
 {
-    "errors": {
+    "error": {
         "title": "Felsida!",
-        "403": "Du är inte autentiserad till sidan."
+        "403": "Du har inte behörighet till att komma åt sidan."
     }
 }

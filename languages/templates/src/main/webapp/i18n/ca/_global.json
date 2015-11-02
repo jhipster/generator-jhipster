@@ -5,8 +5,8 @@
         "menu": {
             "home": "Inici",
             "entities": {
-                "main": "Entities",
-                "additionalEntity": "JHipster will add addtional entities"
+                "main": "Entitats",
+                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "Compte",
@@ -19,14 +19,15 @@
             },
             "admin": {
                 "main": "Administració",
-                "tracker": "User tracker",
+                "user-management": "Administració d'usuaris",
+                "tracker": "Seguidor d'usuaris",
                 "metrics": "Mètriques",
                 "health": "Salud",
-                "configuration": "Configuration",
+                "configuration": "Configuració",
                 "logs": "Registres",
                 "audits": "Auditories",
                 "apidocs": "API",
-                "database": "Database"
+                "database": "Base de dades"
             },
             "language": "Idioma"
         },
@@ -42,8 +43,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Si vol <a href=\"#/login\">autenticar-se</a>, pot usar els comptes per defect:<br/>- Administrador (nom d'usuari=\"admin\" i contrasenya=\"admin\") <br/>- Usuari (nom d'usuari=\"user\" i contrasenya=\"user\").",
-                "register": "No disposa d'un compte encara? <a href=\"#/register\">Registri un nou compte</a>"
+                "authenticated": "Si vol <a class=\"alert-link\" href=\"#/login\">autenticar-se</a>, pot usar els comptes per defect:<br/>- Administrador (nom d'usuari=\"admin\" i contrasenya=\"admin\") <br/>- Usuari (nom d'usuari=\"user\" i contrasenya=\"user\").",
+                "register": "No disposa d'un compte encara? <a class=\"alert-link\" href=\"#/register\">Registri un nou compte</a>"
             },
             "error": {
                 "dontmatch" : "La contrasenya i la confirmació no coincideixen!"
@@ -67,24 +68,46 @@
                     "maxlength": "El seu compte de correu electrònic no pot tenir més de 50 caràcters"
                 }
             }
+        },
+        "field": {
+            "id" : "ID"
         }
     },
     "entity": {
         "action": {
-            "back": "Back",
-            "cancel": "Cancel",
-            "delete": "Delete",
-            "edit": "Edit",
-            "save": "Save",
-            "view": "View"
+            "addblob": "Afegir blob",
+            "addimage": "Afegir imatge",
+            "back": "Enrera",
+            "cancel": "Anul.la",
+            "delete": "Elimina",
+            "edit": "Edita",
+            "save": "Desa",
+            "view": "Visualitza"
         },
         "detail": {
-            "field": "Field",
-            "value": "Value"
+            "field": "Camp",
+            "value": "Valor"
         },
         "delete": {
-            "title": "Confirm delete operation"
+            "title": "Confirma eliminació"
+        },
+        "validation": {
+            "required": "Aquest camp és obligatori.",
+            "minlength": "Aquest camp ha de tenir, com a mínim {{min}} caràcters.",
+            "maxlength": "Aquest camp no pot tenir més de {{max}} caràcters.",
+            "min": "Aquest camp ha de ser major que {{min}}.",
+            "max": "Aquest camp no pot ser major que {{max}}.",
+            "minbytes": "Aquest camp ha de tenir més de {{min}} bytes.",
+            "maxbytes": "Aquest camp no pot tenir més de {{max}} bytes.",
+            "pattern": "Aquest camp ha de tenir el seguent patró {{pattern}}.",
+            "number": "Aquest camp ha de ser numèric.",
+            "datetimelocal": "Aquest camp ha de ser una data/hora."
         }
     },
-    "footer": "Aquest és el teu footer"
+    "error": {
+        "serverNotReachable": "Server not reachable",
+        "NotNull": "Field {{fieldName}} cannot be empty!",
+        "Size": "Field {{fieldName}} does not meet min/max size requirements!"
+    },
+    "footer": "Aquest és el teu peu de pàgina"
 }

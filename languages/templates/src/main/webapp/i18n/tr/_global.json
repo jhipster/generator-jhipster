@@ -6,7 +6,7 @@
             "home": "Ana Sayfa",
             "entities": {
                 "main": "Varlıklar",
-                "additionalEntity": "JHipster ek varlıklar ekleyecek."
+                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "Hesap",
@@ -19,6 +19,7 @@
             },
             "admin": {
                 "main": "Yönetim",
+                "user-management": "User management",
                 "tracker": "Kullanıcı Takip",
                 "metrics": "Ölçümler",
                 "health": "Heath",
@@ -42,8 +43,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "<a href=\"#/login\">Giriş</a> yapmak istiyorsanız, varsayılan hesaplardan birini deneyebilirsiniz:<br/>- Yönetici (kullanıcı adı=\"admin\" ve şifre=\"admin\") <br/>- Kullanıcı (kullanıcı adı=\"user\" and şifre=\"user\").",
-                "register": "Henüz bir hesabınız yok mu? <a href=\"#/register\">Yeni hesap oluştur</a>"
+                "authenticated": "<a class=\"alert-link\" href=\"#/login\">Giriş</a> yapmak istiyorsanız, varsayılan hesaplardan birini deneyebilirsiniz:<br/>- Yönetici (kullanıcı adı=\"admin\" ve şifre=\"admin\") <br/>- Kullanıcı (kullanıcı adı=\"user\" and şifre=\"user\").",
+                "register": "Henüz bir hesabınız yok mu? <a class=\"alert-link\" href=\"#/register\">Yeni hesap oluştur</a>"
             },
             "error": {
                 "dontmatch" : "Şifreler eşleşmedi!"
@@ -67,10 +68,15 @@
                     "maxlength": "E-posta adresi 50 karakterden fazla olamaz"
                 }
             }
+        },
+        "field": {
+            "id" : "ID"
         }
     },
     "entity": {
         "action": {
+            "addblob": "Add blob",
+            "addimage": "Add image",
             "back": "Geri",
             "cancel": "İptal",
             "delete": "Sil",
@@ -84,7 +90,24 @@
         },
         "delete": {
             "title": "Silme işlemini onayla"
+        },
+        "validation": {
+            "required": "This field is required.",
+            "minlength": "This field is required to be at least {{min}} characters.",
+            "maxlength": "This field cannot be longer than {{max}} characters.",
+            "min": "This field should be more than {{min}}.",
+            "max": "This field cannot be more than {{max}}.",
+            "minbytes": "This field should be more than {{min}} bytes.",
+            "maxbytes": "This field cannot be more than {{max}} bytes.",
+            "pattern": "This field should follow pattern {{pattern}}.",
+            "number": "This field should be a number.",
+            "datetimelocal": "This field should be a date and time."
         }
+    },
+    "error": {
+        "serverNotReachable": "Server not reachable",
+        "NotNull": "Field {{fieldName}} cannot be empty!",
+        "Size": "Field {{fieldName}} does not meet min/max size requirements!"
     },
     "footer": "Burası sayfa alt bilgisi"
 }

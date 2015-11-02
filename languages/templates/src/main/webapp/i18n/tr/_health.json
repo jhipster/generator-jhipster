@@ -1,0 +1,23 @@
+{
+    "health": {
+        "title": "Health",
+        "refresh.button": "Yenile",
+        "stacktrace": "Stacktrace",
+        "indicator": {
+            "diskSpace": "Disk space",
+            "mail": "E-posta",<% if (searchEngine == 'elasticsearch') { %>
+            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
+            "db": "Veritabanı"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
+        },
+        "table": {
+            "service": "Hizmetin adı",
+            "status": "Durum"
+        },
+        "status": {
+            "UP": "AKTİF",
+            "DOWN": "DEAKTİF"
+        }
+    }
+}

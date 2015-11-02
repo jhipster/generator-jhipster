@@ -6,7 +6,7 @@
             "home": "Accueil",
             "entities": {
                 "main": "Entités",
-                "additionalEntity": "JHipster will add addtional entities"
+                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "Compte",
@@ -19,6 +19,7 @@
             },
             "admin": {
                 "main": "Administration",
+                "user-management": "Gestion utilisateur",
                 "tracker": "Suivi des utilisateurs",
                 "metrics": "Métriques",
                 "health": "Diagnostics",
@@ -42,8 +43,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Si vous voulez vous <a href=\"#/login\">connecter</a>, vous pouvez utiliser les comptes par défaut : <br/> - Administrateur (nom d'utilisateur=\"admin\" et mot de passe =\"admin\") <br/> - Utilisateur (nom d'utilisateur=\"user\" et mot de passe =\"user\").",
-                "register": "Vous n'avez pas encore de compte ? <a href=\"#/register\">Créer un compte</a>"
+                "authenticated": "Si vous voulez vous <a class=\"alert-link\" href=\"#/login\">connecter</a>, vous pouvez utiliser les comptes par défaut : <br/> - Administrateur (nom d'utilisateur=\"admin\" et mot de passe =\"admin\") <br/> - Utilisateur (nom d'utilisateur=\"user\" et mot de passe =\"user\").",
+                "register": "Vous n'avez pas encore de compte ? <a class=\"alert-link\" href=\"#/register\">Créer un compte</a>"
             },
             "error": {
                 "dontmatch": "Le nouveau mot de passe et sa confirmation ne sont pas égaux!"
@@ -67,10 +68,15 @@
                     "invalid": "Votre email n'est pas valide."
                 }
             }
+        },
+        "field": {
+            "id": "ID"
         }
     },
     "entity": {
         "action": {
+            "addblob": "Ajouter blob",
+            "addimage": "ajouter image",
             "back": "Retour",
             "cancel": "Annuler",
             "edit": "Editer",
@@ -79,12 +85,29 @@
             "view": "Voir"
         },
         "detail": {
-            "field": "Champ",
+            "field": "Champs",
             "value": "Valeur"
         },
         "delete": {
             "title": "Confirmation de suppression"
+        },
+        "validation": {
+            "required": "Ce champs est obligatoire.",
+            "minlength": "Ce champs doit faire au minimum {{min}} caractères.",
+            "maxlength": "Ce champs doit faire moins de {{max}} caractères.",
+            "min": "Ce champs doit être inférieur à {{min}}.",
+            "max": "Ce champs doit être supérieur à {{max}}.",
+            "minbytes": "Ce champs doit être inférieur à {{min}} bytes.",
+            "maxbytes": "Ce champs doit être supérieur à {{max}} bytes.",
+            "pattern": "Ce champs doit suivre l'expression régulière {{pattern}}.",
+            "number": "Ce champs doit être un nombre.",
+            "datetimelocal": "Ce champs doit être une date et une heure."
         }
+    },
+    "error": {
+        "serverNotReachable": "Server not reachable",
+        "NotNull": "Field {{fieldName}} cannot be empty!",
+        "Size": "Field {{fieldName}} does not meet min/max size requirements!"
     },
     "footer": "Ceci est votre pied de page"
 }

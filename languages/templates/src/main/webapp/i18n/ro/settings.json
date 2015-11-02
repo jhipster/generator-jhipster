@@ -1,0 +1,32 @@
+{
+    "settings": {
+        "title": "Setări pentru [<b>{{username}}</b>]",
+        "form": {
+            "firstname": "Prenume",
+            "firstname.placeholder": "Prenumele dumneavoastră",
+            "lastname": "Nume",
+            "lastname.placeholder": "Numele dumneavoastră",
+            "language": "Limba",
+            "button": "Salvează"
+        },
+        "messages": {
+            "error": {
+                "fail": "<strong>Eroare!</strong> Setările nu au putut fi salvate.",
+                "emailexists": "<strong>E-mailul a fost deja folosit!</strong> Vă rugăm să alegeți un altul."
+            },
+            "success": "<strong>Setări salvate!</strong>",
+            "validate": {
+                "firstname": {
+                    "required": "Prenumele dumneavoastră este necesar",
+                    "minlength": "Prenumele dumneavoastră trebuie să aibă cel puțin 1 caracter",
+                    "maxlength": "Prenumele dumneavoastră nu trebuie să aibă mai mult de 50 de caractere"
+                },
+                "lastname": {
+                    "required": "Numele dumneavoastră este necesar",
+                    "minlength": "Numele dumneavoastră trebuie să aibă cel puțin 1 caracter",
+                    "maxlength": "Numele dumneavoastră nu trebuie să aibă mai mult de 50 de caractere"
+                }
+            }
+        }
+    }
+}

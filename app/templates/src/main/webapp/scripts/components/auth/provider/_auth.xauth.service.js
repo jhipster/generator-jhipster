@@ -4,12 +4,12 @@ angular.module('<%=angularAppName%>')
     .factory('AuthServerProvider', function loginService($http, localStorageService, Base64) {
         return {
             login: function(credentials) {
-                var data = "username=" + credentials.username + "&password="
-                    + credentials.password;
+                var data = "username=" +  encodeURIComponent(credentials.username) + "&password="
+                    + encodeURIComponent(credentials.password);
                 return $http.post('api/authenticate', data, {
                     headers: {
                         "Content-Type": "application/x-www-form-urlencoded",
-                        "Accept": "application/json",
+                        "Accept": "application/json"
                     }
                 }).success(function (response) {
                     localStorageService.set('token', response);

@@ -1,0 +1,30 @@
+{
+    "health": {
+        "title": "Starea aplicației",
+        "refresh.button": "Reîncărcare",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "Detalii",
+            "properties": "Proprietați",
+            "name": "Nume",
+            "value": "Valoare",
+            "error": "Eroare"
+        },
+        "indicator": {
+            "diskSpace": "Spațiu disc",
+            "mail": "Email",<% if (searchEngine == 'elasticsearch') { %>
+            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
+            "db": "Bază de date"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
+        },
+        "table": {
+            "service": "Nume serviciu",
+            "status": "Stare"
+        },
+        "status": {
+            "UP": "Sus",
+            "DOWN": "Jos"
+        }
+    }
+}

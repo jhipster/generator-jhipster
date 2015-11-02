@@ -1,0 +1,23 @@
+{
+    "health": {
+        "title": "Heath checks",
+        "refresh.button": "Refresh",
+        "stacktrace": "Stacktrace",
+        "indicator": {
+            "diskSpace": "Disk space",
+            "mail": "Email",<% if (searchEngine == 'elasticsearch') { %>
+            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
+            "db": "Database"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
+        },
+        "table": {
+            "service": "Nombre del servicio",
+            "status": "Estado"
+        },
+        "status": {
+            "UP": "HASTA",
+            "DOWN": "ABAJO"
+        }
+    }
+}

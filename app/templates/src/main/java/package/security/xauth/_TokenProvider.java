@@ -51,6 +51,23 @@ public class TokenProvider {
         long expires = Long.parseLong(parts[1]);
         String signature = parts[2];
         String signatureToMatch = computeSignature(userDetails, expires);
-        return expires >= System.currentTimeMillis() && signature.equals(signatureToMatch);
+        return expires >= System.currentTimeMillis() && constantTimeEquals(signature, signatureToMatch);
     }
+
+    /**
+     * String comparison that doesn't stop at the first character that is different but instead always
+     * iterates the whole string length to prevent timing attacks.
+     */
+    private boolean constantTimeEquals(String a, String b) {
+        if (a.length() != b.length()) {
+            return false;
+        } else {
+            int equal = 0;
+            for (int i = 0; i < a.length(); i++) {
+                equal |= a.charAt(i) ^ b.charAt(i);
+            }
+            return equal == 0;
+        }
+    }
+
 }

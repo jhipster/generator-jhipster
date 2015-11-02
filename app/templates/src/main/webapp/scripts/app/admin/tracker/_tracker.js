@@ -5,7 +5,8 @@ angular.module('<%=angularAppName%>')
                 parent: 'admin',
                 url: '/tracker',
                 data: {
-                    roles: ['ROLE_ADMIN']
+                    authorities: ['ROLE_ADMIN'],
+                    pageTitle: 'tracker.title'
                 },
                 views: {
                     'content@': {
@@ -18,6 +19,12 @@ angular.module('<%=angularAppName%>')
                         $translatePartialLoader.addPart('tracker');
                         return $translate.refresh();
                     }]
-                }
+                },
+                onEnter: function(Tracker) {
+                    Tracker.subscribe();
+                },
+                onExit: function(Tracker) {
+                    Tracker.unsubscribe();
+                },
             });
     });
