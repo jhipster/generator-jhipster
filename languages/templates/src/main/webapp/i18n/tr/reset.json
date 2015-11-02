@@ -1,28 +1,28 @@
 {
     "reset": {
         "request": {
-            "title": "Reset your password",
+            "title": "Şifreni sıfırla",
             "form": {
-                "button": "Reset password"
+                "button": "Şifreyi sıfırla"
             },
             "messages": {
-                "info": "Enter the e-mail address you used to register",
-                "success": "Check your e-mails for details on how to reset your password.",
-                "notfound": "<strong>E-Mail address isn't registered!</strong> Please check and try again"
+                "info": "Kayıt olurken kullandığın e-mail adresini gir",
+                "success": "Şifreni nasıl sıfırlayacağını öğrenmek için e-postalarını kontrol et.",
+                "notfound": "<strong>E-Posta adresi kayıtlı değil!</strong> Lütfen kontrol et ve tekrar dene"
 
             }
 
         },
         "finish" : {
-            "title": "Reset password",
+            "title": "Şifreyi sıfırla",
             "form": {
-                "button": "Validate new password"
+                "button": "Yeni şifreyi doğrula"
             },
             "messages": {
-                "info": "Choose a new password",
-                "success": "<strong>Your password has been reset.</strong> Please <a class=\"alert-link\" href=\"#/login\">sign in</a>.",
-                "keymissing": "The reset key is missing.",
-                "error": "Your password couldn't be reset. Remember a password request is only valid for 24 hours."
+                "info": "Yeni şifre seç",
+                "success": "<strong>Şifren sıfırlandı.</strong> Lütfen <a class=\"alert-link\" href=\"#/login\">giriş yap</a>.",
+                "keymissing": "Şifre sıfırlama anahtarı geçersiz.",
+                "error": "Şifren sıfırlanamaz. Şifre isteği sadece 24 saat geçerlidir."
             }
         }
     }
