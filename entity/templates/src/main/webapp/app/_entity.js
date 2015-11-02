@@ -110,5 +110,28 @@ angular.module('<%=angularAppName%>')
                         $state.go('^');
                     })
                 }]
+            })
+            .state('<%= entityInstance %>.delete', {
+                parent: '<%= entityInstance %>',
+                url: '/{id}/delete',
+                data: {
+                    authorities: ['ROLE_USER'],
+                },
+                onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
+                    $modal.open({
+                        templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-delete-dialog.html',
+                        controller: '<%= entityClass %>DeleteController',
+                        size: 'md',
+                        resolve: {
+                            entity: ['<%= entityClass %>', function(<%= entityClass %>) {
+                                return <%= entityClass %>.get({id : $stateParams.id});
+                            }]
+                        }
+                    }).result.then(function(result) {
+                        $state.go('<%= entityInstance %>', null, { reload: true });
+                    }, function() {
+                        $state.go('^');
+                    })
+                }]
             });
     });

@@ -1010,9 +1010,11 @@ JhipsterGenerator.prototype.app = function app() {
     }
     this.copyHtml(webappDir + '/scripts/app/admin/user-management/user-management.html', webappDir + 'scripts/app/admin/user-management/user-management.html');
     this.copyHtml(webappDir + '/scripts/app/admin/user-management/_user-management-detail.html', webappDir + 'scripts/app/admin/user-management/user-management-detail.html');
+    this.copyHtml(webappDir + '/scripts/app/admin/user-management/_user-management-dialog.html', webappDir + 'scripts/app/admin/user-management/user-management-dialog.html');
     this.copyJs(webappDir + '/scripts/app/admin/user-management/_user-management.js', webappDir + 'scripts/app/admin/user-management/user-management.js', this, {});
     this.template(webappDir + '/scripts/app/admin/user-management/_user-management.controller.js', webappDir + 'scripts/app/admin/user-management/user-management.controller.js', this, {});
     this.template(webappDir + '/scripts/app/admin/user-management/_user-management-detail.controller.js', webappDir + 'scripts/app/admin/user-management/user-management-detail.controller.js', this, {});
+    this.template(webappDir + '/scripts/app/admin/user-management/_user-management-dialog.controller.js', webappDir + 'scripts/app/admin/user-management/user-management-dialog.controller.js', this, {});
     this.copyHtml(webappDir + '/scripts/app/error/error.html', webappDir + 'scripts/app/error/error.html');
     this.copyHtml(webappDir + '/scripts/app/error/accessdenied.html', webappDir + 'scripts/app/error/accessdenied.html');
     this.copyJs(webappDir + '/scripts/app/entities/_entity.js', webappDir + 'scripts/app/entities/entity.js', this, {});
@@ -1140,6 +1142,7 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/app/admin/metrics/metrics.controller.js',
         'scripts/app/admin/metrics/metrics.modal.controller.js',
         'scripts/app/admin/user-management/user-management-detail.controller.js',
+        'scripts/app/admin/user-management/user-management-dialog.controller.js',
         'scripts/app/admin/user-management/user-management.controller.js',
         'scripts/app/admin/user-management/user-management.js',
         'scripts/app/entities/entity.js',
