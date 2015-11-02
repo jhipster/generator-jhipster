@@ -104,5 +104,10 @@
             "datetimelocal": "Este campo debe ser unha data e hora."
         }
     },
+    "error": {
+        "serverNotReachable": "Servidor non accesible",
+        "NotNull": "El campo {{fieldName}} non pode estar baleiro!",
+        "Size": "¡El campo {{fieldName}} non cumpre cos requisitos de tamaño mínimo ou máximo!",
+    },
     "footer": "pé de páxina"
 }

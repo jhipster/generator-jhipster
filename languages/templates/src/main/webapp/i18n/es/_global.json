@@ -105,9 +105,9 @@
         }
     },
     "error": {
-        "serverNotReachable": "Server not reachable",
-        "NotNull": "Field {{fieldName}} cannot be empty!",
-        "Size": "Field {{fieldName}} does not meet min/max size requirements!"
+        "serverNotReachable": "Servidor no accesible",
+        "NotNull": "¡El campo {{fieldName}} no puede estar vacío!",
+        "Size": "¡El campo {{fieldName}} no cumple con los requisitos de tamaño mínimo/máximo!",
     },
     "footer": "pie de página"
 }
