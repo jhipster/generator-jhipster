@@ -43,27 +43,6 @@ angular.module('<%=angularAppName%>')
         <%_ } _%>
         $scope.loadAll();
 
-        $scope.delete = function (id) {
-            <%= entityClass %>.get({id: id}, function(result) {
-
-                var modalInstance = $modal.open({
-                    templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-delete-dialog.html',
-                    controller: '<%= entityClass %>DeleteController',
-                    size: 'md',
-                    resolve: {
-                        entity: function() {
-                            return result;
-                        }
-                    }
-                });
-                modalInstance.result.then(function(result) {
-                    $state.go('<%= entityInstance %>', null, { reload: true });
-                }, function() {
-                    $state.go('<%= entityInstance %>');
-                });
-            });
-        };
-
         <%_ if (searchEngine == 'elasticsearch') { _%>
 
         $scope.search = function () {
