@@ -740,6 +740,73 @@ module.exports = JhipsterGenerator.extend({
             this.template(RESOURCE_DIR + '/config/_application-dev.yml', RESOURCE_DIR + 'config/application-dev.yml', this, {});
             this.template(RESOURCE_DIR + '/config/_application-prod.yml', RESOURCE_DIR + 'config/application-prod.yml', this, {});
 
+            cb();
+        }.bind(this));
+    }
+};
+
+JhipsterGenerator.prototype.app = function app() {
+    var insight = this.insight();
+    insight.track('generator', 'app');
+    insight.track('app/authenticationType', this.authenticationType);
+    insight.track('app/hibernateCache', this.hibernateCache);
+    insight.track('app/clusteredHttpSession', this.clusteredHttpSession);
+    insight.track('app/websocket', this.websocket);
+    insight.track('app/databaseType', this.databaseType);
+    insight.track('app/devDatabaseType', this.devDatabaseType);
+    insight.track('app/prodDatabaseType', this.prodDatabaseType);
+    insight.track('app/searchEngine', this.searchEngine);
+    insight.track('app/useSass', this.useSass);
+    insight.track('app/buildTool', this.buildTool);
+    insight.track('app/frontendBuilder', this.frontendBuilder);
+    insight.track('app/enableTranslation', this.enableTranslation);
+    insight.track('app/enableSocialSignIn', this.enableSocialSignIn);
+    insight.track('app/testFrameworks', this.testFrameworks);
+
+    var packageFolder = this.packageName.replace(/\./g, '/');
+    var javaDir = 'src/main/java/' + packageFolder + '/';
+    var resourceDir = 'src/main/resources/';
+    var webappDir = 'src/main/webapp/';
+    var interpolateRegex = /<%=([\s\S]+?)%>/g; // so that tags in templates do not get mistreated as _ templates
+
+    // Remove old files
+
+    // Application name modified, using each technology's conventions
+    this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
+    this.camelizedBaseName = _.camelize(this.baseName);
+    this.slugifiedBaseName = _.slugify(this.baseName);
+    this.lowercaseBaseName = this.baseName.toLowerCase();
+
+    if (this.prodDatabaseType === 'oracle') { // create a folder for users to place ojdbc jar
+        this.ojdbcVersion = '7';
+        this.libFolder = 'lib/oracle/ojdbc/' + this.ojdbcVersion + '/';
+        mkdirp(this.libFolder);
+    }
+    if (this.databaseType === 'cassandra' || this.databaseType === 'mongodb') {
+        this.pkType = 'String';
+    } else {
+        this.pkType = 'Long';
+    }
+
+    this.template('_package.json', 'package.json', this, {});
+    this.template('_bower.json', 'bower.json', this, {});
+    this.template('_README.md', 'README.md', this, {});
+    this.template('bowerrc', '.bowerrc', this, {});
+    this.copy('gitignore', '.gitignore');
+    this.copy('gitattributes', '.gitattributes');
+
+    // Create docker-compose file
+    if (this.devDatabaseType != "h2Disk" && this.devDatabaseType != "h2Memory" && this.devDatabaseType != "oracle") {
+        this.template('_docker-compose.yml', 'docker-compose.yml', this, {});
+    }
+    if (this.prodDatabaseType != "oracle" || this.searchEngine == "elasticsearch") {
+        this.template('_docker-compose-prod.yml', 'docker-compose-prod.yml', this, {});
+    }
+    if (this.devDatabaseType == "cassandra") {
+        this.template('_Dockerfile_cassandra', 'Dockerfile', this, {});
+    }
+>>>>>>> Removed unnecessary file
+
             if (this.databaseType == "sql") {
                 this.template(RESOURCE_DIR + '/config/liquibase/changelog/_initial_schema.xml', RESOURCE_DIR + 'config/liquibase/changelog/00000000000000_initial_schema.xml', this, {'interpolate': INTERPOLATE_REGEX});
                 this.copy(RESOURCE_DIR + '/config/liquibase/master.xml', RESOURCE_DIR + 'config/liquibase/master.xml');
@@ -1195,10 +1262,19 @@ module.exports = JhipsterGenerator.extend({
                 this.copyJs(WEBAPP_DIR + '/scripts/app/account/social/_social-register.js', WEBAPP_DIR + 'scripts/app/account/social/social-register.js', this, {});
             }
 
+<<<<<<< HEAD
             // interceptor code
             this.template(WEBAPP_DIR + '/scripts/components/interceptor/_auth.interceptor.js', WEBAPP_DIR + 'scripts/components/interceptor/auth.interceptor.js', this, {});
             this.template(WEBAPP_DIR + '/scripts/components/interceptor/_errorhandler.interceptor.js', WEBAPP_DIR + 'scripts/components/interceptor/errorhandler.interceptor.js', this, {});
             this.template(WEBAPP_DIR + '/scripts/components/interceptor/_notification.interceptor.js', WEBAPP_DIR + 'scripts/components/interceptor/notification.interceptor.js', this, {});
+=======
+    this.template('src/main/java/package/web/filter/_package-info.java', javaDir + 'web/filter/package-info.java', this, {});
+    this.template('src/main/java/package/web/filter/_CachingHttpHeadersFilter.java', javaDir + 'web/filter/CachingHttp<ersFilter.java', this, {});
+    this.template('src/main/java/package/web/filter/_StaticResourcesProductionFilter.java', javaDir + 'web/filter/StaticResourcesProductionFilter.java', this, {});
+    if (this.authenticationType == 'session') {
+        this.template('src/main/java/package/web/filter/_CsrfCookieGeneratorFilter.java', javaDir + 'web/filter/CsrfCookieGeneratorFilter.java', this, {});
+    }
+>>>>>>> Removed unnecessary file
 
             //alert service code
             this.template(WEBAPP_DIR + '/scripts/components/alert/_alert.service.js', WEBAPP_DIR + 'scripts/components/alert/alert.service.js', this, {});
