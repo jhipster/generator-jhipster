@@ -1,23 +1,22 @@
 {
     "name": "<%= camelizedBaseName %>",
-    "version": "1.0.0",
-    "description": "<%= camelizedBaseName %>",
-    "private": true,
+    "version": "0.0.0",
     "appPath": "src/main/webapp",
     "testPath": "src/test/javascript/spec",
     "dependencies": {
-        "angular": "1.4.x",
-        "angular-aria": "1.4.x",
+        "angular": "1.4.5",
+        "angular-aria": "1.4.5",
         "angular-bootstrap": "0.13.3",
         "angular-cache-buster": "0.4.3",
-        "angular-cookies": "1.4.x",
+        "angular-cookies": "1.4.5",
         <%_ if (enableTranslation) { _%>
         "angular-dynamic-locale": "0.1.27",
-        "angular-i18n": "1.4.x",
+        "angular-i18n": "1.4.5",
         <%_ } _%>
         "angular-local-storage": "0.2.2",
-        "angular-resource": "1.4.x",
-        "angular-sanitize": "1.4.x",
+        "angular-loading-bar": "0.8.0",
+        "angular-resource": "1.4.5",
+        "angular-sanitize": "1.4.5",
         <%_ if (enableTranslation) { _%>
         "angular-translate": "2.7.2",
         "angular-translate-interpolation-messageformat": "2.7.2",
@@ -42,8 +41,8 @@
         "swagger-ui": "2.1.2"
     },
     "devDependencies": {
-        "angular-mocks": "1.4.x",
-        "angular-scenario": "1.4.x"
+        "angular-mocks": "1.4.5",
+        "angular-scenario": "1.4.5"
     },
     <%_ if (!useSass) { _%>
     "overrides": {
@@ -57,7 +56,8 @@
     },
     <%_ } _%>
     "resolutions": {
-        "angular": "1.4.7",
-        "angular-cookies": "1.4.7"
+        "angular": "1.4.5",
+        "angular-cookies": "1.4.5",
+        "jquery": "2.1.4"
     }
 }

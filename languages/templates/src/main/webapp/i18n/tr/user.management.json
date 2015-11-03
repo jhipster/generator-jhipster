@@ -1,27 +1,27 @@
 {
     "user-management": {
         "home": {
-            "title": "Users",
-            "createLabel": "Create a new user",
-            "createOrEditLabel": "Create or edit a user"
+            "title": "Kullanıcılar",
+            "createLabel": "Yeni kullanıcı oluştur",
+            "createOrEditLabel": "Kullanıcı oluştur veya düzenle"
         },
         "delete": {
-            "question": "Are you sure you want to delete user {{ login }}?"
+            "question": "{{ login }} kullanıcısını silmek istediğinize emin misiniz?"
         },
         "detail": {
-            "title": "User"
+            "title": "Kullanıcı"
         },
-        "login": "Login",
-        "firstName": "First name",
-        "lastName": "Last name",
-        "email": "Email",
-        "activated": "Activated",
-        "deactivated": "Deactivated",
-        "profiles": "Profiles",
-        "langKey": "Language",
-        "createdBy": "Created by",
-        "createdDate": "Created date",
-        "lastModifiedBy": "Modified by",
-        "lastModifiedDate": "Modified date"
+        "login": "Giriş",
+        "firstName": "Ad",
+        "lastName": "Soyad",
+        "email": "Eposta",
+        "activated": "Aktif",
+        "deactivated": "Deaktif",
+        "profiles": "Profiller",
+        "langKey": "Dil",
+        "createdBy": "Oluşturan",
+        "createdDate": "Oluşturma tarihi",
+        "lastModifiedBy": "Düzenleyen",
+        "lastModifiedDate": "Düzenleme tarihi"
     }
 }

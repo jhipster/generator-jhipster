@@ -5,8 +5,10 @@ angular.module('<%=angularAppName%>')
         return {
             restrict: 'E',
             template: '<div class="alerts" ng-cloak="">' +
-                            '<alert ng-cloak="" ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()"><pre>{{ alert.msg }}</pre></alert>' +
-                        '</div>',
+                            '<div ng-repeat="alert in alerts" ng-class="[alert.position, {\'toast\': alert.toast}]">' +
+                                '<alert ng-cloak="" type="{{alert.type}}" close="alert.close()"><pre>{{ alert.msg }}</pre></alert>' +
+                            '</div>' +
+                      '</div>',
             controller: ['$scope',
                 function($scope) {
                     $scope.alerts = AlertService.get();
@@ -21,11 +23,14 @@ angular.module('<%=angularAppName%>')
         return {
             restrict: 'E',
             template: '<div class="alerts" ng-cloak="">' +
-                            '<alert ng-cloak="" ng-repeat="alert in alerts" type="{{alert.type}}" close="alert.close()"><pre>{{ alert.msg }}</pre></alert>' +
-                        '</div>',
+                            '<div ng-repeat="alert in alerts" ng-class="[alert.position, {\'toast\': alert.toast}]">' +
+                                '<alert ng-cloak="" type="{{alert.type}}" close="alert.close(alerts)"><pre>{{ alert.msg }}</pre></alert>' +
+                            '</div>' +
+                      '</div>',
             controller: ['$scope',
                 function($scope) {
-                    $scope.alerts = AlertService.get();
+
+                    $scope.alerts = [];
 
                     var cleanHttpErrorListener = $rootScope.$on('<%=angularAppName%>.httpError', function (event, httpResponse) {
                         var i;
@@ -46,9 +51,9 @@ angular.module('<%=angularAppName%>')
                                         addErrorAlert('Field ' + fieldName + ' cannot be empty', 'error.' + fieldError.message, {fieldName: fieldName});
                                     }
                                 } else if (httpResponse.data && httpResponse.data.message) {
-                                  addErrorAlert(httpResponse.data.message, httpResponse.data.message, httpResponse.data);
+                                    addErrorAlert(httpResponse.data.message, httpResponse.data.message, httpResponse.data);
                                 } else {
-                                  addErrorAlert(httpResponse.data);
+                                    addErrorAlert(httpResponse.data);
                                 }
                                 break;
 
@@ -64,14 +69,40 @@ angular.module('<%=angularAppName%>')
                     $scope.$on('$destroy', function () {
                         if(cleanHttpErrorListener !== undefined && cleanHttpErrorListener !== null){
                             cleanHttpErrorListener();
+                            $scope.alerts = [];
                         }
                     });
 
                     var addErrorAlert = function (message, key, data) {
-                        <% if (enableTranslation) { %>
+                    <%_ if (enableTranslation) { _%>
                         key = key && key != null ? key : message;
-                        AlertService.error(key, data); <%} else { %> AlertService.error(message); <% } %>
-
+                        $scope.alerts.push(
+                            AlertService.add(
+                                {
+                                    type: "danger",
+                                    msg: key,
+                                    params: data,
+                                    timeout: 5000,
+                                    toast: AlertService.isToast(),
+                                    scoped: true
+                                },
+                                $scope.alerts
+                            )
+                        );
+                    <%_ } else { _%>
+                        $scope.alerts.push(
+                            AlertService.add(
+                                {
+                                    type: "danger",
+                                    msg: message,
+                                    timeout: 5000,
+                                    toast: AlertService.isToast(),
+                                    scoped: true
+                                },
+                                $scope.alerts
+                            )
+                        );
+                    <%_ } _%>
                     }
                 }
             ]

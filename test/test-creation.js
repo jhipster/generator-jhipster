@@ -41,6 +41,8 @@ describe('JHipster generator ', function () {
             '.gitattributes',
             'Gruntfile.js',
             'pom.xml',
+            'mvnw',
+            'mvnw.cmd',
             'src/main/resources/banner.txt',
             'src/main/resources/ehcache.xml',
             'src/main/resources/.h2.server.properties',
@@ -80,9 +82,6 @@ describe('JHipster generator ', function () {
             'src/main/java/com/mycompany/myapp/config/audit/AuditEventConverter.java',
             'src/main/java/com/mycompany/myapp/config/locale/package-info.java',
             'src/main/java/com/mycompany/myapp/config/locale/AngularCookieLocaleResolver.java',
-            'src/main/java/com/mycompany/myapp/config/metrics/package-info.java',
-            'src/main/java/com/mycompany/myapp/config/metrics/DatabaseHealthIndicator.java',
-            'src/main/java/com/mycompany/myapp/config/metrics/JHipsterHealthIndicatorConfiguration.java',
             'src/main/java/com/mycompany/myapp/domain/package-info.java',
             'src/main/java/com/mycompany/myapp/domain/AbstractAuditingEntity.java',
             'src/main/java/com/mycompany/myapp/domain/Authority.java',
@@ -273,6 +272,8 @@ describe('JHipster generator ', function () {
             'src/main/webapp/assets/images/development_ribbon.png',
             'src/main/webapp/assets/images/hipster.png',
             'src/main/webapp/assets/images/hipster2x.png',
+            '.mvn/wrapper/maven-wrapper.jar',
+            '.mvn/wrapper/maven-wrapper.properties',
             '.editorconfig',
             '.jshintrc'
         ]);

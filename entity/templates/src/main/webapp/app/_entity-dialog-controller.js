@@ -32,16 +32,22 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>DialogContro
             });
         };
 
-        var onSaveFinished = function (result) {
+        var onSaveSuccess = function (result) {
             $scope.$emit('<%=angularAppName%>:<%= entityInstance %>Update', result);
             $modalInstance.close(result);
+            $scope.isSaving = false;
+        };
+
+        var onSaveError = function (result) {
+            $scope.isSaving = false;
         };
 
         $scope.save = function () {
+            $scope.isSaving = true;
             if ($scope.<%= entityInstance %>.id != null) {
-                <%= entityClass %>.update($scope.<%= entityInstance %>, onSaveFinished);
+                <%= entityClass %>.update($scope.<%= entityInstance %>, onSaveSuccess, onSaveError);
             } else {
-                <%= entityClass %>.save($scope.<%= entityInstance %>, onSaveFinished);
+                <%= entityClass %>.save($scope.<%= entityInstance %>, onSaveSuccess, onSaveError);
             }
         };
 

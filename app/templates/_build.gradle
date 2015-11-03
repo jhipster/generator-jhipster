@@ -4,8 +4,10 @@ buildscript {
         jcenter()
         maven { url 'http://repo.spring.io/plugins-release' }
         maven { url 'http://repo.spring.io/milestone' }
+        maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
+        classpath group: 'org.sonarqube.gradle', name: 'gradle-sonarqube-plugin', version: '1.0'
         classpath group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: spring_boot_version
         classpath group: 'org.springframework.build.gradle', name: 'propdeps-plugin', version: '0.0.7'
         classpath group: 'com.moowork.gradle', name: 'gradle-node-plugin', version: '0.11'<% if(frontendBuilder == 'grunt') {%>
@@ -176,7 +178,7 @@ dependencies {
     testCompile group: 'junit', name: 'junit'
     testCompile group: 'org.mockito', name: 'mockito-core'<% if (databaseType == 'sql') { %>
     testCompile group: 'com.mattbertolini', name: 'liquibase-slf4j', version: liquibase_slf4j_version<% } %><% if (databaseType == 'mongodb') { %>
-    testCompile group: 'cz.jirutka.spring', name: 'embedmongo-spring', version: embedmongo_spring_version<% } %>
+    testCompile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo'<% } %>
     testCompile group: 'org.hamcrest', name: 'hamcrest-library'
     <% if (testFrameworks.indexOf('gatling') != -1) { %>
     testCompile group: 'io.gatling.highcharts', name: 'gatling-charts-highcharts', version: gatling_version<% } %>

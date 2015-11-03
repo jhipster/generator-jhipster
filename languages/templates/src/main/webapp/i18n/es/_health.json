@@ -1,10 +1,11 @@
 {
     "health": {
-        "title": "Heath checks",
-        "refresh.button": "Refresh",
+        "title": "Control de salud",
+        "refresh.button": "Refrescar",
+        "health.details.details": "Detalles",
         "stacktrace": "Stacktrace",
         "indicator": {
-            "diskSpace": "Disk space",
+            "diskSpace": "Espacio en disco",
             "mail": "Email",<% if (searchEngine == 'elasticsearch') { %>
             "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
             "db": "Database"<% } %><% if (databaseType == 'mongodb') { %>
@@ -16,8 +17,8 @@
             "status": "Estado"
         },
         "status": {
-            "UP": "HASTA",
-            "DOWN": "ABAJO"
+            "UP": "LEVANTADO",
+            "DOWN": "CAÍDO"
         }
     }
 }

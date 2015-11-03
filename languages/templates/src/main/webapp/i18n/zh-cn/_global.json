@@ -104,5 +104,10 @@
             "datetimelocal": "本字段必须为日期和时间."
         }
     },
+    "error": {
+        "serverNotReachable": "Server not reachable",
+        "NotNull": "Field {{fieldName}} cannot be empty!",
+        "Size": "Field {{fieldName}} does not meet min/max size requirements!"
+    },
     "footer": "这里是页脚"
 }
