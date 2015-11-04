@@ -476,8 +476,8 @@ describe('JHipster generator ', function () {
         'src/main/java/com/mycompany/myapp/security/social/CustomSignInAdapter.java',
         'src/main/java/com/mycompany/myapp/service/SocialService.java',
         'src/main/java/com/mycompany/myapp/web/rest/SocialController.java',
-        'src/test/java/com/mycompany/myapp/repository/CustomSocialUsersConnectionRepositoryTest.java',
-        'src/test/java/com/mycompany/myapp/service/SocialServiceTest.java'
+        'src/test/java/com/mycompany/myapp/repository/CustomSocialUsersConnectionRepositoryIntTest.java',
+        'src/test/java/com/mycompany/myapp/service/SocialServiceIntTest.java'
     ]);
   });
 });
