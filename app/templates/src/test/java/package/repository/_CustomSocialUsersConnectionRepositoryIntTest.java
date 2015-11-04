@@ -36,7 +36,7 @@ import static org.junit.Assert.*;
 @WebAppConfiguration
 @IntegrationTest
 @Transactional
-public class CustomSocialUsersConnectionRepositoryTest {
+public class CustomSocialUsersConnectionRepositoryIntTest {
 
     private ConnectionFactoryRegistry connectionFactoryRegistry;
 

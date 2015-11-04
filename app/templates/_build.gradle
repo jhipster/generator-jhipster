@@ -39,6 +39,19 @@ bootRun {
     addResources = false
 }
 
+
+test {
+    println 'Starting the Unit and Integration test'
+    include '**/*UnitTest*'
+    include '**/*IntTest*'
+}
+
+task cucumberTest(type: Test) {
+    include '**/CucumberTest*'
+}
+
+test.finalizedBy(cucumberTest)
+
 apply from: 'yeoman.gradle'
 apply from: 'sonar.gradle'
 <% if (databaseType == 'sql') { %>

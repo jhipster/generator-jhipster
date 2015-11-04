@@ -32,7 +32,7 @@ import static org.mockito.Mockito.*;
 @WebAppConfiguration
 @IntegrationTest
 @Transactional
-public class SocialServiceTest {
+public class SocialServiceIntTest {
 
     @Inject
     private AuthorityRepository authorityRepository;
