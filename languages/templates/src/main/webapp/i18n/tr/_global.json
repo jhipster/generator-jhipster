@@ -76,7 +76,7 @@
     "entity": {
         "action": {
             "addblob": "Add blob",
-            "addimage": "Add image",
+            "addimage": "Resim Ekle",
             "back": "Geri",
             "cancel": "İptal",
             "delete": "Sil",
@@ -92,17 +92,22 @@
             "title": "Silme işlemini onayla"
         },
         "validation": {
-            "required": "This field is required.",
-            "minlength": "This field is required to be at least {{min}} characters.",
-            "maxlength": "This field cannot be longer than {{max}} characters.",
-            "min": "This field should be more than {{min}}.",
-            "max": "This field cannot be more than {{max}}.",
-            "minbytes": "This field should be more than {{min}} bytes.",
-            "maxbytes": "This field cannot be more than {{max}} bytes.",
-            "pattern": "This field should follow pattern {{pattern}}.",
-            "number": "This field should be a number.",
-            "datetimelocal": "This field should be a date and time."
+            "required": "Bu alan gerekli.",
+            "minlength": "Bu alan minimum {{min}} karakterden oluşabilir.",
+            "maxlength": "Bu alan maksimum {{max}} karakterden oluşabilir.",
+            "min": "Bu alan minimum {{min}} olmalı.",
+            "max": "Bu alan maksimum {{max}} olmalı.",
+            "minbytes": "Bu alanan minimum {{min}} byte olmalı.",
+            "maxbytes": "Bu alan maksimum {{max}} byte olmalı.",
+            "pattern": "Bu alan {{pattern}} şablonuna uymuyor.",
+            "number": "Bu alan numara içermeli.",
+            "datetimelocal": "Bu alan tarih veya zaman içermeli."
         }
+    },
+    "error": {
+        "serverNotReachable": "Sunucuya ulaşılamıyor",
+        "NotNull": "{{fieldName}} alanı boş bırakılamaz!",
+        "Size": "{{fieldName}} alanı min/max gerekliliklere uymuyor!"
     },
     "footer": "Burası sayfa alt bilgisi"
 }

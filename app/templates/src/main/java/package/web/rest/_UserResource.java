@@ -104,11 +104,9 @@ public class UserResource {
     @Transactional<% } %>
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<ManagedUserDTO> updateUser(@RequestBody ManagedUserDTO managedUserDTO) throws URISyntaxException {
-        log.debug("REST request to update User : {}", managedUserDTO);<% if (databaseType == 'cassandra') { %>
+        log.debug("REST request to update User : {}", managedUserDTO);
         return userRepository
-            .findOne(managedUserDTO.getId())<% } else { %>
-        return Optional.of(userRepository
-            .findOne(managedUserDTO.getId()))<% } %>
+            .findOneById(managedUserDTO.getId())
             .map(user -> {
                 user.setLogin(managedUserDTO.getLogin());
                 user.setFirstName(managedUserDTO.getFirstName());
@@ -131,7 +129,7 @@ public class UserResource {
                 return ResponseEntity.ok()
                     .headers(HeaderUtil.createEntityUpdateAlert("user", managedUserDTO.getLogin()))
                     .body(new ManagedUserDTO(userRepository
-                        .findOne(managedUserDTO.getId())<% if (databaseType == 'cassandra') { %>.get()<% } %>));<% } %>
+                        .findOne(managedUserDTO.getId())));<% } %>
             })
             .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
@@ -157,7 +155,7 @@ public class UserResource {
         throws URISyntaxException {
         List<User> users = userRepository.findAll();
         List<ManagedUserDTO> managedUserDTOs = users.stream()
-            .map(user -> new ManagedUserDTO(user))
+            .map(ManagedUserDTO::new)
             .collect(Collectors.toList());
         return new ResponseEntity<>(managedUserDTOs, HttpStatus.OK);
     }<% } %>
@@ -172,7 +170,7 @@ public class UserResource {
     public ResponseEntity<ManagedUserDTO> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
         return userService.getUserWithAuthoritiesByLogin(login)
-                .map(user -> new ManagedUserDTO(user))
+                .map(ManagedUserDTO::new)
                 .map(managedUserDTO -> new ResponseEntity<>(managedUserDTO, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }<% if (searchEngine == 'elasticsearch') { %>

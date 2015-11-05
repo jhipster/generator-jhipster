@@ -1,4 +1,4 @@
-FROM cassandra
+FROM cassandra:2.2.3
 MAINTAINER Pascal Grimaud <pascalgrimaud@gmail.com>
 
 # add script cql

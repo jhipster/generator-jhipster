@@ -1,10 +1,10 @@
 {
     "health": {
-        "title": "Health",
+        "title": "Sağlık",
         "refresh.button": "Yenile",
-        "stacktrace": "Stacktrace",
+        "stacktrace": "Yığın İzleme",
         "indicator": {
-            "diskSpace": "Disk space",
+            "diskSpace": "Disk alanı",
             "mail": "E-posta",<% if (searchEngine == 'elasticsearch') { %>
             "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
             "db": "Veritabanı"<% } %><% if (databaseType == 'mongodb') { %>
