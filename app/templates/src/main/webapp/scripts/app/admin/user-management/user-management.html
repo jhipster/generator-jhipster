@@ -1,26 +1,72 @@
 <div>
+    <jh-alert-error></jh-alert-error>
     <div class="row">
-        <h2 class="col-sm-6" translate="user-management.home.title">Users</h2>
+        <div class="col-sm-3"><h2 translate="user-management.home.title">Users</h2></div>
+        <div class="col-sm-9">
+            <div class="pull-right">
+                <form name="searchForm" ng-submit="search()" class="form-inline" novalidate show-validation="">
+                    <div class="form-group">
+                        <input placeholder="{{'user-management.home.searchPlaceholder'|translate}}" type="text"
+                               class="form-control" ng-model="searchQuery" id="searchQuery"/>
+                    </div>
+                    <button type="submit" class="btn btn-default">
+                        <i class="glyphicon glyphicon-search" aria-label="search"></i>
+                        <span translate="user-management.home.searchLabel">Search</span>
+                    </button>
+                </form>
+                <button ng-disabled="!areAllUsersSelected" class="btn btn-default" ng-click="sync()">
+                    <i class="glyphicon glyphicon-refresh" aria-label="sync"></i>
+                    <span translate="user-management.home.sync">sync</span>
+                </button>
+
+                <button ng-disabled="!areAllUsersSelected" class="btn btn-default" ng-click="export()">
+                    <i class="glyphicon glyphicon-export" aria-label="export"></i>
+                    <span translate="user-management.home.export">export</span>
+                </button>
+
+                <button ng-disabled="!areAllUsersSelected" class="btn btn-default" ng-click="import()">
+                    <i class="glyphicon glyphicon-import" aria-label="import"></i>
+                    <span translate="user-management.home.import">import</span>
+                </button>
+
+                <button ng-disabled="!areAllUsersSelected" class="btn btn-default btn-danger" ng-click="deleteSelected()">
+                    <i class="glyphicon glyphicon-trash" aria-label="delete"></i>
+                    <span translate="entity.action.delete">delete</span>
+                </button>
+            </div>
+        </div>
     </div>
 
     <div class="table-responsive">
+
         <table class="table table-striped">
+            <caption class="caption notice text-center">
+                <span translate="entity.action.found"
+                     translate-values="{found: '{{users.length}}', total: '{{total}}'}">{{users.length}} users
+                    retrieved from total of {{total}} users
+                </span>
+            </caption>
             <thead>
             <tr>
-                <th translate="global.field.id">ID</th>
-                <th translate="user-management.login">Login</th>
-                <th translate="user-management.email">Email</th>
-                <th></th>
-                <% if (enableTranslation) { %><th translate="user-management.langKey">LangKey</th><% } %>
-                <th translate="user-management.profiles">Profiles</th><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-                <th translate="user-management.createdDate">CreatedDate</th>
-                <th translate="user-management.lastModifiedBy">LastModifiedBy</th>
-                <th translate="user-management.lastModifiedDate">LastModifiedDate</th><% } %>
+                <th>
+                    <input type="checkbox" ng-model="areAllUsersSelected"
+                           ng-change="updateUsersSelection(users, areAllUsersSelected)"/>
+                </th>
+                <th ng-click="order('id', reverse=!reverse)" translate="global.field.id">ID</th>
+                <th ng-click="order('login', reverse=!reverse)" translate="user-management.login">Login</th>
+                <th ng-click="order('email', reverse=!reverse)" translate="user-management.email">Email</th>
+                <th ng-click="order('active', reverse=!reverse)">Activated</th>
+                <th ng-click="order('langKey', reverse=!reverse)" translate="user-management.langKey">LangKey</th>
+                <th translate="user-management.profiles">Profiles</th>
+                <th ng-click="order('createdDate', reverse=!reverse)" translate="user-management.createdDate">CreatedDate</th>
+                <th ng-click="order('lastModifiedBy', reverse=!reverse)" translate="user-management.lastModifiedBy">LastModifiedBy</th>
+                <th ng-click="order('lastModifiedDate', reverse=!reverse)" translate="user-management.lastModifiedDate">LastModifiedDate</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="user in users track by user.id">
+            <tr ng-repeat="user in users | filter:filter | orderBy:predicate:reverse track by user.id">
+                <td><input type="checkbox" ng-model="user.isSelected"/></td>
                 <td><a ui-sref="user-management-detail({login:user.login})">{{user.id}}</a></td>
                 <td>{{user.login}}</td>
                 <td>{{user.email}}</td>
@@ -30,15 +76,15 @@
                     <span class="label label-success" ng-click="setActive(user, false)" ng-show="user.activated"
                           translate="user-management.activated" style="cursor: pointer;">Activated</span>
                 </td>
-                <% if (enableTranslation) { %><td>{{user.langKey}}</td><% } %>
+                <td>{{user.langKey}}</td>
                 <td>
                     <div ng-repeat="authority in user.authorities">
                         <span class="label label-info">{{ authority }}</span>
                     </div>
-                </td><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+                </td>
                 <td>{{user.createdDate | date:'dd/MM/yy HH:mm'}}</td>
                 <td>{{user.lastModifiedBy}}</td>
-                <td>{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td><% } %>
+                <td>{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td>
                 <td class="text-right">
                     <button type="submit"
                             ui-sref="user-management-detail({login:user.login})"
@@ -53,7 +99,9 @@
                 </td>
             </tr>
             </tbody>
-        </table><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+        </table>
+
+        <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         <nav>
             <ul class="pagination">
                 <li ng-show="links['first'] >= 0" ng-click="loadPage(links['first'])"><a>&lt;&lt;</a></li>

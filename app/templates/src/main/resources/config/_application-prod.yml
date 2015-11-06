@@ -98,6 +98,14 @@ spring:
             cluster-name:
             cluster-nodes: localhost:9300
     <%_ } _%>
+    <%_ if (searchEngine == 'solr') { _%>
+    data:
+        solr:
+            host: http://127.0.0.1:8983/solr
+            default:
+                core:
+                    name: collection1
+    <%_ } _%>
     mail:
         host: localhost
         port: 25

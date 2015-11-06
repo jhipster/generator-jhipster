@@ -31,7 +31,8 @@ import org.springframework.context.annotation.Import;<% } %><% if (databaseType 
 import org.springframework.core.env.Environment;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.convert.converter.Converter;<% } %><% if (searchEngine == 'elasticsearch') { %>
-import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;<% } %><% if (databaseType == 'mongodb') { %>
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;<% } %><% if (searchEngine == 'solr') { %>
+import org.springframework.data.solr.repository.config.EnableSolrRepositories;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.convert.CustomConversions;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'oauth2') { %>
@@ -58,7 +59,8 @@ import java.util.List;
 @EnableJpaRepositories("<%=packageName%>.repository")
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @EnableTransactionManagement<% } %><% if (searchEngine == 'elasticsearch') { %>
-@EnableElasticsearchRepositories("<%=packageName%>.repository.search")<% } %><% if (databaseType == 'mongodb') { %>
+@EnableElasticsearchRepositories("<%=packageName%>.repository.search")<% } %><% if (searchEngine == 'solr') { %>
+@EnableSolrRepositories("<%=packageName%>.repository.search", multicoreSupport = true, schemaCreationSupport = true)<% } %><% if (databaseType == 'mongodb') { %>
 @Profile("!" + Constants.SPRING_PROFILE_CLOUD)
 @EnableMongoRepositories("<%=packageName%>.repository")
 @Import(value = MongoAutoConfiguration.class)

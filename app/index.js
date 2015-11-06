@@ -255,6 +255,10 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 {
                     value: 'elasticsearch',
                     name: 'Yes, with ElasticSearch'
+                },
+                {
+                    value: 'solr',
+                    name: 'Yes, with SOLR'
                 }
             ],
             default: 0
@@ -731,6 +735,11 @@ JhipsterGenerator.prototype.app = function app() {
 
     if (this.searchEngine == 'elasticsearch') {
         this.template('src/main/java/package/config/_ElasticSearchConfiguration.java', javaDir + 'config/ElasticSearchConfiguration.java', this, {});
+        this.template('src/main/java/package/repository/search/_package-info.java', javaDir + 'repository/search/package-info.java', this, {});
+        this.template('src/main/java/package/repository/search/_UserSearchRepository.java', javaDir + 'repository/search/UserSearchRepository.java', this, {});
+    }
+    if (this.searchEngine == 'solr') {
+        this.template('src/main/java/package/config/_SolrConfiguration.java', javaDir + 'config/SolrConfiguration.java', this, {});
         this.template('src/main/java/package/repository/search/_package-info.java', javaDir + 'repository/search/package-info.java', this, {});
         this.template('src/main/java/package/repository/search/_UserSearchRepository.java', javaDir + 'repository/search/UserSearchRepository.java', this, {});
     }

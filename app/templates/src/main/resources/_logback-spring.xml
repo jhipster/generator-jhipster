@@ -44,7 +44,8 @@
     <logger name="org.apache" level="WARN"/>
     <logger name="org.apache.catalina.startup.DigesterFactory" level="OFF"/>
     <logger name="org.bson" level="WARN"/><% if (searchEngine == 'elasticsearch') { %>
-    <logger name="org.elasticsearch" level="WARN"/><% } %>
+    <logger name="org.elasticsearch" level="WARN"/><% } %><% if (searchEngine == 'solr') { %>
+    <logger name="org.springframework.data.solr" level="WARN"/><% } %>
     <logger name="org.hibernate.validator" level="WARN"/>
     <logger name="org.hibernate" level="WARN"/>
     <logger name="org.hibernate.ejb.HibernatePersistence" level="OFF"/>

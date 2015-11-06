@@ -1235,6 +1235,11 @@ EntityGenerator.prototype.files = function files() {
             'src/main/java/' + this.packageFolder + '/repository/search/' +    this.entityClass + 'SearchRepository.java', this, {});
     }
 
+    if (this.searchEngine == 'solr') {
+        this.template('src/main/java/package/repository/search/_EntitySearchRepository.java',
+            'src/main/java/' + this.packageFolder + '/repository/search/' +    this.entityClass + 'SearchRepository.java', this, {});
+    }
+
     this.template('src/main/java/package/web/rest/_EntityResource.java',
         'src/main/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'Resource.java', this, {});
 
@@ -1292,6 +1297,12 @@ EntityGenerator.prototype.files = function files() {
     this.addComponentsScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.service' + '.js');
 
     if (this.searchEngine == 'elasticsearch') {
+        this.template('src/main/webapp/components/_entity-search-service.js',
+            'src/main/webapp/scripts/components/entities/' + this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js', this, {});
+        this.addComponentsScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js');
+    }
+
+    if (this.searchEngine == 'solr') {
         this.template('src/main/webapp/components/_entity-search-service.js',
             'src/main/webapp/scripts/components/entities/' + this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js', this, {});
         this.addComponentsScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js');
