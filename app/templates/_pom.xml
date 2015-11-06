@@ -447,6 +447,17 @@
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
         <%_ } _%>
+        <%_ if (searchEngine == 'solr') { _%>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-solr</artifactId>
+            <version>1.5.0.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-solr</artifactId>
+        </dependency>
+        <%_ } _%>
         <%_ if (databaseType == 'mongodb') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -11,7 +11,8 @@
             "error": "Erreur"
         },
         "indicator": {
-            "diskSpace": "Espace disque",
+            "diskSpace": "Espace disque",<% if (searchEngine == 'solr') { %>
+            "solr": "SOLR",<% } %>
             "mail": "Email",<% if (searchEngine == 'elasticsearch') { %>
             "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
             "db": "Base de données"<% } %><% if (databaseType == 'mongodb') { %>

@@ -2,7 +2,8 @@ package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import <%=packageName%>.domain.<%= entityClass %>;
-import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine == 'elasticsearch') { %>
+import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine == 'elasticsearch' || searchEngine == 'solr') { %>
+import java.util.stream.StreamSupport;
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } %>
 import <%=packageName%>.web.rest.util.HeaderUtil;<% if (pagination != 'no') { %>
 import <%=packageName%>.web.rest.util.PaginationUtil;<% } %><% if (dto == 'mapstruct') { %>
@@ -26,7 +27,7 @@ import java.net.URISyntaxException;<% if (dto == 'mapstruct') { %>
 import java.util.LinkedList;<% } %>
 import java.util.List;
 import java.util.Optional;<% if (databaseType == 'cassandra') { %>
-import java.util.UUID;<% } %><% if (searchEngine == 'elasticsearch' || dto == 'mapstruct' || fieldsContainNoOwnerOneToOne == true) { %>
+import java.util.UUID;<% } %><% if (searchEngine == 'elasticsearch' || searchEngine == 'solr' || dto == 'mapstruct' || fieldsContainNoOwnerOneToOne == true) { %>
 import java.util.stream.Collectors;<% } %><% if (searchEngine == 'elasticsearch' || fieldsContainNoOwnerOneToOne == true) { %>
 import java.util.stream.StreamSupport;<% } %><% if (searchEngine == 'elasticsearch') { %>
 
@@ -45,7 +46,7 @@ public class <%= entityClass %>Resource {
     private <%= entityClass %>Repository <%= entityInstance %>Repository;<% if (dto == 'mapstruct') { %>
 
     @Inject
-    private <%= entityClass %>Mapper <%= entityInstance %>Mapper;<% } %><% if (searchEngine == 'elasticsearch') { %>
+    private <%= entityClass %>Mapper <%= entityInstance %>Mapper;<% } %><% if (searchEngine == 'elasticsearch' || searchEngine == 'solr') { %>
 
     @Inject
     private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;<% } %>
@@ -69,7 +70,7 @@ public class <%= entityClass %>Resource {
             return ResponseEntity.badRequest().header("Failure", "A new <%= entityInstance %> cannot already have an ID").body(null);
         }<% if (dto == 'mapstruct') { %>
         <%= entityClass %> <%= entityInstance %> = <%= dtoToEntity %>(<%= instanceName %>);<% } %>
-        <%= entityClass %> result = <%= entityInstance %>Repository.save(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
+        <%= entityClass %> result = <%= entityInstance %>Repository.save(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch' || searchEngine == 'solr') { %>
         <%= entityInstance %>SearchRepository.save(result);<% } %>
         return ResponseEntity.created(new URI("/api/<%= entityInstance %>s/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("<%= entityInstance %>", result.getId().toString()))
@@ -89,7 +90,7 @@ public class <%= entityClass %>Resource {
             return create<%= entityClass %>(<%= instanceName %>);
         }<% if (dto == 'mapstruct') { %>
         <%= entityClass %> <%= entityInstance %> = <%= entityInstance %>Mapper.<%= entityInstance %>DTOTo<%= entityClass %>(<%= instanceName %>);<% } %>
-        <%= entityClass %> result = <%= entityInstance %>Repository.save(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch') { %>
+        <%= entityClass %> result = <%= entityInstance %>Repository.save(<%= entityInstance %>);<% if (searchEngine == 'elasticsearch' || searchEngine == 'solr') { %>
         <%= entityInstance %>SearchRepository.save(<%= entityInstance %>);<% } %>
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("<%= entityInstance %>", <%= instanceName %>.getId().toString()))
@@ -185,4 +186,22 @@ public class <%= entityClass %>Resource {
             .map(<%= entityInstance %>Mapper::<%= entityInstance %>To<%= entityClass %>DTO)<% } %>
             .collect(Collectors.toList());
     }<% } %>
+
+
+    <% if (searchEngine == 'solr') { %>
+     /**
+     * SEARCH  /_search/<%= entityInstance %>s/:query -> search for the <%= entityInstance %> corresponding
+     * to the query.
+     */
+    @RequestMapping(value = "/_search/<%= entityInstance %>s/{query}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> search<%= entityClass %>s(@PathVariable String query) {
+        return StreamSupport
+            .stream(<%= entityInstance %>SearchRepository.findAll().spliterator(), false)<% if (dto == 'mapstruct') { %>
+            .map(<%= entityInstance %>Mapper::<%= entityInstance %>To<%= entityClass %>DTO)<% } %>
+            .collect(Collectors.toList());
+    }<% } %>
+
 }
