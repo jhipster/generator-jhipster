@@ -255,6 +255,10 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 {
                     value: 'elasticsearch',
                     name: 'Yes, with ElasticSearch'
+                },
+                {
+                    value: 'solr',
+                    name: 'Yes, with SOLR'
                 }
             ],
             default: 0
@@ -734,6 +738,11 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/main/java/package/repository/search/_package-info.java', javaDir + 'repository/search/package-info.java', this, {});
         this.template('src/main/java/package/repository/search/_UserSearchRepository.java', javaDir + 'repository/search/UserSearchRepository.java', this, {});
     }
+    if (this.searchEngine == 'solr') {
+        this.template('src/main/java/package/config/_SolrConfiguration.java', javaDir + 'config/SolrConfiguration.java', this, {});
+        this.template('src/main/java/package/repository/search/_package-info.java', javaDir + 'repository/search/package-info.java', this, {});
+        this.template('src/main/java/package/repository/search/_UserSearchRepository.java', javaDir + 'repository/search/UserSearchRepository.java', this, {});
+    }
     this.template('src/main/java/package/repository/_package-info.java', javaDir + 'repository/package-info.java', this, {});
     if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
         this.template('src/main/java/package/repository/_AuthorityRepository.java', javaDir + 'repository/AuthorityRepository.java', this, {});
@@ -951,6 +960,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/scripts/components/util/_parse-links.service.js', webappDir + 'scripts/components/util/parse-links.service.js', this, {});
     this.template(webappDir + '/scripts/components/util/_truncate.filter.js', webappDir + 'scripts/components/util/truncate.filter.js', this, {});
     this.template(webappDir + '/scripts/components/util/_dateutil.service.js', webappDir + 'scripts/components/util/dateutil.service.js', this, {});
+    this.template(webappDir + '/scripts/components/util/_data-util.service.js', webappDir + 'scripts/components/util/data-util.service.js', this, {});
 
     // Client App
     this.template(webappDir + '/scripts/app/account/_account.js', webappDir + 'scripts/app/account/account.js', this, {});

@@ -5,7 +5,7 @@ import <%=packageName%>.domain.PersistentToken;<% } %><% } %>
 import <%=packageName%>.domain.User;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import <%=packageName%>.repository.AuthorityRepository;<% if (authenticationType == 'session') { %>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %><% } %>
-import <%=packageName%>.repository.UserRepository;<% if (searchEngine == 'elasticsearch') { %>
+import <%=packageName%>.repository.UserRepository;<% if (searchEngine == 'elasticsearch' || searchEngine == 'solr') { %>
 import <%=packageName%>.repository.search.UserSearchRepository;<% } %><% if (databaseType == 'cassandra') { %>
 import <%=packageName%>.security.AuthoritiesConstants;<% } %>
 import <%=packageName%>.security.SecurityUtils;
@@ -35,7 +35,7 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
 
     @Inject
-    private UserRepository userRepository;<% if (searchEngine == 'elasticsearch') { %>
+    private UserRepository userRepository;<% if (searchEngine == 'elasticsearch' || searchEngine == 'solr') { %>
 
     @Inject
     private UserSearchRepository userSearchRepository;<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %><% if (authenticationType == 'session') { %>
@@ -53,7 +53,7 @@ public class UserService {
                 // activate given user for the registration key.
                 user.setActivated(true);
                 user.setActivationKey(null);
-                userRepository.save(user);<% if (searchEngine == 'elasticsearch') { %>
+                userRepository.save(user);<% if (searchEngine == 'elasticsearch' || searchEngine == 'solr') { %>
                 userSearchRepository.save(user);<% } %>
                 log.debug("Activated user: {}", user);
                 return user;
@@ -112,7 +112,7 @@ public class UserService {
         authorities.add(authority);<% } %><% if (databaseType == 'cassandra') { %>
         authorities.add(AuthoritiesConstants.USER);<% } %>
         newUser.setAuthorities(authorities);
-        userRepository.save(newUser);<% if (searchEngine == 'elasticsearch') { %>
+        userRepository.save(newUser);<% if (searchEngine == 'elasticsearch' || searchEngine == 'solr') { %>
         userSearchRepository.save(newUser);<% } %>
         log.debug("Created Information for User: {}", newUser);
         return newUser;
@@ -124,7 +124,7 @@ public class UserService {
             u.setLastName(lastName);
             u.setEmail(email);
             u.setLangKey(langKey);
-            userRepository.save(u);<% if (searchEngine == 'elasticsearch') { %>
+            userRepository.save(u);<% if (searchEngine == 'elasticsearch' || searchEngine == 'solr') { %>
             userSearchRepository.save(u);<% } %>
             log.debug("Changed Information for User: {}", u);
         });
@@ -193,7 +193,7 @@ public class UserService {
         List<User> users = userRepository.findAllByActivatedIsFalseAndCreatedDateBefore(now.minusDays(3));
         for (User user : users) {
             log.debug("Deleting not activated user {}", user.getLogin());
-            userRepository.delete(user);<% if (searchEngine == 'elasticsearch') { %>
+            userRepository.delete(user);<% if (searchEngine == 'elasticsearch' || searchEngine == 'solr') { %>
             userSearchRepository.delete(user);<% } %>
         }
     }<% } %>

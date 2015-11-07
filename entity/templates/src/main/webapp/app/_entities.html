@@ -3,19 +3,21 @@
     <h2 translate="<%= keyPrefix %>home.title"><%= entityClass %>s</h2>
     <jh-alert></jh-alert>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
             <button class="btn btn-primary" ui-sref="<%= entityInstance %>.new">
                 <span class="glyphicon glyphicon-flash"></span> <span translate="<%= keyPrefix %>home.createLabel">Create a new <%= entityClass %></span>
             </button>
         </div>
-        <%_ if (searchEngine == 'elasticsearch') { _%>
-        <div class="col-md-8">
-            <form name="searchForm" class="form-inline pull-right" novalidate show-validation>
-                <div class="form-group">
-                    <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="search for..." required>
-                </div>
-                <button ng-disabled="searchForm.$invalid" class="btn btn-info" ng-click="search()"><span class="glyphicon glyphicon-search"></span> <span translate="entity.action.search">Search a <%= entityClass %></span>
-                </button>
+        <%_ if (searchEngine == 'elasticsearch' || searchEngine == 'solr') { _%>
+        <div class="col-md-9">
+            <div class="pull-right">
+                <form name="searchForm" class="form-inline" ng-submit="search()" novalidate show-validation>
+                    <div class="form-group">
+                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="search for..." required>
+                    </div>
+                    <button ng-disabled="searchForm.$invalid" class="btn btn-info" type="submit"><span class="glyphicon glyphicon-search"></span> <span translate="entity.action.search">Search a <%= entityClass %></span>
+                    </button>
+                </form>
                 <button ng-disabled="!areAll<%= entityClass %>sSelected" class="btn btn-default" ng-click="sync()">
                     <i class="glyphicon glyphicon-refresh" aria-label="sync"></i>
                     <span translate="entity.action.sync">sync</span>
@@ -34,8 +36,7 @@
                     <i class="glyphicon glyphicon-trash" aria-label="delete"></i>
                     <span translate="entity.action.delete">delete</span>
                 </button>
-						
-            </form>
+            </div>
         </div>
         <%_ } _%>
     </div>
@@ -43,14 +44,14 @@
     <div class="table-responsive">
         <table class="table table-hover table-striped">
 	        <caption class="caption notice text-center">
-	            <div translate="entity.action.found"
-	                 translate-values="{found: '{{<%=entityInstance %>s.length}}', total: '{{total}}'}">{{cats.length}} <%=entityInstance %>s retrieved from total of {{total}} <%=entityInstance %>s              
-	            </div>
+	            <span translate="entity.action.found"
+	                 translate-values="{found: '{{<%=entityInstance %>s.length}}', total: '{{total}}'}">{{cats.length}} <%=entityInstance %>s retrieved from total of {{total}} <%=entityInstance %>s
+	            </span>
 	        </caption>
-																		
+
             <thead>
                 <tr>
-	                <th><input type="checkbox" ng-model="areAll<%=entityClass %>sSelected" ng-change="update<%=entityClass %>sSelection(<%=entityInstance %>s, areAll<%=entityClass %>sSelected)"></th>	 
+	                <th><input type="checkbox" ng-model="areAll<%=entityClass %>sSelected" ng-change="update<%=entityClass %>sSelection(<%=entityInstance %>s, areAll<%=entityClass %>sSelected)"></th>
                     <th ng-click="order('id', reverse=!reverse)" translate="global.field.id">ID</th>
                     <%_ for (fieldId in fields) { _%>
                     <th ng-click="order('<%= fields[fieldId].fieldName %>', reverse=!reverse)" translate="<%=keyPrefix + fields[fieldId].fieldName %>"><%=fields[fieldId].fieldNameCapitalized%></th>

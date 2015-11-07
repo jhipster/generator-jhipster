@@ -3,6 +3,7 @@ package <%=packageName%>.config;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.web.cors.CorsConfiguration;
 
 /**
  * Properties specific to JHipster.
@@ -29,6 +30,8 @@ public class JHipsterProperties {
     private final Swagger swagger = new Swagger();
 
     private final Metrics metrics = new Metrics();
+
+    private final CorsConfiguration cors = new CorsConfiguration();
 
     <%_ if (enableSocialSignIn) { _%>
     private final Social social = new Social();
@@ -65,6 +68,10 @@ public class JHipsterProperties {
 
     public Metrics getMetrics() {
         return metrics;
+    }
+
+    public CorsConfiguration getCors() {
+        return cors;
     }
 
     <%_ if (enableSocialSignIn) { _%>

@@ -4,7 +4,8 @@ import com.codahale.metrics.annotation.Timed;<% if (databaseType == 'sql' || dat
 import <%=packageName%>.domain.Authority;<% } %>
 import <%=packageName%>.domain.User;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import <%=packageName%>.repository.AuthorityRepository;<% } %>
-import <%=packageName%>.repository.UserRepository;<% if (searchEngine == 'elasticsearch') { %>
+import <%=packageName%>.repository.UserRepository;<% if (searchEngine == 'elasticsearch' || searchEngine == 'solr') { %>
+import java.util.stream.StreamSupport;
 import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
 import <%=packageName%>.security.AuthoritiesConstants;
 import <%=packageName%>.service.UserService;
@@ -29,8 +30,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.Collectors;<% if (searchEngine == 'elasticsearch') { %>
-import java.util.stream.StreamSupport;
-
 import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
 
 /**
@@ -70,7 +69,7 @@ public class UserResource {
     private AuthorityRepository authorityRepository;<% } %>
 
     @Inject
-    private UserService userService;<% if (searchEngine == 'elasticsearch') { %>
+    private UserService userService;<% if (searchEngine == 'elasticsearch' || searchEngine == 'solr') { %>
 
     @Inject
     private UserSearchRepository userSearchRepository;<% } %>
@@ -188,4 +187,22 @@ public class UserResource {
             .stream(userSearchRepository.search(queryStringQuery(query)).spliterator(), false)
             .collect(Collectors.toList());
     }<% } %>
+
+    <% if (searchEngine == 'solr') { %>
+     /**
+     * SEARCH  /_search/users/:query -> search for the User corresponding
+     * to the query.
+     */
+    @RequestMapping(value = "/_search/users/{query}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public List<User> search(@PathVariable String query) {
+        return StreamSupport
+            .stream(userSearchRepository.findByLoginStartingWith(query).spliterator(), false)
+            .collect(Collectors.toList());
+
+    }<% } %>
+
+
 }

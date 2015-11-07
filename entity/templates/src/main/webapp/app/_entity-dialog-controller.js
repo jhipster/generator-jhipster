@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('<%=angularAppName%>').controller('<%= entityClass %>DialogController',
-    ['$scope', '$stateParams', '$modalInstance'<% if (fieldsContainOwnerOneToOne) { %>, '$q'<% } %>, 'entity', '<%= entityClass %>'<% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) {%>, '<%= differentTypes[idx] %>'<% } } %>,
-        function($scope, $stateParams, $modalInstance<% if (fieldsContainOwnerOneToOne) { %>, $q<% } %>, entity, <%= entityClass %><% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) {%>, <%= differentTypes[idx] %><% } } %>) {
+    ['$scope', '$stateParams', '$modalInstance'<% if (fieldsContainOwnerOneToOne) { %>, '$q'<% } %><% if (fieldsContainBlob) { %>, 'DataUtils'<% } %>, 'entity', '<%= entityClass %>'<% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) {%>, '<%= differentTypes[idx] %>'<% } } %>,
+        function($scope, $stateParams, $modalInstance<% if (fieldsContainOwnerOneToOne) { %>, $q<% } %><% if (fieldsContainBlob) { %>, DataUtils<% } %>, entity, <%= entityClass %><% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) {%>, <%= differentTypes[idx] %><% } } %>) {
 
         $scope.<%= entityInstance %> = entity;<%
             var queries = [];
@@ -53,43 +53,14 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>DialogContro
 
         $scope.clear = function() {
             $modalInstance.dismiss('cancel');
-        };<% if (fieldsContainBlob) { %>
-
-        $scope.abbreviate = function (text) {
-            if (!angular.isString(text)) {
-                return '';
-            }
-            if (text.length < 30) {
-                return text;
-            }
-            return text ? (text.substring(0, 15) + '...' + text.slice(-10)) : '';
         };
+        <%_ if (fieldsContainBlob) { _%>
 
-        $scope.byteSize = function (base64String) {
-            if (!angular.isString(base64String)) {
-                return '';
-            }
-            function endsWith(suffix, str) {
-                return str.indexOf(suffix, str.length - suffix.length) !== -1;
-            }
-            function paddingSize(base64String) {
-                if (endsWith('==', base64String)) {
-                    return 2;
-                }
-                if (endsWith('=', base64String)) {
-                    return 1;
-                }
-                return 0;
-            }
-            function size(base64String) {
-                return base64String.length / 4 * 3 - paddingSize(base64String);
-            }
-            function formatAsBytes(size) {
-                return size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " bytes";
-            }
+        $scope.abbreviate = DataUtils.abbreviate;
 
-            return formatAsBytes(size(base64String));
-        };<% } %><% for (fieldId in fields) { if (fields[fieldId].fieldType === 'byte[]') { %>
+        $scope.byteSize = DataUtils.byteSize;
+        <%_ } _%>
+        <%_ for (fieldId in fields) { if (fields[fieldId].fieldType === 'byte[]') { _%>
 
         $scope.set<%= fields[fieldId].fieldNameCapitalized %> = function ($file, <%= entityInstance %>) {
             <%_ if (fields[fieldId].fieldTypeBlobContent == 'image') { _%>
@@ -108,5 +79,6 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>DialogContro
                     });
                 };
             }
-        };<% } } %>
+        };
+        <%_ } } _%>
 }]);
