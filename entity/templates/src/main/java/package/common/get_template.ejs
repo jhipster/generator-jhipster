@@ -1,7 +1,11 @@
-<%_ var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
-var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
-var mapper = entityInstance  + 'Mapper';
-var entityToDto = mapper + '.'+ entityInstance +'To' + entityClass + 'DTO';
+<% if (!viaService) {
+    var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
+    var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
+    var mapper = entityInstance  + 'Mapper';
+    var entityToDto = mapper + '.'+ entityInstance +'To' + entityClass + 'DTO';
 -%>
         <%= entityClass %> <%= entityInstance %> = <% if (databaseType == 'sql' || databaseType == 'mongodb') { %><%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findOneWithEagerRelationships<% } else { %>findOne<% } %>(id))<% } %><% if (databaseType == 'cassandra') { %><%= entityInstance %>Repository.findOne(UUID.fromString(id)))<% } %>;<%_ if (dto == 'mapstruct') { _%>
         <%= instanceType %> <%= instanceName %> = <%= entityToDto %>(<%= entityInstance %>);<%_ } _%>
+<% } else {
+        <%= instanceType %> <%= instanceName %> = <%= entityInstance %>Service.findOne(id);
+<% } -%>

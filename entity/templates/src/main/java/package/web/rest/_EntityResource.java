@@ -40,13 +40,11 @@ import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
 public class <%= entityClass %>Resource {
 
     private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
-    <%- include('../../common/inject_template'); -%>
+    <% var viaService = entityHasService; %>
+    <%- include('../../common/inject_template', {viaService: viaService}); -%>
     <%_
     var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
     var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
-    var mapper = entityInstance  + 'Mapper';
-    var dtoToEntity = mapper + '.'+ entityInstance +'DTOTo' + entityClass;
-    var entityToDto = mapper + '.'+ entityInstance +'To' + entityClass + 'DTO';
     _%>
     /**
      * POST  /<%= entityInstance %>s -> Create a new <%= entityInstance %>.
@@ -59,7 +57,7 @@ public class <%= entityClass %>Resource {
         log.debug("REST request to save <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() != null) {
             return ResponseEntity.badRequest().header("Failure", "A new <%= entityInstance %> cannot already have an ID").body(null);
-        }<%- include('../../common/save_template'); -%>
+        }<%- include('../../common/save_template', {viaService: viaService}); -%>
         return ResponseEntity.created(new URI("/api/<%= entityInstance %>s/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("<%= entityInstance %>", result.getId().toString()))
             .body(result);
@@ -76,7 +74,7 @@ public class <%= entityClass %>Resource {
         log.debug("REST request to update <%= entityClass %> : {}", <%= instanceName %>);
         if (<%= instanceName %>.getId() == null) {
             return create<%= entityClass %>(<%= instanceName %>);
-        }<%- include('../../common/save_template'); -%>
+        }<%- include('../../common/save_template', {viaService: viaService}); -%>
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert("<%= entityInstance %>", <%= instanceName %>.getId().toString()))
             .body(result);
@@ -88,7 +86,7 @@ public class <%= entityClass %>Resource {
     @RequestMapping(value = "/<%= entityInstance %>s",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed<%- include('../../common/get_all_template'); -%>
+    @Timed<%- include('../../common/get_all_template', {viaService: viaService}); -%>
 
     /**
      * GET  /<%= entityInstance %>s/:id -> get the "id" <%= entityInstance %>.
@@ -97,8 +95,8 @@ public class <%= entityClass %>Resource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> get<%= entityClass %>(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id) {
-        log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template'); -%>
+    public ResponseEntity<<%= instanceType %>> get<%= entityClass %>(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id) {
+        log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService}); -%>
         return Optional.ofNullable(<%= instanceName %>)
             .map(<%= instanceType %> -> new ResponseEntity<>(
                 <%= instanceType %>,
@@ -114,7 +112,7 @@ public class <%= entityClass %>Resource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<Void> delete<%= entityClass %>(@PathVariable <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id) {
-        log.debug("REST request to delete <%= entityClass %> : {}", id);<%- include('../../common/delete_template'); -%>
+        log.debug("REST request to delete <%= entityClass %> : {}", id);<%- include('../../common/delete_template', {viaService: viaService}); -%>
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("<%= entityInstance %>", id.toString())).build();
     }<% if (searchEngine == 'elasticsearch') { %>
 
@@ -126,7 +124,7 @@ public class <%= entityClass %>Resource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> search<%= entityClass %>s(@PathVariable String query) {
-        <%- include('../../common/search_template'); -%>
+    public List<<%= instanceType %>> search<%= entityClass %>s(@PathVariable String query) {
+        <%- include('../../common/search_template', {viaService: viaService}); -%>
     }<% } %>
 }

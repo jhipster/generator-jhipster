@@ -1,6 +1,9 @@
-<% var mapper = entityInstance  + 'Mapper';
-var entityToDto = mapper + '.'+ entityInstance +'To' + entityClass + 'DTO'; %>
+<% if (!viaService) {
+    var mapper = entityInstance  + 'Mapper';
+    var entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO'; %>
         return StreamSupport
             .stream(<%= entityInstance %>SearchRepository.search(queryStringQuery(query)).spliterator(), false)<% if (dto == 'mapstruct') { %>
-            .map(<%= mapper %>::<%= entityToDto %>)<% } %>
-            .collect(Collectors.toList());
+            .map(<%= entityToDtoReference %>)<% } %>
+            .collect(Collectors.toList());<% } else { -%>
+        return <%= entityInstance %>Service.search(query);
+<% } -%>

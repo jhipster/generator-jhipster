@@ -1,0 +1,94 @@
+package <%=packageName%>.<%=servicePackage%>;
+<%  var serviceClassName = TODO;
+    var viaService = false;
+    var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
+    var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
+    var mapper = entityInstance  + 'Mapper';
+    var dtoToEntity = mapper + '.'+ entityInstance +'DTOTo' + entityClass;
+    var entityToDto = mapper + '.'+ entityInstance +'To' + entityClass + 'DTO';
+    var entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO';
+    var repository = entityInstance  + 'Repository';
+    var searchRepository = entityInstance  + 'SearchRepository'; %>
+import <%=packageName%>.domain.<%= entityClass %>;
+import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine == 'elasticsearch') { %>
+import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } %>
+import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
+import <%=packageName%>.web.rest.mapper.<%= entityClass %>Mapper;<% } %>
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;<% if (pagination != 'no') { %>
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;<% } if (dto == 'mapstruct') { %>
+import org.springframework.transaction.annotation.Transactional;<% } %>
+import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;<% if (dto == 'mapstruct') { %>
+import java.util.LinkedList;<% } %>
+import java.util.List;
+import java.util.Optional;<% if (databaseType == 'cassandra') { %>
+import java.util.UUID;<% } %><% if (searchEngine == 'elasticsearch' || dto == 'mapstruct' || fieldsContainNoOwnerOneToOne == true) { %>
+import java.util.stream.Collectors;<% } %><% if (searchEngine == 'elasticsearch' || fieldsContainNoOwnerOneToOne == true) { %>
+import java.util.stream.StreamSupport;<% } %><% if (searchEngine == 'elasticsearch') { %>
+
+import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
+
+/**
+ * Service Implementation for managing <%= entityClass %>.
+ */
+@Service
+public class <%= serviceClassName %> {
+
+    private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
+    <%- include('../../common/inject_template', {viaService: viaService}); -%>
+    /**
+     * Save a <%= entityInstance %>.
+     * @param input the <%= instanceType %>
+     * @return the persisted entity
+     */<% if (databaseType == 'sql') { %>
+    @Transactional(readOnly = false) <% } %>
+    public <%= instanceType %> save<%= entityClass %>(<%= instanceType %> <%= instanceName %>) {
+        log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);
+        <%- include('../../common/save_template', {viaService: viaService}); -%>
+        return result;
+    }
+
+    /**
+     *  get all the <%= entityInstance %>s.
+     *  @return the list of entities
+     */<% if (databaseType == 'sql') { %>
+    @Transactional(readOnly = true) <% } %>
+    public <% if (pagination != 'no') { %>Page<% } else { %>List<% } %><<%= instanceType %>> findAll(<% if (pagination != 'no') { %>Pageable pageable<% } %>) {
+        log.debug("Request to get all <%= entityClass %>s");
+        //TODO
+        return <%= instanceName %>;
+    }
+
+
+    /**
+     *  get the "id" <%= entityInstance %>.
+     *  @param input id
+     *  @return the entity
+     */<% if (databaseType == 'sql') { %>
+    @Transactional(readOnly = true) <% } %>
+    public <%= instanceType %> findOne(<% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id) {
+        log.debug("Request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template'); -%>
+        return <%= instanceName %>;
+    }
+
+    /**
+     *  delete the "id" <%= entityInstance %>.
+     *  @param input id
+     */<% if (databaseType == 'sql') { %>
+    @Transactional(readOnly = false) <% } %>
+    public void delete(<% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id) {
+        log.debug("Request to delete <%= entityClass %> : {}", id);<%- include('../../common/delete_template'); -%>
+    }<% if (searchEngine == 'elasticsearch') { %>
+
+    /**
+     * search for the <%= entityInstance %> corresponding
+     * to the query.
+     * @param input query
+     */
+    public List<<%= instanceType %>> search(String query) {
+        <%- include('../../common/search_template'); -%>
+    }<% } %>
+}

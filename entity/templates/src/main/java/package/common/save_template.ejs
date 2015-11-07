@@ -4,15 +4,19 @@ var mapper = entityInstance  + 'Mapper';
 var dtoToEntity = mapper + '.'+ entityInstance +'DTOTo' + entityClass;
 var entityToDto = mapper + '.'+ entityInstance +'To' + entityClass + 'DTO';
 var resultEntity;
-if (dto == 'mapstruct') {
-    resultEntity = entityInstance; _%>
+if (!viaService) {
+    if (dto == 'mapstruct') {
+        resultEntity = entityInstance; _%>
         <%= entityClass %> <%= entityInstance %> = <%= dtoToEntity %>(<%= instanceName %>);
         <%= entityInstance %> = <%= entityInstance %>Repository.save(<%= entityInstance %>);
         <%= instanceType %> result = <%= entityToDto %>(<%= entityInstance %>);
-<%_ } else {
+    <%_ } else {
     resultEntity = 'result'; _%>
         <%= entityClass %> result = <%= entityInstance %>Repository.save(<%= entityInstance %>);
-<%_ }
-if (searchEngine == 'elasticsearch') { _%>
+    <%_ }
+    if (searchEngine == 'elasticsearch') { _%>
         <%= entityInstance %>SearchRepository.save(<%= resultEntity %>);
+    <%_ }
+} else {_%>
+    <%= entityClass %> result = <%= entityInstance %>Service.save(<%= entityInstance %>);
 <%_ } _%>
