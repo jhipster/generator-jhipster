@@ -1,0 +1,21 @@
+    <%_
+    var mapper = entityInstance  + 'Mapper';
+    var dtoToEntity = mapper + '.'+ entityInstance +'DTOTo' + entityClass;
+    var entityToDto = mapper + '.'+ entityInstance +'To' + entityClass + 'DTO';
+    if (dto == 'mapstruct') { _%>
+    @Transactional(readOnly = true)<% } if (pagination == 'no') { -%>
+    public List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>> getAll<%= entityClass %>s(<% if (fieldsContainNoOwnerOneToOne == true) { %>@RequestParam(required = false) String filter<% } %>) {<%- include('get_all_stream_template'); -%>
+        log.debug("REST request to get all <%= entityClass %>s");
+        return <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (dto == 'mapstruct') { %>.stream()
+            .map(<%= mapper %>::<%= entityToDto %>)
+            .collect(Collectors.toCollection(LinkedList::new))<% } %>;
+            <%_ } if (pagination != 'no') { _%>
+    public ResponseEntity<List<<%= entityClass %><% if (dto == 'mapstruct') { %>DTO<% } %>>> getAll<%= entityClass %>s(Pageable pageable<% if (fieldsContainNoOwnerOneToOne == true) { %>, @RequestParam(required = false) String filter<% } %>)
+        throws URISyntaxException {<%- include('get_all_stream_template'); -%>
+        Page<<%= entityClass %>> page = <%= entityInstance %>Repository.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityInstance %>s");
+        return new ResponseEntity<>(page.getContent()<% if (dto == 'mapstruct') { %>.stream()
+            .map(<%= mapper %>::<%= entityToDto %>)
+            .collect(Collectors.toCollection(LinkedList::new))<% } %>, headers, HttpStatus.OK);
+    <%_ } _%>
+    }
