@@ -1,5 +1,5 @@
-package <%=packageName%>.<%=servicePackage%>;
-<%  var serviceClassName = TODO;
+package <%=packageName%>.service<% if (service == 'serviceImpl') { %>.impl<% } %>;
+<%  var serviceClassName = service == 'serviceImpl' ? <%= entityClass %>+ 'serviceImpl' : <%= entityClass %>+ 'service';
     var viaService = false;
     var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
     var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
@@ -11,13 +11,13 @@ package <%=packageName%>.<%=servicePackage%>;
     var searchRepository = entityInstance  + 'SearchRepository'; %>
 import <%=packageName%>.domain.<%= entityClass %>;
 import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine == 'elasticsearch') { %>
-import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } %>
+import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } if (dto == 'mapstruct') { %>
 import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
 import <%=packageName%>.web.rest.mapper.<%= entityClass %>Mapper;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;<% if (pagination != 'no') { %>
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;<% } if (dto == 'mapstruct') { %>
+import org.springframework.data.domain.Pageable;<% } if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 import org.springframework.stereotype.Service;
 
@@ -73,7 +73,7 @@ public class <%= serviceClassName %> {
      *  @return the entity
      */<% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true) <% } %>
-    public <%= instanceType %> findOne(<% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id) {
+    public <%= instanceType %> findOne(<%= pkType %> id) {
         log.debug("Request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template'); -%>
         return <%= instanceName %>;
     }
@@ -83,7 +83,7 @@ public class <%= serviceClassName %> {
      *  @param input id
      */<% if (databaseType == 'sql') { %>
     @Transactional(readOnly = false) <% } %>
-    public void delete(<% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } %> id) {
+    public void delete(<%= pkType %> id) {
         log.debug("Request to delete <%= entityClass %> : {}", id);<%- include('../../common/delete_template'); -%>
     }<% if (searchEngine == 'elasticsearch') { %>
 

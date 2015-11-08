@@ -25,7 +25,7 @@ import java.util.UUID;<% } %>
  */<% } %><% if (databaseType=='cassandra') { %>/**
  * Cassandra repository for the <%= entityClass %> entity.
  */<% } %><% if (databaseType=='sql' || databaseType=='mongodb') { %>
-public interface <%=entityClass%>Repository extends <% if (databaseType=='sql') { %>JpaRepository<% } %><% if (databaseType=='mongodb') { %>MongoRepository<% } %><<%=entityClass%>,<% if (databaseType=='sql') {%>Long<%}%><% if (databaseType=='mongodb') { %>String<%}%>> {<% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'many-to-one' && relationships[relationshipId].otherEntityName == 'user') { %>
+public interface <%=entityClass%>Repository extends <% if (databaseType=='sql') { %>JpaRepository<% } %><% if (databaseType=='mongodb') { %>MongoRepository<% } %><<%=entityClass%>,<%= pkType %>> {<% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'many-to-one' && relationships[relationshipId].otherEntityName == 'user') { %>
 
     @Query("select <%= entityInstance %> from <%= entityClass %> <%= entityInstance %> where <%= entityInstance %>.<%= relationships[relationshipId].relationshipFieldName %>.login = ?#{principal.username}")
     List<<%= entityClass %>> findBy<%= relationships[relationshipId].relationshipNameCapitalized %>IsCurrentUser();<% } } %>
