@@ -151,7 +151,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
     private static final String <%=updatedValueName %>_CONTENT_TYPE = "image/png";<% } else if (isEnum) { %>
 
 
-private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%=enumValue1 %>;
+    private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%=enumValue1 %>;
     private static final <%=fieldType %> <%=updatedValueName %> = <%=fieldType %>.<%=enumValue2 %>;<% } } %>
 
     @Inject
