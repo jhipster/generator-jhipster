@@ -56,12 +56,16 @@ public class <%= serviceClassName %> {
      *  @return the list of entities
      */<% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true) <% } %>
-    public <% if (pagination != 'no') { %>Page<% } else { %>List<% } %><<%= instanceType %>> findAll(<% if (pagination != 'no') { %>Pageable pageable<% } %>) {
-        log.debug("Request to get all <%= entityClass %>s");
-        //TODO
-        return <%= instanceName %>;
+    public <% if (pagination != 'no') { %>Page<<%= entityClass %>% } else { %>List<<%= instanceType %><% } %>> findAll(<% if (pagination != 'no') { %>Pageable pageable<% } %>) {
+        log.debug("Request to get all <%= entityClass %>s");<% if (pagination == 'no') { %>
+        List<<%= instanceType %>> result = <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (dto == 'mapstruct') { %>.stream()
+            .map(<%= entityToDtoReference %>)
+            .collect(Collectors.toCollection(LinkedList::new))<% } %>;<% } else { %>
+        Page<<%= entityClass %>> result = <%= entityInstance %>Repository.findAll(pageable); <% } %>
+        return result;
     }
 
+<%- include('../../common/get_filtered_template'); -%>
 
     /**
      *  get the "id" <%= entityInstance %>.
