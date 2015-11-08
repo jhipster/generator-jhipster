@@ -11,6 +11,11 @@
 /node_modules/**
 
 ######################
+# Bower
+######################
+/src/main/webapp/bower_components/
+
+######################
 # SASS
 ######################
 .sass-cache/**
