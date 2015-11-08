@@ -38,7 +38,9 @@ public class OAuth2AuthenticationAccessToken implements Serializable {
         this.userName = authentication.getName();
         this.clientId = authentication.getOAuth2Request().getClientId();
         this.authentication = authentication;
-        this.refreshToken = oAuth2AccessToken.getRefreshToken().getValue();
+        if(oAuth2AccessToken.getRefreshToken() != null) {
+            this.refreshToken = oAuth2AccessToken.getRefreshToken().getValue();
+        }
     }
 
     public String getTokenId() {
