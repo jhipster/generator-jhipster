@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-public class CassandraKeyspaceTest extends AbstractCassandraTest {
+public class CassandraKeyspaceUnitTest extends AbstractCassandraTest {
 
     protected final Logger log = LoggerFactory.getLogger(this.getClass().getCanonicalName());
 

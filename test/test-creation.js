@@ -127,12 +127,12 @@ describe('JHipster generator ', function () {
             'src/main/java/com/mycompany/myapp/web/rest/AuditResource.java',
             'src/main/java/com/mycompany/myapp/web/rest/LogsResource.java',
             'src/main/java/com/mycompany/myapp/web/rest/UserResource.java',
-            'src/test/java/com/mycompany/myapp/security/SecurityUtilsTest.java',
-            'src/test/java/com/mycompany/myapp/service/UserServiceTest.java',
-            'src/test/java/com/mycompany/myapp/web/rest/AccountResourceTest.java',
-            'src/test/java/com/mycompany/myapp/web/rest/AuditResourceTest.java',
+            'src/test/java/com/mycompany/myapp/security/SecurityUtilsUnitTest.java',
+            'src/test/java/com/mycompany/myapp/service/UserServiceIntTest.java',
+            'src/test/java/com/mycompany/myapp/web/rest/AccountResourceIntTest.java',
+            'src/test/java/com/mycompany/myapp/web/rest/AuditResourceIntTest.java',
             'src/test/java/com/mycompany/myapp/web/rest/TestUtil.java',
-            'src/test/java/com/mycompany/myapp/web/rest/UserResourceTest.java',
+            'src/test/java/com/mycompany/myapp/web/rest/UserResourceIntTest.java',
             'src/test/resources/config/application.yml',
             'src/test/resources/logback-test.xml',
             'src/test/resources/ehcache.xml',
@@ -478,8 +478,8 @@ describe('JHipster generator ', function () {
         'src/main/java/com/mycompany/myapp/security/social/CustomSignInAdapter.java',
         'src/main/java/com/mycompany/myapp/service/SocialService.java',
         'src/main/java/com/mycompany/myapp/web/rest/SocialController.java',
-        'src/test/java/com/mycompany/myapp/repository/CustomSocialUsersConnectionRepositoryTest.java',
-        'src/test/java/com/mycompany/myapp/service/SocialServiceTest.java'
+        'src/test/java/com/mycompany/myapp/repository/CustomSocialUsersConnectionRepositoryIntTest.java',
+        'src/test/java/com/mycompany/myapp/service/SocialServiceIntTest.java'
     ]);
   });
 });

@@ -836,19 +836,19 @@ JhipsterGenerator.prototype.app = function app() {
     mkdirp(testDir);
 
     if (this.databaseType == "cassandra") {
-        this.template('src/test/java/package/_CassandraKeyspaceTest.java', testDir + 'CassandraKeyspaceTest.java', this, {});
+        this.template('src/test/java/package/_CassandraKeyspaceUnitTest.java', testDir + 'CassandraKeyspaceUnitTest.java', this, {});
         this.template('src/test/java/package/_AbstractCassandraTest.java', testDir + 'AbstractCassandraTest.java', this, {});
     }
-    this.template('src/test/java/package/security/_SecurityUtilsTest.java', testDir + 'security/SecurityUtilsTest.java', this, {});
+    this.template('src/test/java/package/security/_SecurityUtilsUnitTest.java', testDir + 'security/SecurityUtilsUnitTest.java', this, {});
     if (this.databaseType == "sql" || this.databaseType == "mongodb") {
-        this.template('src/test/java/package/service/_UserServiceTest.java', testDir + 'service/UserServiceTest.java', this, {});
+        this.template('src/test/java/package/service/_UserServiceIntTest.java', testDir + 'service/UserServiceIntTest.java', this, {});
     }
-    this.template('src/test/java/package/web/rest/_AccountResourceTest.java', testDir + 'web/rest/AccountResourceTest.java', this, {});
+    this.template('src/test/java/package/web/rest/_AccountResourceIntTest.java', testDir + 'web/rest/AccountResourceIntTest.java', this, {});
     if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
-        this.template('src/test/java/package/web/rest/_AuditResourceTest.java', testDir + 'web/rest/AuditResourceTest.java', this, {});
+        this.template('src/test/java/package/web/rest/_AuditResourceIntTest.java', testDir + 'web/rest/AuditResourceIntTest.java', this, {});
     }
     this.template('src/test/java/package/web/rest/_TestUtil.java', testDir + 'web/rest/TestUtil.java', this, {});
-    this.template('src/test/java/package/web/rest/_UserResourceTest.java', testDir + 'web/rest/UserResourceTest.java', this, {});
+    this.template('src/test/java/package/web/rest/_UserResourceIntTest.java', testDir + 'web/rest/UserResourceIntTest.java', this, {});
 
     this.template(testResourceDir + 'config/_application.yml', testResourceDir + 'config/application.yml', this, {});
     this.template(testResourceDir + '_logback-test.xml', testResourceDir + 'logback-test.xml', this, {});
@@ -858,8 +858,8 @@ JhipsterGenerator.prototype.app = function app() {
     }
 
     if (this.enableSocialSignIn) {
-        this.template('src/test/java/package/repository/_CustomSocialUsersConnectionRepositoryTest.java', testDir + 'repository/CustomSocialUsersConnectionRepositoryTest.java', this, {});
-        this.template('src/test/java/package/service/_SocialServiceTest.java', testDir + 'service/SocialServiceTest.java', this, {});
+        this.template('src/test/java/package/repository/_CustomSocialUsersConnectionRepositoryIntTest.java', testDir + 'repository/CustomSocialUsersConnectionRepositoryIntTest.java', this, {});
+        this.template('src/test/java/package/service/_SocialServiceIntTest.java', testDir + 'service/SocialServiceIntTest.java', this, {});
     }
 
     // Create Gatling test files

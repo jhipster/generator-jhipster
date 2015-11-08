@@ -1297,8 +1297,8 @@ EntityGenerator.prototype.files = function files() {
         this.addComponentsScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js');
     }
 
-    this.template('src/test/java/package/web/rest/_EntityResourceTest.java',
-        'src/test/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'ResourceTest.java', this, {});
+    this.template('src/test/java/package/web/rest/_EntityResourceIntTest.java',
+        'src/test/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'ResourceIntTest.java', this, {});
 
     if (this.testFrameworks.indexOf('gatling') != -1) {
         this.template('src/test/gatling/simulations/_EntityGatlingTest.scala',
