@@ -3,7 +3,12 @@
         "home": {
             "title": "Utilisateurs",
             "createLabel": "Créer un nouvel utilisateur",
-            "createOrEditLabel": "Créer ou éditer un utilisateur"
+            "createOrEditLabel": "Créer ou éditer un utilisateur",
+            "searchLabel": "Search",
+            "searchPlaceholder": "Search for...",
+            "sync": "Sync",
+            "export": "Export",
+            "import": "Import"			
         },
         "delete": {
             "question": "Etes-vous certain de vouloir supprimer l'utilisateur {{ login }} ?"

@@ -82,7 +82,12 @@
             "delete": "Delete",
             "edit": "Edit",
             "save": "Save",
-            "view": "View"
+            "view": "View",
+			"found": "[<b>{{found}}</b>] items retrieved from total of [<b>{{total}}</b>] items.",
+			"search": "Search",
+            "export": "Export",
+            "import": "Import",
+            "sync": "Sync"			
         },
         "detail": {
             "field": "Field",
@@ -109,5 +114,5 @@
         "NotNull": "Field {{fieldName}} cannot be empty!",
         "Size": "Field {{fieldName}} does not meet min/max size requirements!"
     },
-    "footer": "This is your footer"
+    "footer": "&copy;2015 <%= baseName %>, Inc."
 }

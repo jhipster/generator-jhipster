@@ -6,6 +6,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;<% if (hibernateCache != 'no'
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %>
 import org.hibernate.validator.constraints.Email;
+<% if (searchEngine == 'solr') { %>
+import org.apache.solr.client.solrj.beans.Field;
+import org.springframework.data.solr.core.mapping.SolrDocument;
+<% } %>
 <% if (searchEngine == 'elasticsearch') { %>
 import org.springframework.data.elasticsearch.annotations.Document;<% } %><% if (databaseType == 'mongodb') { %>
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -32,7 +36,8 @@ import java.time.ZonedDateTime;<% } %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'mongodb') { %>
 @Document(collection = "jhi_user")<% } %><% if (databaseType == 'cassandra') { %>
 @Table(name = "user")<% } %><% if (searchEngine == 'elasticsearch') { %>
-@Document(indexName = "user")<% } %>
+@Document(indexName = "user")<% } %><% if (searchEngine == 'solr') { %>
+@SolrDocument(solrCoreName = "users")<% } %>
 public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %> extends AbstractAuditingEntity<% } %> implements Serializable {
 <% if (databaseType == 'sql') { %>
     @Id
@@ -49,6 +54,7 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Pattern(regexp = "^[a-z0-9]*$|(anonymousUser)")
     @Size(min = 1, max = 50)<% if (databaseType == 'sql') { %>
     @Column(length = 50, unique = true, nullable = false)<% } %><% } %>
+    <% if (searchEngine == 'solr') { %>@Field<% } %>
     private String login;
 
     @JsonIgnore
@@ -58,12 +64,12 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     private String password;
 
     @Size(max = 50)<% if (databaseType == 'sql') { %>
-    @Column(name = "first_name", length = 50)<% } %><% if (databaseType == 'mongodb') { %>
+    @Column(name = "first_name", length = 50)<% } %><% if (databaseType == 'mongodb' || searchEngine == 'solr') { %>
     @Field("first_name")<% } %>
     private String firstName;
 
     @Size(max = 50)<% if (databaseType == 'sql') { %>
-    @Column(name = "last_name", length = 50)<% } %><% if (databaseType == 'mongodb') { %>
+    @Column(name = "last_name", length = 50)<% } %><% if (databaseType == 'mongodb' || searchEngine == 'solr') { %>
     @Field("last_name")<% } %>
     private String lastName;
 
@@ -71,31 +77,31 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Size(max = 100)<% if (databaseType == 'sql') { %>
     @Column(length = 100, unique = true)<% } %>
     private String email;
-<% if (databaseType == 'sql') { %>
+    <% if (databaseType == 'sql') { %>
     @Column(nullable = false)<% } %>
     private boolean activated = false;
 
     @Size(min = 2, max = 5)<% if (databaseType == 'sql') { %>
-    @Column(name = "lang_key", length = 5)<% } %><% if (databaseType == 'mongodb') { %>
+    @Column(name = "lang_key", length = 5)<% } %><% if (databaseType == 'mongodb' || searchEngine == 'solr') { %>
     @Field("lang_key")<% } %><% if (databaseType == 'cassandra') { %>
     @Column(name = "lang_key")<% } %>
     private String langKey;
 
     @Size(max = 20)<% if (databaseType == 'sql') { %>
-    @Column(name = "activation_key", length = 20)<% } %><% if (databaseType == 'mongodb') { %>
+    @Column(name = "activation_key", length = 20)<% } %><% if (databaseType == 'mongodb' || searchEngine == 'solr') { %>
     @Field("activation_key")<% } %><% if (databaseType == 'cassandra') { %>
     @Column(name = "activation_key")<% } %>
     @JsonIgnore
     private String activationKey;
 
     @Size(max = 20)<% if (databaseType == 'sql') { %>
-    @Column(name = "reset_key", length = 20)<% } %><% if (databaseType == 'mongodb') { %>
+    @Column(name = "reset_key", length = 20)<% } %><% if (databaseType == 'mongodb' || searchEngine == 'solr') { %>
     @Field("reset_key")<% } %><% if (databaseType == 'cassandra') { %>
     @Column(name = "reset_key")<% } %>
     private String resetKey;<%if (databaseType == 'sql') {%>
 
     @Column(name = "reset_date", nullable = true)
-    private ZonedDateTime resetDate = null;<% }%><%if (databaseType == 'mongodb') {%>
+    private ZonedDateTime resetDate = null;<% }%><%if (databaseType == 'mongodb' || searchEngine == 'solr') {%>
 
     @Field("reset_date")
     private ZonedDateTime resetDate = null;<% }%><% if (databaseType == 'cassandra') { %>

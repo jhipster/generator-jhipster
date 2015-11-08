@@ -1,9 +1,15 @@
 <div>
 
-<h2 translate="metrics.title">Application Metrics</h2>
-<p>
-    <button type="button" class="btn btn-primary" ng-click="refresh()"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span translate="metrics.refresh.button">Refresh</span></button>
-</p>
+    <div class="row">
+        <div class="col-md-5">
+            <h2 translate="metrics.title">Application Metrics</h2>
+        </div>
+        <div class="col-md-7 text-right">
+            <button type="button" class="btn btn-primary" ng-click="refresh()"><span
+                class="glyphicon glyphicon-refresh"></span>&nbsp;<span translate="metrics.refresh.button">Refresh</span>
+            </button>
+        </div>
+    </div>
 
 <h3 translate="metrics.jvm.title">JVM Metrics</h3>
 <div class="row" ng-hide="updatingMetrics">
@@ -41,25 +47,27 @@
             <span>{{metrics.gauges['jvm.threads.blocked.count'].value * 100 / metrics.gauges['jvm.threads.count'].value  | number:0}}%</span>
         </progressbar>
     </div>
-    <div class="col-md-4">
-        <b translate="metrics.jvm.gc.title">Garbage collections</b>
-        <div class="row">
-            <div class="col-md-9" translate="metrics.jvm.gc.marksweepcount">Mark Sweep count</div>
-            <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-MarkSweep.count'].value}}</div>
-        </div>
-        <div class="row">
-            <div class="col-md-9" translate="metrics.jvm.gc.marksweeptime">Mark Sweep time</div>
-            <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-MarkSweep.time'].value}}ms</div>
-        </div>
-        <div class="row">
-            <div class="col-md-9" translate="metrics.jvm.gc.scavengecount">Scavenge count</div>
-            <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-Scavenge.count'].value}}</div>
-        </div>
-        <div class="row">
-            <div class="col-md-9" translate="metrics.jvm.gc.scavengetime">Scavenge time</div>
-            <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-Scavenge.time'].value}}ms</div>
-        </div>
-    </div>
+    
+																<div class="col-md-4 list-group">
+																            <b class="list-group-item list-group-item-danger row" translate="metrics.jvm.gc.title">Garbage collections</b>
+
+																            <div class="row list-group-item">
+																                <div class="col-md-9" translate="metrics.jvm.gc.marksweepcount">Mark Sweep count</div>
+																                <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-MarkSweep.count'].value}}</div>
+																            </div>
+																            <div class="row list-group-item">
+																                <div class="col-md-9" translate="metrics.jvm.gc.marksweeptime">Mark Sweep time</div>
+																                <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-MarkSweep.time'].value}}ms</div>
+																            </div>
+																            <div class="row list-group-item">
+																                <div class="col-md-9" translate="metrics.jvm.gc.scavengecount">Scavenge count</div>
+																                <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-Scavenge.count'].value}}</div>
+																            </div>
+																            <div class="row list-group-item">
+																                <div class="col-md-9" translate="metrics.jvm.gc.scavengetime">Scavenge time</div>
+																                <div class="col-md-3 text-right">{{metrics.gauges['jvm.garbage.PS-Scavenge.time'].value}}ms</div>
+																            </div>
+																        </div>
 </div>
 <div class="well well-lg" ng-show="updatingMetrics" translate="metrics.updating">Updating...</div>
 

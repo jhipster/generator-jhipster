@@ -127,7 +127,8 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-logging'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop'<% if (databaseType == 'sql') { %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'<% } %><% if (searchEngine == 'elasticsearch') { %>
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-elasticsearch'<% } %><% if (databaseType == 'mongodb') { %>
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-elasticsearch'<% } %><% if (searchEngine == 'solr') { %>
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-solr'<% } %><% if (databaseType == 'mongodb') { %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb'<% } %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security'
     compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web') {

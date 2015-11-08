@@ -1,4 +1,12 @@
-<% if (searchEngine == 'elasticsearch') { %>jhipster-prod-elasticsearch:
+<% if (searchEngine == 'solr') { %>jhipster-prod-solr:
+  container_name: <%=baseName%>-prod-solr
+  image: solr:1.5.3
+  # volumes:
+  # - ~/volumes/jhipster/<%=baseName%>/prod-solr/:/usr/share/solr/data/
+  ports:
+  - "8983:8983"
+  - "9983:9983"
+<% } if (searchEngine == 'elasticsearch') { %>jhipster-prod-elasticsearch:
   container_name: <%=baseName%>-prod-elasticsearch
   image: elasticsearch:1.7.3
   # volumes:

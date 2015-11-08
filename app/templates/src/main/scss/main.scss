@@ -12,6 +12,27 @@ body {
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
     display: none !important;
 }
+nav,.caption,.footer{text-align:center;}
+
+.notice {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    padding: 10px 15px;
+    border: 1px solid #faebcc;
+}
+
+.caption {
+    margin: 10px 0;
+}
+
+.table > thead > tr > th, .table > thead > tr > td, .table > tbody > tr > th, .table > tbody > tr > td, .table > tfoot > tr > th, .table > tfoot > tr > td {
+    vertical-align: middle
+}
+
+.table > thead > tr > th{background-color: rgba(127, 152, 178, 0.12);}
+.table {
+    border-bottom: 1px solid #DDDDDD;
+}
 
 .development {
     position: absolute;
@@ -233,3 +254,74 @@ ul#strength {
 /* end of Social Button */
 <%_ } _%>
 
+.loading-indicator {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1500;
+    width: 300px;
+    height: 300px;
+    transition: all 0.3s;
+    -webkit-transform: translateX(50%) translateY(-50%) rotate(45deg);
+    transform: translateX(50%) translateY(-50%) rotate(45deg);
+    pointer-events: none;
+}
+.loading-indicator::before,
+.loading-indicator::after {
+    position: absolute;
+    bottom: 30px;
+    left: 150px;
+    display: block;
+    border: 5px solid #01ae6f;
+    border-radius: 50%;
+    content: '';
+}
+.loading-indicator::before {
+    margin-left: -40px;
+    width: 80px;
+    height: 80px;
+    border-right-color: #ff231e;
+    border-left-color: #ff231e;
+    -webkit-animation: rotation 3s linear infinite;
+    animation: rotation 3s linear infinite;
+}
+.loading-indicator::after {
+    bottom: 50px;
+    margin-left: -20px;
+    width: 40px;
+    height: 40px;
+    border-top-color: #ff231e;
+    border-bottom-color: #ff231e;
+    -webkit-animation: rotation 1s linear infinite;
+    animation: rotation 1s linear infinite;
+}
+@-webkit-keyframes rotation {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    50% {
+        -webkit-transform: rotate(180deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+@keyframes rotation {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    50% {
+        -webkit-transform: rotate(180deg);
+        transform: rotate(180deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+td.btn-group{
+    width: 230px;
+}
+.form-inline{
+    display: inline;}

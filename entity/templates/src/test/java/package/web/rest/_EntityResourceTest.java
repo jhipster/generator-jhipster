@@ -3,7 +3,7 @@ package <%=packageName%>.web.rest;
 import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.Application;
 import <%=packageName%>.domain.<%= entityClass %>;
-import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine == 'elasticsearch') { %>
+import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine == 'elasticsearch' || searchEngine == 'solr') { %>
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } %><% if (dto == 'mapstruct') { %>
 import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
 import <%=packageName%>.web.rest.mapper.<%= entityClass %>Mapper;<% } %>
@@ -158,7 +158,7 @@ private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%
     private <%= entityClass %>Repository <%= entityInstance %>Repository;<% if (dto == 'mapstruct') { %>
 
     @Inject
-    private <%= entityClass %>Mapper <%= entityInstance %>Mapper;<% } %><% if (searchEngine == 'elasticsearch') { %>
+    private <%= entityClass %>Mapper <%= entityInstance %>Mapper;<% } %><% if (searchEngine == 'elasticsearch' || searchEngine == 'solr') { %>
 
     @Inject
     private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;<% } %>
@@ -178,7 +178,7 @@ private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%
         MockitoAnnotations.initMocks(this);
         <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource();
         ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Repository", <%= entityInstance %>Repository);<% if (dto == 'mapstruct') { %>
-        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Mapper", <%= entityInstance %>Mapper);<% } %><% if (searchEngine == 'elasticsearch') { %>
+        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Mapper", <%= entityInstance %>Mapper);<% } %><% if (searchEngine == 'elasticsearch' || searchEngine == 'solr') { %>
         ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>SearchRepository", <%= entityInstance %>SearchRepository);<% } %>
         this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
             .setCustomArgumentResolvers(pageableArgumentResolver)

@@ -255,6 +255,10 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 {
                     value: 'elasticsearch',
                     name: 'Yes, with ElasticSearch'
+                },
+                {
+                    value: 'solr',
+                    name: 'Yes, with SOLR'
                 }
             ],
             default: 0
@@ -734,6 +738,11 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/main/java/package/repository/search/_package-info.java', javaDir + 'repository/search/package-info.java', this, {});
         this.template('src/main/java/package/repository/search/_UserSearchRepository.java', javaDir + 'repository/search/UserSearchRepository.java', this, {});
     }
+    if (this.searchEngine == 'solr') {
+        this.template('src/main/java/package/config/_SolrConfiguration.java', javaDir + 'config/SolrConfiguration.java', this, {});
+        this.template('src/main/java/package/repository/search/_package-info.java', javaDir + 'repository/search/package-info.java', this, {});
+        this.template('src/main/java/package/repository/search/_UserSearchRepository.java', javaDir + 'repository/search/UserSearchRepository.java', this, {});
+    }
     this.template('src/main/java/package/repository/_package-info.java', javaDir + 'repository/package-info.java', this, {});
     if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
         this.template('src/main/java/package/repository/_AuthorityRepository.java', javaDir + 'repository/AuthorityRepository.java', this, {});
@@ -945,6 +954,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.copyHtml(webappDir + '/scripts/components/navbar/navbar.html', webappDir + 'scripts/components/navbar/navbar.html');
     this.template(webappDir + '/scripts/components/navbar/_navbar.controller.js', webappDir + 'scripts/components/navbar/navbar.controller.js', this, {});
     this.template(webappDir + '/scripts/components/user/_user.service.js', webappDir + 'scripts/components/user/user.service.js', this, {});
+    this.template(webappDir + '/scripts/components/user/_user.search.service.js', webappDir + 'scripts/components/user/user.search.service.js', this, {});
     this.template(webappDir + '/scripts/components/util/_base64.service.js', webappDir + 'scripts/components/util/base64.service.js', this, {});
     this.template(webappDir + '/scripts/components/util/_capitalize.filter.js', webappDir + 'scripts/components/util/capitalize.filter.js', this, {});
     this.template(webappDir + '/scripts/components/util/_parse-links.service.js', webappDir + 'scripts/components/util/parse-links.service.js', this, {});
@@ -1105,6 +1115,7 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/components/navbar/navbar.directive.js',
         'scripts/components/navbar/navbar.controller.js',
         'scripts/components/user/user.service.js',
+        'scripts/components/user/user.search.service.js',
         'scripts/components/util/truncate.filter.js',
         'scripts/components/util/base64.service.js',
         'scripts/components/util/capitalize.filter.js',

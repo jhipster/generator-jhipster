@@ -20,7 +20,9 @@ import java.time.ZonedDateTime;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;<% } %><% if (searchEngine == 'elasticsearch') { %>
-import org.springframework.data.elasticsearch.annotations.Document;<% } %>
+import org.springframework.data.elasticsearch.annotations.Document;<% } %><% if (searchEngine == 'solr') { %>
+import org.springframework.data.solr.core.mapping.SolrDocument;
+import org.apache.solr.client.solrj.beans.Field;<% } %>
 <% if (databaseType == 'sql') { %>
 import javax.persistence.*;<% } %><% if (validation) { %>
 import javax.validation.constraints.*;<% } %>
@@ -55,7 +57,8 @@ import <%=packageName%>.domain.enumeration.<%= element %>;<% }); %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType == 'mongodb') { %>
 @Document(collection = "<%= entityTableName %>")<% } %><% if (databaseType == 'cassandra') { %>
 @Table(name = "<%= entityInstance %>")<% } %><% if (searchEngine == 'elasticsearch') { %>
-@Document(indexName = "<%= entityInstance.toLowerCase() %>")<% } %>
+@Document(indexName = "<%= entityInstance.toLowerCase() %>")<% } %><% if (searchEngine == 'solr') { %>
+@SolrDocument(solrCoreName = "<%= entityInstance.toLowerCase() %>s")<% } %>
 public class <%= entityClass %> implements Serializable {
 <% if (databaseType == 'sql') { %>
     @Id
@@ -92,7 +95,7 @@ public class <%= entityClass %> implements Serializable {
     @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>"<% if (fields[fieldId].fieldValidate == true) { %><% if (fields[fieldId].fieldValidateRules.indexOf('maxlength') != -1) { %>, length = <%= fields[fieldId].fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% } %>)
     <%_     }
         } _%>
-    <%_ if (databaseType == 'mongodb') { _%>
+    <%_ if (databaseType == 'mongodb' || searchEngine == 'solr') { _%>
     @Field("<%=fields[fieldId].fieldNameUnderscored %>")
     <%_ } _%>
     private <%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>;

@@ -2,34 +2,59 @@
 <%_ var keyPrefix = angularAppName + '.'+ entityInstance + '.'; _%>
     <h2 translate="<%= keyPrefix %>home.title"><%= entityClass %>s</h2>
     <jh-alert></jh-alert>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <button class="btn btn-primary" ui-sref="<%= entityInstance %>.new">
-                    <span class="glyphicon glyphicon-flash"></span> <span translate="<%= keyPrefix %>home.createLabel">Create a new <%= entityClass %></span>
-                </button>
-            </div>
-            <%_ if (searchEngine == 'elasticsearch') { _%>
-            <div class="col-md-8">
-                <form name="searchForm" class="form-inline">
+    <div class="row">
+        <div class="col-md-3">
+            <button class="btn btn-primary" ui-sref="<%= entityInstance %>.new">
+                <span class="glyphicon glyphicon-flash"></span> <span translate="<%= keyPrefix %>home.createLabel">Create a new <%= entityClass %></span>
+            </button>
+        </div>
+        <%_ if (searchEngine == 'elasticsearch' || searchEngine == 'solr') { _%>
+        <div class="col-md-9">
+            <div class="pull-right">
+                <form name="searchForm" class="form-inline" ng-submit="search()" novalidate show-validation>
                     <div class="form-group">
-                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="query">
+                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="search for..." required>
                     </div>
-                    <button class="btn btn-info" ng-click="search()"><span class="glyphicon glyphicon-search"></span> <span>Search a <%= entityClass %></span>
+                    <button ng-disabled="searchForm.$invalid" class="btn btn-info" type="submit"><span class="glyphicon glyphicon-search"></span> <span translate="entity.action.search">Search a <%= entityClass %></span>
                     </button>
                 </form>
+                <button ng-disabled="!areAll<%= entityClass %>sSelected" class="btn btn-default" ng-click="sync()">
+                    <i class="glyphicon glyphicon-refresh" aria-label="sync"></i>
+                    <span translate="entity.action.sync">sync</span>
+                </button>
+                <button ng-disabled="!areAll<%= entityClass %>sSelected" class="btn btn-default" ng-click="export()">
+                    <i class="glyphicon glyphicon-export" aria-label="export"></i>
+                    <span translate="entity.action.export">export</span>
+                </button>
+
+                <button ng-disabled="!areAll<%= entityClass %>sSelected" class="btn btn-default" ng-click="import()">
+                    <i class="glyphicon glyphicon-import" aria-label="import"></i>
+                    <span translate="entity.action.import">import</span>
+                </button>
+
+                <button ng-disabled="!areAll<%= entityClass %>sSelected" class="btn btn-default btn-danger" ng-click="deleteSelected()">
+                    <i class="glyphicon glyphicon-trash" aria-label="delete"></i>
+                    <span translate="entity.action.delete">delete</span>
+                </button>
             </div>
-            <%_ } _%>
         </div>
+        <%_ } _%>
     </div>
 
     <div class="table-responsive">
-        <table class="table table-striped">
+        <table class="table table-hover table-striped">
+	        <caption class="caption notice text-center">
+	            <span translate="entity.action.found"
+	                 translate-values="{found: '{{<%=entityInstance %>s.length}}', total: '{{total}}'}">{{cats.length}} <%=entityInstance %>s retrieved from total of {{total}} <%=entityInstance %>s
+	            </span>
+	        </caption>
+
             <thead>
                 <tr>
-                    <th translate="global.field.id">ID</th>
+	                <th><input type="checkbox" ng-model="areAll<%=entityClass %>sSelected" ng-change="update<%=entityClass %>sSelection(<%=entityInstance %>s, areAll<%=entityClass %>sSelected)"></th>
+                    <th ng-click="order('id', reverse=!reverse)" translate="global.field.id">ID</th>
                     <%_ for (fieldId in fields) { _%>
-                    <th translate="<%=keyPrefix + fields[fieldId].fieldName %>"><%=fields[fieldId].fieldNameCapitalized%></th>
+                    <th ng-click="order('<%= fields[fieldId].fieldName %>', reverse=!reverse)" translate="<%=keyPrefix + fields[fieldId].fieldName %>"><%=fields[fieldId].fieldNameCapitalized%></th>
                     <%_ } _%>
                     <%_ for (relationshipId in relationships) { _%>
                         <%_ if (relationships[relationshipId].relationshipType == 'many-to-one'
@@ -42,7 +67,8 @@
                 </tr>
             </thead>
             <tbody<% if (pagination == 'infinite-scroll') { %> infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page"<% } %>>
-                <tr ng-repeat="<%=entityInstance %> in <%=entityInstance %>s track by <%=entityInstance %>.id">
+                <tr ng-repeat="<%=entityInstance %> in <%=entityInstance %>s  | filter:filter | orderBy:predicate:reverse track by <%=entityInstance %>.id">
+				    <td><input type="checkbox" ng-model="<%= entityInstance %>.isSelected"/></td>
                     <td><a ui-sref="<%= entityInstance %>.detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td>
                     <%_ for (fieldId in fields) { _%>
                         <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'image') { _%>
@@ -100,7 +126,7 @@
                     </td>
                         <%_ } _%>
                     <%_ } _%>
-                    <td>
+                    <td class="btn-group">
                         <button type="submit"
                                 ui-sref="<%= entityInstance %>.detail({id:<%= entityInstance %>.id})"
                                 class="btn btn-info btn-sm">
