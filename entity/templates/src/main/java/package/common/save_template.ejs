@@ -12,5 +12,5 @@ if (!viaService) {
         <%= instanceType %> result = <%= entityToDto %>(<%= entityInstance %>);<% } else {
     resultEntity = 'result'; %>
         <%= entityClass %> result = <%= entityInstance %>Repository.save(<%= entityInstance %>);<% } if (searchEngine == 'elasticsearch') { %>
-        <%= entityInstance %>SearchRepository.save(<%= resultEntity %>);<% }} else {-%>
+        <%= entityInstance %>SearchRepository.save(<%= resultEntity %>);<% }} else { %>
         <%= instanceType %> result = <%= entityInstance %>Service.save(<%= instanceName %>);<% } %>

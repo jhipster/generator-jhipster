@@ -98,8 +98,8 @@ public class <%= entityClass %>Resource {
     public ResponseEntity<<%= instanceType %>> get<%= entityClass %>(@PathVariable <%= pkType %> id) {
         log.debug("REST request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService}); -%>
         return Optional.ofNullable(<%= instanceName %>)
-            .map(<%= instanceName %> -> new ResponseEntity<>(
-                <%= instanceName %>,
+            .map(result -> new ResponseEntity<>(
+                result,
                 HttpStatus.OK))
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
