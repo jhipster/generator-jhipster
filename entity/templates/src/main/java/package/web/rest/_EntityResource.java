@@ -1,9 +1,10 @@
 package <%=packageName%>.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import <%=packageName%>.domain.<%= entityClass %>;
+import <%=packageName%>.domain.<%= entityClass %>;<% if (service != 'no') { %>
+import <%=packageName%>.service.<%= entityClass %>Service;<% } else { %>
 import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine == 'elasticsearch') { %>
-import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } %>
+import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% }} %>
 import <%=packageName%>.web.rest.util.HeaderUtil;<% if (pagination != 'no') { %>
 import <%=packageName%>.web.rest.util.PaginationUtil;<% } %><% if (dto == 'mapstruct') { %>
 import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;

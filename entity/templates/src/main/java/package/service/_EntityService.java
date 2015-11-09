@@ -12,14 +12,14 @@ import java.util.List;
 /**
  * Service Interface for managing <%= entityClass %>.
  */
-public Interface <%= entityClass %>Service {
+public interface <%= entityClass %>Service {
 
     /**
      * Save a <%= entityInstance %>.
      * @param input the <%= instanceType %>
      * @return the persisted entity
      */
-    public <%= instanceType %> save<%= entityClass %>(<%= instanceType %> <%= instanceName %>);
+    public <%= instanceType %> save(<%= instanceType %> <%= instanceName %>);
 
     /**
      *  get all the <%= entityInstance %>s.

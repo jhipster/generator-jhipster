@@ -8,7 +8,9 @@ package <%=packageName%>.service<% if (service == 'serviceImpl') { %>.impl<% } %
     var entityToDto = mapper + '.'+ entityInstance +'To' + entityClass + 'DTO';
     var entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO';
     var repository = entityInstance  + 'Repository';
-    var searchRepository = entityInstance  + 'SearchRepository'; %>
+    var searchRepository = entityInstance  + 'SearchRepository';
+    if (service == 'serviceImpl') { %>
+import <%=packageName%>.service.<%= entityClass %>Service;<% } %>
 import <%=packageName%>.domain.<%= entityClass %>;
 import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } if (dto == 'mapstruct') { %>
@@ -45,7 +47,7 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
      * @return the persisted entity
      */<% if (databaseType == 'sql') { %>
     @Transactional(readOnly = false) <% } %>
-    public <%= instanceType %> save<%= entityClass %>(<%= instanceType %> <%= instanceName %>) {
+    public <%= instanceType %> save(<%= instanceType %> <%= instanceName %>) {
         log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);<%- include('../../common/save_template', {viaService: viaService}); -%>
         return result;
     }
