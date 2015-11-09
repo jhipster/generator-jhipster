@@ -43,6 +43,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
     var insight = this.insight();
     this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
     var questions = 15; // making questions a variable to avoid updating each question by hand when adding additional options
+    var defaultAppBaseName = (/^[a-zA-Z0-9_]+$/.test(path.basename(process.cwd())))?path.basename(process.cwd()):'jhipster';
 
     var prompts = [
         {
@@ -62,7 +63,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 return 'Your application name cannot contain special characters or a blank space, using the default name instead';
             },
             message: '(1/' + questions + ') What is the base name of your application?',
-            default: path.basename(process.cwd())
+            default: defaultAppBaseName
         },
         {
             type: 'input',
