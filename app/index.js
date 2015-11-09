@@ -105,6 +105,7 @@ module.exports = JhipsterGenerator.extend({
 
         },
 
+
         setupVars : function () {
             this.packagejs = packagejs;
             this.baseName = this.config.get('baseName');
@@ -130,6 +131,27 @@ module.exports = JhipsterGenerator.extend({
                 // Generate key if key does not already exist in config
                 if (this.rememberMeKey == null) {
                     this.rememberMeKey = crypto.randomBytes(20).toString('hex');
+        {
+            type: 'list',
+            name: 'authenticationType',
+            message: '(3/' + questions + ') Which *type* of authentication would you like to use?',
+            choices: [
+                {
+                    value: 'session',
+                    name: 'HTTP Session Authentication (stateful, default Spring Security mechanism)'
+                },
+                {
+                    value: 'session-social',
+                    name: 'HTTP Session Authentication with social login enabled (Google, Facebook, Twitter). Warning, this only works with SQL databases!'
+                },
+                {
+                    value: 'oauth2',
+                    name: 'OAuth2 Authentication (stateless, with an OAuth2 server implementation)'
+                },
+                {
+                    value: 'jwt',
+                    name: 'Token-based authentication (stateless, with a token)'
+>>>>>>> Index.js changes
                 }
 
                 // If translation is not defined, it is enabled by default
@@ -921,10 +943,16 @@ JhipsterGenerator.prototype.app = function app() {
                 this.template('src/main/java/package/config/hazelcast/_package-info.java', javaDir + 'config/hazelcast/package-info.java', this, {});
             }
 
+<<<<<<< HEAD
             if (this.databaseType == "sql") {
                 this.template('src/main/java/package/config/liquibase/_AsyncSpringLiquibase.java', javaDir + 'config/liquibase/AsyncSpringLiquibase.java', this, {});
                 this.template('src/main/java/package/config/liquibase/_package-info.java', javaDir + 'config/liquibase/package-info.java', this, {});
             }
+=======
+    if (this.authenticationType == 'jwt') {
+        this.template('src/main/java/package/config/_JWTConfiguration.java', javaDir + 'config/JWTConfiguration.java', this, {});
+    }
+>>>>>>> Index.js changes
 
             this.template('src/main/java/package/domain/_package-info.java', javaDir + 'domain/package-info.java', this, {});
             if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
@@ -1079,7 +1107,7 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.authenticationType == 'session' || this.authenticationType == 'oauth2') {
         this.template('src/main/java/package/security/_AjaxLogoutSuccessHandler.java', javaDir + 'security/AjaxLogoutSuccessHandler.java', this, {});
     }
-    if (this.authenticationType == 'xauth') {
+    if (this.authenticationType == 'jwt') {
         this.template('src/main/java/package/security/_AuthenticationProvider.java', javaDir + 'security/AuthenticationProvider.java', this, {});
     }
     this.template('src/main/java/package/security/_AuthoritiesConstants.java', javaDir + 'security/AuthoritiesConstants.java', this, {});
@@ -1095,7 +1123,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java', this, {});
     this.template('src/main/java/package/security/_UserNotActivatedException.java', javaDir + 'security/UserNotActivatedException.java', this, {});
 
-     if (this.authenticationType == 'xauth') {
+     if (this.authenticationType == 'jwt') {
         this.template('src/main/java/package/security/jwt/_TokenAuthenticationService.java', javaDir + 'security/jwt/TokenAuthenticationService.java', this, {});
         this.template('src/main/java/package/security/jwt/_TokenHandler.java', javaDir + 'security/jwt/TokenHandler.java', this, {});
         this.template('src/main/java/package/web/rest/_UserJWTTokenController.java', javaDir + 'web/rest/UserJWTTokenController.java', this, {});
