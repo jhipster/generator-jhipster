@@ -1,4 +1,5 @@
 <%
+var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
 var mapper = entityInstance  + 'Mapper';
 var entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO';
 for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { -%>

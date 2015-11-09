@@ -1,12 +1,8 @@
 package <%=packageName%>.service;
 <%  var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
-    var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
-    var mapper = entityInstance  + 'Mapper';
-    var dtoToEntity = mapper + '.'+ entityInstance +'DTOTo' + entityClass;
-    var entityToDto = mapper + '.'+ entityInstance +'To' + entityClass + 'DTO';
-    var entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO'; %>
-import <%=packageName%>.domain.<%= entityClass %>;<% } if (dto == 'mapstruct') { %>
-import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;<% } %><% if (pagination != 'no') { %>
+    var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance; %>
+import <%=packageName%>.domain.<%= entityClass %>;<% if (dto == 'mapstruct') { %>
+import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;<% } if (pagination != 'no') { %>
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;<% } %>
 <% if (dto == 'mapstruct') { %>
@@ -29,7 +25,7 @@ public Interface <%= entityClass %>Service {
      *  get all the <%= entityInstance %>s.
      *  @return the list of entities
      */
-    public <% if (pagination != 'no') { %>Page<<%= entityClass %>% } else { %>List<<%= instanceType %><% } %>> findAll(<% if (pagination != 'no') { %>Pageable pageable<% } %>);
+    public <% if (pagination != 'no') { %>Page<<%= entityClass %><% } else { %>List<<%= instanceType %><% } %>> findAll(<% if (pagination != 'no') { %>Pageable pageable<% } %>);
 <% for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { -%>
     /**
      *  get all the <%= entityInstance %>s where <%= relationships[idx].relationshipNameCapitalized %> is null.

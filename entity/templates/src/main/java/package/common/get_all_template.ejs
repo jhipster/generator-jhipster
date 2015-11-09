@@ -3,16 +3,16 @@
     var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
     var mapper = entityInstance  + 'Mapper';
     var entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO';
-    if (dto == 'mapstruct') { _%>
+    if (dto == 'mapstruct') { -%>
     @Transactional(readOnly = true)<% } if (pagination == 'no') { -%>
-    public List<<%= instanceType %>> getAll<%= entityClass %>s(<% if (fieldsContainNoOwnerOneToOne == true) { %>@RequestParam(required = false) String filter<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
+    public List<<%= instanceType %>> getAll<%= entityClass %>s(<% if (fieldsContainNoOwnerOneToOne) { %>@RequestParam(required = false) String filter<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
         log.debug("REST request to get all <%= entityClass %>s");<% if (viaService) { %>
         return <%= entityInstance %>Service.findAll();<% } else { %>
-        return <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (dto == 'mapstruct') { %>.stream()
+        return <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (dto == 'mapstruct') { %>.stream()
             .map(<%= entityToDtoReference %>)
             .collect(Collectors.toCollection(LinkedList::new))<% } %>;<% } %>
             <%_ } if (pagination != 'no') { _%>
-    public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClass %>s(Pageable pageable<% if (fieldsContainNoOwnerOneToOne == true) { %>, @RequestParam(required = false) String filter<% } %>)
+    public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClass %>s(Pageable pageable<% if (fieldsContainNoOwnerOneToOne) { %>, @RequestParam(required = false) String filter<% } %>)
         throws URISyntaxException {<%- include('get_all_stream_template', {viaService: viaService}); -%>
         log.debug("REST request to get all <%= entityClass %>s");<% if (viaService) { %>
         Page<<%= entityClass %>> page = <%= entityInstance %>Service.findAll(pageable); <% } else { %>
@@ -21,5 +21,5 @@
         return new ResponseEntity<>(page.getContent()<% if (dto == 'mapstruct') { %>.stream()
             .map(<%= entityToDtoReference %>)
             .collect(Collectors.toCollection(LinkedList::new))<% } %>, headers, HttpStatus.OK);
-    <%_ } _%>
+    <% } -%>
     }

@@ -1,5 +1,5 @@
 package <%=packageName%>.service<% if (service == 'serviceImpl') { %>.impl<% } %>;
-<%  var serviceClassName = service == 'serviceImpl' ? <%= entityClass %>+ 'serviceImpl' : <%= entityClass %>+ 'service';
+<%  var serviceClassName = service == 'serviceImpl' ? entityClass + 'ServiceImpl' : entityClass + 'Service';
     var viaService = false;
     var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
     var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
@@ -35,7 +35,7 @@ import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
  * Service Implementation for managing <%= entityClass %>.
  */
 @Service
-public class <%= serviceClassName %> {
+public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implements <%= entityClass %>Service<% } %>{
 
     private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
     <%- include('../../common/inject_template', {viaService: viaService}); -%>
@@ -46,8 +46,7 @@ public class <%= serviceClassName %> {
      */<% if (databaseType == 'sql') { %>
     @Transactional(readOnly = false) <% } %>
     public <%= instanceType %> save<%= entityClass %>(<%= instanceType %> <%= instanceName %>) {
-        log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);
-        <%- include('../../common/save_template', {viaService: viaService}); -%>
+        log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);<%- include('../../common/save_template', {viaService: viaService}); -%>
         return result;
     }
 
@@ -56,7 +55,7 @@ public class <%= serviceClassName %> {
      *  @return the list of entities
      */<% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true) <% } %>
-    public <% if (pagination != 'no') { %>Page<<%= entityClass %>% } else { %>List<<%= instanceType %><% } %>> findAll(<% if (pagination != 'no') { %>Pageable pageable<% } %>) {
+    public <% if (pagination != 'no') { %>Page<<%= entityClass %><% } else { %>List<<%= instanceType %><% } %>> findAll(<% if (pagination != 'no') { %>Pageable pageable<% } %>) {
         log.debug("Request to get all <%= entityClass %>s");<% if (pagination == 'no') { %>
         List<<%= instanceType %>> result = <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (dto == 'mapstruct') { %>.stream()
             .map(<%= entityToDtoReference %>)
@@ -74,7 +73,7 @@ public class <%= serviceClassName %> {
      */<% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true) <% } %>
     public <%= instanceType %> findOne(<%= pkType %> id) {
-        log.debug("Request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template'); -%>
+        log.debug("Request to get <%= entityClass %> : {}", id);<%- include('../../common/get_template', {viaService: viaService}); -%>
         return <%= instanceName %>;
     }
 
@@ -84,7 +83,7 @@ public class <%= serviceClassName %> {
      */<% if (databaseType == 'sql') { %>
     @Transactional(readOnly = false) <% } %>
     public void delete(<%= pkType %> id) {
-        log.debug("Request to delete <%= entityClass %> : {}", id);<%- include('../../common/delete_template'); -%>
+        log.debug("Request to delete <%= entityClass %> : {}", id);<%- include('../../common/delete_template', {viaService: viaService}); -%>
     }<% if (searchEngine == 'elasticsearch') { %>
 
     /**
@@ -93,6 +92,6 @@ public class <%= serviceClassName %> {
      * @param input query
      */
     public List<<%= instanceType %>> search(String query) {
-        <%- include('../../common/search_template'); -%>
+        <%- include('../../common/search_template', {viaService: viaService}); -%>
     }<% } %>
 }

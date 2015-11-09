@@ -40,12 +40,11 @@ import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
 public class <%= entityClass %>Resource {
 
     private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
-    <% var viaService = entityHasService; %>
-    <%- include('../../common/inject_template', {viaService: viaService}); -%>
-    <%_
+    <% var viaService = service != 'no'; -%>
+    <%- include('../../common/inject_template', {viaService: viaService}); -%><%
     var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
-    var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
-    _%>
+    var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance; -%>
+
     /**
      * POST  /<%= entityInstance %>s -> Create a new <%= entityInstance %>.
      */
@@ -124,7 +123,6 @@ public class <%= entityClass %>Resource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<<%= instanceType %>> search<%= entityClass %>s(@PathVariable String query) {
-        <%- include('../../common/search_template', {viaService: viaService}); -%>
+    public List<<%= instanceType %>> search<%= entityClass %>s(@PathVariable String query) {<%- include('../../common/search_template', {viaService: viaService}); -%>
     }<% } %>
 }

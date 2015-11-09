@@ -54,6 +54,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     }
     this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
     this.jhipsterConfigDirectory = '.jhipster';
+    this.name = this.name.replace('.json','');
     this.filename = this.jhipsterConfigDirectory + '/' + _s.capitalize(this.name) + '.json';
     if (shelljs.test('-f', this.filename)) {
         console.log(chalk.green('Found the ' + this.filename + ' configuration file, automatically generating the entity'));
@@ -1283,17 +1284,13 @@ EntityGenerator.prototype.files = function files() {
     this.template('src/main/java/package/web/rest/_EntityResource.java',
         'src/main/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'Resource.java', this, {});
     if (this.service == 'serviceImpl') {
-        this.entityHasService = true;
         this.template('src/main/java/package/service/_EntityService.java',
             'src/main/java/' + this.packageFolder + '/service/' +    this.entityClass + 'Service.java', this, {});
         this.template('src/main/java/package/service/impl/_EntityServiceImpl.java',
             'src/main/java/' + this.packageFolder + '/service/impl/' +    this.entityClass + 'ServiceImpl.java', this, {});
     } else if(this.service == 'serviceClass') {
-        this.entityHasService = true;
         this.template('src/main/java/package/service/impl/_EntityServiceImpl.java',
             'src/main/java/' + this.packageFolder + '/service/' +    this.entityClass + 'Service.java', this, {});
-    } else {
-        this.entityHasService = false;
     }
     if (this.dto == 'mapstruct') {
         this.template('src/main/java/package/web/rest/dto/_EntityDTO.java',
