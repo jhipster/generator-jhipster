@@ -1,4 +1,4 @@
-<% if (!viaService) { -%>
+<% if (!viaService) { %>
     @Inject
     private <%= entityClass %>Repository <%= entityInstance %>Repository;
     <% if (dto == 'mapstruct') { -%>
@@ -8,7 +8,7 @@
     @Inject
     private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;
     <% }
-  } else { -%>
+  } else { %>
     @Inject
     private <%= entityClass %>Service <%= entityInstance %>Service;
     <% if (dto == 'mapstruct') { -%>
