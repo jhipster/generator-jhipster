@@ -5,6 +5,7 @@ ext {
 }
 
 dependencies {
+    compile group: 'org.springframework.boot', name: 'spring-boot-devtools'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-undertow', version: spring_boot_version
 }
 
