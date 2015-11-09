@@ -119,7 +119,7 @@ public class UserService {
     }
 
     public void updateUserInformation(String firstName, String lastName, String email, String langKey) {
-        userRepository.findOneById(SecurityUtils.getCurrentUserId()).ifPresent(u -> {
+        userRepository.findOneByLogin(SecurityUtils.getCurrentUser().getUsername()).ifPresent(u -> {
             u.setFirstName(firstName);
             u.setLastName(lastName);
             u.setEmail(email);
@@ -131,7 +131,7 @@ public class UserService {
     }
 
     public void changePassword(String password) {
-        userRepository.findOneById(SecurityUtils.getCurrentUserId()).ifPresent(u -> {
+        userRepository.findOneByLogin(SecurityUtils.getCurrentUser().getUsername()).ifPresent(u -> {
             String encryptedPassword = passwordEncoder.encode(password);
             u.setPassword(encryptedPassword);
             userRepository.save(u);
@@ -156,7 +156,7 @@ public class UserService {
 <% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true)<% } %>
     public User getUserWithAuthorities() {
-        User user = userRepository.findOneById(SecurityUtils.getCurrentUserId()).get();
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUser().getUsername()).get();
         user.getAuthorities().size(); // eagerly load the association
         return user;
     }<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>

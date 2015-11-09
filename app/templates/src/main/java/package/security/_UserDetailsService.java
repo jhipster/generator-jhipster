@@ -13,8 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -38,13 +37,13 @@ public class UserDetailsService implements org.springframework.security.core.use
             if (!user.getActivated()) {
                 throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
             }
-            Set<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+            List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
                     .map(authority -> new SimpleGrantedAuthority(authority.getName()))<% } %><% if (databaseType == 'cassandra') { %>
                 .map(authority -> new SimpleGrantedAuthority(authority))<% } %>
-                .collect(Collectors.toSet());
-            return new CustomUserDetails(user.getId(), lowercaseLogin,
+                .collect(Collectors.toList());
+            return new org.springframework.security.core.userdetails.User(lowercaseLogin,
                 user.getPassword(),
-                grantedAuthorities, true, true, true, true);
+                grantedAuthorities);
         }).orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the " +
         "database"));
     }
