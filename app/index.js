@@ -62,7 +62,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 return 'Your application name cannot contain special characters or a blank space, using the default name instead';
             },
             message: '(1/' + questions + ') What is the base name of your application?',
-            default: 'jhipster'
+            default: path.basename(process.cwd())
         },
         {
             type: 'input',
