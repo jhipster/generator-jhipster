@@ -92,7 +92,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                     name: 'OAuth2 Authentication (stateless, with an OAuth2 server implementation)'
                 },
                 {
-                    value: 'xauth',
+                    value: 'jwt',
                     name: 'Token-based authentication (stateless, with a token)'
                 }
             ],
@@ -653,8 +653,8 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('src/main/java/package/config/_OAuth2ServerConfiguration.java', javaDir + 'config/OAuth2ServerConfiguration.java', this, {});
     }
 
-    if (this.authenticationType == 'xauth') {
-        this.template('src/main/java/package/config/_XAuthConfiguration.java', javaDir + 'config/XAuthConfiguration.java', this, {});
+    if (this.authenticationType == 'jwt') {
+        this.template('src/main/java/package/config/_JWTConfiguration.java', javaDir + 'config/JWTConfiguration.java', this, {});
     }
 
     if (this.databaseType == 'mongodb' && this.authenticationType == 'oauth2') {
@@ -753,7 +753,7 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.authenticationType == 'session' || this.authenticationType == 'oauth2') {
         this.template('src/main/java/package/security/_AjaxLogoutSuccessHandler.java', javaDir + 'security/AjaxLogoutSuccessHandler.java', this, {});
     }
-    if (this.authenticationType == 'xauth') {
+    if (this.authenticationType == 'jwt') {
         this.template('src/main/java/package/security/_AuthenticationProvider.java', javaDir + 'security/AuthenticationProvider.java', this, {});
     }
     this.template('src/main/java/package/security/_AuthoritiesConstants.java', javaDir + 'security/AuthoritiesConstants.java', this, {});
@@ -769,7 +769,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java', this, {});
     this.template('src/main/java/package/security/_UserNotActivatedException.java', javaDir + 'security/UserNotActivatedException.java', this, {});
 
-     if (this.authenticationType == 'xauth') {
+     if (this.authenticationType == 'jwt') {
         this.template('src/main/java/package/security/jwt/_TokenAuthenticationService.java', javaDir + 'security/jwt/TokenAuthenticationService.java', this, {});
         this.template('src/main/java/package/security/jwt/_TokenHandler.java', javaDir + 'security/jwt/TokenHandler.java', this, {});
         this.template('src/main/java/package/web/rest/_UserJWTTokenController.java', javaDir + 'web/rest/UserJWTTokenController.java', this, {});
