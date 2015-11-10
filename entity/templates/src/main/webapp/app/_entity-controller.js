@@ -4,10 +4,14 @@ angular.module('<%=angularAppName%>')
     .controller('<%= entityClass %>Controller', function ($scope, $state, $modal<% if (fieldsContainBlob) { %>, DataUtils<% } %>, <%= entityClass %><% if (searchEngine == 'elasticsearch') { %>, <%= entityClass %>Search<% } %><% if (pagination != 'no') { %>, ParseLinks<% } %>) {
       
         $scope.<%= entityInstance %>s = [];
+        <%_ if (pagination != 'no') { _%>
+        $scope.predicate = 'id';
+        $scope.reverse = true;
+        <%_ } _%>
         <%_ if (pagination == 'pager' || pagination == 'pagination') { _%>
         $scope.page = 0;
         $scope.loadAll = function() {
-            <%= entityClass %>.query({page: $scope.page, size: 20}, function(result, headers) {
+            <%= entityClass %>.query({page: $scope.page, size: 20, sort: $scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc')}, function(result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 $scope.<%= entityInstance %>s = result;
             });
@@ -16,7 +20,7 @@ angular.module('<%=angularAppName%>')
         <%_ if (pagination == 'infinite-scroll') { _%>
         $scope.page = 0;
         $scope.loadAll = function() {
-            <%= entityClass %>.query({page: $scope.page, size: 20}, function(result, headers) {
+            <%= entityClass %>.query({page: $scope.page, size: 20, sort: $scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc')}, function(result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 for (var i = 0; i < result.length; i++) {
                     $scope.<%= entityInstance %>s.push(result[i]);
@@ -40,6 +44,21 @@ angular.module('<%=angularAppName%>')
             <%= entityClass %>.query(function(result) {
                $scope.<%= entityInstance %>s = result;
             });
+        };
+        <%_ } _%>
+        <%_ if (pagination != 'no') { _%>
+        $scope.sortBy = function(field) {
+            if (field !== $scope.predicate){
+                $scope.reverse = true;
+            } else {
+                $scope.reverse = !$scope.reverse;
+            }
+            $scope.predicate = field;
+            <%_ if (pagination != 'infinite-scroll') { _%>
+            $scope.loadAll();
+            <%_ } else { _%>
+            $scope.reset();
+            <%_ } _%>
         };
         <%_ } _%>
         $scope.loadAll();
