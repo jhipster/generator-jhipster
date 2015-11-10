@@ -5,7 +5,7 @@ set -ev
 #-------------------------------------------------------------------------------
 if [ $JHIPSTER_MVN_DEP == 1 ]; then
   cd $TRAVIS_BUILD_DIR/
-  git clone https://github.com/pascalgrimaud/jhipster-lib.git
+  git clone https://github.com/jhipster/jhipster-travis-build.git
   rm -Rf $HOME/.m2/repository/
   mv $TRAVIS_BUILD_DIR/jhipster-lib/repository $HOME/.m2/
   mv $TRAVIS_BUILD_DIR/jhipster-lib/node_modules/ $JHIPSTER_SAMPLES/$JHIPSTER/
