@@ -8,9 +8,11 @@ if [ -a docker-compose-prod.yml ]; then
   # travis is not stable with docker... need to start container with privileged
   echo '  privileged: true' >> docker-compose-prod.yml
   docker-compose -f docker-compose-prod.yml up -d
-  sleep 20
   if [ $JHIPSTER == "app-cassandra" ]; then
+    sleep 30
     docker exec -it sampleCassandra-prod-cassandra init
+  else
+    sleep 20
   fi
   docker ps -a
 fi
