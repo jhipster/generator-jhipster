@@ -67,7 +67,8 @@ public class Application {
     /**
      * Main method, used to run the application.
      */
-    public static void main(String[] args) throws UnknownHostException {
+    public static void main(String[] args) throws UnknownHostException {<% if (authenticationType == 'oauth2') { %>
+        System.setProperty("spring.devtools.restart.enabled", "false");<% } %>
         SpringApplication app = new SpringApplication(Application.class);
         SimpleCommandLinePropertySource source = new SimpleCommandLinePropertySource(args);
         addDefaultProfile(app, source);
