@@ -17,7 +17,7 @@
                 "principal": "Kullanıcı",
                 "date": "Tarih",
                 "status": "Durum",
-                "data": "Extra data"
+                "data": "Ekstra bilgi"
             },
             "data": {
                 "remoteAddress": "Uzak Adres:"

@@ -3,11 +3,14 @@
         "<%= entityInstance %>" : {
             "home": {
                 "title": "<%= entityClass %>s",
-                "createLabel": "Create a new <%= entityClass %>",
-                "createOrEditLabel": "Create or edit a <%= entityClass %>"
+                "createLabel": "Crear nuevo <%= entityClass %>",
+                "createOrEditLabel": "Crear o editar <%= entityClass %>"
             },
+            "created": "Un nuevo <%= entityClass %> ha sido creado con el identificador {{ param }}",
+            "updated": "Un <%= entityClass %> ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un <%= entityClass %> ha sido eliminado con el identificador {{ param }}",
             "delete": {
-                "question": "Are you sure you want to delete <%= entityClass %> {{ id }}?"
+                "question": "¿Seguro que quiere eliminar <%= entityClass %> {{ id }}?"
             },
             "detail": {
                 "title": "<%= entityClass %>"

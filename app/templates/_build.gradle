@@ -39,6 +39,19 @@ bootRun {
     addResources = false
 }
 
+
+test {
+    println 'Starting the Unit and Integration test'
+    include '**/*UnitTest*'
+    include '**/*IntTest*'
+}
+
+task cucumberTest(type: Test) {
+    include '**/CucumberTest*'
+}
+
+test.finalizedBy(cucumberTest)
+
 apply from: 'yeoman.gradle'
 apply from: 'sonar.gradle'
 <% if (databaseType == 'sql') { %>
@@ -108,12 +121,13 @@ dependencies {
     compile group: 'javax.inject', name: 'javax.inject', version: javax_inject_version
     compile group: 'javax.transaction', name: 'javax.transaction-api'<% if (databaseType == 'cassandra') { %>
     compile group: 'net.jpountz.lz4', name: 'lz4', version: lz4_version<% } %>
-    compile group: 'org.apache.geronimo.javamail', name: 'geronimo-javamail_1.4_mail', version: geronimo_javamail_1_4_mail_version<% if (databaseType == 'sql') { %>
+    compile group: 'org.apache.geronimo.javamail', name: 'geronimo-javamail_1.4_mail', version: geronimo_javamail_1_4_mail_version
     compile group: 'org.hibernate', name: 'hibernate-core', version: hibernate_entitymanager_version
-    compile group: 'org.hibernate', name: 'hibernate-envers'<% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
+    <% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
     compile (group: 'org.hibernate', name: 'hibernate-ehcache') {
         exclude(module: 'ehcache-core')
     }<% } %>
+    compile group: 'org.hibernate', name: 'hibernate-envers'
     compile group: 'org.hibernate', name: 'hibernate-validator'<% if (databaseType == 'sql') { %>
     compile (group: 'org.liquibase', name: 'liquibase-core', version: liquibase_core_version) {
         exclude(module: 'jetty-servlet')
@@ -122,7 +136,6 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-actuator'
     compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure'
     compile group: 'org.springframework.boot', name: 'spring-boot-loader-tools'
-    compile group: 'org.springframework.boot', name: 'spring-boot-devtools'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-logging'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop'<% if (databaseType == 'sql') { %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'<% } %><% if (searchEngine == 'elasticsearch') { %>

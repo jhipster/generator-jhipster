@@ -6,10 +6,10 @@
         "jvm": {
             "title": "JVM Ölçütleri",
             "memory": {
-                "title": "Memory",
-                "total": "Toplam Memory",
-                "heap": "Heap Memory",
-                "nonheap": "Non-Heap Memory"
+                "title": "Bellek",
+                "total": "Toplam Bellek",
+                "heap": "Yığın Bellek",
+                "nonheap": "Yığın-dışı Bellek"
             },
             "threads": {
                 "title": "Threadler",
@@ -32,7 +32,7 @@
                 }
             },
             "gc": {
-                "title": "Garbage collections",
+                "title": "Çöp toplayıcılar",
                 "marksweepcount": "Mark Sweep count",
                 "marksweeptime": "Mark Sweep time",
                 "scavengecount": "Scavenge count",
@@ -79,10 +79,10 @@
             "mean": "Mean get time (ms)"
         },
         "datasource": {
-        	"usage": "Usage",
-            "title": "DataSource statistics (time in millisecond)",
-            "name": "Pool usage",
-            "count": "Count",
+        	"usage": "Kullanım",
+            "title": "Veri kaynağı istatistikleri (milisaniye cinsinden)",
+            "name": "Havuz kullanımı",
+            "count": "Sayaç",
             "mean": "Mean",
             "min": "Min",
             "max": "Max",

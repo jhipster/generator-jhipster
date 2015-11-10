@@ -31,33 +31,6 @@ angular.module('<%=angularAppName%>')
             });
         };
 
-        $scope.showUpdate = function (login) {
-            User.get({login: login}, function (result) {
-                $scope.user = result;
-                $('#saveUserModal').modal('show');
-            });
-        };
-
-        var onSaveSuccess = function (result) {
-            $scope.refresh();
-            $scope.isSaving = false;
-        };
-
-        var onSaveError = function (result) {
-            $scope.isSaving = false;
-        };
-
-        $scope.save = function () {
-            $scope.isSaving = true;
-            User.update($scope.user, onSaveSuccess, onSaveError);
-        };
-
-        $scope.refresh = function () {
-            $scope.loadAll();
-            $('#saveUserModal').modal('hide');
-            $scope.clear();
-        };
-
         $scope.clear = function () {
             $scope.user = {
                 id: null, login: null, firstName: null, lastName: null, email: null,

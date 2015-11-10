@@ -56,7 +56,7 @@
             }
         },
         "servicesstats": {
-            "title": "Estatísticas dos serviços (tempo em milissegundos)",
+            "title": "Estatísticas dos serviços (tempo em milisegundos)",
             "table": {
                 "name": "Nome do serviço",
                 "count": "Contagem",
@@ -79,11 +79,11 @@
             "mean": "Mediana (ms)"
         },
         "datasource": {
-        	"usage": "Usage",
-            "title": "DataSource statistics (time in millisecond)",
-            "name": "Pool usage",
-            "count": "Count",
-            "mean": "Mean",
+        	"usage": "Utilização",
+            "title": "Estatísticas da DataSource (tempo em milisegundos)",
+            "name": "Utilização da Pool",
+            "count": "Contagem",
+            "mean": "Mediana",
             "min": "Min",
             "max": "Max",
             "p50": "p50",

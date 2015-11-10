@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -54,26 +55,17 @@ public final class SecurityUtils {
     }
 
     /**
-     * Return the current user id, or throws an exception, if the user is not authenticated yet.
-     * 
-     * @return the current user id
-     */
-    public static <%= pkType %> getCurrentUserId() {
-        return getCurrentUser().getId();
-    }
-
-    /**
      * Return the current user, or throws an exception, if the user is not
      * authenticated yet.
-     * 
+     *
      * @return the current user
      */
-    public static CustomUserDetails getCurrentUser() {
+    public static User getCurrentUser() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
         if (authentication != null) {
-            if (authentication.getPrincipal() instanceof CustomUserDetails) {
-                return (CustomUserDetails) authentication.getPrincipal();
+            if (authentication.getPrincipal() instanceof User) {
+                return (User) authentication.getPrincipal();
             }
         }
         throw new IllegalStateException("User not found!");
@@ -82,9 +74,9 @@ public final class SecurityUtils {
     /**
      * If the current user has a specific authority (security role).
      *
-     * <p> The name of this method comes from the isUserInRole() method in the Servlet API</p>
+     * <p>The name of this method comes from the isUserInRole() method in the Servlet API</p>
      */
-    public static boolean isUserInRole(String authority) {
+    public static boolean isCurrentUserInRole(String authority) {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         Authentication authentication = securityContext.getAuthentication();
         if (authentication != null) {

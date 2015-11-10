@@ -1,0 +1,23 @@
+{
+  "generator-jhipster": {
+    "baseName": "sampleGradle",
+    "packageName": "com.mycompany.myapp",
+    "packageFolder": "com/mycompany/myapp",
+    "authenticationType": "session",
+    "hibernateCache": "ehcache",
+    "clusteredHttpSession": "no",
+    "websocket": "no",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": "no",
+    "useSass": false,
+    "buildTool": "gradle",
+    "frontendBuilder": "grunt",
+    "enableTranslation": true,
+    "rememberMeKey": "0b557a1f94eb8ea76db0a95b5e8b64bec08bb869",
+    "testFrameworks": [
+      "gatling"
+    ]
+  }
+}

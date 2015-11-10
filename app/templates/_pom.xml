@@ -84,7 +84,7 @@
         <run.addResources>false</run.addResources>
         <spring-security.version>4.0.2.RELEASE</spring-security.version>
         <%_ if (authenticationType == 'oauth2') { _%>
-        <spring-security-oauth2.version>2.0.7.RELEASE</spring-security-oauth2.version>
+        <spring-security-oauth2.version>2.0.8.RELEASE</spring-security-oauth2.version>
         <%_ } _%>
         <springfox.version>2.0.3</springfox.version>
         <%_ if (enableSocialSignIn) { _%>
@@ -425,11 +425,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-loader-tools</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -831,6 +826,43 @@
                 </configuration>
             </plugin>
         </plugins>
+        <pluginManagement>
+            <plugins>
+                <!--
+                    This plugin's configuration is used to store Eclipse m2e settings only.
+                    It has no influence on the Maven build itself.
+                    Remove when the m2e plugin can correctly bind to Maven lifecycle
+                -->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.jacoco</groupId>
+                                        <artifactId>
+                                            jacoco-maven-plugin
+                                        </artifactId>
+                                        <versionRange>
+                                            [0.7.4,)
+                                        </versionRange>
+                                        <goals>
+                                            <goal>prepare-agent</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore/>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+             </plugins>
+        </pluginManagement>
     </build>
 
     <profiles>
@@ -847,6 +879,11 @@
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-tomcat</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-devtools</artifactId>
+                    <optional>true</optional>
                 </dependency>
             </dependencies>
             <%_ if(frontendBuilder == 'grunt' && useSass) { _%>
@@ -888,6 +925,11 @@
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-undertow</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-devtools</artifactId>
+                    <optional>true</optional>
                 </dependency>
             </dependencies>
             <build>
@@ -959,7 +1001,8 @@
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
-                            <executable>true</executable>
+                            <!-- this is set to false because of https://github.com/jhipster/generator-jhipster/issues/2225 -->
+                            <executable>false</executable>
                             <arguments>
                                 <argument>--spring.profiles.active=prod</argument>
                             </arguments>

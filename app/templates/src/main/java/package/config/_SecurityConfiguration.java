@@ -5,30 +5,22 @@ import <%=packageName%>.web.filter.CsrfCookieGeneratorFilter;<% } %><% if (authe
 import <%=packageName%>.security.xauth.*;<% } %>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;<% if (authenticationType == 'session') { %>
-import org.springframework.core.env.Environment;<% } %><% if (authenticationType == 'oauth2') { %>
-import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;<% } %>
-
-import org.springframework.data.repository.query.spi.EvaluationContextExtension;
-import org.springframework.data.repository.query.spi.EvaluationContextExtensionSupport;
-import org.springframework.security.access.expression.SecurityExpressionRoot;<% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
+import org.springframework.core.env.Environment;<% } %><% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
 import org.springframework.security.authentication.AuthenticationManager;<% } %>
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;<% if (authenticationType == 'session' || authenticationType == 'xauth') { %>
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;<% } %>
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;<% if (authenticationType == 'xauth') { %>
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;<% if (authenticationType == 'xauth' || authenticationType == 'oauth2') { %>
 import org.springframework.security.config.http.SessionCreationPolicy;<% } %>
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 <% if (authenticationType == 'session') { %>
 import org.springframework.security.web.authentication.RememberMeServices;
-import org.springframework.security.web.csrf.CsrfFilter;<% } %><% if (authenticationType == 'oauth2') { %>
-import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecurityExpressionHandler;<% } %>
+import org.springframework.security.web.csrf.CsrfFilter;<% } %>
 
 import javax.inject.Inject;
 
@@ -160,6 +152,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .apply(securityConfigurerAdapter());<% } %>
 
     }<% } %><% if (authenticationType == 'oauth2') { %>
+
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        http
+            .httpBasic().realmName("<%= baseName %>")
+            .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+                .requestMatchers().antMatchers("/oauth/authorize")
+            .and()
+                .authorizeRequests()
+                .antMatchers("/oauth/authorize").authenticated();
+    }
 
     @Override
     @Bean
