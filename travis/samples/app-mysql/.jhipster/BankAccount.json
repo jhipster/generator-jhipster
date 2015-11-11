@@ -31,9 +31,19 @@
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "openingDay",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "lastOperationDate",
+            "fieldType": "ZonedDateTime"
         }
     ],
     "changelogDate": "20150805124838",
-    "dto": "no",
+    "dto": "yes",
     "pagination": "no"
 }
