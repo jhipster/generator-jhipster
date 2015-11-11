@@ -1220,6 +1220,7 @@ EntityGenerator.prototype.files = function files() {
                 this.copyEnumI18n('es', enumInfo);
                 this.copyEnumI18n('sv', enumInfo);
                 this.copyEnumI18n('tr', enumInfo);
+                this.copyEnumI18n('ta', enumInfo);
             }
         }
     }
@@ -1306,8 +1307,6 @@ EntityGenerator.prototype.files = function files() {
     }
 
     // Copy for each
-<<<<<<< HEAD
-<<<<<<< HEAD
     if(this.enableTranslation) {
         this.copyI18n('ca');
         this.copyI18n('zh-cn');
@@ -1329,30 +1328,8 @@ EntityGenerator.prototype.files = function files() {
         this.copyI18n('es');
         this.copyI18n('sv');
         this.copyI18n('tr');
+        this.copyI18n('ta');
     }
-=======
-    this.copyI18n('ca');
-=======
-    this.copy('ca');
->>>>>>> de7fb00... tamil language addition
-    this.copyI18n('zh-cn');
-    this.copyI18n('zh-tw');
-    this.copyI18n('da');
-    this.copyI18n('de');
-    this.copyI18n('en');
-    this.copyI18n('fr');
-    this.copyI18n('hu');
-    this.copyI18n('it');
-    this.copyI18n('ja');
-    this.copyI18n('kr');
-    this.copyI18n('pl');
-    this.copyI18n('pt-br');
-    this.copyI18n('ru');
-    this.copyI18n('es');
-    this.copyI18n('sv');
-    this.copyI18n('tr');
-    this.copyI18n('ta');
->>>>>>> f989dad... Adding in Tamil Language in the list of available Languages
 };
 
 EntityGenerator.prototype.copyI18n = function(language) {
