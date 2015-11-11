@@ -1,0 +1,58 @@
+{
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "userId",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "bankNumber",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "agencyNumber",
+            "fieldType": "Long"
+        },
+        {
+            "fieldId": 5,
+            "fieldName": "lastOperationDuration",
+            "fieldType": "Float"
+        },
+        {
+            "fieldId": 6,
+            "fieldName": "meanOperationDuration",
+            "fieldType": "Double"
+        },
+        {
+            "fieldId": 7,
+            "fieldName": "balance",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldId": 8,
+            "fieldName": "lastOperationDate",
+            "fieldType": "Date"
+        },
+        {
+            "fieldId": 9,
+            "fieldName": "isActive",
+            "fieldType": "Boolean"
+        }
+    ],
+    "changelogDate": "20150805124838",
+    "dto": "yes",
+    "pagination": "no"
+}
