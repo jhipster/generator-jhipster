@@ -186,8 +186,7 @@ dependencies {
     testCompile group: 'info.cukes', name: 'cucumber-junit', version: cucumber_version
     testCompile group: 'info.cukes', name: 'cucumber-spring', version: cucumber_version<% } %>
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
-    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-jetty'
-	testCompile group: 'org.assertj', name: 'assertj-core', version: assertj_core_version
+	  testCompile group: 'org.assertj', name: 'assertj-core', version: assertj_core_version
     testCompile group: 'junit', name: 'junit'
     testCompile group: 'org.mockito', name: 'mockito-core'<% if (databaseType == 'sql') { %>
     testCompile group: 'com.mattbertolini', name: 'liquibase-slf4j', version: liquibase_slf4j_version<% } %><% if (databaseType == 'mongodb') { %>
