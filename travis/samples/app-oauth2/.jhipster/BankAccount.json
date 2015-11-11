@@ -44,6 +44,12 @@
         },
         {
             "fieldId": 5,
+            "fieldName": "type",
+            "fieldType": "BankAccountType",
+            "fieldValues": "MAIN,PROFESSIONAL,SHARED"
+        },
+        {
+            "fieldId": 6,
             "fieldName": "attachment",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any"
