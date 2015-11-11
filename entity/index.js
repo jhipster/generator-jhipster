@@ -1307,6 +1307,7 @@ EntityGenerator.prototype.files = function files() {
 
     // Copy for each
 <<<<<<< HEAD
+<<<<<<< HEAD
     if(this.enableTranslation) {
         this.copyI18n('ca');
         this.copyI18n('zh-cn');
@@ -1331,6 +1332,9 @@ EntityGenerator.prototype.files = function files() {
     }
 =======
     this.copyI18n('ca');
+=======
+    this.copy('ca');
+>>>>>>> de7fb00... tamil language addition
     this.copyI18n('zh-cn');
     this.copyI18n('zh-tw');
     this.copyI18n('da');
