@@ -41,6 +41,12 @@
             "fieldId": 4,
             "fieldName": "lastOperationDate",
             "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldId": 5,
+            "fieldName": "attachment",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any"
         }
     ],
     "changelogDate": "20150805124838",
