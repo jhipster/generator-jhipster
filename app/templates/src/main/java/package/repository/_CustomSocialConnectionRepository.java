@@ -185,7 +185,7 @@ public class CustomSocialConnectionRepository implements ConnectionRepository {
         ConnectionData connectionData = new ConnectionData(socialUserConnection.getProviderId(),
             socialUserConnection.getProviderUserId(),
             socialUserConnection.getDisplayName(),
-            socialUserConnection.getProtileURL(),
+            socialUserConnection.getProfileURL(),
             socialUserConnection.getImageURL(),
             socialUserConnection.getAccessToken(),
             socialUserConnection.getSecret(),
