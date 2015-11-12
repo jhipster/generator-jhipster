@@ -1220,6 +1220,7 @@ EntityGenerator.prototype.files = function files() {
                 this.copyEnumI18n('es', enumInfo);
                 this.copyEnumI18n('sv', enumInfo);
                 this.copyEnumI18n('tr', enumInfo);
+                this.copyEnumI18n('ta', enumInfo);
             }
         }
     }
@@ -1327,6 +1328,7 @@ EntityGenerator.prototype.files = function files() {
         this.copyI18n('es');
         this.copyI18n('sv');
         this.copyI18n('tr');
+        this.copyI18n('ta');
     }
 };
 

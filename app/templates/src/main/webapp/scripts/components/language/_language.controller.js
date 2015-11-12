@@ -32,6 +32,7 @@ angular.module('<%=angularAppName%>')
                 "ro": "Română",
                 "ru": "Русский",
                 "sv": "Svenska",
+                "ta": "தமிழ்",
                 "tr": "Türkçe",
                 "zh-cn": "中文（简体）",
                 "zh-tw": "繁體中文"
