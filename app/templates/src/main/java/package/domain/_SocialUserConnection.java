@@ -40,7 +40,7 @@ public class SocialUserConnection implements Serializable {
     private String displayName;
 
     @Column(name = "profile_url", length = 255)
-    private String protileURL;
+    private String profileURL;
 
     @Column(name = "image_url", length = 255)
     private String imageURL;
@@ -64,7 +64,7 @@ public class SocialUserConnection implements Serializable {
                                 String providerUserId,
                                 Long rank,
                                 String displayName,
-                                String protileURL,
+                                String profileURL,
                                 String imageURL,
                                 String accessToken,
                                 String secret,
@@ -75,7 +75,7 @@ public class SocialUserConnection implements Serializable {
         this.providerUserId = providerUserId;
         this.rank = rank;
         this.displayName = displayName;
-        this.protileURL = protileURL;
+        this.profileURL = profileURL;
         this.imageURL = imageURL;
         this.accessToken = accessToken;
         this.secret = secret;
@@ -131,12 +131,12 @@ public class SocialUserConnection implements Serializable {
         this.displayName = displayName;
     }
 
-    public String getProtileURL() {
-        return protileURL;
+    public String getProfileURL() {
+        return profileURL;
     }
 
-    public void setProtileURL(String protileURL) {
-        this.protileURL = protileURL;
+    public void setProfileURL(String profileURL) {
+        this.profileURL = profileURL;
     }
 
     public String getImageURL() {
@@ -211,7 +211,7 @@ public class SocialUserConnection implements Serializable {
             ", providerUserId='" + providerUserId + '\'' +
             ", rank=" + rank +
             ", displayName='" + displayName + '\'' +
-            ", protileURL='" + protileURL + '\'' +
+            ", profileURL='" + profileURL + '\'' +
             ", imageURL='" + imageURL + '\'' +
             ", accessToken='" + accessToken + '\'' +
             ", secret='" + secret + '\'' +
