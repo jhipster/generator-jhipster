@@ -2,6 +2,11 @@
     "fields": [
         {
             "fieldId": 1,
+            "fieldName": "userId",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldId": 2,
             "fieldName": "name",
             "fieldType": "String",
             "fieldValidateRules": [
@@ -9,27 +14,27 @@
             ]
         },
         {
-            "fieldId": 2,
+            "fieldId": 3,
             "fieldName": "bankNumber",
             "fieldType": "Integer"
         },
         {
-            "fieldId": 3,
+            "fieldId": 4,
             "fieldName": "agencyNumber",
             "fieldType": "Long"
         },
         {
-            "fieldId": 4,
+            "fieldId": 5,
             "fieldName": "lastOperationDuration",
             "fieldType": "Float"
         },
         {
-            "fieldId": 5,
+            "fieldId": 6,
             "fieldName": "meanOperationDuration",
             "fieldType": "Double"
         },
         {
-            "fieldId": 6,
+            "fieldId": 7,
             "fieldName": "balance",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [
@@ -37,25 +42,14 @@
             ]
         },
         {
-            "fieldId": 7,
-            "fieldName": "openingDay",
-            "fieldType": "LocalDate"
-        },
-        {
             "fieldId": 8,
             "fieldName": "lastOperationDate",
-            "fieldType": "ZonedDateTime"
+            "fieldType": "Date"
         },
         {
             "fieldId": 9,
             "fieldName": "isActive",
             "fieldType": "Boolean"
-        },
-        {
-            "fieldId": 10,
-            "fieldName": "accountType",
-            "fieldType": "BankAccountType",
-            "fieldValues": "CHECKING,SAVINGS,LOAN"
         }
     ],
     "changelogDate": "20150805124838",
