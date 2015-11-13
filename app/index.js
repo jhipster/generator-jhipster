@@ -951,6 +951,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/scripts/components/util/_truncate.filter.js', webappDir + 'scripts/components/util/truncate.filter.js', this, {});
     this.template(webappDir + '/scripts/components/util/_dateutil.service.js', webappDir + 'scripts/components/util/dateutil.service.js', this, {});
     this.template(webappDir + '/scripts/components/util/_data-util.service.js', webappDir + 'scripts/components/util/data-util.service.js', this, {});
+    this.template(webappDir + '/scripts/components/util/_sort.directive.js', webappDir + 'scripts/components/util/sort.directive.js', this, {});
 
     // Client App
     this.template(webappDir + '/scripts/app/account/_account.js', webappDir + 'scripts/app/account/account.js', this, {});
@@ -1112,6 +1113,7 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/components/alert/alert.directive.js',
         'scripts/components/util/parse-links.service.js',
         'scripts/components/util/dateutil.service.js',
+        'scripts/components/util/sort.directive.js',
         'scripts/app/account/account.js',
         'scripts/app/account/activate/activate.js',
         'scripts/app/account/activate/activate.controller.js',

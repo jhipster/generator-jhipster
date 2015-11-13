@@ -46,21 +46,6 @@ angular.module('<%=angularAppName%>')
             });
         };
         <%_ } _%>
-        <%_ if (pagination != 'no') { _%>
-        $scope.sortBy = function(field) {
-            if (field !== $scope.predicate){
-                $scope.reverse = true;
-            } else {
-                $scope.reverse = !$scope.reverse;
-            }
-            $scope.predicate = field;
-            <%_ if (pagination != 'infinite-scroll') { _%>
-            $scope.loadAll();
-            <%_ } else { _%>
-            $scope.reset();
-            <%_ } _%>
-        };
-        <%_ } _%>
         $scope.loadAll();
 
         <%_ if (searchEngine == 'elasticsearch') { _%>
