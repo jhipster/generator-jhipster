@@ -1,6 +1,6 @@
 <%_ var keyPrefix = angularAppName + '.'+ entityInstance + '.'; _%>
 <form name="deleteForm" ng-submit="confirmDelete(<%=entityInstance %>.id)">
-    <div class="modal-header">
+    <div class="modal-header bg-danger">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 ng-click="clear()">&times;</button>
         <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>

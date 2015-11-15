@@ -1,7 +1,7 @@
 <% var keyPrefix = angularAppName + '.'+ entityInstance + '.'; %>
 <form name="editForm" class="form form-horizontal" role="form" novalidate ng-submit="save()"<% if (validation) { %> show-validation<% } %>>
 
-    <div class="modal-header">
+    <div class="modal-header bg-primary">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
                 ng-click="clear()">&times;</button>
         <h4 class="modal-title" id="my<%= entityClass %>Label" translate="<%= keyPrefix %>home.createOrEditLabel">Create or edit a <%= entityClass %></h4>
@@ -9,8 +9,8 @@
     <div class="modal-body">
         <jh-alert-error></jh-alert-error>
         <div class="form-group">
-            <label class="col-sm-3 control-label" for="id" translate="global.field.id">ID</label>
-            <div class="col-sm-9">
+            <label class="col-sm-4 control-label" for="id" translate="global.field.id">ID</label>
+            <div class="col-sm-8">
                 <input type="text" class="form-control" id="id" name="id" ng-model="<%=entityInstance %>.id" readonly />
             </div>
         </div>
@@ -30,8 +30,8 @@
                 fieldInputType = 'hidden';
             } _%>
         <div class="form-group"<% if (fields[fieldId].fieldType == 'byte[]') { %> ngf-drop ngf-change="set<%= fields[fieldId].fieldNameCapitalized %>($file, <%= entityInstance %>)"<% if (fields[fieldId].fieldTypeBlobContent == 'image') { %> ngf-pattern="'image/*'"<% } %><% } %>>
-            <label class="col-sm-3 control-label" translate="<%= translationKey %>" for="field_<%= fields[fieldId].fieldName %>"><%=fields[fieldId].fieldNameCapitalized%></label>
-            <div class="col-sm-9">
+            <label class="col-sm-4 control-label" translate="<%= translationKey %>" for="field_<%= fields[fieldId].fieldName %>"><%=fields[fieldId].fieldNameCapitalized%></label>
+            <div class="col-sm-8">
             <%_ if (fields[fieldId].fieldIsEnum) { _%>
             <select class="form-control" name="<%= fields[fieldId].fieldName %>" ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>" id="field_<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) { %> required<% } %>>
                 <%_ var enumPrefix = angularAppName + '.'+ fields[fieldId].fieldType;
@@ -152,8 +152,8 @@
             var translationKey = keyPrefix + relationshipName; _%>
             <%_ if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true && otherEntityName == 'user')) { _%>
         <div class="form-group">
-            <label class="col-sm-3 control-label" translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%=relationshipName %></label>
-            <div class="col-sm-9">
+            <label class="col-sm-4 control-label" translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%=relationshipName %></label>
+            <div class="col-sm-8">
                 <%_ if (dto == 'no') { _%>
                 <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName.toLowerCase() %>s track by <%=otherEntityName %>.id">
                     <option value=""></option>
@@ -167,8 +167,8 @@
         </div>
             <%_ } else if (relationshipType == 'one-to-one' && ownerSide == true) { _%>
         <div class="form-group">
-            <label class="col-sm-3 control-label" translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%=relationshipName %></label>
-            <div class="col-sm-9">
+            <label class="col-sm-4 control-label" translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%=relationshipName %></label>
+            <div class="col-sm-8">
                     <%_ if (dto == 'no') { _%>
                 <select class="form-control" id="field_<%= relationshipName %>" name="<%= relationshipName %>" ng-model="<%= entityInstance %>.<%=relationshipFieldName %>" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in <%=relationshipFieldName.toLowerCase() %>s | orderBy:'id' track by <%=otherEntityName %>.id">
                     <option value=""></option>
@@ -182,8 +182,8 @@
         </div>
             <%_ } else if (relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { _%>
         <div class="form-group">
-            <label class="col-sm-3 control-label" translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%=relationshipName %></label>
-            <div class="col-sm-9">
+            <label class="col-sm-4 control-label" translate="<%= translationKey %>" for="field_<%= relationshipName %>"><%=relationshipName %></label>
+            <div class="col-sm-8">
                 <select class="form-control" id="field_<%= relationshipName %>" multiple name="<%= relationshipName %>" ng-model="<%=entityInstance %>.<%=relationshipFieldName %>s" ng-options="<%=otherEntityName %> as <%=otherEntityName %>.<%=otherEntityField %> for <%=otherEntityName %> in <%=otherEntityName.toLowerCase() %>s track by <%=otherEntityName %>.id"></select>
             </div>
         </div>
