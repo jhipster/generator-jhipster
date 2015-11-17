@@ -1,0 +1,22 @@
+{
+    "<%= angularAppName %>": {
+        "<%= entityInstance %>" : {
+            "home": {
+                "title": "<%= entityClass %>s",
+                "createLabel": "<%= entityClass %>-ஐ உருவாக்கு",
+                "createOrEditLabel": "<%= entityClass %> -ஐ மாற்று (அ) உருவாக்கு"
+            },
+            "created": "<%= entityClass %> புதிதாக உருவாக்கப்பட்டது, அடையாளம் {{ param }}",
+            "updated": "<%= entityClass %> மாற்றப்பட்டது, அடையாளம்  {{ param }}",
+            "deleted": "A <%= entityClass %> நீக்கப்பட்டது, அடையாளம {{ param }}",
+            "delete": {
+                "question": "நீக்குவதற்கு உறுதி செய் <%= entityClass %> {{ id }}?"
+            },
+            "detail": {
+                "title": "<%= entityClass %>"
+            }<% for (fieldId in fields) { %>,
+            "<%=fields[fieldId].fieldName%>": "<%=fields[fieldId].fieldNameCapitalized%>"<% } %><% for (relationshipId in relationships) { %>,
+            "<%=relationships[relationshipId].relationshipName%>": "<%= relationships[relationshipId].relationshipNameCapitalized %>"<% } %>
+        }
+    }
+}
