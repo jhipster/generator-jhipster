@@ -127,6 +127,7 @@ public class <%= entityClass %> implements Serializable {
 
     <%_ } else if (relationships[relationshipId].relationshipType == 'many-to-one') { _%>
     @ManyToOne
+    @JoinColumn(name = "<%= getColumnName(relationships[relationshipId].relationshipName) %>_id")
     private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].relationshipFieldName %>;
 
     <%_ } else if (relationships[relationshipId].relationshipType == 'many-to-many') { _%>
