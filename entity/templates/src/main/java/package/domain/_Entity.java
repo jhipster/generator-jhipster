@@ -70,8 +70,8 @@ public class <%= entityClass %> implements Serializable {
     if (typeof fields[fieldId].javadoc != 'undefined') { _%>
 <%- util.formatAsFieldJavadoc(fields[fieldId].javadoc) -%>
     <%_ }
+    var required = false;
     if (fields[fieldId].fieldValidate == true) {
-        var required = false;
         if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) {
             required = true;
         } _%>
