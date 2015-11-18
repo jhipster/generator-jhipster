@@ -54,7 +54,7 @@
         <createIndex indexName="idx_user_login"
             tableName="jhi_user"
             unique="true">
-            <column name="login" type="varchar(50)"/>
+            <column name="login" type="varchar(<% if (enableSocialSignIn) { %>100<% } else { %>50<% } %>)"/>
         </createIndex>
 
         <createIndex indexName="idx_user_email"

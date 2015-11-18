@@ -1113,6 +1113,7 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/components/alert/alert.directive.js',
         'scripts/components/util/parse-links.service.js',
         'scripts/components/util/dateutil.service.js',
+        'scripts/components/util/data-util.service.js',
         'scripts/components/util/sort.directive.js',
         'scripts/app/account/account.js',
         'scripts/app/account/activate/activate.js',

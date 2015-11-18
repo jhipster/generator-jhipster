@@ -17,15 +17,15 @@ env:
   - JHIPSTER_SCRIPTS=$JHIPSTER_TRAVIS/scripts
   matrix:
   - PROFILE=dev  JHIPSTER=app-gradle    RUNTASK=0
-  - PROFILE=dev  JHIPSTER=app-default
-  - PROFILE=prod JHIPSTER=app-mysql
-  - PROFILE=prod JHIPSTER=app-psql-es
-  - PROFILE=dev  JHIPSTER=app-cassandra
-  - PROFILE=dev  JHIPSTER=app-mongodb
   - PROFILE=dev  JHIPSTER=app-gulp
+  - PROFILE=dev  JHIPSTER=app-cassandra
+  - PROFILE=dev  JHIPSTER=app-default
+  - PROFILE=dev  JHIPSTER=app-mongodb
   - PROFILE=dev  JHIPSTER=app-websocket
   - PROFILE=dev  JHIPSTER=app-noi18n
   - PROFILE=dev  JHIPSTER=app-oauth2
+  - PROFILE=prod JHIPSTER=app-mysql
+  - PROFILE=prod JHIPSTER=app-psql-es
   - PROFILE=dev  JHIPSTER=app-social
 before_install:
   - sudo service docker restart
