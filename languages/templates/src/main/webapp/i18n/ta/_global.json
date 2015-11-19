@@ -12,13 +12,13 @@
                 "main": "கணக்கு",
                 "settings": "அமைப்புகள்",
                 "password": "கடவுச்சொல்",
-                "sessions": "அமர்வுகள்",
-                "login": "அங்கீகரிக்கவும்",
+                "sessions": "பயன்பாடுகள்",
+                "login": "உள்நுழைக",
                 "logout": "வெளியேறுக",
-                "register": "பதிவு"
+                "register": "பதிவு செய்க"
             },
             "admin": {
-                "main": "நிர்வாகம்",
+                "main": "முக்கிய",
                 "user-management": "பயனர் நிர்வாகம்",
                 "tracker": "பயனர் சுவடு",
                 "metrics": "அளவீடுகள்",
@@ -26,18 +26,18 @@
                 "configuration": "கட்டமைப்பு",
                 "logs": "பதிவுகள்",
                 "audits": "தணிக்கைகள்",
-                "apidocs": "எபிஐ",
+                "apidocs": "எபிஐ ",
                 "database": "டேடாபேஸ்"
             },
             "language": "மொழி"
         },
         "form": {
-            "username": "உள்நுழை",
-            "username.placeholder": "உங்கள் உள்நுழைவு",
+            "username": "பயனர் பெயர்",
+            "username.placeholder": "உங்கள் பயனர் பெயர்",
             "newpassword": "புதிய கடவுச்சொல்",
             "newpassword.placeholder": "புதிய கடவுச்சொல்",
-            "confirmpassword": "புதிய கடவுச்சொல் உறுதி",
-            "confirmpassword.placeholder": "புதிய கடவுச்சொல்லை உறுதி",
+            "confirmpassword": "புதிய கடவுச்சொல் உறுதி செய்க",
+            "confirmpassword.placeholder": "புதிய கடவுச்சொல்",
             "email": "மின்னஞ்சல்",
             "email.placeholder": "உங்கள் மின்னஞ்சல்"
         },
@@ -105,9 +105,9 @@
         }
     },
     "error": {
-        "serverNotReachable": "சர்வர் அடைய முடியவில்லை",
+        "serverNotReachable": "சர்வரை அடைய முடியவில்லை",
         "NotNull": "களம் {{fieldName}} காலியாக இருக்க கூடாது!",
         "Size": "களம் {{fieldName}} தேவைகள் பூர்த்தி செய்யவில்லை!"
     },
-    "footer": "இது உங்கள் முடிப்பு ஆகிறது"
+    "footer": "இது உங்கள் முடிப்பு"
 }

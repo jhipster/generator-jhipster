@@ -2,11 +2,11 @@
     "user-management": {
         "home": {
             "title": "பயனர்கள்",
-            "createLabel": "புதிய பயனர் உருவாக்கு",
+            "createLabel": "புதிய பயனரை உருவாக்கு",
             "createOrEditLabel": "உருவாக்கு (அ) மாற்று பயனர்"
         },
         "delete": {
-            "question": "பயனர்யை நீக்க உறுதி செய் ? - {{ login }}?"
+            "question": "பயனரை நீக்க உறுதி செய் ? - {{ login }}?"
         },
         "detail": {
             "title": "பயனர்"
