@@ -202,12 +202,8 @@ public class <%= entityClass %> implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
         <%= entityClass %> <%= entityInstance %> = (<%= entityClass %>) o;
-
-        if ( ! Objects.equals(id, <%= entityInstance %>.id)) return false;
-
-        return true;
+        return Objects.equals(id, <%= entityInstance %>.id);
     }
 
     @Override
