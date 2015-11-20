@@ -342,7 +342,8 @@ JhipsterGenerator.prototype.askFor = function askFor() {
           message: '(15/' + questions + ') Which testing frameworks would you like to use?',
           choices: [
                     {name: 'Gatling', value: 'gatling'},
-                    {name: 'Cucumber', value: 'cucumber'}
+                    {name: 'Cucumber', value: 'cucumber'},
+                    {name: 'Protractor', value: 'protractor'}
           ],
           default: [ 'gatling' ]
         }
@@ -1067,6 +1068,12 @@ JhipsterGenerator.prototype.app = function app() {
     ];
     if (this.authenticationType == 'session') {
         testTemplates.push('spec/app/account/sessions/_sessions.controller.spec.js');
+    }
+    // Create Protractor test files
+    if (this.testFrameworks.indexOf('protractor') != -1) {
+        testTemplates.push('e2e/_account.js');
+        testTemplates.push('e2e/_administration.js');
+        testTemplates.push('_protractor.conf.js')
     }
     testTemplates.map(function(testTemplatePath) {
         this.template(testJsDir + testTemplatePath, testJsDir + testTemplatePath.replace(/_/,''), this, {});

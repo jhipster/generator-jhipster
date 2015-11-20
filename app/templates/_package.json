@@ -3,7 +3,13 @@
   "version": "0.0.0",
   "description": "Description for <%= baseName %>",
   "private": true,
+  "cacheDirectories": [
+    "node_modules",
+    "src/main/webapp/bower_components"
+  ],
   "dependencies": {
+    "bower": "^1.6.3"<% if (testFrameworks.indexOf('protractor')) { %>,
+    "protractor": "^2.5.1"<% } %>
   },
   "devDependencies": {<% if (frontendBuilder == 'grunt') { %>
     "grunt": "0.4.5",
@@ -30,7 +36,10 @@
     "grunt-usemin": "3.1.1",
     "grunt-angular-templates":"0.5.7",
     "load-grunt-tasks": "3.3.0",
-    "grunt-karma": "0.11.0",
+    "grunt-karma": "0.12.1",<% if (testFrameworks.indexOf('protractor')) { %>
+    "grunt-protractor-runner": "2.1.0",
+    "jasmine-reporters": "^2.0.6",
+    "protractor-jasmine2-screenshot-reporter": "0.1.7",<% } %>
     "time-grunt": "1.2.2",<% if (useSass) { %>
     "grunt-sass": "1.1.0",<% }} if (frontendBuilder == 'gulp') { %>
     "browser-sync": "2.9.12",
@@ -45,8 +54,10 @@
     "gulp-imagemin": "2.4.0",
     "gulp-flatten": "0.2.0",
     "gulp-ng-annotate": "1.1.0",
-    "gulp-ng-constant-fork": "0.4.1",
-    "gulp-karma": "https://github.com/lazd/gulp-karma/tarball/helper",
+    "gulp-ng-constant-fork": "0.4.1",<% if (testFrameworks.indexOf('protractor')) { %>
+    "gulp-protractor": "1.0.0",
+    "jasmine-reporters": "^2.0.6",
+    "protractor-jasmine2-screenshot-reporter": "0.1.7",<% } %>
     "gulp-rev": "6.0.1",
     "gulp-jshint": "1.12.0",
     "gulp-browserify": "0.5.1",<% if (useSass) { %>
@@ -62,7 +73,7 @@
     "karma-requirejs": "0.2.2",
     "karma-phantomjs-launcher": "0.2.1",
     "phantomjs": "1.9.18",
-    "karma": "0.12.35",
+    "karma": "0.13.15",
     "karma-coverage": "0.4.2",
     "karma-jenkins-reporter": "0.0.2",
     "generator-jhipster": "<%= packagejs.version %>",
@@ -79,6 +90,7 @@
   },
   "scripts": {<% if (frontendBuilder == 'grunt') { %>
     "test": "grunt test"<% } if (frontendBuilder == 'gulp') { %>
-    "test": "gulp test"<% } %>
+    "test": "gulp test"<% } %><% if (testFrameworks.indexOf('protractor')) { %>,
+    "postinstall": "webdriver-manager update"<% } %>
   }
 }

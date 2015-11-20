@@ -300,7 +300,23 @@ module.exports = function (grunt) {
                 configFile: 'src/test/javascript/karma.conf.js',
                 singleRun: true
             }
-        },
+        },<% if (testFrameworks.indexOf('protractor')) { %>
+        protractor: {
+            options: {
+                configFile: 'src/test/javascript/protractor.conf.js'
+            },
+            e2e: {
+                options: {
+                    // Stops Grunt process if a test fails
+                    keepAlive: false
+                }
+            },
+            continuous: {
+                options: {
+                    keepAlive: true
+                }
+            }
+        },<% } %>
         ngAnnotate: {
             dist: {
                 files: [{
@@ -409,5 +425,6 @@ module.exports = function (grunt) {
         'buildcontrol:openshift'
     ]);
 
+    <% if (testFrameworks.indexOf('protractor')) { %>grunt.registerTask('itest', ['protractor:continuous']);<% } %>
     grunt.registerTask('default', ['serve']);
 };
