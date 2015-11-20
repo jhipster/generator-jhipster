@@ -59,7 +59,7 @@
     "jasmine-reporters": "^2.0.6",
     "protractor-jasmine2-screenshot-reporter": "0.1.7",<% } %>
     "gulp-rev": "6.0.1",
-    "gulp-jshint": "2.0.0",
+    "gulp-jshint": "1.12.0",
     "gulp-browserify": "0.5.1",<% if (useSass) { %>
     "gulp-sass": "2.1.0",<% } %>
     "proxy-middleware": "0.15.0",
