@@ -10,12 +10,6 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-
-
-# ===================================================================
-# JHipster specific properties
-# ===================================================================
-
 spring:
     <%_ if (databaseType == 'sql') { _%>
     datasource:
@@ -42,7 +36,7 @@ spring:
     data:
         mongodb:
             host: localhost
-            port: 27017
+            port: 27117
             database: <%= baseName %>
     <%_ } _%>
     <%_ if (databaseType == 'cassandra') { _%>

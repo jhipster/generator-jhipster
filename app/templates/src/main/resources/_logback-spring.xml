@@ -27,7 +27,7 @@
     </appender>
 -->
 
-    <logger name="<%=packageName%>" level="${logback.loglevel}"/>
+    <logger name="<%=packageName%>" level="@logback.loglevel@"/>
 <% if (databaseType == 'cassandra') { %>
     <logger name="io.netty" level="WARN"/><% } %>
     <logger name="javax.activation" level="WARN"/>
@@ -54,7 +54,8 @@
     <logger name="org.springframework.cache" level="WARN"/>
     <logger name="org.thymeleaf" level="WARN"/>
     <logger name="org.xnio" level="WARN"/>
-    <logger name="springfox" level="WARN"/><% if (databaseType == 'sql') { %>
+    <logger name="springfox" level="WARN"/>
+    <logger name="sun.rmi" level="WARN"/><% if (databaseType == 'sql') { %>
     <logger name="liquibase" level="WARN"/><% } %>
     <logger name="sun.rmi.transport" level="WARN"/>
 
@@ -62,7 +63,7 @@
         <resetJUL>true</resetJUL>
     </contextListener>
 
-    <root level="${logback.loglevel}">
+    <root level="@logback.loglevel@">
         <appender-ref ref="CONSOLE"/>
     </root>
 

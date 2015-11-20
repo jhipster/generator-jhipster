@@ -70,8 +70,8 @@ public class <%= entityClass %> implements Serializable {
     if (typeof fields[fieldId].javadoc != 'undefined') { _%>
 <%- util.formatAsFieldJavadoc(fields[fieldId].javadoc) -%>
     <%_ }
+    var required = false;
     if (fields[fieldId].fieldValidate == true) {
-        var required = false;
         if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) {
             required = true;
         } _%>
@@ -127,11 +127,14 @@ public class <%= entityClass %> implements Serializable {
 
     <%_ } else if (relationships[relationshipId].relationshipType == 'many-to-one') { _%>
     @ManyToOne
+    @JoinColumn(name = "<%= getColumnName(relationships[relationshipId].relationshipName) %>_id")
     private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].relationshipFieldName %>;
 
     <%_ } else if (relationships[relationshipId].relationshipType == 'many-to-many') { _%>
     @ManyToMany<% if (relationships[relationshipId].ownerSide == false) { %>(mappedBy = "<%= relationships[relationshipId].otherEntityRelationshipName %>s")
     @JsonIgnore
+    <%_     } else { _%>
+
     <%_     }
             if (hibernateCache != 'no') { _%>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -199,12 +202,8 @@ public class <%= entityClass %> implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
         <%= entityClass %> <%= entityInstance %> = (<%= entityClass %>) o;
-
-        if ( ! Objects.equals(id, <%= entityInstance %>.id)) return false;
-
-        return true;
+        return Objects.equals(id, <%= entityInstance %>.id);
     }
 
     @Override

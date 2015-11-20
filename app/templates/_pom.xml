@@ -5,7 +5,7 @@
     <parent>
         <artifactId>spring-boot-starter-parent</artifactId>
         <groupId>org.springframework.boot</groupId>
-        <version>1.3.0.RC1</version>
+        <version>1.3.0.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -84,7 +84,7 @@
         <run.addResources>false</run.addResources>
         <spring-security.version>4.0.2.RELEASE</spring-security.version>
         <%_ if (authenticationType == 'oauth2') { _%>
-        <spring-security-oauth2.version>2.0.7.RELEASE</spring-security-oauth2.version>
+        <spring-security-oauth2.version>2.0.8.RELEASE</spring-security-oauth2.version>
         <%_ } _%>
         <springfox.version>2.0.3</springfox.version>
         <%_ if (enableSocialSignIn) { _%>
@@ -425,11 +425,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-loader-tools</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -789,7 +784,7 @@
                     <changeLogFile>src/main/resources/config/liquibase/master.xml</changeLogFile>
                     <diffChangeLogFile>src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
                     <driver><% if (devDatabaseType == 'mysql') { %>com.mysql.jdbc.Driver<% } else if (devDatabaseType == 'postgresql') { %>org.postgresql.Driver<% } else if (devDatabaseType == 'h2Disk') { %>org.h2.Driver<% } %></driver>
-                    <url><% if (devDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType == 'postgresql') { %>jdbc:postgresql://localhost/<%= baseName %><% } else if (devDatabaseType == 'h2Disk') { %>jdbc:h2:tcp://localhost:9092/./target/h2db/db:jhipster<% } %></url>
+                    <url><% if (devDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType == 'postgresql') { %>jdbc:postgresql://localhost/<%= baseName %><% } else if (devDatabaseType == 'h2Disk') { %>jdbc:h2:tcp://localhost:9092/./target/h2db/db/tmp<% } %></url>
                     <defaultSchemaName><% if (devDatabaseType == 'mysql') { %><%= baseName %><% } else if (devDatabaseType == 'postgresql') { %><% } %></defaultSchemaName>
                     <username><% if (devDatabaseType == 'mysql') { %>root<% } else if (devDatabaseType == 'postgresql') { %><%= baseName %><% } %></username>
                     <password></password>
@@ -831,6 +826,43 @@
                 </configuration>
             </plugin>
         </plugins>
+        <pluginManagement>
+            <plugins>
+                <!--
+                    This plugin's configuration is used to store Eclipse m2e settings only.
+                    It has no influence on the Maven build itself.
+                    Remove when the m2e plugin can correctly bind to Maven lifecycle
+                -->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.jacoco</groupId>
+                                        <artifactId>
+                                            jacoco-maven-plugin
+                                        </artifactId>
+                                        <versionRange>
+                                            [0.7.4,)
+                                        </versionRange>
+                                        <goals>
+                                            <goal>prepare-agent</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore/>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+             </plugins>
+        </pluginManagement>
     </build>
 
     <profiles>
@@ -847,6 +879,11 @@
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-tomcat</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-devtools</artifactId>
+                    <optional>true</optional>
                 </dependency>
             </dependencies>
             <%_ if(frontendBuilder == 'grunt' && useSass) { _%>
@@ -888,6 +925,11 @@
                 <dependency>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-undertow</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-devtools</artifactId>
+                    <optional>true</optional>
                 </dependency>
             </dependencies>
             <build>
@@ -959,7 +1001,8 @@
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
-                            <executable>true</executable>
+                            <!-- this is set to false because of https://github.com/jhipster/generator-jhipster/issues/2225 -->
+                            <executable>false</executable>
                             <arguments>
                                 <argument>--spring.profiles.active=prod</argument>
                             </arguments>
@@ -973,4 +1016,15 @@
             </properties>
         </profile>
     </profiles>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>2.19</version>
+            </plugin>
+        </plugins>
+    </reporting>
+
 </project>

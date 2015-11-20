@@ -113,5 +113,10 @@
             "datetimelocal": "Acest câmp trebuie să conțină data si ora."
         }
     },
+    "error": {
+        "serverNotReachable": "Server not reachable",
+        "NotNull": "Field {{fieldName}} cannot be empty!",
+        "Size": "Field {{fieldName}} does not meet min/max size requirements!"
+    },
     "footer": "Acesta este subsolul paginii dumneavoastră"
 }

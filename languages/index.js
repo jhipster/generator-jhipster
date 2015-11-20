@@ -35,7 +35,8 @@ LanguagesGenerator.prototype.askFor = function askFor() {
             {name: 'Chinese (Simplified)', value: 'zh-cn'},
             {name: 'Chinese (Traditional)', value: 'zh-tw'},
             {name: 'Danish', value: 'da'},            
-            {name: 'Dutch', value: 'nl'},            
+            {name: 'Dutch', value: 'nl'},
+            {name: 'Galician', value: 'gl'},
             {name: 'German', value: 'de'},
             {name: 'Hungarian', value: 'hu'},
             {name: 'Italian', value: 'it'},
@@ -48,7 +49,8 @@ LanguagesGenerator.prototype.askFor = function askFor() {
             {name: 'Russian', value: 'ru'},
             {name: 'Spanish', value: 'es'},
             {name: 'Swedish', value: 'sv'},
-            {name: 'Turkish', value: 'tr'}
+            {name: 'Turkish', value: 'tr'},
+            {name: 'Tamil', value: 'ta'}
         ],
         default: 0
     }];

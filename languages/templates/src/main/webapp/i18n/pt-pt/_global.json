@@ -104,5 +104,10 @@
             "datetimelocal": "Este campo é do tipo data/hora."
         }
     },
+    "error": {
+        "serverNotReachable": "Server not reachable",
+        "NotNull": "Field {{fieldName}} cannot be empty!",
+        "Size": "Field {{fieldName}} does not meet min/max size requirements!"
+    },
     "footer": "Este é o seu rodapé"
 }

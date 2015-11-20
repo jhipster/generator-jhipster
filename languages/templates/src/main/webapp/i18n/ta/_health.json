@@ -1,0 +1,29 @@
+{
+    "health": {
+        "title": "ஆரோக்கிய சோதனைகள்",
+        "refresh.button": "புதுப்பி",
+        "stacktrace": "Stacktrace",
+        "details": {
+            "details": "விவரம்",
+            "properties": "பண்புகள்",
+            "name": "பெயர்",
+            "value": "மதிப்பு",
+            "error": "பிழை"
+        },
+        "indicator": {
+            "diskSpace": "வட்டு காலியிடம்",
+            "mail": "மின்னஞ்சல்",<% if (databaseType == 'sql') { %>
+            "db": "Database"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
+        },
+        "table": {
+            "service": "சேவை பெயர்",
+            "status": "நிலை"
+        },
+        "status": {
+            "UP": "மேல்",
+            "DOWN": "கீழ்"
+        }
+    }
+}

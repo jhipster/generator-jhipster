@@ -1,0 +1,23 @@
+{
+  "generator-jhipster": {
+    "baseName": "sampleMysql",
+    "packageName": "com.mycompany.myapp",
+    "packageFolder": "com/mycompany/myapp",
+    "authenticationType": "session",
+    "hibernateCache": "ehcache",
+    "clusteredHttpSession": "no",
+    "websocket": "no",
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "prodDatabaseType": "mysql",
+    "searchEngine": "no",
+    "useSass": false,
+    "buildTool": "maven",
+    "frontendBuilder": "grunt",
+    "enableTranslation": true,
+    "rememberMeKey": "338224d584859bd80d093bc4346526637190816b",
+    "testFrameworks": [
+      "gatling"
+    ]
+  }
+}

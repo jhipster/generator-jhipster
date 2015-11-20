@@ -1,11 +1,50 @@
+os:
+  - linux
+services:
+  - docker
 language: node_js
 node_js:
-  - "0.12"
-sudo: false
-notifications:
-  webhooks:
-    urls:
-      - https://webhooks.gitter.im/e/c77e712c44b0a4914b7c
-    on_success: always  # options: [always|never|change] default: always
-    on_failure: always  # options: [always|never|change] default: always
-    on_start: false     # default: false
+  - "4.2.1"
+jdk:
+  - oraclejdk8
+env:
+  global:
+  - JHIPSTER_MVN_DEP=1
+  - RUNTASK=1
+  - JHIPSTER_TRAVIS=$TRAVIS_BUILD_DIR/travis
+  - JHIPSTER_INSTALL=$JHIPSTER_TRAVIS/install
+  - JHIPSTER_SAMPLES=$JHIPSTER_TRAVIS/samples
+  - JHIPSTER_SCRIPTS=$JHIPSTER_TRAVIS/scripts
+  matrix:
+  - PROFILE=dev  JHIPSTER=app-gradle    RUNTASK=0
+  - PROFILE=dev  JHIPSTER=app-gulp
+  - PROFILE=dev  JHIPSTER=app-cassandra
+  - PROFILE=dev  JHIPSTER=app-default
+  - PROFILE=dev  JHIPSTER=app-mongodb
+  - PROFILE=dev  JHIPSTER=app-websocket
+  - PROFILE=dev  JHIPSTER=app-noi18n
+  - PROFILE=dev  JHIPSTER=app-oauth2
+  - PROFILE=prod JHIPSTER=app-mysql
+  - PROFILE=prod JHIPSTER=app-psql-es
+  - PROFILE=dev  JHIPSTER=app-social
+before_install:
+  - sudo service docker restart
+  - sudo /etc/init.d/postgresql stop
+install:
+  - $JHIPSTER_INSTALL/01-install-docker-compose.sh
+  - $JHIPSTER_INSTALL/02-install-jhipster-stack.sh
+  - $JHIPSTER_INSTALL/03-downloadDep.sh
+  - $JHIPSTER_INSTALL/04-checkVersion.sh
+script:
+  - $JHIPSTER_SCRIPTS/01-generate-project.sh
+  - $JHIPSTER_SCRIPTS/02-generate-entities.sh
+  - $JHIPSTER_SCRIPTS/03-tests.sh
+  - $JHIPSTER_SCRIPTS/04-docker-compose.sh
+  - $JHIPSTER_SCRIPTS/05-run.sh
+# notifications:
+#   webhooks:
+#     urls:
+#       - https://webhooks.gitter.im/e/c77e712c44b0a4914b7c
+#     on_success: always  # options: [always|never|change] default: always
+#     on_failure: always  # options: [always|never|change] default: always
+#     on_start: false     # default: false

@@ -20,6 +20,7 @@ angular.module('<%=angularAppName%>')
                 "en": "English",
                 "es": "Español",
                 "fr": "Français",
+                "gl": "Galego",
                 "hu": "Magyar",
                 "it": "Italiano",
                 "ja": "日本語",
@@ -31,6 +32,7 @@ angular.module('<%=angularAppName%>')
                 "ro": "Română",
                 "ru": "Русский",
                 "sv": "Svenska",
+                "ta": "தமிழ்",
                 "tr": "Türkçe",
                 "zh-cn": "中文（简体）",
                 "zh-tw": "繁體中文"

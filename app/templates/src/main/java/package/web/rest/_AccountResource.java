@@ -68,7 +68,8 @@ public class AccountResource {
                     "://" +                                // "://"
                     request.getServerName() +              // "myhost"
                     ":" +                                  // ":"
-                    request.getServerPort();               // "80"
+                    request.getServerPort() +              // "80"
+                    request.getContextPath();              // "/myContextPath" or "" if deployed in root context
 
                     mailService.sendActivationEmail(user, baseUrl);
                     return new ResponseEntity<>(HttpStatus.CREATED);
@@ -123,7 +124,7 @@ public class AccountResource {
     @Timed
     public ResponseEntity<String> saveAccount(@RequestBody UserDTO userDTO) {
         return userRepository
-            .findOneById(SecurityUtils.getCurrentUserId())
+            .findOneByLogin(SecurityUtils.getCurrentUser().getUsername())
             .map(u -> {
                 userService.updateUserInformation(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
                     userDTO.getLangKey());
@@ -155,7 +156,7 @@ public class AccountResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<List<PersistentToken>> getCurrentSessions() {
-        return userRepository.findOneById(SecurityUtils.getCurrentUserId())
+        return userRepository.findOneByLogin(SecurityUtils.getCurrentUser().getUsername())
             .map(user -> new ResponseEntity<>(
                 persistentTokenRepository.findByUser(user),
                 HttpStatus.OK))
@@ -180,7 +181,7 @@ public class AccountResource {
     @Timed
     public void invalidateSession(@PathVariable String series) throws UnsupportedEncodingException {
         String decodedSeries = URLDecoder.decode(series, "UTF-8");
-        userRepository.findOneById(SecurityUtils.getCurrentUserId()).ifPresent(u -> {
+        userRepository.findOneByLogin(SecurityUtils.getCurrentUser().getUsername()).ifPresent(u -> {
             persistentTokenRepository.findByUser(u).stream()
                 .filter(persistentToken -> StringUtils.equals(persistentToken.getSeries(), decodedSeries))
                 .findAny().ifPresent(t -> persistentTokenRepository.delete(decodedSeries));
@@ -198,7 +199,8 @@ public class AccountResource {
                     "://" +
                     request.getServerName() +
                     ":" +
-                    request.getServerPort();
+                    request.getServerPort() +
+                    request.getContextPath();
                 mailService.sendPasswordResetMail(user, baseUrl);
                 return new ResponseEntity<>("e-mail was sent", HttpStatus.OK);
             }).orElse(new ResponseEntity<>("e-mail address not registered", HttpStatus.BAD_REQUEST));

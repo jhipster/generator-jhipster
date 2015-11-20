@@ -1208,6 +1208,7 @@ EntityGenerator.prototype.files = function files() {
                 this.copyEnumI18n('de', enumInfo);
                 this.copyEnumI18n('en', enumInfo);
                 this.copyEnumI18n('fr', enumInfo);
+                this.copyEnumI18n('gl', enumInfo);
                 this.copyEnumI18n('hu', enumInfo);
                 this.copyEnumI18n('it', enumInfo);
                 this.copyEnumI18n('ja', enumInfo);
@@ -1219,6 +1220,7 @@ EntityGenerator.prototype.files = function files() {
                 this.copyEnumI18n('es', enumInfo);
                 this.copyEnumI18n('sv', enumInfo);
                 this.copyEnumI18n('tr', enumInfo);
+                this.copyEnumI18n('ta', enumInfo);
             }
         }
     }
@@ -1262,6 +1264,8 @@ EntityGenerator.prototype.files = function files() {
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + '-detail.html', this, {}, true);
     this.copyHtml('src/main/webapp/app/_entity-dialog.html',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + '-dialog.html', this, {}, true);
+    this.copyHtml('src/main/webapp/app/_entity-delete-dialog.html',
+        'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + '-delete-dialog.html', this, {}, true);
 
     this.addRouterToMenu(this.entityInstance, this.enableTranslation);
 
@@ -1274,6 +1278,9 @@ EntityGenerator.prototype.files = function files() {
     this.template('src/main/webapp/app/_entity-dialog-controller.js',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '-dialog.controller' + '.js', this, {});
     this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '-dialog.controller' + '.js');
+    this.template('src/main/webapp/app/_entity-delete-dialog-controller.js',
+        'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '-delete-dialog.controller' + '.js', this, {});
+    this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '-delete-dialog.controller' + '.js');
 
     this.template('src/main/webapp/app/_entity-detail-controller.js',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '-detail.controller' + '.js', this, {});
@@ -1291,8 +1298,8 @@ EntityGenerator.prototype.files = function files() {
         this.addComponentsScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js');
     }
 
-    this.template('src/test/java/package/web/rest/_EntityResourceTest.java',
-        'src/test/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'ResourceTest.java', this, {});
+    this.template('src/test/java/package/web/rest/_EntityResourceIntTest.java',
+        'src/test/java/' + this.packageFolder + '/web/rest/' +    this.entityClass + 'ResourceIntTest.java', this, {});
 
     if (this.testFrameworks.indexOf('gatling') != -1) {
         this.template('src/test/gatling/simulations/_EntityGatlingTest.scala',
@@ -1309,6 +1316,7 @@ EntityGenerator.prototype.files = function files() {
         this.copyI18n('de');
         this.copyI18n('en');
         this.copyI18n('fr');
+        this.copyI18n('gl');
         this.copyI18n('hu');
         this.copyI18n('it');
         this.copyI18n('ja');
@@ -1320,6 +1328,7 @@ EntityGenerator.prototype.files = function files() {
         this.copyI18n('es');
         this.copyI18n('sv');
         this.copyI18n('tr');
+        this.copyI18n('ta');
     }
 };
 

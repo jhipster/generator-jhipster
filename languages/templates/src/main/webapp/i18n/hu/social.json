@@ -1,13 +1,13 @@
 {
     "social": {
-        "btnLabel": "Sign in with {{ label }}",
+        "btnLabel": "Lépjen be {{ label }}-al",
         "register": {
-            "title": "Register with {{ label }}",
-            "errorTitle": "Register with an external account",
+            "title": "Regisztráljon {{ label }}-al",
+            "errorTitle": "Regisztráljon egy külső fiókkal",
             "messages": {
-                "success": "<strong>Registration saved!</strong> Please check your email for confirmation.",
+                "success": "<strong>Regisztráció el lett mentve!</strong> Kérjük ellenőrizze email címét a megerősítéshez.",
                 "error": {
-                    "fail": "<strong>Registration failed!</strong> A problem occurred during the validation of your external account, we advise you to try with another connection."
+                    "fail": "<strong>Regisztráció sikertelen!</strong> Probléma volt a külső fiók ellenőrzése során, javasoljuk, hogy próbáljon meg egy másik fiókkal."
                 }
             }
         }

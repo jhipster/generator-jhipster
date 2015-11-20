@@ -26,7 +26,7 @@
             <column name="login" type="varchar(<% if (enableSocialSignIn) { %>100<% } else { %>50<% } %>)">
                 <constraints unique="true" nullable="false"/>
             </column>
-            <column name="PASSWORD" type="varchar(60)"/>
+            <column name="password_hash" type="varchar(60)"/>
             <column name="first_name" type="varchar(50)"/>
             <column name="last_name" type="varchar(50)"/>
             <column name="email" type="varchar(100)">
@@ -54,7 +54,7 @@
         <createIndex indexName="idx_user_login"
             tableName="jhi_user"
             unique="true">
-            <column name="login" type="varchar(50)"/>
+            <column name="login" type="varchar(<% if (enableSocialSignIn) { %>100<% } else { %>50<% } %>)"/>
         </createIndex>
 
         <createIndex indexName="idx_user_email"

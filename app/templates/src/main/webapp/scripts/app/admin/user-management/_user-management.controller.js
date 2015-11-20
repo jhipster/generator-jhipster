@@ -31,26 +31,6 @@ angular.module('<%=angularAppName%>')
             });
         };
 
-        $scope.showUpdate = function (login) {
-            User.get({login: login}, function (result) {
-                $scope.user = result;
-                $('#saveUserModal').modal('show');
-            });
-        };
-
-        $scope.save = function () {
-            User.update($scope.user,
-                function () {
-                    $scope.refresh();
-                });
-        };
-
-        $scope.refresh = function () {
-            $scope.loadAll();
-            $('#saveUserModal').modal('hide');
-            $scope.clear();
-        };
-
         $scope.clear = function () {
             $scope.user = {
                 id: null, login: null, firstName: null, lastName: null, email: null,

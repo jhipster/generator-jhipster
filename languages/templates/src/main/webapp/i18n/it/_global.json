@@ -6,7 +6,7 @@
             "home": "Home",
             "entities": {
                 "main": "Entità",
-                "additionalEntity": "JHipster con entita' aggiunte qui senza traduzione"
+                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "Principale",
@@ -103,6 +103,11 @@
             "number": "Questo campo deve essere un numero.",
             "datetimelocal": "Questo campo dovrebbe essere una data e l'ora."
         }
+    },
+    "error": {
+        "serverNotReachable": "Server not reachable",
+        "NotNull": "Field {{fieldName}} cannot be empty!",
+        "Size": "Field {{fieldName}} does not meet min/max size requirements!"
     },
     "footer": "pie di pagina"
 }

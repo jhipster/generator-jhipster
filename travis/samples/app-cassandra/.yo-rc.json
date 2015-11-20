@@ -1,0 +1,23 @@
+{
+  "generator-jhipster": {
+    "baseName": "sampleCassandra",
+    "packageName": "com.mycompany.myapp",
+    "packageFolder": "com/mycompany/myapp",
+    "authenticationType": "session",
+    "hibernateCache": "no",
+    "clusteredHttpSession": "no",
+    "websocket": "no",
+    "databaseType": "cassandra",
+    "devDatabaseType": "cassandra",
+    "prodDatabaseType": "cassandra",
+    "searchEngine": "no",
+    "useSass": false,
+    "buildTool": "maven",
+    "frontendBuilder": "grunt",
+    "enableTranslation": true,
+    "rememberMeKey": "cc15d9676c1f804a5a1cf653d0cb9ae1f9d6ea47",
+    "testFrameworks": [
+      "gatling"
+    ]
+  }
+}

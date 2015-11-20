@@ -1,0 +1,23 @@
+{
+  "generator-jhipster": {
+    "baseName": "samplePsqlEs",
+    "packageName": "com.mycompany.myapp",
+    "packageFolder": "com/mycompany/myapp",
+    "authenticationType": "session",
+    "hibernateCache": "ehcache",
+    "clusteredHttpSession": "no",
+    "websocket": "no",
+    "databaseType": "sql",
+    "devDatabaseType": "postgresql",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": "no",
+    "useSass": false,
+    "buildTool": "maven",
+    "frontendBuilder": "grunt",
+    "enableTranslation": true,
+    "rememberMeKey": "efaf561e5400af2877060b33324f34288d671c97",
+    "testFrameworks": [
+      "gatling"
+    ]
+  }
+}
