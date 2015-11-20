@@ -342,8 +342,8 @@ JhipsterGenerator.prototype.askFor = function askFor() {
           message: '(15/' + questions + ') Which testing frameworks would you like to use?',
           choices: [
                     {name: 'Gatling', value: 'gatling'},
-                    {name: 'Cucumber', value: 'cucumber'},
-                    {name: 'Protractor', value: 'protractor'}
+                    {name: 'Cucumber', value: 'cucumber'}
+                    //{name: 'Protractor', value: 'protractor'}
           ],
           default: [ 'gatling' ]
         }
