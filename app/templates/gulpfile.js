@@ -14,7 +14,8 @@ var gulp = require('gulp'),
     ngAnnotate = require('gulp-ng-annotate'),
     ngConstant = require('gulp-ng-constant-fork'),
     jshint = require('gulp-jshint'),
-    rev = require('gulp-rev'),
+    rev = require('gulp-rev'),<% if (testFrameworks.indexOf('protractor')) { %>
+    protractor = require("gulp-protractor").protractor,<% } %>
     proxy = require('proxy-middleware'),
     es = require('event-stream'),
     flatten = require('gulp-flatten'),
@@ -25,7 +26,7 @@ var gulp = require('gulp'),
     runSequence = require('run-sequence'),
     browserSync = require('browser-sync');
 
-var karma = require('gulp-karma')({configFile: 'src/test/javascript/karma.conf.js'});
+var karmaServer = require('karma').Server;
 
 var yeoman = {
     app: 'src/main/webapp/',
@@ -60,24 +61,34 @@ var parseVersionFromBuildGradle = function() {
 };<% } %>
 
 gulp.task('clean', function (cb) {
-  del([yeoman.dist], cb);
+    del([yeoman.dist], cb);
 });
 
 gulp.task('clean:tmp', function (cb) {
-  del([yeoman.tmp], cb);
+    del([yeoman.tmp], cb);
 });
 
-gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function() {
-    karma.once();
+gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function(done) {
+    new karmaServer({
+        configFile: __dirname + '/src/test/javascript/karma.conf.js',
+        singleRun: true
+    }, done).start();
 });
+<% if (testFrameworks.indexOf('protractor')) { %>
+gulp.task('protractor', function() {
+    return gulp.src(["./src/main/test/javascript/e2e/*.js"])
+        .pipe(protractor({
+            configFile: "src/test/javascript/protractor.conf.js"
+        }));
+});<% } %>
 
 gulp.task('copy', function() {
     return es.merge( <% if(enableTranslation) { %> // copy i18n folders only if translation is enabled
-              gulp.src(yeoman.app + 'i18n/**').
-              pipe(gulp.dest(yeoman.dist + 'i18n/')), <% } %>
-              gulp.src(yeoman.app + 'assets/**/*.{woff,svg,ttf,eot}').
-              pipe(flatten()).
-              pipe(gulp.dest(yeoman.dist + 'assets/fonts/')));
+        gulp.src(yeoman.app + 'i18n/**').
+        pipe(gulp.dest(yeoman.dist + 'i18n/')), <% } %>
+        gulp.src(yeoman.app + 'assets/**/*.{woff,svg,ttf,eot}').
+        pipe(flatten()).
+        pipe(gulp.dest(yeoman.dist + 'assets/fonts/')));
 });
 
 gulp.task('images', function() {
@@ -254,7 +265,7 @@ gulp.task('ngconstant:dev', function() {
             VERSION: <% if(buildTool == 'maven') { %>parseVersionFromPomXml()<% } else { %>parseVersionFromBuildGradle()<% } %>
         }
     })
-        .pipe(gulp.dest(yeoman.app + 'scripts/app/'));
+    .pipe(gulp.dest(yeoman.app + 'scripts/app/'));
 });
 
 gulp.task('ngconstant:prod', function() {
@@ -270,7 +281,7 @@ gulp.task('ngconstant:prod', function() {
             VERSION: <% if(buildTool == 'maven') { %>parseVersionFromPomXml()<% } else { %>parseVersionFromBuildGradle()<% } %>
         }
     })
-        .pipe(gulp.dest(yeoman.tmp + 'scripts/app/'));
+    .pipe(gulp.dest(yeoman.tmp + 'scripts/app/'));
 });
 
 gulp.task('jshint', function() {
@@ -282,7 +293,9 @@ gulp.task('jshint', function() {
 gulp.task('server', ['serve'], function () {
     gutil.log('The `server` task has been deprecated. Use `gulp serve` to start a server');
 });
-
+<% if (testFrameworks.indexOf('protractor')) { %>
+gulp.task('itest', ['protractor']);
+<% } %>
 gulp.task('default', function() {
     runSequence('serve');
 });

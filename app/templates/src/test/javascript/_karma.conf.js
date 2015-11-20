@@ -15,15 +15,15 @@ module.exports = function (config) {
             // endbower
             'main/webapp/scripts/app/app.js',
             'main/webapp/scripts/app/**/*.js',
-            'main/webapp/scripts/components/**/*.{js,html}',
+            'main/webapp/scripts/components/**/*.+(js|html)',
             'test/javascript/spec/helpers/module.js',
             'test/javascript/spec/helpers/httpBackend.js',
-            'test/javascript/**/!(karma.conf).js'
+            'test/javascript/**/!(karma.conf<% if (testFrameworks.indexOf("protractor")) { %>|protractor.conf<% } %>).js'
         ],
 
 
         // list of files / patterns to exclude
-        exclude: [],
+        exclude: [<% if (testFrameworks.indexOf('protractor')) { %>'test/javascript/e2e/**'<% } %>],
 
         preprocessors: {
             './**/*.js': ['coverage']
