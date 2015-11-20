@@ -29,7 +29,7 @@
                 fieldInputType = 'hidden';
             } _%>
         <div class="form-group"<% if (fields[fieldId].fieldType == 'byte[]') { %> ngf-drop ngf-change="set<%= fields[fieldId].fieldNameCapitalized %>($file, <%= entityInstance %>)"<% if (fields[fieldId].fieldTypeBlobContent == 'image') { %> ngf-pattern="'image/*'"<% } %><% } %>>
-            <label translate="<%= translationKey %>" for="field_<%= fields[fieldId].fieldName %>"><%=fields[fieldId].fieldNameCapitalized%></label>
+            <label class="control-label" translate="<%= translationKey %>" for="field_<%= fields[fieldId].fieldName %>"><%=fields[fieldId].fieldNameCapitalized%></label>
             <%_ if (fields[fieldId].fieldIsEnum) { _%>
             <select class="form-control" name="<%= fields[fieldId].fieldName %>" ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>" id="field_<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) { %> required<% } %>>
                 <%_ var enumPrefix = angularAppName + '.'+ fields[fieldId].fieldType;
