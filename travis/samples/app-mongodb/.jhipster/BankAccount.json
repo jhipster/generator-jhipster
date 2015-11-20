@@ -60,8 +60,8 @@
         {
             "fieldId": 11,
             "fieldName": "attachment",
--            "fieldType": "byte[]",
--            "fieldTypeBlobContent": "any"
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any"
         }
     ],
     "changelogDate": "20150805124838",
