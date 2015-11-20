@@ -43,13 +43,13 @@
     "time-grunt": "1.2.2",<% if (useSass) { %>
     "grunt-sass": "1.1.0",<% }} if (frontendBuilder == 'gulp') { %>
     "browser-sync": "2.10.0",
-    "del": "2.0.2",
+    "del": "2.1.0",
     "gulp": "3.9.0",
     "gulp-util": "3.0.7",
     "gulp-usemin": "0.3.15",
     "gulp-autoprefixer": "3.1.0",
     "gulp-minify-css": "1.2.1",
-    "gulp-uglify": "1.4.2",
+    "gulp-uglify": "1.5.1",
     "gulp-htmlmin": "1.2.0",
     "gulp-imagemin": "2.4.0",
     "gulp-flatten": "0.2.0",
@@ -59,11 +59,11 @@
     "jasmine-reporters": "^2.0.6",
     "protractor-jasmine2-screenshot-reporter": "0.1.7",<% } %>
     "gulp-rev": "6.0.1",
-    "gulp-jshint": "1.12.0",
+    "gulp-jshint": "2.0.0",
     "gulp-browserify": "0.5.1",<% if (useSass) { %>
     "gulp-sass": "2.1.0",<% } %>
     "proxy-middleware": "0.15.0",
-    "run-sequence": "1.1.4",<% } %>
+    "run-sequence": "1.1.5",<% } %>
     "event-stream": "3.3.2",
     "jshint-stylish": "2.1.0",
     "karma-script-launcher": "0.1.0",
