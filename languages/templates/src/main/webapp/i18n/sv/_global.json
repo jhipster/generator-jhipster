@@ -105,9 +105,9 @@
         }
     },
     "error": {
-        "serverNotReachable": "Server not reachable",
-        "NotNull": "Field {{fieldName}} cannot be empty!",
-        "Size": "Field {{fieldName}} does not meet min/max size requirements!"
+        "serverNotReachable": "Servern kan inte nås",
+        "NotNull": "Fält {{fieldName}} kan inte vara tomt!",
+        "Size": "Fält {{fieldName}} uppfyller inte min/max-storlekskravet!"
     },
     "footer": "Detta är din footer"
 }
