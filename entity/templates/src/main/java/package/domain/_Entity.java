@@ -97,9 +97,10 @@ public class <%= entityClass %> implements Serializable {
     <%_ } _%>
     private <%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>;
 
-    <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
-
-    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>_content_type"<% if (required) { %>, nullable = false<% } %>)
+    <%_ if (fields[fieldId].fieldType == 'byte[]') { _%><%_ if (databaseType == 'sql') { _%>
+    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>_content_type"<% if (required) { %>, nullable = false<% } %>) <%_ } _%>
+    <% if (databaseType == 'mongodb') { %>@Field("<%=fields[fieldId].fieldNameUnderscored %>_content_type")
+    <%_ } _%>
     private String <%= fields[fieldId].fieldName %>ContentType;
     <%_ }
     }
@@ -153,6 +154,7 @@ public class <%= entityClass %> implements Serializable {
     private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].relationshipFieldName %>;
 
     <%_ } } _%>
+    
     public <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %><% if (databaseType == 'cassandra') { %>UUID<% } %> getId() {
         return id;
     }

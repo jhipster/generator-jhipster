@@ -56,6 +56,12 @@
             "fieldName": "accountType",
             "fieldType": "BankAccountType",
             "fieldValues": "CHECKING,SAVINGS,LOAN"
+        },
+        {
+            "fieldId": 11,
+            "fieldName": "attachment",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any"
         }
     ],
     "changelogDate": "20150805124838",
