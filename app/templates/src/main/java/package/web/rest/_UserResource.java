@@ -7,6 +7,7 @@ import <%=packageName%>.repository.AuthorityRepository;<% } %>
 import <%=packageName%>.repository.UserRepository;<% if (searchEngine == 'elasticsearch') { %>
 import <%=packageName%>.repository.search.UserSearchRepository;<% } %>
 import <%=packageName%>.security.AuthoritiesConstants;
+import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.UserService;
 import <%=packageName%>.web.rest.dto.ManagedUserDTO;
 import <%=packageName%>.web.rest.dto.UserDTO;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.inject.Inject;
 import java.net.URI;
 import java.net.URISyntaxException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;<% if (searchEngine == 'elasticsearch') { %>
 import java.util.stream.StreamSupport;
@@ -65,6 +67,10 @@ public class UserResource {
 
     @Inject
     private UserRepository userRepository;
+
+    @Inject
+    private MailService mailService;
+
 <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Inject
     private AuthorityRepository authorityRepository;<% } %>
@@ -83,16 +89,26 @@ public class UserResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity<User> createUser(@RequestBody User user) throws URISyntaxException {
+    public ResponseEntity<?> createUser(@RequestBody User user, HttpServletRequest request) throws URISyntaxException {
         log.debug("REST request to save User : {}", user);
-        if (user.getId() != null) {
-            return ResponseEntity.badRequest().header("Failure", "A new user cannot already have an ID").body(null);
-        }
-        User result = userRepository.save(user);
-        return ResponseEntity.created(new URI("/api/users/" + result.getId()))
-                .headers(HeaderUtil.createEntityCreationAlert("user", result.getId().toString()))
-                .body(result);
-    }
+          if (userRepository.findOneByLogin(user.getLogin()).isPresent()) {
+            return ResponseEntity.badRequest().header("Failure", "Login already in use").body(null);
+          } else if (userRepository.findOneByEmail(user.getEmail()).isPresent()) {
+            return ResponseEntity.badRequest().header("Failure", "Email already in use").body(null);
+          } else {
+            User newUser = userService.createUser(user);
+            String baseUrl = request.getScheme() + // "http"
+            "://" +                                // "://"
+            request.getServerName() +              // "myhost"
+            ":" +                                  // ":"
+            request.getServerPort() +              // "80"
+            request.getContextPath();              // "/myContextPath" or "" if deployed in root context
+            mailService.sendCreationEmail(newUser, baseUrl);
+            return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
+                .headers(HeaderUtil.createAlert(<% if(enableTranslation) {%> "user-management.created"<% } else { %> "An user is created with identifier "+newUser.getLogin()<% } %>, newUser.getLogin()))
+                .body(newUser);
+          }
+      }
 
     /**
      * PUT  /users -> Updates an existing User.
@@ -178,7 +194,19 @@ public class UserResource {
                 .map(ManagedUserDTO::new)
                 .map(managedUserDTO -> new ResponseEntity<>(managedUserDTO, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }<% if (searchEngine == 'elasticsearch') { %>
+    }
+      /**
+       * DELETE  USER :login -> delete the "login" User.
+       */
+      @RequestMapping(value = "/users/{login}",
+          method = RequestMethod.DELETE,
+          produces = MediaType.APPLICATION_JSON_VALUE)
+      @Timed
+      public ResponseEntity<Void> deleteUser(@PathVariable String login) {
+          log.debug("REST request to delete User: {}", login);
+          userService.deleteUserInformation(login);
+          return ResponseEntity.ok().headers(HeaderUtil.createAlert(<% if(enableTranslation) {%> "user-management.deleted"<% } else { %> "An user is deleted with identifier "+login<% } %>, login)).build();
+      }<% if (searchEngine == 'elasticsearch') { %>
 
     /**
      * SEARCH  /_search/users/:query -> search for the User corresponding
