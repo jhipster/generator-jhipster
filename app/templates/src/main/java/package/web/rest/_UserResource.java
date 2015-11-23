@@ -83,6 +83,10 @@ public class UserResource {
 
     /**
      * POST  /users -> Create a new user.
+     * Method creates user if the same login and email is not already used.
+     * User entity is created and activation mail is sent to the email id with
+     * password-reset link
+     * The user needs to be activated on creation.
      */
     @RequestMapping(value = "/users",
         method = RequestMethod.POST,
@@ -91,24 +95,24 @@ public class UserResource {
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<?> createUser(@RequestBody User user, HttpServletRequest request) throws URISyntaxException {
         log.debug("REST request to save User : {}", user);
-          if (userRepository.findOneByLogin(user.getLogin()).isPresent()) {
-            return ResponseEntity.badRequest().header("Failure", "Login already in use").body(null);
-          } else if (userRepository.findOneByEmail(user.getEmail()).isPresent()) {
-            return ResponseEntity.badRequest().header("Failure", "Email already in use").body(null);
-          } else {
-            User newUser = userService.createUser(user);
-            String baseUrl = request.getScheme() + // "http"
-            "://" +                                // "://"
-            request.getServerName() +              // "myhost"
-            ":" +                                  // ":"
-            request.getServerPort() +              // "80"
-            request.getContextPath();              // "/myContextPath" or "" if deployed in root context
-            mailService.sendCreationEmail(newUser, baseUrl);
-            return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
-                .headers(HeaderUtil.createAlert(<% if(enableTranslation) {%> "user-management.created"<% } else { %> "An user is created with identifier "+newUser.getLogin()<% } %>, newUser.getLogin()))
-                .body(newUser);
-          }
-      }
+        if (userRepository.findOneByLogin(user.getLogin()).isPresent()) {
+          return ResponseEntity.badRequest().header("Failure", "Login already in use").body(null);
+        } else if (userRepository.findOneByEmail(user.getEmail()).isPresent()) {
+          return ResponseEntity.badRequest().header("Failure", "Email already in use").body(null);
+        } else {
+          User newUser = userService.createUser(user);
+          String baseUrl = request.getScheme() + // "http"
+          "://" +                                // "://"
+          request.getServerName() +              // "myhost"
+          ":" +                                  // ":"
+          request.getServerPort() +              // "80"
+          request.getContextPath();              // "/myContextPath" or "" if deployed in root context
+          mailService.sendCreationEmail(newUser, baseUrl);
+          return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
+              .headers(HeaderUtil.createAlert(<% if(enableTranslation) {%> "user-management.created"<% } else { %> "An user is created with identifier "+newUser.getLogin()<% } %>, newUser.getLogin()))
+              .body(newUser);
+        }
+    }
 
     /**
      * PUT  /users -> Updates an existing User.
