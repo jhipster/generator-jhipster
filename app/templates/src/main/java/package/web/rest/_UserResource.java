@@ -199,18 +199,19 @@ public class UserResource {
                 .map(managedUserDTO -> new ResponseEntity<>(managedUserDTO, HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
-      /**
-       * DELETE  USER :login -> delete the "login" User.
-       */
-      @RequestMapping(value = "/users/{login}",
-          method = RequestMethod.DELETE,
-          produces = MediaType.APPLICATION_JSON_VALUE)
-      @Timed
-      public ResponseEntity<Void> deleteUser(@PathVariable String login) {
-          log.debug("REST request to delete User: {}", login);
-          userService.deleteUserInformation(login);
-          return ResponseEntity.ok().headers(HeaderUtil.createAlert(<% if(enableTranslation) {%> "user-management.deleted"<% } else { %> "An user is deleted with identifier "+login<% } %>, login)).build();
-      }<% if (searchEngine == 'elasticsearch') { %>
+    /**
+     * DELETE  USER :login -> delete the "login" User.
+     */
+    @RequestMapping(value = "/users/{login}",
+        method = RequestMethod.DELETE,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    @Secured(AuthoritiesConstants.ADMIN)
+    public ResponseEntity<Void> deleteUser(@PathVariable String login) {
+        log.debug("REST request to delete User: {}", login);
+        userService.deleteUserInformation(login);
+        return ResponseEntity.ok().headers(HeaderUtil.createAlert(<% if(enableTranslation) {%> "user-management.deleted"<% } else { %> "An user is deleted with identifier "+login<% } %>, login)).build();
+    }<% if (searchEngine == 'elasticsearch') { %>
 
     /**
      * SEARCH  /_search/users/:query -> search for the User corresponding
