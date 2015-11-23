@@ -1,8 +1,13 @@
 <div>
     <div class="row">
         <h2 class="col-sm-6" translate="user-management.home.title">Users</h2>
+        <div class="col-md-4">
+            <button class="btn btn-primary" ui-sref="user-management.new">
+                <span class="glyphicon glyphicon-flash"></span> <span translate="user-management.home.createLabel">Create a new User</span>
+            </button>
+        </div>
     </div>
-
+    <jh-alert></jh-alert>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
@@ -49,6 +54,11 @@
                             ui-sref="user-management.edit({login:user.login})"
                             class="btn btn-primary btn-sm">
                         <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                    <button type="submit"
+                            ui-sref="user-management.delete({login:user.login})"
+                            class="btn btn-danger btn-sm">
+                        <span class="glyphicon glyphicon-remove-circle"></span>
                     </button>
                 </td>
             </tr>

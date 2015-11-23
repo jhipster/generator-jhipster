@@ -5,6 +5,9 @@
             "createLabel": "Skapa en ny användare",
             "createOrEditLabel": "Skapa eller ändra en användare"
         },
+        "created": "A new user is created with identifier {{ param }}",
+        "updated": "An user is updated with identifier {{ param }}",
+        "deleted": "An user is deleted with identifier {{ param }}",
         "delete": {
             "question": "Är du säker på att du vill ta bort användare {{ login }}?"
         },
