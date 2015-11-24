@@ -42,7 +42,7 @@
   - "8888:8888"
 
 jhipster-prod-cassandra:
-  container_name: <%=baseName%>-prod-cassandra
+  container_name: <%=baseName.toLowerCase()%>-prod-cassandra
   build: .
   # volumes:
   # - ~/volumes/jhipster/<%=baseName%>/prod-cassandra/:/var/lib/cassandra/data
@@ -55,7 +55,7 @@ jhipster-prod-cassandra:
   - "9042:9042"
   - "9160:9160"
 
-<%=baseName%>-prod-cassandra-node:
+<%=baseName.toLowerCase()%>-prod-cassandra-node:
   build: .
   links:
   - jhipster-prod-cassandra:seed
