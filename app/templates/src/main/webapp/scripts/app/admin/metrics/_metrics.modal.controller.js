@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('MetricsModalController', function($scope, $modalInstance, threadDump) {
+    .controller('MetricsModalController', function($scope, $uibModalInstance, threadDump) {
 
         $scope.threadDump = threadDump;
         $scope.threadDumpRunnable = 0;
@@ -25,7 +25,7 @@ angular.module('<%=angularAppName%>')
             $scope.threadDumpTimedWaiting + $scope.threadDumpBlocked;
 
         $scope.cancel = function() {
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         };
 
         $scope.getLabelClass = function (threadState) {
