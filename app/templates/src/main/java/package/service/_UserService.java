@@ -122,7 +122,7 @@ public class UserService {
         String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
         user.setPassword(encryptedPassword);
         user.setResetKey(RandomUtil.generateResetKey());
-        user.setResetDate(ZonedDateTime.now());
+        user.<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>setResetDate(ZonedDateTime.now());<% } %><% if (databaseType == 'cassandra') { %>setResetDate(new Date());<% } %>
         user.setActivated(true);
         userRepository.save(user);<% if (searchEngine == 'elasticsearch') { %>
         userSearchRepository.save(user);<% } %>
