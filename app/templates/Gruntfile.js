@@ -300,7 +300,7 @@ module.exports = function (grunt) {
                 configFile: 'src/test/javascript/karma.conf.js',
                 singleRun: true
             }
-        },<% if (testFrameworks.indexOf('protractor')) { %>
+        },<% if (testFrameworks.indexOf('protractor') > -1) { %>
         protractor: {
             options: {
                 configFile: 'src/test/javascript/protractor.conf.js'
@@ -425,6 +425,6 @@ module.exports = function (grunt) {
         'buildcontrol:openshift'
     ]);
 
-    <% if (testFrameworks.indexOf('protractor')) { %>grunt.registerTask('itest', ['protractor:continuous']);<% } %>
+    <% if (testFrameworks.indexOf('protractor') > -1) { %>grunt.registerTask('itest', ['protractor:continuous']);<% } %>
     grunt.registerTask('default', ['serve']);
 };

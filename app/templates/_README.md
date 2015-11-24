@@ -54,8 +54,8 @@ Unit tests are run by [Karma][] and written with [Jasmine][]. They're located in
 <% if (frontendBuilder == 'grunt') { %>
     grunt test<% } %><% if (frontendBuilder == 'gulp') { %>
     gulp test<% } %>
-    
-<% if (testFrameworks.indexOf("protractor")) { %>UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in `src/test/javascript/e2e` 
+
+<% if (testFrameworks.indexOf("protractor") > -1) { %>UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in `src/test/javascript/e2e`
 and can be run by starting Spring Boot in one terminal (`<% if (buildTool == 'maven') { %>mvn spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`grunt itest`) in a second one.<% } %>
 
 # Continuous Integration
@@ -71,7 +71,7 @@ To setup this project in Jenkins, use the following configuration:
     * Poll SCM / Schedule: `H/5 * * * *`
 * Build<% if (buildTool == 'maven') { %>
     * Invoke Maven / Tasks: `-Pprod clean package`<% } %><% if (buildTool == 'gradle') { %>
-    * Invoke Gradle script / Use Gradle Wrapper / Tasks: `-Pprod clean test bootRepackage`<% } %><% if (testFrameworks.indexOf("protractor")) { %>
+    * Invoke Gradle script / Use Gradle Wrapper / Tasks: `-Pprod clean test bootRepackage`<% } %><% if (testFrameworks.indexOf("protractor") > -1) { %>
     * Execute Shell / Command:
         ````
         <% if (buildTool == 'maven') { %>mvn spring-boot:run &<% } %><% if (buildTool == 'gradle') { %>./gradlew bootRun &<% } %>
@@ -81,7 +81,7 @@ To setup this project in Jenkins, use the following configuration:
         kill $bootPid
         ````<% } %>
 * Post-build Actions
-    * Publish JUnit test result report / Test Report XMLs: `build/test-results/*.xml<% if (testFrameworks.indexOf("protractor")) { %>,build/reports/e2e/*.xml<% } %>`
+    * Publish JUnit test result report / Test Report XMLs: `build/test-results/*.xml<% if (testFrameworks.indexOf("protractor") > -1) { %>,build/reports/e2e/*.xml<% } %>`
 
 [JHipster]: https://jhipster.github.io/
 [Node.js]: https://nodejs.org/
