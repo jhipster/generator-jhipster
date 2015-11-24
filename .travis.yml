@@ -11,13 +11,14 @@ env:
   global:
   - JHIPSTER_MVN_DEP=1
   - RUNTASK=1
+  - GRUNT=1
   - JHIPSTER_TRAVIS=$TRAVIS_BUILD_DIR/travis
   - JHIPSTER_INSTALL=$JHIPSTER_TRAVIS/install
   - JHIPSTER_SAMPLES=$JHIPSTER_TRAVIS/samples
   - JHIPSTER_SCRIPTS=$JHIPSTER_TRAVIS/scripts
   matrix:
   - PROFILE=dev  JHIPSTER=app-gradle    RUNTASK=0
-  - PROFILE=dev  JHIPSTER=app-gulp
+  - PROFILE=dev  JHIPSTER=app-gulp      GRUNT=0
   - PROFILE=dev  JHIPSTER=app-cassandra
   - PROFILE=dev  JHIPSTER=app-default
   - PROFILE=dev  JHIPSTER=app-mongodb
