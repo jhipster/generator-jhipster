@@ -531,6 +531,8 @@ JhipsterGenerator.prototype.app = function app() {
     }
     if (this.devDatabaseType == "cassandra") {
         this.template('_Dockerfile_cassandra', 'Dockerfile', this, {});
+        this.template('docker/cassandra/_cassandra.sh', 'docker/cassandra/cassandra.sh', this, {});
+        this.template('docker/opscenter/_Dockerfile', 'docker/opscenter/Dockerfile', this, {});
     }
 
     switch (this.frontendBuilder) {
