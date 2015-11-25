@@ -26,16 +26,17 @@
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
-                <tr>
-                    <th translate="global.field.id">ID</th>
+                <tr<% if (pagination != 'no') { %> jh-sort="predicate" ascending="reverse" callback="<%=pagination != 'infinite-scroll' ? 'loadAll' : 'reset'%>()"<% } %>>
+                    <th translate="global.field.id"<% if (pagination != 'no') { %> jh-sort-by="id"<% } %>>ID</th>
                     <%_ for (fieldId in fields) { _%>
-                    <th translate="<%=keyPrefix + fields[fieldId].fieldName %>"><%=fields[fieldId].fieldNameCapitalized%></th>
+                    <th translate="<%=keyPrefix + fields[fieldId].fieldName %>"<% if (pagination != 'no') { %> jh-sort-by="<%= fields[fieldId].fieldName%>"<% } %>><%=fields[fieldId].fieldNameCapitalized%></th>
                     <%_ } _%>
                     <%_ for (relationshipId in relationships) { _%>
                         <%_ if (relationships[relationshipId].relationshipType == 'many-to-one'
                                 || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)
-                                || (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true && pagination == 'no')) { _%>
-                    <th translate="<%= keyPrefix + relationships[relationshipId].relationshipName%>"><%=relationships[relationshipId].relationshipName%></th>
+                                || (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true && pagination == 'no')) {
+                            var fieldName = dto == 'no' ? "." + relationships[relationshipId].otherEntityField : relationships[relationshipId].otherEntityFieldCapitalized;_%>
+                    <th translate="<%= keyPrefix + relationships[relationshipId].relationshipName%>"<% if (pagination != 'no') { %> jh-sort-by="<%=relationships[relationshipId].relationshipName + (fieldName)%>"<% } %>><%=relationships[relationshipId].relationshipName%></th>
                         <%_ } _%>
                     <%_ } _%>
                     <th></th>
