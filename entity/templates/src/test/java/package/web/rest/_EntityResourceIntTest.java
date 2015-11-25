@@ -255,7 +255,7 @@ private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%
         <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 
         // Get all the <%= entityInstance %>s
-        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityInstance %>s?sort=id,DESC"))
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityInstance %>s?sort=id,desc"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
                 .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().intValue())))<% } %><% if (databaseType == 'mongodb') { %>
