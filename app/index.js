@@ -884,9 +884,10 @@ JhipsterGenerator.prototype.app = function app() {
     // normal CSS or SCSS?
     if (this.useSass) {
         this.template('src/main/scss/main.scss', 'src/main/scss/main.scss');
-    } else {
-        this.template('src/main/webapp/assets/styles/main.css', 'src/main/webapp/assets/styles/main.css');
     }
+    // this css file will be overwritten by the sass generated css if sass is enabled 
+    // but this will avoid errors when running app without running sass task first
+    this.template('src/main/webapp/assets/styles/main.css', 'src/main/webapp/assets/styles/main.css');
 
     // HTML5 BoilerPlate
     this.copy(webappDir + 'favicon.ico', webappDir + 'favicon.ico');
