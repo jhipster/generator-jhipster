@@ -935,8 +935,10 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/scripts/components/form/_form.directive.js', webappDir + 'scripts/components/form/form.directive.js', this, {});
     this.template(webappDir + '/scripts/components/form/_maxbytes.directive.js', webappDir + 'scripts/components/form/maxbytes.directive.js', this, {});
     this.template(webappDir + '/scripts/components/form/_minbytes.directive.js', webappDir + 'scripts/components/form/minbytes.directive.js', this, {});
+    this.template(webappDir + '/scripts/components/form/_pager.config.js', webappDir + 'scripts/components/form/pager.config.js', this, {});
     this.template(webappDir + '/scripts/components/form/_pager.directive.js', webappDir + 'scripts/components/form/pager.directive.js', this, {});
     this.template(webappDir + '/scripts/components/form/_pager.html', webappDir + 'scripts/components/form/pager.html', this, {});
+    this.template(webappDir + '/scripts/components/form/_pagination.config.js', webappDir + 'scripts/components/form/pagination.config.js', this, {});
     this.template(webappDir + '/scripts/components/form/_pagination.directive.js', webappDir + 'scripts/components/form/pagination.directive.js', this, {});
     this.template(webappDir + '/scripts/components/form/_pagination.html', webappDir + 'scripts/components/form/pagination.html', this, {});
     if (this.enableTranslation) {
@@ -1102,7 +1104,9 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/components/form/form.directive.js',
         'scripts/components/form/maxbytes.directive.js',
         'scripts/components/form/minbytes.directive.js',
+        'scripts/components/form/pager.config.js',
         'scripts/components/form/pager.directive.js',
+        'scripts/components/form/pagination.config.js',
         'scripts/components/form/pagination.directive.js',
         'scripts/components/admin/audits.service.js',
         'scripts/components/admin/logs.service.js',
