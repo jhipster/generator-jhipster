@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('<%= entityClass %>Controller', function ($scope, $state, $uibModal<% if (fieldsContainBlob) { %>, DataUtils<% } %>, <%= entityClass %><% if (searchEngine == 'elasticsearch') { %>, <%= entityClass %>Search<% } %><% if (pagination != 'no') { %>, ParseLinks<% } %>) {
+    .controller('<%= entityClass %>Controller', function ($scope, $state<% if (fieldsContainBlob) { %>, DataUtils<% } %>, <%= entityClass %><% if (searchEngine == 'elasticsearch') { %>, <%= entityClass %>Search<% } %><% if (pagination != 'no') { %>, ParseLinks<% } %>) {
 
         $scope.<%= entityInstance %>s = [];
         <%_ if (pagination != 'no') { _%>
