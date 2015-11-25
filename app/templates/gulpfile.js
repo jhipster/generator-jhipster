@@ -14,7 +14,7 @@ var gulp = require('gulp'),
     ngAnnotate = require('gulp-ng-annotate'),
     ngConstant = require('gulp-ng-constant-fork'),
     jshint = require('gulp-jshint'),
-    rev = require('gulp-rev'),<% if (testFrameworks.indexOf('protractor')) { %>
+    rev = require('gulp-rev'),<% if (testFrameworks.indexOf('protractor') > -1) { %>
     protractor = require("gulp-protractor").protractor,<% } %>
     proxy = require('proxy-middleware'),
     es = require('event-stream'),
@@ -74,7 +74,7 @@ gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function(done) {
         singleRun: true
     }, done).start();
 });
-<% if (testFrameworks.indexOf('protractor')) { %>
+<% if (testFrameworks.indexOf('protractor') > -1) { %>
 gulp.task('protractor', function() {
     return gulp.src(["./src/main/test/javascript/e2e/*.js"])
         .pipe(protractor({
@@ -293,7 +293,7 @@ gulp.task('jshint', function() {
 gulp.task('server', ['serve'], function () {
     gutil.log('The `server` task has been deprecated. Use `gulp serve` to start a server');
 });
-<% if (testFrameworks.indexOf('protractor')) { %>
+<% if (testFrameworks.indexOf('protractor') > -1) { %>
 gulp.task('itest', ['protractor']);
 <% } %>
 gulp.task('default', function() {

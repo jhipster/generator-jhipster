@@ -11,7 +11,7 @@ exports.config = {
     ],
 
     capabilities: {
-        'browserName': 'chrome',
+        'browserName': 'firefox',
         'phantomjs.binary.path': require('phantomjs').path,
         'phantomjs.ghostdriver.cli.args': ['--loglevel=DEBUG']
     },
