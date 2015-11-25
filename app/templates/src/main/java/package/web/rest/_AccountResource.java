@@ -126,9 +126,14 @@ public class AccountResource {
         return userRepository
             .findOneByLogin(SecurityUtils.getCurrentUser().getUsername())
             .map(u -> {
-                userService.updateUserInformation(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-                    userDTO.getLangKey());
-                return new ResponseEntity<String>(HttpStatus.OK);
+                Optional<User> oUser=userRepository.findOneByEmail(userDTO.getEmail());
+                if ((!oUser.isPresent()) || (oUser.isPresent() && oUser.get().getLogin().equalsIgnoreCase(u.getLogin()))) {
+                  userService.updateUserInformation(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
+                      userDTO.getLangKey());
+                  return new ResponseEntity<String>(HttpStatus.OK);
+                }else{
+                  return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+                }
             })
             .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }
