@@ -12,8 +12,9 @@ buildscript {
         classpath group: 'org.springframework.build.gradle', name: 'propdeps-plugin', version: '0.0.7'
         classpath group: 'com.moowork.gradle', name: 'gradle-node-plugin', version: '0.11'<% if(frontendBuilder == 'grunt') {%>
         classpath group: 'com.moowork.gradle', name: 'gradle-grunt-plugin', version: '0.11'<% }  if(frontendBuilder == 'gulp') {%>
-  	    classpath group: 'com.moowork.gradle', name: 'gradle-gulp-plugin', version: '0.11'
-        <% } %>
+  	    classpath group: 'com.moowork.gradle', name: 'gradle-gulp-plugin', version: '0.11'<% } %>
+        classpath group: 'net.ltgt.gradle', name: 'gradle-apt-plugin', version: '0.4'
+
     }
 }
 
