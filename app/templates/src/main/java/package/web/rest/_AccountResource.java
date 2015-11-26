@@ -123,17 +123,16 @@ public class AccountResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     public ResponseEntity<String> saveAccount(@RequestBody UserDTO userDTO) {
+        Optional<User> existingUser = userRepository.findOneByEmail(userDTO.getEmail());
+        if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userDTO.getLogin()))) {
+            return ResponseEntity.badRequest().header("Failure", "Email already used").body(null);
+        }
         return userRepository
             .findOneByLogin(SecurityUtils.getCurrentUser().getUsername())
             .map(u -> {
-                Optional<User> oUser=userRepository.findOneByEmail(userDTO.getEmail());
-                if ((!oUser.isPresent()) || (oUser.isPresent() && oUser.get().getLogin().equalsIgnoreCase(u.getLogin()))) {
-                  userService.updateUserInformation(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-                      userDTO.getLangKey());
-                  return new ResponseEntity<String>(HttpStatus.OK);
-                }else{
-                  return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
-                }
+                userService.updateUserInformation(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
+                    userDTO.getLangKey());
+                return new ResponseEntity<String>(HttpStatus.OK);
             })
             .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
     }

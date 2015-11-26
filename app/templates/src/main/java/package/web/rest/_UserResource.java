@@ -105,38 +105,37 @@ public class UserResource {
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<ManagedUserDTO> updateUser(@RequestBody ManagedUserDTO managedUserDTO) throws URISyntaxException {
         log.debug("REST request to update User : {}", managedUserDTO);
-        Optional<User> oUser=userRepository.findOneByEmail(managedUserDTO.getEmail());
-        if ((!oUser.isPresent()) || (oUser.isPresent() && oUser.get().getLogin().equalsIgnoreCase(managedUserDTO.getLogin()))) {
-          return userRepository
-              .findOneById(managedUserDTO.getId())
-              .map(user -> {
-                  user.setLogin(managedUserDTO.getLogin());
-                  user.setFirstName(managedUserDTO.getFirstName());
-                  user.setLastName(managedUserDTO.getLastName());
-                  user.setEmail(managedUserDTO.getEmail());
-                  user.setActivated(managedUserDTO.isActivated());
-                  user.setLangKey(managedUserDTO.getLangKey());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-                  Set<Authority> authorities = user.getAuthorities();
-                  authorities.clear();
-                  managedUserDTO.getAuthorities().stream().forEach(
-                      authority -> authorities.add(authorityRepository.findOne(authority))
-                  );<% if (databaseType == 'mongodb') { %>
-                  userRepository.save(user);<% } %>
-                  return ResponseEntity.ok()
-                      .headers(HeaderUtil.createEntityUpdateAlert("user", managedUserDTO.getLogin()))
-                      .body(new ManagedUserDTO(userRepository
-                          .findOne(managedUserDTO.getId())));<% } else { %>
-                  user.setAuthorities(managedUserDTO.getAuthorities());
-                  userRepository.save(user);
-                  return ResponseEntity.ok()
-                      .headers(HeaderUtil.createEntityUpdateAlert("user", managedUserDTO.getLogin()))
-                      .body(new ManagedUserDTO(userRepository
-                          .findOne(managedUserDTO.getId())));<% } %>
-              })
-              .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
-        }else{
-          return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        Optional<User> existingUser = userRepository.findOneByEmail(managedUserDTO.getEmail());
+        if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(managedUserDTO.getLogin()))) {
+            return ResponseEntity.badRequest().header("Failure", "Email already used").body(null);
         }
+        return userRepository
+            .findOneById(managedUserDTO.getId())
+            .map(user -> {
+                user.setLogin(managedUserDTO.getLogin());
+                user.setFirstName(managedUserDTO.getFirstName());
+                user.setLastName(managedUserDTO.getLastName());
+                user.setEmail(managedUserDTO.getEmail());
+                user.setActivated(managedUserDTO.isActivated());
+                user.setLangKey(managedUserDTO.getLangKey());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+                Set<Authority> authorities = user.getAuthorities();
+                authorities.clear();
+                managedUserDTO.getAuthorities().stream().forEach(
+                    authority -> authorities.add(authorityRepository.findOne(authority))
+                );<% if (databaseType == 'mongodb') { %>
+                userRepository.save(user);<% } %>
+                return ResponseEntity.ok()
+                    .headers(HeaderUtil.createEntityUpdateAlert("user", managedUserDTO.getLogin()))
+                    .body(new ManagedUserDTO(userRepository
+                        .findOne(managedUserDTO.getId())));<% } else { %>
+                user.setAuthorities(managedUserDTO.getAuthorities());
+                userRepository.save(user);
+                return ResponseEntity.ok()
+                    .headers(HeaderUtil.createEntityUpdateAlert("user", managedUserDTO.getLogin()))
+                    .body(new ManagedUserDTO(userRepository
+                        .findOne(managedUserDTO.getId())));<% } %>
+            })
+            .orElseGet(() -> new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR));
 
     }
 
