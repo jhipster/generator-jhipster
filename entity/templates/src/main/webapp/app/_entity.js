@@ -59,8 +59,8 @@ angular.module('<%=angularAppName%>')
                 data: {
                     authorities: ['ROLE_USER'],
                 },
-                onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
-                    $modal.open({
+                onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+                    $uibModal.open({
                         templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-dialog.html',
                         controller: '<%= entityClass %>DialogController',
                         size: 'lg',
@@ -94,8 +94,8 @@ angular.module('<%=angularAppName%>')
                 data: {
                     authorities: ['ROLE_USER'],
                 },
-                onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
-                    $modal.open({
+                onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+                    $uibModal.open({
                         templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-dialog.html',
                         controller: '<%= entityClass %>DialogController',
                         size: 'lg',
@@ -117,8 +117,8 @@ angular.module('<%=angularAppName%>')
                 data: {
                     authorities: ['ROLE_USER'],
                 },
-                onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
-                    $modal.open({
+                onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+                    $uibModal.open({
                         templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-delete-dialog.html',
                         controller: '<%= entityClass %>DeleteController',
                         size: 'md',

@@ -1,12 +1,12 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('HealthModalController', function($scope, $modalInstance, currentHealth, baseName, subSystemName) {
+    .controller('HealthModalController', function($scope, $uibModalInstance, currentHealth, baseName, subSystemName) {
 
         $scope.currentHealth = currentHealth;
         $scope.baseName = baseName, $scope.subSystemName = subSystemName;
 
         $scope.cancel = function() {
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         };
     });

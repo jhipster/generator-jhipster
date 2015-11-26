@@ -1,16 +1,16 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-	.controller('<%= entityClass %>DeleteController', function($scope, $modalInstance, entity, <%= entityClass %>) {
+	.controller('<%= entityClass %>DeleteController', function($scope, $uibModalInstance, entity, <%= entityClass %>) {
 
         $scope.<%= entityInstance %> = entity;
         $scope.clear = function() {
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         };
         $scope.confirmDelete = function (id) {
             <%= entityClass %>.delete({id: id},
                 function () {
-                    $modalInstance.close(true);
+                    $uibModalInstance.close(true);
                 });
         };
 
