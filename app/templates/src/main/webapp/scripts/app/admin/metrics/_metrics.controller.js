@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('MetricsController', function ($scope, MonitoringService, $modal) {
+    .controller('MetricsController', function ($scope, MonitoringService, $uibModal) {
         $scope.metrics = {};
         $scope.updatingMetrics = true;
 
@@ -43,7 +43,7 @@ angular.module('<%=angularAppName%>')
         $scope.refreshThreadDumpData = function() {
             MonitoringService.threadDump().then(function(data) {
 
-                var modalInstance = $modal.open({
+                var modalInstance = $uibModal.open({
                     templateUrl: 'scripts/app/admin/metrics/metrics.modal.html',
                     controller: 'MetricsModalController',
                     size: 'lg',
