@@ -36,17 +36,16 @@ import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
 /**
  * Service Implementation for managing <%= entityClass %>.
  */
-@Service
+@Service<% if (databaseType == 'sql') { %>
+@Transactional<% } %>
 public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implements <%= entityClass %>Service<% } %>{
 
     private final Logger log = LoggerFactory.getLogger(<%= serviceClassName %>.class);
     <%- include('../../common/inject_template', {viaService: viaService}); -%>
     /**
      * Save a <%= entityInstance %>.
-     * @param input the <%= instanceType %>
      * @return the persisted entity
-     */<% if (databaseType == 'sql') { %>
-    @Transactional(readOnly = false) <% } %>
+     */
     public <%= instanceType %> save(<%= instanceType %> <%= instanceName %>) {
         log.debug("Request to save <%= entityClass %> : {}", <%= instanceName %>);<%- include('../../common/save_template', {viaService: viaService}); -%>
         return result;
@@ -67,10 +66,8 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
     }
 
 <%- include('../../common/get_filtered_template'); -%>
-
     /**
      *  get the "id" <%= entityInstance %>.
-     *  @param input id
      *  @return the entity
      */<% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true) <% } %>
@@ -81,9 +78,7 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
 
     /**
      *  delete the "id" <%= entityInstance %>.
-     *  @param input id
-     */<% if (databaseType == 'sql') { %>
-    @Transactional(readOnly = false) <% } %>
+     */
     public void delete(<%= pkType %> id) {
         log.debug("Request to delete <%= entityClass %> : {}", id);<%- include('../../common/delete_template', {viaService: viaService}); -%>
     }<% if (searchEngine == 'elasticsearch') { %>
@@ -91,8 +86,8 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
     /**
      * search for the <%= entityInstance %> corresponding
      * to the query.
-     * @param input query
-     */
+     */<% if (databaseType == 'sql') { %>
+    @Transactional(readOnly = true) <% } %>
     public List<<%= instanceType %>> search(String query) {
         <%- include('../../common/search_template', {viaService: viaService}); -%>
     }<% } %>

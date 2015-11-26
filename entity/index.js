@@ -825,7 +825,7 @@ EntityGenerator.prototype.askForService = function askForService() {
             choices: [
                 {
                     value: 'no',
-                    name: 'No, implement it in the http resource class'
+                    name: 'No, the REST controller should use the repository directly'
                 },
                 {
                     value: 'serviceClass',
