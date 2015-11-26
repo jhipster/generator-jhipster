@@ -885,7 +885,7 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.useSass) {
         this.template('src/main/scss/main.scss', 'src/main/scss/main.scss');
     }
-    // this css file will be overwritten by the sass generated css if sass is enabled 
+    // this css file will be overwritten by the sass generated css if sass is enabled
     // but this will avoid errors when running app without running sass task first
     this.template('src/main/webapp/assets/styles/main.css', 'src/main/webapp/assets/styles/main.css');
 
@@ -936,11 +936,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/scripts/components/form/_maxbytes.directive.js', webappDir + 'scripts/components/form/maxbytes.directive.js', this, {});
     this.template(webappDir + '/scripts/components/form/_minbytes.directive.js', webappDir + 'scripts/components/form/minbytes.directive.js', this, {});
     this.template(webappDir + '/scripts/components/form/_pager.config.js', webappDir + 'scripts/components/form/pager.config.js', this, {});
-    this.template(webappDir + '/scripts/components/form/_pager.directive.js', webappDir + 'scripts/components/form/pager.directive.js', this, {});
-    this.template(webappDir + '/scripts/components/form/_pager.html', webappDir + 'scripts/components/form/pager.html', this, {});
     this.template(webappDir + '/scripts/components/form/_pagination.config.js', webappDir + 'scripts/components/form/pagination.config.js', this, {});
-    this.template(webappDir + '/scripts/components/form/_pagination.directive.js', webappDir + 'scripts/components/form/pagination.directive.js', this, {});
-    this.template(webappDir + '/scripts/components/form/_pagination.html', webappDir + 'scripts/components/form/pagination.html', this, {});
     if (this.enableTranslation) {
         this.template(webappDir + '/scripts/components/language/_language.controller.js', webappDir + 'scripts/components/language/language.controller.js', this, {});
         this.template(webappDir + '/scripts/components/language/_language.service.js', webappDir + 'scripts/components/language/language.service.js', this, {});
@@ -1105,9 +1101,7 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/components/form/maxbytes.directive.js',
         'scripts/components/form/minbytes.directive.js',
         'scripts/components/form/pager.config.js',
-        'scripts/components/form/pager.directive.js',
         'scripts/components/form/pagination.config.js',
-        'scripts/components/form/pagination.directive.js',
         'scripts/components/admin/audits.service.js',
         'scripts/components/admin/logs.service.js',
         'scripts/components/admin/configuration.service.js',
