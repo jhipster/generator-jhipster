@@ -57,7 +57,7 @@
     </div>
     <%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
     <div class="text-center">
-        <pagination class="pagination-sm" total-items="totalItems" ng-model="page" ng-change="loadAll()"></pagination>
+        <uib-pagination class="pagination-sm" total-items="totalItems" ng-model="page" ng-change="loadAll()"></uib-pagination>
     </div>
     <%_ } _%>
 </div>

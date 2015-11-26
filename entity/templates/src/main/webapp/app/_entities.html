@@ -123,10 +123,10 @@
         </table>
     </div>
     <%_ if (pagination == 'pager') { _%>
-    <pager total-items="totalItems" ng-model="page" ng-change="loadAll()"></pager>
+    <uib-pager total-items="totalItems" ng-model="page" ng-change="loadAll()"></uib-pager>
     <%_ } else if (pagination == 'pagination') { _%>
     <div class="text-center">
-        <pagination class="pagination-sm" total-items="totalItems" ng-model="page" ng-change="loadAll()"></pagination>
+        <uib-pagination class="pagination-sm" total-items="totalItems" ng-model="page" ng-change="loadAll()"></uib-pagination>
     </div>
     <%_ } _%>
 </div>
