@@ -41,11 +41,10 @@ import static org.elasticsearch.index.query.QueryBuilders.*;<% } %>
 public class <%= entityClass %>Resource {
 
     private final Logger log = LoggerFactory.getLogger(<%= entityClass %>Resource.class);
-    <% var viaService = service != 'no'; -%>
-    <%- include('../../common/inject_template', {viaService: viaService}); -%><%
+    <% var viaService = service != 'no';
     var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
     var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance; -%>
-
+    <%- include('../../common/inject_template', {viaService: viaService}); -%>
     /**
      * POST  /<%= entityInstance %>s -> Create a new <%= entityInstance %>.
      */
@@ -87,6 +86,7 @@ public class <%= entityClass %>Resource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed<%- include('../../common/get_all_template', {viaService: viaService}); -%>
+    
     /**
      * GET  /<%= entityInstance %>s/:id -> get the "id" <%= entityInstance %>.
      */

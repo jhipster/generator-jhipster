@@ -66,7 +66,7 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
     }
 <%- include('../../common/get_filtered_template'); -%>
     /**
-     *  get the "id" <%= entityInstance %>.
+     *  get one <%= entityInstance %> by id.
      *  @return the entity
      */<% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true) <% } %>
@@ -76,7 +76,7 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
     }
 
     /**
-     *  delete the "id" <%= entityInstance %>.
+     *  delete the  <%= entityInstance %> by id.
      */
     public void delete(<%= pkType %> id) {
         log.debug("Request to delete <%= entityClass %> : {}", id);<%- include('../../common/delete_template', {viaService: viaService}); -%>
