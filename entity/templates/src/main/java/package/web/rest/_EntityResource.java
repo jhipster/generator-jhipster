@@ -87,7 +87,6 @@ public class <%= entityClass %>Resource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed<%- include('../../common/get_all_template', {viaService: viaService}); -%>
-
     /**
      * GET  /<%= entityInstance %>s/:id -> get the "id" <%= entityInstance %>.
      */

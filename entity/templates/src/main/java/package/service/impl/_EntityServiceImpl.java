@@ -64,7 +64,6 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
         Page<<%= entityClass %>> result = <%= entityInstance %>Repository.findAll(pageable); <% } %>
         return result;
     }
-
 <%- include('../../common/get_filtered_template'); -%>
     /**
      *  get the "id" <%= entityInstance %>.
