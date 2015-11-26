@@ -1,16 +1,16 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-	.controller('user-managementDeleteController', function($scope, $modalInstance, entity, User) {
+	.controller('user-managementDeleteController', function($scope, $uibModalInstance, entity, User) {
 
         $scope.user = entity;
         $scope.clear = function() {
-            $modalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         };
         $scope.confirmDelete = function (login) {
             User.delete({login: login},
                 function () {
-                    $modalInstance.close(true);
+                    $uibModalInstance.close(true);
                 });
         };
 
