@@ -86,7 +86,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 },
                 {
                     value: 'session-social',
-                    name: 'HTTP Session Authentication with social login enabled (Google, Facebook, Twitter). Warning, this only works with SQL databases!'
+                    name: 'HTTP Session Authentication with social login enabled (Google, Facebook, Twitter). Warning, this doesn\'t work with Cassandra!'
                 },
                 {
                     value: 'oauth2',
@@ -101,11 +101,26 @@ JhipsterGenerator.prototype.askFor = function askFor() {
         },
         {
             when: function (response) {
-                if (response.authenticationType == 'session-social') {
-                    response.databaseType = 'sql';
-                    return false;
+                return response.authenticationType == 'session-social';
+            },
+            type: 'list',
+            name: 'databaseType',
+            message: '(4/' + questions + ') Which *type* of database would you like to use?',
+            choices: [
+                {
+                    value: 'sql',
+                    name: 'SQL (H2, MySQL, PostgreSQL, Oracle)'
+                },
+                {
+                    value: 'mongodb',
+                    name: 'MongoDB'
                 }
-                return true;
+            ],
+            default: 0
+        },
+        {
+            when: function (response) {
+                return response.authenticationType != 'session-social';
             },
             type: 'list',
             name: 'databaseType',
@@ -605,6 +620,7 @@ JhipsterGenerator.prototype.app = function app() {
         this.copy(resourceDir + '/config/mongeez/authorities.xml', resourceDir + 'config/mongeez/authorities.xml');
         this.copy(resourceDir + '/config/mongeez/master.xml', resourceDir + 'config/mongeez/master.xml');
         this.copy(resourceDir + '/config/mongeez/users.xml', resourceDir + 'config/mongeez/users.xml');
+        this.copy(resourceDir + '/config/mongeez/social_user_connections.xml', resourceDir + 'config/mongeez/social_user_connections.xml');
     }
 
     if (this.databaseType == "cassandra") {
@@ -885,7 +901,7 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.useSass) {
         this.template('src/main/scss/main.scss', 'src/main/scss/main.scss');
     }
-    // this css file will be overwritten by the sass generated css if sass is enabled 
+    // this css file will be overwritten by the sass generated css if sass is enabled
     // but this will avoid errors when running app without running sass task first
     this.template('src/main/webapp/assets/styles/main.css', 'src/main/webapp/assets/styles/main.css');
 
