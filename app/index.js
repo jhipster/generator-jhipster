@@ -86,7 +86,7 @@ JhipsterGenerator.prototype.askFor = function askFor() {
                 },
                 {
                     value: 'session-social',
-                    name: 'HTTP Session Authentication with social login enabled (Google, Facebook, Twitter). Warning, this doesn\'t work with cassandra!'
+                    name: 'HTTP Session Authentication with social login enabled (Google, Facebook, Twitter). Warning, this doesn\'t work with Cassandra!'
                 },
                 {
                     value: 'oauth2',
@@ -901,7 +901,7 @@ JhipsterGenerator.prototype.app = function app() {
     if (this.useSass) {
         this.template('src/main/scss/main.scss', 'src/main/scss/main.scss');
     }
-    // this css file will be overwritten by the sass generated css if sass is enabled 
+    // this css file will be overwritten by the sass generated css if sass is enabled
     // but this will avoid errors when running app without running sass task first
     this.template('src/main/webapp/assets/styles/main.css', 'src/main/webapp/assets/styles/main.css');
 
