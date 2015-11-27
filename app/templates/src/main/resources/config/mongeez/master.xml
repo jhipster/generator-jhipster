@@ -1,4 +1,5 @@
 <changeFiles>
     <file path="authorities.xml"/>
     <file path="users.xml"/>
+    <file path="social_user_connections.xml"/>
 </changeFiles>

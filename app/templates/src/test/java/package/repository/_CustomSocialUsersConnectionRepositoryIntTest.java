@@ -34,8 +34,8 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-@IntegrationTest
-@Transactional
+@IntegrationTest<% if (databaseType == 'sql') { %>
+@Transactional<% } %>
 public class CustomSocialUsersConnectionRepositoryIntTest {
 
     private ConnectionFactoryRegistry connectionFactoryRegistry;
@@ -51,6 +51,8 @@ public class CustomSocialUsersConnectionRepositoryIntTest {
 
     @Before
     public void setUp() {
+		socialUserConnectionRepository.deleteAll();
+
         connectionFactoryRegistry = new ConnectionFactoryRegistry();
         connectionFactory = new TestFacebookConnectionFactory();
         connectionFactoryRegistry.addConnectionFactory(connectionFactory);

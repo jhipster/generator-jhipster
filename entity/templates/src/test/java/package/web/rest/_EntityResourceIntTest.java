@@ -3,8 +3,9 @@ package <%=packageName%>.web.rest;
 import <%=packageName%>.AbstractCassandraTest;<% } %>
 import <%=packageName%>.Application;
 import <%=packageName%>.domain.<%= entityClass %>;
-import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (searchEngine == 'elasticsearch') { %>
-import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% } %><% if (dto == 'mapstruct') { %>
+import <%=packageName%>.repository.<%= entityClass %>Repository;<% if (service != 'no') { %>
+import <%=packageName%>.service.<%= entityClass %>Service;<% } else { if (searchEngine == 'elasticsearch') { %>
+import <%=packageName%>.repository.search.<%= entityClass %>SearchRepository;<% }} if (dto == 'mapstruct') { %>
 import <%=packageName%>.web.rest.dto.<%= entityClass %>DTO;
 import <%=packageName%>.web.rest.mapper.<%= entityClass %>Mapper;<% } %>
 
@@ -151,17 +152,20 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
     private static final String <%=updatedValueName %>_CONTENT_TYPE = "image/png";<% } else if (isEnum) { %>
 
 
-private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%=enumValue1 %>;
+    private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%=enumValue1 %>;
     private static final <%=fieldType %> <%=updatedValueName %> = <%=fieldType %>.<%=enumValue2 %>;<% } } %>
 
     @Inject
     private <%= entityClass %>Repository <%= entityInstance %>Repository;<% if (dto == 'mapstruct') { %>
 
     @Inject
-    private <%= entityClass %>Mapper <%= entityInstance %>Mapper;<% } %><% if (searchEngine == 'elasticsearch') { %>
+    private <%= entityClass %>Mapper <%= entityInstance %>Mapper;<% } if (service != 'no') { %>
 
     @Inject
-    private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;<% } %>
+    private <%= entityClass %>Service <%= entityInstance %>Service;<% } else { if (searchEngine == 'elasticsearch') { %>
+
+    @Inject
+    private <%= entityClass %>SearchRepository <%= entityInstance %>SearchRepository;<% }} %>
 
     @Inject
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -176,10 +180,11 @@ private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%
     @PostConstruct
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource();
-        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Repository", <%= entityInstance %>Repository);<% if (dto == 'mapstruct') { %>
-        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Mapper", <%= entityInstance %>Mapper);<% } %><% if (searchEngine == 'elasticsearch') { %>
+        <%= entityClass %>Resource <%= entityInstance %>Resource = new <%= entityClass %>Resource();<% if (service != 'no') { %>
+        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Service", <%= entityInstance %>Service);<% } else { if (searchEngine == 'elasticsearch') { %>
         ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>SearchRepository", <%= entityInstance %>SearchRepository);<% } %>
+        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Repository", <%= entityInstance %>Repository);<% } if (dto == 'mapstruct') { %>
+        ReflectionTestUtils.setField(<%= entityInstance %>Resource, "<%= entityInstance %>Mapper", <%= entityInstance %>Mapper);<% } %>
         this.rest<%= entityClass %>MockMvc = MockMvcBuilders.standaloneSetup(<%= entityInstance %>Resource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setMessageConverters(jacksonMessageConverter).build();

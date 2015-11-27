@@ -10,7 +10,7 @@ angular.module('<%=angularAppName%>')
 
         $scope.page = 1;
         $scope.loadAll = function () {<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-            User.query({page: $scope.page - 1, per_page: 20}, function (result, headers) {
+            User.query({page: $scope.page - 1, size: 20}, function (result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 $scope.totalItems = headers('X-Total-Count');<% } else { %>
             User.query({}, function (result) {<% } %>

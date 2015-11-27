@@ -18,8 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.social.connect.*;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.test.util.ReflectionTestUtils;<% if (databaseType == 'sql') { %>
+import org.springframework.transaction.annotation.Transactional;<% } %>
 
 import javax.inject.Inject;
 import java.util.Optional;
@@ -30,8 +30,8 @@ import static org.mockito.Mockito.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-@IntegrationTest
-@Transactional
+@IntegrationTest<% if (databaseType == 'sql') { %>
+@Transactional<% } %>
 public class SocialServiceIntTest {
 
     @Inject
@@ -102,10 +102,13 @@ public class SocialServiceIntTest {
             "PROVIDER");
 
         // Exercise
-        socialService.createSocialUser(connection, "fr");
-
-        // Teardown
-        userRepository.delete(user);
+        try {
+            // Exercise
+            socialService.createSocialUser(connection, "fr");
+        } finally {
+            // Teardown
+            userRepository.delete(user);
+        }
     }
 
     @Test
@@ -353,6 +356,6 @@ public class SocialServiceIntTest {
         user.setEmail(email);
         user.setFirstName(firstName);
         user.setLastName(lastName);
-        return userRepository.saveAndFlush(user);
+        return userRepository.<% if (databaseType == 'sql') { %>saveAndFlush<% } else if (databaseType == 'mongodb') { %>save<% } %>(user);
     }
 }
