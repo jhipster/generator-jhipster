@@ -10,7 +10,7 @@ if [ -a docker-compose-prod.yml ]; then
   docker-compose -f docker-compose-prod.yml up -d
   if [ $JHIPSTER == "app-cassandra" ]; then
     sleep 30
-    docker exec -it sampleCassandra-prod-cassandra init
+    docker exec -it samplecassandra-prod-cassandra init
   else
     sleep 20
   fi

@@ -35,11 +35,19 @@
   # - ~/volumes/jhipster/<%=baseName%>/prod-mongodb/:/data/db/
   ports:
   - "27017:27017"
-<% } if (prodDatabaseType == 'cassandra') { %>jhipster-prod-cassandra:
-  container_name: <%=baseName%>-prod-cassandra
+<% } if (prodDatabaseType == 'cassandra') { %>jhipster-opscenter:
+  container_name: jhipster-opscenter
+  build: ./docker/opscenter
+  ports:
+  - "8888:8888"
+
+jhipster-prod-cassandra:
+  container_name: <%=baseName.toLowerCase()%>-prod-cassandra
   build: .
   # volumes:
   # - ~/volumes/jhipster/<%=baseName%>/prod-cassandra/:/var/lib/cassandra/data
+  links:
+  - jhipster-opscenter:opscenter
   ports:
   - "7000:7000"
   - "7001:7001"
@@ -47,10 +55,11 @@
   - "9042:9042"
   - "9160:9160"
 
-<%=baseName%>-prod-cassandra-node:
-  image: cassandra:2.2.3
+<%=baseName.toLowerCase()%>-prod-cassandra-node:
+  build: .
   links:
   - jhipster-prod-cassandra:seed
+  - jhipster-opscenter:opscenter
   environment:
   - CASSANDRA_SEEDS=seed
 <% } %>
