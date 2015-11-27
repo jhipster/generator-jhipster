@@ -1,0 +1,21 @@
+<%
+var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
+var mapper = entityInstance  + 'Mapper';
+var entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO';
+for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { %>
+
+    /**
+     *  get all the <%= entityInstance %>s where <%= relationships[idx].relationshipNameCapitalized %> is null.
+     *  @return the list of entities
+     */<% if (databaseType == 'sql') { %>
+    @Transactional(readOnly = true) <% } %>
+    public List<<%= instanceType %>> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull() {
+        log.debug("Request to get all <%= entityInstance %>s where <%= relationships[idx].relationshipNameCapitalized %> is null");
+        return StreamSupport
+            .stream(<%= entityInstance %>Repository.findAll().spliterator(), false)
+            .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationships[idx].relationshipNameCapitalized %>() == null)<% if (dto == 'mapstruct') { %>
+            .map(<%= entityToDtoReference %>)
+            .collect(Collectors.toCollection(LinkedList::new));<% } else { %>
+            .collect(Collectors.toList());<% } %>
+    }
+<% } } %>
