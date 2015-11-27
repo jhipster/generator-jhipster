@@ -30,7 +30,11 @@ public class PaginationUtil {
             link += "<" + (new URI(baseUrl +"?page=" + (page.getNumber() - 1) + "&size=" + page.getSize())).toString() + ">; rel=\"prev\",";
         }
         // last and first link
-        link += "<" + (new URI(baseUrl +"?page=" + (page.getTotalPages() - 1) + "&size=" + page.getSize())).toString() + ">; rel=\"last\",";
+        int lastPage = 0;
+        if (page.getTotalPages() > 0) {
+            lastPage = page.getTotalPages() - 1;
+        }
+        link += "<" + (new URI(baseUrl +"?page=" + lastPage + "&size=" + page.getSize())).toString() + ">; rel=\"last\",";
         link += "<" + (new URI(baseUrl +"?page=" + 0 + "&size=" + page.getSize())).toString() + ">; rel=\"first\"";
         headers.add(HttpHeaders.LINK, link);
         return headers;
