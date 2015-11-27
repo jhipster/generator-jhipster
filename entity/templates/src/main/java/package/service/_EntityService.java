@@ -16,7 +16,6 @@ public interface <%= entityClass %>Service {
 
     /**
      * Save a <%= entityInstance %>.
-     * @param input the <%= instanceType %>
      * @return the persisted entity
      */
     public <%= instanceType %> save(<%= instanceType %> <%= instanceName %>);
@@ -36,21 +35,18 @@ public interface <%= entityClass %>Service {
 
     /**
      *  get the "id" <%= entityInstance %>.
-     *  @param input id
      *  @return the entity
      */
     public <%= instanceType %> findOne(<%= pkType %> id);
 
     /**
      *  delete the "id" <%= entityInstance %>.
-     *  @param input id
      */
     public void delete(<%= pkType %> id);<% if (searchEngine == 'elasticsearch') { %>
 
     /**
      * search for the <%= entityInstance %> corresponding
      * to the query.
-     * @param input query
      */
     public List<<%= instanceType %>> search(String query);<% } %>
 }
