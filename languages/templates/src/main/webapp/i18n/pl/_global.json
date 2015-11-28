@@ -97,17 +97,17 @@
             "maxlength": "Wartość nie może być dłuższa niż {{max}} znaków.",
             "min": "Wartość powinna być większa niż {{min}}.",
             "max": "Wartość nie może być większa niż {{max}}.",
-            "minbytes": "This field should be more than {{min}} bytes.",
-            "maxbytes": "This field cannot be more than {{max}} bytes.",
+            "minbytes": "Wartość nie może być mniejsza niż {{min}} bajtów.",
+            "maxbytes": "Wartość nie może być większa niż {{max}} bajtów.",
             "pattern": "Wartość powinna być zgodna ze wzorem {{pattern}}.",
             "number": "Wartość powinna być liczbowa.",
             "datetimelocal": "Wartość powinna zawierać datę i czas."
         }
     },
     "error": {
-        "serverNotReachable": "Server not reachable",
-        "NotNull": "Field {{fieldName}} cannot be empty!",
-        "Size": "Field {{fieldName}} does not meet min/max size requirements!"
+        "serverNotReachable": "Serwer jest nieosiągalny",
+        "NotNull": "Wartość {{fieldName}} nie może być pusta!",
+        "Size": "Wartość {{fieldName}} nie spełnia wymagań co do długości!"
     },
     "footer": "To jest stopka"
 }
