@@ -1,13 +1,15 @@
 <div>
-    <div class="row">
-        <h2 class="col-sm-6" translate="user-management.home.title">Users</h2>
-        <div class="col-md-4">
-            <button class="btn btn-primary" ui-sref="user-management.new">
-                <span class="glyphicon glyphicon-flash"></span> <span translate="user-management.home.createLabel">Create a new User</span>
-            </button>
+    <h2 translate="user-management.home.title">Users</h2>
+    <jh-alert></jh-alert>
+    <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+              <button class="btn btn-primary" ui-sref="user-management.new">
+                  <span class="glyphicon glyphicon-flash"></span> <span translate="user-management.home.createLabel">Create a new User</span>
+              </button>
+          </div>
         </div>
     </div>
-    <jh-alert></jh-alert>
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
