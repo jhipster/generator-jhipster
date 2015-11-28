@@ -20,6 +20,23 @@ angular.module('<%=angularAppName%>')
                     $scope.$apply();
                     $scope.callback();
                 }
+                this.applyClass = function (element) {
+                    var allThIcons = element.parent().find('span.glyphicon'),
+                    sortIcon = 'glyphicon-sort',
+                    sortAsc = 'glyphicon-sort-by-attributes',
+                    sortDesc = 'glyphicon-sort-by-attributes-alt',
+                    remove = sortIcon + ' ' + sortDesc,
+                    add = sortAsc,
+                    thisIcon = element.find('span.glyphicon');
+                    if (!$scope.ascending) {
+                        remove = sortIcon + ' ' + sortAsc;
+                        add = sortDesc;
+                    }
+                    allThIcons.removeClass(sortAsc + ' ' + sortDesc);
+                    allThIcons.addClass(sortIcon);
+                    thisIcon.removeClass(remove);
+                    thisIcon.addClass(add);
+                }
             }]
         }
     }).directive('jhSortBy', function () {
@@ -30,6 +47,7 @@ angular.module('<%=angularAppName%>')
             link: function (scope, element, attrs, parentCtrl) {
                 element.bind('click', function () {
                     parentCtrl.sort(attrs.jhSortBy);
+                    parentCtrl.applyClass(element);
                 });
             }
         };
