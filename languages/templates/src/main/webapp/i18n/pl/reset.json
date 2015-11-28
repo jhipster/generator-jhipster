@@ -1,28 +1,28 @@
 {
     "reset": {
         "request": {
-            "title": "Reset your password",
+            "title": "Zresetuj swoje hasło",
             "form": {
-                "button": "Reset password"
+                "button": "Reset hasła"
             },
             "messages": {
-                "info": "Enter the e-mail address you used to register",
-                "success": "Check your e-mails for details on how to reset your password.",
-                "notfound": "<strong>E-Mail address isn't registered!</strong> Please check and try again"
+                "info": "Wpisz e-mail użyty podczas rejestracji.",
+                "success": "Sprawdź e-mail w celu uzyskania szczegołów jak zresetować hasło.",
+                "notfound": "<strong>E-Mail nie był zarejestrowany!</strong> Proszę sprawdź i spróbuj ponownie."
 
             }
 
         },
         "finish" : {
-            "title": "Reset password",
+            "title": "Reset hasła",
             "form": {
-                "button": "Validate new password"
+                "button": "Sprawdź nowe hasło"
             },
             "messages": {
-                "info": "Choose a new password",
-                "success": "<strong>Your password has been reset.</strong> Please <a class=\"alert-link\" href=\"#/login\">sign in</a>.",
-                "keymissing": "The reset key is missing.",
-                "error": "Your password couldn't be reset. Remember a password request is only valid for 24 hours."
+                "info": "Wybierz nowe hasło",
+                "success": "<strong>Twoje hasło zostało zresetowane.</strong> Proszę <a class=\"alert-link\" href=\"#/login\">zaloguj się</a>.",
+                "keymissing": "Brakuje klucza resetującego hasło.",
+                "error": "Twoje hasło nie mogło zostać zresetowane. Pamiętaj że prośba o zresetowanie hasła jest ważna tylko przez 24 godziny."
             }
         }
     }
