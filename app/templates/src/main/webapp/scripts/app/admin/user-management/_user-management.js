@@ -100,7 +100,7 @@ angular.module('<%=angularAppName%>')
                 data: {
                     authorities: ['ROLE_ADMIN'],
                 },
-                onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $modal) {
+                onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
                         templateUrl: 'scripts/app/admin/user-management/user-management-delete-dialog.html',
                         controller: 'user-managementDeleteController',
