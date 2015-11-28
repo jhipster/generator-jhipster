@@ -24,7 +24,8 @@ angular.module('<%=angularAppName%>').controller('UserManagementDialogController
             $scope.isSaving = true;
             if ($scope.user.id != null) {
                 User.update($scope.user, onSaveSuccess, onSaveError);
-            } else {
+            } else {<% if (!enableTranslation){ %>
+                $scope.user.langKey = 'en';<% } %>
                 User.save($scope.user, onSaveSuccess, onSaveError);
             }
         };

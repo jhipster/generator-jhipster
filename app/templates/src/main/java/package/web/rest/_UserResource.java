@@ -93,14 +93,14 @@ public class UserResource {
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
     @Secured(AuthoritiesConstants.ADMIN)
-    public ResponseEntity<?> createUser(@RequestBody User user, HttpServletRequest request) throws URISyntaxException {
-        log.debug("REST request to save User : {}", user);
-        if (userRepository.findOneByLogin(user.getLogin()).isPresent()) {
+    public ResponseEntity<?> createUser(@RequestBody ManagedUserDTO managedUserDTO, HttpServletRequest request) throws URISyntaxException {
+        log.debug("REST request to save User : {}", managedUserDTO);
+        if (userRepository.findOneByLogin(managedUserDTO.getLogin()).isPresent()) {
           return ResponseEntity.badRequest().header("Failure", "Login already in use").body(null);
-        } else if (userRepository.findOneByEmail(user.getEmail()).isPresent()) {
+        } else if (userRepository.findOneByEmail(managedUserDTO.getEmail()).isPresent()) {
           return ResponseEntity.badRequest().header("Failure", "Email already in use").body(null);
         } else {
-          User newUser = userService.createUser(user);
+          User newUser = userService.createUser(managedUserDTO);
           String baseUrl = request.getScheme() + // "http"
           "://" +                                // "://"
           request.getServerName() +              // "myhost"

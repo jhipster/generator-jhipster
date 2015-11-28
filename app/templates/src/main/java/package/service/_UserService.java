@@ -10,6 +10,7 @@ import <%=packageName%>.repository.search.UserSearchRepository;<% } %><% if (dat
 import <%=packageName%>.security.AuthoritiesConstants;<% } %>
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.util.RandomUtil;
+import <%=packageName%>.web.rest.dto.ManagedUserDTO;
 import java.time.ZonedDateTime;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import java.time.LocalDate;<% } %>
 import org.slf4j.Logger;
@@ -118,7 +119,20 @@ public class UserService {
         log.debug("Created Information for User: {}", newUser);
         return newUser;
     }
-    public User createUser(User user) {
+    public User createUser(ManagedUserDTO managedUserDTO) {
+        User user=new User();<% if (databaseType == 'cassandra') { %>
+        user.setId(UUID.randomUUID().toString());<% } %>
+        user.setLogin(managedUserDTO.getLogin());
+        user.setFirstName(managedUserDTO.getFirstName());
+        user.setLastName(managedUserDTO.getLastName());
+        user.setEmail(managedUserDTO.getEmail());
+        user.setLangKey(managedUserDTO.getLangKey());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+        Set<Authority> authorities = new HashSet<>();
+        managedUserDTO.getAuthorities().stream().forEach(
+            authority -> authorities.add(authorityRepository.findOne(authority))
+        );
+        user.setAuthorities(authorities);<% } %><% if (databaseType == 'cassandra') { %>
+        user.setAuthorities(managedUserDTO.getAuthorities());<% } %>
         String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
         user.setPassword(encryptedPassword);
         user.setResetKey(RandomUtil.generateResetKey());
