@@ -107,7 +107,10 @@
     "error": {
         "serverNotReachable": "Servern kan inte nås",
         "NotNull": "Fält {{fieldName}} kan inte vara tomt!",
-        "Size": "Fält {{fieldName}} uppfyller inte min/max-storlekskravet!"
+        "Size": "Fält {{fieldName}} uppfyller inte min/max-storlekskravet!",
+        "userExists": "Login name already used!",
+        "emailExists": "E-mail is already in use!",
+        "idExists": "A new {{entityName}} cannot already have an ID"
     },
     "footer": "Detta är din footer"
 }
