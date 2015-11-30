@@ -108,9 +108,9 @@
         "serverNotReachable": "சர்வரை அடைய முடியவில்லை",
         "NotNull": "களம் {{fieldName}} காலியாக இருக்க கூடாது!",
         "Size": "களம் {{fieldName}} தேவைகள் பூர்த்தி செய்யவில்லை!",
-        "userExists": "Login name already used!",
-        "emailExists": "E-mail is already in use!",
-        "idExists": "A new {{entityName}} cannot already have an ID"
+        "userExists": "உள் நுழை பெயர் எடுக்கப்பட்டது!",
+        "emailExists": "மின்னஞ்சல் உபயோகிக்கப்பட்டது!",
+        "idExists": "புது {{entityName}} -க்கு ஐ.டி இருக்கமுடியாது"
     },
     "footer": "இது உங்கள் முடிப்பு"
 }
