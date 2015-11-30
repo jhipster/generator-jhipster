@@ -82,5 +82,6 @@
     ],
     "changelogDate": "20150805124838",
     "dto": "yes",
-    "pagination": "no"
+    "pagination": "no",
+    "service": "serviceImpl"
 }
