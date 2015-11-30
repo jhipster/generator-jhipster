@@ -890,21 +890,30 @@ EntityGenerator.prototype.files = function files() {
     // Expose utility methods in templates
     this.util = {};
     this.util.contains = _.contains;
-    var wordwrap = function(text, width){
+    var wordwrap = function(text, width, seperator, keepLF){
         var wrappedText = '';
         var rows = text.split('\n');
         for (var i = 0; i < rows.length; i++) {
             var row = rows[i];
-            wrappedText = wrappedText + '\n' + _s.wrap(row, { width: width });
+            if(keepLF == true && i != 0) {
+                wrappedText = wrappedText + '\\n';
+            }
+            wrappedText = wrappedText + seperator + _s.wrap(row, { width: width , seperator : seperator, preserveSpaces: keepLF });
         }
         return wrappedText;
     }
     var wordwrapWidth = 80;
     this.util.formatAsClassJavadoc = function (text) {
-        return '/**' + wordwrap(text, wordwrapWidth - 4).replace(/\n/g, '\n * ') + '\n */';
+        return '/**' + wordwrap(text, wordwrapWidth - 4, '\n * ', false) + '\n */';
     };
     this.util.formatAsFieldJavadoc = function (text) {
-        return '    /**' + wordwrap(text, wordwrapWidth - 8).replace(/\n/g, '\n     * ') + '\n     */';
+        return '    /**' + wordwrap(text, wordwrapWidth - 8, '\n     * ', false) + '\n     */';
+    };
+    this.util.formatAsApiModel = function (text) {
+        return wordwrap(text.replace(/\\/g, '\\\\').replace(/\"/g, '\\\"'), wordwrapWidth - 9, '"\n    + "', true)
+    };
+    this.util.formatAsApiModelProperty = function (text) {
+        return wordwrap(text.replace(/\\/g, '\\\\').replace(/\"/g, '\\\"'), wordwrapWidth - 13, '"\n        + "', true)
     };
 
     if (this.useConfigurationFile == false) { // store informations in a file for further use.

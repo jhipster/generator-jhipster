@@ -1,6 +1,20 @@
 package <%=packageName%>.domain;
 <% if (databaseType == 'cassandra') { %>
-import com.datastax.driver.mapping.annotations.*;<% } %><%
+import com.datastax.driver.mapping.annotations.*;<% } %><% if (typeof javadoc != 'undefined') { -%>
+import io.swagger.annotations.ApiModel;<% } %><%
+var importApiModelProperty = false;
+for (relationshipId in relationships) {
+    if (typeof relationships[relationshipId].javadoc != 'undefined') {
+        importApiModelProperty = true;
+    }
+}
+for (fieldId in fields) {
+    if (typeof fields[fieldId].javadoc != 'undefined') {
+        importApiModelProperty = true;
+    }
+}
+if (importApiModelProperty) { %>
+import io.swagger.annotations.ApiModelProperty;<% } %><%
 var importJsonignore = false;
 for (relationshipId in relationships) {
     if (relationships[relationshipId].relationshipType == 'one-to-many') {
@@ -48,6 +62,7 @@ import <%=packageName%>.domain.enumeration.<%= element %>;<% }); %>
  */
 <% } else { -%>
 <%- util.formatAsClassJavadoc(javadoc) %>
+@ApiModel(description = "<%- util.formatAsApiModel(javadoc) %>")
 <% } -%>
 <% if (databaseType == 'sql') { -%>
 @Entity
@@ -68,7 +83,8 @@ public class <%= entityClass %> implements Serializable {
 
 <%_ for (fieldId in fields) {
     if (typeof fields[fieldId].javadoc != 'undefined') { _%>
-<%- util.formatAsFieldJavadoc(fields[fieldId].javadoc) -%>
+<%- util.formatAsFieldJavadoc(fields[fieldId].javadoc) %>
+    @ApiModelProperty(value = "<%- util.formatAsApiModelProperty(fields[fieldId].javadoc) %>")
     <%_ }
     var required = false;
     if (fields[fieldId].fieldValidate == true) {
@@ -115,7 +131,8 @@ public class <%= entityClass %> implements Serializable {
             mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
         }
         if (typeof relationships[relationshipId].javadoc != 'undefined') { _%>
-<%- util.formatAsFieldJavadoc(relationships[relationshipId].javadoc) -%>
+<%- util.formatAsFieldJavadoc(relationships[relationshipId].javadoc) %>
+    @ApiModelProperty(value = "<%- util.formatAsApiModelProperty(relationships[relationshipId].javadoc) %>")
     <%_ }
         if (relationships[relationshipId].relationshipType == 'one-to-many') {
     _%>
