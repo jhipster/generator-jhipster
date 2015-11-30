@@ -96,9 +96,9 @@ public class UserResource {
     public ResponseEntity<?> createUser(@RequestBody ManagedUserDTO managedUserDTO, HttpServletRequest request) throws URISyntaxException {
         log.debug("REST request to save User : {}", managedUserDTO);
         if (userRepository.findOneByLogin(managedUserDTO.getLogin()).isPresent()) {
-          return ResponseEntity.badRequest().header("Failure", "Login already in use").body(null);
+          return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("user-management", "userExists", "Login already in use")).body(null);
         } else if (userRepository.findOneByEmail(managedUserDTO.getEmail()).isPresent()) {
-          return ResponseEntity.badRequest().header("Failure", "Email already in use").body(null);
+          return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("user-management", "emailExists", "Email already in use")).body(null);
         } else {
           User newUser = userService.createUser(managedUserDTO);
           String baseUrl = request.getScheme() + // "http"
@@ -127,7 +127,7 @@ public class UserResource {
         log.debug("REST request to update User : {}", managedUserDTO);
         Optional<User> existingUser = userRepository.findOneByEmail(managedUserDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(managedUserDTO.getLogin()))) {
-            return ResponseEntity.badRequest().header("Failure", "Email already used").body(null);
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("user-management", "emailExists", "Email already in use")).body(null);
         }
         return userRepository
             .findOneById(managedUserDTO.getId())

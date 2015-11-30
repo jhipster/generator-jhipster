@@ -11,6 +11,7 @@ import <%=packageName%>.service.MailService;
 import <%=packageName%>.service.UserService;
 import <%=packageName%>.web.rest.dto.KeyAndPasswordDTO;
 import <%=packageName%>.web.rest.dto.UserDTO;
+import <%=packageName%>.web.rest.util.HeaderUtil;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -125,7 +126,7 @@ public class AccountResource {
     public ResponseEntity<String> saveAccount(@RequestBody UserDTO userDTO) {
         Optional<User> existingUser = userRepository.findOneByEmail(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userDTO.getLogin()))) {
-            return ResponseEntity.badRequest().header("Failure", "Email already used").body(null);
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("user-management", "emailExists", "Email already in use")).body(null);
         }
         return userRepository
             .findOneByLogin(SecurityUtils.getCurrentUser().getUsername())

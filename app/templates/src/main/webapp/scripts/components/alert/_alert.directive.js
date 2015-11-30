@@ -42,7 +42,12 @@ angular.module('<%=angularAppName%>')
                                 break;
 
                             case 400:
-                                if (httpResponse.data && httpResponse.data.fieldErrors) {
+                                var errorHeader = httpResponse.headers('X-jhipsterApp-error');
+                                var entityKey = httpResponse.headers('X-jhipsterApp-params');
+                                if(errorHeader) {
+                                    var entityName = <% if (enableTranslation) { %>$translate.instant('global.menu.entities.' + entityKey)<% }else{ %>entityKey<% } %>;
+                                    addErrorAlert(errorHeader, errorHeader, {entityName: entityName});
+                                } else if (httpResponse.data && httpResponse.data.fieldErrors) {
                                     for (i = 0; i < httpResponse.data.fieldErrors.length; i++) {
                                         var fieldError = httpResponse.data.fieldErrors[i];
                                         // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
