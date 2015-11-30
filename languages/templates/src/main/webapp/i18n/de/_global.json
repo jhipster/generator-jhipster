@@ -107,7 +107,10 @@
     "error": {
         "serverNotReachable": "Server ist nicht erreichbar",
         "NotNull": "Feld {{fieldName}} kann nicht leer sein!",
-        "Size": "Feld {{fieldName}} erfüllt nicht die minimalen/maximalen Voraussetzungen!"
+        "Size": "Feld {{fieldName}} erfüllt nicht die minimalen/maximalen Voraussetzungen!",
+        "userExists": "Login name already used!",
+        "emailExists": "E-mail is already in use!",
+        "idExists": "A new {{entityName}} cannot already have an ID"
     },
     "footer": "Dies ist Ihre Fußzeile"
 }
