@@ -127,7 +127,11 @@ public class UserService {
         user.setFirstName(managedUserDTO.getFirstName());
         user.setLastName(managedUserDTO.getLastName());
         user.setEmail(managedUserDTO.getEmail());
-        user.setLangKey(managedUserDTO.getLangKey());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+        if (managedUserDTO.getLangKey() == null) {
+            user.setLangKey("en"); // default language is English
+        } else {
+            user.setLangKey(managedUserDTO.getLangKey());
+        }<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         Set<Authority> authorities = new HashSet<>();
         managedUserDTO.getAuthorities().stream().forEach(
             authority -> authorities.add(authorityRepository.findOne(authority))
