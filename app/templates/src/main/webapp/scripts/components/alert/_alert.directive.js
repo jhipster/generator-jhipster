@@ -38,7 +38,7 @@ angular.module('<%=angularAppName%>')
                         switch (httpResponse.status) {
                             // connection refused, server not reachable
                             case 0:
-                                addErrorAlert("Server not reachable",'error.serverNotReachable');
+                                addErrorAlert("Server not reachable",'error.server.not.reachable');
                                 break;
 
                             case 400:

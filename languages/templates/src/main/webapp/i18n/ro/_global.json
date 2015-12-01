@@ -114,7 +114,7 @@
         }
     },
     "error": {
-        "serverNotReachable": "Serverul este indisponibil",
+        "server.not.reachable": "Serverul este indisponibil",
         "NotNull": "Câmpul {{fieldName}} nu poate fi gol!",
         "Size": "Câmpul {{fieldName}} nu corespunde ceințelor de dimensiune minimă/maximă!",
         "userExists": "Login name already used!",

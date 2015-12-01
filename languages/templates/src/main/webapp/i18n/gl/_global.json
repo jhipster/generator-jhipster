@@ -105,7 +105,7 @@
         }
     },
     "error": {
-        "serverNotReachable": "Servidor non accesible",
+        "server.not.reachable": "Servidor non accesible",
         "NotNull": "O campo {{fieldName}} non pode estar baleiro!",
         "Size": "O campo {{fieldName}} non cumpre cos requisitos de tamaño mínimo ou máximo!",
         "userExists": "Login name already used!",

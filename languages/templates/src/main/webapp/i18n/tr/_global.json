@@ -105,7 +105,7 @@
         }
     },
     "error": {
-        "serverNotReachable": "Sunucuya ulaşılamıyor",
+        "server.not.reachable": "Sunucuya ulaşılamıyor",
         "NotNull": "{{fieldName}} alanı boş bırakılamaz!",
         "Size": "{{fieldName}} alanı min/max gerekliliklere uymuyor!",
         "userExists": "Login name already used!",

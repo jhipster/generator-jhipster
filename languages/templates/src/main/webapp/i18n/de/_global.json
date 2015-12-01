@@ -105,7 +105,7 @@
         }
     },
     "error": {
-        "serverNotReachable": "Server ist nicht erreichbar",
+        "server.not.reachable": "Server ist nicht erreichbar",
         "NotNull": "Feld {{fieldName}} kann nicht leer sein!",
         "Size": "Feld {{fieldName}} erfüllt nicht die minimalen/maximalen Voraussetzungen!",
         "userExists": "Login name already used!",

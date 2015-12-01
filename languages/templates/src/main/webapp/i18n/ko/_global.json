@@ -106,7 +106,7 @@
         }
     },
     "error": {
-        "serverNotReachable": "Server not reachable",
+        "server.not.reachable": "Server not reachable",
         "NotNull": "Field {{fieldName}} cannot be empty!",
         "Size": "Field {{fieldName}} does not meet min/max size requirements!",
         "userExists": "Login name already used!",
