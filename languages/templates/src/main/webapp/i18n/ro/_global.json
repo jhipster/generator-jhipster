@@ -106,17 +106,17 @@
             "maxlength": "Acest câmp nu poate să fie mai lung decât {{max}} caractere.",
             "min": "Acest câmp trebuie să fie mai mult decât {{min}}.",
             "max": "Acest câmp nu poate să fie mai mult decât {{max}}.",
-            "minbytes": "This field should be more than {{min}} bytes.",
-            "maxbytes": "This field cannot be more than {{max}} bytes.",
+            "minbytes": "Acest câmp nu poate să fie mai mic decât {{min}} bytes.",
+            "maxbytes": "Acest câmp nu poate să fie mai mare decât {{max}} bytes.",
             "pattern": "Acest câmp trebuie să corespundă șablonului {{pattern}}.",
             "number": "Acest câmp trebuie să fie numeric.",
             "datetimelocal": "Acest câmp trebuie să conțină data si ora."
         }
     },
     "error": {
-        "serverNotReachable": "Server not reachable",
-        "NotNull": "Field {{fieldName}} cannot be empty!",
-        "Size": "Field {{fieldName}} does not meet min/max size requirements!"
+        "serverNotReachable": "Serverul este indisponibil",
+        "NotNull": "Câmpul {{fieldName}} nu poate fi gol!",
+        "Size": "Câmpul {{fieldName}} nu corespunde ceințelor de dimensiune minimă/maximă!"
     },
     "footer": "Acesta este subsolul paginii dumneavoastră"
 }

@@ -1,13 +1,13 @@
 {
     "social": {
-        "btnLabel": "Sign in with {{ label }}",
+        "btnLabel": "Autentificați-vă {{ label }}",
         "register": {
-            "title": "Register with {{ label }}",
-            "errorTitle": "Register with an external account",
+            "title": "Înregistrați-vă cu {{ label }}",
+            "errorTitle": "Înregistrare cu un cont extern",
             "messages": {
-                "success": "<strong>Registration saved!</strong> Please check your email for confirmation.",
+                "success": "<strong>Înregistrare salvată!</strong> Vă rugăm să vă verificați emailul pentu confirmare.",
                 "error": {
-                    "fail": "<strong>Registration failed!</strong> A problem occurred during the validation of your external account, we advise you to try with another connection."
+                    "fail": "<strong>Înregistrare eșuată</strong> A apărut o problemă în timpul validării contului dumneavoastră extern, vă sfătuim să încercați cu o altă conexiune."
                 }
             }
         }
