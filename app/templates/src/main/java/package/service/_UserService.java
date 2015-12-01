@@ -121,7 +121,7 @@ public class UserService {
     }
 
     public User createUser(ManagedUserDTO managedUserDTO) {
-        User user=new User();<% if (databaseType == 'cassandra') { %>
+        User user = new User();<% if (databaseType == 'cassandra') { %>
         user.setId(UUID.randomUUID().toString());<% } %>
         user.setLogin(managedUserDTO.getLogin());
         user.setFirstName(managedUserDTO.getFirstName());
