@@ -9,10 +9,11 @@ angular.module('<%=angularAppName%>')
         $scope.reverse = true;
         <%_ } _%>
         <%_ if (pagination == 'pager' || pagination == 'pagination') { _%>
-        $scope.page = 0;
+        $scope.page = 1;
         $scope.loadAll = function() {
-            <%= entityClass %>.query({page: $scope.page, size: 20, sort: $scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc')}, function(result, headers) {
+            <%= entityClass %>.query({page: $scope.page - 1, size: 20, sort: $scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc')}, function(result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
+                $scope.totalItems = headers('X-Total-Count');
                 $scope.<%= entityInstance %>s = result;
             });
         };
