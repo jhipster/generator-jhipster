@@ -107,7 +107,10 @@
     "error": {
         "serverNotReachable": "Sunucuya ulaşılamıyor",
         "NotNull": "{{fieldName}} alanı boş bırakılamaz!",
-        "Size": "{{fieldName}} alanı min/max gerekliliklere uymuyor!"
+        "Size": "{{fieldName}} alanı min/max gerekliliklere uymuyor!",
+        "userExists": "Login name already used!",
+        "emailExists": "E-mail is already in use!",
+        "idExists": "A new {{entityName}} cannot already have an ID"
     },
     "footer": "Burası sayfa alt bilgisi"
 }

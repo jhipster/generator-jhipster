@@ -634,6 +634,7 @@ JhipsterGenerator.prototype.app = function app() {
 
     // Create mail templates
     this.copy(resourceDir + '/mails/activationEmail.html', resourceDir + 'mails/activationEmail.html');
+    this.copy(resourceDir + '/mails/creationEmail.html', resourceDir + 'mails/creationEmail.html');
     this.copy(resourceDir + '/mails/passwordResetEmail.html', resourceDir + 'mails/passwordResetEmail.html');
     if (this.enableSocialSignIn) {
         this.copy(resourceDir + '/mails/socialRegistrationValidationEmail.html', resourceDir + 'mails/socialRegistrationValidationEmail.html');
@@ -1031,10 +1032,12 @@ JhipsterGenerator.prototype.app = function app() {
     this.copyHtml(webappDir + '/scripts/app/admin/user-management/user-management.html', webappDir + 'scripts/app/admin/user-management/user-management.html');
     this.copyHtml(webappDir + '/scripts/app/admin/user-management/_user-management-detail.html', webappDir + 'scripts/app/admin/user-management/user-management-detail.html');
     this.copyHtml(webappDir + '/scripts/app/admin/user-management/_user-management-dialog.html', webappDir + 'scripts/app/admin/user-management/user-management-dialog.html');
+    this.copyHtml(webappDir + '/scripts/app/admin/user-management/_user-management-delete-dialog.html', webappDir + 'scripts/app/admin/user-management/user-management-delete-dialog.html');
     this.copyJs(webappDir + '/scripts/app/admin/user-management/_user-management.js', webappDir + 'scripts/app/admin/user-management/user-management.js', this, {});
     this.template(webappDir + '/scripts/app/admin/user-management/_user-management.controller.js', webappDir + 'scripts/app/admin/user-management/user-management.controller.js', this, {});
     this.template(webappDir + '/scripts/app/admin/user-management/_user-management-detail.controller.js', webappDir + 'scripts/app/admin/user-management/user-management-detail.controller.js', this, {});
     this.template(webappDir + '/scripts/app/admin/user-management/_user-management-dialog.controller.js', webappDir + 'scripts/app/admin/user-management/user-management-dialog.controller.js', this, {});
+    this.template(webappDir + '/scripts/app/admin/user-management/_user-management-delete-dialog.controller.js', webappDir + 'scripts/app/admin/user-management/user-management-delete-dialog.controller.js', this, {});
     this.copyHtml(webappDir + '/scripts/app/error/error.html', webappDir + 'scripts/app/error/error.html');
     this.copyHtml(webappDir + '/scripts/app/error/accessdenied.html', webappDir + 'scripts/app/error/accessdenied.html');
     this.copyJs(webappDir + '/scripts/app/entities/_entity.js', webappDir + 'scripts/app/entities/entity.js', this, {});
@@ -1171,6 +1174,7 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/app/admin/metrics/metrics.modal.controller.js',
         'scripts/app/admin/user-management/user-management-detail.controller.js',
         'scripts/app/admin/user-management/user-management-dialog.controller.js',
+        'scripts/app/admin/user-management/user-management-delete-dialog.controller.js',
         'scripts/app/admin/user-management/user-management.controller.js',
         'scripts/app/admin/user-management/user-management.js',
         'scripts/app/entities/entity.js',

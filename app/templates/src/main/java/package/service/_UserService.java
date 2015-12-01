@@ -10,6 +10,7 @@ import <%=packageName%>.repository.search.UserSearchRepository;<% } %><% if (dat
 import <%=packageName%>.security.AuthoritiesConstants;<% } %>
 import <%=packageName%>.security.SecurityUtils;
 import <%=packageName%>.service.util.RandomUtil;
+import <%=packageName%>.web.rest.dto.ManagedUserDTO;
 import java.time.ZonedDateTime;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 import java.time.LocalDate;<% } %>
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 
+import java.time.ZonedDateTime;
 import javax.inject.Inject;
 import java.util.*;
 
@@ -117,7 +119,30 @@ public class UserService {
         log.debug("Created Information for User: {}", newUser);
         return newUser;
     }
-
+    public User createUser(ManagedUserDTO managedUserDTO) {
+        User user=new User();<% if (databaseType == 'cassandra') { %>
+        user.setId(UUID.randomUUID().toString());<% } %>
+        user.setLogin(managedUserDTO.getLogin());
+        user.setFirstName(managedUserDTO.getFirstName());
+        user.setLastName(managedUserDTO.getLastName());
+        user.setEmail(managedUserDTO.getEmail());
+        user.setLangKey(managedUserDTO.getLangKey());<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+        Set<Authority> authorities = new HashSet<>();
+        managedUserDTO.getAuthorities().stream().forEach(
+            authority -> authorities.add(authorityRepository.findOne(authority))
+        );
+        user.setAuthorities(authorities);<% } %><% if (databaseType == 'cassandra') { %>
+        user.setAuthorities(managedUserDTO.getAuthorities());<% } %>
+        String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
+        user.setPassword(encryptedPassword);
+        user.setResetKey(RandomUtil.generateResetKey());
+        user.<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>setResetDate(ZonedDateTime.now());<% } %><% if (databaseType == 'cassandra') { %>setResetDate(new Date());<% } %>
+        user.setActivated(true);
+        userRepository.save(user);<% if (searchEngine == 'elasticsearch') { %>
+        userSearchRepository.save(user);<% } %>
+        log.debug("Created Information for User: {}", user);
+        return user;
+    }
     public void updateUserInformation(String firstName, String lastName, String email, String langKey) {
         userRepository.findOneByLogin(SecurityUtils.getCurrentUser().getUsername()).ifPresent(u -> {
             u.setFirstName(firstName);
@@ -127,6 +152,14 @@ public class UserService {
             userRepository.save(u);<% if (searchEngine == 'elasticsearch') { %>
             userSearchRepository.save(u);<% } %>
             log.debug("Changed Information for User: {}", u);
+        });
+    }
+
+    public void deleteUserInformation(String login) {
+        userRepository.findOneByLogin(login).ifPresent(u -> {
+            userRepository.delete(u);<% if (searchEngine == 'elasticsearch') { %>
+            userSearchRepository.delete(u);<% } %>
+            log.debug("Deleted User: {}", u);
         });
     }
 
