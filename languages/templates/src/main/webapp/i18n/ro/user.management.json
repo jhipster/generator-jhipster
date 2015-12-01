@@ -5,6 +5,9 @@
             "createLabel": "Crează un nou utilizator",
             "createOrEditLabel": "Crează sau editează un utilizator"
         },
+        "created": "A new user is created with identifier {{ param }}",
+        "updated": "An user is updated with identifier {{ param }}",
+        "deleted": "An user is deleted with identifier {{ param }}",
         "delete": {
             "question": "Ești sigur ca dorești să stergi utilizaotorul {{ login }}?"
         },

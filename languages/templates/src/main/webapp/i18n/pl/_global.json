@@ -107,7 +107,10 @@
     "error": {
         "serverNotReachable": "Serwer jest nieosiągalny",
         "NotNull": "Wartość {{fieldName}} nie może być pusta!",
-        "Size": "Wartość {{fieldName}} nie spełnia wymagań co do długości!"
+        "Size": "Wartość {{fieldName}} nie spełnia wymagań co do długości!",
+        "userExists": "Login name already used!",
+        "emailExists": "E-mail is already in use!",
+        "idExists": "A new {{entityName}} cannot already have an ID"
     },
     "footer": "To jest stopka"
 }
