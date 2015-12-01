@@ -82,11 +82,12 @@ public class UserResource {
     private UserSearchRepository userSearchRepository;<% } %>
 
     /**
-     * POST  /users -> Create a new user.
-     * Method creates user if the same login and email is not already used.
-     * User entity is created and activation mail is sent to the email id with
-     * password-reset link
+     * POST  /users -> Creates a new user.
+     * <p>
+     * Creates a new user if the login and email are not already used, and sends an
+     * mail with an activation link.
      * The user needs to be activated on creation.
+     * </p>
      */
     @RequestMapping(value = "/users",
         method = RequestMethod.POST,
@@ -96,21 +97,25 @@ public class UserResource {
     public ResponseEntity<?> createUser(@RequestBody ManagedUserDTO managedUserDTO, HttpServletRequest request) throws URISyntaxException {
         log.debug("REST request to save User : {}", managedUserDTO);
         if (userRepository.findOneByLogin(managedUserDTO.getLogin()).isPresent()) {
-          return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("user-management", "userExists", "Login already in use")).body(null);
+            return ResponseEntity.badRequest()
+                .headers(HeaderUtil.createFailureAlert("user-management", "userexists", "Login already in use"))
+                .body(null);
         } else if (userRepository.findOneByEmail(managedUserDTO.getEmail()).isPresent()) {
-          return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("user-management", "emailExists", "Email already in use")).body(null);
+            return ResponseEntity.badRequest()
+                .headers(HeaderUtil.createFailureAlert("user-management", "emailexists", "Email already in use"))
+                .body(null);
         } else {
-          User newUser = userService.createUser(managedUserDTO);
-          String baseUrl = request.getScheme() + // "http"
-          "://" +                                // "://"
-          request.getServerName() +              // "myhost"
-          ":" +                                  // ":"
-          request.getServerPort() +              // "80"
-          request.getContextPath();              // "/myContextPath" or "" if deployed in root context
-          mailService.sendCreationEmail(newUser, baseUrl);
-          return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
-              .headers(HeaderUtil.createAlert(<% if(enableTranslation) {%> "user-management.created"<% } else { %> "An user is created with identifier "+newUser.getLogin()<% } %>, newUser.getLogin()))
-              .body(newUser);
+            User newUser = userService.createUser(managedUserDTO);
+            String baseUrl = request.getScheme() + // "http"
+            "://" +                                // "://"
+            request.getServerName() +              // "myhost"
+            ":" +                                  // ":"
+            request.getServerPort() +              // "80"
+            request.getContextPath();              // "/myContextPath" or "" if deployed in root context
+            mailService.sendCreationEmail(newUser, baseUrl);
+            return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
+                .headers(HeaderUtil.createAlert(<% if(enableTranslation) {%> "user-management.created"<% } else { %> "An user is created with identifier "+newUser.getLogin()<% } %>, newUser.getLogin()))
+                .body(newUser);
         }
     }
 
@@ -127,7 +132,7 @@ public class UserResource {
         log.debug("REST request to update User : {}", managedUserDTO);
         Optional<User> existingUser = userRepository.findOneByEmail(managedUserDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(managedUserDTO.getLogin()))) {
-            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("user-management", "emailExists", "Email already in use")).body(null);
+            return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("user-management", "emailexists", "Email already in use")).body(null);
         }
         return userRepository
             .findOneById(managedUserDTO.getId())

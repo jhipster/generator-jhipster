@@ -106,9 +106,9 @@
     },
     "error": {
         "server.not.reachable": "Server not reachable",
-        "userExists": "Login name already used!",
-        "emailExists": "E-mail is already in use!",
-        "idExists": "A new {{entityName}} cannot already have an ID"
+        "userexists": "Login name already used!",
+        "emailexists": "E-mail is already in use!",
+        "idexists": "A new {{entityName}} cannot already have an ID"
     },
     "footer": "Este é o seu rodapé"
 }
