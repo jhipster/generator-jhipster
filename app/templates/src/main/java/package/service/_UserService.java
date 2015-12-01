@@ -119,6 +119,7 @@ public class UserService {
         log.debug("Created Information for User: {}", newUser);
         return newUser;
     }
+
     public User createUser(ManagedUserDTO managedUserDTO) {
         User user=new User();<% if (databaseType == 'cassandra') { %>
         user.setId(UUID.randomUUID().toString());<% } %>
@@ -143,6 +144,7 @@ public class UserService {
         log.debug("Created Information for User: {}", user);
         return user;
     }
+
     public void updateUserInformation(String firstName, String lastName, String email, String langKey) {
         userRepository.findOneByLogin(SecurityUtils.getCurrentUser().getUsername()).ifPresent(u -> {
             u.setFirstName(firstName);
