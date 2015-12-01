@@ -14,9 +14,9 @@ bootRun {
 }
 
 processResources {
-    filesMatching('**/logback.xml') {
+    filesMatching('**/logback-spring.xml') {
         filter {
-            it.replace('${logback.loglevel}', logbackLoglevel)
+            it.replace('@logback.loglevel@', logbackLoglevel)
         }
     }
 }
