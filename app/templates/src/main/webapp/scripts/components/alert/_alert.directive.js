@@ -42,9 +42,9 @@ angular.module('<%=angularAppName%>')
                                 break;
 
                             case 400:
-                                var errorHeader = httpResponse.headers('X-jhipsterApp-error');
-                                var entityKey = httpResponse.headers('X-jhipsterApp-params');
-                                if(errorHeader) {
+                                var errorHeader = httpResponse.headers('X-<%=angularAppName%>-error');
+                                var entityKey = httpResponse.headers('X-<%=angularAppName%>-params');
+                                if (errorHeader) {
                                     var entityName = <% if (enableTranslation) { %>$translate.instant('global.menu.entities.' + entityKey)<% }else{ %>entityKey<% } %>;
                                     addErrorAlert(errorHeader, errorHeader, {entityName: entityName});
                                 } else if (httpResponse.data && httpResponse.data.fieldErrors) {
