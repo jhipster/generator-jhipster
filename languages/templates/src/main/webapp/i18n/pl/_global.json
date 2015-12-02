@@ -106,6 +106,8 @@
     },
     "error": {
         "server.not.reachable": "Serwer jest nieosiągalny",
+        "NotNull": "Wartość {{fieldName}} nie może być pusta!",
+        "Size": "Wartość {{fieldName}} nie spełnia wymagań co do długości!",
         "userexists": "Login name already used!",
         "emailexists": "E-mail is already in use!",
         "idexists": "A new {{entityName}} cannot already have an ID"

@@ -106,6 +106,8 @@
     },
     "error": {
         "server.not.reachable": "Servidor non accesible",
+        "NotNull": "O campo {{fieldName}} non pode estar baleiro!",
+        "Size": "O campo {{fieldName}} non cumpre cos requisitos de tamaño mínimo ou máximo!",
         "userexists": "Login name already used!",
         "emailexists": "E-mail is already in use!",
         "idexists": "A new {{entityName}} cannot already have an ID"

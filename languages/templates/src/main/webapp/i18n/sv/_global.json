@@ -106,6 +106,8 @@
     },
     "error": {
         "server.not.reachable": "Servern kan inte nås",
+        "NotNull": "Fält {{fieldName}} kan inte vara tomt!",
+        "Size": "Fält {{fieldName}} uppfyller inte min/max-storlekskravet!",
         "userexists": "Login name already used!",
         "emailexists": "E-mail is already in use!",
         "idexists": "A new {{entityName}} cannot already have an ID"

@@ -106,6 +106,8 @@
     },
     "error": {
         "server.not.reachable": "Sunucuya ulaşılamıyor",
+        "NotNull": "{{fieldName}} alanı boş bırakılamaz!",
+        "Size": "{{fieldName}} alanı min/max gerekliliklere uymuyor!",
         "userexists": "Login name already used!",
         "emailexists": "E-mail is already in use!",
         "idexists": "A new {{entityName}} cannot already have an ID"
