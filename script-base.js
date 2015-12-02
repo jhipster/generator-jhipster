@@ -84,8 +84,7 @@ Generator.prototype.addRouterToMenu = function (entityName,enableTranslation) {
 
 Generator.prototype.addChangelogToLiquibase = function (changelogName) {
     try {
-        var appPath = this.env.options.appPath;
-        var fullPath = path.join(appPath, '../resources/config/liquibase/master.xml');
+        var fullPath = 'src/main/resources/config/liquibase/master.xml';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: '<!-- JHipster will add liquibase changelogs here -->',
