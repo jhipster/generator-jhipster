@@ -48,4 +48,6 @@ ModulesGenerator.prototype.configurer = function configurer() {
     this.configuration['javaDir'] = this.javaDir;
     this.configuration['resourceDir'] = this.resourceDir;
     this.configuration['webappDir'] = this.webappDir;
+    this.configuration['dateFormatForLiquibase'] = this.dateFormatForLiquibase;
+    this.configuration['addChangelogToLiquibase'] = this.addChangelogToLiquibase;
 };
