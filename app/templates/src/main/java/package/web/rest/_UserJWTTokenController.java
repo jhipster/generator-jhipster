@@ -23,10 +23,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class UserJWTTokenController {
 
     @Inject
-    private final TokenAuthenticationService tokenAuthenticationService;
+    private  TokenAuthenticationService tokenAuthenticationService;
     
     @Inject
-    private final UserDetailsService userDetailsService;
+    private  UserDetailsService userDetailsService;
 
     @RequestMapping(value = "/authenticate",
             method = RequestMethod.POST)
