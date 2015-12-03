@@ -32,9 +32,7 @@ public class TokenAuthenticationService {
         if (token != null) {
             final UserDetails userDetails = tokenHandler.parseUserFromToken(token);
             if (userDetails != null) {
-                UserAuthentication userAuthentication = new UserAuthentication(userDetails);
-                userAuthentication.setAuthenticated(true);
-                return userAuthentication;
+                return new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword());
             }
         }
         return null;
