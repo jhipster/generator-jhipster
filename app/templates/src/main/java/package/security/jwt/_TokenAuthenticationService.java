@@ -23,7 +23,7 @@ public class TokenAuthenticationService {
         this.tokenHandler = tokenHandler;
     }
 
-    public void addAuthentication(final UserDetails user) {
+    public String getAuthenticationToken(final UserDetails user) {
         return tokenHandler.createTokenForUser(user);
     }
 
