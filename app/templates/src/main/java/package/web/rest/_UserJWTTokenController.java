@@ -27,15 +27,19 @@ public class UserJWTTokenController {
     
     @Inject
     private  UserDetailsService userDetailsService;
+    
+    @Inject
+    private AuthenticationManager authenticationManager;
+
 
     @RequestMapping(value = "/authenticate",
             method = RequestMethod.POST)
-    @Timed
     public void authorize(@RequestParam String username, @RequestParam String password) {
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
         Authentication authentication = this.authenticationManager.authenticate(token);
-        tokenAuthenticationService.addAuthentication(response, userAuthentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        UserDetails details = this.userDetailsService.loadUserByUsername(username);
+        return tokenAuthenticationService.getAuthenticationToken(details);
     }
 }
