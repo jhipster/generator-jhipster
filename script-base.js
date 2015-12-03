@@ -17,15 +17,14 @@ function Generator() {
 
 util.inherits(Generator, yeoman.generators.NamedBase);
 
-Generator.prototype.addAppScriptToIndex = function (script) {
+Generator.prototype.addJavaScriptToIndex = function (script) {
     try {
-        var appPath = this.env.options.appPath;
-        var fullPath = path.join(appPath, 'index.html');
+        var fullPath = 'src/main/webapp/index.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: '<!-- endbuild -->',
             splicable: [
-                    '<script src="scripts/app/entities/' + script + '"></script>'
+                    '<script src="scripts/' + script + '"></script>'
             ]
         });
     } catch (e) {
@@ -65,24 +64,24 @@ Generator.prototype.addMessageformatLocaleToIndex = function (script) {
     }
 };
 
-Generator.prototype.addRouterToMenu = function (entityName,enableTranslation) {
+Generator.prototype.addRouterToMenu = function (routerName, enableTranslation) {
     try {
-        var appPath = this.env.options.appPath;
-        var fullPath = path.join(appPath, 'scripts/components/navbar/navbar.html');
+        var fullPath = 'src/main/webapp/scripts/components/navbar/navbar.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: '<!-- JHipster will add entities to the menu here -->',
             splicable: [
-                    '<li ui-sref-active="active" ><a ui-sref="' + entityName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-asterisk"></span>\n' +
-                    '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.entities.' + entityName + '"':'' ) + '>' + entityName + '</span></a></li>'
+                    '<li ui-sref-active="active" ><a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-asterisk"></span>\n' +
+                    '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.entities.' + routerName + '"':'' ) + '>' + routerName + '</span></a></li>'
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + entityName + '.js ' + 'not added.\n'.yellow);
+        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + routerName + '.js ' + 'not added.\n'.yellow);
     }
 };
 
 Generator.prototype.addChangelogToLiquibase = function (changelogName) {
+    console.log("add changelog");
     try {
         var fullPath = 'src/main/resources/config/liquibase/master.xml';
         jhipsterUtils.rewriteFile({
