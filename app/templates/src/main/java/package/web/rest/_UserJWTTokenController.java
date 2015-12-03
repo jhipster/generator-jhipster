@@ -34,7 +34,7 @@ public class UserJWTTokenController {
 
     @RequestMapping(value = "/authenticate",
             method = RequestMethod.POST)
-    public void authorize(@RequestParam String username, @RequestParam String password) {
+    public String authorize(@RequestParam String username, @RequestParam String password) {
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
         Authentication authentication = this.authenticationManager.authenticate(token);
