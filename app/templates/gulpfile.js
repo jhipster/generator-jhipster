@@ -163,7 +163,7 @@ gulp.task('serve', function() {
             }));
 
         browserSync({
-            open: false,
+            open: true,
             port: yeoman.port,
             server: {
                 baseDir: yeoman.app,
@@ -171,7 +171,7 @@ gulp.task('serve', function() {
             }
         });
 
-        gulp.run('watch');
+        gulp.start('watch');
     });
 });
 
