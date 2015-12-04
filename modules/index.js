@@ -56,9 +56,13 @@ ModulesGenerator.prototype.configurer = function configurer() {
     this.jhipsterVar['resourceDir'] = this.resourceDir;
     this.jhipsterVar['webappDir'] = this.webappDir;
 
-    this.jhipsterFunc['dateFormatForLiquibase'] = this.dateFormatForLiquibase;
-    this.jhipsterFunc['addChangelogToLiquibase'] = this.addChangelogToLiquibase;
     this.jhipsterFunc['addJavaScriptToIndex'] = this.addJavaScriptToIndex;
+    this.jhipsterFunc['addMessageformatLocaleToIndex'] = this.addMessageformatLocaleToIndex;
+    this.jhipsterFunc['addElementToMenu'] = this.addElementToMenu;
+    this.jhipsterFunc['addEntityToMenu'] = this.addEntityToMenu;
+    this.jhipsterFunc['addElementTranslationKey'] = this.addElementTranslationKey;
+    this.jhipsterFunc['addEntityTranslationKey'] = this.addEntityTranslationKey;
+    this.jhipsterFunc['addChangelogToLiquibase'] = this.addChangelogToLiquibase;
+    this.jhipsterFunc['dateFormatForLiquibase'] = this.dateFormatForLiquibase;
     this.jhipsterFunc['copyI18nFilesByName'] = this.copyI18nFilesByName;
-    this.jhipsterFunc['addRouterToMenu'] = this.addRouterToMenu;
 };

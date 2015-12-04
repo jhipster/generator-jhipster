@@ -4,9 +4,10 @@
         "browsehappy": "Está a utilizar un navegador <strong>non actualizado</strong>. Por favor <a href=\"http://browsehappy.com/?locale=en\">actualice o seu navegador</a> para mellorar a súa experiencia.",
         "menu": {
             "home": "Inicio",
+            "jhipster-needle-003": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
                 "main": "Entidades",
-                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
+                "jhipster-needle-004": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "Conta",

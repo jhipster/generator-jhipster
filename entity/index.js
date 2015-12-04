@@ -1331,7 +1331,7 @@ EntityGenerator.prototype.files = function files() {
     this.copyHtml('src/main/webapp/app/_entity-delete-dialog.html',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + '-delete-dialog.html', this, {}, true);
 
-    this.addRouterToMenu(this.entityInstance, this.enableTranslation);
+    this.addEntityToMenu(this.entityInstance, this.enableTranslation);
 
     this.template('src/main/webapp/app/_entity.js',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '.js', this, {});
@@ -1402,7 +1402,7 @@ EntityGenerator.prototype.copyI18n = function(language) {
         var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
         if (stats.isDirectory()) {
             this.template('src/main/webapp/i18n/_entity_' + language + '.json', 'src/main/webapp/i18n/' + language + '/' + this.entityInstance + '.json', this, {});
-            this.addNewEntityToMenu(language, this.entityInstance, this.entityClass);
+            this.addEntityTranslationKey(this.entityInstance, this.entityClass, language);
         }
     } catch(e) {
         // An exception is thrown if the folder doesn't exist
