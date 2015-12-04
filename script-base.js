@@ -32,22 +32,6 @@ Generator.prototype.addJavaScriptToIndex = function (script) {
     }
 };
 
-Generator.prototype.addComponentsScriptToIndex = function (script) {
-    try {
-        var appPath = this.env.options.appPath;
-        var fullPath = path.join(appPath, 'index.html');
-        jhipsterUtils.rewriteFile({
-            file: fullPath,
-            needle: '<!-- endbuild -->',
-            splicable: [
-                    '<script src="scripts/components/entities/' + script + '"></script>'
-            ]
-        });
-    } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + script + '.js ' + 'not added.\n'.yellow);
-    }
-};
-
 Generator.prototype.addMessageformatLocaleToIndex = function (script) {
     try {
         var appPath = this.env.options.appPath;

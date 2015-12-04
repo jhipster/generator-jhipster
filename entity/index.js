@@ -1354,12 +1354,12 @@ EntityGenerator.prototype.files = function files() {
 
     this.template('src/main/webapp/components/_entity-service.js',
         'src/main/webapp/scripts/components/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js', this, {});
-    this.addComponentsScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.service' + '.js');
+    this.addJavaScriptToIndex('components/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js');
 
     if (this.searchEngine == 'elasticsearch') {
         this.template('src/main/webapp/components/_entity-search-service.js',
             'src/main/webapp/scripts/components/entities/' + this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js', this, {});
-        this.addComponentsScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js');
+        this.addJavaScriptToIndex('components/entities/' + this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js');
     }
 
     this.template('src/test/java/package/web/rest/_EntityResourceIntTest.java',
