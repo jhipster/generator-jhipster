@@ -109,9 +109,9 @@
         "server.not.reachable": "Servern kan inte nås",
         "NotNull": "Fält {{fieldName}} kan inte vara tomt!",
         "Size": "Fält {{fieldName}} uppfyller inte min/max-storlekskravet!",
-        "userexists": "Login name already used!",
-        "emailexists": "E-mail is already in use!",
-        "idexists": "A new {{entityName}} cannot already have an ID"
+        "userexists": "Användarnamnet är upptaget!",
+        "emailexists": "E-postadressen är redan registrerad!",
+        "idexists": "En ny {{entityName}} kan inte redan ha ett ID"
     },
     "footer": "Detta är din footer"
 }
