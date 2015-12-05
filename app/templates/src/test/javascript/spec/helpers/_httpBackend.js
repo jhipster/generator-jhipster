@@ -9,3 +9,9 @@ function mockI18nCalls() {
         $httpBackend.whenGET(/i18n\/[a-z][a-z]\/.+\.json/).respond({});
     });
 }
+
+function mockScriptsCalls() {
+    inject(function($httpBackend) {
+        $httpBackend.whenGET(/scripts\/.*/).respond({});
+    });
+}
