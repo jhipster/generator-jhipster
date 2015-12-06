@@ -165,13 +165,15 @@ public class <%= entityClass %> implements Serializable {
     private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();
 
     <%_ } else { _%>
-    @OneToOne<% if (relationships[relationshipId].ownerSide == false) { %>(mappedBy = "<%= relationships[relationshipId].otherEntityRelationshipName %>")
+    <%_     if (relationships[relationshipId].ownerSide) { _%>
+    @OneToOne
+    <%_    } else { _%>
+    @OneToOne(mappedBy = "<%= relationships[relationshipId].otherEntityRelationshipName %>")
     @JsonIgnore
-    <%_} _%>
+    <%_    } _%>
     private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].relationshipFieldName %>;
 
     <%_ } } _%>
-    
     public <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %><% if (databaseType == 'cassandra') { %>UUID<% } %> getId() {
         return id;
     }
