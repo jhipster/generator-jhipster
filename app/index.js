@@ -31,13 +31,12 @@ util.inherits(JhipsterGenerator, scriptBase);
 JhipsterGenerator.prototype.askFor = function askFor() {
     var cb = this.async();
 
-    console.log(chalk.white(
-        '       __   __    __   __  .______     _______.___________. _______ .______\n' +
-        '      |  | |  |  |  | |  | |   _  \\   /       |           ||   ____||   _  \\\n' +
-        '      |  | |  |__|  | |  | |  |_)  | |   (----`---|  |----`|  |__   |  |_)  |\n' +
-        '.--.  |  | |   __   | |  | |   ___/   \\   \\       |  |     |   __|  |      /\n' +
-        '|  `--\'  | |  |  |  | |  | |  |   .----)   |      |  |     |  |____ |  |\\  \\----.\n' +
-        ' \\______/  |__|  |__| |__| | _|   |_______/       |__|     |_______|| _| `._____|\n'));
+    console.log(' \n' +
+        chalk.green('        ██') + chalk.red('  ██    ██  ████████  ███████    ██████  ████████  ████████  ███████\n') +
+        chalk.green('        ██') + chalk.red('  ██    ██     ██     ██    ██  ██          ██     ██        ██    ██\n') +
+        chalk.green('        ██') + chalk.red('  ████████     ██     ███████    █████      ██     ██████    ███████\n') +
+        chalk.green('  ██    ██') + chalk.red('  ██    ██     ██     ██             ██     ██     ██        ██   ██\n') +
+        chalk.green('   ██████ ') + chalk.red('  ██    ██  ████████  ██        ██████      ██     ████████  ██    ██\n'));
     console.log(chalk.white.bold('                            http://jhipster.github.io\n'));
     console.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version + '\n'));
     var insight = this.insight();
