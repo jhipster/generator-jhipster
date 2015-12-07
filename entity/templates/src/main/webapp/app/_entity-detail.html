@@ -53,7 +53,7 @@
                         <%_ if (relationshipType == 'many-to-many') { _%>
                     <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldName %>s">
                         {{<%= relationshipFieldName %>.<%= otherEntityField %>}}{{$last ? '' : ', '}}
-                    <span>
+                    </span>
                         <%_ } else { _%>
                             <%_ if (dto == 'no') { _%>
                     {{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}
@@ -65,7 +65,7 @@
                         <%_ if (relationshipType == 'many-to-many') { _%>
                     <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldName %>s">
                         <a class="form-control-static" ui-sref="<%= otherEntityName %>.detail({id: {{<%= relationshipFieldName %>.id}}})">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
-                    <span>
+                    </span>
                         <%_ } else { _%>
                             <%_ if (dto == 'no') { _%>
                     <a class="form-control-static" ui-sref="<%= otherEntityName %>.detail({id:<%= entityInstance + "." + relationshipFieldName + ".id" %>})">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</a>
