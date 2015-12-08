@@ -86,6 +86,10 @@ ModulesGenerator.prototype.configurer = function configurer() {
     this.jhipsterVar['resourceDir'] = this.resourceDir;
     this.jhipsterVar['webappDir'] = this.webappDir;
 
+    this.jhipsterFunc['addGradlePlugin'] = this.addGradlePlugin;
+    this.jhipsterFunc['addGradleDependency'] = this.addGradleDependency;
+    this.jhipsterFunc['applyFromGradleScript'] = this.applyFromGradleScript;
+
     this.jhipsterFunc['addJavaScriptToIndex'] = this.addJavaScriptToIndex;
     this.jhipsterFunc['addMessageformatLocaleToIndex'] = this.addMessageformatLocaleToIndex;
     this.jhipsterFunc['addElementToMenu'] = this.addElementToMenu;
