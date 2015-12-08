@@ -4,9 +4,10 @@
         "browsehappy": "<strong>Çok eski</strong> bir tarayıcı kullanıyorsunuz. Lütfen kullanım kalitenizi arttırmak için <a href=\"http://browsehappy.com/?locale=tr\">tarayıcınızı yükseltin</a>.",
         "menu": {
             "home": "Ana Sayfa",
+            "jhipster-needle-003": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
                 "main": "Varlıklar",
-                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
+                "jhipster-needle-004": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "Hesap",
@@ -106,6 +107,8 @@
     },
     "error": {
         "server.not.reachable": "Sunucuya ulaşılamıyor",
+        "NotNull": "{{fieldName}} alanı boş bırakılamaz!",
+        "Size": "{{fieldName}} alanı min/max gerekliliklere uymuyor!",
         "userexists": "Login name already used!",
         "emailexists": "E-mail is already in use!",
         "idexists": "A new {{entityName}} cannot already have an ID"

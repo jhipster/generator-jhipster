@@ -1331,35 +1331,35 @@ EntityGenerator.prototype.files = function files() {
     this.copyHtml('src/main/webapp/app/_entity-delete-dialog.html',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance  + '/' + this.entityInstance + '-delete-dialog.html', this, {}, true);
 
-    this.addRouterToMenu(this.entityInstance, this.enableTranslation);
+    this.addEntityToMenu(this.entityInstance, this.enableTranslation);
 
     this.template('src/main/webapp/app/_entity.js',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '.js', this, {});
-    this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.js');
+    this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '/' + this.entityInstance + '.js');
     this.template('src/main/webapp/app/_entity-controller.js',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '.controller' + '.js', this, {});
-    this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.controller' + '.js');
+    this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '/' + this.entityInstance + '.controller' + '.js');
     this.template('src/main/webapp/app/_entity-dialog-controller.js',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '-dialog.controller' + '.js', this, {});
-    this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '-dialog.controller' + '.js');
+    this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '/' + this.entityInstance + '-dialog.controller' + '.js');
     this.template('src/main/webapp/app/_entity-delete-dialog-controller.js',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '-delete-dialog.controller' + '.js', this, {});
-    this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '-delete-dialog.controller' + '.js');
+    this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '/' + this.entityInstance + '-delete-dialog.controller' + '.js');
 
     this.template('src/main/webapp/app/_entity-detail-controller.js',
         'src/main/webapp/scripts/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '-detail.controller' + '.js', this, {});
     this.template('src/test/javascript/spec/app/_entity-detail-controller.spec.js',
         'src/test/javascript/spec/app/entities/' +    this.entityInstance + '/' + this.entityInstance + '-detail.controller.spec.js', this, {});
-    this.addAppScriptToIndex(this.entityInstance + '/' + this.entityInstance + '-detail.controller' + '.js');
+    this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '/' + this.entityInstance + '-detail.controller' + '.js');
 
     this.template('src/main/webapp/components/_entity-service.js',
         'src/main/webapp/scripts/components/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js', this, {});
-    this.addComponentsScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.service' + '.js');
+    this.addJavaScriptToIndex('components/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js');
 
     if (this.searchEngine == 'elasticsearch') {
         this.template('src/main/webapp/components/_entity-search-service.js',
             'src/main/webapp/scripts/components/entities/' + this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js', this, {});
-        this.addComponentsScriptToIndex(this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js');
+        this.addJavaScriptToIndex('components/entities/' + this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js');
     }
 
     this.template('src/test/java/package/web/rest/_EntityResourceIntTest.java',
@@ -1402,7 +1402,7 @@ EntityGenerator.prototype.copyI18n = function(language) {
         var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
         if (stats.isDirectory()) {
             this.template('src/main/webapp/i18n/_entity_' + language + '.json', 'src/main/webapp/i18n/' + language + '/' + this.entityInstance + '.json', this, {});
-            this.addNewEntityToMenu(language, this.entityInstance, this.entityClass);
+            this.addEntityTranslationKey(this.entityInstance, this.entityClass, language);
         }
     } catch(e) {
         // An exception is thrown if the folder doesn't exist

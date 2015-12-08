@@ -17,15 +17,19 @@ function Generator() {
 
 util.inherits(Generator, yeoman.generators.NamedBase);
 
-Generator.prototype.addAppScriptToIndex = function (script) {
+/**
+ * A a new script to the application, in the index.html file.
+ *
+ * This is used to add AngularJS controllers or components to the application.
+ */
+Generator.prototype.addJavaScriptToIndex = function (script) {
     try {
-        var appPath = this.env.options.appPath;
-        var fullPath = path.join(appPath, 'index.html');
+        var fullPath = 'src/main/webapp/index.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: '<!-- endbuild -->',
             splicable: [
-                    '<script src="scripts/app/entities/' + script + '"></script>'
+                    '<script src="scripts/' + script + '"></script>'
             ]
         });
     } catch (e) {
@@ -33,26 +37,14 @@ Generator.prototype.addAppScriptToIndex = function (script) {
     }
 };
 
-Generator.prototype.addComponentsScriptToIndex = function (script) {
-    try {
-        var appPath = this.env.options.appPath;
-        var fullPath = path.join(appPath, 'index.html');
-        jhipsterUtils.rewriteFile({
-            file: fullPath,
-            needle: '<!-- endbuild -->',
-            splicable: [
-                    '<script src="scripts/components/entities/' + script + '"></script>'
-            ]
-        });
-    } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + script + '.js ' + 'not added.\n'.yellow);
-    }
-};
-
+/**
+ * A a new message format to the application, in the index.html file.
+ *
+ * This is used for internationalization.
+ */
 Generator.prototype.addMessageformatLocaleToIndex = function (script) {
     try {
-        var appPath = this.env.options.appPath;
-        var fullPath = path.join(appPath, 'index.html');
+        var fullPath = 'src/main/webapp/index.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: '<!-- endbuild -->',
@@ -65,30 +57,106 @@ Generator.prototype.addMessageformatLocaleToIndex = function (script) {
     }
 };
 
-Generator.prototype.addRouterToMenu = function (entityName,enableTranslation) {
+/**
+ * Add a new menu element, at the root of the menu.
+ *
+ * @param {string} routerName - The name of the AngularJS router that is added to the menu.
+ * @param {string} glyphiconName - The name of the Glyphicon (from Bootstrap) that will be displayed.
+ * @param {boolean} enableTranslation - If translations are enabled or not
+ */
+Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enableTranslation) {
     try {
-        var appPath = this.env.options.appPath;
-        var fullPath = path.join(appPath, 'scripts/components/navbar/navbar.html');
+        var fullPath = 'src/main/webapp/scripts/components/navbar/navbar.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
-            needle: '<!-- JHipster will add entities to the menu here -->',
+            needle: 'jhipster-needle-001',
             splicable: [
-                    '<li ui-sref-active="active" ><a ui-sref="' + entityName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-asterisk"></span>\n' +
-                    '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.entities.' + entityName + '"':'' ) + '>' + entityName + '</span></a></li>'
+                    '<li ui-sref-active="active" ><a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-' + glyphiconName + '"></span>\n' +
+                    '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.' + routerName + '"':'' ) + '>' + routerName + '</span></a></li>'
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + entityName + '.js ' + 'not added.\n'.yellow);
+        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + routerName + '.js ' + 'not added.\n'.yellow);
     }
 };
 
-Generator.prototype.addChangelogToLiquibase = function (changelogName) {
+/**
+ * Add a new entity in the "entities" menu.
+ *
+ * @param {string} routerName - The name of the AngularJS router (which by default is the name of the entity).
+ * @param {boolean} enableTranslation - If translations are enabled or not
+ */
+Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
     try {
-        var appPath = this.env.options.appPath;
-        var fullPath = path.join(appPath, '../resources/config/liquibase/master.xml');
+        var fullPath = 'src/main/webapp/scripts/components/navbar/navbar.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
-            needle: '<!-- JHipster will add liquibase changelogs here -->',
+            needle: 'jhipster-needle-002',
+            splicable: [
+                    '<li ui-sref-active="active" ><a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-asterisk"></span>\n' +
+                    '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.entities.' + routerName + '"':'' ) + '>' + routerName + '</span></a></li>'
+            ]
+        });
+    } catch (e) {
+        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + routerName + '.js ' + 'not added.\n'.yellow);
+    }
+};
+
+/**
+ * A a new element in the "global.json" translations.
+ *
+ * @param {string} key - Key for the menu entry
+ * @param {string} value - Default translated value
+ * @param {string} language - The language to which this translation should be added
+ */
+Generator.prototype.addElementTranslationKey = function(key, value, language) {
+    var fullPath = 'src/main/webapp/i18n/' + language + '/global.json';
+    try {
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-003',
+            splicable: [
+                    '"' + key + '": "' + value + '",'
+            ]
+        });
+    } catch (e) {
+        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + language + 'not added as a new entity in the menu.\n'.yellow);
+    }
+};
+
+/**
+ * A a new entity in the "global.json" translations.
+ *
+ * @param {string} key - Key for the entity name
+ * @param {string} value - Default translated value
+ * @param {string} language - The language to which this translation should be added
+ */
+Generator.prototype.addEntityTranslationKey = function(key, value, language) {
+    var fullPath = 'src/main/webapp/i18n/' + language + '/global.json';
+    try {
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-004',
+            splicable: [
+                    '"' + key + '": "' + value + '",'
+            ]
+        });
+    } catch (e) {
+        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + language + 'not added as a new entity in the menu.\n'.yellow);
+    }
+};
+
+/**
+ * A a new changelog to the Liquibase master.xml file.
+ *
+ * @param {changelogName} routerName - The name of the changelog (name of the file without .xml at the end).
+ */
+Generator.prototype.addChangelogToLiquibase = function (changelogName) {
+    try {
+        var fullPath = 'src/main/resources/config/liquibase/master.xml';
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-005',
             splicable: [
                     '<include file="classpath:config/liquibase/changelog/' + changelogName + '.xml" relativeToChangelogFile="false"/>'
             ]
@@ -98,7 +166,9 @@ Generator.prototype.addChangelogToLiquibase = function (changelogName) {
     }
 };
 
-// This generates a date to be used by Liquibase changelogs
+/**
+ * Generate a date to be used by Liquibase changelogs.
+ */
 Generator.prototype.dateFormatForLiquibase = function () {
     var now = new Date();
     var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
@@ -151,34 +221,17 @@ Generator.prototype.copyI18nFilesByName = function(_this, webappDir, fileToCopy,
 };
 
 Generator.prototype.installNewLanguage = function(language) {
-    var appPath = this.env.options.appPath;
-    var fullPath = path.join(appPath, 'scripts/components/language/language.service.js');
+    var fullPath = 'src/main/webapp/scripts/components/language/language.service.js';
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
-            needle: '//JHipster will add new languages here',
+            needle: 'jhipster-needle-006',
             splicable: [
                     ',\'' + language + '\''
             ]
         });
     } catch (e) {
         console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + language + 'not added as a new language. Check if you have enabled translation support.\n'.yellow);
-    }
-};
-
-Generator.prototype.addNewEntityToMenu = function(language, key, value) {
-    var appPath = this.env.options.appPath;
-    var fullPath = path.join(appPath, 'i18n/' + language + '/global.json');
-    try {
-        jhipsterUtils.rewriteFile({
-            file: fullPath,
-            needle: '"additionalEntity": "JHipster will add additional entities here (do not translate!)"',
-            splicable: [
-                    '"' + key + '": "' + value + '",'
-            ]
-        });
-    } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + language + 'not added as a new entity in the menu.\n'.yellow);
     }
 };
 

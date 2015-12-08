@@ -4,12 +4,13 @@
         "browsehappy": "Folosiți un browser <strong>vechi</strong> . Va rugăm <a href=\"http://browsehappy.com/?locale=en\"> să îl upgradați</a> pentru o experiența îmbunătațită.",
         "menu": {
             "home": "Acasă",
+            "jhipster-needle-003": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
                 "main": "Entitați",
                 "bankAccount": "ContBancar",
                 "label": "Etichetă",
                 "operation": "Operație",
-                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
+                "jhipster-needle-004": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "Cont",
@@ -115,6 +116,8 @@
     },
     "error": {
         "server.not.reachable": "Serverul este indisponibil",
+        "NotNull": "Câmpul {{fieldName}} nu poate fi gol!",
+        "Size": "Câmpul {{fieldName}} nu corespunde ceințelor de dimensiune minimă/maximă!",
         "userexists": "Login name already used!",
         "emailexists": "E-mail is already in use!",
         "idexists": "A new {{entityName}} cannot already have an ID"

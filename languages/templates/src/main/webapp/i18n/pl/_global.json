@@ -4,9 +4,10 @@
         "browsehappy": "Używasz <strong>przestarzałej</strong> przeglądarki. Proszę <a href=\"http://browsehappy.com/\">uaktualnij swoją przeglądarkę</a> aby poprawić wrażenia z użytkowania tej aplikacji.",
         "menu": {
             "home": "Strona domowa",
+            "jhipster-needle-003": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
                 "main": "Encje",
-                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
+                "jhipster-needle-004": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "Konto",
@@ -106,6 +107,8 @@
     },
     "error": {
         "server.not.reachable": "Serwer jest nieosiągalny",
+        "NotNull": "Wartość {{fieldName}} nie może być pusta!",
+        "Size": "Wartość {{fieldName}} nie spełnia wymagań co do długości!",
         "userexists": "Login name already used!",
         "emailexists": "E-mail is already in use!",
         "idexists": "A new {{entityName}} cannot already have an ID"

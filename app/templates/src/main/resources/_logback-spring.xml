@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <configuration scan="true">
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <charset>utf-8</charset>
-            <Pattern>[%p] %c - %m%n</Pattern>
-        </encoder>
-    </appender>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
 
 <!-- The FILE and ASYNC appenders are here as examples for a production configuration -->
 <!--

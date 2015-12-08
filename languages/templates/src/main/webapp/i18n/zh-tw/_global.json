@@ -4,9 +4,10 @@
         "browsehappy": "您目前使用<strong>過於老舊</strong>的瀏覽器, 建議您<a href=\"http://browsehappy.com/?locale=en\">升級瀏覽器</a>讓您有更佳的上網體驗.",
         "menu": {
             "home": "首頁",
+            "jhipster-needle-003": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
                 "main": "實體",
-                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
+                "jhipster-needle-004": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "帳號",
@@ -106,6 +107,8 @@
     },
     "error": {
         "server.not.reachable": "Server not reachable",
+        "NotNull": "Field {{fieldName}} cannot be empty!",
+        "Size": "Field {{fieldName}} does not meet min/max size requirements!",
         "userexists": "Login name already used!",
         "emailexists": "E-mail is already in use!",
         "idexists": "A new {{entityName}} cannot already have an ID"

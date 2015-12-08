@@ -4,9 +4,10 @@
         "browsehappy": "Está a usar um navegador <strong>desatualizado</strong>. Por favor <a href=\"http://browsehappy.com/?locale=pt_PT\">atualize o seu navegador</a> para ter uma experiência melhor.",
         "menu": {
             "home": "Início",
+            "jhipster-needle-003": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
                 "main": "Entidades",
-                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
+                "jhipster-needle-004": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "Conta",
@@ -106,6 +107,8 @@
     },
     "error": {
         "server.not.reachable": "Server not reachable",
+        "NotNull": "Field {{fieldName}} cannot be empty!",
+        "Size": "Field {{fieldName}} does not meet min/max size requirements!",
         "userexists": "Login name already used!",
         "emailexists": "E-mail is already in use!",
         "idexists": "A new {{entityName}} cannot already have an ID"
