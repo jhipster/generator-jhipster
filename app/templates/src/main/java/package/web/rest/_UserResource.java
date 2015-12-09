@@ -131,8 +131,12 @@ public class UserResource {
     public ResponseEntity<ManagedUserDTO> updateUser(@RequestBody ManagedUserDTO managedUserDTO) throws URISyntaxException {
         log.debug("REST request to update User : {}", managedUserDTO);
         Optional<User> existingUser = userRepository.findOneByEmail(managedUserDTO.getEmail());
-        if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(managedUserDTO.getLogin()))) {
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(managedUserDTO.getId()))) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("user-management", "emailexists", "Email already in use")).body(null);
+        }
+        existingUser = userRepository.findOneByLogin(managedUserDTO.getLogin());
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(managedUserDTO.getId()))) {
+        	  return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("user-management", "userexists", "Login name already used")).body(null);
         }
         return userRepository
             .findOneById(managedUserDTO.getId())
