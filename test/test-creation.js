@@ -201,7 +201,7 @@ describe('JHipster generator ', function () {
             'src/main/webapp/scripts/components/util/base64.service.js',
             'src/main/webapp/scripts/components/util/parse-links.service.js',
             'src/main/webapp/scripts/components/util/truncate.filter.js',
-            'src/main/webapp/scripts/components/util/dateutil.service.js',
+            'src/main/webapp/scripts/components/util/date-util.service.js',
             'src/main/webapp/scripts/components/util/sort.directive.js',
             'src/main/webapp/scripts/app/account/account.js',
             'src/main/webapp/scripts/app/account/activate/activate.html',
