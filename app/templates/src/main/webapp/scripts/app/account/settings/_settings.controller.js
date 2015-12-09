@@ -4,7 +4,7 @@ angular.module('<%=angularAppName%>')
     .controller('SettingsController', function ($scope, Principal, Auth<% if (enableTranslation){ %>, Language, $translate<% } %>) {
         $scope.success = null;
         $scope.error = null;
-        Principal.identity(true).then(function(account) {
+        Principal.identity().then(function(account) {
             $scope.settingsAccount = copyAccount(account);
         });
 
@@ -12,7 +12,7 @@ angular.module('<%=angularAppName%>')
             Auth.updateAccount($scope.settingsAccount).then(function() {
                 $scope.error = null;
                 $scope.success = 'OK';
-                Principal.identity(true).then(function(account) {
+                Principal.identity().then(function(account) {
                     $scope.settingsAccount = copyAccount(account);
                 });<% if (enableTranslation){ %>
                 Language.getCurrent().then(function(current) {
@@ -37,8 +37,7 @@ angular.module('<%=angularAppName%>')
                 firstName: account.firstName,
                 langKey: account.langKey,
                 lastName: account.lastName,
-                login: account.login,
-                password: null
+                login: account.login
             }
         }
     });
