@@ -167,6 +167,71 @@ Generator.prototype.addChangelogToLiquibase = function (changelogName) {
 };
 
 /**
+ * A new gradle plugin
+ *
+ * @param {group} plugin GroupId
+ * @param {name} plugin name
+ * @param {version} explicit plugin version number
+ */
+Generator.prototype.addGradlePlugin = function (group, name, version) {
+    try {
+        var fullPath = 'build.gradle';
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-gradle-buildscript-dependency',
+            splicable: [
+                    'classpath group: \'' + group + ', name: \'' + name + ', version: \'' + version + '\''
+            ]
+        });
+    } catch (e) {
+        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + 'classpath: ' + group + ':' + name + ':' + version + 'not added.\n'.yellow);
+    }
+};
+
+/**
+ * A new dependency to build.gradle file
+ *
+ * @param {scope} scope of the new dependency, e.g. compile
+ * @param {group} maven GroupId
+ * @param {name} maven ArtifactId
+ * @param {version} explicit version number
+ */
+Generator.prototype.addGradleDependency = function (scope, group, name, version) {
+    try {
+        var fullPath = 'build.gradle';
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-gradle-dependency',
+            splicable: [
+                    scope + ' group: \'' + group + ', name: \'' + name + ', version: \'' + version + '\''
+            ]
+        });
+    } catch (e) {
+        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + group + ':' + name + ':' + version + 'not added.\n'.yellow);
+    }
+};
+
+/**
+ * Apply from an external gradle build script
+ *
+ * @param {name} name of the file to apply from, must be 'fileName.gradle'
+ */
+Generator.prototype.applyFromGradleScript = function (name) {
+    try {
+        var fullPath = 'build.gradle';
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-gradle-apply-from',
+            splicable: [
+                    'apply from: \'' + name + '.gradle\''
+            ]
+        });
+    } catch (e) {
+        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + name + 'not added.\n'.yellow);
+    }
+};
+
+/**
  * Generate a date to be used by Liquibase changelogs.
  */
 Generator.prototype.dateFormatForLiquibase = function () {
