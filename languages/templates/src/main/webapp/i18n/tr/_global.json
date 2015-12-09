@@ -4,10 +4,10 @@
         "browsehappy": "<strong>Çok eski</strong> bir tarayıcı kullanıyorsunuz. Lütfen kullanım kalitenizi arttırmak için <a href=\"http://browsehappy.com/?locale=tr\">tarayıcınızı yükseltin</a>.",
         "menu": {
             "home": "Ana Sayfa",
-            "jhipster-needle-003": "JHipster will add additional menu entries here (do not translate!)",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
                 "main": "Varlıklar",
-                "jhipster-needle-004": "JHipster will add additional entities here (do not translate!)"
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "Hesap",

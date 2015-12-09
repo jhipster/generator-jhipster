@@ -69,7 +69,7 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
         var fullPath = 'src/main/webapp/scripts/components/navbar/navbar.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
-            needle: 'jhipster-needle-001',
+            needle: 'jhipster-needle-add-element-to-menu',
             splicable: [
                     '<li ui-sref-active="active" ><a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-' + glyphiconName + '"></span>\n' +
                     '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.' + routerName + '"':'' ) + '>' + routerName + '</span></a></li>'
@@ -91,7 +91,7 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
         var fullPath = 'src/main/webapp/scripts/components/navbar/navbar.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
-            needle: 'jhipster-needle-002',
+            needle: 'jhipster-needle-add-entity-to-menu',
             splicable: [
                     '<li ui-sref-active="active" ><a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-asterisk"></span>\n' +
                     '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.entities.' + routerName + '"':'' ) + '>' + routerName + '</span></a></li>'
@@ -114,7 +114,7 @@ Generator.prototype.addElementTranslationKey = function(key, value, language) {
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
-            needle: 'jhipster-needle-003',
+            needle: 'jhipster-needle-menu-add-element',
             splicable: [
                     '"' + key + '": "' + value + '",'
             ]
@@ -136,7 +136,7 @@ Generator.prototype.addEntityTranslationKey = function(key, value, language) {
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
-            needle: 'jhipster-needle-004',
+            needle: 'jhipster-needle-menu-add-entry',
             splicable: [
                     '"' + key + '": "' + value + '",'
             ]
@@ -156,7 +156,7 @@ Generator.prototype.addChangelogToLiquibase = function (changelogName) {
         var fullPath = 'src/main/resources/config/liquibase/master.xml';
         jhipsterUtils.rewriteFile({
             file: fullPath,
-            needle: 'jhipster-needle-005',
+            needle: 'jhipster-needle-liquibase-add-changelog',
             splicable: [
                     '<include file="classpath:config/liquibase/changelog/' + changelogName + '.xml" relativeToChangelogFile="false"/>'
             ]
