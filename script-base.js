@@ -167,6 +167,72 @@ Generator.prototype.addChangelogToLiquibase = function (changelogName) {
 };
 
 /**
+ * Add a new Maven dependency.
+ *
+ * @param {groupId} dependency groupId
+ * @param {artifactId} dependency artifactId
+ * @param {version} explicit dependency version number
+ * @param {other} explicit other thing: scope, exclusions...
+ */
+Generator.prototype.addMavenDependency = function (groupId, artifactId, version, other) {
+    try {
+        var fullPath = 'pom.xml';
+        var dependency = '<dependency>\n' +
+            '            <groupId>' + groupId + '</groupId>\n' +
+            '            <artifactId>' + artifactId + '</artifactId>\n';
+        if (version) {
+            dependency += '            <version>' + version + '</version>\n';
+        }
+        if (other) {
+            dependency += other + '\n';
+        }
+        dependency += '        </dependency>';
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-maven-add-dependency',
+            splicable: [
+                dependency
+            ]
+        });
+    } catch (e) {
+        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + 'maven dependency (groupId: ' + groupId + ', artifactId:' + artifactId + ', version:' + version + ')' +' not added.\n'.yellow);
+    }
+};
+
+/**
+ * Add a new Maven plugin.
+ *
+ * @param {groupId} plugin groupId
+ * @param {artifactId} plugin artifactId
+ * @param {version} explicit plugin version number
+ * @param {other} explicit other thing: executions, configuration...
+ */
+Generator.prototype.addMavenPlugin = function (groupId, artifactId, version, other) {
+    try {
+        var fullPath = 'pom.xml';
+        var plugin =  '<plugin>\n' +
+            '                <groupId>' + groupId + '</groupId>\n' +
+            '                <artifactId>' + artifactId + '</artifactId>\n';
+        if (version) {
+            plugin += '                <version>' + version + '</version>\n';
+        }
+        if (other) {
+            plugin += other + '\n';
+        }
+        plugin += '            </plugin>';
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-maven-add-plugin',
+            splicable: [
+                plugin
+            ]
+        });
+    } catch (e) {
+        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + 'maven plugin (groupId: ' + groupId + ', artifactId:' + artifactId + ', version:' + version + ')' +' not added.\n'.yellow);
+    }
+};
+
+/**
  * A new Gradle plugin.
  *
  * @param {group} plugin GroupId
