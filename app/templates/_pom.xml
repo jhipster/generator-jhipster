@@ -1010,7 +1010,6 @@
                             </arguments>
                         </configuration>
                     </plugin>
-
                 </plugins>
             </build>
             <properties>
