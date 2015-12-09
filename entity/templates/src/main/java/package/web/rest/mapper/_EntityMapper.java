@@ -29,8 +29,8 @@ for (relationshipId in relationships) {
     @Mapping(target = "<%= relationships[relationshipId].relationshipName %>", ignore = true)<% } } %>
     <%= entityClass %> <%= entityInstance %>DTOTo<%= entityClass %>(<%= entityClass %>DTO <%= entityInstance %>DTO);<%
 
+var existingMappings = [];
 for (relationshipId in relationships) {
-    var existingMappings = [];
     if (relationships[relationshipId].relationshipType == 'many-to-one' || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true) || (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true)) {
         // if the entity is mapped twice, we should implement the mapping once
         if (existingMappings.indexOf(relationships[relationshipId].otherEntityName) == -1) {
