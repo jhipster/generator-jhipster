@@ -12,7 +12,7 @@ angular.module('<%=angularAppName%>')
             Auth.updateAccount($scope.settingsAccount).then(function() {
                 $scope.error = null;
                 $scope.success = 'OK';
-                Principal.identity().then(function(account) {
+                Principal.identity(true).then(function(account) {
                     $scope.settingsAccount = copyAccount(account);
                 });<% if (enableTranslation){ %>
                 Language.getCurrent().then(function(current) {
