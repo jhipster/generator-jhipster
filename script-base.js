@@ -167,7 +167,7 @@ Generator.prototype.addChangelogToLiquibase = function (changelogName) {
 };
 
 /**
- * A new gradle plugin
+ * A new Gradle plugin.
  *
  * @param {group} plugin GroupId
  * @param {name} plugin name
@@ -189,7 +189,7 @@ Generator.prototype.addGradlePlugin = function (group, name, version) {
 };
 
 /**
- * A new dependency to build.gradle file
+ * A new dependency to build.gradle file.
  *
  * @param {scope} scope of the new dependency, e.g. compile
  * @param {group} maven GroupId
@@ -212,7 +212,7 @@ Generator.prototype.addGradleDependency = function (scope, group, name, version)
 };
 
 /**
- * Apply from an external gradle build script
+ * Apply from an external Gradle build script.
  *
  * @param {name} name of the file to apply from, must be 'fileName.gradle'
  */
