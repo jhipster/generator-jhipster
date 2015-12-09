@@ -171,7 +171,7 @@ Generator.prototype.addChangelogToLiquibase = function (changelogName) {
  *
  * @param {group} plugin GroupId
  * @param {name} plugin name
- * @param {version} plugin version
+ * @param {version} explicit plugin version number
  */
 Generator.prototype.addGradlePlugin = function (group, name, version) {
     try {
@@ -180,7 +180,7 @@ Generator.prototype.addGradlePlugin = function (group, name, version) {
             file: fullPath,
             needle: 'jhipster-needle-gradle-buildscript-dependency',
             splicable: [
-                    'classpath group: \'' + group + ', name: \'' + name + ', version: \'' + version
+                    'classpath group: \'' + group + ', name: \'' + name + ', version: \'' + version + '\''
             ]
         });
     } catch (e) {
@@ -194,7 +194,7 @@ Generator.prototype.addGradlePlugin = function (group, name, version) {
  * @param {scope} scope of the new dependency, e.g. compile
  * @param {group} maven GroupId
  * @param {name} maven ArtifactId
- * @param {version} Version
+ * @param {version} explicit version number
  */
 Generator.prototype.addGradleDependency = function (scope, group, name, version) {
     try {
@@ -203,7 +203,7 @@ Generator.prototype.addGradleDependency = function (scope, group, name, version)
             file: fullPath,
             needle: 'jhipster-needle-gradle-dependency',
             splicable: [
-                    scope + ' group: \'' + group + ', name: \'' + name + ', version: \'' + version
+                    scope + ' group: \'' + group + ', name: \'' + name + ', version: \'' + version + '\''
             ]
         });
     } catch (e) {
@@ -223,7 +223,7 @@ Generator.prototype.applyFromGradleScript = function (name) {
             file: fullPath,
             needle: 'jhipster-needle-gradle-apply-from',
             splicable: [
-                    'apply from: ' + name
+                    'apply from: \'' + name + '.gradle\''
             ]
         });
     } catch (e) {
