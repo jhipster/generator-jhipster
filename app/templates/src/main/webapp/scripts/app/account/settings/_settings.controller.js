@@ -25,10 +25,9 @@ angular.module('<%=angularAppName%>')
                 $scope.error = 'ERROR';
             });
         };
-        
+
         /**
-         * a separate variable for storing account data instead of using the same global
-         * @param account
+         * Store the "settings account" in a separate variable, and not in the shared "account" variable.
          */
         var copyAccount = function (account) {
             return {
