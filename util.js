@@ -36,7 +36,7 @@ function rewrite(args) {
 
     var lines = args.haystack.split('\n');
 
-    var otherwiseLineIndex = 0;
+    var otherwiseLineIndex = -1;
     lines.forEach(function(line, i) {
         if (line.indexOf(args.needle) !== -1) {
             otherwiseLineIndex = i;
