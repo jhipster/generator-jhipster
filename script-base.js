@@ -125,6 +125,27 @@ Generator.prototype.addElementTranslationKey = function(key, value, language) {
 };
 
 /**
+ * Add a new module to the angular application in "app.js".
+ *
+ * @param {string} moduleName - module name
+ *
+ */
+Generator.prototype.addAngularJsModule = function(moduleName) {
+    var fullPath = 'src/main/webapp/scripts/app/app.js';
+    try {
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-angularjs-add-module',
+            splicable: [
+                "'" + moduleName + "',"
+            ]
+        });
+    } catch (e) {
+        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + 'module name: ' + moduleName + ' not added.\n'.yellow);
+    }
+};
+
+/**
  * A a new entity in the "global.json" translations.
  *
  * @param {string} key - Key for the entity name
