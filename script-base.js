@@ -125,6 +125,59 @@ Generator.prototype.addElementTranslationKey = function(key, value, language) {
 };
 
 /**
+ * Add a new dependency in the "bower.json".
+ *
+ * @param {string} name - dependency name
+ * @param {string} version - dependency version
+ */
+Generator.prototype.addBowerDependency = function(name, version) {
+    var fullPath = 'bower.json';
+    try {
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-bower-add-dependency',
+            splicable: [
+                '"' + name + '": "' + version + '",'
+            ]
+        });
+    } catch (e) {
+        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + 'bower dependency (name: ' + name + ', version:' + version + ')' +' not added.\n'.yellow);
+    }
+};
+
+/**
+ * Add a new override configuration in the "bower.json".
+ *
+ * @param {string} bowerPackageName - Bower package name use in dependencies
+ * @param {array} main - You can specify which files should be selected
+ * @param {boolean} isIgnored - Default: false, Set to true if you want to ignore this package.
+ *
+ */
+Generator.prototype.addBowerOverride = function(bowerPackageName, main, isIgnored) {
+    var fullPath = 'bower.json';
+    var override ='"'+bowerPackageName+'": {\n';
+    if (main != null && main.length > 0) {
+        override += '            "main": '+ JSON.stringify(main);
+        override += (isIgnored ? ',' : '') + '\n';
+    }
+    if (isIgnored) {
+        override += '            "ignore": true\n';
+    }
+    override += '        },';
+    try {
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-bower-add-override',
+            splicable: [
+                override
+            ]
+        });
+    } catch (e) {
+        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + 'bower override (bowerPackageName: ' + name + ', main:' + main + ', ignore:' + isIgnored + ')' +' not added.\n'.yellow);
+    }
+};
+
+/**
  * A a new entity in the "global.json" translations.
  *
  * @param {string} key - Key for the entity name

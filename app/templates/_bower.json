@@ -38,6 +38,7 @@
         "sockjs-client": "1.0.3",
         "stomp-websocket": "2.3.4",
         <%_ } _%>
+        "swagger-ui": "jhipster-needle-bower-add-dependency - JHipster will add additional bower dependency",
         "swagger-ui": "2.1.3"
     },
     "devDependencies": {
@@ -52,7 +53,8 @@
                 "dist/css/bootstrap.css",
                 "less/bootstrap.less"
             ]
-        }
+        },
+        "jhipster-needle-bower-add-override" : "JHipster will add overrides configuration"
     },
     <%_ } _%>
     "resolutions": {
