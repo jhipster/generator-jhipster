@@ -2,6 +2,7 @@
 var path = require('path'),
     util = require('util'),
     yeoman = require('yeoman-generator'),
+    chalk = require('chalk'),
     jhipsterUtils = require('./util.js'),
     shelljs = require('shelljs'),
     Insight = require('insight'),
@@ -33,7 +34,7 @@ Generator.prototype.addJavaScriptToIndex = function (script) {
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + script + '.js ' + 'not added.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + script + '.js ' + chalk.yellow('not added.\n'));
     }
 };
 
@@ -53,7 +54,7 @@ Generator.prototype.addMessageformatLocaleToIndex = function (script) {
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + script + '.js ' + 'not added.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + script + '.js ' + chalk.yellow('not added.\n'));
     }
 };
 
@@ -76,7 +77,7 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + routerName + '.js ' + 'not added.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + routerName + '.js ' + chalk.yellow('not added.\n'));
     }
 };
 
@@ -98,7 +99,7 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + routerName + '.js ' + 'not added.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + routerName + '.js ' + chalk.yellow('not added.\n'));
     }
 };
 
@@ -120,7 +121,7 @@ Generator.prototype.addElementTranslationKey = function(key, value, language) {
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + language + 'not added as a new entity in the menu.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
     }
 };
 
@@ -195,7 +196,7 @@ Generator.prototype.addEntityTranslationKey = function(key, value, language) {
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + language + 'not added as a new entity in the menu.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
     }
 };
 
@@ -215,7 +216,7 @@ Generator.prototype.addChangelogToLiquibase = function (changelogName) {
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + changelogName + '.js ' + 'not added.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + changelogName + '.js ' + chalk.yellow('not added.\n'));
     }
 };
 
@@ -248,7 +249,7 @@ Generator.prototype.addMavenDependency = function (groupId, artifactId, version,
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + 'maven dependency (groupId: ' + groupId + ', artifactId:' + artifactId + ', version:' + version + ')' +' not added.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'maven dependency (groupId: ' + groupId + ', artifactId:' + artifactId + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -281,7 +282,7 @@ Generator.prototype.addMavenPlugin = function (groupId, artifactId, version, oth
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + 'maven plugin (groupId: ' + groupId + ', artifactId:' + artifactId + ', version:' + version + ')' +' not added.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'maven plugin (groupId: ' + groupId + ', artifactId:' + artifactId + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -303,7 +304,7 @@ Generator.prototype.addGradlePlugin = function (group, name, version) {
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + 'classpath: ' + group + ':' + name + ':' + version + 'not added.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'classpath: ' + group + ':' + name + ':' + version + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -326,7 +327,7 @@ Generator.prototype.addGradleDependency = function (scope, group, name, version)
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + group + ':' + name + ':' + version + 'not added.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + group + ':' + name + ':' + version + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -346,7 +347,7 @@ Generator.prototype.applyFromGradleScript = function (name) {
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + name + 'not added.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + name + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -415,7 +416,7 @@ Generator.prototype.installNewLanguage = function(language) {
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + language + 'not added as a new language. Check if you have enabled translation support.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + language + chalk.yellow(' not added as a new language. Check if you have enabled translation support.\n'));
     }
 };
 
