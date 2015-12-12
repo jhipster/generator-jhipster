@@ -142,7 +142,7 @@ Generator.prototype.addAngularJsModule = function(moduleName) {
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + 'module name: ' + moduleName + ' not added.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + moduleName + chalk.yellow(' not added to JHipster app.\n'));
     }
 };
 
