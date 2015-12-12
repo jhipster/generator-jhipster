@@ -173,7 +173,7 @@ Generator.prototype.addBowerOverride = function(bowerPackageName, main, isIgnore
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + 'bower override (bowerPackageName: ' + name + ', main:' + main + ', ignore:' + isIgnored + ')' +' not added.\n'.yellow);
+        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + 'bower override (bowerPackageName: ' + name + ', main:' + JSON.stringify(main) + ', ignore:' + isIgnored + ')' +' not added.\n'.yellow);
     }
 };
 
