@@ -142,7 +142,7 @@ Generator.prototype.addBowerDependency = function(name, version) {
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + 'bower dependency (name: ' + name + ', version:' + version + ')' +' not added.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bower dependency (name: ' + name + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -174,7 +174,7 @@ Generator.prototype.addBowerOverride = function(bowerPackageName, main, isIgnore
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + 'bower override (bowerPackageName: ' + name + ', main:' + JSON.stringify(main) + ', ignore:' + isIgnored + ')' +' not added.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bower override configuration (bowerPackageName: ' + name + ', main:' + JSON.stringify(main) + ', ignore:' + isIgnored + ')' + chalk.yellow(' not added.\n'));
     }
 };
 
