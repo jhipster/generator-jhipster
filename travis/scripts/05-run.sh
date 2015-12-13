@@ -5,11 +5,6 @@ set -ev
 #--------------------------------------------------
 cd $HOME/$JHIPSTER
 if [ $RUNTASK == 1 ]; then
-  if [ $PROTRACTOR == 1 ]; then
-    export DISPLAY=:99.0
-    /etc/init.d/xvfb start
-  fi
-  
   if [ $JHIPSTER != "app-gradle" ]; then
     mvn -P$PROFILE &
     if [ $PROFILE == "dev" ]; then
