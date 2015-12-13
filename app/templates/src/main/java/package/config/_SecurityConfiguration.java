@@ -89,6 +89,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
         .and()
             .addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class)<% } %>
             .exceptionHandling()
+            .accessDeniedHandler(new CustomAccessDeniedHandler())
             .authenticationEntryPoint(authenticationEntryPoint)<% if (authenticationType == 'session') { %>
         .and()
             .rememberMe()
