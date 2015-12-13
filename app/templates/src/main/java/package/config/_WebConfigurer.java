@@ -89,7 +89,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         // on a node, entries for this session on all other nodes are invalidated.
         // You have to know how your load-balancer is configured before
         // setting this parameter. Default is true.
-        parameters.put("sticky-session", "false");
+        parameters.put("sticky-session", "true");
 
         // Name of session id cookie
         parameters.put("cookie-name", "hazelcast.sessionId");

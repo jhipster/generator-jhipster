@@ -52,7 +52,7 @@
         <gatling-maven-plugin.version>2.1.7</gatling-maven-plugin.version>
         <%_ } _%>
         <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>
-        <hazelcast.version>3.5.2</hazelcast.version>
+        <hazelcast.version>3.5.4</hazelcast.version>
         <%_ } _%>
         <%_ if (databaseType == 'sql') { _%>
         <hibernate.version>4.3.11.Final</hibernate.version>
@@ -92,8 +92,8 @@
         <httpclient.version>4.5.1</httpclient.version>
         <spring-social-security.version>1.1.2.RELEASE</spring-social-security.version>
         <spring-social-google.version>1.0.0.RELEASE</spring-social-google.version>
-        <spring-social-facebook.version>2.0.2.RELEASE</spring-social-facebook.version>
-        <spring-social-twitter.version>1.1.1.RELEASE</spring-social-twitter.version>
+        <spring-social-facebook.version>2.0.3.RELEASE</spring-social-facebook.version>
+        <spring-social-twitter.version>1.1.2.RELEASE</spring-social-twitter.version>
         <%_ } _%>
         <!-- Sonar properties -->
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>

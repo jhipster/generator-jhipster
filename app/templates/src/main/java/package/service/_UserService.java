@@ -132,11 +132,13 @@ public class UserService {
         } else {
             user.setLangKey(managedUserDTO.getLangKey());
         }<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-        Set<Authority> authorities = new HashSet<>();
-        managedUserDTO.getAuthorities().stream().forEach(
-            authority -> authorities.add(authorityRepository.findOne(authority))
-        );
-        user.setAuthorities(authorities);<% } %><% if (databaseType == 'cassandra') { %>
+        if (managedUserDTO.getAuthorities() != null) {
+            Set<Authority> authorities = new HashSet<>();
+            managedUserDTO.getAuthorities().stream().forEach(
+                authority -> authorities.add(authorityRepository.findOne(authority))
+            );
+            user.setAuthorities(authorities);
+        }<% } %><% if (databaseType == 'cassandra') { %>
         user.setAuthorities(managedUserDTO.getAuthorities());<% } %>
         String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
         user.setPassword(encryptedPassword);

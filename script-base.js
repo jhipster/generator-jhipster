@@ -173,6 +173,27 @@ Generator.prototype.addBowerOverride = function(bowerPackageName, main, isIgnore
 };
 
 /**
+ * Add a new module to the angular application in "app.js".
+ *
+ * @param {string} moduleName - module name
+ *
+ */
+Generator.prototype.addAngularJsModule = function(moduleName) {
+    var fullPath = 'src/main/webapp/scripts/app/app.js';
+    try {
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-angularjs-add-module',
+            splicable: [
+                "'" + moduleName + "',"
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + moduleName + chalk.yellow(' not added to JHipster app.\n'));
+    }
+};
+
+/**
  * A a new entity in the "global.json" translations.
  *
  * @param {string} key - Key for the entity name
