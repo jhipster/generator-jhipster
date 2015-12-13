@@ -315,7 +315,7 @@ Generator.prototype.addGradlePlugin = function (group, name, version) {
             file: fullPath,
             needle: 'jhipster-needle-gradle-buildscript-dependency',
             splicable: [
-                    'classpath group: \'' + group + ', name: \'' + name + ', version: \'' + version + '\''
+                'classpath group: \'' + group + '\', name: \'' + name + '\', version: \'' + version + '\''
             ]
         });
     } catch (e) {
@@ -338,7 +338,7 @@ Generator.prototype.addGradleDependency = function (scope, group, name, version)
             file: fullPath,
             needle: 'jhipster-needle-gradle-dependency',
             splicable: [
-                    scope + ' group: \'' + group + ', name: \'' + name + ', version: \'' + version + '\''
+                scope + ' group: \'' + group + '\', name: \'' + name + '\', version: \'' + version + '\''
             ]
         });
     } catch (e) {
