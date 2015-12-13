@@ -16,6 +16,8 @@ exports.config = {
         'phantomjs.ghostdriver.cli.args': ['--loglevel=DEBUG']
     },
 
+    directConnect: true,
+
     baseUrl: 'http://localhost:8080/',
 
     framework: 'jasmine2',
