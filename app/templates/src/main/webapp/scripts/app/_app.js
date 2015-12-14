@@ -121,6 +121,7 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTransl
         tmhDynamicLocaleProvider.storageKey('NG_TRANSLATE_LANG_KEY');
         <% } %>
     })
+    // jhipster-needle-angularjs-add-config JHipster will add new application configuration
     .config(['$urlMatcherFactoryProvider', function($urlMatcherFactory) {
         $urlMatcherFactory.type('boolean', {
             name : 'boolean',
@@ -130,4 +131,4 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTransl
             is: function(val) { return [true,false,0,1].indexOf(val) >= 0 },
             pattern: /bool|true|0|1/
         });
-    }]);;
+    }]);
