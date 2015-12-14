@@ -50,11 +50,10 @@ angular.module('<%=angularAppName%>')<% if (authenticationType == 'oauth2' || a
                     $rootScope.previousStateName = to;
                     $rootScope.previousStateNameParams = params;
                     $state.go('login');
-                } else if (response.status == 403 && response.config.method != 'GET' && getCSRF() == ''){
+                } else if (response.status == 403 && response.config.method != 'GET' && getCSRF() == '') {
             		// If the CSRF token expired, then try to get a new CSRF token and retry the old request
-                	return $injector.get('Account').get().$promise
-                    .then(function() { return afterCSRFRenewed(response); })
-                    .catch(function() { return afterCSRFRenewed(response); });
+                	var $http = $injector.get('$http');
+                	return $http.get('/').finally(function() { return afterCSRFRenewed(response); });
                 }
                 return $q.reject(response);
             }
