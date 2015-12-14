@@ -21,3 +21,7 @@ if [ $RUNTASK == 1 ]; then
     # fuser -k 8080/tcp ; sleep 10
   fi
 fi
+
+if [ $PROTRACTOR == 1 ]; then
+  grunt itest
+fi
