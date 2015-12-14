@@ -12,6 +12,7 @@ env:
   - JHIPSTER_MVN_DEP=1
   - RUNTASK=1
   - GRUNT=1
+  - PROTRACTOR=0
   - JHIPSTER_TRAVIS=$TRAVIS_BUILD_DIR/travis
   - JHIPSTER_INSTALL=$JHIPSTER_TRAVIS/install
   - JHIPSTER_SAMPLES=$JHIPSTER_TRAVIS/samples
@@ -22,7 +23,7 @@ env:
   - PROFILE=dev  JHIPSTER=app-cassandra
   - PROFILE=dev  JHIPSTER=app-default
   - PROFILE=dev  JHIPSTER=app-mongodb
-  - PROFILE=dev  JHIPSTER=app-websocket
+  - PROFILE=dev  JHIPSTER=app-websocket PROTRACTOR=1
   - PROFILE=dev  JHIPSTER=app-noi18n
   - PROFILE=dev  JHIPSTER=app-oauth2
   - PROFILE=prod JHIPSTER=app-mysql
@@ -41,6 +42,8 @@ script:
   - $JHIPSTER_SCRIPTS/02-generate-entities.sh
   - $JHIPSTER_SCRIPTS/03-tests.sh
   - $JHIPSTER_SCRIPTS/04-docker-compose.sh
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
   - $JHIPSTER_SCRIPTS/05-run.sh
 # notifications:
 #   webhooks:
