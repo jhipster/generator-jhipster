@@ -93,6 +93,7 @@ ModulesGenerator.prototype.configurer = function configurer() {
     this.jhipsterFunc['addGradleDependency'] = this.addGradleDependency;
     this.jhipsterFunc['applyFromGradleScript'] = this.applyFromGradleScript;
 
+    this.jhipsterFunc['addMainCSSStyle'] = this.addMainCSSStyle;
     this.jhipsterFunc['addAngularJsModule'] = this.addAngularJsModule;
     this.jhipsterFunc['addJavaScriptToIndex'] = this.addJavaScriptToIndex;
     this.jhipsterFunc['addMessageformatLocaleToIndex'] = this.addMessageformatLocaleToIndex;

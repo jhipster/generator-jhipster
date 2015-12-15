@@ -189,6 +189,47 @@ Generator.prototype.addChangelogToLiquibase = function (changelogName) {
 };
 
 /**
+ * Add new css style to the angular application in "main.css".
+ *
+ * @param {string} style - css to put in the file
+ * @param {string} comment - comment to add before css code
+ *
+ * exemple:
+ *
+ * style = '.jhipster {\n     color: #baa186;\n}'
+ * comment = 'New JHipster color'
+ *
+ * * ==========================================================================
+ * New JHipster color
+ * ========================================================================== *
+ * .jhipster {
+ *     color: #baa186;
+ * }
+ *
+ */
+Generator.prototype.addMainCSSStyle = function(style, comment) {
+    var fullPath = 'src/main/webapp/assets/styles/main.css';
+    var styleBlock = '';
+    if (comment) {
+        styleBlock += '/* ==========================================================================\n';
+        styleBlock += comment + '\n';
+        styleBlock += '========================================================================== */\n';
+    }
+    styleBlock += style + '\n';
+    try {
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-css-add-main',
+            splicable: [
+                styleBlock
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. style not added to JHipster app.\n'));
+    }
+};
+
+/**
  * Add a new Maven dependency.
  *
  * @param {groupId} dependency groupId
