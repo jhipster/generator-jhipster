@@ -2,16 +2,15 @@ package <%=packageName%>.config;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
-import com.codahale.metrics.servlets.MetricsServlet;<% if (clusteredHttpSession == 'hazelcast') { %>
-import com.hazelcast.core.HazelcastInstance;
+import com.codahale.metrics.servlets.MetricsServlet;<% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
+import com.hazelcast.core.HazelcastInstance;<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
 import com.hazelcast.web.SessionListener;
-import com.hazelcast.web.WebFilter;<% } %>
+import com.hazelcast.web.spring.SpringAwareWebFilter;<% } %>
 import <%=packageName%>.web.filter.CachingHttpHeadersFilter;
 import <%=packageName%>.web.filter.StaticResourcesProductionFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;<% } %>
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletContainer;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.MimeMappings;
@@ -30,8 +29,7 @@ import javax.servlet.*;
 /**
  * Configuration of web application with Servlet 3.0 APIs.
  */
-@Configuration<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-@AutoConfigureAfter(CacheConfiguration.class)<% } %>
+@Configuration
 public class WebConfigurer implements ServletContextInitializer, EmbeddedServletContainerCustomizer {
 
     private final Logger log = LoggerFactory.getLogger(WebConfigurer.class);
@@ -43,7 +41,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     private JHipsterProperties props;
 
     @Autowired(required = false)
-    private MetricRegistry metricRegistry;<% if (clusteredHttpSession == 'hazelcast') { %>
+    private MetricRegistry metricRegistry;<% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
 
     // Hazelcast instance is injected to force its initialization before the Servlet filter uses it.
     @Inject
@@ -75,7 +73,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC, DispatcherType.INCLUDE);
         servletContext.addListener(new SessionListener());
 
-        FilterRegistration.Dynamic hazelcastWebFilter = servletContext.addFilter("hazelcastWebFilter", new WebFilter());
+        FilterRegistration.Dynamic hazelcastWebFilter = servletContext.addFilter("hazelcastWebFilter", new SpringAwareWebFilter());
         Map<String, String> parameters = new HashMap<>();
         parameters.put("instance-name", "<%=baseName%>");
         // Name of the distributed map storing your web session objects
