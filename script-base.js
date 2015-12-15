@@ -191,7 +191,7 @@ Generator.prototype.addChangelogToLiquibase = function (changelogName) {
 /**
  * Add new css style to the angular application in "main.css".
  *
- * @param {string} style - css to put in the file
+ * @param {string} style - css to add in the file
  * @param {string} comment - comment to add before css code
  *
  * example:
@@ -208,6 +208,11 @@ Generator.prototype.addChangelogToLiquibase = function (changelogName) {
  *
  */
 Generator.prototype.addMainCSSStyle = function(style, comment) {
+    // Not Working this.useSass -> Undifined
+    if (this.useSass) {
+        this.addMainSCSSStyle(style, comment);
+    }
+
     var fullPath = 'src/main/webapp/assets/styles/main.css';
     var styleBlock = '';
     if (comment) {
@@ -220,6 +225,48 @@ Generator.prototype.addMainCSSStyle = function(style, comment) {
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-css-add-main',
+            splicable: [
+                styleBlock
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Style not added to JHipster app.\n'));
+    }
+};
+
+/**
+ * Add new scss style to the angular application in "main.scss".
+ *
+ * @param {string} style - scss to add in the file
+ * @param {string} comment - comment to add before css code
+ *
+ * example:
+ *
+ * style = '.success {\n     @extend .message;\n    border-color: green;\n}'
+ * comment = 'Message'
+ *
+ * * ==========================================================================
+ * Message
+ * ========================================================================== *
+ * .success {
+ *     @extend .message;
+ *     border-color: green;
+ * }
+ *
+ */
+Generator.prototype.addMainSCSSStyle = function(style, comment) {
+    var fullPath = 'src/main/scss/main.scss';
+    var styleBlock = '';
+    if (comment) {
+        styleBlock += '/* ==========================================================================\n';
+        styleBlock += comment + '\n';
+        styleBlock += '========================================================================== */\n';
+    }
+    styleBlock += style + '\n';
+    try {
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-scss-add-main',
             splicable: [
                 styleBlock
             ]
