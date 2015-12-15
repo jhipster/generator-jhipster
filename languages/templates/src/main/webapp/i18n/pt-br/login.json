@@ -13,7 +13,7 @@
             }
         },
         "password" : {
-            "forgot": "Did you forget your password?"
+            "forgot": "Esqueceu sua senha?"
         }
     }
 }
