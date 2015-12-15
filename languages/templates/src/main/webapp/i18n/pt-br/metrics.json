@@ -79,11 +79,11 @@
             "mean": "Mediana (ms)"
         },
         "datasource": {
-        	"usage": "Usage",
-            "title": "DataSource statistics (time in millisecond)",
-            "name": "Pool usage",
-            "count": "Count",
-            "mean": "Mean",
+        	"usage": "Utilização",
+            "title": "Estatísticas do datasource (tempo em milisegundos)",
+            "name": "Utilização do pool",
+            "count": "Contagem",
+            "mean": "Mediana",
             "min": "Min",
             "max": "Max",
             "p50": "p50",
