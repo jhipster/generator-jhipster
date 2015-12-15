@@ -153,7 +153,7 @@ Generator.prototype.addAngularJsModule = function(moduleName) {
  * @param {string} config - javascript to put inside config
  * @param {string} comment - comment to add before the .config() to describe the config
  *
- * exemple:
+ * example:
  *
  * moduleConfigNames = ['moduleName1', 'moduleName2']
  * config = 'moduleName1.doSomething();\nmoduleName2.doOtherthing();'
