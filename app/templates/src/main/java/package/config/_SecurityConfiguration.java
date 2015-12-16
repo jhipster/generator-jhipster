@@ -13,8 +13,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;<% if (authenticationType == 'xauth' || authenticationType == 'oauth2') { %>
-import org.springframework.security.config.http.SessionCreationPolicy;<% } %>
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.http.SessionCreationPolicy;<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.userdetails.UserDetailsService;<% } %>
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
@@ -48,7 +49,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     private UserDetailsService userDetailsService;<% if (authenticationType == 'session') { %>
 
     @Inject
-    private RememberMeServices rememberMeServices;<% } %><% if (authenticationType == 'xauth') { %>
+    private RememberMeServices rememberMeServices;<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
+
+    @Inject
+    private SessionRegistry sessionRegistry;<% } %><% if (authenticationType == 'xauth') { %>
 
     @Inject
     private TokenProvider tokenProvider;<% } %>
@@ -83,9 +87,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http<% if (authenticationType == 'session') { %>
+        http<% if (clusteredHttpSession == 'hazelcast') { %>
+            .sessionManagement()
+            .maximumSessions(32) // maximum number of concurrent sessions for one user
+            .sessionRegistry(sessionRegistry)
+            .and().and()<% } %><% if (authenticationType == 'session') { %>
             .csrf()<% if (websocket == 'spring-websocket') { %>
-            .ignoringAntMatchers("/websocket/**")<% } %> 
+            .ignoringAntMatchers("/websocket/**")<% } %>
         .and()
             .addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class)<% } %>
             .exceptionHandling()
