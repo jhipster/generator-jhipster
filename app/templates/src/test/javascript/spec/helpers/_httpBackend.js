@@ -6,7 +6,7 @@ function mockApiAccountCall() {
 
 function mockI18nCalls() {
     inject(function($httpBackend) {
-        $httpBackend.whenGET(/i18n\/[a-z][a-z]\/.+\.json/).respond({});
+        $httpBackend.whenGET(/i18n\/.*\/.+\.json/).respond({});
     });
 }
 

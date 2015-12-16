@@ -194,6 +194,48 @@ Generator.prototype.addAngularJsModule = function(moduleName) {
 };
 
 /**
+ * Add a new configuration to the angular application in "app.js".
+ *
+ * @param {array} moduleConfigNames - modules name to import in your config
+ * @param {string} config - javascript to put inside config
+ * @param {string} comment - comment to add before the .config() to describe the config
+ *
+ * example:
+ *
+ * moduleConfigNames = ['moduleName1', 'moduleName2']
+ * config = 'moduleName1.doSomething();\nmoduleName2.doOtherthing();'
+ * comment = 'I am a config test'
+ *
+ * // I am a config test
+ * .config(function(moduleName1, moduleName2) {
+ *      moduleName1.doSomething();
+ *      moduleName2.doOtherthing();
+ * });
+ *
+ */
+Generator.prototype.addAngularJsConfig = function(moduleConfigNames, config, comment) {
+    var fullPath = 'src/main/webapp/scripts/app/app.js';
+    var configBlock = '';
+    if (comment) {
+        configBlock += '// ' + comment + '\n    ';
+    }
+    configBlock += '.config(function (' + moduleConfigNames.join(', ') + ') {\n';
+    configBlock += '        ' + config.replace(/\n/g, '\n        ') + '\n';
+    configBlock += '    })';
+    try {
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-angularjs-add-config',
+            splicable: [
+                configBlock
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Configuration not added to JHipster app.\n'));
+    }
+};
+
+/**
  * A a new entity in the "global.json" translations.
  *
  * @param {string} key - Key for the entity name
@@ -232,6 +274,94 @@ Generator.prototype.addChangelogToLiquibase = function (changelogName) {
         });
     } catch (e) {
         console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + changelogName + '.js ' + chalk.yellow('not added.\n'));
+    }
+};
+
+/**
+ * Add new css style to the angular application in "main.css".
+ *
+ * @param {string} style - css to add in the file
+ * @param {string} comment - comment to add before css code
+ *
+ * example:
+ *
+ * style = '.jhipster {\n     color: #baa186;\n}'
+ * comment = 'New JHipster color'
+ *
+ * * ==========================================================================
+ * New JHipster color
+ * ========================================================================== *
+ * .jhipster {
+ *     color: #baa186;
+ * }
+ *
+ */
+Generator.prototype.addMainCSSStyle = function(style, comment) {
+    // Not Working this.useSass -> Undifined
+    if (this.useSass) {
+        this.addMainSCSSStyle(style, comment);
+    }
+
+    var fullPath = 'src/main/webapp/assets/styles/main.css';
+    var styleBlock = '';
+    if (comment) {
+        styleBlock += '/* ==========================================================================\n';
+        styleBlock += comment + '\n';
+        styleBlock += '========================================================================== */\n';
+    }
+    styleBlock += style + '\n';
+    try {
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-css-add-main',
+            splicable: [
+                styleBlock
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Style not added to JHipster app.\n'));
+    }
+};
+
+/**
+ * Add new scss style to the angular application in "main.scss".
+ *
+ * @param {string} style - scss to add in the file
+ * @param {string} comment - comment to add before css code
+ *
+ * example:
+ *
+ * style = '.success {\n     @extend .message;\n    border-color: green;\n}'
+ * comment = 'Message'
+ *
+ * * ==========================================================================
+ * Message
+ * ========================================================================== *
+ * .success {
+ *     @extend .message;
+ *     border-color: green;
+ * }
+ *
+ */
+Generator.prototype.addMainSCSSStyle = function(style, comment) {
+    var fullPath = 'src/main/scss/main.scss';
+    var styleBlock = '';
+    if (comment) {
+        styleBlock += '/* ==========================================================================\n';
+        styleBlock += comment + '\n';
+        styleBlock += '========================================================================== */\n';
+    }
+    styleBlock += style + '\n';
+    try {
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-scss-add-main',
+            splicable: [
+                styleBlock
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Style not added to JHipster app.\n'));
     }
 };
 
