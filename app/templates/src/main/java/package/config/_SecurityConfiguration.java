@@ -84,8 +84,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http<% if (authenticationType == 'session') { %>
-            .csrf()
-            .ignoringAntMatchers("/websocket/**")
+            .csrf()<% if (websocket == 'spring-websocket') { %>
+            .ignoringAntMatchers("/websocket/**")<% } %> 
         .and()
             .addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class)<% } %>
             .exceptionHandling()
