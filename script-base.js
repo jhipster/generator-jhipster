@@ -147,6 +147,48 @@ Generator.prototype.addAngularJsModule = function(moduleName) {
 };
 
 /**
+ * Add a new configuration to the angular application in "app.js".
+ *
+ * @param {array} moduleConfigNames - modules name to import in your config
+ * @param {string} config - javascript to put inside config
+ * @param {string} comment - comment to add before the .config() to describe the config
+ *
+ * example:
+ *
+ * moduleConfigNames = ['moduleName1', 'moduleName2']
+ * config = 'moduleName1.doSomething();\nmoduleName2.doOtherthing();'
+ * comment = 'I am a config test'
+ *
+ * // I am a config test
+ * .config(function(moduleName1, moduleName2) {
+ *      moduleName1.doSomething();
+ *      moduleName2.doOtherthing();
+ * });
+ *
+ */
+Generator.prototype.addAngularJsConfig = function(moduleConfigNames, config, comment) {
+    var fullPath = 'src/main/webapp/scripts/app/app.js';
+    var configBlock = '';
+    if (comment) {
+        configBlock += '// ' + comment + '\n    ';
+    }
+    configBlock += '.config(function (' + moduleConfigNames.join(', ') + ') {\n';
+    configBlock += '        ' + config.replace(/\n/g, '\n        ') + '\n';
+    configBlock += '    })';
+    try {
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-angularjs-add-config',
+            splicable: [
+                configBlock
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Configuration not added to JHipster app.\n'));
+    }
+};
+
+/**
  * A a new entity in the "global.json" translations.
  *
  * @param {string} key - Key for the entity name
