@@ -115,7 +115,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .logout()
             .logoutUrl("/api/logout")
             .logoutSuccessHandler(ajaxLogoutSuccessHandler)
-            .deleteCookies("JSESSIONID"<% if (clusteredHttpSession == 'hazelcast') { %>, "hazelcast.sessionId"<% } %>)
+            .deleteCookies("JSESSIONID", "CSRF-TOKEN"<% if (clusteredHttpSession == 'hazelcast') { %>, "hazelcast.sessionId"<% } %>)
             .permitAll()<% } %>
         .and()<% if (authenticationType == 'xauth') { %>
             .csrf()
