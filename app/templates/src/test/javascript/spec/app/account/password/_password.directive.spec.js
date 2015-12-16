@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Directive Tests ', function () {
+describe('Directive Tests', function () {
     beforeEach(mockApiAccountCall);
     <%_ if (enableTranslation) { _%>
     beforeEach(mockI18nCalls);
