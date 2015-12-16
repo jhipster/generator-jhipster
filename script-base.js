@@ -126,6 +126,53 @@ Generator.prototype.addElementTranslationKey = function(key, value, language) {
 };
 
 /**
+ * Add a new dependency in the "bower.json".
+ *
+ * @param {string} name - dependency name
+ * @param {string} version - dependency version
+ */
+Generator.prototype.addBowerDependency = function(name, version) {
+    var fullPath ='bower.json';
+    try {
+        jhipsterUtils.rewriteJSONFile(fullPath, function(jsonObj) {
+            jsonObj.dependencies[name] = version;
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bower dependency (name: ' + name + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
+    }
+};
+
+/**
+ * Add a new override configuration in the "bower.json".
+ *
+ * @param {string} bowerPackageName - Bower package name use in dependencies
+ * @param {array} main - You can specify which files should be selected
+ * @param {boolean} isIgnored - Default: false, Set to true if you want to ignore this package.
+ * @param {object} dependencies - You can override the dependencies of a package. Set to null to ignore the dependencies.
+ *
+ */
+Generator.prototype.addBowerOverride = function(bowerPackageName, main, isIgnored, dependencies) {
+    var fullPath = 'bower.json';
+    try {
+        jhipsterUtils.rewriteJSONFile(fullPath, function(jsonObj) {
+            var override = {};
+            if (main != null && main.length > 0) {
+                override['main'] = main;
+            }
+            if (isIgnored) {
+                override['ignore'] = true;
+            }
+            if (dependencies) {
+                override['dependencies'] = dependencies;
+            }
+            jsonObj.overrides[bowerPackageName] = override;
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bower override configuration (bowerPackageName: ' + name + ', main:' + JSON.stringify(main) + ', ignore:' + isIgnored + ')' + chalk.yellow(' not added.\n'));
+    }
+};
+
+/**
  * Add a new module to the angular application in "app.js".
  *
  * @param {string} moduleName - module name
