@@ -70,7 +70,6 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
      */
     private void initClusteredHttpSessionFilter(ServletContext servletContext, EnumSet<DispatcherType> disps) {
         log.debug("Registering Clustered Http Session Filter");
-        disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC, DispatcherType.INCLUDE);
         servletContext.addListener(new SessionListener());
 
         FilterRegistration.Dynamic hazelcastWebFilter = servletContext.addFilter("hazelcastWebFilter", new SpringAwareWebFilter());
@@ -105,7 +104,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         parameters.put("shutdown-on-destroy", "true");
 
         hazelcastWebFilter.setInitParameters(parameters);
-        hazelcastWebFilter.addMappingForUrlPatterns(disps, false, "/*");
+        hazelcastWebFilter.addMappingForUrlPatterns(disps, true, "/*");
         hazelcastWebFilter.setAsyncSupported(true);
     }<% } %>
 
