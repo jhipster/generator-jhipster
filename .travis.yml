@@ -26,6 +26,7 @@ env:
   - PROFILE=dev  JHIPSTER=app-websocket PROTRACTOR=1
   - PROFILE=dev  JHIPSTER=app-noi18n
   - PROFILE=dev  JHIPSTER=app-oauth2
+  - PROFILE=dev  JHIPSTER=app-xauth
   - PROFILE=prod JHIPSTER=app-mysql
   - PROFILE=prod JHIPSTER=app-psql-es
   - PROFILE=dev  JHIPSTER=app-social
