@@ -96,8 +96,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .ignoringAntMatchers("/websocket/**")<% } %>
         .and()
             .addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class)<% } %>
-            .exceptionHandling()
-            .accessDeniedHandler(new CustomAccessDeniedHandler())
+            .exceptionHandling()<% if (authenticationType == 'session') { %>
+            .accessDeniedHandler(new CustomAccessDeniedHandler())<% } %>
             .authenticationEntryPoint(authenticationEntryPoint)<% if (authenticationType == 'session') { %>
         .and()
             .rememberMe()
