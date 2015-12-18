@@ -22,6 +22,7 @@ env:
   - PROFILE=dev  JHIPSTER=app-gulp      GRUNT=0
   - PROFILE=dev  JHIPSTER=app-cassandra
   - PROFILE=dev  JHIPSTER=app-default
+  - PROFILE=dev  JHIPSTER=app-hazelcast
   - PROFILE=dev  JHIPSTER=app-mongodb
   - PROFILE=dev  JHIPSTER=app-websocket PROTRACTOR=1
   - PROFILE=dev  JHIPSTER=app-noi18n
