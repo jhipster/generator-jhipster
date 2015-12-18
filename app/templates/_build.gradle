@@ -14,6 +14,7 @@ buildscript {
         classpath group: 'com.moowork.gradle', name: 'gradle-node-plugin', version: '0.11'<% if(frontendBuilder == 'grunt') {%>
         classpath group: 'com.moowork.gradle', name: 'gradle-grunt-plugin', version: '0.11'<% }  if(frontendBuilder == 'gulp') {%>
   	    classpath group: 'com.moowork.gradle', name: 'gradle-gulp-plugin', version: '0.11'<% } %>
+        //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
     }
 }
 
@@ -59,6 +60,7 @@ apply from: 'liquibase.gradle'<% } %>
 <% if (testFrameworks.indexOf('gatling') != -1) { %>
 apply from: 'gatling.gradle'<% } %>
 apply from: 'mapstruct.gradle'
+//jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
 
 if (project.hasProperty('prod')) {
     apply from: 'profile_prod.gradle'
@@ -199,6 +201,7 @@ dependencies {
     runtime files('lib/oracle/ojdbc/7/ojdbc-7.jar')
     runtime fileTree(dir: 'lib', include: '*.jar')<% } %>
     optional group: 'org.springframework.boot', name:'spring-boot-configuration-processor', version: spring_boot_version
+    //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 }
 
 compileJava.dependsOn(processResources)

@@ -780,6 +780,7 @@ JhipsterGenerator.prototype.app = function app() {
     }
     this.template('src/main/java/package/security/_AuthoritiesConstants.java', javaDir + 'security/AuthoritiesConstants.java', this, {});
     if (this.authenticationType == 'session') {
+        this.template('src/main/java/package/security/_CustomAccessDeniedHandler.java', javaDir + 'security/CustomAccessDeniedHandler.java', this, {});
         this.template('src/main/java/package/security/_CustomPersistentRememberMeServices.java', javaDir + 'security/CustomPersistentRememberMeServices.java', this, {});
     }
     this.template('src/main/java/package/security/_Http401UnauthorizedEntryPoint.java', javaDir + 'security/Http401UnauthorizedEntryPoint.java', this, {});
@@ -967,7 +968,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/scripts/components/util/_capitalize.filter.js', webappDir + 'scripts/components/util/capitalize.filter.js', this, {});
     this.template(webappDir + '/scripts/components/util/_parse-links.service.js', webappDir + 'scripts/components/util/parse-links.service.js', this, {});
     this.template(webappDir + '/scripts/components/util/_truncate.filter.js', webappDir + 'scripts/components/util/truncate.filter.js', this, {});
-    this.template(webappDir + '/scripts/components/util/_dateutil.service.js', webappDir + 'scripts/components/util/dateutil.service.js', this, {});
+    this.template(webappDir + '/scripts/components/util/_date-util.service.js', webappDir + 'scripts/components/util/date-util.service.js', this, {});
     this.template(webappDir + '/scripts/components/util/_data-util.service.js', webappDir + 'scripts/components/util/data-util.service.js', this, {});
     this.template(webappDir + '/scripts/components/util/_sort.directive.js', webappDir + 'scripts/components/util/sort.directive.js', this, {});
 
@@ -1138,7 +1139,7 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/components/alert/alert.service.js',
         'scripts/components/alert/alert.directive.js',
         'scripts/components/util/parse-links.service.js',
-        'scripts/components/util/dateutil.service.js',
+        'scripts/components/util/date-util.service.js',
         'scripts/components/util/data-util.service.js',
         'scripts/components/util/sort.directive.js',
         'scripts/app/account/account.js',

@@ -64,7 +64,8 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>DialogContro
 
         $scope.byteSize = DataUtils.byteSize;
         <%_ } _%>
-        <%_ for (fieldId in fields) { if (fields[fieldId].fieldType === 'byte[]') { _%>
+        <%_ for (fieldId in fields) {
+            if (fields[fieldId].fieldType === 'byte[]') { _%>
 
         $scope.set<%= fields[fieldId].fieldNameCapitalized %> = function ($file, <%= entityInstance %>) {
             <%_ if (fields[fieldId].fieldTypeBlobContent == 'image') { _%>
@@ -83,6 +84,16 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>DialogContro
                     });
                 };
             }
+        };
+        <%_ } else if (fields[fieldId].fieldType === 'LocalDate' || fields[fieldId].fieldType === 'ZonedDateTime') { _%>
+        $scope.datePickerFor<%= fields[fieldId].fieldNameCapitalized %> = {};
+
+        $scope.datePickerFor<%= fields[fieldId].fieldNameCapitalized %>.status = {
+            opened: false
+        };
+
+        $scope.datePickerFor<%= fields[fieldId].fieldNameCapitalized %>Open = function($event) {
+            $scope.datePickerFor<%= fields[fieldId].fieldNameCapitalized %>.status.opened = true;
         };
         <%_ } } _%>
 }]);

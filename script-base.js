@@ -2,6 +2,7 @@
 var path = require('path'),
     util = require('util'),
     yeoman = require('yeoman-generator'),
+    chalk = require('chalk'),
     jhipsterUtils = require('./util.js'),
     shelljs = require('shelljs'),
     Insight = require('insight'),
@@ -33,7 +34,7 @@ Generator.prototype.addJavaScriptToIndex = function (script) {
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + script + '.js ' + 'not added.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + script + '.js ' + chalk.yellow('not added.\n'));
     }
 };
 
@@ -53,7 +54,7 @@ Generator.prototype.addMessageformatLocaleToIndex = function (script) {
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + script + '.js ' + 'not added.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + script + '.js ' + chalk.yellow('not added.\n'));
     }
 };
 
@@ -69,14 +70,14 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
         var fullPath = 'src/main/webapp/scripts/components/navbar/navbar.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
-            needle: 'jhipster-needle-001',
+            needle: 'jhipster-needle-add-element-to-menu',
             splicable: [
                     '<li ui-sref-active="active" ><a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-' + glyphiconName + '"></span>\n' +
                     '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.' + routerName + '"':'' ) + '>' + routerName + '</span></a></li>'
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + routerName + '.js ' + 'not added.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + routerName + '.js ' + chalk.yellow('not added.\n'));
     }
 };
 
@@ -91,14 +92,14 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
         var fullPath = 'src/main/webapp/scripts/components/navbar/navbar.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
-            needle: 'jhipster-needle-002',
+            needle: 'jhipster-needle-add-entity-to-menu',
             splicable: [
                     '<li ui-sref-active="active" ><a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-asterisk"></span>\n' +
                     '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.entities.' + routerName + '"':'' ) + '>' + routerName + '</span></a></li>'
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + routerName + '.js ' + 'not added.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + routerName + '.js ' + chalk.yellow('not added.\n'));
     }
 };
 
@@ -114,13 +115,123 @@ Generator.prototype.addElementTranslationKey = function(key, value, language) {
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
-            needle: 'jhipster-needle-003',
+            needle: 'jhipster-needle-menu-add-element',
             splicable: [
                     '"' + key + '": "' + value + '",'
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + language + 'not added as a new entity in the menu.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
+    }
+};
+
+/**
+ * Add a new dependency in the "bower.json".
+ *
+ * @param {string} name - dependency name
+ * @param {string} version - dependency version
+ */
+Generator.prototype.addBowerDependency = function(name, version) {
+    var fullPath ='bower.json';
+    try {
+        jhipsterUtils.rewriteJSONFile(fullPath, function(jsonObj) {
+            jsonObj.dependencies[name] = version;
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bower dependency (name: ' + name + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
+    }
+};
+
+/**
+ * Add a new override configuration in the "bower.json".
+ *
+ * @param {string} bowerPackageName - Bower package name use in dependencies
+ * @param {array} main - You can specify which files should be selected
+ * @param {boolean} isIgnored - Default: false, Set to true if you want to ignore this package.
+ * @param {object} dependencies - You can override the dependencies of a package. Set to null to ignore the dependencies.
+ *
+ */
+Generator.prototype.addBowerOverride = function(bowerPackageName, main, isIgnored, dependencies) {
+    var fullPath = 'bower.json';
+    try {
+        jhipsterUtils.rewriteJSONFile(fullPath, function(jsonObj) {
+            var override = {};
+            if (main != null && main.length > 0) {
+                override['main'] = main;
+            }
+            if (isIgnored) {
+                override['ignore'] = true;
+            }
+            if (dependencies) {
+                override['dependencies'] = dependencies;
+            }
+            jsonObj.overrides[bowerPackageName] = override;
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bower override configuration (bowerPackageName: ' + name + ', main:' + JSON.stringify(main) + ', ignore:' + isIgnored + ')' + chalk.yellow(' not added.\n'));
+    }
+};
+
+/**
+ * Add a new module to the angular application in "app.js".
+ *
+ * @param {string} moduleName - module name
+ *
+ */
+Generator.prototype.addAngularJsModule = function(moduleName) {
+    var fullPath = 'src/main/webapp/scripts/app/app.js';
+    try {
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-angularjs-add-module',
+            splicable: [
+                "'" + moduleName + "',"
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + moduleName + chalk.yellow(' not added to JHipster app.\n'));
+    }
+};
+
+/**
+ * Add a new configuration to the angular application in "app.js".
+ *
+ * @param {array} moduleConfigNames - modules name to import in your config
+ * @param {string} config - javascript to put inside config
+ * @param {string} comment - comment to add before the .config() to describe the config
+ *
+ * example:
+ *
+ * moduleConfigNames = ['moduleName1', 'moduleName2']
+ * config = 'moduleName1.doSomething();\nmoduleName2.doOtherthing();'
+ * comment = 'I am a config test'
+ *
+ * // I am a config test
+ * .config(function(moduleName1, moduleName2) {
+ *      moduleName1.doSomething();
+ *      moduleName2.doOtherthing();
+ * });
+ *
+ */
+Generator.prototype.addAngularJsConfig = function(moduleConfigNames, config, comment) {
+    var fullPath = 'src/main/webapp/scripts/app/app.js';
+    var configBlock = '';
+    if (comment) {
+        configBlock += '// ' + comment + '\n    ';
+    }
+    configBlock += '.config(function (' + moduleConfigNames.join(', ') + ') {\n';
+    configBlock += '        ' + config.replace(/\n/g, '\n        ') + '\n';
+    configBlock += '    })';
+    try {
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-angularjs-add-config',
+            splicable: [
+                configBlock
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Configuration not added to JHipster app.\n'));
     }
 };
 
@@ -136,13 +247,13 @@ Generator.prototype.addEntityTranslationKey = function(key, value, language) {
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
-            needle: 'jhipster-needle-004',
+            needle: 'jhipster-needle-menu-add-entry',
             splicable: [
                     '"' + key + '": "' + value + '",'
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + language + 'not added as a new entity in the menu.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
     }
 };
 
@@ -156,13 +267,232 @@ Generator.prototype.addChangelogToLiquibase = function (changelogName) {
         var fullPath = 'src/main/resources/config/liquibase/master.xml';
         jhipsterUtils.rewriteFile({
             file: fullPath,
-            needle: 'jhipster-needle-005',
+            needle: 'jhipster-needle-liquibase-add-changelog',
             splicable: [
                     '<include file="classpath:config/liquibase/changelog/' + changelogName + '.xml" relativeToChangelogFile="false"/>'
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + changelogName + '.js ' + 'not added.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + changelogName + '.js ' + chalk.yellow('not added.\n'));
+    }
+};
+
+/**
+ * Add new css style to the angular application in "main.css".
+ *
+ * @param {string} style - css to add in the file
+ * @param {string} comment - comment to add before css code
+ *
+ * example:
+ *
+ * style = '.jhipster {\n     color: #baa186;\n}'
+ * comment = 'New JHipster color'
+ *
+ * * ==========================================================================
+ * New JHipster color
+ * ========================================================================== *
+ * .jhipster {
+ *     color: #baa186;
+ * }
+ *
+ */
+Generator.prototype.addMainCSSStyle = function(style, comment) {
+    // Not Working this.useSass -> Undifined
+    if (this.useSass) {
+        this.addMainSCSSStyle(style, comment);
+    }
+
+    var fullPath = 'src/main/webapp/assets/styles/main.css';
+    var styleBlock = '';
+    if (comment) {
+        styleBlock += '/* ==========================================================================\n';
+        styleBlock += comment + '\n';
+        styleBlock += '========================================================================== */\n';
+    }
+    styleBlock += style + '\n';
+    try {
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-css-add-main',
+            splicable: [
+                styleBlock
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Style not added to JHipster app.\n'));
+    }
+};
+
+/**
+ * Add new scss style to the angular application in "main.scss".
+ *
+ * @param {string} style - scss to add in the file
+ * @param {string} comment - comment to add before css code
+ *
+ * example:
+ *
+ * style = '.success {\n     @extend .message;\n    border-color: green;\n}'
+ * comment = 'Message'
+ *
+ * * ==========================================================================
+ * Message
+ * ========================================================================== *
+ * .success {
+ *     @extend .message;
+ *     border-color: green;
+ * }
+ *
+ */
+Generator.prototype.addMainSCSSStyle = function(style, comment) {
+    var fullPath = 'src/main/scss/main.scss';
+    var styleBlock = '';
+    if (comment) {
+        styleBlock += '/* ==========================================================================\n';
+        styleBlock += comment + '\n';
+        styleBlock += '========================================================================== */\n';
+    }
+    styleBlock += style + '\n';
+    try {
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-scss-add-main',
+            splicable: [
+                styleBlock
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Style not added to JHipster app.\n'));
+    }
+};
+
+/**
+ * Add a new Maven dependency.
+ *
+ * @param {groupId} dependency groupId
+ * @param {artifactId} dependency artifactId
+ * @param {version} explicit dependency version number
+ * @param {other} explicit other thing: scope, exclusions...
+ */
+Generator.prototype.addMavenDependency = function (groupId, artifactId, version, other) {
+    try {
+        var fullPath = 'pom.xml';
+        var dependency = '<dependency>\n' +
+            '            <groupId>' + groupId + '</groupId>\n' +
+            '            <artifactId>' + artifactId + '</artifactId>\n';
+        if (version) {
+            dependency += '            <version>' + version + '</version>\n';
+        }
+        if (other) {
+            dependency += other + '\n';
+        }
+        dependency += '        </dependency>';
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-maven-add-dependency',
+            splicable: [
+                dependency
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'maven dependency (groupId: ' + groupId + ', artifactId:' + artifactId + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
+    }
+};
+
+/**
+ * Add a new Maven plugin.
+ *
+ * @param {groupId} plugin groupId
+ * @param {artifactId} plugin artifactId
+ * @param {version} explicit plugin version number
+ * @param {other} explicit other thing: executions, configuration...
+ */
+Generator.prototype.addMavenPlugin = function (groupId, artifactId, version, other) {
+    try {
+        var fullPath = 'pom.xml';
+        var plugin =  '<plugin>\n' +
+            '                <groupId>' + groupId + '</groupId>\n' +
+            '                <artifactId>' + artifactId + '</artifactId>\n';
+        if (version) {
+            plugin += '                <version>' + version + '</version>\n';
+        }
+        if (other) {
+            plugin += other + '\n';
+        }
+        plugin += '            </plugin>';
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-maven-add-plugin',
+            splicable: [
+                plugin
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'maven plugin (groupId: ' + groupId + ', artifactId:' + artifactId + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
+    }
+};
+
+/**
+ * A new Gradle plugin.
+ *
+ * @param {group} plugin GroupId
+ * @param {name} plugin name
+ * @param {version} explicit plugin version number
+ */
+Generator.prototype.addGradlePlugin = function (group, name, version) {
+    try {
+        var fullPath = 'build.gradle';
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-gradle-buildscript-dependency',
+            splicable: [
+                'classpath group: \'' + group + '\', name: \'' + name + '\', version: \'' + version + '\''
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'classpath: ' + group + ':' + name + ':' + version + chalk.yellow(' not added.\n'));
+    }
+};
+
+/**
+ * A new dependency to build.gradle file.
+ *
+ * @param {scope} scope of the new dependency, e.g. compile
+ * @param {group} maven GroupId
+ * @param {name} maven ArtifactId
+ * @param {version} explicit version number
+ */
+Generator.prototype.addGradleDependency = function (scope, group, name, version) {
+    try {
+        var fullPath = 'build.gradle';
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-gradle-dependency',
+            splicable: [
+                scope + ' group: \'' + group + '\', name: \'' + name + '\', version: \'' + version + '\''
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + group + ':' + name + ':' + version + chalk.yellow(' not added.\n'));
+    }
+};
+
+/**
+ * Apply from an external Gradle build script.
+ *
+ * @param {name} name of the file to apply from, must be 'fileName.gradle'
+ */
+Generator.prototype.applyFromGradleScript = function (name) {
+    try {
+        var fullPath = 'build.gradle';
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-gradle-apply-from',
+            splicable: [
+                    'apply from: \'' + name + '.gradle\''
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + name + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -231,7 +561,7 @@ Generator.prototype.installNewLanguage = function(language) {
             ]
         });
     } catch (e) {
-        console.log('\nUnable to find '.yellow + fullPath + '. Reference to '.yellow + language + 'not added as a new language. Check if you have enabled translation support.\n'.yellow);
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + language + chalk.yellow(' not added as a new language. Check if you have enabled translation support.\n'));
     }
 };
 

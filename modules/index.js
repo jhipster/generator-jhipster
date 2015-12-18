@@ -81,11 +81,23 @@ ModulesGenerator.prototype.configurer = function configurer() {
 
     this.jhipsterVar['baseName'] = this.baseName;
     this.jhipsterVar['packageName'] = this.packageName;
+    this.jhipsterVar['packageFolder'] = this.packageFolder;
     this.jhipsterVar['angularAppName'] = this.angularAppName;
     this.jhipsterVar['javaDir'] = this.javaDir;
     this.jhipsterVar['resourceDir'] = this.resourceDir;
     this.jhipsterVar['webappDir'] = this.webappDir;
 
+    this.jhipsterFunc['addMavenDependency'] = this.addMavenDependency;
+    this.jhipsterFunc['addMavenPlugin'] = this.addMavenPlugin;
+    this.jhipsterFunc['addGradlePlugin'] = this.addGradlePlugin;
+    this.jhipsterFunc['addGradleDependency'] = this.addGradleDependency;
+    this.jhipsterFunc['applyFromGradleScript'] = this.applyFromGradleScript;
+    this.jhipsterFunc['addBowerDependency'] = this.addBowerDependency;
+    this.jhipsterFunc['addBowerOverride'] = this.addBowerOverride;
+    this.jhipsterFunc['addMainCSSStyle'] = this.addMainCSSStyle;
+    this.jhipsterFunc['addMainSCSSStyle'] = this.addMainSCSSStyle;
+    this.jhipsterFunc['addAngularJsModule'] = this.addAngularJsModule;
+    this.jhipsterFunc['addAngularJsConfig'] = this.addAngularJsConfig;
     this.jhipsterFunc['addJavaScriptToIndex'] = this.addJavaScriptToIndex;
     this.jhipsterFunc['addMessageformatLocaleToIndex'] = this.addMessageformatLocaleToIndex;
     this.jhipsterFunc['addElementToMenu'] = this.addElementToMenu;

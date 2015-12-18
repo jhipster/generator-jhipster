@@ -7,7 +7,7 @@ describe('Controllers Tests ', function() {
 
     describe('ActivationController', function() {
 
-        var $scope, $httpBackend, $q, MockAuth; // actual implementations
+        var $scope, $httpBackend, $q; // actual implementations
         var MockAuth, MockStateParams; // mocks
         var createController; // local utility function
 

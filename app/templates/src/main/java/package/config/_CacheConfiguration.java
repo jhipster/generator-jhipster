@@ -17,7 +17,9 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.*;<% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
 import org.springframework.core.env.Environment;<% } %><% if (hibernateCache == 'no') { %>
 import org.springframework.cache.support.NoOpCacheManager; <% } %><% if (hibernateCache == 'ehcache') { %>
-import org.springframework.cache.ehcache.EhCacheCacheManager;<% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
+import org.springframework.cache.ehcache.EhCacheCacheManager;<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;<% } %><% if (hibernateCache == 'ehcache' && databaseType == 'sql') { %>
 import org.springframework.util.Assert;<% } %>
 
 import javax.annotation.PreDestroy;
@@ -104,6 +106,7 @@ public class CacheConfiguration {
         config.getNetworkConfig().setPort(5701);
         config.getNetworkConfig().setPortAutoIncrement(true);
 
+        // In development, remove multicast auto-configuration
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
             System.setProperty("hazelcast.local.localAddress", "127.0.0.1");
 
@@ -114,12 +117,12 @@ public class CacheConfiguration {
         <% if (hibernateCache == 'hazelcast') { %>
         config.getMapConfigs().put("default", initializeDefaultMapConfig());
         config.getMapConfigs().put("<%=packageName%>.domain.*", initializeDomainMapConfig(jHipsterProperties));<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
-        config.getMapConfigs().put("my-sessions", initializeClusteredSession(jHipsterProperties));<% } %>
+        config.getMapConfigs().put("clustered-http-sessions", initializeClusteredSession(jHipsterProperties));<% } %>
 
         hazelcastInstance = HazelcastInstanceFactory.newHazelcastInstance(config);
 
         return hazelcastInstance;
-    }<% } %><% if (hibernateCache == 'hazelcast') { %>
+    }<% if (hibernateCache == 'hazelcast') { %>
 
     private MapConfig initializeDefaultMapConfig() {
         MapConfig mapConfig = new MapConfig();
@@ -164,8 +167,14 @@ public class CacheConfiguration {
 
         mapConfig.setTimeToLiveSeconds(jHipsterProperties.getCache().getTimeToLiveSeconds());
         return mapConfig;
-    }
-    <% } %><% if (clusteredHttpSession == 'hazelcast') { %>
+    }<% } %>
+
+    /**
+    * @return the unique instance.
+    */
+    public static HazelcastInstance getHazelcastInstance() {
+        return hazelcastInstance;
+    }<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
 
     private MapConfig initializeClusteredSession(JHipsterProperties jHipsterProperties) {
         MapConfig mapConfig = new MapConfig();
@@ -173,12 +182,13 @@ public class CacheConfiguration {
         mapConfig.setBackupCount(jHipsterProperties.getCache().getHazelcast().getBackupCount());
         mapConfig.setTimeToLiveSeconds(jHipsterProperties.getCache().getTimeToLiveSeconds());
         return mapConfig;
-    }<% } %><% if (hibernateCache == 'hazelcast' || clusteredHttpSession == 'hazelcast') { %>
+    }
 
     /**
-    * @return the unique instance.
-    */
-    public static HazelcastInstance getHazelcastInstance() {
-        return hazelcastInstance;
+     * Use by Spring Security, to get events from Hazelcast.
+     */
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
     }<% } %>
 }

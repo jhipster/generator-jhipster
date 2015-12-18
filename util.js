@@ -6,7 +6,8 @@ var path = require('path'),
 module.exports = {
     rewrite: rewrite,
     rewriteFile: rewriteFile,
-    classify: classify
+    classify: classify,
+    rewriteJSONFile: rewriteJSONFile
 };
 
 function rewriteFile(args) {
@@ -36,7 +37,7 @@ function rewrite(args) {
 
     var lines = args.haystack.split('\n');
 
-    var otherwiseLineIndex = 0;
+    var otherwiseLineIndex = -1;
     lines.forEach(function(line, i) {
         if (line.indexOf(args.needle) !== -1) {
             otherwiseLineIndex = i;
@@ -66,4 +67,10 @@ function rewrite(args) {
 function classify(string) {
     string = string.replace(/[\W_](\w)/g, function (match) { return ' ' + match[1].toUpperCase(); }).replace(/\s/g, '');
     return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function rewriteJSONFile(filePath, rewriteFile) {
+    var jsonObj = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    rewriteFile(jsonObj);
+    fs.writeFileSync(filePath, JSON.stringify(jsonObj, null, 4));
 }

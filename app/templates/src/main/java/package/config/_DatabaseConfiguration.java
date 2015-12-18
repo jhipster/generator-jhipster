@@ -116,6 +116,7 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
         return new HikariDataSource(config);
     }
 <%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
+
     /**
      * Open the TCP port for the H2 database, so it is available remotely.
      */

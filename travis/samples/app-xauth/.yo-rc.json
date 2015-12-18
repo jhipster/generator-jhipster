@@ -1,12 +1,12 @@
 {
   "generator-jhipster": {
-    "baseName": "sampleWebsocket",
+    "baseName": "SampleXauth",
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",
-    "authenticationType": "session",
+    "authenticationType": "xauth",
     "hibernateCache": "ehcache",
     "clusteredHttpSession": "no",
-    "websocket": "spring-websocket",
+    "websocket": "no",
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",
     "prodDatabaseType": "mysql",
@@ -15,9 +15,9 @@
     "buildTool": "maven",
     "frontendBuilder": "grunt",
     "enableTranslation": true,
-    "rememberMeKey": "9e08e1e17590675533a598f0dca7b75fb11d234a",
+    "rememberMeKey": "aa7cd1151a7181987d053a4a7e2667036abac16a",
     "testFrameworks": [
-      "protractor"
+      "gatling"
     ]
   }
 }

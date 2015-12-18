@@ -34,6 +34,8 @@ describe('Controllers Tests ', function() {
             $scope.changePassword();
             //THEN
             expect($scope.doNotMatch).toBe('ERROR');
+            expect($scope.error).toBeNull();
+            expect($scope.success).toBeNull();
         });
         it('should call Auth.changePassword when passwords match', function() {
             //GIVEN
@@ -58,6 +60,7 @@ describe('Controllers Tests ', function() {
             $scope.$apply($scope.changePassword);
 
             //THEN
+            expect($scope.doNotMatch).toBeNull();
             expect($scope.error).toBeNull();
             expect($scope.success).toBe('OK');
         });
@@ -72,6 +75,7 @@ describe('Controllers Tests ', function() {
             $scope.$apply($scope.changePassword);
 
             //THEN
+            expect($scope.doNotMatch).toBeNull();
             expect($scope.success).toBeNull();
             expect($scope.error).toBe('ERROR');
         });
