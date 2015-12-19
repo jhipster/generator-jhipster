@@ -1,0 +1,24 @@
+{
+  "generator-jhipster": {
+    "baseName": "sampleHazelcast",
+    "packageName": "com.mycompany.myapp",
+    "packageFolder": "com/mycompany/myapp",
+    "authenticationType": "session",
+    "hibernateCache": "hazelcast",
+    "clusteredHttpSession": "hazelcast",
+    "websocket": "no",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": "no",
+    "useSass": false,
+    "buildTool": "maven",
+    "frontendBuilder": "grunt",
+    "enableTranslation": true,
+    "enableSocialSignIn": false,
+    "rememberMeKey": "c6d1cbd204e019098d31fef0224d3462cb89f22d",
+    "testFrameworks": [
+      "gatling"
+    ]
+  }
+}
