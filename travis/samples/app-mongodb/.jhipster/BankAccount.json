@@ -65,6 +65,7 @@
         }
     ],
     "changelogDate": "20150805124838",
-    "dto": "yes",
+    "dto": "mapstruct",
+    "service": "no",
     "pagination": "no"
 }
