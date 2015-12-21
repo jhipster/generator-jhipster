@@ -165,6 +165,9 @@ Generator.prototype.addBowerOverride = function(bowerPackageName, main, isIgnore
             if (dependencies) {
                 override['dependencies'] = dependencies;
             }
+            if (jsonObj.overrides === undefined) {
+              jsonObj.overrides = {};
+            }
             jsonObj.overrides[bowerPackageName] = override;
         });
     } catch (e) {
