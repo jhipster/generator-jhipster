@@ -1,6 +1,6 @@
 {
     "health": {
-        "title": "Gesundheit ihrer Anwendung",
+        "title": "Gesundheit Ihrer Anwendung",
         "refresh.button": "Aktualisieren",
         "stacktrace": "Stacktrace",
         "indicator": {
