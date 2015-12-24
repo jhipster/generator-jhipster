@@ -16,7 +16,7 @@ elif [[ ($JHIPSTER == 'app-mongodb') && (-a docker-compose.yml) ]]; then
   sleep 20
 elif [[ ($JHIPSTER == 'app-mysql') || ($JHIPSTER == 'app-psql-es') ]]; then
   if [ -a docker-compose-prod.yml ]; then
-    docker-compose -f docker-compose-prod.yml up
+    docker-compose -f docker-compose-prod.yml up -d
     sleep 20
   fi
 fi
