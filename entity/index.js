@@ -98,7 +98,7 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     } else if (prodDatabaseType == 'oracle' && _s.underscored(this.name).length > 26) {
         console.log(chalk.red('The entity name is too long for Oracle, try a shorter name'));
         throw new Error("Validation error");
-    } else if (prodDatabaseType == 'mongo' && reservedWords_Mongo.indexOf(this.name.toUpperCase()) != -1) {
+    } else if (prodDatabaseType == 'mongodb' && reservedWords_Mongo.indexOf(this.name.toUpperCase()) != -1) {
         console.log(chalk.red('The entity name cannot contain a MongoDB reserved keyword'));
         throw new Error("Validation error");
     }
