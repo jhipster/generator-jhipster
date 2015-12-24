@@ -1,7 +1,7 @@
 #!/bin/bash
 set -ev
 #-------------------------------------------------------------------------------
-# use jhipster-lib that contain .m2 and node_modules
+# Use jhipster-travis-build that contain .m2 and node_modules
 #-------------------------------------------------------------------------------
 if [ $JHIPSTER_MVN_DEP == 1 ]; then
   cd $TRAVIS_BUILD_DIR/
@@ -13,7 +13,7 @@ if [ $JHIPSTER_MVN_DEP == 1 ]; then
   ls -al $HOME/.m2/repository/
   ls -al $JHIPSTER_SAMPLES/$JHIPSTER/
 #-------------------------------------------------------------------------------
-# clone official jhipster-sample-app
+# Clone official jhipster-sample-app
 #-------------------------------------------------------------------------------
 elif [ $JHIPSTER_MVN_DEP == 2 ]; then
   cd $TRAVIS_BUILD_DIR/

@@ -34,6 +34,8 @@ env:
 before_install:
   - sudo service docker restart
   - sudo /etc/init.d/postgresql stop
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
 install:
   - $JHIPSTER_INSTALL/01-install-docker-compose.sh
   - $JHIPSTER_INSTALL/02-install-jhipster-stack.sh
@@ -44,13 +46,11 @@ script:
   - $JHIPSTER_SCRIPTS/02-generate-entities.sh
   - $JHIPSTER_SCRIPTS/03-tests.sh
   - $JHIPSTER_SCRIPTS/04-docker-compose.sh
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
   - $JHIPSTER_SCRIPTS/05-run.sh
-# notifications:
-#   webhooks:
-#     urls:
-#       - https://webhooks.gitter.im/e/c77e712c44b0a4914b7c
-#     on_success: always  # options: [always|never|change] default: always
-#     on_failure: always  # options: [always|never|change] default: always
-#     on_start: false     # default: false
+notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/c77e712c44b0a4914b7c
+    on_success: always  # options: [always|never|change] default: always
+    on_failure: always  # options: [always|never|change] default: always
+    on_start: false     # default: false

@@ -537,6 +537,7 @@ JhipsterGenerator.prototype.app = function app() {
     this.copy('gitattributes', '.gitattributes');
 
     // Create docker-compose file
+    this.template('docker/_sonar.yml', 'docker/sonar.yml', this, {});
     if (this.devDatabaseType != "h2Disk" && this.devDatabaseType != "h2Memory" && this.devDatabaseType != "oracle") {
         this.template('_docker-compose.yml', 'docker-compose.yml', this, {});
     }
@@ -544,7 +545,8 @@ JhipsterGenerator.prototype.app = function app() {
         this.template('_docker-compose-prod.yml', 'docker-compose-prod.yml', this, {});
     }
     if (this.devDatabaseType == "cassandra") {
-        this.template('_Dockerfile_cassandra', 'Dockerfile', this, {});
+        this.template('_Cassandra-Dev.Dockerfile', 'Cassandra-Dev.Dockerfile', this, {});
+        this.template('_Cassandra-Prod.Dockerfile', 'Cassandra-Prod.Dockerfile', this, {});
         this.template('docker/cassandra/_cassandra.sh', 'docker/cassandra/cassandra.sh', this, {});
         this.template('docker/opscenter/_Dockerfile', 'docker/opscenter/Dockerfile', this, {});
     }

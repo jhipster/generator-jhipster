@@ -10,7 +10,7 @@
     "databaseType": "sql",
     "devDatabaseType": "postgresql",
     "prodDatabaseType": "postgresql",
-    "searchEngine": "no",
+    "searchEngine": "elasticsearch",
     "useSass": false,
     "buildTool": "maven",
     "frontendBuilder": "grunt",
