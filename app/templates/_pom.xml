@@ -785,7 +785,7 @@
                     <changeLogFile>src/main/resources/config/liquibase/master.xml</changeLogFile>
                     <diffChangeLogFile>src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
                     <driver><% if (devDatabaseType == 'mysql') { %>com.mysql.jdbc.Driver<% } else if (devDatabaseType == 'postgresql') { %>org.postgresql.Driver<% } else if (devDatabaseType == 'h2Disk') { %>org.h2.Driver<% } %></driver>
-                    <url><% if (devDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType == 'postgresql') { %>jdbc:postgresql://localhost/<%= baseName %><% } else if (devDatabaseType == 'h2Disk') { %>jdbc:h2:file:./target/h2db/db/<%= baseName %><% } %></url>
+                    <url><% if (devDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType == 'postgresql') { %>jdbc:postgresql://localhost/<%= baseName %><% } else if (devDatabaseType == 'h2Disk') { %>jdbc:h2:file:./target/h2db/db/<%= lowercaseBaseName %><% } %></url>
                     <defaultSchemaName><% if (devDatabaseType == 'mysql') { %><%= baseName %><% } else if (devDatabaseType == 'postgresql') { %><% } %></defaultSchemaName>
                     <username><% if (devDatabaseType == 'mysql') { %>root<% } else if (devDatabaseType == 'postgresql') { %><%= baseName %><% } %></username>
                     <password></password>
