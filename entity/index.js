@@ -163,7 +163,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     return 'Your field name cannot contain a Oracle reserved keyword';
                 } else if (prodDatabaseType == 'oracle' && input.length > 30) {
                     return 'The field name cannot be of more than 30 characters';
-                } else if (prodDatabaseType == 'mongo' && reservedWords_Mongo.indexOf(input.toUpperCase()) != -1) {
+                } else if (prodDatabaseType == 'mongodb' && reservedWords_Mongo.indexOf(input.toUpperCase()) != -1) {
                     return 'Your field name cannot contain a MongoDB reserved keyword';
                 }
                 return true;
