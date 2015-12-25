@@ -154,13 +154,13 @@ public class UserResource {
                 );<% if (databaseType == 'mongodb') { %>
                 userRepository.save(user);<% } %>
                 return ResponseEntity.ok()
-                    .headers(HeaderUtil.createEntityUpdateAlert("user", managedUserDTO.getLogin()))
+                    .headers(HeaderUtil.createAlert(<% if(enableTranslation) {%>"user-management.updated"<% } else { %>"An user is updated with identifier "+managedUserDTO.getLogin()<% } %>, managedUserDTO.getLogin()))
                     .body(new ManagedUserDTO(userRepository
                         .findOne(managedUserDTO.getId())));<% } else { %>
                 user.setAuthorities(managedUserDTO.getAuthorities());
                 userRepository.save(user);
                 return ResponseEntity.ok()
-                    .headers(HeaderUtil.createEntityUpdateAlert("user", managedUserDTO.getLogin()))
+                    .headers(HeaderUtil.createAlert(<% if(enableTranslation) {%>"user-management.updated"<% } else { %> "An user is updated with identifier "+managedUserDTO.getLogin()<% } %>, managedUserDTO.getLogin()))
                     .body(new ManagedUserDTO(userRepository
                         .findOne(managedUserDTO.getId())));<% } %>
             })
