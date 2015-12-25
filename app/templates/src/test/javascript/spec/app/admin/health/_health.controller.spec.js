@@ -1,5 +1,6 @@
 'use strict';
-describe('Controllers Tests ', function () {
+
+describe('Controller Tests', function () {
 
     describe('HealthController', function () {
         var $scope; // actual implementations
