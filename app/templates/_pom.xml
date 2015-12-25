@@ -65,7 +65,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <javax.inject.version>1</javax.inject.version>
         <%_ if (databaseType == 'sql') { _%>
-        <liquibase.version>3.4.1</liquibase.version>
+        <liquibase.version>3.4.2</liquibase.version>
         <liquibase-slf4j.version>1.2.1</liquibase-slf4j.version>
         <liquibase-hibernate4.version>3.5</liquibase-hibernate4.version>
         <%_ } _%>
