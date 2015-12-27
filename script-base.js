@@ -126,6 +126,35 @@ Generator.prototype.addElementTranslationKey = function(key, value, language) {
 };
 
 /**
+ * Update one of the 3 configurations yaml file. By default modify application.yml.
+ * Be careful it will erase all the comment.
+ *
+ * @param {object} configObj - dependency name
+ * @param {string} configuration file - file to update:
+ *  - 'main' -> application.yml (default)
+ *  - 'dev' -> application-dev.yml
+ *  - 'prod' -> application-prod.yml
+ */
+Generator.prototype.updateApplicationConfiguration = function(configObj, file) {
+    var fullPath;
+    if (file === 'dev') {
+        fullPath = 'src/main/resources/config/application-dev.yml';
+    }
+    else if (file === 'prod') {
+        fullPath = 'src/main/resources/config/application-prod.yml';
+    }
+    else {
+        fullPath = 'src/main/resources/config/application.yml';
+    }
+    console.log(chalk.yellow('\nupdate ') + fullPath);
+    try {
+        jhipsterUtils.rewriteYAMLFile(fullPath, configObj);
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bower dependency (name: ' + e + ')' + chalk.yellow(' not added.\n'));
+    }
+};
+
+/**
  * Add a new dependency in the "bower.json".
  *
  * @param {string} name - dependency name

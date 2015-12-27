@@ -39,6 +39,8 @@
     "underscore.string": "3.2.0",
     "wordwrap": "1.0.0",
     "yeoman-generator": "0.20.3",
+    "js-yaml": "3.4.6",
+    "merge": "1.2.0",
     "yo": "1.4.8"
   },
   "devDependencies": {
