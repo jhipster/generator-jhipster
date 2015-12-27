@@ -87,6 +87,7 @@ ModulesGenerator.prototype.configurer = function configurer() {
     this.jhipsterVar['resourceDir'] = this.resourceDir;
     this.jhipsterVar['webappDir'] = this.webappDir;
 
+    this.jhipsterFunc['addSocialConnectionFactory'] = this.addSocialConnectionFactory;
     this.jhipsterFunc['addMavenDependency'] = this.addMavenDependency;
     this.jhipsterFunc['addMavenPlugin'] = this.addMavenPlugin;
     this.jhipsterFunc['addGradlePlugin'] = this.addGradlePlugin;
