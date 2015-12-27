@@ -79,7 +79,7 @@ function rewriteJSONFile(filePath, rewriteFile) {
 }
 
 function rewriteYAMLFile(filePath, configObj) {
-    var ymalObj = YAML.safeLoad(fs.readFileSync(filePath, 'utf8'));
-    var ymalObjMerge = merge.recursive(true, ymalObj, configObj);
-    fs.writeFileSync(filePath, YAML.safeDump(ymalObjMerge, { indent : 4 }));
+    var yamlObj = YAML.safeLoad(fs.readFileSync(filePath, 'utf8'));
+    var yamlObjMerge = merge.recursive(true, yamlObj, configObj);
+    fs.writeFileSync(filePath, YAML.safeDump(yamlObjMerge, { indent : 4 }));
 }

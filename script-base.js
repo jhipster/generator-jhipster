@@ -134,23 +134,38 @@ Generator.prototype.addElementTranslationKey = function(key, value, language) {
  *  - 'main' -> application.yml (default)
  *  - 'dev' -> application-dev.yml
  *  - 'prod' -> application-prod.yml
+ *
+ *  example:
+ *
+ *  var configObj = {
+ *      spring: {
+ *          social: {
+ *              github: {
+ *                  clientId: "githubClientId",
+ *                  clientSecret: "githubSecret"
+ *              }
+ *          }
+ *      }
+ *  };
+ *
+ * jhipsterFunc.updateApplicationConfiguration(configObj, 'main'); will add a new social configuration to
+ * configuration.yml file in the social section.
+ *
  */
 Generator.prototype.updateApplicationConfiguration = function(configObj, file) {
     var fullPath;
     if (file === 'dev') {
         fullPath = 'src/main/resources/config/application-dev.yml';
-    }
-    else if (file === 'prod') {
+    } else if (file === 'prod') {
         fullPath = 'src/main/resources/config/application-prod.yml';
-    }
-    else {
+    } else {
         fullPath = 'src/main/resources/config/application.yml';
     }
     console.log(chalk.yellow('\nupdate ') + fullPath);
     try {
         jhipsterUtils.rewriteYAMLFile(fullPath, configObj);
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bower dependency (name: ' + e + ')' + chalk.yellow(' not added.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Configuration file not updated.\n'));
     }
 };
 
