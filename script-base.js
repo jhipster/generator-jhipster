@@ -283,6 +283,64 @@ Generator.prototype.addChangelogToLiquibase = function (changelogName) {
 /**
  * Add a new social connection factory in the SocialConfiguration.java file.
  *
+ * @param {string} socialName - name of the social module. ex: 'facebook'
+ * @param {string} socialParameter - parameter to send to social connection ex: 'public_profile,email'
+ * @param {string} buttonColor - color of the social button. ex: '#3b5998'
+ * @param {string} buttonHoverColor - color of the social button when is hover. ex: '#2d4373'
+ */
+Generator.prototype.addSocialButton = function (socialName, socialParameter, buttonColor, buttonHoverColor) {
+    var socialServicefullPath = 'src/main/webapp/scripts/app/account/social/social.service.js';
+    var loginfullPath = 'src/main/webapp/scripts/app/account/login/login.html';
+    var registerfullPath = 'src/main/webapp/scripts/app/account/register/register.html';
+    try {
+        console.log(chalk.yellow('\nupdate ') + socialServicefullPath);
+        var serviceCode =  "case '" + socialName + "': return '"+ socialParameter +"';";
+        jhipsterUtils.rewriteFile({
+            file: socialServicefullPath,
+            needle: 'jhipster-needle-add-social-button',
+            splicable: [
+                serviceCode
+            ]
+        });
+
+        var buttonCode = '<jh-social ng-provider="'+ socialName +'"></jh-social>';
+        console.log(chalk.yellow('update ') + loginfullPath);
+        jhipsterUtils.rewriteFile({
+            file: loginfullPath,
+            needle: 'jhipster-needle-add-social-button',
+            splicable: [
+                buttonCode
+            ]
+        });
+        console.log(chalk.yellow('update ') + registerfullPath);
+        jhipsterUtils.rewriteFile({
+            file: registerfullPath,
+            needle: 'jhipster-needle-add-social-button',
+            splicable: [
+                buttonCode
+            ]
+        });
+
+        var buttonStyle = '.jh-btn-' + socialName + ' {\n' +
+            '     background-color: ' + buttonColor + ';\n' +
+            '     border-color: rgba(0, 0, 0, 0.2);\n' +
+            '     color: #fff;\n' +
+            '}\n\n' +
+            '.jh-btn-' + socialName + ':hover, .jh-btn-' + socialName + ':focus, .jh-btn-' + socialName + ':active, .jh-btn-' + socialName + '.active, .open > .dropdown-toggle.jh-btn-' + socialName + ' {\n' +
+            '    background-color: ' + buttonHoverColor + ';\n' +
+            '    border-color: rgba(0, 0, 0, 0.2);\n' +
+            '    color: #fff;\n' +
+            '}';
+        this.addMainCSSStyle(buttonStyle,'Add sign in style for ' +  socialName);
+
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to add social button modification.\n' + e));
+    }
+};
+
+/**
+ * Add a new social connection factory in the SocialConfiguration.java file.
+ *
  * @param {string} javaDir - default java directory of the project (JHipster var)
  * @param {string} importPackagePath - package path of the ConnectionFactory class
  * @param {string} socialName - name of the social module
