@@ -125,6 +125,25 @@ Generator.prototype.addElementTranslationKey = function(key, value, language) {
     }
 };
 
+
+/**
+ * Add a new parameter in the ".bowerrc".
+ *
+ * @param {string} key - name of the parameter
+ * @param {string, obj, bool, etc.} value - value of the parameter
+ */
+Generator.prototype.addBowerrcParameter = function(key, value) {
+    var fullPath ='.bowerrc';
+    try {
+        console.log(chalk.yellow('   update ') + fullPath);
+        jhipsterUtils.rewriteJSONFile(fullPath, function(jsonObj) {
+            jsonObj[key] = value;
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bowerrc parameter (key: ' + key + ', value:' + value + ')' + chalk.yellow(' not added.\n'));
+    }
+};
+
 /**
  * Add a new dependency in the "bower.json".
  *
