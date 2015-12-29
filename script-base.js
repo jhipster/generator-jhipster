@@ -218,7 +218,7 @@ Generator.prototype.addEntityTranslationKey = function(key, value, language) {
  * @param {string} value - Default translated value
  * @param {string} method - The method to be run with provided key and value from above
  */
-Generator.prototype.addTranslationKeyToAllLanguage = function(key, value, method) {
+Generator.prototype.addTranslationKeyToAllLanguages = function(key, value, method) {
     if(this.enableTranslation) {
         this.getAllSupportedLanguages().forEach(function(language) {
             try {
