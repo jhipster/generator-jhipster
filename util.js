@@ -1,16 +1,13 @@
 'use strict';
 var path = require('path'),
-    fs = require('fs'),
-    merge = require('merge'),
-    YAML = require('js-yaml');
+    fs = require('fs');
 
 
 module.exports = {
     rewrite: rewrite,
     rewriteFile: rewriteFile,
     classify: classify,
-    rewriteJSONFile: rewriteJSONFile,
-    rewriteYAMLFile: rewriteYAMLFile
+    rewriteJSONFile: rewriteJSONFile
 };
 
 function rewriteFile(args) {
@@ -76,10 +73,4 @@ function rewriteJSONFile(filePath, rewriteFile) {
     var jsonObj = JSON.parse(fs.readFileSync(filePath, 'utf8'));
     rewriteFile(jsonObj);
     fs.writeFileSync(filePath, JSON.stringify(jsonObj, null, 4));
-}
-
-function rewriteYAMLFile(filePath, configObj) {
-    var yamlObj = YAML.safeLoad(fs.readFileSync(filePath, 'utf8'));
-    var yamlObjMerge = merge.recursive(true, yamlObj, configObj);
-    fs.writeFileSync(filePath, YAML.safeDump(yamlObjMerge, { indent : 4 }));
 }
