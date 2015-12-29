@@ -110,4 +110,5 @@ ModulesGenerator.prototype.configurer = function configurer() {
     this.jhipsterFunc['addChangelogToLiquibase'] = this.addChangelogToLiquibase;
     this.jhipsterFunc['dateFormatForLiquibase'] = this.dateFormatForLiquibase;
     this.jhipsterFunc['copyI18nFilesByName'] = this.copyI18nFilesByName;
+    this.jhipsterFunc['copyTemplate'] = this.copyTemplate;
 };

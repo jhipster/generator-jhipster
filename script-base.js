@@ -77,7 +77,30 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + routerName + '.js ' + chalk.yellow('not added.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
+    }
+};
+
+/**
+ * Add a new menu element to the admin menu.
+ *
+ * @param {string} routerName - The name of the AngularJS router that is added to the admin menu.
+ * @param {string} glyphiconName - The name of the Glyphicon (from Bootstrap) that will be displayed.
+ * @param {boolean} enableTranslation - If translations are enabled or not
+ */
+Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName, enableTranslation) {
+    try {
+        var fullPath = 'src/main/webapp/scripts/components/navbar/navbar.html';
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-add-element-to-admin-menu',
+            splicable: [
+                    '<li ui-sref-active="active" ><a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-' + glyphiconName + '"></span>\n' +
+                    '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.admin.' + routerName + '"':'' ) + '>' + routerName + '</span></a></li>'
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
     }
 };
 
@@ -99,7 +122,7 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + routerName + '.js ' + chalk.yellow('not added.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
     }
 };
 
@@ -706,38 +729,83 @@ Generator.prototype.insight = function () {
     return insight;
 }
 
+/**
+ * Copy templates with all the custom logic applied according to the type.
+ *
+ * @param {source} path of the source file to copy from
+ * @param {dest} path of the destination file to copy to
+ * @param {action} type of the action to be performed on the template file, i.e: strip-html | strip-js | template | copy
+ * @param {_opt} options that can be passed to template method
+ * @param {template} flag to use template method instead of copy method
+ */
+Generator.prototype.copyTemplate = function (source, dest, action, data, _opt, template) {
+
+    data = data !== undefined ? data : this;
+    _opt = _opt !== undefined ? _opt : {};
+    switch(action) {
+        case 'stripHtml' :
+            this.copyHtml(source, dest, data, _opt, template);
+            break;
+        case 'stripJs' :
+            this.copyJs(source, dest, data, _opt, template);
+            break;
+        case 'copy' :
+            this.copy(source, dest);
+            break;
+        default:
+            this.template(source, dest, data, _opt);
+    }
+}
+
+/**
+ * Copy html templates after stripping translation keys when translation is disabled.
+ *
+ * @param {source} path of the source file to copy from
+ * @param {dest} path of the destination file to copy to
+ * @param {_opt} options that can be passed to template method
+ * @param {template} flag to use template method instead of copy
+ */
 Generator.prototype.copyHtml = function (source, dest, data, _opt, template) {
 
-    _opt = _opt !== undefined ? _opt : {};
-    data = data !== undefined ? data : this;
-    if (this.enableTranslation) {
-        // uses template method instead of copy if template boolean is set as true
-        template ? this.template(source, dest, data, _opt) : this.copy(source, dest);
-    } else {
-        var regex = '( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")';
-        //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
-        var body = this.stripContent(source, regex, data, _opt);
-        body = this.replacePlaceholders(body, data);
-        this.write(dest, body);
-    }
+    var regex = '( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")';
+    //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
+    this.copyWebResource(source, dest, regex, 'js', data, _opt, template);
 }
 
-
+/**
+ * Copy Js templates after stripping translation keys when translation is disabled.
+ *
+ * @param {source} path of the source file to copy from
+ * @param {dest} path of the destination file to copy to
+ * @param {_opt} options that can be passed to template method
+ * @param {template} flag to use template method instead of copy
+ */
 Generator.prototype.copyJs = function (source, dest, data, _opt, template) {
-    _opt = _opt !== undefined ? _opt : {};
+    var regex = '[a-zA-Z]+\:(\s)?\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\>\;\s]*\}\]';
+    //looks for something like mainTranslatePartialLoader: [*]
+    this.copyWebResource(source, dest, regex, 'js', data, _opt, template);
+}
+
+Generator.prototype.copyWebResource = function (source, dest, regex, type, data, _opt, template) {
+
     data = data !== undefined ? data : this;
+    _opt = _opt !== undefined ? _opt : {};
     if (this.enableTranslation) {
         // uses template method instead of copy if template boolean is set as true
         template ? this.template(source, dest, data, _opt) : this.copy(source, dest);
     } else {
-        var regex = '[a-zA-Z]+\:(\s)?\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\>\;\s]*\}\]';
-        //looks for something like mainTranslatePartialLoader: [*]
         var body = this.stripContent(source, regex, data, _opt);
-        body = this.replaceTitle(body, data, template);
+        switch(type) {
+            case 'html' :
+                body = this.replacePlaceholders(body, data);
+                break;
+            case 'js' :
+                body = this.replaceTitle(body, data, template);
+                break;
+        }
         this.write(dest, body);
     }
 }
-
 
 Generator.prototype.stripContent = function (source, regex, data, _opt) {
     var re = new RegExp(regex, 'g');
