@@ -126,46 +126,33 @@ Generator.prototype.addElementTranslationKey = function(key, value, language) {
 };
 
 /**
- * Update one of the 3 configurations yaml file. By default modify application.yml.
- * Be careful it will erase all the comment.
+ * Add new social configuration in the "application.yml".
  *
- * @param {object} configObj - dependency name
- * @param {string} configuration file - file to update:
- *  - 'main' -> application.yml (default)
- *  - 'dev' -> application-dev.yml
- *  - 'prod' -> application-prod.yml
- *
- *  example:
- *
- *  var configObj = {
- *      spring: {
- *          social: {
- *              github: {
- *                  clientId: "githubClientId",
- *                  clientSecret: "githubSecret"
- *              }
- *          }
- *      }
- *  };
- *
- * jhipsterFunc.updateApplicationConfiguration(configObj, 'main'); will add a new social configuration to
- * configuration.yml file in the social section.
- *
+ * @param {string} name - social name (twitter, facebook, ect.)
+ * @param {string} clientId - clientId
+ * @param {string} clientSecret - clientSecret
+ * @param {string} comment - url of how to configure the social service
  */
-Generator.prototype.updateApplicationConfiguration = function(configObj, file) {
-    var fullPath;
-    if (file === 'dev') {
-        fullPath = 'src/main/resources/config/application-dev.yml';
-    } else if (file === 'prod') {
-        fullPath = 'src/main/resources/config/application-prod.yml';
-    } else {
-        fullPath = 'src/main/resources/config/application.yml';
-    }
-    console.log(chalk.yellow('\nupdate ') + fullPath);
+Generator.prototype.addSocialConfiguration = function(name, clientId, clientSecret, comment) {
+    var fullPath ='src/main/resources/config/application.yml';
     try {
-        jhipsterUtils.rewriteYAMLFile(fullPath, configObj);
+        console.log(chalk.yellow('   update ') + fullPath);
+        var config = '';
+        if (comment) {
+            config += '# ' + comment + '\n        ';
+        }
+        config +=  name + ':\n' +
+            '            clientId: ' + clientId + '\n' +
+            '            clientSecret: ' + clientSecret + '\n';
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-add-social-configuration',
+            splicable: [
+                config
+            ]
+        });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Configuration file not updated.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'social configuration ' + name + chalk.yellow(' not added.\n'));
     }
 };
 
