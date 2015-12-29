@@ -190,6 +190,101 @@ Generator.prototype.addAdminElementTranslationKey = function(key, value, languag
 };
 
 /**
+ * A a new entity in the "global.json" translations.
+ *
+ * @param {string} key - Key for the entity name
+ * @param {string} value - Default translated value
+ * @param {string} language - The language to which this translation should be added
+ */
+Generator.prototype.addEntityTranslationKey = function(key, value, language) {
+    var fullPath = 'src/main/webapp/i18n/' + language + '/global.json';
+    try {
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-menu-add-entry',
+            splicable: [
+                    '"' + key + '": "' + value + '",'
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
+    }
+};
+
+/**
+ * Add a translation key to all installed languages
+ *
+ * @param {string} key - Key for the entity name
+ * @param {string} value - Default translated value
+ * @param {string} method - The method to be run with provided key and value from above
+ */
+Generator.prototype.addTranslationKeyToAllLanguage = function(key, value, method) {
+    if(this.enableTranslation) {
+        this.getAllSupportedLanguages().forEach(function(language) {
+            try {
+                var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
+                if (stats.isDirectory()) {
+                    this[method](key, value, language);
+                }
+            } catch(e) {
+                // An exception is thrown if the folder doesn't exist
+                // do nothing as the language might not be installed
+            }
+        });
+    }
+};
+
+/**
+ * get all the languages installed currently
+ */
+Generator.prototype.getAllInstalledLanguages = function () {
+    var languages = [];
+    if(this.enableTranslation) {
+        this.getAllSupportedLanguages().forEach(function(language) {
+            try {
+                var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
+                if (stats.isDirectory()) {
+                    languages.push(language);
+                }
+            } catch(e) {
+                // An exception is thrown if the folder doesn't exist
+                // do nothing as the language might not be installed
+            }
+        });
+    }
+    return languages;
+}
+/**
+ * get all the languages supported by JHipster
+ */
+Generator.prototype.getAllSupportedLanguages = function () {
+    return [
+      'ca',
+      'zh-cn',
+      'zh-tw',
+      'da',
+      'nl',
+      'de',
+      'en',
+      'fr',
+      'gl',
+      'hu',
+      'it',
+      'ja',
+      'ko',
+      'pl',
+      'pt-br',
+      'pt-pt',
+      'ro',
+      'ru',
+      'es',
+      'sv',
+      'tr',
+      'ta'
+    ];
+}
+
+/**
  * Add a new dependency in the "bower.json".
  *
  * @param {string} name - dependency name
@@ -299,28 +394,6 @@ Generator.prototype.addAngularJsConfig = function(moduleConfigNames, config, com
         });
     } catch (e) {
         console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Configuration not added to JHipster app.\n'));
-    }
-};
-
-/**
- * A a new entity in the "global.json" translations.
- *
- * @param {string} key - Key for the entity name
- * @param {string} value - Default translated value
- * @param {string} language - The language to which this translation should be added
- */
-Generator.prototype.addEntityTranslationKey = function(key, value, language) {
-    var fullPath = 'src/main/webapp/i18n/' + language + '/global.json';
-    try {
-        jhipsterUtils.rewriteFile({
-            file: fullPath,
-            needle: 'jhipster-needle-menu-add-entry',
-            splicable: [
-                    '"' + key + '": "' + value + '",'
-            ]
-        });
-    } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
     }
 };
 
