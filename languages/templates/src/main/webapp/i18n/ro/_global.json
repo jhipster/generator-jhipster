@@ -31,7 +31,8 @@
                 "logs": "Jurnal",
                 "audits": "Audit",
                 "apidocs": "API",
-                "database": "Bază de date"
+                "database": "Bază de date",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
             },
             "services":{
                 "main": "Servicii"

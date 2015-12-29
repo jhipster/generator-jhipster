@@ -28,7 +28,8 @@
                 "logs": "Registres",
                 "audits": "Auditories",
                 "apidocs": "API",
-                "database": "Base de dades"
+                "database": "Base de dades",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
             },
             "language": "Idioma"
         },

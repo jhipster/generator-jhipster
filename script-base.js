@@ -168,6 +168,28 @@ Generator.prototype.addBowerrcParameter = function(key, value) {
 };
 
 /**
+ * A a new element in the admin section of "global.json" translations.
+ *
+ * @param {string} key - Key for the menu entry
+ * @param {string} value - Default translated value
+ * @param {string} language - The language to which this translation should be added
+ */
+Generator.prototype.addAdminElementTranslationKey = function(key, value, language) {
+    var fullPath = 'src/main/webapp/i18n/' + language + '/global.json';
+    try {
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-menu-add-admin-element',
+            splicable: [
+                    '"' + key + '": "' + value + '",'
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
+    }
+};
+
+/**
  * Add a new dependency in the "bower.json".
  *
  * @param {string} name - dependency name

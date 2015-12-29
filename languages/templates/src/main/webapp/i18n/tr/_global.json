@@ -28,7 +28,8 @@
                 "logs": "Kayıtlar",
                 "audits": "Denetim",
                 "apidocs": "API",
-                "database": "Veritabanı"
+                "database": "Veritabanı",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
             },
             "language": "Dil"
         },
