@@ -67,8 +67,7 @@ util.inherits(ModulesGenerator, scriptBase);
 
 ModulesGenerator.prototype.configurer = function configurer() {
     console.log('Reading the JHipster project configuration for your module');
-    this.baseName = this.config.get('baseName');
-    this.packageName = this.config.get('packageName');
+
     if (this.baseName == null ||
         this.packageName == null) {
         console.log(chalk.red('ERROR! There is no existing JHipster configuration file in this directory.'));
@@ -76,14 +75,10 @@ ModulesGenerator.prototype.configurer = function configurer() {
         process.exit(1);
     }
     this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
-    this.packageFolder = this.packageName.replace(/\./g, '/');
     this.javaDir = 'src/main/java/' + this.packageFolder + '/';
     this.resourceDir = 'src/main/resources/';
     this.webappDir = 'src/main/webapp/';
 
-    this.jhipsterVar['baseName'] = this.baseName;
-    this.jhipsterVar['packageName'] = this.packageName;
-    this.jhipsterVar['packageFolder'] = this.packageFolder;
     this.jhipsterVar['angularAppName'] = this.angularAppName;
     this.jhipsterVar['javaDir'] = this.javaDir;
     this.jhipsterVar['resourceDir'] = this.resourceDir;
