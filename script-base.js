@@ -403,7 +403,7 @@ Generator.prototype.addChangelogToLiquibase = function (changelogName) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + changelogName + '.js ' + chalk.yellow('not added.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + changelogName + '.xml ' + chalk.yellow('not added.\n'));
     }
 };
 
