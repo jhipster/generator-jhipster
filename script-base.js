@@ -5,6 +5,7 @@ var path = require('path'),
     chalk = require('chalk'),
     jhipsterUtils = require('./util.js'),
     Insight = require('insight'),
+    fs = require('fs'),
     ejs = require('ejs');
 
 module.exports = Generator;
@@ -32,7 +33,7 @@ Generator.prototype.addJavaScriptToIndex = function (script) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + script + '.js ' + chalk.yellow('not added.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + script + '.js ' + chalk.yellow('not added.\n'));
     }
 };
 
@@ -52,7 +53,7 @@ Generator.prototype.addMessageformatLocaleToIndex = function (script) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + script + '.js ' + chalk.yellow('not added.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + script + '.js ' + chalk.yellow('not added.\n'));
     }
 };
 
@@ -75,7 +76,7 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
     }
 };
 
@@ -98,7 +99,7 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
     }
 };
 
@@ -120,7 +121,7 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
     }
 };
 
@@ -142,7 +143,7 @@ Generator.prototype.addElementTranslationKey = function(key, value, language) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
     }
 };
 
@@ -183,7 +184,7 @@ Generator.prototype.addAdminElementTranslationKey = function(key, value, languag
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
     }
 };
 
@@ -205,7 +206,7 @@ Generator.prototype.addEntityTranslationKey = function(key, value, language) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
     }
 };
 
@@ -219,38 +220,28 @@ Generator.prototype.addEntityTranslationKey = function(key, value, language) {
  */
 Generator.prototype.addTranslationKeyToAllLanguages = function(key, value, method, enableTranslation) {
     if(enableTranslation) {
-        this.getAllSupportedLanguages().forEach(function(language) {
-            try {
-                var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
-                if (stats.isDirectory()) {
-                    this[method](key, value, language);
-                }
-            } catch(e) {
-                // An exception is thrown if the folder doesn't exist
-                // do nothing as the language might not be installed
-            }
-        });
+        this.getAllInstalledLanguages().forEach(function(language) {
+            this[method](key, value, language);
+        }, this);
     }
 };
 
 /**
  * get all the languages installed currently
  */
-Generator.prototype.getAllInstalledLanguages = function (enableTranslation) {
+Generator.prototype.getAllInstalledLanguages = function () {
     var languages = [];
-    if(enableTranslation) {
-        this.getAllSupportedLanguages().forEach(function(language) {
-            try {
-                var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
-                if (stats.isDirectory()) {
-                    languages.push(language);
-                }
-            } catch(e) {
-                // An exception is thrown if the folder doesn't exist
-                // do nothing as the language might not be installed
+    this.getAllSupportedLanguages().forEach(function(language) {
+        try {
+            var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
+            if (stats.isDirectory()) {
+                languages.push(language);
             }
-        });
-    }
+        } catch(e) {
+            // An exception is thrown if the folder doesn't exist
+            // do nothing as the language might not be installed
+        }
+    });
     return languages;
 }
 /**
@@ -350,7 +341,7 @@ Generator.prototype.addAngularJsModule = function(moduleName) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + moduleName + chalk.yellow(' not added to JHipster app.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + moduleName + chalk.yellow(' not added to JHipster app.\n'));
     }
 };
 
@@ -392,7 +383,7 @@ Generator.prototype.addAngularJsConfig = function(moduleConfigNames, config, com
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Configuration not added to JHipster app.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Configuration not added to JHipster app.\n'));
     }
 };
 
@@ -412,7 +403,7 @@ Generator.prototype.addChangelogToLiquibase = function (changelogName) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + changelogName + '.js ' + chalk.yellow('not added.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + changelogName + '.js ' + chalk.yellow('not added.\n'));
     }
 };
 
@@ -521,7 +512,7 @@ Generator.prototype.addSocialConnectionFactory = function (javaDir, importPackag
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Social connection ') + e + ' ' + chalk.yellow('not added.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Social connection ') + e + ' ' + chalk.yellow('not added.\n'));
     }
 };
 
@@ -567,7 +558,7 @@ Generator.prototype.addMainCSSStyle = function(style, comment) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Style not added to JHipster app.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Style not added to JHipster app.\n'));
     }
 };
 
@@ -609,7 +600,7 @@ Generator.prototype.addMainSCSSStyle = function(style, comment) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Style not added to JHipster app.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Style not added to JHipster app.\n'));
     }
 };
 
@@ -642,7 +633,7 @@ Generator.prototype.addMavenDependency = function (groupId, artifactId, version,
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'maven dependency (groupId: ' + groupId + ', artifactId:' + artifactId + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + 'maven dependency (groupId: ' + groupId + ', artifactId:' + artifactId + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -675,7 +666,7 @@ Generator.prototype.addMavenPlugin = function (groupId, artifactId, version, oth
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'maven plugin (groupId: ' + groupId + ', artifactId:' + artifactId + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + 'maven plugin (groupId: ' + groupId + ', artifactId:' + artifactId + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -697,7 +688,7 @@ Generator.prototype.addGradlePlugin = function (group, name, version) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'classpath: ' + group + ':' + name + ':' + version + chalk.yellow(' not added.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + 'classpath: ' + group + ':' + name + ':' + version + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -720,7 +711,7 @@ Generator.prototype.addGradleDependency = function (scope, group, name, version)
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + group + ':' + name + ':' + version + chalk.yellow(' not added.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + group + ':' + name + ':' + version + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -740,7 +731,7 @@ Generator.prototype.applyFromGradleScript = function (name) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + name + chalk.yellow(' not added.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + name + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -809,7 +800,7 @@ Generator.prototype.installNewLanguage = function(language) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + language + chalk.yellow(' not added as a new language. Check if you have enabled translation support.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new language. Check if you have enabled translation support.\n'));
     }
 };
 
@@ -839,10 +830,14 @@ Generator.prototype.copyTemplate = function (source, dest, action, _this, _opt, 
     _opt = _opt !== undefined ? _opt : {};
     switch(action) {
         case 'stripHtml' :
-            _this.copyHtml(source, dest, _this, _opt, template);
+            var regex = '( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")';
+            //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
+            jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, _opt, template);
             break;
         case 'stripJs' :
-            _this.copyJs(source, dest, _this, _opt, template);
+            var regex = '[a-zA-Z]+\:(\s)?\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\>\;\s]*\}\]';
+            //looks for something like mainTranslatePartialLoader: [*]
+            jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, _opt, template);
             break;
         case 'copy' :
             _this.copy(source, dest);
@@ -862,10 +857,7 @@ Generator.prototype.copyTemplate = function (source, dest, action, _this, _opt, 
  * @param {template} flag to use template method instead of copy
  */
 Generator.prototype.copyHtml = function (source, dest, _this, _opt, template) {
-    _this = _this !== undefined ? _this : this;
-    var regex = '( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")';
-    //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
-    jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, _opt, template);
+    this.copyTemplate(source, dest, 'stripHtml', _this, _opt, template);
 }
 
 /**
@@ -878,8 +870,5 @@ Generator.prototype.copyHtml = function (source, dest, _this, _opt, template) {
  * @param {template} flag to use template method instead of copy
  */
 Generator.prototype.copyJs = function (source, dest, _this, _opt, template) {
-    _this = _this !== undefined ? _this : this;
-    var regex = '[a-zA-Z]+\:(\s)?\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\>\;\s]*\}\]';
-    //looks for something like mainTranslatePartialLoader: [*]
-    jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, _opt, template);
+    this.copyTemplate(source, dest, 'stripJs', _this, _opt, template);
 }
