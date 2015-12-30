@@ -4,9 +4,7 @@ var path = require('path'),
     yeoman = require('yeoman-generator'),
     chalk = require('chalk'),
     jhipsterUtils = require('./util.js'),
-    shelljs = require('shelljs'),
     Insight = require('insight'),
-    html = require("html-wiring"),
     ejs = require('ejs');
 
 module.exports = Generator;
@@ -217,9 +215,10 @@ Generator.prototype.addEntityTranslationKey = function(key, value, language) {
  * @param {string} key - Key for the entity name
  * @param {string} value - Default translated value
  * @param {string} method - The method to be run with provided key and value from above
+ * @param {string} enableTranslation - specify if i18n is enabled
  */
-Generator.prototype.addTranslationKeyToAllLanguages = function(key, value, method) {
-    if(this.enableTranslation) {
+Generator.prototype.addTranslationKeyToAllLanguages = function(key, value, method, enableTranslation) {
+    if(enableTranslation) {
         this.getAllSupportedLanguages().forEach(function(language) {
             try {
                 var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
@@ -237,9 +236,9 @@ Generator.prototype.addTranslationKeyToAllLanguages = function(key, value, metho
 /**
  * get all the languages installed currently
  */
-Generator.prototype.getAllInstalledLanguages = function () {
+Generator.prototype.getAllInstalledLanguages = function (enableTranslation) {
     var languages = [];
-    if(this.enableTranslation) {
+    if(enableTranslation) {
         this.getAllSupportedLanguages().forEach(function(language) {
             try {
                 var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
@@ -546,7 +545,7 @@ Generator.prototype.addSocialConnectionFactory = function (javaDir, importPackag
  *
  */
 Generator.prototype.addMainCSSStyle = function(style, comment) {
-    // Not Working this.useSass -> Undifined
+    // Not Working this.useSass -> Undifined --> this in the modules context would be jhipsterFunc
     if (this.useSass) {
         this.addMainSCSSStyle(style, comment);
     }
@@ -829,26 +828,27 @@ Generator.prototype.insight = function () {
  *
  * @param {source} path of the source file to copy from
  * @param {dest} path of the destination file to copy to
- * @param {action} type of the action to be performed on the template file, i.e: strip-html | strip-js | template | copy
+ * @param {action} type of the action to be performed on the template file, i.e: stripHtml | stripJs | template | copy
+ * @param {_this} context that can be used as the generator instance or data to process template
  * @param {_opt} options that can be passed to template method
  * @param {template} flag to use template method instead of copy method
  */
-Generator.prototype.copyTemplate = function (source, dest, action, data, _opt, template) {
+Generator.prototype.copyTemplate = function (source, dest, action, _this, _opt, template) {
 
-    data = data !== undefined ? data : this;
+    _this = _this !== undefined ? _this : this;
     _opt = _opt !== undefined ? _opt : {};
     switch(action) {
         case 'stripHtml' :
-            this.copyHtml(source, dest, data, _opt, template);
+            _this.copyHtml(source, dest, _this, _opt, template);
             break;
         case 'stripJs' :
-            this.copyJs(source, dest, data, _opt, template);
+            _this.copyJs(source, dest, _this, _opt, template);
             break;
         case 'copy' :
-            this.copy(source, dest);
+            _this.copy(source, dest);
             break;
         default:
-            this.template(source, dest, data, _opt);
+            _this.template(source, dest, _this, _opt);
     }
 }
 
@@ -857,14 +857,15 @@ Generator.prototype.copyTemplate = function (source, dest, action, data, _opt, t
  *
  * @param {source} path of the source file to copy from
  * @param {dest} path of the destination file to copy to
+ * @param {_this} context that can be used as the generator instance or data to process template
  * @param {_opt} options that can be passed to template method
  * @param {template} flag to use template method instead of copy
  */
-Generator.prototype.copyHtml = function (source, dest, data, _opt, template) {
-
+Generator.prototype.copyHtml = function (source, dest, _this, _opt, template) {
+    _this = _this !== undefined ? _this : this;
     var regex = '( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")';
     //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
-    this.copyWebResource(source, dest, regex, 'js', data, _opt, template);
+    jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, _opt, template);
 }
 
 /**
@@ -872,115 +873,13 @@ Generator.prototype.copyHtml = function (source, dest, data, _opt, template) {
  *
  * @param {source} path of the source file to copy from
  * @param {dest} path of the destination file to copy to
+ * @param {_this} context that can be used as the generator instance or data to process template
  * @param {_opt} options that can be passed to template method
  * @param {template} flag to use template method instead of copy
  */
-Generator.prototype.copyJs = function (source, dest, data, _opt, template) {
+Generator.prototype.copyJs = function (source, dest, _this, _opt, template) {
+    _this = _this !== undefined ? _this : this;
     var regex = '[a-zA-Z]+\:(\s)?\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\>\;\s]*\}\]';
     //looks for something like mainTranslatePartialLoader: [*]
-    this.copyWebResource(source, dest, regex, 'js', data, _opt, template);
-}
-
-Generator.prototype.copyWebResource = function (source, dest, regex, type, data, _opt, template) {
-
-    data = data !== undefined ? data : this;
-    _opt = _opt !== undefined ? _opt : {};
-    if (this.enableTranslation) {
-        // uses template method instead of copy if template boolean is set as true
-        template ? this.template(source, dest, data, _opt) : this.copy(source, dest);
-    } else {
-        var body = this.stripContent(source, regex, data, _opt);
-        switch(type) {
-            case 'html' :
-                body = this.replacePlaceholders(body, data);
-                break;
-            case 'js' :
-                body = this.replaceTitle(body, data, template);
-                break;
-        }
-        this.write(dest, body);
-    }
-}
-
-Generator.prototype.stripContent = function (source, regex, data, _opt) {
-    var re = new RegExp(regex, 'g');
-    var that=this;
-
-    var body = html.readFileAsString(path.join(that.sourceRoot(), source));
-    this.engine = require('ejs').render;
-    //temp hack to fix error thrown by ejs during entity creation, this needs a permanent fix when we add more .ejs files
-    _opt.filename = path.join(that.sourceRoot(), "src/main/webapp/app/ng_validators.ejs");
-    body = this.engine(body, data, _opt);
-    body = body.replace(re, '');
-
-    return body;
-}
-
-Generator.prototype.replaceTitle = function (body, data, template) {
-    var re = /pageTitle[\s]*:[\s]*[\'|\"]([a-zA-Z0-9\.\-\_]+)[\'|\"]/g;
-    var match;
-
-    while (match = re.exec(body)) {
-        // match is now the next match, in array form and our key is at index 1, index 1 is replace target.
-        var key = match[1], target = key;
-        var jsonData = this.geti18nJson(key, data);
-        var keyValue = jsonData !== undefined ? this.deepFind(jsonData, key) : undefined;
-
-        body = body.replace(target, keyValue!== undefined ? keyValue : this.baseName);
-    }
-
-    return body;
-}
-
-Generator.prototype.replacePlaceholders = function (body, data) {
-    var re = /placeholder=[\'|\"]([\{]{2}[\'|\"]([a-zA-Z0-9\.\-\_]+)[\'|\"][\s][\|][\s](translate)[\}]{2})[\'|\"]/g;
-    var match;
-
-    while (match = re.exec(body)) {
-        // match is now the next match, in array form and our key is at index 2, index 1 is replace target.
-        var key = match[2], target = match[1];
-        var jsonData = this.geti18nJson(key, data);
-        var keyValue = jsonData !== undefined ? this.deepFind(jsonData, key, true) : undefined; // dirty fix to get placeholder as it is not in proper json format, name has a dot in it. Assuming that all placeholders are in similar format
-
-        body = body.replace(target, keyValue!== undefined ? keyValue : '');
-    }
-
-    return body;
-}
-
-Generator.prototype.geti18nJson = function (key, data, template) {
-    var that = this,
-    i18nDirectory = 'src/main/webapp/i18n/en/',
-    filename = i18nDirectory + key.split('.')[0] + '.json',
-    keyValue, render = template;
-
-    if (!shelljs.test('-f', path.join(that.sourceRoot(), filename))) {
-        filename = i18nDirectory + '_' +key.split('.')[0] + '.json';
-        render = true;
-    }
-    try {
-        var file = html.readFileAsString(path.join(that.sourceRoot(), filename));
-        this.engine = require('ejs').render;
-        file = render ? this.engine(file, data, {}) : file;
-        return JSON.parse(file);
-    } catch (err) {
-        // 'Error reading translation file!'
-        return undefined;
-    }
-}
-
-Generator.prototype.deepFind = function (obj, path, placeholder) {
-    var paths = path.split('.'), current=obj, i;
-    if(placeholder){// dirty fix for placeholders, the json files needs to be corrected
-        paths[paths.length-2] = paths[paths.length-2] + '.' + paths[paths.length-1];
-        paths.pop();
-    }
-    for (i = 0; i < paths.length; ++i) {
-        if (current[paths[i]] == undefined) {
-            return undefined;
-        } else {
-            current = current[paths[i]];
-        }
-    }
-    return current;
+    jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, _opt, template);
 }

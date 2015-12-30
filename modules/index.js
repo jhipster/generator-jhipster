@@ -13,8 +13,10 @@ this.jhipsterVar = {};
 this.jhipsterFunc = {};
 
 var ModulesGenerator = module.exports = function ModulesGenerator(args, options, config) {
+
     this.jhipsterVar = options.jhipsterVar;
     this.jhipsterFunc = options.jhipsterFunc;
+
     if (this.jhipsterVar == null ||
         this.jhipsterVar.moduleName == null) {
         console.log(chalk.red('ERROR! This sub-generator must be used by JHipster modules, and the module name is not defined.'));
@@ -116,4 +118,6 @@ ModulesGenerator.prototype.configurer = function configurer() {
     this.jhipsterFunc['dateFormatForLiquibase'] = this.dateFormatForLiquibase;
     this.jhipsterFunc['copyI18nFilesByName'] = this.copyI18nFilesByName;
     this.jhipsterFunc['copyTemplate'] = this.copyTemplate;
+    this.jhipsterFunc['copyHtml'] = this.copyHtml;
+    this.jhipsterFunc['copyJs'] = this.copyJs;
 };
