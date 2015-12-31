@@ -9,6 +9,7 @@ var path = require('path'),
 module.exports = {
     rewrite: rewrite,
     rewriteFile: rewriteFile,
+    replaceContent: replaceContent,
     classify: classify,
     rewriteJSONFile: rewriteJSONFile,
     copyWebResource: copyWebResource

@@ -826,7 +826,7 @@ Generator.prototype.rewriteFile = function(filePath, needle, content) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required needle. File rewrite failed.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required needle. File rewrite failed.\n'));
     }
 };
 
@@ -847,7 +847,7 @@ Generator.prototype.replaceContent = function(filePath, pattern, content, regex)
             regex, regex
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required pattern. File rewrite failed.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required pattern. File rewrite failed.\n') + e);
     }
 };
 
