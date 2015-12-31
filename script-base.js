@@ -390,7 +390,7 @@ Generator.prototype.addAngularJsConfig = function(moduleConfigNames, config, com
 /**
  * A a new changelog to the Liquibase master.xml file.
  *
- * @param {changelogName} routerName - The name of the changelog (name of the file without .xml at the end).
+ * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
  */
 Generator.prototype.addChangelogToLiquibase = function (changelogName) {
     try {
@@ -404,6 +404,26 @@ Generator.prototype.addChangelogToLiquibase = function (changelogName) {
         });
     } catch (e) {
         console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + changelogName + '.xml ' + chalk.yellow('not added.\n'));
+    }
+};
+
+/**
+ * A a new column to a Liquibase changelog file for entity.
+ *
+ * @param {string} filePath - The full path of the changelog file.
+ * @param {string} content - The content to be added as column, can have multiple columns as well
+ */
+Generator.prototype.addColumnToLiquibaseEntityChangeset = function (filePath, content) {
+    try {
+        jhipsterUtils.rewriteFile({
+            file: filePath,
+            needle: 'jhipster-needle-liquibase-add-column',
+            splicable: [
+                content
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required jhipster-needle. Column not added.\n') + e);
     }
 };
 

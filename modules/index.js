@@ -110,6 +110,7 @@ ModulesGenerator.prototype.configurer = function configurer() {
     this.jhipsterFunc['getAllInstalledLanguages'] = this.getAllInstalledLanguages;
     this.jhipsterFunc['addEntityTranslationKey'] = this.addEntityTranslationKey;
     this.jhipsterFunc['addChangelogToLiquibase'] = this.addChangelogToLiquibase;
+    this.jhipsterFunc['addColumnToLiquibaseEntityChangeset'] = this.addColumnToLiquibaseEntityChangeset;
     this.jhipsterFunc['dateFormatForLiquibase'] = this.dateFormatForLiquibase;
     this.jhipsterFunc['copyI18nFilesByName'] = this.copyI18nFilesByName;
     this.jhipsterFunc['copyTemplate'] = this.copyTemplate;
