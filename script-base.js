@@ -563,6 +563,26 @@ Generator.prototype.addMavenPlugin = function (groupId, artifactId, version, oth
 };
 
 /**
+ * Add a configuration to the Spring Boot Maven plugin.
+ *
+ * @param {conf} XML configuration to add
+ */
+Generator.prototype.addConfigurationToProdSBMavenPlugin = function (conf) {
+    try {
+        var fullPath = 'pom.xml';
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-add-configuration-to-prod-sbmaven-plugin',
+            splicable: [
+                conf
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + conf + chalk.yellow(' not added.\n'));
+    }
+};
+
+/**
  * A new Gradle plugin.
  *
  * @param {group} plugin GroupId
