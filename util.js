@@ -24,6 +24,17 @@ function rewriteFile(args) {
     fs.writeFileSync(fullPath, body);
 }
 
+function replaceContent(args) {
+    args.path = args.path || process.cwd();
+    var fullPath = path.join(args.path, args.file);
+
+    var re = args.regex ? new RegExp(args.pattern, 'g') : args.pattern;
+
+    var body = fs.readFileSync(fullPath, 'utf8');
+    body = body.replace(re, args.content);
+    fs.writeFileSync(fullPath, body);
+}
+
 function escapeRegExp(str) {
     return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
 }
@@ -32,8 +43,7 @@ function rewrite(args) {
     // check if splicable is already in the body text
     var re = new RegExp(args.splicable.map(function(line) {
         return '\s*' + escapeRegExp(line);
-    })
-        .join('\n'));
+    }).join('\n'));
 
     if (re.test(args.haystack)) {
         return args.haystack;
@@ -60,8 +70,7 @@ function rewrite(args) {
 
     lines.splice(otherwiseLineIndex, 0, args.splicable.map(function(line) {
         return spaceStr + line;
-    })
-        .join('\n'));
+    }).join('\n'));
 
     return lines.join('\n');
 }

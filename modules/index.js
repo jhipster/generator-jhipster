@@ -115,4 +115,6 @@ ModulesGenerator.prototype.configurer = function configurer() {
     this.jhipsterFunc['copyTemplate'] = this.copyTemplate;
     this.jhipsterFunc['copyHtml'] = this.copyHtml;
     this.jhipsterFunc['copyJs'] = this.copyJs;
+    this.jhipsterFunc['rewriteFile'] = this.rewriteFile;
+    this.jhipsterFunc['replaceContent'] = this.replaceContent;
 };

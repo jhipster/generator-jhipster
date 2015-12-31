@@ -750,6 +750,107 @@ Generator.prototype.dateFormatForLiquibase = function () {
     return year + "" + month + "" + day + "" + hour + "" + minute + "" + second;
 };
 
+/**
+ * Copy templates with all the custom logic applied according to the type.
+ *
+ * @param {source} path of the source file to copy from
+ * @param {dest} path of the destination file to copy to
+ * @param {action} type of the action to be performed on the template file, i.e: stripHtml | stripJs | template | copy
+ * @param {_this} context that can be used as the generator instance or data to process template
+ * @param {_opt} options that can be passed to template method
+ * @param {template} flag to use template method instead of copy method
+ */
+Generator.prototype.copyTemplate = function (source, dest, action, _this, _opt, template) {
+
+    _this = _this !== undefined ? _this : this;
+    _opt = _opt !== undefined ? _opt : {};
+    switch(action) {
+        case 'stripHtml' :
+            var regex = '( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")';
+            //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
+            jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, _opt, template);
+            break;
+        case 'stripJs' :
+            var regex = '[a-zA-Z]+\:(\s)?\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\>\;\s]*\}\]';
+            //looks for something like mainTranslatePartialLoader: [*]
+            jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, _opt, template);
+            break;
+        case 'copy' :
+            _this.copy(source, dest);
+            break;
+        default:
+            _this.template(source, dest, _this, _opt);
+    }
+}
+
+/**
+ * Copy html templates after stripping translation keys when translation is disabled.
+ *
+ * @param {source} path of the source file to copy from
+ * @param {dest} path of the destination file to copy to
+ * @param {_this} context that can be used as the generator instance or data to process template
+ * @param {_opt} options that can be passed to template method
+ * @param {template} flag to use template method instead of copy
+ */
+Generator.prototype.copyHtml = function (source, dest, _this, _opt, template) {
+    this.copyTemplate(source, dest, 'stripHtml', _this, _opt, template);
+}
+
+/**
+ * Copy Js templates after stripping translation keys when translation is disabled.
+ *
+ * @param {source} path of the source file to copy from
+ * @param {dest} path of the destination file to copy to
+ * @param {_this} context that can be used as the generator instance or data to process template
+ * @param {_opt} options that can be passed to template method
+ * @param {template} flag to use template method instead of copy
+ */
+Generator.prototype.copyJs = function (source, dest, _this, _opt, template) {
+    this.copyTemplate(source, dest, 'stripJs', _this, _opt, template);
+}
+
+/**
+ * Rewrite the specified file with provided content at the needle location
+ *
+ * @param {fullPath} path of the source file to rewrite
+ * @param {needle} needle to look for where content will be inserted
+ * @param {content} content to be written
+ */
+Generator.prototype.rewriteFile = function(filePath, needle, content) {
+    try {
+        jhipsterUtils.rewriteFile({
+            file: filePath,
+            needle: needle,
+            splicable: [
+              content
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required needle. File rewrite failed.\n'));
+    }
+};
+
+/**
+ * Replace the pattern/regex with provided content
+ *
+ * @param {fullPath} path of the source file to rewrite
+ * @param {pattern} pattern to look for where content will be replaced
+ * @param {content} content to be written
+ * @param {regex} true if pattern is regex
+ */
+Generator.prototype.replaceContent = function(filePath, pattern, content, regex) {
+    try {
+        jhipsterUtils.replaceContent({
+            file: filePath,
+            pattern: pattern,
+            content: content,
+            regex, regex
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required pattern. File rewrite failed.\n'));
+    }
+};
+
 Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, resourceDir, lang) {
     this.copyI18nFilesByName(_this, webappDir, 'activate.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'audits.json', lang);
@@ -812,63 +913,4 @@ Generator.prototype.insight = function () {
         packageVersion: pkg.version
     });
     return insight;
-}
-
-/**
- * Copy templates with all the custom logic applied according to the type.
- *
- * @param {source} path of the source file to copy from
- * @param {dest} path of the destination file to copy to
- * @param {action} type of the action to be performed on the template file, i.e: stripHtml | stripJs | template | copy
- * @param {_this} context that can be used as the generator instance or data to process template
- * @param {_opt} options that can be passed to template method
- * @param {template} flag to use template method instead of copy method
- */
-Generator.prototype.copyTemplate = function (source, dest, action, _this, _opt, template) {
-
-    _this = _this !== undefined ? _this : this;
-    _opt = _opt !== undefined ? _opt : {};
-    switch(action) {
-        case 'stripHtml' :
-            var regex = '( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")';
-            //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
-            jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, _opt, template);
-            break;
-        case 'stripJs' :
-            var regex = '[a-zA-Z]+\:(\s)?\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\>\;\s]*\}\]';
-            //looks for something like mainTranslatePartialLoader: [*]
-            jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, _opt, template);
-            break;
-        case 'copy' :
-            _this.copy(source, dest);
-            break;
-        default:
-            _this.template(source, dest, _this, _opt);
-    }
-}
-
-/**
- * Copy html templates after stripping translation keys when translation is disabled.
- *
- * @param {source} path of the source file to copy from
- * @param {dest} path of the destination file to copy to
- * @param {_this} context that can be used as the generator instance or data to process template
- * @param {_opt} options that can be passed to template method
- * @param {template} flag to use template method instead of copy
- */
-Generator.prototype.copyHtml = function (source, dest, _this, _opt, template) {
-    this.copyTemplate(source, dest, 'stripHtml', _this, _opt, template);
-}
-
-/**
- * Copy Js templates after stripping translation keys when translation is disabled.
- *
- * @param {source} path of the source file to copy from
- * @param {dest} path of the destination file to copy to
- * @param {_this} context that can be used as the generator instance or data to process template
- * @param {_opt} options that can be passed to template method
- * @param {template} flag to use template method instead of copy
- */
-Generator.prototype.copyJs = function (source, dest, _this, _opt, template) {
-    this.copyTemplate(source, dest, 'stripJs', _this, _opt, template);
 }
