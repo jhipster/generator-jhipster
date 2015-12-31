@@ -105,6 +105,7 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTransl
         $httpProvider.interceptors.push('authExpiredInterceptor');<% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
         $httpProvider.interceptors.push('authInterceptor');<% } %>
         $httpProvider.interceptors.push('notificationInterceptor');
+        // jhipster-needle-angularjs-add-interceptor JHipster will add new application interceptor here
         <% if (enableTranslation) { %>
         // Initialize angular-translate
         $translateProvider.useLoader('$translatePartialLoader', {

@@ -388,6 +388,27 @@ Generator.prototype.addAngularJsConfig = function(moduleConfigNames, config, com
 };
 
 /**
+ * Add a new interceptor to the angular application in "app.js".
+ * The interceptor should be in its own .js file inside scripts/Components/interceptor folder
+ * @param {string} interceptorName - angular name of the interceptor
+ *
+ */
+Generator.prototype.addAngularJsInterceptor = function(interceptorName) {
+    var fullPath = 'src/main/webapp/scripts/app/app.js';
+    try {
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-angularjs-add-interceptor',
+            splicable: [
+                '$httpProvider.interceptors.push(\'' + interceptorName + '\');'
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Interceptor not added to JHipster app.\n'));
+    }
+};
+
+/**
  * A a new changelog to the Liquibase master.xml file.
  *
  * @param {string} changelogName - The name of the changelog (name of the file without .xml at the end).
