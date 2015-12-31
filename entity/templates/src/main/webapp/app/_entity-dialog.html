@@ -59,12 +59,29 @@
                 </button>
             </div>
                 <%_ } _%>
-                <%_ if (fields[fieldId].fieldType == 'LocalDate' || fields[fieldId].fieldType == 'ZonedDateTime' || fields[fieldId].fieldType == 'Date') { _%>
-            <input id="field_<%= fields[fieldId].fieldName %>" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>" is-open="datePickerFor<%= fields[fieldId].fieldNameCapitalized %>.status.opened"
-            <%- include ng_validators %>/>
-            <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="datePickerFor<%= fields[fieldId].fieldNameCapitalized %>Open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-            </span>
+                <%_ if (fields[fieldId].fieldType == 'LocalDate' || fields[fieldId].fieldType == 'Date') { _%>
+            <div class="input-group">                
+                <input id="field_<%= fields[fieldId].fieldName %>" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>" is-open="datePickerFor<%= fields[fieldId].fieldNameCapitalized %>.status.opened"
+                <%- include ng_validators %>/>
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="datePickerFor<%= fields[fieldId].fieldNameCapitalized %>Open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+            </div><!-- /input-group -->
+                <%_ } else if (fields[fieldId].fieldType == 'ZonedDateTime') { _%>
+            <div class="input-group">              
+                <input id="field_<%= fields[fieldId].fieldName %>" type="text" class="form-control" ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"
+                <%- include ng_validators %>/>              
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown_<%= fields[fieldId].fieldName %>" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li>
+                            <datetimepicker role="menu" aria-labelledby="dropdown_<%= fields[fieldId].fieldName %>" data-ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>" data-datetimepicker-config="{ dropdownSelector: '.dropdown_<%= fields[fieldId].fieldName %>' }"></datetimepicker>
+                        </li>
+                    </ul>
+                </div><!-- /btn-group-btn -->
+            </div><!-- /input-group -->
                 <%_ } else { _%>
             <input type="<%= fieldInputType %>" class="form-control" name="<%= fields[fieldId].fieldName %>" id="field_<%= fields[fieldId].fieldName %>"
                     ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"
