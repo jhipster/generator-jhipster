@@ -87,11 +87,14 @@ ModulesGenerator.prototype.configurer = function configurer() {
     this.jhipsterVar['resourceDir'] = this.resourceDir;
     this.jhipsterVar['webappDir'] = this.webappDir;
 
+    this.jhipsterFunc['addSocialButton'] = this.addSocialButton;
+    this.jhipsterFunc['addSocialConnectionFactory'] = this.addSocialConnectionFactory;
     this.jhipsterFunc['addMavenDependency'] = this.addMavenDependency;
     this.jhipsterFunc['addMavenPlugin'] = this.addMavenPlugin;
     this.jhipsterFunc['addGradlePlugin'] = this.addGradlePlugin;
     this.jhipsterFunc['addGradleDependency'] = this.addGradleDependency;
     this.jhipsterFunc['applyFromGradleScript'] = this.applyFromGradleScript;
+    this.jhipsterFunc['addBowerrcParameter'] = this.addBowerrcParameter;
     this.jhipsterFunc['addBowerDependency'] = this.addBowerDependency;
     this.jhipsterFunc['addBowerOverride'] = this.addBowerOverride;
     this.jhipsterFunc['addMainCSSStyle'] = this.addMainCSSStyle;

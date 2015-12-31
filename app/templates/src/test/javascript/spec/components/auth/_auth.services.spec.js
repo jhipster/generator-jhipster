@@ -1,6 +1,6 @@
 'use strict';
 
-describe('Services Tests ', function () {
+describe('Service Tests', function () {
     <%_ if (authenticationType == 'session') { _%>
     beforeEach(mockApiAccountCall);
     <%_ } _%>

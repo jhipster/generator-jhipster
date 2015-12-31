@@ -22,6 +22,7 @@ import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 import org.springframework.social.google.connect.GoogleConnectionFactory;
 import org.springframework.social.security.AuthenticationNameUserIdSource;
 import org.springframework.social.twitter.connect.TwitterConnectionFactory;
+// jhipster-needle-add-social-connection-factory-import-package
 
 import javax.inject.Inject;
 
@@ -85,6 +86,8 @@ public class SocialConfiguration implements SocialConfigurer {
         } else {
             log.error("Cannot configure TwitterConnectionFactory id or secret null");
         }
+
+        // jhipster-needle-add-social-connection-factory
     }
 
     @Override

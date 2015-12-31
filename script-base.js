@@ -125,6 +125,25 @@ Generator.prototype.addElementTranslationKey = function(key, value, language) {
     }
 };
 
+
+/**
+ * Add a new parameter in the ".bowerrc".
+ *
+ * @param {string} key - name of the parameter
+ * @param {string, obj, bool, etc.} value - value of the parameter
+ */
+Generator.prototype.addBowerrcParameter = function(key, value) {
+    var fullPath ='.bowerrc';
+    try {
+        console.log(chalk.yellow('   update ') + fullPath);
+        jhipsterUtils.rewriteJSONFile(fullPath, function(jsonObj) {
+            jsonObj[key] = value;
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bowerrc parameter (key: ' + key + ', value:' + value + ')' + chalk.yellow(' not added.\n'));
+    }
+};
+
 /**
  * Add a new dependency in the "bower.json".
  *
@@ -165,10 +184,13 @@ Generator.prototype.addBowerOverride = function(bowerPackageName, main, isIgnore
             if (dependencies) {
                 override['dependencies'] = dependencies;
             }
+            if (jsonObj.overrides === undefined) {
+              jsonObj.overrides = {};
+            }
             jsonObj.overrides[bowerPackageName] = override;
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bower override configuration (bowerPackageName: ' + name + ', main:' + JSON.stringify(main) + ', ignore:' + isIgnored + ')' + chalk.yellow(' not added.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bower override configuration (bowerPackageName: ' + bowerPackageName + ', main:' + JSON.stringify(main) + ', ignore:' + isIgnored + ')' + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -274,6 +296,115 @@ Generator.prototype.addChangelogToLiquibase = function (changelogName) {
         });
     } catch (e) {
         console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + changelogName + '.js ' + chalk.yellow('not added.\n'));
+    }
+};
+
+/**
+ * Add a new social connection factory in the SocialConfiguration.java file.
+ *
+ * @param {string} socialName - name of the social module. ex: 'facebook'
+ * @param {string} socialParameter - parameter to send to social connection ex: 'public_profile,email'
+ * @param {string} buttonColor - color of the social button. ex: '#3b5998'
+ * @param {string} buttonHoverColor - color of the social button when is hover. ex: '#2d4373'
+ */
+Generator.prototype.addSocialButton = function (socialName, socialParameter, buttonColor, buttonHoverColor) {
+    var socialServicefullPath = 'src/main/webapp/scripts/app/account/social/social.service.js';
+    var loginfullPath = 'src/main/webapp/scripts/app/account/login/login.html';
+    var registerfullPath = 'src/main/webapp/scripts/app/account/register/register.html';
+    try {
+        console.log(chalk.yellow('\nupdate ') + socialServicefullPath);
+        var serviceCode =  "case '" + socialName + "': return '"+ socialParameter +"';";
+        jhipsterUtils.rewriteFile({
+            file: socialServicefullPath,
+            needle: 'jhipster-needle-add-social-button',
+            splicable: [
+                serviceCode
+            ]
+        });
+
+        var buttonCode = '<jh-social ng-provider="'+ socialName +'"></jh-social>';
+        console.log(chalk.yellow('update ') + loginfullPath);
+        jhipsterUtils.rewriteFile({
+            file: loginfullPath,
+            needle: 'jhipster-needle-add-social-button',
+            splicable: [
+                buttonCode
+            ]
+        });
+        console.log(chalk.yellow('update ') + registerfullPath);
+        jhipsterUtils.rewriteFile({
+            file: registerfullPath,
+            needle: 'jhipster-needle-add-social-button',
+            splicable: [
+                buttonCode
+            ]
+        });
+
+        var buttonStyle = '.jh-btn-' + socialName + ' {\n' +
+            '     background-color: ' + buttonColor + ';\n' +
+            '     border-color: rgba(0, 0, 0, 0.2);\n' +
+            '     color: #fff;\n' +
+            '}\n\n' +
+            '.jh-btn-' + socialName + ':hover, .jh-btn-' + socialName + ':focus, .jh-btn-' + socialName + ':active, .jh-btn-' + socialName + '.active, .open > .dropdown-toggle.jh-btn-' + socialName + ' {\n' +
+            '    background-color: ' + buttonHoverColor + ';\n' +
+            '    border-color: rgba(0, 0, 0, 0.2);\n' +
+            '    color: #fff;\n' +
+            '}';
+        this.addMainCSSStyle(buttonStyle,'Add sign in style for ' +  socialName);
+
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to add social button modification.\n' + e));
+    }
+};
+
+/**
+ * Add a new social connection factory in the SocialConfiguration.java file.
+ *
+ * @param {string} javaDir - default java directory of the project (JHipster var)
+ * @param {string} importPackagePath - package path of the ConnectionFactory class
+ * @param {string} socialName - name of the social module
+ * @param {string} connectionFactoryClassName - name of the ConnectionFactory class
+ * @param {string} configurationName - name of the section in the config yaml file
+ */
+Generator.prototype.addSocialConnectionFactory = function (javaDir, importPackagePath, socialName, connectionFactoryClassName, configurationName) {
+    var fullPath = javaDir + 'config/social/SocialConfiguration.java';
+    try {
+        console.log(chalk.yellow('\nupdate ') + fullPath);
+        var javaImport = 'import ' + importPackagePath +';\n';
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-add-social-connection-factory-import-package',
+            splicable: [
+                javaImport
+            ]
+        });
+
+        var clientId = socialName + 'ClientId';
+        var clientSecret = socialName + 'ClientSecret';
+        var javaCode = '// ' + socialName + ' configuration\n' +
+            '        String ' + clientId + ' = environment.getProperty("spring.social.' + configurationName + '.clientId");\n' +
+            '        String ' + clientSecret + ' = environment.getProperty("spring.social.' + configurationName + '.clientSecret");\n' +
+            '        if (' + clientId + ' != null && ' + clientSecret + ' != null) {\n' +
+            '            log.debug("Configuring ' + connectionFactoryClassName + '");\n' +
+            '            connectionFactoryConfigurer.addConnectionFactory(\n' +
+            '                new ' + connectionFactoryClassName + '(\n' +
+            '                    ' + clientId + ',\n' +
+            '                    ' + clientSecret + '\n' +
+            '                )\n' +
+            '            );\n' +
+            '        } else {\n' +
+            '            log.error("Cannot configure ' + connectionFactoryClassName + ' id or secret null");\n' +
+            '        }\n';
+
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-add-social-connection-factory',
+            splicable: [
+                javaCode
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Social connection ') + e + ' ' + chalk.yellow('not added.\n'));
     }
 };
 

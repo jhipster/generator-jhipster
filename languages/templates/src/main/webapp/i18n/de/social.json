@@ -3,7 +3,7 @@
         "btnLabel": "Anmelden mit {{ label }}",
         "register": {
             "title": "Registrieren mit {{ label }}",
-            "errorTitle": "Registerieren mit einem externen Konto",
+            "errorTitle": "Registrieren mit einem externen Konto",
             "messages": {
                 "success": "<strong>Registrierung gespeichert!</strong> Bitte schauen Sie in Ihren Emails nach der Bestätigung.",
                 "error": {
