@@ -40,7 +40,7 @@ install:
   - $JHIPSTER_INSTALL/01-install-docker-compose.sh
   - $JHIPSTER_INSTALL/02-install-jhipster-stack.sh
   - $JHIPSTER_INSTALL/03-downloadDep.sh
-  - $JHIPSTER_INSTALL/04-checkVersion.sh
+  # - $JHIPSTER_INSTALL/04-checkVersion.sh
 script:
   - $JHIPSTER_SCRIPTS/01-generate-project.sh
   - $JHIPSTER_SCRIPTS/02-generate-entities.sh
