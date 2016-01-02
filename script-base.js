@@ -389,7 +389,7 @@ Generator.prototype.addAngularJsConfig = function(moduleConfigNames, config, com
 
 /**
  * Add a new interceptor to the angular application in "app.js".
- * The interceptor should be in its own .js file inside scripts/Components/interceptor folder
+ * The interceptor should be in its own .js file inside scripts/components/interceptor folder
  * @param {string} interceptorName - angular name of the interceptor
  *
  */
