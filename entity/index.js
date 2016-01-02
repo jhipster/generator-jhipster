@@ -1370,6 +1370,57 @@ EntityGenerator.prototype.files = function files() {
 
 };
 
+EntityGenerator.prototype.afterRunHook = function afterRunHook() {
+    var cb = this.async();
+    try {
+        var modulesJsonFile = '.jhipster-modules.json';
+        if (shelljs.test('-f', modulesJsonFile)) {
+            console.log('\n' + chalk.bold.green('Running post run module hooks'));
+
+            var modules;
+            try {
+                modules = JSON.parse(fs.readFileSync(modulesJsonFile, 'utf8'));
+            } catch (err) {
+                console.log(chalk.red('The module configuration file could not be read!'));
+            }
+            // form the data to be passed to modules
+            var entityConfig = {
+                jhipsterConfigDirectory: this.jhipsterConfigDirectory,
+                filename: this.filename,
+                data: this.data || this.fileData,
+                useConfigurationFile: this.useConfigurationFile,
+                fieldsContainOwnerManyToMany: this.fieldsContainOwnerManyToMany,
+                fieldsContainNoOwnerOneToOne: this.fieldsContainNoOwnerOneToOne,
+                fieldsContainOwnerOneToOne: this.fieldsContainOwnerOneToOne,
+                fieldsContainOneToMany: this.fieldsContainOneToMany,
+                fieldsContainZonedDateTime: this.fieldsContainZonedDateTime,
+                fieldsContainLocalDate: this.fieldsContainLocalDate,
+                fieldsContainDate: this.fieldsContainDate,
+                fieldsContainBigDecimal: this.fieldsContainBigDecimal,
+                fieldsContainBlob: this.fieldsContainBlob,
+                pkType: this.pkType,
+                entityClass: this.entityClass,
+                entityTableName: this.entityTableName,
+                entityInstance: this.entityInstance
+            };
+            // run through all post entity creation module hooks
+            modules.forEach(function(module){
+                if(module.hookFor == 'entity' && module.hookType == 'post') {
+                    // compose with the modules callback generator
+                    this.composeWith(module.generatorCallback, {
+                        options: {
+                          entityConfig: entityConfig
+                        }
+                    });
+                }
+            }, this);
+        }
+        cb();
+    } catch (err) {
+        console.log('\n' + chalk.bold.red('Running post run module hooks failed. Entity generation will proceed as normal'));
+    }
+}
+
 EntityGenerator.prototype.copyI18n = function(language) {
     try {
         var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
