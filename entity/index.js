@@ -1244,7 +1244,10 @@ EntityGenerator.prototype.files = function files() {
     }
     this.entityClass = _s.capitalize(this.name);
     this.entityInstance = _s.decapitalize(this.name);
-    //this.entityTableName = _s.underscored(this.name).toLowerCase();
+    // for the sake of current test scenarios where entity name is table name
+    if (_.isUndefined(this.entityTableName)) {
+    	this.entityTableName = _s.underscored(this.name).toLowerCase();
+    }
 
     this.differentTypes = [this.entityClass];
     if (this.relationships == undefined) {
