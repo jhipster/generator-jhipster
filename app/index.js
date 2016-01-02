@@ -1284,6 +1284,7 @@ JhipsterGenerator.prototype.projectfiles = function projectfiles() {
     this.copy('editorconfig', '.editorconfig');
     this.copy('jshintrc', '.jshintrc');
     this.template('_travis.yml', '.travis.yml', this, {});
+    this.copy('.jhipster-modules.json', '.jhipster-modules.json'); // modules will register hooks here
 };
 
 function removefile(file) {

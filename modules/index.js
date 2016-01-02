@@ -78,11 +78,13 @@ ModulesGenerator.prototype.configurer = function configurer() {
     this.javaDir = 'src/main/java/' + this.packageFolder + '/';
     this.resourceDir = 'src/main/resources/';
     this.webappDir = 'src/main/webapp/';
+    var modulesJsonFile = '.jhipster-modules.json';
 
     this.jhipsterVar['angularAppName'] = this.angularAppName;
     this.jhipsterVar['javaDir'] = this.javaDir;
     this.jhipsterVar['resourceDir'] = this.resourceDir;
     this.jhipsterVar['webappDir'] = this.webappDir;
+    this.jhipsterVar['modulesJsonFile'] = modulesJsonFile;
 
     this.jhipsterFunc['addSocialButton'] = this.addSocialButton;
     this.jhipsterFunc['addSocialConnectionFactory'] = this.addSocialConnectionFactory;
