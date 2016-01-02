@@ -83,24 +83,6 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     } else if (reservedWords_JHipster.indexOf(this.name.toUpperCase()) != -1) {
         console.log(chalk.red('The entity name cannot contain a JHipster reserved keyword'));
         throw new Error("Validation error");
-    } else if (prodDatabaseType == 'mysql' && reservedWords_MySQL.indexOf(this.name.toUpperCase()) != -1) {
-        console.log(chalk.red('The entity name cannot contain a MySQL reserved keyword'));
-        throw new Error("Validation error");
-    } else if (prodDatabaseType == 'postgresql' && reservedWords_Postgresql.indexOf(this.name.toUpperCase()) != -1) {
-        console.log(chalk.red('The entity name cannot contain a PostgreSQL reserved keyword'));
-        throw new Error("Validation error");
-    } else if (prodDatabaseType == 'cassandra' && reservedWords_Cassandra.indexOf(this.name.toUpperCase()) != -1) {
-        console.log(chalk.red('The entity name cannot contain a Cassandra reserved keyword'));
-        throw new Error("Validation error");
-    // } else if (prodDatabaseType == 'oracle' && reservedWords_Oracle.indexOf(this.name.toUpperCase()) != -1) {
-    //     console.log(chalk.red('The entity name cannot contain a Oracle reserved keyword'));
-    //     throw new Error("Validation error");
-    } else if (prodDatabaseType == 'oracle' && _s.underscored(this.name).length > 26) {
-        console.log(chalk.red('The entity name is too long for Oracle, try a shorter name'));
-        throw new Error("Validation error");
-    } else if (prodDatabaseType == 'mongodb' && reservedWords_Mongo.indexOf(this.name.toUpperCase()) != -1) {
-        console.log(chalk.red('The entity name cannot contain a MongoDB reserved keyword'));
-        throw new Error("Validation error");
     }
 
     console.log(chalk.red('The entity ' + this.name + ' is being created.'));
@@ -155,7 +137,6 @@ EntityGenerator.prototype.askForTableName = function askForTableName() {
             default: function (response) {
                  return _s.underscored(this.name).toLowerCase();
             }
-            //default: _s.underscored(this.name).toLowerCase();
         }
     ];
     this.prompt(prompts, function (props) {
