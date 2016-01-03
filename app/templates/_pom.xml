@@ -1003,11 +1003,11 @@
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
-                            <!-- this is set to false because of https://github.com/jhipster/generator-jhipster/issues/2225 -->
-                            <executable>false</executable>
+                            <!-- executable is not set by default because of https://github.com/jhipster/generator-jhipster/issues/2225 -->
                             <arguments>
                                 <argument>--spring.profiles.active=prod</argument>
                             </arguments>
+                            <!-- jhipster-needle-add-configuration-to-prod-sbmaven-plugin -->
                         </configuration>
                     </plugin>
                 </plugins>
