@@ -89,6 +89,7 @@ function rewriteJSONFile(filePath, rewriteFile) {
     fs.writeFileSync(filePath, JSON.stringify(jsonObj, null, 4));
 }
 
+<<<<<<< HEAD
 function copyWebResource (source, dest, regex, type, _this, _opt, template) {
 
     _opt = _opt !== undefined ? _opt : {};
@@ -190,4 +191,21 @@ function deepFind (obj, path, placeholder) {
         }
     }
     return current;
+=======
+// Converts a camelCase string to a human readable string.
+// i.e. myVariableName => My Variable Name
+function camelToHuman(input) {
+    if (input)
+        return input.charAt(0).toUpperCase() + input.substr(1).replace(/[A-Z]/g, ' $&');
+    else return '';
+}
+// Converts a camelCase string to a dash-case string.
+// i.e. myVariableName => my-variable-name
+function camelToDashed(input) {
+    if (input)
+        return input.replace(/[A-Z]/g, function (match, pos) {
+            return (pos > 0 ? '-' : '') + match.toLowerCase();
+        });
+    else return '';
+>>>>>>> 9d3bc06... add camelToHuman filter
 }

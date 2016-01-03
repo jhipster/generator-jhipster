@@ -1,14 +1,15 @@
 'use strict';
 var util = require('util'),
-        fs = require('fs'),
-        path = require('path'),
-        yeoman = require('yeoman-generator'),
-        chalk = require('chalk'),
-        _ = require('lodash'),
-        _s = require('underscore.string'),
-        shelljs = require('shelljs'),
-        html = require("html-wiring"),
-        scriptBase = require('../script-base');
+    fs = require('fs'),
+    path = require('path'),
+    yeoman = require('yeoman-generator'),
+    chalk = require('chalk'),
+    _ = require('lodash'),
+    _s = require('underscore.string'),
+    shelljs = require('shelljs'),
+    html = require("html-wiring"),
+    jhipsterUtils = require('../util.js'),
+    scriptBase = require('../script-base');
 
 var reservedWords_Java = ["ABSTRACT", "CONTINUE", "FOR", "NEW", "SWITCH", "ASSERT", "DEFAULT", "GOTO", "PACKAGE", "SYNCHRONIZED", "BOOLEAN", "DO", "IF", "PRIVATE", "THIS", "BREAK", "DOUBLE", "IMPLEMENTS", "PROTECTED", "THROW", "BYTE", "ELSE", "IMPORT", "PUBLIC", "THROWS", "CASE", "ENUM", "INSTANCEOF", "RETURN", "TRANSIENT", "CATCH", "EXTENDS", "INT", "SHORT", "TRY", "CHAR", "FINAL", "INTERFACE", "STATIC", "VOID", "CLASS", "FINALLY", "LONG", "STRICTFP", "VOLATILE", "CONST", "FLOAT", "NATIVE", "SUPER", "WHILE"];
 
@@ -1374,7 +1375,7 @@ EntityGenerator.prototype.copyI18n = function(language) {
         var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
         if (stats.isDirectory()) {
             this.template('src/main/webapp/i18n/_entity_' + language + '.json', 'src/main/webapp/i18n/' + language + '/' + this.entityInstance + '.json', this, {});
-            this.addEntityTranslationKey(this.entityInstance, this.entityClass, language);
+            this.addEntityTranslationKey(this.entityInstance, jhipsterUtils.camelToHuman(this.entityClass), language);
         }
     } catch(e) {
         // An exception is thrown if the folder doesn't exist
