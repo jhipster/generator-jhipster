@@ -1407,11 +1407,16 @@ EntityGenerator.prototype.afterRunHook = function afterRunHook() {
             modules.forEach(function(module){
                 if(module.hookFor == 'entity' && module.hookType == 'post') {
                     // compose with the modules callback generator
-                    this.composeWith(module.generatorCallback, {
-                        options: {
-                          entityConfig: entityConfig
-                        }
-                    });
+                    try {
+                        this.composeWith(module.generatorCallback, {
+                            options: {
+                                entityConfig: entityConfig
+                            }
+                        });
+                    } catch (err) {
+                        console.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
+                            chalk.red('. Make sure you have installed the module with ') + chalk.bold.yellow('\'npm -g ' + module.npmPackageName + '\''));
+                    }
                 }
             }, this);
         }

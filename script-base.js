@@ -856,7 +856,7 @@ Generator.prototype.copyTemplate = function (source, dest, action, _this, _opt, 
         default:
             _this.template(source, dest, _this, _opt);
     }
-}
+};
 
 /**
  * Copy html templates after stripping translation keys when translation is disabled.
@@ -869,7 +869,7 @@ Generator.prototype.copyTemplate = function (source, dest, action, _this, _opt, 
  */
 Generator.prototype.copyHtml = function (source, dest, _this, _opt, template) {
     this.copyTemplate(source, dest, 'stripHtml', _this, _opt, template);
-}
+};
 
 /**
  * Copy Js templates after stripping translation keys when translation is disabled.
@@ -882,7 +882,7 @@ Generator.prototype.copyHtml = function (source, dest, _this, _opt, template) {
  */
 Generator.prototype.copyJs = function (source, dest, _this, _opt, template) {
     this.copyTemplate(source, dest, 'stripJs', _this, _opt, template);
-}
+};
 
 /**
  * Rewrite the specified file with provided content at the needle location
@@ -924,6 +924,11 @@ Generator.prototype.replaceContent = function(filePath, pattern, content, regex)
     } catch (e) {
         console.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required pattern. File rewrite failed.\n') + e);
     }
+};
+Generator.prototype.testMethod = function(test) {
+
+        console.log(chalk.yellow('\n Im a test ') + test);
+
 };
 
 /**
