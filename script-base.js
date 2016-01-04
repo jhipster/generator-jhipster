@@ -885,7 +885,7 @@ Generator.prototype.replaceContent = function(filePath, pattern, content, regex)
             file: filePath,
             pattern: pattern,
             content: content,
-            regex, regex
+            regex: regex
         });
     } catch (e) {
         console.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required pattern. File rewrite failed.\n') + e);
