@@ -1003,8 +1003,7 @@
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
-                            <!-- this is set to false because of https://github.com/jhipster/generator-jhipster/issues/2225 -->
-                            <executable>false</executable>
+                            <executable>true</executable>
                             <arguments>
                                 <argument>--spring.profiles.active=prod</argument>
                             </arguments>
