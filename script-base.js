@@ -892,6 +892,39 @@ Generator.prototype.replaceContent = function(filePath, pattern, content, regex)
     }
 };
 
+/**
+ * Register a module configuration to .jhipster-modules.json
+ *
+ * @param {moduleConfig} configuration object for the module
+ */
+Generator.prototype.registerModule = function(moduleConfig) {
+    try {
+        var modulesJsonFile = '.jhipster-modules.json';
+        var modules;
+        var error;
+        if (shelljs.test('-f', modulesJsonFile)) {
+            // file is present append to it
+            try {
+                modules = JSON.parse(fs.readFileSync(modulesJsonFile, 'utf8'));
+            } catch (err) {
+                error = true;
+                console.log(chalk.red('The Jhipster module configuration file could not be read!'));
+            }
+        } else {
+            // file not present create it and add config to it
+            modules = [];
+        }
+        if(!error) {
+            modules.push(moduleConfig);
+            fs.writeFile(modulesJsonFile, modules, 'utf8',function (err) {
+                if (err) return console.log('Error while writing module configuration' + err);
+            });
+        }
+    } catch (err) {
+        console.log('\n' + chalk.bold.red('Could not add jhipster module configuration' + err));
+    }
+};
+
 Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, resourceDir, lang) {
     this.copyI18nFilesByName(_this, webappDir, 'activate.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'audits.json', lang);

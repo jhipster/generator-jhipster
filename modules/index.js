@@ -121,4 +121,6 @@ ModulesGenerator.prototype.configurer = function configurer() {
     this.jhipsterFunc['copyJs'] = this.copyJs;
     this.jhipsterFunc['rewriteFile'] = this.rewriteFile;
     this.jhipsterFunc['replaceContent'] = this.replaceContent;
+    this.jhipsterFunc['registerModule'] = this.registerModule;
+
 };
