@@ -6,6 +6,7 @@ var path = require('path'),
     jhipsterUtils = require('./util.js'),
     Insight = require('insight'),
     fs = require('fs'),
+    shelljs = require('shelljs'),
     ejs = require('ejs');
 
 module.exports = Generator;
