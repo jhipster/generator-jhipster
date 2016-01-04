@@ -1420,41 +1420,8 @@ EntityGenerator.prototype.afterRunHook = function afterRunHook() {
                 }
             }, this);
         }
-        cb();
     } catch (err) {
         console.log('\n' + chalk.bold.red('Running post run module hooks failed. Entity generation will proceed as normal'));
     }
+    cb();
 }
-
-EntityGenerator.prototype.copyI18n = function(language) {
-    try {
-        var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
-        if (stats.isDirectory()) {
-            this.template('src/main/webapp/i18n/_entity_' + language + '.json', 'src/main/webapp/i18n/' + language + '/' + this.entityInstance + '.json', this, {});
-            this.addEntityTranslationKey(this.entityInstance, _s.humanize(this.entityClass), language);
-        }
-    } catch(e) {
-        // An exception is thrown if the folder doesn't exist
-        // do nothing
-    }
-};
-
-EntityGenerator.prototype.copyEnumI18n = function(language, enumInfo) {
-    try {
-        var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
-        if (stats.isDirectory()) {
-            this.template('src/main/webapp/i18n/_enum_' + language + '.json', 'src/main/webapp/i18n/' + language + '/' + enumInfo.enumInstance + '.json', enumInfo, {});
-        }
-    } catch(e) {
-        // An exception is thrown if the folder doesn't exist
-        // do nothing
-    }
-};
-
-EntityGenerator.prototype.getTableName = function(value) {
-    return _s.underscored(value).toLowerCase();
-};
-
-EntityGenerator.prototype.getColumnName = function(value) {
-    return _s.underscored(value).toLowerCase();
-};
