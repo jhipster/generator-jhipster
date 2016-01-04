@@ -1,6 +1,7 @@
 'use strict';
 var path = require('path'),
     util = require('util'),
+    _ = require('lodash'),
     yeoman = require('yeoman-generator'),
     chalk = require('chalk'),
     jhipsterUtils = require('./util.js'),
@@ -902,11 +903,13 @@ Generator.prototype.registerModule = function(moduleConfig) {
     try {
         var modulesJsonFile = '.jhipster-modules.json';
         var modules;
-        var error;
+        var error, duplicate;
         if (shelljs.test('-f', modulesJsonFile)) {
-            // file is present append to it
+         // file is present append to it
             try {
-                modules = JSON.parse(fs.readFileSync(modulesJsonFile, 'utf8'));
+                var modulesString = fs.readFileSync(modulesJsonFile, 'utf8');
+                modules = JSON.parse(modulesString);
+                duplicate = _.findIndex(modules, moduleConfig) !== -1;
             } catch (err) {
                 error = true;
                 console.log(chalk.red('The Jhipster module configuration file could not be read!'));
@@ -915,9 +918,9 @@ Generator.prototype.registerModule = function(moduleConfig) {
             // file not present create it and add config to it
             modules = [];
         }
-        if(!error) {
+        if(!error && !duplicate) {
             modules.push(moduleConfig);
-            fs.writeFile(modulesJsonFile, modules, 'utf8',function (err) {
+            fs.writeFile(modulesJsonFile, JSON.stringify(modules, null, 4), 'utf8',function (err) {
                 if (err) return console.log('Error while writing module configuration' + err);
             });
         }
