@@ -925,11 +925,6 @@ Generator.prototype.replaceContent = function(filePath, pattern, content, regex)
         console.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required pattern. File rewrite failed.\n') + e);
     }
 };
-Generator.prototype.testMethod = function(test) {
-
-        console.log(chalk.yellow('\n Im a test ') + test);
-
-};
 
 /**
  * Register a module configuration to .jhipster-modules.json
