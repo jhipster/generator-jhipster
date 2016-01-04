@@ -184,7 +184,7 @@ Generator.prototype.addAdminElementTranslationKey = function(key, value, languag
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new entry in the admin menu.\n'));
     }
 };
 
