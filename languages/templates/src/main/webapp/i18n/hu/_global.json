@@ -28,7 +28,8 @@
                 "logs": "Naplók",
                 "audits": "Nyomkövetés",
                 "apidocs": "API dokumentáció",
-                "database": "Adatbázis"
+                "database": "Adatbázis",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
             },
             "language": "Nyelvek"
         },

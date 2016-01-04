@@ -13,8 +13,10 @@ this.jhipsterVar = {};
 this.jhipsterFunc = {};
 
 var ModulesGenerator = module.exports = function ModulesGenerator(args, options, config) {
+
     this.jhipsterVar = options.jhipsterVar;
     this.jhipsterFunc = options.jhipsterFunc;
+
     if (this.jhipsterVar == null ||
         this.jhipsterVar.moduleName == null) {
         console.log(chalk.red('ERROR! This sub-generator must be used by JHipster modules, and the module name is not defined.'));
@@ -65,8 +67,7 @@ util.inherits(ModulesGenerator, scriptBase);
 
 ModulesGenerator.prototype.configurer = function configurer() {
     console.log('Reading the JHipster project configuration for your module');
-    this.baseName = this.config.get('baseName');
-    this.packageName = this.config.get('packageName');
+
     if (this.baseName == null ||
         this.packageName == null) {
         console.log(chalk.red('ERROR! There is no existing JHipster configuration file in this directory.'));
@@ -74,18 +75,16 @@ ModulesGenerator.prototype.configurer = function configurer() {
         process.exit(1);
     }
     this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
-    this.packageFolder = this.packageName.replace(/\./g, '/');
     this.javaDir = 'src/main/java/' + this.packageFolder + '/';
     this.resourceDir = 'src/main/resources/';
     this.webappDir = 'src/main/webapp/';
+    var modulesJsonFile = '.jhipster-modules.json';
 
-    this.jhipsterVar['baseName'] = this.baseName;
-    this.jhipsterVar['packageName'] = this.packageName;
-    this.jhipsterVar['packageFolder'] = this.packageFolder;
     this.jhipsterVar['angularAppName'] = this.angularAppName;
     this.jhipsterVar['javaDir'] = this.javaDir;
     this.jhipsterVar['resourceDir'] = this.resourceDir;
     this.jhipsterVar['webappDir'] = this.webappDir;
+    this.jhipsterVar['modulesJsonFile'] = modulesJsonFile;
 
     this.jhipsterFunc['addSocialButton'] = this.addSocialButton;
     this.jhipsterFunc['addSocialConnectionFactory'] = this.addSocialConnectionFactory;
@@ -101,13 +100,27 @@ ModulesGenerator.prototype.configurer = function configurer() {
     this.jhipsterFunc['addMainSCSSStyle'] = this.addMainSCSSStyle;
     this.jhipsterFunc['addAngularJsModule'] = this.addAngularJsModule;
     this.jhipsterFunc['addAngularJsConfig'] = this.addAngularJsConfig;
+    this.jhipsterFunc['addAngularJsInterceptor'] = this.addAngularJsInterceptor;
     this.jhipsterFunc['addJavaScriptToIndex'] = this.addJavaScriptToIndex;
     this.jhipsterFunc['addMessageformatLocaleToIndex'] = this.addMessageformatLocaleToIndex;
     this.jhipsterFunc['addElementToMenu'] = this.addElementToMenu;
+    this.jhipsterFunc['addElementToAdminMenu'] = this.addElementToAdminMenu;
     this.jhipsterFunc['addEntityToMenu'] = this.addEntityToMenu;
     this.jhipsterFunc['addElementTranslationKey'] = this.addElementTranslationKey;
+    this.jhipsterFunc['addAdminElementTranslationKey'] = this.addAdminElementTranslationKey;
+    this.jhipsterFunc['addTranslationKeyToAllLanguages'] = this.addTranslationKeyToAllLanguages;
+    this.jhipsterFunc['getAllSupportedLanguages'] = this.getAllSupportedLanguages;
+    this.jhipsterFunc['getAllInstalledLanguages'] = this.getAllInstalledLanguages;
     this.jhipsterFunc['addEntityTranslationKey'] = this.addEntityTranslationKey;
     this.jhipsterFunc['addChangelogToLiquibase'] = this.addChangelogToLiquibase;
+    this.jhipsterFunc['addColumnToLiquibaseEntityChangeset'] = this.addColumnToLiquibaseEntityChangeset;
     this.jhipsterFunc['dateFormatForLiquibase'] = this.dateFormatForLiquibase;
     this.jhipsterFunc['copyI18nFilesByName'] = this.copyI18nFilesByName;
+    this.jhipsterFunc['copyTemplate'] = this.copyTemplate;
+    this.jhipsterFunc['copyHtml'] = this.copyHtml;
+    this.jhipsterFunc['copyJs'] = this.copyJs;
+    this.jhipsterFunc['rewriteFile'] = this.rewriteFile;
+    this.jhipsterFunc['replaceContent'] = this.replaceContent;
+    this.jhipsterFunc['registerModule'] = this.registerModule;
+
 };

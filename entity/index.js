@@ -1262,29 +1262,12 @@ EntityGenerator.prototype.files = function files() {
                 'src/main/java/' + this.packageFolder + '/domain/enumeration/' + fieldType + '.java', enumInfo, {});
 
             // Copy for each
-            if (this.enableTranslation) {
-                this.copyEnumI18n('ca', enumInfo);
-                this.copyEnumI18n('zh-cn', enumInfo);
-                this.copyEnumI18n('zh-tw', enumInfo);
-                this.copyEnumI18n('da', enumInfo);
-                this.copyEnumI18n('de', enumInfo);
-                this.copyEnumI18n('en', enumInfo);
-                this.copyEnumI18n('fr', enumInfo);
-                this.copyEnumI18n('gl', enumInfo);
-                this.copyEnumI18n('hu', enumInfo);
-                this.copyEnumI18n('it', enumInfo);
-                this.copyEnumI18n('ja', enumInfo);
-                this.copyEnumI18n('ko', enumInfo);
-                this.copyEnumI18n('pl', enumInfo);
-                this.copyEnumI18n('pt-br', enumInfo);
-                this.copyEnumI18n('pt-pt', enumInfo);
-                this.copyEnumI18n('ro', enumInfo);
-                this.copyEnumI18n('ru', enumInfo);
-                this.copyEnumI18n('es', enumInfo);
-                this.copyEnumI18n('sv', enumInfo);
-                this.copyEnumI18n('tr', enumInfo);
-                this.copyEnumI18n('ta', enumInfo);
+            if(this.enableTranslation) {
+                this.getAllInstalledLanguages().forEach(function(language) {
+                    this.copyEnumI18n(language, enumInfo);
+                },this);
             }
+
         }
     }
 
@@ -1379,29 +1362,11 @@ EntityGenerator.prototype.files = function files() {
 
     // Copy for each
     if(this.enableTranslation) {
-        this.copyI18n('ca');
-        this.copyI18n('zh-cn');
-        this.copyI18n('zh-tw');
-        this.copyI18n('da');
-        this.copyI18n('nl');
-        this.copyI18n('de');
-        this.copyI18n('en');
-        this.copyI18n('fr');
-        this.copyI18n('gl');
-        this.copyI18n('hu');
-        this.copyI18n('it');
-        this.copyI18n('ja');
-        this.copyI18n('ko');
-        this.copyI18n('pl');
-        this.copyI18n('pt-br');
-        this.copyI18n('pt-pt');
-        this.copyI18n('ro');
-        this.copyI18n('ru');
-        this.copyI18n('es');
-        this.copyI18n('sv');
-        this.copyI18n('tr');
-        this.copyI18n('ta');
+        this.getAllInstalledLanguages().forEach(function(language) {
+            this.copyI18n(language);
+        }, this);
     }
+
 };
 
 EntityGenerator.prototype.copyI18n = function(language) {
