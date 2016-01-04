@@ -92,6 +92,7 @@ ModulesGenerator.prototype.configurer = function configurer() {
     this.jhipsterFunc['addMavenPlugin'] = this.addMavenPlugin;
     this.jhipsterFunc['addGradlePlugin'] = this.addGradlePlugin;
     this.jhipsterFunc['addGradleDependency'] = this.addGradleDependency;
+    this.jhipsterFunc['addSocialConfiguration'] = this.addSocialConfiguration;
     this.jhipsterFunc['applyFromGradleScript'] = this.applyFromGradleScript;
     this.jhipsterFunc['addBowerrcParameter'] = this.addBowerrcParameter;
     this.jhipsterFunc['addBowerDependency'] = this.addBowerDependency;

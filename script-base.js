@@ -277,6 +277,37 @@ Generator.prototype.getAllSupportedLanguages = function () {
 }
 
 /**
+ * Add new social configuration in the "application.yml".
+ *
+ * @param {string} name - social name (twitter, facebook, ect.)
+ * @param {string} clientId - clientId
+ * @param {string} clientSecret - clientSecret
+ * @param {string} comment - url of how to configure the social service
+ */
+Generator.prototype.addSocialConfiguration = function(name, clientId, clientSecret, comment) {
+    var fullPath ='src/main/resources/config/application.yml';
+    try {
+        console.log(chalk.yellow('   update ') + fullPath);
+        var config = '';
+        if (comment) {
+            config += '# ' + comment + '\n        ';
+        }
+        config +=  name + ':\n' +
+            '            clientId: ' + clientId + '\n' +
+            '            clientSecret: ' + clientSecret + '\n';
+        jhipsterUtils.rewriteFile({
+            file: fullPath,
+            needle: 'jhipster-needle-add-social-configuration',
+            splicable: [
+                config
+            ]
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'social configuration ' + name + chalk.yellow(' not added.\n'));
+    }
+};
+
+/**
  * Add a new dependency in the "bower.json".
  *
  * @param {string} name - dependency name
