@@ -7,6 +7,7 @@
         "angular": "1.4.8",
         "angular-aria": "1.4.8",
         "angular-bootstrap": "0.14.3",
+        "angular-bootstrap-datetimepicker": "0.4.0",        
         "angular-cache-buster": "0.4.3",
         "angular-cookies": "1.4.8",
         <%_ if (enableTranslation) { _%>
@@ -32,6 +33,7 @@
         "jquery": "2.1.4",
         "json3": "3.3.2",
         "modernizr": "3.2.0",
+        "moment": "2.8.3", 
         "ng-file-upload": "10.0.2",
         "ngInfiniteScroll": "1.2.1",
         <%_ if (websocket == 'spring-websocket') { _%>
@@ -44,17 +46,26 @@
         "angular-mocks": "1.4.8",
         "angular-scenario": "1.4.8"
     },
-    <%_ if (!useSass) { _%>
     "overrides": {
+    <%_ if (!useSass) { _%>
         "bootstrap": {
             "main": [
                 "dist/js/bootstrap.js",
                 "dist/css/bootstrap.css",
                 "less/bootstrap.less"
             ]
+        },
+    <%_ } _%>
+        "angular-bootstrap-datetimepicker": {
+            "main": [
+                "src/js/datetimepicker.js", 
+                "src/css/datetimepicker.css"
+            ],
+            "dependencies": {
+                "moment": "2.8.3"
+            }
         }
     },
-    <%_ } _%>
     "resolutions": {
         "angular": "1.4.8",
         "angular-cookies": "1.4.8",
