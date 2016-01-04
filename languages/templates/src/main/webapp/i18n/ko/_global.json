@@ -20,7 +20,6 @@
             },
             "admin": {
                 "main": "관리자",
-                "user-management": "User management",
                 "tracker": "사용자 트랙커",
                 "metrics": "메트릭스",
                 "health": "상태 확인",
@@ -29,7 +28,8 @@
                 "audits": "Audit",
                 "apidocs": "API",
                 "database": "데이터베이스",
-                "user-management": "사용자 관리"
+                "user-management": "사용자 관리",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
             },
             "language": "언어"
         },

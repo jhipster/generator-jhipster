@@ -28,7 +28,8 @@
                 "logs": "日志",
                 "audits": "审核",
                 "apidocs": "API",
-                "database": "数据库"
+                "database": "数据库",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
             },
             "language": "语言"
         },

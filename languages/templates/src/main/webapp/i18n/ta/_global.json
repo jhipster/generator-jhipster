@@ -28,7 +28,8 @@
                 "logs": "பதிவுகள்",
                 "audits": "தணிக்கைகள்",
                 "apidocs": "எபிஐ ",
-                "database": "டேடாபேஸ்"
+                "database": "டேடாபேஸ்",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
             },
             "language": "மொழி"
         },

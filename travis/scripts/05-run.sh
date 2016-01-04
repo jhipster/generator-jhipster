@@ -6,6 +6,9 @@ set -ev
 cd $HOME/$JHIPSTER
 if [ $RUNTASK == 1 ]; then
   if [ $JHIPSTER != "app-gradle" ]; then
+    if [ $JHIPSTER == 'app-cassandra' ]; then
+      docker exec -it samplecassandra-dev-cassandra init
+    fi
     mvn -P$PROFILE &
     if [ $PROFILE == "dev" ]; then
       sleep 60

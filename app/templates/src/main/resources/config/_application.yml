@@ -40,6 +40,8 @@ spring:
         twitter:
             clientId: xxx
             clientSecret: xxx
+
+        # jhipster-needle-add-social-configuration
 <%_ } _%>
 
 security:

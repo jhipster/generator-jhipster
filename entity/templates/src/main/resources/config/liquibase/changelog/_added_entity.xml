@@ -51,6 +51,7 @@
             <column name="<%=getColumnName(relationships[relationshipId].relationshipName) %>_id" type="bigint">
                 <constraints unique="true"/>
             </column><% } %><% } %>
+            <!-- jhipster-needle-liquibase-add-column - Jhipster will add columns here, do not remove-->
         </createTable><% for (fieldId in fields) {
             if (fields[fieldId].fieldType == 'ZonedDateTime') { %>
         <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%=fields[fieldId].fieldNameUnderscored %>" columnDataType="datetime"/>
