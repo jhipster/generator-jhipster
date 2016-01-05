@@ -4,7 +4,8 @@
             "home": {
                 "title": "<%= entityClass %>s",
                 "createLabel": "<%= entityClass %>-ஐ உருவாக்கு",
-                "createOrEditLabel": "<%= entityClass %> -ஐ மாற்று (அ) உருவாக்கு"
+                "createOrEditLabel": "<%= entityClass %> -ஐ மாற்று (அ) உருவாக்கு",
+                "search": "Search for <%= entityClass %>"
             },
             "created": "<%= entityClass %> புதிதாக உருவாக்கப்பட்டது, அடையாளம் {{ param }}",
             "updated": "<%= entityClass %> மாற்றப்பட்டது, அடையாளம்  {{ param }}",

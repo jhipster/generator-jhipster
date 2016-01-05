@@ -243,4 +243,37 @@ Social Buttons
 }
 <%_ } _%>
 
+/* entity tables helpers */
+
+/* Remove Bootstrap padding from the element
+   http://stackoverflow.com/questions/19562903/remove-padding-from-columns-in-bootstrap-3 */
+.no-padding-left { padding-left: 0 !important; }
+.no-padding-right { padding-right: 0 !important; }
+.no-padding-top { padding-top: 0 !important; }
+.no-padding-bottom { padding-bottom: 0 !important; }
+.no-padding { padding: 0 !important; }
+
+/* bootstrap 3 input-group 100% width
+   http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
+.width-min { width: 1% !important; }
+
+/* Makes toolbar not wrap on smaller screens
+ http://www.sketchingwithcss.com/samplechapter/cheatsheet.html#right */
+.flex-btn-group-container {
+   display: -webkit-flex;
+   display: flex;
+   -webkit-flex-direction: row;
+   flex-direction: row;
+   -webkit-justify-content: flex-end;
+   justify-content: flex-end;
+}
+
+/* Align text in td verifically (top aligned by Bootstrap) */
+.jh-table > tbody > tr > td {
+    vertical-align: middle;
+}
+/* end of entity tables helpers */
+
+/* jhipster-needle-scss-add-main JHipster will add new css style */
+
 /* jhipster-needle-css-add-main JHipster will add new css style */
