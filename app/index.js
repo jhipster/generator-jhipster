@@ -968,7 +968,6 @@ JhipsterGenerator.prototype.app = function app() {
     this.template(webappDir + '/scripts/components/user/_user.service.js', webappDir + 'scripts/components/user/user.service.js', this, {});
     this.template(webappDir + '/scripts/components/util/_base64.service.js', webappDir + 'scripts/components/util/base64.service.js', this, {});
     this.template(webappDir + '/scripts/components/util/_capitalize.filter.js', webappDir + 'scripts/components/util/capitalize.filter.js', this, {});
-    this.template(webappDir + '/scripts/components/util/_convertion.filter.js', webappDir + 'scripts/components/util/convertion.filter.js', this, {});
     this.template(webappDir + '/scripts/components/util/_parse-links.service.js', webappDir + 'scripts/components/util/parse-links.service.js', this, {});
     this.template(webappDir + '/scripts/components/util/_truncate.filter.js', webappDir + 'scripts/components/util/truncate.filter.js', this, {});
     this.template(webappDir + '/scripts/components/util/_date-util.service.js', webappDir + 'scripts/components/util/date-util.service.js', this, {});
@@ -1139,7 +1138,6 @@ JhipsterGenerator.prototype.app = function app() {
         'scripts/components/util/truncate.filter.js',
         'scripts/components/util/base64.service.js',
         'scripts/components/util/capitalize.filter.js',
-        'scripts/components/util/convertion.filter.js',
         'scripts/components/alert/alert.service.js',
         'scripts/components/alert/alert.directive.js',
         'scripts/components/util/parse-links.service.js',

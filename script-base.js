@@ -2,6 +2,7 @@
 var path = require('path'),
     util = require('util'),
     _ = require('lodash'),
+    _s = require('underscore.string'),
     yeoman = require('yeoman-generator'),
     chalk = require('chalk'),
     jhipsterUtils = require('./util.js'),
@@ -74,7 +75,7 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
             needle: 'jhipster-needle-add-element-to-menu',
             splicable: [
                     '<li ui-sref-active="active" ><a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-' + glyphiconName + '"></span>\n' +
-                    '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.' + routerName + '"':'' ) + '>' + jhipsterUtils.camelToHuman(routerName) + '</span></a></li>'
+                    '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.' + routerName + '"':'' ) + '>' + _s.humanize(routerName) + '</span></a></li>'
             ]
         });
     } catch (e) {
@@ -97,7 +98,7 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
             needle: 'jhipster-needle-add-element-to-admin-menu',
             splicable: [
                     '<li ui-sref-active="active" ><a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-' + glyphiconName + '"></span>\n' +
-                    '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.admin.' + routerName + '"':'' ) + '>' + routerName + '</span></a></li>'
+                    '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.admin.' + routerName + '"':'' ) + '>' + _s.humanize(routerName) + '</span></a></li>'
             ]
         });
     } catch (e) {
@@ -119,7 +120,7 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
             needle: 'jhipster-needle-add-entity-to-menu',
             splicable: [
                     '<li ui-sref-active="active" ><a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-asterisk"></span>\n' +
-                    '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.entities.' + routerName + '"':'' ) + '>' + jhipsterUtils.camelToHuman(routerName) + '</span></a></li>'
+                    '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.entities.' + routerName + '"':'' ) + '>' + _s.humanize(routerName) + '</span></a></li>'
             ]
         });
     } catch (e) {
