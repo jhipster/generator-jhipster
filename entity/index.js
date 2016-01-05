@@ -1371,7 +1371,6 @@ EntityGenerator.prototype.files = function files() {
 };
 
 EntityGenerator.prototype.afterRunHook = function afterRunHook() {
-    var cb = this.async();
     try {
         var modulesJsonFile = '.jhipster-modules.json';
         if (shelljs.test('-f', modulesJsonFile)) {
@@ -1423,5 +1422,4 @@ EntityGenerator.prototype.afterRunHook = function afterRunHook() {
     } catch (err) {
         console.log('\n' + chalk.bold.red('Running post run module hooks failed. Entity generation will proceed as normal'));
     }
-    cb();
 }
