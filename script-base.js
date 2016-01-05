@@ -961,6 +961,28 @@ Generator.prototype.registerModule = function(moduleConfig) {
     }
 };
 
+/**
+ * Add configuration to Entity.json files
+ *
+ * @param {file} configuration file name for the entity
+ * @param {key} key to be added or updated
+ * @param {value} value to be added
+ */
+Generator.prototype.updateEntityConfig = function(file, key, value) {
+
+    try {
+        var entityJsonString = fs.readFileSync(file, 'utf8');
+        var entityJson = JSON.parse(entityJsonString);
+        entityJson[key] = value;
+        fs.writeFile(file, JSON.stringify(entityJson, null, 4), 'utf8',function (err) {
+            if (err) return console.log('Error while writing entity configuration' + err);
+        });
+    } catch (err) {
+        console.log(chalk.red('The Jhipster entity configuration file could not be read!') + err);
+    }
+
+}
+
 Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, resourceDir, lang) {
     this.copyI18nFilesByName(_this, webappDir, 'activate.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'audits.json', lang);

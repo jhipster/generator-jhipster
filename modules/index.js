@@ -123,5 +123,6 @@ ModulesGenerator.prototype.configurer = function configurer() {
     this.jhipsterFunc['rewriteFile'] = this.rewriteFile;
     this.jhipsterFunc['replaceContent'] = this.replaceContent;
     this.jhipsterFunc['registerModule'] = this.registerModule;
+    this.jhipsterFunc['updateEntityConfig'] = this.updateEntityConfig;
 
 };
