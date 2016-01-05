@@ -145,6 +145,7 @@ module.exports = EntityGenerator.extend({
         }
     },
     prompting: {
+        /* pre entity hook needs to be written here */
         askForFields: function() {
             // don't prompt if data are imported from a file
             if (this.useConfigurationFile == true) {
