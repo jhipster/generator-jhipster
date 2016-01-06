@@ -28,7 +28,7 @@ describe('JHipster generator', function () {
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                 "searchEngine": "no"
             })
-            .on('end', function () {
+            .once('end', function () {
                 assert.file([
                     'bower.json',
                     'package.json',
@@ -298,7 +298,7 @@ describe('JHipster generator', function () {
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                 "searchEngine": "no"
             })
-            .on('end', function () {
+            .once('end', function () {
                 assert.file([
                     'src/main/java/com/otherpackage/Application.java'
                 ]);
@@ -327,7 +327,7 @@ describe('JHipster generator', function () {
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                 "searchEngine": "no"
             })
-            .on('end', function () {
+            .once('end', function () {
                 assert.file([
                     'src/main/webapp/scripts/app/main/main.js'
                 ]);
@@ -356,7 +356,7 @@ describe('JHipster generator', function () {
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                 "searchEngine": "no"
             })
-            .on('end', function () {
+            .once('end', function () {
                 assert.file([
                     'src/main/java/com/mycompany/myapp/config/OAuth2ServerConfiguration.java'
                 ]);
@@ -384,7 +384,7 @@ describe('JHipster generator', function () {
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                 "searchEngine": "no"
             })
-            .on('end', function () {
+            .once('end', function () {
                 assert.file([
                     'src/main/java/com/mycompany/myapp/config/hazelcast/HazelcastCacheRegionFactory.java',
                     'src/main/java/com/mycompany/myapp/config/hazelcast/package-info.java'
@@ -413,7 +413,7 @@ describe('JHipster generator', function () {
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                 "searchEngine": "no"
             })
-            .on('end', function () {
+            .once('end', function () {
                 assert.noFile([
                     'src/main/resources/i18n/messages_fr.properties',
                     'src/main/webapp/i18n/en/global.json',
@@ -445,7 +445,7 @@ describe('JHipster generator', function () {
                 "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                 "searchEngine": "no"
             })
-            .on('end', function () {
+            .once('end', function () {
                 assert.file([
                     'src/main/java/com/mycompany/myapp/config/social/SocialConfiguration.java',
                     'src/main/java/com/mycompany/myapp/domain/SocialUserConnection.java',
