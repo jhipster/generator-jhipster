@@ -214,6 +214,24 @@ Generator.prototype.addEntityTranslationKey = function(key, value, language) {
 };
 
 /**
+ * A a new entry as a root param in "global.json" translations.
+ *
+ * @param {string} key - Key for the entry
+ * @param {string} value - Default translated value or object with multiple key and translated value
+ * @param {string} language - The language to which this translation should be added
+ */
+Generator.prototype.addGlobalTranslationKey = function(key, value, language) {
+    var fullPath = 'src/main/webapp/i18n/' + language + '/global.json';
+    try {
+        jhipsterUtils.rewriteJSONFile(fullPath, function(jsonObj) {
+            jsonObj[key] = value;
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bowerrc parameter (key: ' + key + ', value:' + value + ')' + chalk.yellow(' not added.\n'));
+    }
+};
+
+/**
  * Add a translation key to all installed languages
  *
  * @param {string} key - Key for the entity name
