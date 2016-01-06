@@ -109,6 +109,7 @@ ModulesGenerator.prototype.configurer = function configurer() {
     this.jhipsterFunc['addEntityToMenu'] = this.addEntityToMenu;
     this.jhipsterFunc['addElementTranslationKey'] = this.addElementTranslationKey;
     this.jhipsterFunc['addAdminElementTranslationKey'] = this.addAdminElementTranslationKey;
+    this.jhipsterFunc['addGlobalTranslationKey'] = this.addGlobalTranslationKey;
     this.jhipsterFunc['addTranslationKeyToAllLanguages'] = this.addTranslationKeyToAllLanguages;
     this.jhipsterFunc['getAllSupportedLanguages'] = this.getAllSupportedLanguages;
     this.jhipsterFunc['getAllInstalledLanguages'] = this.getAllInstalledLanguages;
