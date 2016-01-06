@@ -150,25 +150,6 @@ Generator.prototype.addElementTranslationKey = function(key, value, language) {
     }
 };
 
-
-/**
- * Add a new parameter in the ".bowerrc".
- *
- * @param {string} key - name of the parameter
- * @param {string, obj, bool, etc.} value - value of the parameter
- */
-Generator.prototype.addBowerrcParameter = function(key, value) {
-    var fullPath ='.bowerrc';
-    try {
-        console.log(chalk.yellow('   update ') + fullPath);
-        jhipsterUtils.rewriteJSONFile(fullPath, function(jsonObj) {
-            jsonObj[key] = value;
-        });
-    } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bowerrc parameter (key: ' + key + ', value:' + value + ')' + chalk.yellow(' not added.\n'));
-    }
-};
-
 /**
  * A a new element in the admin section of "global.json" translations.
  *
@@ -227,7 +208,7 @@ Generator.prototype.addGlobalTranslationKey = function(key, value, language) {
             jsonObj[key] = value;
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bowerrc parameter (key: ' + key + ', value:' + value + ')' + chalk.yellow(' not added.\n'));
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + '(key: ' + key + ', value:' + value + ')' + chalk.yellow(' not added to global translations.\n'));
     }
 };
 
@@ -373,6 +354,24 @@ Generator.prototype.addBowerOverride = function(bowerPackageName, main, isIgnore
         });
     } catch (e) {
         console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bower override configuration (bowerPackageName: ' + bowerPackageName + ', main:' + JSON.stringify(main) + ', ignore:' + isIgnored + ')' + chalk.yellow(' not added.\n'));
+    }
+};
+
+/**
+ * Add a new parameter in the ".bowerrc".
+ *
+ * @param {string} key - name of the parameter
+ * @param {string, obj, bool, etc.} value - value of the parameter
+ */
+Generator.prototype.addBowerrcParameter = function(key, value) {
+    var fullPath ='.bowerrc';
+    try {
+        console.log(chalk.yellow('   update ') + fullPath);
+        jhipsterUtils.rewriteJSONFile(fullPath, function(jsonObj) {
+            jsonObj[key] = value;
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bowerrc parameter (key: ' + key + ', value:' + value + ')' + chalk.yellow(' not added.\n'));
     }
 };
 
