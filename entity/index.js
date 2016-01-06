@@ -84,24 +84,6 @@ var EntityGenerator = module.exports = function EntityGenerator(args, options, c
     } else if (reservedWords_JHipster.indexOf(this.name.toUpperCase()) != -1) {
         console.log(chalk.red('The entity name cannot contain a JHipster reserved keyword'));
         throw new Error("Validation error");
-    } else if (prodDatabaseType == 'mysql' && reservedWords_MySQL.indexOf(this.name.toUpperCase()) != -1) {
-        console.log(chalk.red('The entity name cannot contain a MySQL reserved keyword'));
-        throw new Error("Validation error");
-    } else if (prodDatabaseType == 'postgresql' && reservedWords_Postgresql.indexOf(this.name.toUpperCase()) != -1) {
-        console.log(chalk.red('The entity name cannot contain a PostgreSQL reserved keyword'));
-        throw new Error("Validation error");
-    } else if (prodDatabaseType == 'cassandra' && reservedWords_Cassandra.indexOf(this.name.toUpperCase()) != -1) {
-        console.log(chalk.red('The entity name cannot contain a Cassandra reserved keyword'));
-        throw new Error("Validation error");
-    } else if (prodDatabaseType == 'oracle' && reservedWords_Oracle.indexOf(this.name.toUpperCase()) != -1) {
-        console.log(chalk.red('The entity name cannot contain a Oracle reserved keyword'));
-        throw new Error("Validation error");
-    } else if (prodDatabaseType == 'oracle' && _s.underscored(this.name).length > 26) {
-        console.log(chalk.red('The entity name is too long for Oracle, try a shorter name'));
-        throw new Error("Validation error");
-    } else if (prodDatabaseType == 'mongodb' && reservedWords_Mongo.indexOf(this.name.toUpperCase()) != -1) {
-        console.log(chalk.red('The entity name cannot contain a MongoDB reserved keyword'));
-        throw new Error("Validation error");
     }
 
     console.log(chalk.red('The entity ' + this.name + ' is being created.'));
@@ -122,6 +104,47 @@ var prodDatabaseType;
 
 util.inherits(EntityGenerator, yeoman.generators.Base);
 util.inherits(EntityGenerator, scriptBase);
+
+EntityGenerator.prototype.askForTableName = function askForTableName() {
+    if (this.useConfigurationFile == true) { // don't prompt if data are imported from a file
+        return;
+    }
+    var cb = this.async();
+    var prompts = [
+        {
+        	type: 'input',
+            name: 'entityTableName',
+            validate: function (input) {
+                if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
+                    return 'Your table name cannot contain special characters';
+                } else if (input == '') {
+                    return 'Your table name cannot be empty';
+                } else if (prodDatabaseType == 'mysql' && reservedWords_MySQL.indexOf(input.toUpperCase()) != -1) {
+                    return 'Your table name cannot contain a MySQL reserved keyword';
+                } else if (prodDatabaseType == 'postgresql' && reservedWords_Postgresql.indexOf(input.toUpperCase()) != -1) {
+                    return 'Your table name cannot contain a PostgreSQL reserved keyword';
+                } else if (prodDatabaseType == 'cassandra' && reservedWords_Cassandra.indexOf(input.toUpperCase()) != -1) {
+                    return 'Your table name cannot contain a Cassandra reserved keyword';
+                } else if (prodDatabaseType == 'oracle' && reservedWords_Oracle.indexOf(input.toUpperCase()) != -1) {
+                    return 'Your table name cannot contain a Oracle reserved keyword';
+                } else if (prodDatabaseType == 'oracle' && input.length > 30) {
+                    return 'The table name cannot be of more than 30 characters';
+                } else if (prodDatabaseType == 'mongodb' && reservedWords_Mongo.indexOf(input.toUpperCase()) != -1) {
+                    return 'Your table name cannot contain a MongoDB reserved keyword';
+                }
+                return true;
+            },
+            message: 'How do you want to name your database table?',
+            default: function (response) {
+                 return _s.underscored(this.name).toLowerCase();
+            }
+        }
+    ];
+    this.prompt(prompts, function (props) {
+    	this.entityTableName = _s.underscored(props.entityTableName).toLowerCase();
+        cb();
+    }.bind(this));
+};
 
 EntityGenerator.prototype.askForFields = function askForFields() {
     if (this.useConfigurationFile == true) {// don't prompt if data are imported from a file
@@ -1222,7 +1245,10 @@ EntityGenerator.prototype.files = function files() {
     }
     this.entityClass = _s.capitalize(this.name);
     this.entityInstance = _s.decapitalize(this.name);
-    this.entityTableName = _s.underscored(this.name).toLowerCase();
+    // for the sake of current test scenarios where entity name is table name
+    if (_.isUndefined(this.entityTableName)) {
+    	this.entityTableName = _s.underscored(this.name).toLowerCase();
+    }
 
     this.differentTypes = [this.entityClass];
     if (this.relationships == undefined) {
