@@ -872,7 +872,7 @@ Generator.prototype.copyTemplate = function (source, dest, action, _this, _opt, 
         default:
             _this.template(source, dest, _this, _opt);
     }
-}
+};
 
 /**
  * Copy html templates after stripping translation keys when translation is disabled.
@@ -885,7 +885,7 @@ Generator.prototype.copyTemplate = function (source, dest, action, _this, _opt, 
  */
 Generator.prototype.copyHtml = function (source, dest, _this, _opt, template) {
     this.copyTemplate(source, dest, 'stripHtml', _this, _opt, template);
-}
+};
 
 /**
  * Copy Js templates after stripping translation keys when translation is disabled.
@@ -898,7 +898,7 @@ Generator.prototype.copyHtml = function (source, dest, _this, _opt, template) {
  */
 Generator.prototype.copyJs = function (source, dest, _this, _opt, template) {
     this.copyTemplate(source, dest, 'stripJs', _this, _opt, template);
-}
+};
 
 /**
  * Rewrite the specified file with provided content at the needle location
@@ -977,6 +977,28 @@ Generator.prototype.registerModule = function(moduleConfig) {
     }
 };
 
+/**
+ * Add configuration to Entity.json files
+ *
+ * @param {file} configuration file name for the entity
+ * @param {key} key to be added or updated
+ * @param {value} value to be added
+ */
+Generator.prototype.updateEntityConfig = function(file, key, value) {
+
+    try {
+        var entityJsonString = fs.readFileSync(file, 'utf8');
+        var entityJson = JSON.parse(entityJsonString);
+        entityJson[key] = value;
+        fs.writeFile(file, JSON.stringify(entityJson, null, 4), 'utf8',function (err) {
+            if (err) return console.log('Error while writing entity configuration' + err);
+        });
+    } catch (err) {
+        console.log(chalk.red('The Jhipster entity configuration file could not be read!') + err);
+    }
+
+}
+
 Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, resourceDir, lang) {
     this.copyI18nFilesByName(_this, webappDir, 'activate.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'audits.json', lang);
@@ -1016,6 +1038,31 @@ Generator.prototype.copyI18nFilesByName = function(_this, webappDir, fileToCopy,
     _this.copy(webappDir + '/i18n/' + lang + '/' + fileToCopy, webappDir + '/i18n/' + lang + '/' + fileToCopy);
 };
 
+Generator.prototype.copyI18n = function(language) {
+    try {
+        var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
+        if (stats.isDirectory()) {
+            this.template('src/main/webapp/i18n/_entity_' + language + '.json', 'src/main/webapp/i18n/' + language + '/' + this.entityInstance + '.json', this, {});
+            this.addEntityTranslationKey(this.entityInstance, this.entityClass, language);
+        }
+    } catch(e) {
+        // An exception is thrown if the folder doesn't exist
+        // do nothing
+    }
+};
+
+Generator.prototype.copyEnumI18n = function(language, enumInfo) {
+    try {
+        var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
+        if (stats.isDirectory()) {
+            this.template('src/main/webapp/i18n/_enum_' + language + '.json', 'src/main/webapp/i18n/' + language + '/' + enumInfo.enumInstance + '.json', enumInfo, {});
+        }
+    } catch(e) {
+        // An exception is thrown if the folder doesn't exist
+        // do nothing
+    }
+};
+
 Generator.prototype.installNewLanguage = function(language) {
     var fullPath = 'src/main/webapp/scripts/components/language/language.service.js';
     try {
@@ -1029,6 +1076,14 @@ Generator.prototype.installNewLanguage = function(language) {
     } catch (e) {
         console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new language. Check if you have enabled translation support.\n'));
     }
+};
+
+Generator.prototype.getTableName = function(value) {
+    return _s.underscored(value).toLowerCase();
+};
+
+Generator.prototype.getColumnName = function(value) {
+    return _s.underscored(value).toLowerCase();
 };
 
 Generator.prototype.insight = function () {
