@@ -507,7 +507,7 @@ Generator.prototype.addColumnToLiquibaseEntityChangeset = function (filePath, co
  * @param {string} buttonColor - color of the social button. ex: '#3b5998'
  * @param {string} buttonHoverColor - color of the social button when is hover. ex: '#2d4373'
  */
-Generator.prototype.addSocialButton = function (socialName, socialParameter, buttonColor, buttonHoverColor) {
+Generator.prototype.addSocialButton = function (isUseSass, socialName, socialParameter, buttonColor, buttonHoverColor) {
     var socialServicefullPath = 'src/main/webapp/scripts/app/account/social/social.service.js';
     var loginfullPath = 'src/main/webapp/scripts/app/account/login/login.html';
     var registerfullPath = 'src/main/webapp/scripts/app/account/register/register.html';
@@ -550,7 +550,7 @@ Generator.prototype.addSocialButton = function (socialName, socialParameter, but
             '    border-color: rgba(0, 0, 0, 0.2);\n' +
             '    color: #fff;\n' +
             '}';
-        this.addMainCSSStyle(buttonStyle,'Add sign in style for ' +  socialName);
+        this.addMainCSSStyle(isUseSass, buttonStyle,'Add sign in style for ' +  socialName);
 
     } catch (e) {
         console.log(chalk.yellow('\nUnable to add social button modification.\n' + e));
@@ -627,9 +627,8 @@ Generator.prototype.addSocialConnectionFactory = function (javaDir, importPackag
  * }
  *
  */
-Generator.prototype.addMainCSSStyle = function(style, comment) {
-    // Not Working this.useSass -> Undifined --> this in the modules context would be jhipsterFunc
-    if (this.useSass) {
+Generator.prototype.addMainCSSStyle = function(isUseSass, style, comment) {
+    if (isUseSass) {
         this.addMainSCSSStyle(style, comment);
     }
 
