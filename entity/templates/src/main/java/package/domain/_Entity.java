@@ -111,9 +111,13 @@ public class <%= entityClass %> implements Serializable {
     <%_ if (databaseType == 'mongodb') { _%>
     @Field("<%=fields[fieldId].fieldNameUnderscored %>")
     <%_ } _%>
+    <%_ if (fields[fieldId].fieldTypeBlobContent != 'text') { _%>
     private <%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>;
-
-    <%_ if (fields[fieldId].fieldType == 'byte[]') { _%><%_ if (databaseType == 'sql') { _%>
+    <%_ } else { _%>
+    private String <%= fields[fieldId].fieldName %>;
+    <%_ } _%>
+    
+    <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%><%_ if (databaseType == 'sql') { _%>
     @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>_content_type"<% if (required) { %>, nullable = false<% } %>) <%_ } _%>
     <% if (databaseType == 'mongodb') { %>@Field("<%=fields[fieldId].fieldNameUnderscored %>_content_type")
     <%_ } _%>
@@ -182,14 +186,22 @@ public class <%= entityClass %> implements Serializable {
         this.id = id;
     }
 <% for (fieldId in fields) { %>
+    <%_ if (fields[fieldId].fieldTypeBlobContent != 'text') { _%>
     public <%= fields[fieldId].fieldType %> get<%= fields[fieldId].fieldInJavaBeanMethod %>() {
+    <%_ } else { _%>
+    public String get<%= fields[fieldId].fieldInJavaBeanMethod %>() {
+    <%_ } _%>
         return <%= fields[fieldId].fieldName %>;
     }
-
+    
+    <%_ if (fields[fieldId].fieldTypeBlobContent != 'text') { _%>
     public void set<%= fields[fieldId].fieldInJavaBeanMethod %>(<%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>) {
+    <%_ } else { _%>
+    public void set<%= fields[fieldId].fieldInJavaBeanMethod %>(String <%= fields[fieldId].fieldName %>) {
+    <%_ } _%>
         this.<%= fields[fieldId].fieldName %> = <%= fields[fieldId].fieldName %>;
     }
-    <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
+    <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
 
     public String get<%= fields[fieldId].fieldInJavaBeanMethod %>ContentType() {
         return <%= fields[fieldId].fieldName %>ContentType;
@@ -241,7 +253,7 @@ public class <%= entityClass %> implements Serializable {
             "id=" + id +
             <%_ for (fieldId in fields) { _%>
             ", <%= fields[fieldId].fieldName %>='" + <%= fields[fieldId].fieldName %> + "'" +
-                <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
+                <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
             ", <%= fields[fieldId].fieldName %>ContentType='" + <%= fields[fieldId].fieldName %>ContentType + "'" +
                 <%_ } _%>
             <%_ } _%>

@@ -72,7 +72,7 @@ angular.module('<%=angularAppName%>')
                                     <%= fields[fieldId].fieldName %>: false,
                                     	<%_ } else { _%>
                                     <%= fields[fieldId].fieldName %>: null,
-                                        	<%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
+                                        	<%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
                                     <%= fields[fieldId].fieldName %>ContentType: null,
                                         	<%_ } _%>
                                         <%_ } _%>

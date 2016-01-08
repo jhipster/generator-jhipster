@@ -378,6 +378,10 @@ module.exports = EntityGenerator.extend({
                             {
                                 value: 'any',
                                 name: 'A binary file'
+                            },
+                            {
+                                value: 'text',
+                                name: 'A CLOB (Text field)'
                             }
                         ],
                         default: 0
@@ -428,7 +432,8 @@ module.exports = EntityGenerator.extend({
                             response.fieldType == 'Long' ||
                             response.fieldType == 'Float' ||
                             response.fieldType == 'Double' ||
-                            response.fieldType == 'BigDecimal');
+                            response.fieldType == 'BigDecimal' ||
+                            response.fieldTypeBlobContent == 'text');
                         },
                         type: 'checkbox',
                         name: 'fieldValidateRules',
@@ -453,7 +458,8 @@ module.exports = EntityGenerator.extend({
                         when: function(response) {
                             return response.fieldAdd == true &&
                             response.fieldValidate == true &&
-                            response.fieldType == 'byte[]';
+                            response.fieldType == 'byte[]' &&
+                            response.fieldTypeBlobContent != 'text';
                         },
                         type: 'checkbox',
                         name: 'fieldValidateRules',
@@ -582,7 +588,8 @@ module.exports = EntityGenerator.extend({
                             return response.fieldAdd == true &&
                             response.fieldValidate == true &&
                             response.fieldValidateRules.indexOf('minbytes') != -1 &&
-                            response.fieldType == 'byte[]';
+                            response.fieldType == 'byte[]' &&
+                            response.fieldTypeBlobContent != 'text';
                         },
                         type: 'input',
                         name: 'fieldValidateRulesMinbytes',
@@ -598,7 +605,8 @@ module.exports = EntityGenerator.extend({
                             return response.fieldAdd == true &&
                             response.fieldValidate == true &&
                             response.fieldValidateRules.indexOf('maxbytes') != -1 &&
-                            response.fieldType == 'byte[]';
+                            response.fieldType == 'byte[]' &&
+                            response.fieldTypeBlobContent != 'text';
                         },
                         type: 'input',
                         name: 'fieldValidateRulesMaxbytes',
