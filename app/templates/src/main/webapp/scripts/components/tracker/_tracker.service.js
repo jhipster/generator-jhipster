@@ -48,6 +48,7 @@ angular.module('<%=angularAppName%>')
                 if (subscriber != null) {
                     subscriber.unsubscribe();
                 }
+                listener = $q.defer();
             },
             receive: function() {
                 return listener.promise;
