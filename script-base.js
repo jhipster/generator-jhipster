@@ -943,17 +943,32 @@ Generator.prototype.replaceContent = function(filePath, pattern, content, regex)
 };
 
 /**
- * Register a module configuration to .jhipster-modules.json
+ * Register a module configuration to .jhipster/modules/jhi-hooks.json
  *
- * @param {moduleConfig} configuration object for the module
+ * @param {npmPackageName} npm package name of the generator
+ * @param {hookFor} from which Jhipster generator this should be hooked ( 'entity' or 'app')
+ * @param {hookType} where to hook this at the generator stage ( 'pre' or 'post')
+ * @param {callbackSubGenerator}[optional] sub generator to invoke, if this is not given the module's main generator will be called, i.e app
+ * @param {description}[optional] description of the generator
  */
-Generator.prototype.registerModule = function(moduleConfig) {
+Generator.prototype.registerModule = function(npmPackageName, hookFor, hookType, callbackSubGenerator, description) {
     try {
-        var modulesJsonFile = '.jhipster-modules.json';
+        var modulesJsonFile = '.jhipster/modules/jhi-hooks.json';
         var modules;
         var error, duplicate;
+        var moduleName = _s.humanize(npmPackageName.replace('generator-jhipster-',''));
+        var generatorName = npmPackageName.replace('generator-','');
+        var generatorCallback = generatorName + ':' + (callbackSubGenerator ? callbackSubGenerator : 'app') ;
+        var moduleConfig = {
+            name : moduleName + ' generator',
+            npmPackageName : npmPackageName,
+            description : description ? description : 'A JHipster module to generate ' + moduleName,
+            hookFor : hookFor,
+            hookType : hookType,
+            generatorCallback : generatorCallback
+        }
         if (shelljs.test('-f', modulesJsonFile)) {
-         // file is present append to it
+            // file is present append to it
             try {
                 var modulesString = fs.readFileSync(modulesJsonFile, 'utf8');
                 modules = JSON.parse(modulesString);

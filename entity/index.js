@@ -1471,13 +1471,13 @@ module.exports = EntityGenerator.extend({
     end: {
         afterRunHook: function() {
             try {
-                var modulesJsonFile = '.jhipster-modules.json';
+                var modulesJsonFile = '.jhipster/modules/jhi-hooks.json';
                 if (shelljs.test('-f', modulesJsonFile)) {
                     this.log('\n' + chalk.bold.green('Running post run module hooks'));
 
                     var modules;
                     try {
-                        modules = JSON.parse(fs.readFileSync(modulesJsonFile, 'utf8'));
+                        modules = this.fs.readJSON(modulesJsonFile);
                     } catch (err) {
                         this.log(chalk.red('The module configuration file could not be read!'));
                     }
