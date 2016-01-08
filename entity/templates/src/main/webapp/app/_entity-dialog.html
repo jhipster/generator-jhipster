@@ -21,10 +21,10 @@
                 fieldInputType = 'number';
             } else if (fields[fieldId].fieldType == 'Boolean') {
                 fieldInputType = 'checkbox';
-            } else if (fields[fieldId].fieldType == 'byte[]') {
+            } else if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') {
                 fieldInputType = 'hidden';
             } _%>
-        <div class="form-group"<% if (fields[fieldId].fieldType == 'byte[]') { %> ngf-drop ngf-change="set<%= fields[fieldId].fieldNameCapitalized %>($file, <%= entityInstance %>)"<% if (fields[fieldId].fieldTypeBlobContent == 'image') { %> ngf-pattern="'image/*'"<% } %><% } %>>
+        <div class="form-group"<% if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { %> ngf-drop ngf-change="set<%= fields[fieldId].fieldNameCapitalized %>($file, <%= entityInstance %>)"<% if (fields[fieldId].fieldTypeBlobContent == 'image') { %> ngf-pattern="'image/*'"<% } %><% } %>>
             <label class="control-label" translate="<%= translationKey %>" for="field_<%= fields[fieldId].fieldName %>"><%=fields[fieldId].fieldNameCapitalized%></label>
             <%_ if (fields[fieldId].fieldIsEnum) { _%>
             <select class="form-control" name="<%= fields[fieldId].fieldName %>" ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>" id="field_<%= fields[fieldId].fieldName %>"<% if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) { %> required<% } %>>
@@ -36,7 +36,7 @@
                 <%_ } _%>
             </select>
             <%_ } else { _%>
-                <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
+                <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
             <div>
                     <%_ if (fields[fieldId].fieldTypeBlobContent == 'image') { _%>
                 <img data-ng-src="{{'data:' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-height: 100px;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/>
@@ -69,7 +69,7 @@
             <input type="<%= fieldInputType %>" class="form-control" name="<%= fields[fieldId].fieldName %>" id="field_<%= fields[fieldId].fieldName %>"
                     ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"
                     <%- include ng_validators %> />
-                    <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
+                    <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
             <input type="hidden" class="form-control" name="<%= fields[fieldId].fieldName %>ContentType" id="field_<%= fields[fieldId].fieldName %>ContentType"
                     ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>ContentType" />
                     <%_ } _%>

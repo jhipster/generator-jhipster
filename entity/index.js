@@ -339,7 +339,7 @@ EntityGenerator.prototype.askForFields = function askForFields() {
         },
         {
             when: function (response) {
-                return response.fieldAdd == true &&
+            	return response.fieldAdd == true &&
                     response.fieldType == 'byte[]';
             },
             type: 'list',
@@ -349,6 +349,10 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                 {
                     value: 'image',
                     name: 'An image'
+                },
+                {
+                    value: 'text',
+                    name: 'A text'
                 },
                 {
                     value: 'any',
@@ -391,7 +395,8 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     response.fieldType == 'Long' ||
                     response.fieldType == 'Float' ||
                     response.fieldType == 'Double' ||
-                    response.fieldType == 'BigDecimal');
+                    response.fieldType == 'BigDecimal' ||
+                    response.fieldTypeBlobContent == 'text');
             },
             type: 'checkbox',
             name: 'fieldValidateRules',
@@ -407,7 +412,8 @@ EntityGenerator.prototype.askForFields = function askForFields() {
             when: function (response) {
                 return response.fieldAdd == true &&
                     response.fieldValidate == true &&
-                    response.fieldType == 'byte[]';
+                    response.fieldType == 'byte[]' &&
+                    response.fieldTypeBlobContent != 'text';
             },
             type: 'checkbox',
             name: 'fieldValidateRules',
@@ -488,7 +494,9 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     response.fieldType == 'Long' ||
                     response.fieldType == 'Float' ||
                     response.fieldType == 'Double' ||
-                    response.fieldType == 'BigDecimal');
+                    response.fieldType == 'BigDecimal' ||
+                    response.fieldTypeBlobContent == 'text'
+                    );
             },
             type: 'input',
             name: 'fieldValidateRulesMin',
@@ -508,7 +516,8 @@ EntityGenerator.prototype.askForFields = function askForFields() {
                     response.fieldType == 'Long' ||
                     response.fieldType == 'Float' ||
                     response.fieldType == 'Double' ||
-                    response.fieldType == 'BigDecimal');
+                    response.fieldType == 'BigDecimal' ||
+                    response.fieldTypeBlobContent == 'text');
             },
             type: 'input',
             name: 'fieldValidateRulesMax',
@@ -865,7 +874,7 @@ EntityGenerator.prototype.askForPagination = function askForPagination() {
         {
             type: 'list',
             name: 'pagination',
-            message: 'Do you want pagination on your entity?',
+            message: 'Do you want paginatAithroion on your entity?',
             choices: [
                 {
                     value: 'no',
@@ -1086,7 +1095,7 @@ EntityGenerator.prototype.files = function files() {
 
         if ((databaseType == 'sql' || databaseType == 'mongodb') && !_.contains([
             'String', 'Integer', 'Long', 'Float', 'Double', 'BigDecimal',
-            'LocalDate', 'ZonedDateTime', 'Boolean', 'byte[]'], field.fieldType)) {
+            'LocalDate', 'ZonedDateTime', 'Boolean', 'byte[]', 'Text'], field.fieldType)) {
             field.fieldIsEnum = true;
         } else {
             field.fieldIsEnum = false;

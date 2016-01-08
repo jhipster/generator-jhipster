@@ -67,7 +67,8 @@ public class <%= entityClass %>Repository {
                 <%= entityInstance %>.setId(row.getUUID("id"));<% for (fieldId in fields) { %><% if (fields[fieldId].fieldType == 'Integer') { %>
                 <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(row.getInt("<%= fields[fieldId].fieldName %>"));<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
                 <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(row.getDecimal("<%= fields[fieldId].fieldName %>"));<% } else if (fields[fieldId].fieldType == 'Boolean') { %>
-                <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(row.getBool("<%= fields[fieldId].fieldName %>"));<% } else { %>
+                <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(row.getBool("<%= fields[fieldId].fieldName %>"));<% } else if (fields[fieldId].fieldType == 'Text') { %>
+                <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(row.getString("<%= fields[fieldId].fieldName %>"));<% } else { %>
                 <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(row.get<%= fields[fieldId].fieldType %>("<%= fields[fieldId].fieldName %>"));<% } } %>
                 return <%= entityInstance %>;
             }
