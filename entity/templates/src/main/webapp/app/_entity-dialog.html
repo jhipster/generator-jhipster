@@ -65,6 +65,9 @@
             <span class="input-group-btn">
                 <button type="button" class="btn btn-default" ng-click="datePickerFor<%= fields[fieldId].fieldNameCapitalized %>Open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
             </span>
+                <%_ } else if(fields[fieldId].fieldTypeBlobContent == 'text') { _%>
+                <textarea class="form-control" name="<%= fields[fieldId].fieldName %>" id="field_<%= fields[fieldId].fieldName %>"
+                    ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>" <%- include ng_validators %> />
                 <%_ } else { _%>
             <input type="<%= fieldInputType %>" class="form-control" name="<%= fields[fieldId].fieldName %>" id="field_<%= fields[fieldId].fieldName %>"
                     ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"
