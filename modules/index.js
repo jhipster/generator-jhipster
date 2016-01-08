@@ -85,6 +85,9 @@ ModulesGenerator.prototype.configurer = function configurer() {
     this.jhipsterVar['resourceDir'] = this.resourceDir;
     this.jhipsterVar['webappDir'] = this.webappDir;
     this.jhipsterVar['modulesJsonFile'] = modulesJsonFile;
+    // alias fs and log methods so that we can use it in script-base when invoking functions from jhipsterFunc context in modules
+    this.jhipsterFunc['fs'] = this.fs;
+    this.jhipsterFunc['log'] = this.log;
 
     this.jhipsterFunc['addSocialButton'] = this.addSocialButton;
     this.jhipsterFunc['addSocialConnectionFactory'] = this.addSocialConnectionFactory;
@@ -125,5 +128,6 @@ ModulesGenerator.prototype.configurer = function configurer() {
     this.jhipsterFunc['replaceContent'] = this.replaceContent;
     this.jhipsterFunc['registerModule'] = this.registerModule;
     this.jhipsterFunc['updateEntityConfig'] = this.updateEntityConfig;
+    this.jhipsterFunc['getModuleHooks'] = this.getModuleHooks;
 
 };

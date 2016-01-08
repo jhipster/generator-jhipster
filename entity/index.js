@@ -1471,16 +1471,9 @@ module.exports = EntityGenerator.extend({
     end: {
         afterRunHook: function() {
             try {
-                var modulesJsonFile = '.jhipster/modules/jhi-hooks.json';
-                if (shelljs.test('-f', modulesJsonFile)) {
-                    this.log('\n' + chalk.bold.green('Running post run module hooks'));
-
-                    var modules;
-                    try {
-                        modules = this.fs.readJSON(modulesJsonFile);
-                    } catch (err) {
-                        this.log(chalk.red('The module configuration file could not be read!'));
-                    }
+                var modules = this.getModuleHooks();
+                if (modules.length > 0) {
+                    this.log('\n' + chalk.bold.green('Running post run module hooks\n'));
                     // form the data to be passed to modules
                     var entityConfig = {
                         jhipsterConfigDirectory: this.jhipsterConfigDirectory,
@@ -1513,13 +1506,13 @@ module.exports = EntityGenerator.extend({
                                 });
                             } catch (err) {
                                 this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
-                                chalk.red('. Make sure you have installed the module with ') + chalk.bold.yellow('\'npm -g ' + module.npmPackageName + '\''));
+                                chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow('\'npm -g ' + module.npmPackageName + '\''));
                             }
                         }
                     }, this);
                 }
             } catch (err) {
-                this.log('\n' + chalk.bold.red('Running post run module hooks failed. No modification done to the generated entity.'));
+                this.log('\n' + chalk.bold.red('Running post run module hooks failed. No modification done to the generated entity.') + err);
             }
         }
     }
