@@ -11,6 +11,8 @@ var path = require('path'),
     shelljs = require('shelljs'),
     ejs = require('ejs');
 
+var MODULES_HOOK_FILE = '.jhipster/modules/jhi-hooks.json';
+
 module.exports = Generator;
 
 function Generator() {
@@ -917,7 +919,7 @@ Generator.prototype.rewriteFile = function(filePath, needle, content) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required needle. File rewrite failed.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required needle. File rewrite failed.\n'));
     }
 };
 
@@ -938,29 +940,42 @@ Generator.prototype.replaceContent = function(filePath, pattern, content, regex)
             regex: regex
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required pattern. File rewrite failed.\n') + e);
+        this.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required pattern. File rewrite failed.\n') + e);
     }
 };
 
 /**
- * Register a module configuration to .jhipster-modules.json
+ * Register a module configuration to .jhipster/modules/jhi-hooks.json
  *
- * @param {moduleConfig} configuration object for the module
+ * @param {npmPackageName} npm package name of the generator
+ * @param {hookFor} from which Jhipster generator this should be hooked ( 'entity' or 'app')
+ * @param {hookType} where to hook this at the generator stage ( 'pre' or 'post')
+ * @param {callbackSubGenerator}[optional] sub generator to invoke, if this is not given the module's main generator will be called, i.e app
+ * @param {description}[optional] description of the generator
  */
-Generator.prototype.registerModule = function(moduleConfig) {
+Generator.prototype.registerModule = function(npmPackageName, hookFor, hookType, callbackSubGenerator, description) {
     try {
-        var modulesJsonFile = '.jhipster-modules.json';
         var modules;
         var error, duplicate;
-        if (shelljs.test('-f', modulesJsonFile)) {
-         // file is present append to it
+        var moduleName = _s.humanize(npmPackageName.replace('generator-jhipster-',''));
+        var generatorName = npmPackageName.replace('generator-','');
+        var generatorCallback = generatorName + ':' + (callbackSubGenerator ? callbackSubGenerator : 'app') ;
+        var moduleConfig = {
+            name : moduleName + ' generator',
+            npmPackageName : npmPackageName,
+            description : description ? description : 'A JHipster module to generate ' + moduleName,
+            hookFor : hookFor,
+            hookType : hookType,
+            generatorCallback : generatorCallback
+        }
+        if (shelljs.test('-f', MODULES_HOOK_FILE)) {
+            // file is present append to it
             try {
-                var modulesString = fs.readFileSync(modulesJsonFile, 'utf8');
-                modules = JSON.parse(modulesString);
+                modules = this.fs.readJSON(MODULES_HOOK_FILE);
                 duplicate = _.findIndex(modules, moduleConfig) !== -1;
             } catch (err) {
                 error = true;
-                console.log(chalk.red('The Jhipster module configuration file could not be read!'));
+                this.log(chalk.red('The Jhipster module configuration file could not be read!'));
             }
         } else {
             // file not present create it and add config to it
@@ -968,12 +983,10 @@ Generator.prototype.registerModule = function(moduleConfig) {
         }
         if(!error && !duplicate) {
             modules.push(moduleConfig);
-            fs.writeFile(modulesJsonFile, JSON.stringify(modules, null, 4), 'utf8',function (err) {
-                if (err) return console.log('Error while writing module configuration' + err);
-            });
+            this.fs.writeJSON(MODULES_HOOK_FILE, modules, null, 4);
         }
     } catch (err) {
-        console.log('\n' + chalk.bold.red('Could not add jhipster module configuration' + err));
+        this.log('\n' + chalk.bold.red('Could not add jhipster module configuration'));
     }
 };
 
@@ -987,16 +1000,29 @@ Generator.prototype.registerModule = function(moduleConfig) {
 Generator.prototype.updateEntityConfig = function(file, key, value) {
 
     try {
-        var entityJsonString = fs.readFileSync(file, 'utf8');
-        var entityJson = JSON.parse(entityJsonString);
+        var entityJson = this.fs.readJSON(file);
         entityJson[key] = value;
-        fs.writeFile(file, JSON.stringify(entityJson, null, 4), 'utf8',function (err) {
-            if (err) return console.log('Error while writing entity configuration' + err);
-        });
+        this.fs.writeJSON(file, entityJson, null, 4);
     } catch (err) {
-        console.log(chalk.red('The Jhipster entity configuration file could not be read!') + err);
+        this.log(chalk.red('The Jhipster entity configuration file could not be read!') + err);
     }
 
+}
+
+/**
+ * get the module hooks config json
+ */
+Generator.prototype.getModuleHooks = function() {
+    var modulesConfig = [];
+    try {
+        if (shelljs.test('-f', MODULES_HOOK_FILE)) {
+            modulesConfig = this.fs.readJSON(MODULES_HOOK_FILE);
+        }
+    } catch (err) {
+        this.log(chalk.red('The module configuration file could not be read!'));
+    }
+
+    return modulesConfig;
 }
 
 Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, resourceDir, lang) {
