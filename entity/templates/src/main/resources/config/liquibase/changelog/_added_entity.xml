@@ -40,12 +40,7 @@
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="decimal(10,2)"<% } else if (fieldType == 'LocalDate') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="date"<% } else if (fieldType == 'ZonedDateTime') { %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="timestamp"<% } else if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { %>
-<<<<<<< HEAD
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="blob" <% if (required == false) {
-                 %>/><% } else { %>>
-=======
             <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="blob" <% if (required == false) { %>/><% } else { %>>
->>>>>>> fix issue on blog configuration in liquidbase
                 <constraints nullable="false" />
             </column><% } %>
             <column name="<%=fields[fieldId].fieldNameUnderscored %>_content_type" type="varchar(50)"<% } else if (fieldTypeBlobContent == 'text') { %>

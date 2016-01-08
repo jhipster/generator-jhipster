@@ -489,6 +489,7 @@ module.exports = EntityGenerator.extend({
                             response.fieldType == 'UUID' ||
                             response.fieldType == 'Date' ||
                             response.fieldType == 'Boolean' ||
+                            response.fieldTypeBlobContent == 'text' ||
                             response.fieldIsEnum == true);
                         },
                         type: 'checkbox',
@@ -552,6 +553,7 @@ module.exports = EntityGenerator.extend({
                             response.fieldType == 'Long' ||
                             response.fieldType == 'Float' ||
                             response.fieldType == 'Double' ||
+                            response.fieldTypeBlobContent == 'text' ||
                             response.fieldType == 'BigDecimal');
                         },
                         type: 'input',
@@ -572,6 +574,7 @@ module.exports = EntityGenerator.extend({
                             response.fieldType == 'Long' ||
                             response.fieldType == 'Float' ||
                             response.fieldType == 'Double' ||
+                            response.fieldTypeBlobContent == 'text' ||
                             response.fieldType == 'BigDecimal');
                         },
                         type: 'input',
@@ -1185,7 +1188,6 @@ module.exports = EntityGenerator.extend({
                 if (_.isUndefined(field.fieldNameUnderscored)) {
                     field.fieldNameUnderscored = _s.underscored(field.fieldName);
                 }
-<<<<<<< HEAD
 
                 if (_.isUndefined(field.fieldInJavaBeanMethod)) {
                     // Handle the specific case when the second letter is capitalized
@@ -1201,47 +1203,6 @@ module.exports = EntityGenerator.extend({
                     } else {
                         field.fieldInJavaBeanMethod = _s.capitalize(field.fieldName);
                     }
-=======
-            ],
-            default: 0
-        }
-    ];
-    this.prompt(prompts, function (props) {
-        this.service = props.service;
-        cb();
-    }.bind(this));
-};
-
-EntityGenerator.prototype.askForPagination = function askForPagination() {
-    if (this.useConfigurationFile == true) { // don't prompt if data are imported from a file
-        return;
-    }
-    if (this.databaseType == 'cassandra') {
-        return;
-    }
-    var cb = this.async();
-    var prompts = [
-        {
-            type: 'list',
-            name: 'pagination',
-            message: 'Do you want pagination on your entity?',
-            choices: [
-                {
-                    value: 'no',
-                    name: 'No'
-                },
-                {
-                    value: 'pager',
-                    name: 'Yes, with a simple pager'
-                },
-                {
-                    value: 'pagination',
-                    name: 'Yes, with pagination links'
-                },
-                {
-                    value: 'infinite-scroll',
-                    name: 'Yes, with infinite scroll'
->>>>>>> add clob field
                 }
 
                 if (_.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1) {
