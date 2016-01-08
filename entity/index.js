@@ -874,7 +874,7 @@ EntityGenerator.prototype.askForPagination = function askForPagination() {
         {
             type: 'list',
             name: 'pagination',
-            message: 'Do you want paginatAithroion on your entity?',
+            message: 'Do you want pagination on your entity?',
             choices: [
                 {
                     value: 'no',
