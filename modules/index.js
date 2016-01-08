@@ -78,13 +78,11 @@ ModulesGenerator.prototype.configurer = function configurer() {
     this.javaDir = 'src/main/java/' + this.packageFolder + '/';
     this.resourceDir = 'src/main/resources/';
     this.webappDir = 'src/main/webapp/';
-    var modulesJsonFile = '.jhipster-modules.json';
 
     this.jhipsterVar['angularAppName'] = this.angularAppName;
     this.jhipsterVar['javaDir'] = this.javaDir;
     this.jhipsterVar['resourceDir'] = this.resourceDir;
     this.jhipsterVar['webappDir'] = this.webappDir;
-    this.jhipsterVar['modulesJsonFile'] = modulesJsonFile;
     // alias fs and log methods so that we can use it in script-base when invoking functions from jhipsterFunc context in modules
     this.jhipsterFunc['fs'] = this.fs;
     this.jhipsterFunc['log'] = this.log;
