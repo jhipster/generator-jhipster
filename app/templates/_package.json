@@ -73,7 +73,7 @@
     "karma-requirejs": "0.2.2",
     "karma-phantomjs-launcher": "0.2.1",
     "phantomjs": "1.9.18",
-    "karma": "0.13.15",
+    "karma": "0.13.19",
     "karma-coverage": "0.5.3",
     "karma-jenkins-reporter": "0.0.2",
     "generator-jhipster": "<%= packagejs.version %>",

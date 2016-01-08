@@ -224,6 +224,9 @@ public class <%= entityClass %> implements Serializable {
             return false;
         }
         <%= entityClass %> <%= entityInstance %> = (<%= entityClass %>) o;
+        if(<%= entityInstance %>.id == null || id == null) {
+            return false;
+        }
         return Objects.equals(id, <%= entityInstance %>.id);
     }
 

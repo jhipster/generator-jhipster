@@ -2,6 +2,7 @@
 var path = require('path'),
     util = require('util'),
     _ = require('lodash'),
+    _s = require('underscore.string'),
     yeoman = require('yeoman-generator'),
     chalk = require('chalk'),
     jhipsterUtils = require('./util.js'),
@@ -74,7 +75,7 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
             needle: 'jhipster-needle-add-element-to-menu',
             splicable: [
                     '<li ui-sref-active="active" ><a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-' + glyphiconName + '"></span>\n' +
-                    '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.' + routerName + '"':'' ) + '>' + routerName + '</span></a></li>'
+                    '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.' + routerName + '"':'' ) + '>' + _s.humanize(routerName) + '</span></a></li>'
             ]
         });
     } catch (e) {
@@ -97,7 +98,7 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
             needle: 'jhipster-needle-add-element-to-admin-menu',
             splicable: [
                     '<li ui-sref-active="active" ><a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-' + glyphiconName + '"></span>\n' +
-                    '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.admin.' + routerName + '"':'' ) + '>' + routerName + '</span></a></li>'
+                    '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.admin.' + routerName + '"':'' ) + '>' + _s.humanize(routerName) + '</span></a></li>'
             ]
         });
     } catch (e) {
@@ -119,7 +120,7 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
             needle: 'jhipster-needle-add-entity-to-menu',
             splicable: [
                     '<li ui-sref-active="active" ><a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-asterisk"></span>\n' +
-                    '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.entities.' + routerName + '"':'' ) + '>' + routerName + '</span></a></li>'
+                    '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.entities.' + routerName + '"':'' ) + '>' + _s.humanize(routerName) + '</span></a></li>'
             ]
         });
     } catch (e) {
@@ -146,25 +147,6 @@ Generator.prototype.addElementTranslationKey = function(key, value, language) {
         });
     } catch (e) {
         console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
-    }
-};
-
-
-/**
- * Add a new parameter in the ".bowerrc".
- *
- * @param {string} key - name of the parameter
- * @param {string, obj, bool, etc.} value - value of the parameter
- */
-Generator.prototype.addBowerrcParameter = function(key, value) {
-    var fullPath ='.bowerrc';
-    try {
-        console.log(chalk.yellow('   update ') + fullPath);
-        jhipsterUtils.rewriteJSONFile(fullPath, function(jsonObj) {
-            jsonObj[key] = value;
-        });
-    } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bowerrc parameter (key: ' + key + ', value:' + value + ')' + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -209,6 +191,24 @@ Generator.prototype.addEntityTranslationKey = function(key, value, language) {
         });
     } catch (e) {
         console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
+    }
+};
+
+/**
+ * A a new entry as a root param in "global.json" translations.
+ *
+ * @param {string} key - Key for the entry
+ * @param {string} value - Default translated value or object with multiple key and translated value
+ * @param {string} language - The language to which this translation should be added
+ */
+Generator.prototype.addGlobalTranslationKey = function(key, value, language) {
+    var fullPath = 'src/main/webapp/i18n/' + language + '/global.json';
+    try {
+        jhipsterUtils.rewriteJSONFile(fullPath, function(jsonObj) {
+            jsonObj[key] = value;
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + '(key: ' + key + ', value:' + value + ')' + chalk.yellow(' not added to global translations.\n'));
     }
 };
 
@@ -358,6 +358,24 @@ Generator.prototype.addBowerOverride = function(bowerPackageName, main, isIgnore
 };
 
 /**
+ * Add a new parameter in the ".bowerrc".
+ *
+ * @param {string} key - name of the parameter
+ * @param {string, obj, bool, etc.} value - value of the parameter
+ */
+Generator.prototype.addBowerrcParameter = function(key, value) {
+    var fullPath ='.bowerrc';
+    try {
+        console.log(chalk.yellow('   update ') + fullPath);
+        jhipsterUtils.rewriteJSONFile(fullPath, function(jsonObj) {
+            jsonObj[key] = value;
+        });
+    } catch (e) {
+        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bowerrc parameter (key: ' + key + ', value:' + value + ')' + chalk.yellow(' not added.\n'));
+    }
+};
+
+/**
  * Add a new module to the angular application in "app.js".
  *
  * @param {string} moduleName - module name
@@ -489,7 +507,7 @@ Generator.prototype.addColumnToLiquibaseEntityChangeset = function (filePath, co
  * @param {string} buttonColor - color of the social button. ex: '#3b5998'
  * @param {string} buttonHoverColor - color of the social button when is hover. ex: '#2d4373'
  */
-Generator.prototype.addSocialButton = function (socialName, socialParameter, buttonColor, buttonHoverColor) {
+Generator.prototype.addSocialButton = function (isUseSass, socialName, socialParameter, buttonColor, buttonHoverColor) {
     var socialServicefullPath = 'src/main/webapp/scripts/app/account/social/social.service.js';
     var loginfullPath = 'src/main/webapp/scripts/app/account/login/login.html';
     var registerfullPath = 'src/main/webapp/scripts/app/account/register/register.html';
@@ -532,7 +550,7 @@ Generator.prototype.addSocialButton = function (socialName, socialParameter, but
             '    border-color: rgba(0, 0, 0, 0.2);\n' +
             '    color: #fff;\n' +
             '}';
-        this.addMainCSSStyle(buttonStyle,'Add sign in style for ' +  socialName);
+        this.addMainCSSStyle(isUseSass, buttonStyle,'Add sign in style for ' +  socialName);
 
     } catch (e) {
         console.log(chalk.yellow('\nUnable to add social button modification.\n' + e));
@@ -609,9 +627,8 @@ Generator.prototype.addSocialConnectionFactory = function (javaDir, importPackag
  * }
  *
  */
-Generator.prototype.addMainCSSStyle = function(style, comment) {
-    // Not Working this.useSass -> Undifined --> this in the modules context would be jhipsterFunc
-    if (this.useSass) {
+Generator.prototype.addMainCSSStyle = function(isUseSass, style, comment) {
+    if (isUseSass) {
         this.addMainSCSSStyle(style, comment);
     }
 
@@ -855,7 +872,7 @@ Generator.prototype.copyTemplate = function (source, dest, action, _this, _opt, 
         default:
             _this.template(source, dest, _this, _opt);
     }
-}
+};
 
 /**
  * Copy html templates after stripping translation keys when translation is disabled.
@@ -868,7 +885,7 @@ Generator.prototype.copyTemplate = function (source, dest, action, _this, _opt, 
  */
 Generator.prototype.copyHtml = function (source, dest, _this, _opt, template) {
     this.copyTemplate(source, dest, 'stripHtml', _this, _opt, template);
-}
+};
 
 /**
  * Copy Js templates after stripping translation keys when translation is disabled.
@@ -881,7 +898,7 @@ Generator.prototype.copyHtml = function (source, dest, _this, _opt, template) {
  */
 Generator.prototype.copyJs = function (source, dest, _this, _opt, template) {
     this.copyTemplate(source, dest, 'stripJs', _this, _opt, template);
-}
+};
 
 /**
  * Rewrite the specified file with provided content at the needle location
@@ -960,6 +977,28 @@ Generator.prototype.registerModule = function(moduleConfig) {
     }
 };
 
+/**
+ * Add configuration to Entity.json files
+ *
+ * @param {file} configuration file name for the entity
+ * @param {key} key to be added or updated
+ * @param {value} value to be added
+ */
+Generator.prototype.updateEntityConfig = function(file, key, value) {
+
+    try {
+        var entityJsonString = fs.readFileSync(file, 'utf8');
+        var entityJson = JSON.parse(entityJsonString);
+        entityJson[key] = value;
+        fs.writeFile(file, JSON.stringify(entityJson, null, 4), 'utf8',function (err) {
+            if (err) return console.log('Error while writing entity configuration' + err);
+        });
+    } catch (err) {
+        console.log(chalk.red('The Jhipster entity configuration file could not be read!') + err);
+    }
+
+}
+
 Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, resourceDir, lang) {
     this.copyI18nFilesByName(_this, webappDir, 'activate.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'audits.json', lang);
@@ -999,6 +1038,31 @@ Generator.prototype.copyI18nFilesByName = function(_this, webappDir, fileToCopy,
     _this.copy(webappDir + '/i18n/' + lang + '/' + fileToCopy, webappDir + '/i18n/' + lang + '/' + fileToCopy);
 };
 
+Generator.prototype.copyI18n = function(language) {
+    try {
+        var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
+        if (stats.isDirectory()) {
+            this.template('src/main/webapp/i18n/_entity_' + language + '.json', 'src/main/webapp/i18n/' + language + '/' + this.entityInstance + '.json', this, {});
+            this.addEntityTranslationKey(this.entityInstance, this.entityClass, language);
+        }
+    } catch(e) {
+        // An exception is thrown if the folder doesn't exist
+        // do nothing
+    }
+};
+
+Generator.prototype.copyEnumI18n = function(language, enumInfo) {
+    try {
+        var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
+        if (stats.isDirectory()) {
+            this.template('src/main/webapp/i18n/_enum_' + language + '.json', 'src/main/webapp/i18n/' + language + '/' + enumInfo.enumInstance + '.json', enumInfo, {});
+        }
+    } catch(e) {
+        // An exception is thrown if the folder doesn't exist
+        // do nothing
+    }
+};
+
 Generator.prototype.installNewLanguage = function(language) {
     var fullPath = 'src/main/webapp/scripts/components/language/language.service.js';
     try {
@@ -1012,6 +1076,14 @@ Generator.prototype.installNewLanguage = function(language) {
     } catch (e) {
         console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new language. Check if you have enabled translation support.\n'));
     }
+};
+
+Generator.prototype.getTableName = function(value) {
+    return _s.underscored(value).toLowerCase();
+};
+
+Generator.prototype.getColumnName = function(value) {
+    return _s.underscored(value).toLowerCase();
 };
 
 Generator.prototype.insight = function () {
