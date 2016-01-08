@@ -30,10 +30,6 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTransl
                 Auth.authorize();
             }
 			
-			Principal.identity().then(function(account) {
-                $rootScope.currentAccount = account;
-            });
-			
             <% if (enableTranslation) { %>
             // Update the language
             Language.getCurrent().then(function (language) {
