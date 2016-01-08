@@ -611,12 +611,12 @@
         </resources>
         <%_ if (testFrameworks.indexOf('cucumber') != -1) { _%>
         <testResources>
-        	<testResource>
+            <testResource>
                 <directory>src/test/resources</directory>
-        	</testResource>
-        	<testResource>
+            </testResource>
+            <testResource>
                 <directory>src/test/features</directory>
-        	</testResource>
+            </testResource>
         </testResources>
         <%_ } _%>
         <plugins>
@@ -641,7 +641,7 @@
                     <expandEmptyElements>false</expandEmptyElements>
                 </configuration>
             </plugin>
-        	<%_ if (testFrameworks.indexOf('gatling') != -1) { _%>
+            <%_ if (testFrameworks.indexOf('gatling') != -1) { _%>
             <plugin>
                 <groupId>io.gatling</groupId>
                 <artifactId>gatling-maven-plugin</artifactId>
@@ -657,7 +657,7 @@
                     <simulationClass>*</simulationClass>
                 </configuration>
             </plugin>
-        	<%_ } _%>
+            <%_ } _%>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
@@ -694,6 +694,28 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>default-test</id>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/Abstract*.java</exclude>
+                                <exclude>**/*Cucumber*.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>without-cucumber</id>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                              <include>**/*Cucumber*.java</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                </executions>
                 <configuration>
                     <argLine>-Xmx256m ${surefireArgLine}</argLine>
                     <!-- Force alphabetical order to have a reproducible build -->
