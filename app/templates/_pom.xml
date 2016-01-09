@@ -694,6 +694,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <%_ if (testFrameworks.indexOf('cucumber') != -1) { _%>
                 <executions>
                     <execution>
                         <id>default-test</id>
@@ -716,6 +717,7 @@
                         </configuration>
                     </execution>
                 </executions>
+                <%_ } _%>
                 <configuration>
                     <argLine>-Xmx256m ${surefireArgLine}</argLine>
                     <!-- Force alphabetical order to have a reproducible build -->
