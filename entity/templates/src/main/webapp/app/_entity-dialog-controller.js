@@ -65,7 +65,7 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>DialogContro
         $scope.byteSize = DataUtils.byteSize;
         <%_ } _%>
         <%_ for (fieldId in fields) {
-            if (fields[fieldId].fieldType === 'byte[]') { _%>
+            if (fields[fieldId].fieldType === 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
 
         $scope.set<%= fields[fieldId].fieldNameCapitalized %> = function ($file, <%= entityInstance %>) {
             <%_ if (fields[fieldId].fieldTypeBlobContent == 'image') { _%>
