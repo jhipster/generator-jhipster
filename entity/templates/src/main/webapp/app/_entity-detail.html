@@ -27,7 +27,7 @@
                     <%_ } else { _%>
                     <span class="form-control-static">{{<%= entityInstance %>.<%=fields[fieldId].fieldName%>}}</span>
                     <%_ } _%>
-                    <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
+                    <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
                     <div>{{<%= entityInstance %>.<%= fields[fieldId].fieldName %>ContentType}}  {{byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}</div>
                     <%_ } _%>
                 </td>
