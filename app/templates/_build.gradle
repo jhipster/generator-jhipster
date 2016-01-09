@@ -31,6 +31,10 @@ bootRepackage {
    mainClass = '<%= packageName %>.Application'
 }
 
+war {
+    rootSpec.exclude("**/tomcat-*.jar")
+}
+
 springBoot {
     mainClass = '<%= packageName %>.Application'
     executable = true
