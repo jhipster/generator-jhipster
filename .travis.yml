@@ -35,6 +35,7 @@ env:
     - JHIPSTER=app-social
     - JHIPSTER=app-hazelcast-cucumber
 before_install:
+  - sudo /etc/init.d/postgresql stop
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
 install:
