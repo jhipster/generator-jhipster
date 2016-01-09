@@ -1121,3 +1121,17 @@ Generator.prototype.insight = function () {
     });
     return insight;
 }
+
+Generator.prototype.removefile = function(file) {
+    this.log('Remove the file - ' + file)
+    if (shelljs.test('-f', file)) {
+        shelljs.rm(file);
+    }
+}
+
+Generator.prototype.removefolder = function(folder) {
+    this.log('Remove the folder - ' + folder)
+    if (shelljs.test('-d', folder)) {
+        shelljs.rm("-rf", folder);
+    }
+}

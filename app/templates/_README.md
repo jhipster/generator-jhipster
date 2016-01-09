@@ -1,7 +1,7 @@
 # <%= baseName %>
 
 This application was generated using JHipster, you can find documentation and help at [https://jhipster.github.io](https://jhipster.github.io).
-
+<% if (!(skipClient || skipServer)) { %>
 Before you can build this project, you must install and configure the following dependencies on your machine:
 
 1. [Node.js][]: We use Node to run a development web server and build the project.
@@ -91,4 +91,4 @@ To setup this project in Jenkins, use the following configuration:
 [BrowserSync]: http://www.browsersync.io/
 [Karma]: http://karma-runner.github.io/
 [Jasmine]: http://jasmine.github.io/2.0/introduction.html
-[Protractor]: https://angular.github.io/protractor/
+[Protractor]: https://angular.github.io/protractor/<% } %>

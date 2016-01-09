@@ -47,7 +47,7 @@ module.exports = EntityGenerator.extend({
     constructor: function() {
         generators.Base.apply(this, arguments);
 
-        // This makes `appname` a required argument.
+        // This makes `name` a required argument.
         this.argument('name', {
             type: String,
             required: true,
