@@ -33,7 +33,6 @@ env:
     - JHIPSTER=app-mysql PROFILE=prod
     - JHIPSTER=app-psql-es PROFILE=prod
     - JHIPSTER=app-social
-    - JHIPSTER=app-hazelcast-cucumber
 before_install:
   - sudo /etc/init.d/postgresql stop
   - export DISPLAY=:99.0
