@@ -9,31 +9,31 @@ jdk:
   - oraclejdk8
 env:
   global:
-  - JHIPSTER_NODE_CACHE=1
-  - PROFILE=dev
-  - RUN_APP=1
-  - GRUNT=1
-  - PROTRACTOR=0
-  - JHIPSTER_TRAVIS=$TRAVIS_BUILD_DIR/travis
-  - JHIPSTER_INSTALL=$JHIPSTER_TRAVIS/install
-  - JHIPSTER_SAMPLES=$JHIPSTER_TRAVIS/samples
-  - JHIPSTER_SCRIPTS=$JHIPSTER_TRAVIS/scripts
+    - JHIPSTER_NODE_CACHE=1
+    - PROFILE=dev
+    - RUN_APP=1
+    - GRUNT=1
+    - PROTRACTOR=0
+    - JHIPSTER_TRAVIS=$TRAVIS_BUILD_DIR/travis
+    - JHIPSTER_INSTALL=$JHIPSTER_TRAVIS/install
+    - JHIPSTER_SAMPLES=$JHIPSTER_TRAVIS/samples
+    - JHIPSTER_SCRIPTS=$JHIPSTER_TRAVIS/scripts
   matrix:
-  - JHIPSTER=app-from-scratch JHIPSTER_NODE_CACHE=0 RUN_APP=0
-  - JHIPSTER=app-gradle RUN_APP=0
-  - JHIPSTER=app-gulp GRUNT=0
-  - JHIPSTER=app-cassandra
-  - JHIPSTER=app-default
-  - JHIPSTER=app-hazelcast-cucumber
-  - JHIPSTER=app-mongodb
-  - JHIPSTER=app-websocket PROTRACTOR=1
-  - JHIPSTER=app-noi18n
-  - JHIPSTER=app-oauth2
-  - JHIPSTER=app-xauth
-  - JHIPSTER=app-mysql PROFILE=prod
-  - JHIPSTER=app-psql-es PROFILE=prod
-  - JHIPSTER=app-social
-  - JHIPSTER=app-hazelcast-cucumber
+    - JHIPSTER=app-from-scratch JHIPSTER_NODE_CACHE=0 RUN_APP=0
+    - JHIPSTER=app-gradle RUN_APP=0
+    - JHIPSTER=app-gulp GRUNT=0
+    - JHIPSTER=app-cassandra
+    - JHIPSTER=app-default
+    - JHIPSTER=app-hazelcast-cucumber
+    - JHIPSTER=app-mongodb
+    - JHIPSTER=app-websocket PROTRACTOR=1
+    - JHIPSTER=app-noi18n
+    - JHIPSTER=app-oauth2
+    - JHIPSTER=app-xauth
+    - JHIPSTER=app-mysql PROFILE=prod
+    - JHIPSTER=app-psql-es PROFILE=prod
+    - JHIPSTER=app-social
+    - JHIPSTER=app-hazelcast-cucumber
 before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
