@@ -28,22 +28,22 @@
     "test": "mocha --reporter spec"
   },
   "dependencies": {
-    "chalk": "1.0.0",
+    "chalk": "1.1.1",
     "cheerio": "0.19.0",
     "ejs": "2.3.4",
-    "html-wiring": "1.1.0",
-    "insight": "0.6.0",
-    "lodash": "3.10.0",
+    "html-wiring": "1.2.0",
+    "insight": "0.7.0",
+    "lodash": "3.10.1",
     "mkdirp": "0.5.1",
-    "shelljs": "0.5.0",
-    "underscore.string": "3.2.0",
+    "shelljs": "0.5.3",
+    "underscore.string": "3.2.2",
     "wordwrap": "1.0.0",
-    "yeoman-generator": "0.20.3",
-    "yo": "1.5.1"
+    "yeoman-generator": "0.22.2",
+    "yo": "1.6.0"
   },
   "devDependencies": {
     "grunt": "0.4.5",
-    "mocha": "1.21.5"
+    "mocha": "2.3.4"
   },
   "engines": {
     "node": ">=0.12.0",
