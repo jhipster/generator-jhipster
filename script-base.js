@@ -1123,15 +1123,15 @@ Generator.prototype.insight = function () {
 }
 
 Generator.prototype.removefile = function(file) {
-    this.log('Remove the file - ' + file)
     if (shelljs.test('-f', file)) {
+        this.log('Removing the file - ' + file);
         shelljs.rm(file);
     }
 }
 
 Generator.prototype.removefolder = function(folder) {
-    this.log('Remove the folder - ' + folder)
     if (shelljs.test('-d', folder)) {
+        this.log('Removing the folder - ' + folder)
         shelljs.rm("-rf", folder);
     }
 }
