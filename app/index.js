@@ -135,6 +135,9 @@ module.exports = JhipsterGenerator.extend({
 
     prompting: {
         askForInsightOptIn: function () {
+            if(this.existingProject){
+                return;
+            }
             var done = this.async();
             var insight = this.insight();
             this.prompt({
