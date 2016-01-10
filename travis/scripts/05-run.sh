@@ -7,6 +7,8 @@ cd $HOME/$JHIPSTER
 if [ $RUN_APP == 1 ]; then
   if [ $JHIPSTER != "app-gradle" ]; then
     if [ $JHIPSTER == 'app-cassandra' ]; then
+      chmod -R 777 src/main/resources/config/cql/
+      docker cp src/main/resources/config/cql/ samplecassandra-dev-cassandra:/
       docker exec -it samplecassandra-dev-cassandra init
     fi
     mvn package -DskipTests=true -P$PROFILE
