@@ -460,4 +460,5 @@ describe('JHipster generator', function () {
                 ]);
             });
     });
+
 });
