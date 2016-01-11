@@ -26,6 +26,21 @@ var interpolateRegex = /<%=([\s\S]+?)%>/g; // so that tags in templates do not g
 module.exports = JhipsterGenerator.extend({
     constructor: function() {
         generators.Base.apply(this, arguments);
+        // This method adds support for a `--skip-client` flag
+        this.option('skip-client', {
+            desc: 'Skips the client side app generation',
+            type: Boolean,
+            defaults: false
+        });
+        // This method adds support for a `--skipServer` flag
+        this.option('skip-server', {
+            desc: 'Skips the server side app generation',
+            type: Boolean,
+            defaults: false
+        });
+        this.skipClient = this.options['skip-client'];
+        this.skipServer = this.options['skip-server'];
+
     },
     initializing : {
         displayLogo : function () {
