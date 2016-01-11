@@ -121,12 +121,7 @@ angular.module('<%=angularAppName%>')
                     $uibModal.open({
                         templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-delete-dialog.html',
                         controller: '<%= entityClass %>DeleteController',
-                        size: 'md',
-                        resolve: {
-                            entity: ['<%= entityClass %>', function(<%= entityClass %>) {
-                                return <%= entityClass %>.get({id : $stateParams.id});
-                            }]
-                        }
+                        size: 'md'
                     }).result.then(function(result) {
                         $state.go('<%= entityInstance %>', null, { reload: true });
                     }, function() {
