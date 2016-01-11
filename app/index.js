@@ -38,8 +38,15 @@ module.exports = JhipsterGenerator.extend({
             type: Boolean,
             defaults: false
         });
+        // This method adds support for a `--[no-]i18n` flag
+        this.option('i18n', {
+            desc: 'disable or enable i18n when skipping client side generation, has no effect otherwise',
+            type: Boolean,
+            defaults: true
+        });
         this.skipClient = this.options['skip-client'];
         this.skipServer = this.options['skip-server'];
+        this.i18n = this.options['i18n'];
 
     },
     initializing : {
@@ -619,11 +626,25 @@ module.exports = JhipsterGenerator.extend({
             } else {
                 this.pkType = 'Long';
             }
-            this.packageFolder = this.packageName.replace(/\./g, '/');
-            this.javaDir = 'src/main/java/' + this.packageFolder + '/';
-            this.testDir = 'src/test/java/' + this.packageFolder + '/';
+
             if(this.skipServer){
                 this.authenticationType = 'session';
+                this.buildTool = 'none';
+                this.websocket = false;
+                this.searchEngine = 'none';
+                this.enableSocialSignIn = false;
+                this.databaseType = 'none';
+                this.devDatabaseType = 'none';
+                this.prodDatabaseType = 'none';
+                this.hibernateCache = 'none';
+            } else {
+                this.packageFolder = this.packageName.replace(/\./g, '/');
+                this.javaDir = 'src/main/java/' + this.packageFolder + '/';
+                this.testDir = 'src/test/java/' + this.packageFolder + '/';
+            }
+            if(this.skipClient){
+                this.frontendBuilder = 'none';
+                this.enableTranslation = this.i18n;
             }
         },
         saveConfig: function () {
