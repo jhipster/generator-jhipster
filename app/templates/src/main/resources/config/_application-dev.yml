@@ -43,6 +43,11 @@ spring:
         name:
         username: <% if (devDatabaseType == 'mysql') { %>root<% } else if (devDatabaseType == 'postgresql') { %><%= baseName %><% } %>
         password:
+    <%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
+    h2:
+        console:
+            enabled: false
+    <%_ } _%>
     jpa:
         <%_ if (devDatabaseType == 'mysql') { _%>
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect

@@ -198,7 +198,7 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
     private void initH2Console(ServletContext servletContext) {
         log.debug("Initialize H2 console");
         ServletRegistration.Dynamic h2ConsoleServlet = servletContext.addServlet("H2Console", new org.h2.server.web.WebServlet());
-        h2ConsoleServlet.addMapping("/console/*");
+        h2ConsoleServlet.addMapping("/h2-console/*");
         h2ConsoleServlet.setInitParameter("-properties", "src/main/resources");
         h2ConsoleServlet.setLoadOnStartup(1);
     }<% } %>
