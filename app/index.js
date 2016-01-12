@@ -1425,10 +1425,10 @@ module.exports = JhipsterGenerator.extend({
     },
 
     install: function () {
+        if(this.skipClient){
+            return;
+        }
         var injectDependenciesAndConstants = function () {
-            if(this.skipClient){
-                return;
-            }
             if (this.options['skip-install']) {
                 this.log(
                     'After running `npm install & bower install`, inject your front end dependencies' +
