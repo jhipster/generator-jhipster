@@ -32,11 +32,11 @@ module.exports = JhipsterGenerator.extend({
             type: Boolean,
             defaults: false
         });
-        // This method adds support for a `--skipServer` flag
-        this.option('skip-server', {
-            desc: 'Skips the server side app generation',
-            type: Boolean,
-            defaults: false
+        // This method adds support for a `--client-build` flag
+        this.option('client-build', {
+            desc: 'Specify the client side build to use when skipping client side generation, has no effect otherwise',
+            type: String,
+            defaults: 'none'
         });
         // This method adds support for a `--[no-]i18n` flag
         this.option('i18n', {
@@ -45,7 +45,7 @@ module.exports = JhipsterGenerator.extend({
             defaults: true
         });
         this.skipClient = this.options['skip-client'];
-        this.skipServer = this.options['skip-server'];
+        this.clientBuild = this.options['client-build'];
         this.i18n = this.options['i18n'];
 
     },
@@ -75,9 +75,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         setupServerVars : function () {
-            if(this.skipServer){
-                return;
-            }
+
             this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
             this.packageName = this.config.get('packageName');
             this.authenticationType = this.config.get('authenticationType');
@@ -123,8 +121,7 @@ module.exports = JhipsterGenerator.extend({
 
             var clientConfigFound = this.useSass != null && this.frontendBuilder != null;
 
-            if (this.baseName != null &&
-                (this.skipServer || serverConfigFound) &&
+            if (this.baseName != null && serverConfigFound &&
                 (this.skipClient || clientConfigFound)) {
 
                 // Generate key if key does not already exist in config
@@ -202,7 +199,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         askForServerSideOpts: function (){
-            if(this.existingProject || this.skipServer){
+            if(this.existingProject){
                 return;
             }
 
@@ -558,14 +555,10 @@ module.exports = JhipsterGenerator.extend({
             if(this.existingProject){
                 return;
             }
-            var choices = [];
-            if(!this.skipServer){
-                // all server side test framework choices are added here
-                choices.push(
-                    {name: 'Gatling', value: 'gatling'},
-                    {name: 'Cucumber', value: 'cucumber'}
-                );
-            }
+            var choices = [
+                {name: 'Gatling', value: 'gatling'},
+                {name: 'Cucumber', value: 'cucumber'}
+            ];
             if(!this.skipClient){
                 // all client side test frameworks are addded here
                 choices.push(
@@ -627,24 +620,12 @@ module.exports = JhipsterGenerator.extend({
                 this.pkType = 'Long';
             }
 
-            if(this.skipServer){
-                this.authenticationType = 'session';
-                this.buildTool = 'none';
-                this.websocket = false;
-                this.searchEngine = 'none';
-                this.enableSocialSignIn = false;
-                this.databaseType = 'none';
-                this.devDatabaseType = 'none';
-                this.prodDatabaseType = 'none';
-                this.hibernateCache = 'none';
-            } else {
-                this.packageFolder = this.packageName.replace(/\./g, '/');
-                this.javaDir = 'src/main/java/' + this.packageFolder + '/';
-                this.testDir = 'src/test/java/' + this.packageFolder + '/';
-            }
+            this.packageFolder = this.packageName.replace(/\./g, '/');
+            this.javaDir = 'src/main/java/' + this.packageFolder + '/';
+            this.testDir = 'src/test/java/' + this.packageFolder + '/';
             if(this.skipClient){
-                this.frontendBuilder = 'none';
                 this.enableTranslation = this.i18n;
+                this.frontendBuilder = this.clientBuild;
             }
         },
         saveConfig: function () {
@@ -680,9 +661,6 @@ module.exports = JhipsterGenerator.extend({
         },
 
         writeServerFiles: function () {
-            if(this.skipServer){
-                return;
-            }
 
             var packageFolder = this.packageFolder;
             var javaDir = this.javaDir;
@@ -1320,9 +1298,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         writeServerTestFwFiles: function () {
-            if(this.skipServer){
-                return;
-            }
+
             // Create Test Java files
             var testDir = this.testDir;
 
