@@ -71,6 +71,7 @@ module.exports = EntityGenerator.extend({
             this.enableTranslation = this.config.get('enableTranslation');
             this.buildTool = this.config.get('buildTool');
             this.testFrameworks = this.config.get('testFrameworks');
+            this.skipClient = this.config.get('skipClient');
             // backward compatibility on testing frameworks
             if (this.testFrameworks == null) {
                 this.testFrameworks = ['gatling'];
@@ -1357,7 +1358,7 @@ module.exports = EntityGenerator.extend({
                     'src/main/java/' + this.packageFolder + '/domain/enumeration/' + fieldType + '.java', enumInfo, {});
 
                     // Copy for each
-                    if (this.enableTranslation) {
+                    if (!this.skipClient && this.enableTranslation) {
                         this.getAllInstalledLanguages().forEach(function(language) {
                             this.copyEnumI18n(language, enumInfo);
                         }, this);
@@ -1416,6 +1417,9 @@ module.exports = EntityGenerator.extend({
         },
 
         writeClientFiles: function() {
+            if(this.skipClient){
+                return;
+            }
             this.copyHtml('src/main/webapp/app/_entities.html',
             'src/main/webapp/scripts/app/entities/' + this.entityInstance + '/' + this.entityInstance + 's.html', this, {}, true);
             this.copyHtml('src/main/webapp/app/_entity-detail.html',

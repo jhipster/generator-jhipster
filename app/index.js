@@ -628,6 +628,7 @@ module.exports = JhipsterGenerator.extend({
                 this.frontendBuilder = this.clientBuild;
             }
         },
+
         saveConfig: function () {
             this.config.set('baseName', this.baseName);
             this.config.set('packageName', this.packageName);
@@ -647,6 +648,9 @@ module.exports = JhipsterGenerator.extend({
             this.config.set('enableSocialSignIn', this.enableSocialSignIn);
             this.config.set('rememberMeKey', this.rememberMeKey);
             this.config.set('testFrameworks', this.testFrameworks);
+            if(this.skipClient){
+                this.config.set('skipClient', true);
+            }
         }
     },
 
