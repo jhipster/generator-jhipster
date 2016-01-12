@@ -27,6 +27,28 @@ var interpolateRegex = /<%=([\s\S]+?)%>/g; // so that tags in templates do not g
 module.exports = JhipsterGenerator.extend({
     constructor: function() {
         generators.Base.apply(this, arguments);
+        // This method adds support for a `--skip-client` flag
+        this.option('skip-client', {
+            desc: 'Skips the client side app generation',
+            type: Boolean,
+            defaults: false
+        });
+        // This method adds support for a `--client-build` flag
+        this.option('client-build', {
+            desc: 'Specify the client side build to use when skipping client side generation, has no effect otherwise',
+            type: String,
+            defaults: 'none'
+        });
+        // This method adds support for a `--[no-]i18n` flag
+        this.option('i18n', {
+            desc: 'disable or enable i18n when skipping client side generation, has no effect otherwise',
+            type: Boolean,
+            defaults: true
+        });
+        this.skipClient = this.options['skip-client'];
+        this.clientBuild = this.options['client-build'];
+        this.i18n = this.options['i18n'];
+
     },
     initializing : {
         displayLogo : function () {
@@ -54,9 +76,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         setupServerVars : function () {
-            if(this.skipServer){
-                return;
-            }
+
             this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
             this.packageName = this.config.get('packageName');
             this.authenticationType = this.config.get('authenticationType');
@@ -102,8 +122,7 @@ module.exports = JhipsterGenerator.extend({
 
             var clientConfigFound = this.useSass != null && this.frontendBuilder != null;
 
-            if (this.baseName != null &&
-                (this.skipServer || serverConfigFound) &&
+            if (this.baseName != null && serverConfigFound &&
                 (this.skipClient || clientConfigFound)) {
 
                 // Generate key if key does not already exist in config
@@ -181,7 +200,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         askForServerSideOpts: function (){
-            if(this.existingProject || this.skipServer){
+            if(this.existingProject){
                 return;
             }
 
@@ -537,14 +556,10 @@ module.exports = JhipsterGenerator.extend({
             if(this.existingProject){
                 return;
             }
-            var choices = [];
-            if(!this.skipServer){
-                // all server side test framework choices are added here
-                choices.push(
-                    {name: 'Gatling', value: 'gatling'},
-                    {name: 'Cucumber', value: 'cucumber'}
-                );
-            }
+            var choices = [
+                {name: 'Gatling', value: 'gatling'},
+                {name: 'Cucumber', value: 'cucumber'}
+            ];
             if(!this.skipClient){
                 // all client side test frameworks are addded here
                 choices.push(
@@ -605,13 +620,16 @@ module.exports = JhipsterGenerator.extend({
             } else {
                 this.pkType = 'Long';
             }
+
             this.packageFolder = this.packageName.replace(/\./g, '/');
             this.javaDir = 'src/main/java/' + this.packageFolder + '/';
             this.testDir = 'src/test/java/' + this.packageFolder + '/';
-            if(this.skipServer){
-                this.authenticationType = 'session';
+            if(this.skipClient){
+                this.enableTranslation = this.i18n;
+                this.frontendBuilder = this.clientBuild;
             }
         },
+
         saveConfig: function () {
             this.config.set('baseName', this.baseName);
             this.config.set('packageName', this.packageName);
@@ -631,6 +649,9 @@ module.exports = JhipsterGenerator.extend({
             this.config.set('enableSocialSignIn', this.enableSocialSignIn);
             this.config.set('rememberMeKey', this.rememberMeKey);
             this.config.set('testFrameworks', this.testFrameworks);
+            if(this.skipClient){
+                this.config.set('skipClient', true);
+            }
         }
     },
 
@@ -645,9 +666,6 @@ module.exports = JhipsterGenerator.extend({
         },
 
         writeServerFiles: function () {
-            if(this.skipServer){
-                return;
-            }
 
             var packageFolder = this.packageFolder;
             var javaDir = this.javaDir;
@@ -1290,9 +1308,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         writeServerTestFwFiles: function () {
-            if(this.skipServer){
-                return;
-            }
+
             // Create Test Java files
             var testDir = this.testDir;
 
@@ -1424,10 +1440,10 @@ module.exports = JhipsterGenerator.extend({
     },
 
     install: function () {
+        if(this.skipClient){
+            return;
+        }
         var injectDependenciesAndConstants = function () {
-            if(this.skipClient){
-                return;
-            }
             if (this.options['skip-install']) {
                 this.log(
                     'After running `npm install & bower install`, inject your front end dependencies' +
