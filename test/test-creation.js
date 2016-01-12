@@ -40,6 +40,8 @@ describe('JHipster generator', function () {
                     'pom.xml',
                     'mvnw',
                     'mvnw.cmd',
+                    'src/main/docker/sonar.yml',
+                    'src/main/docker/prod.yml',
                     'src/main/resources/banner.txt',
                     'src/main/resources/ehcache.xml',
                     'src/main/resources/.h2.server.properties',
