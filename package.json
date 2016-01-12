@@ -38,7 +38,9 @@
     "shelljs": "0.5.3",
     "underscore.string": "3.2.2",
     "wordwrap": "1.0.0",
+    "yeoman-assert": "2.1.1",
     "yeoman-generator": "0.22.2",
+    "yeoman-test": "1.0.0",
     "yo": "1.6.0"
   },
   "devDependencies": {

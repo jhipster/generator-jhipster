@@ -16,11 +16,11 @@ var MODULES_HOOK_FILE = '.jhipster/modules/jhi-hooks.json';
 module.exports = Generator;
 
 function Generator() {
-    yeoman.generators.NamedBase.apply(this, arguments);
+    yeoman.Base.apply(this, arguments);
     this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
 }
 
-util.inherits(Generator, yeoman.generators.NamedBase);
+util.inherits(Generator, yeoman.Base);
 
 /**
  * A a new script to the application, in the index.html file.
