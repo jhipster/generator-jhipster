@@ -9,7 +9,7 @@ var util = require('util'),
     AwsFactory = require('./lib/aws.js');
 
 var AwsGenerator = module.exports = function AwsGenerator(args, options, config) {
-    yeoman.generators.Base.apply(this, arguments);
+    yeoman.Base.apply(this, arguments);
 
     console.log(chalk.bold('AWS configuration is starting'));
 
@@ -18,7 +18,7 @@ var AwsGenerator = module.exports = function AwsGenerator(args, options, config)
     this.buildTool = this.config.get('buildTool');
 };
 
-util.inherits(AwsGenerator, yeoman.generators.Base);
+util.inherits(AwsGenerator, yeoman.Base);
 util.inherits(AwsGenerator, scriptBase);
 
 AwsGenerator.prototype.checkDatabase = function checkDatabase() {
@@ -183,7 +183,12 @@ AwsGenerator.prototype.uploadWar = function uploadWar() {
 
     var s3 = this.awsFactory.getS3();
 
-    s3.uploadWar({bucket: this.bucketName}, function (err, data) {
+    var params = {
+        bucket: this.bucketName,
+        buildTool: this.buildTool
+    };
+
+    s3.uploadWar(params, function (err, data) {
         if (err) {
             this._errorHandling(err);
         } else {
