@@ -390,7 +390,7 @@
         <dependency>
             <groupId>org.mongeez</groupId>
             <artifactId>mongeez</artifactId>
-            <version>0.9.4</version>
+            <version>0.9.6</version>
         </dependency>
         <%_ } _%>
         <%_ if (devDatabaseType == 'postgresql' || prodDatabaseType == 'postgresql') { _%>
