@@ -96,38 +96,27 @@ module.exports = EntityGenerator.extend({
             databaseType = this.databaseType;
             prodDatabaseType = this.prodDatabaseType;
             if (!(/^([a-zA-Z0-9_]*)$/.test(this.name))) {
-                this.log(chalk.red('The entity name cannot contain special characters'));
-                throw new Error("Validation error");
+                this.env.error(chalk.red('The entity name cannot contain special characters'));
             } else if (this.name == '') {
-                this.log(chalk.red('The entity name cannot be empty'));
-                throw new Error("Validation error");
+                this.env.error(chalk.red('The entity name cannot be empty'));
             } else if (this.name.indexOf("Detail", this.name.length - "Detail".length) !== -1) {
-                this.log(chalk.red('The entity name cannot end with \'Detail\''));
-                throw new Error("Validation error");
+                this.env.error(chalk.red('The entity name cannot end with \'Detail\''));
             } else if (reservedWords_Java.indexOf(this.name.toUpperCase()) != -1) {
-                this.log(chalk.red('The entity name cannot contain a Java reserved keyword'));
-                throw new Error("Validation error");
+                this.env.error(chalk.red('The entity name cannot contain a Java reserved keyword'));
             } else if (reservedWords_JHipster.indexOf(this.name.toUpperCase()) != -1) {
-                this.log(chalk.red('The entity name cannot contain a JHipster reserved keyword'));
-                throw new Error("Validation error");
+                this.env.error(chalk.red('The entity name cannot contain a JHipster reserved keyword'));
             } else if (prodDatabaseType == 'mysql' && reservedWords_MySQL.indexOf(this.name.toUpperCase()) != -1) {
-                this.log(chalk.red('The entity name cannot contain a MySQL reserved keyword'));
-                throw new Error("Validation error");
+                this.env.error(chalk.red('The entity name cannot contain a MySQL reserved keyword'));
             } else if (prodDatabaseType == 'postgresql' && reservedWords_Postgresql.indexOf(this.name.toUpperCase()) != -1) {
-                this.log(chalk.red('The entity name cannot contain a PostgreSQL reserved keyword'));
-                throw new Error("Validation error");
+                this.env.error(chalk.red('The entity name cannot contain a PostgreSQL reserved keyword'));
             } else if (prodDatabaseType == 'cassandra' && reservedWords_Cassandra.indexOf(this.name.toUpperCase()) != -1) {
-                this.log(chalk.red('The entity name cannot contain a Cassandra reserved keyword'));
-                throw new Error("Validation error");
+                this.env.error(chalk.red('The entity name cannot contain a Cassandra reserved keyword'));
             } else if (prodDatabaseType == 'oracle' && reservedWords_Oracle.indexOf(this.name.toUpperCase()) != -1) {
-                this.log(chalk.red('The entity name cannot contain a Oracle reserved keyword'));
-                throw new Error("Validation error");
+                this.env.error(chalk.red('The entity name cannot contain a Oracle reserved keyword'));
             } else if (prodDatabaseType == 'oracle' && _s.underscored(this.name).length > 26) {
-                this.log(chalk.red('The entity name is too long for Oracle, try a shorter name'));
-                throw new Error("Validation error");
+                this.env.error(chalk.red('The entity name is too long for Oracle, try a shorter name'));
             } else if (prodDatabaseType == 'mongodb' && reservedWords_Mongo.indexOf(this.name.toUpperCase()) != -1) {
-                this.log(chalk.red('The entity name cannot contain a MongoDB reserved keyword'));
-                throw new Error("Validation error");
+                this.env.error(chalk.red('The entity name cannot contain a MongoDB reserved keyword'));
             }
         },
 
@@ -1038,59 +1027,47 @@ module.exports = EntityGenerator.extend({
                 for (var idx in this.fields) {
                     var field = this.fields[idx];
                     if (_.isUndefined(field.fieldId)) {
-                        this.log(chalk.red('ERROR fieldId is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
-                        process.exit(1);
+                        this.env.error(chalk.red('ERROR fieldId is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
 
                     if (_.isUndefined(field.fieldName)) {
-                        this.log(chalk.red('ERROR fieldName is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
-                        process.exit(1);
+                        this.env.error(chalk.red('ERROR fieldName is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
                     }
 
                     if (_.isUndefined(field.fieldType)) {
-                        this.log(chalk.red('ERROR fieldType is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
-                        process.exit(1);
+                        this.env.error(chalk.red('ERROR fieldType is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
                     }
 
                     if (!_.isUndefined(field.fieldValidateRules)) {
                         if (!_.isArray(field.fieldValidateRules)) {
-                            this.log(chalk.red('ERROR fieldValidateRules is not an array in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
-                            process.exit(1);
+                            this.env.error(chalk.red('ERROR fieldValidateRules is not an array in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
                         }
                         for (var idxRules in field.fieldValidateRules) {
                             var fieldValidateRule = field.fieldValidateRules[idxRules];
                             if (!_.contains(supportedValidationRules, fieldValidateRule)) {
-                                this.log(chalk.red('ERROR fieldValidateRules contains unknown validation rule ' + fieldValidateRule + ' in .jhipster/' + this.name + '.json for field with id ' + field.fieldId + ' [supported validation rules ' + supportedValidationRules + ']'));
-                                process.exit(1);
+                                this.env.error(chalk.red('ERROR fieldValidateRules contains unknown validation rule ' + fieldValidateRule + ' in .jhipster/' + this.name + '.json for field with id ' + field.fieldId + ' [supported validation rules ' + supportedValidationRules + ']'));
                             }
                         }
                         if (_.contains(field.fieldValidateRules, 'max') && _.isUndefined(field.fieldValidateRulesMax)) {
-                            this.log(chalk.red('ERROR fieldValidateRulesMax is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
-                            process.exit(1);
+                            this.env.error(chalk.red('ERROR fieldValidateRulesMax is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
                         }
                         if (_.contains(field.fieldValidateRules, 'min') && _.isUndefined(field.fieldValidateRulesMin)) {
-                            this.log(chalk.red('ERROR fieldValidateRulesMin is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
-                            process.exit(1);
+                            this.env.error(chalk.red('ERROR fieldValidateRulesMin is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
                         }
                         if (_.contains(field.fieldValidateRules, 'maxlength') && _.isUndefined(field.fieldValidateRulesMaxlength)) {
-                            this.log(chalk.red('ERROR fieldValidateRulesMaxlength is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
-                            process.exit(1);
+                            this.env.error(chalk.red('ERROR fieldValidateRulesMaxlength is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
                         }
                         if (_.contains(field.fieldValidateRules, 'minlength') && _.isUndefined(field.fieldValidateRulesMinlength)) {
-                            this.log(chalk.red('ERROR fieldValidateRulesMinlength is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
-                            process.exit(1);
+                            this.env.error(chalk.red('ERROR fieldValidateRulesMinlength is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
                         }
                         if (_.contains(field.fieldValidateRules, 'maxbytes') && _.isUndefined(field.fieldValidateRulesMaxbytes)) {
-                            this.log(chalk.red('ERROR fieldValidateRulesMaxbytes is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
-                            process.exit(1);
+                            this.env.error(chalk.red('ERROR fieldValidateRulesMaxbytes is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
                         }
                         if (_.contains(field.fieldValidateRules, 'minbytes') && _.isUndefined(field.fieldValidateRulesMinbytes)) {
-                            this.log(chalk.red('ERROR fieldValidateRulesMinbytes is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
-                            process.exit(1);
+                            this.env.error(chalk.red('ERROR fieldValidateRulesMinbytes is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
                         }
                         if (_.contains(field.fieldValidateRules, 'pattern') && _.isUndefined(field.fieldValidateRulesPattern)) {
-                            this.log(chalk.red('ERROR fieldValidateRulesPattern is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
-                            process.exit(1);
+                            this.env.error(chalk.red('ERROR fieldValidateRulesPattern is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
                         }
                     }
                 }
@@ -1099,8 +1076,7 @@ module.exports = EntityGenerator.extend({
                 for (var idx in this.relationships) {
                     var relationship = this.relationships[idx];
                     if (_.isUndefined(relationship.relationshipId)) {
-                        this.log(chalk.red('ERROR relationshipId is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4)));
-                        process.exit(1);
+                        this.env.error(chalk.red('ERROR relationshipId is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4)));
                     }
 
                     if (_.isUndefined(relationship.relationshipName)) {
@@ -1109,8 +1085,7 @@ module.exports = EntityGenerator.extend({
                     }
 
                     if (_.isUndefined(relationship.otherEntityName)) {
-                        this.log(chalk.red('ERROR otherEntityName is missing in .jhipster/' + this.name + '.json for relationship with id ' + relationship.relationshipId));
-                        process.exit(1);
+                        this.env.error(chalk.red('ERROR otherEntityName is missing in .jhipster/' + this.name + '.json for relationship with id ' + relationship.relationshipId));
                     }
 
                     if (_.isUndefined(relationship.otherEntityRelationshipName)
@@ -1126,14 +1101,12 @@ module.exports = EntityGenerator.extend({
                     }
 
                     if (_.isUndefined(relationship.relationshipType)) {
-                        this.log(chalk.red('ERROR relationshipType is missing in .jhipster/' + this.name + '.json for relationship with id ' + relationship.relationshipId));
-                        process.exit(1);
+                        this.env.error(chalk.red('ERROR relationshipType is missing in .jhipster/' + this.name + '.json for relationship with id ' + relationship.relationshipId));
                     }
 
                     if (_.isUndefined(relationship.ownerSide)
                     && (relationship.relationshipType == 'one-to-one' || relationship.relationshipType == 'many-to-many')) {
-                        this.log(chalk.red('ERROR ownerSide is missing in .jhipster/' + this.name + '.json for relationship with id ' + relationship.relationshipId));
-                        process.exit(1);
+                        this.env.error(chalk.red('ERROR ownerSide is missing in .jhipster/' + this.name + '.json for relationship with id ' + relationship.relationshipId));
                     }
                 }
 

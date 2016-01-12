@@ -17,13 +17,12 @@ var ModulesGenerator = module.exports = function ModulesGenerator(args, options,
     this.jhipsterVar = options.jhipsterVar;
     this.jhipsterFunc = options.jhipsterFunc;
 
-    if (this.jhipsterVar == null ||
-        this.jhipsterVar.moduleName == null) {
-        console.log(chalk.red('ERROR! This sub-generator must be used by JHipster modules, and the module name is not defined.'));
-        process.exit(1);
+    yeoman.Base.apply(this, arguments);
+
+    if (this.jhipsterVar == null || this.jhipsterVar.moduleName == null) {
+        this.env.error(chalk.red('ERROR! This sub-generator must be used by JHipster modules, and the module name is not defined.'));
     };
     console.log('Composing JHipster configuration with module ' + chalk.red(this.jhipsterVar.moduleName));
-    yeoman.generators.Base.apply(this, arguments);
 
     this.baseName = this.config.get('baseName');
     this.packageName = this.config.get('packageName');
@@ -62,7 +61,7 @@ var ModulesGenerator = module.exports = function ModulesGenerator(args, options,
     this.jhipsterVar['testFrameworks'] = this.testFrameworks;
 };
 
-util.inherits(ModulesGenerator, yeoman.generators.Base);
+util.inherits(ModulesGenerator, yeoman.Base);
 util.inherits(ModulesGenerator, scriptBase);
 
 ModulesGenerator.prototype.configurer = function configurer() {
@@ -71,8 +70,7 @@ ModulesGenerator.prototype.configurer = function configurer() {
     if (this.baseName == null ||
         this.packageName == null) {
         console.log(chalk.red('ERROR! There is no existing JHipster configuration file in this directory.'));
-        console.log('JHipster ' + this.jhipsterVar.moduleName + ' is a JHipster module, and needs a .yo-rc.json configuration file made by JHipster.');
-        process.exit(1);
+        this.env.error('JHipster ' + this.jhipsterVar.moduleName + ' is a JHipster module, and needs a .yo-rc.json configuration file made by JHipster.');
     }
     this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
     this.javaDir = 'src/main/java/' + this.packageFolder + '/';
