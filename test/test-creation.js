@@ -2,8 +2,8 @@
 'use strict';
 
 var path = require('path');
-var assert = require('yeoman-generator').assert;
-var helpers = require('yeoman-generator').test;
+var assert = require('yeoman-assert');
+var helpers = require('yeoman-test');
 var os = require('os');
 
 describe('JHipster generator', function () {
