@@ -4,7 +4,8 @@
             "home": {
                 "title": "<%= entityClass %>s",
                 "createLabel": "Create a new <%= entityClass %>",
-                "createOrEditLabel": "Create or edit a <%= entityClass %>"
+                "createOrEditLabel": "Create or edit a <%= entityClass %>",
+                "search": "Search for <%= entityClass %>"
             },
             "delete": {
                 "question": "Are you sure you want to delete <%= entityClass %> {{ id }}?"

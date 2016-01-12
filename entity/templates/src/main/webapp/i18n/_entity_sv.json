@@ -4,7 +4,8 @@
             "home": {
                 "title": "<%= entityClass %>s",
                 "createLabel": "Skapa en ny <%= entityClass %>",
-                "createOrEditLabel": "Skapa eller ändra en <%= entityClass %>"
+                "createOrEditLabel": "Skapa eller ändra en <%= entityClass %>",
+                "search": "Sök efter <%= entityClass %>"
             },
             "delete": {
                 "question": "Är du säker på att du vill ta bort <%= entityClass %> {{ id }}?"
