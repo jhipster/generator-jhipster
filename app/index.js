@@ -1010,6 +1010,8 @@ module.exports = JhipsterGenerator.extend({
             // Angular JS views
 
             this.template(webappDir + '/scripts/app/_app.js', webappDir + 'scripts/app/app.js', this, {});
+            this.template(webappDir + '/scripts/app/_app.constants.js', webappDir + 'scripts/app/app.constants.js', this, {});
+
             // Client Components
             this.template(webappDir + '/scripts/components/admin/_audits.service.js', webappDir + 'scripts/components/admin/audits.service.js', this, {});
             this.template(webappDir + '/scripts/components/admin/_configuration.service.js', webappDir + 'scripts/components/admin/configuration.service.js', this, {});
