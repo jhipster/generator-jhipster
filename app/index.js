@@ -21,6 +21,7 @@ var resourceDir = 'src/main/resources/';
 var webappDir = 'src/main/webapp/';
 var testJsDir = 'src/test/javascript/';
 var testResourceDir = 'src/test/resources/';
+var dockerDir = 'src/main/docker/';
 var interpolateRegex = /<%=([\s\S]+?)%>/g; // so that tags in templates do not get mistreated as _ templates
 
 module.exports = JhipsterGenerator.extend({
@@ -652,18 +653,21 @@ module.exports = JhipsterGenerator.extend({
             var javaDir = this.javaDir;
 
             // Create docker-compose file
-            this.template('docker/_sonar.yml', 'docker/sonar.yml', this, {});
+            this.template(dockerDir + '_sonar.yml', dockerDir + 'sonar.yml', this, {});
             if (this.devDatabaseType != "h2Disk" && this.devDatabaseType != "h2Memory" && this.devDatabaseType != "oracle") {
-                this.template('_docker-compose.yml', 'docker-compose.yml', this, {});
+                this.template(dockerDir + '_dev.yml', dockerDir + 'dev.yml', this, {});
             }
             if (this.prodDatabaseType != "oracle" || this.searchEngine == "elasticsearch") {
-                this.template('_docker-compose-prod.yml', 'docker-compose-prod.yml', this, {});
+                this.template(dockerDir + '_prod.yml', dockerDir + 'prod.yml', this, {});
             }
             if (this.devDatabaseType == "cassandra") {
-                this.template('_Cassandra-Dev.Dockerfile', 'Cassandra-Dev.Dockerfile', this, {});
-                this.template('_Cassandra-Prod.Dockerfile', 'Cassandra-Prod.Dockerfile', this, {});
-                this.template('docker/cassandra/_cassandra.sh', 'docker/cassandra/cassandra.sh', this, {});
-                this.template('docker/opscenter/_Dockerfile', 'docker/opscenter/Dockerfile', this, {});
+                this.template(dockerDir + 'cassandra/_Cassandra-Dev.Dockerfile', dockerDir + 'cassandra/Cassandra-Dev.Dockerfile', this, {});
+                this.template(dockerDir + 'cassandra/_Cassandra-Prod.Dockerfile', dockerDir + 'cassandra/Cassandra-Prod.Dockerfile', this, {});
+                this.template(dockerDir + 'cassandra/scripts/_init-dev.sh', dockerDir + 'cassandra/scripts/init-dev.sh', this, {});
+                this.template(dockerDir + 'cassandra/scripts/_init-prod.sh', dockerDir + 'cassandra/scripts/init-prod.sh', this, {});
+                this.template(dockerDir + 'cassandra/scripts/_entities.sh', dockerDir + 'cassandra/scripts/entities.sh', this, {});
+                this.template(dockerDir + 'cassandra/scripts/_cassandra.sh', dockerDir + 'cassandra/scripts/cassandra.sh', this, {});
+                this.template(dockerDir + 'opscenter/_Dockerfile', dockerDir + 'opscenter/Dockerfile', this, {});
             }
 
             switch (this.buildTool) {
@@ -1411,6 +1415,11 @@ module.exports = JhipsterGenerator.extend({
             this.removefile(testJsDir + 'spec/app/account/settings/settingsControllerSpec.js');
             this.removefile(testJsDir + 'spec/components/auth/authServicesSpec.js');
 
+            this.removefile('docker-compose.yml');
+            this.removefile('docker-compose-prod.yml');
+            this.removefile('Cassandra-Dev.Dockerfile');
+            this.removefile('Cassandra-Prod.Dockerfile');
+            this.removefolder('docker/');
         }
     },
 

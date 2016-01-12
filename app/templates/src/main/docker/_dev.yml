@@ -37,7 +37,7 @@
 <%= baseName.toLowerCase() %>-dev-cassandra:
   container_name: <%= baseName.toLowerCase() %>-dev-cassandra
   build: .
-  dockerfile: Cassandra-Dev.Dockerfile
+  dockerfile: cassandra/Cassandra-Dev.Dockerfile
   # volumes:
   #   - ~/volumes/jhipster/<%= baseName %>/dev-cassandra/:/var/lib/cassandra/data
   ports:
