@@ -63,8 +63,16 @@ S3.prototype.createBucket = function createBucket(params, callback) {
 
 S3.prototype.uploadWar = function uploadWar(params, callback) {
     var bucket = params.bucket;
+    var buildTool = params.buildTool;
+    var buildFolder;
 
-    findWarFilename(function (err, warFilename) {
+    if(buildTool === 'gradle') {
+        buildFolder = 'build/libs/'
+    } else {
+        buildFolder = 'target/'
+    }
+
+    findWarFilename(buildFolder, function (err, warFilename) {
         if (err) {
             error(err, callback);
         } else {
@@ -78,7 +86,7 @@ S3.prototype.uploadWar = function uploadWar(params, callback) {
                 signatureVersion: 'v4'
             });
 
-            var filePath = 'target/' + warFilename,
+            var filePath = buildFolder + warFilename,
                 body = fs.createReadStream(filePath);
 
             uploadToS3(s3, body, function (err, message) {
@@ -92,9 +100,9 @@ S3.prototype.uploadWar = function uploadWar(params, callback) {
     }.bind(this));
 };
 
-var findWarFilename = function findWarFilename(callback) {
+var findWarFilename = function findWarFilename(buildFolder, callback) {
     var warFilename = '';
-    fs.readdir('target/', function (err, files) {
+    fs.readdir(buildFolder, function (err, files) {
         if (err) {
             error(err, callback);
         }

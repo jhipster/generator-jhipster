@@ -2,6 +2,7 @@
 var util = require('util'),
     path = require('path'),
     fs = require('fs'),
+    os = require('os'),
     yeoman = require('yeoman-generator'),
     exec = require('child_process').exec,
     chalk = require('chalk'),
@@ -190,7 +191,11 @@ HerokuGenerator.prototype.productionDeploy = function productionDeploy() {
 
         var herokuDeployCommand = 'mvn package -Pprod -DskipTests=true && heroku deploy:jar --jar target/*.war --app ' + this.herokuDeployedName;
         if (this.buildTool == 'gradle') {
-            herokuDeployCommand = './gradlew -Pprod bootRepackage -x test && heroku deploy:jar --jar build/libs/*.war'
+            if(os.platform() === 'win32') {
+                herokuDeployCommand = 'gradlew -Pprod bootRepackage -x test && heroku deploy:jar --jar build/libs/*.war'
+            } else {
+                herokuDeployCommand = './gradlew -Pprod bootRepackage -x test && heroku deploy:jar --jar build/libs/*.war'
+            }
         }
 
         this.log(chalk.bold("\nUploading your application code.\n This may take " + chalk.cyan('several minutes') + " depending on your connection speed..."));
