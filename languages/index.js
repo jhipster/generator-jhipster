@@ -1,14 +1,14 @@
 'use strict';
 var util = require('util'),
 path = require('path'),
-yeoman = require('yeoman-generator'),
+generators = require('yeoman-generator'),
 exec = require('child_process').exec,
 chalk = require('chalk'),
 _ = require('underscore.string'),
 scriptBase = require('../script-base');
 
 var LanguagesGenerator = module.exports = function LanguagesGenerator(args, options, config) {
-    yeoman.generators.Base.apply(this, arguments);
+    generators.Base.apply(this, arguments);
     console.log(chalk.bold('Languages configuration is starting'));
     this.baseName = this.config.get('baseName');
     this.websocket = this.config.get('websocket');
@@ -19,7 +19,7 @@ var LanguagesGenerator = module.exports = function LanguagesGenerator(args, opti
     this.enableSocialSignIn = this.config.get('enableSocialSignIn');
 };
 
-util.inherits(LanguagesGenerator, yeoman.generators.Base);
+util.inherits(LanguagesGenerator, generators.Base);
 util.inherits(LanguagesGenerator, scriptBase);
 
 LanguagesGenerator.prototype.askFor = function askFor() {
@@ -34,7 +34,7 @@ LanguagesGenerator.prototype.askFor = function askFor() {
             {name: 'Catalan', value: 'ca'},
             {name: 'Chinese (Simplified)', value: 'zh-cn'},
             {name: 'Chinese (Traditional)', value: 'zh-tw'},
-            {name: 'Danish', value: 'da'},            
+            {name: 'Danish', value: 'da'},
             {name: 'Dutch', value: 'nl'},
             {name: 'Galician', value: 'gl'},
             {name: 'German', value: 'de'},
