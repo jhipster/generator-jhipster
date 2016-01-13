@@ -997,7 +997,7 @@
                                 <configuration>
                                     <buildTool><%= frontendBuilder %></buildTool>
                                     <%_ if (frontendBuilder == 'grunt') { _%>
-                                    <buildArgs>build --force --no-color</buildArgs>
+                                    <buildArgs>build --no-color</buildArgs>
                                     <%_ } _%>
                                 </configuration>
                             </execution>
