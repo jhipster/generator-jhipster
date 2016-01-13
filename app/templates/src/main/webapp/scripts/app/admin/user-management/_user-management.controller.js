@@ -12,8 +12,9 @@ angular.module('<%=angularAppName%>')
             $scope.currentAccount = account;
         });
         $scope.page = 1;
+        $scope.pageSize = 20;
         $scope.loadAll = function () {<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-            User.query({page: $scope.page - 1, size: 20}, function (result, headers) {
+            User.query({page: $scope.page - 1, size: $scope.pageSize}, function (result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 $scope.totalItems = headers('X-Total-Count');<% } else { %>
             User.query({}, function (result) {<% } %>

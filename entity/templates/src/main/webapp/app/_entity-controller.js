@@ -7,11 +7,12 @@ angular.module('<%=angularAppName%>')
         <%_ if (pagination != 'no') { _%>
         $scope.predicate = 'id';
         $scope.reverse = true;
+        $scope.pageSize = 20;
         <%_ } _%>
         <%_ if (pagination == 'pager' || pagination == 'pagination') { _%>
         $scope.page = 1;
         $scope.loadAll = function() {
-            <%= entityClass %>.query({page: $scope.page - 1, size: 20, sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'), 'id']}, function(result, headers) {
+            <%= entityClass %>.query({page: $scope.page - 1, size: $scope.pageSize, sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'), 'id']}, function(result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 $scope.totalItems = headers('X-Total-Count');
                 $scope.<%= entityInstance %>s = result;
@@ -21,7 +22,7 @@ angular.module('<%=angularAppName%>')
         <%_ if (pagination == 'infinite-scroll') { _%>
         $scope.page = 0;
         $scope.loadAll = function() {
-            <%= entityClass %>.query({page: $scope.page, size: 20, sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'), 'id']}, function(result, headers) {
+            <%= entityClass %>.query({page: $scope.page, size: $scope.pageSize, sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'), 'id']}, function(result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 for (var i = 0; i < result.length; i++) {
                     $scope.<%= entityInstance %>s.push(result[i]);
