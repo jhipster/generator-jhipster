@@ -19,8 +19,8 @@ util.inherits(ModulesGenerator, scriptBase);
 module.exports = ModulesGenerator.extend({
     constructor: function() {
         generators.Base.apply(this, arguments);
-        this.jhipsterVar = options.jhipsterVar;
-        this.jhipsterFunc = options.jhipsterFunc;
+        this.jhipsterVar = this.options.jhipsterVar;
+        this.jhipsterFunc = this.options.jhipsterFunc;
 
     },
 
@@ -116,6 +116,7 @@ module.exports = ModulesGenerator.extend({
             this.jhipsterFunc['registerModule'] = this.registerModule;
             this.jhipsterFunc['updateEntityConfig'] = this.updateEntityConfig;
             this.jhipsterFunc['getModuleHooks'] = this.getModuleHooks;
+            this.log(this.jhipsterVar);
         }
     }
 });
