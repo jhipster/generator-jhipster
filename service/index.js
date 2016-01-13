@@ -8,6 +8,7 @@ var util = require('util'),
 
 var ServiceGenerator = module.exports = function ServiceGenerator(args, options, config) {
     generators.Base.apply(this, arguments);
+    this.argument('name', { type: String, required: true });
     console.log('The service ' + this.name + ' is being created.');
     this.baseName = this.config.get('baseName');
     this.packageName = this.config.get('packageName');
