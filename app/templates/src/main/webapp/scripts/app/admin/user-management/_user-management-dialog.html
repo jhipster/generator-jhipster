@@ -78,7 +78,7 @@
         </div>
         <div class="form-group">
             <label for="activated">
-                <input type="checkbox" id="activated" ng-model="user.activated">
+                <input ng-disabled="user.id === null" type="checkbox" id="activated" ng-model="user.activated">
                 <span translate="user-management.activated">Activated</span>
             </label>
         </div><% if (enableTranslation) { %>
