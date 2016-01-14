@@ -1,13 +1,14 @@
 'use strict';
 var util = require('util'),
     path = require('path'),
-    yeoman = require('yeoman-generator'),
+    generators = require('yeoman-generator'),
     chalk = require('chalk'),
     _ = require('underscore.string'),
     scriptBase = require('../script-base');
 
 var ServiceGenerator = module.exports = function ServiceGenerator(args, options, config) {
-    yeoman.generators.NamedBase.apply(this, arguments);
+    generators.Base.apply(this, arguments);
+    this.argument('name', { type: String, required: true });
     console.log('The service ' + this.name + ' is being created.');
     this.baseName = this.config.get('baseName');
     this.packageName = this.config.get('packageName');
@@ -15,7 +16,7 @@ var ServiceGenerator = module.exports = function ServiceGenerator(args, options,
     this.databaseType = this.config.get('databaseType');
 };
 
-util.inherits(ServiceGenerator, yeoman.generators.Base);
+util.inherits(ServiceGenerator, generators.Base);
 util.inherits(ServiceGenerator, scriptBase);
 
 ServiceGenerator.prototype.askFor = function askFor() {

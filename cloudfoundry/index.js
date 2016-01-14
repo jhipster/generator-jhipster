@@ -1,7 +1,7 @@
 'use strict';
 var util = require('util'),
     path = require('path'),
-    yeoman = require('yeoman-generator'),
+    generators = require('yeoman-generator'),
     childProcess = require('child_process'),
     chalk = require('chalk'),
     _ = require('underscore.string'),
@@ -11,7 +11,7 @@ var exec = childProcess.exec;
 var spawn = childProcess.spawn;
 
 var CloudFoundryGenerator = module.exports = function CloudFoundryGenerator() {
-    yeoman.generators.Base.apply(this, arguments);
+    generators.Base.apply(this, arguments);
     console.log(chalk.bold('CloudFoundry configuration is starting'));
     this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
     this.baseName = this.config.get('baseName');
@@ -24,7 +24,7 @@ var CloudFoundryGenerator = module.exports = function CloudFoundryGenerator() {
     this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
 };
 
-util.inherits(CloudFoundryGenerator, yeoman.generators.Base);
+util.inherits(CloudFoundryGenerator, generators.Base);
 util.inherits(CloudFoundryGenerator, scriptBase);
 
 CloudFoundryGenerator.prototype.askForName = function askForName() {

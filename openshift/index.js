@@ -1,7 +1,7 @@
 'use strict';
 var util = require('util'),
     path = require('path'),
-    yeoman = require('yeoman-generator'),
+    generators = require('yeoman-generator'),
     childProcess = require('child_process'),
     chalk = require('chalk'),
     _ = require('underscore.string'),
@@ -11,7 +11,7 @@ var exec = childProcess.exec;
 var spawn = childProcess.spawn;
 
 var OpenshiftGenerator = module.exports = function OpenshiftGenerator() {
-    yeoman.generators.Base.apply(this, arguments);
+    generators.Base.apply(this, arguments);
     console.log(chalk.bold('Openshift configuration is starting'));
     this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
     this.baseName = this.config.get('baseName');
@@ -23,7 +23,7 @@ var OpenshiftGenerator = module.exports = function OpenshiftGenerator() {
     this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
 };
 
-util.inherits(OpenshiftGenerator, yeoman.generators.Base);
+util.inherits(OpenshiftGenerator, generators.Base);
 util.inherits(OpenshiftGenerator, scriptBase);
 
 OpenshiftGenerator.prototype.askForName = function askForName() {
