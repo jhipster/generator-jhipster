@@ -1,8 +1,6 @@
 'use strict';
 var util = require('util'),
-path = require('path'),
 generators = require('yeoman-generator'),
-exec = require('child_process').exec,
 chalk = require('chalk'),
 _ = require('underscore.string'),
 scriptBase = require('../script-base');
