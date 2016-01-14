@@ -1,0 +1,19 @@
+{
+    "main": {
+        "title": "Bem-vindo, Java Hipster!",
+        "subtitle": "Esta é a página principal",
+        "logged": {
+            "message": "Está autenticado como \"{{username}}\"."
+        },
+        "question": "Em caso de dúvida sobre o JHipster:",
+        "link": {
+            "homepage": "Página do JHipster",
+            "stackoverflow": "JHipster no Stack Overflow",
+            "bugtracker": "Bug's do JHipster",
+            "chat": "Chat público do JHipster",
+            "contact": "Contacte @java_hipster no Twitter"
+        },
+        "like": "Se gosta do JHipster, não se esqueça de avaliar no",
+        "github": "Github"
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "social": {
+        "btnLabel": "Zaloguj się z {{ label }}",
+        "register": {
+            "title": "Zarejestruj się z {{ label }}",
+            "errorTitle": "Zarejestruj się zewnętrznym kontem",
+            "messages": {
+                "success": "<strong>Rejestracja udana!</strong> Sprawdź skrzynkę w celu potwierdzenia.",
+                "error": {
+                    "fail": "<strong>Rejestracja nieudana!</strong> Wystąpił problem podczas walidacji Twojego zewnętrznego konta, spróbuj ponownie później."
+                }
+            }
+        }
+    }
+}

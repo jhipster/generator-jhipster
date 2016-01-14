@@ -4,12 +4,13 @@
         "browsehappy": "Folosiți un browser <strong>vechi</strong> . Va rugăm <a href=\"http://browsehappy.com/?locale=en\"> să îl upgradați</a> pentru o experiența îmbunătațită.",
         "menu": {
             "home": "Acasă",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
                 "main": "Entitați",
                 "bankAccount": "ContBancar",
                 "label": "Etichetă",
                 "operation": "Operație",
-                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "Cont",
@@ -22,6 +23,7 @@
             },
             "admin": {
                 "main": "Administrare",
+                "user-management": "User management",
                 "tracker": "Informații utilizatori",
                 "metrics": "Metrici",
                 "health": "Stare",
@@ -29,7 +31,8 @@
                 "logs": "Jurnal",
                 "audits": "Audit",
                 "apidocs": "API",
-                "database": "Bază de date"
+                "database": "Bază de date",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
             },
             "services":{
                 "main": "Servicii"
@@ -51,8 +54,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Dacă doriți să vă <a href=\"#/login\">autentificați</a>, puteți încerca conturile implicite:<br/>- Administrator (login=\"admin\" si parola=\"admin\") <br/>- Utilizator (login=\"user\" si parola=\"user\").",
-                "register": "Înca nu aveți un cont? <a href=\"#/register\">Înregistrați un nou cont</a>"
+                "authenticated": "Dacă doriți să vă <a class=\"alert-link\" href=\"#/login\">autentificați</a>, puteți încerca conturile implicite:<br/>- Administrator (login=\"admin\" si parola=\"admin\") <br/>- Utilizator (login=\"user\" si parola=\"user\").",
+                "register": "Înca nu aveți un cont? <a class=\"alert-link\" href=\"#/register\">Înregistrați un nou cont</a>"
             },
             "error": {
                 "dontmatch" : "Parola si confirmarea ei nu corespund!"
@@ -105,12 +108,20 @@
             "maxlength": "Acest câmp nu poate să fie mai lung decât {{max}} caractere.",
             "min": "Acest câmp trebuie să fie mai mult decât {{min}}.",
             "max": "Acest câmp nu poate să fie mai mult decât {{max}}.",
-            "minbytes": "This field should be more than {{min}} bytes.",
-            "maxbytes": "This field cannot be more than {{max}} bytes.",
+            "minbytes": "Acest câmp nu poate să fie mai mic decât {{min}} bytes.",
+            "maxbytes": "Acest câmp nu poate să fie mai mare decât {{max}} bytes.",
             "pattern": "Acest câmp trebuie să corespundă șablonului {{pattern}}.",
             "number": "Acest câmp trebuie să fie numeric.",
             "datetimelocal": "Acest câmp trebuie să conțină data si ora."
         }
+    },
+    "error": {
+        "server.not.reachable": "Serverul este indisponibil",
+        "NotNull": "Câmpul {{fieldName}} nu poate fi gol!",
+        "Size": "Câmpul {{fieldName}} nu corespunde ceințelor de dimensiune minimă/maximă!",
+        "userexists": "Login name already used!",
+        "emailexists": "E-mail is already in use!",
+        "idexists": "A new {{entityName}} cannot already have an ID"
     },
     "footer": "Acesta este subsolul paginii dumneavoastră"
 }

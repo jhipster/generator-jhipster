@@ -19,3 +19,4 @@
 *.gz binary
 *.ai binary
 *.eps binary
+*.swf binary

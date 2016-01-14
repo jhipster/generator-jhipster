@@ -4,9 +4,10 @@
         "browsehappy": "Sie benutzen einen <strong>veralteten</strong> Browser. Bitte <a href=\"http://browsehappy.com/?locale=de/\">aktualisieren Sie Ihren Browser</a>, um die Benutzerfreundlichkeit zu erhöhen.",
         "menu": {
             "home": "Startseite",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
                 "main": "Entitäten",
-                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "Zugang",
@@ -19,6 +20,7 @@
             },
             "admin": {
                 "main": "Administration",
+                "user-management": "Benutzerverwaltung",
                 "tracker": "Benutzer Aktivitäten",
                 "metrics": "Metriken",
                 "health": "Status",
@@ -26,7 +28,8 @@
                 "logs": "Protokoll",
                 "audits": "Audits",
                 "apidocs": "API",
-                "database": "Database"
+                "database": "Datenbank",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
             },
             "language": "Sprache"
         },
@@ -36,14 +39,14 @@
             "newpassword": "Neues Passwort",
             "newpassword.placeholder": "Neues Passwort",
             "confirmpassword": "Neues Passwort bestätigen",
-            "confirmpassword.placeholder": "Bestätigen Sie ihr neues Passwort",
+            "confirmpassword.placeholder": "Bestätigen Sie Ihr neues Passwort",
             "email": "E-Mail Adresse",
             "email.placeholder": "Ihre E-Mail Adresse"
         },
         "messages": {
             "info": {
-                "authenticated": "Wenn Sie sich <a href=\"#/login\">anmelden</a> möchten, versuchen Sie es mit <br/>- Administrator (Name=\"admin\" und Passwort=\"admin\")<br/>- Benutzer (Name=\"user\" und Passwort=\"user\").",
-                "register": "Sie haben noch keinen Zugang? <a href=\"#/register\">Registrieren Sie sich</a>"
+                "authenticated": "Wenn Sie sich <a class=\"alert-link\" href=\"#/login\">anmelden</a> möchten, versuchen Sie es mit <br/>- Administrator (Name=\"admin\" und Passwort=\"admin\")<br/>- Benutzer (Name=\"user\" und Passwort=\"user\").",
+                "register": "Sie haben noch keinen Zugang? <a class=\"alert-link\" href=\"#/register\">Registrieren Sie sich</a>"
             },
             "error": {
                 "dontmatch": "Das bestätigte Passwort entspricht nicht dem neuen Passwort!"
@@ -74,8 +77,8 @@
     },
     "entity": {
         "action": {
-            "addblob": "Add blob",
-            "addimage": "Add image",
+            "addblob": "Blob hinzufügen",
+            "addimage": "Bild hinzufügen",
             "back": "Zurück",
             "cancel": "Abbrechen",
             "delete": "Löschen",
@@ -96,12 +99,20 @@
             "maxlength": "Dieses Feld darf max. {{max}} Zeichen lang sein.",
             "min": "Dieses Feld muss größer als {{min}} sein.",
             "max": "Dieses Feld muss kleiner als {{max}} sein.",
-            "minbytes": "This field should be more than {{min}} bytes.",
-            "maxbytes": "This field cannot be more than {{max}} bytes.",
+            "minbytes": "Dieses Feld sollte mehr als {{min}} bytes haben.",
+            "maxbytes": "Dieses Feld sollte nicht mehr als {{max}} bytes haben.",
             "pattern": "Dieses Feld muss das Muster {{pattern}} erfüllen.",
             "number": "Dieses Feld muss eine Zahl sein.",
             "datetimelocal": "Dieses Feld muss eine Datums- und Zeitangabe enthalten."
         }
+    },
+    "error": {
+        "server.not.reachable": "Server ist nicht erreichbar",
+        "NotNull": "Feld {{fieldName}} kann nicht leer sein!",
+        "Size": "Feld {{fieldName}} erfüllt nicht die minimalen/maximalen Voraussetzungen!",
+        "userexists": "Benutzername bereits vergeben!",
+        "emailexists": "E-mail wird bereits verwendet!",
+        "idexists": "Ein neuer {{entityName}} kann noch keine ID haben"
     },
     "footer": "Dies ist Ihre Fußzeile"
 }

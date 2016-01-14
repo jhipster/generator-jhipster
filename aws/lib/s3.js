@@ -1,11 +1,14 @@
 'use strict';
 var fs = require('fs');
-var FILE_EXTENSION = '.original';
+
+var FILE_EXTENSION = '.original',
+    S3_STANDARD_REGION = 'us-east-1';
+
 try {
     var progressbar = require('progress');
 } catch (e) {
     console.log(
-        'You don\'t have the AWS SDK installed. Please install it in the jhipster generator directory.\n\n' +
+        'You don\'t have the AWS SDK installed. Please install it in the JHipster generator directory.\n\n' +
         'WINDOWS\n' +
         'cd %USERPROFILE%\\AppData\\Roaming\\npm\\node_modules\\generator-jhipster\n' +
         'npm install aws-sdk progress node-uuid\n\n' +
@@ -16,7 +19,6 @@ try {
     process.exit(e.code);
 }
 
-
 var S3 = module.exports = function S3(Aws) {
     this.Aws = Aws;
 };
@@ -25,11 +27,17 @@ S3.prototype.createBucket = function createBucket(params, callback) {
     var bucket = params.bucket,
         region = this.Aws.config.region;
 
+    var s3Params = {
+        Bucket: bucket,
+        CreateBucketConfiguration: {LocationConstraint: region}
+    };
+
+    if (region.toLowerCase() === S3_STANDARD_REGION) {
+        s3Params.CreateBucketConfiguration = undefined;
+    }
+
     var s3 = new this.Aws.S3({
-        params: {
-            Bucket: bucket,
-            CreateBucketConfiguration: {LocationConstraint: region}
-        },
+        params: s3Params,
         signatureVersion: 'v4'
     });
 
@@ -50,15 +58,21 @@ S3.prototype.createBucket = function createBucket(params, callback) {
                 success('Bucket ' + bucket + ' already exists', callback);
             }
         }
-    )
-    ;
+    );
 };
 
 S3.prototype.uploadWar = function uploadWar(params, callback) {
-    var bucket = params.bucket,
-        region = this.Aws.config.region;
+    var bucket = params.bucket;
+    var buildTool = params.buildTool;
+    var buildFolder;
 
-    findWarFilename(function (err, warFilename) {
+    if(buildTool === 'gradle') {
+        buildFolder = 'build/libs/'
+    } else {
+        buildFolder = 'target/'
+    }
+
+    findWarFilename(buildFolder, function (err, warFilename) {
         if (err) {
             error(err, callback);
         } else {
@@ -67,13 +81,12 @@ S3.prototype.uploadWar = function uploadWar(params, callback) {
             var s3 = new this.Aws.S3({
                 params: {
                     Bucket: bucket,
-                    Key: warKey,
-                    CreateBucketConfiguration: {LocationConstraint: region}
+                    Key: warKey
                 },
                 signatureVersion: 'v4'
             });
 
-            var filePath = 'target/' + warFilename,
+            var filePath = buildFolder + warFilename,
                 body = fs.createReadStream(filePath);
 
             uploadToS3(s3, body, function (err, message) {
@@ -87,9 +100,9 @@ S3.prototype.uploadWar = function uploadWar(params, callback) {
     }.bind(this));
 };
 
-var findWarFilename = function findWarFilename(callback) {
+var findWarFilename = function findWarFilename(buildFolder, callback) {
     var warFilename = '';
-    fs.readdir('target/', function (err, files) {
+    fs.readdir(buildFolder, function (err, files) {
         if (err) {
             error(err, callback);
         }

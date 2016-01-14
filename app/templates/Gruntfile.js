@@ -1,4 +1,4 @@
-// Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= pkg.name %> <%= pkg.version %>
+// Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= packagejs.name %> <%= packagejs.version %>
 'use strict';
 var fs = require('fs');
 <% if (buildTool == 'maven') { %>
@@ -8,7 +8,13 @@ var parseVersionFromPomXml = function() {
     var version;
     var pomXml = fs.readFileSync('pom.xml', "utf8");
     parseString(pomXml, function (err, result){
-        version = result.project.version[0];
+        if (result.project.version && result.project.version[0]) {
+            version = result.project.version[0];
+        } else if (result.project.parent && result.project.parent[0] && result.project.parent[0].version && result.project.parent[0].version[0]) {
+            version = result.project.parent[0].version[0]
+        } else {
+            throw new Error('pom.xml is malformed. No version is defined');
+        }
     });
     return version;
 };<% } else { %>
@@ -49,17 +55,17 @@ module.exports = function (grunt) {
             ngconstant: {
                 files: ['Gruntfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>],
                 tasks: ['ngconstant:dev']
-            }<% if (useCompass) { %>,
-            compass: {
+            }<% if (useSass) { %>,
+            sass: {
                 files: ['src/main/scss/**/*.{scss,sass}'],
-                tasks: ['compass:server']
+                tasks: ['sass:server']
             }<% } %>
         },
         autoprefixer: {
             // src and dest is configured in a subtask called "generated" by usemin
         },
         wiredep: {
-            app: {<% if (useCompass) { %>
+            app: {<% if (useSass) { %>
                 src: ['src/main/webapp/index.html', 'src/main/scss/main.scss'],
                 exclude: [
                     /angular-i18n/, // localizations are loaded dynamically
@@ -96,7 +102,7 @@ module.exports = function (grunt) {
                         'src/main/webapp/**/*.html',
                         'src/main/webapp/**/*.json',
                         'src/main/webapp/assets/styles/**/*.css',
-                        'src/main/webapp/scripts/**/*.js',
+                        'src/main/webapp/scripts/**/*.{js,html}',
                         'src/main/webapp/assets/images/**/*.{png,jpg,jpeg,gif,webp,svg}',
                         'tmp/**/*.{css,js}'
                     ]
@@ -130,26 +136,21 @@ module.exports = function (grunt) {
                 'src/main/webapp/scripts/app/**/*.js',
                 'src/main/webapp/scripts/components/**/*.js'
             ]
-        },<% if (useCompass) { %>
-        compass: {
+        },<% if (useSass) { %>
+        sass: {
             options: {
-                sassDir: 'src/main/scss',
-                cssDir: 'src/main/webapp/assets/styles',
-                generatedImagesDir: '.tmp/assets/images/generated',
-                imagesDir: 'src/main/webapp/assets/images',
-                javascriptsDir: 'src/main/webapp/scripts',
-                fontsDir: 'src/main/webapp/assets/fonts',
-                importPath: 'src/main/webapp/bower_components',
-                httpImagesPath: '/assets/images',
-                httpGeneratedImagesPath: '/assets/images/generated',
-                httpFontsPath: '/assets/fonts',
-                relativeAssets: false
+                includePaths: [
+                    'src/main/webapp/bower_components'
+                ]
             },
-            dist: {},
             server: {
-                options: {
-                    debugInfo: true
-                }
+                files: [{
+                    expand: true,
+                    cwd: 'src/main/scss',
+                    src: ['*.scss'],
+                    dest: 'src/main/webapp/assets/styles',
+                    ext: '.css'
+                }]
             }
         },<% } %>
         concat: {
@@ -171,7 +172,7 @@ module.exports = function (grunt) {
             }
         },
         useminPrepare: {
-            html: 'src/main/webapp/**/*.html',
+            html: 'src/main/webapp/index.html',
             options: {
                 dest: '<%%= yeoman.dist %>',
                 flow: {
@@ -305,7 +306,23 @@ module.exports = function (grunt) {
                 configFile: 'src/test/javascript/karma.conf.js',
                 singleRun: true
             }
-        },
+        },<% if (testFrameworks.indexOf('protractor') > -1) { %>
+        protractor: {
+            options: {
+                configFile: 'src/test/javascript/protractor.conf.js'
+            },
+            e2e: {
+                options: {
+                    // Stops Grunt process if a test fails
+                    keepAlive: false
+                }
+            },
+            continuous: {
+                options: {
+                    keepAlive: true
+                }
+            }
+        },<% } %>
         ngAnnotate: {
             dist: {
                 files: [{
@@ -361,8 +378,8 @@ module.exports = function (grunt) {
     grunt.registerTask('serve', [
         'clean:server',
         'wiredep',
-        'ngconstant:dev',<% if (useCompass) { %>
-        'compass:server',<% } %>
+        'ngconstant:dev',<% if (useSass) { %>
+        'sass:server',<% } %>
         'browserSync',
         'watch'
     ]);
@@ -375,8 +392,8 @@ module.exports = function (grunt) {
     grunt.registerTask('test', [
         'clean:server',
         'wiredep:test',
-        'ngconstant:dev',<% if (useCompass) { %>
-        'compass',<% } %>
+        'ngconstant:dev',<% if (useSass) { %>
+        'sass:server',<% } %>
         'karma'
     ]);
 
@@ -385,8 +402,8 @@ module.exports = function (grunt) {
         'wiredep:app',
         'ngconstant:prod',
         'useminPrepare',
-        'ngtemplates',<% if (useCompass) { %>
-        'compass:dist',<% } %>
+        'ngtemplates',<% if (useSass) { %>
+        'sass:server',<% } %>
         'imagemin',
         'svgmin',
         'concat',
@@ -401,23 +418,6 @@ module.exports = function (grunt) {
         'htmlmin'
     ]);
 
-	grunt.registerTask('appendSkipBower', 'Force skip of bower for Gradle', function () {
-
-		if (!grunt.file.exists(filepath)) {
-			// Assume this is a maven project
-			return true;
-		}
-
-		var fileContent = grunt.file.read(filepath);
-		var skipBowerIndex = fileContent.indexOf("skipBower=true");
-
-		if (skipBowerIndex != -1) {
-			return true;
-		}
-
-		grunt.file.write(filepath, fileContent + "\nskipBower=true\n");
-	});
-
     grunt.registerTask('buildOpenshift', [
         'test',
         'build',
@@ -431,8 +431,6 @@ module.exports = function (grunt) {
         'buildcontrol:openshift'
     ]);
 
-    grunt.registerTask('default', [
-        'test',
-        'build'
-    ]);
+    <% if (testFrameworks.indexOf('protractor') > -1) { %>grunt.registerTask('itest', ['protractor:continuous']);<% } %>
+    grunt.registerTask('default', ['serve']);
 };

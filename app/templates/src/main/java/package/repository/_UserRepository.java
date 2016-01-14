@@ -5,15 +5,16 @@ import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;<% } %>
 import <%=packageName%>.domain.User;
 
-import org.joda.time.DateTime;<% if (databaseType == 'sql') { %>
+import java.time.ZonedDateTime;<% if (databaseType == 'sql') { %>
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.mongodb.repository.MongoRepository;<% } %>
 
-import java.util.List;<% if (javaVersion == '8') { %>
-import java.util.Optional;<%}%><% if (databaseType == 'cassandra') { %>
+import java.util.List;
+import java.util.Optional;<% if (databaseType == 'cassandra') { %>
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
+
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -27,12 +28,12 @@ import java.util.Optional;<%}%>
  * Spring Data MongoDB repository for the User entity.
  */<% } %><% if (databaseType == 'cassandra') { %>/**
  * Cassandra repository for the User entity.
- */<% } %><% if ((databaseType == 'sql' || databaseType == 'mongodb') && javaVersion == '8') { %>
+ */<% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
 public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRepository<User, Long><% } %><% if (databaseType == 'mongodb') { %>MongoRepository<User, String><% } %> {
 
     Optional<User> findOneByActivationKey(String activationKey);
 
-    List<User> findAllByActivatedIsFalseAndCreatedDateBefore(DateTime dateTime);
+    List<User> findAllByActivatedIsFalseAndCreatedDateBefore(ZonedDateTime dateTime);
 
     Optional<User> findOneByResetKey(String resetKey);
 
@@ -40,21 +41,10 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
 
     Optional<User> findOneByLogin(String login);
 
+    Optional<User> findOneById(<%= pkType %> userId);
+
     @Override
     void delete(User t);
-
-}<% } else if ((databaseType == 'sql' || databaseType == 'mongodb') && javaVersion == '7') { %>
-public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRepository<User, Long><% } %><% if (databaseType == 'mongodb') { %>MongoRepository<User, String><% } %> {
-
-    User findOneByActivationKey(String activationKey);
-
-    List<User> findAllByActivatedIsFalseAndCreatedDateBefore(DateTime dateTime);
-
-    User findOneByResetKey(String resetKey);
-
-    User findOneByLogin(String login);
-
-    User findOneByEmail(String email);
 
 }<% } else if (databaseType == 'cassandra') { %>
 @Repository
@@ -150,6 +140,14 @@ public class UserRepository {
                 "WHERE email = :email");
     }
 
+    public User findOne(String id) {
+        return mapper.get(id);
+    }
+
+    public Optional<User> findOneById(String id) {
+        return Optional.of(findOne(id));
+    }
+
     public Optional<User> findOneByActivationKey(String activationKey) {
         BoundStatement stmt = findOneByActivationKeyStmt.bind();
         stmt.setString("activation_key", activationKey);
@@ -178,7 +176,7 @@ public class UserRepository {
         return mapper.map(session.execute(findAllStmt.bind())).all();
     }
 
-    public void save(User user) {
+    public User save(User user) {
         User oldUser = mapper.get(user.getId());
         if (oldUser != null) {
             if (!StringUtils.isEmpty(oldUser.getActivationKey()) && !oldUser.getActivationKey().equals(user.getActivationKey())) {
@@ -213,6 +211,7 @@ public class UserRepository {
             .setString("email", user.getEmail())
             .setString("id", user.getId()));
         session.execute(batch);
+        return user;
     }
 
     public void delete(User user) {

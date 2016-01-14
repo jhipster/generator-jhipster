@@ -1,16 +1,18 @@
 package <%=packageName%>.domain;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;<% if (databaseType == 'sql') { %>
-import org.hibernate.annotations.Type;
 import org.hibernate.envers.Audited;<% } %>
-import org.joda.time.DateTime;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 <% if (databaseType == 'mongodb') { %>import org.springframework.data.mongodb.core.mapping.Field;
+import java.time.ZonedDateTime;
 <% } %><% if (databaseType == 'sql') { %>
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import java.time.ZonedDateTime;
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;<% } %>
@@ -23,7 +25,9 @@ import javax.validation.constraints.NotNull;
 @MappedSuperclass
 @Audited
 @EntityListeners(AuditingEntityListener.class)<% } %>
-public abstract class AbstractAuditingEntity {
+public abstract class AbstractAuditingEntity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @CreatedBy<% if (databaseType == 'sql') { %>
     @NotNull
@@ -34,11 +38,10 @@ public abstract class AbstractAuditingEntity {
 
     @CreatedDate<% if (databaseType == 'sql') { %>
     @NotNull
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(name = "created_date", nullable = false)<% } %><% if (databaseType == 'mongodb') { %>
     @Field("created_date")<% } %>
     @JsonIgnore
-    private DateTime createdDate = DateTime.now();
+    private ZonedDateTime createdDate = ZonedDateTime.now();
 
     @LastModifiedBy<% if (databaseType == 'sql') { %>
     @Column(name = "last_modified_by", length = 50)<% } %><% if (databaseType == 'mongodb') { %>
@@ -47,11 +50,10 @@ public abstract class AbstractAuditingEntity {
     private String lastModifiedBy;
 
     @LastModifiedDate<% if (databaseType == 'sql') { %>
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(name = "last_modified_date")<% } %><% if (databaseType == 'mongodb') { %>
     @Field("last_modified_date  ")<% } %>
     @JsonIgnore
-    private DateTime lastModifiedDate = DateTime.now();
+    private ZonedDateTime lastModifiedDate = ZonedDateTime.now();
 
     public String getCreatedBy() {
         return createdBy;
@@ -61,11 +63,11 @@ public abstract class AbstractAuditingEntity {
         this.createdBy = createdBy;
     }
 
-    public DateTime getCreatedDate() {
+    public ZonedDateTime getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreatedDate(DateTime createdDate) {
+    public void setCreatedDate(ZonedDateTime createdDate) {
         this.createdDate = createdDate;
     }
 
@@ -77,11 +79,11 @@ public abstract class AbstractAuditingEntity {
         this.lastModifiedBy = lastModifiedBy;
     }
 
-    public DateTime getLastModifiedDate() {
+    public ZonedDateTime getLastModifiedDate() {
         return lastModifiedDate;
     }
 
-    public void setLastModifiedDate(DateTime lastModifiedDate) {
+    public void setLastModifiedDate(ZonedDateTime lastModifiedDate) {
         this.lastModifiedDate = lastModifiedDate;
     }
 }

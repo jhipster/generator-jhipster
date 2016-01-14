@@ -15,13 +15,36 @@ module.exports = function (config) {
             // endbower
             'main/webapp/scripts/app/app.js',
             'main/webapp/scripts/app/**/*.js',
-            'main/webapp/scripts/components/**/*.{js,html}',
-            'test/javascript/**/!(karma.conf).js'
+            'main/webapp/scripts/components/**/*.+(js|html)',
+            'test/javascript/spec/helpers/module.js',
+            'test/javascript/spec/helpers/httpBackend.js',
+            'test/javascript/**/!(karma.conf<% if (testFrameworks.indexOf("protractor") > -1) { %>|protractor.conf<% } %>).js'
         ],
 
 
         // list of files / patterns to exclude
-        exclude: [],
+        exclude: [<% if (testFrameworks.indexOf('protractor') > -1) { %>'test/javascript/e2e/**'<% } %>],
+
+        preprocessors: {
+            './**/*.js': ['coverage']
+        },
+
+        reporters: ['dots', 'jenkins', 'coverage', 'progress'],
+
+        jenkinsReporter: {
+            <% if (buildTool == 'maven') { %>
+            outputFile: '../target/test-results/karma/TESTS-results.xml'<% } else { %>
+            outputFile: '../build/test-results/karma/TESTS-results.xml'<% } %>
+        },
+
+        coverageReporter: {
+            <% if (buildTool == 'maven') { %>
+            dir: '../target/test-results/coverage',<% } else { %>
+            dir: '../build/test-results/coverage',<% } %>
+            reporters: [
+                {type: 'lcov', subdir: 'report-lcov'}
+            ]
+        },
 
         // web server port
         port: 9876,
@@ -45,6 +68,11 @@ module.exports = function (config) {
 
         // Continuous Integration mode
         // if true, it capture browsers, run tests and exit
-        singleRun: false
+        singleRun: false,
+
+        // to avoid DISCONNECTED messages when connecting to slow virtual machines
+        browserDisconnectTimeout : 10000, // default 2000
+        browserDisconnectTolerance : 1, // default 0
+        browserNoActivityTimeout : 4*60*1000 //default 10000
     });
 };

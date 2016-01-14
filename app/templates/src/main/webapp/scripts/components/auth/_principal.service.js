@@ -12,24 +12,24 @@ angular.module('<%=angularAppName%>')
             isAuthenticated: function () {
                 return _authenticated;
             },
-            isInRole: function (role) {
+            hasAuthority: function (authority) {
                 if (!_authenticated) {
-                   return false;
-               }
+                    return $q.when(false);
+                }
 
-               return this.identity().then(function(_id) {
-                   return _id.roles && _id.roles.indexOf(role) !== -1;
-               }, function(err){
-                   return false;
-               });
+                return this.identity().then(function(_id) {
+                    return _id.authorities && _id.authorities.indexOf(authority) !== -1;
+                }, function(err){
+                    return false;
+                });
             },
-            isInAnyRole: function (roles) {
-                if (!_authenticated || !_identity || !_identity.roles) {
+            hasAnyAuthority: function (authorities) {
+                if (!_authenticated || !_identity || !_identity.authorities) {
                     return false;
                 }
 
-                for (var i = 0; i < roles.length; i++) {
-                    if (this.isInRole(roles[i])) {
+                for (var i = 0; i < authorities.length; i++) {
+                    if (_identity.authorities.indexOf(authorities[i]) !== -1) {
                         return true;
                     }
                 }

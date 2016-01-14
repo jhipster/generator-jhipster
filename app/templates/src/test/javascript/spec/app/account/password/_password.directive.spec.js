@@ -1,33 +1,26 @@
 'use strict';
 
-describe('Directive Tests ', function () {
-
-    beforeEach(module('<%= angularAppName %>'));
+describe('Directive Tests', function () {
+    beforeEach(mockApiAccountCall);
+    <%_ if (enableTranslation) { _%>
+    beforeEach(mockI18nCalls);
+    <%_ } _%>
 
     var elm, scope, $httpBackend;
 
     beforeEach(inject(function($compile, $rootScope, $injector) {
+        <%_ if (websocket == 'spring-websocket' && authenticationType == 'oauth2') { _%>
+        spyOn(localStorage, 'getItem').and.callFake(function (key) {
+            return "{\"access_token\":\"79b4ddc8-eb1c-4e7f-82e0-0dc2038a56fd\"}";
+        });
+        <%_ } _%>
         $httpBackend = $injector.get('$httpBackend');
 
         var html = '<password-strength-bar password-to-check="password"></password-strength-bar>';
         scope = $rootScope.$new();
         elm = angular.element(html);
         $compile(elm)(scope);
-
-        $httpBackend.expectGET(/api\/account\?cacheBuster=\d+/).respond({});
-        $httpBackend.expectGET('scripts/components/navbar/navbar.html').respond({});
-        <% if (enableTranslation) { %>
-        $httpBackend.expectGET('i18n/en/global.json').respond({});
-        $httpBackend.expectGET('i18n/en/main.json').respond({});
-        <% } %>
-        $httpBackend.expectGET('scripts/app/main/main.html').respond({});
     }));
-
-    afterEach(function() {
-        $httpBackend.flush();
-        $httpBackend.verifyNoOutstandingExpectation();
-        $httpBackend.verifyNoOutstandingRequest();
-    });
 
     describe('Password strength', function () {
         it("Should display the password strength bar", function() {

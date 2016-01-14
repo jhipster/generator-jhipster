@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('MetricsController', function ($scope, MonitoringService, $modal) {
+    .controller('MetricsController', function ($scope, MonitoringService, $uibModal) {
         $scope.metrics = {};
         $scope.updatingMetrics = true;
 
@@ -23,7 +23,6 @@ angular.module('<%=angularAppName%>')
                 if (key.indexOf('web.rest') !== -1 || key.indexOf('service') !== -1) {
                     $scope.servicesStats[key] = value;
                 }
-
                 if (key.indexOf('net.sf.ehcache.Cache') !== -1) {
                     // remove gets or puts
                     var index = key.lastIndexOf('.');
@@ -44,19 +43,17 @@ angular.module('<%=angularAppName%>')
         $scope.refreshThreadDumpData = function() {
             MonitoringService.threadDump().then(function(data) {
 
-                var modalInstance = $modal.open({
+                var modalInstance = $uibModal.open({
                     templateUrl: 'scripts/app/admin/metrics/metrics.modal.html',
                     controller: 'MetricsModalController',
                     size: 'lg',
                     resolve: {
                         threadDump: function() {
-                            return data;
+                            return data.content;
                         }
 
                     }
                 });
             });
         };
-
-
     });

@@ -4,9 +4,10 @@
         "browsehappy": "Używasz <strong>przestarzałej</strong> przeglądarki. Proszę <a href=\"http://browsehappy.com/\">uaktualnij swoją przeglądarkę</a> aby poprawić wrażenia z użytkowania tej aplikacji.",
         "menu": {
             "home": "Strona domowa",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
                 "main": "Encje",
-                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "Konto",
@@ -19,6 +20,7 @@
             },
             "admin": {
                 "main": "Administracja",
+                "user-management": "User management",
                 "tracker": "Śledzenie użytkownika",
                 "metrics": "Metryki",
                 "health": "Status",
@@ -26,7 +28,8 @@
                 "logs": "Logi",
                 "audits": "Audyty",
                 "apidocs": "API",
-                "database": "Baza danych"
+                "database": "Baza danych",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
             },
             "language": "Język"
         },
@@ -42,8 +45,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Jeśli chcesz się <a href=\"#/login\">zalogować</a>, możesz spróbować któregoś z domyślnych kont:<br/>- Administrator (login=\"admin\" i hasło=\"admin\") <br/>- Użytkownik (login=\"user\" i hasło=\"user\").",
-                "register": "Nie masz jeszcze konta? <a href=\"#/register\">Zarejestruj się</a>"
+                "authenticated": "Jeśli chcesz się <a class=\"alert-link\" href=\"#/login\">zalogować</a>, możesz spróbować któregoś z domyślnych kont:<br/>- Administrator (login=\"admin\" i hasło=\"admin\") <br/>- Użytkownik (login=\"user\" i hasło=\"user\").",
+                "register": "Nie masz jeszcze konta? <a class=\"alert-link\" href=\"#/register\">Zarejestruj się</a>"
             },
             "error": {
                 "dontmatch": "Hasło i potwierdzenie nie zgadzają się!"
@@ -96,12 +99,20 @@
             "maxlength": "Wartość nie może być dłuższa niż {{max}} znaków.",
             "min": "Wartość powinna być większa niż {{min}}.",
             "max": "Wartość nie może być większa niż {{max}}.",
-            "minbytes": "This field should be more than {{min}} bytes.",
-            "maxbytes": "This field cannot be more than {{max}} bytes.",
+            "minbytes": "Wartość nie może być mniejsza niż {{min}} bajtów.",
+            "maxbytes": "Wartość nie może być większa niż {{max}} bajtów.",
             "pattern": "Wartość powinna być zgodna ze wzorem {{pattern}}.",
             "number": "Wartość powinna być liczbowa.",
             "datetimelocal": "Wartość powinna zawierać datę i czas."
         }
+    },
+    "error": {
+        "server.not.reachable": "Serwer jest nieosiągalny",
+        "NotNull": "Wartość {{fieldName}} nie może być pusta!",
+        "Size": "Wartość {{fieldName}} nie spełnia wymagań co do długości!",
+        "userexists": "Login name already used!",
+        "emailexists": "E-mail is already in use!",
+        "idexists": "A new {{entityName}} cannot already have an ID"
     },
     "footer": "To jest stopka"
 }

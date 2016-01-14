@@ -1,15 +1,27 @@
 'use strict';
 
 angular.module('<%=angularAppName%>').controller('<%= entityClass %>DialogController',
-    ['$scope', '$stateParams', '$modalInstance', 'entity', '<%= entityClass %>'<% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) {%>, '<%= differentTypes[idx] %>'<% } } %>,
-        function($scope, $stateParams, $modalInstance, entity, <%= entityClass %><% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) {%>, <%= differentTypes[idx] %><% } } %>) {
+    ['$scope', '$stateParams', '$uibModalInstance'<% if (fieldsContainOwnerOneToOne) { %>, '$q'<% } %><% if (fieldsContainBlob) { %>, 'DataUtils'<% } %>, 'entity', '<%= entityClass %>'<% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) {%>, '<%= differentTypes[idx] %>'<% } } %>,
+        function($scope, $stateParams, $uibModalInstance<% if (fieldsContainOwnerOneToOne) { %>, $q<% } %><% if (fieldsContainBlob) { %>, DataUtils<% } %>, entity, <%= entityClass %><% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) {%>, <%= differentTypes[idx] %><% } } %>) {
 
         $scope.<%= entityInstance %> = entity;<%
             var queries = [];
             for (idx in relationships) {
                 var query;
-                if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide == true) {
-                    query = '$scope.' + relationships[idx].relationshipFieldName.toLowerCase() + 's = ' + relationships[idx].otherEntityNameCapitalized + ".query({filter: '" + relationships[idx].otherEntityRelationshipName.toLowerCase() + "-is-null'});";
+                if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide == true && relationships[idx].otherEntityName != 'user') {
+                    query = '$scope.' + relationships[idx].relationshipFieldName.toLowerCase() + 's = ' + relationships[idx].otherEntityNameCapitalized + ".query({filter: '" + relationships[idx].otherEntityRelationshipName.toLowerCase() + "-is-null'});"
+                + "\n        $q.all([$scope." + relationships[idx].otherEntityRelationshipName + ".$promise, $scope." + relationships[idx].relationshipFieldName.toLowerCase() + "s.$promise]).then(function() {";
+                    if (dto == "no"){
+                        query += "\n            if (!$scope." + relationships[idx].otherEntityRelationshipName + "." + relationships[idx].relationshipFieldName + " || !$scope." + relationships[idx].otherEntityRelationshipName + "." + relationships[idx].relationshipFieldName + ".id) {"
+                    } else {
+                        query += "\n            if (!$scope." + relationships[idx].otherEntityRelationshipName + "." + relationships[idx].relationshipFieldName + "Id) {"
+                    }
+                    query += "\n                return $q.reject();"
+                + "\n            }"
+                + "\n            return " + relationships[idx].otherEntityNameCapitalized + ".get({id : $scope." + relationships[idx].otherEntityRelationshipName + "." + relationships[idx].relationshipFieldName + (dto == 'no' ? ".id" : "Id") + "}).$promise;"
+                + "\n        }).then(function(" + relationships[idx].relationshipFieldName + ") {"
+                + "\n            $scope." + relationships[idx].relationshipFieldName.toLowerCase() + "s.push(" + relationships[idx].relationshipFieldName + ");"
+                + "\n        });";
                 } else {
                     query = '$scope.' + relationships[idx].otherEntityNameCapitalized.toLowerCase() + 's = ' + relationships[idx].otherEntityNameCapitalized + '.query();';
                 }
@@ -24,71 +36,64 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>DialogContro
             });
         };
 
-        var onSaveFinished = function (result) {
+        var onSaveSuccess = function (result) {
             $scope.$emit('<%=angularAppName%>:<%= entityInstance %>Update', result);
-            $modalInstance.close(result);
+            $uibModalInstance.close(result);
+            $scope.isSaving = false;
+        };
+
+        var onSaveError = function (result) {
+            $scope.isSaving = false;
         };
 
         $scope.save = function () {
+            $scope.isSaving = true;
             if ($scope.<%= entityInstance %>.id != null) {
-                <%= entityClass %>.update($scope.<%= entityInstance %>, onSaveFinished);
+                <%= entityClass %>.update($scope.<%= entityInstance %>, onSaveSuccess, onSaveError);
             } else {
-                <%= entityClass %>.save($scope.<%= entityInstance %>, onSaveFinished);
+                <%= entityClass %>.save($scope.<%= entityInstance %>, onSaveSuccess, onSaveError);
             }
         };
 
         $scope.clear = function() {
-            $modalInstance.dismiss('cancel');
-        };<% if (fieldsContainBlob) { %>
-
-        $scope.abbreviate = function (text) {
-            if (!angular.isString(text)) {
-                return '';
-            }
-            if (text.length < 30) {
-                return text;
-            }
-            return text ? (text.substring(0, 15) + '...' + text.slice(-10)) : '';
+            $uibModalInstance.dismiss('cancel');
         };
+        <%_ if (fieldsContainBlob) { _%>
 
-        $scope.byteSize = function (base64String) {
-            if (!angular.isString(base64String)) {
-                return '';
-            }
-            function endsWith(suffix, str) {
-                return str.indexOf(suffix, str.length - suffix.length) !== -1;
-            }
-            function paddingSize(base64String) {
-                if (endsWith('==', base64String)) {
-                    return 2;
-                }
-                if (endsWith('=', base64String)) {
-                    return 1;
-                }
-                return 0;
-            }
-            function size(base64String) {
-                return base64String.length / 4 * 3 - paddingSize(base64String);
-            }
-            function formatAsBytes(size) {
-                return size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " bytes";
-            }
+        $scope.abbreviate = DataUtils.abbreviate;
 
-            return formatAsBytes(size(base64String));
-        };<% } %><% for (fieldId in fields) { if (fields[fieldId].fieldType === 'byte[]') { %>
+        $scope.byteSize = DataUtils.byteSize;
+        <%_ } _%>
+        <%_ for (fieldId in fields) {
+            if (fields[fieldId].fieldType === 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
 
-        $scope.set<%= fields[fieldId].fieldNameCapitalized %> = function ($files, <%= entityInstance %>) {
-            if ($files[0]) {
-                var file = $files[0];
+        $scope.set<%= fields[fieldId].fieldNameCapitalized %> = function ($file, <%= entityInstance %>) {
+            <%_ if (fields[fieldId].fieldTypeBlobContent == 'image') { _%>
+            if ($file && $file.$error == 'pattern') {
+                return;
+            }
+            <%_ } _%>
+            if ($file) {
                 var fileReader = new FileReader();
-                fileReader.readAsDataURL(file);
+                fileReader.readAsDataURL($file);
                 fileReader.onload = function (e) {
-                    var data = e.target.result;
-                    var base64Data = data.substr(data.indexOf('base64,') + 'base64,'.length);
+                    var base64Data = e.target.result.substr(e.target.result.indexOf('base64,') + 'base64,'.length);
                     $scope.$apply(function() {
                         <%= entityInstance %>.<%= fields[fieldId].fieldName %> = base64Data;
+                        <%= entityInstance %>.<%= fields[fieldId].fieldName %>ContentType = $file.type;
                     });
                 };
             }
-        };<% } } %>
+        };
+        <%_ } else if (fields[fieldId].fieldType === 'LocalDate' || fields[fieldId].fieldType === 'ZonedDateTime') { _%>
+        $scope.datePickerFor<%= fields[fieldId].fieldNameCapitalized %> = {};
+
+        $scope.datePickerFor<%= fields[fieldId].fieldNameCapitalized %>.status = {
+            opened: false
+        };
+
+        $scope.datePickerFor<%= fields[fieldId].fieldNameCapitalized %>Open = function($event) {
+            $scope.datePickerFor<%= fields[fieldId].fieldNameCapitalized %>.status.opened = true;
+        };
+        <%_ } } _%>
 }]);

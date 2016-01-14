@@ -4,8 +4,9 @@ var field = fields[fieldId];
 var result = '';
 
 if (field.fieldValidate == true) {
-	var rules = field.fieldValidateRules;
-	var validators = [];
+    var rules = field.fieldValidateRules;
+    var validators = [];
+  var MAX_VALUE = 2147483647;
 
     if (rules.indexOf('required') != -1) {
         validators.push('@NotNull');
@@ -32,12 +33,13 @@ if (field.fieldValidate == true) {
         validators.push('@Min(value = ' + field.fieldValidateRulesMin + ')');
     }
     if (rules.indexOf('max') != -1) {
-        validators.push('@Max(value = ' + field.fieldValidateRulesMax + ')');
+        var isLong = (field.fieldValidateRulesMax > MAX_VALUE) ? 'L' : '';
+        validators.push('@Max(value = ' + field.fieldValidateRulesMax + isLong + ')');
     }
     if (rules.indexOf('pattern') != -1) {
-        validators.push('@Pattern(regexp = "' + field.fieldValidateRulesPattern  + '")');
+        validators.push('@Pattern(regexp = "' + field.fieldValidateRulesPatternJava  + '")');
     }
     result =  validators.join('\n    ');
-}
--%>
+    result += '\n';
+} -%>
 <%- result -%>

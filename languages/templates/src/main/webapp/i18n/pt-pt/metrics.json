@@ -1,0 +1,95 @@
+{
+    "metrics": {
+        "title": "Métricas da aplicação",
+        "refresh.button": "Atualizar",
+        "updating": "Atualização...",
+        "jvm": {
+            "title": "Métricas da JVM",
+            "memory": {
+                "title": "Memória",
+                "total": "Memória Total",
+                "heap": "Memória Heap",
+                "nonheap": "Memória não Heap"
+            },
+            "threads": {
+                "title": "Threads",
+                "all": "Tudo",
+                "runnable": "Runnable",
+                "timedwaiting": "Tempo de espera",
+                "waiting": "Aguardando",
+                "blocked": "Bloqueado",
+                "dump": {
+                    "title": "Threads dump",
+                    "id": "Id: ",
+                    "blockedtime": "Tempo bloqueado",
+                    "blockedcount": "Número de bloqueios",
+                    "waitedtime": "Tempo de espera",
+                    "waitedcount": "Número de esperas",
+                    "lockname": "Nome do bloqueio",
+                    "stacktrace": "Stacktrace",
+                    "show": "Mostrar",
+                    "hide": "Esconder"
+                }
+            },
+            "gc": {
+                "title": "Garbage collections",
+                "marksweepcount": "Mark Sweep count",
+                "marksweeptime": "Mark Sweep time",
+                "scavengecount": "Scavenge count",
+                "scavengetime": "Scavenge time"
+            },
+            "http": {
+                "title": "Pedidos HTTP (eventos por segundo)",
+                "active": "Pedidos ativos:",
+                "total": "Total de pedidos:",
+                "table": {
+                    "code": "Código",
+                    "count": "Contagem",
+                    "mean": "Mediana",
+                    "average": "Média"
+                },
+                "code": {
+                    "ok": "Ok",
+                    "notfound": "Não encontrado",
+                    "servererror": "Erro do servidor"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Estatísticas dos serviços (tempo em milisegundos)",
+            "table": {
+                "name": "Nome do serviço",
+                "count": "Contagem",
+                "mean": "Mediana",
+                "min": "Min",
+                "max": "Max",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "ehcache": {
+            "title": "Estatísticas da Ehcache",
+            "cachename": "Nome da cache",
+            "objects": "Objetos",
+            "hits": "Hits",
+            "misses": "Misses",
+            "evictioncount": "Número de despejos",
+            "mean": "Mediana (ms)"
+        },
+        "datasource": {
+        	"usage": "Utilização",
+            "title": "Estatísticas da DataSource (tempo em milisegundos)",
+            "name": "Utilização da Pool",
+            "count": "Contagem",
+            "mean": "Mediana",
+            "min": "Min",
+            "max": "Max",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}

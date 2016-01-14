@@ -1,11 +1,13 @@
 {
     "health": {
-        "title": "Heath checks",
-        "refresh.button": "Refresh",
+        "title": "Control de salud",
+        "refresh.button": "Refrescar",
+        "health.details.details": "Detalles",
         "stacktrace": "Stacktrace",
         "indicator": {
-            "diskSpace": "Disk space",
-            "mail": "Email",<% if (databaseType == 'sql') { %>
+            "diskSpace": "Espacio en disco",
+            "mail": "Email",<% if (searchEngine == 'elasticsearch') { %>
+            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
             "db": "Database"<% } %><% if (databaseType == 'mongodb') { %>
             "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
             "cassandra": "Cassandra"<% } %>
@@ -15,8 +17,8 @@
             "status": "Estado"
         },
         "status": {
-            "UP": "HASTA",
-            "DOWN": "ABAJO"
+            "UP": "LEVANTADO",
+            "DOWN": "CAÍDO"
         }
     }
 }

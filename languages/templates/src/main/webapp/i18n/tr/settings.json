@@ -11,7 +11,7 @@
         },
         "messages": {
             "error": {
-                "fail": "<strong>Bir hata oluştu!</strong> Ayarlar kaydeilemedi.",
+                "fail": "<strong>Bir hata oluştu!</strong> Ayarlar kaydedilemedi.",
                 "emailexists": "<strong>E-mail adresi zaten kullanılıyor!</strong> Lütfen başka bir mail seçiniz."
             },
             "success": "<strong>Ayarlar kaydedildi!</strong>",

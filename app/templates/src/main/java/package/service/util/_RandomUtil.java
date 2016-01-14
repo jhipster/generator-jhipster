@@ -35,7 +35,7 @@ public final class RandomUtil {
     *
     * @return the generated reset key
     */
-   public static String generateResetKey() {
-       return RandomStringUtils.randomNumeric(DEF_COUNT);
-   }
+    public static String generateResetKey() {
+        return RandomStringUtils.randomNumeric(DEF_COUNT);
+    }
 }

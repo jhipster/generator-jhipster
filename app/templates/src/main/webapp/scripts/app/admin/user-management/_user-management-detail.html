@@ -1,0 +1,116 @@
+<div>
+    <h2><span translate="user-management.detail.title">User</span> "{{user.login}}"</h2>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th translate="entity.detail.field">Field</th>
+                    <th translate="entity.detail.value">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <span translate="user-management.login">Login</span>
+                </td>
+                <td>
+                    <input type="text" class="input-sm form-control" value="{{user.login}}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="user-management.firstName">FirstName</span>
+                </td>
+                <td>
+                    <input type="text" class="input-sm form-control" value="{{user.firstName}}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="user-management.lastName">LastName</span>
+                </td>
+                <td>
+                    <input type="text" class="input-sm form-control" value="{{user.lastName}}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="user-management.email">Email</span>
+                </td>
+                <td>
+                    <input type="text" class="input-sm form-control" value="{{user.email}}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="user-management.activated">Activated</span>
+                </td>
+                <td>
+                    <input type="text" class="input-sm form-control" value="{{user.activated}}" readonly>
+                </td>
+            </tr>
+            <% if (enableTranslation) { %>
+            <tr>
+                <td>
+                    <span translate="user-management.langKey">LangKey</span>
+                </td>
+                <td>
+                    <input type="text" class="input-sm form-control" value="{{user.langKey}}" readonly>
+                </td>
+            </tr>
+            <% } %>
+            <tr>
+                <td>
+                    <span translate="user-management.createdBy">CreatedBy</span>
+                </td>
+                <td>
+                    <input type="text" class="input-sm form-control" value="{{user.createdBy}}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="user-management.createdDate">CreatedDate</span>
+                </td>
+                <td>
+                    <input type="text" class="input-sm form-control"
+                           value="{{user.createdDate | date:'dd/MM/yy HH:mm' }}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="user-management.lastModifiedBy">LastModifiedBy</span>
+                </td>
+                <td>
+                    <input type="text" class="input-sm form-control" value="{{user.lastModifiedBy}}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="user-management.lastModifiedDate">LastCreatedDate</span>
+                </td>
+                <td>
+                    <input type="text" class="input-sm form-control"
+                           value="{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}" readonly>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="user-management.profiles">Profiles</span>
+                </td>
+                <td>
+                    <ul class="list-unstyled">
+                        <li ng-repeat="authority in user.authorities"><span>{{authority}}</span></li>
+                    </ul>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            ui-sref="user-management"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

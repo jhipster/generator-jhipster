@@ -1,0 +1,75 @@
+<div>
+    <h2 translate="user-management.home.title">Users</h2>
+    <jh-alert></jh-alert>
+    <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+              <button class="btn btn-primary" ui-sref="user-management.new">
+                  <span class="glyphicon glyphicon-flash"></span> <span translate="user-management.home.createLabel">Create a new User</span>
+              </button>
+          </div>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th translate="global.field.id">ID</th>
+                <th translate="user-management.login">Login</th>
+                <th translate="user-management.email">Email</th>
+                <th></th>
+                <% if (enableTranslation) { %><th translate="user-management.langKey">LangKey</th><% } %>
+                <th translate="user-management.profiles">Profiles</th><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+                <th translate="user-management.createdDate">CreatedDate</th>
+                <th translate="user-management.lastModifiedBy">LastModifiedBy</th>
+                <th translate="user-management.lastModifiedDate">LastModifiedDate</th><% } %>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="user in users track by user.id">
+                <td><a ui-sref="user-management-detail({login:user.login})">{{user.id}}</a></td>
+                <td>{{user.login}}</td>
+                <td>{{user.email}}</td>
+                <td>
+                    <span class="label label-danger" ng-click="setActive(user, true)" ng-show="!user.activated"
+                          translate="user-management.deactivated" style="cursor: pointer;">Desactivated</span>
+                    <span class="label label-success" ng-click="setActive(user, false)" ng-show="user.activated"
+                          translate="user-management.activated" style="cursor: pointer;">Activated</span>
+                </td>
+                <% if (enableTranslation) { %><td>{{user.langKey}}</td><% } %>
+                <td>
+                    <div ng-repeat="authority in user.authorities">
+                        <span class="label label-info">{{ authority }}</span>
+                    </div>
+                </td><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+                <td>{{user.createdDate | date:'dd/MM/yy HH:mm'}}</td>
+                <td>{{user.lastModifiedBy}}</td>
+                <td>{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}</td><% } %>
+                <td class="text-right">
+                    <button type="submit"
+                            ui-sref="user-management-detail({login:user.login})"
+                            class="btn btn-info btn-sm">
+                        <span class="glyphicon glyphicon-eye-open"></span>
+                    </button>
+                    <button type="submit"
+                            ui-sref="user-management.edit({login:user.login})"
+                            class="btn btn-primary btn-sm">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </button>
+                    <button type="submit"
+                            ui-sref="user-management.delete({login:user.login})"
+                            class="btn btn-danger btn-sm">
+                        <span class="glyphicon glyphicon-remove-circle"></span>
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
+    <div class="text-center">
+        <uib-pagination class="pagination-sm" total-items="totalItems" ng-model="page" ng-change="loadAll()"></uib-pagination>
+    </div>
+    <%_ } _%>
+</div>

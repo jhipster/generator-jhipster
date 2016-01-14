@@ -2,20 +2,20 @@
 var util = require('util'),
     path = require('path'),
     fs = require('fs'),
-    yeoman = require('yeoman-generator'),
+    os = require('os'),
+    generators = require('yeoman-generator'),
     exec = require('child_process').exec,
     chalk = require('chalk'),
     _ = require('underscore.string'),
     scriptBase = require('../script-base');
 
 var HerokuGenerator = module.exports = function HerokuGenerator(args, options, config) {
-    yeoman.generators.Base.apply(this, arguments);
+    generators.Base.apply(this, arguments);
     console.log(chalk.bold('Heroku configuration is starting'));
     this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
     this.baseName = this.config.get('baseName');
     this.packageName = this.config.get('packageName');
     this.packageFolder = this.config.get('packageFolder');
-    this.javaVersion = this.config.get('javaVersion');
     this.hibernateCache = this.config.get('hibernateCache');
     this.databaseType = this.config.get('databaseType');
     this.prodDatabaseType = this.config.get('prodDatabaseType');
@@ -23,7 +23,7 @@ var HerokuGenerator = module.exports = function HerokuGenerator(args, options, c
     this.buildTool = this.config.get('buildTool');
 };
 
-util.inherits(HerokuGenerator, yeoman.generators.Base);
+util.inherits(HerokuGenerator, generators.Base);
 util.inherits(HerokuGenerator, scriptBase);
 
 HerokuGenerator.prototype.askFor = function askFor() {
@@ -106,17 +106,12 @@ HerokuGenerator.prototype.herokuCreate = function herokuCreate() {
     if(this.abort) return;
     var done = this.async();
 
-    if (this.prodDatabaseType != 'postgresql') {
-      this.log.error('Only PostgreSQL is Supported for Heroku generator');
-      this.abort = true;
-      done();
-      return;
-    }
-
     var regionParams = (this.herokuRegion !== 'us') ? ' --region ' + this.herokuRegion : '';
 
+    var dbAddOn = (this.prodDatabaseType != 'postgresql') ? ' --addons cleardb' : ' --addons heroku-postgresql';
+
     this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
-    var herokuCreateCmd = 'heroku create ' + this.herokuDeployedName + regionParams + ' --addons heroku-postgresql:hobby-dev';
+    var herokuCreateCmd = 'heroku create ' + this.herokuDeployedName + regionParams + dbAddOn;
 
     console.log(herokuCreateCmd);
     var child = exec(herokuCreateCmd, {}, function (err, stdout, stderr) {
@@ -149,6 +144,8 @@ HerokuGenerator.prototype.herokuCreate = function herokuCreate() {
                   this.abort = true;
                   this.log.error(err);
                 } else {
+                  // Extract from "Created random-app-name-1234... done"
+                  this.herokuDeployedName = stdout.substring(9, stdout.indexOf('...'));
                   this.log(stdout);
                 }
                 done();
@@ -173,6 +170,8 @@ HerokuGenerator.prototype.herokuCreate = function herokuCreate() {
 
 HerokuGenerator.prototype.copyHerokuFiles = function copyHerokuFiles() {
     if(this.abort) return;
+    var insight = this.insight();
+    insight.track('generator', 'heroku');
     var done = this.async();
     this.log(chalk.bold('\nCreating Heroku deployment files'));
 
@@ -192,7 +191,11 @@ HerokuGenerator.prototype.productionDeploy = function productionDeploy() {
 
         var herokuDeployCommand = 'mvn package -Pprod -DskipTests=true && heroku deploy:jar --jar target/*.war --app ' + this.herokuDeployedName;
         if (this.buildTool == 'gradle') {
-            herokuDeployCommand = './gradlew -Pprod bootRepackage -x test && heroku deploy:jar --jar build/libs/*.war'
+            if(os.platform() === 'win32') {
+                herokuDeployCommand = 'gradlew -Pprod bootRepackage -x test && heroku deploy:jar --jar build/libs/*.war'
+            } else {
+                herokuDeployCommand = './gradlew -Pprod bootRepackage -x test && heroku deploy:jar --jar build/libs/*.war'
+            }
         }
 
         this.log(chalk.bold("\nUploading your application code.\n This may take " + chalk.cyan('several minutes') + " depending on your connection speed..."));

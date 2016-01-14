@@ -1,0 +1,30 @@
+{
+    "user-management": {
+        "home": {
+            "title": "Utilizatori",
+            "createLabel": "Crează un nou utilizator",
+            "createOrEditLabel": "Crează sau editează un utilizator"
+        },
+        "created": "A new user is created with identifier {{ param }}",
+        "updated": "An user is updated with identifier {{ param }}",
+        "deleted": "An user is deleted with identifier {{ param }}",
+        "delete": {
+            "question": "Ești sigur ca dorești să stergi utilizaotorul {{ login }}?"
+        },
+        "detail": {
+            "title": "Utilizator"
+        },
+        "login": "Login",
+        "firstName": "Prenume",
+        "lastName": "Nume",
+        "email": "Email",
+        "activated": "Activat",
+        "deactivated": "Dezactivat",
+        "profiles": "Profile",
+        "langKey": "Limbă",
+        "createdBy": "Creat de",
+        "createdDate": "Creat la data",
+        "lastModifiedBy": "Modifica de",
+        "lastModifiedDate": "Modificat la data"
+    }
+}

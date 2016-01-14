@@ -1,7 +1,7 @@
 'use strict';
 var util = require('util'),
     path = require('path'),
-    yeoman = require('yeoman-generator'),
+    generators = require('yeoman-generator'),
     childProcess = require('child_process'),
     chalk = require('chalk'),
     _ = require('underscore.string'),
@@ -11,13 +11,12 @@ var exec = childProcess.exec;
 var spawn = childProcess.spawn;
 
 var CloudFoundryGenerator = module.exports = function CloudFoundryGenerator() {
-    yeoman.generators.Base.apply(this, arguments);
+    generators.Base.apply(this, arguments);
     console.log(chalk.bold('CloudFoundry configuration is starting'));
     this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
     this.baseName = this.config.get('baseName');
     this.packageName = this.config.get('packageName');
     this.packageFolder = this.config.get('packageFolder');
-    this.javaVersion = this.config.get('javaVersion');
     this.hibernateCache = this.config.get('hibernateCache');
     this.databaseType = this.config.get('databaseType');
     this.devDatabaseType = this.config.get('devDatabaseType');
@@ -25,7 +24,7 @@ var CloudFoundryGenerator = module.exports = function CloudFoundryGenerator() {
     this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
 };
 
-util.inherits(CloudFoundryGenerator, yeoman.generators.Base);
+util.inherits(CloudFoundryGenerator, generators.Base);
 util.inherits(CloudFoundryGenerator, scriptBase);
 
 CloudFoundryGenerator.prototype.askForName = function askForName() {
@@ -81,7 +80,7 @@ CloudFoundryGenerator.prototype.checkInstallation = function checkInstallation()
     if(this.abort) return;
     var done = this.async();
 
-    exec('cf --version', function (err) {
+    exec('cf -v', function (err) {
         if (err) {
             this.log.error('cloudfoundry\'s cf command line interface is not available. ' +
             'You can install it via https://github.com/cloudfoundry/cli/releases');

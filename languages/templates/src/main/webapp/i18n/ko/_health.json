@@ -1,0 +1,23 @@
+{
+    "health": {
+        "title": "상태 확인",
+        "refresh.button": "새로고침",
+        "indicator": {
+            "diskSpace": "디스크 공간",
+            "mail": "이메일",<% if (searchEngine == 'elasticsearch') { %>
+            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
+            "db": "데이터베이스"<% } %><% if (databaseType == 'mongodb') { %>
+            "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
+            "cassandra": "Cassandra"<% } %>
+        },
+        "stacktrace": "스택트레이스",
+        "table": {
+            "service": "서비스 이름",
+            "status": "상태"
+        },
+        "status": {
+            "UP": "사용할 수",
+            "DOWN": "서비스 중"
+        }
+    }
+}

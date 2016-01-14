@@ -7,7 +7,7 @@ angular.module('<%=angularAppName%>')
                 parent: 'entity',
                 url: '/<%= entityInstance %>s',
                 data: {
-                    roles: ['ROLE_USER'],
+                    authorities: ['ROLE_USER'],
                     pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>.home.title'<% }else{ %>'<%= entityClass %>s'<% } %>
                 },
                 views: {
@@ -31,7 +31,7 @@ angular.module('<%=angularAppName%>')
                 parent: 'entity',
                 url: '/<%= entityInstance %>/{id}',
                 data: {
-                    roles: ['ROLE_USER'],
+                    authorities: ['ROLE_USER'],
                     pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>.detail.title'<% }else{ %>'<%= entityClass %>'<% } %>
                 },
                 views: {
@@ -57,16 +57,28 @@ angular.module('<%=angularAppName%>')
                 parent: '<%= entityInstance %>',
                 url: '/new',
                 data: {
-                    roles: ['ROLE_USER'],
+                    authorities: ['ROLE_USER'],
                 },
-                onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
-                    $modal.open({
+                onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+                    $uibModal.open({
                         templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-dialog.html',
                         controller: '<%= entityClass %>DialogController',
                         size: 'lg',
                         resolve: {
                             entity: function () {
-                                return {<% for (fieldId in fields) { %><%= fields[fieldId].fieldName %>: null, <% } %>id: null};
+                                return {
+                                    <%_ for (fieldId in fields) { _%>
+                                    	<%_ if (fields[fieldId].fieldType == 'Boolean' && fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) { _%>
+                                    <%= fields[fieldId].fieldName %>: false,
+                                    	<%_ } else { _%>
+                                    <%= fields[fieldId].fieldName %>: null,
+                                        	<%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
+                                    <%= fields[fieldId].fieldName %>ContentType: null,
+                                        	<%_ } _%>
+                                        <%_ } _%>
+                                    <%_ } _%>
+                                    id: null
+                                };
                             }
                         }
                     }).result.then(function(result) {
@@ -80,13 +92,36 @@ angular.module('<%=angularAppName%>')
                 parent: '<%= entityInstance %>',
                 url: '/{id}/edit',
                 data: {
-                    roles: ['ROLE_USER'],
+                    authorities: ['ROLE_USER'],
                 },
-                onEnter: ['$stateParams', '$state', '$modal', function($stateParams, $state, $modal) {
-                    $modal.open({
+                onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+                    $uibModal.open({
                         templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-dialog.html',
                         controller: '<%= entityClass %>DialogController',
                         size: 'lg',
+                        resolve: {
+                            entity: ['<%= entityClass %>', function(<%= entityClass %>) {
+                                return <%= entityClass %>.get({id : $stateParams.id});
+                            }]
+                        }
+                    }).result.then(function(result) {
+                        $state.go('<%= entityInstance %>', null, { reload: true });
+                    }, function() {
+                        $state.go('^');
+                    })
+                }]
+            })
+            .state('<%= entityInstance %>.delete', {
+                parent: '<%= entityInstance %>',
+                url: '/{id}/delete',
+                data: {
+                    authorities: ['ROLE_USER'],
+                },
+                onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
+                    $uibModal.open({
+                        templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-delete-dialog.html',
+                        controller: '<%= entityClass %>DeleteController',
+                        size: 'md',
                         resolve: {
                             entity: ['<%= entityClass %>', function(<%= entityClass %>) {
                                 return <%= entityClass %>.get({id : $stateParams.id});

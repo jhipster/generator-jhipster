@@ -1,0 +1,16 @@
+<%_ var instanceType = (dto == 'mapstruct') ? entityClass + 'DTO' : entityClass;
+var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance;
+var mapper = entityInstance  + 'Mapper';
+var dtoToEntity = mapper + '.'+ entityInstance +'DTOTo' + entityClass;
+var entityToDto = mapper + '.'+ entityInstance +'To' + entityClass + 'DTO';
+var resultEntity;
+if (!viaService) {
+    if (dto == 'mapstruct') {
+        resultEntity = entityInstance; %>
+        <%= entityClass %> <%= entityInstance %> = <%= dtoToEntity %>(<%= instanceName %>);
+        <%= entityInstance %> = <%= entityInstance %>Repository.save(<%= entityInstance %>);
+        <%= instanceType %> result = <%= entityToDto %>(<%= entityInstance %>);<% } else {
+    resultEntity = 'result'; %>
+        <%= entityClass %> result = <%= entityInstance %>Repository.save(<%= entityInstance %>);<% } if (searchEngine == 'elasticsearch') { %>
+        <%= entityInstance %>SearchRepository.save(<%= resultEntity %>);<% }} else { %>
+        <%= instanceType %> result = <%= entityInstance %>Service.save(<%= instanceName %>);<% } %>

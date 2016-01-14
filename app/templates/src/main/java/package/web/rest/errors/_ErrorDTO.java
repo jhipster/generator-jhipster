@@ -8,6 +8,7 @@ import java.util.List;
  * DTO for transfering error message with a list of field errors.
  */
 public class ErrorDTO implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     private final String message;

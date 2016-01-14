@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .directive('hasAnyRole', ['Principal', function (Principal) {
+    .directive('hasAnyAuthority', ['Principal', function (Principal) {
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
@@ -17,22 +17,22 @@ angular.module('<%=angularAppName%>')
                             setVisible();
                         }
 
-                        result = Principal.isInAnyRole(roles);
+                        result = Principal.hasAnyAuthority(authorities);
                         if (result) {
                             setVisible();
                         } else {
                             setHidden();
                         }
                     },
-                    roles = attrs.hasAnyRole.replace(/\s+/g, '').split(',');
+                    authorities = attrs.hasAnyAuthority.replace(/\s+/g, '').split(',');
 
-                if (roles.length > 0) {
+                if (authorities.length > 0) {
                     defineVisibility(true);
                 }
             }
         };
     }])
-    .directive('hasRole', ['Principal', function (Principal) {
+    .directive('hasAuthority', ['Principal', function (Principal) {
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
@@ -48,8 +48,8 @@ angular.module('<%=angularAppName%>')
                             setVisible();
                         }
 
-                        Principal.isInRole(role)
-                            .then(function(result) {
+                        Principal.hasAuthority(authority)
+                            .then(function (result) {
                                 if (result) {
                                     setVisible();
                                 } else {
@@ -57,9 +57,9 @@ angular.module('<%=angularAppName%>')
                                 }
                             });
                     },
-                    role = attrs.hasRole.replace(/\s+/g, '');
+                    authority = attrs.hasAuthority.replace(/\s+/g, '');
 
-                if (role.length > 0) {
+                if (authority.length > 0) {
                     defineVisibility(true);
                 }
             }

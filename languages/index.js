@@ -1,23 +1,25 @@
 'use strict';
 var util = require('util'),
 path = require('path'),
-yeoman = require('yeoman-generator'),
+generators = require('yeoman-generator'),
 exec = require('child_process').exec,
 chalk = require('chalk'),
 _ = require('underscore.string'),
 scriptBase = require('../script-base');
 
 var LanguagesGenerator = module.exports = function LanguagesGenerator(args, options, config) {
-    yeoman.generators.Base.apply(this, arguments);
+    generators.Base.apply(this, arguments);
     console.log(chalk.bold('Languages configuration is starting'));
     this.baseName = this.config.get('baseName');
     this.websocket = this.config.get('websocket');
     this.databaseType = this.config.get('databaseType');
+    this.searchEngine = this.config.get('searchEngine');
     this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
     this.enableTranslation = this.config.get('enableTranslation');
+    this.enableSocialSignIn = this.config.get('enableSocialSignIn');
 };
 
-util.inherits(LanguagesGenerator, yeoman.generators.Base);
+util.inherits(LanguagesGenerator, generators.Base);
 util.inherits(LanguagesGenerator, scriptBase);
 
 LanguagesGenerator.prototype.askFor = function askFor() {
@@ -32,20 +34,23 @@ LanguagesGenerator.prototype.askFor = function askFor() {
             {name: 'Catalan', value: 'ca'},
             {name: 'Chinese (Simplified)', value: 'zh-cn'},
             {name: 'Chinese (Traditional)', value: 'zh-tw'},
-            {name: 'Danish', value: 'da'},            
-            {name: 'Dutch', value: 'nl'},            
+            {name: 'Danish', value: 'da'},
+            {name: 'Dutch', value: 'nl'},
+            {name: 'Galician', value: 'gl'},
             {name: 'German', value: 'de'},
             {name: 'Hungarian', value: 'hu'},
             {name: 'Italian', value: 'it'},
             {name: 'Japanese', value: 'ja'},
-            {name: 'Korean', value: 'kr'},
+            {name: 'Korean', value: 'ko'},
             {name: 'Polish', value: 'pl'},
             {name: 'Portuguese (Brazilian)', value: 'pt-br'},
+            {name: 'Portuguese', value: 'pt-pt'},
             {name: 'Romanian', value: 'ro'},
             {name: 'Russian', value: 'ru'},
             {name: 'Spanish', value: 'es'},
             {name: 'Swedish', value: 'sv'},
-            {name: 'Turkish', value: 'tr'}
+            {name: 'Turkish', value: 'tr'},
+            {name: 'Tamil', value: 'ta'}
         ],
         default: 0
     }];

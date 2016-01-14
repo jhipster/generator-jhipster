@@ -4,9 +4,10 @@
         "browsehappy": "Està usant un navegador <strong>des-actualitzat</strong>. Si us plau <a href=\"http://browsehappy.com/?locale=en\">actualitzi el seu navegador</a> per millorar l'experiencia.",
         "menu": {
             "home": "Inici",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
-                "main": "Entities",
-                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
+                "main": "Entitats",
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "Compte",
@@ -19,14 +20,16 @@
             },
             "admin": {
                 "main": "Administració",
-                "tracker": "User tracker",
+                "user-management": "Administració d'usuaris",
+                "tracker": "Seguidor d'usuaris",
                 "metrics": "Mètriques",
                 "health": "Salud",
-                "configuration": "Configuration",
+                "configuration": "Configuració",
                 "logs": "Registres",
                 "audits": "Auditories",
                 "apidocs": "API",
-                "database": "Database"
+                "database": "Base de dades",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
             },
             "language": "Idioma"
         },
@@ -42,8 +45,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Si vol <a href=\"#/login\">autenticar-se</a>, pot usar els comptes per defect:<br/>- Administrador (nom d'usuari=\"admin\" i contrasenya=\"admin\") <br/>- Usuari (nom d'usuari=\"user\" i contrasenya=\"user\").",
-                "register": "No disposa d'un compte encara? <a href=\"#/register\">Registri un nou compte</a>"
+                "authenticated": "Si vol <a class=\"alert-link\" href=\"#/login\">autenticar-se</a>, pot usar els comptes per defect:<br/>- Administrador (nom d'usuari=\"admin\" i contrasenya=\"admin\") <br/>- Usuari (nom d'usuari=\"user\" i contrasenya=\"user\").",
+                "register": "No disposa d'un compte encara? <a class=\"alert-link\" href=\"#/register\">Registri un nou compte</a>"
             },
             "error": {
                 "dontmatch" : "La contrasenya i la confirmació no coincideixen!"
@@ -74,34 +77,42 @@
     },
     "entity": {
         "action": {
-            "addblob": "Add blob",
-            "addimage": "Add image",
-            "back": "Back",
-            "cancel": "Cancel",
-            "delete": "Delete",
-            "edit": "Edit",
-            "save": "Save",
-            "view": "View"
+            "addblob": "Afegir blob",
+            "addimage": "Afegir imatge",
+            "back": "Enrera",
+            "cancel": "Anul.la",
+            "delete": "Elimina",
+            "edit": "Edita",
+            "save": "Desa",
+            "view": "Visualitza"
         },
         "detail": {
-            "field": "Field",
-            "value": "Value"
+            "field": "Camp",
+            "value": "Valor"
         },
         "delete": {
-            "title": "Confirm delete operation"
+            "title": "Confirma eliminació"
         },
         "validation": {
-            "required": "This field is required.",
-            "minlength": "This field is required to be at least {{min}} characters.",
-            "maxlength": "This field cannot be longer than {{max}} characters.",
-            "min": "This field should be more than {{min}}.",
-            "max": "This field cannot be more than {{max}}.",
-            "minbytes": "This field should be more than {{min}} bytes.",
-            "maxbytes": "This field cannot be more than {{max}} bytes.",
-            "pattern": "This field should follow pattern {{pattern}}.",
-            "number": "This field should be a number.",
-            "datetimelocal": "This field should be a date and time."
+            "required": "Aquest camp és obligatori.",
+            "minlength": "Aquest camp ha de tenir, com a mínim {{min}} caràcters.",
+            "maxlength": "Aquest camp no pot tenir més de {{max}} caràcters.",
+            "min": "Aquest camp ha de ser major que {{min}}.",
+            "max": "Aquest camp no pot ser major que {{max}}.",
+            "minbytes": "Aquest camp ha de tenir més de {{min}} bytes.",
+            "maxbytes": "Aquest camp no pot tenir més de {{max}} bytes.",
+            "pattern": "Aquest camp ha de tenir el seguent patró {{pattern}}.",
+            "number": "Aquest camp ha de ser numèric.",
+            "datetimelocal": "Aquest camp ha de ser una data/hora."
         }
     },
-    "footer": "Aquest és el teu footer"
+    "error": {
+        "server.not.reachable": "Server not reachable",
+        "NotNull": "Field {{fieldName}} cannot be empty!",
+        "Size": "Field {{fieldName}} does not meet min/max size requirements!",
+        "userexists": "Login name already used!",
+        "emailexists": "E-mail is already in use!",
+        "idexists": "A new {{entityName}} cannot already have an ID"
+    },
+    "footer": "Aquest és el teu peu de pàgina"
 }

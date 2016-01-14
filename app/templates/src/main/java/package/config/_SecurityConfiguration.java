@@ -5,30 +5,23 @@ import <%=packageName%>.web.filter.CsrfCookieGeneratorFilter;<% } %><% if (authe
 import <%=packageName%>.security.xauth.*;<% } %>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;<% if (authenticationType == 'session') { %>
-import org.springframework.core.env.Environment;<% } %><% if (authenticationType == 'oauth2') { %>
-import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;<% } %>
-
-import org.springframework.data.repository.query.spi.EvaluationContextExtension;
-import org.springframework.data.repository.query.spi.EvaluationContextExtensionSupport;
-import org.springframework.security.access.expression.SecurityExpressionRoot;<% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
+import org.springframework.core.env.Environment;<% } %><% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
 import org.springframework.security.authentication.AuthenticationManager;<% } %>
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;<% if (authenticationType == 'session' || authenticationType == 'xauth') { %>
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;<% } %>
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;<% if (authenticationType == 'xauth') { %>
-import org.springframework.security.config.http.SessionCreationPolicy;<% } %>
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;<% if (authenticationType == 'xauth' || authenticationType == 'oauth2') { %>
+import org.springframework.security.config.http.SessionCreationPolicy;<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
+import org.springframework.security.core.session.SessionRegistry;<% } %>
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 <% if (authenticationType == 'session') { %>
 import org.springframework.security.web.authentication.RememberMeServices;
-import org.springframework.security.web.csrf.CsrfFilter;<% } %><% if (authenticationType == 'oauth2') { %>
-import org.springframework.security.oauth2.provider.expression.OAuth2MethodSecurityExpressionHandler;<% } %>
+import org.springframework.security.web.csrf.CsrfFilter;<% } %>
 
 import javax.inject.Inject;
 
@@ -56,7 +49,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     private UserDetailsService userDetailsService;<% if (authenticationType == 'session') { %>
 
     @Inject
-    private RememberMeServices rememberMeServices;<% } %><% if (authenticationType == 'xauth') { %>
+    private RememberMeServices rememberMeServices;<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
+
+    @Inject
+    private SessionRegistry sessionRegistry;<% } %><% if (authenticationType == 'xauth') { %>
 
     @Inject
     private TokenProvider tokenProvider;<% } %>
@@ -80,23 +76,28 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/bower_components/**")
             .antMatchers("/i18n/**")
             .antMatchers("/assets/**")
-            .antMatchers("/swagger-ui.html")<% if (authenticationType == 'oauth2') { %>
+            .antMatchers("/swagger-ui/index.html")<% if (authenticationType == 'oauth2') { %>
             .antMatchers("/api/register")
             .antMatchers("/api/activate")
             .antMatchers("/api/account/reset_password/init")
             .antMatchers("/api/account/reset_password/finish")<% } %>
-            .antMatchers("/test/**")<% if (devDatabaseType != 'h2Memory') { %>;<% } else { %>
-            .antMatchers("/console/**");<% } %>
+            .antMatchers("/test/**")<% if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { %>;<% } else { %>
+            .antMatchers("/h2-console/**");<% } %>
     }<% if (authenticationType == 'session' || authenticationType == 'xauth') { %>
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http<% if (authenticationType == 'session') { %>
-            .csrf()
-            .ignoringAntMatchers("/websocket/**")
+        http<% if (clusteredHttpSession == 'hazelcast') { %>
+            .sessionManagement()
+            .maximumSessions(32) // maximum number of concurrent sessions for one user
+            .sessionRegistry(sessionRegistry)
+            .and().and()<% } %><% if (authenticationType == 'session') { %>
+            .csrf()<% if (websocket == 'spring-websocket') { %>
+            .ignoringAntMatchers("/websocket/**")<% } %>
         .and()
             .addFilterAfter(new CsrfCookieGeneratorFilter(), CsrfFilter.class)<% } %>
-            .exceptionHandling()
+            .exceptionHandling()<% if (authenticationType == 'session') { %>
+            .accessDeniedHandler(new CustomAccessDeniedHandler())<% } %>
             .authenticationEntryPoint(authenticationEntryPoint)<% if (authenticationType == 'session') { %>
         .and()
             .rememberMe()
@@ -115,7 +116,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .logout()
             .logoutUrl("/api/logout")
             .logoutSuccessHandler(ajaxLogoutSuccessHandler)
-            .deleteCookies("JSESSIONID"<% if (clusteredHttpSession == 'hazelcast') { %>, "hazelcast.sessionId"<% } %>)
+            .deleteCookies("JSESSIONID", "CSRF-TOKEN"<% if (clusteredHttpSession == 'hazelcast') { %>, "hazelcast.sessionId"<% } %>)
             .permitAll()<% } %>
         .and()<% if (authenticationType == 'xauth') { %>
             .csrf()
@@ -138,7 +139,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/api/**").authenticated()<% if (websocket == 'spring-websocket') { %>
             .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/websocket/**").permitAll()<% } %>
-            .antMatchers("/webjars/**").permitAll()
             .antMatchers("/metrics/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/health/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/trace/**").hasAuthority(AuthoritiesConstants.ADMIN)
@@ -150,15 +150,31 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/autoconfig/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/env/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/trace/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/v2/api-docs/**").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/configuration/security").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/configuration/ui").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/swagger-ui.html").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/protected/**").authenticated()<% if (authenticationType != 'xauth') { %>;<% } %><% if (authenticationType == 'xauth') { %>
+            .antMatchers("/mappings/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/liquibase/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/v2/api-docs/**").permitAll()
+            .antMatchers("/configuration/security").permitAll()
+            .antMatchers("/configuration/ui").permitAll()
+            .antMatchers("/swagger-ui/index.html").hasAuthority(AuthoritiesConstants.ADMIN)
+            .antMatchers("/protected/**").authenticated() <%if (authenticationType != 'xauth') { %>;<% } %><% if (authenticationType == 'xauth') { %>
         .and()
             .apply(securityConfigurerAdapter());<% } %>
 
     }<% } %><% if (authenticationType == 'oauth2') { %>
+
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        http
+            .httpBasic().realmName("<%= baseName %>")
+            .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+                .requestMatchers().antMatchers("/oauth/authorize")
+            .and()
+                .authorizeRequests()
+                .antMatchers("/oauth/authorize").authenticated();
+    }
 
     @Override
     @Bean

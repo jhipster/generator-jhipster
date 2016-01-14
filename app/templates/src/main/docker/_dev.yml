@@ -1,0 +1,49 @@
+<%_ if (devDatabaseType == 'mysql') { _%>
+<%= baseName.toLowerCase() %>-dev-mysql:
+  container_name: <%= baseName.toLowerCase() %>-dev-mysql
+  image: mysql:5.7.9
+  # volumes:
+  #   - ~/volumes/jhipster/<%= baseName %>/dev-mysql/:/var/lib/mysql/
+  environment:
+    - MYSQL_USER=root
+    - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    - MYSQL_DATABASE=<%= baseName.toLowerCase() %>
+  ports:
+    - "3306:3306"
+  command: mysqld --lower_case_table_names=1
+<%_ } _%>
+<%_ if (devDatabaseType == 'postgresql') { _%>
+<%= baseName.toLowerCase() %>-dev-postgresql:
+  container_name: <%= baseName.toLowerCase() %>-dev-postgresql
+  image: postgres:9.4.5
+  # volumes:
+  #   - ~/volumes/jhipster/<%= baseName %>/dev-postgresql/:/var/lib/postgresql/
+  environment:
+    - POSTGRES_USER=<%= baseName %>
+    - POSTGRES_PASSWORD=
+  ports:
+    - "5432:5432"
+<%_ } _%>
+<%_ if (devDatabaseType == 'mongodb') { _%>
+<%= baseName.toLowerCase() %>-dev-mongodb:
+  container_name: <%= baseName.toLowerCase() %>-dev-mongodb
+  image: mongo:3.0.7
+  # volumes:
+  #   - ~/volumes/jhipster/<%= baseName %>/dev-mongodb/:/data/db/
+  ports:
+    - "27017:27017"
+<%_ } _%>
+<%_ if (devDatabaseType == 'cassandra') { _%>
+<%= baseName.toLowerCase() %>-dev-cassandra:
+  container_name: <%= baseName.toLowerCase() %>-dev-cassandra
+  build: .
+  dockerfile: cassandra/Cassandra-Dev.Dockerfile
+  # volumes:
+  #   - ~/volumes/jhipster/<%= baseName %>/dev-cassandra/:/var/lib/cassandra/data
+  ports:
+    - "7000:7000"
+    - "7001:7001"
+    - "7199:7199"
+    - "9042:9042"
+    - "9160:9160"
+<%_ } _%>

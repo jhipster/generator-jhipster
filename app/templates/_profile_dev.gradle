@@ -5,6 +5,7 @@ ext {
 }
 
 dependencies {
+    compile group: 'org.springframework.boot', name: 'spring-boot-devtools'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: spring_boot_version
 }
 
@@ -19,9 +20,9 @@ task setProdProperties(dependsOn: bootRun) << {
 }
 
 processResources {
-    filesMatching('**/logback.xml') {
+    filesMatching('**/logback-spring.xml') {
         filter {
-            it.replace('${logback.loglevel}', logbackLoglevel)
+            it.replace('@logback.loglevel@', logbackLoglevel)
         }
     }
 }

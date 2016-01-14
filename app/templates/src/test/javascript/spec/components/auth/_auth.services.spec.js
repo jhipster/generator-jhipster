@@ -1,8 +1,13 @@
 'use strict';
 
-describe('Services Tests ', function () {
-
-    beforeEach(module('<%= angularAppName %>'));
+describe('Service Tests', function () {
+    <%_ if (authenticationType == 'session') { _%>
+    beforeEach(mockApiAccountCall);
+    <%_ } _%>
+    <%_ if (enableTranslation) { _%>
+    beforeEach(mockI18nCalls);
+    <%_ } _%>
+    beforeEach(mockScriptsCalls);
 
     describe('Auth', function () {
         var $httpBackend, spiedLocalStorageService, authService, spiedAuthServerProvider;
@@ -12,17 +17,11 @@ describe('Services Tests ', function () {
             spiedLocalStorageService = localStorageService;
             authService = Auth;
             spiedAuthServerProvider = AuthServerProvider;
-            //Request on app init<% if (authenticationType == 'session' || authenticationType == 'oauth2') { %>
-            $httpBackend.expectPOST(/api\/logout\?cacheBuster=\d+/).respond(200, ''); <% } %>
 
-            $httpBackend.expectGET('scripts/components/navbar/navbar.html').respond({});
-            <% if (enableTranslation) { %>
-            $httpBackend.expectGET('i18n/en/global.json').respond(200, '');
-            $httpBackend.expectGET('i18n/en/main.json').respond(200, '');
-	     <% } %>
-            $httpBackend.expectGET('scripts/app/main/main.html').respond({});<% if (authenticationType == 'session') { %>
-            $httpBackend.expectGET(/api\/account\?cacheBuster=\d+/).respond({});<% } %>
-          }));
+            <%_ if (authenticationType == 'session' || authenticationType == 'oauth2') { _%>
+            $httpBackend.expectPOST(/api\/logout\?cacheBuster=\d+/).respond(200, '');
+            <%_ } _%>
+        }));
         //make sure no expectations were missed in your tests.
         //(e.g. expectGET or expectPOST)
         afterEach(function() {

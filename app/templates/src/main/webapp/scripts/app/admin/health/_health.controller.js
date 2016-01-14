@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('HealthController', function ($scope, MonitoringService, $modal) {
+    .controller('HealthController', function ($scope, MonitoringService, $uibModal) {
         $scope.updatingHealth = true;
         $scope.separator = '.';
 
@@ -62,7 +62,7 @@ angular.module('<%=angularAppName%>')
 
 
         $scope.showHealth = function(health) {
-            var modalInstance = $modal.open({
+            var modalInstance = $uibModal.open({
                 templateUrl: 'scripts/app/admin/health/health.modal.html',
                 controller: 'HealthModalController',
                 size: 'lg',

@@ -4,9 +4,10 @@
         "browsehappy": "U gebruikt een <strong>verouderde</strong> browser. <a href=\"http://browsehappy.com/?locale=en\">upgrade uw browser</a> om de bruikbaarheid te verbeteren.",
         "menu": {
             "home": "Startpagina",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
                 "main": "Entiteiten",
-                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "Gebruiker",
@@ -19,6 +20,7 @@
             },
             "admin": {
                 "main": "Administrator",
+                "user-management": "User management",
                 "tracker": "User tracker",
                 "metrics": "Statistieken",
                 "health": "Status",
@@ -26,13 +28,14 @@
                 "logs": "Logboek",
                 "audits": "Audits",
                 "apidocs": "API",
-                "database": "Databank"
+                "database": "Databank",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
             },
             "language": "Taal"
         },
         "form": {
-            "username": "Login",
-            "username.placeholder": "Uw login",
+            "username": "Username",
+            "username.placeholder": "Uw username",
             "newpassword": "Nieuw wachtwoord",
             "newpassword.placeholder": "Nieuw wachtwoord",
             "confirmpassword": "Nieuw wachtwoord bevestigen",
@@ -42,8 +45,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Indien u wilt <a href=\"#/login\">aanmelden</a>, dan kan u de standaard gebruikers proberen:<br/>- Administrator (login=\"admin\" en wachtwoord=\"admin\") <br/>- Gebruiker (login=\"user\" en wachtwoord=\"user\").",
-                "register": "U heeft nog geen gebruiker? <a href=\"#/register\">Registreer een nieuwe gebruiker</a>"
+                "authenticated": "Indien u wilt <a class=\"alert-link\" href=\"#/login\">aanmelden</a>, dan kan u de standaard gebruikers proberen:<br/>- Administrator (login=\"admin\" en wachtwoord=\"admin\") <br/>- Gebruiker (login=\"user\" en wachtwoord=\"user\").",
+                "register": "U heeft nog geen gebruiker? <a class=\"alert-link\" href=\"#/register\">Registreer een nieuwe gebruiker</a>"
             },
             "error": {
                 "dontmatch" : "Het wachtwoord en zijn bevestiging komen niet overeen!"
@@ -67,7 +70,7 @@
                     "maxlength": "Uw e-mail kan niet langer zijn dan 50 tekens."
                 }
             }
-        }, 
+        },
         "field": {
             "id" : "ID"
         }
@@ -98,6 +101,14 @@
             "number": "Dit veld zou een getal moeten zijn.",
             "datetimelocal": "Dit veld zou een datum en tijd moeten zijn."
         }
+    },
+    "error": {
+        "server.not.reachable": "Server not reachable",
+        "NotNull": "Field {{fieldName}} cannot be empty!",
+        "Size": "Field {{fieldName}} does not meet min/max size requirements!",
+        "userexists": "Login name already used!",
+        "emailexists": "E-mail is already in use!",
+        "idexists": "A new {{entityName}} cannot already have an ID"
     },
     "footer": "Dit is uw voettekst"
 }

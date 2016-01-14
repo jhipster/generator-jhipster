@@ -1,11 +1,12 @@
 {
     "health": {
-        "title": "Gesundheit ihrer Anwendung",
+        "title": "Gesundheit Ihrer Anwendung",
         "refresh.button": "Aktualisieren",
         "stacktrace": "Stacktrace",
         "indicator": {
             "diskSpace": "Festplattenspeicher",
-            "mail": "Email",<% if (databaseType == 'sql') { %>
+            "mail": "Email",<% if (searchEngine == 'elasticsearch') { %>
+            "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
             "db": "Datenbank"<% } %><% if (databaseType == 'mongodb') { %>
             "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
             "cassandra": "Cassandra"<% } %>

@@ -5,7 +5,7 @@ try {
     var uuid = require('node-uuid');
 } catch (e) {
     console.log(
-        'You don\'t have the AWS SDK installed. Please install it in the jhipster generator directory.\n\n' +
+        'You don\'t have the AWS SDK installed. Please install it in the JHipster generator directory.\n\n' +
         'WINDOWS\n' +
         'cd %USERPROFILE%\\AppData\\Roaming\\npm\\node_modules\\generator-jhipster\n' +
         'npm install aws-sdk progress node-uuid\n\n' +
@@ -141,56 +141,76 @@ var createEnvironment = function createEnvironment(params, callback) {
 
     var elasticbeanstalk = new aws.ElasticBeanstalk();
 
-    var environmentParams = {
-        ApplicationName: applicationName,
-        EnvironmentName: environmentName,
-        OptionSettings: [
-            {
-                Namespace: 'aws:elasticbeanstalk:application:environment',
-                OptionName: 'spring.profiles.active',
-                Value: 'prod'
-            },
-            {
-                Namespace: 'aws:elasticbeanstalk:application:environment',
-                OptionName: 'spring.datasource.url',
-                Value: dbUrl
-            },
-            {
-                Namespace: 'aws:elasticbeanstalk:application:environment',
-                OptionName: 'spring.datasource.username',
-                Value: dbUsername
-            },
-            {
-                Namespace: 'aws:elasticbeanstalk:application:environment',
-                OptionName: 'spring.datasource.password',
-                Value: dbPassword
-            },
-            {
-                Namespace: 'aws:autoscaling:launchconfiguration',
-                OptionName: 'InstanceType',
-                Value: instanceType
-            },
-            {
-                Namespace: 'aws:autoscaling:launchconfiguration',
-                OptionName: 'IamInstanceProfile',
-                Value: 'aws-elasticbeanstalk-ec2-role'
-            }
-        ],
-        SolutionStackName: '64bit Amazon Linux 2015.03 v1.4.1 running Tomcat 8 Java 8',
-        VersionLabel: versionLabel,
-        Tier: {
-            Name: 'WebServer',
-            Type: 'Standard'
-        }
-    };
+    getLatestSolutionStackName(function(err, data) {
+        if (err) callback(err, null);
 
-    elasticbeanstalk.createEnvironment(environmentParams, function (err) {
-        if (err) {
-            callback(err, null);
-        } else {
-            callback(null, {message: 'Environment ' + environmentName + ' created successful'});
-        }
+        var solutionStackName = data.solutionStackName,
+            environmentParams = {
+            ApplicationName: applicationName,
+            EnvironmentName: environmentName,
+            OptionSettings: [
+                {
+                    Namespace: 'aws:elasticbeanstalk:application:environment',
+                    OptionName: 'spring.profiles.active',
+                    Value: 'prod'
+                },
+                {
+                    Namespace: 'aws:elasticbeanstalk:application:environment',
+                    OptionName: 'spring.datasource.url',
+                    Value: dbUrl
+                },
+                {
+                    Namespace: 'aws:elasticbeanstalk:application:environment',
+                    OptionName: 'spring.datasource.username',
+                    Value: dbUsername
+                },
+                {
+                    Namespace: 'aws:elasticbeanstalk:application:environment',
+                    OptionName: 'spring.datasource.password',
+                    Value: dbPassword
+                },
+                {
+                    Namespace: 'aws:autoscaling:launchconfiguration',
+                    OptionName: 'InstanceType',
+                    Value: instanceType
+                },
+                {
+                    Namespace: 'aws:autoscaling:launchconfiguration',
+                    OptionName: 'IamInstanceProfile',
+                    Value: 'aws-elasticbeanstalk-ec2-role'
+                }
+            ],
+            SolutionStackName: solutionStackName,
+            VersionLabel: versionLabel,
+            Tier: {
+                Name: 'WebServer',
+                Type: 'Standard'
+            }
+        };
+
+        elasticbeanstalk.createEnvironment(environmentParams, function (err) {
+            if (err) callback(err, null);
+            else callback(null, {message: 'Environment ' + environmentName + ' created successful'});
+        });
     });
+};
+
+var getLatestSolutionStackName = function(callback) {
+    var elasticbeanstalk = new aws.ElasticBeanstalk();
+
+    elasticbeanstalk.listAvailableSolutionStacks(function(err, data) {
+        if (err) callback(err, null);
+        filterSolutionStackNames(data, callback);
+    });
+
+    function filterSolutionStackNames(data, callback) {
+        var filtredArray = data.SolutionStacks.filter(filterCriteria);
+        callback(null, {solutionStackName: filtredArray[0]});
+    }
+
+    function filterCriteria(element) {
+        return element.indexOf('Tomcat 8') > -1;
+    }
 };
 
 var updateEnvironment = function updateEnvironment(params, callback) {
@@ -220,4 +240,3 @@ var updateEnvironment = function updateEnvironment(params, callback) {
         }
     });
 };
-

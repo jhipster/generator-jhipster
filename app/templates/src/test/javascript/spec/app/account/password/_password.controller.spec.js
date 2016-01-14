@@ -1,54 +1,83 @@
 'use strict';
 
-describe('Controllers Tests ', function () {
+describe('Controller Tests', function() {
+    beforeEach(mockApiAccountCall);
+    beforeEach(mockI18nCalls);
 
-    beforeEach(module('<%= angularAppName %>'));
+    describe('PasswordController', function() {
 
-    var $scope, $httpBackend, q, Auth;
+        var $scope, $httpBackend, $q;
+        var MockAuth;
+        var createController;
 
-    // define the mock Auth service
-    beforeEach(function() {
-        Auth = {
-            changePassword: function() {}
-        };
-    });
+        beforeEach(inject(function($injector) {
+            $scope = $injector.get('$rootScope').$new();
+            $q = $injector.get('$q');
+            $httpBackend = $injector.get('$httpBackend');
 
-    beforeEach(inject(function ($rootScope, $controller, $q, $injector) {
-        $scope = $rootScope.$new();
-        q = $q;
-        $httpBackend = $injector.get('$httpBackend');
-        $controller('PasswordController', {$scope: $scope, Auth: Auth});
-    }));
+            MockAuth = jasmine.createSpyObj('MockAuth', ['changePassword']);
+            var locals = {
+                '$scope': $scope,
+                'Auth': MockAuth
+            };
+            createController = function() {
+                $injector.get('$controller')('PasswordController', locals);
+            }
+        }));
 
-    describe('PasswordController', function () {
-        it('should show error if passwords do not match', function () {
+        it('should show error if passwords do not match', function() {
             //GIVEN
+            createController();
             $scope.password = 'password1';
             $scope.confirmPassword = 'password2';
             //WHEN
             $scope.changePassword();
             //THEN
             expect($scope.doNotMatch).toBe('ERROR');
+            expect($scope.error).toBeNull();
+            expect($scope.success).toBeNull();
         });
-        it('should call Service and set OK on Success', function () {
+        it('should call Auth.changePassword when passwords match', function() {
             //GIVEN
-            var pass = 'myPassword';
-            $scope.password = pass;
-            $scope.confirmPassword = pass;
-
-            spyOn(Auth, 'changePassword').and.returnValue(new function(){
-                var deferred = q.defer();
-                $scope.error = null;
-                $scope.success = 'OK';
-                return deferred.promise;
-            });
+            MockAuth.changePassword.and.returnValue($q.resolve());
+            createController();
+            $scope.password = $scope.confirmPassword = 'myPassword';
 
             //WHEN
-            $scope.changePassword();
+            $scope.$apply($scope.changePassword);
 
             //THEN
+            expect(MockAuth.changePassword).toHaveBeenCalledWith('myPassword');
+        });
+
+        it('should set success to OK upon success', function() {
+            //GIVEN
+            MockAuth.changePassword.and.returnValue($q.resolve());
+            createController();
+            $scope.password = $scope.confirmPassword = 'myPassword';
+
+            //WHEN
+            $scope.$apply($scope.changePassword);
+
+            //THEN
+            expect($scope.doNotMatch).toBeNull();
             expect($scope.error).toBeNull();
             expect($scope.success).toBe('OK');
+        });
+
+        it('should notify of error if change password fails', function() {
+            //GIVEN
+            MockAuth.changePassword.and.returnValue($q.reject());
+            createController();
+            $scope.password = $scope.confirmPassword = 'myPassword';
+
+            //WHEN
+            $scope.$apply($scope.changePassword);
+
+            //THEN
+            expect($scope.doNotMatch).toBeNull();
+            expect($scope.success).toBeNull();
+            expect($scope.error).toBe('ERROR');
         });
     });
 });

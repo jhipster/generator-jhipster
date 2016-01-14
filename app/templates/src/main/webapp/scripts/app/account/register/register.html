@@ -22,34 +22,39 @@
             <div class="alert alert-danger" ng-show="doNotMatch" translate="global.messages.error.dontmatch">
                 The password and its confirmation do not match!
             </div>
-
+        </div>
+        <%_ if (enableSocialSignIn) { _%>
+        <div class="col-md-4 col-md-offset-2">
+        <%_ } else { _%>
+        <div class="col-md-8 col-md-offset-2">
+        <%_ } _%>
             <form ng-show="!success" name="form" role="form" novalidate ng-submit="register()" show-validation>
 
                 <div class="form-group">
-                    <label for="login" translate="global.form.username">Login</label>
+                    <label class="control-label" for="login" translate="global.form.username">Username</label>
                     <input type="text" class="form-control" id="login" name="login" placeholder="{{'global.form.username.placeholder' | translate}}"
                            ng-model="registerAccount.login" ng-minlength=1 ng-maxlength=50 ng-pattern="/^[a-z0-9]*$/" required>
                     <div ng-show="form.login.$dirty && form.login.$invalid">
                         <p class="help-block"
                                ng-show="form.login.$error.required" translate="register.messages.validate.login.required">
-                            Your login is required.
+                            Your username is required.
                         </p>
                         <p class="help-block"
                                ng-show="form.login.$error.minlength" translate="register.messages.validate.login.minlength">
-                            Your login is required to be at least 1 character.
+                            Your username is required to be at least 1 character.
                         </p>
                         <p class="help-block"
                                ng-show="form.login.$error.maxlength" translate="register.messages.validate.login.maxlength">
-                            Your login cannot be longer than 50 characters.
+                            Your username cannot be longer than 50 characters.
                         </p>
                         <p class="help-block"
                                ng-show="form.login.$error.pattern" translate="register.messages.validate.login.pattern">
-                            Your login can only contain lower-case letters and digits.
+                            Your username can only contain lower-case letters and digits.
                     </p>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="email" translate="global.form.email">E-mail</label>
+                    <label class="control-label" for="email" translate="global.form.email">E-mail</label>
                     <input type="email" class="form-control" id="email" name="email" placeholder="{{'global.form.email.placeholder' | translate}}"
                            ng-model="registerAccount.email" ng-minlength=5 ng-maxlength=100 required>
                     <div ng-show="form.email.$dirty && form.email.$invalid">
@@ -72,7 +77,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="password" translate="global.form.newpassword">New password</label>
+                    <label class="control-label" for="password" translate="global.form.newpassword">New password</label>
                     <input type="password" class="form-control" id="password" name="password" placeholder="{{'global.form.newpassword.placeholder' | translate}}"
                            ng-model="registerAccount.password" ng-minlength=5 ng-maxlength=50 required>
                     <div ng-show="form.password.$dirty && form.password.$invalid">
@@ -92,7 +97,7 @@
                     <password-strength-bar password-to-check="registerAccount.password"></password-strength-bar>
                 </div>
                 <div class="form-group">
-                    <label for="confirmPassword" translate="global.form.confirmpassword">New password confirmation</label>
+                    <label class="control-label" for="confirmPassword" translate="global.form.confirmpassword">New password confirmation</label>
                     <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="{{'global.form.confirmpassword.placeholder' | translate}}"
                            ng-model="confirmPassword" ng-minlength=5 ng-maxlength=50 required>
                     <div ng-show="form.confirmPassword.$dirty && form.confirmPassword.$invalid">
@@ -115,8 +120,16 @@
             </form>
             <p></p>
             <div class="alert alert-warning" translate="global.messages.info.authenticated">
-                If you want to <a href="#/login">authenticate</a>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").
+                If you want to <a class="alert-link" href="#/login">sign in</a>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").
             </div>
         </div>
+        <%_ if (enableSocialSignIn) { _%>
+        <div class="col-md-4">
+            <br/>
+            <jh-social ng-provider="google"></jh-social>
+            <jh-social ng-provider="facebook"></jh-social>
+            <jh-social ng-provider="twitter"></jh-social>
+            <!-- jhipster-needle-add-social-button -->
+        <%_ } _%>
     </div>
 </div>

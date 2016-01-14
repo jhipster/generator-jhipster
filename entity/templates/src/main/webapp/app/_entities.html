@@ -1,122 +1,144 @@
 <div>
-<% var keyPrefix = angularAppName + '.'+ entityInstance + '.'; %>
+<%_ var keyPrefix = angularAppName + '.'+ entityInstance + '.'; _%>
     <h2 translate="<%= keyPrefix %>home.title"><%= entityClass %>s</h2>
-
-    <div class="container">
+    <jh-alert></jh-alert>
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-md-4">
-                <button class="btn btn-primary" ui-sref="<%= entityInstance %>.new">
-                    <span class="glyphicon glyphicon-flash"></span> <span translate="<%= keyPrefix %>home.createLabel">Create a new <%= entityClass %></span>
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-primary" ui-sref="<%= entityInstance %>.new" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span 
+                        <%_ if (searchEngine == 'elasticsearch') { _%>class="hidden-xs" <%_ } _%>
+                        translate="<%= keyPrefix %>home.createLabel">Create new <%= entityClass %>
+                    </span>
                 </button>
-            </div><% if (searchEngine == 'elasticsearch') { %>
-            <div class="col-md-8">
+            </div>
+            <%_ if (searchEngine == 'elasticsearch') { _%>
+            <div class="col-xs-8 no-padding-right">
                 <form name="searchForm" class="form-inline">
-                    <div class="form-group">
-                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="query">
-                    </div>
-                    <button class="btn btn-info" ng-click="search()"><span class="glyphicon glyphicon-search"></span> <span>Search a <%= entityClass %></span>
-                    </button>
-                </form>
-            </div><% } %>
-        </div>
-    </div>
-
-    <div class="modal fade" id="delete<%= entityClass %>Confirmation">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form name="deleteForm" ng-submit="confirmDelete(<%=entityInstance %>.id)">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                                ng-click="clear()">&times;</button>
-                        <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
-                    </div>
-                    <div class="modal-body">
-                        <p translate="<%= keyPrefix %>delete.question" translate-values="{id: '{{<%= entityInstance %>.id}}'}">Are you sure you want to delete this <%= entityClass %>?</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
-                            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
-                        </button>
-                        <button type="submit" ng-disabled="deleteForm.$invalid" class="btn btn-danger">
-                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete">Delete</span>
-                        </button>
+                    <div class="input-group pull-right" >
+                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="{{ '<%= keyPrefix %>home.search' | translate }}">
+                        <span  class="input-group-btn width-min" >
+                            <button class="btn btn-info" ng-click="search()">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
                     </div>
                 </form>
             </div>
+            <%_ } _%>
         </div>
     </div>
-
+    <br/>
     <div class="table-responsive">
-        <table class="table table-striped">
+        <table class="jh-table table table-striped">
             <thead>
-                <tr>
-                    <th translate="global.field.id">ID</th><% for (fieldId in fields) { %>
-                    <th translate="<%=keyPrefix + fields[fieldId].fieldName %>"><%=fields[fieldId].fieldNameCapitalized%></th><% } %><% for (relationshipId in relationships) {
-                        if (relationships[relationshipId].relationshipType == 'many-to-one'
-                           || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) { %>
-                    <th translate="<%= keyPrefix + relationships[relationshipId].relationshipName%>"><%=relationships[relationshipId].relationshipName%></th><% } } %>
+                <tr<% if (pagination != 'no') { %> jh-sort="predicate" ascending="reverse" callback="<%=pagination != 'infinite-scroll' ? 'loadAll' : 'reset'%>()"<% } %>>
+                    <th<% if (pagination != 'no') { %> jh-sort-by="id"<% } %>><span translate="global.field.id">ID</span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
+                    <%_ for (fieldId in fields) { _%>
+                    <th<% if (pagination != 'no') { %> jh-sort-by="<%= fields[fieldId].fieldName%>"<% } %>><span translate="<%=keyPrefix + fields[fieldId].fieldName %>"><%=fields[fieldId].fieldNameCapitalized%></span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
+                    <%_ } _%>
+                    <%_ for (relationshipId in relationships) { _%>
+                        <%_ if (relationships[relationshipId].relationshipType == 'many-to-one'
+                                || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)
+                                || (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true && pagination == 'no')) {
+                            var fieldName = dto == 'no' ? "." + relationships[relationshipId].otherEntityField : relationships[relationshipId].otherEntityFieldCapitalized;_%>
+                    <th<% if (pagination != 'no') { %> jh-sort-by="<%=relationships[relationshipId].relationshipName + (fieldName)%>"<% } %>><span translate="<%= keyPrefix + relationships[relationshipId].relationshipName%>"><%=relationships[relationshipId].relationshipName%></span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
+                        <%_ } _%>
+                    <%_ } _%>
                     <th></th>
                 </tr>
             </thead>
             <tbody<% if (pagination == 'infinite-scroll') { %> infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page"<% } %>>
-                <tr ng-repeat="<%=entityInstance %> in <%=entityInstance %>s">
-                    <td><a ui-sref="<%= entityInstance %>.detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td><% for (fieldId in fields) { %><% if (fields[fieldId].fieldType == 'byte[]') { %>
-                    <td><% if (fields[fieldId].fieldIsEnum) {
-                        var enumPrefix = angularAppName + '.'+ fields[fieldId].fieldType;%>
-                        <td translate="<%=enumPrefix%>.SELECT" translate-values="{ VALUE: <%= entityInstance %>.<%=fields[fieldId].fieldName%> }" translate-interpolation="messageformat"></td>
-                        <% } else if (fields[fieldId].fieldTypeBlobContent == 'image') { %>
-                        <img data-ng-src="{{'data:image/*;base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-height: 30px;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/><% } %><% if (fields[fieldId].fieldTypeBlobContent == 'any') { %>
-                        {{abbreviate(<%= entityInstance %>.<%= fields[fieldId].fieldName %>) + ' ' + byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}<% } else { %>
-                        {{byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}<% } %>
-                    </td><% } else { %>
-                    <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%>}}</td><% } %><% } %><% for (relationshipId in relationships) {
-                        if (relationships[relationshipId].relationshipType == 'many-to-one'
-                           || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) {
-                            var relationShipValue = entityInstance + "." + relationships[relationshipId].relationshipFieldName + "." + relationships[relationshipId].otherEntityField;
-                            if (dto == 'mapstruct') {
-                                relationShipValue = entityInstance + "." + relationships[relationshipId].relationshipFieldName + relationships[relationshipId].otherEntityFieldCapitalized;
-                            }%>
-                    <td>{{<%=relationShipValue %>}}</td><% } } %>
+                <tr ng-repeat="<%=entityInstance %> in <%=entityInstance %>s track by <%=entityInstance %>.id">
+                    <td><a ui-sref="<%= entityInstance %>.detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td>
+                    <%_ for (fieldId in fields) { _%>
+                        <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'image') { _%>
                     <td>
-                        <button type="submit"
-                                ui-sref="<%= entityInstance %>.detail({id:<%= entityInstance %>.id})"
-                                class="btn btn-info btn-sm">
-                            <span class="glyphicon glyphicon-eye-open"></span>&nbsp;<span translate="entity.action.view"> View</span>
-                        </button>
-                        <button type="submit"
-                                ui-sref="<%= entityInstance %>.edit({id:<%=entityInstance %>.id})"
-                                class="btn btn-primary btn-sm">
-                            <span class="glyphicon glyphicon-pencil"></span>&nbsp;<span translate="entity.action.edit"> Edit</span>
-                        </button>
-                        <button type="submit"
-                                ng-click="delete(<%=entityInstance %>.id)"
-                                class="btn btn-danger btn-sm">
-                            <span class="glyphicon glyphicon-remove-circle"></span>&nbsp;<span translate="entity.action.delete"> Delete</span>
-                        </button>
+                        <img data-ng-src="{{'data:' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-height: 30px;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/> {{<%= entityInstance %>.<%= fields[fieldId].fieldName %>ContentType}} {{byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}
+                    </td>
+                        <%_ } else if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'any') { _%>
+                    <td>{{abbreviate(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}} {{<%= entityInstance %>.<%= fields[fieldId].fieldName %>ContentType}} {{byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}</td>
+                        <%_ } else if (fields[fieldId].fieldIsEnum) { _%>
+                    <td translate="{{'<%= angularAppName %>.<%= fields[fieldId].fieldType %>.' + <%= entityInstance %>.<%= fields[fieldId].fieldName %>}}">{{<%= entityInstance %>.<%= fields[fieldId].fieldName %>}}</td>
+                        <%_ } else if (fields[fieldId].fieldType == 'ZonedDateTime' || fields[fieldId].fieldType == 'Date') { _%>
+                    <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%> | date:'medium'}}</td>
+                    <%_ } else if (fields[fieldId].fieldType == 'LocalDate') { _%>
+                        <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%> | date:'mediumDate'}}</td>
+                        <%_ } else { _%>
+                    <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%>}}</td>
+                        <%_ } _%>
+                    <%_ } _%>
+                    <%_ for (relationshipId in relationships) {
+                            var relationshipType = relationships[relationshipId].relationshipType;
+                            var ownerSide = relationships[relationshipId].ownerSide;
+                            var relationshipFieldName = relationships[relationshipId].relationshipFieldName;
+                            var otherEntityName = relationships[relationshipId].otherEntityName;
+                            var otherEntityField = relationships[relationshipId].otherEntityField;
+                            var otherEntityFieldCapitalized = relationships[relationshipId].otherEntityFieldCapitalized; _%>
+                        <%_ if (relationshipType == 'many-to-one'
+                                || (relationshipType == 'one-to-one' && ownerSide == true)
+                                || (relationshipType == 'many-to-many' && ownerSide == true && pagination == 'no')) { _%>
+                    <td>
+                            <%_ if (otherEntityName == 'user') { _%>
+                                <%_ if (relationshipType == 'many-to-many') { _%>
+                        <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldName %>s">
+                            {{<%= relationshipFieldName %>.<%= otherEntityField %>}}{{$last ? '' : ', '}}
+                        <span>
+                                <%_ } else { _%>
+                                    <%_ if (dto == 'no') { _%>
+                        {{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}
+                                    <%_ } else { _%>
+                        {{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}
+                                    <%_ } _%>
+                                <%_ } _%>
+                            <%_ } else { _%>
+                                <%_ if (relationshipType == 'many-to-many') { _%>
+                        <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldName %>s">
+                            <a class="form-control-static" ui-sref="<%= otherEntityName %>.detail({id: {{<%= relationshipFieldName %>.id}}})">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
+                        <span>
+                                <%_ } else { _%>
+                                    <%_ if (dto == 'no') { _%>
+                        <a ui-sref="<%= otherEntityName %>.detail({id:<%= entityInstance + "." + relationshipFieldName + ".id" %>})">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</a>
+                                    <%_ } else { _%>
+                        <a ui-sref="<%= otherEntityName %>.detail({id:<%= entityInstance + "." + relationshipFieldName + "Id" %>})">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
+                                    <%_ } _%>
+                                <%_ } _%>
+                            <%_ } _%>
+                    </td>
+                        <%_ } _%>
+                    <%_ } _%>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit"
+                                    ui-sref="<%= entityInstance %>.detail({id:<%= entityInstance %>.id})"
+                                    class="btn btn-info btn-sm"> 
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.view"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="<%= entityInstance %>.edit({id:<%=entityInstance %>.id})"
+                                    class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.edit"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="<%= entityInstance %>.delete({id:<%=entityInstance %>.id})"
+                                    class="btn btn-danger btn-sm">                                    
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.delete"></span>
+                            </button>
+                        </div>
                     </td>
                 </tr>
             </tbody>
-        </table><% if (pagination == 'pager') { %>
-        <nav>
-            <ul class="pager">
-                <li ng-show="links['first']" ng-click="loadPage(links['first'])"><a href="#">&lt;&lt;</a></li>
-                <li ng-show="links['prev']" ng-click="loadPage(links['prev'])"><a href="#">&lt;</a></li>
-                <li ng-show="links['next']" ng-click="loadPage(links['next'])"><a href="#">&gt;</a></li>
-                <li ng-show="links['last']" ng-click="loadPage(links['last'])"><a href="#">&gt;&gt;</a></li>
-            </ul>
-        </nav><% } %><% if (pagination == 'pagination') { %>
-        <nav>
-            <ul class="pagination">
-                <li ng-show="links['first']" ng-click="loadPage(links['first'])"><a>&lt;&lt;</a></li>
-                <li ng-show="links['prev']" ng-click="loadPage(links['prev'])"><a>&lt;</a></li>
-                <li ng-show="page > 2" ng-click="loadPage(page - 2)"><a>{{page - 2}}</a></li>
-                <li ng-show="page > 1" ng-click="loadPage(page - 1)"><a>{{page - 1}}</a></li>
-                <li class="active"><a>{{page}}</a></li>
-                <li ng-show="page < links['last']" ng-click="loadPage(page + 1)"><a>{{page + 1}}</a></li>
-                <li ng-show="page < links['last'] - 1" ng-click="loadPage(page + 2)"><a>{{page + 2}}</a></li>
-                <li ng-show="links['next']" ng-click="loadPage(links['next'])"><a>&gt;</a></li>
-                <li ng-show="links['last']" ng-click="loadPage(links['last'])"><a>&gt;&gt;</a></li>
-            </ul>
-        </nav><% } %>
+        </table>
     </div>
+    <%_ if (pagination == 'pager') { _%>
+    <uib-pager total-items="totalItems" ng-model="page" ng-change="loadAll()"></uib-pager>
+    <%_ } else if (pagination == 'pagination') { _%>
+    <div class="text-center">
+        <uib-pagination class="pagination-sm" total-items="totalItems" ng-model="page" ng-change="loadAll()"></uib-pagination>
+    </div>
+    <%_ } _%>
 </div>

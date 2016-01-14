@@ -10,33 +10,29 @@ import org.hibernate.validator.constraints.Email;
 import org.springframework.data.elasticsearch.annotations.Document;<% } %><% if (databaseType == 'mongodb') { %>
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import <%=packageName%>.domain.util.CustomDateTimeDeserializer;
-import <%=packageName%>.domain.util.CustomDateTimeSerializer;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 <% } %><% if (databaseType == 'sql') { %>
-import javax.persistence.*;
-import org.hibernate.annotations.Type;<% } %>
+import javax.persistence.*;<% } %>
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-
-import org.joda.time.DateTime;<% } %>
+import java.time.ZonedDateTime;<% } %>
 
 /**
  * A user.
  */<% if (databaseType == 'sql') { %>
 @Entity
-@Table(name = "JHI_USER")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
+@Table(name = "jhi_user")<% } %><% if (hibernateCache != 'no' && databaseType == 'sql') { %>
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'mongodb') { %>
-@Document(collection = "JHI_USER")<% } %><% if (databaseType == 'cassandra') { %>
+@Document(collection = "jhi_user")<% } %><% if (databaseType == 'cassandra') { %>
 @Table(name = "user")<% } %><% if (searchEngine == 'elasticsearch') { %>
-@Document(indexName="user")<% } %>
+@Document(indexName = "user")<% } %>
 public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %> extends AbstractAuditingEntity<% } %> implements Serializable {
 <% if (databaseType == 'sql') { %>
     @Id
@@ -47,16 +43,18 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @PartitionKey
     private String id;<% } %>
 
-    @NotNull
-    @Pattern(regexp = "^[a-z0-9]*$")
+    @NotNull<% if (enableSocialSignIn) { %>
+    @Size(min = 1, max = 100)<% if (databaseType == 'sql') { %>
+    @Column(length = 100, unique = true, nullable = false)<% } %><% } else { %>
+    @Pattern(regexp = "^[a-z0-9]*$|(anonymousUser)")
     @Size(min = 1, max = 50)<% if (databaseType == 'sql') { %>
-    @Column(length = 50, unique = true, nullable = false)<% } %>
+    @Column(length = 50, unique = true, nullable = false)<% } %><% } %>
     private String login;
 
     @JsonIgnore
     @NotNull
     @Size(min = 60, max = 60) <% if (databaseType == 'sql') { %>
-    @Column(length = 60)<% } %>
+    @Column(name = "password_hash",length = 60)<% } %>
     private String password;
 
     @Size(max = 50)<% if (databaseType == 'sql') { %>
@@ -96,14 +94,11 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Column(name = "reset_key")<% } %>
     private String resetKey;<%if (databaseType == 'sql') {%>
 
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @Column(name = "reset_date", nullable = true)
-    private DateTime resetDate = null;<% }%><%if (databaseType == 'mongodb') {%>
+    private ZonedDateTime resetDate = null;<% }%><%if (databaseType == 'mongodb') {%>
 
-    @JsonSerialize(using = CustomDateTimeSerializer.class)
-    @JsonDeserialize(using = CustomDateTimeDeserializer.class)
     @Field("reset_date")
-    private DateTime resetDate = null;<% }%><% if (databaseType == 'cassandra') { %>
+    private ZonedDateTime resetDate = null;<% }%><% if (databaseType == 'cassandra') { %>
 
     @Column(name = "reset_date")
     private Date resetDate;<% }%>
@@ -111,9 +106,9 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @JsonIgnore<% if (databaseType == 'sql') { %>
     @ManyToMany
     @JoinTable(
-            name = "JHI_USER_AUTHORITY",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})<% if (hibernateCache != 'no') { %>
+        name = "jhi_user_authority",
+        joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+        inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})<% if (hibernateCache != 'no') { %>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% } %><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     private Set<Authority> authorities = new HashSet<>();<% } %><% if (databaseType == 'cassandra') { %>
     private Set<String> authorities = new HashSet<>();<% } %><% if (authenticationType == 'session' && databaseType == 'sql') { %>
@@ -195,11 +190,11 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
         this.resetKey = resetKey;
     }<% if (databaseType == 'sql' || databaseType == 'mongodb') {%>
 
-    public DateTime getResetDate() {
+    public ZonedDateTime getResetDate() {
        return resetDate;
     }
 
-    public void setResetDate(DateTime resetDate) {
+    public void setResetDate(ZonedDateTime resetDate) {
        this.resetDate = resetDate;
     }<% }%><% if (databaseType == 'cassandra') { %>
 
@@ -261,14 +256,13 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Override
     public String toString() {
         return "User{" +
-                "login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", activated='" + activated + '\'' +
-                ", langKey='" + langKey + '\'' +
-                ", activationKey='" + activationKey + '\'' +
-                "}";
+            "login='" + login + '\'' +
+            ", firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            ", email='" + email + '\'' +
+            ", activated='" + activated + '\'' +
+            ", langKey='" + langKey + '\'' +
+            ", activationKey='" + activationKey + '\'' +
+            "}";
     }
 }

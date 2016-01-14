@@ -1,0 +1,15 @@
+{
+    "social": {
+        "btnLabel": "Inicia sesión con {{ label }}",
+        "register": {
+            "title": "Rexistrarse con {{ label }}",
+            "errorTitle": "Rexístrache cunha conta externa",
+            "messages": {
+                "success": "<strong>Rexistro gardado!</strong> Por favor revise o seu correo electrónico para a confirmación.",
+                "error": {
+                    "fail": "<strong>Rexistro fallido!</strong> Ocorreu un problema durante a validación da conta externa, recomendámoslle que probe con outra conexión."
+                }
+            }
+        }
+    }
+}

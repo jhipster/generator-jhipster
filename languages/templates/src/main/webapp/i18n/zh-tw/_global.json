@@ -4,9 +4,10 @@
         "browsehappy": "您目前使用<strong>過於老舊</strong>的瀏覽器, 建議您<a href=\"http://browsehappy.com/?locale=en\">升級瀏覽器</a>讓您有更佳的上網體驗.",
         "menu": {
             "home": "首頁",
+            "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
                 "main": "實體",
-                "additionalEntity": "JHipster will add additional entities here (do not translate!)"
+                "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
                 "main": "帳號",
@@ -19,6 +20,7 @@
             },
             "admin": {
                 "main": "管理",
+                "user-management": "User management",
                 "tracker": "追蹤使用者",
                 "metrics": "資源監控",
                 "health": "服務狀態",
@@ -26,7 +28,8 @@
                 "logs": "記錄",
                 "audits": "稽核",
                 "apidocs": "API",
-                "database": "資料庫"
+                "database": "資料庫",
+                "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
             },
             "language": "語系"
         },
@@ -42,8 +45,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "如果您要<a href=\"#/login\">登入</a>, 您可以使用預設帳號:<br/>- 管理者 (帳號=\"admin\"與密碼=\"admin\") <br/>- 使用者 (帳號=\"user\"與密碼=\"user\").",
-                "register": "您還沒有帳號？<a href=\"#/register\">註冊一個新帳號</a>"
+                "authenticated": "如果您要<a class=\"alert-link\" href=\"#/login\">登入</a>, 您可以使用預設帳號:<br/>- 管理者 (帳號=\"admin\"與密碼=\"admin\") <br/>- 使用者 (帳號=\"user\"與密碼=\"user\").",
+                "register": "您還沒有帳號？<a class=\"alert-link\" href=\"#/register\">註冊一個新帳號</a>"
             },
             "error": {
                 "dontmatch" : "您輸入的密碼與密碼確認不符合!"
@@ -102,6 +105,14 @@
             "number": "This field should be a number.",
             "datetimelocal": "This field should be a date and time."
         }
+    },
+    "error": {
+        "server.not.reachable": "Server not reachable",
+        "NotNull": "Field {{fieldName}} cannot be empty!",
+        "Size": "Field {{fieldName}} does not meet min/max size requirements!",
+        "userexists": "Login name already used!",
+        "emailexists": "E-mail is already in use!",
+        "idexists": "A new {{entityName}} cannot already have an ID"
     },
     "footer": "這裡是頁尾"
 }
