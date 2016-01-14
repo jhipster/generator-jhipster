@@ -94,7 +94,7 @@ public class SocialService {
     private String getLoginDependingOnProviderId(UserProfile userProfile, String providerId) {
         switch (providerId) {
             case "twitter":
-                return userProfile.getUsername();
+                return userProfile.getUsername().toLowerCase();
             default:
                 return userProfile.getEmail();
         }
