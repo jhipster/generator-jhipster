@@ -45,7 +45,8 @@ module.exports = JhipsterGenerator.extend({
             type: Boolean,
             defaults: true
         });
-        this.skipClient = this.options['skip-client'];
+        var skipClient = this.config.get('skipClient');
+        this.skipClient = this.options['skip-client'] || skipClient;
         this.clientBuild = this.options['client-build'];
         this.i18n = this.options['i18n'];
 
