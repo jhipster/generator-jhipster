@@ -107,12 +107,12 @@
         }
     },
     "error": {
-        "serverNotReachable": "Сервер не доступен",
+        "server.not.reachable": "Сервер не доступен",
         "NotNull": "Поле {{fieldName}} не может быть пустым!",
         "Size": "Поле {{fieldName}} не отвечает требованиям мин/макс.го размера!",
         "userexists": "Имя пользователя уже используется!",
         "emailexists": "Эл. почта уже используется!!",
-        "idexists": "Новый {{entityName}} не может иметь ID"
+        "idexists": "Новый {{entityName}} не может иметь данный ID"
     },
     "footer": "Это ваш футтер"
 }
