@@ -29,6 +29,7 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTransl
             if (Principal.isIdentityResolved()) {
                 Auth.authorize();
             }
+			
             <% if (enableTranslation) { %>
             // Update the language
             Language.getCurrent().then(function (language) {
