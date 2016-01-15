@@ -38,7 +38,7 @@ Generator.prototype.addJavaScriptToIndex = function (script) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + script + '.js ' + chalk.yellow('not added.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + script + '.js ' + chalk.yellow('not added.\n'));
     }
 };
 
@@ -58,7 +58,7 @@ Generator.prototype.addMessageformatLocaleToIndex = function (script) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + script + '.js ' + chalk.yellow('not added.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + script + '.js ' + chalk.yellow('not added.\n'));
     }
 };
 
@@ -81,7 +81,7 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
     }
 };
 
@@ -104,7 +104,7 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to admin menu.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to admin menu.\n'));
     }
 };
 
@@ -126,7 +126,7 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + routerName + ' ' + chalk.yellow('not added to menu.\n'));
     }
 };
 
@@ -148,7 +148,7 @@ Generator.prototype.addElementTranslationKey = function(key, value, language) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
     }
 };
 
@@ -170,7 +170,7 @@ Generator.prototype.addAdminElementTranslationKey = function(key, value, languag
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new entry in the admin menu.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new entry in the admin menu.\n'));
     }
 };
 
@@ -192,7 +192,7 @@ Generator.prototype.addEntityTranslationKey = function(key, value, language) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new entity in the menu.\n'));
     }
 };
 
@@ -210,7 +210,7 @@ Generator.prototype.addGlobalTranslationKey = function(key, value, language) {
             jsonObj[key] = value;
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + '(key: ' + key + ', value:' + value + ')' + chalk.yellow(' not added to global translations.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + '(key: ' + key + ', value:' + value + ')' + chalk.yellow(' not added to global translations.\n'));
     }
 };
 
@@ -289,7 +289,7 @@ Generator.prototype.getAllSupportedLanguages = function () {
 Generator.prototype.addSocialConfiguration = function(name, clientId, clientSecret, comment) {
     var fullPath ='src/main/resources/config/application.yml';
     try {
-        console.log(chalk.yellow('   update ') + fullPath);
+        this.log(chalk.yellow('   update ') + fullPath);
         var config = '';
         if (comment) {
             config += '# ' + comment + '\n        ';
@@ -305,7 +305,7 @@ Generator.prototype.addSocialConfiguration = function(name, clientId, clientSecr
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'social configuration ' + name + chalk.yellow(' not added.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'social configuration ' + name + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -322,7 +322,7 @@ Generator.prototype.addBowerDependency = function(name, version) {
             jsonObj.dependencies[name] = version;
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bower dependency (name: ' + name + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bower dependency (name: ' + name + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -355,7 +355,7 @@ Generator.prototype.addBowerOverride = function(bowerPackageName, main, isIgnore
             jsonObj.overrides[bowerPackageName] = override;
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bower override configuration (bowerPackageName: ' + bowerPackageName + ', main:' + JSON.stringify(main) + ', ignore:' + isIgnored + ')' + chalk.yellow(' not added.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bower override configuration (bowerPackageName: ' + bowerPackageName + ', main:' + JSON.stringify(main) + ', ignore:' + isIgnored + ')' + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -368,12 +368,12 @@ Generator.prototype.addBowerOverride = function(bowerPackageName, main, isIgnore
 Generator.prototype.addBowerrcParameter = function(key, value) {
     var fullPath ='.bowerrc';
     try {
-        console.log(chalk.yellow('   update ') + fullPath);
+        this.log(chalk.yellow('   update ') + fullPath);
         jhipsterUtils.rewriteJSONFile(fullPath, function(jsonObj) {
             jsonObj[key] = value;
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bowerrc parameter (key: ' + key + ', value:' + value + ')' + chalk.yellow(' not added.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bowerrc parameter (key: ' + key + ', value:' + value + ')' + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -394,7 +394,7 @@ Generator.prototype.addAngularJsModule = function(moduleName) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + moduleName + chalk.yellow(' not added to JHipster app.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + moduleName + chalk.yellow(' not added to JHipster app.\n'));
     }
 };
 
@@ -436,7 +436,7 @@ Generator.prototype.addAngularJsConfig = function(moduleConfigNames, config, com
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Configuration not added to JHipster app.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Configuration not added to JHipster app.\n'));
     }
 };
 
@@ -457,7 +457,7 @@ Generator.prototype.addAngularJsInterceptor = function(interceptorName) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Interceptor not added to JHipster app.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Interceptor not added to JHipster app.\n'));
     }
 };
 
@@ -477,7 +477,7 @@ Generator.prototype.addChangelogToLiquibase = function (changelogName) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + changelogName + '.xml ' + chalk.yellow('not added.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + changelogName + '.xml ' + chalk.yellow('not added.\n'));
     }
 };
 
@@ -497,7 +497,7 @@ Generator.prototype.addColumnToLiquibaseEntityChangeset = function (filePath, co
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required jhipster-needle. Column not added.\n') + e);
+        this.log(chalk.yellow('\nUnable to find ') + filePath + chalk.yellow(' or missing required jhipster-needle. Column not added.\n') + e);
     }
 };
 
@@ -514,7 +514,7 @@ Generator.prototype.addSocialButton = function (isUseSass, socialName, socialPar
     var loginfullPath = 'src/main/webapp/scripts/app/account/login/login.html';
     var registerfullPath = 'src/main/webapp/scripts/app/account/register/register.html';
     try {
-        console.log(chalk.yellow('\nupdate ') + socialServicefullPath);
+        this.log(chalk.yellow('\nupdate ') + socialServicefullPath);
         var serviceCode =  "case '" + socialName + "': return '"+ socialParameter +"';";
         jhipsterUtils.rewriteFile({
             file: socialServicefullPath,
@@ -525,7 +525,7 @@ Generator.prototype.addSocialButton = function (isUseSass, socialName, socialPar
         });
 
         var buttonCode = '<jh-social ng-provider="'+ socialName +'"></jh-social>';
-        console.log(chalk.yellow('update ') + loginfullPath);
+        this.log(chalk.yellow('update ') + loginfullPath);
         jhipsterUtils.rewriteFile({
             file: loginfullPath,
             needle: 'jhipster-needle-add-social-button',
@@ -533,7 +533,7 @@ Generator.prototype.addSocialButton = function (isUseSass, socialName, socialPar
                 buttonCode
             ]
         });
-        console.log(chalk.yellow('update ') + registerfullPath);
+        this.log(chalk.yellow('update ') + registerfullPath);
         jhipsterUtils.rewriteFile({
             file: registerfullPath,
             needle: 'jhipster-needle-add-social-button',
@@ -555,7 +555,7 @@ Generator.prototype.addSocialButton = function (isUseSass, socialName, socialPar
         this.addMainCSSStyle(isUseSass, buttonStyle,'Add sign in style for ' +  socialName);
 
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to add social button modification.\n' + e));
+        this.log(chalk.yellow('\nUnable to add social button modification.\n' + e));
     }
 };
 
@@ -571,7 +571,7 @@ Generator.prototype.addSocialButton = function (isUseSass, socialName, socialPar
 Generator.prototype.addSocialConnectionFactory = function (javaDir, importPackagePath, socialName, connectionFactoryClassName, configurationName) {
     var fullPath = javaDir + 'config/social/SocialConfiguration.java';
     try {
-        console.log(chalk.yellow('\nupdate ') + fullPath);
+        this.log(chalk.yellow('\nupdate ') + fullPath);
         var javaImport = 'import ' + importPackagePath +';\n';
         jhipsterUtils.rewriteFile({
             file: fullPath,
@@ -606,7 +606,7 @@ Generator.prototype.addSocialConnectionFactory = function (javaDir, importPackag
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Social connection ') + e + ' ' + chalk.yellow('not added.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Social connection ') + e + ' ' + chalk.yellow('not added.\n'));
     }
 };
 
@@ -651,7 +651,7 @@ Generator.prototype.addMainCSSStyle = function(isUseSass, style, comment) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Style not added to JHipster app.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Style not added to JHipster app.\n'));
     }
 };
 
@@ -693,7 +693,7 @@ Generator.prototype.addMainSCSSStyle = function(style, comment) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Style not added to JHipster app.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Style not added to JHipster app.\n'));
     }
 };
 
@@ -726,7 +726,7 @@ Generator.prototype.addMavenDependency = function (groupId, artifactId, version,
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + 'maven dependency (groupId: ' + groupId + ', artifactId:' + artifactId + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + 'maven dependency (groupId: ' + groupId + ', artifactId:' + artifactId + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -759,7 +759,7 @@ Generator.prototype.addMavenPlugin = function (groupId, artifactId, version, oth
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + 'maven plugin (groupId: ' + groupId + ', artifactId:' + artifactId + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + 'maven plugin (groupId: ' + groupId + ', artifactId:' + artifactId + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -781,7 +781,7 @@ Generator.prototype.addGradlePlugin = function (group, name, version) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + 'classpath: ' + group + ':' + name + ':' + version + chalk.yellow(' not added.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + 'classpath: ' + group + ':' + name + ':' + version + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -804,7 +804,7 @@ Generator.prototype.addGradleDependency = function (scope, group, name, version)
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + group + ':' + name + ':' + version + chalk.yellow(' not added.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + group + ':' + name + ':' + version + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -824,7 +824,7 @@ Generator.prototype.applyFromGradleScript = function (name) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + name + chalk.yellow(' not added.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + name + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -1100,7 +1100,7 @@ Generator.prototype.installNewLanguage = function(language) {
             ]
         });
     } catch (e) {
-        console.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new language. Check if you have enabled translation support.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new language. Check if you have enabled translation support.\n'));
     }
 };
 

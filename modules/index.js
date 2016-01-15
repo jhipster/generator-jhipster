@@ -25,7 +25,7 @@ module.exports = ModulesGenerator.extend({
         var packageName = this.config.get('packageName');
         var packageFolder = this.config.get('packageFolder');
 
-        if (baseName == null || packageName == null) {
+        if (!this.options.skipValidation && (baseName == null || packageName == null)) {
             this.log(chalk.red('ERROR! There is no existing JHipster configuration file in this directory.'));
             this.env.error('JHipster ' + jhipsterVar.moduleName + ' is a JHipster module, and needs a .yo-rc.json configuration file made by JHipster.');
         }
