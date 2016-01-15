@@ -70,7 +70,7 @@
     </div>
     <%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
     <div class="text-center">
-        <uib-pagination class="pagination-sm" total-items="totalItems" ng-model="page" ng-change="loadAll()" items-per-page="pageSize"></uib-pagination>
+        <uib-pagination class="pagination-sm" total-items="totalItems" ng-model="page" ng-change="loadAll()"></uib-pagination>
     </div>
     <%_ } _%>
 </div>
