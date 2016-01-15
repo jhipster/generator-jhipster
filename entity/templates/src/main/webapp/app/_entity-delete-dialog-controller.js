@@ -1,9 +1,9 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-	.controller('<%= entityClass %>DeleteController', function($scope, $uibModalInstance, $stateParams, <%= entityClass %>) {
+	.controller('<%= entityClass %>DeleteController', function($scope, $uibModalInstance, entity, <%= entityClass %>) {
 
-        $scope.<%= entityInstance %> = {id:$stateParams.id};
+        $scope.<%= entityInstance %> = entity;
         $scope.clear = function() {
             $uibModalInstance.dismiss('cancel');
         };
