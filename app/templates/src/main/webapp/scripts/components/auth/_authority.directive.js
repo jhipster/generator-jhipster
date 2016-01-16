@@ -28,6 +28,12 @@ angular.module('<%=angularAppName%>')
 
                 if (authorities.length > 0) {
                     defineVisibility(true);
+                    
+                    scope.$watch(function(scope) {
+                        return Principal.isAuthenticated();
+                    }, function(newValue) {
+                        defineVisibility(true);
+                    });
                 }
             }
         };
@@ -61,6 +67,12 @@ angular.module('<%=angularAppName%>')
 
                 if (authority.length > 0) {
                     defineVisibility(true);
+
+                    scope.$watch(function(scope) {
+                        return Principal.isAuthenticated();
+                    }, function(newValue) {
+                        defineVisibility(true);
+                    });
                 }
             }
         };
