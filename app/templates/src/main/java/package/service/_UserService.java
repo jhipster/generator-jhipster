@@ -197,7 +197,7 @@ public class UserService {
 <% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true)<% } %>
     public User getUserWithAuthorities() {
-        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUser().getUsername()).get();
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
         user.getAuthorities().size(); // eagerly load the association
         return user;
     }<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>

@@ -58,10 +58,16 @@ angular.module('<%=angularAppName%>')
                 // retrieve the identity data from the server, update the identity object, and then resolve.
                 Account.get().$promise
                     .then(function (account) {
-                        _identity = account.data;
-                        _authenticated = true;
-                        deferred.resolve(_identity);<% if (websocket == 'spring-websocket') { %>
-                        Tracker.connect();<% } %>
+                        if(account.data.login === "anonymousUser"){
+                            _identity = null;
+                            _authenticated = false;
+                            deferred.resolve(_identity);
+                        }else {
+                            _identity = account.data;
+                            _authenticated = true;
+                            deferred.resolve(_identity);<% if (websocket == 'spring-websocket') { %>
+                            Tracker.connect();<% } %>
+                         }
                     })
                     .catch(function() {
                         _identity = null;
