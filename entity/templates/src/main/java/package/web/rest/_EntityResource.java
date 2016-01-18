@@ -119,7 +119,7 @@ public class <%= entityClass %>Resource {
      * SEARCH  /_search/<%= entityInstance %>s/:query -> search for the <%= entityInstance %> corresponding
      * to the query.
      */
-    @RequestMapping(value = "/_search/<%= entityInstance %>s/{query}",
+    @RequestMapping(value = "/_search/<%= entityInstance %>s/{query:.+}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
