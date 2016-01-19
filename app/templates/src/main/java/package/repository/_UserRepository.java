@@ -3,7 +3,7 @@ package <%=packageName%>.repository;
 import com.datastax.driver.core.*;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;<% } %>
-import <%=packageName%>.domain.User;<% if (this.authenticationType == 'session') { %>
+import <%=packageName%>.domain.User;<% if (authenticationType == 'session') { %>
 import <%=packageName%>.domain.PersistentToken;<% } %>
 
 import java.time.ZonedDateTime;<% if (databaseType == 'sql') { %>
@@ -42,7 +42,7 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
 
     Optional<User> findOneByLogin(String login);
 
-    Optional<User> findOneById(<%= pkType %> userId);<% if (this.authenticationType == 'session') { %>
+    Optional<User> findOneById(<%= pkType %> userId);<% if (authenticationType == 'session') { %>
 
     Optional<User> findOneByPersistentTokens(PersistentToken token);<% } %>
 
