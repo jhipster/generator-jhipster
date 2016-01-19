@@ -3,8 +3,8 @@ package <%=packageName%>.repository;
 import com.datastax.driver.core.*;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;<% } %>
-import <%=packageName%>.domain.User;
-import <%=packageName%>.domain.PersistentToken;
+import <%=packageName%>.domain.User;<% if (this.authenticationType == 'session') { %>
+import <%=packageName%>.domain.PersistentToken;<% } %>
 
 import java.time.ZonedDateTime;<% if (databaseType == 'sql') { %>
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -42,9 +42,9 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
 
     Optional<User> findOneByLogin(String login);
 
-    Optional<User> findOneById(<%= pkType %> userId);
-    
-    Optional<User> findOneByPersistentTokens(PersistentToken token);
+    Optional<User> findOneById(<%= pkType %> userId);<% if (this.authenticationType == 'session') { %>
+
+    Optional<User> findOneByPersistentTokens(PersistentToken token);<% } %>
 
     @Override
     void delete(User t);
