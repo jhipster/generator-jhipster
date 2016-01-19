@@ -148,7 +148,7 @@ public class CustomPersistentRememberMeServices extends
         if (rememberMeCookie != null && rememberMeCookie.length() != 0) {
             try {
                 String[] cookieTokens = decodeCookie(rememberMeCookie);
-                PersistentToken token = getPersistentToken(cookieTokens);<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+                PersistentToken token = getPersistentToken(cookieTokens);<% if (databaseType == 'sql') { %>
 
                 // remove the token from the user, updating the user cache
                 userRepository.findOneByPersistentTokens(token).ifPresent(u -> {
