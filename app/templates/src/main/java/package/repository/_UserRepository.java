@@ -42,6 +42,8 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
     Optional<User> findOneByLogin(String login);
 
     Optional<User> findOneById(<%= pkType %> userId);
+    
+    Optional<User> findOneByPersistentTokens(PersistentToken token);
 
     @Override
     void delete(User t);
