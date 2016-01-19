@@ -42,7 +42,7 @@ public interface UserRepository extends <% if (databaseType == 'sql') { %>JpaRep
 
     Optional<User> findOneByLogin(String login);
 
-    Optional<User> findOneById(<%= pkType %> userId);<% if (this.authenticationType == 'session') { %>
+    Optional<User> findOneById(<%= pkType %> userId);<% if (authenticationType == 'session') { %>
 
     Optional<User> findOneByPersistentTokens(PersistentToken token);<% } %>
 
