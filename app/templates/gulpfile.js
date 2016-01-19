@@ -165,6 +165,7 @@ gulp.task('serve', function() {
             proxyRoutes.map(function (r) {
                 var options = url.parse(baseUri + r);
                 options.route = r;
+                options.preserveHost = true;
                 return proxy(options);
             }));
 
