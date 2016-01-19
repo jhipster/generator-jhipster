@@ -157,6 +157,7 @@ gulp.task('serve', function() {
                         res.end();
                     }
                 });
+                req.headers['X-Forwarded-Host'] = req.headers.host;
 
                 next();
             }
