@@ -1,0 +1,24 @@
+{
+  "generator-jhipster": {
+    "baseName": "sampleSocial",
+    "packageName": "com.mycompany.myapp",
+    "packageFolder": "com/mycompany/myapp",
+    "authenticationType": "session",
+    "hibernateCache": "ehcache",
+    "clusteredHttpSession": "no",
+    "websocket": "no",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Memory",
+    "prodDatabaseType": "mysql",
+    "searchEngine": "no",
+    "useSass": false,
+    "buildTool": "maven",
+    "frontendBuilder": "grunt",
+    "enableTranslation": true,
+    "enableSocialSignIn": true,
+    "rememberMeKey": "cb7ffe96c2de12a54c69ec0940d49c36d596375f",
+    "testFrameworks": [
+      "gatling"
+    ]
+  }
+}
