@@ -36,10 +36,10 @@ describe('JHipster generator languages', function () {
             before(function (done) {
                 helpers.run(require.resolve('../languages'))
                     .inTmpDir(function (dir) {
-                      fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
+                        fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
                     })
                     .withPrompts({
-                        "languages": [language.value]
+                        languages: [language.value]
                     })
                     .on('end', done);
             });
@@ -86,10 +86,10 @@ describe('JHipster generator languages', function () {
             before(function (done) {
                 helpers.run(require.resolve('../languages'))
                     .inTmpDir(function (dir) {
-                      fse.copySync(path.join(__dirname, '../test/templates/social'), dir)
+                        fse.copySync(path.join(__dirname, '../test/templates/social'), dir)
                     })
                     .withPrompts({
-                        "languages": [language.value]
+                        languages: [language.value]
                     })
                     .on('end', done);
             });

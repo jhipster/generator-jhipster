@@ -12,15 +12,15 @@ describe('JHipster generator entity', function () {
         before(function (done) {
             helpers.run(require.resolve('../entity'))
                 .inTmpDir(function (dir) {
-                  fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
+                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
                 })
                 .withArguments(['foo'])
                 .withPrompts({
-                    "fieldAdd": false,
-                    "relationshipAdd": false,
-                    "dto": "no",
-                    "service": "no",
-                    "pagination": "no"
+                    fieldAdd: false,
+                    relationshipAdd: false,
+                    dto: 'no',
+                    service: 'no',
+                    pagination: 'no'
                 })
                 .on('end', done);
         });

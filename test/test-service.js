@@ -12,11 +12,11 @@ describe('JHipster generator service', function () {
         before(function (done) {
             helpers.run(require.resolve('../service'))
                 .inTmpDir(function (dir) {
-                  fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
+                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
                 })
                 .withArguments(['foo'])
                 .withPrompts({
-                    "useInterface": false
+                    useInterface: false
                 })
                 .on('end', done);
         });
@@ -38,11 +38,11 @@ describe('JHipster generator service', function () {
         before(function (done) {
             helpers.run(require.resolve('../service'))
                 .inTmpDir(function (dir) {
-                  fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
+                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
                 })
                 .withArguments(['foo'])
                 .withPrompts({
-                    "useInterface": true
+                    useInterface: true
                 })
                 .on('end', done);
         });
