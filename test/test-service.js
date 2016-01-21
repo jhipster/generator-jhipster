@@ -4,7 +4,6 @@
 var path = require('path');
 var assert = require('yeoman-assert');
 var helpers = require('yeoman-test');
-var os = require('os');
 var fse = require('fs-extra');
 
 describe('JHipster generator service', function () {
