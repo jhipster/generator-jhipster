@@ -1,6 +1,6 @@
 {
     "login": {
-        "title": "Inizia la sessione",
+        "title": "Accesso",
         "form": {
             "password": "Password",
             "password.placeholder": "la password",
@@ -9,11 +9,11 @@
         },
         "messages": {
             "error": {
-                "authentication": "<strong> Accesso non riuscito </ strong> rivedere le credenziali e riprovare !."
+                "authentication": "<strong> Accesso non riuscito </ strong> controllare le credenziali e riprovare !."
             }
         },
         "password" : {
-            "forgot": "Hai dimenticato la tua password?"
+            "forgot": "Password dimenticata?"
         }
     }
 }
