@@ -1,15 +1,15 @@
 {
     "sessions": {
-        "title": "Sesiones activas para [<b>{{username}}</b>]",
+        "title": "Sessione attiva per [<b>{{username}}</b>]",
         "table": {
-            "ipaddress": "IP address",
+            "ipaddress": "Indirizzo IP",
             "useragent": "User Agent",
-            "date": "Fecha",
-            "button": "Invalidar"
+            "date": "Data",
+            "button": "Invalida"
         },
         "messages": {
-            "success": "<strong>¡Sesión invalidada!</strong>",
-            "error": "<strong>¡Ha ocurrido un error!</strong> La sesión no puede ser invalidada."
+            "success": "<strong>Sessione invalidata!</strong>",
+            "error": "<strong>C'è stato un errore!</strong> Impossibile invalidare la sessione."
         }
     }
 }

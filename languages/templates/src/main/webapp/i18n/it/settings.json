@@ -1,29 +1,31 @@
 {
     "settings": {
-        "title": "Ajustes del usuario para [<b>{{username}}</b>]",
+        "title": "Impostazioni per l'utente [<b>{{username}}</b>]",
         "form": {
-            "firstname": "Nombre",
-            "firstname.placeholder": "Su nombre",
-            "lastname": "Apellido",
-            "lastname.placeholder": "Su Apellido",
-            "button": "Guardar"
+            "firstname": "Nome",
+            "firstname.placeholder": "Nome",
+            "lastname": "Cognome",
+            "lastname.placeholder": "Cognome",
+            "button": "Salva",
+            "language": "Lingua"
+
         },
         "messages": {
             "error": {
-                "fail": "<strong>¡Ha ocurrido un error!</strong> Ajustes no pudieron guardarse.",
-                "emailexists": "<strong>E-mail is already in use!</strong> Please choose another one."
+                "fail": "<strong>C'è stato un errore!</strong> Impossibile salvare le impostazioni.",
+                "emailexists": "<strong>L'indirizzo e-mail è già in uso!</strong> Sceglierne un altro per favore."
             },
-            "success": "<strong>¡Ajustes guardados!</strong>",
+            "success": "<strong>Impostazioni salvate!</strong>",
             "validate": {
                 "firstname": {
-                    "required": "Se requiere que ingrese su nombre.",
-                    "minlength": "Se requiere que su nombre tenga por lo menos 1 carácter",
-                    "maxlength": "Su nombre no puede tener mas de 50 carácteres"
+                    "required": "E' richiesto l'inserimento di un nome.",
+                    "minlength": "Il nome deve contenere almeno un carattere",
+                    "maxlength": "Il nome può avere una lunghezza massima di 50 caratteri"
                 },
                 "lastname": {
-                    "required": "Se requiere que ingrese su apellido.",
-                    "minlength": "Se requiere que su apellido tenga por lo menos 1 carácter",
-                    "maxlength": "Su apellido no puede tener mas de 50 carácteres"
+                    "required": "E' richiesto l'inserimento di un cognome.",
+                    "minlength": "Il cognnome deve contenere almeno un carattere",
+                    "maxlength": "Il cognnome può avere una lunghezza massima di 50 caratteri"
                 }
             }
         }

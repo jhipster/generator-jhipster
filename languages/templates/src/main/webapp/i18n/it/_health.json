@@ -4,7 +4,7 @@
         "refresh.button": "Refresh",
         "stacktrace": "Stacktrace",
         "indicator": {
-            "diskSpace": "Disk space",
+            "diskSpace": "Spazio su disco",
             "mail": "Email",<% if (searchEngine == 'elasticsearch') { %>
             "elasticsearch": "Elasticsearch",<% } %><% if (databaseType == 'sql') { %>
             "db": "Database"<% } %><% if (databaseType == 'mongodb') { %>
@@ -12,12 +12,12 @@
             "cassandra": "Cassandra"<% } %>
         },
         "table": {
-            "service": "Nombre del servicio",
-            "status": "Estado"
+            "service": "Nome del servizio",
+            "status": "Stato"
         },
         "status": {
-            "UP": "HASTA",
-            "DOWN": "ABAJO"
+            "UP": "DISPONIBILE",
+            "DOWN": "NON DISPONIBILE"
         }
     }
 }

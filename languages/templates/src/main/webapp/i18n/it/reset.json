@@ -8,7 +8,7 @@
             "messages": {
                 "info": "Inserire l'indirizzo e-mail utilizzato per la registrazione",
                 "success": "Controlla la tua e-mail per i dettagli su come reimpostare la password.",
-                "notfound": "<strong>E-Mail  E-Mail non è registrato!</strong> Si prega di verificare e riprovare!"
+                "notfound": "<strong>E-Mail E-Mail non è registrata!</strong> Si prega di verificarla e riprovare!"
 
             }
 
@@ -16,13 +16,13 @@
         "finish" : {
             "title": "Reset Password",
             "form": {
-                "button": "Convalida nuova password"
+                "button": "Convalida la nuova password"
             },
             "messages": {
                 "info": "Scegliere una nuova password",
-                "success": "<strong>La tua password è stata reimpostata .</strong> Per favore  <a class=\"alert-link\" href=\"#/login\">autenticatie</a>.",
+                "success": "<strong>La tua password è stata reimpostata .</strong> Per favore <a class=\"alert-link\" href=\"#/login\">autenticatie</a>.",
                 "keymissing": "La chiave di reset non è presente.",
-                "error": "La tua password potrebbe non essere ripristinato Ricorda una richiesta della password è valida solo per 24 ore."
+                "error": "La tua password potrebbe non essere ripristinata. Ricorda che la richiesta della password è valida solo per 24 ore."
             }
         }
     }
