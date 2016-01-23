@@ -22,7 +22,7 @@ angular.module('<%=angularAppName%>')
         $scope.previousMonth = function () {
             var fromDate = new Date();
             if (fromDate.getMonth() === 0) {
-                fromDate = new Date(fromDate.getFullYear() - 1, 0, fromDate.getDate());
+                fromDate = new Date(fromDate.getFullYear() - 1, 11, fromDate.getDate());
             } else {
                 fromDate = new Date(fromDate.getFullYear(), fromDate.getMonth() - 1, fromDate.getDate());
             }
