@@ -66,12 +66,12 @@ var parseVersionFromBuildGradle = function() {
     return versionRegex.exec(buildGradle)[1];
 };<% } %>
 
-gulp.task('clean', function (cb) {
-    del([yeoman.dist], cb);
+gulp.task('clean', function () {
+    return del([yeoman.dist]);
 });
 
-gulp.task('clean:tmp', function (cb) {
-    del([yeoman.tmp], cb);
+gulp.task('clean:tmp', function () {
+    return del([yeoman.tmp]);
 });
 
 gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function(done) {
@@ -231,8 +231,8 @@ gulp.task('wiredep:test', function () {
         .pipe(gulp.dest('src/test/javascript'));
 });
 
-gulp.task('build', function () {
-    runSequence('clean', 'copy', 'wiredep:app', 'ngconstant:prod', 'usemin');
+gulp.task('build', function (cb) {
+    runSequence('clean', 'copy', 'wiredep:app', 'ngconstant:prod', 'usemin', cb);
 });
 
 gulp.task('usemin', function() {
