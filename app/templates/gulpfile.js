@@ -235,28 +235,26 @@ gulp.task('build', function (cb) {
     runSequence('clean', 'copy', 'wiredep:app', 'ngconstant:prod', 'usemin', cb);
 });
 
-gulp.task('usemin', function() {
-    runSequence('images', 'styles', function () {
-        return gulp.src([yeoman.app + '**/*.html', '!' + yeoman.app + 'bower_components/**/*.html']).
-            pipe(usemin({
-                css: [
-                    prefix.apply(),
-                    minifyCss({root: 'src/main/webapp'}),  // Replace relative paths for static resources with absolute path with root
-                    'concat', // Needs to be present for minifyCss root option to work
-                    rev()
-                ],
-                html: [
-                    htmlmin({collapseWhitespace: true})
-                ],
-                js: [
-                    ngAnnotate(),
-                    uglify(),
-                    'concat',
-                    rev()
-                ]
-            })).
-            pipe(gulp.dest(yeoman.dist));
-    });
+gulp.task('usemin', ['images', 'styles'], function() {
+    return gulp.src([yeoman.app + '**/*.html', '!' + yeoman.app + '@(dist|bower_components)/**/*.html']).
+        pipe(usemin({
+            css: [
+                prefix,
+                function () { return minifyCss({root: 'src/main/webapp'}) },  // Replace relative paths for static resources with absolute path with root
+                'concat', // Needs to be present for minifyCss root option to work
+                rev
+            ],
+            html: [
+                function () { return htmlmin({collapseWhitespace: true}) }
+            ],
+            js: [
+                ngAnnotate,
+                uglify,
+                'concat',
+                rev
+            ]
+        })).
+        pipe(gulp.dest(yeoman.dist));
 });
 
 gulp.task('ngconstant:dev', function() {
