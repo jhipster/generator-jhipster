@@ -1,14 +1,18 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('AuditsController', function ($scope, $filter, AuditsService) {
+    .controller('AuditsController', function ($scope, $filter, AuditsService, ParseLinks) {
+        $scope.page = 1;
+
         $scope.onChangeDate = function () {
             var dateFormat = 'yyyy-MM-dd';
             var fromDate = $filter('date')($scope.fromDate, dateFormat);
             var toDate = $filter('date')($scope.toDate, dateFormat);
 
-            AuditsService.findByDates(fromDate, toDate).then(function (data) {
-                $scope.audits = data;
+            AuditsService.query({page: $scope.page -1, size: 20, fromDate: fromDate, toDate: toDate}, function(result, headers){
+                $scope.audits = result;
+                //$scope.links = ParseLinks.parse(headers('link'));
+                //$scope.totalItems = headers('X-Total-Count');
             });
         };
 
@@ -28,6 +32,11 @@ angular.module('<%=angularAppName%>')
             }
 
             $scope.fromDate = fromDate;
+        };
+
+        $scope.loadPage = function (page) {
+            $scope.page = page;
+            $scope.onChangeDate();
         };
 
         $scope.today();
