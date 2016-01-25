@@ -240,12 +240,12 @@ gulp.task('usemin', ['images', 'styles'], function() {
         pipe(usemin({
             css: [
                 prefix,
-                function () { return minifyCss({root: 'src/main/webapp'}) },  // Replace relative paths for static resources with absolute path with root
+                minifyCss,  // Replace relative paths for static resources with absolute path with root
                 'concat', // Needs to be present for minifyCss root option to work
                 rev
             ],
             html: [
-                function () { return htmlmin({collapseWhitespace: true}) }
+                htmlmin.bind(htmlmin, {collapseWhitespace: true})
             ],
             js: [
                 ngAnnotate,
