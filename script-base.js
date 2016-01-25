@@ -1069,7 +1069,7 @@ Generator.prototype.copyI18n = function(language) {
         var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
         if (stats.isDirectory()) {
             this.template('src/main/webapp/i18n/_entity_' + language + '.json', 'src/main/webapp/i18n/' + language + '/' + this.entityInstance + '.json', this, {});
-            this.addEntityTranslationKey(this.entityInstance, this.entityClass, language);
+            this.addEntityTranslationKey(this.entityInstance + '-management', this.entityClass, language);
         }
     } catch(e) {
         // An exception is thrown if the folder doesn't exist

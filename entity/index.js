@@ -1394,34 +1394,34 @@ module.exports = EntityGenerator.extend({
                 return;
             }
             this.copyHtml('src/main/webapp/app/_entities.html',
-            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '/' + this.entityInstance + 's.html', this, {}, true);
+            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.html', this, {}, true);
             this.copyHtml('src/main/webapp/app/_entity-detail.html',
-            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '/' + this.entityInstance + '-detail.html', this, {}, true);
+            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.html', this, {}, true);
             this.copyHtml('src/main/webapp/app/_entity-dialog.html',
-            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '/' + this.entityInstance + '-dialog.html', this, {}, true);
+            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-dialog.html', this, {}, true);
             this.copyHtml('src/main/webapp/app/_entity-delete-dialog.html',
-            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '/' + this.entityInstance + '-delete-dialog.html', this, {}, true);
+            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-delete-dialog.html', this, {}, true);
 
-            this.addEntityToMenu(this.entityInstance, this.enableTranslation);
+            this.addEntityToMenu(this.entityInstance + '-management', this.enableTranslation);
 
             this.template('src/main/webapp/app/_entity.js',
-            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '/' + this.entityInstance + '.js', this, {});
-            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '/' + this.entityInstance + '.js');
+            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.js', this, {});
+            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.js');
             this.template('src/main/webapp/app/_entity-controller.js',
-            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '/' + this.entityInstance + '.controller' + '.js', this, {});
-            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '/' + this.entityInstance + '.controller' + '.js');
+            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.controller' + '.js', this, {});
+            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.controller' + '.js');
             this.template('src/main/webapp/app/_entity-dialog-controller.js',
-            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '/' + this.entityInstance + '-dialog.controller' + '.js', this, {});
-            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '/' + this.entityInstance + '-dialog.controller' + '.js');
+            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-dialog.controller' + '.js', this, {});
+            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-dialog.controller' + '.js');
             this.template('src/main/webapp/app/_entity-delete-dialog-controller.js',
-            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '/' + this.entityInstance + '-delete-dialog.controller' + '.js', this, {});
-            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '/' + this.entityInstance + '-delete-dialog.controller' + '.js');
+            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-delete-dialog.controller' + '.js', this, {});
+            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-delete-dialog.controller' + '.js');
 
             this.template('src/main/webapp/app/_entity-detail-controller.js',
-            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '/' + this.entityInstance + '-detail.controller' + '.js', this, {});
+            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller' + '.js', this, {});
             this.template('src/test/javascript/spec/app/_entity-detail-controller.spec.js',
-            'src/test/javascript/spec/app/entities/' + this.entityInstance + '/' + this.entityInstance + '-detail.controller.spec.js', this, {});
-            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '/' + this.entityInstance + '-detail.controller' + '.js');
+            'src/test/javascript/spec/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller.spec.js', this, {});
+            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller' + '.js');
 
             this.template('src/main/webapp/components/_entity-service.js',
             'src/main/webapp/scripts/components/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js', this, {});

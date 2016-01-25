@@ -3,17 +3,17 @@
 angular.module('<%=angularAppName%>')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('<%= entityInstance %>', {
+            .state('<%= entityInstance %>-management', {
                 parent: 'entity',
-                url: '/<%= entityInstance %>s',
+                url: '/<%= entityInstance %>-management',
                 data: {
                     authorities: ['ROLE_USER'],
                     pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>.home.title'<% }else{ %>'<%= entityClass %>s'<% } %>
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>s.html',
-                        controller: '<%= entityClass %>Controller'
+                        templateUrl: 'scripts/app/entities/<%= entityInstance %>-management/<%= entityInstance %>-management.html',
+                        controller: '<%= entityClass %>ManagementController'
                     }
                 },
                 resolve: {<% if (enableTranslation){ %>
@@ -27,17 +27,17 @@ angular.module('<%=angularAppName%>')
                     }]<% } %>
                 }
             })
-            .state('<%= entityInstance %>.detail', {
+            .state('<%= entityInstance %>-management-detail', {
                 parent: 'entity',
-                url: '/<%= entityInstance %>/{id}',
+                url: '/<%= entityInstance %>-management/{id:int}',
                 data: {
                     authorities: ['ROLE_USER'],
                     pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>.detail.title'<% }else{ %>'<%= entityClass %>'<% } %>
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-detail.html',
-                        controller: '<%= entityClass %>DetailController'
+                        templateUrl: 'scripts/app/entities/<%= entityInstance %>-management/<%= entityInstance %>-management-detail.html',
+                        controller: '<%= entityClass %>ManagementDetailController'
                     }
                 },
                 resolve: {<% if (enableTranslation){ %>
@@ -53,16 +53,16 @@ angular.module('<%=angularAppName%>')
                     }]
                 }
             })
-            .state('<%= entityInstance %>.new', {
-                parent: '<%= entityInstance %>',
+            .state('<%= entityInstance %>-management.new', {
+                parent: '<%= entityInstance %>-management',
                 url: '/new',
                 data: {
                     authorities: ['ROLE_USER'],
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-dialog.html',
-                        controller: '<%= entityClass %>DialogController',
+                        templateUrl: 'scripts/app/entities/<%= entityInstance %>-management/<%= entityInstance %>-management-dialog.html',
+                        controller: '<%= entityClass %>ManagementDialogController',
                         size: 'lg',
                         resolve: {
                             entity: function () {
@@ -82,22 +82,22 @@ angular.module('<%=angularAppName%>')
                             }
                         }
                     }).result.then(function(result) {
-                        $state.go('<%= entityInstance %>', null, { reload: true });
+                        $state.go('<%= entityInstance %>-management', null, { reload: true });
                     }, function() {
-                        $state.go('<%= entityInstance %>');
+                        $state.go('<%= entityInstance %>-management');
                     })
                 }]
             })
-            .state('<%= entityInstance %>.edit', {
-                parent: '<%= entityInstance %>',
-                url: '/{id}/edit',
+            .state('<%= entityInstance %>-management.edit', {
+                parent: '<%= entityInstance %>-management',
+                url: '/{id:int}/edit',
                 data: {
                     authorities: ['ROLE_USER'],
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-dialog.html',
-                        controller: '<%= entityClass %>DialogController',
+                        templateUrl: 'scripts/app/entities/<%= entityInstance %>-management/<%= entityInstance %>-management-dialog.html',
+                        controller: '<%= entityClass %>ManagementDialogController',
                         size: 'lg',
                         resolve: {
                             entity: ['<%= entityClass %>', function(<%= entityClass %>) {
@@ -105,22 +105,22 @@ angular.module('<%=angularAppName%>')
                             }]
                         }
                     }).result.then(function(result) {
-                        $state.go('<%= entityInstance %>', null, { reload: true });
+                        $state.go('<%= entityInstance %>-management', null, { reload: true });
                     }, function() {
                         $state.go('^');
                     })
                 }]
             })
-            .state('<%= entityInstance %>.delete', {
-                parent: '<%= entityInstance %>',
-                url: '/{id}/delete',
+            .state('<%= entityInstance %>-management.delete', {
+                parent: '<%= entityInstance %>-management',
+                url: '/{id:int}/delete',
                 data: {
                     authorities: ['ROLE_USER'],
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'scripts/app/entities/<%= entityInstance %>/<%= entityInstance %>-delete-dialog.html',
-                        controller: '<%= entityClass %>DeleteController',
+                        templateUrl: 'scripts/app/entities/<%= entityInstance %>-management/<%= entityInstance %>-management-delete-dialog.html',
+                        controller: '<%= entityClass %>ManagementDeleteController',
                         size: 'md',
                         resolve: {
                             entity: ['<%= entityClass %>', function(<%= entityClass %>) {
@@ -128,7 +128,7 @@ angular.module('<%=angularAppName%>')
                             }]
                         }
                     }).result.then(function(result) {
-                        $state.go('<%= entityInstance %>', null, { reload: true });
+                        $state.go('<%= entityInstance %>-management', null, { reload: true });
                     }, function() {
                         $state.go('^');
                     })
