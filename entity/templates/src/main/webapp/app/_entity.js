@@ -8,7 +8,7 @@ angular.module('<%=angularAppName%>')
                 url: '/<%= entityInstance %>-management',
                 data: {
                     authorities: ['ROLE_USER'],
-                    pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>.home.title'<% }else{ %>'<%= entityClass %>s'<% } %>
+                    pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>-management.home.title'<% }else{ %>'<%= entityClass %>s'<% } %>
                 },
                 views: {
                     'content@': {
@@ -32,7 +32,7 @@ angular.module('<%=angularAppName%>')
                 url: '/<%= entityInstance %>-management/{id:int}',
                 data: {
                     authorities: ['ROLE_USER'],
-                    pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>.detail.title'<% }else{ %>'<%= entityClass %>'<% } %>
+                    pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>-management.detail.title'<% }else{ %>'<%= entityClass %>'<% } %>
                 },
                 views: {
                     'content@': {
