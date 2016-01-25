@@ -694,17 +694,17 @@ module.exports = JhipsterGenerator.extend({
                     this.template('_build.gradle', 'build.gradle', this, {});
                     this.template('_settings.gradle', 'settings.gradle', this, {});
                     this.template('_gradle.properties', 'gradle.properties', this, {});
-                    this.template('_yeoman.gradle', 'yeoman.gradle', this, {});
-                    this.template('_sonar.gradle', 'sonar.gradle', this, {});
-                    this.template('_profile_dev.gradle', 'profile_dev.gradle', this, {'interpolate': interpolateRegex});
-                    this.template('_profile_prod.gradle', 'profile_prod.gradle', this, {'interpolate': interpolateRegex});
-                    this.template('_profile_fast.gradle', 'profile_fast.gradle', this, {'interpolate': interpolateRegex});
-                    this.template('_mapstruct.gradle', 'mapstruct.gradle', this, {'interpolate': interpolateRegex});
+                    this.template('gradle/_yeoman.gradle', 'gradle/yeoman.gradle', this, {});
+                    this.template('gradle/_sonar.gradle', 'gradle/sonar.gradle', this, {});
+                    this.template('gradle/_profile_dev.gradle', 'gradle/profile_dev.gradle', this, {'interpolate': interpolateRegex});
+                    this.template('gradle/_profile_prod.gradle', 'gradle/profile_prod.gradle', this, {'interpolate': interpolateRegex});
+                    this.template('gradle/_profile_fast.gradle', 'gradle/profile_fast.gradle', this, {'interpolate': interpolateRegex});
+                    this.template('gradle/_mapstruct.gradle', 'gradle/mapstruct.gradle', this, {'interpolate': interpolateRegex});
                     if (this.testFrameworks.indexOf('gatling') != -1) {
-                        this.template('_gatling.gradle', 'gatling.gradle', this, {});
+                        this.template('gradle/_gatling.gradle', 'gradle/gatling.gradle', this, {});
                     }
                     if (this.databaseType == "sql") {
-                        this.template('_liquibase.gradle', 'liquibase.gradle', this, {});
+                        this.template('gradle/_liquibase.gradle', 'gradle/liquibase.gradle', this, {});
                     }
                     this.copy('gradlew', 'gradlew');
                     this.copy('gradlew.bat', 'gradlew.bat');
@@ -1437,6 +1437,21 @@ module.exports = JhipsterGenerator.extend({
             this.removefile('Cassandra-Dev.Dockerfile');
             this.removefile('Cassandra-Prod.Dockerfile');
             this.removefolder('docker/');
+
+            if (this.buildTool === 'gradle') {
+                if (this.testFrameworks.indexOf('gatling') != -1) {
+                    this.removefile('gatling.gradle');
+                }
+                if (this.databaseType == 'sql') {
+                    this.removefile('liquibase.gradle');
+                }
+                this.removefile('mapstruct.gradle');
+                this.removefile('profile_dev.gradle');
+                this.removefile('profile_fast.gradle');
+                this.removefile('profile_prod.gradle');
+                this.removefile('sonar.gradle');
+                this.removefile('yeoman.gradle');
+            }
         }
     },
 
