@@ -37,8 +37,9 @@ public class AuditEventService {
         this.auditEventConverter = auditEventConverter;
     }
 
-    public List<AuditEvent> findAll() {
-        return auditEventConverter.convertToAuditEvent(persistenceAuditEventRepository.findAll());
+    public Page<AuditEvent> findAll(Pageable pageable) {
+        return persistenceAuditEventRepository.findAll(pageable)
+            .map(persistentAuditEvents -> auditEventConverter.convertToAuditEvent(persistentAuditEvents));
     }
 
     public Page<AuditEvent> findByDates(LocalDateTime fromDate, LocalDateTime toDate, Pageable pageable) {

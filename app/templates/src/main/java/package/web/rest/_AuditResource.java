@@ -32,11 +32,24 @@ public class AuditResource {
         this.auditEventService = auditEventService;
     }
 
+    /**
+     * GET  /audits -> get a page of AuditEvents.
+     */
     @RequestMapping(method = RequestMethod.GET)
-    public List<AuditEvent> getAll() {
-        return auditEventService.findAll();
+    public ResponseEntity<List<AuditEvent>> getAll(Pageable pageable) throws URISyntaxException {
+        Page<AuditEvent> page = auditEventService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/audits");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+
+    /**
+     * GET  /audits -> get a page of AuditEvents between the fromDate and toDate.
+     *
+     *  @param fromDate the start of the time period of AuditEvents to get
+     *  @param toDate the end of the time period of AuditEvents to get
+     *
+     */
     @RequestMapping(method = RequestMethod.GET,
         params = {"fromDate", "toDate"})
     public ResponseEntity<List<AuditEvent>> getByDates(
@@ -49,6 +62,10 @@ public class AuditResource {
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
 
+    /**
+     * GET  /audits/:id -> get an AuditEvent by id.
+     *  @param id the id of the entity to get
+     */
     @RequestMapping(value = "/{id:.+}",
         method = RequestMethod.GET)
     public ResponseEntity<AuditEvent> get(@PathVariable <% if (databaseType == 'sql') { %>Long <% } %><% if (databaseType == 'mongodb') { %>String <% } %>id) {
