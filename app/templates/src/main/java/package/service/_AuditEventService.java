@@ -1,10 +1,11 @@
 package <%=packageName%>.service;
 
 import <%=packageName%>.config.audit.AuditEventConverter;
-import <%=packageName%>.domain.PersistentAuditEvent;
 import <%=packageName%>.repository.PersistenceAuditEventRepository;
 import java.time.LocalDateTime;
 import org.springframework.boot.actuate.audit.AuditEvent;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;<% if (databaseType == 'sql') { %>
 import org.springframework.transaction.annotation.Transactional;<% } %>
 
@@ -40,11 +41,9 @@ public class AuditEventService {
         return auditEventConverter.convertToAuditEvent(persistenceAuditEventRepository.findAll());
     }
 
-    public List<AuditEvent> findByDates(LocalDateTime fromDate, LocalDateTime toDate) {
-        List<PersistentAuditEvent> persistentAuditEvents =
-            persistenceAuditEventRepository.findAllByAuditEventDateBetween(fromDate, toDate);
-
-        return auditEventConverter.convertToAuditEvent(persistentAuditEvents);
+    public Page<AuditEvent> findByDates(LocalDateTime fromDate, LocalDateTime toDate, Pageable pageable) {
+        return persistenceAuditEventRepository.findAllByAuditEventDateBetween(fromDate, toDate, pageable)
+            .map(persistentAuditEvents -> auditEventConverter.convertToAuditEvent(persistentAuditEvents));
     }
 
     public Optional<AuditEvent> find(<% if (databaseType == 'sql') { %>Long <% } %><% if (databaseType == 'mongodb') { %>String <% } %>id) {

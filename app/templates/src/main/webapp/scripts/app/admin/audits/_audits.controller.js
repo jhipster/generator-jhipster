@@ -11,8 +11,8 @@ angular.module('<%=angularAppName%>')
 
             AuditsService.query({page: $scope.page -1, size: 20, fromDate: fromDate, toDate: toDate}, function(result, headers){
                 $scope.audits = result;
-                //$scope.links = ParseLinks.parse(headers('link'));
-                //$scope.totalItems = headers('X-Total-Count');
+                $scope.links = ParseLinks.parse(headers('link'));
+                $scope.totalItems = headers('X-Total-Count');
             });
         };
 
