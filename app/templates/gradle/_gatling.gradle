@@ -21,7 +21,6 @@ task manifestJar(dependsOn:'compileTestScala',type: Jar) {
 }
 
 task gatlingRun(dependsOn:'manifestJar', type: JavaExec) {
-
     group = "gatling"
 
     standardInput = System.in
