@@ -16,13 +16,13 @@ var JhipsterGenerator = generators.Base.extend({});
 
 util.inherits(JhipsterGenerator, scriptBase);
 
-var questions = 15; // making questions a variable to avoid updating each question by hand when adding additional options
-var resourceDir = 'src/main/resources/';
-var webappDir = 'src/main/webapp/';
-var testJsDir = 'src/test/javascript/';
-var testResourceDir = 'src/test/resources/';
-var dockerDir = 'src/main/docker/';
-var interpolateRegex = /<%=([\s\S]+?)%>/g; // so that tags in templates do not get mistreated as _ templates
+const questions = 15; // making questions a variable to avoid updating each question by hand when adding additional options
+const resourceDir = 'src/main/resources/';
+const webappDir = 'src/main/webapp/';
+const testJsDir = 'src/test/javascript/';
+const testResourceDir = 'src/test/resources/';
+const dockerDir = 'src/main/docker/';
+const interpolateRegex = /<%=([\s\S]+?)%>/g; // so that tags in templates do not get mistreated as _ templates
 
 module.exports = JhipsterGenerator.extend({
     constructor: function() {
