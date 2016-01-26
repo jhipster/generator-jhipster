@@ -81,11 +81,11 @@ module.exports = EntityGenerator.extend({
 
             this.filename = this.jhipsterConfigDirectory + '/' + _s.capitalize(this.name) + '.json';
             if (shelljs.test('-f', this.filename)) {
-                this.log(chalk.green('Found the ' + this.filename + ' configuration file, entity can be automatically generated!'));
+                this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
                 try {
                     this.fileData = this.fs.readJSON(this.filename);
                 } catch (err) {
-                    this.log(chalk.red('The configuration file could not be read!'));
+                    this.log(chalk.red('\nThe configuration file could not be read!\n'));
                     return;
                 }
                 this.useConfigurationFile = true;
@@ -121,9 +121,9 @@ module.exports = EntityGenerator.extend({
         },
 
         setupVars: function() {
-            this.log(chalk.red('The entity ' + this.name + ' is being created.'));
             // Specific Entity sub-generator variables
             if (this.useConfigurationFile == false) {
+                this.log(chalk.red('\nThe entity ' + this.name + ' is being created.\n'));
                 this.fieldId = 0;
                 this.fields = [];
                 this.relationshipId = 0;
@@ -133,6 +133,7 @@ module.exports = EntityGenerator.extend({
                 this.dto = 'no';
                 this.service = 'no';
             } else {
+                this.log(chalk.red('\nThe entity ' + this.name + ' is being updated.\n'));
                 this.fieldId = this.fileData.fields? this.fileData.fields.length : 0;
                 this.relationshipId = this.fileData.relationships? this.fileData.relationships.length : 0;
                 this.relationships = this.fileData.relationships;
@@ -147,7 +148,7 @@ module.exports = EntityGenerator.extend({
                     fieldNameChoices.push({name: field.fieldName, value: field.fieldName});
                 }, this);
                 this.relationships.forEach(function (rel) {
-                    relNameChoices.push({name: rel.fieldName + ':' + rel.relationshipType, value: field.fieldName + ':' + rel.relationshipType});
+                    relNameChoices.push({name: rel.relationshipName + ':' + rel.relationshipType, value: rel.relationshipName + ':' + rel.relationshipType});
                 }, this);
             }
         }
@@ -155,7 +156,7 @@ module.exports = EntityGenerator.extend({
     /* private Helper methods */
     _askForField : function(cb){
         this.fieldId++;
-        this.log(chalk.green('Generating field #' + this.fieldId));
+        this.log(chalk.green('\nGenerating field #' + this.fieldId + '\n'));
         var prompts = [
             {
                 type: 'confirm',
@@ -648,7 +649,7 @@ module.exports = EntityGenerator.extend({
                 fieldNamesUnderscored.push(_s.underscored(props.fieldName));
                 this.fields.push(field);
             }
-            this.log(chalk.red('=================' + _s.capitalize(this.name) + '================='));
+            this.log(chalk.red('\n=================' + _s.capitalize(this.name) + '================='));
             this.fields.forEach(function(field) {
                 var validationDetails = '';
                 var fieldValidate = _.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
@@ -709,7 +710,7 @@ module.exports = EntityGenerator.extend({
         ];
         this.prompt(prompts, function(props) {
             if (props.confirmRemove) {
-                this.log(chalk.red('Removing fields: ' + props.fieldsToRemove));
+                this.log(chalk.red('\nRemoving fields: ' + props.fieldsToRemove + '\n'));
                 var i;
                 for (i = this.fields.length - 1; i >= 0; i -= 1) {
                     var field = this.fields[i];
@@ -734,7 +735,7 @@ module.exports = EntityGenerator.extend({
         var packageFolder = this.packageFolder;
         var name = this.name;
         this.relationshipId++;
-        this.log(chalk.green('Generating relationships with other entities'));
+        this.log(chalk.green('\nGenerating relationships with other entities\n'));
         var prompts = [
             {
                 type: 'confirm',
@@ -864,7 +865,7 @@ module.exports = EntityGenerator.extend({
         ];
         this.prompt(prompts, function(props) {
             if (props.noOtherEntity == false || props.noOtherEntity2 == false) {
-                this.log(chalk.red('Generation aborted, as requested by the user.'));
+                this.log(chalk.red('\nGeneration aborted, as requested by the user.\n'));
                 return;
             }
             if (props.relationshipAdd) {
@@ -880,7 +881,7 @@ module.exports = EntityGenerator.extend({
                 fieldNamesUnderscored.push(_s.underscored(props.relationshipName));
                 this.relationships.push(relationship);
             }
-            this.log(chalk.red('===========' + _s.capitalize(this.name) + '=============='));
+            this.log(chalk.red('\n===========' + _s.capitalize(this.name) + '=============='));
             this.fields.forEach(function(field) {
                 this.log(chalk.red(field.fieldName + ' (' + field.fieldType + (field.fieldTypeBlobContent ? ' ' + field.fieldTypeBlobContent : '') + ')'));
             }, this);
@@ -891,12 +892,13 @@ module.exports = EntityGenerator.extend({
             if (props.relationshipAdd) {
                 this._askForRelationship(cb);
             } else {
+                this.log('\n')
                 cb();
             }
         }.bind(this));
     },
 
-    askForRelationsToRemove : function(cb){
+    _askForRelationsToRemove : function(cb){
         var prompts = [
             {
                 type: 'checkbox',
@@ -917,7 +919,7 @@ module.exports = EntityGenerator.extend({
         ];
         this.prompt(prompts, function(props) {
             if (props.confirmRemove) {
-                this.log(chalk.red('Removing relationships: ' + props.relsToRemove));
+                this.log(chalk.red('\nRemoving relationships: ' + props.relsToRemove + '\n'));
                 var i;
                 for (i = this.relationships.length - 1; i >= 0; i -= 1) {
                     var rel = this.relationships[i];
@@ -1134,7 +1136,7 @@ module.exports = EntityGenerator.extend({
             ];
             this.prompt(prompts, function(props) {
                 this.pagination = props.pagination;
-                this.log(chalk.green('Everything is configured, generating the entity...'));
+                this.log(chalk.green('\nEverything is configured, generating the entity...\n'));
                 cb();
             }.bind(this));
         }
@@ -1476,7 +1478,7 @@ module.exports = EntityGenerator.extend({
                 return;
             }
              // store informations in a file for further use.
-            if (this.useConfigurationFile && (this.databaseType == "sql" || this.databaseType == "cassandra")) {
+            if (!this.useConfigurationFile && (this.databaseType == "sql" || this.databaseType == "cassandra")) {
                 this.changelogDate = this.dateFormatForLiquibase();
             }
             this.data = {};
