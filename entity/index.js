@@ -685,6 +685,43 @@ module.exports = EntityGenerator.extend({
         }.bind(this));
     },
 
+    _askForFieldsToRemove : function(cb){
+        this.fieldId++;
+        var prompts = [
+            {
+                type: 'checkbox',
+                name: 'fieldsToRemove',
+                message: 'Please choose the fields you want to remove',
+                choices: fieldNameChoices,
+                default: 'none'
+            },
+            {
+                when: function(response) {
+                    return response.fieldsToRemove != 'none';
+                },
+                type: 'confirm',
+                name: 'confirmRemove',
+                message: 'Are you sure to remove fields ' + response.fieldsToRemove,
+                default: true
+            }
+        ];
+        this.prompt(prompts, function(props) {
+            if (props.confirmRemove) {
+                this.log(chalk.red('Removing fields: ' + props.fieldsToRemove));
+                var i;
+                for (i = this.fields.length - 1; i >= 0; i -= 1) {
+                    var field = this.fields[i];
+                    if(props.fieldsToRemove.filter(function (val) {
+                        return val == field.fieldName;
+                    }).length > 0){
+                        this.fields.splice(i, 1);
+                    }
+                }
+            }
+            cb();
+
+        }.bind(this));
+    },
 
     _askForRelationship: function(cb){
         var packageFolder = this.packageFolder;
@@ -909,6 +946,15 @@ module.exports = EntityGenerator.extend({
             this._askForField(cb);
         },
 
+        askForFieldsToRemove: function() {
+            // prompt only if data is imported from a file
+            if (!this.useConfigurationFile || this.updateEntity != 'remove') {
+                return;
+            }
+            var cb = this.async();
+
+            this._askForFieldsToRemove(cb);
+        },
 
         askForRelationships: function() {
             // don't prompt if data is imported from a file
@@ -922,6 +968,16 @@ module.exports = EntityGenerator.extend({
             var cb = this.async();
 
             this._askForRelationship(cb);
+        },
+
+        askForRelationsToRemove: function() {
+            // prompt only if data is imported from a file
+            if (!this.useConfigurationFile || this.updateEntity != 'remove') {
+                return;
+            }
+            var cb = this.async();
+
+            this._askForField(cb);
         },
 
         askForDTO: function() {
