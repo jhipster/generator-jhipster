@@ -149,7 +149,6 @@ public class <%= entityClass %> implements Serializable {
 
     <%_ } else if (relationships[relationshipId].relationshipType == 'many-to-one') { _%>
     @ManyToOne
-    @JoinColumn(name = "<%= getColumnName(relationships[relationshipId].relationshipName) %>_id")
     private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].relationshipFieldName %>;
 
     <%_ } else if (relationships[relationshipId].relationshipType == 'many-to-many') { _%>
@@ -171,7 +170,7 @@ public class <%= entityClass %> implements Serializable {
     <%_ } else { _%>
     <%_     if (relationships[relationshipId].ownerSide) { _%>
     @OneToOne
-    @JoinColumn(name = "<%= getColumnName(relationships[relationshipId].relationshipName) %>_id", unique = true)
+    @JoinColumn(unique = true)
     <%_    } else { _%>
     @OneToOne(mappedBy = "<%= relationships[relationshipId].otherEntityRelationshipName %>")
     @JsonIgnore
