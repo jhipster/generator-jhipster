@@ -33,7 +33,7 @@ var enums = [];
 var existingEnum = false;
 
 var fieldNamesUnderscored = ['id'];
-var fieldNameChoices = [{name:'id', value: 'ID'}];
+var fieldNameChoices = [];
 var databaseType;
 var prodDatabaseType;
 const interpolateRegex = /<%=([\s\S]+?)%>/g; // so that thymeleaf tags in templates do not get mistreated as _ templates
@@ -686,7 +686,6 @@ module.exports = EntityGenerator.extend({
     },
 
     _askForFieldsToRemove : function(cb){
-        this.fieldId++;
         var prompts = [
             {
                 type: 'checkbox',
@@ -701,7 +700,7 @@ module.exports = EntityGenerator.extend({
                 },
                 type: 'confirm',
                 name: 'confirmRemove',
-                message: 'Are you sure to remove fields ' + response.fieldsToRemove,
+                message: 'Are you sure to remove these fields?',
                 default: true
             }
         ];
@@ -717,6 +716,11 @@ module.exports = EntityGenerator.extend({
                         this.fields.splice(i, 1);
                     }
                 }
+                //reset filed IDs
+                for (i = 0; i < this.fields.length; i++) {
+                    this.fields[i].fieldId = i;
+                }
+                this.fieldId = this.fileData.fields.length;
             }
             cb();
 
