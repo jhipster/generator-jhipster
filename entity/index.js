@@ -36,8 +36,8 @@ var fieldNamesUnderscored = ['id'];
 var fieldNameChoices = [], relNameChoices = [];
 var databaseType;
 var prodDatabaseType;
-const interpolateRegex = /<%=([\s\S]+?)%>/g; // so that thymeleaf tags in templates do not get mistreated as _ templates
-const resourceDir = 'src/main/resources/';
+const INTERPOLATE_REGEX = /<%=([\s\S]+?)%>/g; // so that thymeleaf tags in templates do not get mistreated as _ templates
+const RESOURCE_DIR = 'src/main/resources/';
 
 var EntityGenerator = generators.Base.extend({});
 
@@ -1557,16 +1557,16 @@ module.exports = EntityGenerator.extend({
 
         writeDbFiles: function() {
             if (this.databaseType == "sql") {
-                this.template(resourceDir + '/config/liquibase/changelog/_added_entity.xml',
-                resourceDir + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml', this, {
-                    'interpolate': interpolateRegex
+                this.template(RESOURCE_DIR + '/config/liquibase/changelog/_added_entity.xml',
+                RESOURCE_DIR + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml', this, {
+                    'interpolate': INTERPOLATE_REGEX
                 });
 
                 this.addChangelogToLiquibase(this.changelogDate + '_added_entity_' + this.entityClass);
             }
             if (this.databaseType == "cassandra") {
-                this.template(resourceDir + '/config/cql/_added_entity.cql',
-                resourceDir + 'config/cql/' + this.changelogDate + '_added_entity_' + this.entityClass + '.cql', this, {});
+                this.template(RESOURCE_DIR + '/config/cql/_added_entity.cql',
+                RESOURCE_DIR + 'config/cql/' + this.changelogDate + '_added_entity_' + this.entityClass + '.cql', this, {});
             }
         },
 
