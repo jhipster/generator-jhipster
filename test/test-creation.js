@@ -139,6 +139,7 @@ var expectedFiles = {
         'src/main/webapp/i18n/en/settings.json',
         'src/main/webapp/i18n/en/reset.json',
         'src/main/webapp/i18n/en/user.management.json',
+        'src/main/resources/i18n/messages.properties',
         'src/main/resources/i18n/messages_en.properties',
         'src/main/webapp/i18n/fr/activate.json',
         'src/main/webapp/i18n/fr/audits.json',
@@ -257,6 +258,7 @@ var expectedFiles = {
     ],
 
     i18n: [
+        'src/main/resources/i18n/messages_en.properties',
         'src/main/resources/i18n/messages_fr.properties',
         'src/main/webapp/i18n/en/global.json',
         'src/main/webapp/i18n/fr/global.json',

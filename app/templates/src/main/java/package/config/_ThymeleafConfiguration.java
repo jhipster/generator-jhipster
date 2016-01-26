@@ -24,14 +24,4 @@ public class ThymeleafConfiguration {
         emailTemplateResolver.setOrder(1);
         return emailTemplateResolver;
     }
-
-    @Bean
-    @Description("Spring mail message resolver")
-    public MessageSource emailMessageSource() {
-        log.info("loading non-reloadable mail messages resources");
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:/mails/messages/messages");
-        messageSource.setDefaultEncoding(CharEncoding.UTF_8);
-        return messageSource;
-    }
 }
