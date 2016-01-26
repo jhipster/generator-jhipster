@@ -893,6 +893,48 @@ module.exports = EntityGenerator.extend({
         }.bind(this));
     },
 
+    askForRelationsToRemove : function(cb){
+        var prompts = [
+            {
+                type: 'checkbox',
+                name: 'fieldsToRemove',
+                message: 'Please choose the fields you want to remove',
+                choices: fieldNameChoices,
+                default: 'none'
+            },
+            {
+                when: function(response) {
+                    return response.fieldsToRemove != 'none';
+                },
+                type: 'confirm',
+                name: 'confirmRemove',
+                message: 'Are you sure to remove these fields?',
+                default: true
+            }
+        ];
+        this.prompt(prompts, function(props) {
+            if (props.confirmRemove) {
+                this.log(chalk.red('Removing fields: ' + props.fieldsToRemove));
+                var i;
+                for (i = this.fields.length - 1; i >= 0; i -= 1) {
+                    var field = this.fields[i];
+                    if(props.fieldsToRemove.filter(function (val) {
+                        return val == field.fieldName;
+                    }).length > 0){
+                        this.fields.splice(i, 1);
+                    }
+                }
+                //reset filed IDs
+                for (i = 0; i < this.fields.length; i++) {
+                    this.fields[i].fieldId = i;
+                }
+                this.fieldId = this.fileData.fields.length;
+            }
+            cb();
+
+        }.bind(this));
+    },
+
     /* end of Helper methods */
 
     prompting: {
@@ -979,9 +1021,13 @@ module.exports = EntityGenerator.extend({
             if (!this.useConfigurationFile || this.updateEntity != 'remove') {
                 return;
             }
+            if (this.databaseType == 'mongodb' || this.databaseType == 'cassandra') {
+                return;
+            }
+
             var cb = this.async();
 
-            this._askForField(cb);
+            this._askForRelationsToRemove(cb);
         },
 
         askForDTO: function() {
