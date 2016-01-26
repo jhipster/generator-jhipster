@@ -955,7 +955,7 @@ module.exports = EntityGenerator.extend({
                 {
                     type: 'list',
                     name: 'updateEntity',
-                    message: 'Do you want to update the entity? This will replace the existing files for this entity, all your custom code will be overwriiten',
+                    message: 'Do you want to update the entity? This will replace the existing files for this entity, all your custom code will be overwritten',
                     choices: [
                         {
                             value: 'rewrite',
