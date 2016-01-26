@@ -148,7 +148,13 @@ public class CustomPersistentRememberMeServices extends
         if (rememberMeCookie != null && rememberMeCookie.length() != 0) {
             try {
                 String[] cookieTokens = decodeCookie(rememberMeCookie);
-                PersistentToken token = getPersistentToken(cookieTokens);
+                PersistentToken token = getPersistentToken(cookieTokens);<% if (databaseType == 'sql') { %>
+
+                // remove the token from the user, updating the user cache
+                userRepository.findOneByPersistentTokens(token).ifPresent(u -> {
+                    u.getPersistentTokens().remove(token);
+                    userRepository.save(u);
+                });<%}%>
                 persistentTokenRepository.delete(token);
             } catch (InvalidCookieException ice) {
                 log.info("Invalid cookie, no persistent token could be deleted");
