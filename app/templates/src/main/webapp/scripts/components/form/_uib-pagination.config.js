@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .config(function (uibPaginationConfig) {
-        uibPaginationConfig.itemsPerPage = 20;
+    .config(function (uibPaginationConfig, paginationConstants) {
+        uibPaginationConfig.itemsPerPage = paginationConstants.itemsPerPage;
         uibPaginationConfig.maxSize = 5;
         uibPaginationConfig.boundaryLinks = true;
         uibPaginationConfig.firstText = '«';

@@ -1062,6 +1062,7 @@ module.exports = JhipsterGenerator.extend({
             this.template(webappDir + '/scripts/components/form/_minbytes.directive.js', webappDir + 'scripts/components/form/minbytes.directive.js', this, {});
             this.template(webappDir + '/scripts/components/form/_uib-pager.config.js', webappDir + 'scripts/components/form/uib-pager.config.js', this, {});
             this.template(webappDir + '/scripts/components/form/_uib-pagination.config.js', webappDir + 'scripts/components/form/uib-pagination.config.js', this, {});
+            this.template(webappDir + '/scripts/components/form/_pagination.constants.js', webappDir + 'scripts/components/form/pagination.constants.js', this, {});
             if (this.enableTranslation) {
                 this.template(webappDir + '/scripts/components/language/_language.controller.js', webappDir + 'scripts/components/language/language.controller.js', this, {});
                 this.template(webappDir + '/scripts/components/language/_language.service.js', webappDir + 'scripts/components/language/language.service.js', this, {});
@@ -1205,6 +1206,7 @@ module.exports = JhipsterGenerator.extend({
                 'scripts/components/form/minbytes.directive.js',
                 'scripts/components/form/uib-pager.config.js',
                 'scripts/components/form/uib-pagination.config.js',
+                'scripts/components/form/pagination.constants.js',
                 'scripts/components/admin/audits.service.js',
                 'scripts/components/admin/logs.service.js',
                 'scripts/components/admin/configuration.service.js',

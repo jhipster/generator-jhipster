@@ -1,19 +1,19 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('UserManagementController', function ($scope, Principal, User, ParseLinks<% if (enableTranslation) { %>, Language<% } %>) {
+    .controller('UserManagementController', function ($scope, Principal, User, ParseLinks, paginationConstants<% if (enableTranslation) { %>, Language<% } %>) {
         $scope.users = [];
         $scope.authorities = ["ROLE_USER", "ROLE_ADMIN"];<% if (enableTranslation) { %>
         Language.getAll().then(function (languages) {
             $scope.languages = languages;
         });<% } %>
-		
+
 		Principal.identity().then(function(account) {
             $scope.currentAccount = account;
         });
         $scope.page = 1;
         $scope.loadAll = function () {<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-            User.query({page: $scope.page - 1, size: 20}, function (result, headers) {
+            User.query({page: $scope.page - 1, size: paginationConstants.itemsPerPage}, function (result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 $scope.totalItems = headers('X-Total-Count');<% } else { %>
             User.query({}, function (result) {<% } %>
