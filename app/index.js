@@ -16,8 +16,8 @@ var JhipsterGenerator = generators.Base.extend({});
 
 util.inherits(JhipsterGenerator, scriptBase);
 
-const questions = 15; // making questions a variable to avoid updating each question by hand when adding additional options
-const resourceDir = 'src/main/resources/';
+const QUESTIONS = 15; // making questions a variable to avoid updating each question by hand when adding additional options
+const RESOURCE_DIR = 'src/main/resources/';
 const webappDir = 'src/main/webapp/';
 const testJsDir = 'src/test/javascript/';
 const testResourceDir = 'src/test/resources/';
@@ -191,7 +191,7 @@ module.exports = JhipsterGenerator.extend({
                     if (/^([a-zA-Z0-9_]*)$/.test(input)) return true;
                     return 'Your application name cannot contain special characters or a blank space, using the default name instead';
                 },
-                message: '(1/' + questions + ') What is the base name of your application?',
+                message: '(1/' + QUESTIONS + ') What is the base name of your application?',
                 default: defaultAppBaseName
             }, function (prompt) {
                 this.baseName = prompt.baseName;
@@ -214,14 +214,14 @@ module.exports = JhipsterGenerator.extend({
                         if (/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)) return true;
                         return 'The package name you have provided is not a valid Java package name.';
                     },
-                    message: '(2/' + questions + ') What is your default Java package name?',
+                    message: '(2/' + QUESTIONS + ') What is your default Java package name?',
                     default: 'com.mycompany.myapp',
                     store: true
                 },
                 {
                     type: 'list',
                     name: 'authenticationType',
-                    message: '(3/' + questions + ') Which *type* of authentication would you like to use?',
+                    message: '(3/' + QUESTIONS + ') Which *type* of authentication would you like to use?',
                     choices: [
                         {
                             value: 'session',
@@ -248,7 +248,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'databaseType',
-                    message: '(4/' + questions + ') Which *type* of database would you like to use?',
+                    message: '(4/' + QUESTIONS + ') Which *type* of database would you like to use?',
                     choices: [
                         {
                             value: 'sql',
@@ -267,7 +267,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'databaseType',
-                    message: '(4/' + questions + ') Which *type* of database would you like to use?',
+                    message: '(4/' + QUESTIONS + ') Which *type* of database would you like to use?',
                     choices: [
                         {
                             value: 'sql',
@@ -290,7 +290,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'prodDatabaseType',
-                    message: '(5/' + questions + ') Which *production* database would you like to use?',
+                    message: '(5/' + QUESTIONS + ') Which *production* database would you like to use?',
                     choices: [
                         {
                             value: 'mysql',
@@ -313,7 +313,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'devDatabaseType',
-                    message: '(6/' + questions + ') Which *development* database would you like to use?',
+                    message: '(6/' + QUESTIONS + ') Which *development* database would you like to use?',
                     choices: [
                         {
                             value: 'h2Disk',
@@ -336,7 +336,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'devDatabaseType',
-                    message: '(6/' + questions + ') Which *development* database would you like to use?',
+                    message: '(6/' + QUESTIONS + ') Which *development* database would you like to use?',
                     choices: [
                         {
                             value: 'h2Disk',
@@ -359,7 +359,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'devDatabaseType',
-                    message: '(6/' + questions + ') Which *development* database would you like to use?',
+                    message: '(6/' + QUESTIONS + ') Which *development* database would you like to use?',
                     choices: [
                         {
                             value: 'h2Disk',
@@ -382,7 +382,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'hibernateCache',
-                    message: '(7/' + questions + ') Do you want to use Hibernate 2nd level cache?',
+                    message: '(7/' + QUESTIONS + ') Do you want to use Hibernate 2nd level cache?',
                     choices: [
                         {
                             value: 'no',
@@ -405,7 +405,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'searchEngine',
-                    message: '(8/' + questions + ') Do you want to use a search engine in your application?',
+                    message: '(8/' + QUESTIONS + ') Do you want to use a search engine in your application?',
                     choices: [
                         {
                             value: 'no',
@@ -421,7 +421,7 @@ module.exports = JhipsterGenerator.extend({
                 {
                     type: 'list',
                     name: 'clusteredHttpSession',
-                    message: '(9/' + questions + ') Do you want to use clustered HTTP sessions?',
+                    message: '(9/' + QUESTIONS + ') Do you want to use clustered HTTP sessions?',
                     choices: [
                         {
                             value: 'no',
@@ -437,7 +437,7 @@ module.exports = JhipsterGenerator.extend({
                 {
                     type: 'list',
                     name: 'websocket',
-                    message: '(10/' + questions + ') Do you want to use WebSockets?',
+                    message: '(10/' + QUESTIONS + ') Do you want to use WebSockets?',
                     choices: [
                         {
                             value: 'no',
@@ -453,7 +453,7 @@ module.exports = JhipsterGenerator.extend({
                 {
                     type: 'list',
                     name: 'buildTool',
-                    message: '(11/' + questions + ') Would you like to use Maven or Gradle for building the backend?',
+                    message: '(11/' + QUESTIONS + ') Would you like to use Maven or Gradle for building the backend?',
                     choices: [
                         {
                             value: 'maven',
@@ -527,19 +527,19 @@ module.exports = JhipsterGenerator.extend({
                             name: 'Gulp.js'
                         }
                     ],
-                    message: '(12/' + questions + ') Would you like to use Grunt or Gulp.js for building the frontend?',
+                    message: '(12/' + QUESTIONS + ') Would you like to use Grunt or Gulp.js for building the frontend?',
                     default: 'grunt'
                 },
                 {
                     type: 'confirm',
                     name: 'useSass',
-                    message: '(13/' + questions + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
+                    message: '(13/' + QUESTIONS + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
                     default: false
                 },
                 {
                     type: 'confirm',
                     name: 'enableTranslation',
-                    message: '(14/' + questions + ') Would you like to enable translation support with Angular Translate?',
+                    message: '(14/' + QUESTIONS + ') Would you like to enable translation support with Angular Translate?',
                     default: true
                 }
             ];
@@ -572,7 +572,7 @@ module.exports = JhipsterGenerator.extend({
             this.prompt({
                 type: 'checkbox',
                 name: 'testFrameworks',
-                message: '(15/' + questions + ') Which testing frameworks would you like to use?',
+                message: '(15/' + QUESTIONS + ') Which testing frameworks would you like to use?',
                 choices: choices,
                 default: [ 'gatling' ]
             }, function (prompt) {
@@ -721,53 +721,53 @@ module.exports = JhipsterGenerator.extend({
             }
 
             // Create Java resource files
-            mkdirp(resourceDir);
-            this.copy(resourceDir + '/banner.txt', resourceDir + '/banner.txt');
+            mkdirp(RESOURCE_DIR);
+            this.copy(RESOURCE_DIR + '/banner.txt', RESOURCE_DIR + '/banner.txt');
 
             if (this.hibernateCache == "ehcache") {
-                this.template(resourceDir + '_ehcache.xml', resourceDir + 'ehcache.xml', this, {});
+                this.template(RESOURCE_DIR + '_ehcache.xml', RESOURCE_DIR + 'ehcache.xml', this, {});
             }
             if (this.devDatabaseType == "h2Disk" || this.devDatabaseType == "h2Memory") {
-                this.copy(resourceDir + 'h2.server.properties', resourceDir + '.h2.server.properties');
+                this.copy(RESOURCE_DIR + 'h2.server.properties', RESOURCE_DIR + '.h2.server.properties');
             }
 
             // Thymeleaf templates
-            this.copy(resourceDir + '/templates/error.html', resourceDir + 'templates/error.html');
+            this.copy(RESOURCE_DIR + '/templates/error.html', RESOURCE_DIR + 'templates/error.html');
 
-            this.template(resourceDir + '_logback-spring.xml', resourceDir + 'logback-spring.xml', this, {'interpolate': interpolateRegex});
+            this.template(RESOURCE_DIR + '_logback-spring.xml', RESOURCE_DIR + 'logback-spring.xml', this, {'interpolate': interpolateRegex});
 
-            this.template(resourceDir + '/config/_application.yml', resourceDir + 'config/application.yml', this, {});
-            this.template(resourceDir + '/config/_application-dev.yml', resourceDir + 'config/application-dev.yml', this, {});
-            this.template(resourceDir + '/config/_application-prod.yml', resourceDir + 'config/application-prod.yml', this, {});
+            this.template(RESOURCE_DIR + '/config/_application.yml', RESOURCE_DIR + 'config/application.yml', this, {});
+            this.template(RESOURCE_DIR + '/config/_application-dev.yml', RESOURCE_DIR + 'config/application-dev.yml', this, {});
+            this.template(RESOURCE_DIR + '/config/_application-prod.yml', RESOURCE_DIR + 'config/application-prod.yml', this, {});
 
             if (this.databaseType == "sql") {
-                this.template(resourceDir + '/config/liquibase/changelog/_initial_schema.xml', resourceDir + 'config/liquibase/changelog/00000000000000_initial_schema.xml', this, {'interpolate': interpolateRegex});
-                this.copy(resourceDir + '/config/liquibase/master.xml', resourceDir + 'config/liquibase/master.xml');
-                this.copy(resourceDir + '/config/liquibase/users.csv', resourceDir + 'config/liquibase/users.csv');
-                this.copy(resourceDir + '/config/liquibase/authorities.csv', resourceDir + 'config/liquibase/authorities.csv');
-                this.copy(resourceDir + '/config/liquibase/users_authorities.csv', resourceDir + 'config/liquibase/users_authorities.csv');
+                this.template(RESOURCE_DIR + '/config/liquibase/changelog/_initial_schema.xml', RESOURCE_DIR + 'config/liquibase/changelog/00000000000000_initial_schema.xml', this, {'interpolate': interpolateRegex});
+                this.copy(RESOURCE_DIR + '/config/liquibase/master.xml', RESOURCE_DIR + 'config/liquibase/master.xml');
+                this.copy(RESOURCE_DIR + '/config/liquibase/users.csv', RESOURCE_DIR + 'config/liquibase/users.csv');
+                this.copy(RESOURCE_DIR + '/config/liquibase/authorities.csv', RESOURCE_DIR + 'config/liquibase/authorities.csv');
+                this.copy(RESOURCE_DIR + '/config/liquibase/users_authorities.csv', RESOURCE_DIR + 'config/liquibase/users_authorities.csv');
             }
 
             if (this.databaseType == "mongodb") {
-                this.copy(resourceDir + '/config/mongeez/authorities.xml', resourceDir + 'config/mongeez/authorities.xml');
-                this.copy(resourceDir + '/config/mongeez/master.xml', resourceDir + 'config/mongeez/master.xml');
-                this.copy(resourceDir + '/config/mongeez/users.xml', resourceDir + 'config/mongeez/users.xml');
-                this.copy(resourceDir + '/config/mongeez/social_user_connections.xml', resourceDir + 'config/mongeez/social_user_connections.xml');
+                this.copy(RESOURCE_DIR + '/config/mongeez/authorities.xml', RESOURCE_DIR + 'config/mongeez/authorities.xml');
+                this.copy(RESOURCE_DIR + '/config/mongeez/master.xml', RESOURCE_DIR + 'config/mongeez/master.xml');
+                this.copy(RESOURCE_DIR + '/config/mongeez/users.xml', RESOURCE_DIR + 'config/mongeez/users.xml');
+                this.copy(RESOURCE_DIR + '/config/mongeez/social_user_connections.xml', RESOURCE_DIR + 'config/mongeez/social_user_connections.xml');
             }
 
             if (this.databaseType == "cassandra") {
-                this.template(resourceDir + '/config/cql/_create-keyspace-prod.cql', resourceDir + 'config/cql/create-keyspace-prod.cql', this, {});
-                this.template(resourceDir + '/config/cql/_create-keyspace.cql', resourceDir + 'config/cql/create-keyspace.cql', this, {});
-                this.template(resourceDir + '/config/cql/_drop-keyspace.cql', resourceDir + 'config/cql/drop-keyspace.cql', this, {});
-                this.copy(resourceDir + '/config/cql/create-tables.cql', resourceDir + 'config/cql/create-tables.cql');
+                this.template(RESOURCE_DIR + '/config/cql/_create-keyspace-prod.cql', RESOURCE_DIR + 'config/cql/create-keyspace-prod.cql', this, {});
+                this.template(RESOURCE_DIR + '/config/cql/_create-keyspace.cql', RESOURCE_DIR + 'config/cql/create-keyspace.cql', this, {});
+                this.template(RESOURCE_DIR + '/config/cql/_drop-keyspace.cql', RESOURCE_DIR + 'config/cql/drop-keyspace.cql', this, {});
+                this.copy(RESOURCE_DIR + '/config/cql/create-tables.cql', RESOURCE_DIR + 'config/cql/create-tables.cql');
             }
 
             // Create mail templates
-            this.copy(resourceDir + '/mails/activationEmail.html', resourceDir + 'mails/activationEmail.html');
-            this.copy(resourceDir + '/mails/creationEmail.html', resourceDir + 'mails/creationEmail.html');
-            this.copy(resourceDir + '/mails/passwordResetEmail.html', resourceDir + 'mails/passwordResetEmail.html');
+            this.copy(RESOURCE_DIR + '/mails/activationEmail.html', RESOURCE_DIR + 'mails/activationEmail.html');
+            this.copy(RESOURCE_DIR + '/mails/creationEmail.html', RESOURCE_DIR + 'mails/creationEmail.html');
+            this.copy(RESOURCE_DIR + '/mails/passwordResetEmail.html', RESOURCE_DIR + 'mails/passwordResetEmail.html');
             if (this.enableSocialSignIn) {
-                this.copy(resourceDir + '/mails/socialRegistrationValidationEmail.html', resourceDir + 'mails/socialRegistrationValidationEmail.html');
+                this.copy(RESOURCE_DIR + '/mails/socialRegistrationValidationEmail.html', RESOURCE_DIR + 'mails/socialRegistrationValidationEmail.html');
             }
 
             // Create Java files
@@ -1020,10 +1020,10 @@ module.exports = JhipsterGenerator.extend({
 
             // install all files related to i18n if translation is enabled
             if (this.enableTranslation) {
-                this.installI18nFilesByLanguage(this, webappDir, resourceDir, 'en');
-                this.installI18nFilesByLanguage(this, webappDir, resourceDir, 'fr');
+                this.installI18nFilesByLanguage(this, webappDir, RESOURCE_DIR, 'en');
+                this.installI18nFilesByLanguage(this, webappDir, RESOURCE_DIR, 'fr');
             } else {
-                this.template(resourceDir + '/i18n/_messages_en.properties', resourceDir + 'i18n/messages_en.properties', this, {});
+                this.template(RESOURCE_DIR + '/i18n/_messages_en.properties', RESOURCE_DIR + 'i18n/messages_en.properties', this, {});
             }
 
             // Swagger-ui for Jhipster
@@ -1419,7 +1419,7 @@ module.exports = JhipsterGenerator.extend({
             this.removefile(javaDir + 'domain/util/ISO8601LocalDateDeserializer.java');
             this.removefolder(javaDir + 'web/propertyeditors');
 
-            this.removefile(resourceDir + 'logback.xml');
+            this.removefile(RESOURCE_DIR + 'logback.xml');
 
             this.removefile(webappDir + 'scripts/app/account/logout/logout.js');
             this.removefile(webappDir + 'scripts/app/account/logout/logout.controller.js');
