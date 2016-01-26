@@ -53,7 +53,6 @@ public class SwaggerConfiguration {
 
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
             .apiInfo(apiInfo)
-            .genericModelSubstitutes(ResponseEntity.class)
             .forCodeGeneration(true)
             .genericModelSubstitutes(ResponseEntity.class)
             .ignoredParameterTypes(Pageable.class)
