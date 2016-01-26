@@ -16,13 +16,13 @@ var JhipsterGenerator = generators.Base.extend({});
 
 util.inherits(JhipsterGenerator, scriptBase);
 
-var questions = 15; // making questions a variable to avoid updating each question by hand when adding additional options
-var resourceDir = 'src/main/resources/';
-var webappDir = 'src/main/webapp/';
-var testJsDir = 'src/test/javascript/';
-var testResourceDir = 'src/test/resources/';
-var dockerDir = 'src/main/docker/';
-var interpolateRegex = /<%=([\s\S]+?)%>/g; // so that tags in templates do not get mistreated as _ templates
+const QUESTIONS = 15; // making questions a variable to avoid updating each question by hand when adding additional options
+const RESOURCE_DIR = 'src/main/resources/';
+const WEBAPP_DIR = 'src/main/webapp/';
+const TEST_JS_DIR = 'src/test/javascript/';
+const TEST_RES_DIR = 'src/test/resources/';
+const DOCKER_DIR = 'src/main/docker/';
+const INTERPOLATE_REGEX = /<%=([\s\S]+?)%>/g; // so that tags in templates do not get mistreated as _ templates
 
 module.exports = JhipsterGenerator.extend({
     constructor: function() {
@@ -191,7 +191,7 @@ module.exports = JhipsterGenerator.extend({
                     if (/^([a-zA-Z0-9_]*)$/.test(input)) return true;
                     return 'Your application name cannot contain special characters or a blank space, using the default name instead';
                 },
-                message: '(1/' + questions + ') What is the base name of your application?',
+                message: '(1/' + QUESTIONS + ') What is the base name of your application?',
                 default: defaultAppBaseName
             }, function (prompt) {
                 this.baseName = prompt.baseName;
@@ -214,14 +214,14 @@ module.exports = JhipsterGenerator.extend({
                         if (/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)) return true;
                         return 'The package name you have provided is not a valid Java package name.';
                     },
-                    message: '(2/' + questions + ') What is your default Java package name?',
+                    message: '(2/' + QUESTIONS + ') What is your default Java package name?',
                     default: 'com.mycompany.myapp',
                     store: true
                 },
                 {
                     type: 'list',
                     name: 'authenticationType',
-                    message: '(3/' + questions + ') Which *type* of authentication would you like to use?',
+                    message: '(3/' + QUESTIONS + ') Which *type* of authentication would you like to use?',
                     choices: [
                         {
                             value: 'session',
@@ -248,7 +248,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'databaseType',
-                    message: '(4/' + questions + ') Which *type* of database would you like to use?',
+                    message: '(4/' + QUESTIONS + ') Which *type* of database would you like to use?',
                     choices: [
                         {
                             value: 'sql',
@@ -267,7 +267,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'databaseType',
-                    message: '(4/' + questions + ') Which *type* of database would you like to use?',
+                    message: '(4/' + QUESTIONS + ') Which *type* of database would you like to use?',
                     choices: [
                         {
                             value: 'sql',
@@ -290,7 +290,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'prodDatabaseType',
-                    message: '(5/' + questions + ') Which *production* database would you like to use?',
+                    message: '(5/' + QUESTIONS + ') Which *production* database would you like to use?',
                     choices: [
                         {
                             value: 'mysql',
@@ -313,7 +313,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'devDatabaseType',
-                    message: '(6/' + questions + ') Which *development* database would you like to use?',
+                    message: '(6/' + QUESTIONS + ') Which *development* database would you like to use?',
                     choices: [
                         {
                             value: 'h2Disk',
@@ -336,7 +336,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'devDatabaseType',
-                    message: '(6/' + questions + ') Which *development* database would you like to use?',
+                    message: '(6/' + QUESTIONS + ') Which *development* database would you like to use?',
                     choices: [
                         {
                             value: 'h2Disk',
@@ -359,7 +359,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'devDatabaseType',
-                    message: '(6/' + questions + ') Which *development* database would you like to use?',
+                    message: '(6/' + QUESTIONS + ') Which *development* database would you like to use?',
                     choices: [
                         {
                             value: 'h2Disk',
@@ -382,7 +382,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'hibernateCache',
-                    message: '(7/' + questions + ') Do you want to use Hibernate 2nd level cache?',
+                    message: '(7/' + QUESTIONS + ') Do you want to use Hibernate 2nd level cache?',
                     choices: [
                         {
                             value: 'no',
@@ -405,7 +405,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'searchEngine',
-                    message: '(8/' + questions + ') Do you want to use a search engine in your application?',
+                    message: '(8/' + QUESTIONS + ') Do you want to use a search engine in your application?',
                     choices: [
                         {
                             value: 'no',
@@ -421,7 +421,7 @@ module.exports = JhipsterGenerator.extend({
                 {
                     type: 'list',
                     name: 'clusteredHttpSession',
-                    message: '(9/' + questions + ') Do you want to use clustered HTTP sessions?',
+                    message: '(9/' + QUESTIONS + ') Do you want to use clustered HTTP sessions?',
                     choices: [
                         {
                             value: 'no',
@@ -437,7 +437,7 @@ module.exports = JhipsterGenerator.extend({
                 {
                     type: 'list',
                     name: 'websocket',
-                    message: '(10/' + questions + ') Do you want to use WebSockets?',
+                    message: '(10/' + QUESTIONS + ') Do you want to use WebSockets?',
                     choices: [
                         {
                             value: 'no',
@@ -453,7 +453,7 @@ module.exports = JhipsterGenerator.extend({
                 {
                     type: 'list',
                     name: 'buildTool',
-                    message: '(11/' + questions + ') Would you like to use Maven or Gradle for building the backend?',
+                    message: '(11/' + QUESTIONS + ') Would you like to use Maven or Gradle for building the backend?',
                     choices: [
                         {
                             value: 'maven',
@@ -527,19 +527,19 @@ module.exports = JhipsterGenerator.extend({
                             name: 'Gulp.js'
                         }
                     ],
-                    message: '(12/' + questions + ') Would you like to use Grunt or Gulp.js for building the frontend?',
+                    message: '(12/' + QUESTIONS + ') Would you like to use Grunt or Gulp.js for building the frontend?',
                     default: 'grunt'
                 },
                 {
                     type: 'confirm',
                     name: 'useSass',
-                    message: '(13/' + questions + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
+                    message: '(13/' + QUESTIONS + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
                     default: false
                 },
                 {
                     type: 'confirm',
                     name: 'enableTranslation',
-                    message: '(14/' + questions + ') Would you like to enable translation support with Angular Translate?',
+                    message: '(14/' + QUESTIONS + ') Would you like to enable translation support with Angular Translate?',
                     default: true
                 }
             ];
@@ -572,7 +572,7 @@ module.exports = JhipsterGenerator.extend({
             this.prompt({
                 type: 'checkbox',
                 name: 'testFrameworks',
-                message: '(15/' + questions + ') Which testing frameworks would you like to use?',
+                message: '(15/' + QUESTIONS + ') Which testing frameworks would you like to use?',
                 choices: choices,
                 default: [ 'gatling' ]
             }, function (prompt) {
@@ -672,21 +672,21 @@ module.exports = JhipsterGenerator.extend({
             var javaDir = this.javaDir;
 
             // Create docker-compose file
-            this.template(dockerDir + '_sonar.yml', dockerDir + 'sonar.yml', this, {});
+            this.template(DOCKER_DIR + '_sonar.yml', DOCKER_DIR + 'sonar.yml', this, {});
             if (this.devDatabaseType != "h2Disk" && this.devDatabaseType != "h2Memory" && this.devDatabaseType != "oracle") {
-                this.template(dockerDir + '_dev.yml', dockerDir + 'dev.yml', this, {});
+                this.template(DOCKER_DIR + '_dev.yml', DOCKER_DIR + 'dev.yml', this, {});
             }
             if (this.prodDatabaseType != "oracle" || this.searchEngine == "elasticsearch") {
-                this.template(dockerDir + '_prod.yml', dockerDir + 'prod.yml', this, {});
+                this.template(DOCKER_DIR + '_prod.yml', DOCKER_DIR + 'prod.yml', this, {});
             }
             if (this.devDatabaseType == "cassandra") {
-                this.template(dockerDir + 'cassandra/_Cassandra-Dev.Dockerfile', dockerDir + 'cassandra/Cassandra-Dev.Dockerfile', this, {});
-                this.template(dockerDir + 'cassandra/_Cassandra-Prod.Dockerfile', dockerDir + 'cassandra/Cassandra-Prod.Dockerfile', this, {});
-                this.template(dockerDir + 'cassandra/scripts/_init-dev.sh', dockerDir + 'cassandra/scripts/init-dev.sh', this, {});
-                this.template(dockerDir + 'cassandra/scripts/_init-prod.sh', dockerDir + 'cassandra/scripts/init-prod.sh', this, {});
-                this.template(dockerDir + 'cassandra/scripts/_entities.sh', dockerDir + 'cassandra/scripts/entities.sh', this, {});
-                this.template(dockerDir + 'cassandra/scripts/_cassandra.sh', dockerDir + 'cassandra/scripts/cassandra.sh', this, {});
-                this.template(dockerDir + 'opscenter/_Dockerfile', dockerDir + 'opscenter/Dockerfile', this, {});
+                this.template(DOCKER_DIR + 'cassandra/_Cassandra-Dev.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra-Dev.Dockerfile', this, {});
+                this.template(DOCKER_DIR + 'cassandra/_Cassandra-Prod.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra-Prod.Dockerfile', this, {});
+                this.template(DOCKER_DIR + 'cassandra/scripts/_init-dev.sh', DOCKER_DIR + 'cassandra/scripts/init-dev.sh', this, {});
+                this.template(DOCKER_DIR + 'cassandra/scripts/_init-prod.sh', DOCKER_DIR + 'cassandra/scripts/init-prod.sh', this, {});
+                this.template(DOCKER_DIR + 'cassandra/scripts/_entities.sh', DOCKER_DIR + 'cassandra/scripts/entities.sh', this, {});
+                this.template(DOCKER_DIR + 'cassandra/scripts/_cassandra.sh', DOCKER_DIR + 'cassandra/scripts/cassandra.sh', this, {});
+                this.template(DOCKER_DIR + 'opscenter/_Dockerfile', DOCKER_DIR + 'opscenter/Dockerfile', this, {});
             }
 
             switch (this.buildTool) {
@@ -696,10 +696,10 @@ module.exports = JhipsterGenerator.extend({
                     this.template('_gradle.properties', 'gradle.properties', this, {});
                     this.template('gradle/_yeoman.gradle', 'gradle/yeoman.gradle', this, {});
                     this.template('gradle/_sonar.gradle', 'gradle/sonar.gradle', this, {});
-                    this.template('gradle/_profile_dev.gradle', 'gradle/profile_dev.gradle', this, {'interpolate': interpolateRegex});
-                    this.template('gradle/_profile_prod.gradle', 'gradle/profile_prod.gradle', this, {'interpolate': interpolateRegex});
-                    this.template('gradle/_profile_fast.gradle', 'gradle/profile_fast.gradle', this, {'interpolate': interpolateRegex});
-                    this.template('gradle/_mapstruct.gradle', 'gradle/mapstruct.gradle', this, {'interpolate': interpolateRegex});
+                    this.template('gradle/_profile_dev.gradle', 'gradle/profile_dev.gradle', this, {'interpolate': INTERPOLATE_REGEX});
+                    this.template('gradle/_profile_prod.gradle', 'gradle/profile_prod.gradle', this, {'interpolate': INTERPOLATE_REGEX});
+                    this.template('gradle/_profile_fast.gradle', 'gradle/profile_fast.gradle', this, {'interpolate': INTERPOLATE_REGEX});
+                    this.template('gradle/_mapstruct.gradle', 'gradle/mapstruct.gradle', this, {'interpolate': INTERPOLATE_REGEX});
                     if (this.testFrameworks.indexOf('gatling') != -1) {
                         this.template('gradle/_gatling.gradle', 'gradle/gatling.gradle', this, {});
                     }
@@ -717,57 +717,57 @@ module.exports = JhipsterGenerator.extend({
                     this.copy('mvnw.cmd', 'mvnw.cmd');
                     this.copy('.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.jar');
                     this.copy('.mvn/wrapper/maven-wrapper.properties', '.mvn/wrapper/maven-wrapper.properties');
-                    this.template('_pom.xml', 'pom.xml', null, {'interpolate': interpolateRegex});
+                    this.template('_pom.xml', 'pom.xml', null, {'interpolate': INTERPOLATE_REGEX});
             }
 
             // Create Java resource files
-            mkdirp(resourceDir);
-            this.copy(resourceDir + '/banner.txt', resourceDir + '/banner.txt');
+            mkdirp(RESOURCE_DIR);
+            this.copy(RESOURCE_DIR + '/banner.txt', RESOURCE_DIR + '/banner.txt');
 
             if (this.hibernateCache == "ehcache") {
-                this.template(resourceDir + '_ehcache.xml', resourceDir + 'ehcache.xml', this, {});
+                this.template(RESOURCE_DIR + '_ehcache.xml', RESOURCE_DIR + 'ehcache.xml', this, {});
             }
             if (this.devDatabaseType == "h2Disk" || this.devDatabaseType == "h2Memory") {
-                this.copy(resourceDir + 'h2.server.properties', resourceDir + '.h2.server.properties');
+                this.copy(RESOURCE_DIR + 'h2.server.properties', RESOURCE_DIR + '.h2.server.properties');
             }
 
             // Thymeleaf templates
-            this.copy(resourceDir + '/templates/error.html', resourceDir + 'templates/error.html');
+            this.copy(RESOURCE_DIR + '/templates/error.html', RESOURCE_DIR + 'templates/error.html');
 
-            this.template(resourceDir + '_logback-spring.xml', resourceDir + 'logback-spring.xml', this, {'interpolate': interpolateRegex});
+            this.template(RESOURCE_DIR + '_logback-spring.xml', RESOURCE_DIR + 'logback-spring.xml', this, {'interpolate': INTERPOLATE_REGEX});
 
-            this.template(resourceDir + '/config/_application.yml', resourceDir + 'config/application.yml', this, {});
-            this.template(resourceDir + '/config/_application-dev.yml', resourceDir + 'config/application-dev.yml', this, {});
-            this.template(resourceDir + '/config/_application-prod.yml', resourceDir + 'config/application-prod.yml', this, {});
+            this.template(RESOURCE_DIR + '/config/_application.yml', RESOURCE_DIR + 'config/application.yml', this, {});
+            this.template(RESOURCE_DIR + '/config/_application-dev.yml', RESOURCE_DIR + 'config/application-dev.yml', this, {});
+            this.template(RESOURCE_DIR + '/config/_application-prod.yml', RESOURCE_DIR + 'config/application-prod.yml', this, {});
 
             if (this.databaseType == "sql") {
-                this.template(resourceDir + '/config/liquibase/changelog/_initial_schema.xml', resourceDir + 'config/liquibase/changelog/00000000000000_initial_schema.xml', this, {'interpolate': interpolateRegex});
-                this.copy(resourceDir + '/config/liquibase/master.xml', resourceDir + 'config/liquibase/master.xml');
-                this.copy(resourceDir + '/config/liquibase/users.csv', resourceDir + 'config/liquibase/users.csv');
-                this.copy(resourceDir + '/config/liquibase/authorities.csv', resourceDir + 'config/liquibase/authorities.csv');
-                this.copy(resourceDir + '/config/liquibase/users_authorities.csv', resourceDir + 'config/liquibase/users_authorities.csv');
+                this.template(RESOURCE_DIR + '/config/liquibase/changelog/_initial_schema.xml', RESOURCE_DIR + 'config/liquibase/changelog/00000000000000_initial_schema.xml', this, {'interpolate': INTERPOLATE_REGEX});
+                this.copy(RESOURCE_DIR + '/config/liquibase/master.xml', RESOURCE_DIR + 'config/liquibase/master.xml');
+                this.copy(RESOURCE_DIR + '/config/liquibase/users.csv', RESOURCE_DIR + 'config/liquibase/users.csv');
+                this.copy(RESOURCE_DIR + '/config/liquibase/authorities.csv', RESOURCE_DIR + 'config/liquibase/authorities.csv');
+                this.copy(RESOURCE_DIR + '/config/liquibase/users_authorities.csv', RESOURCE_DIR + 'config/liquibase/users_authorities.csv');
             }
 
             if (this.databaseType == "mongodb") {
-                this.copy(resourceDir + '/config/mongeez/authorities.xml', resourceDir + 'config/mongeez/authorities.xml');
-                this.copy(resourceDir + '/config/mongeez/master.xml', resourceDir + 'config/mongeez/master.xml');
-                this.copy(resourceDir + '/config/mongeez/users.xml', resourceDir + 'config/mongeez/users.xml');
-                this.copy(resourceDir + '/config/mongeez/social_user_connections.xml', resourceDir + 'config/mongeez/social_user_connections.xml');
+                this.copy(RESOURCE_DIR + '/config/mongeez/authorities.xml', RESOURCE_DIR + 'config/mongeez/authorities.xml');
+                this.copy(RESOURCE_DIR + '/config/mongeez/master.xml', RESOURCE_DIR + 'config/mongeez/master.xml');
+                this.copy(RESOURCE_DIR + '/config/mongeez/users.xml', RESOURCE_DIR + 'config/mongeez/users.xml');
+                this.copy(RESOURCE_DIR + '/config/mongeez/social_user_connections.xml', RESOURCE_DIR + 'config/mongeez/social_user_connections.xml');
             }
 
             if (this.databaseType == "cassandra") {
-                this.template(resourceDir + '/config/cql/_create-keyspace-prod.cql', resourceDir + 'config/cql/create-keyspace-prod.cql', this, {});
-                this.template(resourceDir + '/config/cql/_create-keyspace.cql', resourceDir + 'config/cql/create-keyspace.cql', this, {});
-                this.template(resourceDir + '/config/cql/_drop-keyspace.cql', resourceDir + 'config/cql/drop-keyspace.cql', this, {});
-                this.copy(resourceDir + '/config/cql/create-tables.cql', resourceDir + 'config/cql/create-tables.cql');
+                this.template(RESOURCE_DIR + '/config/cql/_create-keyspace-prod.cql', RESOURCE_DIR + 'config/cql/create-keyspace-prod.cql', this, {});
+                this.template(RESOURCE_DIR + '/config/cql/_create-keyspace.cql', RESOURCE_DIR + 'config/cql/create-keyspace.cql', this, {});
+                this.template(RESOURCE_DIR + '/config/cql/_drop-keyspace.cql', RESOURCE_DIR + 'config/cql/drop-keyspace.cql', this, {});
+                this.copy(RESOURCE_DIR + '/config/cql/create-tables.cql', RESOURCE_DIR + 'config/cql/create-tables.cql');
             }
 
             // Create mail templates
-            this.copy(resourceDir + '/mails/activationEmail.html', resourceDir + 'mails/activationEmail.html');
-            this.copy(resourceDir + '/mails/creationEmail.html', resourceDir + 'mails/creationEmail.html');
-            this.copy(resourceDir + '/mails/passwordResetEmail.html', resourceDir + 'mails/passwordResetEmail.html');
+            this.copy(RESOURCE_DIR + '/mails/activationEmail.html', RESOURCE_DIR + 'mails/activationEmail.html');
+            this.copy(RESOURCE_DIR + '/mails/creationEmail.html', RESOURCE_DIR + 'mails/creationEmail.html');
+            this.copy(RESOURCE_DIR + '/mails/passwordResetEmail.html', RESOURCE_DIR + 'mails/passwordResetEmail.html');
             if (this.enableSocialSignIn) {
-                this.copy(resourceDir + '/mails/socialRegistrationValidationEmail.html', resourceDir + 'mails/socialRegistrationValidationEmail.html');
+                this.copy(RESOURCE_DIR + '/mails/socialRegistrationValidationEmail.html', RESOURCE_DIR + 'mails/socialRegistrationValidationEmail.html');
             }
 
             // Create Java files
@@ -1002,7 +1002,7 @@ module.exports = JhipsterGenerator.extend({
             }
 
             // Create Webapp
-            mkdirp(webappDir);
+            mkdirp(WEBAPP_DIR);
 
             // normal CSS or SCSS?
             if (this.useSass) {
@@ -1013,171 +1013,171 @@ module.exports = JhipsterGenerator.extend({
             this.template('src/main/webapp/assets/styles/main.css', 'src/main/webapp/assets/styles/main.css');
 
             // HTML5 BoilerPlate
-            this.copy(webappDir + 'favicon.ico', webappDir + 'favicon.ico');
-            this.copy(webappDir + 'robots.txt', webappDir + 'robots.txt');
-            this.copy(webappDir + 'htaccess.txt', webappDir + '.htaccess');
-            this.copy(webappDir + '404.html', webappDir + '404.html');
+            this.copy(WEBAPP_DIR + 'favicon.ico', WEBAPP_DIR + 'favicon.ico');
+            this.copy(WEBAPP_DIR + 'robots.txt', WEBAPP_DIR + 'robots.txt');
+            this.copy(WEBAPP_DIR + 'htaccess.txt', WEBAPP_DIR + '.htaccess');
+            this.copy(WEBAPP_DIR + '404.html', WEBAPP_DIR + '404.html');
 
             // install all files related to i18n if translation is enabled
             if (this.enableTranslation) {
-                this.installI18nFilesByLanguage(this, webappDir, resourceDir, 'en');
-                this.installI18nFilesByLanguage(this, webappDir, resourceDir, 'fr');
+                this.installI18nFilesByLanguage(this, WEBAPP_DIR, RESOURCE_DIR, 'en');
+                this.installI18nFilesByLanguage(this, WEBAPP_DIR, RESOURCE_DIR, 'fr');
             }
-            this.template(resourceDir + '/i18n/_messages_en.properties', resourceDir + 'i18n/messages.properties', this, {});
+            
 
             // Swagger-ui for Jhipster
-            this.template(webappDir + '/swagger-ui/_index.html', webappDir + 'swagger-ui/index.html', this, {});
-            this.copy(webappDir + '/swagger-ui/images/throbber.gif', webappDir + 'swagger-ui/images/throbber.gif');
+            this.template(WEBAPP_DIR + '/swagger-ui/_index.html', WEBAPP_DIR + 'swagger-ui/index.html', this, {});
+            this.copy(WEBAPP_DIR + '/swagger-ui/images/throbber.gif', WEBAPP_DIR + 'swagger-ui/images/throbber.gif');
 
             // Angular JS views
 
-            this.template(webappDir + '/scripts/app/_app.js', webappDir + 'scripts/app/app.js', this, {});
-            this.template(webappDir + '/scripts/app/_app.constants.js', webappDir + 'scripts/app/app.constants.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/_app.js', WEBAPP_DIR + 'scripts/app/app.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/_app.constants.js', WEBAPP_DIR + 'scripts/app/app.constants.js', this, {});
 
             // Client Components
-            this.template(webappDir + '/scripts/components/admin/_audits.service.js', webappDir + 'scripts/components/admin/audits.service.js', this, {});
-            this.template(webappDir + '/scripts/components/admin/_configuration.service.js', webappDir + 'scripts/components/admin/configuration.service.js', this, {});
-            this.template(webappDir + '/scripts/components/admin/_logs.service.js', webappDir + 'scripts/components/admin/logs.service.js', this, {});
-            this.template(webappDir + '/scripts/components/admin/_monitoring.service.js', webappDir + 'scripts/components/admin/monitoring.service.js', this, {});
-            this.template(webappDir + '/scripts/components/auth/_auth.service.js', webappDir + 'scripts/components/auth/auth.service.js', this, {});
-            this.template(webappDir + '/scripts/components/auth/_principal.service.js', webappDir + 'scripts/components/auth/principal.service.js', this, {});
-            this.template(webappDir + '/scripts/components/auth/_authority.directive.js', webappDir + 'scripts/components/auth/authority.directive.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/admin/_audits.service.js', WEBAPP_DIR + 'scripts/components/admin/audits.service.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/admin/_configuration.service.js', WEBAPP_DIR + 'scripts/components/admin/configuration.service.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/admin/_logs.service.js', WEBAPP_DIR + 'scripts/components/admin/logs.service.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/admin/_monitoring.service.js', WEBAPP_DIR + 'scripts/components/admin/monitoring.service.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/auth/_auth.service.js', WEBAPP_DIR + 'scripts/components/auth/auth.service.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/auth/_principal.service.js', WEBAPP_DIR + 'scripts/components/auth/principal.service.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/auth/_authority.directive.js', WEBAPP_DIR + 'scripts/components/auth/authority.directive.js', this, {});
             if (this.authenticationType == 'oauth2') {
-                this.template(webappDir + '/scripts/components/auth/provider/_auth.oauth2.service.js', webappDir + 'scripts/components/auth/provider/auth.oauth2.service.js', this, {});
+                this.template(WEBAPP_DIR + '/scripts/components/auth/provider/_auth.oauth2.service.js', WEBAPP_DIR + 'scripts/components/auth/provider/auth.oauth2.service.js', this, {});
             } else if (this.authenticationType == 'xauth') {
-                this.template(webappDir + '/scripts/components/auth/provider/_auth.xauth.service.js', webappDir + 'scripts/components/auth/provider/auth.xauth.service.js', this, {});
+                this.template(WEBAPP_DIR + '/scripts/components/auth/provider/_auth.xauth.service.js', WEBAPP_DIR + 'scripts/components/auth/provider/auth.xauth.service.js', this, {});
             } else {
-                this.template(webappDir + '/scripts/components/auth/provider/_auth.session.service.js', webappDir + 'scripts/components/auth/provider/auth.session.service.js', this, {});
+                this.template(WEBAPP_DIR + '/scripts/components/auth/provider/_auth.session.service.js', WEBAPP_DIR + 'scripts/components/auth/provider/auth.session.service.js', this, {});
             }
-            this.template(webappDir + '/scripts/components/auth/services/_account.service.js', webappDir + 'scripts/components/auth/services/account.service.js', this, {});
-            this.template(webappDir + '/scripts/components/auth/services/_activate.service.js', webappDir + 'scripts/components/auth/services/activate.service.js', this, {});
-            this.template(webappDir + '/scripts/components/auth/services/_password.service.js', webappDir + 'scripts/components/auth/services/password.service.js', this, {});
-            this.template(webappDir + '/scripts/components/auth/services/_register.service.js', webappDir + 'scripts/components/auth/services/register.service.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/auth/services/_account.service.js', WEBAPP_DIR + 'scripts/components/auth/services/account.service.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/auth/services/_activate.service.js', WEBAPP_DIR + 'scripts/components/auth/services/activate.service.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/auth/services/_password.service.js', WEBAPP_DIR + 'scripts/components/auth/services/password.service.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/auth/services/_register.service.js', WEBAPP_DIR + 'scripts/components/auth/services/register.service.js', this, {});
             if (this.authenticationType == 'session') {
-                this.template(webappDir + '/scripts/components/auth/services/_sessions.service.js', webappDir + 'scripts/components/auth/services/sessions.service.js', this, {});
+                this.template(WEBAPP_DIR + '/scripts/components/auth/services/_sessions.service.js', WEBAPP_DIR + 'scripts/components/auth/services/sessions.service.js', this, {});
             }
-            this.template(webappDir + '/scripts/components/form/_form.directive.js', webappDir + 'scripts/components/form/form.directive.js', this, {});
-            this.template(webappDir + '/scripts/components/form/_maxbytes.directive.js', webappDir + 'scripts/components/form/maxbytes.directive.js', this, {});
-            this.template(webappDir + '/scripts/components/form/_minbytes.directive.js', webappDir + 'scripts/components/form/minbytes.directive.js', this, {});
-            this.template(webappDir + '/scripts/components/form/_uib-pager.config.js', webappDir + 'scripts/components/form/uib-pager.config.js', this, {});
-            this.template(webappDir + '/scripts/components/form/_uib-pagination.config.js', webappDir + 'scripts/components/form/uib-pagination.config.js', this, {});
-            this.template(webappDir + '/scripts/components/form/_pagination.constants.js', webappDir + 'scripts/components/form/pagination.constants.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/form/_form.directive.js', WEBAPP_DIR + 'scripts/components/form/form.directive.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/form/_maxbytes.directive.js', WEBAPP_DIR + 'scripts/components/form/maxbytes.directive.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/form/_minbytes.directive.js', WEBAPP_DIR + 'scripts/components/form/minbytes.directive.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/form/_uib-pager.config.js', WEBAPP_DIR + 'scripts/components/form/uib-pager.config.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/form/_uib-pagination.config.js', WEBAPP_DIR + 'scripts/components/form/uib-pagination.config.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/form/_pagination.constants.js', WEBAPP_DIR + 'scripts/components/form/pagination.constants.js', this, {});
             if (this.enableTranslation) {
-                this.template(webappDir + '/scripts/components/language/_language.controller.js', webappDir + 'scripts/components/language/language.controller.js', this, {});
-                this.template(webappDir + '/scripts/components/language/_language.service.js', webappDir + 'scripts/components/language/language.service.js', this, {});
+                this.template(WEBAPP_DIR + '/scripts/components/language/_language.controller.js', WEBAPP_DIR + 'scripts/components/language/language.controller.js', this, {});
+                this.template(WEBAPP_DIR + '/scripts/components/language/_language.service.js', WEBAPP_DIR + 'scripts/components/language/language.service.js', this, {});
             }
-            this.template(webappDir + '/scripts/components/navbar/_navbar.directive.js', webappDir + 'scripts/components/navbar/navbar.directive.js', this, {});
-            this.copyHtml(webappDir + '/scripts/components/navbar/navbar.html', webappDir + 'scripts/components/navbar/navbar.html');
-            this.template(webappDir + '/scripts/components/navbar/_navbar.controller.js', webappDir + 'scripts/components/navbar/navbar.controller.js', this, {});
-            this.template(webappDir + '/scripts/components/user/_user.service.js', webappDir + 'scripts/components/user/user.service.js', this, {});
-            this.template(webappDir + '/scripts/components/util/_base64.service.js', webappDir + 'scripts/components/util/base64.service.js', this, {});
-            this.template(webappDir + '/scripts/components/util/_capitalize.filter.js', webappDir + 'scripts/components/util/capitalize.filter.js', this, {});
-            this.template(webappDir + '/scripts/components/util/_parse-links.service.js', webappDir + 'scripts/components/util/parse-links.service.js', this, {});
-            this.template(webappDir + '/scripts/components/util/_truncate.filter.js', webappDir + 'scripts/components/util/truncate.filter.js', this, {});
-            this.template(webappDir + '/scripts/components/util/_date-util.service.js', webappDir + 'scripts/components/util/date-util.service.js', this, {});
-            this.template(webappDir + '/scripts/components/util/_data-util.service.js', webappDir + 'scripts/components/util/data-util.service.js', this, {});
-            this.template(webappDir + '/scripts/components/util/_sort.directive.js', webappDir + 'scripts/components/util/sort.directive.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/navbar/_navbar.directive.js', WEBAPP_DIR + 'scripts/components/navbar/navbar.directive.js', this, {});
+            this.copyHtml(WEBAPP_DIR + '/scripts/components/navbar/navbar.html', WEBAPP_DIR + 'scripts/components/navbar/navbar.html');
+            this.template(WEBAPP_DIR + '/scripts/components/navbar/_navbar.controller.js', WEBAPP_DIR + 'scripts/components/navbar/navbar.controller.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/user/_user.service.js', WEBAPP_DIR + 'scripts/components/user/user.service.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/util/_base64.service.js', WEBAPP_DIR + 'scripts/components/util/base64.service.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/util/_capitalize.filter.js', WEBAPP_DIR + 'scripts/components/util/capitalize.filter.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/util/_parse-links.service.js', WEBAPP_DIR + 'scripts/components/util/parse-links.service.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/util/_truncate.filter.js', WEBAPP_DIR + 'scripts/components/util/truncate.filter.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/util/_date-util.service.js', WEBAPP_DIR + 'scripts/components/util/date-util.service.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/util/_data-util.service.js', WEBAPP_DIR + 'scripts/components/util/data-util.service.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/util/_sort.directive.js', WEBAPP_DIR + 'scripts/components/util/sort.directive.js', this, {});
 
             // Client App
-            this.template(webappDir + '/scripts/app/account/_account.js', webappDir + 'scripts/app/account/account.js', this, {});
-            this.copyHtml(webappDir + '/scripts/app/account/activate/activate.html', webappDir + 'scripts/app/account/activate/activate.html');
-            this.copyJs(webappDir + '/scripts/app/account/activate/_activate.js', webappDir + 'scripts/app/account/activate/activate.js', this, {});
-            this.template(webappDir + '/scripts/app/account/activate/_activate.controller.js', webappDir + 'scripts/app/account/activate/activate.controller.js', this, {});
-            this.copyHtml(webappDir + '/scripts/app/account/login/login.html', webappDir + 'scripts/app/account/login/login.html');
-            this.copyJs(webappDir + '/scripts/app/account/login/_login.js', webappDir + 'scripts/app/account/login/login.js', this, {});
-            this.template(webappDir + '/scripts/app/account/login/_login.controller.js', webappDir + 'scripts/app/account/login/login.controller.js', this, {});
-            this.copyHtml(webappDir + '/scripts/app/account/password/password.html', webappDir + 'scripts/app/account/password/password.html');
-            this.copyJs(webappDir + '/scripts/app/account/password/_password.js', webappDir + 'scripts/app/account/password/password.js', this, {});
-            this.template(webappDir + '/scripts/app/account/password/_password.controller.js', webappDir + 'scripts/app/account/password/password.controller.js', this, {});
-            this.template(webappDir + '/scripts/app/account/password/_password.directive.js', webappDir + 'scripts/app/account/password/password.directive.js', this, {});
-            this.copyHtml(webappDir + '/scripts/app/account/register/register.html', webappDir + 'scripts/app/account/register/register.html');
-            this.copyJs(webappDir + '/scripts/app/account/register/_register.js', webappDir + 'scripts/app/account/register/register.js', this, {});
-            this.template(webappDir + '/scripts/app/account/register/_register.controller.js', webappDir + 'scripts/app/account/register/register.controller.js', this, {});
-            this.copyHtml(webappDir + '/scripts/app/account/reset/request/reset.request.html', webappDir + 'scripts/app/account/reset/request/reset.request.html');
-            this.copyJs(webappDir + '/scripts/app/account/reset/request/_reset.request.js', webappDir + 'scripts/app/account/reset/request/reset.request.js', this, {});
-            this.template(webappDir + '/scripts/app/account/reset/request/_reset.request.controller.js', webappDir + 'scripts/app/account/reset/request/reset.request.controller.js', this, {});
-            this.copyHtml(webappDir + '/scripts/app/account/reset/finish/reset.finish.html', webappDir + 'scripts/app/account/reset/finish/reset.finish.html');
-            this.copyJs(webappDir + '/scripts/app/account/reset/finish/_reset.finish.js', webappDir + 'scripts/app/account/reset/finish/reset.finish.js', this, {});
-            this.template(webappDir + '/scripts/app/account/reset/finish/_reset.finish.controller.js', webappDir + 'scripts/app/account/reset/finish/reset.finish.controller.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/account/_account.js', WEBAPP_DIR + 'scripts/app/account/account.js', this, {});
+            this.copyHtml(WEBAPP_DIR + '/scripts/app/account/activate/activate.html', WEBAPP_DIR + 'scripts/app/account/activate/activate.html');
+            this.copyJs(WEBAPP_DIR + '/scripts/app/account/activate/_activate.js', WEBAPP_DIR + 'scripts/app/account/activate/activate.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/account/activate/_activate.controller.js', WEBAPP_DIR + 'scripts/app/account/activate/activate.controller.js', this, {});
+            this.copyHtml(WEBAPP_DIR + '/scripts/app/account/login/login.html', WEBAPP_DIR + 'scripts/app/account/login/login.html');
+            this.copyJs(WEBAPP_DIR + '/scripts/app/account/login/_login.js', WEBAPP_DIR + 'scripts/app/account/login/login.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/account/login/_login.controller.js', WEBAPP_DIR + 'scripts/app/account/login/login.controller.js', this, {});
+            this.copyHtml(WEBAPP_DIR + '/scripts/app/account/password/password.html', WEBAPP_DIR + 'scripts/app/account/password/password.html');
+            this.copyJs(WEBAPP_DIR + '/scripts/app/account/password/_password.js', WEBAPP_DIR + 'scripts/app/account/password/password.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/account/password/_password.controller.js', WEBAPP_DIR + 'scripts/app/account/password/password.controller.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/account/password/_password.directive.js', WEBAPP_DIR + 'scripts/app/account/password/password.directive.js', this, {});
+            this.copyHtml(WEBAPP_DIR + '/scripts/app/account/register/register.html', WEBAPP_DIR + 'scripts/app/account/register/register.html');
+            this.copyJs(WEBAPP_DIR + '/scripts/app/account/register/_register.js', WEBAPP_DIR + 'scripts/app/account/register/register.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/account/register/_register.controller.js', WEBAPP_DIR + 'scripts/app/account/register/register.controller.js', this, {});
+            this.copyHtml(WEBAPP_DIR + '/scripts/app/account/reset/request/reset.request.html', WEBAPP_DIR + 'scripts/app/account/reset/request/reset.request.html');
+            this.copyJs(WEBAPP_DIR + '/scripts/app/account/reset/request/_reset.request.js', WEBAPP_DIR + 'scripts/app/account/reset/request/reset.request.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/account/reset/request/_reset.request.controller.js', WEBAPP_DIR + 'scripts/app/account/reset/request/reset.request.controller.js', this, {});
+            this.copyHtml(WEBAPP_DIR + '/scripts/app/account/reset/finish/reset.finish.html', WEBAPP_DIR + 'scripts/app/account/reset/finish/reset.finish.html');
+            this.copyJs(WEBAPP_DIR + '/scripts/app/account/reset/finish/_reset.finish.js', WEBAPP_DIR + 'scripts/app/account/reset/finish/reset.finish.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/account/reset/finish/_reset.finish.controller.js', WEBAPP_DIR + 'scripts/app/account/reset/finish/reset.finish.controller.js', this, {});
             if (this.authenticationType == 'session') {
-                this.copyHtml(webappDir + '/scripts/app/account/sessions/sessions.html', webappDir + 'scripts/app/account/sessions/sessions.html');
-                this.copyJs(webappDir + '/scripts/app/account/sessions/_sessions.js', webappDir + 'scripts/app/account/sessions/sessions.js', this, {});
-                this.template(webappDir + '/scripts/app/account/sessions/_sessions.controller.js', webappDir + 'scripts/app/account/sessions/sessions.controller.js', this, {});
+                this.copyHtml(WEBAPP_DIR + '/scripts/app/account/sessions/sessions.html', WEBAPP_DIR + 'scripts/app/account/sessions/sessions.html');
+                this.copyJs(WEBAPP_DIR + '/scripts/app/account/sessions/_sessions.js', WEBAPP_DIR + 'scripts/app/account/sessions/sessions.js', this, {});
+                this.template(WEBAPP_DIR + '/scripts/app/account/sessions/_sessions.controller.js', WEBAPP_DIR + 'scripts/app/account/sessions/sessions.controller.js', this, {});
             }
-            this.copyHtml(webappDir + '/scripts/app/account/settings/settings.html', webappDir + 'scripts/app/account/settings/settings.html');
-            this.copyJs(webappDir + '/scripts/app/account/settings/_settings.js', webappDir + 'scripts/app/account/settings/settings.js', this, {});
-            this.template(webappDir + '/scripts/app/account/settings/_settings.controller.js', webappDir + 'scripts/app/account/settings/settings.controller.js', this, {});
-            this.template(webappDir + '/scripts/app/admin/_admin.js', webappDir + 'scripts/app/admin/admin.js', this, {});
-            this.copyHtml(webappDir + '/scripts/app/admin/audits/audits.html', webappDir + 'scripts/app/admin/audits/audits.html');
-            this.copyJs(webappDir + '/scripts/app/admin/audits/_audits.js', webappDir + 'scripts/app/admin/audits/audits.js', this, {});
-            this.template(webappDir + '/scripts/app/admin/audits/_audits.controller.js', webappDir + 'scripts/app/admin/audits/audits.controller.js', this, {});
-            this.copyHtml(webappDir + '/scripts/app/admin/configuration/configuration.html', webappDir + 'scripts/app/admin/configuration/configuration.html');
-            this.copyJs(webappDir + '/scripts/app/admin/configuration/_configuration.js', webappDir + 'scripts/app/admin/configuration/configuration.js', this, {});
-            this.template(webappDir + '/scripts/app/admin/configuration/_configuration.controller.js', webappDir + 'scripts/app/admin/configuration/configuration.controller.js', this, {});
-            this.copy(webappDir + '/scripts/app/admin/docs/docs.html', webappDir + 'scripts/app/admin/docs/docs.html');
-            this.copyJs(webappDir + '/scripts/app/admin/docs/_docs.js', webappDir + 'scripts/app/admin/docs/docs.js', this, {});
-            this.copyHtml(webappDir + '/scripts/app/admin/health/health.html', webappDir + 'scripts/app/admin/health/health.html');
-            this.copyHtml(webappDir + '/scripts/app/admin/health/_health.modal.html', webappDir + 'scripts/app/admin/health/health.modal.html');
-            this.copyJs(webappDir + '/scripts/app/admin/health/_health.js', webappDir + 'scripts/app/admin/health/health.js', this, {});
-            this.template(webappDir + '/scripts/app/admin/health/_health.controller.js', webappDir + 'scripts/app/admin/health/health.controller.js', this, {});
-            this.template(webappDir + '/scripts/app/admin/health/_health.modal.controller.js', webappDir + 'scripts/app/admin/health/health.modal.controller.js', this, {});
-            this.copyHtml(webappDir + '/scripts/app/admin/logs/logs.html', webappDir + 'scripts/app/admin/logs/logs.html');
-            this.copyJs(webappDir + '/scripts/app/admin/logs/_logs.js', webappDir + 'scripts/app/admin/logs/logs.js', this, {});
-            this.template(webappDir + '/scripts/app/admin/logs/_logs.controller.js', webappDir + 'scripts/app/admin/logs/logs.controller.js', this, {});
-            this.copyHtml(webappDir + '/scripts/app/admin/metrics/_metrics.html', webappDir + 'scripts/app/admin/metrics/metrics.html', this, {}, true);
-            this.copyHtml(webappDir + '/scripts/app/admin/metrics/_metrics.modal.html', webappDir + 'scripts/app/admin/metrics/metrics.modal.html', this, {}, true);
-            this.copyJs(webappDir + '/scripts/app/admin/metrics/_metrics.js', webappDir + 'scripts/app/admin/metrics/metrics.js', this, {});
-            this.template(webappDir + '/scripts/app/admin/metrics/_metrics.controller.js', webappDir + 'scripts/app/admin/metrics/metrics.controller.js', this, {});
-            this.template(webappDir + '/scripts/app/admin/metrics/_metrics.modal.controller.js', webappDir + 'scripts/app/admin/metrics/metrics.modal.controller.js', this, {});
+            this.copyHtml(WEBAPP_DIR + '/scripts/app/account/settings/settings.html', WEBAPP_DIR + 'scripts/app/account/settings/settings.html');
+            this.copyJs(WEBAPP_DIR + '/scripts/app/account/settings/_settings.js', WEBAPP_DIR + 'scripts/app/account/settings/settings.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/account/settings/_settings.controller.js', WEBAPP_DIR + 'scripts/app/account/settings/settings.controller.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/admin/_admin.js', WEBAPP_DIR + 'scripts/app/admin/admin.js', this, {});
+            this.copyHtml(WEBAPP_DIR + '/scripts/app/admin/audits/audits.html', WEBAPP_DIR + 'scripts/app/admin/audits/audits.html');
+            this.copyJs(WEBAPP_DIR + '/scripts/app/admin/audits/_audits.js', WEBAPP_DIR + 'scripts/app/admin/audits/audits.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/admin/audits/_audits.controller.js', WEBAPP_DIR + 'scripts/app/admin/audits/audits.controller.js', this, {});
+            this.copyHtml(WEBAPP_DIR + '/scripts/app/admin/configuration/configuration.html', WEBAPP_DIR + 'scripts/app/admin/configuration/configuration.html');
+            this.copyJs(WEBAPP_DIR + '/scripts/app/admin/configuration/_configuration.js', WEBAPP_DIR + 'scripts/app/admin/configuration/configuration.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/admin/configuration/_configuration.controller.js', WEBAPP_DIR + 'scripts/app/admin/configuration/configuration.controller.js', this, {});
+            this.copy(WEBAPP_DIR + '/scripts/app/admin/docs/docs.html', WEBAPP_DIR + 'scripts/app/admin/docs/docs.html');
+            this.copyJs(WEBAPP_DIR + '/scripts/app/admin/docs/_docs.js', WEBAPP_DIR + 'scripts/app/admin/docs/docs.js', this, {});
+            this.copyHtml(WEBAPP_DIR + '/scripts/app/admin/health/health.html', WEBAPP_DIR + 'scripts/app/admin/health/health.html');
+            this.copyHtml(WEBAPP_DIR + '/scripts/app/admin/health/_health.modal.html', WEBAPP_DIR + 'scripts/app/admin/health/health.modal.html');
+            this.copyJs(WEBAPP_DIR + '/scripts/app/admin/health/_health.js', WEBAPP_DIR + 'scripts/app/admin/health/health.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/admin/health/_health.controller.js', WEBAPP_DIR + 'scripts/app/admin/health/health.controller.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/admin/health/_health.modal.controller.js', WEBAPP_DIR + 'scripts/app/admin/health/health.modal.controller.js', this, {});
+            this.copyHtml(WEBAPP_DIR + '/scripts/app/admin/logs/logs.html', WEBAPP_DIR + 'scripts/app/admin/logs/logs.html');
+            this.copyJs(WEBAPP_DIR + '/scripts/app/admin/logs/_logs.js', WEBAPP_DIR + 'scripts/app/admin/logs/logs.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/admin/logs/_logs.controller.js', WEBAPP_DIR + 'scripts/app/admin/logs/logs.controller.js', this, {});
+            this.copyHtml(WEBAPP_DIR + '/scripts/app/admin/metrics/_metrics.html', WEBAPP_DIR + 'scripts/app/admin/metrics/metrics.html', this, {}, true);
+            this.copyHtml(WEBAPP_DIR + '/scripts/app/admin/metrics/_metrics.modal.html', WEBAPP_DIR + 'scripts/app/admin/metrics/metrics.modal.html', this, {}, true);
+            this.copyJs(WEBAPP_DIR + '/scripts/app/admin/metrics/_metrics.js', WEBAPP_DIR + 'scripts/app/admin/metrics/metrics.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/admin/metrics/_metrics.controller.js', WEBAPP_DIR + 'scripts/app/admin/metrics/metrics.controller.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/admin/metrics/_metrics.modal.controller.js', WEBAPP_DIR + 'scripts/app/admin/metrics/metrics.modal.controller.js', this, {});
             if (this.websocket == 'spring-websocket') {
-                this.copyHtml(webappDir + '/scripts/app/admin/tracker/tracker.html', webappDir + 'scripts/app/admin/tracker/tracker.html');
-                this.copyJs(webappDir + '/scripts/app/admin/tracker/_tracker.js', webappDir + 'scripts/app/admin/tracker/tracker.js', this, {});
-                this.template(webappDir + '/scripts/app/admin/tracker/_tracker.controller.js', webappDir + 'scripts/app/admin/tracker/tracker.controller.js', this, {});
-                this.template(webappDir + '/scripts/components/tracker/_tracker.service.js', webappDir + '/scripts/components/tracker/tracker.service.js', this, {});
+                this.copyHtml(WEBAPP_DIR + '/scripts/app/admin/tracker/tracker.html', WEBAPP_DIR + 'scripts/app/admin/tracker/tracker.html');
+                this.copyJs(WEBAPP_DIR + '/scripts/app/admin/tracker/_tracker.js', WEBAPP_DIR + 'scripts/app/admin/tracker/tracker.js', this, {});
+                this.template(WEBAPP_DIR + '/scripts/app/admin/tracker/_tracker.controller.js', WEBAPP_DIR + 'scripts/app/admin/tracker/tracker.controller.js', this, {});
+                this.template(WEBAPP_DIR + '/scripts/components/tracker/_tracker.service.js', WEBAPP_DIR + '/scripts/components/tracker/tracker.service.js', this, {});
             }
-            this.copyHtml(webappDir + '/scripts/app/admin/user-management/user-management.html', webappDir + 'scripts/app/admin/user-management/user-management.html');
-            this.copyHtml(webappDir + '/scripts/app/admin/user-management/_user-management-detail.html', webappDir + 'scripts/app/admin/user-management/user-management-detail.html');
-            this.copyHtml(webappDir + '/scripts/app/admin/user-management/_user-management-dialog.html', webappDir + 'scripts/app/admin/user-management/user-management-dialog.html');
-            this.copyHtml(webappDir + '/scripts/app/admin/user-management/_user-management-delete-dialog.html', webappDir + 'scripts/app/admin/user-management/user-management-delete-dialog.html');
-            this.copyJs(webappDir + '/scripts/app/admin/user-management/_user-management.js', webappDir + 'scripts/app/admin/user-management/user-management.js', this, {});
-            this.template(webappDir + '/scripts/app/admin/user-management/_user-management.controller.js', webappDir + 'scripts/app/admin/user-management/user-management.controller.js', this, {});
-            this.template(webappDir + '/scripts/app/admin/user-management/_user-management-detail.controller.js', webappDir + 'scripts/app/admin/user-management/user-management-detail.controller.js', this, {});
-            this.template(webappDir + '/scripts/app/admin/user-management/_user-management-dialog.controller.js', webappDir + 'scripts/app/admin/user-management/user-management-dialog.controller.js', this, {});
-            this.template(webappDir + '/scripts/app/admin/user-management/_user-management-delete-dialog.controller.js', webappDir + 'scripts/app/admin/user-management/user-management-delete-dialog.controller.js', this, {});
-            this.copyHtml(webappDir + '/scripts/app/error/error.html', webappDir + 'scripts/app/error/error.html');
-            this.copyHtml(webappDir + '/scripts/app/error/accessdenied.html', webappDir + 'scripts/app/error/accessdenied.html');
-            this.copyJs(webappDir + '/scripts/app/entities/_entity.js', webappDir + 'scripts/app/entities/entity.js', this, {});
-            this.copyJs(webappDir + '/scripts/app/error/_error.js', webappDir + 'scripts/app/error/error.js', this, {});
-            this.copyHtml(webappDir + '/scripts/app/main/main.html', webappDir + 'scripts/app/main/main.html');
-            this.copyJs(webappDir + '/scripts/app/main/_main.js', webappDir + 'scripts/app/main/main.js', this, {});
-            this.template(webappDir + '/scripts/app/main/_main.controller.js', webappDir + 'scripts/app/main/main.controller.js', this, {});
+            this.copyHtml(WEBAPP_DIR + '/scripts/app/admin/user-management/user-management.html', WEBAPP_DIR + 'scripts/app/admin/user-management/user-management.html');
+            this.copyHtml(WEBAPP_DIR + '/scripts/app/admin/user-management/_user-management-detail.html', WEBAPP_DIR + 'scripts/app/admin/user-management/user-management-detail.html');
+            this.copyHtml(WEBAPP_DIR + '/scripts/app/admin/user-management/_user-management-dialog.html', WEBAPP_DIR + 'scripts/app/admin/user-management/user-management-dialog.html');
+            this.copyHtml(WEBAPP_DIR + '/scripts/app/admin/user-management/_user-management-delete-dialog.html', WEBAPP_DIR + 'scripts/app/admin/user-management/user-management-delete-dialog.html');
+            this.copyJs(WEBAPP_DIR + '/scripts/app/admin/user-management/_user-management.js', WEBAPP_DIR + 'scripts/app/admin/user-management/user-management.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/admin/user-management/_user-management.controller.js', WEBAPP_DIR + 'scripts/app/admin/user-management/user-management.controller.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/admin/user-management/_user-management-detail.controller.js', WEBAPP_DIR + 'scripts/app/admin/user-management/user-management-detail.controller.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/admin/user-management/_user-management-dialog.controller.js', WEBAPP_DIR + 'scripts/app/admin/user-management/user-management-dialog.controller.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/admin/user-management/_user-management-delete-dialog.controller.js', WEBAPP_DIR + 'scripts/app/admin/user-management/user-management-delete-dialog.controller.js', this, {});
+            this.copyHtml(WEBAPP_DIR + '/scripts/app/error/error.html', WEBAPP_DIR + 'scripts/app/error/error.html');
+            this.copyHtml(WEBAPP_DIR + '/scripts/app/error/accessdenied.html', WEBAPP_DIR + 'scripts/app/error/accessdenied.html');
+            this.copyJs(WEBAPP_DIR + '/scripts/app/entities/_entity.js', WEBAPP_DIR + 'scripts/app/entities/entity.js', this, {});
+            this.copyJs(WEBAPP_DIR + '/scripts/app/error/_error.js', WEBAPP_DIR + 'scripts/app/error/error.js', this, {});
+            this.copyHtml(WEBAPP_DIR + '/scripts/app/main/main.html', WEBAPP_DIR + 'scripts/app/main/main.html');
+            this.copyJs(WEBAPP_DIR + '/scripts/app/main/_main.js', WEBAPP_DIR + 'scripts/app/main/main.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/main/_main.controller.js', WEBAPP_DIR + 'scripts/app/main/main.controller.js', this, {});
 
             // Social
             if (this.enableSocialSignIn) {
-                this.copyHtml(webappDir + '/scripts/app/account/social/directive/_social.html', webappDir + 'scripts/app/account/social/directive/social.html');
-                this.template(webappDir + '/scripts/app/account/social/directive/_social.directive.js', webappDir + 'scripts/app/account/social/directive/social.directive.js', this, {});
-                this.copyHtml(webappDir + '/scripts/app/account/social/_social-register.html', webappDir + 'scripts/app/account/social/social-register.html');
-                this.template(webappDir + '/scripts/app/account/social/_social-register.controller.js', webappDir + 'scripts/app/account/social/social-register.controller.js', this, {});
-                this.template(webappDir + '/scripts/app/account/social/_social.service.js', webappDir + 'scripts/app/account/social/social.service.js', this, {});
-                this.copyJs(webappDir + '/scripts/app/account/social/_social-register.js', webappDir + 'scripts/app/account/social/social-register.js', this, {});
+                this.copyHtml(WEBAPP_DIR + '/scripts/app/account/social/directive/_social.html', WEBAPP_DIR + 'scripts/app/account/social/directive/social.html');
+                this.template(WEBAPP_DIR + '/scripts/app/account/social/directive/_social.directive.js', WEBAPP_DIR + 'scripts/app/account/social/directive/social.directive.js', this, {});
+                this.copyHtml(WEBAPP_DIR + '/scripts/app/account/social/_social-register.html', WEBAPP_DIR + 'scripts/app/account/social/social-register.html');
+                this.template(WEBAPP_DIR + '/scripts/app/account/social/_social-register.controller.js', WEBAPP_DIR + 'scripts/app/account/social/social-register.controller.js', this, {});
+                this.template(WEBAPP_DIR + '/scripts/app/account/social/_social.service.js', WEBAPP_DIR + 'scripts/app/account/social/social.service.js', this, {});
+                this.copyJs(WEBAPP_DIR + '/scripts/app/account/social/_social-register.js', WEBAPP_DIR + 'scripts/app/account/social/social-register.js', this, {});
             }
 
             // interceptor code
-            this.template(webappDir + '/scripts/components/interceptor/_auth.interceptor.js', webappDir + 'scripts/components/interceptor/auth.interceptor.js', this, {});
-            this.template(webappDir + '/scripts/components/interceptor/_errorhandler.interceptor.js', webappDir + 'scripts/components/interceptor/errorhandler.interceptor.js', this, {});
-            this.template(webappDir + '/scripts/components/interceptor/_notification.interceptor.js', webappDir + 'scripts/components/interceptor/notification.interceptor.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/interceptor/_auth.interceptor.js', WEBAPP_DIR + 'scripts/components/interceptor/auth.interceptor.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/interceptor/_errorhandler.interceptor.js', WEBAPP_DIR + 'scripts/components/interceptor/errorhandler.interceptor.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/interceptor/_notification.interceptor.js', WEBAPP_DIR + 'scripts/components/interceptor/notification.interceptor.js', this, {});
 
             //alert service code
-            this.template(webappDir + '/scripts/components/alert/_alert.service.js', webappDir + 'scripts/components/alert/alert.service.js', this, {});
-            this.template(webappDir + '/scripts/components/alert/_alert.directive.js', webappDir + 'scripts/components/alert/alert.directive.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/alert/_alert.service.js', WEBAPP_DIR + 'scripts/components/alert/alert.service.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/components/alert/_alert.directive.js', WEBAPP_DIR + 'scripts/components/alert/alert.directive.js', this, {});
 
             // CSS
-            this.copy(webappDir + 'assets/styles/documentation.css', webappDir + 'assets/styles/documentation.css');
+            this.copy(WEBAPP_DIR + 'assets/styles/documentation.css', WEBAPP_DIR + 'assets/styles/documentation.css');
 
             // Images
-            this.copy(webappDir + 'assets/images/development_ribbon.png', webappDir + 'assets/images/development_ribbon.png');
-            this.copy(webappDir + 'assets/images/hipster.png', webappDir + 'assets/images/hipster.png');
-            this.copy(webappDir + 'assets/images/hipster2x.png', webappDir + 'assets/images/hipster2x.png');
+            this.copy(WEBAPP_DIR + 'assets/images/development_ribbon.png', WEBAPP_DIR + 'assets/images/development_ribbon.png');
+            this.copy(WEBAPP_DIR + 'assets/images/hipster.png', WEBAPP_DIR + 'assets/images/hipster.png');
+            this.copy(WEBAPP_DIR + 'assets/images/hipster2x.png', WEBAPP_DIR + 'assets/images/hipster2x.png');
 
         },
 
@@ -1186,7 +1186,7 @@ module.exports = JhipsterGenerator.extend({
                 return;
             }
             // Index page
-            var indexFile = html.readFileAsString(path.join(this.sourceRoot(), webappDir + '_index.html'));
+            var indexFile = html.readFileAsString(path.join(this.sourceRoot(), WEBAPP_DIR + '_index.html'));
             var engine = ejs.render;
             indexFile = engine(indexFile, this, {});
 
@@ -1305,7 +1305,7 @@ module.exports = JhipsterGenerator.extend({
             }
 
             indexFile = html.appendScripts(indexFile, 'scripts/app.js', appScripts, {}, ['.tmp', 'src/main/webapp']);
-            this.write(webappDir + 'index.html', indexFile);
+            this.write(WEBAPP_DIR + 'index.html', indexFile);
 
         },
 
@@ -1331,11 +1331,11 @@ module.exports = JhipsterGenerator.extend({
             this.template('src/test/java/package/web/rest/_TestUtil.java', testDir + 'web/rest/TestUtil.java', this, {});
             this.template('src/test/java/package/web/rest/_UserResourceIntTest.java', testDir + 'web/rest/UserResourceIntTest.java', this, {});
 
-            this.template(testResourceDir + 'config/_application.yml', testResourceDir + 'config/application.yml', this, {});
-            this.template(testResourceDir + '_logback-test.xml', testResourceDir + 'logback-test.xml', this, {});
+            this.template(TEST_RES_DIR + 'config/_application.yml', TEST_RES_DIR + 'config/application.yml', this, {});
+            this.template(TEST_RES_DIR + '_logback-test.xml', TEST_RES_DIR + 'logback-test.xml', this, {});
 
             if (this.hibernateCache == "ehcache") {
-                this.template(testResourceDir + '_ehcache.xml', testResourceDir + 'ehcache.xml', this, {});
+                this.template(TEST_RES_DIR + '_ehcache.xml', TEST_RES_DIR + 'ehcache.xml', this, {});
             }
 
             if (this.enableSocialSignIn) {
@@ -1390,7 +1390,7 @@ module.exports = JhipsterGenerator.extend({
                 testTemplates.push('_protractor.conf.js')
             }
             testTemplates.map(function(testTemplatePath) {
-                this.template(testJsDir + testTemplatePath, testJsDir + testTemplatePath.replace(/_/,''), this, {});
+                this.template(TEST_JS_DIR + testTemplatePath, TEST_JS_DIR + testTemplatePath.replace(/_/,''), this, {});
             }.bind(this));
 
         },
@@ -1418,20 +1418,20 @@ module.exports = JhipsterGenerator.extend({
             this.removefile(javaDir + 'domain/util/ISO8601LocalDateDeserializer.java');
             this.removefolder(javaDir + 'web/propertyeditors');
 
-            this.removefile(resourceDir + 'logback.xml');
+            this.removefile(RESOURCE_DIR + 'logback.xml');
 
-            this.removefile(webappDir + 'scripts/app/account/logout/logout.js');
-            this.removefile(webappDir + 'scripts/app/account/logout/logout.controller.js');
-            this.removefolder(webappDir + 'scripts/app/account/logout');
+            this.removefile(WEBAPP_DIR + 'scripts/app/account/logout/logout.js');
+            this.removefile(WEBAPP_DIR + 'scripts/app/account/logout/logout.controller.js');
+            this.removefolder(WEBAPP_DIR + 'scripts/app/account/logout');
 
             this.removefile(testDir + 'config/MongoConfiguration.java');
-            this.removefile(testJsDir + 'spec/app/account/health/healthControllerSpec.js');
-            this.removefile(testJsDir + 'spec/app/account/login/loginControllerSpec.js');
-            this.removefile(testJsDir + 'spec/app/account/password/passwordControllerSpec.js');
-            this.removefile(testJsDir + 'spec/app/account/password/passwordDirectiveSpec.js');
-            this.removefile(testJsDir + 'spec/app/account/sessions/sessionsControllerSpec.js');
-            this.removefile(testJsDir + 'spec/app/account/settings/settingsControllerSpec.js');
-            this.removefile(testJsDir + 'spec/components/auth/authServicesSpec.js');
+            this.removefile(TEST_JS_DIR + 'spec/app/account/health/healthControllerSpec.js');
+            this.removefile(TEST_JS_DIR + 'spec/app/account/login/loginControllerSpec.js');
+            this.removefile(TEST_JS_DIR + 'spec/app/account/password/passwordControllerSpec.js');
+            this.removefile(TEST_JS_DIR + 'spec/app/account/password/passwordDirectiveSpec.js');
+            this.removefile(TEST_JS_DIR + 'spec/app/account/sessions/sessionsControllerSpec.js');
+            this.removefile(TEST_JS_DIR + 'spec/app/account/settings/settingsControllerSpec.js');
+            this.removefile(TEST_JS_DIR + 'spec/components/auth/authServicesSpec.js');
 
             this.removefile('docker-compose.yml');
             this.removefile('docker-compose-prod.yml');
