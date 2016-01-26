@@ -166,7 +166,7 @@ module.exports = EntityGenerator.extend({
                                 return 'Your field name cannot start with a upper case letter';
                             } else if (input == 'id' || fieldNamesUnderscored.indexOf(_s.underscored(input)) != -1) {
                                 return 'Your field name cannot use an already existing field name';
-                            } else if (reservedWords_Java.indexOf(input.toUpperCase()) != -1) {
+                            } else if (RESERVED_WORDS_JAVA.indexOf(input.toUpperCase()) != -1) {
                                 return 'Your field name cannot contain a Java reserved keyword';
                             } else if (prodDatabaseType == 'mysql' && reservedWords_MySQL.indexOf(input.toUpperCase()) != -1) {
                                 return 'Your field name cannot contain a MySQL reserved keyword';
@@ -710,7 +710,7 @@ module.exports = EntityGenerator.extend({
                                 return 'Your other entity name cannot contain special characters';
                             } else if (input == '') {
                                 return 'Your other entity name cannot be empty';
-                            } else if (reservedWords_Java.indexOf(input.toUpperCase()) != -1) {
+                            } else if (RESERVED_WORDS_JAVA.indexOf(input.toUpperCase()) != -1) {
                                 return 'Your other entity name cannot contain a Java reserved keyword';
                             }
                             return true;
@@ -730,7 +730,7 @@ module.exports = EntityGenerator.extend({
                                 return 'Your relationship cannot be empty';
                             } else if (input == 'id' || fieldNamesUnderscored.indexOf(_s.underscored(input)) != -1) {
                                 return 'Your relationship cannot use an already existing field name';
-                            } else if (reservedWords_Java.indexOf(input.toUpperCase()) != -1) {
+                            } else if (RESERVED_WORDS_JAVA.indexOf(input.toUpperCase()) != -1) {
                                 return 'Your relationship cannot contain a Java reserved keyword';
                             }
                             return true;
