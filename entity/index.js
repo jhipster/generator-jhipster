@@ -33,7 +33,7 @@ var enums = [];
 var existingEnum = false;
 
 var fieldNamesUnderscored = ['id'];
-var fieldNameChoices = [];
+var fieldNameChoices = [], relNameChoices = [];
 var databaseType;
 var prodDatabaseType;
 const interpolateRegex = /<%=([\s\S]+?)%>/g; // so that thymeleaf tags in templates do not get mistreated as _ templates
@@ -145,6 +145,9 @@ module.exports = EntityGenerator.extend({
                 this.fields.forEach(function (field) {
                     fieldNamesUnderscored.push(_s.underscored(field.fieldName));
                     fieldNameChoices.push({name: field.fieldName, value: field.fieldName});
+                }, this);
+                this.relationships.forEach(function (rel) {
+                    relNameChoices.push({name: rel.fieldName + ':' + rel.relationshipType, value: field.fieldName + ':' + rel.relationshipType});
                 }, this);
             }
         }
@@ -720,7 +723,7 @@ module.exports = EntityGenerator.extend({
                 for (i = 0; i < this.fields.length; i++) {
                     this.fields[i].fieldId = i;
                 }
-                this.fieldId = this.fileData.fields.length;
+                this.fieldId = this.fields.length;
             }
             cb();
 
@@ -897,38 +900,38 @@ module.exports = EntityGenerator.extend({
         var prompts = [
             {
                 type: 'checkbox',
-                name: 'fieldsToRemove',
-                message: 'Please choose the fields you want to remove',
-                choices: fieldNameChoices,
+                name: 'relsToRemove',
+                message: 'Please choose the relationships you want to remove',
+                choices: relNameChoices,
                 default: 'none'
             },
             {
                 when: function(response) {
-                    return response.fieldsToRemove != 'none';
+                    return response.relsToRemove != 'none';
                 },
                 type: 'confirm',
                 name: 'confirmRemove',
-                message: 'Are you sure to remove these fields?',
+                message: 'Are you sure to remove these relationships?',
                 default: true
             }
         ];
         this.prompt(prompts, function(props) {
             if (props.confirmRemove) {
-                this.log(chalk.red('Removing fields: ' + props.fieldsToRemove));
+                this.log(chalk.red('Removing relationships: ' + props.relsToRemove));
                 var i;
-                for (i = this.fields.length - 1; i >= 0; i -= 1) {
-                    var field = this.fields[i];
-                    if(props.fieldsToRemove.filter(function (val) {
-                        return val == field.fieldName;
+                for (i = this.relationships.length - 1; i >= 0; i -= 1) {
+                    var rel = this.relationships[i];
+                    if(props.relsToRemove.filter(function (val) {
+                        return val == rel.relationshipName + ':' + rel.relationshipType;
                     }).length > 0){
-                        this.fields.splice(i, 1);
+                        this.relationships.splice(i, 1);
                     }
                 }
                 //reset filed IDs
-                for (i = 0; i < this.fields.length; i++) {
-                    this.fields[i].fieldId = i;
+                for (i = 0; i < this.relationships.length; i++) {
+                    this.relationships[i].relationshipId = i;
                 }
-                this.fieldId = this.fileData.fields.length;
+                this.relationshipId = this.relationships.length;
             }
             cb();
 
