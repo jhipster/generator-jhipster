@@ -1022,9 +1022,8 @@ module.exports = JhipsterGenerator.extend({
             if (this.enableTranslation) {
                 this.installI18nFilesByLanguage(this, webappDir, resourceDir, 'en');
                 this.installI18nFilesByLanguage(this, webappDir, resourceDir, 'fr');
-            } else {
-                this.template(resourceDir + '/i18n/_messages_en.properties', resourceDir + 'i18n/messages_en.properties', this, {});
             }
+            this.template(resourceDir + '/i18n/_messages_en.properties', resourceDir + 'i18n/messages.properties', this, {});
 
             // Swagger-ui for Jhipster
             this.template(webappDir + '/swagger-ui/_index.html', webappDir + 'swagger-ui/index.html', this, {});
