@@ -143,11 +143,11 @@ module.exports = EntityGenerator.extend({
                 this.service = this.fileData.service;
                 this.pagination = this.fileData.pagination;
                 this.javadoc = this.fileData.javadoc;
-                this.fields.forEach(function (field) {
+                this.fields && this.fields.forEach(function (field) {
                     fieldNamesUnderscored.push(_s.underscored(field.fieldName));
                     fieldNameChoices.push({name: field.fieldName, value: field.fieldName});
                 }, this);
-                this.relationships.forEach(function (rel) {
+                this.relationships && this.relationships.forEach(function (rel) {
                     relNameChoices.push({name: rel.relationshipName + ':' + rel.relationshipType, value: rel.relationshipName + ':' + rel.relationshipType});
                 }, this);
             }
