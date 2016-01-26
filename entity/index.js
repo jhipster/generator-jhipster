@@ -168,17 +168,17 @@ module.exports = EntityGenerator.extend({
                                 return 'Your field name cannot use an already existing field name';
                             } else if (RESERVED_WORDS_JAVA.indexOf(input.toUpperCase()) != -1) {
                                 return 'Your field name cannot contain a Java reserved keyword';
-                            } else if (prodDatabaseType == 'mysql' && reservedWords_MySQL.indexOf(input.toUpperCase()) != -1) {
+                            } else if (prodDatabaseType == 'mysql' && RESERVED_WORDS_MYSQL.indexOf(input.toUpperCase()) != -1) {
                                 return 'Your field name cannot contain a MySQL reserved keyword';
-                            } else if (prodDatabaseType == 'postgresql' && reservedWords_Postgresql.indexOf(input.toUpperCase()) != -1) {
+                            } else if (prodDatabaseType == 'postgresql' && RESERVED_WORDS_POSGRES.indexOf(input.toUpperCase()) != -1) {
                                 return 'Your field name cannot contain a PostgreSQL reserved keyword';
-                            } else if (prodDatabaseType == 'cassandra' && reservedWords_Cassandra.indexOf(input.toUpperCase()) != -1) {
+                            } else if (prodDatabaseType == 'cassandra' && RESERVED_WORDS_CASSANDRA.indexOf(input.toUpperCase()) != -1) {
                                 return 'Your field name cannot contain a Cassandra reserved keyword';
-                            } else if (prodDatabaseType == 'oracle' && reservedWords_Oracle.indexOf(input.toUpperCase()) != -1) {
+                            } else if (prodDatabaseType == 'oracle' && RESERVED_WORDS_ORACLE.indexOf(input.toUpperCase()) != -1) {
                                 return 'Your field name cannot contain a Oracle reserved keyword';
                             } else if (prodDatabaseType == 'oracle' && input.length > 30) {
                                 return 'The field name cannot be of more than 30 characters';
-                            } else if (prodDatabaseType == 'mongodb' && reservedWords_Mongo.indexOf(input.toUpperCase()) != -1) {
+                            } else if (prodDatabaseType == 'mongodb' && RESERVED_WORDS_MONGO.indexOf(input.toUpperCase()) != -1) {
                                 return 'Your field name cannot contain a MongoDB reserved keyword';
                             }
                             return true;
@@ -1044,8 +1044,8 @@ module.exports = EntityGenerator.extend({
                         }
                         for (var idxRules in field.fieldValidateRules) {
                             var fieldValidateRule = field.fieldValidateRules[idxRules];
-                            if (!_.contains(supportedValidationRules, fieldValidateRule)) {
-                                this.env.error(chalk.red('ERROR fieldValidateRules contains unknown validation rule ' + fieldValidateRule + ' in .jhipster/' + this.name + '.json for field with id ' + field.fieldId + ' [supported validation rules ' + supportedValidationRules + ']'));
+                            if (!_.contains(SUPPORTED_VALIDATION_RULES, fieldValidateRule)) {
+                                this.env.error(chalk.red('ERROR fieldValidateRules contains unknown validation rule ' + fieldValidateRule + ' in .jhipster/' + this.name + '.json for field with id ' + field.fieldId + ' [supported validation rules ' + SUPPORTED_VALIDATION_RULES + ']'));
                             }
                         }
                         if (_.contains(field.fieldValidateRules, 'max') && _.isUndefined(field.fieldValidateRulesMax)) {
