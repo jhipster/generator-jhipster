@@ -19,9 +19,9 @@ util.inherits(JhipsterGenerator, scriptBase);
 const QUESTIONS = 15; // making questions a variable to avoid updating each question by hand when adding additional options
 const RESOURCE_DIR = 'src/main/resources/';
 const WEBAPP_DIR = 'src/main/webapp/';
-const testJsDir = 'src/test/javascript/';
-const testResourceDir = 'src/test/resources/';
-const dockerDir = 'src/main/docker/';
+const TEST_JS_DIR = 'src/test/javascript/';
+const TEST_RES_DIR = 'src/test/resources/';
+const DOCKER_DIR = 'src/main/docker/';
 const interpolateRegex = /<%=([\s\S]+?)%>/g; // so that tags in templates do not get mistreated as _ templates
 
 module.exports = JhipsterGenerator.extend({
@@ -672,21 +672,21 @@ module.exports = JhipsterGenerator.extend({
             var javaDir = this.javaDir;
 
             // Create docker-compose file
-            this.template(dockerDir + '_sonar.yml', dockerDir + 'sonar.yml', this, {});
+            this.template(DOCKER_DIR + '_sonar.yml', DOCKER_DIR + 'sonar.yml', this, {});
             if (this.devDatabaseType != "h2Disk" && this.devDatabaseType != "h2Memory" && this.devDatabaseType != "oracle") {
-                this.template(dockerDir + '_dev.yml', dockerDir + 'dev.yml', this, {});
+                this.template(DOCKER_DIR + '_dev.yml', DOCKER_DIR + 'dev.yml', this, {});
             }
             if (this.prodDatabaseType != "oracle" || this.searchEngine == "elasticsearch") {
-                this.template(dockerDir + '_prod.yml', dockerDir + 'prod.yml', this, {});
+                this.template(DOCKER_DIR + '_prod.yml', DOCKER_DIR + 'prod.yml', this, {});
             }
             if (this.devDatabaseType == "cassandra") {
-                this.template(dockerDir + 'cassandra/_Cassandra-Dev.Dockerfile', dockerDir + 'cassandra/Cassandra-Dev.Dockerfile', this, {});
-                this.template(dockerDir + 'cassandra/_Cassandra-Prod.Dockerfile', dockerDir + 'cassandra/Cassandra-Prod.Dockerfile', this, {});
-                this.template(dockerDir + 'cassandra/scripts/_init-dev.sh', dockerDir + 'cassandra/scripts/init-dev.sh', this, {});
-                this.template(dockerDir + 'cassandra/scripts/_init-prod.sh', dockerDir + 'cassandra/scripts/init-prod.sh', this, {});
-                this.template(dockerDir + 'cassandra/scripts/_entities.sh', dockerDir + 'cassandra/scripts/entities.sh', this, {});
-                this.template(dockerDir + 'cassandra/scripts/_cassandra.sh', dockerDir + 'cassandra/scripts/cassandra.sh', this, {});
-                this.template(dockerDir + 'opscenter/_Dockerfile', dockerDir + 'opscenter/Dockerfile', this, {});
+                this.template(DOCKER_DIR + 'cassandra/_Cassandra-Dev.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra-Dev.Dockerfile', this, {});
+                this.template(DOCKER_DIR + 'cassandra/_Cassandra-Prod.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra-Prod.Dockerfile', this, {});
+                this.template(DOCKER_DIR + 'cassandra/scripts/_init-dev.sh', DOCKER_DIR + 'cassandra/scripts/init-dev.sh', this, {});
+                this.template(DOCKER_DIR + 'cassandra/scripts/_init-prod.sh', DOCKER_DIR + 'cassandra/scripts/init-prod.sh', this, {});
+                this.template(DOCKER_DIR + 'cassandra/scripts/_entities.sh', DOCKER_DIR + 'cassandra/scripts/entities.sh', this, {});
+                this.template(DOCKER_DIR + 'cassandra/scripts/_cassandra.sh', DOCKER_DIR + 'cassandra/scripts/cassandra.sh', this, {});
+                this.template(DOCKER_DIR + 'opscenter/_Dockerfile', DOCKER_DIR + 'opscenter/Dockerfile', this, {});
             }
 
             switch (this.buildTool) {
@@ -1332,11 +1332,11 @@ module.exports = JhipsterGenerator.extend({
             this.template('src/test/java/package/web/rest/_TestUtil.java', testDir + 'web/rest/TestUtil.java', this, {});
             this.template('src/test/java/package/web/rest/_UserResourceIntTest.java', testDir + 'web/rest/UserResourceIntTest.java', this, {});
 
-            this.template(testResourceDir + 'config/_application.yml', testResourceDir + 'config/application.yml', this, {});
-            this.template(testResourceDir + '_logback-test.xml', testResourceDir + 'logback-test.xml', this, {});
+            this.template(TEST_RES_DIR + 'config/_application.yml', TEST_RES_DIR + 'config/application.yml', this, {});
+            this.template(TEST_RES_DIR + '_logback-test.xml', TEST_RES_DIR + 'logback-test.xml', this, {});
 
             if (this.hibernateCache == "ehcache") {
-                this.template(testResourceDir + '_ehcache.xml', testResourceDir + 'ehcache.xml', this, {});
+                this.template(TEST_RES_DIR + '_ehcache.xml', TEST_RES_DIR + 'ehcache.xml', this, {});
             }
 
             if (this.enableSocialSignIn) {
@@ -1391,7 +1391,7 @@ module.exports = JhipsterGenerator.extend({
                 testTemplates.push('_protractor.conf.js')
             }
             testTemplates.map(function(testTemplatePath) {
-                this.template(testJsDir + testTemplatePath, testJsDir + testTemplatePath.replace(/_/,''), this, {});
+                this.template(TEST_JS_DIR + testTemplatePath, TEST_JS_DIR + testTemplatePath.replace(/_/,''), this, {});
             }.bind(this));
 
         },
@@ -1426,13 +1426,13 @@ module.exports = JhipsterGenerator.extend({
             this.removefolder(WEBAPP_DIR + 'scripts/app/account/logout');
 
             this.removefile(testDir + 'config/MongoConfiguration.java');
-            this.removefile(testJsDir + 'spec/app/account/health/healthControllerSpec.js');
-            this.removefile(testJsDir + 'spec/app/account/login/loginControllerSpec.js');
-            this.removefile(testJsDir + 'spec/app/account/password/passwordControllerSpec.js');
-            this.removefile(testJsDir + 'spec/app/account/password/passwordDirectiveSpec.js');
-            this.removefile(testJsDir + 'spec/app/account/sessions/sessionsControllerSpec.js');
-            this.removefile(testJsDir + 'spec/app/account/settings/settingsControllerSpec.js');
-            this.removefile(testJsDir + 'spec/components/auth/authServicesSpec.js');
+            this.removefile(TEST_JS_DIR + 'spec/app/account/health/healthControllerSpec.js');
+            this.removefile(TEST_JS_DIR + 'spec/app/account/login/loginControllerSpec.js');
+            this.removefile(TEST_JS_DIR + 'spec/app/account/password/passwordControllerSpec.js');
+            this.removefile(TEST_JS_DIR + 'spec/app/account/password/passwordDirectiveSpec.js');
+            this.removefile(TEST_JS_DIR + 'spec/app/account/sessions/sessionsControllerSpec.js');
+            this.removefile(TEST_JS_DIR + 'spec/app/account/settings/settingsControllerSpec.js');
+            this.removefile(TEST_JS_DIR + 'spec/components/auth/authServicesSpec.js');
 
             this.removefile('docker-compose.yml');
             this.removefile('docker-compose-prod.yml');
