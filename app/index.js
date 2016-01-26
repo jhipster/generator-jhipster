@@ -22,7 +22,7 @@ const WEBAPP_DIR = 'src/main/webapp/';
 const TEST_JS_DIR = 'src/test/javascript/';
 const TEST_RES_DIR = 'src/test/resources/';
 const DOCKER_DIR = 'src/main/docker/';
-const interpolateRegex = /<%=([\s\S]+?)%>/g; // so that tags in templates do not get mistreated as _ templates
+const INTERPOLATE_REGEX = /<%=([\s\S]+?)%>/g; // so that tags in templates do not get mistreated as _ templates
 
 module.exports = JhipsterGenerator.extend({
     constructor: function() {
@@ -696,10 +696,10 @@ module.exports = JhipsterGenerator.extend({
                     this.template('_gradle.properties', 'gradle.properties', this, {});
                     this.template('gradle/_yeoman.gradle', 'gradle/yeoman.gradle', this, {});
                     this.template('gradle/_sonar.gradle', 'gradle/sonar.gradle', this, {});
-                    this.template('gradle/_profile_dev.gradle', 'gradle/profile_dev.gradle', this, {'interpolate': interpolateRegex});
-                    this.template('gradle/_profile_prod.gradle', 'gradle/profile_prod.gradle', this, {'interpolate': interpolateRegex});
-                    this.template('gradle/_profile_fast.gradle', 'gradle/profile_fast.gradle', this, {'interpolate': interpolateRegex});
-                    this.template('gradle/_mapstruct.gradle', 'gradle/mapstruct.gradle', this, {'interpolate': interpolateRegex});
+                    this.template('gradle/_profile_dev.gradle', 'gradle/profile_dev.gradle', this, {'interpolate': INTERPOLATE_REGEX});
+                    this.template('gradle/_profile_prod.gradle', 'gradle/profile_prod.gradle', this, {'interpolate': INTERPOLATE_REGEX});
+                    this.template('gradle/_profile_fast.gradle', 'gradle/profile_fast.gradle', this, {'interpolate': INTERPOLATE_REGEX});
+                    this.template('gradle/_mapstruct.gradle', 'gradle/mapstruct.gradle', this, {'interpolate': INTERPOLATE_REGEX});
                     if (this.testFrameworks.indexOf('gatling') != -1) {
                         this.template('gradle/_gatling.gradle', 'gradle/gatling.gradle', this, {});
                     }
@@ -717,7 +717,7 @@ module.exports = JhipsterGenerator.extend({
                     this.copy('mvnw.cmd', 'mvnw.cmd');
                     this.copy('.mvn/wrapper/maven-wrapper.jar', '.mvn/wrapper/maven-wrapper.jar');
                     this.copy('.mvn/wrapper/maven-wrapper.properties', '.mvn/wrapper/maven-wrapper.properties');
-                    this.template('_pom.xml', 'pom.xml', null, {'interpolate': interpolateRegex});
+                    this.template('_pom.xml', 'pom.xml', null, {'interpolate': INTERPOLATE_REGEX});
             }
 
             // Create Java resource files
@@ -734,14 +734,14 @@ module.exports = JhipsterGenerator.extend({
             // Thymeleaf templates
             this.copy(RESOURCE_DIR + '/templates/error.html', RESOURCE_DIR + 'templates/error.html');
 
-            this.template(RESOURCE_DIR + '_logback-spring.xml', RESOURCE_DIR + 'logback-spring.xml', this, {'interpolate': interpolateRegex});
+            this.template(RESOURCE_DIR + '_logback-spring.xml', RESOURCE_DIR + 'logback-spring.xml', this, {'interpolate': INTERPOLATE_REGEX});
 
             this.template(RESOURCE_DIR + '/config/_application.yml', RESOURCE_DIR + 'config/application.yml', this, {});
             this.template(RESOURCE_DIR + '/config/_application-dev.yml', RESOURCE_DIR + 'config/application-dev.yml', this, {});
             this.template(RESOURCE_DIR + '/config/_application-prod.yml', RESOURCE_DIR + 'config/application-prod.yml', this, {});
 
             if (this.databaseType == "sql") {
-                this.template(RESOURCE_DIR + '/config/liquibase/changelog/_initial_schema.xml', RESOURCE_DIR + 'config/liquibase/changelog/00000000000000_initial_schema.xml', this, {'interpolate': interpolateRegex});
+                this.template(RESOURCE_DIR + '/config/liquibase/changelog/_initial_schema.xml', RESOURCE_DIR + 'config/liquibase/changelog/00000000000000_initial_schema.xml', this, {'interpolate': INTERPOLATE_REGEX});
                 this.copy(RESOURCE_DIR + '/config/liquibase/master.xml', RESOURCE_DIR + 'config/liquibase/master.xml');
                 this.copy(RESOURCE_DIR + '/config/liquibase/users.csv', RESOURCE_DIR + 'config/liquibase/users.csv');
                 this.copy(RESOURCE_DIR + '/config/liquibase/authorities.csv', RESOURCE_DIR + 'config/liquibase/authorities.csv');
