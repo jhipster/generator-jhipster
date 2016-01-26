@@ -99,8 +99,6 @@ module.exports = EntityGenerator.extend({
                 this.env.error(chalk.red('The entity name cannot end with \'Detail\''));
             } else if (reservedWords_Java.indexOf(this.name.toUpperCase()) != -1) {
                 this.env.error(chalk.red('The entity name cannot contain a Java reserved keyword'));
-            } else if (reservedWords_JHipster.indexOf(this.name.toUpperCase()) != -1) {
-                this.env.error(chalk.red('The entity name cannot contain a JHipster reserved keyword'));
             } else if (prodDatabaseType == 'mysql' && reservedWords_MySQL.indexOf(this.name.toUpperCase()) != -1) {
                 this.env.error(chalk.red('The entity name cannot contain a MySQL reserved keyword'));
             } else if (prodDatabaseType == 'postgresql' && reservedWords_Postgresql.indexOf(this.name.toUpperCase()) != -1) {
