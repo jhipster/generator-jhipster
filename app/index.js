@@ -1023,7 +1023,7 @@ module.exports = JhipsterGenerator.extend({
                 this.installI18nFilesByLanguage(this, WEBAPP_DIR, RESOURCE_DIR, 'en');
                 this.installI18nFilesByLanguage(this, WEBAPP_DIR, RESOURCE_DIR, 'fr');
             }
-            
+            this.template(resourceDir + '/i18n/_messages_en.properties', resourceDir + 'i18n/messages.properties', this, {});
 
             // Swagger-ui for Jhipster
             this.template(WEBAPP_DIR + '/swagger-ui/_index.html', WEBAPP_DIR + 'swagger-ui/index.html', this, {});
