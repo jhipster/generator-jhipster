@@ -116,7 +116,7 @@ public class <%= entityClass %> implements Serializable {
     <%_ } else { _%>
     private String <%= fields[fieldId].fieldName %>;
     <%_ } _%>
-    
+
     <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%><%_ if (databaseType == 'sql') { _%>
     @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>_content_type"<% if (required) { %>, nullable = false<% } %>) <%_ } _%>
     <% if (databaseType == 'mongodb') { %>@Field("<%=fields[fieldId].fieldNameUnderscored %>_content_type")
@@ -171,6 +171,7 @@ public class <%= entityClass %> implements Serializable {
     <%_ } else { _%>
     <%_     if (relationships[relationshipId].ownerSide) { _%>
     @OneToOne
+    @JoinColumn(name = "<%= getColumnName(relationships[relationshipId].relationshipName) %>_id", unique = true)
     <%_    } else { _%>
     @OneToOne(mappedBy = "<%= relationships[relationshipId].otherEntityRelationshipName %>")
     @JsonIgnore
@@ -193,7 +194,7 @@ public class <%= entityClass %> implements Serializable {
     <%_ } _%>
         return <%= fields[fieldId].fieldName %>;
     }
-    
+
     <%_ if (fields[fieldId].fieldTypeBlobContent != 'text') { _%>
     public void set<%= fields[fieldId].fieldInJavaBeanMethod %>(<%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>) {
     <%_ } else { _%>
