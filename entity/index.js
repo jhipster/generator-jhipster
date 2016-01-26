@@ -1296,6 +1296,26 @@ module.exports = EntityGenerator.extend({
 
         },
 
+        writeEntityJson: function () {
+            if (this.useConfigurationFile && this.updateEntity == 'rewrite') {
+                return;
+            }
+             // store informations in a file for further use.
+            if (!this.useConfigurationFile && (this.databaseType == "sql" || this.databaseType == "cassandra")) {
+                this.changelogDate = this.dateFormatForLiquibase();
+            }
+            this.data = {};
+            this.data.relationships = this.relationships;
+            this.data.fields = this.fields;
+            this.data.changelogDate = this.changelogDate;
+            this.data.dto = this.dto;
+            this.data.service = this.service;
+            if (databaseType == 'sql' || databaseType == 'mongodb') {
+                this.data.pagination = this.pagination;
+            }
+            this.fs.writeJSON(this.filename, this.data, null, 4);
+        },
+
         LoadInMemoryData: function() {
 
             // Load in-memory data for fields
@@ -1473,25 +1493,6 @@ module.exports = EntityGenerator.extend({
     },
 
     writing : {
-        writeEntityJson: function () {
-            if (this.useConfigurationFile && this.updateEntity == 'rewrite') {
-                return;
-            }
-             // store informations in a file for further use.
-            if (!this.useConfigurationFile && (this.databaseType == "sql" || this.databaseType == "cassandra")) {
-                this.changelogDate = this.dateFormatForLiquibase();
-            }
-            this.data = {};
-            this.data.relationships = this.relationships;
-            this.data.fields = this.fields;
-            this.data.changelogDate = this.changelogDate;
-            this.data.dto = this.dto;
-            this.data.service = this.service;
-            if (databaseType == 'sql' || databaseType == 'mongodb') {
-                this.data.pagination = this.pagination;
-            }
-            this.fs.writeJSON(this.filename, this.data, null, 4);
-        },
 
         writeEnumFiles: function() {
 
