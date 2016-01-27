@@ -1,36 +1,15 @@
-package <%=packageName%>.domain;
-<% if (databaseType == 'cassandra') { %>
-import com.datastax.driver.mapping.annotations.*;<% } %><% if (typeof javadoc != 'undefined') { -%>
-import io.swagger.annotations.ApiModel;<% } %><%
+package <%=packageName%>.domain;<%
 var importApiModelProperty = false;
-for (relationshipId in relationships) {
-    if (typeof relationships[relationshipId].javadoc != 'undefined') {
-        importApiModelProperty = true;
-    }
-}
-for (fieldId in fields) {
-    if (typeof fields[fieldId].javadoc != 'undefined') {
-        importApiModelProperty = true;
-    }
-}
-if (importApiModelProperty) { %>
-import io.swagger.annotations.ApiModelProperty;<% } %><%
 var importJsonignore = false;
-for (relationshipId in relationships) {
-    if (relationships[relationshipId].relationshipType == 'one-to-many') {
-        importJsonignore = true;
-    } else if (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == false) {
-        importJsonignore = true;
-    } else if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == false) {
-        importJsonignore = true;
-    }
-}
-if (importJsonignore) { %>
-import com.fasterxml.jackson.annotation.JsonIgnore;<% } %><% if (hibernateCache != 'no') { %>
+var importSet = false;
+var uniqueEnums = {}; %><%- include imports -%>
+<% if (databaseType == 'cassandra') { %>
+import com.datastax.driver.mapping.annotations.*;<% } %><% if (importJsonignore == true) { %>
+import com.fasterxml.jackson.annotation.JsonIgnore;<% } %><% if (typeof javadoc != 'undefined') { %>
+import io.swagger.annotations.ApiModel;<% } %><% if (importApiModelProperty == true) { %>
+import io.swagger.annotations.ApiModelProperty;<% } %><% if (hibernateCache != 'no') { %>
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (fieldsContainLocalDate == true) { %>
-import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
-import java.time.ZonedDateTime;<% } %><% if (databaseType == 'mongodb') { %>
+import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;<% } %><% if (searchEngine == 'elasticsearch') { %>
@@ -39,20 +18,14 @@ import org.springframework.data.elasticsearch.annotations.Document;<% } %>
 import javax.persistence.*;<% } %><% if (validation) { %>
 import javax.validation.constraints.*;<% } %>
 import java.io.Serializable;<% if (fieldsContainBigDecimal == true) { %>
-import java.math.BigDecimal;<% } %><% if (fieldsContainDate == true) { %>
-import java.util.Date;<% } %><% if (relationships.length > 0) { %>
+import java.math.BigDecimal;<% } %><% if (fieldsContainLocalDate == true) { %>
+import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
+import java.time.ZonedDateTime;<% } %><% if (fieldsContainDate == true) { %>
+import java.util.Date;<% } %><% if (importSet == true) { %>
 import java.util.HashSet;
 import java.util.Set;<% } %>
 import java.util.Objects;<% if (databaseType == 'cassandra') { %>
-import java.util.UUID;<% } %><%
-var uniqueEnums = {};
-for (fieldId in fields) {
-    if (fields[fieldId].fieldIsEnum && (
-            !uniqueEnums[fields[fieldId].fieldType] || (uniqueEnums[fields[fieldId].fieldType] && fields[fieldId].fieldValues.length !== 0))) {
-        uniqueEnums[fields[fieldId].fieldType] = fields[fieldId].fieldType;
-    }
-}
-Object.keys(uniqueEnums).forEach(function(element) { %>
+import java.util.UUID;<% } %><% Object.keys(uniqueEnums).forEach(function(element) { %>
 
 import <%=packageName%>.domain.enumeration.<%= element %>;<% }); %>
 
