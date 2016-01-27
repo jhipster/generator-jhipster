@@ -981,6 +981,20 @@ module.exports = EntityGenerator.extend({
             this._askForRelationship(cb);
         },
 
+        askForRelationsToRemove: function() {
+            // prompt only if data is imported from a file
+            if (!this.useConfigurationFile || this.updateEntity != 'remove') {
+                return;
+            }
+            if (this.databaseType == 'mongodb' || this.databaseType == 'cassandra') {
+                return;
+            }
+
+            var cb = this.async();
+
+            this._askForRelationsToRemove(cb);
+        },
+
         askForDTO: function() {
             // don't prompt if data is imported from a file
             if (this.useConfigurationFile) {
