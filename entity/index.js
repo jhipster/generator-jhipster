@@ -81,11 +81,11 @@ module.exports = EntityGenerator.extend({
 
             this.filename = this.jhipsterConfigDirectory + '/' + _s.capitalize(this.name) + '.json';
             if (shelljs.test('-f', this.filename)) {
-                this.log(chalk.green('Found the ' + this.filename + ' configuration file, automatically generating the entity'));
+                this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
                 try {
-                    this.fileData = JSON.parse(html.readFileAsString(this.filename))
+                    this.fileData = this.fs.readJSON(this.filename);
                 } catch (err) {
-                    this.log(chalk.red('The configuration file could not be read!'));
+                    this.log(chalk.red('\nThe configuration file could not be read!\n'));
                     return;
                 }
                 this.useConfigurationFile = true;
