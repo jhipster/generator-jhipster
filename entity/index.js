@@ -957,9 +957,11 @@ module.exports = EntityGenerator.extend({
 
     prompting: {
         /* pre entity hook needs to be written here */
+        /* ask question to user if s/he wants to update entity */
         askForUpdate: function () {
             // ask only if running an existing entity without arg option --force
             var isForce = this.options['force'];
+            this.updateEntity == 'rewrite'; // default if skipping questions by --force
             if (isForce || !this.useConfigurationFile) {
                 return;
             }
@@ -1311,7 +1313,7 @@ module.exports = EntityGenerator.extend({
 
         writeEntityJson: function () {
             if (this.useConfigurationFile && this.updateEntity == 'rewrite') {
-                return;
+                return; //do not update if regenerating entity
             }
              // store informations in a file for further use.
             if (!this.useConfigurationFile && (this.databaseType == "sql" || this.databaseType == "cassandra")) {
@@ -1493,7 +1495,7 @@ module.exports = EntityGenerator.extend({
         },
 
         insight: function() {
-
+            // track insights
             var insight = this.insight();
 
             insight.track('generator', 'entity');
@@ -1654,7 +1656,7 @@ module.exports = EntityGenerator.extend({
             try {
                 var modules = this.getModuleHooks();
                 if (modules.length > 0) {
-                    this.log('\n' + chalk.bold.green('Running post run module hooks\n'));
+                    this.log('\n' + chalk.bold.green('\nRunning post run module hooks\n'));
                     // form the data to be passed to modules
                     var entityConfig = {
                         jhipsterConfigDirectory: this.jhipsterConfigDirectory,
