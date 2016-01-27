@@ -34,7 +34,7 @@ var enums = [];
 var existingEnum = false;
 
 var fieldNamesUnderscored = ['id'];
-var fieldNameChoices = [], relNameChoices = [];
+var fieldNameChoices = [], relNameChoices = []; // this variable will hold field and relationship names for question options during update
 var databaseType;
 var prodDatabaseType;
 const INTERPOLATE_REGEX = /<%=([\s\S]+?)%>/g; // so that thymeleaf tags in templates do not get mistreated as _ templates
