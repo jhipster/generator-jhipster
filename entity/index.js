@@ -946,6 +946,45 @@ module.exports = EntityGenerator.extend({
 
     prompting: {
         /* pre entity hook needs to be written here */
+        askForUpdate: function () {
+            // ask only if running an existing entity without arg option --force
+            var isForce = this.options['force'];
+            if (isForce || !this.useConfigurationFile) {
+                return;
+            }
+            var cb = this.async();
+            var prompts = [
+                {
+                    type: 'list',
+                    name: 'updateEntity',
+                    message: 'Do you want to update the entity? This will replace the existing files for this entity, all your custom code will be overwritten',
+                    choices: [
+                        {
+                            value: 'rewrite',
+                            name: 'Yes, re generate the entity'
+                        },
+                        {
+                            value: 'add',
+                            name: '[BETA] Yes, add more fields and relationships'
+                        },
+                        {
+                            value: 'remove',
+                            name: '[BETA] Yes, remove fields and relationships'
+                        },
+                        {
+                            value: 'none',
+                            name: 'No, exit'
+                        },
+                    ],
+                    default: 0
+                }
+            ];
+            this.prompt(prompts, function(props) {
+                this.updateEntity = props.updateEntity;
+                if(this.updateEntity == 'none'){
+                    this.env.error(chalk.green('Aborting entity update, no changes were made.'));
+                }
+                cb();
 
         askForFields: function() {
             // don't prompt if data is imported from a file
