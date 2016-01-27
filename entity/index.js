@@ -1656,7 +1656,7 @@ module.exports = EntityGenerator.extend({
             try {
                 var modules = this.getModuleHooks();
                 if (modules.length > 0) {
-                    this.log('\n' + chalk.bold.green('\nRunning post run module hooks\n'));
+                    this.log('\n' + chalk.bold.green('Running post run module hooks\n'));
                     // form the data to be passed to modules
                     var entityConfig = {
                         jhipsterConfigDirectory: this.jhipsterConfigDirectory,
