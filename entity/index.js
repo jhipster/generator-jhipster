@@ -123,7 +123,8 @@ module.exports = EntityGenerator.extend({
 
         setupVars: function() {
             // Specific Entity sub-generator variables
-            if (this.useConfigurationFile == false) {
+            if (!this.useConfigurationFile) {
+                //no file present, new entity creation
                 this.log(chalk.red('\nThe entity ' + this.name + ' is being created.\n'));
                 this.fieldId = 0;
                 this.fields = [];
@@ -134,6 +135,7 @@ module.exports = EntityGenerator.extend({
                 this.dto = 'no';
                 this.service = 'no';
             } else {
+                //existing entity reading values from file
                 this.log(chalk.red('\nThe entity ' + this.name + ' is being updated.\n'));
                 this.fieldId = this.fileData.fields? this.fileData.fields.length : 0;
                 this.relationshipId = this.fileData.relationships? this.fileData.relationships.length : 0;
@@ -156,6 +158,9 @@ module.exports = EntityGenerator.extend({
     },
 
     /* private Helper methods */
+    /**
+     * ask question for a field creation
+     */
     _askForField : function(cb){
         this.fieldId++;
         this.log(chalk.green('\nGenerating field #' + this.fieldId + '\n'));
@@ -690,7 +695,9 @@ module.exports = EntityGenerator.extend({
             }
         }.bind(this));
     },
-
+    /**
+     * ask question for field deletion
+     */
     _askForFieldsToRemove : function(cb){
         var prompts = [
             {
@@ -732,7 +739,9 @@ module.exports = EntityGenerator.extend({
 
         }.bind(this));
     },
-
+    /**
+     * ask question for a relationship creation
+     */
     _askForRelationship: function(cb){
         var packageFolder = this.packageFolder;
         var name = this.name;
@@ -899,7 +908,9 @@ module.exports = EntityGenerator.extend({
             }
         }.bind(this));
     },
-
+    /**
+     * ask question for relationship deletion
+     */
     _askForRelationsToRemove : function(cb){
         var prompts = [
             {
