@@ -1060,7 +1060,7 @@ Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, res
     this.copyI18nFilesByName(_this, webappDir, 'error.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'login.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'logs.json', lang);
-    this.copyI18nFilesByName(_this, webappDir, 'main.json', lang);
+    this.copyI18nFilesByName(_this, webappDir, 'home.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'metrics.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'password.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'register.json', lang);

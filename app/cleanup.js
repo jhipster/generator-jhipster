@@ -56,5 +56,32 @@ function cleanupOldFiles(generator) {
         generator.removefile('profile_prod.gradle');
         generator.removefile('sonar.gradle');
         generator.removefile('yeoman.gradle');
+
+        generator.removefile(generator.WEBAPP_DIR + 'scripts/app/main/main.controller.js');
+        generator.removefile(generator.WEBAPP_DIR + 'scripts/app/main/main.js');
+        generator.removefile(generator.WEBAPP_DIR + 'scripts/app/main/main.html');
+        generator.removefolder(generator.WEBAPP_DIR + 'scripts/app/main/');
+        generator.removefile(generator.WEBAPP_DIR + 'i18n/en/main.json');
+        generator.removefile(generator.WEBAPP_DIR + 'i18n/fr/main.json');
+        generator.removefile(generator.WEBAPP_DIR + 'i18n/ca/main.json');
+        generator.removefile(generator.WEBAPP_DIR + 'i18n/da/main.json');
+        generator.removefile(generator.WEBAPP_DIR + 'i18n/de/main.json');
+        generator.removefile(generator.WEBAPP_DIR + 'i18n/es/main.json');
+        generator.removefile(generator.WEBAPP_DIR + 'i18n/gl/main.json');
+        generator.removefile(generator.WEBAPP_DIR + 'i18n/hu/main.json');
+        generator.removefile(generator.WEBAPP_DIR + 'i18n/it/main.json');
+        generator.removefile(generator.WEBAPP_DIR + 'i18n/ja/main.json');
+        generator.removefile(generator.WEBAPP_DIR + 'i18n/ko/main.json');
+        generator.removefile(generator.WEBAPP_DIR + 'i18n/nl/main.json');
+        generator.removefile(generator.WEBAPP_DIR + 'i18n/pl/main.json');
+        generator.removefile(generator.WEBAPP_DIR + 'i18n/pt-br/main.json');
+        generator.removefile(generator.WEBAPP_DIR + 'i18n/pt-pt/main.json');
+        generator.removefile(generator.WEBAPP_DIR + 'i18n/ro/main.json');
+        generator.removefile(generator.WEBAPP_DIR + 'i18n/ru/main.json');
+        generator.removefile(generator.WEBAPP_DIR + 'i18n/sv/main.json');
+        generator.removefile(generator.WEBAPP_DIR + 'i18n/ta/main.json');
+        generator.removefile(generator.WEBAPP_DIR + 'i18n/tr/main.json');
+        generator.removefile(generator.WEBAPP_DIR + 'i18n/zh-cn/main.json');
+        generator.removefile(generator.WEBAPP_DIR + 'i18n/zh-tw/main.json');
     }
 }
