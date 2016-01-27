@@ -34,6 +34,7 @@ var enums = [];
 var existingEnum = false;
 
 var fieldNamesUnderscored = ['id'];
+var fieldNameChoices = [], relNameChoices = [];
 var databaseType;
 var prodDatabaseType;
 const INTERPOLATE_REGEX = /<%=([\s\S]+?)%>/g; // so that thymeleaf tags in templates do not get mistreated as _ templates
@@ -143,7 +144,13 @@ module.exports = EntityGenerator.extend({
                 this.service = this.fileData.service;
                 this.pagination = this.fileData.pagination;
                 this.javadoc = this.fileData.javadoc;
-
+                this.fields && this.fields.forEach(function (field) {
+                    fieldNamesUnderscored.push(_s.underscored(field.fieldName));
+                    fieldNameChoices.push({name: field.fieldName, value: field.fieldName});
+                }, this);
+                this.relationships && this.relationships.forEach(function (rel) {
+                    relNameChoices.push({name: rel.relationshipName + ':' + rel.relationshipType, value: rel.relationshipName + ':' + rel.relationshipType});
+                }, this);
             }
         }
     },
@@ -681,6 +688,48 @@ module.exports = EntityGenerator.extend({
             } else {
                 cb();
             }
+        }.bind(this));
+    },
+
+    _askForFieldsToRemove : function(cb){
+        var prompts = [
+            {
+                type: 'checkbox',
+                name: 'fieldsToRemove',
+                message: 'Please choose the fields you want to remove',
+                choices: fieldNameChoices,
+                default: 'none'
+            },
+            {
+                when: function(response) {
+                    return response.fieldsToRemove != 'none';
+                },
+                type: 'confirm',
+                name: 'confirmRemove',
+                message: 'Are you sure to remove these fields?',
+                default: true
+            }
+        ];
+        this.prompt(prompts, function(props) {
+            if (props.confirmRemove) {
+                this.log(chalk.red('\nRemoving fields: ' + props.fieldsToRemove + '\n'));
+                var i;
+                for (i = this.fields.length - 1; i >= 0; i -= 1) {
+                    var field = this.fields[i];
+                    if(props.fieldsToRemove.filter(function (val) {
+                        return val == field.fieldName;
+                    }).length > 0){
+                        this.fields.splice(i, 1);
+                    }
+                }
+                //reset filed IDs
+                for (i = 0; i < this.fields.length; i++) {
+                    this.fields[i].fieldId = i;
+                }
+                this.fieldId = this.fields.length;
+            }
+            cb();
+
         }.bind(this));
     },
 
