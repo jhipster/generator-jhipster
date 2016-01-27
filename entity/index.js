@@ -900,6 +900,48 @@ module.exports = EntityGenerator.extend({
         }.bind(this));
     },
 
+    _askForRelationsToRemove : function(cb){
+        var prompts = [
+            {
+                type: 'checkbox',
+                name: 'relsToRemove',
+                message: 'Please choose the relationships you want to remove',
+                choices: relNameChoices,
+                default: 'none'
+            },
+            {
+                when: function(response) {
+                    return response.relsToRemove != 'none';
+                },
+                type: 'confirm',
+                name: 'confirmRemove',
+                message: 'Are you sure to remove these relationships?',
+                default: true
+            }
+        ];
+        this.prompt(prompts, function(props) {
+            if (props.confirmRemove) {
+                this.log(chalk.red('\nRemoving relationships: ' + props.relsToRemove + '\n'));
+                var i;
+                for (i = this.relationships.length - 1; i >= 0; i -= 1) {
+                    var rel = this.relationships[i];
+                    if(props.relsToRemove.filter(function (val) {
+                        return val == rel.relationshipName + ':' + rel.relationshipType;
+                    }).length > 0){
+                        this.relationships.splice(i, 1);
+                    }
+                }
+                //reset filed IDs
+                for (i = 0; i < this.relationships.length; i++) {
+                    this.relationships[i].relationshipId = i;
+                }
+                this.relationshipId = this.relationships.length;
+            }
+            cb();
+
+        }.bind(this));
+    },
+
     /* end of Helper methods */
 
     prompting: {
