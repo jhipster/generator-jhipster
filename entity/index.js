@@ -722,7 +722,7 @@ module.exports = EntityGenerator.extend({
                         this.fields.splice(i, 1);
                     }
                 }
-                //reset filed IDs
+                //reset field IDs
                 for (i = 0; i < this.fields.length; i++) {
                     this.fields[i].fieldId = i;
                 }
@@ -931,7 +931,7 @@ module.exports = EntityGenerator.extend({
                         this.relationships.splice(i, 1);
                     }
                 }
-                //reset filed IDs
+                //reset relationship IDs
                 for (i = 0; i < this.relationships.length; i++) {
                     this.relationships[i].relationshipId = i;
                 }
