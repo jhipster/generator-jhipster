@@ -1447,7 +1447,6 @@ module.exports = JhipsterGenerator.extend({
             this.removefile('profile_prod.gradle');
             this.removefile('sonar.gradle');
             this.removefile('yeoman.gradle');
-            }
         }
     },
 
