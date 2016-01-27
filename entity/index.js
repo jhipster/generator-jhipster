@@ -870,8 +870,8 @@ module.exports = EntityGenerator.extend({
         },
 
         askForDTO: function() {
-            // don't prompt if data are imported from a file
-            if (this.useConfigurationFile == true) {
+            // don't prompt if data is imported from a file
+            if (this.useConfigurationFile) {
                 return;
             }
             var cb = this.async();
@@ -901,7 +901,7 @@ module.exports = EntityGenerator.extend({
 
         askForService: function() {
             // don't prompt if data are imported from a file
-            if (this.useConfigurationFile == true) {
+            if (this.useConfigurationFile) {
                 return;
             }
             var cb = this.async();
@@ -935,7 +935,7 @@ module.exports = EntityGenerator.extend({
 
         askForPagination: function() {
             // don't prompt if data are imported from a file
-            if (this.useConfigurationFile == true) {
+            if (this.useConfigurationFile) {
                 return;
             }
             if (this.databaseType == 'cassandra') {
