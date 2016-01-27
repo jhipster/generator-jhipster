@@ -12,11 +12,7 @@ scriptBase = require('../script-base');
 /* constants used througout */
 const RESERVED_WORDS_JAVA = ["ABSTRACT", "CONTINUE", "FOR", "NEW", "SWITCH", "ASSERT", "DEFAULT", "GOTO", "PACKAGE", "SYNCHRONIZED", "BOOLEAN", "DO", "IF", "PRIVATE", "THIS", "BREAK", "DOUBLE", "IMPLEMENTS", "PROTECTED", "THROW", "BYTE", "ELSE", "IMPORT", "PUBLIC", "THROWS", "CASE", "ENUM", "INSTANCEOF", "RETURN", "TRANSIENT", "CATCH", "EXTENDS", "INT", "SHORT", "TRY", "CHAR", "FINAL", "INTERFACE", "STATIC", "VOID", "CLASS", "FINALLY", "LONG", "STRICTFP", "VOLATILE", "CONST", "FLOAT", "NATIVE", "SUPER", "WHILE"];
 
-// The JHipster reserved keywords are only for the entity names.
-// They are used to generate AngularJS routes, so we cannot create an entity using one of the JHipster default routes.
-const RESERVED_WORDS_JHIPSTER = ["ADMIN", "ACCOUNT", "LOGIN", "LOGOUT", "ACTIVATE", "SETTINGS", "PASSWORD", "SESSIONS", "METRICS", "HEALTH", "CONFIGURATION", "AUDITS", "LOGS", "REGISTER", "RESET", "TEST", "LOAD"];
-
-const RESERVED_WORDS_MYSQL = ["ACCESSIBLE", "ADD", "ALL", "ALTER", "ANALYZE", "AND", "AS", "ASC", "ASENSITIVE", "BEFORE", "BETWEEN", "BIGINT", "BINARY", "BLOB", "BOTH", "BY", "CALL", "CASCADE", "CASE", "CHANGE", "CHAR", "CHARACTER", "CHECK", "COLLATE", "COLUMN", "CONDITION", "CONSTRAINT", "CONTINUE", "CONVERT", "CREATE", "CROSS", "CURRENT_DATE", "CURRENT_TIME", "CURRENT_TIMESTAMP", "CURRENT_USER", "CURSOR", "DATABASE", "DATABASES", "DAY_HOUR", "DAY_MICROSECOND", "DAY_MINUTE", "DAY_SECOND", "DEC", "DECIMAL", "DECLARE", "DEFAULT", "DELAYED", "DELETE", "DESC", "DESCRIBE", "DETERMINISTIC", "DISTINCT", "DISTINCTROW", "DIV", "DOUBLE", "DROP", "DUAL", "EACH", "ELSE", "ELSEIF", "ENCLOSED", "ESCAPED", "EXISTS", "EXIT", "EXPLAIN", "FALSE", "FETCH", "FLOAT", "FLOAT4", "FLOAT8", "FOR", "FORCE", "FOREIGN", "FROM", "FULLTEXT", "GRANT", "GROUP", "HAVING", "HIGH_PRIORITY", "HOUR_MICROSECOND", "HOUR_MINUTE", "HOUR_SECOND", "IF", "IGNORE", "IN", "INDEX", "INFILE", "INNER", "INOUT", "INSENSITIVE", "INSERT", "INT", "INT1", "INT2", "INT3", "INT4", "INT8", "INTEGER", "INTERVAL", "INTO", "IS", "ITERATE", "JOIN", "KEY", "KEYS", "KILL", "LEADING", "LEAVE", "LEFT", "LIKE", "LIMIT", "LINEAR", "LINES", "LOAD", "LOCALTIME", "LOCALTIMESTAMP", "LOCK", "LONG", "LONGBLOB", "LONGTEXT", "LOOP", "LOW_PRIORITY", "MASTER_SSL_VERIFY_SERVER_CERT", "MATCH", "MAXVALUE", "MEDIUMBLOB", "MEDIUMINT", "MEDIUMTEXT", "MIDDLEINT", "MINUTE_MICROSECOND", "MINUTE_SECOND", "MOD", "MODIFIES", "NATURAL", "NOT", "NO_WRITE_TO_BINLOG", "NULL", "NUMERIC", "ON", "OPTIMIZE", "OPTION", "OPTIONALLY", "OR", "ORDER", "OUT", "OUTER", "OUTFILE", "PRECISION", "PRIMARY", "PROCEDURE", "PURGE", "RANGE", "READ", "READS", "READ_WRITE", "REAL", "REFERENCES", "REGEXP", "RELEASE", "RENAME", "REPEAT", "REPLACE", "REQUIRE", "RESIGNAL", "RESTRICT", "RETURN", "REVOKE", "RIGHT", "RLIKE", "SCHEMA", "SCHEMAS", "SECOND_MICROSECOND", "SELECT", "SENSITIVE", "SEPARATOR", "SET", "SHOW", "SIGNAL", "SMALLINT", "SPATIAL", "SPECIFIC", "SQL", "SQLEXCEPTION", "SQLSTATE", "SQLWARNING", "SQL_BIG_RESULT", "SQL_CALC_FOUND_ROWS", "SQL_SMALL_RESULT", "SSL", "STARTING", "STRAIGHT_JOIN", "TABLE", "TERMINATED", "THEN", "TINYBLOB", "TINYINT", "TINYTEXT", "TO", "TRAILING", "TRIGGER", "TRUE", "UNDO", "UNION", "UNIQUE", "UNLOCK", "UNSIGNED", "UPDATE", "USAGE", "USE", "USING", "UTC_DATE", "UTC_TIME", "UTC_TIMESTAMP", "VALUES", "VARBINARY", "VARCHAR", "VARCHARACTER", "VARYING", "WHEN", "WHERE", "WHILE", "WITH", "WRITE", "XOR", "YEAR_MONTH", "ZEROFILL", "GENERAL", "IGNORE_SERVER_IDS", "MASTER_HEARTBEAT_PERIOD", "MAXVALUE", "RESIGNAL", "SIGNAL", "SLOW"];
+var reservedWords_MySQL = ["ACCESSIBLE", "ADD", "ALL", "ALTER", "ANALYZE", "AND", "AS", "ASC", "ASENSITIVE", "BEFORE", "BETWEEN", "BIGINT", "BINARY", "BLOB", "BOTH", "BY", "CALL", "CASCADE", "CASE", "CHANGE", "CHAR", "CHARACTER", "CHECK", "COLLATE", "COLUMN", "CONDITION", "CONSTRAINT", "CONTINUE", "CONVERT", "CREATE", "CROSS", "CURRENT_DATE", "CURRENT_TIME", "CURRENT_TIMESTAMP", "CURRENT_USER", "CURSOR", "DATABASE", "DATABASES", "DAY_HOUR", "DAY_MICROSECOND", "DAY_MINUTE", "DAY_SECOND", "DEC", "DECIMAL", "DECLARE", "DEFAULT", "DELAYED", "DELETE", "DESC", "DESCRIBE", "DETERMINISTIC", "DISTINCT", "DISTINCTROW", "DIV", "DOUBLE", "DROP", "DUAL", "EACH", "ELSE", "ELSEIF", "ENCLOSED", "ESCAPED", "EXISTS", "EXIT", "EXPLAIN", "FALSE", "FETCH", "FLOAT", "FLOAT4", "FLOAT8", "FOR", "FORCE", "FOREIGN", "FROM", "FULLTEXT", "GRANT", "GROUP", "HAVING", "HIGH_PRIORITY", "HOUR_MICROSECOND", "HOUR_MINUTE", "HOUR_SECOND", "IF", "IGNORE", "IN", "INDEX", "INFILE", "INNER", "INOUT", "INSENSITIVE", "INSERT", "INT", "INT1", "INT2", "INT3", "INT4", "INT8", "INTEGER", "INTERVAL", "INTO", "IS", "ITERATE", "JOIN", "KEY", "KEYS", "KILL", "LEADING", "LEAVE", "LEFT", "LIKE", "LIMIT", "LINEAR", "LINES", "LOAD", "LOCALTIME", "LOCALTIMESTAMP", "LOCK", "LONG", "LONGBLOB", "LONGTEXT", "LOOP", "LOW_PRIORITY", "MASTER_SSL_VERIFY_SERVER_CERT", "MATCH", "MAXVALUE", "MEDIUMBLOB", "MEDIUMINT", "MEDIUMTEXT", "MIDDLEINT", "MINUTE_MICROSECOND", "MINUTE_SECOND", "MOD", "MODIFIES", "NATURAL", "NOT", "NO_WRITE_TO_BINLOG", "NULL", "NUMERIC", "ON", "OPTIMIZE", "OPTION", "OPTIONALLY", "OR", "ORDER", "OUT", "OUTER", "OUTFILE", "PRECISION", "PRIMARY", "PROCEDURE", "PURGE", "RANGE", "READ", "READS", "READ_WRITE", "REAL", "REFERENCES", "REGEXP", "RELEASE", "RENAME", "REPEAT", "REPLACE", "REQUIRE", "RESIGNAL", "RESTRICT", "RETURN", "REVOKE", "RIGHT", "RLIKE", "SCHEMA", "SCHEMAS", "SECOND_MICROSECOND", "SELECT", "SENSITIVE", "SEPARATOR", "SET", "SHOW", "SIGNAL", "SMALLINT", "SPATIAL", "SPECIFIC", "SQL", "SQLEXCEPTION", "SQLSTATE", "SQLWARNING", "SQL_BIG_RESULT", "SQL_CALC_FOUND_ROWS", "SQL_SMALL_RESULT", "SSL", "STARTING", "STRAIGHT_JOIN", "TABLE", "TERMINATED", "THEN", "TINYBLOB", "TINYINT", "TINYTEXT", "TO", "TRAILING", "TRIGGER", "TRUE", "UNDO", "UNION", "UNIQUE", "UNLOCK", "UNSIGNED", "UPDATE", "USAGE", "USE", "USING", "UTC_DATE", "UTC_TIME", "UTC_TIMESTAMP", "VALUES", "VARBINARY", "VARCHAR", "VARCHARACTER", "VARYING", "WHEN", "WHERE", "WHILE", "WITH", "WRITE", "XOR", "YEAR_MONTH", "ZEROFILL", "GENERAL", "IGNORE_SERVER_IDS", "MASTER_HEARTBEAT_PERIOD", "MAXVALUE", "RESIGNAL", "SIGNAL", "SLOW"];
 
 const RESERVED_WORDS_POSGRES = ["ALL", "ANALYSE", "ANALYZE", "AND", "ANY", "ARRAY", "AS", "ASC", "ASYMMETRIC", "AUTHORIZATION", "BINARY", "BOTH", "CASE", "CAST", "CHECK", "COLLATE", "COLLATION", "COLUMN", "CONCURRENTLY", "CONSTRAINT", "CREATE", "CROSS", "CURRENT_CATALOG", "CURRENT_DATE", "CURRENT_ROLE", "CURRENT_SCHEMA", "CURRENT_TIME", "CURRENT_TIMESTAMP", "CURRENT_USER", "DEFAULT", "DEFERRABLE", "DESC", "DISTINCT", "DO", "ELSE", "END", "EXCEPT", "FALSE", "FETCH", "FOR", "FOREIGN", "FROM", "FULL", "GRANT", "GROUP", "HAVING", "ILIKE", "IN", "INITIALLY", "INNER", "INTERSECT", "INTO", "IS", "ISNULL", "JOIN", "LATERAL", "LEADING", "LEFT", "LIKE", "LIMIT", "LOCALTIME", "LOCALTIMESTAMP", "NATURAL", "NOT", "NOTNULL", "NULL", "OFFSET", "ON", "ONLY", "OR", "ORDER", "OUTER", "OVERLAPS", "PLACING", "PRIMARY", "REFERENCES", "RETURNING", "RIGHT", "SELECT", "SESSION_USER", "SIMILAR", "SOME", "SYMMETRIC", "TABLE", "THEN", "TO", "TRAILING", "TRUE", "UNION", "UNIQUE", "USER", "USING", "VARIADIC", "VERBOSE", "WHEN", "WHERE", "WINDOW", "WITH"];
 
@@ -104,9 +100,7 @@ module.exports = EntityGenerator.extend({
                 this.env.error(chalk.red('The entity name cannot end with \'Detail\''));
             } else if (RESERVED_WORDS_JAVA.indexOf(this.name.toUpperCase()) != -1) {
                 this.env.error(chalk.red('The entity name cannot contain a Java reserved keyword'));
-            } else if (RESERVED_WORDS_JHIPSTER.indexOf(this.name.toUpperCase()) != -1) {
-                this.env.error(chalk.red('The entity name cannot contain a JHipster reserved keyword'));
-            } else if (prodDatabaseType == 'mysql' && RESERVED_WORDS_MYSQL.indexOf(this.name.toUpperCase()) != -1) {
+            } else if (prodDatabaseType == 'mysql' && reservedWords_MySQL.indexOf(this.name.toUpperCase()) != -1) {
                 this.env.error(chalk.red('The entity name cannot contain a MySQL reserved keyword'));
             } else if (prodDatabaseType == 'postgresql' && RESERVED_WORDS_POSGRES.indexOf(this.name.toUpperCase()) != -1) {
                 this.env.error(chalk.red('The entity name cannot contain a PostgreSQL reserved keyword'));
@@ -1590,34 +1584,34 @@ module.exports = EntityGenerator.extend({
                 return;
             }
             this.copyHtml('src/main/webapp/app/_entities.html',
-            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '/' + this.entityInstance + 's.html', this, {}, true);
+            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.html', this, {}, true);
             this.copyHtml('src/main/webapp/app/_entity-detail.html',
-            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '/' + this.entityInstance + '-detail.html', this, {}, true);
+            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.html', this, {}, true);
             this.copyHtml('src/main/webapp/app/_entity-dialog.html',
-            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '/' + this.entityInstance + '-dialog.html', this, {}, true);
+            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-dialog.html', this, {}, true);
             this.copyHtml('src/main/webapp/app/_entity-delete-dialog.html',
-            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '/' + this.entityInstance + '-delete-dialog.html', this, {}, true);
+            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-delete-dialog.html', this, {}, true);
 
-            this.addEntityToMenu(this.entityInstance, this.enableTranslation);
+            this.addEntityToMenu(this.entityInstance + '-management', this.enableTranslation);
 
             this.template('src/main/webapp/app/_entity.js',
-            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '/' + this.entityInstance + '.js', this, {});
-            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '/' + this.entityInstance + '.js');
+            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.js', this, {});
+            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.js');
             this.template('src/main/webapp/app/_entity-controller.js',
-            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '/' + this.entityInstance + '.controller' + '.js', this, {});
-            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '/' + this.entityInstance + '.controller' + '.js');
+            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.controller' + '.js', this, {});
+            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.controller' + '.js');
             this.template('src/main/webapp/app/_entity-dialog-controller.js',
-            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '/' + this.entityInstance + '-dialog.controller' + '.js', this, {});
-            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '/' + this.entityInstance + '-dialog.controller' + '.js');
+            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-dialog.controller' + '.js', this, {});
+            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-dialog.controller' + '.js');
             this.template('src/main/webapp/app/_entity-delete-dialog-controller.js',
-            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '/' + this.entityInstance + '-delete-dialog.controller' + '.js', this, {});
-            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '/' + this.entityInstance + '-delete-dialog.controller' + '.js');
+            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-delete-dialog.controller' + '.js', this, {});
+            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-delete-dialog.controller' + '.js');
 
             this.template('src/main/webapp/app/_entity-detail-controller.js',
-            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '/' + this.entityInstance + '-detail.controller' + '.js', this, {});
+            'src/main/webapp/scripts/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller' + '.js', this, {});
             this.template('src/test/javascript/spec/app/_entity-detail-controller.spec.js',
-            'src/test/javascript/spec/app/entities/' + this.entityInstance + '/' + this.entityInstance + '-detail.controller.spec.js', this, {});
-            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '/' + this.entityInstance + '-detail.controller' + '.js');
+            'src/test/javascript/spec/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller.spec.js', this, {});
+            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller' + '.js');
 
             this.template('src/main/webapp/components/_entity-service.js',
             'src/main/webapp/scripts/components/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js', this, {});

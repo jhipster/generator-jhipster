@@ -1,11 +1,11 @@
 <div>
-<%_ var keyPrefix = angularAppName + '.'+ entityInstance + '.'; _%>
+<%_ var keyPrefix = angularAppName + '.'+ entityInstance + '-management.'; _%>
     <h2 translate="<%= keyPrefix %>home.title"><%= entityClass %>s</h2>
     <jh-alert></jh-alert>
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-4 no-padding-left">
-                <button class="btn btn-primary" ui-sref="<%= entityInstance %>.new" >
+                <button class="btn btn-primary" ui-sref="<%= entityInstance %>-management.new" >
                     <span class="glyphicon glyphicon-plus"></span>
                     <span 
                         <%_ if (searchEngine == 'elasticsearch') { _%>class="hidden-xs" <%_ } _%>
@@ -51,7 +51,7 @@
             </thead>
             <tbody<% if (pagination == 'infinite-scroll') { %> infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page"<% } %>>
                 <tr ng-repeat="<%=entityInstance %> in <%=entityInstance %>s track by <%=entityInstance %>.id">
-                    <td><a ui-sref="<%= entityInstance %>.detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td>
+                    <td><a ui-sref="<%= entityInstance %>-management-detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td>
                     <%_ for (fieldId in fields) { _%>
                         <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'image') { _%>
                     <td>
@@ -95,13 +95,13 @@
                             <%_ } else { _%>
                                 <%_ if (relationshipType == 'many-to-many') { _%>
                         <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldName %>s">
-                            <a class="form-control-static" ui-sref="<%= otherEntityName %>.detail({id: {{<%= relationshipFieldName %>.id}}})">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
+                            <a class="form-control-static" ui-sref="<%= otherEntityName %>-management-detail({id: {{<%= relationshipFieldName %>.id}}})">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
                         <span>
                                 <%_ } else { _%>
                                     <%_ if (dto == 'no') { _%>
-                        <a ui-sref="<%= otherEntityName %>.detail({id:<%= entityInstance + "." + relationshipFieldName + ".id" %>})">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</a>
+                        <a ui-sref="<%= otherEntityName %>-management-detail({id:<%= entityInstance + "." + relationshipFieldName + ".id" %>})">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</a>
                                     <%_ } else { _%>
-                        <a ui-sref="<%= otherEntityName %>.detail({id:<%= entityInstance + "." + relationshipFieldName + "Id" %>})">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
+                        <a ui-sref="<%= otherEntityName %>-management-detail({id:<%= entityInstance + "." + relationshipFieldName + "Id" %>})">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
                                     <%_ } _%>
                                 <%_ } _%>
                             <%_ } _%>
@@ -111,19 +111,19 @@
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
                             <button type="submit"
-                                    ui-sref="<%= entityInstance %>.detail({id:<%= entityInstance %>.id})"
+                                    ui-sref="<%= entityInstance %>-management-detail({id:<%= entityInstance %>.id})"
                                     class="btn btn-info btn-sm"> 
                                 <span class="glyphicon glyphicon-eye-open"></span>
                                 <span class="hidden-xs hidden-sm" translate="entity.action.view"></span>
                             </button>
                             <button type="submit"
-                                    ui-sref="<%= entityInstance %>.edit({id:<%=entityInstance %>.id})"
+                                    ui-sref="<%= entityInstance %>-management.edit({id:<%=entityInstance %>.id})"
                                     class="btn btn-primary btn-sm">
                                 <span class="glyphicon glyphicon-pencil"></span>
                                 <span class="hidden-xs hidden-sm" translate="entity.action.edit"></span>
                             </button>
                             <button type="submit"
-                                    ui-sref="<%= entityInstance %>.delete({id:<%=entityInstance %>.id})"
+                                    ui-sref="<%= entityInstance %>-management.delete({id:<%=entityInstance %>.id})"
                                     class="btn btn-danger btn-sm">                                    
                                 <span class="glyphicon glyphicon-remove-circle"></span>
                                 <span class="hidden-xs hidden-sm" translate="entity.action.delete"></span>
