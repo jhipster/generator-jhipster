@@ -699,7 +699,6 @@ module.exports = JhipsterGenerator.extend({
                     this.template('gradle/_sonar.gradle', 'gradle/sonar.gradle', this, {});
                     this.template('gradle/_profile_dev.gradle', 'gradle/profile_dev.gradle', this, {'interpolate': INTERPOLATE_REGEX});
                     this.template('gradle/_profile_prod.gradle', 'gradle/profile_prod.gradle', this, {'interpolate': INTERPOLATE_REGEX});
-                    this.template('gradle/_profile_fast.gradle', 'gradle/profile_fast.gradle', this, {'interpolate': INTERPOLATE_REGEX});
                     this.template('gradle/_mapstruct.gradle', 'gradle/mapstruct.gradle', this, {'interpolate': INTERPOLATE_REGEX});
                     if (this.testFrameworks.indexOf('gatling') != -1) {
                         this.template('gradle/_gatling.gradle', 'gradle/gatling.gradle', this, {});
@@ -1440,19 +1439,14 @@ module.exports = JhipsterGenerator.extend({
             this.removefile('Cassandra-Prod.Dockerfile');
             this.removefolder('docker/');
 
-            if (this.buildTool === 'gradle') {
-                if (this.testFrameworks.indexOf('gatling') != -1) {
-                    this.removefile('gatling.gradle');
-                }
-                if (this.databaseType == 'sql') {
-                    this.removefile('liquibase.gradle');
-                }
-                this.removefile('mapstruct.gradle');
-                this.removefile('profile_dev.gradle');
-                this.removefile('profile_fast.gradle');
-                this.removefile('profile_prod.gradle');
-                this.removefile('sonar.gradle');
-                this.removefile('yeoman.gradle');
+            this.removefile('gatling.gradle');
+            this.removefile('liquibase.gradle');
+            this.removefile('mapstruct.gradle');
+            this.removefile('profile_dev.gradle');
+            this.removefile('profile_fast.gradle');
+            this.removefile('profile_prod.gradle');
+            this.removefile('sonar.gradle');
+            this.removefile('yeoman.gradle');
             }
         }
     },
