@@ -957,6 +957,16 @@ module.exports = EntityGenerator.extend({
             this._askForField(cb);
         },
 
+        askForFieldsToRemove: function() {
+            // prompt only if data is imported from a file
+            if (!this.useConfigurationFile || this.updateEntity != 'remove') {
+                return;
+            }
+            var cb = this.async();
+
+            this._askForFieldsToRemove(cb);
+        },
+
         askForRelationships: function() {
             // don't prompt if data is imported from a file
             if (this.useConfigurationFile && this.updateEntity != 'add') {
