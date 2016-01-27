@@ -34,6 +34,7 @@ var enums = [];
 var existingEnum = false;
 
 var fieldNamesUnderscored = ['id'];
+var fieldNameChoices = [], relNameChoices = []; // this variable will hold field and relationship names for question options during update
 var databaseType;
 var prodDatabaseType;
 const INTERPOLATE_REGEX = /<%=([\s\S]+?)%>/g; // so that thymeleaf tags in templates do not get mistreated as _ templates
@@ -122,7 +123,8 @@ module.exports = EntityGenerator.extend({
 
         setupVars: function() {
             // Specific Entity sub-generator variables
-            if (this.useConfigurationFile == false) {
+            if (!this.useConfigurationFile) {
+                //no file present, new entity creation
                 this.log(chalk.red('\nThe entity ' + this.name + ' is being created.\n'));
                 this.fieldId = 0;
                 this.fields = [];
@@ -133,6 +135,7 @@ module.exports = EntityGenerator.extend({
                 this.dto = 'no';
                 this.service = 'no';
             } else {
+                //existing entity reading values from file
                 this.log(chalk.red('\nThe entity ' + this.name + ' is being updated.\n'));
                 this.fieldId = this.fileData.fields? this.fileData.fields.length : 0;
                 this.relationshipId = this.fileData.relationships? this.fileData.relationships.length : 0;
@@ -143,12 +146,21 @@ module.exports = EntityGenerator.extend({
                 this.service = this.fileData.service;
                 this.pagination = this.fileData.pagination;
                 this.javadoc = this.fileData.javadoc;
-
+                this.fields && this.fields.forEach(function (field) {
+                    fieldNamesUnderscored.push(_s.underscored(field.fieldName));
+                    fieldNameChoices.push({name: field.fieldName, value: field.fieldName});
+                }, this);
+                this.relationships && this.relationships.forEach(function (rel) {
+                    relNameChoices.push({name: rel.relationshipName + ':' + rel.relationshipType, value: rel.relationshipName + ':' + rel.relationshipType});
+                }, this);
             }
         }
     },
 
     /* private Helper methods */
+    /**
+     * ask question for a field creation
+     */
     _askForField : function(cb){
         this.fieldId++;
         this.log(chalk.green('\nGenerating field #' + this.fieldId + '\n'));
@@ -683,7 +695,53 @@ module.exports = EntityGenerator.extend({
             }
         }.bind(this));
     },
+    /**
+     * ask question for field deletion
+     */
+    _askForFieldsToRemove : function(cb){
+        var prompts = [
+            {
+                type: 'checkbox',
+                name: 'fieldsToRemove',
+                message: 'Please choose the fields you want to remove',
+                choices: fieldNameChoices,
+                default: 'none'
+            },
+            {
+                when: function(response) {
+                    return response.fieldsToRemove != 'none';
+                },
+                type: 'confirm',
+                name: 'confirmRemove',
+                message: 'Are you sure to remove these fields?',
+                default: true
+            }
+        ];
+        this.prompt(prompts, function(props) {
+            if (props.confirmRemove) {
+                this.log(chalk.red('\nRemoving fields: ' + props.fieldsToRemove + '\n'));
+                var i;
+                for (i = this.fields.length - 1; i >= 0; i -= 1) {
+                    var field = this.fields[i];
+                    if(props.fieldsToRemove.filter(function (val) {
+                        return val == field.fieldName;
+                    }).length > 0){
+                        this.fields.splice(i, 1);
+                    }
+                }
+                //reset field IDs
+                for (i = 0; i < this.fields.length; i++) {
+                    this.fields[i].fieldId = i;
+                }
+                this.fieldId = this.fields.length;
+            }
+            cb();
 
+        }.bind(this));
+    },
+    /**
+     * ask question for a relationship creation
+     */
     _askForRelationship: function(cb){
         var packageFolder = this.packageFolder;
         var name = this.name;
@@ -850,11 +908,99 @@ module.exports = EntityGenerator.extend({
             }
         }.bind(this));
     },
+    /**
+     * ask question for relationship deletion
+     */
+    _askForRelationsToRemove : function(cb){
+        var prompts = [
+            {
+                type: 'checkbox',
+                name: 'relsToRemove',
+                message: 'Please choose the relationships you want to remove',
+                choices: relNameChoices,
+                default: 'none'
+            },
+            {
+                when: function(response) {
+                    return response.relsToRemove != 'none';
+                },
+                type: 'confirm',
+                name: 'confirmRemove',
+                message: 'Are you sure to remove these relationships?',
+                default: true
+            }
+        ];
+        this.prompt(prompts, function(props) {
+            if (props.confirmRemove) {
+                this.log(chalk.red('\nRemoving relationships: ' + props.relsToRemove + '\n'));
+                var i;
+                for (i = this.relationships.length - 1; i >= 0; i -= 1) {
+                    var rel = this.relationships[i];
+                    if(props.relsToRemove.filter(function (val) {
+                        return val == rel.relationshipName + ':' + rel.relationshipType;
+                    }).length > 0){
+                        this.relationships.splice(i, 1);
+                    }
+                }
+                //reset relationship IDs
+                for (i = 0; i < this.relationships.length; i++) {
+                    this.relationships[i].relationshipId = i;
+                }
+                this.relationshipId = this.relationships.length;
+            }
+            cb();
+
+        }.bind(this));
+    },
 
     /* end of Helper methods */
 
     prompting: {
         /* pre entity hook needs to be written here */
+        /* ask question to user if s/he wants to update entity */
+        askForUpdate: function () {
+            // ask only if running an existing entity without arg option --force
+            var isForce = this.options['force'];
+            this.updateEntity == 'rewrite'; // default if skipping questions by --force
+            if (isForce || !this.useConfigurationFile) {
+                return;
+            }
+            var cb = this.async();
+            var prompts = [
+                {
+                    type: 'list',
+                    name: 'updateEntity',
+                    message: 'Do you want to update the entity? This will replace the existing files for this entity, all your custom code will be overwritten',
+                    choices: [
+                        {
+                            value: 'rewrite',
+                            name: 'Yes, re generate the entity'
+                        },
+                        {
+                            value: 'add',
+                            name: '[BETA] Yes, add more fields and relationships'
+                        },
+                        {
+                            value: 'remove',
+                            name: '[BETA] Yes, remove fields and relationships'
+                        },
+                        {
+                            value: 'none',
+                            name: 'No, exit'
+                        },
+                    ],
+                    default: 0
+                }
+            ];
+            this.prompt(prompts, function(props) {
+                this.updateEntity = props.updateEntity;
+                if(this.updateEntity == 'none'){
+                    this.env.error(chalk.green('Aborting entity update, no changes were made.'));
+                }
+                cb();
+
+            }.bind(this));
+        },
 
         askForFields: function() {
             // don't prompt if data is imported from a file
@@ -864,6 +1010,16 @@ module.exports = EntityGenerator.extend({
             var cb = this.async();
 
             this._askForField(cb);
+        },
+
+        askForFieldsToRemove: function() {
+            // prompt only if data is imported from a file
+            if (!this.useConfigurationFile || this.updateEntity != 'remove') {
+                return;
+            }
+            var cb = this.async();
+
+            this._askForFieldsToRemove(cb);
         },
 
         askForRelationships: function() {
@@ -878,6 +1034,20 @@ module.exports = EntityGenerator.extend({
             var cb = this.async();
 
             this._askForRelationship(cb);
+        },
+
+        askForRelationsToRemove: function() {
+            // prompt only if data is imported from a file
+            if (!this.useConfigurationFile || this.updateEntity != 'remove') {
+                return;
+            }
+            if (this.databaseType == 'mongodb' || this.databaseType == 'cassandra') {
+                return;
+            }
+
+            var cb = this.async();
+
+            this._askForRelationsToRemove(cb);
         },
 
         askForDTO: function() {
@@ -1142,8 +1312,8 @@ module.exports = EntityGenerator.extend({
         },
 
         writeEntityJson: function () {
-            if (this.useConfigurationFile) {
-                return;
+            if (this.useConfigurationFile && this.updateEntity == 'rewrite') {
+                return; //do not update if regenerating entity
             }
              // store informations in a file for further use.
             if (!this.useConfigurationFile && (this.databaseType == "sql" || this.databaseType == "cassandra")) {
@@ -1325,7 +1495,7 @@ module.exports = EntityGenerator.extend({
         },
 
         insight: function() {
-
+            // track insights
             var insight = this.insight();
 
             insight.track('generator', 'entity');
