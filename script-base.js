@@ -11,7 +11,7 @@ var path = require('path'),
     shelljs = require('shelljs'),
     ejs = require('ejs');
 
-var MODULES_HOOK_FILE = '.jhipster/modules/jhi-hooks.json';
+const MODULES_HOOK_FILE = '.jhipster/modules/jhi-hooks.json';
 
 module.exports = Generator;
 
