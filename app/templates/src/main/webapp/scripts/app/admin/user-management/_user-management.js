@@ -103,7 +103,7 @@ angular.module('<%=angularAppName%>')
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
                         templateUrl: 'scripts/app/admin/user-management/user-management-delete-dialog.html',
-                        controller: 'user-managementDeleteController',
+                        controller: 'UserManagementDeleteController',
                         size: 'md',
                         resolve: {
                             entity: ['User', function(User) {
