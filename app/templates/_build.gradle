@@ -82,8 +82,6 @@ apply from: 'gradle/mapstruct.gradle'
 
 if (project.hasProperty('prod')) {
     apply from: 'gradle/profile_prod.gradle'
-} else if (project.hasProperty('fast')) {
-    apply from: 'gradle/profile_fast.gradle'
 } else {
   apply from: 'gradle/profile_dev.gradle'
 }

@@ -139,17 +139,8 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
         liquibase.setDefaultSchema(liquibaseProperties.getDefaultSchema());
         liquibase.setDropFirst(liquibaseProperties.isDropFirst());
         liquibase.setShouldRun(liquibaseProperties.isEnabled());
-        if (env.acceptsProfiles(Constants.SPRING_PROFILE_FAST)) {
-            if ("org.h2.jdbcx.JdbcDataSource".equals(dataSourceProperties.getDriverClassName())) {
-                liquibase.setShouldRun(true);
-                log.warn("Using '{}' profile with H2 database in memory is not optimal, you should consider switching to" +
-                    " MySQL or Postgresql to avoid rebuilding your database upon each start.", Constants.SPRING_PROFILE_FAST);
-            } else {
-                liquibase.setShouldRun(false);
-            }
-        } else {
-            log.debug("Configuring Liquibase");
-        }
+        log.debug("Configuring Liquibase");
+
         return liquibase;
     }
 
@@ -192,7 +183,6 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
     }
 
     @Bean
-    @Profile("!" + Constants.SPRING_PROFILE_FAST)
     public Mongeez mongeez() {
         log.debug("Configuring Mongeez");
         Mongeez mongeez = new Mongeez();
