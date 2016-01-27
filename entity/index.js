@@ -986,6 +986,9 @@ module.exports = EntityGenerator.extend({
                 }
                 cb();
 
+            }.bind(this));
+        },
+
         askForFields: function() {
             // don't prompt if data is imported from a file
             if (this.useConfigurationFile && this.updateEntity != 'add') {
@@ -1296,7 +1299,7 @@ module.exports = EntityGenerator.extend({
         },
 
         writeEntityJson: function () {
-            if (this.useConfigurationFile) {
+            if (this.useConfigurationFile && this.updateEntity == 'rewrite') {
                 return;
             }
              // store informations in a file for further use.
