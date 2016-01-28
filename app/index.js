@@ -49,7 +49,7 @@ module.exports = JhipsterGenerator.extend({
         });
         // This method adds support for a `--skip-entities` flag
         this.option('skip-entities', {
-            desc: 'Skips the existing entities generation',
+            desc: 'Skips the existing entities regeneration',
             type: Boolean,
             defaults: false
         });
@@ -1409,15 +1409,15 @@ module.exports = JhipsterGenerator.extend({
             cleanup.cleanupOldFiles(this);
         },
 
-        writeEntitiesFiles: function () {
+        regenerateEntities: function () {
             if (this.skipEntities) {
               return;
             }
             var entities = this.config.get('entities');
             if (entities !== undefined) {
-                for (var i=0; i<entities.length; i++) {
-                    this.composeWith('jhipster:entity', {args:[entities[i]]});
-                }
+                entities.forEach( function(entity) {
+                    this.composeWith('jhipster:entity', {args:[entity]});
+                }, this);
             }
         }
     },

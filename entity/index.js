@@ -1620,7 +1620,7 @@ module.exports = EntityGenerator.extend({
 
         },
 
-        writeEntitiesFiles: function() {
+        updateEntityToConfig: function() {
             var entities = new Set(this.config.get('entities'));
             entities.add(_s.capitalize(this.name));
             this.config.set('entities', Array.from(entities));
