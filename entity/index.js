@@ -1446,9 +1446,9 @@ module.exports = EntityGenerator.extend({
                 this.pkType = 'Long';
             }
             this.entityClass = _s.capitalize(this.name);
+            this.entityClassPlural = pluralize(this.entityClass);
             this.entityInstance = _s.decapitalize(this.name);
             this.entityInstancePlural = pluralize(this.entityInstance);
-            console.log(this.entityInstancePlural)
             this.entityTableName = _s.underscored(this.name).toLowerCase();
 
             this.differentTypes = [this.entityClass];
