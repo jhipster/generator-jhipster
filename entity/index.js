@@ -7,6 +7,7 @@ chalk = require('chalk'),
 _ = require('lodash'),
 _s = require('underscore.string'),
 shelljs = require('shelljs'),
+pluralize = require('pluralize'),
 scriptBase = require('../script-base');
 
 /* constants used througout */
@@ -1446,7 +1447,8 @@ module.exports = EntityGenerator.extend({
             }
             this.entityClass = _s.capitalize(this.name);
             this.entityInstance = _s.decapitalize(this.name);
-            this.entityInstancePlural = this.entityInstance + 's';
+            this.entityInstancePlural = pluralize(this.entityInstance);
+            console.log(this.entityInstancePlural)
             this.entityTableName = _s.underscored(this.name).toLowerCase();
 
             this.differentTypes = [this.entityClass];

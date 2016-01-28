@@ -258,7 +258,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
 <%  } } } %>
     @Test<% if (databaseType == 'sql') { %>
     @Transactional<% } %>
-    public void getAll<%= entityClass %>s() throws Exception {
+    public void getAll<%= entityClassPlural %>() throws Exception {
         // Initialize the database
         <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 

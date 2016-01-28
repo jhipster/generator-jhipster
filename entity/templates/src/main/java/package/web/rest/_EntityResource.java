@@ -123,6 +123,6 @@ public class <%= entityClass %>Resource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<<%= instanceType %>> search<%= entityClass %>s(@PathVariable String query) {<%- include('../../common/search_template', {viaService: viaService}); -%>
+    public List<<%= instanceType %>> search<%= entityClassPlural %>(@PathVariable String query) {<%- include('../../common/search_template', {viaService: viaService}); -%>
     }<% } %>
 }

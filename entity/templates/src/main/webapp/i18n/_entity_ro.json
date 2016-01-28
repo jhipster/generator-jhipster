@@ -2,7 +2,7 @@
     "<%= angularAppName %>": {
         "<%= entityInstance %>-management" : {
             "home": {
-                "title": "<%= entityClass %>s",
+                "title": "<%= entityClassPlural %>",
                 "createLabel": "Crează o nouă <%= entityClass %>",
                 "createOrEditLabel": "Crează sau editează o <%= entityClass %>",
                 "search": "Search for <%= entityClass %>"

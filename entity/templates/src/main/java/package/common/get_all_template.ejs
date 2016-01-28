@@ -5,16 +5,16 @@
     var entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO';
     if (dto == 'mapstruct') { %>
     @Transactional(readOnly = true)<% } if (pagination == 'no') { %>
-    public List<<%= instanceType %>> getAll<%= entityClass %>s(<% if (fieldsContainNoOwnerOneToOne) { %>@RequestParam(required = false) String filter<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
-        log.debug("REST request to get all <%= entityClass %>s");<% if (viaService) { %>
+    public List<<%= instanceType %>> getAll<%= entityClassPlural %>(<% if (fieldsContainNoOwnerOneToOne) { %>@RequestParam(required = false) String filter<% } %>) {<%- include('get_all_stream_template', {viaService: viaService}); -%>
+        log.debug("REST request to get all <%= entityClassPlural %>");<% if (viaService) { %>
         return <%= entityInstance %>Service.findAll();<% } else { %>
         return <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (dto == 'mapstruct') { %>.stream()
             .map(<%= entityToDtoReference %>)
             .collect(Collectors.toCollection(LinkedList::new))<% } %>;<% } %>
             <% } if (pagination != 'no') { %>
-    public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClass %>s(Pageable pageable<% if (fieldsContainNoOwnerOneToOne) { %>, @RequestParam(required = false) String filter<% } %>)
+    public ResponseEntity<List<<%= instanceType %>>> getAll<%= entityClassPlural %>(Pageable pageable<% if (fieldsContainNoOwnerOneToOne) { %>, @RequestParam(required = false) String filter<% } %>)
         throws URISyntaxException {<%- include('get_all_stream_template', {viaService: viaService}); -%>
-        log.debug("REST request to get a page of <%= entityClass %>s");<% if (viaService) { %>
+        log.debug("REST request to get a page of <%= entityClassPlural %>");<% if (viaService) { %>
         Page<<%= entityClass %>> page = <%= entityInstance %>Service.findAll(pageable); <% } else { %>
         Page<<%= entityClass %>> page = <%= entityInstance %>Repository.findAll(pageable); <% } %>
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityInstancePlural %>");
