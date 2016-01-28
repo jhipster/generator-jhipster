@@ -25,7 +25,7 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>ManagementDi
                 } else {
                     query = '$scope.' + relationships[idx].otherEntityNameCapitalized.toLowerCase() + 's = ' + relationships[idx].otherEntityNameCapitalized + '.query();';
                 }
-                if (!util.contains(queries, query)) {
+                if (!contains(queries, query)) {
                     queries.push(query);
                 }
             } %><% for (idx in queries) { %>

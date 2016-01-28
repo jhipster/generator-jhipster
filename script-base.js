@@ -12,6 +12,7 @@ var path = require('path'),
     ejs = require('ejs');
 
 const MODULES_HOOK_FILE = '.jhipster/modules/jhi-hooks.json';
+const WORD_WRAP_WIDTH = 80;
 
 module.exports = Generator;
 
@@ -1134,4 +1135,36 @@ Generator.prototype.removefolder = function(folder) {
         this.log('Removing the folder - ' + folder)
         shelljs.rm("-rf", folder);
     }
+}
+
+Generator.prototype.contains = _.contains;
+
+Generator.prototype.formatAsClassJavadoc = function(text) {
+    return '/**' + wordwrap(text, WORD_WRAP_WIDTH - 4, '\n * ', false) + '\n */';
+};
+Generator.prototype.formatAsFieldJavadoc = function(text) {
+    return '    /**' + wordwrap(text, WORD_WRAP_WIDTH - 8, '\n     * ', false) + '\n     */';
+};
+Generator.prototype.formatAsApiModel = function(text) {
+    return wordwrap(text.replace(/\\/g, '\\\\').replace(/\"/g, '\\\"'), WORD_WRAP_WIDTH - 9, '"\n    + "', true)
+};
+Generator.prototype.formatAsApiModelProperty = function(text) {
+    return wordwrap(text.replace(/\\/g, '\\\\').replace(/\"/g, '\\\"'), WORD_WRAP_WIDTH - 13, '"\n        + "', true)
+};
+
+var wordwrap = function(text, width, seperator, keepLF) {
+    var wrappedText = '';
+    var rows = text.split('\n');
+    for (var i = 0; i < rows.length; i++) {
+        var row = rows[i];
+        if (keepLF == true && i != 0) {
+            wrappedText = wrappedText + '\\n';
+        }
+        wrappedText = wrappedText + seperator + _s.wrap(row, {
+            width: width,
+            seperator: seperator,
+            preserveSpaces: keepLF
+        });
+    }
+    return wrappedText;
 }
