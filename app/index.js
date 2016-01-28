@@ -1416,7 +1416,7 @@ module.exports = JhipsterGenerator.extend({
             var entities = this.config.get('entities');
             if (entities !== undefined) {
                 entities.forEach( function(entity) {
-                    this.composeWith('jhipster:entity', {args:[entity]});
+                    this.composeWith('jhipster:entity', {options: {regenerate: true}, args:[entity]});
                 }, this);
             }
         }
