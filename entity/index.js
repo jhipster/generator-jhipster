@@ -1159,10 +1159,6 @@ module.exports = EntityGenerator.extend({
     },
 
     configuring : {
-        setup: function() {
-            // Expose utility methods in templates
-
-        },
 
         validateFile: function() {
 
