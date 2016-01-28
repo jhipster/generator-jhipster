@@ -39,7 +39,8 @@
     "underscore.string": "3.2.2",
     "wordwrap": "1.0.0",
     "yeoman-generator": "0.22.2",
-    "yo": "1.6.0"
+    "yo": "1.6.0",
+    "semver": "5.1.0"
   },
   "devDependencies": {
     "fs-extra": "0.26.4",

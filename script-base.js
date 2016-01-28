@@ -9,7 +9,8 @@ var path = require('path'),
     Insight = require('insight'),
     fs = require('fs'),
     shelljs = require('shelljs'),
-    ejs = require('ejs');
+    ejs = require('ejs'),
+    semver = require('semver');
 
 const MODULES_HOOK_FILE = '.jhipster/modules/jhi-hooks.json';
 
@@ -1134,4 +1135,12 @@ Generator.prototype.removefolder = function(folder) {
         this.log('Removing the folder - ' + folder)
         shelljs.rm("-rf", folder);
     }
+}
+
+Generator.prototype.isJhipsterVersionLessThan = function(version) {
+    var jhipsterVersion = this.config.get('jhipsterVersion');
+    if (!jhipsterVersion) {
+        return true;
+    }
+    return semver.lt(jhipsterVersion, version);
 }

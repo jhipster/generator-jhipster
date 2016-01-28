@@ -1,16 +1,17 @@
 'use strict';
 var util = require('util'),
-path = require('path'),
-generators = require('yeoman-generator'),
-chalk = require('chalk'),
-_ = require('underscore.string'),
-shelljs = require('shelljs'),
-scriptBase = require('../script-base'),
-packagejs = require(__dirname + '/../package.json'),
-crypto = require("crypto"),
-mkdirp = require('mkdirp'),
-html = require("html-wiring"),
-ejs = require('ejs');
+    path = require('path'),
+    generators = require('yeoman-generator'),
+    chalk = require('chalk'),
+    _ = require('underscore.string'),
+    shelljs = require('shelljs'),
+    scriptBase = require('../script-base'),
+    cleanup = require('../app/cleanup'),
+    packagejs = require(__dirname + '/../package.json'),
+    crypto = require("crypto"),
+    mkdirp = require('mkdirp'),
+    html = require("html-wiring"),
+    ejs = require('ejs');
 
 var JhipsterGenerator = generators.Base.extend({});
 
@@ -107,6 +108,7 @@ module.exports = JhipsterGenerator.extend({
 
         setupVars : function () {
             this.packagejs = packagejs;
+            this.jhipsterVersion = this.config.get('jhipsterVersion');
             this.baseName = this.config.get('baseName');
             this.rememberMeKey = this.config.get('rememberMeKey');
             this.testFrameworks = this.config.get('testFrameworks');
@@ -633,6 +635,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         saveConfig: function () {
+            this.config.set('jhipsterVersion', packagejs.version);
             this.config.set('baseName', this.baseName);
             this.config.set('packageName', this.packageName);
             this.config.set('packageFolder', this.packageFolder);
@@ -1395,58 +1398,8 @@ module.exports = JhipsterGenerator.extend({
 
         },
 
-        removeOlderVersionFiles: function () {
-            var packageFolder = this.packageFolder;
-            var javaDir = this.javaDir;
-            var testDir = this.testDir;
-            // Remove old files, from previous JHipster versions
-            this.removefile(javaDir + 'config/MailConfiguration.java');
-            this.removefile(javaDir + 'config/metrics/JavaMailHealthIndicator.java');
-            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
-                this.removefolder(javaDir + 'config/metrics');
-            }
-
-            this.removefile(javaDir + 'security/_CustomUserDetails.java');
-            this.removefile(javaDir + 'domain/util/CustomLocalDateSerializer.java');
-            this.removefile(javaDir + 'domain/util/CustomDateTimeSerializer.java');
-            this.removefile(javaDir + 'domain/util/CustomDateTimeDeserializer.java');
-            this.removefile(javaDir + 'domain/util/CustomLocalDateDeserializer.java');
-            this.removefile(javaDir + 'domain/util/DateToZonedDateTimeConverter.java');
-            this.removefile(javaDir + 'domain/util/ZonedDateTimeToDateConverter.java');
-            this.removefile(javaDir + 'domain/util/DateToLocalDateConverter.java');
-            this.removefile(javaDir + 'domain/util/LocalDateToDateConverter.java');
-            this.removefile(javaDir + 'domain/util/ISO8601LocalDateDeserializer.java');
-            this.removefolder(javaDir + 'web/propertyeditors');
-
-            this.removefile(RESOURCE_DIR + 'logback.xml');
-
-            this.removefile(WEBAPP_DIR + 'scripts/app/account/logout/logout.js');
-            this.removefile(WEBAPP_DIR + 'scripts/app/account/logout/logout.controller.js');
-            this.removefolder(WEBAPP_DIR + 'scripts/app/account/logout');
-
-            this.removefile(testDir + 'config/MongoConfiguration.java');
-            this.removefile(TEST_JS_DIR + 'spec/app/account/health/healthControllerSpec.js');
-            this.removefile(TEST_JS_DIR + 'spec/app/account/login/loginControllerSpec.js');
-            this.removefile(TEST_JS_DIR + 'spec/app/account/password/passwordControllerSpec.js');
-            this.removefile(TEST_JS_DIR + 'spec/app/account/password/passwordDirectiveSpec.js');
-            this.removefile(TEST_JS_DIR + 'spec/app/account/sessions/sessionsControllerSpec.js');
-            this.removefile(TEST_JS_DIR + 'spec/app/account/settings/settingsControllerSpec.js');
-            this.removefile(TEST_JS_DIR + 'spec/components/auth/authServicesSpec.js');
-
-            this.removefile('docker-compose.yml');
-            this.removefile('docker-compose-prod.yml');
-            this.removefile('Cassandra-Dev.Dockerfile');
-            this.removefile('Cassandra-Prod.Dockerfile');
-            this.removefolder('docker/');
-
-            this.removefile('gatling.gradle');
-            this.removefile('liquibase.gradle');
-            this.removefile('mapstruct.gradle');
-            this.removefile('profile_dev.gradle');
-            this.removefile('profile_fast.gradle');
-            this.removefile('profile_prod.gradle');
-            this.removefile('sonar.gradle');
-            this.removefile('yeoman.gradle');
+        cleanup: function () {
+            cleanup.cleanupOldFiles(this);
         }
     },
 
