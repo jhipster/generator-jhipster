@@ -1137,9 +1137,10 @@ Generator.prototype.removefolder = function(folder) {
     }
 }
 
-Generator.prototype.isVersionLessThan = function(version, installedJhipsterVersion) {
-    if (!installedJhipsterVersion) {
+Generator.prototype.isJhipsterVersionLessThan = function(version) {
+    var jhipsterVersion = this.config.get('jhipsterVersion');
+    if (!jhipsterVersion) {
         return true;
     }
-    return semver.lt(installedJhipsterVersion, version);
+    return semver.lt(jhipsterVersion, version);
 }
