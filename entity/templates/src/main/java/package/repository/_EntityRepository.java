@@ -59,7 +59,7 @@ public class <%= entityClass %>Repository {
     }
 
     public List<<%= entityClass %>> findAll() {
-        List<<%= entityClass %>> <%= entityInstance %>s = new ArrayList<>();
+        List<<%= entityClass %>> <%= entityInstancePlural %> = new ArrayList<>();
         BoundStatement stmt =  findAllStmt.bind();
         session.execute(stmt).all().stream().map(
             row -> {
@@ -72,8 +72,8 @@ public class <%= entityClass %>Repository {
                 <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(row.get<%= fields[fieldId].fieldType %>("<%= fields[fieldId].fieldName %>"));<% } } %>
                 return <%= entityInstance %>;
             }
-        ).forEach(<%= entityInstance %>s::add);
-        return <%= entityInstance %>s;
+        ).forEach(<%= entityInstancePlural %>::add);
+        return <%= entityInstancePlural %>;
     }
 
     public <%= entityClass %> findOne(UUID id) {

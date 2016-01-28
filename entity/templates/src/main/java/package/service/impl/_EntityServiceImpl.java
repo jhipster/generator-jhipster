@@ -52,7 +52,7 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
     }
 
     /**
-     *  get all the <%= entityInstance %>s.
+     *  get all the <%= entityInstancePlural %>.
      *  @return the list of entities
      */<% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true) <% } %>

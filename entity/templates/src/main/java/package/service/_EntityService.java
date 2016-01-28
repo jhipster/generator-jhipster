@@ -21,13 +21,13 @@ public interface <%= entityClass %>Service {
     public <%= instanceType %> save(<%= instanceType %> <%= instanceName %>);
 
     /**
-     *  get all the <%= entityInstance %>s.
+     *  get all the <%= entityInstancePlural %>.
      *  @return the list of entities
      */
     public <% if (pagination != 'no') { %>Page<<%= entityClass %><% } else { %>List<<%= instanceType %><% } %>> findAll(<% if (pagination != 'no') { %>Pageable pageable<% } %>);
 <% for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { -%>
     /**
-     *  get all the <%= entityInstance %>s where <%= relationships[idx].relationshipNameCapitalized %> is null.
+     *  get all the <%= entityInstancePlural %> where <%= relationships[idx].relationshipNameCapitalized %> is null.
      *  @return the list of entities
      */
     public List<<%= instanceType %>> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull();

@@ -1446,6 +1446,7 @@ module.exports = EntityGenerator.extend({
             }
             this.entityClass = _s.capitalize(this.name);
             this.entityInstance = _s.decapitalize(this.name);
+            this.entityInstancePlural = this.entityInstance + 's';
             this.entityTableName = _s.underscored(this.name).toLowerCase();
 
             this.differentTypes = [this.entityClass];

@@ -17,7 +17,7 @@
         log.debug("REST request to get a page of <%= entityClass %>s");<% if (viaService) { %>
         Page<<%= entityClass %>> page = <%= entityInstance %>Service.findAll(pageable); <% } else { %>
         Page<<%= entityClass %>> page = <%= entityInstance %>Repository.findAll(pageable); <% } %>
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityInstance %>s");
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityInstancePlural %>");
         return new ResponseEntity<>(page.getContent()<% if (dto == 'mapstruct') { %>.stream()
             .map(<%= entityToDtoReference %>)
             .collect(Collectors.toCollection(LinkedList::new))<% } %>, headers, HttpStatus.OK);
