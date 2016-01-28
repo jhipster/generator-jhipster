@@ -52,6 +52,13 @@ module.exports = EntityGenerator.extend({
         });
         // remove extention if feeding json files
         this.name = this.name.replace('.json', '');
+        // This method adds support for a `--[no-]regenerate` flag
+        this.option('regenerate', {
+            desc: 'regenerate the entity without presenting an option to update it',
+            type: Boolean,
+            defaults: false
+        });
+        this.regenerate = this.options['regenerate'];
     },
     initializing: {
         getConfig: function(args) {
@@ -954,7 +961,7 @@ module.exports = EntityGenerator.extend({
         /* ask question to user if s/he wants to update entity */
         askForUpdate: function () {
             // ask only if running an existing entity without arg option --force
-            var isForce = this.options['force'];
+            var isForce = this.options['force'] || this.regenerate;
             this.updateEntity == 'rewrite'; // default if skipping questions by --force
             if (isForce || !this.useConfigurationFile) {
                 return;
