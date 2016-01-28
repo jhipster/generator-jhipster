@@ -29,6 +29,7 @@ defaultTasks 'bootRun'
 
 bootRepackage {
    mainClass = '<%= packageName %>.Application'
+   classifier = 'exec'
 }
 
 war {
