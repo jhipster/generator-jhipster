@@ -34,8 +34,8 @@ import <%=packageName%>.domain.enumeration.<%= element %>;<% }); %>
  * A <%= entityClass %>.
  */
 <% } else { -%>
-<%- util.formatAsClassJavadoc(javadoc) %>
-@ApiModel(description = "<%- util.formatAsApiModel(javadoc) %>")
+<%- formatAsClassJavadoc(javadoc) %>
+@ApiModel(description = "<%- formatAsApiModel(javadoc) %>")
 <% } -%>
 <% if (databaseType == 'sql') { -%>
 @Entity
@@ -56,8 +56,8 @@ public class <%= entityClass %> implements Serializable {
 
 <%_ for (fieldId in fields) {
     if (typeof fields[fieldId].javadoc != 'undefined') { _%>
-<%- util.formatAsFieldJavadoc(fields[fieldId].javadoc) %>
-    @ApiModelProperty(value = "<%- util.formatAsApiModelProperty(fields[fieldId].javadoc) %>")
+<%- formatAsFieldJavadoc(fields[fieldId].javadoc) %>
+    @ApiModelProperty(value = "<%- formatAsApiModelProperty(fields[fieldId].javadoc) %>")
     <%_ }
     var required = false;
     if (fields[fieldId].fieldValidate == true) {
@@ -108,8 +108,8 @@ public class <%= entityClass %> implements Serializable {
             mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
         }
         if (typeof relationships[relationshipId].javadoc != 'undefined') { _%>
-<%- util.formatAsFieldJavadoc(relationships[relationshipId].javadoc) %>
-    @ApiModelProperty(value = "<%- util.formatAsApiModelProperty(relationships[relationshipId].javadoc) %>")
+<%- formatAsFieldJavadoc(relationships[relationshipId].javadoc) %>
+    @ApiModelProperty(value = "<%- formatAsApiModelProperty(relationships[relationshipId].javadoc) %>")
     <%_ }
         if (relationships[relationshipId].relationshipType == 'one-to-many') {
     _%>

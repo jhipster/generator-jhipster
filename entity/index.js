@@ -7,6 +7,7 @@ chalk = require('chalk'),
 _ = require('lodash'),
 _s = require('underscore.string'),
 shelljs = require('shelljs'),
+pluralize = require('pluralize'),
 scriptBase = require('../script-base');
 
 /* constants used througout */
@@ -1159,40 +1160,6 @@ module.exports = EntityGenerator.extend({
     },
 
     configuring : {
-        setup: function() {
-            // Expose utility methods in templates
-            this.util = {};
-            this.util.contains = _.contains;
-            var wordwrap = function(text, width, seperator, keepLF) {
-                var wrappedText = '';
-                var rows = text.split('\n');
-                for (var i = 0; i < rows.length; i++) {
-                    var row = rows[i];
-                    if (keepLF == true && i != 0) {
-                        wrappedText = wrappedText + '\\n';
-                    }
-                    wrappedText = wrappedText + seperator + _s.wrap(row, {
-                        width: width,
-                        seperator: seperator,
-                        preserveSpaces: keepLF
-                    });
-                }
-                return wrappedText;
-            }
-            var wordwrapWidth = 80;
-            this.util.formatAsClassJavadoc = function(text) {
-                return '/**' + wordwrap(text, wordwrapWidth - 4, '\n * ', false) + '\n */';
-            };
-            this.util.formatAsFieldJavadoc = function(text) {
-                return '    /**' + wordwrap(text, wordwrapWidth - 8, '\n     * ', false) + '\n     */';
-            };
-            this.util.formatAsApiModel = function(text) {
-                return wordwrap(text.replace(/\\/g, '\\\\').replace(/\"/g, '\\\"'), wordwrapWidth - 9, '"\n    + "', true)
-            };
-            this.util.formatAsApiModelProperty = function(text) {
-                return wordwrap(text.replace(/\\/g, '\\\\').replace(/\"/g, '\\\"'), wordwrapWidth - 13, '"\n        + "', true)
-            };
-        },
 
         validateFile: function() {
 
@@ -1479,7 +1446,9 @@ module.exports = EntityGenerator.extend({
                 this.pkType = 'Long';
             }
             this.entityClass = _s.capitalize(this.name);
+            this.entityClassPlural = pluralize(this.entityClass);
             this.entityInstance = _s.decapitalize(this.name);
+            this.entityInstancePlural = pluralize(this.entityInstance);
             this.entityTableName = _s.underscored(this.name).toLowerCase();
 
             this.differentTypes = [this.entityClass];

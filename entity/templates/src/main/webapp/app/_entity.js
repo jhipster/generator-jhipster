@@ -8,7 +8,7 @@ angular.module('<%=angularAppName%>')
                 url: '/<%= entityInstance %>-management',
                 data: {
                     authorities: ['ROLE_USER'],
-                    pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>-management.home.title'<% }else{ %>'<%= entityClass %>s'<% } %>
+                    pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>-management.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
                 },
                 views: {
                     'content@': {

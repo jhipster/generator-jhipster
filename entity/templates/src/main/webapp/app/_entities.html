@@ -1,6 +1,6 @@
 <div>
 <%_ var keyPrefix = angularAppName + '.'+ entityInstance + '-management.'; _%>
-    <h2 translate="<%= keyPrefix %>home.title"><%= entityClass %>s</h2>
+    <h2 translate="<%= keyPrefix %>home.title"><%= entityClassPlural %></h2>
     <jh-alert></jh-alert>
     <div class="container-fluid">
         <div class="row">
@@ -50,7 +50,7 @@
                 </tr>
             </thead>
             <tbody<% if (pagination == 'infinite-scroll') { %> infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page"<% } %>>
-                <tr ng-repeat="<%=entityInstance %> in <%=entityInstance %>s track by <%=entityInstance %>.id">
+                <tr ng-repeat="<%=entityInstance %> in <%=entityInstancePlural %> track by <%=entityInstance %>.id">
                     <td><a ui-sref="<%= entityInstance %>-management-detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td>
                     <%_ for (fieldId in fields) { _%>
                         <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'image') { _%>
