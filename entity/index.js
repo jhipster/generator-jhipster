@@ -960,9 +960,9 @@ module.exports = EntityGenerator.extend({
         /* pre entity hook needs to be written here */
         /* ask question to user if s/he wants to update entity */
         askForUpdate: function () {
-            // ask only if running an existing entity without arg option --force
+            // ask only if running an existing entity without arg option --force or --regenerate
             var isForce = this.options['force'] || this.regenerate;
-            this.updateEntity == 'rewrite'; // default if skipping questions by --force
+            this.updateEntity == 'regenerate'; // default if skipping questions by --force
             if (isForce || !this.useConfigurationFile) {
                 return;
             }
@@ -974,7 +974,7 @@ module.exports = EntityGenerator.extend({
                     message: 'Do you want to update the entity? This will replace the existing files for this entity, all your custom code will be overwritten',
                     choices: [
                         {
-                            value: 'rewrite',
+                            value: 'regenerate',
                             name: 'Yes, re generate the entity'
                         },
                         {
@@ -1313,7 +1313,7 @@ module.exports = EntityGenerator.extend({
         },
 
         writeEntityJson: function () {
-            if (this.useConfigurationFile && this.updateEntity == 'rewrite') {
+            if (this.useConfigurationFile && this.updateEntity == 'regenerate') {
                 return; //do not update if regenerating entity
             }
              // store informations in a file for further use.
