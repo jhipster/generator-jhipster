@@ -1402,7 +1402,7 @@ module.exports = JhipsterGenerator.extend({
             var javaDir = this.javaDir;
             var testDir = this.testDir;
             // Remove old files, from previous JHipster versions
-            if (this.installedVersionIsLessThan('2.27.1', this.jhipsterVersion)) {
+            if (this.isVersionLessThan('2.27.1', this.jhipsterVersion)) {
                 this.removefile(javaDir + 'config/MailConfiguration.java');
                 this.removefile(javaDir + 'config/metrics/JavaMailHealthIndicator.java');
                 if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
