@@ -13,6 +13,7 @@ var path = require('path'),
     semver = require('semver');
 
 const MODULES_HOOK_FILE = '.jhipster/modules/jhi-hooks.json';
+const ENTITY_DIR = ".jhipster";
 const WORD_WRAP_WIDTH = 80;
 
 module.exports = Generator;
@@ -1025,6 +1026,31 @@ Generator.prototype.getModuleHooks = function() {
     }
 
     return modulesConfig;
+}
+
+Generator.prototype.getExistingEntities = function() {
+    var entities = [];
+    var unique_dates = new Set();
+
+    function isBefore(e1, e2) {
+      return e1.definition.changelogDate - e2.definition.changelogDate;
+    }
+
+    if (shelljs.test('-d', ENTITY_DIR)) {
+        shelljs.ls(path.join(ENTITY_DIR, '*.json')).forEach( function(file) {
+            var definition = this.fs.readJSON(file);
+            unique_dates.add(definition.changelogDate);
+            entities.push({name: path.basename(file, '.json'), definition: definition});
+        }, this);
+    }
+    if(entities.length != unique_dates.size) {
+        this.log(chalk.yellow('WARNING some of your entities have the same changelog dates so JHipster couldn\'t\n' +
+        ' determine the order in which they should be generated. It is recommended to\n' +
+        ' edit the changelog dates in the '+ ENTITY_DIR + 'folder and to relaunch this\n' +
+        ' generator.' ));
+    }
+
+    return entities.sort(isBefore);
 }
 
 Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, resourceDir, lang) {
