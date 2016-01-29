@@ -99,6 +99,7 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc['registerModule'] = this.registerModule;
         jhipsterFunc['updateEntityConfig'] = this.updateEntityConfig;
         jhipsterFunc['getModuleHooks'] = this.getModuleHooks;
+        jhipsterFunc['getExistingEntities'] = this.getExistingEntities;
 
     },
 

@@ -31,7 +31,7 @@ module.exports = JhipsterGenerator.extend({
         generators.Base.apply(this, arguments);
         // This method adds support for a `--skip-client` flag
         this.option('skip-client', {
-            desc: 'Skips the client side app generation',
+            desc: 'Skip the client side app generation',
             type: Boolean,
             defaults: false
         });
@@ -43,14 +43,21 @@ module.exports = JhipsterGenerator.extend({
         });
         // This method adds support for a `--[no-]i18n` flag
         this.option('i18n', {
-            desc: 'disable or enable i18n when skipping client side generation, has no effect otherwise',
+            desc: 'Disable or enable i18n when skipping client side generation, has no effect otherwise',
             type: Boolean,
             defaults: true
+        });
+        // This method adds support for a `--with-entities` flag
+        this.option('with-entities', {
+            desc: 'Regenerate the existing entities if any',
+            type: Boolean,
+            defaults: false
         });
         var skipClient = this.config.get('skipClient');
         this.skipClient = this.options['skip-client'] || skipClient;
         this.clientBuild = this.options['client-build'];
         this.i18n = this.options['i18n'];
+        this.withEntities = this.options['with-entities'];
 
     },
     initializing : {
@@ -1400,6 +1407,14 @@ module.exports = JhipsterGenerator.extend({
 
         cleanup: function () {
             cleanup.cleanupOldFiles(this);
+        },
+
+        regenerateEntities: function () {
+            if (this.withEntities) {
+                this.getExistingEntities().forEach( function(entity) {
+                    this.composeWith('jhipster:entity', {options: {regenerate: true}, args:[entity.name]});
+                }, this);
+            }
         }
     },
 
