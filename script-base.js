@@ -12,8 +12,8 @@ var path = require('path'),
     ejs = require('ejs'),
     semver = require('semver');
 
-const MODULES_HOOK_FILE = '.jhipster/modules/jhi-hooks.json';
-const ENTITY_DIR = ".jhipster";
+const JHIPSTER_CONFIG_DIR = ".jhipster";
+const MODULES_HOOK_FILE = JHIPSTER_CONFIG_DIR + '/modules/jhi-hooks.json';
 const WORD_WRAP_WIDTH = 80;
 
 module.exports = Generator;
@@ -1036,8 +1036,8 @@ Generator.prototype.getExistingEntities = function() {
       return e1.definition.changelogDate - e2.definition.changelogDate;
     }
 
-    if (shelljs.test('-d', ENTITY_DIR)) {
-        shelljs.ls(path.join(ENTITY_DIR, '*.json')).forEach( function(file) {
+    if (shelljs.test('-d', JHIPSTER_CONFIG_DIR)) {
+        shelljs.ls(path.join(JHIPSTER_CONFIG_DIR, '*.json')).forEach( function(file) {
             var definition = this.fs.readJSON(file);
             unique_dates.add(definition.changelogDate);
             entities.push({name: path.basename(file, '.json'), definition: definition});
@@ -1046,7 +1046,7 @@ Generator.prototype.getExistingEntities = function() {
     if(entities.length != unique_dates.size) {
         this.log(chalk.yellow('WARNING some of your entities have the same changelog dates so JHipster couldn\'t\n' +
         ' determine the order in which they should be generated. It is recommended to\n' +
-        ' edit the changelog dates in the '+ ENTITY_DIR + 'folder and to relaunch this\n' +
+        ' edit the changelog dates in the '+ JHIPSTER_CONFIG_DIR + 'folder and to relaunch this\n' +
         ' generator.' ));
     }
 
