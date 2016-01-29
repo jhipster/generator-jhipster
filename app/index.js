@@ -47,7 +47,7 @@ module.exports = JhipsterGenerator.extend({
             type: Boolean,
             defaults: true
         });
-        // This method adds support for a `--skip-entities` flag
+        // This method adds support for a `--with-entities` flag
         this.option('with-entities', {
             desc: 'Regenerate the existing entities if any',
             type: Boolean,
