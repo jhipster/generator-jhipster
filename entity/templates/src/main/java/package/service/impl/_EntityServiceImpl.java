@@ -52,12 +52,12 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
     }
 
     /**
-     *  get all the <%= entityInstance %>s.
+     *  get all the <%= entityInstancePlural %>.
      *  @return the list of entities
      */<% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true) <% } %>
     public <% if (pagination != 'no') { %>Page<<%= entityClass %><% } else { %>List<<%= instanceType %><% } %>> findAll(<% if (pagination != 'no') { %>Pageable pageable<% } %>) {
-        log.debug("Request to get all <%= entityClass %>s");<% if (pagination == 'no') { %>
+        log.debug("Request to get all <%= entityClassPlural %>");<% if (pagination == 'no') { %>
         List<<%= instanceType %>> result = <%= entityInstance %>Repository.<% if (fieldsContainOwnerManyToMany == true) { %>findAllWithEagerRelationships<% } else { %>findAll<% } %>()<% if (dto == 'mapstruct') { %>.stream()
             .map(<%= entityToDtoReference %>)
             .collect(Collectors.toCollection(LinkedList::new))<% } %>;<% } else { %>

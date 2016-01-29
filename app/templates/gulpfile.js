@@ -1,4 +1,4 @@
-// Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= pkg.name %> <%= pkg.version %>
+// Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= packagejs.name %> <%= packagejs.version %>
 /* jshint camelcase: false */
 'use strict';
 
@@ -66,12 +66,12 @@ var parseVersionFromBuildGradle = function() {
     return versionRegex.exec(buildGradle)[1];
 };<% } %>
 
-gulp.task('clean', function (cb) {
-    del([yeoman.dist], cb);
+gulp.task('clean', function () {
+    return del([yeoman.dist]);
 });
 
-gulp.task('clean:tmp', function (cb) {
-    del([yeoman.tmp], cb);
+gulp.task('clean:tmp', function () {
+    return del([yeoman.tmp]);
 });
 
 gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function(done) {
@@ -165,6 +165,7 @@ gulp.task('serve', function() {
             proxyRoutes.map(function (r) {
                 var options = url.parse(baseUri + r);
                 options.route = r;
+                options.preserveHost = true;
                 return proxy(options);
             }));
 
@@ -230,32 +231,30 @@ gulp.task('wiredep:test', function () {
         .pipe(gulp.dest('src/test/javascript'));
 });
 
-gulp.task('build', function () {
-    runSequence('clean', 'copy', 'wiredep:app', 'ngconstant:prod', 'usemin');
+gulp.task('build', function (cb) {
+    runSequence('clean', 'copy', 'wiredep:app', 'ngconstant:prod', 'usemin', cb);
 });
 
-gulp.task('usemin', function() {
-    runSequence('images', 'styles', function () {
-        return gulp.src([yeoman.app + '**/*.html', '!' + yeoman.app + 'bower_components/**/*.html']).
-            pipe(usemin({
-                css: [
-                    prefix.apply(),
-                    minifyCss({root: 'src/main/webapp'}),  // Replace relative paths for static resources with absolute path with root
-                    'concat', // Needs to be present for minifyCss root option to work
-                    rev()
-                ],
-                html: [
-                    htmlmin({collapseWhitespace: true})
-                ],
-                js: [
-                    ngAnnotate(),
-                    uglify(),
-                    'concat',
-                    rev()
-                ]
-            })).
-            pipe(gulp.dest(yeoman.dist));
-    });
+gulp.task('usemin', ['images', 'styles'], function() {
+    return gulp.src([yeoman.app + '**/*.html', '!' + yeoman.app + '@(dist|bower_components)/**/*.html']).
+        pipe(usemin({
+            css: [
+                prefix,
+                minifyCss,  // Replace relative paths for static resources with absolute path with root
+                'concat', // Needs to be present for minifyCss root option to work
+                rev
+            ],
+            html: [
+                htmlmin.bind(htmlmin, {collapseWhitespace: true})
+            ],
+            js: [
+                ngAnnotate,
+                uglify,
+                'concat',
+                rev
+            ]
+        })).
+        pipe(gulp.dest(yeoman.dist));
 });
 
 gulp.task('ngconstant:dev', function() {

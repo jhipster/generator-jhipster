@@ -1,10 +1,11 @@
 {
     "<%= angularAppName %>": {
-        "<%= entityInstance %>" : {
+        "<%= entityInstance %>-management" : {
             "home": {
-                "title": "<%= entityClass %>s",
+                "title": "<%= entityClassPlural %>",
                 "createLabel": "Create a new <%= entityClass %>",
-                "createOrEditLabel": "Create or edit a <%= entityClass %>"
+                "createOrEditLabel": "Create or edit a <%= entityClass %>",
+                "search": "Search for <%= entityClass %>"
             },
             "created": "A new <%= entityClass %> is created with identifier {{ param }}",
             "updated": "A <%= entityClass %> is updated with identifier {{ param }}",

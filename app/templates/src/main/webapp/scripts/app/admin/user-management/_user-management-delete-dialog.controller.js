@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-	.controller('user-managementDeleteController', function($scope, $uibModalInstance, entity, User) {
+	.controller('UserManagementDeleteController', function($scope, $uibModalInstance, entity, User) {
 
         $scope.user = entity;
         $scope.clear = function() {

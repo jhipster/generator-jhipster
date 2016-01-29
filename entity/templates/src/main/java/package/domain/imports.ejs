@@ -1,0 +1,42 @@
+<%#	Checks which imports are needed -%>
+<%
+
+for (relationshipId in relationships) {
+    if (typeof relationships[relationshipId].javadoc != 'undefined') {
+        importApiModelProperty = true;
+        break;
+    }
+}
+if (importApiModelProperty == false) {
+  for (fieldId in fields) {
+      if (typeof fields[fieldId].javadoc != 'undefined') {
+          importApiModelProperty = true;
+          break;
+      }
+  }
+}
+
+for (relationshipId in relationships) {
+    if (relationships[relationshipId].relationshipType == 'one-to-many'
+        || relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == false
+        || relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == false) {
+        importJsonignore = true;
+        break;
+    }
+}
+
+for (relationshipId in relationships) {
+    if (relationships[relationshipId].relationshipType == 'one-to-many' || relationships[relationshipId].relationshipType == 'many-to-many') {
+        importSet = true;
+        break;
+    }
+}
+
+for (fieldId in fields) {
+    if (fields[fieldId].fieldIsEnum && (
+            !uniqueEnums[fields[fieldId].fieldType] || (uniqueEnums[fields[fieldId].fieldType] && fields[fieldId].fieldValues.length !== 0))) {
+        uniqueEnums[fields[fieldId].fieldType] = fields[fieldId].fieldType;
+    }
+}
+
+%>

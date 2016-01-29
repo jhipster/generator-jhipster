@@ -1,7 +1,7 @@
 {
     "global": {
         "title": "<%= baseName %>",
-        "browsehappy": "Stai utilizzando un browser <strong> non aggiornato </ strong> <a href=\"http://browsehappy.com/?locale=en\"> Aggiorna il tuo browser per </a> migliorare la loro esperienza.",
+        "browsehappy": "Stai utilizzando un browser <strong> non aggiornato </ strong> <a href=\"http://browsehappy.com/?locale=en\"> Aggiorna il tuo browser per </a> migliorare la tua esperienza.",
         "menu": {
             "home": "Home",
             "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
@@ -10,20 +10,20 @@
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {
-                "main": "Principale",
+                "main": "Utente",
                 "settings": "Impostazioni",
                 "password": "Password",
                 "sessions": "Sessione",
                 "login": "Accesso",
                 "logout": "Esci",
-                "register": "Effettua registrazione"
+                "register": "Registrazione"
             },
             "admin": {
                 "main": "Amministratore",
-                "user-management": "User management",
+                "user-management": "Gestione utenti",
                 "tracker": "Tracciamento utente",
                 "metrics": "Metrica",
-                "health": "Salute",
+                "health": "Integrità",
                 "configuration": "Configurazione",
                 "logs": "Logs",
                 "audits": "Cambiamenti",
@@ -34,7 +34,7 @@
             "language": "Lingua"
         },
         "form": {
-            "username": "User",
+            "username": "Utente",
             "username.placeholder": "Il tuo nome utente",
             "newpassword": "Nuova password",
             "newpassword.placeholder": "Nuova password",
@@ -45,7 +45,7 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Se si vuole <a class=\"alert-link\" href=\"#/login\"> avviare una sessione</a> , è possibile provare a utilizzare gli account di default: <br/> - Amministratore (user = \" admin \"e la password = \"admin \") <br/> - utente (user = \"user \" e la password = \"user \")",
+                "authenticated": "Se si vuole <a class=\"alert-link\" href=\"#/login\"> avviare una sessione</a> , è possibile provare ad utilizzare gli account di default: <br/> - Amministratore (user = \" admin \"e la password = \"admin \") <br/> - utente (user = \"user \" e la password = \"user \")",
                 "register": "Non hai ancora un account <a class=\"alert-link\" href=\"#/register\">Crea un account?</a>"
             },
             "error": {
@@ -54,20 +54,20 @@
             "validate": {
                 "newpassword": {
                     "required": "è necessario immettere una password.",
-                    "minlength": "La tua password  è richiesta con almeno 5 caratteri",
-                    "maxlength": "La tua password non può essere più di 50 caratteri",
-                    "strength": "Password di sicurezza:"
+                    "minlength": "La tua password deve avere almeno 5 caratteri",
+                    "maxlength": "La tua password non può essere più lunga di 50 caratteri",
+                    "strength": "Robustezza della password:"
                 },
                 "confirmpassword": {
                     "required": "è necessario per confermare la password.",
-                    "minlength": "La tua password  è richiesta con almeno 5 caratteri",
-                    "maxlength": "La tua password non può essere più di 50 caratteri"
+                    "minlength": "La tua password deve avere almeno 5 caratteri",
+                    "maxlength": "La tua password non può essere più lunga di 50 caratteri"
                 },
                 "email": {
-                    "required": "è necessario e-mail.",
+                    "required": "è necessario un indirizzo e-mail.",
                     "invalid": "Il tuo indirizzo email non è valido.",
-                    "minlength": "E 'necessario che la tua email è di almeno 5 caratteri",
-                    "maxlength": "Il tuo indirizzo email non può essere più di 50 caratteri"
+                    "minlength": "E' necessario che la tua email abbia almeno 5 caratteri",
+                    "maxlength": "Il tuo indirizzo email non può essere più lungo di 50 caratteri"
                 }
             }
         },
@@ -77,8 +77,8 @@
     },
     "entity": {
         "action": {
-            "addblob": "Add blob",
-            "addimage": "Add image",
+            "addblob": "Aggiungi blob",
+            "addimage": "Aggiungi immagine",
             "back": "Indietro",
             "cancel": "Annulla",
             "delete": "Elimina",
@@ -99,20 +99,20 @@
             "maxlength": "Questo campo non può essere più lungo di {{max}} caratteri.",
             "min": "Questo campo dovrebbe essere più di {{min}}..",
             "max": "Questo campo non può essere superiore a {{max}}.",
-            "minbytes": "This field should be more than {{min}} bytes.",
-            "maxbytes": "This field cannot be more than {{max}} bytes.",
+            "minbytes": "Questo campo dovrebbe essere più di {{min}} bytes.",
+            "maxbytes": "Questo campo non può essere superiore a {{max}} bytes.",
             "pattern": "Questo campo dovrebbe seguire pattern pattern {{}}.",
             "number": "Questo campo deve essere un numero.",
-            "datetimelocal": "Questo campo dovrebbe essere una data e l'ora."
+            "datetimelocal": "Questo campo dovrebbe essere data e ora."
         }
     },
     "error": {
         "server.not.reachable": "Server not reachable",
-        "NotNull": "Field {{fieldName}} cannot be empty!",
-        "Size": "Field {{fieldName}} does not meet min/max size requirements!",
-        "userexists": "Login name already used!",
-        "emailexists": "E-mail is already in use!",
-        "idexists": "A new {{entityName}} cannot already have an ID"
+        "NotNull": "Il campo {{fieldName}} non può essere vuoto!",
+        "Size": "Il campo {{fieldName}} non è conforme ai requisiti di lunghezza min/max!",
+        "userexists": "Il nome utente è già in uso!",
+        "emailexists": "L' e-mail è già in uso!",
+        "idexists": "Una nuovaentità {{entityName}} non può avere un ID"
     },
-    "footer": "pie di pagina"
+    "footer": "pié di pagina"
 }

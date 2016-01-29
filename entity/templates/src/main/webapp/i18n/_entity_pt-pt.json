@@ -1,10 +1,11 @@
 {
     "<%= angularAppName %>": {
-        "<%= entityInstance %>" : {
+        "<%= entityInstance %>-management" : {
             "home": {
-                "title": "<%= entityClass %>s",
+                "title": "<%= entityClassPlural %>",
                 "createLabel": "Criar um(a) novo(a) <%= entityClass %>",
-                "createOrEditLabel": "Criar ou editar um(a) <%= entityClass %>"
+                "createOrEditLabel": "Criar ou editar um(a) <%= entityClass %>",
+                "search": "Search for <%= entityClass %>"
             },
             "delete": {
                 "question": "Tem a certeza que pretende eliminar o(a) <%= entityClass %> {{ id }}?"

@@ -2,7 +2,7 @@
 
 describe('Controller Tests', function() {
 
-    describe('<%= entityClass %> Detail Controller', function() {
+    describe('<%= entityClass %> Management Detail Controller', function() {
         var $scope, $rootScope;
         var MockEntity<% for (idx in differentTypes) { %>, Mock<%= differentTypes[idx] %><%}%>;
         var createController;
@@ -21,7 +21,7 @@ describe('Controller Tests', function() {
                 '<%= differentTypes[idx] %>': Mock<%= differentTypes[idx] %><% } %>
             };
             createController = function() {
-                $injector.get('$controller')("<%= entityClass %>DetailController", locals);
+                $injector.get('$controller')("<%= entityClass %>ManagementDetailController", locals);
             };
         }));
 

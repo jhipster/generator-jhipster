@@ -1,26 +1,26 @@
 {
     "audits": {
-        "title": "Auditorías",
+        "title": "Cambiamenti",
         "filter": {
-            "title": "Filtrar por fecha",
-            "from": "desde",
+            "title": "Filtra per data",
+            "from": "da",
             "to": "a",
             "button": {
-                "weeks": "Semanas",
-                "today": "hoy",
-                "clear": "limpiar",
-                "close": "cerrar"
+                "weeks": "Settimane",
+                "today": "oggi",
+                "clear": "cancella",
+                "close": "chiudi"
             }
         },
         "table": {
             "header": {
-                "principal": "Usuario",
-                "date": "Fecha",
-                "status": "Estado",
-                "data": "Datos extra"
+                "principal": "Utente",
+                "date": "Data",
+                "status": "Stato",
+                "data": "Altre informazioni"
             },
             "data": {
-                "remoteAddress": "Dirección remota:"
+                "remoteAddress": "Indirizzo remoto:"
             }
         }
     }

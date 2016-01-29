@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('<%=angularAppName%>').controller('<%= entityClass %>DialogController',
+angular.module('<%=angularAppName%>').controller('<%= entityClass %>ManagementDialogController',
     ['$scope', '$stateParams', '$uibModalInstance'<% if (fieldsContainOwnerOneToOne) { %>, '$q'<% } %><% if (fieldsContainBlob) { %>, 'DataUtils'<% } %>, 'entity', '<%= entityClass %>'<% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) {%>, '<%= differentTypes[idx] %>'<% } } %>,
         function($scope, $stateParams, $uibModalInstance<% if (fieldsContainOwnerOneToOne) { %>, $q<% } %><% if (fieldsContainBlob) { %>, DataUtils<% } %>, entity, <%= entityClass %><% for (idx in differentTypes) { if (differentTypes[idx] != entityClass) {%>, <%= differentTypes[idx] %><% } } %>) {
 
@@ -25,7 +25,7 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>DialogContro
                 } else {
                     query = '$scope.' + relationships[idx].otherEntityNameCapitalized.toLowerCase() + 's = ' + relationships[idx].otherEntityNameCapitalized + '.query();';
                 }
-                if (!util.contains(queries, query)) {
+                if (!contains(queries, query)) {
                     queries.push(query);
                 }
             } %><% for (idx in queries) { %>
@@ -65,7 +65,7 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>DialogContro
         $scope.byteSize = DataUtils.byteSize;
         <%_ } _%>
         <%_ for (fieldId in fields) {
-            if (fields[fieldId].fieldType === 'byte[]') { _%>
+            if (fields[fieldId].fieldType === 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
 
         $scope.set<%= fields[fieldId].fieldNameCapitalized %> = function ($file, <%= entityInstance %>) {
             <%_ if (fields[fieldId].fieldTypeBlobContent == 'image') { _%>

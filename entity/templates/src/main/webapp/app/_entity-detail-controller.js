@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('<%= entityClass %>DetailController', function ($scope, $rootScope, $stateParams<% if (fieldsContainBlob) { %>, DataUtils<% } %>, entity<% for (idx in differentTypes) { %>, <%= differentTypes[idx] %><% } %>) {
+    .controller('<%= entityClass %>ManagementDetailController', function ($scope, $rootScope, $stateParams<% if (fieldsContainBlob) { %>, DataUtils<% } %>, entity<% for (idx in differentTypes) { %>, <%= differentTypes[idx] %><% } %>) {
         $scope.<%= entityInstance %> = entity;
         $scope.load = function (id) {
             <%= entityClass %>.get({id: id}, function(result) {

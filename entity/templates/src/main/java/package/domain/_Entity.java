@@ -1,36 +1,15 @@
-package <%=packageName%>.domain;
-<% if (databaseType == 'cassandra') { %>
-import com.datastax.driver.mapping.annotations.*;<% } %><% if (typeof javadoc != 'undefined') { -%>
-import io.swagger.annotations.ApiModel;<% } %><%
+package <%=packageName%>.domain;<%
 var importApiModelProperty = false;
-for (relationshipId in relationships) {
-    if (typeof relationships[relationshipId].javadoc != 'undefined') {
-        importApiModelProperty = true;
-    }
-}
-for (fieldId in fields) {
-    if (typeof fields[fieldId].javadoc != 'undefined') {
-        importApiModelProperty = true;
-    }
-}
-if (importApiModelProperty) { %>
-import io.swagger.annotations.ApiModelProperty;<% } %><%
 var importJsonignore = false;
-for (relationshipId in relationships) {
-    if (relationships[relationshipId].relationshipType == 'one-to-many') {
-        importJsonignore = true;
-    } else if (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == false) {
-        importJsonignore = true;
-    } else if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == false) {
-        importJsonignore = true;
-    }
-}
-if (importJsonignore) { %>
-import com.fasterxml.jackson.annotation.JsonIgnore;<% } %><% if (hibernateCache != 'no') { %>
+var importSet = false;
+var uniqueEnums = {}; %><%- include imports -%>
+<% if (databaseType == 'cassandra') { %>
+import com.datastax.driver.mapping.annotations.*;<% } %><% if (importJsonignore == true) { %>
+import com.fasterxml.jackson.annotation.JsonIgnore;<% } %><% if (typeof javadoc != 'undefined') { %>
+import io.swagger.annotations.ApiModel;<% } %><% if (importApiModelProperty == true) { %>
+import io.swagger.annotations.ApiModelProperty;<% } %><% if (hibernateCache != 'no') { %>
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (fieldsContainLocalDate == true) { %>
-import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
-import java.time.ZonedDateTime;<% } %><% if (databaseType == 'mongodb') { %>
+import org.hibernate.annotations.CacheConcurrencyStrategy;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;<% } %><% if (searchEngine == 'elasticsearch') { %>
@@ -39,20 +18,14 @@ import org.springframework.data.elasticsearch.annotations.Document;<% } %>
 import javax.persistence.*;<% } %><% if (validation) { %>
 import javax.validation.constraints.*;<% } %>
 import java.io.Serializable;<% if (fieldsContainBigDecimal == true) { %>
-import java.math.BigDecimal;<% } %><% if (fieldsContainDate == true) { %>
-import java.util.Date;<% } %><% if (relationships.length > 0) { %>
+import java.math.BigDecimal;<% } %><% if (fieldsContainLocalDate == true) { %>
+import java.time.LocalDate;<% } %><% if (fieldsContainZonedDateTime == true) { %>
+import java.time.ZonedDateTime;<% } %><% if (fieldsContainDate == true) { %>
+import java.util.Date;<% } %><% if (importSet == true) { %>
 import java.util.HashSet;
 import java.util.Set;<% } %>
 import java.util.Objects;<% if (databaseType == 'cassandra') { %>
-import java.util.UUID;<% } %><%
-var uniqueEnums = {};
-for (fieldId in fields) {
-    if (fields[fieldId].fieldIsEnum && (
-            !uniqueEnums[fields[fieldId].fieldType] || (uniqueEnums[fields[fieldId].fieldType] && fields[fieldId].fieldValues.length !== 0))) {
-        uniqueEnums[fields[fieldId].fieldType] = fields[fieldId].fieldType;
-    }
-}
-Object.keys(uniqueEnums).forEach(function(element) { %>
+import java.util.UUID;<% } %><% Object.keys(uniqueEnums).forEach(function(element) { %>
 
 import <%=packageName%>.domain.enumeration.<%= element %>;<% }); %>
 
@@ -61,8 +34,8 @@ import <%=packageName%>.domain.enumeration.<%= element %>;<% }); %>
  * A <%= entityClass %>.
  */
 <% } else { -%>
-<%- util.formatAsClassJavadoc(javadoc) %>
-@ApiModel(description = "<%- util.formatAsApiModel(javadoc) %>")
+<%- formatAsClassJavadoc(javadoc) %>
+@ApiModel(description = "<%- formatAsApiModel(javadoc) %>")
 <% } -%>
 <% if (databaseType == 'sql') { -%>
 @Entity
@@ -83,8 +56,8 @@ public class <%= entityClass %> implements Serializable {
 
 <%_ for (fieldId in fields) {
     if (typeof fields[fieldId].javadoc != 'undefined') { _%>
-<%- util.formatAsFieldJavadoc(fields[fieldId].javadoc) %>
-    @ApiModelProperty(value = "<%- util.formatAsApiModelProperty(fields[fieldId].javadoc) %>")
+<%- formatAsFieldJavadoc(fields[fieldId].javadoc) %>
+    @ApiModelProperty(value = "<%- formatAsApiModelProperty(fields[fieldId].javadoc) %>")
     <%_ }
     var required = false;
     if (fields[fieldId].fieldValidate == true) {
@@ -111,9 +84,13 @@ public class <%= entityClass %> implements Serializable {
     <%_ if (databaseType == 'mongodb') { _%>
     @Field("<%=fields[fieldId].fieldNameUnderscored %>")
     <%_ } _%>
+    <%_ if (fields[fieldId].fieldTypeBlobContent != 'text') { _%>
     private <%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>;
+    <%_ } else { _%>
+    private String <%= fields[fieldId].fieldName %>;
+    <%_ } _%>
 
-    <%_ if (fields[fieldId].fieldType == 'byte[]') { _%><%_ if (databaseType == 'sql') { _%>
+    <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%><%_ if (databaseType == 'sql') { _%>
     @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>_content_type"<% if (required) { %>, nullable = false<% } %>) <%_ } _%>
     <% if (databaseType == 'mongodb') { %>@Field("<%=fields[fieldId].fieldNameUnderscored %>_content_type")
     <%_ } _%>
@@ -131,8 +108,8 @@ public class <%= entityClass %> implements Serializable {
             mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
         }
         if (typeof relationships[relationshipId].javadoc != 'undefined') { _%>
-<%- util.formatAsFieldJavadoc(relationships[relationshipId].javadoc) %>
-    @ApiModelProperty(value = "<%- util.formatAsApiModelProperty(relationships[relationshipId].javadoc) %>")
+<%- formatAsFieldJavadoc(relationships[relationshipId].javadoc) %>
+    @ApiModelProperty(value = "<%- formatAsApiModelProperty(relationships[relationshipId].javadoc) %>")
     <%_ }
         if (relationships[relationshipId].relationshipType == 'one-to-many') {
     _%>
@@ -145,7 +122,6 @@ public class <%= entityClass %> implements Serializable {
 
     <%_ } else if (relationships[relationshipId].relationshipType == 'many-to-one') { _%>
     @ManyToOne
-    @JoinColumn(name = "<%= getColumnName(relationships[relationshipId].relationshipName) %>_id")
     private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].relationshipFieldName %>;
 
     <%_ } else if (relationships[relationshipId].relationshipType == 'many-to-many') { _%>
@@ -167,6 +143,7 @@ public class <%= entityClass %> implements Serializable {
     <%_ } else { _%>
     <%_     if (relationships[relationshipId].ownerSide) { _%>
     @OneToOne
+    @JoinColumn(unique = true)
     <%_    } else { _%>
     @OneToOne(mappedBy = "<%= relationships[relationshipId].otherEntityRelationshipName %>")
     @JsonIgnore
@@ -182,14 +159,22 @@ public class <%= entityClass %> implements Serializable {
         this.id = id;
     }
 <% for (fieldId in fields) { %>
+    <%_ if (fields[fieldId].fieldTypeBlobContent != 'text') { _%>
     public <%= fields[fieldId].fieldType %> get<%= fields[fieldId].fieldInJavaBeanMethod %>() {
+    <%_ } else { _%>
+    public String get<%= fields[fieldId].fieldInJavaBeanMethod %>() {
+    <%_ } _%>
         return <%= fields[fieldId].fieldName %>;
     }
 
+    <%_ if (fields[fieldId].fieldTypeBlobContent != 'text') { _%>
     public void set<%= fields[fieldId].fieldInJavaBeanMethod %>(<%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>) {
+    <%_ } else { _%>
+    public void set<%= fields[fieldId].fieldInJavaBeanMethod %>(String <%= fields[fieldId].fieldName %>) {
+    <%_ } _%>
         this.<%= fields[fieldId].fieldName %> = <%= fields[fieldId].fieldName %>;
     }
-    <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
+    <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
 
     public String get<%= fields[fieldId].fieldInJavaBeanMethod %>ContentType() {
         return <%= fields[fieldId].fieldName %>ContentType;
@@ -241,7 +226,7 @@ public class <%= entityClass %> implements Serializable {
             "id=" + id +
             <%_ for (fieldId in fields) { _%>
             ", <%= fields[fieldId].fieldName %>='" + <%= fields[fieldId].fieldName %> + "'" +
-                <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
+                <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
             ", <%= fields[fieldId].fieldName %>ContentType='" + <%= fields[fieldId].fieldName %>ContentType + "'" +
                 <%_ } _%>
             <%_ } _%>

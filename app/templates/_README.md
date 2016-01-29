@@ -3,7 +3,7 @@
 This application was generated using JHipster, you can find documentation and help at [https://jhipster.github.io](https://jhipster.github.io).
 
 Before you can build this project, you must install and configure the following dependencies on your machine:
-
+<% if(!skipClient) { %>
 1. [Node.js][]: We use Node to run a development web server and build the project.
    Depending on your system, you can install Node either from source or as a pre-packaged bundle.
 
@@ -30,22 +30,22 @@ auto-refreshes when files change on your hard drive.
 Bower is used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
 specifying a newer version in `bower.json`. You can also run `bower update` and `bower install` to manage dependencies.
 Add the `-h` flag on any command to see how you can use it. For example, `bower update -h`.
-
+<% } %>
 # Building for production
 
 To optimize the <%= baseName %> client for production, run:
 <% if (buildTool == 'maven') { %>
     mvn -Pprod clean package<% } %><% if (buildTool == 'gradle') { %>
     ./gradlew -Pprod clean bootRepackage<% } %>
-
+<% if(!skipClient) { %>
 This will concatenate and minify CSS and JavaScript files. It will also modify `index.html` so it references
 these new files.
-
+<% } %>
 To ensure everything worked, run:
 <% if (buildTool == 'maven') { %>
     java -jar target/*.war --spring.profiles.active=prod<% } %><% if (buildTool == 'gradle') { %>
     java -jar build/libs/*.war --spring.profiles.active=prod<% } %>
-
+<% if(!skipClient) { %>
 Then navigate to [http://localhost:8080](http://localhost:8080) in your browser.
 
 # Testing
@@ -57,7 +57,7 @@ Unit tests are run by [Karma][] and written with [Jasmine][]. They're located in
 
 <% if (testFrameworks.indexOf("protractor") > -1) { %>UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in `src/test/javascript/e2e`
 and can be run by starting Spring Boot in one terminal (`<% if (buildTool == 'maven') { %>mvn spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`grunt itest`) in a second one.<% } %>
-
+<% } %>
 # Continuous Integration
 
 To setup this project in Jenkins, use the following configuration:

@@ -78,10 +78,16 @@
             "fieldName": "attachment",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any"
+        },
+        {
+            "fieldId": 12,
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text"
         }
     ],
     "changelogDate": "20150805124838",
-    "dto": "mapstruct",
+    "dto": "no",
     "service": "no",
     "pagination": "no"
 }

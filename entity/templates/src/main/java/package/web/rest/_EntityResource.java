@@ -46,9 +46,9 @@ public class <%= entityClass %>Resource {
     var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance; -%>
     <%- include('../../common/inject_template', {viaService: viaService}); -%>
     /**
-     * POST  /<%= entityInstance %>s -> Create a new <%= entityInstance %>.
+     * POST  /<%= entityInstancePlural %> -> Create a new <%= entityInstance %>.
      */
-    @RequestMapping(value = "/<%= entityInstance %>s",
+    @RequestMapping(value = "/<%= entityInstancePlural %>",
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -57,15 +57,15 @@ public class <%= entityClass %>Resource {
         if (<%= instanceName %>.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("<%= entityInstance %>", "idexists", "A new <%= entityInstance %> cannot already have an ID")).body(null);
         }<%- include('../../common/save_template', {viaService: viaService}); -%>
-        return ResponseEntity.created(new URI("/api/<%= entityInstance %>s/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/<%= entityInstancePlural %>/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("<%= entityInstance %>", result.getId().toString()))
             .body(result);
     }
 
     /**
-     * PUT  /<%= entityInstance %>s -> Updates an existing <%= entityInstance %>.
+     * PUT  /<%= entityInstancePlural %> -> Updates an existing <%= entityInstance %>.
      */
-    @RequestMapping(value = "/<%= entityInstance %>s",
+    @RequestMapping(value = "/<%= entityInstancePlural %>",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -80,17 +80,17 @@ public class <%= entityClass %>Resource {
     }
 
     /**
-     * GET  /<%= entityInstance %>s -> get all the <%= entityInstance %>s.
+     * GET  /<%= entityInstancePlural %> -> get all the <%= entityInstancePlural %>.
      */
-    @RequestMapping(value = "/<%= entityInstance %>s",
+    @RequestMapping(value = "/<%= entityInstancePlural %>",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed<%- include('../../common/get_all_template', {viaService: viaService}); -%>
 
     /**
-     * GET  /<%= entityInstance %>s/:id -> get the "id" <%= entityInstance %>.
+     * GET  /<%= entityInstancePlural %>/:id -> get the "id" <%= entityInstance %>.
      */
-    @RequestMapping(value = "/<%= entityInstance %>s/{id}",
+    @RequestMapping(value = "/<%= entityInstancePlural %>/{id}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -104,9 +104,9 @@ public class <%= entityClass %>Resource {
     }
 
     /**
-     * DELETE  /<%= entityInstance %>s/:id -> delete the "id" <%= entityInstance %>.
+     * DELETE  /<%= entityInstancePlural %>/:id -> delete the "id" <%= entityInstance %>.
      */
-    @RequestMapping(value = "/<%= entityInstance %>s/{id}",
+    @RequestMapping(value = "/<%= entityInstancePlural %>/{id}",
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -116,13 +116,13 @@ public class <%= entityClass %>Resource {
     }<% if (searchEngine == 'elasticsearch') { %>
 
     /**
-     * SEARCH  /_search/<%= entityInstance %>s/:query -> search for the <%= entityInstance %> corresponding
+     * SEARCH  /_search/<%= entityInstancePlural %>/:query -> search for the <%= entityInstance %> corresponding
      * to the query.
      */
-    @RequestMapping(value = "/_search/<%= entityInstance %>s/{query}",
+    @RequestMapping(value = "/_search/<%= entityInstancePlural %>/{query:.+}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public List<<%= instanceType %>> search<%= entityClass %>s(@PathVariable String query) {<%- include('../../common/search_template', {viaService: viaService}); -%>
+    public List<<%= instanceType %>> search<%= entityClassPlural %>(@PathVariable String query) {<%- include('../../common/search_template', {viaService: viaService}); -%>
     }<% } %>
 }

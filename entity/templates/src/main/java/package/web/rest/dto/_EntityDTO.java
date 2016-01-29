@@ -42,9 +42,12 @@ public class <%= entityClass %>DTO implements Serializable {
     @Max(value = <%= fields[fieldId].fieldValidateRulesMax %><%= (fields[fieldId].fieldValidateRulesMax > MAX_VALUE) ? 'L' : '' %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('pattern') != -1) { %>
     @Pattern(regexp = "<%= fields[fieldId].fieldValidateRulesPatternJava %>")<% } } %><% if (fields[fieldId].fieldType == 'byte[]') { %>
     @Lob<% } %>
+    <%_ if (fields[fieldId].fieldTypeBlobContent != 'text') { _%>
     private <%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>;
-        <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
-
+    <%_ } else { _%>
+    private String <%= fields[fieldId].fieldName %>;
+    <%_ } %>
+    <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
     private String <%= fields[fieldId].fieldName %>ContentType;
         <%_ } _%>
     <%_ } _%>
@@ -67,15 +70,22 @@ public class <%= entityClass %>DTO implements Serializable {
         this.id = id;
     }
     <%_ for (fieldId in fields) { _%>
-
+    <%_ if(fields[fieldId].fieldTypeBlobContent != 'text') { _%>
     public <%= fields[fieldId].fieldType %> get<%= fields[fieldId].fieldInJavaBeanMethod %>() {
+    <%_ } else { _%>
+    public String get<%= fields[fieldId].fieldInJavaBeanMethod %>() {
+    <%_ } _%>
         return <%= fields[fieldId].fieldName %>;
     }
 
+    <%_ if(fields[fieldId].fieldTypeBlobContent != 'text') { _%>
     public void set<%= fields[fieldId].fieldInJavaBeanMethod %>(<%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>) {
+    <%_ } else { _%>
+    public void set<%= fields[fieldId].fieldInJavaBeanMethod %>(String <%= fields[fieldId].fieldName %>) {
+    <%_ } _%>
         this.<%= fields[fieldId].fieldName %> = <%= fields[fieldId].fieldName %>;
     }
-    <%_ if (fields[fieldId].fieldType == 'byte[]') { _%>
+    <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
 
     public String get<%= fields[fieldId].fieldInJavaBeanMethod %>ContentType() {
         return <%= fields[fieldId].fieldName %>ContentType;

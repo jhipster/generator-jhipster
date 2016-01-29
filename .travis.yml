@@ -4,43 +4,44 @@ services:
   - docker
 language: node_js
 node_js:
-  - "4.2.1"
+  - "4.2.4"
 jdk:
   - oraclejdk8
 env:
   global:
-  - JHIPSTER_MVN_DEP=1
-  - RUNTASK=1
-  - GRUNT=1
-  - PROTRACTOR=0
-  - JHIPSTER_TRAVIS=$TRAVIS_BUILD_DIR/travis
-  - JHIPSTER_INSTALL=$JHIPSTER_TRAVIS/install
-  - JHIPSTER_SAMPLES=$JHIPSTER_TRAVIS/samples
-  - JHIPSTER_SCRIPTS=$JHIPSTER_TRAVIS/scripts
+    - JHIPSTER_NODE_CACHE=1
+    - PROFILE=dev
+    - RUN_APP=1
+    - GRUNT=1
+    - PROTRACTOR=0
+    - JHIPSTER_TRAVIS=$TRAVIS_BUILD_DIR/travis
+    - JHIPSTER_INSTALL=$JHIPSTER_TRAVIS/install
+    - JHIPSTER_SAMPLES=$JHIPSTER_TRAVIS/samples
+    - JHIPSTER_SCRIPTS=$JHIPSTER_TRAVIS/scripts
   matrix:
-  - PROFILE=dev  JHIPSTER=app-gradle    RUNTASK=0
-  - PROFILE=dev  JHIPSTER=app-gulp      GRUNT=0
-  - PROFILE=dev  JHIPSTER=app-cassandra
-  - PROFILE=dev  JHIPSTER=app-default
-  - PROFILE=dev  JHIPSTER=app-hazelcast
-  - PROFILE=dev  JHIPSTER=app-mongodb
-  - PROFILE=dev  JHIPSTER=app-websocket PROTRACTOR=1
-  - PROFILE=dev  JHIPSTER=app-noi18n
-  - PROFILE=dev  JHIPSTER=app-oauth2
-  - PROFILE=dev  JHIPSTER=app-xauth
-  - PROFILE=prod JHIPSTER=app-mysql
-  - PROFILE=prod JHIPSTER=app-psql-es
-  - PROFILE=dev  JHIPSTER=app-social
+    - JHIPSTER=app-from-scratch JHIPSTER_NODE_CACHE=0 RUN_APP=0
+    - JHIPSTER=app-gradle RUN_APP=0
+    - JHIPSTER=app-gulp GRUNT=0
+    - JHIPSTER=app-cassandra
+    - JHIPSTER=app-default
+    - JHIPSTER=app-hazelcast-cucumber
+    - JHIPSTER=app-mongodb
+    - JHIPSTER=app-websocket PROTRACTOR=1
+    - JHIPSTER=app-noi18n
+    - JHIPSTER=app-oauth2
+    - JHIPSTER=app-xauth
+    - JHIPSTER=app-mysql PROFILE=prod
+    - JHIPSTER=app-psql-es PROFILE=prod
+    - JHIPSTER=app-social
 before_install:
-  - sudo service docker restart
   - sudo /etc/init.d/postgresql stop
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
 install:
   - $JHIPSTER_INSTALL/01-install-docker-compose.sh
   - $JHIPSTER_INSTALL/02-install-jhipster-stack.sh
-  - $JHIPSTER_INSTALL/03-downloadDep.sh
-  # - $JHIPSTER_INSTALL/04-checkVersion.sh
+  # - $JHIPSTER_INSTALL/03-checkVersion.sh
+  - $JHIPSTER_INSTALL/04-cache.sh
 script:
   - $JHIPSTER_SCRIPTS/01-generate-project.sh
   - $JHIPSTER_SCRIPTS/02-generate-entities.sh

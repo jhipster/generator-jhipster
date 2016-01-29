@@ -1,25 +1,16 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .factory('AuditsService', function ($http) {
-        return {
-            findAll: function () {
-                return $http.get('api/audits/').then(function (response) {
-                    return response.data;
-                });
+    .factory('AuditsService', function ($resource, DateUtils) {
+        return $resource('api/audits/:id', {}, {
+            'get': {
+                method: 'GET',
+                isArray: true
             },
-            findByDates: function (fromDate, toDate) {
-
-                var formatDate =  function (dateToFormat) {
-                    if (dateToFormat !== undefined && !angular.isString(dateToFormat)) {
-                        return dateToFormat.getYear() + '-' + dateToFormat.getMonth() + '-' + dateToFormat.getDay();
-                    }
-                    return dateToFormat;
-                };
-
-                return $http.get('api/audits/', {params: {fromDate: formatDate(fromDate), toDate: formatDate(toDate)}}).then(function (response) {
-                    return response.data;
-                });
+            'query': {
+                method: 'GET',
+                isArray: true,
+                params: {fromDate: null, toDate: null}
             }
-        };
+        })
     });

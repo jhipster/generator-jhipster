@@ -5,7 +5,8 @@ import <%=packageName%>.web.filter.CsrfCookieGeneratorFilter;<% } %><% if (authe
 import <%=packageName%>.security.xauth.*;<% } %>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;<% if (authenticationType == 'session') { %>
-import org.springframework.core.env.Environment;<% } %><% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
+import org.springframework.core.env.Environment;<% } %>
+import org.springframework.http.HttpMethod;<% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
 import org.springframework.security.authentication.AuthenticationManager;<% } %>
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -72,6 +73,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
+            .antMatchers(HttpMethod.OPTIONS, "/**")
             .antMatchers("/scripts/**/*.{js,html}")
             .antMatchers("/bower_components/**")
             .antMatchers("/i18n/**")
@@ -82,7 +84,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/api/account/reset_password/init")
             .antMatchers("/api/account/reset_password/finish")<% } %>
             .antMatchers("/test/**")<% if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { %>;<% } else { %>
-            .antMatchers("/console/**");<% } %>
+            .antMatchers("/h2-console/**");<% } %>
     }<% if (authenticationType == 'session' || authenticationType == 'xauth') { %>
 
     @Override

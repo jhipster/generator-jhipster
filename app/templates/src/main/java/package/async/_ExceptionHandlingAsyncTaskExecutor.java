@@ -22,7 +22,7 @@ public class ExceptionHandlingAsyncTaskExecutor implements AsyncTaskExecutor,
 
     @Override
     public void execute(Runnable task) {
-        executor.execute(task);
+        executor.execute(createWrappedRunnable(task));
     }
 
     @Override

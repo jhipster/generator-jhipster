@@ -15,25 +15,24 @@ module.exports = {
     copyWebResource: copyWebResource
 };
 
-function rewriteFile(args) {
+function rewriteFile(args, _this) {
     args.path = args.path || process.cwd();
     var fullPath = path.join(args.path, args.file);
 
-    args.haystack = fs.readFileSync(fullPath, 'utf8');
+    args.haystack = _this.fs.read(fullPath);
     var body = rewrite(args);
-
-    fs.writeFileSync(fullPath, body);
+    _this.fs.write(fullPath, body);
 }
 
-function replaceContent(args) {
+function replaceContent(args, _this) {
     args.path = args.path || process.cwd();
     var fullPath = path.join(args.path, args.file);
 
     var re = args.regex ? new RegExp(args.pattern, 'g') : args.pattern;
 
-    var body = fs.readFileSync(fullPath, 'utf8');
+    var body = _this.fs.read(fullPath);
     body = body.replace(re, args.content);
-    fs.writeFileSync(fullPath, body);
+    _this.fs.write(fullPath, body);
 }
 
 function escapeRegExp(str) {
@@ -83,10 +82,10 @@ function classify(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function rewriteJSONFile(filePath, rewriteFile) {
-    var jsonObj = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-    rewriteFile(jsonObj);
-    fs.writeFileSync(filePath, JSON.stringify(jsonObj, null, 4));
+function rewriteJSONFile(filePath, rewriteFile, _this) {
+    var jsonObj = _this.fs.readJSON(fullPath);
+    rewriteFile(jsonObj, _this);
+    _this.fs.writeJSON(filePath, jsonObj, null, 4);
 }
 
 function copyWebResource (source, dest, regex, type, _this, _opt, template) {

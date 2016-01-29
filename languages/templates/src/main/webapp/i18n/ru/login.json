@@ -13,7 +13,7 @@
             }
         },
         "password" : {
-            "forgot": "Did you forget your password?"
+            "forgot": "Вы забыли ваш пароль?"
         }
     }
 }

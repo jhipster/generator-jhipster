@@ -45,13 +45,13 @@
 <%_ if (prodDatabaseType == 'cassandra') { _%>
 jhipster-opscenter:
   container_name: jhipster-opscenter
-  build: ./docker/opscenter
+  build: opscenter/
   ports:
     - "8888:8888"
 <%= baseName.toLowerCase() %>-cassandra:
   container_name: <%= baseName.toLowerCase() %>-cassandra
   build: .
-  dockerfile: Cassandra-Prod.Dockerfile
+  dockerfile: cassandra/Cassandra-Prod.Dockerfile
   # volumes:
   #   - ~/volumes/jhipster/<%= baseName %>/cassandra/:/var/lib/cassandra/data
   links:
@@ -64,7 +64,7 @@ jhipster-opscenter:
     - "9160:9160"
 <%=baseName.toLowerCase()%>-cassandra-node:
   build: .
-  dockerfile: Cassandra-Prod.Dockerfile
+  dockerfile: cassandra/Cassandra-Prod.Dockerfile
   links:
     - <%= baseName.toLowerCase() %>-cassandra:seed
     - jhipster-opscenter:opscenter

@@ -37,7 +37,6 @@ public class SwaggerConfiguration {
      * Swagger Springfox configuration.
      */
     @Bean
-    @Profile("!" + Constants.SPRING_PROFILE_FAST)
     public Docket swaggerSpringfoxDocket(JHipsterProperties jHipsterProperties) {
         log.debug("Starting Swagger");
         StopWatch watch = new StopWatch();
@@ -53,7 +52,6 @@ public class SwaggerConfiguration {
 
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
             .apiInfo(apiInfo)
-            .genericModelSubstitutes(ResponseEntity.class)
             .forCodeGeneration(true)
             .genericModelSubstitutes(ResponseEntity.class)
             .ignoredParameterTypes(Pageable.class)

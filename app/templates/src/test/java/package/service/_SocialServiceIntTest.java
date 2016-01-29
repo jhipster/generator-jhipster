@@ -229,7 +229,7 @@ public class SocialServiceIntTest {
 
         //Verify
         User user = userRepository.findOneByEmail("mail@mail.com").get();
-        assertThat(user.getLogin()).isEqualTo("@LOGIN");
+        assertThat(user.getLogin()).isEqualToIgnoringCase("@LOGIN");
 
         // Teardown
         userRepository.delete(user);

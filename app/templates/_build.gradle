@@ -31,6 +31,10 @@ bootRepackage {
    mainClass = '<%= packageName %>.Application'
 }
 
+war {
+    rootSpec.exclude("**/tomcat-*.jar")
+}
+
 springBoot {
     mainClass = '<%= packageName %>.Application'
     executable = true
@@ -45,29 +49,41 @@ test {
     println 'Starting the Unit and Integration test'
     include '**/*UnitTest*'
     include '**/*IntTest*'
+
+    reports.html.enabled = false
 }
 
 task cucumberTest(type: Test) {
+    println 'Starting the Cucumber test'
     include '**/CucumberTest*'
+
+    reports.html.enabled = false
 }
 
 test.finalizedBy(cucumberTest)
 
-apply from: 'yeoman.gradle'
-apply from: 'sonar.gradle'
+task testReport(type: TestReport) {
+    println 'Executing testReport'
+    destinationDir = file("$buildDir/reports/tests")
+    reportOn test
+    reportOn cucumberTest
+}
+
+cucumberTest.finalizedBy(testReport)
+
+apply from: 'gradle/yeoman.gradle'
+apply from: 'gradle/sonar.gradle'
 <% if (databaseType == 'sql') { %>
-apply from: 'liquibase.gradle'<% } %>
+apply from: 'gradle/liquibase.gradle'<% } %>
 <% if (testFrameworks.indexOf('gatling') != -1) { %>
-apply from: 'gatling.gradle'<% } %>
-apply from: 'mapstruct.gradle'
+apply from: 'gradle/gatling.gradle'<% } %>
+apply from: 'gradle/mapstruct.gradle'
 //jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
 
 if (project.hasProperty('prod')) {
-    apply from: 'profile_prod.gradle'
-} else if (project.hasProperty('fast')) {
-    apply from: 'profile_fast.gradle'
+    apply from: 'gradle/profile_prod.gradle'
 } else {
-  apply from: 'profile_dev.gradle'
+  apply from: 'gradle/profile_dev.gradle'
 }
 
 group = '<%= packageName %>'

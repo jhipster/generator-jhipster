@@ -1,10 +1,11 @@
 {
     "<%= angularAppName %>": {
-        "<%= entityInstance %>" : {
+        "<%= entityInstance %>-management" : {
             "home": {
-                "title": "<%= entityClass %>s",
+                "title": "<%= entityClassPlural %>",
                 "createLabel": "Maak een nieuwe <%= entityClass %>",
-                "createOrEditLabel": "Maak of wijzig een <%= entityClass %>"
+                "createOrEditLabel": "Maak of wijzig een <%= entityClass %>",
+                "search": "Search for <%= entityClass %>"
             },
             "delete": {
                 "question": "Bent u zeker dat u <%= entityClass %> {{ id }} wilt verwijderen?"

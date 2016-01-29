@@ -1,10 +1,11 @@
 {
     "<%= angularAppName %>": {
-        "<%= entityInstance %>" : {
+        "<%= entityInstance %>-management" : {
             "home": {
-                "title": "<%= entityClass %>s",
+                "title": "<%= entityClassPlural %>",
                 "createLabel": "Egy új <%= entityClass %> létrehozása",
-                "createOrEditLabel": "Hozzon létre, vagy módosítson <%= entityClass %>t"
+                "createOrEditLabel": "Hozzon létre, vagy módosítson <%= entityClass %>t",
+                "search": "Search for <%= entityClass %>"
             },
             "delete": {
                 "question": "Biztos benne, hogy törölni szeretné az <%= entityClass %>t {{ id }} azonosítóval?"

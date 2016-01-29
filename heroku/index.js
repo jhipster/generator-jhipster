@@ -2,14 +2,15 @@
 var util = require('util'),
     path = require('path'),
     fs = require('fs'),
-    yeoman = require('yeoman-generator'),
+    os = require('os'),
+    generators = require('yeoman-generator'),
     exec = require('child_process').exec,
     chalk = require('chalk'),
     _ = require('underscore.string'),
     scriptBase = require('../script-base');
 
 var HerokuGenerator = module.exports = function HerokuGenerator(args, options, config) {
-    yeoman.generators.Base.apply(this, arguments);
+    generators.Base.apply(this, arguments);
     console.log(chalk.bold('Heroku configuration is starting'));
     this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
     this.baseName = this.config.get('baseName');
@@ -22,7 +23,7 @@ var HerokuGenerator = module.exports = function HerokuGenerator(args, options, c
     this.buildTool = this.config.get('buildTool');
 };
 
-util.inherits(HerokuGenerator, yeoman.generators.Base);
+util.inherits(HerokuGenerator, generators.Base);
 util.inherits(HerokuGenerator, scriptBase);
 
 HerokuGenerator.prototype.askFor = function askFor() {
@@ -190,7 +191,11 @@ HerokuGenerator.prototype.productionDeploy = function productionDeploy() {
 
         var herokuDeployCommand = 'mvn package -Pprod -DskipTests=true && heroku deploy:jar --jar target/*.war --app ' + this.herokuDeployedName;
         if (this.buildTool == 'gradle') {
-            herokuDeployCommand = './gradlew -Pprod bootRepackage -x test && heroku deploy:jar --jar build/libs/*.war'
+            if(os.platform() === 'win32') {
+                herokuDeployCommand = 'gradlew -Pprod bootRepackage -x test && heroku deploy:jar --jar build/libs/*.war'
+            } else {
+                herokuDeployCommand = './gradlew -Pprod bootRepackage -x test && heroku deploy:jar --jar build/libs/*.war'
+            }
         }
 
         this.log(chalk.bold("\nUploading your application code.\n This may take " + chalk.cyan('several minutes') + " depending on your connection speed..."));

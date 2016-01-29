@@ -1,10 +1,11 @@
 {
     "<%= angularAppName %>": {
-        "<%= entityInstance %>" : {
+        "<%= entityInstance %>-management" : {
             "home": {
-                "title": "<%= entityClass %>s",
+                "title": "<%= entityClassPlural %>",
                 "createLabel": "<%= entityClass %> を追加",
-                "createOrEditLabel": "<%= entityClass %>を追加または編集"
+                "createOrEditLabel": "<%= entityClass %>を追加または編集",
+                "search": "Search for <%= entityClass %>"
             },
             "delete": {
                 "question": "<%= entityClass %> {{ id }}を削除してもよろしいですか？"

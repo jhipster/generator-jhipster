@@ -59,7 +59,8 @@
                     </button>
                     <button type="submit"
                             ui-sref="user-management.delete({login:user.login})"
-                            class="btn btn-danger btn-sm">
+                            class="btn btn-danger btn-sm"
+                            ng-disabled="currentAccount.login==user.login">
                         <span class="glyphicon glyphicon-remove-circle"></span>
                     </button>
                 </td>
