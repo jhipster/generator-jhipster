@@ -1,6 +1,5 @@
 'use strict';
 var path = require('path'),
-    fs = require('fs'),
     html = require("html-wiring"),
     shelljs = require('shelljs'),
     engine = require('ejs').render;

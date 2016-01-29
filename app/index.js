@@ -5,6 +5,7 @@ var util = require('util'),
     chalk = require('chalk'),
     _ = require('underscore.string'),
     shelljs = require('shelljs'),
+    fs = require('fs'),
     scriptBase = require('../script-base'),
     cleanup = require('../app/cleanup'),
     packagejs = require(__dirname + '/../package.json'),
@@ -24,6 +25,7 @@ const WEBAPP_DIR = 'src/main/webapp/';
 const TEST_JS_DIR = 'src/test/javascript/';
 const TEST_RES_DIR = 'src/test/resources/';
 const DOCKER_DIR = 'src/main/docker/';
+const ENTITY_DIR = ".jhipster";
 const INTERPOLATE_REGEX = /<%=([\s\S]+?)%>/g; // so that tags in templates do not get mistreated as _ templates
 
 module.exports = JhipsterGenerator.extend({
@@ -160,6 +162,30 @@ module.exports = JhipsterGenerator.extend({
                 'to re-generate the project...\n'));
 
                 this.existingProject = true;
+            }
+        },
+
+        getExistingEntities: function() {
+            this.entities = [];
+            var unique_dates = new Set();
+            function isBefore(e1, e2) {
+              return e1.definition.changelogDate - e2.definition.changelogDate;
+            }
+
+            if (shelljs.test('-d', ENTITY_DIR)) {
+                shelljs.ls(path.join(ENTITY_DIR, '*.json')).forEach( function(file) {
+                    var definition = JSON.parse(fs.readFileSync(file, 'utf8'));
+                    unique_dates.add(definition.changelogDate);
+                    this.entities.push({name: path.basename(file, '.json'), definition: definition});
+                }, this);
+            }
+            this.entities.sort(isBefore);
+
+            if(this.withEntities && this.entities.length != unique_dates.size) {
+                this.log(chalk.yellow('WARNING some of your entities have the same changelog dates so JHipster couldn\'t\n' +
+                ' determine the order in which they should be generated. It is recommended to\n' +
+                ' edit the changelog dates in the '+ ENTITY_DIR + 'folder and to relaunch this\n' +
+                ' generator.' ));
             }
         }
     },
@@ -1411,12 +1437,9 @@ module.exports = JhipsterGenerator.extend({
 
         regenerateEntities: function () {
             if (this.withEntities) {
-                var entities = this.config.get('entities');
-                if (entities !== undefined) {
-                    entities.forEach( function(entity) {
-                        this.composeWith('jhipster:entity', {options: {regenerate: true}, args:[entity]});
-                    }, this);
-                }
+                this.entities.forEach( function(entity) {
+                    this.composeWith('jhipster:entity', {options: {regenerate: true}, args:[entity.name]});
+                }, this);
             }
         }
     },
