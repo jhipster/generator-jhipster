@@ -1296,6 +1296,7 @@ module.exports = EntityGenerator.extend({
             if (databaseType == 'sql' || databaseType == 'mongodb') {
                 this.data.pagination = this.pagination;
             }
+            this.data.javadoc = this.javadoc;
             this.fs.writeJSON(this.filename, this.data, null, 4);
         },
 
