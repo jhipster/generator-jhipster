@@ -45,7 +45,6 @@
   },
   "devDependencies": {
     "fs-extra": "0.26.4",
-    "grunt": "0.4.5",
     "mocha": "2.3.4",
     "yeoman-assert": "2.1.1",
     "yeoman-test": "1.0.0"
