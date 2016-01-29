@@ -234,9 +234,9 @@ var expectedFiles = {
         'src/main/webapp/scripts/app/error/accessdenied.html',
         'src/main/webapp/scripts/app/entities/entity.js',
         'src/main/webapp/scripts/app/error/error.js',
-        'src/main/webapp/scripts/app/main/main.html',
-        'src/main/webapp/scripts/app/main/main.js',
-        'src/main/webapp/scripts/app/main/main.controller.js',
+        'src/main/webapp/scripts/app/home/home.html',
+        'src/main/webapp/scripts/app/home/home.js',
+        'src/main/webapp/scripts/app/home/home.controller.js',
         'src/test/javascript/karma.conf.js',
         'src/test/javascript/spec/helpers/httpBackend.js',
         'src/test/javascript/spec/helpers/module.js',
@@ -407,9 +407,9 @@ describe('JHipster generator', function () {
 
         it('creates expected files with correct application name', function () {
             assert.file([
-                'src/main/webapp/scripts/app/main/main.js'
+                'src/main/webapp/scripts/app/home/home.js'
             ]);
-            assert.fileContent('src/main/webapp/scripts/app/main/main.js', /myapplicationApp/);
+            assert.fileContent('src/main/webapp/scripts/app/home/home.js', /myapplicationApp/);
         })
     });
 

@@ -1406,7 +1406,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         cleanup: function () {
-            cleanup.cleanupOldFiles(this);
+            cleanup.cleanupOldFiles(this, this.javaDir, this.testDir, RESOURCE_DIR, WEBAPP_DIR, TEST_JS_DIR);
         },
 
         regenerateEntities: function () {
