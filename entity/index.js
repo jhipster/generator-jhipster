@@ -963,7 +963,7 @@ module.exports = EntityGenerator.extend({
         askForUpdate: function () {
             // ask only if running an existing entity without arg option --force or --regenerate
             var isForce = this.options['force'] || this.regenerate;
-            this.updateEntity == 'regenerate'; // default if skipping questions by --force
+            this.updateEntity = 'regenerate'; // default if skipping questions by --force
             if (isForce || !this.useConfigurationFile) {
                 return;
             }
