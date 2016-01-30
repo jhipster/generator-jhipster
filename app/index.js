@@ -1405,7 +1405,7 @@ module.exports = JhipsterGenerator.extend({
                 'spec/app/account/register/_register.controller.spec.js',
                 'spec/app/account/reset/finish/_reset.finish.controller.spec.js',
                 'spec/app/account/reset/request/_reset.request.controller.spec.js',
-                'spec/components/auth/_auth.services.spec.js'
+                'spec/app/services/auth/_auth.services.spec.js'
             ];
             if (this.authenticationType == 'session') {
                 testTemplates.push('spec/app/account/sessions/_sessions.controller.spec.js');
