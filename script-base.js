@@ -37,7 +37,7 @@ Generator.prototype.addJavaScriptToIndex = function (script) {
             file: fullPath,
             needle: '<!-- endbuild -->',
             splicable: [
-                    '<script src="scripts/' + script + '"></script>'
+                    '<script src="app/' + script + '"></script>'
             ]
         }, this);
     } catch (e) {
@@ -74,7 +74,7 @@ Generator.prototype.addMessageformatLocaleToIndex = function (script) {
  */
 Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enableTranslation) {
     try {
-        var fullPath = 'src/main/webapp/scripts/components/navbar/navbar.html';
+        var fullPath = 'src/main/webapp/app/components/navbar/navbar.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-add-element-to-menu',
@@ -97,7 +97,7 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
  */
 Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName, enableTranslation) {
     try {
-        var fullPath = 'src/main/webapp/scripts/components/navbar/navbar.html';
+        var fullPath = 'src/main/webapp/app/components/navbar/navbar.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-add-element-to-admin-menu',
@@ -119,7 +119,7 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
  */
 Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
     try {
-        var fullPath = 'src/main/webapp/scripts/components/navbar/navbar.html';
+        var fullPath = 'src/main/webapp/app/components/navbar/navbar.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-add-entity-to-menu',
@@ -387,7 +387,7 @@ Generator.prototype.addBowerrcParameter = function(key, value) {
  *
  */
 Generator.prototype.addAngularJsModule = function(moduleName) {
-    var fullPath = 'src/main/webapp/scripts/app/app.js';
+    var fullPath = 'src/main/webapp/app/app/app.js';
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
@@ -422,7 +422,7 @@ Generator.prototype.addAngularJsModule = function(moduleName) {
  *
  */
 Generator.prototype.addAngularJsConfig = function(moduleConfigNames, config, comment) {
-    var fullPath = 'src/main/webapp/scripts/app/app.js';
+    var fullPath = 'src/main/webapp/app/app/app.js';
     var configBlock = '';
     if (comment) {
         configBlock += '// ' + comment + '\n    ';
@@ -445,12 +445,12 @@ Generator.prototype.addAngularJsConfig = function(moduleConfigNames, config, com
 
 /**
  * Add a new interceptor to the angular application in "app.js".
- * The interceptor should be in its own .js file inside scripts/components/interceptor folder
+ * The interceptor should be in its own .js file inside app/components/interceptor folder
  * @param {string} interceptorName - angular name of the interceptor
  *
  */
 Generator.prototype.addAngularJsInterceptor = function(interceptorName) {
-    var fullPath = 'src/main/webapp/scripts/app/app.js';
+    var fullPath = 'src/main/webapp/app/app/app.js';
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
@@ -513,9 +513,9 @@ Generator.prototype.addColumnToLiquibaseEntityChangeset = function (filePath, co
  * @param {string} buttonHoverColor - color of the social button when is hover. ex: '#2d4373'
  */
 Generator.prototype.addSocialButton = function (isUseSass, socialName, socialParameter, buttonColor, buttonHoverColor) {
-    var socialServicefullPath = 'src/main/webapp/scripts/app/account/social/social.service.js';
-    var loginfullPath = 'src/main/webapp/scripts/app/account/login/login.html';
-    var registerfullPath = 'src/main/webapp/scripts/app/account/register/register.html';
+    var socialServicefullPath = 'src/main/webapp/app/app/account/social/social.service.js';
+    var loginfullPath = 'src/main/webapp/app/app/account/login/login.html';
+    var registerfullPath = 'src/main/webapp/app/app/account/register/register.html';
     try {
         this.log(chalk.yellow('\nupdate ') + socialServicefullPath);
         var serviceCode =  "case '" + socialName + "': return '"+ socialParameter +"';";
@@ -1118,7 +1118,7 @@ Generator.prototype.copyEnumI18n = function(language, enumInfo) {
 };
 
 Generator.prototype.installNewLanguage = function(language) {
-    var fullPath = 'src/main/webapp/scripts/components/language/language.service.js';
+    var fullPath = 'src/main/webapp/app/components/language/language.service.js';
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
