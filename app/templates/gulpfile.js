@@ -35,7 +35,7 @@ var yeoman = {
     test: 'src/test/javascript/spec/',
     tmp: '.tmp/'<% if(useSass) { %>,
     importPath: 'src/main/webapp/bower_components',
-    scss: 'src/main/scss/'<% } %>,
+    scss: 'src/main/webapp/scss/'<% } %>,
     port: 9000,
     apiPort: 8080,
     liveReloadPort: 35729
@@ -200,7 +200,7 @@ gulp.task('wiredep:app', function () {
         }))
         .pipe(gulp.dest('src/main/webapp'));
 
-    return <% if (useSass) { %>es.merge(s, gulp.src('src/main/scss/main.scss')
+    return <% if (useSass) { %>es.merge(s, gulp.src(yeoman.scss + 'main.scss')
         .pipe(wiredep({
             exclude: [
                 /angular-i18n/,  // localizations are loaded dynamically
@@ -208,7 +208,7 @@ gulp.task('wiredep:app', function () {
             ],
             ignorePath: /\.\.\/webapp\/bower_components\// // remove ../webapp/bower_components/ from paths of injected sass files
         }))
-        .pipe(gulp.dest('src/main/scss')));<% } else { %>s;<% } %>
+        .pipe(gulp.dest(yeoman.scss)));<% } else { %>s;<% } %>
 });
 
 gulp.task('wiredep:test', function () {
