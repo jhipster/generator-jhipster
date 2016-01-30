@@ -36,7 +36,7 @@ var databaseType;
 var prodDatabaseType;
 const INTERPOLATE_REGEX = /<%=([\s\S]+?)%>/g; // so that thymeleaf tags in templates do not get mistreated as _ templates
 const RESOURCE_DIR = 'src/main/resources/';
-const ANGULAR_DIR = WEBAPP_DIR + 'app/';
+const ANGULAR_DIR = 'src/main/webapp/app/';
 
 var EntityGenerator = generators.Base.extend({});
 
@@ -1591,14 +1591,14 @@ module.exports = EntityGenerator.extend({
             'src/test/javascript/spec/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller.spec.js', this, {});
             this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller' + '.js');
 
-            this.template('src/main/webapp/components/_entity-service.js',
-            ANGULAR_DIR + 'components/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js', this, {});
-            this.addJavaScriptToIndex('components/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js');
+            this.template('src/main/webapp/services/_entity-service.js',
+            ANGULAR_DIR + 'services/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js', this, {});
+            this.addJavaScriptToIndex('services/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js');
 
             if (this.searchEngine == 'elasticsearch') {
-                this.template('src/main/webapp/components/_entity-search-service.js',
-                ANGULAR_DIR + 'components/entities/' + this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js', this, {});
-                this.addJavaScriptToIndex('components/entities/' + this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js');
+                this.template('src/main/webapp/services/_entity-search-service.js',
+                ANGULAR_DIR + 'services/entities/' + this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js', this, {});
+                this.addJavaScriptToIndex('services/entities/' + this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js');
             }
 
             // Copy for each
