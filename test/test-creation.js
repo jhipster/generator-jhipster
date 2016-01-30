@@ -284,7 +284,7 @@ const expectedFiles = {
 
 describe('JHipster generator', function () {
     describe('grunt default configuration', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
@@ -317,7 +317,7 @@ describe('JHipster generator', function () {
     });
 
     describe('gulp default configuration', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
@@ -350,7 +350,7 @@ describe('JHipster generator', function () {
     });
 
     describe('package names', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
@@ -383,7 +383,7 @@ describe('JHipster generator', function () {
     });
 
     describe('application names', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
@@ -416,7 +416,7 @@ describe('JHipster generator', function () {
     });
 
     describe('oauth2', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
@@ -448,7 +448,7 @@ describe('JHipster generator', function () {
     });
 
     describe('hazelcast', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
@@ -481,7 +481,7 @@ describe('JHipster generator', function () {
     });
 
     describe('i18n', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
@@ -511,7 +511,7 @@ describe('JHipster generator', function () {
     });
 
     describe('social login', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
@@ -541,7 +541,7 @@ describe('JHipster generator', function () {
     });
 
     describe('skip client', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../app'))
                 .withOptions({skipInstall: true, skipClient: true})
                 .withPrompts({

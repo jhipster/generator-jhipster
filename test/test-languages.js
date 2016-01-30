@@ -1,4 +1,4 @@
-/*global describe, beforeEach, it*/
+/*global describe, beforeEachEach, it*/
 'use strict';
 
 var path = require('path');
@@ -32,7 +32,7 @@ describe('JHipster generator languages', function () {
 
     languages.forEach( function(language) {
         describe('no social - creates ' + language.name, function () {
-            before(function (done) {
+            beforeEach(function (done) {
                 helpers.run(require.resolve('../languages'))
                     .inTmpDir(function (dir) {
                         fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
@@ -82,7 +82,7 @@ describe('JHipster generator languages', function () {
 
     languages.forEach( function(language) {
         describe('with social - creates ' + language.name, function () {
-            before(function (done) {
+            beforeEach(function (done) {
                 helpers.run(require.resolve('../languages'))
                     .inTmpDir(function (dir) {
                         fse.copySync(path.join(__dirname, '../test/templates/social'), dir)
