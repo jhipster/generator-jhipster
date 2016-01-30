@@ -14,7 +14,7 @@ Example:
         /webapp/i18n/{lang}/language.json
         /webapp/i18n/{lang}/login.json
         /webapp/i18n/{lang}/logs.json
-        /webapp/i18n/{lang}/main.json
+        /webapp/i18n/{lang}/home.json
         /webapp/i18n/{lang}/metrics.json
         /webapp/i18n/{lang}/password.json
         /webapp/i18n/{lang}/register.json

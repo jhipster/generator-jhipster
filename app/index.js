@@ -1158,9 +1158,9 @@ module.exports = JhipsterGenerator.extend({
             this.copyHtml(WEBAPP_DIR + '/scripts/app/error/accessdenied.html', WEBAPP_DIR + 'scripts/app/error/accessdenied.html');
             this.copyJs(WEBAPP_DIR + '/scripts/app/entities/_entity.js', WEBAPP_DIR + 'scripts/app/entities/entity.js', this, {});
             this.copyJs(WEBAPP_DIR + '/scripts/app/error/_error.js', WEBAPP_DIR + 'scripts/app/error/error.js', this, {});
-            this.copyHtml(WEBAPP_DIR + '/scripts/app/main/main.html', WEBAPP_DIR + 'scripts/app/main/main.html');
-            this.copyJs(WEBAPP_DIR + '/scripts/app/main/_main.js', WEBAPP_DIR + 'scripts/app/main/main.js', this, {});
-            this.template(WEBAPP_DIR + '/scripts/app/main/_main.controller.js', WEBAPP_DIR + 'scripts/app/main/main.controller.js', this, {});
+            this.copyHtml(WEBAPP_DIR + '/scripts/app/home/home.html', WEBAPP_DIR + 'scripts/app/home/home.html');
+            this.copyJs(WEBAPP_DIR + '/scripts/app/home/_home.js', WEBAPP_DIR + 'scripts/app/home/home.js', this, {});
+            this.template(WEBAPP_DIR + '/scripts/app/home/_home.controller.js', WEBAPP_DIR + 'scripts/app/home/home.controller.js', this, {});
 
             // Social
             if (this.enableSocialSignIn) {
@@ -1272,8 +1272,8 @@ module.exports = JhipsterGenerator.extend({
                 'scripts/app/admin/user-management/user-management.js',
                 'scripts/app/entities/entity.js',
                 'scripts/app/error/error.js',
-                'scripts/app/main/main.js',
-                'scripts/app/main/main.controller.js'
+                'scripts/app/home/home.js',
+                'scripts/app/home/home.controller.js'
             ];
             if (this.enableTranslation) {
                 appScripts = appScripts.concat([
@@ -1406,7 +1406,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         cleanup: function () {
-            cleanup.cleanupOldFiles(this);
+            cleanup.cleanupOldFiles(this, this.javaDir, this.testDir, RESOURCE_DIR, WEBAPP_DIR, TEST_JS_DIR);
         },
 
         regenerateEntities: function () {
