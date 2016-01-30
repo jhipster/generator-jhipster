@@ -2,7 +2,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
 apply plugin: 'com.moowork.node'<% if(frontendBuilder == 'grunt') {%>
 apply plugin: 'com.moowork.grunt'<% } if(frontendBuilder == 'gulp') {%>
 apply plugin: 'com.moowork.gulp'<% } %>
-
+<% if(!skipClient) {%>
 task bower(type: Exec) {
     if (Os.isFamily(Os.FAMILY_WINDOWS)) {
         commandLine 'cmd', '/c', 'bower', 'install'
@@ -10,13 +10,6 @@ task bower(type: Exec) {
         commandLine 'bower', 'install'
     }
 }
-
-<% if(frontendBuilder == 'grunt') {%>
-bower.onlyIf { !project.hasProperty('skipBower') }
 processResources.dependsOn 'bower'
-<% }  if(frontendBuilder == 'gulp') {%>
-gulp_build.dependsOn 'npmInstall'
-gulp_build.dependsOn 'bower'
-processResources.dependsOn gulp_build
-test.dependsOn gulp_test
+bower.onlyIf { !project.hasProperty('skipBower') }
 <% } %>
