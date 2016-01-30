@@ -637,7 +637,7 @@ Generator.prototype.addMainCSSStyle = function(isUseSass, style, comment) {
         this.addMainSCSSStyle(style, comment);
     }
 
-    var fullPath = 'src/main/webapp/assets/styles/main.css';
+    var fullPath = 'src/main/webapp/content/css/main.css';
     var styleBlock = '';
     if (comment) {
         styleBlock += '/* ==========================================================================\n';
@@ -679,7 +679,7 @@ Generator.prototype.addMainCSSStyle = function(isUseSass, style, comment) {
  *
  */
 Generator.prototype.addMainSCSSStyle = function(style, comment) {
-    var fullPath = 'src/main/scss/main.scss';
+    var fullPath = 'src/main/webapp/scss/main.scss';
     var styleBlock = '';
     if (comment) {
         styleBlock += '/* ==========================================================================\n';

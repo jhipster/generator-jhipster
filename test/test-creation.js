@@ -119,7 +119,7 @@ var expectedFiles = {
         'bower.json',
         'package.json',
         '.bowerrc',
-        'src/main/webapp/assets/styles/main.css',
+        'src/main/webapp/content/styles/main.css',
         'src/main/webapp/favicon.ico',
         'src/main/webapp/robots.txt',
         'src/main/webapp/.htaccess',
@@ -251,10 +251,10 @@ var expectedFiles = {
         'src/test/javascript/spec/app/account/reset/finish/reset.finish.controller.spec.js',
         'src/test/javascript/spec/app/account/reset/request/reset.request.controller.spec.js',
         'src/test/javascript/spec/components/auth/auth.services.spec.js',
-        'src/main/webapp/assets/styles/documentation.css',
-        'src/main/webapp/assets/images/development_ribbon.png',
-        'src/main/webapp/assets/images/hipster.png',
-        'src/main/webapp/assets/images/hipster2x.png'
+        'src/main/webapp/content/styles/documentation.css',
+        'src/main/webapp/content/images/development_ribbon.png',
+        'src/main/webapp/content/images/hipster.png',
+        'src/main/webapp/content/images/hipster2x.png'
     ],
 
     i18n: [
