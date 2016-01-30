@@ -1587,8 +1587,7 @@ module.exports = EntityGenerator.extend({
 
             this.template(ANGULAR_DIR + 'entities/_entity-detail-controller.js',
             ANGULAR_DIR + 'entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller' + '.js', this, {});
-            this.template('src/test/javascript/spec/app/_entity-detail-controller.spec.js',
-            'src/test/javascript/spec/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller.spec.js', this, {});
+
             this.addJavaScriptToIndex('entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller' + '.js');
 
             this.template(ANGULAR_DIR + 'services/_entity-service.js',
@@ -1601,6 +1600,9 @@ module.exports = EntityGenerator.extend({
                 this.addJavaScriptToIndex('services/' + this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js');
             }
 
+            this.template('src/test/javascript/spec/app/_entity-detail-controller.spec.js',
+            'src/test/javascript/spec/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller.spec.js', this, {});
+            
             // Copy for each
             if (this.enableTranslation) {
                 this.getAllInstalledLanguages().forEach(function(language) {
