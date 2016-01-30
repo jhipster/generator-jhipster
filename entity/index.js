@@ -1561,42 +1561,42 @@ module.exports = EntityGenerator.extend({
             if(this.skipClient){
                 return;
             }
-            this.copyHtml('src/main/webapp/app/_entities.html',
-            ANGULAR_DIR + 'app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.html', this, {}, true);
-            this.copyHtml('src/main/webapp/app/_entity-detail.html',
-            ANGULAR_DIR + 'app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.html', this, {}, true);
-            this.copyHtml('src/main/webapp/app/_entity-dialog.html',
-            ANGULAR_DIR + 'app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-dialog.html', this, {}, true);
-            this.copyHtml('src/main/webapp/app/_entity-delete-dialog.html',
-            ANGULAR_DIR + 'app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-delete-dialog.html', this, {}, true);
+            this.copyHtml(ANGULAR_DIR + 'entities/_entities.html',
+            ANGULAR_DIR + 'entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.html', this, {}, true);
+            this.copyHtml(ANGULAR_DIR + 'entities/_entity-detail.html',
+            ANGULAR_DIR + 'entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.html', this, {}, true);
+            this.copyHtml(ANGULAR_DIR + 'entities/_entity-dialog.html',
+            ANGULAR_DIR + 'entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-dialog.html', this, {}, true);
+            this.copyHtml(ANGULAR_DIR + 'entities/_entity-delete-dialog.html',
+            ANGULAR_DIR + 'entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-delete-dialog.html', this, {}, true);
 
             this.addEntityToMenu(this.entityInstance + '-management', this.enableTranslation);
 
-            this.template('src/main/webapp/app/_entity.js',
-            ANGULAR_DIR + 'app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.js', this, {});
+            this.template(ANGULAR_DIR + 'entities/_entity.js',
+            ANGULAR_DIR + 'entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.js', this, {});
             this.addJavaScriptToIndex('entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.js');
-            this.template('src/main/webapp/app/_entity-controller.js',
-            ANGULAR_DIR + 'app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.controller' + '.js', this, {});
+            this.template(ANGULAR_DIR + 'entities/_entity-controller.js',
+            ANGULAR_DIR + 'entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.controller' + '.js', this, {});
             this.addJavaScriptToIndex('entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.controller' + '.js');
-            this.template('src/main/webapp/app/_entity-dialog-controller.js',
-            ANGULAR_DIR + 'app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-dialog.controller' + '.js', this, {});
+            this.template(ANGULAR_DIR + 'entities/_entity-dialog-controller.js',
+            ANGULAR_DIR + 'entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-dialog.controller' + '.js', this, {});
             this.addJavaScriptToIndex('entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-dialog.controller' + '.js');
-            this.template('src/main/webapp/app/_entity-delete-dialog-controller.js',
-            ANGULAR_DIR + 'app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-delete-dialog.controller' + '.js', this, {});
+            this.template(ANGULAR_DIR + 'entities/_entity-delete-dialog-controller.js',
+            ANGULAR_DIR + 'entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-delete-dialog.controller' + '.js', this, {});
             this.addJavaScriptToIndex('entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-delete-dialog.controller' + '.js');
 
-            this.template('src/main/webapp/app/_entity-detail-controller.js',
-            ANGULAR_DIR + 'app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller' + '.js', this, {});
+            this.template(ANGULAR_DIR + 'entities/_entity-detail-controller.js',
+            ANGULAR_DIR + 'entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller' + '.js', this, {});
             this.template('src/test/javascript/spec/app/_entity-detail-controller.spec.js',
             'src/test/javascript/spec/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller.spec.js', this, {});
             this.addJavaScriptToIndex('entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller' + '.js');
 
-            this.template('src/main/webapp/services/_entity-service.js',
+            this.template(ANGULAR_DIR + 'services/_entity-service.js',
             ANGULAR_DIR + 'services/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js', this, {});
             this.addJavaScriptToIndex('services/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js');
 
             if (this.searchEngine == 'elasticsearch') {
-                this.template('src/main/webapp/services/_entity-search-service.js',
+                this.template(ANGULAR_DIR + 'services/_entity-search-service.js',
                 ANGULAR_DIR + 'services/entities/' + this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js', this, {});
                 this.addJavaScriptToIndex('services/entities/' + this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js');
             }
