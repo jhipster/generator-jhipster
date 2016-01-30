@@ -1016,7 +1016,7 @@ module.exports = JhipsterGenerator.extend({
 
             // normal CSS or SCSS?
             if (this.useSass) {
-                this.template('src/main/scss/main.scss', 'src/main/scss/main.scss');
+                this.template(WEBAPP_DIR + 'scss/main.scss', WEBAPP_DIR + 'scss/main.scss');
             }
             // this css file will be overwritten by the sass generated css if sass is enabled
             // but this will avoid errors when running app without running sass task first
