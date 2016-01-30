@@ -2,7 +2,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
 apply plugin: 'com.moowork.node'<% if(frontendBuilder == 'grunt') {%>
 apply plugin: 'com.moowork.grunt'<% } if(frontendBuilder == 'gulp') {%>
 apply plugin: 'com.moowork.gulp'<% } %>
-<% if(!skipClient) {%>
+<% if(!skipBower) {%>
 task bower(type: Exec) {
     if (Os.isFamily(Os.FAMILY_WINDOWS)) {
         commandLine 'cmd', '/c', 'bower', 'install'

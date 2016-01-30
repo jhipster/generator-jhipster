@@ -47,14 +47,14 @@ task gruntTest(type: Exec) {
   }
 
 }
-gruntBuild.dependsOn 'npmInstall'
-gruntBuild.dependsOn 'bower'
+gruntBuild.dependsOn 'npmInstall'<% if(!skipBower) {%>
+gruntBuild.dependsOn 'bower'<% } %>
 processResources.dependsOn gruntBuild
 test.dependsOn gruntTest
 bootRun.dependsOn gruntTest
 <% }  if(frontendBuilder == 'gulp') {%>
-gulp_build.dependsOn 'npmInstall'
-gulp_build.dependsOn 'bower'
+gulp_build.dependsOn 'npmInstall'<% if(!skipBower) {%>
+gulp_build.dependsOn 'bower'<% } %>
 processResources.dependsOn gulp_build
 test.dependsOn gulp_test
 bootRun.dependsOn gulp_test

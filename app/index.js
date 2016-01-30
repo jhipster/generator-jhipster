@@ -29,23 +29,29 @@ const INTERPOLATE_REGEX = /<%=([\s\S]+?)%>/g; // so that tags in templates do no
 module.exports = JhipsterGenerator.extend({
     constructor: function() {
         generators.Base.apply(this, arguments);
-        // This method adds support for a `--skip-client` flag
+        // This adds support for a `--skip-client` flag
         this.option('skip-client', {
             desc: 'Skip the client side app generation',
             type: Boolean,
             defaults: false
         });
-        // This method adds support for a `--client-build` flag
+        // This adds support for a `--client-build` flag
         this.option('client-build', {
             desc: 'Specify the client side build to use when skipping client side generation, has no effect otherwise',
             type: String,
             defaults: 'none'
         });
-        // This method adds support for a `--[no-]i18n` flag
+        // This adds support for a `--[no-]i18n` flag
         this.option('i18n', {
             desc: 'Disable or enable i18n when skipping client side generation, has no effect otherwise',
             type: Boolean,
             defaults: true
+        });
+        // This adds support for a `--skip-bower` flag
+        this.option('skip-bower', {
+            desc: 'Disable bower hookd from the Maven/Gradle build',
+            type: Boolean,
+            defaults: false
         });
         // This method adds support for a `--with-entities` flag
         this.option('with-entities', {
@@ -57,6 +63,7 @@ module.exports = JhipsterGenerator.extend({
         this.skipClient = this.options['skip-client'] || skipClient;
         this.clientBuild = this.options['client-build'];
         this.i18n = this.options['i18n'];
+        this.skipBower = this.options['skip-bower'];
         this.withEntities = this.options['with-entities'];
 
     },
