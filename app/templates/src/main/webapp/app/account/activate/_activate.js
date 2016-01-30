@@ -12,7 +12,7 @@ angular.module('<%=angularAppName%>')
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/account/activate/activate.html',
+                        templateUrl: 'app/account/activate/activate.html',
                         controller: 'ActivationController'
                     }
                 },

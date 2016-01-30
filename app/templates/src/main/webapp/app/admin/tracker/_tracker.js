@@ -10,7 +10,7 @@ angular.module('<%=angularAppName%>')
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/admin/tracker/tracker.html',
+                        templateUrl: 'app/admin/tracker/tracker.html',
                         controller: 'TrackerController'
                     }
                 },

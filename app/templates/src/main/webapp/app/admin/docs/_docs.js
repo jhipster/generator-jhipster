@@ -12,7 +12,7 @@ angular.module('<%=angularAppName%>')
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/admin/docs/docs.html'
+                        templateUrl: 'app/admin/docs/docs.html'
                     }
                 },
                 resolve: {

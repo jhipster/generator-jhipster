@@ -7,7 +7,7 @@ angular.module('<%=angularAppName%>')
             scope: {
                 provider: "@ngProvider"
             },
-            templateUrl: 'scripts/app/account/social/directive/social.html',
+            templateUrl: 'app/account/social/directive/social.html',
             link: function(scope, element, attrs) {<% if (enableTranslation){ %>
                 $translatePartialLoader.addPart('social');
                 $translate.refresh();

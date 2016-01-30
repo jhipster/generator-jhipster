@@ -12,7 +12,7 @@ angular.module('<%=angularAppName%>')
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/admin/audits/audits.html',
+                        templateUrl: 'app/admin/audits/audits.html',
                         controller: 'AuditsController'
                     }
                 },

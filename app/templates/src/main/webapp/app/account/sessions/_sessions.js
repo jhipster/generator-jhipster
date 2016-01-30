@@ -12,7 +12,7 @@ angular.module('<%=angularAppName%>')
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/account/sessions/sessions.html',
+                        templateUrl: 'app/account/sessions/sessions.html',
                         controller: 'SessionsController'
                     }
                 },
