@@ -44,7 +44,7 @@ angular.module('<%=angularAppName%>')
             MonitoringService.threadDump().then(function(data) {
 
                 var modalInstance = $uibModal.open({
-                    templateUrl: 'scripts/app/admin/metrics/metrics.modal.html',
+                    templateUrl: 'app/admin/metrics/metrics.modal.html',
                     controller: 'MetricsModalController',
                     size: 'lg',
                     resolve: {

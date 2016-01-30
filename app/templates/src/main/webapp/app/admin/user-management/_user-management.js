@@ -12,7 +12,7 @@ angular.module('<%=angularAppName%>')
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/admin/user-management/user-management.html',
+                        templateUrl: 'app/admin/user-management/user-management.html',
                         controller: 'UserManagementController'
                     }
                 },
@@ -32,7 +32,7 @@ angular.module('<%=angularAppName%>')
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/admin/user-management/user-management-detail.html',
+                        templateUrl: 'app/admin/user-management/user-management-detail.html',
                         controller: 'UserManagementDetailController'
                     }
                 },
@@ -51,7 +51,7 @@ angular.module('<%=angularAppName%>')
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'scripts/app/admin/user-management/user-management-dialog.html',
+                        templateUrl: 'app/admin/user-management/user-management-dialog.html',
                         controller: 'UserManagementDialogController',
                         size: 'lg',
                         resolve: {
@@ -79,7 +79,7 @@ angular.module('<%=angularAppName%>')
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'scripts/app/admin/user-management/user-management-dialog.html',
+                        templateUrl: 'app/admin/user-management/user-management-dialog.html',
                         controller: 'UserManagementDialogController',
                         size: 'lg',
                         resolve: {
@@ -102,7 +102,7 @@ angular.module('<%=angularAppName%>')
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'scripts/app/admin/user-management/user-management-delete-dialog.html',
+                        templateUrl: 'app/admin/user-management/user-management-delete-dialog.html',
                         controller: 'UserManagementDeleteController',
                         size: 'md',
                         resolve: {

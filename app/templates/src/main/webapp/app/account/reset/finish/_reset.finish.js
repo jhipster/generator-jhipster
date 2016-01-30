@@ -11,7 +11,7 @@ angular.module('<%=angularAppName%>')
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/account/reset/finish/reset.finish.html',
+                        templateUrl: 'app/account/reset/finish/reset.finish.html',
                         controller: 'ResetFinishController'
                     }
                 },
