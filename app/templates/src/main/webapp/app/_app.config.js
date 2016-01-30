@@ -17,7 +17,7 @@ angular.module('<%=angularAppName%>')
             'abstract': true,
             views: {
                 'navbar@': {
-                    templateUrl: 'appcomponents/navbar/navbar.html',
+                    templateUrl: 'app/layouts/navbar/navbar.html',
                     controller: 'NavbarController'
                 }
             },
