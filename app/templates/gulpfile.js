@@ -93,26 +93,26 @@ gulp.task('copy', function() {
     return es.merge( <% if(enableTranslation) { %> // copy i18n folders only if translation is enabled
         gulp.src(yeoman.app + 'i18n/**').
         pipe(gulp.dest(yeoman.dist + 'i18n/')), <% } %>
-        gulp.src(yeoman.app + 'assets/**/*.{woff,svg,ttf,eot}').
+        gulp.src(yeoman.app + 'content/**/*.{woff,svg,ttf,eot}').
         pipe(flatten()).
-        pipe(gulp.dest(yeoman.dist + 'assets/fonts/')));
+        pipe(gulp.dest(yeoman.dist + 'content/fonts/')));
 });
 
 gulp.task('images', function() {
-    return gulp.src(yeoman.app + 'assets/images/**').
+    return gulp.src(yeoman.app + 'content/images/**').
         pipe(imagemin({optimizationLevel: 5})).
-        pipe(gulp.dest(yeoman.dist + 'assets/images')).
+        pipe(gulp.dest(yeoman.dist + 'content/images')).
         pipe(browserSync.reload({stream: true}));
 });
 <% if(useSass) { %>
 gulp.task('sass', function () {
     return gulp.src(yeoman.scss + '**/*.scss')
         .pipe(sass({includePaths:yeoman.importPath}).on('error', sass.logError))
-        .pipe(gulp.dest(yeoman.app + 'assets/styles'));
+        .pipe(gulp.dest(yeoman.app + 'content/css'));
 });
 <% } %>
 gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function() {
-    return gulp.src(yeoman.app + 'assets/styles/**/*.css').
+    return gulp.src(yeoman.app + 'content/css/**/*.css').
         pipe(gulp.dest(yeoman.tmp)).
         pipe(browserSync.reload({stream: true}));
 });
@@ -186,8 +186,8 @@ gulp.task('serve', function() {
 gulp.task('watch', function() {
     gulp.watch('bower.json', ['wiredep:test', 'wiredep:app']);
     gulp.watch(['gulpfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>], ['ngconstant:dev']);
-    gulp.watch(<% if(useSass) { %>yeoman.scss + '**/*.scss'<% } else { %>yeoman.app + 'assets/styles/**/*.css'<% } %>, ['styles']);
-    gulp.watch(yeoman.app + 'assets/images/**', ['images']);
+    gulp.watch(<% if(useSass) { %>yeoman.scss + '**/*.scss'<% } else { %>yeoman.app + 'content/css/**/*.css'<% } %>, ['styles']);
+    gulp.watch(yeoman.app + 'content/images/**', ['images']);
     gulp.watch([yeoman.app + '*.html', yeoman.app + 'scripts/**', yeoman.app + 'i18n/**']).on('change', browserSync.reload);
 });
 

@@ -1020,7 +1020,7 @@ module.exports = JhipsterGenerator.extend({
             }
             // this css file will be overwritten by the sass generated css if sass is enabled
             // but this will avoid errors when running app without running sass task first
-            this.template('src/main/webapp/assets/styles/main.css', 'src/main/webapp/assets/styles/main.css');
+                this.template('src/main/webapp/content/css/main.css', 'src/main/webapp/content/css/main.css');
 
             // HTML5 BoilerPlate
             this.copy(WEBAPP_DIR + 'favicon.ico', WEBAPP_DIR + 'favicon.ico');
@@ -1182,12 +1182,12 @@ module.exports = JhipsterGenerator.extend({
             this.template(WEBAPP_DIR + '/scripts/components/alert/_alert.directive.js', WEBAPP_DIR + 'scripts/components/alert/alert.directive.js', this, {});
 
             // CSS
-            this.copy(WEBAPP_DIR + 'assets/styles/documentation.css', WEBAPP_DIR + 'assets/styles/documentation.css');
+            this.copy(WEBAPP_DIR + 'content/css/documentation.css', WEBAPP_DIR + 'content/css/documentation.css');
 
             // Images
-            this.copy(WEBAPP_DIR + 'assets/images/development_ribbon.png', WEBAPP_DIR + 'assets/images/development_ribbon.png');
-            this.copy(WEBAPP_DIR + 'assets/images/hipster.png', WEBAPP_DIR + 'assets/images/hipster.png');
-            this.copy(WEBAPP_DIR + 'assets/images/hipster2x.png', WEBAPP_DIR + 'assets/images/hipster2x.png');
+            this.copy(WEBAPP_DIR + 'content/images/development_ribbon.png', WEBAPP_DIR + 'content/images/development_ribbon.png');
+            this.copy(WEBAPP_DIR + 'content/images/hipster.png', WEBAPP_DIR + 'content/images/hipster.png');
+            this.copy(WEBAPP_DIR + 'content/images/hipster2x.png', WEBAPP_DIR + 'content/images/hipster2x.png');
 
         },
 

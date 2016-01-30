@@ -77,7 +77,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/scripts/**/*.{js,html}")
             .antMatchers("/bower_components/**")
             .antMatchers("/i18n/**")
-            .antMatchers("/assets/**")
+            .antMatchers("/content/**")
             .antMatchers("/swagger-ui/index.html")<% if (authenticationType == 'oauth2') { %>
             .antMatchers("/api/register")
             .antMatchers("/api/activate")
