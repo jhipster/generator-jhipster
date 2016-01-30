@@ -1021,7 +1021,7 @@ module.exports = JhipsterGenerator.extend({
             }
             // this css file will be overwritten by the sass generated css if sass is enabled
             // but this will avoid errors when running app without running sass task first
-                this.template('src/main/webapp/content/css/main.css', 'src/main/webapp/content/css/main.css');
+            this.template(WEBAPP_DIR + 'content/css/main.css', WEBAPP_DIR + 'content/css/main.css');
 
             // HTML5 BoilerPlate
             this.copy(WEBAPP_DIR + 'favicon.ico', WEBAPP_DIR + 'favicon.ico');
@@ -1041,31 +1041,31 @@ module.exports = JhipsterGenerator.extend({
             this.copy(WEBAPP_DIR + '/swagger-ui/images/throbber.gif', WEBAPP_DIR + 'swagger-ui/images/throbber.gif');
 
             // Angular JS views
-
-            this.template(ANGULAR_DIR + 'app/_app.js', ANGULAR_DIR + 'app/app.js', this, {});
-            this.template(ANGULAR_DIR + 'app/_app.constants.js', ANGULAR_DIR + 'app/app.constants.js', this, {});
+            this.template(ANGULAR_DIR + '_app.module.js', ANGULAR_DIR + 'app.module.js', this, {});
+            this.template(ANGULAR_DIR + '_app.config.js', ANGULAR_DIR + 'app.config.js', this, {});
+            this.template(ANGULAR_DIR + '_app.constants.js', ANGULAR_DIR + 'app.constants.js', this, {});
 
             // Client Components
-            this.template(ANGULAR_DIR + 'components/admin/_audits.service.js', ANGULAR_DIR + 'components/admin/audits.service.js', this, {});
-            this.template(ANGULAR_DIR + 'components/admin/_configuration.service.js', ANGULAR_DIR + 'components/admin/configuration.service.js', this, {});
-            this.template(ANGULAR_DIR + 'components/admin/_logs.service.js', ANGULAR_DIR + 'components/admin/logs.service.js', this, {});
-            this.template(ANGULAR_DIR + 'components/admin/_monitoring.service.js', ANGULAR_DIR + 'components/admin/monitoring.service.js', this, {});
-            this.template(ANGULAR_DIR + 'components/auth/_auth.service.js', ANGULAR_DIR + 'components/auth/auth.service.js', this, {});
-            this.template(ANGULAR_DIR + 'components/auth/_principal.service.js', ANGULAR_DIR + 'components/auth/principal.service.js', this, {});
-            this.template(ANGULAR_DIR + 'components/auth/_authority.directive.js', ANGULAR_DIR + 'components/auth/authority.directive.js', this, {});
+            this.template(ANGULAR_DIR + 'services/admin/_audits.service.js', ANGULAR_DIR + 'services/admin/audits.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/admin/_configuration.service.js', ANGULAR_DIR + 'services/admin/configuration.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/admin/_logs.service.js', ANGULAR_DIR + 'services/admin/logs.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/admin/_monitoring.service.js', ANGULAR_DIR + 'services/admin/monitoring.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/auth/_auth.service.js', ANGULAR_DIR + 'services/auth/auth.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/auth/_principal.service.js', ANGULAR_DIR + 'services/auth/principal.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/auth/_authority.directive.js', ANGULAR_DIR + 'services/auth/authority.directive.js', this, {});
             if (this.authenticationType == 'oauth2') {
-                this.template(ANGULAR_DIR + 'components/auth/provider/_auth.oauth2.service.js', ANGULAR_DIR + 'components/auth/provider/auth.oauth2.service.js', this, {});
+                this.template(ANGULAR_DIR + 'services/auth/provider/_auth.oauth2.service.js', ANGULAR_DIR + 'services/auth/provider/auth.oauth2.service.js', this, {});
             } else if (this.authenticationType == 'xauth') {
-                this.template(ANGULAR_DIR + 'components/auth/provider/_auth.xauth.service.js', ANGULAR_DIR + 'components/auth/provider/auth.xauth.service.js', this, {});
+                this.template(ANGULAR_DIR + 'services/auth/provider/_auth.xauth.service.js', ANGULAR_DIR + 'services/auth/provider/auth.xauth.service.js', this, {});
             } else {
-                this.template(ANGULAR_DIR + 'components/auth/provider/_auth.session.service.js', ANGULAR_DIR + 'components/auth/provider/auth.session.service.js', this, {});
+                this.template(ANGULAR_DIR + 'services/auth/provider/_auth.session.service.js', ANGULAR_DIR + 'services/auth/provider/auth.session.service.js', this, {});
             }
-            this.template(ANGULAR_DIR + 'components/auth/services/_account.service.js', ANGULAR_DIR + 'components/auth/services/account.service.js', this, {});
-            this.template(ANGULAR_DIR + 'components/auth/services/_activate.service.js', ANGULAR_DIR + 'components/auth/services/activate.service.js', this, {});
-            this.template(ANGULAR_DIR + 'components/auth/services/_password.service.js', ANGULAR_DIR + 'components/auth/services/password.service.js', this, {});
-            this.template(ANGULAR_DIR + 'components/auth/services/_register.service.js', ANGULAR_DIR + 'components/auth/services/register.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/auth/services/_account.service.js', ANGULAR_DIR + 'services/auth/services/account.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/auth/services/_activate.service.js', ANGULAR_DIR + 'services/auth/services/activate.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/auth/services/_password.service.js', ANGULAR_DIR + 'services/auth/services/password.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/auth/services/_register.service.js', ANGULAR_DIR + 'services/auth/services/register.service.js', this, {});
             if (this.authenticationType == 'session') {
-                this.template(ANGULAR_DIR + 'components/auth/services/_sessions.service.js', ANGULAR_DIR + 'components/auth/services/sessions.service.js', this, {});
+                this.template(ANGULAR_DIR + 'services/auth/services/_sessions.service.js', ANGULAR_DIR + 'services/auth/services/sessions.service.js', this, {});
             }
             this.template(ANGULAR_DIR + 'components/form/_form.directive.js', ANGULAR_DIR + 'components/form/form.directive.js', this, {});
             this.template(ANGULAR_DIR + 'components/form/_maxbytes.directive.js', ANGULAR_DIR + 'components/form/maxbytes.directive.js', this, {});
