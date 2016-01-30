@@ -6,6 +6,30 @@ var assert = require('yeoman-assert');
 var helpers = require('yeoman-test');
 var fse = require('fs-extra');
 
+const expectedFiles = {
+    default: [
+        '.jhipster/Foo.json',
+        'src/main/java/com/mycompany/myapp/domain/Foo.java',
+        'src/main/java/com/mycompany/myapp/repository/FooRepository.java',
+        'src/main/java/com/mycompany/myapp/web/rest/FooResource.java',
+        // 'src/main/resources/config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
+        'src/main/webapp/app/entities/foo-management/foo-management.html',
+        'src/main/webapp/app/entities/foo-management/foo-management-detail.html',
+        'src/main/webapp/app/entities/foo-management/foo-management-dialog.html',
+        'src/main/webapp/app/entities/foo-management/foo-management-delete-dialog.html',
+        'src/main/webapp/app/entities/foo-management/foo-management.js',
+        'src/main/webapp/app/entities/foo-management/foo-management.controller.js',
+        'src/main/webapp/app/entities/foo-management/foo-management-dialog.controller.js',
+        'src/main/webapp/app/entities/foo-management/foo-management-delete-dialog.controller.js',
+        'src/main/webapp/app/entities/foo-management/foo-management-detail.controller.js',
+        'src/test/javascript/spec/app/entities/foo-management/foo-management-detail.controller.spec.js',
+        'src/main/webapp/app/services/foo/foo.service.js',
+        // 'src/main/webapp/i18n/en/foo.json',
+        // 'src/main/webapp/i18n/fr/foo.json',
+        'src/test/java/com/mycompany/myapp/web/rest/FooResourceIntTest.java',
+        'src/test/gatling/simulations/FooGatlingTest.scala',
+    ]
+}
 describe('JHipster generator entity', function () {
     describe('no dto, no service, no pagination', function () {
         before(function (done) {
@@ -25,28 +49,7 @@ describe('JHipster generator entity', function () {
         });
 
         it('creates expected default files', function () {
-            assert.file([
-                '.jhipster/Foo.json',
-                'src/main/java/com/mycompany/myapp/domain/Foo.java',
-                'src/main/java/com/mycompany/myapp/repository/FooRepository.java',
-                'src/main/java/com/mycompany/myapp/web/rest/FooResource.java',
-                // 'src/main/resources/config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
-                'src/main/webapp/app/app/entities/foo-management/foo-management.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-detail.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-dialog.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-delete-dialog.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management.controller.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-dialog.controller.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-delete-dialog.controller.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-detail.controller.js',
-                'src/test/javascript/spec/app/entities/foo-management/foo-management-detail.controller.spec.js',
-                'src/main/webapp/app/components/entities/foo/foo.service.js',
-                // 'src/main/webapp/i18n/en/foo.json',
-                // 'src/main/webapp/i18n/fr/foo.json',
-                'src/test/java/com/mycompany/myapp/web/rest/FooResourceIntTest.java',
-                'src/test/gatling/simulations/FooGatlingTest.scala',
-            ])
+            assert.file(expectedFiles.default);
         });
     });
 
@@ -68,30 +71,11 @@ describe('JHipster generator entity', function () {
         });
 
         it('creates expected default files', function () {
+            assert.file(expectedFiles.default);
             assert.file([
-                '.jhipster/Foo.json',
-                'src/main/java/com/mycompany/myapp/domain/Foo.java',
-                'src/main/java/com/mycompany/myapp/repository/FooRepository.java',
-                'src/main/java/com/mycompany/myapp/web/rest/FooResource.java',
                 'src/main/java/com/mycompany/myapp/web/rest/dto/FooDTO.java',
-                'src/main/java/com/mycompany/myapp/web/rest/mapper/FooMapper.java',
-                // 'src/main/resources/config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
-                'src/main/webapp/app/app/entities/foo-management/foo-management.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-detail.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-dialog.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-delete-dialog.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management.controller.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-dialog.controller.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-delete-dialog.controller.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-detail.controller.js',
-                'src/test/javascript/spec/app/entities/foo-management/foo-management-detail.controller.spec.js',
-                'src/main/webapp/app/components/entities/foo/foo.service.js',
-                // 'src/main/webapp/i18n/en/foo.json',
-                // 'src/main/webapp/i18n/fr/foo.json',
-                'src/test/java/com/mycompany/myapp/web/rest/FooResourceIntTest.java',
-                'src/test/gatling/simulations/FooGatlingTest.scala',
-            ])
+                'src/main/java/com/mycompany/myapp/web/rest/mapper/FooMapper.java'
+            ]);
         });
     });
 
@@ -113,29 +97,10 @@ describe('JHipster generator entity', function () {
         });
 
         it('creates expected default files', function () {
-            assert.file([
-                '.jhipster/Foo.json',
-                'src/main/java/com/mycompany/myapp/domain/Foo.java',
-                'src/main/java/com/mycompany/myapp/repository/FooRepository.java',
-                'src/main/java/com/mycompany/myapp/web/rest/FooResource.java',
-                'src/main/java/com/mycompany/myapp/service/FooService.java',
-                // 'src/main/resources/config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
-                'src/main/webapp/app/app/entities/foo-management/foo-management.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-detail.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-dialog.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-delete-dialog.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management.controller.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-dialog.controller.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-delete-dialog.controller.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-detail.controller.js',
-                'src/test/javascript/spec/app/entities/foo-management/foo-management-detail.controller.spec.js',
-                'src/main/webapp/app/components/entities/foo/foo.service.js',
-                // 'src/main/webapp/i18n/en/foo.json',
-                // 'src/main/webapp/i18n/fr/foo.json',
-                'src/test/java/com/mycompany/myapp/web/rest/FooResourceIntTest.java',
-                'src/test/gatling/simulations/FooGatlingTest.scala',
-            ])
+            assert.file(expectedFiles.default)
+            assert.file([,
+                'src/main/java/com/mycompany/myapp/service/FooService.java'
+            ]);
         });
     });
 
@@ -157,30 +122,11 @@ describe('JHipster generator entity', function () {
         });
 
         it('creates expected default files', function () {
+            assert.file(expectedFiles.default);
             assert.file([
-                '.jhipster/Foo.json',
-                'src/main/java/com/mycompany/myapp/domain/Foo.java',
-                'src/main/java/com/mycompany/myapp/repository/FooRepository.java',
-                'src/main/java/com/mycompany/myapp/web/rest/FooResource.java',
                 'src/main/java/com/mycompany/myapp/service/FooService.java',
-                'src/main/java/com/mycompany/myapp/service/impl/FooServiceImpl.java',
-                // 'src/main/resources/config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
-                'src/main/webapp/app/app/entities/foo-management/foo-management.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-detail.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-dialog.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-delete-dialog.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management.controller.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-dialog.controller.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-delete-dialog.controller.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-detail.controller.js',
-                'src/test/javascript/spec/app/entities/foo-management/foo-management-detail.controller.spec.js',
-                'src/main/webapp/app/components/entities/foo/foo.service.js',
-                // 'src/main/webapp/i18n/en/foo.json',
-                // 'src/main/webapp/i18n/fr/foo.json',
-                'src/test/java/com/mycompany/myapp/web/rest/FooResourceIntTest.java',
-                'src/test/gatling/simulations/FooGatlingTest.scala',
-            ])
+                'src/main/java/com/mycompany/myapp/service/impl/FooServiceImpl.java'
+            ]);
         });
     });
 
@@ -202,28 +148,7 @@ describe('JHipster generator entity', function () {
         });
 
         it('creates expected default files', function () {
-            assert.file([
-                '.jhipster/Foo.json',
-                'src/main/java/com/mycompany/myapp/domain/Foo.java',
-                'src/main/java/com/mycompany/myapp/repository/FooRepository.java',
-                'src/main/java/com/mycompany/myapp/web/rest/FooResource.java',
-                // 'src/main/resources/config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
-                'src/main/webapp/app/app/entities/foo-management/foo-management.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-detail.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-dialog.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-delete-dialog.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management.controller.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-dialog.controller.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-delete-dialog.controller.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-detail.controller.js',
-                'src/test/javascript/spec/app/entities/foo-management/foo-management-detail.controller.spec.js',
-                'src/main/webapp/app/components/entities/foo/foo.service.js',
-                // 'src/main/webapp/i18n/en/foo.json',
-                // 'src/main/webapp/i18n/fr/foo.json',
-                'src/test/java/com/mycompany/myapp/web/rest/FooResourceIntTest.java',
-                'src/test/gatling/simulations/FooGatlingTest.scala',
-            ])
+            assert.file(expectedFiles.default);
         });
     });
 
@@ -245,28 +170,7 @@ describe('JHipster generator entity', function () {
         });
 
         it('creates expected default files', function () {
-            assert.file([
-                '.jhipster/Foo.json',
-                'src/main/java/com/mycompany/myapp/domain/Foo.java',
-                'src/main/java/com/mycompany/myapp/repository/FooRepository.java',
-                'src/main/java/com/mycompany/myapp/web/rest/FooResource.java',
-                // 'src/main/resources/config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
-                'src/main/webapp/app/app/entities/foo-management/foo-management.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-detail.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-dialog.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-delete-dialog.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management.controller.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-dialog.controller.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-delete-dialog.controller.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-detail.controller.js',
-                'src/test/javascript/spec/app/entities/foo-management/foo-management-detail.controller.spec.js',
-                'src/main/webapp/app/components/entities/foo/foo.service.js',
-                // 'src/main/webapp/i18n/en/foo.json',
-                // 'src/main/webapp/i18n/fr/foo.json',
-                'src/test/java/com/mycompany/myapp/web/rest/FooResourceIntTest.java',
-                'src/test/gatling/simulations/FooGatlingTest.scala',
-            ])
+            assert.file(expectedFiles.default);
         });
     });
 
@@ -288,28 +192,7 @@ describe('JHipster generator entity', function () {
         });
 
         it('creates expected default files', function () {
-            assert.file([
-                '.jhipster/Foo.json',
-                'src/main/java/com/mycompany/myapp/domain/Foo.java',
-                'src/main/java/com/mycompany/myapp/repository/FooRepository.java',
-                'src/main/java/com/mycompany/myapp/web/rest/FooResource.java',
-                // 'src/main/resources/config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
-                'src/main/webapp/app/app/entities/foo-management/foo-management.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-detail.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-dialog.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-delete-dialog.html',
-                'src/main/webapp/app/app/entities/foo-management/foo-management.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management.controller.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-dialog.controller.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-delete-dialog.controller.js',
-                'src/main/webapp/app/app/entities/foo-management/foo-management-detail.controller.js',
-                'src/test/javascript/spec/app/entities/foo-management/foo-management-detail.controller.spec.js',
-                'src/main/webapp/app/components/entities/foo/foo.service.js',
-                // 'src/main/webapp/i18n/en/foo.json',
-                // 'src/main/webapp/i18n/fr/foo.json',
-                'src/test/java/com/mycompany/myapp/web/rest/FooResourceIntTest.java',
-                'src/test/gatling/simulations/FooGatlingTest.scala',
-            ])
+            assert.file(expectedFiles.default);
         });
     });
 });
