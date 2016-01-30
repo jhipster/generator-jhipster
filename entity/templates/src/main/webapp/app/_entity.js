@@ -12,7 +12,7 @@ angular.module('<%=angularAppName%>')
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/entities/<%= entityInstance %>-management/<%= entityInstance %>-management.html',
+                        templateUrl: 'app/entities/<%= entityInstance %>-management/<%= entityInstance %>-management.html',
                         controller: '<%= entityClass %>ManagementController'
                     }
                 },
@@ -36,7 +36,7 @@ angular.module('<%=angularAppName%>')
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'scripts/app/entities/<%= entityInstance %>-management/<%= entityInstance %>-management-detail.html',
+                        templateUrl: 'app/entities/<%= entityInstance %>-management/<%= entityInstance %>-management-detail.html',
                         controller: '<%= entityClass %>ManagementDetailController'
                     }
                 },
@@ -61,7 +61,7 @@ angular.module('<%=angularAppName%>')
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'scripts/app/entities/<%= entityInstance %>-management/<%= entityInstance %>-management-dialog.html',
+                        templateUrl: 'app/entities/<%= entityInstance %>-management/<%= entityInstance %>-management-dialog.html',
                         controller: '<%= entityClass %>ManagementDialogController',
                         size: 'lg',
                         resolve: {
@@ -96,7 +96,7 @@ angular.module('<%=angularAppName%>')
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'scripts/app/entities/<%= entityInstance %>-management/<%= entityInstance %>-management-dialog.html',
+                        templateUrl: 'app/entities/<%= entityInstance %>-management/<%= entityInstance %>-management-dialog.html',
                         controller: '<%= entityClass %>ManagementDialogController',
                         size: 'lg',
                         resolve: {
@@ -119,7 +119,7 @@ angular.module('<%=angularAppName%>')
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'scripts/app/entities/<%= entityInstance %>-management/<%= entityInstance %>-management-delete-dialog.html',
+                        templateUrl: 'app/entities/<%= entityInstance %>-management/<%= entityInstance %>-management-delete-dialog.html',
                         controller: '<%= entityClass %>ManagementDeleteController',
                         size: 'md',
                         resolve: {

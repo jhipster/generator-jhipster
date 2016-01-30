@@ -1574,22 +1574,22 @@ module.exports = EntityGenerator.extend({
 
             this.template('src/main/webapp/app/_entity.js',
             ANGULAR_DIR + 'app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.js', this, {});
-            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.js');
+            this.addJavaScriptToIndex('entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.js');
             this.template('src/main/webapp/app/_entity-controller.js',
             ANGULAR_DIR + 'app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.controller' + '.js', this, {});
-            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.controller' + '.js');
+            this.addJavaScriptToIndex('entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.controller' + '.js');
             this.template('src/main/webapp/app/_entity-dialog-controller.js',
             ANGULAR_DIR + 'app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-dialog.controller' + '.js', this, {});
-            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-dialog.controller' + '.js');
+            this.addJavaScriptToIndex('entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-dialog.controller' + '.js');
             this.template('src/main/webapp/app/_entity-delete-dialog-controller.js',
             ANGULAR_DIR + 'app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-delete-dialog.controller' + '.js', this, {});
-            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-delete-dialog.controller' + '.js');
+            this.addJavaScriptToIndex('entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-delete-dialog.controller' + '.js');
 
             this.template('src/main/webapp/app/_entity-detail-controller.js',
             ANGULAR_DIR + 'app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller' + '.js', this, {});
             this.template('src/test/javascript/spec/app/_entity-detail-controller.spec.js',
             'src/test/javascript/spec/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller.spec.js', this, {});
-            this.addJavaScriptToIndex('app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller' + '.js');
+            this.addJavaScriptToIndex('entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller' + '.js');
 
             this.template('src/main/webapp/services/_entity-service.js',
             ANGULAR_DIR + 'services/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js', this, {});
