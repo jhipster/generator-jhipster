@@ -188,7 +188,7 @@ gulp.task('watch', function() {
     gulp.watch(['gulpfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>], ['ngconstant:dev']);
     gulp.watch(<% if(useSass) { %>yeoman.scss + '**/*.scss'<% } else { %>yeoman.app + 'content/css/**/*.css'<% } %>, ['styles']);
     gulp.watch(yeoman.app + 'content/images/**', ['images']);
-    gulp.watch([yeoman.app + '*.html', yeoman.app + 'scripts/**', yeoman.app + 'i18n/**']).on('change', browserSync.reload);
+    gulp.watch([yeoman.app + '*.html', yeoman.app + 'app/**', yeoman.app + 'i18n/**']).on('change', browserSync.reload);
 });
 
 gulp.task('wiredep', ['wiredep:test', 'wiredep:app']);
@@ -273,7 +273,7 @@ gulp.task('ngconstant:dev', function() {
             VERSION: <% if(buildTool == 'maven') { %>parseVersionFromPomXml()<% } else { %>parseVersionFromBuildGradle()<% } %>
         }
     })
-    .pipe(gulp.dest(yeoman.app + 'scripts/app/'));
+    .pipe(gulp.dest(yeoman.app + 'app/app/'));
 });
 
 gulp.task('ngconstant:prod', function() {
@@ -289,11 +289,11 @@ gulp.task('ngconstant:prod', function() {
             VERSION: <% if(buildTool == 'maven') { %>parseVersionFromPomXml()<% } else { %>parseVersionFromBuildGradle()<% } %>
         }
     })
-    .pipe(gulp.dest(yeoman.tmp + 'scripts/app/'));
+    .pipe(gulp.dest(yeoman.tmp + 'app/app/'));
 });
 
 gulp.task('jshint', function() {
-    return gulp.src(['gulpfile.js', yeoman.app + 'scripts/**/*.js'])
+    return gulp.src(['gulpfile.js', yeoman.app + 'app/**/*.js'])
         .pipe(jshint())
         .pipe(jshint.reporter('jshint-stylish'));
 });

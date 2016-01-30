@@ -102,7 +102,7 @@ module.exports = function (grunt) {
                         'src/main/webapp/**/*.html',
                         'src/main/webapp/**/*.json',
                         'src/main/webapp/content/css/**/*.css',
-                        'src/main/webapp/scripts/**/*.{js,html}',
+                        'src/main/webapp/app/**/*.{js,html}',
                         'src/main/webapp/content/images/**/*.{png,jpg,jpeg,gif,webp,svg}',
                         'tmp/**/*.{css,js}'
                     ]
@@ -137,9 +137,9 @@ module.exports = function (grunt) {
             },
             all: [
                 'Gruntfile.js',
-                'src/main/webapp/scripts/app.js',
-                'src/main/webapp/scripts/app/**/*.js',
-                'src/main/webapp/scripts/components/**/*.js'
+                'src/main/webapp/app/app.js',
+                'src/main/webapp/app/app/**/*.js',
+                'src/main/webapp/app/components/**/*.js'
             ]
         },<% if (useSass) { %>
         sass: {
@@ -168,7 +168,7 @@ module.exports = function (grunt) {
             dist: {
                 files: {
                     src: [
-                        '<%%= yeoman.dist %>/scripts/**/*.js',
+                        '<%%= yeoman.dist %>/app/**/*.js',
                         '<%%= yeoman.dist %>/content/css/**/*.css',
                         '<%%= yeoman.dist %>/content/images/**/*.{png,jpg,jpeg,gif,webp,svg}',
                         '<%%= yeoman.dist %>/content/fonts/*'
@@ -194,7 +194,7 @@ module.exports = function (grunt) {
         usemin: {
             html: ['<%%= yeoman.dist %>/**/*.html'],
             css: ['<%%= yeoman.dist %>/content/css/**/*.css'],
-            js: ['<%%= yeoman.dist %>/scripts/**/*.js'],
+            js: ['<%%= yeoman.dist %>/app/**/*.js'],
             options: {
                 assetsDirs: ['<%%= yeoman.dist %>', '<%%= yeoman.dist %>/content/css', '<%%= yeoman.dist %>/content/images', '<%%= yeoman.dist %>/content/fonts'],
                 patterns: {
@@ -231,11 +231,11 @@ module.exports = function (grunt) {
         ngtemplates:    {
             dist: {
                 cwd: 'src/main/webapp',
-                src: ['scripts/app/**/*.html', 'scripts/components/**/*.html',],
+                src: ['app/app/**/*.html', 'app/components/**/*.html',],
                 dest: '.tmp/templates/templates.js',
                 options: {
                     module: '<%= angularAppName%>',
-                    usemin: 'scripts/app.js',
+                    usemin: 'app/app.js',
                     htmlmin: '<%%= htmlmin.dist.options %>'
                 }
             }
@@ -284,7 +284,7 @@ module.exports = function (grunt) {
                     dest: '<%%= yeoman.dist %>',
                     src: [
                         '*.html',
-                        'scripts/**/*.html',
+                        'app/**/*.html',
                         'content/images/**/*.{png,gif,webp,jpg,jpeg,svg}',
                         'content/fonts/*'
                     ]
@@ -324,9 +324,9 @@ module.exports = function (grunt) {
             dist: {
                 files: [{
                     expand: true,
-                    cwd: '.tmp/concat/scripts',
+                    cwd: '.tmp/concat/app',
                     src: '*.js',
-                    dest: '.tmp/concat/scripts'
+                    dest: '.tmp/concat/app'
                 }]
             }
         },
@@ -346,7 +346,7 @@ module.exports = function (grunt) {
             },
             dev: {
                 options: {
-                    dest: 'src/main/webapp/scripts/app/app.constants.js'
+                    dest: 'src/main/webapp/app/app/app.constants.js'
                 },
                 constants: {
                     ENV: 'dev',
@@ -355,7 +355,7 @@ module.exports = function (grunt) {
             },
             prod: {
                 options: {
-                    dest: '.tmp/scripts/app/app.constants.js'
+                    dest: '.tmp/app/app/app.constants.js'
                 },
                 constants: {
                     ENV: 'prod',
