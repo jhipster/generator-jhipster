@@ -883,6 +883,23 @@
                                         <ignore/>
                                     </action>
                                 </pluginExecution>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>com.github.trecloux</groupId>
+                                        <artifactId>
+                                            yeoman-maven-plugin
+                                        </artifactId>
+                                        <versionRange>
+                                            [0.4,)
+                                        </versionRange>
+                                        <goals>
+                                            <goal>build</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore/>
+                                    </action>
+                                </pluginExecution>
                             </pluginExecutions>
                         </lifecycleMappingMetadata>
                     </configuration>
