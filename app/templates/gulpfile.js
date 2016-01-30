@@ -273,7 +273,7 @@ gulp.task('ngconstant:dev', function() {
             VERSION: <% if(buildTool == 'maven') { %>parseVersionFromPomXml()<% } else { %>parseVersionFromBuildGradle()<% } %>
         }
     })
-    .pipe(gulp.dest(yeoman.app + 'app/app/'));
+    .pipe(gulp.dest(yeoman.app + 'app/'));
 });
 
 gulp.task('ngconstant:prod', function() {
@@ -289,7 +289,7 @@ gulp.task('ngconstant:prod', function() {
             VERSION: <% if(buildTool == 'maven') { %>parseVersionFromPomXml()<% } else { %>parseVersionFromBuildGradle()<% } %>
         }
     })
-    .pipe(gulp.dest(yeoman.tmp + 'app/app/'));
+    .pipe(gulp.dest(yeoman.tmp + 'app/'));
 });
 
 gulp.task('jshint', function() {

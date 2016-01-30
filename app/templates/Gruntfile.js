@@ -137,9 +137,9 @@ module.exports = function (grunt) {
             },
             all: [
                 'Gruntfile.js',
-                'src/main/webapp/app/app.js',
-                'src/main/webapp/app/app/**/*.js',
-                'src/main/webapp/app/components/**/*.js'
+                'src/main/webapp/app/app.module.js',
+                'src/main/webapp/app/app.config.js',
+                'src/main/webapp/app/**/*.js'
             ]
         },<% if (useSass) { %>
         sass: {
@@ -231,7 +231,7 @@ module.exports = function (grunt) {
         ngtemplates:    {
             dist: {
                 cwd: 'src/main/webapp',
-                src: ['app/app/**/*.html', 'app/components/**/*.html',],
+                src: ['app/**/*.html', 'app/components/**/*.html',],
                 dest: '.tmp/templates/templates.js',
                 options: {
                     module: '<%= angularAppName%>',
@@ -346,7 +346,7 @@ module.exports = function (grunt) {
             },
             dev: {
                 options: {
-                    dest: 'src/main/webapp/app/app/app.constants.js'
+                    dest: 'src/main/webapp/app/app.constants.js'
                 },
                 constants: {
                     ENV: 'dev',
@@ -355,7 +355,7 @@ module.exports = function (grunt) {
             },
             prod: {
                 options: {
-                    dest: '.tmp/app/app/app.constants.js'
+                    dest: '.tmp/app/app.constants.js'
                 },
                 constants: {
                     ENV: 'prod',
