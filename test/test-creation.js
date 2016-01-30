@@ -6,7 +6,7 @@ var assert = require('yeoman-assert');
 var helpers = require('yeoman-test');
 var os = require('os');
 
-var expectedFiles = {
+const expectedFiles = {
 
     server: [
         'README.md',
