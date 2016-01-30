@@ -252,7 +252,7 @@ const expectedFiles = {
         'src/test/javascript/spec/app/account/register/register.controller.spec.js',
         'src/test/javascript/spec/app/account/reset/finish/reset.finish.controller.spec.js',
         'src/test/javascript/spec/app/account/reset/request/reset.request.controller.spec.js',
-        'src/test/javascript/spec/components/auth/auth.services.spec.js',
+        'src/test/javascript/spec/app/services/auth/auth.services.spec.js',
         'src/main/webapp/content/css/documentation.css',
         'src/main/webapp/content/images/development_ribbon.png',
         'src/main/webapp/content/images/hipster.png',
