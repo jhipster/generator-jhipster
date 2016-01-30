@@ -1040,56 +1040,12 @@ module.exports = JhipsterGenerator.extend({
             this.template(WEBAPP_DIR + '/swagger-ui/_index.html', WEBAPP_DIR + 'swagger-ui/index.html', this, {});
             this.copy(WEBAPP_DIR + '/swagger-ui/images/throbber.gif', WEBAPP_DIR + 'swagger-ui/images/throbber.gif');
 
-            // Angular JS views
+            // Angular JS module
             this.template(ANGULAR_DIR + '_app.module.js', ANGULAR_DIR + 'app.module.js', this, {});
             this.template(ANGULAR_DIR + '_app.config.js', ANGULAR_DIR + 'app.config.js', this, {});
             this.template(ANGULAR_DIR + '_app.constants.js', ANGULAR_DIR + 'app.constants.js', this, {});
 
-            // Client Components
-            this.template(ANGULAR_DIR + 'services/admin/_audits.service.js', ANGULAR_DIR + 'services/admin/audits.service.js', this, {});
-            this.template(ANGULAR_DIR + 'services/admin/_configuration.service.js', ANGULAR_DIR + 'services/admin/configuration.service.js', this, {});
-            this.template(ANGULAR_DIR + 'services/admin/_logs.service.js', ANGULAR_DIR + 'services/admin/logs.service.js', this, {});
-            this.template(ANGULAR_DIR + 'services/admin/_monitoring.service.js', ANGULAR_DIR + 'services/admin/monitoring.service.js', this, {});
-            this.template(ANGULAR_DIR + 'services/auth/_auth.service.js', ANGULAR_DIR + 'services/auth/auth.service.js', this, {});
-            this.template(ANGULAR_DIR + 'services/auth/_principal.service.js', ANGULAR_DIR + 'services/auth/principal.service.js', this, {});
-            this.template(ANGULAR_DIR + 'services/auth/_authority.directive.js', ANGULAR_DIR + 'services/auth/authority.directive.js', this, {});
-            if (this.authenticationType == 'oauth2') {
-                this.template(ANGULAR_DIR + 'services/auth/_auth.oauth2.service.js', ANGULAR_DIR + 'services/auth/auth.oauth2.service.js', this, {});
-            } else if (this.authenticationType == 'xauth') {
-                this.template(ANGULAR_DIR + 'services/auth/_auth.xauth.service.js', ANGULAR_DIR + 'services/auth/auth.xauth.service.js', this, {});
-            } else {
-                this.template(ANGULAR_DIR + 'services/auth/_auth.session.service.js', ANGULAR_DIR + 'services/auth/auth.session.service.js', this, {});
-            }
-            this.template(ANGULAR_DIR + 'services/auth/_account.service.js', ANGULAR_DIR + 'services/auth/account.service.js', this, {});
-            this.template(ANGULAR_DIR + 'services/auth/_activate.service.js', ANGULAR_DIR + 'services/auth/activate.service.js', this, {});
-            this.template(ANGULAR_DIR + 'services/auth/_password.service.js', ANGULAR_DIR + 'services/auth/password.service.js', this, {});
-            this.template(ANGULAR_DIR + 'services/auth/_register.service.js', ANGULAR_DIR + 'services/auth/register.service.js', this, {});
-            if (this.authenticationType == 'session') {
-                this.template(ANGULAR_DIR + 'services/auth/_sessions.service.js', ANGULAR_DIR + 'services/auth/sessions.service.js', this, {});
-            }
-            this.template(ANGULAR_DIR + 'components/form/_form.directive.js', ANGULAR_DIR + 'components/form/form.directive.js', this, {});
-            this.template(ANGULAR_DIR + 'components/form/_maxbytes.directive.js', ANGULAR_DIR + 'components/form/maxbytes.directive.js', this, {});
-            this.template(ANGULAR_DIR + 'components/form/_minbytes.directive.js', ANGULAR_DIR + 'components/form/minbytes.directive.js', this, {});
-            this.template(ANGULAR_DIR + 'components/form/_uib-pager.config.js', ANGULAR_DIR + 'components/form/uib-pager.config.js', this, {});
-            this.template(ANGULAR_DIR + 'components/form/_uib-pagination.config.js', ANGULAR_DIR + 'components/form/uib-pagination.config.js', this, {});
-            this.template(ANGULAR_DIR + 'components/form/_pagination.constants.js', ANGULAR_DIR + 'components/form/pagination.constants.js', this, {});
-            if (this.enableTranslation) {
-                this.template(ANGULAR_DIR + 'components/language/_language.controller.js', ANGULAR_DIR + 'components/language/language.controller.js', this, {});
-                this.template(ANGULAR_DIR + 'components/language/_language.service.js', ANGULAR_DIR + 'components/language/language.service.js', this, {});
-            }
-            this.template(ANGULAR_DIR + 'layouts/navbar/_navbar.directive.js', ANGULAR_DIR + 'layouts/navbar/navbar.directive.js', this, {});
-            this.copyHtml(ANGULAR_DIR + 'layouts/navbar/navbar.html', ANGULAR_DIR + 'layouts/navbar/navbar.html');
-            this.template(ANGULAR_DIR + 'layouts/navbar/_navbar.controller.js', ANGULAR_DIR + 'layouts/navbar/navbar.controller.js', this, {});
-            this.template(ANGULAR_DIR + 'services/user/_user.service.js', ANGULAR_DIR + 'services/user/user.service.js', this, {});
-            this.template(ANGULAR_DIR + 'components/util/_base64.service.js', ANGULAR_DIR + 'components/util/base64.service.js', this, {});
-            this.template(ANGULAR_DIR + 'components/util/_capitalize.filter.js', ANGULAR_DIR + 'components/util/capitalize.filter.js', this, {});
-            this.template(ANGULAR_DIR + 'components/util/_parse-links.service.js', ANGULAR_DIR + 'components/util/parse-links.service.js', this, {});
-            this.template(ANGULAR_DIR + 'components/util/_truncate.filter.js', ANGULAR_DIR + 'components/util/truncate.filter.js', this, {});
-            this.template(ANGULAR_DIR + 'components/util/_date-util.service.js', ANGULAR_DIR + 'components/util/date-util.service.js', this, {});
-            this.template(ANGULAR_DIR + 'components/util/_data-util.service.js', ANGULAR_DIR + 'components/util/data-util.service.js', this, {});
-            this.template(ANGULAR_DIR + 'components/util/_sort.directive.js', ANGULAR_DIR + 'components/util/sort.directive.js', this, {});
-
-            // Client App
+            // account module
             this.template(ANGULAR_DIR + 'account/_account.js', ANGULAR_DIR + 'account/account.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'account/activate/activate.html', ANGULAR_DIR + 'account/activate/activate.html');
             this.copyJs(ANGULAR_DIR + 'account/activate/_activate.js', ANGULAR_DIR + 'account/activate/activate.js', this, {});
@@ -1118,6 +1074,17 @@ module.exports = JhipsterGenerator.extend({
             this.copyHtml(ANGULAR_DIR + 'account/settings/settings.html', ANGULAR_DIR + 'account/settings/settings.html');
             this.copyJs(ANGULAR_DIR + 'account/settings/_settings.js', ANGULAR_DIR + 'account/settings/settings.js', this, {});
             this.template(ANGULAR_DIR + 'account/settings/_settings.controller.js', ANGULAR_DIR + 'account/settings/settings.controller.js', this, {});
+            // Social
+            if (this.enableSocialSignIn) {
+                this.copyHtml(ANGULAR_DIR + 'account/social/directive/_social.html', ANGULAR_DIR + 'account/social/directive/social.html');
+                this.template(ANGULAR_DIR + 'account/social/directive/_social.directive.js', ANGULAR_DIR + 'account/social/directive/social.directive.js', this, {});
+                this.copyHtml(ANGULAR_DIR + 'account/social/_social-register.html', ANGULAR_DIR + 'account/social/social-register.html');
+                this.template(ANGULAR_DIR + 'account/social/_social-register.controller.js', ANGULAR_DIR + 'account/social/social-register.controller.js', this, {});
+                this.template(ANGULAR_DIR + 'account/social/_social.service.js', ANGULAR_DIR + 'account/social/social.service.js', this, {});
+                this.copyJs(ANGULAR_DIR + 'account/social/_social-register.js', ANGULAR_DIR + 'account/social/social-register.js', this, {});
+            }
+
+            // admin modules
             this.template(ANGULAR_DIR + 'admin/_admin.js', ANGULAR_DIR + 'admin/admin.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'admin/audits/audits.html', ANGULAR_DIR + 'admin/audits/audits.html');
             this.copyJs(ANGULAR_DIR + 'admin/audits/_audits.js', ANGULAR_DIR + 'admin/audits/audits.js', this, {});
@@ -1155,24 +1122,25 @@ module.exports = JhipsterGenerator.extend({
             this.template(ANGULAR_DIR + 'admin/user-management/_user-management-detail.controller.js', ANGULAR_DIR + 'admin/user-management/user-management-detail.controller.js', this, {});
             this.template(ANGULAR_DIR + 'admin/user-management/_user-management-dialog.controller.js', ANGULAR_DIR + 'admin/user-management/user-management-dialog.controller.js', this, {});
             this.template(ANGULAR_DIR + 'admin/user-management/_user-management-delete-dialog.controller.js', ANGULAR_DIR + 'admin/user-management/user-management-delete-dialog.controller.js', this, {});
-            this.copyHtml(ANGULAR_DIR + 'layouts/error/error.html', ANGULAR_DIR + 'layouts/error/error.html');
-            this.copyHtml(ANGULAR_DIR + 'layouts/error/accessdenied.html', ANGULAR_DIR + 'layouts/error/accessdenied.html');
-            this.copyJs(ANGULAR_DIR + 'entities/_entity.js', ANGULAR_DIR + 'entities/entity.js', this, {});
-            this.copyJs(ANGULAR_DIR + 'layouts/error/_error.js', ANGULAR_DIR + 'layouts/error/error.js', this, {});
-            this.copyHtml(ANGULAR_DIR + 'home/home.html', ANGULAR_DIR + 'home/home.html');
-            this.copyJs(ANGULAR_DIR + 'home/_home.js', ANGULAR_DIR + 'home/home.js', this, {});
-            this.template(ANGULAR_DIR + 'home/_home.controller.js', ANGULAR_DIR + 'home/home.controller.js', this, {});
 
-            // Social
-            if (this.enableSocialSignIn) {
-                this.copyHtml(ANGULAR_DIR + 'account/social/directive/_social.html', ANGULAR_DIR + 'account/social/directive/social.html');
-                this.template(ANGULAR_DIR + 'account/social/directive/_social.directive.js', ANGULAR_DIR + 'account/social/directive/social.directive.js', this, {});
-                this.copyHtml(ANGULAR_DIR + 'account/social/_social-register.html', ANGULAR_DIR + 'account/social/social-register.html');
-                this.template(ANGULAR_DIR + 'account/social/_social-register.controller.js', ANGULAR_DIR + 'account/social/social-register.controller.js', this, {});
-                this.template(ANGULAR_DIR + 'account/social/_social.service.js', ANGULAR_DIR + 'account/social/social.service.js', this, {});
-                this.copyJs(ANGULAR_DIR + 'account/social/_social-register.js', ANGULAR_DIR + 'account/social/social-register.js', this, {});
+            //components
+            this.template(ANGULAR_DIR + 'components/form/_form.directive.js', ANGULAR_DIR + 'components/form/form.directive.js', this, {});
+            this.template(ANGULAR_DIR + 'components/form/_maxbytes.directive.js', ANGULAR_DIR + 'components/form/maxbytes.directive.js', this, {});
+            this.template(ANGULAR_DIR + 'components/form/_minbytes.directive.js', ANGULAR_DIR + 'components/form/minbytes.directive.js', this, {});
+            this.template(ANGULAR_DIR + 'components/form/_uib-pager.config.js', ANGULAR_DIR + 'components/form/uib-pager.config.js', this, {});
+            this.template(ANGULAR_DIR + 'components/form/_uib-pagination.config.js', ANGULAR_DIR + 'components/form/uib-pagination.config.js', this, {});
+            this.template(ANGULAR_DIR + 'components/form/_pagination.constants.js', ANGULAR_DIR + 'components/form/pagination.constants.js', this, {});
+            if (this.enableTranslation) {
+                this.template(ANGULAR_DIR + 'components/language/_language.controller.js', ANGULAR_DIR + 'components/language/language.controller.js', this, {});
+                this.template(ANGULAR_DIR + 'components/language/_language.service.js', ANGULAR_DIR + 'components/language/language.service.js', this, {});
             }
-
+            this.template(ANGULAR_DIR + 'components/util/_base64.service.js', ANGULAR_DIR + 'components/util/base64.service.js', this, {});
+            this.template(ANGULAR_DIR + 'components/util/_capitalize.filter.js', ANGULAR_DIR + 'components/util/capitalize.filter.js', this, {});
+            this.template(ANGULAR_DIR + 'components/util/_parse-links.service.js', ANGULAR_DIR + 'components/util/parse-links.service.js', this, {});
+            this.template(ANGULAR_DIR + 'components/util/_truncate.filter.js', ANGULAR_DIR + 'components/util/truncate.filter.js', this, {});
+            this.template(ANGULAR_DIR + 'components/util/_date-util.service.js', ANGULAR_DIR + 'components/util/date-util.service.js', this, {});
+            this.template(ANGULAR_DIR + 'components/util/_data-util.service.js', ANGULAR_DIR + 'components/util/data-util.service.js', this, {});
+            this.template(ANGULAR_DIR + 'components/util/_sort.directive.js', ANGULAR_DIR + 'components/util/sort.directive.js', this, {});
             // interceptor code
             this.template(ANGULAR_DIR + 'components/interceptor/_auth.interceptor.js', ANGULAR_DIR + 'components/interceptor/auth.interceptor.js', this, {});
             this.template(ANGULAR_DIR + 'components/interceptor/_errorhandler.interceptor.js', ANGULAR_DIR + 'components/interceptor/errorhandler.interceptor.js', this, {});
@@ -1181,6 +1149,46 @@ module.exports = JhipsterGenerator.extend({
             //alert service code
             this.template(ANGULAR_DIR + 'components/alert/_alert.service.js', ANGULAR_DIR + 'components/alert/alert.service.js', this, {});
             this.template(ANGULAR_DIR + 'components/alert/_alert.directive.js', ANGULAR_DIR + 'components/alert/alert.directive.js', this, {});
+
+            // entities
+            this.copyJs(ANGULAR_DIR + 'entities/_entity.js', ANGULAR_DIR + 'entities/entity.js', this, {});
+
+            // home module
+            this.copyHtml(ANGULAR_DIR + 'home/home.html', ANGULAR_DIR + 'home/home.html');
+            this.copyJs(ANGULAR_DIR + 'home/_home.js', ANGULAR_DIR + 'home/home.js', this, {});
+            this.template(ANGULAR_DIR + 'home/_home.controller.js', ANGULAR_DIR + 'home/home.controller.js', this, {});
+
+            // layouts
+            this.template(ANGULAR_DIR + 'layouts/navbar/_navbar.directive.js', ANGULAR_DIR + 'layouts/navbar/navbar.directive.js', this, {});
+            this.copyHtml(ANGULAR_DIR + 'layouts/navbar/navbar.html', ANGULAR_DIR + 'layouts/navbar/navbar.html');
+            this.template(ANGULAR_DIR + 'layouts/navbar/_navbar.controller.js', ANGULAR_DIR + 'layouts/navbar/navbar.controller.js', this, {});
+            this.copyHtml(ANGULAR_DIR + 'layouts/error/error.html', ANGULAR_DIR + 'layouts/error/error.html');
+            this.copyHtml(ANGULAR_DIR + 'layouts/error/accessdenied.html', ANGULAR_DIR + 'layouts/error/accessdenied.html');
+            this.copyJs(ANGULAR_DIR + 'layouts/error/_error.js', ANGULAR_DIR + 'layouts/error/error.js', this, {});
+
+            // services
+            this.template(ANGULAR_DIR + 'services/admin/_audits.service.js', ANGULAR_DIR + 'services/admin/audits.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/admin/_configuration.service.js', ANGULAR_DIR + 'services/admin/configuration.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/admin/_logs.service.js', ANGULAR_DIR + 'services/admin/logs.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/admin/_monitoring.service.js', ANGULAR_DIR + 'services/admin/monitoring.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/auth/_auth.service.js', ANGULAR_DIR + 'services/auth/auth.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/auth/_principal.service.js', ANGULAR_DIR + 'services/auth/principal.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/auth/_authority.directive.js', ANGULAR_DIR + 'services/auth/authority.directive.js', this, {});
+            if (this.authenticationType == 'oauth2') {
+                this.template(ANGULAR_DIR + 'services/auth/_auth.oauth2.service.js', ANGULAR_DIR + 'services/auth/auth.oauth2.service.js', this, {});
+            } else if (this.authenticationType == 'xauth') {
+                this.template(ANGULAR_DIR + 'services/auth/_auth.xauth.service.js', ANGULAR_DIR + 'services/auth/auth.xauth.service.js', this, {});
+            } else {
+                this.template(ANGULAR_DIR + 'services/auth/_auth.session.service.js', ANGULAR_DIR + 'services/auth/auth.session.service.js', this, {});
+            }
+            this.template(ANGULAR_DIR + 'services/auth/_account.service.js', ANGULAR_DIR + 'services/auth/account.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/auth/_activate.service.js', ANGULAR_DIR + 'services/auth/activate.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/auth/_password.service.js', ANGULAR_DIR + 'services/auth/password.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/auth/_register.service.js', ANGULAR_DIR + 'services/auth/register.service.js', this, {});
+            if (this.authenticationType == 'session') {
+                this.template(ANGULAR_DIR + 'services/auth/_sessions.service.js', ANGULAR_DIR + 'services/auth/sessions.service.js', this, {});
+            }
+            this.template(ANGULAR_DIR + 'services/user/_user.service.js', ANGULAR_DIR + 'services/user/user.service.js', this, {});
 
             // CSS
             this.copy(WEBAPP_DIR + 'content/css/documentation.css', WEBAPP_DIR + 'content/css/documentation.css');
@@ -1205,38 +1213,7 @@ module.exports = JhipsterGenerator.extend({
                 'app/app.module.js',
                 'app/app.config.js',
                 'app/app.constants.js',
-                'app/services/auth/auth.service.js',
-                'app/services/auth/principal.service.js',
-                'app/services/auth/authority.directive.js',
-                'app/services/auth/account.service.js',
-                'app/services/auth/activate.service.js',
-                'app/services/auth/password.service.js',
-                'app/services/auth/register.service.js',
-                'app/components/form/form.directive.js',
-                'app/components/form/maxbytes.directive.js',
-                'app/components/form/minbytes.directive.js',
-                'app/components/form/uib-pager.config.js',
-                'app/components/form/uib-pagination.config.js',
-                'app/components/form/pagination.constants.js',
-                'app/services/admin/audits.service.js',
-                'app/services/admin/logs.service.js',
-                'app/services/admin/configuration.service.js',
-                'app/services/admin/monitoring.service.js',
-                'app/components/interceptor/auth.interceptor.js',
-                'app/components/interceptor/errorhandler.interceptor.js',
-                'app/components/interceptor/notification.interceptor.js',
-                'app/layouts/navbar/navbar.directive.js',
-                'app/layouts/navbar/navbar.controller.js',
-                'app/services/user/user.service.js',
-                'app/components/util/truncate.filter.js',
-                'app/components/util/base64.service.js',
-                'app/components/util/capitalize.filter.js',
-                'app/components/alert/alert.service.js',
-                'app/components/alert/alert.directive.js',
-                'app/components/util/parse-links.service.js',
-                'app/components/util/date-util.service.js',
-                'app/components/util/data-util.service.js',
-                'app/components/util/sort.directive.js',
+                // account
                 'app/account/account.js',
                 'app/account/activate/activate.js',
                 'app/account/activate/activate.controller.js',
@@ -1253,6 +1230,7 @@ module.exports = JhipsterGenerator.extend({
                 'app/account/reset/finish/reset.finish.js',
                 'app/account/reset/request/reset.request.controller.js',
                 'app/account/reset/request/reset.request.js',
+                // admin
                 'app/admin/admin.js',
                 'app/admin/audits/audits.js',
                 'app/admin/audits/audits.controller.js',
@@ -1272,10 +1250,47 @@ module.exports = JhipsterGenerator.extend({
                 'app/admin/user-management/user-management-delete-dialog.controller.js',
                 'app/admin/user-management/user-management.controller.js',
                 'app/admin/user-management/user-management.js',
+                // components
+                'app/components/form/form.directive.js',
+                'app/components/form/maxbytes.directive.js',
+                'app/components/form/minbytes.directive.js',
+                'app/components/form/uib-pager.config.js',
+                'app/components/form/uib-pagination.config.js',
+                'app/components/form/pagination.constants.js',
+                'app/components/interceptor/auth.interceptor.js',
+                'app/components/interceptor/errorhandler.interceptor.js',
+                'app/components/interceptor/notification.interceptor.js',
+                'app/components/util/truncate.filter.js',
+                'app/components/util/base64.service.js',
+                'app/components/util/capitalize.filter.js',
+                'app/components/alert/alert.service.js',
+                'app/components/alert/alert.directive.js',
+                'app/components/util/parse-links.service.js',
+                'app/components/util/date-util.service.js',
+                'app/components/util/data-util.service.js',
+                'app/components/util/sort.directive.js',
+                // entities
                 'app/entities/entity.js',
-                'app/layouts/error/error.js',
+                // home
                 'app/home/home.js',
-                'app/home/home.controller.js'
+                'app/home/home.controller.js',
+                // layouts
+                'app/layouts/error/error.js',
+                'app/layouts/navbar/navbar.directive.js',
+                'app/layouts/navbar/navbar.controller.js',
+                // services
+                'app/services/auth/auth.service.js',
+                'app/services/auth/principal.service.js',
+                'app/services/auth/authority.directive.js',
+                'app/services/auth/account.service.js',
+                'app/services/auth/activate.service.js',
+                'app/services/auth/password.service.js',
+                'app/services/auth/register.service.js',
+                'app/services/admin/audits.service.js',
+                'app/services/admin/logs.service.js',
+                'app/services/admin/configuration.service.js',
+                'app/services/admin/monitoring.service.js',
+                'app/services/user/user.service.js'
             ];
             if (this.enableTranslation) {
                 appScripts = appScripts.concat([
