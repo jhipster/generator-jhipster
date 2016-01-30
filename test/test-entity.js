@@ -1,4 +1,4 @@
-/*global describe, beforeEach, it*/
+/*global describe, beforeEachEach, it*/
 'use strict';
 
 var path = require('path');
@@ -32,7 +32,7 @@ const expectedFiles = {
 }
 describe('JHipster generator entity', function () {
     describe('no dto, no service, no pagination', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(require.resolve('../entity'))
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
@@ -54,7 +54,7 @@ describe('JHipster generator entity', function () {
     });
 
     describe('with dto, no service, no pagination', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(require.resolve('../entity'))
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
@@ -80,7 +80,7 @@ describe('JHipster generator entity', function () {
     });
 
     describe('no dto, with serviceClass, no pagination', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(require.resolve('../entity'))
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
@@ -105,7 +105,7 @@ describe('JHipster generator entity', function () {
     });
 
     describe('no dto, with serviceImpl, no pagination', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(require.resolve('../entity'))
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
@@ -131,7 +131,7 @@ describe('JHipster generator entity', function () {
     });
 
     describe('no dto, no service, with pager', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(require.resolve('../entity'))
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
@@ -153,7 +153,7 @@ describe('JHipster generator entity', function () {
     });
 
     describe('no dto, no service, with pagination', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(require.resolve('../entity'))
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
@@ -175,7 +175,7 @@ describe('JHipster generator entity', function () {
     });
 
     describe('no dto, no service, with infinite-scroll', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(require.resolve('../entity'))
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir)

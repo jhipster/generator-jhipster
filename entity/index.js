@@ -1592,13 +1592,13 @@ module.exports = EntityGenerator.extend({
             this.addJavaScriptToIndex('entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller' + '.js');
 
             this.template(ANGULAR_DIR + 'services/_entity-service.js',
-            ANGULAR_DIR + 'services/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js', this, {});
-            this.addJavaScriptToIndex('services/entities/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js');
+            ANGULAR_DIR + 'services/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js', this, {});
+            this.addJavaScriptToIndex('services/' + this.entityInstance + '/' + this.entityInstance + '.service' + '.js');
 
             if (this.searchEngine == 'elasticsearch') {
                 this.template(ANGULAR_DIR + 'services/_entity-search-service.js',
-                ANGULAR_DIR + 'services/entities/' + this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js', this, {});
-                this.addJavaScriptToIndex('services/entities/' + this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js');
+                ANGULAR_DIR + 'services/' + this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js', this, {});
+                this.addJavaScriptToIndex('services/' + this.entityInstance + '/' + this.entityInstance + '.search.service' + '.js');
             }
 
             // Copy for each
