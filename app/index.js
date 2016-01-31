@@ -943,16 +943,15 @@ JhipsterGenerator.prototype.app = function app() {
                 this.template('src/main/java/package/config/hazelcast/_package-info.java', javaDir + 'config/hazelcast/package-info.java', this, {});
             }
 
-<<<<<<< HEAD
             if (this.databaseType == "sql") {
                 this.template('src/main/java/package/config/liquibase/_AsyncSpringLiquibase.java', javaDir + 'config/liquibase/AsyncSpringLiquibase.java', this, {});
                 this.template('src/main/java/package/config/liquibase/_package-info.java', javaDir + 'config/liquibase/package-info.java', this, {});
             }
-=======
+
     if (this.authenticationType == 'jwt') {
         this.template('src/main/java/package/config/_JWTConfiguration.java', javaDir + 'config/JWTConfiguration.java', this, {});
     }
->>>>>>> Index.js changes
+
 
             this.template('src/main/java/package/domain/_package-info.java', javaDir + 'domain/package-info.java', this, {});
             if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {

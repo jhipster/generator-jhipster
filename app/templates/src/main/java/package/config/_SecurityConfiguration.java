@@ -110,13 +110,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
             .antMatchers("/api/account/reset_password/init")
             .antMatchers("/api/account/reset_password/finish")<% } %>
             .antMatchers("/test/**")<% if (devDatabaseType != 'h2Disk' && devDatabaseType != 'h2Memory') { %>;<% } else { %>
-<<<<<<< HEAD
-            .antMatchers("/h2-console/**");<% } %>
-    }<% if (authenticationType == 'session' || authenticationType == 'xauth') { %>
-=======
-            .antMatchers("/console/**");<% } %>
+            .antMatchers("/h2-console/**"");<% } %>
     }<% if (authenticationType == 'session' || authenticationType == 'jwt') { %>
->>>>>>> Initial commit
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -215,7 +210,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
         return super.authenticationManagerBean();
     }<% } %><% if (authenticationType == 'jwt') { %>
 
-    private JWTTokenConfigurer securityConfigurerAdapter() {
+    private JWTTokenConfigurer fsecurityConfigurerAdapter() {
       return new JWTTokenConfigurer(userDetailsService, tokenAuthenticationService);
     }<% } %>
 
