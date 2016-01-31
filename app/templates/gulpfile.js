@@ -5,7 +5,7 @@
 var gulp = require('gulp'),
     gutil = require('gulp-util'),
     prefix = require('gulp-autoprefixer'),
-    minifyCss = require('gulp-minify-css'),
+    cssnano = require('gulp-cssnano'),
     usemin = require('gulp-usemin'),
     uglify = require('gulp-uglify'),<% if(useSass) { %>
     sass = require('gulp-sass'),<% } %>
@@ -241,8 +241,8 @@ gulp.task('usemin', ['images', 'styles'], function() {
         pipe(usemin({
             css: [
                 prefix,
-                minifyCss,  // Replace relative paths for static resources with absolute path with root
-                'concat', // Needs to be present for minifyCss root option to work
+                'concat',
+                cssnano,
                 rev
             ],
             html: [
