@@ -283,6 +283,7 @@ const expectedFiles = {
 };
 
 describe('JHipster generator', function () {
+    this.timeout(3000); //to avoid occassional timeouts
     describe('grunt default configuration', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../app'))

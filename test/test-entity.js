@@ -22,10 +22,8 @@ const expectedFiles = {
         'src/main/webapp/app/entities/foo-management/foo-management-dialog.controller.js',
         'src/main/webapp/app/entities/foo-management/foo-management-delete-dialog.controller.js',
         'src/main/webapp/app/entities/foo-management/foo-management-detail.controller.js',
-        'src/test/javascript/spec/app/entities/foo-management/foo-management-detail.controller.spec.js',
         'src/main/webapp/app/entities/foo-management/foo.service.js',
-        // 'src/main/webapp/i18n/en/foo.json',
-        // 'src/main/webapp/i18n/fr/foo.json',
+        'src/test/javascript/spec/app/entities/foo-management/foo-management-detail.controller.spec.js',
         'src/test/java/com/mycompany/myapp/web/rest/FooResourceIntTest.java',
         'src/test/gatling/simulations/FooGatlingTest.scala',
     ]
@@ -50,6 +48,10 @@ describe('JHipster generator entity', function () {
 
         it('creates expected default files', function () {
             assert.file(expectedFiles.default);
+            assert.file([
+                //'src/main/webapp/i18n/en/foo.json', //this should ideally be working
+                //'src/main/webapp/i18n/fr/foo.json'
+            ]);
         });
     });
 
@@ -193,6 +195,32 @@ describe('JHipster generator entity', function () {
 
         it('creates expected default files', function () {
             assert.file(expectedFiles.default);
+        });
+    });
+
+    describe('with dto, serviceImpl, with hazelcast, elasticsearch and noi18n', function () {
+        beforeEach(function (done) {
+            helpers.run(require.resolve('../entity'))
+                .inTmpDir(function (dir) {
+                    fse.copySync(path.join(__dirname, '../test/templates/noi18n'), dir)
+                })
+                .withArguments(['foo'])
+                .withPrompts({
+                    fieldAdd: false,
+                    relationshipAdd: false,
+                    dto: 'yes',
+                    service: 'serviceImpl',
+                    pagination: 'infinite-scroll'
+                })
+                .on('end', done);
+        });
+
+        it('creates expected default files', function () {
+            assert.file(expectedFiles.default);
+            assert.noFile([
+                'src/main/webapp/i18n/en/foo.json',
+                'src/main/webapp/i18n/fr/foo.json'
+            ])
         });
     });
 });
