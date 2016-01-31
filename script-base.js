@@ -383,7 +383,7 @@ Generator.prototype.addBowerrcParameter = function(key, value) {
 };
 
 /**
- * Add a new module to the angular application in "app.js".
+ * Add a new module to the angular application in "app.module.js".
  *
  * @param {string} moduleName - module name
  *
@@ -404,7 +404,7 @@ Generator.prototype.addAngularJsModule = function(moduleName) {
 };
 
 /**
- * Add a new configuration to the angular application in "app.js".
+ * Add a new configuration to the angular application in "app.config.js".
  *
  * @param {array} moduleConfigNames - modules name to import in your config
  * @param {string} config - javascript to put inside config
@@ -446,7 +446,7 @@ Generator.prototype.addAngularJsConfig = function(moduleConfigNames, config, com
 };
 
 /**
- * Add a new interceptor to the angular application in "app.js".
+ * Add a new interceptor to the angular application in "app.config.js".
  * The interceptor should be in its own .js file inside app/components/interceptor folder
  * @param {string} interceptorName - angular name of the interceptor
  *
