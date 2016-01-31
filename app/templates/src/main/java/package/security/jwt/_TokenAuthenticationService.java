@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 @Service
 public class TokenAuthenticationService {
 
-    private static final String AUTH_HEADER_NAME = "X-AUTH-TOKEN";
+    private static final String AUTH_HEADER_NAME = "X-JHIPSTER-AUTH";
     private final TokenHandler tokenHandler;
 
     @Autowired
