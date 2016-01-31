@@ -24,7 +24,8 @@ var gulp = require('gulp'),
     wiredep = require('wiredep').stream,
     fs = require('fs'),
     runSequence = require('run-sequence'),
-    browserSync = require('browser-sync');
+    browserSync = require('browser-sync'),
+    sourcemaps = require('gulp-sourcemaps');
 
 var karmaServer = require('karma').Server;
 
@@ -248,10 +249,12 @@ gulp.task('usemin', ['images', 'styles'], function() {
                 htmlmin.bind(htmlmin, {collapseWhitespace: true})
             ],
             js: [
+                sourcemaps.init,
                 ngAnnotate,
-                uglify,
                 'concat',
-                rev
+                uglify.bind(uglify, { mangle: false }),
+                rev,
+                sourcemaps.write.bind(sourcemaps.write, '.')
             ]
         })).
         pipe(gulp.dest(yeoman.dist));
