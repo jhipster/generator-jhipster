@@ -1452,6 +1452,7 @@ module.exports = EntityGenerator.extend({
             this.entityInstance = _s.decapitalize(this.name);
             this.entityInstancePlural = pluralize(this.entityInstance);
             this.entityTableName = _s.underscored(this.name).toLowerCase();
+            this.entityDasherized = _s.trim(_s.dasherize(this.name), '-');
 
             this.differentTypes = [this.entityClass];
             if (this.relationships == undefined) {
@@ -1559,32 +1560,32 @@ module.exports = EntityGenerator.extend({
             if(this.skipClient){
                 return;
             }
-            this.copyHtml(ANGULAR_DIR + 'entities/_entity-management.html', ANGULAR_DIR + 'entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.html', this, {}, true);
-            this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-detail.html', ANGULAR_DIR + 'entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.html', this, {}, true);
-            this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-dialog.html', ANGULAR_DIR + 'entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-dialog.html', this, {}, true);
-            this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-delete-dialog.html', ANGULAR_DIR + 'entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-delete-dialog.html', this, {}, true);
+            this.copyHtml(ANGULAR_DIR + 'entities/_entity-management.html', ANGULAR_DIR + 'entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management.html', this, {}, true);
+            this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-detail.html', ANGULAR_DIR + 'entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management-detail.html', this, {}, true);
+            this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-dialog.html', ANGULAR_DIR + 'entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management-dialog.html', this, {}, true);
+            this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-delete-dialog.html', ANGULAR_DIR + 'entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management-delete-dialog.html', this, {}, true);
 
-            this.addEntityToMenu(this.entityInstance + '-management', this.enableTranslation);
+            this.addEntityToMenu(this.entityDasherized + '-management', this.enableTranslation);
 
-            this.template(ANGULAR_DIR + 'entities/_entity-management.js', ANGULAR_DIR + 'entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.js', this, {});
-            this.addJavaScriptToIndex('entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.js');
-            this.template(ANGULAR_DIR + 'entities/_entity-management.controller.js', ANGULAR_DIR + 'entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.controller' + '.js', this, {});
-            this.addJavaScriptToIndex('entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management.controller' + '.js');
-            this.template(ANGULAR_DIR + 'entities/_entity-management-dialog.controller.js', ANGULAR_DIR + 'entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-dialog.controller' + '.js', this, {});
-            this.addJavaScriptToIndex('entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-dialog.controller' + '.js');
-            this.template(ANGULAR_DIR + 'entities/_entity-management-delete-dialog.controller.js', ANGULAR_DIR + 'entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-delete-dialog.controller' + '.js', this, {});
-            this.addJavaScriptToIndex('entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-delete-dialog.controller' + '.js');
+            this.template(ANGULAR_DIR + 'entities/_entity-management.js', ANGULAR_DIR + 'entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management.js', this, {});
+            this.addJavaScriptToIndex('entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management.js');
+            this.template(ANGULAR_DIR + 'entities/_entity-management.controller.js', ANGULAR_DIR + 'entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management.controller' + '.js', this, {});
+            this.addJavaScriptToIndex('entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management.controller' + '.js');
+            this.template(ANGULAR_DIR + 'entities/_entity-management-dialog.controller.js', ANGULAR_DIR + 'entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management-dialog.controller' + '.js', this, {});
+            this.addJavaScriptToIndex('entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management-dialog.controller' + '.js');
+            this.template(ANGULAR_DIR + 'entities/_entity-management-delete-dialog.controller.js', ANGULAR_DIR + 'entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management-delete-dialog.controller' + '.js', this, {});
+            this.addJavaScriptToIndex('entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management-delete-dialog.controller' + '.js');
 
-            this.template(ANGULAR_DIR + 'entities/_entity-management-detail.controller.js', ANGULAR_DIR + 'entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller' + '.js', this, {});
+            this.template(ANGULAR_DIR + 'entities/_entity-management-detail.controller.js', ANGULAR_DIR + 'entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management-detail.controller' + '.js', this, {});
 
-            this.addJavaScriptToIndex('entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller' + '.js');
+            this.addJavaScriptToIndex('entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management-detail.controller' + '.js');
 
-            this.template(ANGULAR_DIR + 'services/_entity.service.js', ANGULAR_DIR + 'entities/' + this.entityInstance + '-management/' + this.entityInstance + '.service' + '.js', this, {});
-            this.addJavaScriptToIndex('entities/' + this.entityInstance + '-management/' + this.entityInstance + '.service' + '.js');
+            this.template(ANGULAR_DIR + 'services/_entity.service.js', ANGULAR_DIR + 'entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '.service' + '.js', this, {});
+            this.addJavaScriptToIndex('entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '.service' + '.js');
 
             if (this.searchEngine == 'elasticsearch') {
-                this.template(ANGULAR_DIR + 'services/_entity-search.service.js', ANGULAR_DIR + 'entities/' + this.entityInstance + '-management/' + this.entityInstance + '.search.service' + '.js', this, {});
-                this.addJavaScriptToIndex('entities/' + this.entityInstance + '-management/' + this.entityInstance + '.search.service' + '.js');
+                this.template(ANGULAR_DIR + 'services/_entity-search.service.js', ANGULAR_DIR + 'entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '.search.service' + '.js', this, {});
+                this.addJavaScriptToIndex('entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '.search.service' + '.js');
             }
 
             // Copy for each
@@ -1600,7 +1601,7 @@ module.exports = EntityGenerator.extend({
                 return;
             }
             this.template('src/test/javascript/spec/app/entities/_entity-management-detail.controller.spec.js',
-                'src/test/javascript/spec/app/entities/' + this.entityInstance + '-management/' + this.entityInstance + '-management-detail.controller.spec.js', this, {});
+                'src/test/javascript/spec/app/entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management-detail.controller.spec.js', this, {});
         },
 
         writeTestFiles: function() {
@@ -1639,7 +1640,8 @@ module.exports = EntityGenerator.extend({
                         pkType: this.pkType,
                         entityClass: this.entityClass,
                         entityTableName: this.entityTableName,
-                        entityInstance: this.entityInstance
+                        entityInstance: this.entityInstance,
+                        entityDasherized: this.entityDasherized
                     };
                     // run through all post entity creation module hooks
                     modules.forEach(function(module) {

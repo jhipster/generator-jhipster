@@ -127,7 +127,7 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
             needle: 'jhipster-needle-add-entity-to-menu',
             splicable: [
                     '<li ui-sref-active="active" ><a ui-sref="' + routerName + '" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-asterisk"></span>\n' +
-                    '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.entities.' + routerName + '"':'' ) + '>' + _s.humanize(routerName) + '</span></a></li>'
+                    '                        &#xA0;<span ' + ( enableTranslation ? 'translate="global.menu.entities.' + _s.camelize(routerName) + '"':'' ) + '>' + _s.humanize(routerName) + '</span></a></li>'
             ]
         }, this);
     } catch (e) {
@@ -1102,7 +1102,7 @@ Generator.prototype.copyI18n = function(language) {
         var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
         if (stats.isDirectory()) {
             this.template('src/main/webapp/i18n/_entity_' + language + '.json', 'src/main/webapp/i18n/' + language + '/' + this.entityInstance + '.json', this, {});
-            this.addEntityTranslationKey(this.entityInstance + '-management', this.entityClass, language);
+            this.addEntityTranslationKey(this.entityInstance + 'Management', this.entityClass, language);
         }
     } catch(e) {
         // An exception is thrown if the folder doesn't exist

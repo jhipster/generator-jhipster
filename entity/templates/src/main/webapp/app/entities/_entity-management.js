@@ -3,16 +3,16 @@
 angular.module('<%=angularAppName%>')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('<%= entityInstance %>-management', {
+            .state('<%= entityDasherized %>-management', {
                 parent: 'entity',
-                url: '/<%= entityInstance %>-management',
+                url: '/<%= entityDasherized %>-management',
                 data: {
                     authorities: ['ROLE_USER'],
                     pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>-management.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'app/entities/<%= entityInstance %>-management/<%= entityInstance %>-management.html',
+                        templateUrl: 'app/entities/<%= entityDasherized %>-management/<%= entityDasherized %>-management.html',
                         controller: '<%= entityClass %>ManagementController'
                     }
                 },
@@ -27,16 +27,16 @@ angular.module('<%=angularAppName%>')
                     }]<% } %>
                 }
             })
-            .state('<%= entityInstance %>-management-detail', {
+            .state('<%= entityDasherized %>-management-detail', {
                 parent: 'entity',
-                url: '/<%= entityInstance %>-management/{id:<% if (databaseType == 'sql') { %>int<% } else if (databaseType == 'mongodb') { %>[0-9a-fA-F]{24}<% } else if (databaseType == 'cassandra') { %>[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}<% } %>}',
+                url: '/<%= entityDasherized %>-management/{id:<% if (databaseType == 'sql') { %>int<% } else if (databaseType == 'mongodb') { %>[0-9a-fA-F]{24}<% } else if (databaseType == 'cassandra') { %>[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}<% } %>}',
                 data: {
                     authorities: ['ROLE_USER'],
                     pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>-management.detail.title'<% }else{ %>'<%= entityClass %>'<% } %>
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'app/entities/<%= entityInstance %>-management/<%= entityInstance %>-management-detail.html',
+                        templateUrl: 'app/entities/<%= entityDasherized %>-management/<%= entityDasherized %>-management-detail.html',
                         controller: '<%= entityClass %>ManagementDetailController'
                     }
                 },
@@ -53,15 +53,15 @@ angular.module('<%=angularAppName%>')
                     }]
                 }
             })
-            .state('<%= entityInstance %>-management.new', {
-                parent: '<%= entityInstance %>-management',
+            .state('<%= entityDasherized %>-management.new', {
+                parent: '<%= entityDasherized %>-management',
                 url: '/new',
                 data: {
                     authorities: ['ROLE_USER'],
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'app/entities/<%= entityInstance %>-management/<%= entityInstance %>-management-dialog.html',
+                        templateUrl: 'app/entities/<%= entityDasherized %>-management/<%= entityDasherized %>-management-dialog.html',
                         controller: '<%= entityClass %>ManagementDialogController',
                         size: 'lg',
                         resolve: {
@@ -82,21 +82,21 @@ angular.module('<%=angularAppName%>')
                             }
                         }
                     }).result.then(function(result) {
-                        $state.go('<%= entityInstance %>-management', null, { reload: true });
+                        $state.go('<%= entityDasherized %>-management', null, { reload: true });
                     }, function() {
-                        $state.go('<%= entityInstance %>-management');
+                        $state.go('<%= entityDasherized %>-management');
                     })
                 }]
             })
-            .state('<%= entityInstance %>-management.edit', {
-                parent: '<%= entityInstance %>-management',
+            .state('<%= entityDasherized %>-management.edit', {
+                parent: '<%= entityDasherized %>-management',
                 url: '/{id:<% if (databaseType == 'sql') { %>int<% } else if (databaseType == 'mongodb') { %>[0-9a-fA-F]{24}<% } else if (databaseType == 'cassandra') { %>[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}<% } %>}/edit',
                 data: {
                     authorities: ['ROLE_USER'],
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'app/entities/<%= entityInstance %>-management/<%= entityInstance %>-management-dialog.html',
+                        templateUrl: 'app/entities/<%= entityDasherized %>-management/<%= entityDasherized %>-management-dialog.html',
                         controller: '<%= entityClass %>ManagementDialogController',
                         size: 'lg',
                         resolve: {
@@ -105,21 +105,21 @@ angular.module('<%=angularAppName%>')
                             }]
                         }
                     }).result.then(function(result) {
-                        $state.go('<%= entityInstance %>-management', null, { reload: true });
+                        $state.go('<%= entityDasherized %>-management', null, { reload: true });
                     }, function() {
                         $state.go('^');
                     })
                 }]
             })
-            .state('<%= entityInstance %>-management.delete', {
-                parent: '<%= entityInstance %>-management',
+            .state('<%= entityDasherized %>-management.delete', {
+                parent: '<%= entityDasherized %>-management',
                 url: '/{id:<% if (databaseType == 'sql') { %>int<% } else if (databaseType == 'mongodb') { %>[0-9a-fA-F]{24}<% } else if (databaseType == 'cassandra') { %>[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}<% } %>}/delete',
                 data: {
                     authorities: ['ROLE_USER'],
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
-                        templateUrl: 'app/entities/<%= entityInstance %>-management/<%= entityInstance %>-management-delete-dialog.html',
+                        templateUrl: 'app/entities/<%= entityDasherized %>-management/<%= entityDasherized %>-management-delete-dialog.html',
                         controller: '<%= entityClass %>ManagementDeleteController',
                         size: 'md',
                         resolve: {
@@ -128,7 +128,7 @@ angular.module('<%=angularAppName%>')
                             }]
                         }
                     }).result.then(function(result) {
-                        $state.go('<%= entityInstance %>-management', null, { reload: true });
+                        $state.go('<%= entityDasherized %>-management', null, { reload: true });
                     }, function() {
                         $state.go('^');
                     })

@@ -1,6 +1,6 @@
 {
     "<%= angularAppName %>": {
-        "<%= entityInstance %>-management" : {
+        "<%= entityInstance %>Management" : {
             "home": {
                 "title": "<%= entityClassPlural %>",
                 "createLabel": "Créer un nouveau <%= entityClass %>",
