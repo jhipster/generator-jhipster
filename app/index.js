@@ -1289,19 +1289,17 @@ JhipsterGenerator.prototype.app = function app() {
                 this.copyJs(WEBAPP_DIR + '/scripts/app/account/social/_social-register.js', WEBAPP_DIR + 'scripts/app/account/social/social-register.js', this, {});
             }
 
-<<<<<<< HEAD
+
             // interceptor code
             this.template(WEBAPP_DIR + '/scripts/components/interceptor/_auth.interceptor.js', WEBAPP_DIR + 'scripts/components/interceptor/auth.interceptor.js', this, {});
             this.template(WEBAPP_DIR + '/scripts/components/interceptor/_errorhandler.interceptor.js', WEBAPP_DIR + 'scripts/components/interceptor/errorhandler.interceptor.js', this, {});
             this.template(WEBAPP_DIR + '/scripts/components/interceptor/_notification.interceptor.js', WEBAPP_DIR + 'scripts/components/interceptor/notification.interceptor.js', this, {});
-=======
     this.template('src/main/java/package/web/filter/_package-info.java', javaDir + 'web/filter/package-info.java', this, {});
     this.template('src/main/java/package/web/filter/_CachingHttpHeadersFilter.java', javaDir + 'web/filter/CachingHttpHeadersFilter.java', this, {});
     this.template('src/main/java/package/web/filter/_StaticResourcesProductionFilter.java', javaDir + 'web/filter/StaticResourcesProductionFilter.java', this, {});
     if (this.authenticationType == 'session') {
         this.template('src/main/java/package/web/filter/_CsrfCookieGeneratorFilter.java', javaDir + 'web/filter/CsrfCookieGeneratorFilter.java', this, {});
     }
->>>>>>> Removed unnecessary file
 
             //alert service code
             this.template(WEBAPP_DIR + '/scripts/components/alert/_alert.service.js', WEBAPP_DIR + 'scripts/components/alert/alert.service.js', this, {});
