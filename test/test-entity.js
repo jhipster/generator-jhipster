@@ -23,7 +23,7 @@ const expectedFiles = {
         'src/main/webapp/app/entities/foo-management/foo-management-delete-dialog.controller.js',
         'src/main/webapp/app/entities/foo-management/foo-management-detail.controller.js',
         'src/test/javascript/spec/app/entities/foo-management/foo-management-detail.controller.spec.js',
-        'src/main/webapp/app/entities/foo/foo.service.js',
+        'src/main/webapp/app/entities/foo-management/foo.service.js',
         // 'src/main/webapp/i18n/en/foo.json',
         // 'src/main/webapp/i18n/fr/foo.json',
         'src/test/java/com/mycompany/myapp/web/rest/FooResourceIntTest.java',
