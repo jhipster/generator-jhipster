@@ -13,9 +13,10 @@ module.exports = function (config) {
         files: [
             // bower:js
             // endbower
-            'main/webapp/scripts/app/app.js',
-            'main/webapp/scripts/app/**/*.js',
-            'main/webapp/scripts/components/**/*.+(js|html)',
+            'main/webapp/app/app.module.js',
+            'main/webapp/app/app.config.js',
+            'main/webapp/app/app.constants.js',
+            'main/webapp/app/**/*.+(js|html)',
             'test/javascript/spec/helpers/module.js',
             'test/javascript/spec/helpers/httpBackend.js',
             'test/javascript/**/!(karma.conf<% if (testFrameworks.indexOf("protractor") > -1) { %>|protractor.conf<% } %>).js'

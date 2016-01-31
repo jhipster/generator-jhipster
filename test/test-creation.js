@@ -6,7 +6,7 @@ var assert = require('yeoman-assert');
 var helpers = require('yeoman-test');
 var os = require('os');
 
-var expectedFiles = {
+const expectedFiles = {
 
     server: [
         'README.md',
@@ -119,7 +119,7 @@ var expectedFiles = {
         'bower.json',
         'package.json',
         '.bowerrc',
-        'src/main/webapp/assets/styles/main.css',
+        'src/main/webapp/content/css/main.css',
         'src/main/webapp/favicon.ico',
         'src/main/webapp/robots.txt',
         'src/main/webapp/.htaccess',
@@ -158,85 +158,87 @@ var expectedFiles = {
         'src/main/webapp/i18n/fr/reset.json',
         'src/main/webapp/i18n/fr/user.management.json',
         'src/main/resources/i18n/messages_fr.properties',
-        'src/main/webapp/scripts/app/app.js',
-        'src/main/webapp/scripts/components/admin/audits.service.js',
-        'src/main/webapp/scripts/components/admin/configuration.service.js',
-        'src/main/webapp/scripts/components/admin/logs.service.js',
-        'src/main/webapp/scripts/components/admin/monitoring.service.js',
-        'src/main/webapp/scripts/components/auth/auth.service.js',
-        'src/main/webapp/scripts/components/auth/principal.service.js',
-        'src/main/webapp/scripts/components/auth/authority.directive.js',
-        'src/main/webapp/scripts/components/auth/provider/auth.session.service.js',
-        'src/main/webapp/scripts/components/auth/services/account.service.js',
-        'src/main/webapp/scripts/components/auth/services/activate.service.js',
-        'src/main/webapp/scripts/components/auth/services/password.service.js',
-        'src/main/webapp/scripts/components/auth/services/register.service.js',
-        'src/main/webapp/scripts/components/auth/services/sessions.service.js',
-        'src/main/webapp/scripts/components/form/form.directive.js',
-        'src/main/webapp/scripts/components/form/uib-pager.config.js',
-        'src/main/webapp/scripts/components/form/uib-pagination.config.js',
-        'src/main/webapp/scripts/components/language/language.controller.js',
-        'src/main/webapp/scripts/components/language/language.service.js',
-        'src/main/webapp/scripts/components/navbar/navbar.directive.js',
-        'src/main/webapp/scripts/components/navbar/navbar.html',
-        'src/main/webapp/scripts/components/navbar/navbar.controller.js',
-        'src/main/webapp/scripts/components/user/user.service.js',
-        'src/main/webapp/scripts/components/util/base64.service.js',
-        'src/main/webapp/scripts/components/util/parse-links.service.js',
-        'src/main/webapp/scripts/components/util/truncate.filter.js',
-        'src/main/webapp/scripts/components/util/date-util.service.js',
-        'src/main/webapp/scripts/components/util/sort.directive.js',
-        'src/main/webapp/scripts/app/account/account.js',
-        'src/main/webapp/scripts/app/account/activate/activate.html',
-        'src/main/webapp/scripts/app/account/activate/activate.js',
-        'src/main/webapp/scripts/app/account/activate/activate.controller.js',
-        'src/main/webapp/scripts/app/account/login/login.html',
-        'src/main/webapp/scripts/app/account/login/login.js',
-        'src/main/webapp/scripts/app/account/login/login.controller.js',
-        'src/main/webapp/scripts/app/account/password/password.html',
-        'src/main/webapp/scripts/app/account/password/password.js',
-        'src/main/webapp/scripts/app/account/password/password.controller.js',
-        'src/main/webapp/scripts/app/account/password/password.directive.js',
-        'src/main/webapp/scripts/app/account/register/register.html',
-        'src/main/webapp/scripts/app/account/register/register.js',
-        'src/main/webapp/scripts/app/account/register/register.controller.js',
-        'src/main/webapp/scripts/app/account/reset/request/reset.request.html',
-        'src/main/webapp/scripts/app/account/reset/request/reset.request.js',
-        'src/main/webapp/scripts/app/account/reset/request/reset.request.controller.js',
-        'src/main/webapp/scripts/app/account/reset/finish/reset.finish.html',
-        'src/main/webapp/scripts/app/account/reset/finish/reset.finish.js',
-        'src/main/webapp/scripts/app/account/reset/finish/reset.finish.controller.js',
-        'src/main/webapp/scripts/app/account/sessions/sessions.html',
-        'src/main/webapp/scripts/app/account/sessions/sessions.js',
-        'src/main/webapp/scripts/app/account/sessions/sessions.controller.js',
-        'src/main/webapp/scripts/app/account/settings/settings.html',
-        'src/main/webapp/scripts/app/account/settings/settings.js',
-        'src/main/webapp/scripts/app/account/settings/settings.controller.js',
-        'src/main/webapp/scripts/app/admin/admin.js',
-        'src/main/webapp/scripts/app/admin/audits/audits.html',
-        'src/main/webapp/scripts/app/admin/audits/audits.js',
-        'src/main/webapp/scripts/app/admin/audits/audits.controller.js',
-        'src/main/webapp/scripts/app/admin/configuration/configuration.html',
-        'src/main/webapp/scripts/app/admin/configuration/configuration.js',
-        'src/main/webapp/scripts/app/admin/configuration/configuration.controller.js',
-        'src/main/webapp/scripts/app/admin/docs/docs.html',
-        'src/main/webapp/scripts/app/admin/docs/docs.js',
-        'src/main/webapp/scripts/app/admin/health/health.html',
-        'src/main/webapp/scripts/app/admin/health/health.js',
-        'src/main/webapp/scripts/app/admin/health/health.controller.js',
-        'src/main/webapp/scripts/app/admin/logs/logs.html',
-        'src/main/webapp/scripts/app/admin/logs/logs.js',
-        'src/main/webapp/scripts/app/admin/logs/logs.controller.js',
-        'src/main/webapp/scripts/app/admin/metrics/metrics.html',
-        'src/main/webapp/scripts/app/admin/metrics/metrics.js',
-        'src/main/webapp/scripts/app/admin/metrics/metrics.controller.js',
-        'src/main/webapp/scripts/app/error/error.html',
-        'src/main/webapp/scripts/app/error/accessdenied.html',
-        'src/main/webapp/scripts/app/entities/entity.js',
-        'src/main/webapp/scripts/app/error/error.js',
-        'src/main/webapp/scripts/app/home/home.html',
-        'src/main/webapp/scripts/app/home/home.js',
-        'src/main/webapp/scripts/app/home/home.controller.js',
+        'src/main/webapp/app/app.module.js',
+        'src/main/webapp/app/app.config.js',
+        'src/main/webapp/app/app.constants.js',
+        'src/main/webapp/app/services/admin/audits.service.js',
+        'src/main/webapp/app/services/admin/configuration.service.js',
+        'src/main/webapp/app/services/admin/logs.service.js',
+        'src/main/webapp/app/services/admin/monitoring.service.js',
+        'src/main/webapp/app/services/auth/auth.service.js',
+        'src/main/webapp/app/services/auth/principal.service.js',
+        'src/main/webapp/app/services/auth/authority.directive.js',
+        'src/main/webapp/app/services/auth/auth.session.service.js',
+        'src/main/webapp/app/services/auth/account.service.js',
+        'src/main/webapp/app/services/auth/activate.service.js',
+        'src/main/webapp/app/services/auth/password.service.js',
+        'src/main/webapp/app/services/auth/register.service.js',
+        'src/main/webapp/app/services/auth/sessions.service.js',
+        'src/main/webapp/app/components/form/form.directive.js',
+        'src/main/webapp/app/components/form/uib-pager.config.js',
+        'src/main/webapp/app/components/form/uib-pagination.config.js',
+        'src/main/webapp/app/components/language/language.controller.js',
+        'src/main/webapp/app/components/language/language.service.js',
+        'src/main/webapp/app/layouts/navbar/navbar.directive.js',
+        'src/main/webapp/app/layouts/navbar/navbar.html',
+        'src/main/webapp/app/layouts/navbar/navbar.controller.js',
+        'src/main/webapp/app/services/user/user.service.js',
+        'src/main/webapp/app/components/util/base64.service.js',
+        'src/main/webapp/app/components/util/parse-links.service.js',
+        'src/main/webapp/app/components/util/truncate.filter.js',
+        'src/main/webapp/app/components/util/date-util.service.js',
+        'src/main/webapp/app/components/util/sort.directive.js',
+        'src/main/webapp/app/account/account.js',
+        'src/main/webapp/app/account/activate/activate.html',
+        'src/main/webapp/app/account/activate/activate.js',
+        'src/main/webapp/app/account/activate/activate.controller.js',
+        'src/main/webapp/app/account/login/login.html',
+        'src/main/webapp/app/account/login/login.js',
+        'src/main/webapp/app/account/login/login.controller.js',
+        'src/main/webapp/app/account/password/password.html',
+        'src/main/webapp/app/account/password/password.js',
+        'src/main/webapp/app/account/password/password.controller.js',
+        'src/main/webapp/app/account/password/password.directive.js',
+        'src/main/webapp/app/account/register/register.html',
+        'src/main/webapp/app/account/register/register.js',
+        'src/main/webapp/app/account/register/register.controller.js',
+        'src/main/webapp/app/account/reset/request/reset.request.html',
+        'src/main/webapp/app/account/reset/request/reset.request.js',
+        'src/main/webapp/app/account/reset/request/reset.request.controller.js',
+        'src/main/webapp/app/account/reset/finish/reset.finish.html',
+        'src/main/webapp/app/account/reset/finish/reset.finish.js',
+        'src/main/webapp/app/account/reset/finish/reset.finish.controller.js',
+        'src/main/webapp/app/account/sessions/sessions.html',
+        'src/main/webapp/app/account/sessions/sessions.js',
+        'src/main/webapp/app/account/sessions/sessions.controller.js',
+        'src/main/webapp/app/account/settings/settings.html',
+        'src/main/webapp/app/account/settings/settings.js',
+        'src/main/webapp/app/account/settings/settings.controller.js',
+        'src/main/webapp/app/admin/admin.js',
+        'src/main/webapp/app/admin/audits/audits.html',
+        'src/main/webapp/app/admin/audits/audits.js',
+        'src/main/webapp/app/admin/audits/audits.controller.js',
+        'src/main/webapp/app/admin/configuration/configuration.html',
+        'src/main/webapp/app/admin/configuration/configuration.js',
+        'src/main/webapp/app/admin/configuration/configuration.controller.js',
+        'src/main/webapp/app/admin/docs/docs.html',
+        'src/main/webapp/app/admin/docs/docs.js',
+        'src/main/webapp/app/admin/health/health.html',
+        'src/main/webapp/app/admin/health/health.js',
+        'src/main/webapp/app/admin/health/health.controller.js',
+        'src/main/webapp/app/admin/logs/logs.html',
+        'src/main/webapp/app/admin/logs/logs.js',
+        'src/main/webapp/app/admin/logs/logs.controller.js',
+        'src/main/webapp/app/admin/metrics/metrics.html',
+        'src/main/webapp/app/admin/metrics/metrics.js',
+        'src/main/webapp/app/admin/metrics/metrics.controller.js',
+        'src/main/webapp/app/layouts/error/error.html',
+        'src/main/webapp/app/layouts/error/accessdenied.html',
+        'src/main/webapp/app/entities/entity.js',
+        'src/main/webapp/app/layouts/error/error.js',
+        'src/main/webapp/app/home/home.html',
+        'src/main/webapp/app/home/home.js',
+        'src/main/webapp/app/home/home.controller.js',
         'src/test/javascript/karma.conf.js',
         'src/test/javascript/spec/helpers/httpBackend.js',
         'src/test/javascript/spec/helpers/module.js',
@@ -250,11 +252,11 @@ var expectedFiles = {
         'src/test/javascript/spec/app/account/register/register.controller.spec.js',
         'src/test/javascript/spec/app/account/reset/finish/reset.finish.controller.spec.js',
         'src/test/javascript/spec/app/account/reset/request/reset.request.controller.spec.js',
-        'src/test/javascript/spec/components/auth/auth.services.spec.js',
-        'src/main/webapp/assets/styles/documentation.css',
-        'src/main/webapp/assets/images/development_ribbon.png',
-        'src/main/webapp/assets/images/hipster.png',
-        'src/main/webapp/assets/images/hipster2x.png'
+        'src/test/javascript/spec/app/services/auth/auth.services.spec.js',
+        'src/main/webapp/content/css/documentation.css',
+        'src/main/webapp/content/images/development_ribbon.png',
+        'src/main/webapp/content/images/hipster.png',
+        'src/main/webapp/content/images/hipster2x.png'
     ],
 
     i18n: [
@@ -262,8 +264,8 @@ var expectedFiles = {
         'src/main/resources/i18n/messages_fr.properties',
         'src/main/webapp/i18n/en/global.json',
         'src/main/webapp/i18n/fr/global.json',
-        'src/main/webapp/scripts/components/language/language.controller.js',
-        'src/main/webapp/scripts/components/language/language.service.js'
+        'src/main/webapp/app/components/language/language.controller.js',
+        'src/main/webapp/app/components/language/language.service.js'
     ],
 
     socialLogin: [
@@ -281,8 +283,9 @@ var expectedFiles = {
 };
 
 describe('JHipster generator', function () {
+    this.timeout(3000); //to avoid occassional timeouts
     describe('grunt default configuration', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
@@ -315,7 +318,7 @@ describe('JHipster generator', function () {
     });
 
     describe('gulp default configuration', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
@@ -348,7 +351,7 @@ describe('JHipster generator', function () {
     });
 
     describe('package names', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
@@ -381,7 +384,7 @@ describe('JHipster generator', function () {
     });
 
     describe('application names', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
@@ -407,14 +410,14 @@ describe('JHipster generator', function () {
 
         it('creates expected files with correct application name', function () {
             assert.file([
-                'src/main/webapp/scripts/app/home/home.js'
+                'src/main/webapp/app/home/home.js'
             ]);
-            assert.fileContent('src/main/webapp/scripts/app/home/home.js', /myapplicationApp/);
+            assert.fileContent('src/main/webapp/app/home/home.js', /myapplicationApp/);
         })
     });
 
     describe('oauth2', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
@@ -446,7 +449,7 @@ describe('JHipster generator', function () {
     });
 
     describe('hazelcast', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
@@ -479,7 +482,7 @@ describe('JHipster generator', function () {
     });
 
     describe('i18n', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
@@ -509,7 +512,7 @@ describe('JHipster generator', function () {
     });
 
     describe('social login', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
@@ -539,7 +542,7 @@ describe('JHipster generator', function () {
     });
 
     describe('skip client', function () {
-        before(function (done) {
+        beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../app'))
                 .withOptions({skipInstall: true, skipClient: true})
                 .withPrompts({

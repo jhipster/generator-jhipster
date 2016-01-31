@@ -132,8 +132,8 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
 
         staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/");
         staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/index.html");
-        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/assets/*");
-        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/scripts/*");
+        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/content/*");
+        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/app/*");
         staticResourcesProductionFilter.setAsyncSupported(true);
     }
 
@@ -147,8 +147,8 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
             servletContext.addFilter("cachingHttpHeadersFilter",
                 new CachingHttpHeadersFilter(env));
 
-        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/dist/assets/*");
-        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/dist/scripts/*");
+        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/dist/content/*");
+        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/dist/app/*");
         cachingHttpHeadersFilter.setAsyncSupported(true);
     }
 

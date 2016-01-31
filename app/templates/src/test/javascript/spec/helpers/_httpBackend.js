@@ -12,6 +12,6 @@ function mockI18nCalls() {
 
 function mockScriptsCalls() {
     inject(function($httpBackend) {
-        $httpBackend.whenGET(/scripts\/.*/).respond({});
+        $httpBackend.whenGET(/app\/.*/).respond({});
     });
 }

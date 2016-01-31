@@ -35,7 +35,7 @@ var yeoman = {
     test: 'src/test/javascript/spec/',
     tmp: '.tmp/'<% if(useSass) { %>,
     importPath: 'src/main/webapp/bower_components',
-    scss: 'src/main/scss/'<% } %>,
+    scss: 'src/main/webapp/scss/'<% } %>,
     port: 9000,
     apiPort: 8080,
     liveReloadPort: 35729
@@ -93,26 +93,26 @@ gulp.task('copy', function() {
     return es.merge( <% if(enableTranslation) { %> // copy i18n folders only if translation is enabled
         gulp.src(yeoman.app + 'i18n/**').
         pipe(gulp.dest(yeoman.dist + 'i18n/')), <% } %>
-        gulp.src(yeoman.app + 'assets/**/*.{woff,svg,ttf,eot}').
+        gulp.src(yeoman.app + 'content/**/*.{woff,svg,ttf,eot}').
         pipe(flatten()).
-        pipe(gulp.dest(yeoman.dist + 'assets/fonts/')));
+        pipe(gulp.dest(yeoman.dist + 'content/fonts/')));
 });
 
 gulp.task('images', function() {
-    return gulp.src(yeoman.app + 'assets/images/**').
+    return gulp.src(yeoman.app + 'content/images/**').
         pipe(imagemin({optimizationLevel: 5})).
-        pipe(gulp.dest(yeoman.dist + 'assets/images')).
+        pipe(gulp.dest(yeoman.dist + 'content/images')).
         pipe(browserSync.reload({stream: true}));
 });
 <% if(useSass) { %>
 gulp.task('sass', function () {
     return gulp.src(yeoman.scss + '**/*.scss')
         .pipe(sass({includePaths:yeoman.importPath}).on('error', sass.logError))
-        .pipe(gulp.dest(yeoman.app + 'assets/styles'));
+        .pipe(gulp.dest(yeoman.app + 'content/css'));
 });
 <% } %>
 gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function() {
-    return gulp.src(yeoman.app + 'assets/styles/**/*.css').
+    return gulp.src(yeoman.app + 'content/css/**/*.css').
         pipe(gulp.dest(yeoman.tmp)).
         pipe(browserSync.reload({stream: true}));
 });
@@ -186,9 +186,9 @@ gulp.task('serve', function() {
 gulp.task('watch', function() {
     gulp.watch('bower.json', ['wiredep:test', 'wiredep:app']);
     gulp.watch(['gulpfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>], ['ngconstant:dev']);
-    gulp.watch(<% if(useSass) { %>yeoman.scss + '**/*.scss'<% } else { %>yeoman.app + 'assets/styles/**/*.css'<% } %>, ['styles']);
-    gulp.watch(yeoman.app + 'assets/images/**', ['images']);
-    gulp.watch([yeoman.app + '*.html', yeoman.app + 'scripts/**', yeoman.app + 'i18n/**']).on('change', browserSync.reload);
+    gulp.watch(<% if(useSass) { %>yeoman.scss + '**/*.scss'<% } else { %>yeoman.app + 'content/css/**/*.css'<% } %>, ['styles']);
+    gulp.watch(yeoman.app + 'content/images/**', ['images']);
+    gulp.watch([yeoman.app + '*.html', yeoman.app + 'app/**', yeoman.app + 'i18n/**']).on('change', browserSync.reload);
 });
 
 gulp.task('wiredep', ['wiredep:test', 'wiredep:app']);
@@ -200,7 +200,7 @@ gulp.task('wiredep:app', function () {
         }))
         .pipe(gulp.dest('src/main/webapp'));
 
-    return <% if (useSass) { %>es.merge(s, gulp.src('src/main/scss/main.scss')
+    return <% if (useSass) { %>es.merge(s, gulp.src(yeoman.scss + 'main.scss')
         .pipe(wiredep({
             exclude: [
                 /angular-i18n/,  // localizations are loaded dynamically
@@ -208,7 +208,7 @@ gulp.task('wiredep:app', function () {
             ],
             ignorePath: /\.\.\/webapp\/bower_components\// // remove ../webapp/bower_components/ from paths of injected sass files
         }))
-        .pipe(gulp.dest('src/main/scss')));<% } else { %>s;<% } %>
+        .pipe(gulp.dest(yeoman.scss)));<% } else { %>s;<% } %>
 });
 
 gulp.task('wiredep:test', function () {
@@ -273,7 +273,7 @@ gulp.task('ngconstant:dev', function() {
             VERSION: <% if(buildTool == 'maven') { %>parseVersionFromPomXml()<% } else { %>parseVersionFromBuildGradle()<% } %>
         }
     })
-    .pipe(gulp.dest(yeoman.app + 'scripts/app/'));
+    .pipe(gulp.dest(yeoman.app + 'app/'));
 });
 
 gulp.task('ngconstant:prod', function() {
@@ -289,11 +289,11 @@ gulp.task('ngconstant:prod', function() {
             VERSION: <% if(buildTool == 'maven') { %>parseVersionFromPomXml()<% } else { %>parseVersionFromBuildGradle()<% } %>
         }
     })
-    .pipe(gulp.dest(yeoman.tmp + 'scripts/app/'));
+    .pipe(gulp.dest(yeoman.tmp + 'app/'));
 });
 
 gulp.task('jshint', function() {
-    return gulp.src(['gulpfile.js', yeoman.app + 'scripts/**/*.js'])
+    return gulp.src(['gulpfile.js', yeoman.app + 'app/**/*.js'])
         .pipe(jshint())
         .pipe(jshint.reporter('jshint-stylish'));
 });
