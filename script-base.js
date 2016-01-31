@@ -29,6 +29,7 @@ util.inherits(Generator, yeoman.Base);
  * A a new script to the application, in the index.html file.
  *
  * This is used to add AngularJS controllers or components to the application.
+ * @param {string} script - path of the script rlative to the app folder
  */
 Generator.prototype.addJavaScriptToIndex = function (script) {
     try {
@@ -49,6 +50,7 @@ Generator.prototype.addJavaScriptToIndex = function (script) {
  * A a new message format to the application, in the index.html file.
  *
  * This is used for internationalization.
+ * @param {string} script - name of the messageformat script file
  */
 Generator.prototype.addMessageformatLocaleToIndex = function (script) {
     try {
@@ -74,7 +76,7 @@ Generator.prototype.addMessageformatLocaleToIndex = function (script) {
  */
 Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enableTranslation) {
     try {
-        var fullPath = 'src/main/webapp/app/components/navbar/navbar.html';
+        var fullPath = 'src/main/webapp/app/layouts/navbar/navbar.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-add-element-to-menu',
@@ -97,7 +99,7 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
  */
 Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName, enableTranslation) {
     try {
-        var fullPath = 'src/main/webapp/app/components/navbar/navbar.html';
+        var fullPath = 'src/main/webapp/app/layouts/navbar/navbar.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-add-element-to-admin-menu',
@@ -119,7 +121,7 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
  */
 Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
     try {
-        var fullPath = 'src/main/webapp/app/components/navbar/navbar.html';
+        var fullPath = 'src/main/webapp/app/layouts/navbar/navbar.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-add-entity-to-menu',
@@ -387,7 +389,7 @@ Generator.prototype.addBowerrcParameter = function(key, value) {
  *
  */
 Generator.prototype.addAngularJsModule = function(moduleName) {
-    var fullPath = 'src/main/webapp/app/app/app.js';
+    var fullPath = 'src/main/webapp/app/app.module.js';
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
@@ -422,7 +424,7 @@ Generator.prototype.addAngularJsModule = function(moduleName) {
  *
  */
 Generator.prototype.addAngularJsConfig = function(moduleConfigNames, config, comment) {
-    var fullPath = 'src/main/webapp/app/app/app.js';
+    var fullPath = 'src/main/webapp/app/app.config.js';
     var configBlock = '';
     if (comment) {
         configBlock += '// ' + comment + '\n    ';
@@ -450,7 +452,7 @@ Generator.prototype.addAngularJsConfig = function(moduleConfigNames, config, com
  *
  */
 Generator.prototype.addAngularJsInterceptor = function(interceptorName) {
-    var fullPath = 'src/main/webapp/app/app/app.js';
+    var fullPath = 'src/main/webapp/app/app.config.js';
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
@@ -513,9 +515,9 @@ Generator.prototype.addColumnToLiquibaseEntityChangeset = function (filePath, co
  * @param {string} buttonHoverColor - color of the social button when is hover. ex: '#2d4373'
  */
 Generator.prototype.addSocialButton = function (isUseSass, socialName, socialParameter, buttonColor, buttonHoverColor) {
-    var socialServicefullPath = 'src/main/webapp/app/app/account/social/social.service.js';
-    var loginfullPath = 'src/main/webapp/app/app/account/login/login.html';
-    var registerfullPath = 'src/main/webapp/app/app/account/register/register.html';
+    var socialServicefullPath = 'src/main/webapp/app/account/social/social.service.js';
+    var loginfullPath = 'src/main/webapp/app/account/login/login.html';
+    var registerfullPath = 'src/main/webapp/app/account/register/register.html';
     try {
         this.log(chalk.yellow('\nupdate ') + socialServicefullPath);
         var serviceCode =  "case '" + socialName + "': return '"+ socialParameter +"';";
@@ -703,10 +705,10 @@ Generator.prototype.addMainSCSSStyle = function(style, comment) {
 /**
  * Add a new Maven dependency.
  *
- * @param {groupId} dependency groupId
- * @param {artifactId} dependency artifactId
- * @param {version} explicit dependency version number
- * @param {other} explicit other thing: scope, exclusions...
+ * @param {string} groupId - dependency groupId
+ * @param {string} artifactId - dependency artifactId
+ * @param {string} version - explicit dependency version number
+ * @param {string} other - explicit other thing: scope, exclusions...
  */
 Generator.prototype.addMavenDependency = function (groupId, artifactId, version, other) {
     try {
@@ -736,10 +738,10 @@ Generator.prototype.addMavenDependency = function (groupId, artifactId, version,
 /**
  * Add a new Maven plugin.
  *
- * @param {groupId} plugin groupId
- * @param {artifactId} plugin artifactId
- * @param {version} explicit plugin version number
- * @param {other} explicit other thing: executions, configuration...
+ * @param {string} groupId - plugin groupId
+ * @param {string} artifactId - plugin artifactId
+ * @param {string} version - explicit plugin version number
+ * @param {string} other - explicit other thing: executions, configuration...
  */
 Generator.prototype.addMavenPlugin = function (groupId, artifactId, version, other) {
     try {
@@ -769,9 +771,9 @@ Generator.prototype.addMavenPlugin = function (groupId, artifactId, version, oth
 /**
  * A new Gradle plugin.
  *
- * @param {group} plugin GroupId
- * @param {name} plugin name
- * @param {version} explicit plugin version number
+ * @param {string} group - plugin GroupId
+ * @param {string} name - plugin name
+ * @param {string} version - explicit plugin version number
  */
 Generator.prototype.addGradlePlugin = function (group, name, version) {
     try {
@@ -791,10 +793,10 @@ Generator.prototype.addGradlePlugin = function (group, name, version) {
 /**
  * A new dependency to build.gradle file.
  *
- * @param {scope} scope of the new dependency, e.g. compile
- * @param {group} maven GroupId
- * @param {name} maven ArtifactId
- * @param {version} explicit version number
+ * @param {string} scope - scope of the new dependency, e.g. compile
+ * @param {string} group - maven GroupId
+ * @param {string} name - maven ArtifactId
+ * @param {string} version - explicit version number
  */
 Generator.prototype.addGradleDependency = function (scope, group, name, version) {
     try {
@@ -814,7 +816,7 @@ Generator.prototype.addGradleDependency = function (scope, group, name, version)
 /**
  * Apply from an external Gradle build script.
  *
- * @param {name} name of the file to apply from, must be 'fileName.gradle'
+ * @param {string} name - name of the file to apply from, must be 'fileName.gradle'
  */
 Generator.prototype.applyFromGradleScript = function (name) {
     try {
@@ -849,12 +851,12 @@ Generator.prototype.dateFormatForLiquibase = function () {
 /**
  * Copy templates with all the custom logic applied according to the type.
  *
- * @param {source} path of the source file to copy from
- * @param {dest} path of the destination file to copy to
- * @param {action} type of the action to be performed on the template file, i.e: stripHtml | stripJs | template | copy
- * @param {_this} context that can be used as the generator instance or data to process template
- * @param {_opt} options that can be passed to template method
- * @param {template} flag to use template method instead of copy method
+ * @param {string} source - path of the source file to copy from
+ * @param {string} dest - path of the destination file to copy to
+ * @param {string} action - type of the action to be performed on the template file, i.e: stripHtml | stripJs | template | copy
+ * @param {object} _this - context that can be used as the generator instance or data to process template
+ * @param {object} _opt - options that can be passed to template method
+ * @param {boolean} template - flag to use template method instead of copy method
  */
 Generator.prototype.copyTemplate = function (source, dest, action, _this, _opt, template) {
 
@@ -882,11 +884,11 @@ Generator.prototype.copyTemplate = function (source, dest, action, _this, _opt, 
 /**
  * Copy html templates after stripping translation keys when translation is disabled.
  *
- * @param {source} path of the source file to copy from
- * @param {dest} path of the destination file to copy to
- * @param {_this} context that can be used as the generator instance or data to process template
- * @param {_opt} options that can be passed to template method
- * @param {template} flag to use template method instead of copy
+ * @param {string} source - path of the source file to copy from
+ * @param {string} dest - path of the destination file to copy to
+ * @param {object} _this - context that can be used as the generator instance or data to process template
+ * @param {object} _opt - options that can be passed to template method
+ * @param {boolean} template - flag to use template method instead of copy
  */
 Generator.prototype.copyHtml = function (source, dest, _this, _opt, template) {
     this.copyTemplate(source, dest, 'stripHtml', _this, _opt, template);
@@ -895,11 +897,11 @@ Generator.prototype.copyHtml = function (source, dest, _this, _opt, template) {
 /**
  * Copy Js templates after stripping translation keys when translation is disabled.
  *
- * @param {source} path of the source file to copy from
- * @param {dest} path of the destination file to copy to
- * @param {_this} context that can be used as the generator instance or data to process template
- * @param {_opt} options that can be passed to template method
- * @param {template} flag to use template method instead of copy
+ * @param {string} source - path of the source file to copy from
+ * @param {string} dest - path of the destination file to copy to
+ * @param {object} _this - context that can be used as the generator instance or data to process template
+ * @param {object} _opt - options that can be passed to template method
+ * @param {boolean} template - flag to use template method instead of copy
  */
 Generator.prototype.copyJs = function (source, dest, _this, _opt, template) {
     this.copyTemplate(source, dest, 'stripJs', _this, _opt, template);
@@ -908,9 +910,9 @@ Generator.prototype.copyJs = function (source, dest, _this, _opt, template) {
 /**
  * Rewrite the specified file with provided content at the needle location
  *
- * @param {fullPath} path of the source file to rewrite
- * @param {needle} needle to look for where content will be inserted
- * @param {content} content to be written
+ * @param {string} fullPath - path of the source file to rewrite
+ * @param {string} needle - needle to look for where content will be inserted
+ * @param {string} content - content to be written
  */
 Generator.prototype.rewriteFile = function(filePath, needle, content) {
     try {
@@ -929,10 +931,10 @@ Generator.prototype.rewriteFile = function(filePath, needle, content) {
 /**
  * Replace the pattern/regex with provided content
  *
- * @param {fullPath} path of the source file to rewrite
- * @param {pattern} pattern to look for where content will be replaced
- * @param {content} content to be written
- * @param {regex} true if pattern is regex
+ * @param {string} fullPath - path of the source file to rewrite
+ * @param {string} pattern - pattern to look for where content will be replaced
+ * @param {string} content - content to be written
+ * @param {string} regex - true if pattern is regex
  */
 Generator.prototype.replaceContent = function(filePath, pattern, content, regex) {
     try {
@@ -950,11 +952,11 @@ Generator.prototype.replaceContent = function(filePath, pattern, content, regex)
 /**
  * Register a module configuration to .jhipster/modules/jhi-hooks.json
  *
- * @param {npmPackageName} npm package name of the generator
- * @param {hookFor} from which Jhipster generator this should be hooked ( 'entity' or 'app')
- * @param {hookType} where to hook this at the generator stage ( 'pre' or 'post')
- * @param {callbackSubGenerator}[optional] sub generator to invoke, if this is not given the module's main generator will be called, i.e app
- * @param {description}[optional] description of the generator
+ * @param {string} npmPackageName - npm package name of the generator
+ * @param {string} hookFor - from which Jhipster generator this should be hooked ( 'entity' or 'app')
+ * @param {string} hookType - where to hook this at the generator stage ( 'pre' or 'post')
+ * @param {string} callbackSubGenerator[optional] - sub generator to invoke, if this is not given the module's main generator will be called, i.e app
+ * @param {string} description[optional] - description of the generator
  */
 Generator.prototype.registerModule = function(npmPackageName, hookFor, hookType, callbackSubGenerator, description) {
     try {
@@ -996,9 +998,9 @@ Generator.prototype.registerModule = function(npmPackageName, hookFor, hookType,
 /**
  * Add configuration to Entity.json files
  *
- * @param {file} configuration file name for the entity
- * @param {key} key to be added or updated
- * @param {value} value to be added
+ * @param {string} file - configuration file name for the entity
+ * @param {string} key - key to be added or updated
+ * @param {object} value - value to be added
  */
 Generator.prototype.updateEntityConfig = function(file, key, value) {
 
@@ -1028,7 +1030,10 @@ Generator.prototype.getModuleHooks = function() {
     return modulesConfig;
 }
 
-Generator.prototype.getExistingEntities = function() {
+/**
+ * get sorted list of entities according to changelog date
+ */
+Generator.prototype.getExistingEntities = function(warn) {
     var entities = [];
     var unique_dates = new Set();
 
