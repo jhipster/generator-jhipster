@@ -112,7 +112,7 @@ function stripContent (source, regex, _this, _opt) {
 
     var body = html.readFileAsString(path.join(_this.sourceRoot(), source));
     //temp hack to fix error thrown by ejs during entity creation, this needs a permanent fix when we add more .ejs files
-    _opt.filename = path.join(_this.sourceRoot(), "src/main/webapp/app/ng_validators.ejs");
+    _opt.filename = path.join(_this.sourceRoot(), "src/main/webapp/app/entities/ng_validators.ejs");
     body = engine(body, _this, _opt);
     body = body.replace(re, '');
 
