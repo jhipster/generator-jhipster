@@ -15,7 +15,7 @@ Example:
         src/main/webapp/app/entities/foo/foo.js
         src/main/webapp/app/entities/foo/foo.controller.js
         src/main/webapp/app/entities/foo/foo-detail.controller.js
-        src/main/webapp/app/services/foo/foo.service.js
+        src/main/webapp/app/entities/foo/foo.service.js
         src/test/java/package/web/rest/FooResourceTest.java
         src/main/webapp/i18n/en/foo.json
         src/main/webapp/i18n/fr/foo.json
