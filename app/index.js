@@ -151,7 +151,6 @@ module.exports = JhipsterGenerator.extend({
                 {
                     value: 'jwt',
                     name: 'Token-based authentication (stateless, with a token)'
->>>>>>> Index.js changes
                 }
 
                 // If translation is not defined, it is enabled by default
@@ -259,7 +258,7 @@ module.exports = JhipsterGenerator.extend({
                             name: 'OAuth2 Authentication (stateless, with an OAuth2 server implementation)'
                         },
                         {
-                            value: 'xauth',
+                            value: 'jwt',
                             name: 'Token-based authentication (stateless, with a token)'
                         }
                     ],
