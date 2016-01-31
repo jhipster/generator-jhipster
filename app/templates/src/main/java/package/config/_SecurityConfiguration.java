@@ -5,7 +5,6 @@ import <%=packageName%>.web.filter.CsrfCookieGeneratorFilter;<% } %><% if (authe
 import <%=packageName%>.security.jwt.*;<% } %>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;<% if (authenticationType == 'session') { %>
-<<<<<<< HEAD
 import org.springframework.core.env.Environment;<% } %>
 import org.springframework.http.HttpMethod;<% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
 import org.springframework.security.authentication.AuthenticationManager;<% } %>
@@ -17,7 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;<% if (authenticationType == 'xauth' || authenticationType == 'oauth2') { %>
 import org.springframework.security.config.http.SessionCreationPolicy;<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
 import org.springframework.security.core.session.SessionRegistry;<% } %>
-=======
 import org.springframework.core.env.Environment;<% } %><% if (authenticationType == 'oauth2') { %>
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;<% } %>
 
@@ -34,7 +32,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;<% if (authenticationType == 'jwt') { %>
 import org.springframework.security.config.http.SessionCreationPolicy;<% } %>
 import org.springframework.security.core.context.SecurityContextHolder;
->>>>>>> Initial commit
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

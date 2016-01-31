@@ -18,8 +18,8 @@ public class JWTConfiguration {
 
     @Bean
     public TokenHandler tokenHandler(JHipsterProperties jHipsterProperties) {
-        String secret = jHipsterProperties.getSecurity().getAuthentication().getXauth().getSecret();
-        return new TokenProvider(secret, userDetailsService);
+        String secret = jHipsterProperties.getSecurity().getAuthentication().getJWT().getSecret();
+        return new TokenHandler(secret, userDetailsService);
     }
 
     @Bean

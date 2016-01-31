@@ -253,7 +253,7 @@ public class JHipsterProperties {
 
         private final Rememberme rememberme = new Rememberme();
 
-        <%_ if (authenticationType == 'oauth2' || authenticationType == 'xauth') { _%>
+        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
         private final Authentication authentication = new Authentication();
 
         <%_ } _%>
@@ -261,7 +261,7 @@ public class JHipsterProperties {
             return rememberme;
         }
 
-        <%_ if (authenticationType == 'oauth2' || authenticationType == 'xauth') { _%>
+        <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
         public Authentication getAuthentication() {
             return authentication;
         }
@@ -272,8 +272,8 @@ public class JHipsterProperties {
             private final Oauth oauth = new Oauth();
 
             <%_ } _%>
-            <%_ if (authenticationType == 'xauth') { _%>
-            private final Xauth xauth = new Xauth();
+            <%_ if (authenticationType == 'jwt') { _%>
+            private final JWT jwt = new JWT();
 
             <%_ } _%>
             <%_ if (authenticationType == 'oauth2') { _%>
@@ -281,9 +281,9 @@ public class JHipsterProperties {
                 return oauth;
             }
             <%_ } _%>
-            <%_ if (authenticationType == 'xauth') { _%>
-            public Xauth getXauth() {
-                return xauth;
+            <%_ if (authenticationType == 'jwt') { _%>
+            public JWT getJWT() {
+                return jwt;
             }
             <%_ } _%>
             <%_ if (authenticationType == 'oauth2') { _%>
@@ -321,9 +321,9 @@ public class JHipsterProperties {
                 }
             }
             <%_ } _%>
-            <%_ if (authenticationType == 'xauth') { _%>
+            <%_ if (authenticationType == 'jwt') { _%>
 
-            public static class Xauth {
+            public static class JWT {
 
                 private String secret;
 
