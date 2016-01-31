@@ -890,7 +890,7 @@
                                             yeoman-maven-plugin
                                         </artifactId>
                                         <versionRange>
-                                            [0.4,)
+                                            [0.5,)
                                         </versionRange>
                                         <goals>
                                             <goal>build</goal>
@@ -935,7 +935,7 @@
                     <plugin>
                         <groupId>com.github.trecloux</groupId>
                         <artifactId>yeoman-maven-plugin</artifactId>
-                        <version>0.4</version>
+                        <version>0.5</version>
                         <executions>
                             <execution>
                                 <id>run-grunt</id>
@@ -971,7 +971,7 @@
                     <plugin>
                         <groupId>com.github.trecloux</groupId>
                         <artifactId>yeoman-maven-plugin</artifactId>
-                        <version>0.4</version>
+                        <version>0.5</version>
                         <executions>
                             <execution>
                                 <id>run-frontend-build</id>
