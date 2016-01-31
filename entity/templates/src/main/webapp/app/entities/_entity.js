@@ -29,7 +29,7 @@ angular.module('<%=angularAppName%>')
             })
             .state('<%= entityInstance %>-management-detail', {
                 parent: 'entity',
-                url: '/<%= entityInstance %>-management/{id:int}',
+                url: '/<%= entityInstance %>-management/{id:<% if (databaseType == 'sql') { %>int<% } else if (databaseType == 'mongodb') { %>[0-9a-fA-F]{24}<% } else if (databaseType == 'cassandra') { %>[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}<% } %>}',
                 data: {
                     authorities: ['ROLE_USER'],
                     pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityInstance %>-management.detail.title'<% }else{ %>'<%= entityClass %>'<% } %>
@@ -90,7 +90,7 @@ angular.module('<%=angularAppName%>')
             })
             .state('<%= entityInstance %>-management.edit', {
                 parent: '<%= entityInstance %>-management',
-                url: '/{id:int}/edit',
+                url: '/{id:<% if (databaseType == 'sql') { %>int<% } else if (databaseType == 'mongodb') { %>[0-9a-fA-F]{24}<% } else if (databaseType == 'cassandra') { %>[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}<% } %>}/edit',
                 data: {
                     authorities: ['ROLE_USER'],
                 },
@@ -113,7 +113,7 @@ angular.module('<%=angularAppName%>')
             })
             .state('<%= entityInstance %>-management.delete', {
                 parent: '<%= entityInstance %>-management',
-                url: '/{id:int}/delete',
+                url: '/{id:<% if (databaseType == 'sql') { %>int<% } else if (databaseType == 'mongodb') { %>[0-9a-fA-F]{24}<% } else if (databaseType == 'cassandra') { %>[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}<% } %>}/delete',
                 data: {
                     authorities: ['ROLE_USER'],
                 },
