@@ -108,7 +108,7 @@ HerokuGenerator.prototype.herokuCreate = function herokuCreate() {
 
     var regionParams = (this.herokuRegion !== 'us') ? ' --region ' + this.herokuRegion : '';
 
-    var dbAddOn = (this.prodDatabaseType != 'postgresql') ? ' --addons cleardb' : ' --addons heroku-postgresql';
+    var dbAddOn = (this.prodDatabaseType != 'postgresql') ? ' --addons jawsdb:kitefin' : ' --addons heroku-postgresql';
 
     this.log(chalk.bold('\nCreating Heroku application and setting up node environment'));
     var herokuCreateCmd = 'heroku create ' + this.herokuDeployedName + regionParams + dbAddOn;
@@ -137,7 +137,7 @@ HerokuGenerator.prototype.herokuCreate = function herokuCreate() {
               if (props.herokuForceName == 'Yes') {
                 herokuCreateCmd = 'heroku git:remote --app ' + this.herokuDeployedName
               } else {
-                herokuCreateCmd = 'heroku create ' + regionParams + ' --addons heroku-postgresql:hobby-dev';
+                herokuCreateCmd = 'heroku create ' + regionParams + dbAddOn;
               }
               var forceCreateChild = exec(herokuCreateCmd, {}, function (err, stdout, stderr) {
                 if (err) {
@@ -145,7 +145,7 @@ HerokuGenerator.prototype.herokuCreate = function herokuCreate() {
                   this.log.error(err);
                 } else {
                   // Extract from "Created random-app-name-1234... done"
-                  this.herokuDeployedName = stdout.substring(9, stdout.indexOf('...'));
+                  this.herokuDeployedName = stdout.substring(stdout.indexOf('https://') + 8, stdout.indexOf('.herokuapp'));
                   this.log(stdout);
                 }
                 done();
