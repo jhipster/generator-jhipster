@@ -6,20 +6,6 @@ angular.module('<%=angularAppName%>')
 
         this.$get = ['$timeout', '$sce'<% if (enableTranslation) { %>, '$translate'<% } %>, function($timeout, $sce<% if (enableTranslation) { %>,$translate<% } %>) {
 
-            var exports = {
-                factory: factory,
-                isToast: isToast,
-                add: addAlert,
-                closeAlert: closeAlert,
-                closeAlertByIndex: closeAlertByIndex,
-                clear: clear,
-                get: get,
-                success: success,
-                error: error,
-                info: info,
-                warning : warning
-            },
-            
             toast = this.toast,
             alertId = 0, // unique id for each alert. Starts from 0.
             alerts = [],
@@ -39,7 +25,7 @@ angular.module('<%=angularAppName%>')
 
             function success(msg, params, position) {
                 return this.add({
-                    type: "success",
+                    type: 'success',
                     msg: msg,
                     params: params,
                     timeout: timeout,
@@ -50,7 +36,7 @@ angular.module('<%=angularAppName%>')
 
             function error(msg, params, position) {
                 return this.add({
-                    type: "danger",
+                    type: 'danger',
                     msg: msg,
                     params: params,
                     timeout: timeout,
@@ -61,7 +47,7 @@ angular.module('<%=angularAppName%>')
 
             function warning(msg, params, position) {
                 return this.add({
-                    type: "warning",
+                    type: 'warning',
                     msg: msg,
                     params: params,
                     timeout: timeout,
@@ -72,7 +58,7 @@ angular.module('<%=angularAppName%>')
 
             function info(msg, params, position) {
                 return this.add({
-                    type: "info",
+                    type: 'info',
                     msg: msg,
                     params: params,
                     timeout: timeout,
@@ -124,7 +110,19 @@ angular.module('<%=angularAppName%>')
                 return thisAlerts.splice(index, 1);
             }
 
-            return exports;
+            return {
+                factory: factory,
+                isToast: isToast,
+                add: addAlert,
+                closeAlert: closeAlert,
+                closeAlertByIndex: closeAlertByIndex,
+                clear: clear,
+                get: get,
+                success: success,
+                error: error,
+                info: info,
+                warning : warning
+            };
         }];
 
         this.showAsToast = function(isToast) {
