@@ -16,7 +16,7 @@ angular.module('<%=angularAppName%>')
                 langKey: account.langKey,
                 lastName: account.lastName,
                 login: account.login
-            }
+            };
         };
 
         Principal.identity().then(function(account) {

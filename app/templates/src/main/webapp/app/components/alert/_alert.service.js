@@ -24,7 +24,7 @@ angular.module('<%=angularAppName%>')
 
             function success(msg, params, position) {
                 return this.add({
-                    type: "success",
+                    type: 'success',
                     msg: msg,
                     params: params,
                     timeout: timeout,
@@ -35,7 +35,7 @@ angular.module('<%=angularAppName%>')
 
             function error(msg, params, position) {
                 return this.add({
-                    type: "danger",
+                    type: 'danger',
                     msg: msg,
                     params: params,
                     timeout: timeout,
@@ -46,7 +46,7 @@ angular.module('<%=angularAppName%>')
 
             function warning(msg, params, position) {
                 return this.add({
-                    type: "warning",
+                    type: 'warning',
                     msg: msg,
                     params: params,
                     timeout: timeout,
@@ -57,7 +57,7 @@ angular.module('<%=angularAppName%>')
 
             function info(msg, params, position) {
                 return this.add({
-                    type: "info",
+                    type: 'info',
                     msg: msg,
                     params: params,
                     timeout: timeout,
@@ -78,7 +78,7 @@ angular.module('<%=angularAppName%>')
                     close: function (alerts) {
                         return exports.closeAlert(this.id, alerts);
                     }
-                }
+                };
                 if(!alert.scoped) {
                     alerts.push(alert);
                 }
