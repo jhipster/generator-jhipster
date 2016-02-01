@@ -5,13 +5,13 @@ module.exports =  {
     parseVersion : parseVersion
 }
 
-var endsWith = function (str, suffix) {
+function endsWith(str, suffix) {
     return str.indexOf('/', str.length - suffix.length) !== -1;
 };
 <% if (buildTool == 'maven') { %>
 var parseString = require('xml2js').parseString;
 // return the version number from `pom.xml` file
-var parseVersion = function() {
+function parseVersion() {
     var version;
     var pomXml = fs.readFileSync('pom.xml', 'utf8');
     parseString(pomXml, function (err, result) {
@@ -26,7 +26,7 @@ var parseVersion = function() {
     return version;
 };<% } else { %>
 // Returns the second occurrence of the version number from `build.gradle` file
-var parseVersion = function() {
+function parseVersion() {
     var versionRegex = /^version\s*=\s*[',"]([^',"]*)[',"]/gm; // Match and group the version number
     var buildGradle = fs.readFileSync('build.gradle', 'utf8');
     return versionRegex.exec(buildGradle)[1];
