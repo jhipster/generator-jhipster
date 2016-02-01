@@ -5,8 +5,7 @@ angular.module('<%=angularAppName%>')
         this.toast = false;
 
         this.$get = ['$timeout', '$sce'<% if (enableTranslation) { %>, '$translate'<% } %>, function($timeout, $sce<% if (enableTranslation) { %>,$translate<% } %>) {
-
-            toast = this.toast,
+            var toast = this.toast,
             alertId = 0, // unique id for each alert. Starts from 0.
             alerts = [],
             timeout = 5000; // default timeout
@@ -25,7 +24,7 @@ angular.module('<%=angularAppName%>')
 
             function success(msg, params, position) {
                 return this.add({
-                    type: 'success',
+                    type: "success",
                     msg: msg,
                     params: params,
                     timeout: timeout,
@@ -36,7 +35,7 @@ angular.module('<%=angularAppName%>')
 
             function error(msg, params, position) {
                 return this.add({
-                    type: 'danger',
+                    type: "danger",
                     msg: msg,
                     params: params,
                     timeout: timeout,
@@ -47,7 +46,7 @@ angular.module('<%=angularAppName%>')
 
             function warning(msg, params, position) {
                 return this.add({
-                    type: 'warning',
+                    type: "warning",
                     msg: msg,
                     params: params,
                     timeout: timeout,
@@ -58,7 +57,7 @@ angular.module('<%=angularAppName%>')
 
             function info(msg, params, position) {
                 return this.add({
-                    type: 'info',
+                    type: "info",
                     msg: msg,
                     params: params,
                     timeout: timeout,
