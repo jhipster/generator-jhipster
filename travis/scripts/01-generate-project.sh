@@ -6,6 +6,9 @@ set -ev
 mv -f $JHIPSTER_SAMPLES/$JHIPSTER $HOME/
 cd $HOME/$JHIPSTER
 
+rm -Rf $HOME/$JHIPSTER/node_modules/.bin/*grunt*
+rm -Rf $HOME/$JHIPSTER/node_modules/*grunt*
+
 npm link generator-jhipster
 yo jhipster --force --no-insight
 ls -al $HOME/$JHIPSTER
