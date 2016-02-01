@@ -35,15 +35,18 @@ angular.module('<%=angularAppName%>')<% if (authenticationType == 'oauth2' || a
                 return $q.reject(response);
             }
         };
-    })<% } %><% if (authenticationType == 'session') { %>
+    })<% } %><% if (authenticationType === 'session') { %>
     .factory('authExpiredInterceptor', function ($rootScope, $q, $injector) {
         function getCSRF() {
             var name = 'CSRF-TOKEN=';
             var ca = document.cookie.split(';');
             for (var i = 0; i < ca.length; i++) {
                 var c = ca[i];
-                while (c.charAt(0) == ' ') c = c.substring(1);
-                if (c.indexOf(name) != -1) return c.substring(name.length, c.length);
+                while (c.charAt(0) === ' ') {c = c.substring(1);}
+
+                if (c.indexOf(name) !== -1) {
+                    return c.substring(name.length, c.length);
+                }
             }
             return '';
         }
@@ -72,7 +75,7 @@ angular.module('<%=angularAppName%>')<% if (authenticationType == 'oauth2' || a
                     $rootScope.previousStateName = to;
                     $rootScope.previousStateNameParams = params;
                     $state.go('login');
-                } else if (response.status == 403 && response.config.method !== 'GET' && getCSRF() === '') {
+                } else if (response.status === 403 && response.config.method !== 'GET' && getCSRF() === '') {
                     // If the CSRF token expired, then try to get a new CSRF token and retry the old request
                     var $http = $injector.get('$http');
                     return $http.get('/').finally(function() { return afterCSRFRenewed(response); });
