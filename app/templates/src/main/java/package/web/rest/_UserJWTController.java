@@ -43,7 +43,7 @@ public class UserJWTController {
         Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.createTokenForUser(username);
-        response.addHeader(JWTConfigurer.JWT_HEADER_NAME, jwt);
+        response.addHeader(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + jwt);
         return ResponseEntity.ok().build();
     }
 }

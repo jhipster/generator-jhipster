@@ -12,9 +12,12 @@ angular.module('<%=angularAppName%>')
                         "Accept": "application/json"
                     }
                 }).success(function (data, status, headers) {
-                    var jwt = headers('X-JHipster-authentication');
-                    localStorageService.set('authentication-token', jwt);
-                    return jwt;
+                    var bearerToken = headers('Authorization');
+                    if (bearerToken != undefined && bearerToken.slice(0, 7) == 'Bearer ') {
+                        var jwt = bearerToken.slice(7, bearerToken.length);
+                        localStorageService.set('authentication-token', jwt);
+                        return jwt;
+                    }
                 });
             },
             logout: function() {
