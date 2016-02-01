@@ -82,7 +82,6 @@ module.exports = JhipsterGenerator.extend({
                 // backward compatibility for existing compass users
                 this.useSass = this.config.get('useCompass');
             }
-            this.frontendBuilder = this.config.get('frontendBuilder');
             this.enableTranslation = this.config.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
         },
 
@@ -133,7 +132,7 @@ module.exports = JhipsterGenerator.extend({
             this.searchEngine != null &&
             this.buildTool != null;
 
-            var clientConfigFound = this.useSass != null && this.frontendBuilder != null;
+            var clientConfigFound = this.useSass != null;
 
             if (this.baseName != null && serverConfigFound &&
                 (this.skipClient || clientConfigFound)) {
@@ -566,38 +565,21 @@ module.exports = JhipsterGenerator.extend({
             var done = this.async();
             var prompts = [
                 {
-                    type: 'list',
-                    name: 'frontendBuilder',
-                    choices: [
-                        {
-                            value: 'grunt',
-                            name: 'Grunt (recommended)'
-                        },
-                        {
-                            value: 'gulp',
-                            name: 'Gulp.js'
-                        }
-                    ],
-                    message: '(13/' + QUESTIONS + ') Would you like to use Grunt or Gulp.js for building the frontend?',
-                    default: 'grunt'
-                },
-                {
                     type: 'confirm',
                     name: 'useSass',
-                    message: '(14/' + QUESTIONS + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
+                    message: '(12/' + QUESTIONS + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
                     default: false
                 },
                 {
                     type: 'confirm',
                     name: 'enableTranslation',
-                    message: '(15/' + QUESTIONS + ') Would you like to enable translation support with Angular Translate?',
+                    message: '(13/' + QUESTIONS + ') Would you like to enable translation support with Angular Translate?',
                     default: true
                 }
             ];
             this.prompt(prompts, function (props) {
 
                 this.useSass = props.useSass;
-                this.frontendBuilder = props.frontendBuilder;
                 this.enableTranslation = props.enableTranslation;
 
                 done();
@@ -648,7 +630,6 @@ module.exports = JhipsterGenerator.extend({
             insight.track('app/searchEngine', this.searchEngine);
             insight.track('app/useSass', this.useSass);
             insight.track('app/buildTool', this.buildTool);
-            insight.track('app/frontendBuilder', this.frontendBuilder);
             insight.track('app/enableTranslation', this.enableTranslation);
             insight.track('app/enableSocialSignIn', this.enableSocialSignIn);
             insight.track('app/testFrameworks', this.testFrameworks);
@@ -679,7 +660,6 @@ module.exports = JhipsterGenerator.extend({
             this.testDir = 'src/test/java/' + this.packageFolder + '/';
             if(this.skipClient){
                 this.enableTranslation = this.i18n;
-                this.frontendBuilder = this.clientBuild;
             }
         },
 
@@ -699,7 +679,6 @@ module.exports = JhipsterGenerator.extend({
             this.config.set('searchEngine', this.searchEngine);
             this.config.set('useSass', this.useSass);
             this.config.set('buildTool', this.buildTool);
-            this.config.set('frontendBuilder', this.frontendBuilder);
             this.config.set('enableTranslation', this.enableTranslation);
             this.config.set('enableSocialSignIn', this.enableSocialSignIn);
             this.config.set('rememberMeKey', this.rememberMeKey);
@@ -1040,15 +1019,8 @@ module.exports = JhipsterGenerator.extend({
             this.template('_package.json', 'package.json', this, {});
             this.template('_bower.json', 'bower.json', this, {});
             this.template('bowerrc', '.bowerrc', this, {});
+            this.template('gulpfile.js', 'gulpfile.js', this, {});
 
-            switch (this.frontendBuilder) {
-                case 'gulp':
-                    this.template('gulpfile.js', 'gulpfile.js', this, {});
-                    break;
-                case 'grunt':
-                default:
-                    this.template('Gruntfile.js', 'Gruntfile.js', this, {});
-            }
 
             // Create Webapp
             mkdirp(WEBAPP_DIR);
@@ -1487,20 +1459,13 @@ module.exports = JhipsterGenerator.extend({
                     'After running `npm install & bower install`, inject your front end dependencies' +
                     '\ninto your source code by running:' +
                     '\n' +
-                    '\n' + chalk.yellow.bold('grunt wiredep') +
+                    '\n' + chalk.yellow.bold('gulp wiredep') +
                     '\n' +
                     '\n ...and generate the Angular constants with:' +
-                    '\n' + chalk.yellow.bold('grunt ngconstant:dev')
+                    '\n' + chalk.yellow.bold('gulp ngconstant:dev')
                 );
             } else {
-                switch (this.frontendBuilder) {
-                    case 'gulp':
-                        this.spawnCommand('gulp', ['ngconstant:dev', 'wiredep:test', 'wiredep:app']);
-                        break;
-                    case 'grunt':
-                    default:
-                        this.spawnCommand('grunt', ['ngconstant:dev', 'wiredep']);
-                }
+                this.spawnCommand('gulp', ['ngconstant:dev', 'wiredep']);
             }
         };
 
