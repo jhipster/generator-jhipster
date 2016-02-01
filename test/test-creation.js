@@ -285,38 +285,6 @@ const expectedFiles = {
 
 describe('JHipster generator', function () {
     this.timeout(3000); //to avoid occassional timeouts
-    describe('grunt default configuration', function () {
-        beforeEach(function (done) {
-            helpers.run(path.join(__dirname, '../app'))
-                .withOptions({skipInstall: true})
-                .withPrompts({
-                    "baseName": "jhipster",
-                    "packageName": "com.mycompany.myapp",
-                    "packageFolder": "com/mycompany/myapp",
-                    "authenticationType": "session",
-                    "hibernateCache": "ehcache",
-                    "clusteredHttpSession": "no",
-                    "websocket": "no",
-                    "databaseType": "sql",
-                    "devDatabaseType": "h2Memory",
-                    "prodDatabaseType": "mysql",
-                    "useSass": false,
-                    "enableTranslation": true,
-                    "buildTool": "maven",
-                    "frontendBuilder": "grunt",
-                    "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
-                    "searchEngine": "no"
-                })
-                .on('end', done);
-        });
-
-        it('creates expected default files', function () {
-            assert.file(expectedFiles.server);
-            assert.file(expectedFiles.client);
-            assert.file(['Gruntfile.js']);
-            assert.noFile(['gulpfile.js']);
-        });
-    });
 
     describe('gulp default configuration', function () {
         beforeEach(function (done) {
@@ -347,7 +315,6 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.client);
             assert.file(['gulpfile.js']);
-            assert.noFile(['Gruntfile.js']);
         });
     });
 
@@ -369,7 +336,6 @@ describe('JHipster generator', function () {
                     "useSass": false,
                     "enableTranslation": true,
                     "buildTool": "maven",
-                    "frontendBuilder": "grunt",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
                 })
@@ -402,7 +368,6 @@ describe('JHipster generator', function () {
                     "useSass": false,
                     "enableTranslation": true,
                     "buildTool": "maven",
-                    "frontendBuilder": "grunt",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
                 })
@@ -435,7 +400,6 @@ describe('JHipster generator', function () {
                     "useSass": false,
                     "enableTranslation": true,
                     "buildTool": "maven",
-                    "frontendBuilder": "grunt",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
                 })
@@ -467,7 +431,6 @@ describe('JHipster generator', function () {
                     "useSass": false,
                     "enableTranslation": true,
                     "buildTool": "maven",
-                    "frontendBuilder": "grunt",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
                 })
@@ -500,7 +463,6 @@ describe('JHipster generator', function () {
                     "useSass": false,
                     "enableTranslation": false,
                     "buildTool": "maven",
-                    "frontendBuilder": "grunt",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
                 })
@@ -530,7 +492,6 @@ describe('JHipster generator', function () {
                     "useSass": false,
                     "enableTranslation": true,
                     "buildTool": "maven",
-                    "frontendBuilder": "grunt",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
                 })
@@ -567,7 +528,7 @@ describe('JHipster generator', function () {
         it('creates expected files for default configuration with skip client option enabled', function () {
             assert.file(expectedFiles.server);
             assert.noFile(expectedFiles.client);
-            assert.noFile(['Gruntfile.js']);
+            assert.noFile(['gulpfile.js']);
         });
     });
 });
