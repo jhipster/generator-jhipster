@@ -889,7 +889,7 @@
                                     <action>
                                         <ignore/>
                                     </action>
-                                </pluginExecution>
+                                </pluginExecution><% if(!skipClient) {%>
                                 <pluginExecution>
                                     <pluginExecutionFilter>
                                         <groupId>com.github.trecloux</groupId>
@@ -907,7 +907,7 @@
                                         <ignore/>
                                     </action>
                                 </pluginExecution>
-                            </pluginExecutions>
+                            </pluginExecutions><% } %>
                         </lifecycleMappingMetadata>
                     </configuration>
                 </plugin>
@@ -936,34 +936,6 @@
                     <optional>true</optional>
                 </dependency>
             </dependencies>
-            <%_ if(frontendBuilder == 'grunt' && useSass) { _%>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.github.trecloux</groupId>
-                        <artifactId>yeoman-maven-plugin</artifactId>
-                        <version>0.5</version>
-                        <executions>
-                            <execution>
-                                <id>run-grunt</id>
-                                <phase>generate-resources</phase>
-                                <goals>
-                                    <goal>build</goal>
-                                </goals>
-                                <configuration>
-                                    <skipTests>true</skipTests>
-                                    <buildTool>grunt</buildTool>
-                                    <buildArgs>sass:server --force</buildArgs>
-                                </configuration>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <yeomanProjectDirectory>${project.basedir}</yeomanProjectDirectory>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-            <%_ } _%>
         </profile>
         <profile>
             <id>prod</id>
@@ -973,7 +945,7 @@
                     <artifactId>spring-boot-starter-tomcat</artifactId>
                 </dependency>
             </dependencies>
-            <build>
+            <build><% if(!skipClient) {%>
                 <plugins>
                     <plugin>
                         <groupId>com.github.trecloux</groupId>
@@ -987,17 +959,14 @@
                                     <goal>build</goal>
                                 </goals>
                                 <configuration>
-                                    <buildTool><%= frontendBuilder %></buildTool>
-                                    <%_ if (frontendBuilder == 'grunt') { _%>
-                                    <buildArgs>build --no-color</buildArgs>
-                                    <%_ } _%>
+                                    <buildTool>gulp</buildTool>
                                 </configuration>
                             </execution>
                         </executions>
                         <configuration>
                             <yeomanProjectDirectory>${project.basedir}</yeomanProjectDirectory>
                         </configuration>
-                    </plugin>
+                    </plugin><% } %>
                     <plugin>
                         <artifactId>maven-clean-plugin</artifactId>
                         <version>2.5</version>
