@@ -1369,6 +1369,10 @@ module.exports = EntityGenerator.extend({
                 if (_.isUndefined(relationship.otherEntityFieldCapitalized)) {
                     relationship.otherEntityFieldCapitalized = _s.capitalize(relationship.otherEntityField);
                 }
+
+                if (_.isUndefined(relationship.otherEntityStateName)) {
+                    relationship.otherEntityStateName = _s.trim(_s.dasherize(relationship.otherEntityName), '-') + '-management';
+                }
             }
 
             // Load in-memory data for root
@@ -1452,7 +1456,21 @@ module.exports = EntityGenerator.extend({
             this.entityInstance = _s.decapitalize(this.name);
             this.entityInstancePlural = pluralize(this.entityInstance);
             this.entityTableName = _s.underscored(this.name).toLowerCase();
-            this.entityDasherized = _s.trim(_s.dasherize(this.name), '-');
+
+            this.entityFolderName = _s.trim(_s.dasherize(this.name), '-') + '-management';
+            this.entityFileName = _s.trim(_s.dasherize(this.name), '-') + '-management';
+            this.entityServiceFileName = _s.trim(_s.dasherize(this.name), '-');
+            this.entityStateName = _s.trim(_s.dasherize(this.name), '-') + '-management';
+            this.entityUrl = _s.trim(_s.dasherize(this.name), '-') + '-management';
+            if (databaseType == 'sql') {
+                this.entityUrlType = 'int';
+            } else if (databaseType == 'mongodb') {
+                this.entityUrlType = '[0-9a-fA-F]{24}';
+            } else if (databaseType == 'cassandra') {
+                this.entityUrlType = '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}';
+            }
+            this.entityTranslationKeySuffix = 'Management';
+            this.entityTranslationKey = this.entityInstance + this.entityTranslationKeySuffix;
 
             this.differentTypes = [this.entityClass];
             if (this.relationships == undefined) {
@@ -1560,32 +1578,32 @@ module.exports = EntityGenerator.extend({
             if(this.skipClient){
                 return;
             }
-            this.copyHtml(ANGULAR_DIR + 'entities/_entity-management.html', ANGULAR_DIR + 'entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management.html', this, {}, true);
-            this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-detail.html', ANGULAR_DIR + 'entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management-detail.html', this, {}, true);
-            this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-dialog.html', ANGULAR_DIR + 'entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management-dialog.html', this, {}, true);
-            this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-delete-dialog.html', ANGULAR_DIR + 'entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management-delete-dialog.html', this, {}, true);
+            this.copyHtml(ANGULAR_DIR + 'entities/_entity-management.html', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '.html', this, {}, true);
+            this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-detail.html', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.html', this, {}, true);
+            this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-dialog.html', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-dialog.html', this, {}, true);
+            this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-delete-dialog.html', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-delete-dialog.html', this, {}, true);
 
-            this.addEntityToMenu(this.entityDasherized + '-management', this.enableTranslation);
+            this.addEntityToMenu(this.entityStateName, this.enableTranslation);
 
-            this.template(ANGULAR_DIR + 'entities/_entity-management.js', ANGULAR_DIR + 'entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management.js', this, {});
-            this.addJavaScriptToIndex('entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management.js');
-            this.template(ANGULAR_DIR + 'entities/_entity-management.controller.js', ANGULAR_DIR + 'entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management.controller' + '.js', this, {});
-            this.addJavaScriptToIndex('entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management.controller' + '.js');
-            this.template(ANGULAR_DIR + 'entities/_entity-management-dialog.controller.js', ANGULAR_DIR + 'entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management-dialog.controller' + '.js', this, {});
-            this.addJavaScriptToIndex('entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management-dialog.controller' + '.js');
-            this.template(ANGULAR_DIR + 'entities/_entity-management-delete-dialog.controller.js', ANGULAR_DIR + 'entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management-delete-dialog.controller' + '.js', this, {});
-            this.addJavaScriptToIndex('entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management-delete-dialog.controller' + '.js');
+            this.template(ANGULAR_DIR + 'entities/_entity-management.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '.js', this, {});
+            this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityFileName + '.js');
+            this.template(ANGULAR_DIR + 'entities/_entity-management.controller.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '.controller' + '.js', this, {});
+            this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityFileName + '.controller' + '.js');
+            this.template(ANGULAR_DIR + 'entities/_entity-management-dialog.controller.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-dialog.controller' + '.js', this, {});
+            this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityFileName + '-dialog.controller' + '.js');
+            this.template(ANGULAR_DIR + 'entities/_entity-management-delete-dialog.controller.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-delete-dialog.controller' + '.js', this, {});
+            this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityFileName + '-delete-dialog.controller' + '.js');
 
-            this.template(ANGULAR_DIR + 'entities/_entity-management-detail.controller.js', ANGULAR_DIR + 'entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management-detail.controller' + '.js', this, {});
+            this.template(ANGULAR_DIR + 'entities/_entity-management-detail.controller.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.controller' + '.js', this, {});
 
-            this.addJavaScriptToIndex('entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management-detail.controller' + '.js');
+            this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.controller' + '.js');
 
-            this.template(ANGULAR_DIR + 'services/_entity.service.js', ANGULAR_DIR + 'entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '.service' + '.js', this, {});
-            this.addJavaScriptToIndex('entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '.service' + '.js');
+            this.template(ANGULAR_DIR + 'services/_entity.service.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.service' + '.js', this, {});
+            this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.service' + '.js');
 
             if (this.searchEngine == 'elasticsearch') {
-                this.template(ANGULAR_DIR + 'services/_entity-search.service.js', ANGULAR_DIR + 'entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '.search.service' + '.js', this, {});
-                this.addJavaScriptToIndex('entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '.search.service' + '.js');
+                this.template(ANGULAR_DIR + 'services/_entity-search.service.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.search.service' + '.js', this, {});
+                this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.search.service' + '.js');
             }
 
             // Copy for each
@@ -1601,7 +1619,7 @@ module.exports = EntityGenerator.extend({
                 return;
             }
             this.template('src/test/javascript/spec/app/entities/_entity-management-detail.controller.spec.js',
-                'src/test/javascript/spec/app/entities/' + this.entityDasherized + '-management/' + this.entityDasherized + '-management-detail.controller.spec.js', this, {});
+                'src/test/javascript/spec/app/entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.controller.spec.js', this, {});
         },
 
         writeTestFiles: function() {
@@ -1641,7 +1659,14 @@ module.exports = EntityGenerator.extend({
                         entityClass: this.entityClass,
                         entityTableName: this.entityTableName,
                         entityInstance: this.entityInstance,
-                        entityDasherized: this.entityDasherized
+                        entityFolderName: this.entityFolderName,
+                        entityFileName: this.entityFileName,
+                        entityServiceFileName: this.entityServiceFileName,
+                        entityStateName: this.entityStateName,
+                        entityUrl: this.entityUrl,
+                        entityUrlType: this.entityUrlType,
+                        entityTranslationKeySuffix: this.entityTranslationKeySuffix,
+                        entityTranslationKey: this.entityTranslationKey
                     };
                     // run through all post entity creation module hooks
                     modules.forEach(function(module) {

@@ -16,9 +16,9 @@ public class HeaderUtil {
     }
 <%
     if(enableTranslation) {
-        var createdMessage = '"' + angularAppName + '." + entityName + "-management.created"';
-        var updatedMessage = '"' + angularAppName + '." + entityName + "-management.updated"';
-        var deletedMessage = '"' + angularAppName + '." + entityName + "-management.deleted"';
+        var createdMessage = '"' + angularAppName + '." + entityName + "Management.created"';
+        var updatedMessage = '"' + angularAppName + '." + entityName + "Management.updated"';
+        var deletedMessage = '"' + angularAppName + '." + entityName + "Management.deleted"';
         var errorMessage = '"error." + errorKey';
     } else {
         var createdMessage = '"A new " + entityName + " is created with identifier " + param';

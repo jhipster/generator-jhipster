@@ -1,11 +1,11 @@
 <div>
-<%_ var keyPrefix = angularAppName + '.'+ entityInstance + 'Management.'; _%>
+<%_ var keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; _%>
     <h2 translate="<%= keyPrefix %>home.title"><%= entityClassPlural %></h2>
     <jh-alert></jh-alert>
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-4 no-padding-left">
-                <button class="btn btn-primary" ui-sref="<%= entityDasherized %>-management.new" >
+                <button class="btn btn-primary" ui-sref="<%= entityStateName %>.new" >
                     <span class="glyphicon glyphicon-plus"></span>
                     <span
                         <%_ if (searchEngine == 'elasticsearch') { _%>class="hidden-xs" <%_ } _%>
@@ -51,7 +51,7 @@
             </thead>
             <tbody<% if (pagination == 'infinite-scroll') { %> infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page"<% } %>>
                 <tr ng-repeat="<%=entityInstance %> in <%=entityInstancePlural %> track by <%=entityInstance %>.id">
-                    <td><a ui-sref="<%= entityDasherized %>-management-detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td>
+                    <td><a ui-sref="<%= entityStateName %>-detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td>
                     <%_ for (fieldId in fields) { _%>
                         <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'image') { _%>
                     <td>
@@ -74,6 +74,7 @@
                             var ownerSide = relationships[relationshipId].ownerSide;
                             var relationshipFieldName = relationships[relationshipId].relationshipFieldName;
                             var otherEntityName = relationships[relationshipId].otherEntityName;
+                            var otherEntityStateName = relationships[relationshipId].otherEntityStateName;
                             var otherEntityField = relationships[relationshipId].otherEntityField;
                             var otherEntityFieldCapitalized = relationships[relationshipId].otherEntityFieldCapitalized; _%>
                         <%_ if (relationshipType == 'many-to-one'
@@ -95,13 +96,13 @@
                             <%_ } else { _%>
                                 <%_ if (relationshipType == 'many-to-many') { _%>
                         <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldName %>s">
-                            <a class="form-control-static" ui-sref="<%= otherEntityNameDasherized %>-management-detail({id: {{<%= relationshipFieldName %>.id}}})">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
+                            <a class="form-control-static" ui-sref="<%= otherEntityStateName %>-detail({id: {{<%= relationshipFieldName %>.id}}})">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
                         <span>
                                 <%_ } else { _%>
                                     <%_ if (dto == 'no') { _%>
-                        <a ui-sref="<%= otherEntityNameDasherized %>-management-detail({id:<%= entityInstance + "." + relationshipFieldName + ".id" %>})">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</a>
+                        <a ui-sref="<%= otherEntityStateName %>-detail({id:<%= entityInstance + "." + relationshipFieldName + ".id" %>})">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</a>
                                     <%_ } else { _%>
-                        <a ui-sref="<%= otherEntityNameDasherized %>-management-detail({id:<%= entityInstance + "." + relationshipFieldName + "Id" %>})">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
+                        <a ui-sref="<%= otherEntityStateName %>-detail({id:<%= entityInstance + "." + relationshipFieldName + "Id" %>})">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
                                     <%_ } _%>
                                 <%_ } _%>
                             <%_ } _%>
@@ -111,19 +112,19 @@
                     <td class="text-right">
                         <div class="btn-group flex-btn-group-container">
                             <button type="submit"
-                                    ui-sref="<%= entityDasherized %>-management-detail({id:<%= entityInstance %>.id})"
+                                    ui-sref="<%= entityStateName %>-detail({id:<%= entityInstance %>.id})"
                                     class="btn btn-info btn-sm">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                                 <span class="hidden-xs hidden-sm" translate="entity.action.view"></span>
                             </button>
                             <button type="submit"
-                                    ui-sref="<%= entityDasherized %>-management.edit({id:<%=entityInstance %>.id})"
+                                    ui-sref="<%= entityStateName %>.edit({id:<%=entityInstance %>.id})"
                                     class="btn btn-primary btn-sm">
                                 <span class="glyphicon glyphicon-pencil"></span>
                                 <span class="hidden-xs hidden-sm" translate="entity.action.edit"></span>
                             </button>
                             <button type="submit"
-                                    ui-sref="<%= entityDasherized %>-management.delete({id:<%=entityInstance %>.id})"
+                                    ui-sref="<%= entityStateName %>.delete({id:<%=entityInstance %>.id})"
                                     class="btn btn-danger btn-sm">
                                 <span class="glyphicon glyphicon-remove-circle"></span>
                                 <span class="hidden-xs hidden-sm" translate="entity.action.delete"></span>

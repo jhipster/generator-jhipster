@@ -1,6 +1,6 @@
 {
     "<%= angularAppName %>": {
-        "<%= entityInstance %>Management" : {
+        "<%= entityTranslationKey %>" : {
             "home": {
                 "title": "<%= entityClass %>",
                 "createLabel": "Dodaj <%= entityClass %>",
