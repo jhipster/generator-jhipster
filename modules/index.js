@@ -44,7 +44,6 @@ module.exports = ModulesGenerator.extend({
         jhipsterVar['searchEngine'] = this.config.get('searchEngine');
         jhipsterVar['useSass'] = this.config.get('useSass');
         jhipsterVar['buildTool'] = this.config.get('buildTool');
-        jhipsterVar['frontendBuilder'] = this.config.get('frontendBuilder');
         jhipsterVar['enableTranslation'] = this.config.get('enableTranslation');
         jhipsterVar['enableSocialSignIn'] = this.config.get('enableSocialSignIn');
         jhipsterVar['testFrameworks'] = this.config.get('testFrameworks');
