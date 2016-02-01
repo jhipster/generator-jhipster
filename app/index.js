@@ -18,7 +18,7 @@ var JhipsterGenerator = generators.Base.extend({});
 util.inherits(JhipsterGenerator, scriptBase);
 
 /* Constants use through out */
-const QUESTIONS = 15; // making questions a variable to avoid updating each question by hand when adding additional options
+const QUESTIONS = 16; // making questions a variable to avoid updating each question by hand when adding additional options
 const RESOURCE_DIR = 'src/main/resources/';
 const WEBAPP_DIR = 'src/main/webapp/';
 const ANGULAR_DIR = WEBAPP_DIR + 'app/';
@@ -111,14 +111,15 @@ module.exports = JhipsterGenerator.extend({
             }
             this.buildTool = this.config.get('buildTool');
             this.enableSocialSignIn = this.config.get('enableSocialSignIn');
-
         },
 
         setupVars : function () {
             this.packagejs = packagejs;
             this.jhipsterVersion = this.config.get('jhipsterVersion');
+            this.applicationType = this.config.get('applicationType');
             this.baseName = this.config.get('baseName');
             this.rememberMeKey = this.config.get('rememberMeKey');
+            this.jwtSecretKey = this.config.get('jwtSecretKey');
             this.testFrameworks = this.config.get('testFrameworks');
 
             var serverConfigFound = this.packageName != null &&
@@ -137,9 +138,14 @@ module.exports = JhipsterGenerator.extend({
             if (this.baseName != null && serverConfigFound &&
                 (this.skipClient || clientConfigFound)) {
 
-                // Generate key if key does not already exist in config
+                // Generate remember me key if key does not already exist in config
                 if (this.rememberMeKey == null) {
                     this.rememberMeKey = crypto.randomBytes(20).toString('hex');
+                }
+
+                // Generate JWT secert key if key does not already exist in config
+                if (this.authenticationType == 'jwt' && this.jwtSecretKey == null) {
+                    this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
                 }
 
                 // If translation is not defined, it is enabled by default
@@ -188,6 +194,37 @@ module.exports = JhipsterGenerator.extend({
             }.bind(this));
         },
 
+        askForApplicationType: function () {
+            if(this.existingProject){
+                return;
+            }
+            var done = this.async();
+
+            this.prompt({
+                type: 'list',
+                name: 'applicationType',
+                message: '(1/' + QUESTIONS + ') Which *type* of application would you like to create?',
+                choices: [
+                    {
+                        value: 'monolithic',
+                        name: 'Monolithic application'
+                    },
+                    {
+                        value: 'microservice',
+                        name: 'Microservice application'
+                    },
+                    {
+                        value: 'gateway',
+                        name: 'Microservice gateway'
+                    }
+                ],
+                default: 0
+            }, function (prompt) {
+                this.applicationType = prompt.applicationType;
+                done();
+            }.bind(this));
+        },
+
         askForModuleName: function () {
             if(this.existingProject){
                 return;
@@ -202,7 +239,7 @@ module.exports = JhipsterGenerator.extend({
                     if (/^([a-zA-Z0-9_]*)$/.test(input)) return true;
                     return 'Your application name cannot contain special characters or a blank space, using the default name instead';
                 },
-                message: '(1/' + QUESTIONS + ') What is the base name of your application?',
+                message: '(2/' + QUESTIONS + ') What is the base name of your application?',
                 default: defaultAppBaseName
             }, function (prompt) {
                 this.baseName = prompt.baseName;
@@ -225,14 +262,14 @@ module.exports = JhipsterGenerator.extend({
                         if (/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)) return true;
                         return 'The package name you have provided is not a valid Java package name.';
                     },
-                    message: '(2/' + QUESTIONS + ') What is your default Java package name?',
+                    message: '(3/' + QUESTIONS + ') What is your default Java package name?',
                     default: 'com.mycompany.myapp',
                     store: true
                 },
                 {
                     type: 'list',
                     name: 'authenticationType',
-                    message: '(3/' + QUESTIONS + ') Which *type* of authentication would you like to use?',
+                    message: '(4/' + QUESTIONS + ') Which *type* of authentication would you like to use?',
                     choices: [
                         {
                             value: 'session',
@@ -259,7 +296,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'databaseType',
-                    message: '(4/' + QUESTIONS + ') Which *type* of database would you like to use?',
+                    message: '(5/' + QUESTIONS + ') Which *type* of database would you like to use?',
                     choices: [
                         {
                             value: 'sql',
@@ -278,7 +315,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'databaseType',
-                    message: '(4/' + QUESTIONS + ') Which *type* of database would you like to use?',
+                    message: '(5/' + QUESTIONS + ') Which *type* of database would you like to use?',
                     choices: [
                         {
                             value: 'sql',
@@ -301,7 +338,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'prodDatabaseType',
-                    message: '(5/' + QUESTIONS + ') Which *production* database would you like to use?',
+                    message: '(6/' + QUESTIONS + ') Which *production* database would you like to use?',
                     choices: [
                         {
                             value: 'mysql',
@@ -324,7 +361,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'devDatabaseType',
-                    message: '(6/' + QUESTIONS + ') Which *development* database would you like to use?',
+                    message: '(7/' + QUESTIONS + ') Which *development* database would you like to use?',
                     choices: [
                         {
                             value: 'h2Disk',
@@ -347,7 +384,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'devDatabaseType',
-                    message: '(6/' + QUESTIONS + ') Which *development* database would you like to use?',
+                    message: '(7/' + QUESTIONS + ') Which *development* database would you like to use?',
                     choices: [
                         {
                             value: 'h2Disk',
@@ -370,7 +407,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'devDatabaseType',
-                    message: '(6/' + QUESTIONS + ') Which *development* database would you like to use?',
+                    message: '(7/' + QUESTIONS + ') Which *development* database would you like to use?',
                     choices: [
                         {
                             value: 'h2Disk',
@@ -393,7 +430,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'hibernateCache',
-                    message: '(7/' + QUESTIONS + ') Do you want to use Hibernate 2nd level cache?',
+                    message: '(8/' + QUESTIONS + ') Do you want to use Hibernate 2nd level cache?',
                     choices: [
                         {
                             value: 'no',
@@ -416,7 +453,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'searchEngine',
-                    message: '(8/' + QUESTIONS + ') Do you want to use a search engine in your application?',
+                    message: '(9/' + QUESTIONS + ') Do you want to use a search engine in your application?',
                     choices: [
                         {
                             value: 'no',
@@ -432,7 +469,7 @@ module.exports = JhipsterGenerator.extend({
                 {
                     type: 'list',
                     name: 'clusteredHttpSession',
-                    message: '(9/' + QUESTIONS + ') Do you want to use clustered HTTP sessions?',
+                    message: '(10/' + QUESTIONS + ') Do you want to use clustered HTTP sessions?',
                     choices: [
                         {
                             value: 'no',
@@ -448,7 +485,7 @@ module.exports = JhipsterGenerator.extend({
                 {
                     type: 'list',
                     name: 'websocket',
-                    message: '(10/' + QUESTIONS + ') Do you want to use WebSockets?',
+                    message: '(11/' + QUESTIONS + ') Do you want to use WebSockets?',
                     choices: [
                         {
                             value: 'no',
@@ -464,7 +501,7 @@ module.exports = JhipsterGenerator.extend({
                 {
                     type: 'list',
                     name: 'buildTool',
-                    message: '(11/' + QUESTIONS + ') Would you like to use Maven or Gradle for building the backend?',
+                    message: '(12/' + QUESTIONS + ') Would you like to use Maven or Gradle for building the backend?',
                     choices: [
                         {
                             value: 'maven',
@@ -490,6 +527,9 @@ module.exports = JhipsterGenerator.extend({
                     this.enableSocialSignIn = false;
                 }
                 props.enableSocialSignIn = this.enableSocialSignIn;
+                if (this.authenticationType == 'jwt') {
+                    this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
+                }
 
                 this.packageName = props.packageName;
                 this.hibernateCache = props.hibernateCache;
@@ -538,19 +578,19 @@ module.exports = JhipsterGenerator.extend({
                             name: 'Gulp.js'
                         }
                     ],
-                    message: '(12/' + QUESTIONS + ') Would you like to use Grunt or Gulp.js for building the frontend?',
+                    message: '(13/' + QUESTIONS + ') Would you like to use Grunt or Gulp.js for building the frontend?',
                     default: 'grunt'
                 },
                 {
                     type: 'confirm',
                     name: 'useSass',
-                    message: '(13/' + QUESTIONS + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
+                    message: '(14/' + QUESTIONS + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
                     default: false
                 },
                 {
                     type: 'confirm',
                     name: 'enableTranslation',
-                    message: '(14/' + QUESTIONS + ') Would you like to enable translation support with Angular Translate?',
+                    message: '(15/' + QUESTIONS + ') Would you like to enable translation support with Angular Translate?',
                     default: true
                 }
             ];
@@ -583,7 +623,7 @@ module.exports = JhipsterGenerator.extend({
             this.prompt({
                 type: 'checkbox',
                 name: 'testFrameworks',
-                message: '(15/' + QUESTIONS + ') Which testing frameworks would you like to use?',
+                message: '(16/' + QUESTIONS + ') Which testing frameworks would you like to use?',
                 choices: choices,
                 default: [ 'gatling' ]
             }, function (prompt) {
@@ -597,6 +637,7 @@ module.exports = JhipsterGenerator.extend({
         insight: function () {
             var insight = this.insight();
             insight.track('generator', 'app');
+            insight.track('app/applicationType', this.applicationType);
             insight.track('app/authenticationType', this.authenticationType);
             insight.track('app/hibernateCache', this.hibernateCache);
             insight.track('app/clusteredHttpSession', this.clusteredHttpSession);
@@ -644,6 +685,7 @@ module.exports = JhipsterGenerator.extend({
 
         saveConfig: function () {
             this.config.set('jhipsterVersion', packagejs.version);
+            this.config.set('applicationType', this.applicationType);
             this.config.set('baseName', this.baseName);
             this.config.set('packageName', this.packageName);
             this.config.set('packageFolder', this.packageFolder);
@@ -661,6 +703,7 @@ module.exports = JhipsterGenerator.extend({
             this.config.set('enableTranslation', this.enableTranslation);
             this.config.set('enableSocialSignIn', this.enableSocialSignIn);
             this.config.set('rememberMeKey', this.rememberMeKey);
+            this.config.set('jwtSecretKey', this.jwtSecretKey);
             this.config.set('testFrameworks', this.testFrameworks);
             if(this.skipClient){
                 this.config.set('skipClient', true);
