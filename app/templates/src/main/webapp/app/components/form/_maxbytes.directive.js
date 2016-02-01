@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .directive('maxbytes', function ($q) {
+    .directive('maxbytes', function () {
         function endsWith(suffix, str) {
             return str.indexOf(suffix, str.length - suffix.length) !== -1;
         }
@@ -25,7 +25,9 @@ angular.module('<%=angularAppName%>')
             restrict: 'A',
             require: '?ngModel',
             link: function (scope, element, attrs, ngModel) {
-                if (!ngModel) return;
+                if (!ngModel) {
+                    return;
+                }
 
                 ngModel.$validators.maxbytes = function (modelValue) {
                     return ngModel.$isEmpty(modelValue) || numberOfBytes(modelValue) <= attrs.maxbytes;
