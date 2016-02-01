@@ -15,8 +15,9 @@ describe('Service Tests', function () {
             spiedLocalStorageService = localStorageService;
             authService = Auth;
             spiedAuthServerProvider = AuthServerProvider;
-
+<%_ if (authenticationType != 'jwt') { _%>
             $httpBackend.expectPOST(/api\/logout\?cacheBuster=\d+/).respond(200, '');
+<%_ } _%>
         }));
         //make sure no expectations were missed in your tests.
         //(e.g. expectGET or expectPOST)
