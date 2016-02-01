@@ -17,7 +17,7 @@ angular.module('<%=angularAppName%>')
                     });
                 }
             ]
-        }
+        };
     })
     .directive('jhAlertError', function(AlertService, $rootScope<% if (enableTranslation) { %>, $translate<% } %>) {
         return {
@@ -35,11 +35,11 @@ angular.module('<%=angularAppName%>')
 
                     var addErrorAlert = function (message, key, data) {
                         <%_ if (enableTranslation) { _%>
-                        key = key && key != null ? key : message;
+                        key = key && key !== null ? key : message;
                             $scope.alerts.push(
                             AlertService.add(
                         {
-                            type: "danger",
+                            type: 'danger',
                             msg: key,
                             params: data,
                             timeout: 5000,
@@ -53,7 +53,7 @@ angular.module('<%=angularAppName%>')
                         $scope.alerts.push(
                             AlertService.add(
                                 {
-                                    type: "danger",
+                                    type: 'danger',
                                     msg: message,
                                     timeout: 5000,
                                     toast: AlertService.isToast(),
@@ -112,5 +112,5 @@ angular.module('<%=angularAppName%>')
                     });
                 }
             ]
-        }
+        };
     });
