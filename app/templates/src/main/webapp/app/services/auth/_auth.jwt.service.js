@@ -11,17 +11,17 @@ angular.module('<%=angularAppName%>')
                         "Content-Type": "application/x-www-form-urlencoded",
                         "Accept": "application/json"
                     }
-                }).success(function (response) {
-                    localStorageService.set('token', response);
-                    return response;
+                }).success(function (data, status, headers) {
+                    var jwt = headers('X-JHipster-authentication');
+                    localStorageService.set('authentication-token', jwt);
+                    return jwt;
                 });
             },
             logout: function() {
-                //Stateless API : No server logout
                 localStorageService.clearAll();
             },
             getToken: function () {
-                return localStorageService.get('token');
+                return localStorageService.get('authentication-token');
             },
             hasValidToken: function () {
                 var token = this.getToken();

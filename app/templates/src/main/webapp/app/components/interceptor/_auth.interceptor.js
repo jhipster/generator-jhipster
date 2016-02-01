@@ -1,31 +1,31 @@
 'use strict';
 
-angular.module('<%=angularAppName%>')<% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
+angular.module('<%=angularAppName%>')<% if (authenticationType == 'oauth2' || authenticationType == 'jwt') { %>
     .factory('authInterceptor', function ($rootScope, $q, $location, localStorageService) {
         return {
             // Add authorization token to headers
             request: function (config) {
                 config.headers = config.headers || {};
-                var token = localStorageService.get('token');
+                var token = localStorageService.get('authentication-token');
                 <% if (authenticationType == 'oauth2') { %>
                 if (token && token.expires_at && token.expires_at > new Date().getTime()) {
                     config.headers.Authorization = 'Bearer ' + token.access_token;
                 }
-                <% } %><% if (authenticationType == 'xauth') { %>
-                if (token && token.expires && token.expires > new Date().getTime()) {
-                  config.headers['x-auth-token'] = token.token;
+                <% } %><% if (authenticationType == 'jwt') { %>
+                if (token) {
+                  config.headers['X-JHipster-Authentication'] = token;
                 }
                 <% } %>
                 return config;
             }
         };
-    })<% } %><% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
+    })<% } %><% if (authenticationType == 'oauth2' || authenticationType == 'jwt') { %>
     .factory('authExpiredInterceptor', function ($rootScope, $q, $injector, localStorageService) {
         return {
             responseError: function (response) {
                 // token has expired
                 if (response.status === 401 && (response.data.error == 'invalid_token' || response.data.error == 'Unauthorized')) {
-                    localStorageService.remove('token');
+                    localStorageService.remove('authentication-token');
                     var Principal = $injector.get('Principal');
                     if (Principal.isAuthenticated()) {
                         var Auth = $injector.get('Auth');

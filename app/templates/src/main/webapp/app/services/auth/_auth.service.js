@@ -13,9 +13,11 @@ angular.module('<%=angularAppName%>')
                         <%_ if (enableTranslation){ _%>
                         // After the login the language will be changed to
                         // the language selected by the user during his registration
-                        $translate.use(account.langKey).then(function(){
-                            $translate.refresh();
-                        });
+                        if (account!= null) {
+                            $translate.use(account.langKey).then(function () {
+                                $translate.refresh();
+                            });
+                        }
                         <%_ } _%>
                         <%_ if (websocket == 'spring-websocket') { _%>
                         Tracker.sendActivity();

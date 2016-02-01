@@ -17,7 +17,7 @@ angular.module('<%=angularAppName%>')
                     var expiredAt = new Date();
                     expiredAt.setSeconds(expiredAt.getSeconds() + response.expires_in);
                     response.expires_at = expiredAt.getTime();
-                    localStorageService.set('token', response);
+                    localStorageService.set('authentication-token', response);
                     return response;
                 });
             },
@@ -28,7 +28,7 @@ angular.module('<%=angularAppName%>')
                 });
             },
             getToken: function () {
-                return localStorageService.get('token');
+                return localStorageService.get('authentication-token');
             },
             hasValidToken: function () {
                 var token = this.getToken();

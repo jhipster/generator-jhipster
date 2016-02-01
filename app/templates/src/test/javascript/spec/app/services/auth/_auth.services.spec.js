@@ -43,7 +43,7 @@ describe('Service Tests', function () {
             //THEN
             expect(spiedAuthServerProvider.logout).toHaveBeenCalled();
             expect(spiedLocalStorageService.clearAll).toHaveBeenCalled();
-        });<% } %><% if (authenticationType == 'xauth') { %>
+        });<% } %><% if (authenticationType == 'jwt') { %>
           it('should call LocalStorageService.clearAll on logout', function(){
             //GIVEN
             //Set spy
