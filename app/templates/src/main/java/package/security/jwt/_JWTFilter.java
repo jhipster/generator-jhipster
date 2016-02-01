@@ -20,8 +20,6 @@ import java.io.IOException;
  */
 public class JWTFilter extends GenericFilterBean {
 
-
-
     private UserDetailsService detailsService;
 
     private TokenProvider tokenProvider;
@@ -35,11 +33,12 @@ public class JWTFilter extends GenericFilterBean {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         try {
             HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-            String authToken = httpServletRequest.getHeader(JWTConfigurer.JWT_HEADER_NAME);
-            if (StringUtils.hasText(authToken)) {
-                String username = this.tokenProvider.getUsernameFromToken(authToken);
+            String bearerToken = httpServletRequest.getHeader(JWTConfigurer.AUTHORIZATION_HEADER);
+            if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+                String jwt = bearerToken.substring(7, bearerToken.length());
+                String username = this.tokenProvider.getUsernameFromToken(jwt);
                 UserDetails details = this.detailsService.loadUserByUsername(username);
-                if (this.tokenProvider.validateToken(authToken)) {
+                if (this.tokenProvider.validateToken(jwt)) {
                     UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(details, details.getPassword(), details.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(token);
                 }

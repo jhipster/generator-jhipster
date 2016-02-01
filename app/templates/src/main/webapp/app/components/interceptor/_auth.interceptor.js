@@ -13,7 +13,7 @@ angular.module('<%=angularAppName%>')<% if (authenticationType == 'oauth2' || a
                 }
                 <% } %><% if (authenticationType == 'jwt') { %>
                 if (token) {
-                  config.headers['X-JHipster-Authentication'] = token;
+                  config.headers['Authorization'] = 'Bearer ' + token;
                 }
                 <% } %>
                 return config;
