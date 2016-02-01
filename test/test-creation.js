@@ -8,13 +8,34 @@ var os = require('os');
 
 const expectedFiles = {
 
+    gradle : [
+        'gradle.properties',
+        'build.gradle',
+        'settings.gradle',
+        'gradlew',
+        'gradlew.bat',
+        'gradle/gatling.gradle',
+        'gradle/liquibase.gradle',
+        'gradle/mapstruct.gradle',
+        'gradle/profile_dev.gradle',
+        'gradle/profile_prod.gradle',
+        'gradle/sonar.gradle',
+        'gradle/wrapper/gradle-wrapper.jar',
+        'gradle/wrapper/gradle-wrapper.properties'
+    ],
+
+    maven : [
+        'pom.xml',
+        'mvnw',
+        'mvnw.cmd',
+        '.mvn/wrapper/maven-wrapper.jar',
+        '.mvn/wrapper/maven-wrapper.properties'
+    ],
+
     server: [
         'README.md',
         '.gitignore',
         '.gitattributes',
-        'pom.xml',
-        'mvnw',
-        'mvnw.cmd',
         'src/main/resources/banner.txt',
         'src/main/resources/ehcache.xml',
         'src/main/resources/.h2.server.properties',
@@ -109,8 +130,6 @@ const expectedFiles = {
         'src/test/resources/logback-test.xml',
         'src/test/resources/ehcache.xml',
         'src/test/gatling/conf/gatling.conf',
-        '.mvn/wrapper/maven-wrapper.jar',
-        '.mvn/wrapper/maven-wrapper.properties',
         '.editorconfig',
         '.jshintrc'
     ],
@@ -284,9 +303,9 @@ const expectedFiles = {
 };
 
 describe('JHipster generator', function () {
-    this.timeout(3000); //to avoid occassional timeouts
+    this.timeout(4000); //to avoid occassional timeouts
 
-    describe('gulp default configuration', function () {
+    describe('default configuration', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../app'))
                 .withOptions({skipInstall: true})
@@ -312,8 +331,42 @@ describe('JHipster generator', function () {
 
         it('creates expected default files', function () {
             assert.file(expectedFiles.server);
+            assert.file(expectedFiles.maven);
             assert.file(expectedFiles.client);
             assert.file(['gulpfile.js']);
+        });
+    });
+
+    describe('default gradle configuration', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../app'))
+                .withOptions({skipInstall: true})
+                .withPrompts({
+                    "baseName": "jhipster",
+                    "packageName": "com.mycompany.myapp",
+                    "packageFolder": "com/mycompany/myapp",
+                    "authenticationType": "session",
+                    "hibernateCache": "ehcache",
+                    "clusteredHttpSession": "no",
+                    "websocket": "no",
+                    "databaseType": "sql",
+                    "devDatabaseType": "h2Memory",
+                    "prodDatabaseType": "mysql",
+                    "useSass": false,
+                    "enableTranslation": true,
+                    "buildTool": "gradle",
+                    "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
+                    "searchEngine": "no"
+                })
+                .on('end', done);
+        });
+
+        it('creates expected default files for gradle', function () {
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.gradle);
+            assert.file(expectedFiles.client);
+            assert.file(['gulpfile.js']);
+            assert.file(['gradle/yeoman.gradle']);
         });
     });
 
@@ -526,8 +579,40 @@ describe('JHipster generator', function () {
 
         it('creates expected files for default configuration with skip client option enabled', function () {
             assert.file(expectedFiles.server);
+            assert.file(expectedFiles.maven);
             assert.noFile(expectedFiles.client);
             assert.noFile(['gulpfile.js']);
+        });
+    });
+
+    describe('skip client with gradle', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../app'))
+                .withOptions({skipInstall: true, skipClient: true})
+                .withPrompts({
+                    "baseName": "jhipster",
+                    "packageName": "com.mycompany.myapp",
+                    "packageFolder": "com/mycompany/myapp",
+                    "authenticationType": "session",
+                    "hibernateCache": "ehcache",
+                    "clusteredHttpSession": "no",
+                    "websocket": "no",
+                    "databaseType": "sql",
+                    "devDatabaseType": "h2Memory",
+                    "prodDatabaseType": "mysql",
+                    "buildTool": "gradle",
+                    "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
+                    "searchEngine": "no"
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files for default configuration with skip client option enabled', function () {
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.gradle);
+            assert.noFile(expectedFiles.client);
+            assert.noFile(['gulpfile.js']);
+            assert.noFile(['gradle/yeoman.gradle']);
         });
     });
 });
