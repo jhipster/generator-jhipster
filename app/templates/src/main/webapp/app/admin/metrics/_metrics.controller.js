@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('MetricsController', function ($scope, MonitoringService, $uibModal) {
+    .controller('MetricsController', function ($scope, MetricsService, $uibModal) {
         $scope.metrics = {};
         $scope.updatingMetrics = true;
 
         $scope.refresh = function () {
             $scope.updatingMetrics = true;
-            MonitoringService.getMetrics().then(function (promise) {
+            MetricsService.getMetrics().then(function (promise) {
                 $scope.metrics = promise;
                 $scope.updatingMetrics = false;
             }, function (promise) {
@@ -41,7 +41,7 @@ angular.module('<%=angularAppName%>')
         $scope.refresh();
 
         $scope.refreshThreadDumpData = function() {
-            MonitoringService.threadDump().then(function(data) {
+            MetricsService.threadDump().then(function(data) {
 
                 var modalInstance = $uibModal.open({
                     templateUrl: 'app/admin/metrics/metrics.modal.html',

@@ -1091,9 +1091,11 @@ module.exports = JhipsterGenerator.extend({
             this.copyHtml(ANGULAR_DIR + 'admin/audits/audits.html', ANGULAR_DIR + 'admin/audits/audits.html');
             this.copyJs(ANGULAR_DIR + 'admin/audits/_audits.js', ANGULAR_DIR + 'admin/audits/audits.js', this, {});
             this.template(ANGULAR_DIR + 'admin/audits/_audits.controller.js', ANGULAR_DIR + 'admin/audits/audits.controller.js', this, {});
+            this.template(ANGULAR_DIR + 'admin/audits/_audits.service.js', ANGULAR_DIR + 'admin/audits/audits.service.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'admin/configuration/configuration.html', ANGULAR_DIR + 'admin/configuration/configuration.html');
             this.copyJs(ANGULAR_DIR + 'admin/configuration/_configuration.js', ANGULAR_DIR + 'admin/configuration/configuration.js', this, {});
             this.template(ANGULAR_DIR + 'admin/configuration/_configuration.controller.js', ANGULAR_DIR + 'admin/configuration/configuration.controller.js', this, {});
+            this.template(ANGULAR_DIR + 'admin/configuration/_configuration.service.js', ANGULAR_DIR + 'admin/configuration/configuration.service.js', this, {});
             this.copy(ANGULAR_DIR + 'admin/docs/docs.html', ANGULAR_DIR + 'admin/docs/docs.html');
             this.copyJs(ANGULAR_DIR + 'admin/docs/_docs.js', ANGULAR_DIR + 'admin/docs/docs.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'admin/health/health.html', ANGULAR_DIR + 'admin/health/health.html');
@@ -1101,19 +1103,22 @@ module.exports = JhipsterGenerator.extend({
             this.copyJs(ANGULAR_DIR + 'admin/health/_health.js', ANGULAR_DIR + 'admin/health/health.js', this, {});
             this.template(ANGULAR_DIR + 'admin/health/_health.controller.js', ANGULAR_DIR + 'admin/health/health.controller.js', this, {});
             this.template(ANGULAR_DIR + 'admin/health/_health.modal.controller.js', ANGULAR_DIR + 'admin/health/health.modal.controller.js', this, {});
+            this.template(ANGULAR_DIR + 'admin/health/_health.service.js', ANGULAR_DIR + 'admin/health/health.service.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'admin/logs/logs.html', ANGULAR_DIR + 'admin/logs/logs.html');
             this.copyJs(ANGULAR_DIR + 'admin/logs/_logs.js', ANGULAR_DIR + 'admin/logs/logs.js', this, {});
             this.template(ANGULAR_DIR + 'admin/logs/_logs.controller.js', ANGULAR_DIR + 'admin/logs/logs.controller.js', this, {});
+            this.template(ANGULAR_DIR + 'admin/logs/_logs.service.js', ANGULAR_DIR + 'admin/logs/logs.service.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'admin/metrics/_metrics.html', ANGULAR_DIR + 'admin/metrics/metrics.html', this, {}, true);
             this.copyHtml(ANGULAR_DIR + 'admin/metrics/_metrics.modal.html', ANGULAR_DIR + 'admin/metrics/metrics.modal.html', this, {}, true);
             this.copyJs(ANGULAR_DIR + 'admin/metrics/_metrics.js', ANGULAR_DIR + 'admin/metrics/metrics.js', this, {});
             this.template(ANGULAR_DIR + 'admin/metrics/_metrics.controller.js', ANGULAR_DIR + 'admin/metrics/metrics.controller.js', this, {});
             this.template(ANGULAR_DIR + 'admin/metrics/_metrics.modal.controller.js', ANGULAR_DIR + 'admin/metrics/metrics.modal.controller.js', this, {});
+            this.template(ANGULAR_DIR + 'admin/metrics/_metrics.service.js', ANGULAR_DIR + 'admin/metrics/metrics.service.js', this, {});
             if (this.websocket == 'spring-websocket') {
                 this.copyHtml(ANGULAR_DIR + 'admin/tracker/tracker.html', ANGULAR_DIR + 'admin/tracker/tracker.html');
                 this.copyJs(ANGULAR_DIR + 'admin/tracker/_tracker.js', ANGULAR_DIR + 'admin/tracker/tracker.js', this, {});
                 this.template(ANGULAR_DIR + 'admin/tracker/_tracker.controller.js', ANGULAR_DIR + 'admin/tracker/tracker.controller.js', this, {});
-                this.template(ANGULAR_DIR + 'services/tracker/_tracker.service.js', ANGULAR_DIR + 'services/tracker/tracker.service.js', this, {});
+                this.template(ANGULAR_DIR + 'admin/tracker/_tracker.service.js', ANGULAR_DIR + 'admin/tracker/tracker.service.js', this, {});
             }
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/user-management.html', ANGULAR_DIR + 'admin/user-management/user-management.html');
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/_user-management-detail.html', ANGULAR_DIR + 'admin/user-management/user-management-detail.html');
@@ -1169,10 +1174,6 @@ module.exports = JhipsterGenerator.extend({
             this.copyJs(ANGULAR_DIR + 'layouts/error/_error.js', ANGULAR_DIR + 'layouts/error/error.js', this, {});
 
             // services
-            this.template(ANGULAR_DIR + 'services/admin/_audits.service.js', ANGULAR_DIR + 'services/admin/audits.service.js', this, {});
-            this.template(ANGULAR_DIR + 'services/admin/_configuration.service.js', ANGULAR_DIR + 'services/admin/configuration.service.js', this, {});
-            this.template(ANGULAR_DIR + 'services/admin/_logs.service.js', ANGULAR_DIR + 'services/admin/logs.service.js', this, {});
-            this.template(ANGULAR_DIR + 'services/admin/_monitoring.service.js', ANGULAR_DIR + 'services/admin/monitoring.service.js', this, {});
             this.template(ANGULAR_DIR + 'services/auth/_auth.service.js', ANGULAR_DIR + 'services/auth/auth.service.js', this, {});
             this.template(ANGULAR_DIR + 'services/auth/_principal.service.js', ANGULAR_DIR + 'services/auth/principal.service.js', this, {});
             this.template(ANGULAR_DIR + 'services/auth/_authority.directive.js', ANGULAR_DIR + 'services/auth/authority.directive.js', this, {});
@@ -1236,16 +1237,21 @@ module.exports = JhipsterGenerator.extend({
                 'app/admin/admin.js',
                 'app/admin/audits/audits.js',
                 'app/admin/audits/audits.controller.js',
+                'app/admin/audits/audits.service.js',
                 'app/admin/configuration/configuration.js',
                 'app/admin/configuration/configuration.controller.js',
+                'app/admin/configuration/configuration.service.js',
                 'app/admin/docs/docs.js',
                 'app/admin/health/health.js',
                 'app/admin/health/health.controller.js',
+                'app/admin/health/health.service.js',
                 'app/admin/health/health.modal.controller.js',
                 'app/admin/logs/logs.js',
                 'app/admin/logs/logs.controller.js',
+                'app/admin/logs/logs.service.js',
                 'app/admin/metrics/metrics.js',
                 'app/admin/metrics/metrics.controller.js',
+                'app/admin/metrics/metrics.service.js',
                 'app/admin/metrics/metrics.modal.controller.js',
                 'app/admin/user-management/user-management-detail.controller.js',
                 'app/admin/user-management/user-management-dialog.controller.js',
@@ -1288,10 +1294,6 @@ module.exports = JhipsterGenerator.extend({
                 'app/services/auth/activate.service.js',
                 'app/services/auth/password.service.js',
                 'app/services/auth/register.service.js',
-                'app/services/admin/audits.service.js',
-                'app/services/admin/logs.service.js',
-                'app/services/admin/configuration.service.js',
-                'app/services/admin/monitoring.service.js',
                 'app/services/user/user.service.js'
             ];
             if (this.enableTranslation) {
@@ -1330,7 +1332,7 @@ module.exports = JhipsterGenerator.extend({
                 appScripts = appScripts.concat([
                     'app/admin/tracker/tracker.js',
                     'app/admin/tracker/tracker.controller.js',
-                    'app/services/tracker/tracker.service.js'])
+                    'app/admin/tracker/tracker.service.js'])
             }
 
             indexFile = html.appendScripts(indexFile, 'app/app.js', appScripts, {}, ['.tmp', 'src/main/webapp']);
