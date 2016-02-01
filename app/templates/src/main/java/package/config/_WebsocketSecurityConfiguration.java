@@ -17,7 +17,7 @@ public class WebsocketSecurityConfiguration extends AbstractSecurityWebSocketMes
             // message types other than MESSAGE and SUBSCRIBE
             .nullDestMatcher().authenticated()
             // matches any destination that starts with /rooms/
-            <%_ if (authenticationType == 'session' || authenticationType == 'oauth2') { // ignoring authentiation check for authenticationType == 'xauth' since it does not work, see issue #2129 _%>
+            <%_ if (authenticationType == 'session' || authenticationType == 'oauth2') { // ignoring authentiation check for authenticationType == 'jwt' since it does not work, see issue #2129 _%>
             .simpDestMatchers("/topic/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
             <%_ } _%>
             .simpDestMatchers("/topic/**").authenticated()

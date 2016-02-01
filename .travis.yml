@@ -29,7 +29,7 @@ env:
     - JHIPSTER=app-websocket PROTRACTOR=1
     - JHIPSTER=app-noi18n
     - JHIPSTER=app-oauth2
-    - JHIPSTER=app-xauth
+    - JHIPSTER=app-jwt
     - JHIPSTER=app-mysql PROFILE=prod
     - JHIPSTER=app-psql-es PROFILE=prod
     - JHIPSTER=app-social

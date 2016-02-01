@@ -26,7 +26,7 @@ angular.module('<%=angularAppName%>')
                 });
             },
             getToken: function () {
-                var token = localStorageService.get('token');
+                var token = localStorageService.get('authentication-token');
                 return token;
             },
             hasValidToken: function () {

@@ -247,8 +247,8 @@ module.exports = JhipsterGenerator.extend({
                             name: 'OAuth2 Authentication (stateless, with an OAuth2 server implementation)'
                         },
                         {
-                            value: 'xauth',
-                            name: 'Token-based authentication (stateless, with a token)'
+                            value: 'jwt',
+                            name: 'JWT authentication (stateless, with a token)'
                         }
                     ],
                     default: 0
@@ -817,10 +817,6 @@ module.exports = JhipsterGenerator.extend({
                 this.template('src/main/java/package/config/_OAuth2ServerConfiguration.java', javaDir + 'config/OAuth2ServerConfiguration.java', this, {});
             }
 
-            if (this.authenticationType == 'xauth') {
-                this.template('src/main/java/package/config/_XAuthConfiguration.java', javaDir + 'config/XAuthConfiguration.java', this, {});
-            }
-
             if (this.databaseType == 'mongodb' && this.authenticationType == 'oauth2') {
                 this.template('src/main/java/package/config/oauth2/_OAuth2AuthenticationReadConverter.java', javaDir + 'config/oauth2/OAuth2AuthenticationReadConverter.java', this, {});
                 this.template('src/main/java/package/config/oauth2/_MongoDBTokenStore.java', javaDir + 'config/oauth2/MongoDBTokenStore.java', this, {});
@@ -917,7 +913,7 @@ module.exports = JhipsterGenerator.extend({
             if (this.authenticationType == 'session' || this.authenticationType == 'oauth2') {
                 this.template('src/main/java/package/security/_AjaxLogoutSuccessHandler.java', javaDir + 'security/AjaxLogoutSuccessHandler.java', this, {});
             }
-            if (this.authenticationType == 'xauth') {
+            if (this.authenticationType == 'jwt') {
                 this.template('src/main/java/package/security/_AuthenticationProvider.java', javaDir + 'security/AuthenticationProvider.java', this, {});
             }
             this.template('src/main/java/package/security/_AuthoritiesConstants.java', javaDir + 'security/AuthoritiesConstants.java', this, {});
@@ -933,12 +929,11 @@ module.exports = JhipsterGenerator.extend({
             this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java', this, {});
             this.template('src/main/java/package/security/_UserNotActivatedException.java', javaDir + 'security/UserNotActivatedException.java', this, {});
 
-            if (this.authenticationType == 'xauth') {
-                this.template('src/main/java/package/security/xauth/_Token.java', javaDir + 'security/xauth/Token.java', this, {});
-                this.template('src/main/java/package/security/xauth/_TokenProvider.java', javaDir + 'security/xauth/TokenProvider.java', this, {});
-                this.template('src/main/java/package/web/rest/_UserXAuthTokenController.java', javaDir + 'web/rest/UserXAuthTokenController.java', this, {});
-                this.template('src/main/java/package/security/xauth/_XAuthTokenConfigurer.java', javaDir + 'security/xauth/XAuthTokenConfigurer.java', this, {});
-                this.template('src/main/java/package/security/xauth/_XAuthTokenFilter.java', javaDir + 'security/xauth/XAuthTokenFilter.java', this, {});
+            if (this.authenticationType == 'jwt') {
+                this.template('src/main/java/package/security/jwt/_TokenProvider.java', javaDir + 'security/jwt/TokenProvider.java', this, {});
+                this.template('src/main/java/package/web/rest/_UserJWTController.java', javaDir + 'web/rest/UserJWTController.java', this, {});
+                this.template('src/main/java/package/security/jwt/_JWTConfigurer.java', javaDir + 'security/jwt/JWTConfigurer.java', this, {});
+                this.template('src/main/java/package/security/jwt/_JWTFilter.java', javaDir + 'security/jwt/JWTFilter.java', this, {});
             }
 
             this.template('src/main/java/package/service/_package-info.java', javaDir + 'service/package-info.java', this, {});
@@ -1179,8 +1174,8 @@ module.exports = JhipsterGenerator.extend({
             this.template(ANGULAR_DIR + 'services/auth/_authority.directive.js', ANGULAR_DIR + 'services/auth/authority.directive.js', this, {});
             if (this.authenticationType == 'oauth2') {
                 this.template(ANGULAR_DIR + 'services/auth/_auth.oauth2.service.js', ANGULAR_DIR + 'services/auth/auth.oauth2.service.js', this, {});
-            } else if (this.authenticationType == 'xauth') {
-                this.template(ANGULAR_DIR + 'services/auth/_auth.xauth.service.js', ANGULAR_DIR + 'services/auth/auth.xauth.service.js', this, {});
+            } else if (this.authenticationType == 'jwt') {
+                this.template(ANGULAR_DIR + 'services/auth/_auth.jwt.service.js', ANGULAR_DIR + 'services/auth/auth.jwt.service.js', this, {});
             } else {
                 this.template(ANGULAR_DIR + 'services/auth/_auth.session.service.js', ANGULAR_DIR + 'services/auth/auth.session.service.js', this, {});
             }
@@ -1310,9 +1305,9 @@ module.exports = JhipsterGenerator.extend({
                     'app/account/social/social-register.controller.js',
                     'app/account/social/social.service.js']);
             }
-            if (this.authenticationType == 'xauth') {
+            if (this.authenticationType == 'jwt') {
                 appScripts = appScripts.concat([
-                    'app/services/auth/auth.xauth.service.js']);
+                    'app/services/auth/auth.jwt.service.js']);
             }
 
             if (this.authenticationType == 'oauth2') {

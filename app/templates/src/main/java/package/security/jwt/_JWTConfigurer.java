@@ -1,4 +1,4 @@
-package <%=packageName%>.security.xauth;
+package <%=packageName%>.security.jwt;
 
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -6,20 +6,22 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-public class XAuthTokenConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
+public class JWTConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
+
+    public final static String JWT_HEADER_NAME = "X-JHipster-Authentication";
 
     private TokenProvider tokenProvider;
 
     private UserDetailsService detailsService;
 
-    public XAuthTokenConfigurer(UserDetailsService detailsService, TokenProvider tokenProvider) {
+    public JWTConfigurer(UserDetailsService detailsService, TokenProvider tokenProvider) {
         this.detailsService = detailsService;
         this.tokenProvider = tokenProvider;
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        XAuthTokenFilter customFilter = new XAuthTokenFilter(detailsService, tokenProvider);
+        JWTFilter customFilter = new JWTFilter(detailsService, tokenProvider);
         http.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

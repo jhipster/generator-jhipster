@@ -89,11 +89,11 @@ jhipster:
         maxPoolSize: 50
         queueCapacity: 10000
     security:
-<%_ if (authenticationType == 'oauth2' || authenticationType == 'xauth') { _%>
+<%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
         authentication:
-    <%_ if (authenticationType == 'xauth') { _%>
-            xauth:
-                secret: myXAuthSecret
+    <%_ if (authenticationType == 'jwt') { _%>
+            jwt:
+                secret: jwt-secret-key
                 # Token is valid 30 minutes
                 tokenValidityInSeconds: 1800
     <%_ } _%>

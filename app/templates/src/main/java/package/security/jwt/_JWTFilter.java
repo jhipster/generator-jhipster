@@ -1,4 +1,4 @@
-package <%=packageName%>.security.xauth;
+package <%=packageName%>.security.jwt;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,15 +18,15 @@ import java.io.IOException;
  * Filters incoming requests and installs a Spring Security principal
  * if a header corresponding to a valid user is found.
  */
-public class XAuthTokenFilter extends GenericFilterBean {
+public class JWTFilter extends GenericFilterBean {
 
-    private final static String XAUTH_TOKEN_HEADER_NAME = "x-auth-token";
+
 
     private UserDetailsService detailsService;
 
     private TokenProvider tokenProvider;
 
-    public XAuthTokenFilter(UserDetailsService detailsService, TokenProvider tokenProvider) {
+    public JWTFilter(UserDetailsService detailsService, TokenProvider tokenProvider) {
         this.detailsService = detailsService;
         this.tokenProvider = tokenProvider;
     }
@@ -35,11 +35,11 @@ public class XAuthTokenFilter extends GenericFilterBean {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         try {
             HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-            String authToken = httpServletRequest.getHeader(XAUTH_TOKEN_HEADER_NAME);
+            String authToken = httpServletRequest.getHeader(JWTConfigurer.JWT_HEADER_NAME);
             if (StringUtils.hasText(authToken)) {
-                String username = this.tokenProvider.getUserNameFromToken(authToken);
+                String username = this.tokenProvider.getUsernameFromToken(authToken);
                 UserDetails details = this.detailsService.loadUserByUsername(username);
-                if (this.tokenProvider.validateToken(authToken, details)) {
+                if (this.tokenProvider.validateToken(authToken)) {
                     UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(details, details.getPassword(), details.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(token);
                 }

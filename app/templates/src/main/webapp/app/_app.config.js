@@ -34,7 +34,7 @@ angular.module('<%=angularAppName%>')
         });
 
         $httpProvider.interceptors.push('errorHandlerInterceptor');
-        $httpProvider.interceptors.push('authExpiredInterceptor');<% if (authenticationType == 'oauth2' || authenticationType == 'xauth') { %>
+        $httpProvider.interceptors.push('authExpiredInterceptor');<% if (authenticationType == 'oauth2' || authenticationType == 'jwt') { %>
         $httpProvider.interceptors.push('authInterceptor');<% } %>
         $httpProvider.interceptors.push('notificationInterceptor');
         // jhipster-needle-angularjs-add-interceptor JHipster will add new application interceptor here
