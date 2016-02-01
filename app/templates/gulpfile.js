@@ -200,7 +200,7 @@ gulp.task('wiredep:app', function () {
         }))
         .pipe(gulp.dest('src/main/webapp'));
 
-    return <% if (useSass) { %>es.merge(s, gulp.src(yeoman.scss + 'main.scss')
+    return <% if (useSass) { %>es.merge(s, gulp.src(yeoman.scss + '*.scss')
         .pipe(wiredep({
             exclude: [
                 /angular-i18n/,  // localizations are loaded dynamically
