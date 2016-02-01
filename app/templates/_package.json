@@ -34,6 +34,7 @@
     "gulp-browserify": "0.5.1",<% if (useSass) { %>
     "gulp-sass": "2.1.0",<% } %>
     "gulp-notify": "2.2.0",
+    "gulp-plumber" : "1.0.1",
     "proxy-middleware": "0.15.0",
     "run-sequence": "1.1.5",
     "event-stream": "3.3.2",
