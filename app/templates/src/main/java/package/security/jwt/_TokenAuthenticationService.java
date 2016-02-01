@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.userdetails.UsernamePasswordAuthenticationToken;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +24,8 @@ public class TokenAuthenticationService {
     }
 
     public void addAuthentication(HttpServletResponse response, UserAuthentication authentication) {
-        final CustomUserDetails user = (CustomUserDetails) authentication.getDetails();
+        //DONT NEED custom UserDetails now...removing
+        final UserDetails user =  authentication.getDetails();
         response.addHeader(AUTH_HEADER_NAME, tokenHandler.createTokenForUser(user));
     }
 
@@ -32,7 +34,8 @@ public class TokenAuthenticationService {
         if (token != null) {
             final UserDetails userDetails = tokenHandler.parseUserFromToken(token);
             if (userDetails != null) {
-                UserAuthentication userAuthentication = new UserAuthentication(userDetails);
+                UsernamePasswordAuthenticationToken userAuthentication = new UsernamePasswordAuthenticationToken(userDetails.getUsername(),userDetails.getPassword()
+                , userDetails.getAuthorities());
                 userAuthentication.setAuthenticated(true);
                 return userAuthentication;
             }
