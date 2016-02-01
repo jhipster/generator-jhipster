@@ -71,7 +71,7 @@ jhipster:
         authentication:
     <%_ if (authenticationType == 'jwt') { _%>
             jwt:
-                secret: jwt-secret-key
+                secret: <%= jwtSecretKey %>
                 # Token is valid 30 minutes
                 tokenValidityInSeconds: 1800
     <%_ } _%>
