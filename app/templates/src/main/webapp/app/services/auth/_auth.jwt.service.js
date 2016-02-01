@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .factory('AuthServerProvider', function loginService($http, localStorageService, Base64) {
+    .factory('AuthServerProvider', function loginService($http, localStorageService) {
         return {
             login: function(credentials) {
                 var data = "username=" +  encodeURIComponent(credentials.username) + "&password="
