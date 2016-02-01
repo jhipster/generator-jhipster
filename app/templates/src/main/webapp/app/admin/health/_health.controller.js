@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('HealthController', function ($scope, MonitoringService, $uibModal) {
+    .controller('HealthController', function ($scope, HealthService, $uibModal) {
         $scope.updatingHealth = true;
         $scope.separator = '.';
 
         $scope.refresh = function () {
             $scope.updatingHealth = true;
-            MonitoringService.checkHealth().then(function (response) {
+            HealthService.checkHealth().then(function (response) {
                 $scope.healthData = $scope.transformHealthData(response);
                 $scope.updatingHealth = false;
             }, function (response) {
