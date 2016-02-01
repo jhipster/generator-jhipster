@@ -13,7 +13,6 @@
     "searchEngine": "elasticsearch",
     "useSass": true,
     "buildTool": "maven",
-    "frontendBuilder": "grunt",
     "enableTranslation": false,
     "enableSocialSignIn": false,
     "rememberMeKey": "2bb60a80889aa6e6767e9ccd8714982681152aa5",
