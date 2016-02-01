@@ -66,7 +66,7 @@ module.exports = function (grunt) {
         },
         wiredep: {
             app: {<% if (useSass) { %>
-                src: ['src/main/webapp/index.html', 'src/main/webapp/scss/main.scss'],
+                src: ['src/main/webapp/index.html', 'src/main/webapp/scss/*.scss'],
                 exclude: [
                     /angular-i18n/, // localizations are loaded dynamically
                     'bower_components/bootstrap/' // Exclude Bootstrap LESS as we use bootstrap-sass
@@ -184,7 +184,7 @@ module.exports = function (grunt) {
                     html: {
                         steps: {
                             js: ['concat', 'uglifyjs'],
-                            css: ['cssmin', useminAutoprefixer] // Let cssmin concat files so it corrects relative paths to fonts and images
+                            css: ['concat', 'cssmin', useminAutoprefixer] // Let cssmin concat files so it corrects relative paths to fonts and images
                         },
                             post: {}
                         }
