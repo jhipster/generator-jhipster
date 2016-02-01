@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .factory('AuditsService', function ($resource, DateUtils) {
+    .factory('AuditsService', function ($resource) {
         return $resource('api/audits/:id', {}, {
             'get': {
                 method: 'GET',
@@ -12,5 +12,5 @@ angular.module('<%=angularAppName%>')
                 isArray: true,
                 params: {fromDate: null, toDate: null}
             }
-        })
+        });
     });
