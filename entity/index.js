@@ -1469,8 +1469,7 @@ module.exports = EntityGenerator.extend({
             } else if (databaseType == 'cassandra') {
                 this.entityUrlType = '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}';
             }
-            this.entityTranslationKeySuffix = 'Management';
-            this.entityTranslationKey = this.entityInstance + this.entityTranslationKeySuffix;
+            this.entityTranslationKey = this.entityInstance + 'Management';
 
             this.differentTypes = [this.entityClass];
             if (this.relationships == undefined) {
@@ -1665,7 +1664,6 @@ module.exports = EntityGenerator.extend({
                         entityStateName: this.entityStateName,
                         entityUrl: this.entityUrl,
                         entityUrlType: this.entityUrlType,
-                        entityTranslationKeySuffix: this.entityTranslationKeySuffix,
                         entityTranslationKey: this.entityTranslationKey
                     };
                     // run through all post entity creation module hooks
