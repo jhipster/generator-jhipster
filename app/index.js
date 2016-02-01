@@ -1022,6 +1022,9 @@ module.exports = JhipsterGenerator.extend({
             this.template('_bower.json', 'bower.json', this, {});
             this.template('bowerrc', '.bowerrc', this, {});
             this.template('gulpfile.js', 'gulpfile.js', this, {});
+            this.template('gulpfile.js', 'gulpfile.js', this, {});
+            this.template('gulp/handleErrors.js', 'gulp/handleErrors.js', this, {});
+            this.template('gulp/utils.js', 'gulp/utils.js', this, {});
 
 
             // Create Webapp
