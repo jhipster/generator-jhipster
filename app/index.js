@@ -728,7 +728,9 @@ module.exports = JhipsterGenerator.extend({
                     this.template('_build.gradle', 'build.gradle', this, {});
                     this.template('_settings.gradle', 'settings.gradle', this, {});
                     this.template('_gradle.properties', 'gradle.properties', this, {});
-                    this.template('gradle/_yeoman.gradle', 'gradle/yeoman.gradle', this, {});
+                    if(!this.skipClient) {
+                        this.template('gradle/_yeoman.gradle', 'gradle/yeoman.gradle', this, {});
+                    }
                     this.template('gradle/_sonar.gradle', 'gradle/sonar.gradle', this, {});
                     this.template('gradle/_profile_dev.gradle', 'gradle/profile_dev.gradle', this, {'interpolate': INTERPOLATE_REGEX});
                     this.template('gradle/_profile_prod.gradle', 'gradle/profile_prod.gradle', this, {'interpolate': INTERPOLATE_REGEX});
