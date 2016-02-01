@@ -13,7 +13,7 @@ angular.module('<%=angularAppName%>')
 
     this.convertLocaleDateFromServer = function(date) {
         if (date) {
-            var dateString = date.split("-");
+            var dateString = date.split('-');
             return new Date(dateString[0], dateString[1] - 1, dateString[2]);
         }
         return null;
@@ -25,10 +25,10 @@ angular.module('<%=angularAppName%>')
         } else {
             return null;
         }
-    }
+    };
 
     // common date format for all date input fields
     this.dateformat = function() {
         return 'yyyy-MM-dd';
-    }
+    };
 });
