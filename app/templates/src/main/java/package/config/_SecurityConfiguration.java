@@ -185,7 +185,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {<% if (
     }<% } %><% if (authenticationType == 'jwt') { %>
 
     private JWTConfigurer securityConfigurerAdapter() {
-        return new JWTConfigurer(userDetailsService, tokenProvider);
+        return new JWTConfigurer(tokenProvider);
     }<% } %>
 
     @Bean
