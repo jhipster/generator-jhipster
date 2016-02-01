@@ -27,7 +27,7 @@ var gulp = require('gulp'),
     browserSync = require('browser-sync'),
     sourcemaps = require('gulp-sourcemaps');
 
-var karmaServer = require('karma').Server;
+var KarmaServer = require('karma').Server;
 
 var yeoman = {
     app: 'src/main/webapp/',
@@ -53,7 +53,7 @@ var parseVersionFromPomXml = function() {
         if (result.project.version && result.project.version[0]) {
             version = result.project.version[0];
         } else if (result.project.parent && result.project.parent[0] && result.project.parent[0].version && result.project.parent[0].version[0]) {
-            version = result.project.parent[0].version[0]
+            version = result.project.parent[0].version[0];
         } else {
             throw new Error('pom.xml is malformed. No version is defined');
         }
@@ -76,7 +76,7 @@ gulp.task('clean:tmp', function () {
 });
 
 gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function(done) {
-    new karmaServer({
+    new KarmaServer({
         configFile: __dirname + '/src/test/javascript/karma.conf.js',
         singleRun: true
     }, done).start();
