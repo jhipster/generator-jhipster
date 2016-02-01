@@ -64,11 +64,11 @@ angular.module('<%=angularAppName%>')
                                 };
                             }
                         }
-                    }).result.then(function(result) {
+                    }).result.then(function() {
                         $state.go('user-management', null, { reload: true });
                     }, function() {
                         $state.go('user-management');
-                    })
+                    });
                 }]
             })
             .state('user-management.edit', {
@@ -87,11 +87,11 @@ angular.module('<%=angularAppName%>')
                                 return User.get({login : $stateParams.login});
                             }]
                         }
-                    }).result.then(function(result) {
+                    }).result.then(function() {
                         $state.go('user-management', null, { reload: true });
                     }, function() {
                         $state.go('^');
-                    })
+                    });
                 }]
             })
             .state('user-management.delete', {
@@ -110,11 +110,11 @@ angular.module('<%=angularAppName%>')
                                 return User.get({login : $stateParams.login});
                             }]
                         }
-                    }).result.then(function(result) {
+                    }).result.then(function() {
                         $state.go('user-management', null, { reload: true });
                     }, function() {
                         $state.go('^');
-                    })
+                    });
                 }]
             });
     });
