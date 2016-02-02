@@ -1452,17 +1452,17 @@ module.exports = EntityGenerator.extend({
                 this.pkType = 'Long';
             }
 
-            var entityNameSpinalCased = _s.trim(_s.dasherize(this.name), '-');
-            var entityNamePluralizedAndSpinalCased = _s.trim(_s.dasherize(pluralize(this.name)), '-');
+            var entityNameSpinalCased = _s.dasherize(_s.decapitalize(this.name));
+            var entityNamePluralizedAndSpinalCased = _s.dasherize(_s.decapitalize(pluralize(this.name)));
 
-            this.entityApiUrl = entityNamePluralizedAndSpinalCased;
             this.entityClass = _s.capitalize(this.name);
             this.entityClassPlural = pluralize(this.entityClass);
             this.entityInstance = _s.decapitalize(this.name);
             this.entityInstancePlural = pluralize(this.entityInstance);
             this.entityTableName = _s.underscored(this.name).toLowerCase();
+            this.entityApiUrl = entityNamePluralizedAndSpinalCased;
 
-            this.entityFolderName = entityNameSpinalCased + '-management';
+            this.entityFolderName = entityNameSpinalCased;
             this.entityFileName = entityNameSpinalCased + '-management';
             this.entityServiceFileName = entityNameSpinalCased;
             this.entityStateName = entityNameSpinalCased + '-management';
