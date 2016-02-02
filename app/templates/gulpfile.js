@@ -32,7 +32,7 @@ var gulp = require('gulp'),
 var config = {
     app: 'src/main/webapp/',
     dist: 'src/main/webapp/dist/',
-    test: 'src/test/javascript/spec/'<% if(useSass) { %>,
+    test: 'src/test/javascript/'<% if(useSass) { %>,
     importPath: 'src/main/webapp/bower_components',
     scss: 'src/main/webapp/scss/'<% } %>,
     port: 9000,
@@ -46,16 +46,16 @@ gulp.task('clean', function () {
 
 gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function(done) {
     new KarmaServer({
-        configFile: __dirname + '/src/test/javascript/karma.conf.js',
+        configFile: __dirname + '/' + config.test + 'karma.conf.js',
         singleRun: true
     }, done).start();
 });
 <% if (testFrameworks.indexOf('protractor') > -1) { %>
 gulp.task('protractor', function() {
-    return gulp.src(['./src/main/test/javascript/e2e/*.js'])
+    return gulp.src([config.test + 'e2e/*.js'])
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(protractor({
-            configFile: 'src/test/javascript/protractor.conf.js'
+            configFile: config.test + 'protractor.conf.js'
         }));
 });<% } %>
 
@@ -172,12 +172,12 @@ gulp.task('watch', function() {
 gulp.task('wiredep', ['wiredep:test', 'wiredep:app']);
 
 gulp.task('wiredep:app', function () {
-    var stream = gulp.src('src/main/webapp/index.html')
+    var stream = gulp.src(config.app + 'index.html')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(wiredep({
             exclude: [/angular-i18n/]
         }))
-        .pipe(gulp.dest('src/main/webapp'));
+        .pipe(gulp.dest(config.app));
 
     return <% if (useSass) { %>es.merge(stream, gulp.src(config.scss + '*.{scss,sass}')
         .pipe(plumber({errorHandler: handleErrors}))
@@ -192,7 +192,7 @@ gulp.task('wiredep:app', function () {
 });
 
 gulp.task('wiredep:test', function () {
-    return gulp.src('src/test/javascript/karma.conf.js')
+    return gulp.src(config.test + 'karma.conf.js')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(wiredep({
             exclude: [/angular-i18n/, /angular-scenario/],
@@ -210,7 +210,7 @@ gulp.task('wiredep:test', function () {
                 }
             }
         }))
-        .pipe(gulp.dest('src/test/javascript'));
+        .pipe(gulp.dest(config.test));
 });
 
 gulp.task('build', function (cb) {
