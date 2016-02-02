@@ -1025,11 +1025,9 @@ module.exports = JhipsterGenerator.extend({
             if (this.useSass) {
                 this.template(WEBAPP_DIR + 'scss/main.scss', WEBAPP_DIR + 'scss/main.scss');
                 this.template(WEBAPP_DIR + 'scss/vendor.scss', WEBAPP_DIR + 'scss/vendor.scss');
+            } else {
+                this.template(WEBAPP_DIR + 'content/css/main.css', WEBAPP_DIR + 'content/css/main.css');
             }
-            // this css file will be overwritten by the sass generated css if sass is enabled
-            // but this will avoid errors when running app without running sass task first
-            this.template(WEBAPP_DIR + 'content/css/main.css', WEBAPP_DIR + 'content/css/main.css');
-            this.template(WEBAPP_DIR + 'content/css/vendor.css', WEBAPP_DIR + 'content/css/vendor.css');
 
             // HTML5 BoilerPlate
             this.copy(WEBAPP_DIR + 'favicon.ico', WEBAPP_DIR + 'favicon.ico');
@@ -1452,16 +1450,24 @@ module.exports = JhipsterGenerator.extend({
         var injectDependenciesAndConstants = function () {
             if (this.options['skip-install']) {
                 this.log(
-                    'After running `npm install & bower install`, inject your front end dependencies' +
-                    '\ninto your source code by running:' +
+                    'After running ' + chalk.yellow.bold('npm install & bower install') + ' ...' +
                     '\n' +
-                    '\n' + chalk.yellow.bold('gulp wiredep') +
+                    '\nInject your front end dependencies into your source code:' +
+                    '\n ' + chalk.yellow.bold('gulp wiredep') +
                     '\n' +
-                    '\n ...and generate the Angular constants with:' +
-                    '\n' + chalk.yellow.bold('gulp ngconstant:dev')
+                    '\nGenerate the Angular constants:' +
+                    '\n ' + chalk.yellow.bold('gulp ngconstant:dev') +
+                    (this.useSass ?
+                    '\n' +
+                    '\nCompile your Sass style sheets:' +
+                    '\n ' + chalk.yellow.bold('gulp sass') : '') +
+                    '\n' +
+                    '\nOr do all of the above:' +
+                    '\n ' + chalk.yellow.bold('gulp install') +
+                    '\n'
                 );
             } else {
-                this.spawnCommand('gulp', ['ngconstant:dev', 'wiredep']);
+                this.spawnCommand('gulp', ['install']);
             }
         };
 

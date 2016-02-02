@@ -90,8 +90,12 @@ gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function() {
         .pipe(browserSync.reload({stream: true}));
 });
 
+gulp.task('install', function(done) {
+    runSequence('wiredep', 'ngconstant:dev'<% if(useSass) { %>, 'sass'<% } %>, done);
+});
+
 gulp.task('serve', function() {
-    runSequence('wiredep', 'ngconstant:dev'<% if(useSass) { %>, 'sass'<% } %>, function () {
+    runSequence('install', function () {
         var baseUri = 'http://localhost:' + config.apiPort;
         // Routes to proxy to the backend. Routes ending with a / will setup
         // a redirect so that if accessed without a trailing slash, will
