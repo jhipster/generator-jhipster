@@ -169,6 +169,15 @@ dependencies {
         exclude module: 'com.codahale.metrics'
     }
     compile group: 'com.datastax.cassandra', name: 'cassandra-driver-mapping', version: datastax_driver_version<% } %>
+    <%_ if (applicationType == 'gateway') { _%>
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-zuul', version: spring_cloud_version
+    <%_ } _%>
+    <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-starter', version: spring_cloud_version
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-ribbon', version: spring_cloud_version
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka', version: spring_cloud_version
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: spring_cloud_version
+    <%_ } _%>
     compile group: 'org.springframework.cloud', name: 'spring-cloud-cloudfoundry-connector'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-spring-service-connector'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-localconfig-connector'

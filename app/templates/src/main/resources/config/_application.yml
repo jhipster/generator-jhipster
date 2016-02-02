@@ -11,7 +11,25 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+eureka:
+    instance:
+        appname: <%= baseName %>
+        instanceId: <%= baseName %>:${spring.application.instance_id:${random.value}}
+
+ribbon:
+    eureka:
+        enabled: true
+<%_ } _%>
+<%_ if (applicationType == 'gateway') { _%>
+
+zuul:
+
+<%_ } _%>
+
 spring:
+    application:
+        name: <%= baseName %>
     jpa:
         open-in-view: false
         hibernate:

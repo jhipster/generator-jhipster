@@ -10,6 +10,20 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+eureka:
+    instance:
+        prefer-ip-address: true
+    client:
+        enabled: true
+        healthcheck:
+            enabled: true
+        registerWithEureka: true
+        fetchRegistry: true
+        serviceUrl:
+            defaultZone: http://localhost:8761/eureka/
+<%_ } _%>
+
 spring:
     profiles:
         active: prod

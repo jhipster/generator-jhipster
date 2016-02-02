@@ -82,6 +82,9 @@
         <postgresql.version>9.4-1203-jdbc42</postgresql.version>
         <%_ } _%>
         <run.addResources>false</run.addResources>
+        <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+        <spring-cloud.version>1.1.0.M4</spring-cloud.version>
+        <%_ } _%>
         <spring-security.version>4.0.2.RELEASE</spring-security.version>
         <%_ if (authenticationType == 'oauth2') { _%>
         <spring-security-oauth2.version>2.0.8.RELEASE</spring-security-oauth2.version>
@@ -523,6 +526,35 @@
         </dependency>
         <%_ } _%>
         <!-- Spring Cloud -->
+        <%_ if (applicationType == 'gateway') { _%>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-zuul</artifactId>
+            <version>${spring-cloud.version}</version>
+        </dependency>
+        <%_ } _%>
+        <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter</artifactId>
+            <version>${spring-cloud.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-ribbon</artifactId>
+            <version>${spring-cloud.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka</artifactId>
+            <version>${spring-cloud.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-hystrix</artifactId>
+            <version>${spring-cloud.version}</version>
+        </dependency>
+        <%_ } _%>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-cloudfoundry-connector</artifactId>

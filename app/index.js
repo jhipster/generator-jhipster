@@ -198,7 +198,7 @@ module.exports = JhipsterGenerator.extend({
                 message: '(1/' + QUESTIONS + ') Which *type* of application would you like to create?',
                 choices: [
                     {
-                        value: 'monolithic',
+                        value: 'monolith',
                         name: 'Monolithic application'
                     },
                     {
