@@ -15,7 +15,7 @@ var gulp = require('gulp'),
     ngConstant = require('gulp-ng-constant-fork'),
     jshint = require('gulp-jshint'),
     rev = require('gulp-rev'),<% if (testFrameworks.indexOf('protractor') > -1) { %>
-    protractor = require("gulp-protractor").protractor,<% } %>
+    protractor = require('gulp-protractor').protractor,<% } %>
     proxy = require('proxy-middleware'),
     es = require('event-stream'),
     flatten = require('gulp-flatten'),
@@ -58,10 +58,10 @@ gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function(done) {
 });
 <% if (testFrameworks.indexOf('protractor') > -1) { %>
 gulp.task('protractor', function() {
-    return gulp.src(["./src/main/test/javascript/e2e/*.js"])
+    return gulp.src(['./src/main/test/javascript/e2e/*.js'])
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(protractor({
-            configFile: "src/test/javascript/protractor.conf.js"
+            configFile: 'src/test/javascript/protractor.conf.js'
         }));
 });<% } %>
 
