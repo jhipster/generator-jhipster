@@ -30,25 +30,19 @@ const INTERPOLATE_REGEX = /<%=([\s\S]+?)%>/g; // so that tags in templates do no
 module.exports = JhipsterGenerator.extend({
     constructor: function() {
         generators.Base.apply(this, arguments);
-        // This method adds support for a `--skip-client` flag
+        // This adds support for a `--skip-client` flag
         this.option('skip-client', {
             desc: 'Skip the client side app generation',
             type: Boolean,
             defaults: false
         });
-        // This method adds support for a `--client-build` flag
-        this.option('client-build', {
-            desc: 'Specify the client side build to use when skipping client side generation, has no effect otherwise',
-            type: String,
-            defaults: 'none'
-        });
-        // This method adds support for a `--[no-]i18n` flag
+        // This adds support for a `--[no-]i18n` flag
         this.option('i18n', {
             desc: 'Disable or enable i18n when skipping client side generation, has no effect otherwise',
             type: Boolean,
             defaults: true
         });
-        // This method adds support for a `--with-entities` flag
+        // This adds support for a `--with-entities` flag
         this.option('with-entities', {
             desc: 'Regenerate the existing entities if any',
             type: Boolean,
@@ -56,7 +50,6 @@ module.exports = JhipsterGenerator.extend({
         });
         var skipClient = this.config.get('skipClient');
         this.skipClient = this.options['skip-client'] || skipClient;
-        this.clientBuild = this.options['client-build'];
         this.i18n = this.options['i18n'];
         this.withEntities = this.options['with-entities'];
 
@@ -82,7 +75,6 @@ module.exports = JhipsterGenerator.extend({
                 // backward compatibility for existing compass users
                 this.useSass = this.config.get('useCompass');
             }
-            this.frontendBuilder = this.config.get('frontendBuilder');
             this.enableTranslation = this.config.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
         },
 
@@ -133,7 +125,7 @@ module.exports = JhipsterGenerator.extend({
             this.searchEngine != null &&
             this.buildTool != null;
 
-            var clientConfigFound = this.useSass != null && this.frontendBuilder != null;
+            var clientConfigFound = this.useSass != null;
 
             if (this.baseName != null && serverConfigFound &&
                 (this.skipClient || clientConfigFound)) {
@@ -566,38 +558,21 @@ module.exports = JhipsterGenerator.extend({
             var done = this.async();
             var prompts = [
                 {
-                    type: 'list',
-                    name: 'frontendBuilder',
-                    choices: [
-                        {
-                            value: 'grunt',
-                            name: 'Grunt (recommended)'
-                        },
-                        {
-                            value: 'gulp',
-                            name: 'Gulp.js'
-                        }
-                    ],
-                    message: '(13/' + QUESTIONS + ') Would you like to use Grunt or Gulp.js for building the frontend?',
-                    default: 'grunt'
-                },
-                {
                     type: 'confirm',
                     name: 'useSass',
-                    message: '(14/' + QUESTIONS + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
+                    message: '(12/' + QUESTIONS + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
                     default: false
                 },
                 {
                     type: 'confirm',
                     name: 'enableTranslation',
-                    message: '(15/' + QUESTIONS + ') Would you like to enable translation support with Angular Translate?',
+                    message: '(13/' + QUESTIONS + ') Would you like to enable translation support with Angular Translate?',
                     default: true
                 }
             ];
             this.prompt(prompts, function (props) {
 
                 this.useSass = props.useSass;
-                this.frontendBuilder = props.frontendBuilder;
                 this.enableTranslation = props.enableTranslation;
 
                 done();
@@ -648,7 +623,6 @@ module.exports = JhipsterGenerator.extend({
             insight.track('app/searchEngine', this.searchEngine);
             insight.track('app/useSass', this.useSass);
             insight.track('app/buildTool', this.buildTool);
-            insight.track('app/frontendBuilder', this.frontendBuilder);
             insight.track('app/enableTranslation', this.enableTranslation);
             insight.track('app/enableSocialSignIn', this.enableSocialSignIn);
             insight.track('app/testFrameworks', this.testFrameworks);
@@ -679,7 +653,6 @@ module.exports = JhipsterGenerator.extend({
             this.testDir = 'src/test/java/' + this.packageFolder + '/';
             if(this.skipClient){
                 this.enableTranslation = this.i18n;
-                this.frontendBuilder = this.clientBuild;
             }
         },
 
@@ -699,7 +672,6 @@ module.exports = JhipsterGenerator.extend({
             this.config.set('searchEngine', this.searchEngine);
             this.config.set('useSass', this.useSass);
             this.config.set('buildTool', this.buildTool);
-            this.config.set('frontendBuilder', this.frontendBuilder);
             this.config.set('enableTranslation', this.enableTranslation);
             this.config.set('enableSocialSignIn', this.enableSocialSignIn);
             this.config.set('rememberMeKey', this.rememberMeKey);
@@ -749,7 +721,9 @@ module.exports = JhipsterGenerator.extend({
                     this.template('_build.gradle', 'build.gradle', this, {});
                     this.template('_settings.gradle', 'settings.gradle', this, {});
                     this.template('_gradle.properties', 'gradle.properties', this, {});
-                    this.template('gradle/_yeoman.gradle', 'gradle/yeoman.gradle', this, {});
+                    if(!this.skipClient) {
+                        this.template('gradle/_yeoman.gradle', 'gradle/yeoman.gradle', this, {});
+                    }
                     this.template('gradle/_sonar.gradle', 'gradle/sonar.gradle', this, {});
                     this.template('gradle/_profile_dev.gradle', 'gradle/profile_dev.gradle', this, {'interpolate': INTERPOLATE_REGEX});
                     this.template('gradle/_profile_prod.gradle', 'gradle/profile_prod.gradle', this, {'interpolate': INTERPOLATE_REGEX});
@@ -1040,15 +1014,9 @@ module.exports = JhipsterGenerator.extend({
             this.template('_package.json', 'package.json', this, {});
             this.template('_bower.json', 'bower.json', this, {});
             this.template('bowerrc', '.bowerrc', this, {});
-
-            switch (this.frontendBuilder) {
-                case 'gulp':
-                    this.template('gulpfile.js', 'gulpfile.js', this, {});
-                    break;
-                case 'grunt':
-                default:
-                    this.template('Gruntfile.js', 'Gruntfile.js', this, {});
-            }
+            this.template('gulpfile.js', 'gulpfile.js', this, {});
+            this.fs.copy(this.templatePath('gulp/handleErrors.js'), this.destinationPath('gulp/handleErrors.js')); // to avoid interpolate errors
+            this.template('gulp/utils.js', 'gulp/utils.js', this, {});
 
             // Create Webapp
             mkdirp(WEBAPP_DIR);
@@ -1487,20 +1455,13 @@ module.exports = JhipsterGenerator.extend({
                     'After running `npm install & bower install`, inject your front end dependencies' +
                     '\ninto your source code by running:' +
                     '\n' +
-                    '\n' + chalk.yellow.bold('grunt wiredep') +
+                    '\n' + chalk.yellow.bold('gulp wiredep') +
                     '\n' +
                     '\n ...and generate the Angular constants with:' +
-                    '\n' + chalk.yellow.bold('grunt ngconstant:dev')
+                    '\n' + chalk.yellow.bold('gulp ngconstant:dev')
                 );
             } else {
-                switch (this.frontendBuilder) {
-                    case 'gulp':
-                        this.spawnCommand('gulp', ['ngconstant:dev', 'wiredep:test', 'wiredep:app']);
-                        break;
-                    case 'grunt':
-                    default:
-                        this.spawnCommand('grunt', ['ngconstant:dev', 'wiredep']);
-                }
+                this.spawnCommand('gulp', ['ngconstant:dev', 'wiredep']);
             }
         };
 

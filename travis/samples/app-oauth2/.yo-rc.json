@@ -13,7 +13,6 @@
     "searchEngine": "no",
     "useSass": false,
     "buildTool": "maven",
-    "frontendBuilder": "grunt",
     "enableTranslation": true,
     "enableSocialSignIn": false,
     "rememberMeKey": "aa7cd1151a7181987d053a4a7e2667036abac16a",

@@ -175,6 +175,6 @@ CloudFoundryGenerator.prototype.restartApp = function restartApp() {
             this.log(chalk.green('\nYou may need to address the issues mentioned above and restart the server for the app to work correctly \n\t' +
             'cf restart ' + this.cloudfoundryDeployedName));
         }
-        this.log(chalk.yellow('After application modification, re-deploy it with\n\t' + chalk.bold('grunt deploycloudfoundry')));
+        this.log(chalk.yellow('After application modification, re-deploy it with\n\t' + chalk.bold('gulp deploycloudfoundry')));
     }.bind(this));
 };
