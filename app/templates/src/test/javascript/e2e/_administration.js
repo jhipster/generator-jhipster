@@ -30,7 +30,7 @@ describe('administration', function () {
 
     it('should load health', function () {
         element(by.css('[ui-sref="health"]')).click();
-        expect(element.all(by.css('h2')).first().getText()).toMatch(/Health checks/);
+        expect(element.all(by.css('h2')).first().getText()).toMatch(/Health Checks/);
     });
 
     it('should load configuration', function () {

@@ -7,7 +7,7 @@ exports.config = {
     allScriptsTimeout: 20000,
 
     specs: [
-        'e2e/*.js'
+        // These are piped in from gulp.src, see protractor task in gulpfile.js
     ],
 
     capabilities: {
