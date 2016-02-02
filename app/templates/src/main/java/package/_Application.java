@@ -6,8 +6,7 @@ import <%=packageName%>.config.JHipsterProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.actuate.autoconfigure.MetricFilterAutoConfiguration;
-import org.springframework.boot.actuate.autoconfigure.MetricRepositoryAutoConfiguration;
+import org.springframework.boot.actuate.autoconfigure.*;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;<% if (clusteredHttpSession == 'hazelcast') { %>
 import org.springframework.boot.autoconfigure.hazelcast.HazelcastAutoConfiguration;<% } %>
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
@@ -31,7 +30,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @ComponentScan
-@EnableAutoConfiguration(exclude = { MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class<% if (clusteredHttpSession == 'hazelcast') { %>, HazelcastAutoConfiguration.class<% } %> })
+@EnableAutoConfiguration(exclude = { MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class<% if (clusteredHttpSession == 'hazelcast') { %>, HazelcastAutoConfiguration.class<% } %><% if (applicationType == 'gateway') { %>, MetricsDropwizardAutoConfiguration.class<% } %> })
 @EnableConfigurationProperties({ JHipsterProperties.class, LiquibaseProperties.class })
 <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
 @EnableEurekaClient
