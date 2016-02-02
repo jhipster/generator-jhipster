@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .factory('Auth', function Auth($rootScope, $state, $q, <% if (enableTranslation){ %>$translate, <% } %>Principal, AuthServerProvider, Account, Register, Activate, Password, PasswordResetInit, PasswordResetFinish<% if (websocket == 'spring-websocket') { %>, Tracker<% } %>) {
+    .factory('Auth', function Auth($rootScope, $state, $q, <% if (enableTranslation){ %>$translate, <% } %>Principal, AuthServerProvider, Account, Register, Activate, Password, PasswordResetInit, PasswordResetFinish<% if (websocket === 'spring-websocket') { %>, Tracker<% } %>) {
         return {
             login: function (credentials, callback) {
                 var cb = callback || angular.noop;
@@ -13,13 +13,13 @@ angular.module('<%=angularAppName%>')
                         <%_ if (enableTranslation){ _%>
                         // After the login the language will be changed to
                         // the language selected by the user during his registration
-                        if (account!= null) {
+                        if (account!== null) {
                             $translate.use(account.langKey).then(function () {
                                 $translate.refresh();
                             });
                         }
                         <%_ } _%>
-                        <%_ if (websocket == 'spring-websocket') { _%>
+                        <%_ if (websocket === 'spring-websocket') { _%>
                         Tracker.sendActivity();
                         <%_ } _%>
                         deferred.resolve(data);
