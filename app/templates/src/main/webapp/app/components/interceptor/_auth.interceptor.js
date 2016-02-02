@@ -1,4 +1,3 @@
-/* globals document */
 'use strict';
 
 angular.module('<%=angularAppName%>')<% if (authenticationType == 'oauth2' || authenticationType == 'jwt') { %>
@@ -37,6 +36,7 @@ angular.module('<%=angularAppName%>')<% if (authenticationType == 'oauth2' || a
             }
         };
     })<% } %><% if (authenticationType === 'session') { %>
+    /* globals document */
     .factory('authExpiredInterceptor', function ($rootScope, $q, $injector) {
         function getCSRF() {
             var name = 'CSRF-TOKEN=';
