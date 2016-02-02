@@ -5,10 +5,10 @@ angular.module('<%=angularAppName%>')
         return {
             restrict: 'E',
             scope: {
-                provider: "@ngProvider"
+                provider: '@ngProvider'
             },
             templateUrl: 'app/account/social/directive/social.html',
-            link: function(scope, element, attrs) {<% if (enableTranslation){ %>
+            link: function(scope) {<% if (enableTranslation){ %>
                 $translatePartialLoader.addPart('social');
                 $translate.refresh();
 <% } %>
@@ -17,5 +17,5 @@ angular.module('<%=angularAppName%>')
                 scope.providerURL = SocialService.getProviderURL(scope.provider);
                 scope.csrf = SocialService.getCSRF();
             }
-        }
+        };
      });
