@@ -30,25 +30,19 @@ const INTERPOLATE_REGEX = /<%=([\s\S]+?)%>/g; // so that tags in templates do no
 module.exports = JhipsterGenerator.extend({
     constructor: function() {
         generators.Base.apply(this, arguments);
-        // This method adds support for a `--skip-client` flag
+        // This adds support for a `--skip-client` flag
         this.option('skip-client', {
             desc: 'Skip the client side app generation',
             type: Boolean,
             defaults: false
         });
-        // This method adds support for a `--client-build` flag
-        this.option('client-build', {
-            desc: 'Specify the client side build to use when skipping client side generation, has no effect otherwise',
-            type: String,
-            defaults: 'none'
-        });
-        // This method adds support for a `--[no-]i18n` flag
+        // This adds support for a `--[no-]i18n` flag
         this.option('i18n', {
             desc: 'Disable or enable i18n when skipping client side generation, has no effect otherwise',
             type: Boolean,
             defaults: true
         });
-        // This method adds support for a `--with-entities` flag
+        // This adds support for a `--with-entities` flag
         this.option('with-entities', {
             desc: 'Regenerate the existing entities if any',
             type: Boolean,
@@ -56,7 +50,6 @@ module.exports = JhipsterGenerator.extend({
         });
         var skipClient = this.config.get('skipClient');
         this.skipClient = this.options['skip-client'] || skipClient;
-        this.clientBuild = this.options['client-build'];
         this.i18n = this.options['i18n'];
         this.withEntities = this.options['with-entities'];
 
@@ -728,9 +721,7 @@ module.exports = JhipsterGenerator.extend({
                     this.template('_build.gradle', 'build.gradle', this, {});
                     this.template('_settings.gradle', 'settings.gradle', this, {});
                     this.template('_gradle.properties', 'gradle.properties', this, {});
-                    if(!this.skipClient) {
-                        this.template('gradle/_yeoman.gradle', 'gradle/yeoman.gradle', this, {});
-                    }
+                    this.template('gradle/_yeoman.gradle', 'gradle/yeoman.gradle', this, {});
                     this.template('gradle/_sonar.gradle', 'gradle/sonar.gradle', this, {});
                     this.template('gradle/_profile_dev.gradle', 'gradle/profile_dev.gradle', this, {'interpolate': INTERPOLATE_REGEX});
                     this.template('gradle/_profile_prod.gradle', 'gradle/profile_prod.gradle', this, {'interpolate': INTERPOLATE_REGEX});
@@ -1022,8 +1013,6 @@ module.exports = JhipsterGenerator.extend({
             this.template('_bower.json', 'bower.json', this, {});
             this.template('bowerrc', '.bowerrc', this, {});
             this.template('gulpfile.js', 'gulpfile.js', this, {});
-            this.fs.copy(this.templatePath('gulp/handleErrors.js'), this.destinationPath('gulp/handleErrors.js')); // to avoid interpolate errors
-            this.template('gulp/utils.js', 'gulp/utils.js', this, {});
 
 
             // Create Webapp
