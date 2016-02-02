@@ -1451,17 +1451,22 @@ module.exports = EntityGenerator.extend({
             } else {
                 this.pkType = 'Long';
             }
+
+            var entityNameSpinalCased = _s.trim(_s.dasherize(this.name), '-');
+            var entityNamePluralizedAndSpinalCased = _s.trim(_s.dasherize(pluralize(this.name)), '-');
+
+            this.entityApiUrl = entityNamePluralizedAndSpinalCased;
             this.entityClass = _s.capitalize(this.name);
             this.entityClassPlural = pluralize(this.entityClass);
             this.entityInstance = _s.decapitalize(this.name);
             this.entityInstancePlural = pluralize(this.entityInstance);
             this.entityTableName = _s.underscored(this.name).toLowerCase();
 
-            this.entityFolderName = _s.trim(_s.dasherize(this.name), '-') + '-management';
-            this.entityFileName = _s.trim(_s.dasherize(this.name), '-') + '-management';
-            this.entityServiceFileName = _s.trim(_s.dasherize(this.name), '-');
-            this.entityStateName = _s.trim(_s.dasherize(this.name), '-') + '-management';
-            this.entityUrl = _s.trim(_s.dasherize(this.name), '-') + '-management';
+            this.entityFolderName = entityNameSpinalCased + '-management';
+            this.entityFileName = entityNameSpinalCased + '-management';
+            this.entityServiceFileName = entityNameSpinalCased;
+            this.entityStateName = entityNameSpinalCased + '-management';
+            this.entityUrl = entityNameSpinalCased + '-management';
             if (databaseType == 'sql') {
                 this.entityUrlType = 'int';
             } else if (databaseType == 'mongodb') {
@@ -1655,6 +1660,7 @@ module.exports = EntityGenerator.extend({
                         fieldsContainBigDecimal: this.fieldsContainBigDecimal,
                         fieldsContainBlob: this.fieldsContainBlob,
                         pkType: this.pkType,
+                        entityApiUrl: this.entityApiUrl,
                         entityClass: this.entityClass,
                         entityTableName: this.entityTableName,
                         entityInstance: this.entityInstance,

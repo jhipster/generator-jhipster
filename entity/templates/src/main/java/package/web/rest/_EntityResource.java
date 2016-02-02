@@ -46,9 +46,9 @@ public class <%= entityClass %>Resource {
     var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance; -%>
     <%- include('../../common/inject_template', {viaService: viaService}); -%>
     /**
-     * POST  /<%= entityInstancePlural %> -> Create a new <%= entityInstance %>.
+     * POST  /<%= entityApiUrl %> -> Create a new <%= entityInstance %>.
      */
-    @RequestMapping(value = "/<%= entityInstancePlural %>",
+    @RequestMapping(value = "/<%= entityApiUrl %>",
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -57,15 +57,15 @@ public class <%= entityClass %>Resource {
         if (<%= instanceName %>.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("<%= entityInstance %>", "idexists", "A new <%= entityInstance %> cannot already have an ID")).body(null);
         }<%- include('../../common/save_template', {viaService: viaService}); -%>
-        return ResponseEntity.created(new URI("/api/<%= entityInstancePlural %>/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/<%= entityApiUrl %>/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("<%= entityInstance %>", result.getId().toString()))
             .body(result);
     }
 
     /**
-     * PUT  /<%= entityInstancePlural %> -> Updates an existing <%= entityInstance %>.
+     * PUT  /<%= entityApiUrl %> -> Updates an existing <%= entityInstance %>.
      */
-    @RequestMapping(value = "/<%= entityInstancePlural %>",
+    @RequestMapping(value = "/<%= entityApiUrl %>",
         method = RequestMethod.PUT,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -80,17 +80,17 @@ public class <%= entityClass %>Resource {
     }
 
     /**
-     * GET  /<%= entityInstancePlural %> -> get all the <%= entityInstancePlural %>.
+     * GET  /<%= entityApiUrl %> -> get all the <%= entityInstancePlural %>.
      */
-    @RequestMapping(value = "/<%= entityInstancePlural %>",
+    @RequestMapping(value = "/<%= entityApiUrl %>",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed<%- include('../../common/get_all_template', {viaService: viaService}); -%>
 
     /**
-     * GET  /<%= entityInstancePlural %>/:id -> get the "id" <%= entityInstance %>.
+     * GET  /<%= entityApiUrl %>/:id -> get the "id" <%= entityInstance %>.
      */
-    @RequestMapping(value = "/<%= entityInstancePlural %>/{id}",
+    @RequestMapping(value = "/<%= entityApiUrl %>/{id}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -104,9 +104,9 @@ public class <%= entityClass %>Resource {
     }
 
     /**
-     * DELETE  /<%= entityInstancePlural %>/:id -> delete the "id" <%= entityInstance %>.
+     * DELETE  /<%= entityApiUrl %>/:id -> delete the "id" <%= entityInstance %>.
      */
-    @RequestMapping(value = "/<%= entityInstancePlural %>/{id}",
+    @RequestMapping(value = "/<%= entityApiUrl %>/{id}",
         method = RequestMethod.DELETE,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
@@ -116,10 +116,10 @@ public class <%= entityClass %>Resource {
     }<% if (searchEngine == 'elasticsearch') { %>
 
     /**
-     * SEARCH  /_search/<%= entityInstancePlural %>/:query -> search for the <%= entityInstance %> corresponding
+     * SEARCH  /_search/<%= entityApiUrl %>/:query -> search for the <%= entityInstance %> corresponding
      * to the query.
      */
-    @RequestMapping(value = "/_search/<%= entityInstancePlural %>/{query:.+}",
+    @RequestMapping(value = "/_search/<%= entityApiUrl %>/{query:.+}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed

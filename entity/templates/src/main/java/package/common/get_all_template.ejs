@@ -17,7 +17,7 @@
         log.debug("REST request to get a page of <%= entityClassPlural %>");<% if (viaService) { %>
         Page<<%= entityClass %>> page = <%= entityInstance %>Service.findAll(pageable); <% } else { %>
         Page<<%= entityClass %>> page = <%= entityInstance %>Repository.findAll(pageable); <% } %>
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityInstancePlural %>");
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/<%= entityApiUrl %>");
         return new ResponseEntity<>(<% if (dto == 'mapstruct') { %><%= entityListToDtoListReference %>(page.getContent())<% } else { %>page.getContent()<% } %>, headers, HttpStatus.OK);
     <% } -%>
 }
