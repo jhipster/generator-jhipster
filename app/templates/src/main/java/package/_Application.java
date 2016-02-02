@@ -12,6 +12,12 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;<% if (clu
 import org.springframework.boot.autoconfigure.hazelcast.HazelcastAutoConfiguration;<% } %>
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+<%_ } _%>
+<%_ if (applicationType == 'gateway') { _%>
+import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
+<%_ } _%>
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.SimpleCommandLinePropertySource;
@@ -27,6 +33,12 @@ import java.util.Collection;
 @ComponentScan
 @EnableAutoConfiguration(exclude = { MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class<% if (clusteredHttpSession == 'hazelcast') { %>, HazelcastAutoConfiguration.class<% } %> })
 @EnableConfigurationProperties({ JHipsterProperties.class, LiquibaseProperties.class })
+<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+@EnableEurekaClient
+<%_ } _%>
+<%_ if (applicationType == 'gateway') { _%>
+@EnableZuulProxy
+<%_ } _%>
 public class Application {
 
     private static final Logger log = LoggerFactory.getLogger(Application.class);
@@ -69,9 +81,11 @@ public class Application {
         SimpleCommandLinePropertySource source = new SimpleCommandLinePropertySource(args);
         addDefaultProfile(app, source);
         Environment env = app.run(args).getEnvironment();
-        log.info("Access URLs:\n----------------------------------------------------------\n\t" +
+        log.info("\n----------------------------------------------------------\n\t" +
+                "Application '{}' is running! Access URLs:\n\t" +
                 "Local: \t\thttp://127.0.0.1:{}\n\t" +
                 "External: \thttp://{}:{}\n----------------------------------------------------------",
+            env.getProperty("spring.application.name"),
             env.getProperty("server.port"),
             InetAddress.getLocalHost().getHostAddress(),
             env.getProperty("server.port"));
