@@ -5,7 +5,7 @@ angular.module('<%=angularAppName%>').controller('UserManagementDialogController
         function($scope, $stateParams, $uibModalInstance, entity, User<% if (enableTranslation) { %>, Language<% } %>) {
 
         $scope.user = entity;
-        $scope.authorities = ["ROLE_USER", "ROLE_ADMIN"];
+        $scope.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
         <%_ if (enableTranslation) { _%>
         Language.getAll().then(function (languages) {
             $scope.languages = languages;
@@ -16,13 +16,13 @@ angular.module('<%=angularAppName%>').controller('UserManagementDialogController
             $uibModalInstance.close(result);
         };
 
-        var onSaveError = function (result) {
+        var onSaveError = function () {
             $scope.isSaving = false;
         };
 
         $scope.save = function () {
             $scope.isSaving = true;
-            if ($scope.user.id != null) {
+            if ($scope.user.id !== null) {
                 User.update($scope.user, onSaveSuccess, onSaveError);
             } else {<% if (!enableTranslation){ %>
                 $scope.user.langKey = 'en';<% } %>

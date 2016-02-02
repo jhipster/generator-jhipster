@@ -5,6 +5,8 @@ angular.module('<%=angularAppName%>')
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
+                var authorities = attrs.hasAnyAuthority.replace(/\s+/g, '').split(',');
+
                 var setVisible = function () {
                         element.removeClass('hidden');
                     },
@@ -23,15 +25,14 @@ angular.module('<%=angularAppName%>')
                         } else {
                             setHidden();
                         }
-                    },
-                    authorities = attrs.hasAnyAuthority.replace(/\s+/g, '').split(',');
+                    };
 
                 if (authorities.length > 0) {
                     defineVisibility(true);
-                    
-                    scope.$watch(function(scope) {
+
+                    scope.$watch(function() {
                         return Principal.isAuthenticated();
-                    }, function(newValue) {
+                    }, function() {
                         defineVisibility(true);
                     });
                 }
@@ -42,6 +43,8 @@ angular.module('<%=angularAppName%>')
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
+                var authority = attrs.hasAuthority.replace(/\s+/g, '');
+
                 var setVisible = function () {
                         element.removeClass('hidden');
                     },
@@ -62,15 +65,14 @@ angular.module('<%=angularAppName%>')
                                     setHidden();
                                 }
                             });
-                    },
-                    authority = attrs.hasAuthority.replace(/\s+/g, '');
+                    };
 
                 if (authority.length > 0) {
                     defineVisibility(true);
 
-                    scope.$watch(function(scope) {
+                    scope.$watch(function() {
                         return Principal.isAuthenticated();
-                    }, function(newValue) {
+                    }, function() {
                         defineVisibility(true);
                     });
                 }

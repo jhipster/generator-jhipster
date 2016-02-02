@@ -3,7 +3,7 @@
 angular.module('<%=angularAppName%>')
     .controller('UserManagementController', function ($scope, Principal, User, ParseLinks, paginationConstants<% if (enableTranslation) { %>, Language<% } %>) {
         $scope.users = [];
-        $scope.authorities = ["ROLE_USER", "ROLE_ADMIN"];<% if (enableTranslation) { %>
+        $scope.authorities = ['ROLE_USER', 'ROLE_ADMIN'];<% if (enableTranslation) { %>
         Language.getAll().then(function (languages) {
             $scope.languages = languages;
         });<% } %>

@@ -4,6 +4,21 @@ angular.module('<%=angularAppName%>')
     .controller('SettingsController', function ($scope, Principal, Auth<% if (enableTranslation){ %>, Language, $translate<% } %>) {
         $scope.success = null;
         $scope.error = null;
+
+        /**
+         * Store the "settings account" in a separate variable, and not in the shared "account" variable.
+         */
+        var copyAccount = function (account) {
+            return {
+                activated: account.activated,
+                email: account.email,
+                firstName: account.firstName,
+                langKey: account.langKey,
+                lastName: account.lastName,
+                login: account.login
+            };
+        };
+
         Principal.identity().then(function(account) {
             $scope.settingsAccount = copyAccount(account);
         });
@@ -25,18 +40,4 @@ angular.module('<%=angularAppName%>')
                 $scope.error = 'ERROR';
             });
         };
-
-        /**
-         * Store the "settings account" in a separate variable, and not in the shared "account" variable.
-         */
-        var copyAccount = function (account) {
-            return {
-                activated: account.activated,
-                email: account.email,
-                firstName: account.firstName,
-                langKey: account.langKey,
-                lastName: account.lastName,
-                login: account.login
-            }
-        }
     });

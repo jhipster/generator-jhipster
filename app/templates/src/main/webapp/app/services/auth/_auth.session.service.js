@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .factory('AuthServerProvider', function loginService($http, localStorageService, $window<% if (websocket == 'spring-websocket') { %>, Tracker<% } %>) {
+    .factory('AuthServerProvider', function loginService($http, localStorageService <% if (websocket == 'spring-websocket') { %>, Tracker<% } %>) {
         return {
             login: function(credentials) {
                 var data = 'j_username=' + encodeURIComponent(credentials.username) +
