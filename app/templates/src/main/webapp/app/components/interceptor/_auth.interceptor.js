@@ -1,3 +1,4 @@
+/* globals document */
 'use strict';
 
 angular.module('<%=angularAppName%>')<% if (authenticationType == 'oauth2' || authenticationType == 'jwt') { %>
@@ -13,18 +14,18 @@ angular.module('<%=angularAppName%>')<% if (authenticationType == 'oauth2' || a
                 }
                 <% } %><% if (authenticationType == 'jwt') { %>
                 if (token) {
-                  config.headers['Authorization'] = 'Bearer ' + token;
+                  config.headers.Authorization = 'Bearer ' + token;
                 }
                 <% } %>
                 return config;
             }
         };
-    })<% } %><% if (authenticationType == 'oauth2' || authenticationType == 'jwt') { %>
+    })<% } %><% if (authenticationType === 'oauth2' || authenticationType === 'jwt') { %>
     .factory('authExpiredInterceptor', function ($rootScope, $q, $injector, localStorageService) {
         return {
             responseError: function (response) {
                 // token has expired
-                if (response.status === 401 && (response.data.error == 'invalid_token' || response.data.error == 'Unauthorized')) {
+                if (response.status === 401 && (response.data.error === 'invalid_token' || response.data.error === 'Unauthorized')) {
                     localStorageService.remove('authentication-token');
                     var Principal = $injector.get('Principal');
                     if (Principal.isAuthenticated()) {
