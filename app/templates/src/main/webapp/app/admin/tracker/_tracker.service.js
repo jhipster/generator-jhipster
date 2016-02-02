@@ -21,6 +21,8 @@ angular.module('<%=angularAppName%>')
                 //building absolute path so that websocket doesnt fail when deploying with a context path
                 var loc = window.location;
                 var url = '//' + loc.host + loc.pathname + 'websocket/tracker';<% if (authenticationType == 'oauth2') { %>
+                /* globals localStorage */
+                /*jshint camelcase: false */
                 var authToken = JSON.parse(localStorage.getItem('ls.token')).access_token;
                 url += '?access_token=' + authToken;<% } %>
                 var socket = new SockJS(url);

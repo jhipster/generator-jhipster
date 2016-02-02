@@ -5,6 +5,7 @@ angular.module('<%=angularAppName%>')<% if (authenticationType == 'oauth2' || a
         return {
             // Add authorization token to headers
             request: function (config) {
+                /*jshint camelcase: false */
                 config.headers = config.headers || {};
                 var token = localStorageService.get('authentication-token');
                 <% if (authenticationType == 'oauth2') { %>
