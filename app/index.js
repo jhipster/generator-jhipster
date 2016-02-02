@@ -1341,7 +1341,7 @@ module.exports = JhipsterGenerator.extend({
                     'app/admin/tracker/tracker.service.js'])
             }
 
-            indexFile = html.appendScripts(indexFile, 'app/app.js', appScripts, {}, ['.tmp', 'src/main/webapp']);
+            indexFile = html.appendScripts(indexFile, 'app/app.js', appScripts, {});
             this.write(WEBAPP_DIR + 'index.html', indexFile);
 
         },

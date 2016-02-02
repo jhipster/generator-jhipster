@@ -32,8 +32,7 @@ var gulp = require('gulp'),
 var config = {
     app: 'src/main/webapp/',
     dist: 'src/main/webapp/dist/',
-    test: 'src/test/javascript/spec/',
-    tmp: '.tmp/'<% if(useSass) { %>,
+    test: 'src/test/javascript/spec/'<% if(useSass) { %>,
     importPath: 'src/main/webapp/bower_components',
     scss: 'src/main/webapp/scss/'<% } %>,
     port: 9000,
@@ -43,10 +42,6 @@ var config = {
 
 gulp.task('clean', function () {
     return del([config.dist]);
-});
-
-gulp.task('clean:tmp', function () {
-    return del([config.tmp]);
 });
 
 gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function(done) {
@@ -91,9 +86,7 @@ gulp.task('sass', function () {
 });
 <% } %>
 gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function() {
-    return gulp.src(config.app + 'content/css/**/*.css')
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(gulp.dest(config.tmp))
+    return gulp.src(config.app + 'content/css')
         .pipe(browserSync.reload({stream: true}));
 });
 
@@ -274,7 +267,7 @@ gulp.task('ngconstant:prod', function() {
             VERSION: util.parseVersion()
         }
     })
-    .pipe(gulp.dest(config.tmp + 'app/'));
+    .pipe(gulp.dest(config.app + 'app/'));
 });
 
 gulp.task('jshint', function() {
