@@ -3,7 +3,7 @@
 angular.module('<%=angularAppName%>')
     .provider('AlertService', function () {
         this.toast = false;
-
+        /*jshint validthis: true */
         this.$get = ['$timeout', '$sce'<% if (enableTranslation) { %>, '$translate'<% } %>, function($timeout, $sce<% if (enableTranslation) { %>,$translate<% } %>) {
             var toast = this.toast,
             alertId = 0, // unique id for each alert. Starts from 0.
