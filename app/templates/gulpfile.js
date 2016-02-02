@@ -79,7 +79,7 @@ gulp.task('images', function() {
 });
 <% if(useSass) { %>
 gulp.task('sass', function () {
-    return gulp.src(config.scss + '**/*.scss')
+    return gulp.src(config.scss + '**/*.{scss,sass}')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(sass({includePaths:config.importPath}).on('error', sass.logError))
         .pipe(gulp.dest(config.app + 'content/css'));
@@ -164,7 +164,7 @@ gulp.task('serve', function() {
 gulp.task('watch', function() {
     gulp.watch('bower.json', ['wiredep']);
     gulp.watch(['gulpfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>], ['ngconstant:dev']);
-    gulp.watch(<% if(useSass) { %>config.scss + '**/*.scss'<% } else { %>config.app + 'content/css/**/*.css'<% } %>, ['styles']);
+    gulp.watch(<% if(useSass) { %>config.scss + '**/*.{scss,sass}'<% } else { %>config.app + 'content/css/**/*.css'<% } %>, ['styles']);
     gulp.watch(config.app + 'content/images/**', ['images']);
     gulp.watch([config.app + '*.html', config.app + 'app/**', config.app + 'i18n/**']).on('change', browserSync.reload);
 });
@@ -179,7 +179,7 @@ gulp.task('wiredep:app', function () {
         }))
         .pipe(gulp.dest('src/main/webapp'));
 
-    return <% if (useSass) { %>es.merge(stream, gulp.src(config.scss + '*.scss')
+    return <% if (useSass) { %>es.merge(stream, gulp.src(config.scss + '*.{scss,sass}')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(wiredep({
             exclude: [
