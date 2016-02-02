@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, <% if (enableTranslation) { %>$translateProvider, tmhDynamicLocaleProvider,<% } %> httpRequestInterceptorCacheBusterProvider, AlertServiceProvider) {
-        // uncomment below to make alerts look like toast
+    // uncomment below to make alerts look like toast
+    .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, <% if (enableTranslation) { %>$translateProvider, tmhDynamicLocaleProvider,<% } %> httpRequestInterceptorCacheBusterProvider/*, AlertServiceProvider*/) {
         //AlertServiceProvider.showAsToast(true);
 <% if (authenticationType == 'session') { %>
         //enable CSRF
@@ -58,10 +58,10 @@ angular.module('<%=angularAppName%>')
     .config(['$urlMatcherFactoryProvider', function($urlMatcherFactory) {
         $urlMatcherFactory.type('boolean', {
             name : 'boolean',
-            decode: function(val) { return val === true ? true : val === 'true' ? true : false },
+            decode: function(val) { return val === true || val === 'true'; },
             encode: function(val) { return val ? 1 : 0; },
             equals: function(a, b) { return this.is(a) && a === b; },
-            is: function(val) { return [true,false,0,1].indexOf(val) >= 0 },
+            is: function(val) { return [true,false,0,1].indexOf(val) >= 0; },
             pattern: /bool|true|0|1/
         });
     }]);
