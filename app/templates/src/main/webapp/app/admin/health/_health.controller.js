@@ -62,7 +62,7 @@ angular.module('<%=angularAppName%>')
 
 
         $scope.showHealth = function(health) {
-            var modalInstance = $uibModal.open({
+            $uibModal.open({
                 templateUrl: 'app/admin/health/health.modal.html',
                 controller: 'HealthModalController',
                 size: 'lg',
