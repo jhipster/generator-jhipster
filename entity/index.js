@@ -1101,11 +1101,11 @@ module.exports = EntityGenerator.extend({
                         },
                         {
                             value: 'serviceClass',
-                            name: '[BETA] Yes, generate a separate service class'
+                            name: 'Yes, generate a separate service class'
                         },
                         {
                             value: 'serviceImpl',
-                            name: '[BETA] Yes, generate a separate service interface and implementation'
+                            name: 'Yes, generate a separate service interface and implementation'
                         }
                     ],
                     default: 0
