@@ -48,6 +48,7 @@ module.exports = JhipsterGenerator.extend({
         });
         var skipClient = this.config.get('skipClient');
         this.skipClient = this.options['skip-client'] || skipClient;
+        configOptions.skipClient = this.skipClient;
         this.withEntities = this.options['with-entities'];
 
     },
@@ -171,6 +172,7 @@ module.exports = JhipsterGenerator.extend({
                 default: [ 'gatling' ]
             }, function (prompt) {
                 this.testFrameworks = prompt.testFrameworks;
+                configOptions.testFrameworks = this.testFrameworks;
                 done();
             }.bind(this));
         }

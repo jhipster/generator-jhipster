@@ -513,7 +513,6 @@ module.exports = JhipsterServerGenerator.extend({
         insight: function () {
             var insight = this.insight();
             insight.track('generator', 'app');
-            insight.track('app/applicationType', this.applicationType);
             insight.track('app/authenticationType', this.authenticationType);
             insight.track('app/hibernateCache', this.hibernateCache);
             insight.track('app/clusteredHttpSession', this.clusteredHttpSession);
@@ -524,7 +523,6 @@ module.exports = JhipsterServerGenerator.extend({
             insight.track('app/searchEngine', this.searchEngine);
             insight.track('app/buildTool', this.buildTool);
             insight.track('app/enableSocialSignIn', this.enableSocialSignIn);
-            insight.track('app/testFrameworks', this.testFrameworks);
         },
 
         configureGlobal: function () {
@@ -579,6 +577,9 @@ module.exports = JhipsterServerGenerator.extend({
                 this.enableTranslation = configOptions.enableTranslation;
             }
             this.useSass = configOptions.useSass ? configOptions.useSass : false;
+            if(configOptions.testFrameworks) {
+                this.testFrameworks = configOptions.testFrameworks;
+            }
         },
 
         writeGlobalFiles: function () {
