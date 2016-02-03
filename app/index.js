@@ -18,7 +18,7 @@ var JhipsterGenerator = generators.Base.extend({});
 util.inherits(JhipsterGenerator, scriptBase);
 
 /* Constants use through out */
-const QUESTIONS = 16; // making questions a variable to avoid updating each question by hand when adding additional options
+const QUESTIONS = 15; // making questions a variable to avoid updating each question by hand when adding additional options
 const RESOURCE_DIR = 'src/main/resources/';
 const WEBAPP_DIR = 'src/main/webapp/';
 const ANGULAR_DIR = WEBAPP_DIR + 'app/';

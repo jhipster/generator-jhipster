@@ -82,7 +82,7 @@ function classify(string) {
 }
 
 function rewriteJSONFile(filePath, rewriteFile, _this) {
-    var jsonObj = _this.fs.readJSON(fullPath);
+    var jsonObj = _this.fs.readJSON(filePath);
     rewriteFile(jsonObj, _this);
     _this.fs.writeJSON(filePath, jsonObj, null, 4);
 }

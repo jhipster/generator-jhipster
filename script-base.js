@@ -327,6 +327,7 @@ Generator.prototype.addBowerDependency = function(name, version) {
             jsonObj.dependencies[name] = version;
         }, this);
     } catch (e) {
+        console.log(e)
         this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Reference to ') + 'bower dependency (name: ' + name + ', version:' + version + ')' + chalk.yellow(' not added.\n'));
     }
 };
