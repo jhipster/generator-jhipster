@@ -9,7 +9,7 @@ var fse = require('fs-extra');
 describe('JHipster generator service', function () {
     describe('creates service without interface', function () {
         beforeEach(function (done) {
-            helpers.run(require.resolve('../service'))
+            helpers.run(require.resolve('../generators/service'))
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
                 })
@@ -35,7 +35,7 @@ describe('JHipster generator service', function () {
 
     describe('creates service with interface', function () {
         beforeEach(function (done) {
-            helpers.run(require.resolve('../service'))
+            helpers.run(require.resolve('../generators/service'))
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
                 })

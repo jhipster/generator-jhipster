@@ -5,7 +5,7 @@ var path = require('path'),
     _s = require('underscore.string'),
     yeoman = require('yeoman-generator'),
     chalk = require('chalk'),
-    jhipsterUtils = require('./util.js'),
+    jhipsterUtils = require('./util'),
     Insight = require('insight'),
     fs = require('fs'),
     shelljs = require('shelljs'),
@@ -1147,7 +1147,7 @@ Generator.prototype.getColumnName = function(value) {
 };
 
 Generator.prototype.insight = function () {
-    var pkg = require('./package.json');
+    var pkg = require('../package.json');
     var insight = new Insight({
         trackingCode: 'UA-46075199-2',
         packageName: pkg.name,

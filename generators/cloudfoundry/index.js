@@ -5,7 +5,7 @@ var util = require('util'),
     childProcess = require('child_process'),
     chalk = require('chalk'),
     _ = require('underscore.string'),
-    scriptBase = require('../script-base');
+    scriptBase = require('../generator-base');
 
 var exec = childProcess.exec;
 var spawn = childProcess.spawn;

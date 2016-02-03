@@ -5,9 +5,9 @@ var util = require('util'),
     chalk = require('chalk'),
     _ = require('underscore.string'),
     shelljs = require('shelljs'),
-    scriptBase = require('../script-base'),
-    cleanup = require('../app/cleanup'),
-    packagejs = require(__dirname + '/../package.json'),
+    scriptBase = require('../generator-base'),
+    cleanup = require('./cleanup'),
+    packagejs = require('../../package.json'),
     crypto = require("crypto"),
     mkdirp = require('mkdirp'),
     html = require("html-wiring"),
@@ -1025,9 +1025,10 @@ module.exports = JhipsterGenerator.extend({
             if (this.useSass) {
                 this.template(WEBAPP_DIR + 'scss/main.scss', WEBAPP_DIR + 'scss/main.scss');
                 this.template(WEBAPP_DIR + 'scss/vendor.scss', WEBAPP_DIR + 'scss/vendor.scss');
-            } else {
-                this.template(WEBAPP_DIR + 'content/css/main.css', WEBAPP_DIR + 'content/css/main.css');
             }
+            // this css file will be overwritten by the sass generated css if sass is enabled
+            // but this will avoid errors when running app without running sass task first
+            this.template(WEBAPP_DIR + 'content/css/main.css', WEBAPP_DIR + 'content/css/main.css');
 
             // HTML5 BoilerPlate
             this.copy(WEBAPP_DIR + 'favicon.ico', WEBAPP_DIR + 'favicon.ico');
