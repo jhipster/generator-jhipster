@@ -508,57 +508,6 @@ module.exports = JhipsterGenerator.extend({
 
         },
 
-        writeServerTestFwFiles: function () {
-
-            // Create Test Java files
-            var testDir = this.testDir;
-
-            mkdirp(testDir);
-
-            if (this.databaseType == "cassandra") {
-                this.template('src/test/java/package/_CassandraKeyspaceUnitTest.java', testDir + 'CassandraKeyspaceUnitTest.java', this, {});
-                this.template('src/test/java/package/_AbstractCassandraTest.java', testDir + 'AbstractCassandraTest.java', this, {});
-            }
-            this.template('src/test/java/package/security/_SecurityUtilsUnitTest.java', testDir + 'security/SecurityUtilsUnitTest.java', this, {});
-            if (this.databaseType == "sql" || this.databaseType == "mongodb") {
-                this.template('src/test/java/package/service/_UserServiceIntTest.java', testDir + 'service/UserServiceIntTest.java', this, {});
-            }
-            this.template('src/test/java/package/web/rest/_AccountResourceIntTest.java', testDir + 'web/rest/AccountResourceIntTest.java', this, {});
-            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
-                this.template('src/test/java/package/web/rest/_AuditResourceIntTest.java', testDir + 'web/rest/AuditResourceIntTest.java', this, {});
-            }
-            this.template('src/test/java/package/web/rest/_TestUtil.java', testDir + 'web/rest/TestUtil.java', this, {});
-            this.template('src/test/java/package/web/rest/_UserResourceIntTest.java', testDir + 'web/rest/UserResourceIntTest.java', this, {});
-
-            this.template(TEST_RES_DIR + 'config/_application.yml', TEST_RES_DIR + 'config/application.yml', this, {});
-            this.template(TEST_RES_DIR + '_logback-test.xml', TEST_RES_DIR + 'logback-test.xml', this, {});
-
-            if (this.hibernateCache == "ehcache") {
-                this.template(TEST_RES_DIR + '_ehcache.xml', TEST_RES_DIR + 'ehcache.xml', this, {});
-            }
-
-            if (this.enableSocialSignIn) {
-                this.template('src/test/java/package/repository/_CustomSocialUsersConnectionRepositoryIntTest.java', testDir + 'repository/CustomSocialUsersConnectionRepositoryIntTest.java', this, {});
-                this.template('src/test/java/package/service/_SocialServiceIntTest.java', testDir + 'service/SocialServiceIntTest.java', this, {});
-            }
-
-            // Create Gatling test files
-            if (this.testFrameworks.indexOf('gatling') != -1) {
-                this.copy('src/test/gatling/conf/gatling.conf', 'src/test/gatling/conf/gatling.conf');
-                mkdirp('src/test/gatling/data');
-                mkdirp('src/test/gatling/bodies');
-                mkdirp('src/test/gatling/simulations');
-            }
-
-            // Create Cucumber test files
-            if (this.testFrameworks.indexOf('cucumber') != -1) {
-                this.template('src/test/java/package/cucumber/_CucumberTest.java', testDir + 'cucumber/CucumberTest.java', this, {});
-                this.template('src/test/java/package/cucumber/_UserStepDefs.java', testDir + 'cucumber/UserStepDefs.java', this, {});
-                this.copy('src/test/features/user.feature', 'src/test/features/user.feature');
-            }
-
-        },
-
         writeClientTestFwFiles: function () {
             if(this.skipClient){
                 return;
@@ -592,19 +541,8 @@ module.exports = JhipsterGenerator.extend({
                 this.template(TEST_JS_DIR + testTemplatePath, TEST_JS_DIR + testTemplatePath.replace(/_/,''), this, {});
             }.bind(this));
 
-        },
-
-        cleanup: function () {
-            cleanup.cleanupOldFiles(this, this.javaDir, this.testDir, RESOURCE_DIR, WEBAPP_DIR, TEST_JS_DIR);
-        },
-
-        regenerateEntities: function () {
-            if (this.withEntities) {
-                this.getExistingEntities().forEach( function(entity) {
-                    this.composeWith('jhipster:entity', {options: {regenerate: true}, args:[entity.name]});
-                }, this);
-            }
         }
+
     },
 
     install: function () {
