@@ -33,7 +33,7 @@ describe('JHipster generator languages', function () {
     languages.forEach( function(language) {
         describe('no social - creates ' + language.name, function () {
             beforeEach(function (done) {
-                helpers.run(require.resolve('../languages'))
+                helpers.run(require.resolve('../generators/languages'))
                     .inTmpDir(function (dir) {
                         fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
                     })
@@ -83,7 +83,7 @@ describe('JHipster generator languages', function () {
     languages.forEach( function(language) {
         describe('with social - creates ' + language.name, function () {
             beforeEach(function (done) {
-                helpers.run(require.resolve('../languages'))
+                helpers.run(require.resolve('../generators/languages'))
                     .inTmpDir(function (dir) {
                         fse.copySync(path.join(__dirname, '../test/templates/social'), dir)
                     })
