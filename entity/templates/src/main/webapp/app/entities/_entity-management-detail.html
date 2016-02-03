@@ -1,4 +1,4 @@
-<% var keyPrefix = angularAppName + '.'+ entityInstance + '-management'; %>
+<% var keyPrefix = angularAppName + '.' + entityTranslationKey; %>
 <div>
     <h2><span translate="<%= keyPrefix %>.detail.title"><%= entityClass %></span> {{<%= entityInstance %>.id}}</h2>
     <div class="table-responsive">
@@ -39,6 +39,7 @@
                     var relationshipName = relationships[relationshipId].relationshipName;
                     var relationshipFieldName = relationships[relationshipId].relationshipFieldName;
                     var otherEntityName = relationships[relationshipId].otherEntityName;
+                    var otherEntityStateName = relationships[relationshipId].otherEntityStateName;
                     var otherEntityField = relationships[relationshipId].otherEntityField;
                     var otherEntityFieldCapitalized = relationships[relationshipId].otherEntityFieldCapitalized;
                     if (relationshipType == 'many-to-one'
@@ -64,13 +65,13 @@
                     <%_ } else { _%>
                         <%_ if (relationshipType == 'many-to-many') { _%>
                     <span ng-repeat="<%= relationshipFieldName %> in <%= entityInstance %>.<%= relationshipFieldName %>s">
-                        <a class="form-control-static" ui-sref="<%= otherEntityName %>-management-detail({id: {{<%= relationshipFieldName %>.id}}})">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
+                        <a class="form-control-static" ui-sref="<%= otherEntityStateName %>-detail({id: {{<%= relationshipFieldName %>.id}}})">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
                     </span>
                         <%_ } else { _%>
                             <%_ if (dto == 'no') { _%>
-                    <a class="form-control-static" ui-sref="<%= otherEntityName %>-management-detail({id:<%= entityInstance + "." + relationshipFieldName + ".id" %>})">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</a>
+                    <a class="form-control-static" ui-sref="<%= otherEntityStateName %>-detail({id:<%= entityInstance + "." + relationshipFieldName + ".id" %>})">{{<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</a>
                             <%_ } else { _%>
-                    <a class="form-control-static" ui-sref="<%= otherEntityName %>-management-detail({id:<%= entityInstance + "." + relationshipFieldName + "Id" %>})">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
+                    <a class="form-control-static" ui-sref="<%= otherEntityStateName %>-detail({id:<%= entityInstance + "." + relationshipFieldName + "Id" %>})">{{<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
                             <%_ } _%>
                         <%_ } _%>
                     <%_ } _%>

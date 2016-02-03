@@ -100,12 +100,12 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .pause(10)
         .repeat(2) {
             exec(http("Get all <%= entityInstancePlural %>")
-            .get("/api/<%= entityInstancePlural %>")
+            .get("/api/<%= entityApiUrl %>")
             .headers(headers_http_authenticated)
             .check(status.is(200)))
             .pause(10 seconds, 20 seconds)
             .exec(http("Create new <%= entityInstance %>")
-            .post("/api/<%= entityInstancePlural %>")
+            .post("/api/<%= entityApiUrl %>")
             .headers(headers_http_authenticated)
             .body(StringBody("""{"id":null<% for (fieldId in fields) { %>, "<%= fields[fieldId].fieldName %>":<% if (fields[fieldId].fieldType == 'String') { %>"SAMPLE_TEXT"<% } else if (fields[fieldId].fieldType == 'Integer') { %>"0"<% } else if (fields[fieldId].fieldType == 'ZonedDateTime' || fields[fieldId].fieldType == 'LocalDate') { %>"2020-01-01T00:00:00.000Z"<% } else { %>null<% } } %>}""")).asJSON
             .check(status.is(201))

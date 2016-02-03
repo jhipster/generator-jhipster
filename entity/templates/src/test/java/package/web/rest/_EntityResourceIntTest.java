@@ -151,10 +151,10 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
     private static final byte[] <%=updatedValueName %> = TestUtil.createByteArray(<%= updatedValue %>, "1");
     private static final String <%=defaultValueName %>_CONTENT_TYPE = "image/jpg";
     private static final String <%=updatedValueName %>_CONTENT_TYPE = "image/png";<% } else if (fieldTypeBlobContent == 'text') { %>
-    
+
     private static final String <%=defaultValueName %> = "<%=sampleTextString %>";
     private static final String <%=updatedValueName %> = "<%=updatedTextString %>";<% } else if (isEnum) { %>
-    
+
     private static final <%=fieldType %> <%=defaultValueName %> = <%=fieldType %>.<%=enumValue1 %>;
     private static final <%=fieldType %> <%=updatedValueName %> = <%=fieldType %>.<%=enumValue2 %>;<% } } %>
 
@@ -213,7 +213,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         // Create the <%= entityClass %><% if (dto == 'mapstruct') { %>
         <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(<%= entityInstance %>);<% } %>
 
-        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityInstancePlural %>")
+        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>)))
                 .andExpect(status().isCreated());
@@ -247,7 +247,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         // Create the <%= entityClass %>, which fails.<% if (dto == 'mapstruct') { %>
         <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(<%= entityInstance %>);<% } %>
 
-        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityInstancePlural %>")
+        rest<%= entityClass %>MockMvc.perform(post("/api/<%= entityApiUrl %>")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>)))
                 .andExpect(status().isBadRequest());
@@ -263,7 +263,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 
         // Get all the <%= entityInstancePlural %>
-        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityInstancePlural %>?sort=id,desc"))
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>?sort=id,desc"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
                 .andExpect(jsonPath("$.[*].id").value(hasItem(<%= entityInstance %>.getId().intValue())))<% } %><% if (databaseType == 'mongodb') { %>
@@ -282,7 +282,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         <%= entityInstance %>Repository.save<% if (databaseType == 'sql') { %>AndFlush<% } %>(<%= entityInstance %>);
 
         // Get the <%= entityInstance %>
-        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityInstancePlural %>/{id}", <%= entityInstance %>.getId()))
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/{id}", <%= entityInstance %>.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))<% if (databaseType == 'sql') { %>
             .andExpect(jsonPath("$.id").value(<%= entityInstance %>.getId().intValue()))<% } %><% if (databaseType == 'mongodb') { %>
@@ -298,7 +298,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
     @Transactional<% } %>
     public void getNonExisting<%= entityClass %>() throws Exception {
         // Get the <%= entityInstance %>
-        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityInstancePlural %>/{id}", <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>Long.MAX_VALUE<% } %><% if (databaseType == 'cassandra') { %>UUID.randomUUID().toString()<% } %>))
+        rest<%= entityClass %>MockMvc.perform(get("/api/<%= entityApiUrl %>/{id}", <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>Long.MAX_VALUE<% } %><% if (databaseType == 'cassandra') { %>UUID.randomUUID().toString()<% } %>))
                 .andExpect(status().isNotFound());
     }
 
@@ -321,7 +321,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         <%= entityClass %>DTO <%= entityInstance %>DTO = <%= entityInstance %>Mapper.<%= entityInstance %>To<%= entityClass %>DTO(<%= entityInstance %>);
         <%_ } _%>
 
-        rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityInstancePlural %>")
+        rest<%= entityClass %>MockMvc.perform(put("/api/<%= entityApiUrl %>")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(TestUtil.convertObjectToJsonBytes(<%= entityInstance %><% if (dto == 'mapstruct') { %>DTO<% } %>)))
                 .andExpect(status().isOk());
@@ -349,7 +349,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
 		int databaseSizeBeforeDelete = <%= entityInstance %>Repository.findAll().size();
 
         // Get the <%= entityInstance %>
-        rest<%= entityClass %>MockMvc.perform(delete("/api/<%= entityInstancePlural %>/{id}", <%= entityInstance %>.getId())
+        rest<%= entityClass %>MockMvc.perform(delete("/api/<%= entityApiUrl %>/{id}", <%= entityInstance %>.getId())
                 .accept(TestUtil.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk());
 
