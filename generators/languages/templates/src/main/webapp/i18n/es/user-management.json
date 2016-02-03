@@ -1,5 +1,5 @@
 {
-    "user-management": {
+    "userManagement": {
         "home": {
             "title": "Usuarios",
             "createLabel": "Crear un nuevo usuario",

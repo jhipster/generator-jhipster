@@ -1,5 +1,5 @@
 {
-    "user-management": {
+    "userManagement": {
         "home": {
             "title": "Utilizadores",
             "createLabel": "Adicionar",

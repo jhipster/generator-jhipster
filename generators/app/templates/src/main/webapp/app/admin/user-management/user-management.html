@@ -1,11 +1,11 @@
 <div>
-    <h2 translate="user-management.home.title">Users</h2>
+    <h2 translate="userManagement.home.title">Users</h2>
     <jh-alert></jh-alert>
     <div class="container">
         <div class="row">
           <div class="col-md-4">
               <button class="btn btn-primary" ui-sref="user-management.new">
-                  <span class="glyphicon glyphicon-flash"></span> <span translate="user-management.home.createLabel">Create a new User</span>
+                  <span class="glyphicon glyphicon-flash"></span> <span translate="userManagement.home.createLabel">Create a new User</span>
               </button>
           </div>
         </div>
@@ -15,14 +15,14 @@
             <thead>
             <tr>
                 <th translate="global.field.id">ID</th>
-                <th translate="user-management.login">Login</th>
-                <th translate="user-management.email">Email</th>
+                <th translate="userManagement.login">Login</th>
+                <th translate="userManagement.email">Email</th>
                 <th></th>
-                <% if (enableTranslation) { %><th translate="user-management.langKey">LangKey</th><% } %>
-                <th translate="user-management.profiles">Profiles</th><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-                <th translate="user-management.createdDate">CreatedDate</th>
-                <th translate="user-management.lastModifiedBy">LastModifiedBy</th>
-                <th translate="user-management.lastModifiedDate">LastModifiedDate</th><% } %>
+                <% if (enableTranslation) { %><th translate="userManagement.langKey">LangKey</th><% } %>
+                <th translate="userManagement.profiles">Profiles</th><% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+                <th translate="userManagement.createdDate">CreatedDate</th>
+                <th translate="userManagement.lastModifiedBy">LastModifiedBy</th>
+                <th translate="userManagement.lastModifiedDate">LastModifiedDate</th><% } %>
                 <th></th>
             </tr>
             </thead>
@@ -33,9 +33,9 @@
                 <td>{{user.email}}</td>
                 <td>
                     <span class="label label-danger" ng-click="setActive(user, true)" ng-show="!user.activated"
-                          translate="user-management.deactivated" style="cursor: pointer;">Desactivated</span>
+                          translate="userManagement.deactivated" style="cursor: pointer;">Desactivated</span>
                     <span class="label label-success" ng-click="setActive(user, false)" ng-show="user.activated"
-                          translate="user-management.activated" style="cursor: pointer;">Activated</span>
+                          translate="userManagement.activated" style="cursor: pointer;">Activated</span>
                 </td>
                 <% if (enableTranslation) { %><td>{{user.langKey}}</td><% } %>
                 <td>
