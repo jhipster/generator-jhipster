@@ -4,10 +4,7 @@ var util = require('util'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
     _ = require('underscore.string'),
-    shelljs = require('shelljs'),
     scriptBase = require('../generator-base'),
-    cleanup = require('../cleanup'),
-    crypto = require("crypto"),
     mkdirp = require('mkdirp'),
     html = require("html-wiring"),
     ejs = require('ejs');
@@ -56,15 +53,16 @@ module.exports = JhipsterGenerator.extend({
         });
 
         // This adds support for a `--auth` flag
-        this.option('base-name', {
+        this.option('auth', {
             desc: 'Provide authentication type for the application',
             type: String
         });
 
         this.i18n = this.options['i18n'];
         this.baseName = this.options['base-name'];
+        this.testFrameworks = [];
         var protractor = this.options['protractor'];
-        this.testFrameworks = protractor ? [ protractor ] : [];
+        protractor &&  this.testFrameworks.push('protractor');
         var lastQuestion = this.options['last-question'];
         currentQuestion = lastQuestion ? lastQuestion : 0;
         this.logo = this.options['logo'];
@@ -168,7 +166,7 @@ module.exports = JhipsterGenerator.extend({
 
         configureGlobal: function () {
             // Application name modified, using each technology's conventions
-            this.angularAppName = _.camelize(_.slugify(this.baseName)) + 'App';
+            this.angularAppName = this.getAngularAppName();
             this.camelizedBaseName = _.camelize(this.baseName);
             this.slugifiedBaseName = _.slugify(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();

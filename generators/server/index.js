@@ -24,15 +24,25 @@ const TEST_RES_DIR = 'src/test/resources/';
 const DOCKER_DIR = 'src/main/docker/';
 const INTERPOLATE_REGEX = /<%=([\s\S]+?)%>/g; // so that tags in templates do not get mistreated as _ templates
 
+var currentQuestion;
+
 module.exports = JhipsterGenerator.extend({
     constructor: function() {
         generators.Base.apply(this, arguments);
+
+        // This adds support for a `--base-name` flag
+        this.option('base-name', {
+            desc: 'Provide base name for the application, this will be overwritten if base name is found in .yo-rc file',
+            type: String
+        });
+
         // This adds support for a `--skip-client` flag
         this.option('skip-client', {
-            desc: 'Skip the client side app generation',
+            desc: 'Skip the client side hooks for server build',
             type: Boolean,
-            defaults: false
+            defaults: true
         });
+
         // This adds support for a `--[no-]i18n` flag
         this.option('i18n', {
             desc: 'Disable or enable i18n when skipping client side generation, has no effect otherwise',
@@ -40,21 +50,52 @@ module.exports = JhipsterGenerator.extend({
             defaults: true
         });
 
+        // This adds support for a `--protractor` flag
+        this.option('protractor', {
+            desc: 'Enable protractor tests',
+            type: Boolean,
+            defaults: false
+        });
+
+        // This adds support for a `--cucumber` flag
+        this.option('cucumber', {
+            desc: 'Enable cucumber tests',
+            type: Boolean,
+            defaults: false
+        });
+
+        // This adds support for a `--last-question` flag
+        this.option('last-question', {
+            desc: 'Pass the last question number asked',
+            type: Number
+        });
+
+        // This adds support for a `--[no-]logo` flag
+        this.option('logo', {
+            desc: 'Disable or enable Jhipster logo',
+            type: Boolean,
+            defaults: true
+        });
+
         var skipClient = this.config.get('skipClient');
         this.skipClient = this.options['skip-client'] || skipClient;
         this.i18n = this.options['i18n'];
+        this.baseName = this.options['base-name'];
+        this.testFrameworks = [];
+        var gatling = this.options['gatling'];
+        gatling &&  this.testFrameworks.push('gatling');
+        var cucumber = this.options['cucumber'];
+        cucumber &&  this.testFrameworks.push('cucumber');
+        var lastQuestion = this.options['last-question'];
+        currentQuestion = lastQuestion ? lastQuestion : 0;
+        this.logo = this.options['logo'];
 
     },
     initializing : {
         displayLogo : function () {
-            this.log(' \n' +
-            chalk.green('        ██') + chalk.red('  ██    ██  ████████  ███████    ██████  ████████  ████████  ███████\n') +
-            chalk.green('        ██') + chalk.red('  ██    ██     ██     ██    ██  ██          ██     ██        ██    ██\n') +
-            chalk.green('        ██') + chalk.red('  ████████     ██     ███████    █████      ██     ██████    ███████\n') +
-            chalk.green('  ██    ██') + chalk.red('  ██    ██     ██     ██             ██     ██     ██        ██   ██\n') +
-            chalk.green('   ██████ ') + chalk.red('  ██    ██  ████████  ██        ██████      ██     ████████  ██    ██\n'));
-            this.log(chalk.white.bold('                            http://jhipster.github.io\n'));
-            this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version + '\n'));
+            if(this.logo){
+                this.printJHipsterLogo();
+            }
         },
 
         setupServerVars : function () {
@@ -88,11 +129,16 @@ module.exports = JhipsterGenerator.extend({
             this.packagejs = packagejs;
             this.jhipsterVersion = this.config.get('jhipsterVersion');
             this.applicationType = this.config.get('applicationType');
-            this.baseName = this.config.get('baseName');
             this.rememberMeKey = this.config.get('rememberMeKey');
             this.jwtSecretKey = this.config.get('jwtSecretKey');
-            this.testFrameworks = this.config.get('testFrameworks');
-
+            var testFrameworks = this.config.get('testFrameworks');
+            if (testFrameworks) {
+                this.testFrameworks = testFrameworks;
+            }
+            var baseName = this.config.get('baseName');
+            if (baseName) {
+                this.baseName = baseName;
+            }
             var serverConfigFound = this.packageName != null &&
             this.authenticationType != null &&
             this.hibernateCache != null &&
@@ -137,7 +183,7 @@ module.exports = JhipsterGenerator.extend({
     prompting: {
 
         askForModuleName: function () {
-            if(this.existingProject){
+            if(this.baseName){
                 return;
             }
             var done = this.async();
@@ -150,11 +196,10 @@ module.exports = JhipsterGenerator.extend({
                     if (/^([a-zA-Z0-9_]*)$/.test(input)) return true;
                     return 'Your application name cannot contain special characters or a blank space, using the default name instead';
                 },
-                message: '(2/' + QUESTIONS + ') What is the base name of your application?',
+                message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') What is the base name of your application?',
                 default: defaultAppBaseName
             }, function (prompt) {
                 this.baseName = prompt.baseName;
-                this.rememberMeKey = crypto.randomBytes(20).toString('hex');
                 done();
             }.bind(this));
         },
@@ -173,14 +218,14 @@ module.exports = JhipsterGenerator.extend({
                         if (/^([a-z_]{1}[a-z0-9_]*(\.[a-z_]{1}[a-z0-9_]*)*)$/.test(input)) return true;
                         return 'The package name you have provided is not a valid Java package name.';
                     },
-                    message: '(3/' + QUESTIONS + ') What is your default Java package name?',
+                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') What is your default Java package name?',
                     default: 'com.mycompany.myapp',
                     store: true
                 },
                 {
                     type: 'list',
                     name: 'authenticationType',
-                    message: '(4/' + QUESTIONS + ') Which *type* of authentication would you like to use?',
+                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Which *type* of authentication would you like to use?',
                     choices: [
                         {
                             value: 'session',
@@ -207,7 +252,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'databaseType',
-                    message: '(5/' + QUESTIONS + ') Which *type* of database would you like to use?',
+                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Which *type* of database would you like to use?',
                     choices: [
                         {
                             value: 'sql',
@@ -226,7 +271,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'databaseType',
-                    message: '(5/' + QUESTIONS + ') Which *type* of database would you like to use?',
+                    message: '(' + (currentQuestion) + '/' + QUESTIONS + ') Which *type* of database would you like to use?',
                     choices: [
                         {
                             value: 'sql',
@@ -249,7 +294,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'prodDatabaseType',
-                    message: '(6/' + QUESTIONS + ') Which *production* database would you like to use?',
+                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Which *production* database would you like to use?',
                     choices: [
                         {
                             value: 'mysql',
@@ -272,7 +317,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'devDatabaseType',
-                    message: '(7/' + QUESTIONS + ') Which *development* database would you like to use?',
+                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Which *development* database would you like to use?',
                     choices: [
                         {
                             value: 'h2Disk',
@@ -295,7 +340,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'devDatabaseType',
-                    message: '(7/' + QUESTIONS + ') Which *development* database would you like to use?',
+                    message: '(' + (currentQuestion) + '/' + QUESTIONS + ') Which *development* database would you like to use?',
                     choices: [
                         {
                             value: 'h2Disk',
@@ -318,7 +363,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'devDatabaseType',
-                    message: '(7/' + QUESTIONS + ') Which *development* database would you like to use?',
+                    message: '(' + (currentQuestion) + '/' + QUESTIONS + ') Which *development* database would you like to use?',
                     choices: [
                         {
                             value: 'h2Disk',
@@ -341,7 +386,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'hibernateCache',
-                    message: '(8/' + QUESTIONS + ') Do you want to use Hibernate 2nd level cache?',
+                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Do you want to use Hibernate 2nd level cache?',
                     choices: [
                         {
                             value: 'no',
@@ -364,7 +409,7 @@ module.exports = JhipsterGenerator.extend({
                     },
                     type: 'list',
                     name: 'searchEngine',
-                    message: '(9/' + QUESTIONS + ') Do you want to use a search engine in your application?',
+                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Do you want to use a search engine in your application?',
                     choices: [
                         {
                             value: 'no',
@@ -380,7 +425,7 @@ module.exports = JhipsterGenerator.extend({
                 {
                     type: 'list',
                     name: 'clusteredHttpSession',
-                    message: '(10/' + QUESTIONS + ') Do you want to use clustered HTTP sessions?',
+                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Do you want to use clustered HTTP sessions?',
                     choices: [
                         {
                             value: 'no',
@@ -396,7 +441,7 @@ module.exports = JhipsterGenerator.extend({
                 {
                     type: 'list',
                     name: 'websocket',
-                    message: '(11/' + QUESTIONS + ') Do you want to use WebSockets?',
+                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Do you want to use WebSockets?',
                     choices: [
                         {
                             value: 'no',
@@ -412,7 +457,7 @@ module.exports = JhipsterGenerator.extend({
                 {
                     type: 'list',
                     name: 'buildTool',
-                    message: '(12/' + QUESTIONS + ') Would you like to use Maven or Gradle for building the backend?',
+                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Would you like to use Maven or Gradle for building the backend?',
                     choices: [
                         {
                             value: 'maven',
@@ -428,6 +473,7 @@ module.exports = JhipsterGenerator.extend({
             ];
 
             this.prompt(prompts, function (props) {
+                this.rememberMeKey = crypto.randomBytes(20).toString('hex');
                 // Read the authenticationType to extract the enableSocialSignIn
                 // This allows to have only one authenticationType question for the moment
                 if (props.authenticationType == 'session-social') {
@@ -491,6 +537,7 @@ module.exports = JhipsterGenerator.extend({
 
         configureGlobal: function () {
             // Application name modified, using each technology's conventions
+            this.angularAppName = this.getAngularAppName();
             this.camelizedBaseName = _.camelize(this.baseName);
             this.slugifiedBaseName = _.slugify(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();
@@ -518,7 +565,6 @@ module.exports = JhipsterGenerator.extend({
 
         saveConfig: function () {
             this.config.set('jhipsterVersion', packagejs.version);
-            this.config.set('applicationType', this.applicationType);
             this.config.set('baseName', this.baseName);
             this.config.set('packageName', this.packageName);
             this.config.set('packageFolder', this.packageFolder);
@@ -533,6 +579,7 @@ module.exports = JhipsterGenerator.extend({
             this.config.set('buildTool', this.buildTool);
             this.config.set('enableSocialSignIn', this.enableSocialSignIn);
             this.config.set('jwtSecretKey', this.jwtSecretKey);
+            this.config.set('rememberMeKey', this.rememberMeKey);
         }
     },
 
@@ -657,7 +704,7 @@ module.exports = JhipsterGenerator.extend({
                 this.installI18nResFilesByLanguage(this, RESOURCE_DIR, 'fr');
             }
             this.template(RESOURCE_DIR + '/i18n/_messages_en.properties', RESOURCE_DIR + 'i18n/messages.properties', this, {});
-            
+
             // Create Java files
             this.template('src/main/java/package/_Application.java', javaDir + '/Application.java', this, {});
             this.template('src/main/java/package/_ApplicationWebXml.java', javaDir + '/ApplicationWebXml.java', this, {});
@@ -923,6 +970,7 @@ module.exports = JhipsterGenerator.extend({
         if (this.prodDatabaseType === 'oracle') {
             this.log(chalk.yellow.bold('\n\nYou have selected Oracle database.\n') + 'Please place the ' + chalk.yellow.bold('ojdbc-' + this.ojdbcVersion + '.jar') + ' in the `' + chalk.yellow.bold(this.libFolder) + '` folder under the project root. \n');
         }
+        this.log(chalk.green.bold('\nServer app generated succesfully.\n'));
     }
 
 });

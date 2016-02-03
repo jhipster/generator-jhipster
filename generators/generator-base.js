@@ -1212,6 +1212,9 @@ Generator.prototype.printJHipsterLogo = function () {
     this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version + '\n'));
 };
 
+Generator.prototype.getAngularAppName = function () {
+    return _s.camelize(_s.slugify(this.baseName)) + 'App';
+}
 var wordwrap = function(text, width, seperator, keepLF) {
     var wrappedText = '';
     var rows = text.split('\n');
