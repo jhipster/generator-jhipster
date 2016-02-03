@@ -58,7 +58,7 @@ describe('JHipster generator languages', function () {
                     'src/main/webapp/i18n/' + language.value + '/sessions.json',
                     'src/main/webapp/i18n/' + language.value + '/settings.json',
                     'src/main/webapp/i18n/' + language.value + '/reset.json',
-                    'src/main/webapp/i18n/' + language.value + '/user.management.json',
+                    'src/main/webapp/i18n/' + language.value + '/user-management.json',
                     'src/main/webapp/i18n/' + language.value + '/global.json',
                     'src/main/webapp/i18n/' + language.value + '/health.json',
                     'src/main/resources/i18n/messages_' + language.value.replace('-','_') + '.properties'
@@ -108,7 +108,7 @@ describe('JHipster generator languages', function () {
                     'src/main/webapp/i18n/' + language.value + '/sessions.json',
                     'src/main/webapp/i18n/' + language.value + '/settings.json',
                     'src/main/webapp/i18n/' + language.value + '/reset.json',
-                    'src/main/webapp/i18n/' + language.value + '/user.management.json',
+                    'src/main/webapp/i18n/' + language.value + '/user-management.json',
                     'src/main/webapp/i18n/' + language.value + '/global.json',
                     'src/main/webapp/i18n/' + language.value + '/health.json',
                     'src/main/webapp/i18n/' + language.value + '/social.json',
