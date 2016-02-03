@@ -80,6 +80,10 @@ module.exports = JhipsterGenerator.extend({
 
         setupServerVars : function () {
 
+            this.applicationType = this.config.get('applicationType');
+            if (this.applicationType == undefined) {
+                this.applicationType = 'monolith';
+            }
             this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
             this.packageName = this.config.get('packageName');
             this.authenticationType = this.config.get('authenticationType');
@@ -108,7 +112,6 @@ module.exports = JhipsterGenerator.extend({
         setupVars : function () {
             this.packagejs = packagejs;
             this.jhipsterVersion = this.config.get('jhipsterVersion');
-            this.applicationType = this.config.get('applicationType');
             this.baseName = this.config.get('baseName');
             this.rememberMeKey = this.config.get('rememberMeKey');
             this.jwtSecretKey = this.config.get('jwtSecretKey');
@@ -210,7 +213,7 @@ module.exports = JhipsterGenerator.extend({
                         name: 'Microservice gateway'
                     }
                 ],
-                default: 0
+                default: 'monolith'
             }, function (prompt) {
                 this.applicationType = prompt.applicationType;
                 done();
@@ -1004,6 +1007,10 @@ module.exports = JhipsterGenerator.extend({
                 this.template('src/main/java/package/web/rest/_SocialController.java', javaDir + 'web/rest/SocialController.java', this, {});
             }
 
+            if (this.applicationType == 'gateway') {
+                this.template('src/main/java/package/web/rest/dto/_RouteDTO.java', javaDir + 'web/rest/dto/RouteDTO.java', this, {});
+                this.template('src/main/java/package/web/rest/_GatewayResource.java', javaDir + 'web/rest/GatewayResource.java', this, {});
+            }
         },
 
         writeClientFiles: function () {
@@ -1134,6 +1141,12 @@ module.exports = JhipsterGenerator.extend({
             this.template(ANGULAR_DIR + 'admin/user-management/_user-management-detail.controller.js', ANGULAR_DIR + 'admin/user-management/user-management-detail.controller.js', this, {});
             this.template(ANGULAR_DIR + 'admin/user-management/_user-management-dialog.controller.js', ANGULAR_DIR + 'admin/user-management/user-management-dialog.controller.js', this, {});
             this.template(ANGULAR_DIR + 'admin/user-management/_user-management-delete-dialog.controller.js', ANGULAR_DIR + 'admin/user-management/user-management-delete-dialog.controller.js', this, {});
+            if (this.applicationType == 'gateway') {
+                this.copyHtml(ANGULAR_DIR + 'admin/gateway/gateway.html', ANGULAR_DIR + 'admin/gateway/gateway.html');
+                this.copyJs(ANGULAR_DIR + 'admin/gateway/_gateway.js', ANGULAR_DIR + 'admin/gateway/gateway.js', this, {});
+                this.copyJs(ANGULAR_DIR + 'admin/gateway/_gateway.controller.js', ANGULAR_DIR + 'admin/gateway/gateway.controller.js', this, {});
+                this.copyJs(ANGULAR_DIR + 'admin/gateway/_gateway.routes.service.js', ANGULAR_DIR + 'admin/gateway/gateway.routes.service.js', this, {});
+            }
 
             //components
             this.template(ANGULAR_DIR + 'components/form/_form.directive.js', ANGULAR_DIR + 'components/form/form.directive.js', this, {});
@@ -1338,6 +1351,13 @@ module.exports = JhipsterGenerator.extend({
                     'app/admin/tracker/tracker.js',
                     'app/admin/tracker/tracker.controller.js',
                     'app/admin/tracker/tracker.service.js'])
+            }
+
+            if (this.applicationType == 'gateway') {
+                appScripts = appScripts.concat([
+                    'app/admin/gateway/gateway.js',
+                    'app/admin/gateway/gateway.controler.js',
+                    'app/admin/gateway/gateway.routes.service.js'])
             }
 
             indexFile = html.appendScripts(indexFile, 'app/app.js', appScripts, {});

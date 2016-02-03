@@ -299,6 +299,21 @@ const expectedFiles = {
         'src/main/java/com/mycompany/myapp/web/rest/SocialController.java',
         'src/test/java/com/mycompany/myapp/repository/CustomSocialUsersConnectionRepositoryIntTest.java',
         'src/test/java/com/mycompany/myapp/service/SocialServiceIntTest.java'
+    ],
+
+    jwt: [
+        'src/main/java/com/mycompany/myapp/security/jwt/JWTConfigurer.java',
+        'src/main/java/com/mycompany/myapp/security/jwt/JWTFilter.java',
+        'src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java',
+    ],
+
+    gateway: [
+        'src/main/java/com/mycompany/myapp/web/rest/dto/RouteDTO.java',
+        'src/main/java/com/mycompany/myapp/web/rest/GatewayResource.java',
+        'src/main/webapp/app/admin/gateway/gateway.controller.js',
+        'src/main/webapp/app/admin/gateway/gateway.js',
+        'src/main/webapp/app/admin/gateway/gateway.html',
+        'src/main/webapp/app/admin/gateway/gateway.routes.service.js'
     ]
 };
 
@@ -555,6 +570,35 @@ describe('JHipster generator', function () {
         });
     });
 
+    describe('JWT authentication', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true})
+                .withPrompts({
+                    "baseName": "jhipster",
+                    "packageName": "com.mycompany.myapp",
+                    "packageFolder": "com/mycompany/myapp",
+                    "authenticationType": "jwt",
+                    "hibernateCache": "ehcache",
+                    "clusteredHttpSession": "no",
+                    "websocket": "no",
+                    "databaseType": "sql",
+                    "devDatabaseType": "h2Memory",
+                    "prodDatabaseType": "mysql",
+                    "useSass": false,
+                    "enableTranslation": true,
+                    "buildTool": "maven",
+                    "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
+                    "searchEngine": "no"
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with JWT authentication', function () {
+            assert.file(expectedFiles.jwt);
+        });
+    });
+
     describe('skip client', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
@@ -613,6 +657,37 @@ describe('JHipster generator', function () {
             assert.noFile(expectedFiles.client);
             assert.noFile(['gulpfile.js']);
             assert.noFile(['gradle/yeoman.gradle']);
+        });
+    });
+
+    describe('gateway', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true})
+                .withPrompts({
+                    "applicationType": "gateway",
+                    "baseName": "jhipster",
+                    "packageName": "com.mycompany.myapp",
+                    "packageFolder": "com/mycompany/myapp",
+                    "authenticationType": "jwt",
+                    "hibernateCache": "ehcache",
+                    "clusteredHttpSession": "no",
+                    "websocket": "no",
+                    "databaseType": "sql",
+                    "devDatabaseType": "h2Memory",
+                    "prodDatabaseType": "mysql",
+                    "useSass": false,
+                    "enableTranslation": true,
+                    "buildTool": "maven",
+                    "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
+                    "searchEngine": "no"
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with the gateway application type', function () {
+            assert.file(expectedFiles.jwt);
+            assert.file(expectedFiles.gateway);
         });
     });
 });
