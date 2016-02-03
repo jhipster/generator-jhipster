@@ -42,8 +42,7 @@ angular.module('<%=angularAppName%>')
 
         $scope.refreshThreadDumpData = function() {
             MetricsService.threadDump().then(function(data) {
-
-                var modalInstance = $uibModal.open({
+                $uibModal.open({
                     templateUrl: 'app/admin/metrics/metrics.modal.html',
                     controller: 'MetricsModalController',
                     size: 'lg',

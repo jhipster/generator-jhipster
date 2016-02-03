@@ -1,17 +1,18 @@
+/*jshint camelcase: false */
 'use strict';
 
 angular.module('<%=angularAppName%>')
     .factory('AuthServerProvider', function loginService($http, localStorageService, Base64) {
         return {
             login: function(credentials) {
-                var data = "username=" +  encodeURIComponent(credentials.username) + "&password="
-                    + encodeURIComponent(credentials.password) + "&grant_type=password&scope=read%20write&" +
-                    "client_secret=mySecretOAuthSecret&client_id=<%= baseName%>app";
+                var data = 'username=' +  encodeURIComponent(credentials.username) + '&password=' +
+                    encodeURIComponent(credentials.password) + '&grant_type=password&scope=read%20write&' +
+                    'client_secret=mySecretOAuthSecret&client_id=<%= baseName%>app';
                 return $http.post('oauth/token', data, {
                     headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                        "Accept": "application/json",
-                        "Authorization": "Basic " + Base64.encode("<%= baseName%>app" + ':' + "mySecretOAuthSecret")
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Accept': 'application/json',
+                        'Authorization': 'Basic ' + Base64.encode('<%= baseName%>app' + ':' + 'mySecretOAuthSecret')
                     }
                 }).success(function (response) {
                     var expiredAt = new Date();

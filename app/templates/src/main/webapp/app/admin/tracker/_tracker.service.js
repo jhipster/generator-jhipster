@@ -1,4 +1,5 @@
 'use strict';
+/* globals window, SockJS, Stomp */
 
 angular.module('<%=angularAppName%>')
     .factory('Tracker', function ($rootScope, $cookies, $http, $q) {
@@ -8,7 +9,7 @@ angular.module('<%=angularAppName%>')
         var connected = $q.defer();
         var alreadyConnectedOnce = false;
         function sendActivity() {
-            if (stompClient != null && stompClient.connected) {
+            if (stompClient !== null && stompClient.connected) {
                 stompClient
                     .send('/topic/activity',
                     {},
@@ -20,17 +21,19 @@ angular.module('<%=angularAppName%>')
                 //building absolute path so that websocket doesnt fail when deploying with a context path
                 var loc = window.location;
                 var url = '//' + loc.host + loc.pathname + 'websocket/tracker';<% if (authenticationType == 'oauth2') { %>
-                var authToken = JSON.parse(localStorage.getItem("ls.token")).access_token;
+                /* globals localStorage */
+                /*jshint camelcase: false */
+                var authToken = JSON.parse(localStorage.getItem('ls.token')).access_token;
                 url += '?access_token=' + authToken;<% } %>
                 var socket = new SockJS(url);
                 stompClient = Stomp.over(socket);
                 var headers = {};<% if (authenticationType == 'session') { %>
                 headers['X-CSRF-TOKEN'] = $cookies[$http.defaults.xsrfCookieName];<% } %>
-                stompClient.connect(headers, function(frame) {
-                    connected.resolve("success");
+                stompClient.connect(headers, function() {
+                    connected.resolve('success');
                     sendActivity();
                     if (!alreadyConnectedOnce) {
-                        $rootScope.$on('$stateChangeStart', function (event) {
+                        $rootScope.$on('$stateChangeStart', function () {
                             sendActivity();
                         });
                         alreadyConnectedOnce = true;
@@ -39,13 +42,13 @@ angular.module('<%=angularAppName%>')
             },
             subscribe: function() {
                 connected.promise.then(function() {
-                    subscriber = stompClient.subscribe("/topic/tracker", function(data) {
+                    subscriber = stompClient.subscribe('/topic/tracker', function(data) {
                         listener.notify(JSON.parse(data.body));
                     });
                 }, null, null);
             },
             unsubscribe: function() {
-                if (subscriber != null) {
+                if (subscriber !== null) {
                     subscriber.unsubscribe();
                 }
                 listener = $q.defer();
@@ -54,12 +57,12 @@ angular.module('<%=angularAppName%>')
                 return listener.promise;
             },
             sendActivity: function () {
-                if (stompClient != null) {
+                if (stompClient !== null) {
                     sendActivity();
                 }
             },
             disconnect: function() {
-                if (stompClient != null) {
+                if (stompClient !== null) {
                     stompClient.disconnect();
                     stompClient = null;
                 }
