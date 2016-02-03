@@ -167,6 +167,7 @@ gulp.task('watch', function() {
     gulp.watch(<% if(useSass) { %>config.scss + '**/*.{scss,sass}'<% } else { %>config.app + 'content/css/**/*.css'<% } %>, ['styles']);
     gulp.watch(config.app + 'content/images/**', ['images']);
     gulp.watch([config.app + '*.html', config.app + 'app/**', config.app + 'i18n/**']).on('change', browserSync.reload);
+    gulp.watch(config.app + 'app/**/*.js', ['jshint']);
 });
 
 gulp.task('wiredep', ['wiredep:test', 'wiredep:app']);
@@ -278,7 +279,8 @@ gulp.task('jshint', function() {
     return gulp.src(['gulpfile.js', config.app + 'app/**/*.js'])
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(jshint())
-        .pipe(jshint.reporter('jshint-stylish'));
+        .pipe(jshint.reporter('jshint-stylish'))
+        .pipe(jshint.reporter('fail'));
 });
 
 <% if (testFrameworks.indexOf('protractor') > -1) { %>
