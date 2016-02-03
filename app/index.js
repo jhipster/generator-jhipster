@@ -560,13 +560,13 @@ module.exports = JhipsterGenerator.extend({
                 {
                     type: 'confirm',
                     name: 'useSass',
-                    message: '(12/' + QUESTIONS + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
+                    message: '(13/' + QUESTIONS + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
                     default: false
                 },
                 {
                     type: 'confirm',
                     name: 'enableTranslation',
-                    message: '(13/' + QUESTIONS + ') Would you like to enable translation support with Angular Translate?',
+                    message: '(14/' + QUESTIONS + ') Would you like to enable translation support with Angular Translate?',
                     default: true
                 }
             ];
@@ -598,7 +598,7 @@ module.exports = JhipsterGenerator.extend({
             this.prompt({
                 type: 'checkbox',
                 name: 'testFrameworks',
-                message: '(16/' + QUESTIONS + ') Which testing frameworks would you like to use?',
+                message: '(15/' + QUESTIONS + ') Which testing frameworks would you like to use?',
                 choices: choices,
                 default: [ 'gatling' ]
             }, function (prompt) {
