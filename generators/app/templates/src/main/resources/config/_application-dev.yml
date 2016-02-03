@@ -131,7 +131,11 @@ liquibase:
     contexts: dev
 
 server:
+<%_ if (applicationType == 'microservice') { _%>
+    port: 8081
+<%_ } else { _%>
     port: 8080
+<%_ } _%>
 
 # ===================================================================
 # JHipster specific properties
