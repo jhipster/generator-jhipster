@@ -43,26 +43,24 @@ bootRun {
     addResources = false
 }
 
-
 test {
-    println 'Starting the Unit and Integration test'
     include '**/*UnitTest*'
     include '**/*IntTest*'
 
+    ignoreFailures true
     reports.html.enabled = false
 }
 
 task cucumberTest(type: Test) {
-    println 'Starting the Cucumber test'
     include '**/CucumberTest*'
 
+    ignoreFailures true
     reports.html.enabled = false
 }
 
 test.finalizedBy(cucumberTest)
 
 task testReport(type: TestReport) {
-    println 'Executing testReport'
     destinationDir = file("$buildDir/reports/tests")
     reportOn test
     reportOn cucumberTest
