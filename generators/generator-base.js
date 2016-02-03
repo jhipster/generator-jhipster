@@ -1147,7 +1147,7 @@ Generator.prototype.getColumnName = function(value) {
 };
 
 Generator.prototype.insight = function () {
-    var pkg = require('./package.json');
+    var pkg = require('../package.json');
     var insight = new Insight({
         trackingCode: 'UA-46075199-2',
         packageName: pkg.name,
