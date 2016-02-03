@@ -217,6 +217,30 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
 
     @Test
     @Transactional
+    public void testRegisterEmailEmpty() throws Exception {
+        UserDTO u = new UserDTO(
+            "bob",              // login
+            "password",         // password
+            "Bob",              // firstName
+            "Green",            // lastName
+            "",                 // e-mail <-- empty
+            true,               // activated
+            "en",               // langKey
+            new HashSet<>(Arrays.asList(AuthoritiesConstants.USER))
+        );
+
+        restUserMockMvc.perform(
+            post("/api/register")
+                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .content(TestUtil.convertObjectToJsonBytes(u)))
+            .andExpect(status().isBadRequest());
+
+        Optional<User> user = userRepository.findOneByLogin("bob");
+        assertThat(user.isPresent()).isFalse();
+    }
+
+    @Test
+    @Transactional
     public void testRegisterDuplicateLogin() throws Exception {
         // Good
         UserDTO u = new UserDTO(
