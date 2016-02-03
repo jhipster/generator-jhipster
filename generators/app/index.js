@@ -55,6 +55,17 @@ module.exports = JhipsterGenerator.extend({
     initializing : {
         displayLogo : function () {
             this.printJHipsterLogo();
+        },
+
+        setupVars : function () {
+            this.baseName = this.config.get('baseName');
+            this.jhipsterVersion = this.config.get('jhipsterVersion');
+            this.applicationType = this.config.get('applicationType');
+
+            var configFound = this.baseName != null && this.jhipsterVersion != null && this.applicationType != null;
+            if (configFound) {
+                this.existingProject = true;
+            }
         }
     },
 
@@ -121,7 +132,7 @@ module.exports = JhipsterGenerator.extend({
         },
     },
 
-    default: {
+    configuring: {
 
         composeServer : function () {
             this.composeWith('jhipster:server', {
@@ -146,8 +157,10 @@ module.exports = JhipsterGenerator.extend({
                 local: require.resolve('../client')
             });
 
-        },
+        }
+    },
 
+    default: {
         askForTestOpts: function () {
             if(this.existingProject){
                 return;
@@ -175,10 +188,8 @@ module.exports = JhipsterGenerator.extend({
                 configOptions.testFrameworks = this.testFrameworks;
                 done();
             }.bind(this));
-        }
-    },
+        },
 
-    configuring: {
         insight: function () {
             var insight = this.insight();
             insight.track('generator', 'app');
@@ -213,9 +224,7 @@ module.exports = JhipsterGenerator.extend({
     },
 
     end: function () {
-        if (this.prodDatabaseType === 'oracle') {
-            this.log(chalk.yellow.bold('\n\nYou have selected Oracle database.\n') + 'Please place the ' + chalk.yellow.bold('ojdbc-' + this.ojdbcVersion + '.jar') + ' in the `' + chalk.yellow.bold(this.libFolder) + '` folder under the project root. \n');
-        }
+        this.log(chalk.green.bold('\nWeb app generated succesfully.\n'));
     }
 
 });

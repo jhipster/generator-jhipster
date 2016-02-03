@@ -134,9 +134,6 @@ module.exports = JhipsterClientGenerator.extend({
         setupClientVars : function () {
             this.useSass = this.config.get('useSass');
             this.enableTranslation = this.config.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
-        },
-
-        setupVars : function () {
             this.packagejs = packagejs;
             var baseName = this.config.get('baseName');
             if (baseName) {
@@ -185,14 +182,15 @@ module.exports = JhipsterClientGenerator.extend({
                 }
             ];
             this.prompt(prompts, function (props) {
-
                 this.useSass = props.useSass;
                 this.enableTranslation = props.enableTranslation;
-                configOptions.useSass = props.useSass;
-                configOptions.enableTranslation = props.enableTranslation;
-
                 done();
             }.bind(this));
+        },
+
+        setSharedConfigOptions : function () {
+            configOptions.useSass = this.useSass;
+            configOptions.enableTranslation = this.enableTranslation;
         }
 
     },
@@ -220,7 +218,7 @@ module.exports = JhipsterClientGenerator.extend({
         }
     },
 
-    writing: {
+    default: {
 
         getSharedConfigOptions: function () {
             if(configOptions.hibernateCache) {
@@ -253,8 +251,10 @@ module.exports = JhipsterClientGenerator.extend({
             if(configOptions.testFrameworks) {
                 this.testFrameworks = configOptions.testFrameworks;
             }
-        },
+        }
+    },
 
+    writing: {
         writeClientFiles: function () {
 
             this.template('_package.json', 'package.json', this, {});

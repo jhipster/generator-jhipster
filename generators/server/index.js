@@ -122,9 +122,6 @@ module.exports = JhipsterServerGenerator.extend({
             }
             this.buildTool = this.config.get('buildTool');
             this.enableSocialSignIn = this.config.get('enableSocialSignIn');
-        },
-
-        setupVars : function () {
             this.packagejs = packagejs;
             this.jhipsterVersion = this.config.get('jhipsterVersion');
             this.applicationType = this.config.get('applicationType');
@@ -491,21 +488,23 @@ module.exports = JhipsterServerGenerator.extend({
                     this.searchEngine = 'no';
                 }
 
-                configOptions.lastQuestion = currentQuestion;
-                configOptions.packageName = this.packageName;
-                configOptions.hibernateCache = this.hibernateCache;
-                configOptions.clusteredHttpSession = this.clusteredHttpSession;
-                configOptions.websocket = this.websocket;
-                configOptions.databaseType = this.databaseType;
-                configOptions.devDatabaseType = this.devDatabaseType;
-                configOptions.prodDatabaseType = this.prodDatabaseType;
-                configOptions.searchEngine = this.searchEngine;
-                configOptions.buildTool = this.buildTool;
-                configOptions.enableSocialSignIn = this.enableSocialSignIn;
-                configOptions.authenticationType = this.authenticationType;
-
                 done();
             }.bind(this));
+        },
+
+        setSharedConfigOptions : function () {
+            configOptions.lastQuestion = currentQuestion;
+            configOptions.packageName = this.packageName;
+            configOptions.hibernateCache = this.hibernateCache;
+            configOptions.clusteredHttpSession = this.clusteredHttpSession;
+            configOptions.websocket = this.websocket;
+            configOptions.databaseType = this.databaseType;
+            configOptions.devDatabaseType = this.devDatabaseType;
+            configOptions.prodDatabaseType = this.prodDatabaseType;
+            configOptions.searchEngine = this.searchEngine;
+            configOptions.buildTool = this.buildTool;
+            configOptions.enableSocialSignIn = this.enableSocialSignIn;
+            configOptions.authenticationType = this.authenticationType;
         }
     },
 
@@ -571,7 +570,7 @@ module.exports = JhipsterServerGenerator.extend({
         }
     },
 
-    writing: {
+    default: {
         getSharedConfigOptions: function () {
             if(configOptions.enableTranslation) {
                 this.enableTranslation = configOptions.enableTranslation;
@@ -580,7 +579,10 @@ module.exports = JhipsterServerGenerator.extend({
             if(configOptions.testFrameworks) {
                 this.testFrameworks = configOptions.testFrameworks;
             }
-        },
+        }
+    },
+
+    writing : {
 
         writeGlobalFiles: function () {
             this.template('_README.md', 'README.md', this, {});
