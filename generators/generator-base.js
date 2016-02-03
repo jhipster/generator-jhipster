@@ -10,6 +10,7 @@ var path = require('path'),
     fs = require('fs'),
     shelljs = require('shelljs'),
     ejs = require('ejs'),
+    packagejs = require('../package.json'),
     semver = require('semver');
 
 const JHIPSTER_CONFIG_DIR = ".jhipster";
@@ -1151,11 +1152,10 @@ Generator.prototype.getColumnName = function(value) {
 };
 
 Generator.prototype.insight = function () {
-    var pkg = require('../package.json');
     var insight = new Insight({
         trackingCode: 'UA-46075199-2',
-        packageName: pkg.name,
-        packageVersion: pkg.version
+        packageName: packagejs.name,
+        packageVersion: packagejs.version
     });
     return insight;
 }
@@ -1182,6 +1182,10 @@ Generator.prototype.isJhipsterVersionLessThan = function(version) {
     return semver.lt(jhipsterVersion, version);
 }
 
+Generator.prototype.getDefaultAppName = function(text) {
+    return (/^[a-zA-Z0-9_]+$/.test(path.basename(process.cwd())))?path.basename(process.cwd()):'jhipster';
+};
+
 Generator.prototype.contains = _.contains;
 
 Generator.prototype.formatAsClassJavadoc = function(text) {
@@ -1195,6 +1199,17 @@ Generator.prototype.formatAsApiModel = function(text) {
 };
 Generator.prototype.formatAsApiModelProperty = function(text) {
     return wordwrap(text.replace(/\\/g, '\\\\').replace(/\"/g, '\\\"'), WORD_WRAP_WIDTH - 13, '"\n        + "', true)
+};
+
+Generator.prototype.printJHipsterLogo = function () {
+    this.log(' \n' +
+    chalk.green('        ██') + chalk.red('  ██    ██  ████████  ███████    ██████  ████████  ████████  ███████\n') +
+    chalk.green('        ██') + chalk.red('  ██    ██     ██     ██    ██  ██          ██     ██        ██    ██\n') +
+    chalk.green('        ██') + chalk.red('  ████████     ██     ███████    █████      ██     ██████    ███████\n') +
+    chalk.green('  ██    ██') + chalk.red('  ██    ██     ██     ██             ██     ██     ██        ██   ██\n') +
+    chalk.green('   ██████ ') + chalk.red('  ██    ██  ████████  ██        ██████      ██     ████████  ██    ██\n'));
+    this.log(chalk.white.bold('                            http://jhipster.github.io\n'));
+    this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version + '\n'));
 };
 
 var wordwrap = function(text, width, seperator, keepLF) {

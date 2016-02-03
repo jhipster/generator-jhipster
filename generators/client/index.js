@@ -7,7 +7,6 @@ var util = require('util'),
     shelljs = require('shelljs'),
     scriptBase = require('../generator-base'),
     cleanup = require('../cleanup'),
-    packagejs = require('../../package.json'),
     crypto = require("crypto"),
     mkdirp = require('mkdirp'),
     html = require("html-wiring"),
@@ -24,65 +23,77 @@ const ANGULAR_DIR = WEBAPP_DIR + 'app/';
 const TEST_JS_DIR = 'src/test/javascript/';
 const INTERPOLATE_REGEX = /<%=([\s\S]+?)%>/g; // so that tags in templates do not get mistreated as _ templates
 
+var currentQuestion;
+
 module.exports = JhipsterGenerator.extend({
     constructor: function() {
         generators.Base.apply(this, arguments);
-        // This adds support for a `--skip-client` flag
-        this.option('skip-client', {
-            desc: 'Skip the client side app generation',
+
+        // This adds support for a `--base-name` flag
+        this.option('base-name', {
+            desc: 'Provide base name for the application, this will be overwritten if base name is found in .yo-rc file',
+            type: String
+        });
+
+        // This adds support for a `--protractor` flag
+        this.option('protractor', {
+            desc: 'Enable protractor tests',
             type: Boolean,
             defaults: false
         });
-        // This adds support for a `--[no-]i18n` flag
-        this.option('i18n', {
-            desc: 'Disable or enable i18n when skipping client side generation, has no effect otherwise',
+
+        // This adds support for a `--last-question` flag
+        this.option('last-question', {
+            desc: 'Pass the last question number asked',
+            type: Number
+        });
+
+        // This adds support for a `--[no-]logo` flag
+        this.option('logo', {
+            desc: 'Disable or enable Jhipster logo',
             type: Boolean,
             defaults: true
         });
-        // This adds support for a `--with-entities` flag
-        this.option('with-entities', {
-            desc: 'Regenerate the existing entities if any',
-            type: Boolean,
-            defaults: false
+
+        // This adds support for a `--auth` flag
+        this.option('base-name', {
+            desc: 'Provide authentication type for the application',
+            type: String
         });
-        var skipClient = this.config.get('skipClient');
-        this.skipClient = this.options['skip-client'] || skipClient;
+
         this.i18n = this.options['i18n'];
-        this.withEntities = this.options['with-entities'];
+        this.baseName = this.options['base-name'];
+        var protractor = this.options['protractor'];
+        this.testFrameworks = protractor ? [ protractor ] : [];
+        var lastQuestion = this.options['last-question'];
+        currentQuestion = lastQuestion ? lastQuestion : 0;
+        this.logo = this.options['logo'];
+        this.authenticationType = this.options['auth'];
 
     },
     initializing : {
         displayLogo : function () {
-            this.log(' \n' +
-            chalk.green('        ██') + chalk.red('  ██    ██  ████████  ███████    ██████  ████████  ████████  ███████\n') +
-            chalk.green('        ██') + chalk.red('  ██    ██     ██     ██    ██  ██          ██     ██        ██    ██\n') +
-            chalk.green('        ██') + chalk.red('  ████████     ██     ███████    █████      ██     ██████    ███████\n') +
-            chalk.green('  ██    ██') + chalk.red('  ██    ██     ██     ██             ██     ██     ██        ██   ██\n') +
-            chalk.green('   ██████ ') + chalk.red('  ██    ██  ████████  ██        ██████      ██     ████████  ██    ██\n'));
-            this.log(chalk.white.bold('                            http://jhipster.github.io\n'));
-            this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version + '\n'));
+            if(this.logo){
+                this.printJHipsterLogo();
+            }
         },
 
         setupClientVars : function () {
-            if(this.skipClient){
-                return;
-            }
             this.useSass = this.config.get('useSass');
-            if (this.useSass == undefined) {
-                // backward compatibility for existing compass users
-                this.useSass = this.config.get('useCompass');
-            }
             this.enableTranslation = this.config.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
         },
 
         setupVars : function () {
 
-            this.baseName = this.config.get('baseName');
+            var baseName = this.config.get('baseName');
+
+            if (baseName) {
+                this.baseName = baseName;
+            }
 
             var clientConfigFound = this.useSass != null;
 
             if (clientConfigFound) {
-
                 // If translation is not defined, it is enabled by default
                 if (this.enableTranslation == null) {
                     this.enableTranslation = true;
@@ -96,11 +107,11 @@ module.exports = JhipsterGenerator.extend({
     prompting: {
 
         askForModuleName: function () {
-            if(this.existingProject){
+            if(this.baseName){
                 return;
             }
             var done = this.async();
-            var defaultAppBaseName = (/^[a-zA-Z0-9_]+$/.test(path.basename(process.cwd())))?path.basename(process.cwd()):'jhipster';
+            var defaultAppBaseName = this.getDefaultAppName();
 
             this.prompt({
                 type: 'input',
@@ -109,17 +120,16 @@ module.exports = JhipsterGenerator.extend({
                     if (/^([a-zA-Z0-9_]*)$/.test(input)) return true;
                     return 'Your application name cannot contain special characters or a blank space, using the default name instead';
                 },
-                message: '(2/' + QUESTIONS + ') What is the base name of your application?',
+                message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') What is the base name of your application?',
                 default: defaultAppBaseName
             }, function (prompt) {
                 this.baseName = prompt.baseName;
-                this.rememberMeKey = crypto.randomBytes(20).toString('hex');
                 done();
             }.bind(this));
         },
 
         askForClientSideOpts: function () {
-            if(this.existingProject || this.skipClient){
+            if(this.existingProject){
                 return;
             }
             var done = this.async();
@@ -127,13 +137,13 @@ module.exports = JhipsterGenerator.extend({
                 {
                     type: 'confirm',
                     name: 'useSass',
-                    message: '(13/' + QUESTIONS + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
+                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
                     default: false
                 },
                 {
                     type: 'confirm',
                     name: 'enableTranslation',
-                    message: '(14/' + QUESTIONS + ') Would you like to enable translation support with Angular Translate?',
+                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Would you like to enable translation support with Angular Translate?',
                     default: true
                 }
             ];
@@ -372,9 +382,6 @@ module.exports = JhipsterGenerator.extend({
         },
 
         updateJsToHtml: function () {
-            if(this.skipClient){
-                return;
-            }
             // Index page
             var indexFile = html.readFileAsString(path.join(this.sourceRoot(), WEBAPP_DIR + '_index.html'));
             var engine = ejs.render;
@@ -509,9 +516,6 @@ module.exports = JhipsterGenerator.extend({
         },
 
         writeClientTestFwFiles: function () {
-            if(this.skipClient){
-                return;
-            }
             // Create Test Javascript files
             var testTemplates = [
                 '_karma.conf.js',
@@ -546,9 +550,6 @@ module.exports = JhipsterGenerator.extend({
     },
 
     install: function () {
-        if(this.skipClient){
-            return;
-        }
         var injectDependenciesAndConstants = function () {
             if (this.options['skip-install']) {
                 this.log(
@@ -579,9 +580,7 @@ module.exports = JhipsterGenerator.extend({
     },
 
     end: function () {
-        if (this.prodDatabaseType === 'oracle') {
-            this.log(chalk.yellow.bold('\n\nYou have selected Oracle database.\n') + 'Please place the ' + chalk.yellow.bold('ojdbc-' + this.ojdbcVersion + '.jar') + ' in the `' + chalk.yellow.bold(this.libFolder) + '` folder under the project root. \n');
-        }
+        this.log(chalk.green.bold('\nClient app generated succesfully.\n'));
     }
 
 });
