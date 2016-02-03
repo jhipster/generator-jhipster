@@ -79,7 +79,7 @@ module.exports = JhipsterGenerator.extend({
 
         var skipClient = this.config.get('skipClient');
         this.skipClient = this.options['skip-client'] || skipClient;
-        this.i18n = this.options['i18n'];
+        this.enableTranslation = this.options['i18n'];
         this.baseName = this.options['base-name'];
         this.testFrameworks = [];
         var gatling = this.options['gatling'];
@@ -558,9 +558,6 @@ module.exports = JhipsterGenerator.extend({
             this.packageFolder = this.packageName.replace(/\./g, '/');
             this.javaDir = 'src/main/java/' + this.packageFolder + '/';
             this.testDir = 'src/test/java/' + this.packageFolder + '/';
-            if(this.skipClient){
-                this.enableTranslation = this.i18n;
-            }
         },
 
         saveConfig: function () {
