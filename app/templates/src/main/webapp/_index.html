@@ -13,7 +13,9 @@
     <!-- build:css content/css/vendor.css -->
     <!-- bower:css -->
     <!-- endbower -->
+    <%_ if(useSass) { _%>
     <link rel="stylesheet" href="content/css/vendor.css">
+    <%_ } _%>
     <!-- endbuild -->
     <!-- build:css content/css/main.css -->
     <link rel="stylesheet" href="content/css/main.css">
@@ -28,7 +30,7 @@
     <div class="container">
         <div class="well" ui-view="content"></div>
 
-        <div class="footer">
+        <div class="footer" ng-cloak>
             <p translate="footer">This is your footer</p>
         </div>
     </div>

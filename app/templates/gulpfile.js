@@ -32,8 +32,7 @@ var gulp = require('gulp'),
 var config = {
     app: 'src/main/webapp/',
     dist: 'src/main/webapp/dist/',
-    test: 'src/test/javascript/spec/',
-    tmp: '.tmp/'<% if(useSass) { %>,
+    test: 'src/test/javascript/'<% if(useSass) { %>,
     importPath: 'src/main/webapp/bower_components',
     scss: 'src/main/webapp/scss/'<% } %>,
     port: 9000,
@@ -45,22 +44,18 @@ gulp.task('clean', function () {
     return del([config.dist]);
 });
 
-gulp.task('clean:tmp', function () {
-    return del([config.tmp]);
-});
-
 gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function(done) {
     new KarmaServer({
-        configFile: __dirname + '/src/test/javascript/karma.conf.js',
+        configFile: __dirname + '/' + config.test + 'karma.conf.js',
         singleRun: true
     }, done).start();
 });
 <% if (testFrameworks.indexOf('protractor') > -1) { %>
 gulp.task('protractor', function() {
-    return gulp.src(['./src/main/test/javascript/e2e/*.js'])
+    return gulp.src([config.test + 'e2e/*.js'])
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(protractor({
-            configFile: 'src/test/javascript/protractor.conf.js'
+            configFile: config.test + 'protractor.conf.js'
         }));
 });<% } %>
 
@@ -84,21 +79,23 @@ gulp.task('images', function() {
 });
 <% if(useSass) { %>
 gulp.task('sass', function () {
-    return gulp.src(config.scss + '**/*.scss')
+    return gulp.src(config.scss + '**/*.{scss,sass}')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(sass({includePaths:config.importPath}).on('error', sass.logError))
         .pipe(gulp.dest(config.app + 'content/css'));
 });
 <% } %>
 gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function() {
-    return gulp.src(config.app + 'content/css/**/*.css')
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(gulp.dest(config.tmp))
+    return gulp.src(config.app + 'content/css')
         .pipe(browserSync.reload({stream: true}));
 });
 
+gulp.task('install', function(done) {
+    runSequence('wiredep', 'ngconstant:dev'<% if(useSass) { %>, 'sass'<% } %>, done);
+});
+
 gulp.task('serve', function() {
-    runSequence('wiredep', 'ngconstant:dev'<% if(useSass) { %>, 'sass'<% } %>, function () {
+    runSequence('install', function () {
         var baseUri = 'http://localhost:' + config.apiPort;
         // Routes to proxy to the backend. Routes ending with a / will setup
         // a redirect so that if accessed without a trailing slash, will
@@ -167,7 +164,7 @@ gulp.task('serve', function() {
 gulp.task('watch', function() {
     gulp.watch('bower.json', ['wiredep']);
     gulp.watch(['gulpfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>], ['ngconstant:dev']);
-    gulp.watch(<% if(useSass) { %>config.scss + '**/*.scss'<% } else { %>config.app + 'content/css/**/*.css'<% } %>, ['styles']);
+    gulp.watch(<% if(useSass) { %>config.scss + '**/*.{scss,sass}'<% } else { %>config.app + 'content/css/**/*.css'<% } %>, ['styles']);
     gulp.watch(config.app + 'content/images/**', ['images']);
     gulp.watch([config.app + '*.html', config.app + 'app/**', config.app + 'i18n/**']).on('change', browserSync.reload);
 });
@@ -175,14 +172,14 @@ gulp.task('watch', function() {
 gulp.task('wiredep', ['wiredep:test', 'wiredep:app']);
 
 gulp.task('wiredep:app', function () {
-    var stream = gulp.src('src/main/webapp/index.html')
+    var stream = gulp.src(config.app + 'index.html')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(wiredep({
             exclude: [/angular-i18n/]
         }))
-        .pipe(gulp.dest('src/main/webapp'));
+        .pipe(gulp.dest(config.app));
 
-    return <% if (useSass) { %>es.merge(stream, gulp.src(config.scss + '*.scss')
+    return <% if (useSass) { %>es.merge(stream, gulp.src(config.scss + '*.{scss,sass}')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(wiredep({
             exclude: [
@@ -195,7 +192,7 @@ gulp.task('wiredep:app', function () {
 });
 
 gulp.task('wiredep:test', function () {
-    return gulp.src('src/test/javascript/karma.conf.js')
+    return gulp.src(config.test + 'karma.conf.js')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(wiredep({
             exclude: [/angular-i18n/, /angular-scenario/],
@@ -213,7 +210,7 @@ gulp.task('wiredep:test', function () {
                 }
             }
         }))
-        .pipe(gulp.dest('src/test/javascript'));
+        .pipe(gulp.dest(config.test));
 });
 
 gulp.task('build', function (cb) {
@@ -274,7 +271,7 @@ gulp.task('ngconstant:prod', function() {
             VERSION: util.parseVersion()
         }
     })
-    .pipe(gulp.dest(config.tmp + 'app/'));
+    .pipe(gulp.dest(config.app + 'app/'));
 });
 
 gulp.task('jshint', function() {
