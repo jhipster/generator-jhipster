@@ -4,14 +4,10 @@ var util = require('util'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
     _ = require('underscore.string'),
-    shelljs = require('shelljs'),
     scriptBase = require('../generator-base'),
-    cleanup = require('../cleanup'),
     packagejs = require('../../package.json'),
     crypto = require("crypto"),
-    mkdirp = require('mkdirp'),
-    html = require("html-wiring"),
-    ejs = require('ejs');
+    mkdirp = require('mkdirp');
 
 var JhipsterGenerator = generators.Base.extend({});
 
@@ -186,22 +182,7 @@ module.exports = JhipsterGenerator.extend({
             if(this.baseName){
                 return;
             }
-            var done = this.async();
-            var defaultAppBaseName = (/^[a-zA-Z0-9_]+$/.test(path.basename(process.cwd())))?path.basename(process.cwd()):'jhipster';
-
-            this.prompt({
-                type: 'input',
-                name: 'baseName',
-                validate: function (input) {
-                    if (/^([a-zA-Z0-9_]*)$/.test(input)) return true;
-                    return 'Your application name cannot contain special characters or a blank space, using the default name instead';
-                },
-                message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') What is the base name of your application?',
-                default: defaultAppBaseName
-            }, function (prompt) {
-                this.baseName = prompt.baseName;
-                done();
-            }.bind(this));
+            this.askModuleName(this, ++currentQuestion, QUESTIONS);
         },
 
         askForServerSideOpts: function (){

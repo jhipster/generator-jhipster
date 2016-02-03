@@ -1214,7 +1214,28 @@ Generator.prototype.printJHipsterLogo = function () {
 
 Generator.prototype.getAngularAppName = function () {
     return _s.camelize(_s.slugify(this.baseName)) + 'App';
-}
+};
+
+Generator.prototype.askModuleName = function (generator, question, questions) {
+
+    var done = generator.async();
+    var defaultAppBaseName = this.getDefaultAppName();
+
+    generator.prompt({
+        type: 'input',
+        name: 'baseName',
+        validate: function (input) {
+            if (/^([a-zA-Z0-9_]*)$/.test(input)) return true;
+            return 'Your application name cannot contain special characters or a blank space, using the default name instead';
+        },
+        message: '(' + (question) + '/' + questions + ') What is the base name of your application?',
+        default: defaultAppBaseName
+    }, function (prompt) {
+        generator.baseName = generator.baseName;
+        done();
+    }.bind(generator));
+};
+
 var wordwrap = function(text, width, seperator, keepLF) {
     var wrappedText = '';
     var rows = text.split('\n');

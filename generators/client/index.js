@@ -7,7 +7,8 @@ var util = require('util'),
     scriptBase = require('../generator-base'),
     mkdirp = require('mkdirp'),
     html = require("html-wiring"),
-    ejs = require('ejs');
+    packagejs = require('../../package.json'),
+    engine = require('ejs').render;
 
 var JhipsterGenerator = generators.Base.extend({});
 
@@ -58,6 +59,50 @@ module.exports = JhipsterGenerator.extend({
             type: String
         });
 
+        // This adds support for a `--build` flag
+        this.option('build', {
+            desc: 'Provide build tool for the application',
+            type: String
+        });
+
+        // This adds support for a `--websocket` flag
+        this.option('websocket', {
+            desc: 'Provide websocket option for the application',
+            type: String
+        });
+
+        // This adds support for a `--dev-db` flag
+        this.option('dev-db', {
+            desc: 'Provide development DB option for the application',
+            type: String
+        });
+
+        // This adds support for a `--db` flag
+        this.option('db', {
+            desc: 'Provide DB type for the application',
+            type: String
+        });
+
+        // This adds support for a `--social` flag
+        this.option('social', {
+            desc: 'Provide development DB option for the application',
+            type: Boolean,
+            default: false
+        });
+
+        // This adds support for a `--search-engine` flag
+        this.option('search-engine', {
+            desc: 'Provide development DB option for the application',
+            type: String
+        });
+
+        // This adds support for a `--search-engine` flag
+        this.option('hb-cache', {
+            desc: 'Provide hibernate cache option for the application',
+            type: String
+        });
+
+
         this.i18n = this.options['i18n'];
         this.baseName = this.options['base-name'];
         this.testFrameworks = [];
@@ -67,6 +112,13 @@ module.exports = JhipsterGenerator.extend({
         currentQuestion = lastQuestion ? lastQuestion : 0;
         this.logo = this.options['logo'];
         this.authenticationType = this.options['auth'];
+        this.buildTool = this.options['build'];
+        this.websocket = this.options['websocket'];
+        this.devDatabaseType = this.options['dev-db'];
+        this.databaseType = this.options['db'];
+        this.enableSocialSignIn = this.options['social'];
+        this.searchEngine = this.options['search-engine'];
+        this.hibernateCache = this.options['hb-cache'];
 
     },
     initializing : {
@@ -82,15 +134,13 @@ module.exports = JhipsterGenerator.extend({
         },
 
         setupVars : function () {
-
+            this.packagejs = packagejs;
             var baseName = this.config.get('baseName');
-
             if (baseName) {
                 this.baseName = baseName;
             }
 
             var clientConfigFound = this.useSass != null;
-
             if (clientConfigFound) {
                 // If translation is not defined, it is enabled by default
                 if (this.enableTranslation == null) {
@@ -105,25 +155,11 @@ module.exports = JhipsterGenerator.extend({
     prompting: {
 
         askForModuleName: function () {
+
             if(this.baseName){
                 return;
             }
-            var done = this.async();
-            var defaultAppBaseName = this.getDefaultAppName();
-
-            this.prompt({
-                type: 'input',
-                name: 'baseName',
-                validate: function (input) {
-                    if (/^([a-zA-Z0-9_]*)$/.test(input)) return true;
-                    return 'Your application name cannot contain special characters or a blank space, using the default name instead';
-                },
-                message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') What is the base name of your application?',
-                default: defaultAppBaseName
-            }, function (prompt) {
-                this.baseName = prompt.baseName;
-                done();
-            }.bind(this));
+            this.askModuleName(this, ++currentQuestion, QUESTIONS);
         },
 
         askForClientSideOpts: function () {
@@ -382,7 +418,7 @@ module.exports = JhipsterGenerator.extend({
         updateJsToHtml: function () {
             // Index page
             var indexFile = html.readFileAsString(path.join(this.sourceRoot(), WEBAPP_DIR + '_index.html'));
-            var engine = ejs.render;
+
             indexFile = engine(indexFile, this, {});
 
             var appScripts = [
