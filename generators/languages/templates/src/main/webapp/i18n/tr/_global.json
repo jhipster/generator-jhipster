@@ -20,7 +20,7 @@
             },
             "admin": {
                 "main": "Yönetim",
-                "user-management": "User management",
+                "userManagement": "User management",
                 "tracker": "Kullanıcı Takip",
                 "metrics": "Ölçümler",
                 "health": "Heath",

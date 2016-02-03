@@ -20,7 +20,7 @@
             },
             "admin": {
                 "main": "Administration",
-                "user-management": "Benutzerverwaltung",
+                "userManagement": "Benutzerverwaltung",
                 "tracker": "Benutzer Aktivitäten",
                 "metrics": "Metriken",
                 "health": "Status",
