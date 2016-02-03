@@ -6,15 +6,36 @@ var assert = require('yeoman-assert');
 var helpers = require('yeoman-test');
 var os = require('os');
 
-var expectedFiles = {
+const expectedFiles = {
+
+    gradle : [
+        'gradle.properties',
+        'build.gradle',
+        'settings.gradle',
+        'gradlew',
+        'gradlew.bat',
+        'gradle/gatling.gradle',
+        'gradle/liquibase.gradle',
+        'gradle/mapstruct.gradle',
+        'gradle/profile_dev.gradle',
+        'gradle/profile_prod.gradle',
+        'gradle/sonar.gradle',
+        'gradle/wrapper/gradle-wrapper.jar',
+        'gradle/wrapper/gradle-wrapper.properties'
+    ],
+
+    maven : [
+        'pom.xml',
+        'mvnw',
+        'mvnw.cmd',
+        '.mvn/wrapper/maven-wrapper.jar',
+        '.mvn/wrapper/maven-wrapper.properties'
+    ],
 
     server: [
         'README.md',
         '.gitignore',
         '.gitattributes',
-        'pom.xml',
-        'mvnw',
-        'mvnw.cmd',
         'src/main/resources/banner.txt',
         'src/main/resources/ehcache.xml',
         'src/main/resources/.h2.server.properties',
@@ -109,8 +130,6 @@ var expectedFiles = {
         'src/test/resources/logback-test.xml',
         'src/test/resources/ehcache.xml',
         'src/test/gatling/conf/gatling.conf',
-        '.mvn/wrapper/maven-wrapper.jar',
-        '.mvn/wrapper/maven-wrapper.properties',
         '.editorconfig',
         '.jshintrc'
     ],
@@ -119,7 +138,7 @@ var expectedFiles = {
         'bower.json',
         'package.json',
         '.bowerrc',
-        'src/main/webapp/assets/styles/main.css',
+        'src/main/webapp/content/css/main.css',
         'src/main/webapp/favicon.ico',
         'src/main/webapp/robots.txt',
         'src/main/webapp/.htaccess',
@@ -131,7 +150,7 @@ var expectedFiles = {
         'src/main/webapp/i18n/en/health.json',
         'src/main/webapp/i18n/en/login.json',
         'src/main/webapp/i18n/en/logs.json',
-        'src/main/webapp/i18n/en/main.json',
+        'src/main/webapp/i18n/en/home.json',
         'src/main/webapp/i18n/en/metrics.json',
         'src/main/webapp/i18n/en/password.json',
         'src/main/webapp/i18n/en/register.json',
@@ -149,7 +168,7 @@ var expectedFiles = {
         'src/main/webapp/i18n/fr/health.json',
         'src/main/webapp/i18n/fr/login.json',
         'src/main/webapp/i18n/fr/logs.json',
-        'src/main/webapp/i18n/fr/main.json',
+        'src/main/webapp/i18n/fr/home.json',
         'src/main/webapp/i18n/fr/metrics.json',
         'src/main/webapp/i18n/fr/password.json',
         'src/main/webapp/i18n/fr/register.json',
@@ -158,85 +177,88 @@ var expectedFiles = {
         'src/main/webapp/i18n/fr/reset.json',
         'src/main/webapp/i18n/fr/user.management.json',
         'src/main/resources/i18n/messages_fr.properties',
-        'src/main/webapp/scripts/app/app.js',
-        'src/main/webapp/scripts/components/admin/audits.service.js',
-        'src/main/webapp/scripts/components/admin/configuration.service.js',
-        'src/main/webapp/scripts/components/admin/logs.service.js',
-        'src/main/webapp/scripts/components/admin/monitoring.service.js',
-        'src/main/webapp/scripts/components/auth/auth.service.js',
-        'src/main/webapp/scripts/components/auth/principal.service.js',
-        'src/main/webapp/scripts/components/auth/authority.directive.js',
-        'src/main/webapp/scripts/components/auth/provider/auth.session.service.js',
-        'src/main/webapp/scripts/components/auth/services/account.service.js',
-        'src/main/webapp/scripts/components/auth/services/activate.service.js',
-        'src/main/webapp/scripts/components/auth/services/password.service.js',
-        'src/main/webapp/scripts/components/auth/services/register.service.js',
-        'src/main/webapp/scripts/components/auth/services/sessions.service.js',
-        'src/main/webapp/scripts/components/form/form.directive.js',
-        'src/main/webapp/scripts/components/form/uib-pager.config.js',
-        'src/main/webapp/scripts/components/form/uib-pagination.config.js',
-        'src/main/webapp/scripts/components/language/language.controller.js',
-        'src/main/webapp/scripts/components/language/language.service.js',
-        'src/main/webapp/scripts/components/navbar/navbar.directive.js',
-        'src/main/webapp/scripts/components/navbar/navbar.html',
-        'src/main/webapp/scripts/components/navbar/navbar.controller.js',
-        'src/main/webapp/scripts/components/user/user.service.js',
-        'src/main/webapp/scripts/components/util/base64.service.js',
-        'src/main/webapp/scripts/components/util/parse-links.service.js',
-        'src/main/webapp/scripts/components/util/truncate.filter.js',
-        'src/main/webapp/scripts/components/util/date-util.service.js',
-        'src/main/webapp/scripts/components/util/sort.directive.js',
-        'src/main/webapp/scripts/app/account/account.js',
-        'src/main/webapp/scripts/app/account/activate/activate.html',
-        'src/main/webapp/scripts/app/account/activate/activate.js',
-        'src/main/webapp/scripts/app/account/activate/activate.controller.js',
-        'src/main/webapp/scripts/app/account/login/login.html',
-        'src/main/webapp/scripts/app/account/login/login.js',
-        'src/main/webapp/scripts/app/account/login/login.controller.js',
-        'src/main/webapp/scripts/app/account/password/password.html',
-        'src/main/webapp/scripts/app/account/password/password.js',
-        'src/main/webapp/scripts/app/account/password/password.controller.js',
-        'src/main/webapp/scripts/app/account/password/password.directive.js',
-        'src/main/webapp/scripts/app/account/register/register.html',
-        'src/main/webapp/scripts/app/account/register/register.js',
-        'src/main/webapp/scripts/app/account/register/register.controller.js',
-        'src/main/webapp/scripts/app/account/reset/request/reset.request.html',
-        'src/main/webapp/scripts/app/account/reset/request/reset.request.js',
-        'src/main/webapp/scripts/app/account/reset/request/reset.request.controller.js',
-        'src/main/webapp/scripts/app/account/reset/finish/reset.finish.html',
-        'src/main/webapp/scripts/app/account/reset/finish/reset.finish.js',
-        'src/main/webapp/scripts/app/account/reset/finish/reset.finish.controller.js',
-        'src/main/webapp/scripts/app/account/sessions/sessions.html',
-        'src/main/webapp/scripts/app/account/sessions/sessions.js',
-        'src/main/webapp/scripts/app/account/sessions/sessions.controller.js',
-        'src/main/webapp/scripts/app/account/settings/settings.html',
-        'src/main/webapp/scripts/app/account/settings/settings.js',
-        'src/main/webapp/scripts/app/account/settings/settings.controller.js',
-        'src/main/webapp/scripts/app/admin/admin.js',
-        'src/main/webapp/scripts/app/admin/audits/audits.html',
-        'src/main/webapp/scripts/app/admin/audits/audits.js',
-        'src/main/webapp/scripts/app/admin/audits/audits.controller.js',
-        'src/main/webapp/scripts/app/admin/configuration/configuration.html',
-        'src/main/webapp/scripts/app/admin/configuration/configuration.js',
-        'src/main/webapp/scripts/app/admin/configuration/configuration.controller.js',
-        'src/main/webapp/scripts/app/admin/docs/docs.html',
-        'src/main/webapp/scripts/app/admin/docs/docs.js',
-        'src/main/webapp/scripts/app/admin/health/health.html',
-        'src/main/webapp/scripts/app/admin/health/health.js',
-        'src/main/webapp/scripts/app/admin/health/health.controller.js',
-        'src/main/webapp/scripts/app/admin/logs/logs.html',
-        'src/main/webapp/scripts/app/admin/logs/logs.js',
-        'src/main/webapp/scripts/app/admin/logs/logs.controller.js',
-        'src/main/webapp/scripts/app/admin/metrics/metrics.html',
-        'src/main/webapp/scripts/app/admin/metrics/metrics.js',
-        'src/main/webapp/scripts/app/admin/metrics/metrics.controller.js',
-        'src/main/webapp/scripts/app/error/error.html',
-        'src/main/webapp/scripts/app/error/accessdenied.html',
-        'src/main/webapp/scripts/app/entities/entity.js',
-        'src/main/webapp/scripts/app/error/error.js',
-        'src/main/webapp/scripts/app/main/main.html',
-        'src/main/webapp/scripts/app/main/main.js',
-        'src/main/webapp/scripts/app/main/main.controller.js',
+        'src/main/webapp/app/app.module.js',
+        'src/main/webapp/app/app.config.js',
+        'src/main/webapp/app/app.constants.js',
+        'src/main/webapp/app/admin/audits/audits.service.js',
+        'src/main/webapp/app/admin/configuration/configuration.service.js',
+        'src/main/webapp/app/admin/logs/logs.service.js',
+        'src/main/webapp/app/admin/metrics/metrics.service.js',
+        'src/main/webapp/app/admin/health/health.service.js',
+        'src/main/webapp/app/services/auth/auth.service.js',
+        'src/main/webapp/app/services/auth/principal.service.js',
+        'src/main/webapp/app/services/auth/authority.directive.js',
+        'src/main/webapp/app/services/auth/auth.session.service.js',
+        'src/main/webapp/app/services/auth/account.service.js',
+        'src/main/webapp/app/services/auth/activate.service.js',
+        'src/main/webapp/app/services/auth/password.service.js',
+        'src/main/webapp/app/services/auth/register.service.js',
+        'src/main/webapp/app/services/auth/sessions.service.js',
+        'src/main/webapp/app/components/form/form.directive.js',
+        'src/main/webapp/app/components/form/uib-pager.config.js',
+        'src/main/webapp/app/components/form/uib-pagination.config.js',
+        'src/main/webapp/app/components/language/language.controller.js',
+        'src/main/webapp/app/components/language/language.service.js',
+        'src/main/webapp/app/layouts/navbar/navbar.directive.js',
+        'src/main/webapp/app/layouts/navbar/navbar.html',
+        'src/main/webapp/app/layouts/navbar/navbar.controller.js',
+        'src/main/webapp/app/services/user/user.service.js',
+        'src/main/webapp/app/components/util/base64.service.js',
+        'src/main/webapp/app/components/util/parse-links.service.js',
+        'src/main/webapp/app/components/util/truncate.filter.js',
+        'src/main/webapp/app/components/util/date-util.service.js',
+        'src/main/webapp/app/components/util/sort.directive.js',
+        'src/main/webapp/app/account/account.js',
+        'src/main/webapp/app/account/activate/activate.html',
+        'src/main/webapp/app/account/activate/activate.js',
+        'src/main/webapp/app/account/activate/activate.controller.js',
+        'src/main/webapp/app/account/login/login.html',
+        'src/main/webapp/app/account/login/login.js',
+        'src/main/webapp/app/account/login/login.controller.js',
+        'src/main/webapp/app/account/password/password.html',
+        'src/main/webapp/app/account/password/password.js',
+        'src/main/webapp/app/account/password/password.controller.js',
+        'src/main/webapp/app/account/password/password.directive.js',
+        'src/main/webapp/app/account/register/register.html',
+        'src/main/webapp/app/account/register/register.js',
+        'src/main/webapp/app/account/register/register.controller.js',
+        'src/main/webapp/app/account/reset/request/reset.request.html',
+        'src/main/webapp/app/account/reset/request/reset.request.js',
+        'src/main/webapp/app/account/reset/request/reset.request.controller.js',
+        'src/main/webapp/app/account/reset/finish/reset.finish.html',
+        'src/main/webapp/app/account/reset/finish/reset.finish.js',
+        'src/main/webapp/app/account/reset/finish/reset.finish.controller.js',
+        'src/main/webapp/app/account/sessions/sessions.html',
+        'src/main/webapp/app/account/sessions/sessions.js',
+        'src/main/webapp/app/account/sessions/sessions.controller.js',
+        'src/main/webapp/app/account/settings/settings.html',
+        'src/main/webapp/app/account/settings/settings.js',
+        'src/main/webapp/app/account/settings/settings.controller.js',
+        'src/main/webapp/app/admin/admin.js',
+        'src/main/webapp/app/admin/audits/audits.html',
+        'src/main/webapp/app/admin/audits/audits.js',
+        'src/main/webapp/app/admin/audits/audits.controller.js',
+        'src/main/webapp/app/admin/configuration/configuration.html',
+        'src/main/webapp/app/admin/configuration/configuration.js',
+        'src/main/webapp/app/admin/configuration/configuration.controller.js',
+        'src/main/webapp/app/admin/docs/docs.html',
+        'src/main/webapp/app/admin/docs/docs.js',
+        'src/main/webapp/app/admin/health/health.html',
+        'src/main/webapp/app/admin/health/health.js',
+        'src/main/webapp/app/admin/health/health.controller.js',
+        'src/main/webapp/app/admin/logs/logs.html',
+        'src/main/webapp/app/admin/logs/logs.js',
+        'src/main/webapp/app/admin/logs/logs.controller.js',
+        'src/main/webapp/app/admin/metrics/metrics.html',
+        'src/main/webapp/app/admin/metrics/metrics.js',
+        'src/main/webapp/app/admin/metrics/metrics.controller.js',
+        'src/main/webapp/app/layouts/error/error.html',
+        'src/main/webapp/app/layouts/error/accessdenied.html',
+        'src/main/webapp/app/entities/entity.js',
+        'src/main/webapp/app/layouts/error/error.js',
+        'src/main/webapp/app/home/home.html',
+        'src/main/webapp/app/home/home.js',
+        'src/main/webapp/app/home/home.controller.js',
         'src/test/javascript/karma.conf.js',
         'src/test/javascript/spec/helpers/httpBackend.js',
         'src/test/javascript/spec/helpers/module.js',
@@ -250,11 +272,11 @@ var expectedFiles = {
         'src/test/javascript/spec/app/account/register/register.controller.spec.js',
         'src/test/javascript/spec/app/account/reset/finish/reset.finish.controller.spec.js',
         'src/test/javascript/spec/app/account/reset/request/reset.request.controller.spec.js',
-        'src/test/javascript/spec/components/auth/auth.services.spec.js',
-        'src/main/webapp/assets/styles/documentation.css',
-        'src/main/webapp/assets/images/development_ribbon.png',
-        'src/main/webapp/assets/images/hipster.png',
-        'src/main/webapp/assets/images/hipster2x.png'
+        'src/test/javascript/spec/app/services/auth/auth.services.spec.js',
+        'src/main/webapp/content/css/documentation.css',
+        'src/main/webapp/content/images/development_ribbon.png',
+        'src/main/webapp/content/images/hipster.png',
+        'src/main/webapp/content/images/hipster2x.png'
     ],
 
     i18n: [
@@ -262,8 +284,8 @@ var expectedFiles = {
         'src/main/resources/i18n/messages_fr.properties',
         'src/main/webapp/i18n/en/global.json',
         'src/main/webapp/i18n/fr/global.json',
-        'src/main/webapp/scripts/components/language/language.controller.js',
-        'src/main/webapp/scripts/components/language/language.service.js'
+        'src/main/webapp/app/components/language/language.controller.js',
+        'src/main/webapp/app/components/language/language.service.js'
     ],
 
     socialLogin: [
@@ -277,13 +299,30 @@ var expectedFiles = {
         'src/main/java/com/mycompany/myapp/web/rest/SocialController.java',
         'src/test/java/com/mycompany/myapp/repository/CustomSocialUsersConnectionRepositoryIntTest.java',
         'src/test/java/com/mycompany/myapp/service/SocialServiceIntTest.java'
+    ],
+
+    jwt: [
+        'src/main/java/com/mycompany/myapp/security/jwt/JWTConfigurer.java',
+        'src/main/java/com/mycompany/myapp/security/jwt/JWTFilter.java',
+        'src/main/java/com/mycompany/myapp/security/jwt/TokenProvider.java',
+    ],
+
+    gateway: [
+        'src/main/java/com/mycompany/myapp/web/rest/dto/RouteDTO.java',
+        'src/main/java/com/mycompany/myapp/web/rest/GatewayResource.java',
+        'src/main/webapp/app/admin/gateway/gateway.controller.js',
+        'src/main/webapp/app/admin/gateway/gateway.js',
+        'src/main/webapp/app/admin/gateway/gateway.html',
+        'src/main/webapp/app/admin/gateway/gateway.routes.service.js'
     ]
 };
 
 describe('JHipster generator', function () {
-    describe('grunt default configuration', function () {
-        before(function (done) {
-            helpers.run(path.join(__dirname, '../app'))
+    this.timeout(4000); //to avoid occassional timeouts
+
+    describe('default configuration', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
                     "baseName": "jhipster",
@@ -299,7 +338,6 @@ describe('JHipster generator', function () {
                     "useSass": false,
                     "enableTranslation": true,
                     "buildTool": "maven",
-                    "frontendBuilder": "grunt",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
                 })
@@ -308,15 +346,15 @@ describe('JHipster generator', function () {
 
         it('creates expected default files', function () {
             assert.file(expectedFiles.server);
+            assert.file(expectedFiles.maven);
             assert.file(expectedFiles.client);
-            assert.file(['Gruntfile.js']);
-            assert.noFile(['gulpfile.js']);
+            assert.file(['gulpfile.js']);
         });
     });
 
-    describe('gulp default configuration', function () {
-        before(function (done) {
-            helpers.run(path.join(__dirname, '../app'))
+    describe('default gradle configuration', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
                     "baseName": "jhipster",
@@ -331,25 +369,25 @@ describe('JHipster generator', function () {
                     "prodDatabaseType": "mysql",
                     "useSass": false,
                     "enableTranslation": true,
-                    "buildTool": "maven",
-                    "frontendBuilder": "gulp",
+                    "buildTool": "gradle",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
                 })
                 .on('end', done);
         });
 
-        it('creates expected default files', function () {
+        it('creates expected default files for gradle', function () {
             assert.file(expectedFiles.server);
+            assert.file(expectedFiles.gradle);
             assert.file(expectedFiles.client);
             assert.file(['gulpfile.js']);
-            assert.noFile(['Gruntfile.js']);
+            assert.file(['gradle/yeoman.gradle']);
         });
     });
 
     describe('package names', function () {
-        before(function (done) {
-            helpers.run(path.join(__dirname, '../app'))
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
                     "baseName": "jhipster",
@@ -365,7 +403,6 @@ describe('JHipster generator', function () {
                     "useSass": false,
                     "enableTranslation": true,
                     "buildTool": "maven",
-                    "frontendBuilder": "grunt",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
                 })
@@ -381,8 +418,8 @@ describe('JHipster generator', function () {
     });
 
     describe('application names', function () {
-        before(function (done) {
-            helpers.run(path.join(__dirname, '../app'))
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
                     "baseName": "myapplication",
@@ -398,7 +435,6 @@ describe('JHipster generator', function () {
                     "useSass": false,
                     "enableTranslation": true,
                     "buildTool": "maven",
-                    "frontendBuilder": "grunt",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
                 })
@@ -407,15 +443,15 @@ describe('JHipster generator', function () {
 
         it('creates expected files with correct application name', function () {
             assert.file([
-                'src/main/webapp/scripts/app/main/main.js'
+                'src/main/webapp/app/home/home.js'
             ]);
-            assert.fileContent('src/main/webapp/scripts/app/main/main.js', /myapplicationApp/);
+            assert.fileContent('src/main/webapp/app/home/home.js', /myapplicationApp/);
         })
     });
 
     describe('oauth2', function () {
-        before(function (done) {
-            helpers.run(path.join(__dirname, '../app'))
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
                     "baseName": "jhipster",
@@ -431,7 +467,6 @@ describe('JHipster generator', function () {
                     "useSass": false,
                     "enableTranslation": true,
                     "buildTool": "maven",
-                    "frontendBuilder": "grunt",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
                 })
@@ -446,8 +481,8 @@ describe('JHipster generator', function () {
     });
 
     describe('hazelcast', function () {
-        before(function (done) {
-            helpers.run(path.join(__dirname, '../app'))
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
                     "baseName": "jhipster",
@@ -463,7 +498,6 @@ describe('JHipster generator', function () {
                     "useSass": false,
                     "enableTranslation": true,
                     "buildTool": "maven",
-                    "frontendBuilder": "grunt",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
                 })
@@ -479,8 +513,8 @@ describe('JHipster generator', function () {
     });
 
     describe('i18n', function () {
-        before(function (done) {
-            helpers.run(path.join(__dirname, '../app'))
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
                     "baseName": "jhipster",
@@ -496,7 +530,6 @@ describe('JHipster generator', function () {
                     "useSass": false,
                     "enableTranslation": false,
                     "buildTool": "maven",
-                    "frontendBuilder": "grunt",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
                 })
@@ -509,8 +542,8 @@ describe('JHipster generator', function () {
     });
 
     describe('social login', function () {
-        before(function (done) {
-            helpers.run(path.join(__dirname, '../app'))
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true})
                 .withPrompts({
                     "baseName": "jhipster",
@@ -526,7 +559,6 @@ describe('JHipster generator', function () {
                     "useSass": false,
                     "enableTranslation": true,
                     "buildTool": "maven",
-                    "frontendBuilder": "grunt",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
                 })
@@ -538,9 +570,38 @@ describe('JHipster generator', function () {
         });
     });
 
+    describe('JWT authentication', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true})
+                .withPrompts({
+                    "baseName": "jhipster",
+                    "packageName": "com.mycompany.myapp",
+                    "packageFolder": "com/mycompany/myapp",
+                    "authenticationType": "jwt",
+                    "hibernateCache": "ehcache",
+                    "clusteredHttpSession": "no",
+                    "websocket": "no",
+                    "databaseType": "sql",
+                    "devDatabaseType": "h2Memory",
+                    "prodDatabaseType": "mysql",
+                    "useSass": false,
+                    "enableTranslation": true,
+                    "buildTool": "maven",
+                    "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
+                    "searchEngine": "no"
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with JWT authentication', function () {
+            assert.file(expectedFiles.jwt);
+        });
+    });
+
     describe('skip client', function () {
-        before(function (done) {
-            helpers.run(path.join(__dirname, '../app'))
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, skipClient: true})
                 .withPrompts({
                     "baseName": "jhipster",
@@ -562,8 +623,71 @@ describe('JHipster generator', function () {
 
         it('creates expected files for default configuration with skip client option enabled', function () {
             assert.file(expectedFiles.server);
+            assert.file(expectedFiles.maven);
             assert.noFile(expectedFiles.client);
-            assert.noFile(['Gruntfile.js']);
+            assert.noFile(['gulpfile.js']);
+        });
+    });
+
+    describe('skip client with gradle', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, skipClient: true})
+                .withPrompts({
+                    "baseName": "jhipster",
+                    "packageName": "com.mycompany.myapp",
+                    "packageFolder": "com/mycompany/myapp",
+                    "authenticationType": "session",
+                    "hibernateCache": "ehcache",
+                    "clusteredHttpSession": "no",
+                    "websocket": "no",
+                    "databaseType": "sql",
+                    "devDatabaseType": "h2Memory",
+                    "prodDatabaseType": "mysql",
+                    "buildTool": "gradle",
+                    "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
+                    "searchEngine": "no"
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files for default configuration with skip client option enabled', function () {
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.gradle);
+            assert.noFile(expectedFiles.client);
+            assert.noFile(['gulpfile.js']);
+            assert.noFile(['gradle/yeoman.gradle']);
+        });
+    });
+
+    describe('gateway', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true})
+                .withPrompts({
+                    "applicationType": "gateway",
+                    "baseName": "jhipster",
+                    "packageName": "com.mycompany.myapp",
+                    "packageFolder": "com/mycompany/myapp",
+                    "authenticationType": "jwt",
+                    "hibernateCache": "ehcache",
+                    "clusteredHttpSession": "no",
+                    "websocket": "no",
+                    "databaseType": "sql",
+                    "devDatabaseType": "h2Memory",
+                    "prodDatabaseType": "mysql",
+                    "useSass": false,
+                    "enableTranslation": true,
+                    "buildTool": "maven",
+                    "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
+                    "searchEngine": "no"
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with the gateway application type', function () {
+            assert.file(expectedFiles.jwt);
+            assert.file(expectedFiles.gateway);
         });
     });
 });

@@ -1,11 +1,10 @@
 #!/bin/bash
 set -ev
 #-------------------------------------------------------------------------------
-# Install yeoman, bower, grunt and gulp
+# Install yeoman, bower and gulp
 #-------------------------------------------------------------------------------
 npm install -g yo
 npm install -g bower
-npm install -g grunt-cli
 npm install -g gulp
 #-------------------------------------------------------------------------------
 # Install the latest version of JHipster

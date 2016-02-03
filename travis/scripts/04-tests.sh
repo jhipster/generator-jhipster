@@ -9,8 +9,5 @@ if [ $JHIPSTER != "app-gradle" ]; then
 else
   ./gradlew test
 fi
-if [ $JHIPSTER != "app-gulp" ]; then
-  grunt test
-else
-  gulp test
-fi
+
+gulp test

@@ -12,7 +12,6 @@ env:
     - JHIPSTER_NODE_CACHE=1
     - PROFILE=dev
     - RUN_APP=1
-    - GRUNT=1
     - PROTRACTOR=0
     - JHIPSTER_TRAVIS=$TRAVIS_BUILD_DIR/travis
     - JHIPSTER_INSTALL=$JHIPSTER_TRAVIS/install
@@ -21,7 +20,7 @@ env:
   matrix:
     - JHIPSTER=app-from-scratch JHIPSTER_NODE_CACHE=0 RUN_APP=0
     - JHIPSTER=app-gradle RUN_APP=0
-    - JHIPSTER=app-gulp GRUNT=0
+    - JHIPSTER=app-gulp
     - JHIPSTER=app-cassandra
     - JHIPSTER=app-default
     - JHIPSTER=app-hazelcast-cucumber
@@ -29,7 +28,7 @@ env:
     - JHIPSTER=app-websocket PROTRACTOR=1
     - JHIPSTER=app-noi18n
     - JHIPSTER=app-oauth2
-    - JHIPSTER=app-xauth
+    - JHIPSTER=app-jwt
     - JHIPSTER=app-mysql PROFILE=prod
     - JHIPSTER=app-psql-es PROFILE=prod
     - JHIPSTER=app-social

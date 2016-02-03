@@ -32,8 +32,8 @@ describe('JHipster generator languages', function () {
 
     languages.forEach( function(language) {
         describe('no social - creates ' + language.name, function () {
-            before(function (done) {
-                helpers.run(require.resolve('../languages'))
+            beforeEach(function (done) {
+                helpers.run(require.resolve('../generators/languages'))
                     .inTmpDir(function (dir) {
                         fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
                     })
@@ -51,7 +51,7 @@ describe('JHipster generator languages', function () {
                     'src/main/webapp/i18n/' + language.value + '/error.json',
                     'src/main/webapp/i18n/' + language.value + '/login.json',
                     'src/main/webapp/i18n/' + language.value + '/logs.json',
-                    'src/main/webapp/i18n/' + language.value + '/main.json',
+                    'src/main/webapp/i18n/' + language.value + '/home.json',
                     'src/main/webapp/i18n/' + language.value + '/metrics.json',
                     'src/main/webapp/i18n/' + language.value + '/password.json',
                     'src/main/webapp/i18n/' + language.value + '/register.json',
@@ -82,8 +82,8 @@ describe('JHipster generator languages', function () {
 
     languages.forEach( function(language) {
         describe('with social - creates ' + language.name, function () {
-            before(function (done) {
-                helpers.run(require.resolve('../languages'))
+            beforeEach(function (done) {
+                helpers.run(require.resolve('../generators/languages'))
                     .inTmpDir(function (dir) {
                         fse.copySync(path.join(__dirname, '../test/templates/social'), dir)
                     })
@@ -101,7 +101,7 @@ describe('JHipster generator languages', function () {
                     'src/main/webapp/i18n/' + language.value + '/error.json',
                     'src/main/webapp/i18n/' + language.value + '/login.json',
                     'src/main/webapp/i18n/' + language.value + '/logs.json',
-                    'src/main/webapp/i18n/' + language.value + '/main.json',
+                    'src/main/webapp/i18n/' + language.value + '/home.json',
                     'src/main/webapp/i18n/' + language.value + '/metrics.json',
                     'src/main/webapp/i18n/' + language.value + '/password.json',
                     'src/main/webapp/i18n/' + language.value + '/register.json',

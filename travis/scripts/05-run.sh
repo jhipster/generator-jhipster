@@ -24,6 +24,6 @@ if [ $RUN_APP == 1 ]; then
   # Launch protractor tests
   #-------------------------------------------------------------------------------
   if [ $PROTRACTOR == 1 ]; then
-    grunt itest
+    gulp itest
   fi
 fi
