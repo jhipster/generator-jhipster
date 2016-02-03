@@ -78,9 +78,9 @@ module.exports = JhipsterServerGenerator.extend({
 
         var skipClient = this.config.get('skipClient');
         this.skipClient = skipClient || this.options['skip-client'] || configOptions.skipClient;
-        this.enableTranslation = this.options['i18n'] || configOptions.enableTranslation;
+        this.enableTranslation = this.options['i18n'];
         this.baseName = this.options['base-name'];
-        this.testFrameworks = configOptions.testFrameworks || [];
+        this.testFrameworks = [];
         var gatling = this.options['gatling'];
         gatling &&  this.testFrameworks.push('gatling');
         var cucumber = this.options['cucumber'];
@@ -159,11 +159,6 @@ module.exports = JhipsterServerGenerator.extend({
                 // Generate JWT secert key if key does not already exist in config
                 if (this.authenticationType == 'jwt' && this.jwtSecretKey == null) {
                     this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
-                }
-
-                // backward compatibility on testing frameworks
-                if (this.testFrameworks == null) {
-                    this.testFrameworks = [ 'gatling' ];
                 }
 
                 // If social sign in is not defined, it is disabled by default
@@ -497,6 +492,17 @@ module.exports = JhipsterServerGenerator.extend({
                 }
 
                 configOptions.lastQuestion = currentQuestion;
+                configOptions.packageName = this.packageName;
+                configOptions.hibernateCache = this.hibernateCache;
+                configOptions.clusteredHttpSession = this.clusteredHttpSession;
+                configOptions.websocket = this.websocket;
+                configOptions.databaseType = this.databaseType;
+                configOptions.devDatabaseType = this.devDatabaseType;
+                configOptions.prodDatabaseType = this.prodDatabaseType;
+                configOptions.searchEngine = this.searchEngine;
+                configOptions.buildTool = this.buildTool;
+                configOptions.enableSocialSignIn = this.enableSocialSignIn;
+                configOptions.authenticationType = this.authenticationType;
 
                 done();
             }.bind(this));
@@ -544,6 +550,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.packageFolder = this.packageName.replace(/\./g, '/');
             this.javaDir = 'src/main/java/' + this.packageFolder + '/';
             this.testDir = 'src/test/java/' + this.packageFolder + '/';
+
         },
 
         saveConfig: function () {
@@ -567,6 +574,13 @@ module.exports = JhipsterServerGenerator.extend({
     },
 
     writing: {
+        getSharedConfigOptions: function () {
+            if(configOptions.enableTranslation) {
+                this.enableTranslation = configOptions.enableTranslation;
+            }
+            this.useSass = configOptions.useSass ? configOptions.useSass : false;
+        },
+
         writeGlobalFiles: function () {
             this.template('_README.md', 'README.md', this, {});
             this.copy('gitignore', '.gitignore');

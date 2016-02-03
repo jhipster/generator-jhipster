@@ -1,6 +1,6 @@
 ######################
 # Project Specific
-######################<% if (!skipClient) { %>
+######################<% if (!skipClient && useSass) { %>
 /src/main/webapp/content/css/main.css<% } %>
 /src/main/webapp/dist
 

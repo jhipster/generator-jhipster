@@ -188,6 +188,8 @@ module.exports = JhipsterClientGenerator.extend({
 
                 this.useSass = props.useSass;
                 this.enableTranslation = props.enableTranslation;
+                configOptions.useSass = props.useSass;
+                configOptions.enableTranslation = props.enableTranslation;
 
                 done();
             }.bind(this));
@@ -219,6 +221,36 @@ module.exports = JhipsterClientGenerator.extend({
     },
 
     writing: {
+
+        getSharedConfigOptions: function () {
+            if(configOptions.hibernateCache) {
+                this.hibernateCache = configOptions.hibernateCache;
+            }
+            if(configOptions.websocket) {
+                this.websocket = configOptions.websocket;
+            }
+            if(configOptions.databaseType) {
+                this.databaseType = configOptions.databaseType;
+            }
+            if(configOptions.devDatabaseType) {
+                this.devDatabaseType = configOptions.devDatabaseType;
+            }
+            if(configOptions.prodDatabaseType) {
+                this.prodDatabaseType = configOptions.prodDatabaseType;
+            }
+            if(configOptions.searchEngine) {
+                this.searchEngine = configOptions.searchEngine;
+            }
+            if(configOptions.buildTool) {
+                this.buildTool = configOptions.buildTool;
+            }
+            if(configOptions.enableSocialSignIn) {
+                this.enableSocialSignIn = configOptions.enableSocialSignIn;
+            }
+            if(configOptions.authenticationType) {
+                this.authenticationType = configOptions.authenticationType;
+            }
+        },
 
         writeClientFiles: function () {
 
