@@ -7,7 +7,7 @@ var util = require('util'),
     exec = require('child_process').exec,
     chalk = require('chalk'),
     _ = require('underscore.string'),
-    scriptBase = require('../script-base');
+    scriptBase = require('../generator-base');
 
 var HerokuGenerator = module.exports = function HerokuGenerator(args, options, config) {
     generators.Base.apply(this, arguments);

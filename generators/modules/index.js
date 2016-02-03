@@ -4,7 +4,7 @@ var util = require('util'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
     _ = require('underscore.string'),
-    scriptBase = require('../script-base');
+    scriptBase = require('../generator-base');
 
 var ModulesGenerator = generators.Base.extend({});
 
