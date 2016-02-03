@@ -3,7 +3,6 @@
 'use strict';
 
 var gulp = require('gulp'),
-//    gutil = require('gulp-util'),
     prefix = require('gulp-autoprefixer'),
     cssnano = require('gulp-cssnano'),
     usemin = require('gulp-usemin'),
