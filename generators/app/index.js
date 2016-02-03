@@ -61,6 +61,7 @@ module.exports = JhipsterGenerator.extend({
             this.baseName = this.config.get('baseName');
             this.jhipsterVersion = this.config.get('jhipsterVersion');
             this.applicationType = this.config.get('applicationType');
+            this.testFrameworks = this.config.get('testFrameworks');
 
             var configFound = this.baseName != null && this.jhipsterVersion != null && this.applicationType != null;
             if (configFound) {
@@ -135,10 +136,14 @@ module.exports = JhipsterGenerator.extend({
     configuring: {
 
         composeServer : function () {
+            if(this.skipClient){
+                configOptions.enableTranslation = false;
+            }
             this.composeWith('jhipster:server', {
                 options: {
                     'logo': false,
                     'base-name' : this.baseName,
+                    'client-hook': !this.skipClient,
                     configOptions : configOptions
                 }
             }, {
@@ -147,10 +152,14 @@ module.exports = JhipsterGenerator.extend({
         },
 
         composeClient : function () {
+            if(this.skipClient){
+                return;
+            }
             this.composeWith('jhipster:client', {
                 options: {
                     'logo': false,
                     'base-name' : this.baseName,
+                    'skip-install': this.options['skip-install'],
                     configOptions : configOptions
                 }
             }, {
@@ -185,9 +194,12 @@ module.exports = JhipsterGenerator.extend({
                 default: [ 'gatling' ]
             }, function (prompt) {
                 this.testFrameworks = prompt.testFrameworks;
-                configOptions.testFrameworks = this.testFrameworks;
                 done();
             }.bind(this));
+        },
+
+        setSharedConfigOptions: function () {
+            configOptions.testFrameworks = this.testFrameworks;
         },
 
         insight: function () {

@@ -645,10 +645,13 @@ module.exports = JhipsterClientGenerator.extend({
                 this.spawnCommand('gulp', ['install']);
             }
         };
-
-        this.installDependencies({
-            callback: injectDependenciesAndConstants.bind(this)
-        });
+        if (!this.options['skip-install']) {
+            this.installDependencies({
+                callback: injectDependenciesAndConstants.bind(this)
+            });
+        } else {
+            injectDependenciesAndConstants.call(this);
+        }
     },
 
     end: function () {
