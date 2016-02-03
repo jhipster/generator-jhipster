@@ -9,9 +9,9 @@ var util = require('util'),
     crypto = require("crypto"),
     mkdirp = require('mkdirp');
 
-var JhipsterGenerator = generators.Base.extend({});
+var JhipsterServerGenerator = generators.Base.extend({});
 
-util.inherits(JhipsterGenerator, scriptBase);
+util.inherits(JhipsterServerGenerator, scriptBase);
 
 /* Constants used through out */
 const QUESTIONS = 15; // making questions a variable to avoid updating each question by hand when adding additional options
@@ -21,10 +21,13 @@ const DOCKER_DIR = 'src/main/docker/';
 const INTERPOLATE_REGEX = /<%=([\s\S]+?)%>/g; // so that tags in templates do not get mistreated as _ templates
 
 var currentQuestion;
+var configOptions = {};
 
-module.exports = JhipsterGenerator.extend({
+module.exports = JhipsterServerGenerator.extend({
     constructor: function() {
         generators.Base.apply(this, arguments);
+
+        configOptions = this.options.configOptions || {};
 
         // This adds support for a `--base-name` flag
         this.option('base-name', {
@@ -74,15 +77,15 @@ module.exports = JhipsterGenerator.extend({
         });
 
         var skipClient = this.config.get('skipClient');
-        this.skipClient = this.options['skip-client'] || skipClient;
-        this.enableTranslation = this.options['i18n'];
+        this.skipClient = skipClient || this.options['skip-client'] || configOptions.skipClient;
+        this.enableTranslation = this.options['i18n'] || configOptions.enableTranslation;
         this.baseName = this.options['base-name'];
-        this.testFrameworks = [];
+        this.testFrameworks = configOptions.testFrameworks || [];
         var gatling = this.options['gatling'];
         gatling &&  this.testFrameworks.push('gatling');
         var cucumber = this.options['cucumber'];
         cucumber &&  this.testFrameworks.push('cucumber');
-        var lastQuestion = this.options['last-question'];
+        var lastQuestion = this.options['last-question'] || configOptions.lastQuestion;
         currentQuestion = lastQuestion ? lastQuestion : 0;
         this.logo = this.options['logo'];
 
@@ -492,6 +495,8 @@ module.exports = JhipsterGenerator.extend({
                 if (this.searchEngine == null) {
                     this.searchEngine = 'no';
                 }
+
+                configOptions.lastQuestion = currentQuestion;
 
                 done();
             }.bind(this));

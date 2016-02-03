@@ -10,9 +10,9 @@ var util = require('util'),
     packagejs = require('../../package.json'),
     engine = require('ejs').render;
 
-var JhipsterGenerator = generators.Base.extend({});
+var JhipsterClientGenerator = generators.Base.extend({});
 
-util.inherits(JhipsterGenerator, scriptBase);
+util.inherits(JhipsterClientGenerator, scriptBase);
 
 /* Constants use through out */
 const QUESTIONS = 15; // making questions a variable to avoid updating each question by hand when adding additional options
@@ -22,10 +22,13 @@ const TEST_JS_DIR = 'src/test/javascript/';
 const INTERPOLATE_REGEX = /<%=([\s\S]+?)%>/g; // so that tags in templates do not get mistreated as _ templates
 
 var currentQuestion;
+var configOptions = {};
 
-module.exports = JhipsterGenerator.extend({
+module.exports = JhipsterClientGenerator.extend({
     constructor: function() {
         generators.Base.apply(this, arguments);
+
+        configOptions = this.options.configOptions || {};
 
         // This adds support for a `--base-name` flag
         this.option('base-name', {
@@ -108,7 +111,7 @@ module.exports = JhipsterGenerator.extend({
         this.testFrameworks = [];
         var protractor = this.options['protractor'];
         protractor &&  this.testFrameworks.push('protractor');
-        var lastQuestion = this.options['last-question'];
+        var lastQuestion = this.options['last-question'] || configOptions.lastQuestion;
         currentQuestion = lastQuestion ? lastQuestion : 0;
         this.logo = this.options['logo'];
         this.authenticationType = this.options['auth'];

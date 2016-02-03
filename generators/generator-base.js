@@ -1231,7 +1231,7 @@ Generator.prototype.askModuleName = function (generator, question, questions) {
         message: '(' + (question) + '/' + questions + ') What is the base name of your application?',
         default: defaultAppBaseName
     }, function (prompt) {
-        generator.baseName = generator.baseName;
+        generator.baseName = prompt.baseName;
         done();
     }.bind(generator));
 };
