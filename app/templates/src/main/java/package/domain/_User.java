@@ -67,11 +67,13 @@ public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     @Field("last_name")<% } %>
     private String lastName;
 
+    @NotNull
     @Email
     @Size(max = 100)<% if (databaseType == 'sql') { %>
     @Column(length = 100, unique = true)<% } %>
     private String email;
 <% if (databaseType == 'sql') { %>
+    @NotNull
     @Column(nullable = false)<% } %>
     private boolean activated = false;
 
