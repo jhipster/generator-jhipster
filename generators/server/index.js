@@ -651,6 +651,13 @@ module.exports = JhipsterGenerator.extend({
                 this.copy(RESOURCE_DIR + '/mails/socialRegistrationValidationEmail.html', RESOURCE_DIR + 'mails/socialRegistrationValidationEmail.html');
             }
 
+            // install all files related to i18n if translation is enabled
+            if (this.enableTranslation) {
+                this.installI18nResFilesByLanguage(this, RESOURCE_DIR, 'en');
+                this.installI18nResFilesByLanguage(this, RESOURCE_DIR, 'fr');
+            }
+            this.template(RESOURCE_DIR + '/i18n/_messages_en.properties', RESOURCE_DIR + 'i18n/messages.properties', this, {});
+            
             // Create Java files
             this.template('src/main/java/package/_Application.java', javaDir + '/Application.java', this, {});
             this.template('src/main/java/package/_ApplicationWebXml.java', javaDir + '/ApplicationWebXml.java', this, {});

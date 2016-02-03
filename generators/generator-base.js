@@ -1059,7 +1059,7 @@ Generator.prototype.getExistingEntities = function(warn) {
     return entities.sort(isBefore);
 }
 
-Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, resourceDir, lang) {
+Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, lang) {
     this.copyI18nFilesByName(_this, webappDir, 'activate.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'audits.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'configuration.json', lang);
@@ -1088,6 +1088,10 @@ Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, res
     _this.template(webappDir + '/i18n/' + lang + '/_global.json', webappDir + 'i18n/' + lang + '/global.json', this, {});
     _this.template(webappDir + '/i18n/' + lang + '/_health.json', webappDir + 'i18n/' + lang + '/health.json', this, {});
 
+
+};
+
+Generator.prototype.installI18nResFilesByLanguage = function (_this, resourceDir, lang) {
     // Template the message server side properties
     var lang_prop = lang.replace(/-/g, "_");
     _this.template(resourceDir + '/i18n/_messages_' + lang_prop + '.properties', resourceDir + 'i18n/messages_' + lang_prop + '.properties', this, {});
