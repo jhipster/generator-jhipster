@@ -20,6 +20,9 @@
             },
             "admin": {
                 "main": "Yönetim",
+                <%_ if (applicationType == 'gateway') { _%>
+                "gateway": "Gateway",
+                <%_ } _%>
                 "userManagement": "User management",
                 "tracker": "Kullanıcı Takip",
                 "metrics": "Ölçümler",

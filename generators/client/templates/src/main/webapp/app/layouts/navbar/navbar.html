@@ -68,6 +68,10 @@
                         </span>
                     </a>
                     <ul class="dropdown-menu">
+                        <%_ if (applicationType == 'gateway') { _%>
+                        <li ui-sref-active="active"><a ui-sref="gateway" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-road"></span>
+                            &#xA0;<span translate="global.menu.admin.gateway">Gateway</span></a></li>
+                        <%_ } _%>
                         <li ui-sref-active="active"><a ui-sref="user-management" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-user"></span>
                             &#xA0;<span translate="global.menu.admin.userManagement">User management</span></a></li>
                         <%_ if (websocket == 'spring-websocket') { _%>

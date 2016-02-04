@@ -14,10 +14,6 @@ var JhipsterClientGenerator = generators.Base.extend({});
 
 util.inherits(JhipsterClientGenerator, scriptBase);
 
-
-
-
-
 /* Constants use through out */
 const QUESTIONS = 15; // making questions a variable to avoid updating each question by hand when adding additional options
 const WEBAPP_DIR = 'src/main/webapp/';
@@ -599,7 +595,7 @@ module.exports = JhipsterClientGenerator.extend({
             if (this.applicationType == 'gateway') {
                 appScripts = appScripts.concat([
                     'app/admin/gateway/gateway.js',
-                    'app/admin/gateway/gateway.controler.js',
+                    'app/admin/gateway/gateway.controller.js',
                     'app/admin/gateway/gateway.routes.service.js'])
             }
 

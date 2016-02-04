@@ -20,6 +20,9 @@
             },
             "admin": {
                 "main": "முக்கிய",
+                <%_ if (applicationType == 'gateway') { _%>
+                "gateway": "Gateway",
+                <%_ } _%>
                 "userManagement": "பயனர் நிர்வாகம்",
                 "tracker": "பயனர் சுவடு",
                 "metrics": "அளவீடுகள்",

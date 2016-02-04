@@ -20,6 +20,9 @@
             },
             "admin": {
                 "main": "Adminisztráció",
+                <%_ if (applicationType == 'gateway') { _%>
+                "gateway": "Gateway",
+                <%_ } _%>
                 "userManagement": "User management",
                 "tracker": "Felhasználó követés",
                 "metrics": "Metrikák",

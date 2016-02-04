@@ -1,7 +1,7 @@
 <div>
-    <h2>Gateway</h2>
+    <h2 translate="gateway.title">Gateway</h2>
 
-    <h3>Current routes</h3>
+    <h3 translate="gateway.routes.title">Current routes</h3>
     <p>
         <button type="button" class="btn btn-primary" ng-click="refresh()" ng-show="updatingRoutes == false">
             <span class="glyphicon glyphicon-refresh glyphicon-"></span>&nbsp;<span translate="gateway.refresh.button">Refresh</span>
@@ -13,9 +13,9 @@
     <table class="table table-striped table-responsive">
         <thead>
         <tr>
-            <th>URL</th>
-            <th>Service</th>
-            <th>Available servers</th>
+            <th translate="gateway.routes.url">URL</th>
+            <th translate="gateway.routes.service">Service</th>
+            <th translate="gateway.routes.servers">Available servers</th>
         </tr>
         </thead>
 
@@ -23,7 +23,7 @@
             <td>{{route.path}}</td>
             <td>{{route.serviceId}}</td>
             <td>
-                <div ng-show="{{route.serviceInstances.length == 0}}" class="label label-danger">
+                <div ng-show="{{route.serviceInstances.length == 0}}" class="label label-danger" translate="gateway.routes.error">
                     Warning: no server available!
                 </div>
                 <table class="tabletable-responsive">

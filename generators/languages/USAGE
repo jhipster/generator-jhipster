@@ -10,6 +10,7 @@ Example:
         /webapp/i18n/{lang}/audits.json
         /webapp/i18n/{lang}/configuration.json
         /webapp/i18n/{lang}/error.json
+        /webapp/i18n/{lang}/gateway.json
         /webapp/i18n/{lang}/health.json
         /webapp/i18n/{lang}/language.json
         /webapp/i18n/{lang}/login.json

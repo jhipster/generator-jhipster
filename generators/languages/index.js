@@ -16,6 +16,7 @@ module.exports = LanguagesGenerator.extend({
     initializing : {
         getConfig : function () {
             this.log(chalk.bold('Languages configuration is starting'));
+            this.applicationType = this.config.get('applicationType');
             this.baseName = this.config.get('baseName');
             this.websocket = this.config.get('websocket');
             this.databaseType = this.config.get('databaseType');

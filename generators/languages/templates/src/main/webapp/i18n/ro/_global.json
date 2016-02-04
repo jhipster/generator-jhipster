@@ -23,6 +23,9 @@
             },
             "admin": {
                 "main": "Administrare",
+                <%_ if (applicationType == 'gateway') { _%>
+                "gateway": "Gateway",
+                <%_ } _%>
                 "userManagement": "User management",
                 "tracker": "Informații utilizatori",
                 "metrics": "Metrici",

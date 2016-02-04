@@ -20,6 +20,9 @@
             },
             "admin": {
                 "main": "Amministratore",
+                <%_ if (applicationType == 'gateway') { _%>
+                "gateway": "Gateway",
+                <%_ } _%>
                 "userManagement": "Gestione utenti",
                 "tracker": "Tracciamento utente",
                 "metrics": "Metrica",
