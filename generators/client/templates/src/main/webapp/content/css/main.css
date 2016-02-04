@@ -274,6 +274,22 @@ Social Buttons
 }
 /* end of entity tables helpers */
 
+/* ui bootstrap tweaks */
+.nav, .pagination, .carousel, .panel-title a {
+    cursor: pointer;
+}
+
+.datetime-picker-dropdown > li.date-picker-menu div > table .btn-default,
+.uib-datepicker-popup  > li > div.uib-datepicker > table .btn-default {
+    border: 0;
+}
+
+.datetime-picker-dropdown > li.date-picker-menu div > table:focus,
+.uib-datepicker-popup  > li > div.uib-datepicker > table:focus{
+    outline: none;
+}
+/* end of ui bootstrap tweaks */
+
 /* jhipster-needle-scss-add-main JHipster will add new css style */
 
 /* jhipster-needle-css-add-main JHipster will add new css style */

@@ -262,12 +262,28 @@ ul#strength {
    flex-direction: row;
    -webkit-justify-content: flex-end;
    justify-content: flex-end;
-}  
+}
 
 /* Align text in td verifically (top aligned by Bootstrap) */
 .jh-table > tbody > tr > td {
     vertical-align: middle;
 }
 /* end of entity tables helpers */
+
+/* ui bootstrap tweaks */
+.nav, .pagination, .carousel, .panel-title a {
+    cursor: pointer;
+}
+
+.datetime-picker-dropdown > li.date-picker-menu div > table .btn-default,
+.uib-datepicker-popup  > li > div.uib-datepicker > table .btn-default {
+    border: 0;
+}
+
+.datetime-picker-dropdown > li.date-picker-menu div > table:focus,
+.uib-datepicker-popup  > li > div.uib-datepicker > table:focus{
+    outline: none;
+}
+/* end of ui bootstrap tweaks */
 
 /* jhipster-needle-scss-add-main JHipster will add new css style */
