@@ -501,7 +501,6 @@ module.exports = EntityGenerator.extend({
                     response.fieldType == 'UUID' ||
                     response.fieldType == 'Date' ||
                     response.fieldType == 'Boolean' ||
-                    response.fieldTypeBlobContent == 'text' ||
                     response.fieldIsEnum == true);
                 },
                 type: 'checkbox',
