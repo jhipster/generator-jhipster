@@ -19,6 +19,10 @@
             var translationKey = keyPrefix + fields[fieldId].fieldName;
             if (fields[fieldId].fieldType == 'Integer' || fields[fieldId].fieldType == 'Long' || fields[fieldId].fieldType == 'Float' || fields[fieldId].fieldType == 'Double' || fields[fieldId].fieldType == 'BigDecimal') {
                 fieldInputType = 'number';
+            } else if (fields[fieldId].fieldType == 'LocalDate' || fields[fieldId].fieldType == 'Date') {
+                fieldInputType = 'date';
+            } else if (fields[fieldId].fieldType == 'ZonedDateTime') {
+                fieldInputType = 'datetime-local';
             } else if (fields[fieldId].fieldType == 'Boolean') {
                 fieldInputType = 'checkbox';
             } else if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') {
@@ -59,12 +63,14 @@
                 </button>
             </div>
                 <%_ } _%>
-                <%_ if (fields[fieldId].fieldType == 'LocalDate' || fields[fieldId].fieldType == 'ZonedDateTime' || fields[fieldId].fieldType == 'Date') { _%>
-            <input id="field_<%= fields[fieldId].fieldName %>" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>" is-open="datePickerFor<%= fields[fieldId].fieldNameCapitalized %>.status.opened"
-            <%- include ng_validators %>/>
-            <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="datePickerFor<%= fields[fieldId].fieldNameCapitalized %>Open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-            </span>
+                <%_ if (fields[fieldId].fieldType == 'LocalDate' || fields[fieldId].fieldType == 'Date') { _%>
+                <div class="input-group">
+                    <input id="field_<%= fields[fieldId].fieldName %>" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>" is-open="datePickerFor<%= fields[fieldId].fieldNameCapitalized %>.status.opened"
+                    <%- include ng_validators %>/>
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="datePickerFor<%= fields[fieldId].fieldNameCapitalized %>Open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
                 <%_ } else if(fields[fieldId].fieldTypeBlobContent == 'text') { _%>
                 <textarea class="form-control" name="<%= fields[fieldId].fieldName %>" id="field_<%= fields[fieldId].fieldName %>"
                     ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>" <%- include ng_validators %> />
