@@ -40,6 +40,13 @@ module.exports = JhipsterGenerator.extend({
             defaults: false
         });
 
+        // This adds support for a `--[no-]i18n` flag
+        this.option('i18n', {
+            desc: 'Disable or enable i18n when skipping client side generation, has no effect otherwise',
+            type: Boolean,
+            defaults: true
+        });
+
         // This adds support for a `--with-entities` flag
         this.option('with-entities', {
             desc: 'Regenerate the existing entities if any',
@@ -137,7 +144,7 @@ module.exports = JhipsterGenerator.extend({
 
         composeServer : function () {
             if(this.skipClient){
-                configOptions.enableTranslation = false;
+                configOptions.enableTranslation = this.options['i18n'];
             }
             this.composeWith('jhipster:server', {
                 options: {

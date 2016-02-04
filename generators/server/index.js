@@ -565,7 +565,7 @@ module.exports = JhipsterServerGenerator.extend({
 
     default: {
         getSharedConfigOptions: function () {
-            if(configOptions.enableTranslation) {
+            if(configOptions.enableTranslation != null) {
                 this.enableTranslation = configOptions.enableTranslation;
             }
             this.useSass = configOptions.useSass ? configOptions.useSass : false;
@@ -692,6 +692,7 @@ module.exports = JhipsterServerGenerator.extend({
             }
 
             // install all files related to i18n if translation is enabled
+            console.log('Translation--->' + this.enableTranslation);
             if (this.enableTranslation) {
                 this.installI18nResFilesByLanguage(this, RESOURCE_DIR, 'en');
                 this.installI18nResFilesByLanguage(this, RESOURCE_DIR, 'fr');

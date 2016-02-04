@@ -242,7 +242,7 @@ module.exports = JhipsterClientGenerator.extend({
             if(configOptions.buildTool) {
                 this.buildTool = configOptions.buildTool;
             }
-            if(configOptions.enableSocialSignIn) {
+            if(configOptions.enableSocialSignIn != null) {
                 this.enableSocialSignIn = configOptions.enableSocialSignIn;
             }
             if(configOptions.authenticationType) {
