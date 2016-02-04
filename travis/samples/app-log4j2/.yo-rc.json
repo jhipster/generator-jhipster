@@ -1,7 +1,7 @@
 {
   "generator-jhipster": {
     "applicationType": "monolith",
-    "baseName": "sampleGulp",
+    "baseName": "sampleDefault",
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",
     "authenticationType": "session",
@@ -14,10 +14,10 @@
     "searchEngine": "no",
     "useSass": false,
     "buildTool": "maven",
-    "loggingImpl": "logback",
+    "loggingImpl": "log4j2",
     "enableTranslation": true,
     "enableSocialSignIn": false,
-    "rememberMeKey": "5b5e44a65ccb2d7ab32491bb5764f28f6013cfcb",
+    "rememberMeKey": "f4c523f23573d9d213071335c2b6562403c546d1",
     "testFrameworks": [
       "gatling"
     ]

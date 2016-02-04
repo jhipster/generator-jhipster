@@ -126,6 +126,7 @@ module.exports = JhipsterServerGenerator.extend({
                 this.hibernateCache = this.config.get('hibernateCache');
             }
             this.buildTool = this.config.get('buildTool');
+            this.loggingImpl = this.config.get('loggingImpl');
             this.enableSocialSignIn = this.config.get('enableSocialSignIn');
             this.packagejs = packagejs;
             this.jhipsterVersion = this.config.get('jhipsterVersion');
@@ -148,7 +149,8 @@ module.exports = JhipsterServerGenerator.extend({
             this.devDatabaseType != null &&
             this.prodDatabaseType != null &&
             this.searchEngine != null &&
-            this.buildTool != null;
+            this.buildTool != null &&
+            this.loggingImpl != null;
 
             if (this.baseName != null && serverConfigFound) {
 
@@ -449,6 +451,25 @@ module.exports = JhipsterServerGenerator.extend({
                         }
                     ],
                     default: 'maven'
+                },
+                {
+                    when: function (response) { // TODO Allow for Gradle too?
+                        return response.buildTool == 'maven';
+                    },
+                    type: 'list',
+                    name: 'loggingImpl',
+                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Which logging implementation would you prefer?',
+                    choices: [
+                        {
+                            value: 'logback',
+                            name: 'Logback'
+                        },
+                        {
+                            value: 'log4j2',
+                            name: 'Log4J2'
+                        }
+                    ],
+                    default: 'logback'
                 }
             ];
 
@@ -477,6 +498,7 @@ module.exports = JhipsterServerGenerator.extend({
                 this.prodDatabaseType = props.prodDatabaseType;
                 this.searchEngine = props.searchEngine;
                 this.buildTool = props.buildTool;
+                this.loggingImpl = props.loggingImpl;
                 this.enableSocialSignIn = props.enableSocialSignIn;
 
                 if (this.databaseType == 'mongodb') {
@@ -669,7 +691,11 @@ module.exports = JhipsterServerGenerator.extend({
             // Thymeleaf templates
             this.copy(RESOURCE_DIR + '/templates/error.html', RESOURCE_DIR + 'templates/error.html');
 
-            this.template(RESOURCE_DIR + '_logback-spring.xml', RESOURCE_DIR + 'logback-spring.xml', this, {'interpolate': INTERPOLATE_REGEX});
+            if (this.loggingImpl == "log4j2") {
+                this.template(RESOURCE_DIR + '_log4j2.xml', RESOURCE_DIR + 'log4j2.xml', this, { 'interpolate': INTERPOLATE_REGEX });
+            } else {
+                this.template(RESOURCE_DIR + '_logback-spring.xml', RESOURCE_DIR + 'logback-spring.xml', this, { 'interpolate': INTERPOLATE_REGEX });
+            }
 
             this.template(RESOURCE_DIR + '/config/_application.yml', RESOURCE_DIR + 'config/application.yml', this, {});
             this.template(RESOURCE_DIR + '/config/_application-dev.yml', RESOURCE_DIR + 'config/application-dev.yml', this, {});
@@ -961,7 +987,12 @@ module.exports = JhipsterServerGenerator.extend({
             this.template('src/test/java/package/web/rest/_UserResourceIntTest.java', testDir + 'web/rest/UserResourceIntTest.java', this, {});
 
             this.template(TEST_RES_DIR + 'config/_application.yml', TEST_RES_DIR + 'config/application.yml', this, {});
-            this.template(TEST_RES_DIR + '_logback-test.xml', TEST_RES_DIR + 'logback-test.xml', this, {});
+
+            if (this.loggingImpl == "log4j2") {
+                this.template(TEST_RES_DIR + '_log4j2-test.xml', TEST_RES_DIR + 'log4j2-test.xml', this, {});
+            } else {
+                this.template(TEST_RES_DIR + '_logback-test.xml', TEST_RES_DIR + 'logback-test.xml', this, {});
+            }
 
             if (this.hibernateCache == "ehcache") {
                 this.template(TEST_RES_DIR + '_ehcache.xml', TEST_RES_DIR + 'ehcache.xml', this, {});
