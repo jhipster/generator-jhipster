@@ -64,6 +64,9 @@ gulp.task('copy', function() {
         gulp.src(config.app + 'i18n/**')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(gulp.dest(config.dist + 'i18n/')), <% } %>
+        gulp.src(config.app + 'bower_components/bootstrap/fonts/*.*')
+        .pipe(plumber({errorHandler: handleErrors}))
+        .pipe(gulp.dest(config.dist + 'content/fonts/')),
         gulp.src(config.app + 'content/**/*.{woff,svg,ttf,eot}')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(flatten())
