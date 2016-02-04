@@ -77,7 +77,8 @@ module.exports = LanguagesGenerator.extend({
 
         for (var id in this.languages) {
             var language = this.languages[id];
-            this.installI18nFilesByLanguage(this, webappDir, resourceDir, language);
+            this.installI18nFilesByLanguage(this, webappDir, language);
+            this.installI18nResFilesByLanguage(this, resourceDir, language);
             this.installNewLanguage(language);
             this.addMessageformatLocaleToIndex(language.split("-")[0] + '.js');
             insight.track('languages/language', language);

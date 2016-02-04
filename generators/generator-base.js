@@ -10,6 +10,7 @@ var path = require('path'),
     fs = require('fs'),
     shelljs = require('shelljs'),
     ejs = require('ejs'),
+    packagejs = require('../package.json'),
     semver = require('semver');
 
 const JHIPSTER_CONFIG_DIR = ".jhipster";
@@ -1059,7 +1060,7 @@ Generator.prototype.getExistingEntities = function(warn) {
     return entities.sort(isBefore);
 }
 
-Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, resourceDir, lang) {
+Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, lang) {
     this.copyI18nFilesByName(_this, webappDir, 'activate.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'audits.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'configuration.json', lang);
@@ -1088,6 +1089,10 @@ Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, res
     _this.template(webappDir + '/i18n/' + lang + '/_global.json', webappDir + 'i18n/' + lang + '/global.json', this, {});
     _this.template(webappDir + '/i18n/' + lang + '/_health.json', webappDir + 'i18n/' + lang + '/health.json', this, {});
 
+
+};
+
+Generator.prototype.installI18nResFilesByLanguage = function (_this, resourceDir, lang) {
     // Template the message server side properties
     var lang_prop = lang.replace(/-/g, "_");
     _this.template(resourceDir + '/i18n/_messages_' + lang_prop + '.properties', resourceDir + 'i18n/messages_' + lang_prop + '.properties', this, {});
@@ -1147,11 +1152,10 @@ Generator.prototype.getColumnName = function(value) {
 };
 
 Generator.prototype.insight = function () {
-    var pkg = require('../package.json');
     var insight = new Insight({
         trackingCode: 'UA-46075199-2',
-        packageName: pkg.name,
-        packageVersion: pkg.version
+        packageName: packagejs.name,
+        packageVersion: packagejs.version
     });
     return insight;
 }
@@ -1178,6 +1182,10 @@ Generator.prototype.isJhipsterVersionLessThan = function(version) {
     return semver.lt(jhipsterVersion, version);
 }
 
+Generator.prototype.getDefaultAppName = function(text) {
+    return (/^[a-zA-Z0-9_]+$/.test(path.basename(process.cwd())))?path.basename(process.cwd()):'jhipster';
+};
+
 Generator.prototype.contains = _.contains;
 
 Generator.prototype.formatAsClassJavadoc = function(text) {
@@ -1191,6 +1199,41 @@ Generator.prototype.formatAsApiModel = function(text) {
 };
 Generator.prototype.formatAsApiModelProperty = function(text) {
     return wordwrap(text.replace(/\\/g, '\\\\').replace(/\"/g, '\\\"'), WORD_WRAP_WIDTH - 13, '"\n        + "', true)
+};
+
+Generator.prototype.printJHipsterLogo = function () {
+    this.log(' \n' +
+    chalk.green('        ██') + chalk.red('  ██    ██  ████████  ███████    ██████  ████████  ████████  ███████\n') +
+    chalk.green('        ██') + chalk.red('  ██    ██     ██     ██    ██  ██          ██     ██        ██    ██\n') +
+    chalk.green('        ██') + chalk.red('  ████████     ██     ███████    █████      ██     ██████    ███████\n') +
+    chalk.green('  ██    ██') + chalk.red('  ██    ██     ██     ██             ██     ██     ██        ██   ██\n') +
+    chalk.green('   ██████ ') + chalk.red('  ██    ██  ████████  ██        ██████      ██     ████████  ██    ██\n'));
+    this.log(chalk.white.bold('                            http://jhipster.github.io\n'));
+    this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version + '\n'));
+};
+
+Generator.prototype.getAngularAppName = function () {
+    return _s.camelize(_s.slugify(this.baseName)) + 'App';
+};
+
+Generator.prototype.askModuleName = function (generator, question, questions) {
+
+    var done = generator.async();
+    var defaultAppBaseName = this.getDefaultAppName();
+
+    generator.prompt({
+        type: 'input',
+        name: 'baseName',
+        validate: function (input) {
+            if (/^([a-zA-Z0-9_]*)$/.test(input)) return true;
+            return 'Your application name cannot contain special characters or a blank space, using the default name instead';
+        },
+        message: '(' + (question) + '/' + questions + ') What is the base name of your application?',
+        default: defaultAppBaseName
+    }, function (prompt) {
+        generator.baseName = prompt.baseName;
+        done();
+    }.bind(generator));
 };
 
 var wordwrap = function(text, width, seperator, keepLF) {
