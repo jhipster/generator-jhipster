@@ -14,6 +14,10 @@ var JhipsterClientGenerator = generators.Base.extend({});
 
 util.inherits(JhipsterClientGenerator, scriptBase);
 
+
+
+
+
 /* Constants use through out */
 const QUESTIONS = 15; // making questions a variable to avoid updating each question by hand when adding additional options
 const WEBAPP_DIR = 'src/main/webapp/';
@@ -132,6 +136,10 @@ module.exports = JhipsterClientGenerator.extend({
         },
 
         setupClientVars : function () {
+            this.applicationType = this.config.get('applicationType') || configOptions.applicationType;
+            if (this.applicationType == undefined) {
+                this.applicationType = 'monolith';
+            }
             this.useSass = this.config.get('useSass');
             this.enableTranslation = this.config.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
             this.packagejs = packagejs;
@@ -379,6 +387,12 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'admin/user-management/_user-management-detail.controller.js', ANGULAR_DIR + 'admin/user-management/user-management-detail.controller.js', this, {});
             this.template(ANGULAR_DIR + 'admin/user-management/_user-management-dialog.controller.js', ANGULAR_DIR + 'admin/user-management/user-management-dialog.controller.js', this, {});
             this.template(ANGULAR_DIR + 'admin/user-management/_user-management-delete-dialog.controller.js', ANGULAR_DIR + 'admin/user-management/user-management-delete-dialog.controller.js', this, {});
+            if (this.applicationType == 'gateway') {
+                this.copyHtml(ANGULAR_DIR + 'admin/gateway/gateway.html', ANGULAR_DIR + 'admin/gateway/gateway.html');
+                this.copyJs(ANGULAR_DIR + 'admin/gateway/_gateway.js', ANGULAR_DIR + 'admin/gateway/gateway.js', this, {});
+                this.copyJs(ANGULAR_DIR + 'admin/gateway/_gateway.controller.js', ANGULAR_DIR + 'admin/gateway/gateway.controller.js', this, {});
+                this.copyJs(ANGULAR_DIR + 'admin/gateway/_gateway.routes.service.js', ANGULAR_DIR + 'admin/gateway/gateway.routes.service.js', this, {});
+            }
 
             //components
             this.template(ANGULAR_DIR + 'components/form/_form.directive.js', ANGULAR_DIR + 'components/form/form.directive.js', this, {});
@@ -580,6 +594,13 @@ module.exports = JhipsterClientGenerator.extend({
                     'app/admin/tracker/tracker.js',
                     'app/admin/tracker/tracker.controller.js',
                     'app/admin/tracker/tracker.service.js'])
+            }
+
+            if (this.applicationType == 'gateway') {
+                appScripts = appScripts.concat([
+                    'app/admin/gateway/gateway.js',
+                    'app/admin/gateway/gateway.controler.js',
+                    'app/admin/gateway/gateway.routes.service.js'])
             }
 
             indexFile = html.appendScripts(indexFile, 'app/app.js', appScripts, {});

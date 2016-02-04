@@ -92,6 +92,10 @@ module.exports = JhipsterServerGenerator.extend({
 
         setupServerVars : function () {
 
+            this.applicationType = this.config.get('applicationType') || configOptions.applicationType;
+            if (this.applicationType == undefined) {
+                this.applicationType = 'monolith';
+            }
             this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
             this.packageName = this.config.get('packageName');
             this.authenticationType = this.config.get('authenticationType');
@@ -117,7 +121,6 @@ module.exports = JhipsterServerGenerator.extend({
             this.enableSocialSignIn = this.config.get('enableSocialSignIn');
             this.packagejs = packagejs;
             this.jhipsterVersion = this.config.get('jhipsterVersion');
-            this.applicationType = this.config.get('applicationType');
             this.rememberMeKey = this.config.get('rememberMeKey');
             this.jwtSecretKey = this.config.get('jwtSecretKey');
             var testFrameworks = this.config.get('testFrameworks');
@@ -692,7 +695,6 @@ module.exports = JhipsterServerGenerator.extend({
             }
 
             // install all files related to i18n if translation is enabled
-            console.log('Translation--->' + this.enableTranslation);
             if (this.enableTranslation) {
                 this.installI18nResFilesByLanguage(this, RESOURCE_DIR, 'en');
                 this.installI18nResFilesByLanguage(this, RESOURCE_DIR, 'fr');
@@ -905,6 +907,10 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template('src/main/java/package/web/rest/_SocialController.java', javaDir + 'web/rest/SocialController.java', this, {});
             }
 
+            if (this.applicationType == 'gateway') {
+                this.template('src/main/java/package/web/rest/dto/_RouteDTO.java', javaDir + 'web/rest/dto/RouteDTO.java', this, {});
+                this.template('src/main/java/package/web/rest/_GatewayResource.java', javaDir + 'web/rest/GatewayResource.java', this, {});
+            }
         },
 
 

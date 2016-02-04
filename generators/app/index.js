@@ -1,17 +1,10 @@
 'use strict';
 var util = require('util'),
-    path = require('path'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
-    _ = require('underscore.string'),
-    shelljs = require('shelljs'),
     scriptBase = require('../generator-base'),
     cleanup = require('../cleanup'),
-    packagejs = require('../../package.json'),
-    crypto = require("crypto"),
-    mkdirp = require('mkdirp'),
-    html = require("html-wiring"),
-    ejs = require('ejs');
+    packagejs = require('../../package.json');
 
 var JhipsterGenerator = generators.Base.extend({});
 
@@ -65,9 +58,12 @@ module.exports = JhipsterGenerator.extend({
         },
 
         setupVars : function () {
+            this.applicationType = this.config.get('applicationType');
+            if (this.applicationType == undefined) {
+                this.applicationType = 'monolith';
+            }
             this.baseName = this.config.get('baseName');
             this.jhipsterVersion = this.config.get('jhipsterVersion');
-            this.applicationType = this.config.get('applicationType');
             this.testFrameworks = this.config.get('testFrameworks');
 
             var configFound = this.baseName != null && this.jhipsterVersion != null && this.applicationType != null;
@@ -143,6 +139,7 @@ module.exports = JhipsterGenerator.extend({
     configuring: {
 
         composeServer : function () {
+            configOptions.applicationType = this.applicationType;
             if(this.skipClient){
                 configOptions.enableTranslation = this.options['i18n'];
             }
