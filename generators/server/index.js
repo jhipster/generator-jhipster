@@ -93,7 +93,7 @@ module.exports = JhipsterServerGenerator.extend({
         setupServerVars : function () {
 
             this.applicationType = this.config.get('applicationType') || configOptions.applicationType;
-            if (this.applicationType == undefined) {
+            if (!this.applicationType) {
                 this.applicationType = 'monolith';
             }
             this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.

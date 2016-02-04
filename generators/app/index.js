@@ -59,14 +59,14 @@ module.exports = JhipsterGenerator.extend({
 
         setupVars : function () {
             this.applicationType = this.config.get('applicationType');
-            if (this.applicationType == undefined) {
+            if (!this.applicationType) {
                 this.applicationType = 'monolith';
             }
             this.baseName = this.config.get('baseName');
             this.jhipsterVersion = this.config.get('jhipsterVersion');
             this.testFrameworks = this.config.get('testFrameworks');
 
-            var configFound = this.baseName != null && this.jhipsterVersion != null && this.applicationType != null;
+            var configFound = this.baseName != null && this.applicationType != null;
             if (configFound) {
                 this.existingProject = true;
             }

@@ -137,7 +137,7 @@ module.exports = JhipsterClientGenerator.extend({
 
         setupClientVars : function () {
             this.applicationType = this.config.get('applicationType') || configOptions.applicationType;
-            if (this.applicationType == undefined) {
+            if (!this.applicationType) {
                 this.applicationType = 'monolith';
             }
             this.useSass = this.config.get('useSass');
