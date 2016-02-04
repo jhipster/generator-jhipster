@@ -20,7 +20,7 @@
             },
             "admin": {
                 "main": "Administració",
-                "user-management": "Administració d'usuaris",
+                "userManagement": "Administració d'usuaris",
                 "tracker": "Seguidor d'usuaris",
                 "metrics": "Mètriques",
                 "health": "Salud",

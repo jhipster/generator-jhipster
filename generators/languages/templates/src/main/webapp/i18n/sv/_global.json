@@ -20,7 +20,7 @@
             },
             "admin": {
                 "main": "Administration",
-                "user-management": "Hantera användare",
+                "userManagement": "Hantera användare",
                 "tracker": "Användarspårning",
                 "metrics": "Mätningar",
                 "health": "Status",

@@ -1,18 +1,18 @@
 {
-    "user-management": {
+    "userManagement": {
         "home": {
-            "title": "Utilizadores",
+            "title": "Usuários",
             "createLabel": "Adicionar",
-            "createOrEditLabel": "Criar ou editar utilizador"
+ d            "createOrEitLabel": "Criar ou editar usuário"
         },
-        "created": "A new user is created with identifier {{ param }}",
-        "updated": "An user is updated with identifier {{ param }}",
-        "deleted": "An user is deleted with identifier {{ param }}",
+        "created": "Novo usuário foi criado com a identificação {{ param }}",
+        "updated": "Usuário com a identificação {{ param }} foi atualizado ",
+        "deleted": "Usuário com a identificação {{ param }} foi removido",
         "delete": {
-            "question": "Tem a certeza que deseja eliminar o utilizador {{ id }}?"
+            "question": "Você tem certeza que deseja excluir o usuário {{ id }}?"
         },
         "detail": {
-            "title": "Utilizador"
+            "title": "Usuário"
         },
         "login": "Login",
         "firstName": "Primeiro nome",
@@ -21,7 +21,7 @@
         "activated": "Ativo",
         "deactivated": "Inativo",
         "profiles": "Perfis",
-        "langKey": "Linguagem",
+        "langKey": "Idioma",
         "createdBy": "Criado por",
         "createdDate": "Criado em",
         "lastModifiedBy": "Alterado por",
