@@ -1,5 +1,6 @@
 {
   "generator-jhipster": {
+    "applicationType": "monolith",
     "baseName": "sampleCassandra",
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",

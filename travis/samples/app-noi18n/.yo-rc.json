@@ -1,5 +1,6 @@
 {
   "generator-jhipster": {
+    "applicationType": "monolith",
     "baseName": "sampleNoi18n",
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",

@@ -33,7 +33,7 @@ describe('JHipster generator languages', function () {
     languages.forEach( function(language) {
         describe('no social - creates ' + language.name, function () {
             beforeEach(function (done) {
-                helpers.run(require.resolve('../languages'))
+                helpers.run(require.resolve('../generators/languages'))
                     .inTmpDir(function (dir) {
                         fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
                     })
@@ -49,6 +49,7 @@ describe('JHipster generator languages', function () {
                     'src/main/webapp/i18n/' + language.value + '/audits.json',
                     'src/main/webapp/i18n/' + language.value + '/configuration.json',
                     'src/main/webapp/i18n/' + language.value + '/error.json',
+                    'src/main/webapp/i18n/' + language.value + '/gateway.json',
                     'src/main/webapp/i18n/' + language.value + '/login.json',
                     'src/main/webapp/i18n/' + language.value + '/logs.json',
                     'src/main/webapp/i18n/' + language.value + '/home.json',
@@ -58,7 +59,7 @@ describe('JHipster generator languages', function () {
                     'src/main/webapp/i18n/' + language.value + '/sessions.json',
                     'src/main/webapp/i18n/' + language.value + '/settings.json',
                     'src/main/webapp/i18n/' + language.value + '/reset.json',
-                    'src/main/webapp/i18n/' + language.value + '/user.management.json',
+                    'src/main/webapp/i18n/' + language.value + '/user-management.json',
                     'src/main/webapp/i18n/' + language.value + '/global.json',
                     'src/main/webapp/i18n/' + language.value + '/health.json',
                     'src/main/resources/i18n/messages_' + language.value.replace('-','_') + '.properties'
@@ -83,7 +84,7 @@ describe('JHipster generator languages', function () {
     languages.forEach( function(language) {
         describe('with social - creates ' + language.name, function () {
             beforeEach(function (done) {
-                helpers.run(require.resolve('../languages'))
+                helpers.run(require.resolve('../generators/languages'))
                     .inTmpDir(function (dir) {
                         fse.copySync(path.join(__dirname, '../test/templates/social'), dir)
                     })
@@ -99,6 +100,7 @@ describe('JHipster generator languages', function () {
                     'src/main/webapp/i18n/' + language.value + '/audits.json',
                     'src/main/webapp/i18n/' + language.value + '/configuration.json',
                     'src/main/webapp/i18n/' + language.value + '/error.json',
+                    'src/main/webapp/i18n/' + language.value + '/gateway.json',
                     'src/main/webapp/i18n/' + language.value + '/login.json',
                     'src/main/webapp/i18n/' + language.value + '/logs.json',
                     'src/main/webapp/i18n/' + language.value + '/home.json',
@@ -108,7 +110,7 @@ describe('JHipster generator languages', function () {
                     'src/main/webapp/i18n/' + language.value + '/sessions.json',
                     'src/main/webapp/i18n/' + language.value + '/settings.json',
                     'src/main/webapp/i18n/' + language.value + '/reset.json',
-                    'src/main/webapp/i18n/' + language.value + '/user.management.json',
+                    'src/main/webapp/i18n/' + language.value + '/user-management.json',
                     'src/main/webapp/i18n/' + language.value + '/global.json',
                     'src/main/webapp/i18n/' + language.value + '/health.json',
                     'src/main/webapp/i18n/' + language.value + '/social.json',

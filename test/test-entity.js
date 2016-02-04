@@ -13,17 +13,17 @@ const expectedFiles = {
         'src/main/java/com/mycompany/myapp/repository/FooRepository.java',
         'src/main/java/com/mycompany/myapp/web/rest/FooResource.java',
         // 'src/main/resources/config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
-        'src/main/webapp/app/entities/foo-management/foo-management.html',
-        'src/main/webapp/app/entities/foo-management/foo-management-detail.html',
-        'src/main/webapp/app/entities/foo-management/foo-management-dialog.html',
-        'src/main/webapp/app/entities/foo-management/foo-management-delete-dialog.html',
-        'src/main/webapp/app/entities/foo-management/foo-management.js',
-        'src/main/webapp/app/entities/foo-management/foo-management.controller.js',
-        'src/main/webapp/app/entities/foo-management/foo-management-dialog.controller.js',
-        'src/main/webapp/app/entities/foo-management/foo-management-delete-dialog.controller.js',
-        'src/main/webapp/app/entities/foo-management/foo-management-detail.controller.js',
-        'src/main/webapp/app/entities/foo-management/foo.service.js',
-        'src/test/javascript/spec/app/entities/foo-management/foo-management-detail.controller.spec.js',
+        'src/main/webapp/app/entities/foo/foo-management.html',
+        'src/main/webapp/app/entities/foo/foo-management-detail.html',
+        'src/main/webapp/app/entities/foo/foo-management-dialog.html',
+        'src/main/webapp/app/entities/foo/foo-management-delete-dialog.html',
+        'src/main/webapp/app/entities/foo/foo-management.js',
+        'src/main/webapp/app/entities/foo/foo-management.controller.js',
+        'src/main/webapp/app/entities/foo/foo-management-dialog.controller.js',
+        'src/main/webapp/app/entities/foo/foo-management-delete-dialog.controller.js',
+        'src/main/webapp/app/entities/foo/foo-management-detail.controller.js',
+        'src/main/webapp/app/entities/foo/foo.service.js',
+        'src/test/javascript/spec/app/entities/foo/foo-management-detail.controller.spec.js',
         'src/test/java/com/mycompany/myapp/web/rest/FooResourceIntTest.java',
         'src/test/gatling/simulations/FooGatlingTest.scala',
     ]
@@ -31,7 +31,7 @@ const expectedFiles = {
 describe('JHipster generator entity', function () {
     describe('no dto, no service, no pagination', function () {
         beforeEach(function (done) {
-            helpers.run(require.resolve('../entity'))
+            helpers.run(require.resolve('../generators/entity'))
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
                 })
@@ -57,7 +57,7 @@ describe('JHipster generator entity', function () {
 
     describe('with dto, no service, no pagination', function () {
         beforeEach(function (done) {
-            helpers.run(require.resolve('../entity'))
+            helpers.run(require.resolve('../generators/entity'))
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
                 })
@@ -83,7 +83,7 @@ describe('JHipster generator entity', function () {
 
     describe('no dto, with serviceClass, no pagination', function () {
         beforeEach(function (done) {
-            helpers.run(require.resolve('../entity'))
+            helpers.run(require.resolve('../generators/entity'))
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
                 })
@@ -108,7 +108,7 @@ describe('JHipster generator entity', function () {
 
     describe('no dto, with serviceImpl, no pagination', function () {
         beforeEach(function (done) {
-            helpers.run(require.resolve('../entity'))
+            helpers.run(require.resolve('../generators/entity'))
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
                 })
@@ -134,7 +134,7 @@ describe('JHipster generator entity', function () {
 
     describe('no dto, no service, with pager', function () {
         beforeEach(function (done) {
-            helpers.run(require.resolve('../entity'))
+            helpers.run(require.resolve('../generators/entity'))
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
                 })
@@ -156,7 +156,7 @@ describe('JHipster generator entity', function () {
 
     describe('no dto, no service, with pagination', function () {
         beforeEach(function (done) {
-            helpers.run(require.resolve('../entity'))
+            helpers.run(require.resolve('../generators/entity'))
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
                 })
@@ -178,7 +178,7 @@ describe('JHipster generator entity', function () {
 
     describe('no dto, no service, with infinite-scroll', function () {
         beforeEach(function (done) {
-            helpers.run(require.resolve('../entity'))
+            helpers.run(require.resolve('../generators/entity'))
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
                 })
@@ -200,7 +200,7 @@ describe('JHipster generator entity', function () {
 
     describe('with dto, serviceImpl, with hazelcast, elasticsearch and noi18n', function () {
         beforeEach(function (done) {
-            helpers.run(require.resolve('../entity'))
+            helpers.run(require.resolve('../generators/entity'))
                 .inTmpDir(function (dir) {
                     fse.copySync(path.join(__dirname, '../test/templates/noi18n'), dir)
                 })
