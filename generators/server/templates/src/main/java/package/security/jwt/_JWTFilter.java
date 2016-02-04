@@ -4,16 +4,22 @@ import java.io.IOException;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
+
+import io.jsonwebtoken.ExpiredJwtException;
 
 /**
  * Filters incoming requests and installs a Spring Security principal if a header corresponding to a valid user is
  * found.
  */
 public class JWTFilter extends GenericFilterBean {
+
+    private final Logger log = LoggerFactory.getLogger(JWTFilter.class);
 
     private TokenProvider tokenProvider;
 
@@ -35,6 +41,8 @@ public class JWTFilter extends GenericFilterBean {
                 }
             }
             filterChain.doFilter(servletRequest, servletResponse);
+        } catch (ExpiredJwtException eje) {
+            log.info("Security exception for user {} - {}", eje.getClaims().getSubject(), eje.getMessage());
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

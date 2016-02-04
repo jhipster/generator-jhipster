@@ -2,8 +2,7 @@ package <%=packageName%>.security.jwt;
 
 import <%=packageName%>.config.JHipsterProperties;
 
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -27,12 +26,18 @@ public class TokenProvider {
 
     private String secretKey;
 
+    private long tokenValidityInSeconds;
+
     @Inject
     private JHipsterProperties jHipsterProperties;
 
     @PostConstruct
     public void init() {
-        this.secretKey = jHipsterProperties.getSecurity().getAuthentication().getJwt().getSecret();
+        this.secretKey =
+            jHipsterProperties.getSecurity().getAuthentication().getJwt().getSecret();
+
+        this.tokenValidityInSeconds =
+            1000 * jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds();
     }
 
     public String createToken(Authentication authentication) {
@@ -40,10 +45,14 @@ public class TokenProvider {
             .map(authority -> authority.getAuthority())
             .collect(Collectors.joining(","));
 
+        long now = (new Date()).getTime();
+        Date validity = new Date(now + this.tokenValidityInSeconds);
+
         return Jwts.builder()
             .setSubject(authentication.getName())
             .claim(AUTHORITIES_KEY, authorities)
             .signWith(SignatureAlgorithm.HS512, secretKey)
+            .setExpiration(validity)
             .compact();
     }
 

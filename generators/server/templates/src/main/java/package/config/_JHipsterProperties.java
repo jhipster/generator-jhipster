@@ -327,7 +327,7 @@ public class JHipsterProperties {
 
                 private String secret;
 
-                private int tokenValidityInSeconds = 1800;
+                private long tokenValidityInSeconds = 1800;
 
                 public String getSecret() {
                     return secret;
@@ -337,11 +337,11 @@ public class JHipsterProperties {
                     this.secret = secret;
                 }
 
-                public int getTokenValidityInSeconds() {
+                public long getTokenValidityInSeconds() {
                     return tokenValidityInSeconds;
                 }
 
-                public void setTokenValidityInSeconds(int tokenValidityInSeconds) {
+                public void setTokenValidityInSeconds(long tokenValidityInSeconds) {
                     this.tokenValidityInSeconds = tokenValidityInSeconds;
                 }
             }
