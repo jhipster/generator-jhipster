@@ -2,7 +2,8 @@
 var path = require('path'),
     html = require("html-wiring"),
     shelljs = require('shelljs'),
-    engine = require('ejs').render;
+    engine = require('ejs').render,
+    _s = require('underscore.string');
 
 
 module.exports = {
@@ -154,7 +155,7 @@ function replacePlaceholders (body, _this) {
 function geti18nJson (key, _this, template) {
 
     var i18nDirectory = 'src/main/webapp/i18n/en/',
-    name = key.split('.')[0].replace('-','.'),
+    name = _s.slugify(key.split('.')[0]),
     filename = i18nDirectory + name + '.json',
     keyValue, render = template;
 
@@ -164,6 +165,7 @@ function geti18nJson (key, _this, template) {
     }
     try {
         var file = html.readFileAsString(path.join(_this.sourceRoot(), filename));
+
         file = render ? engine(file, _this, {}) : file;
         file = JSON.parse(file);
         return file;

@@ -20,7 +20,10 @@
             },
             "admin": {
                 "main": "Administración",
-                "user-management": "Xestión de usuarios",
+                <%_ if (applicationType == 'gateway') { _%>
+                "gateway": "Gateway",
+                <%_ } _%>
+                "userManagement": "Xestión de usuarios",
                 "tracker": "Rexistro de usuarios",
                 "metrics": "Métricas",
                 "health": "Saúde",
