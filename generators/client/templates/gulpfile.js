@@ -29,7 +29,10 @@ var gulp = require('gulp'),
     argv = require('yargs').argv,
     gulpif = require('gulp-if'),
     handleErrors = require('./gulp/handleErrors'),
-    util = require('./gulp/utils');
+    util = require('./gulp/utils'),
+    map = require('map-stream'),
+    events = require('events'),
+    emmitter = new events.EventEmitter();
 
 var config = {
     app: 'src/main/webapp/',
@@ -282,11 +285,26 @@ gulp.task('ngconstant:prod', function() {
 });
 
 gulp.task('jshint', function() {
+    //Custom reporter (in task to have new instance each time)
+    var jsHintErrorReporter = map(function (file, cb) {
+        if (!file.jshint.success) {
+            var nbErrors = 0;
+            file.jshint.results.map(function (data) {
+            if (data.error && data.error.code && data.error.code[0] === 'E') {
+                nbErrors++;
+            }});
+            if (nbErrors){
+                emmitter.emit('error', new Error('JSHint failed for: ' + file.relative + ' (' + nbErrors + ' errors)\n'));
+            }
+        }
+        cb(null, file);
+    });
+
     return gulp.src(['gulpfile.js', config.app + 'app/**/*.js'])
         .pipe(gulpif(config.notification, plumber({errorHandler: handleErrors})))
         .pipe(jshint())
         .pipe(jshint.reporter('jshint-stylish'))
-        .pipe(gulpif(config.notification, jshint.reporter('fail')));
+        .pipe(gulpif(config.notification, jsHintErrorReporter));
 });
 
 <% if (testFrameworks.indexOf('protractor') > -1) { %>
