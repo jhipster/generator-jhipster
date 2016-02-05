@@ -27,12 +27,7 @@ var gulp = require('gulp'),
     KarmaServer = require('karma').Server,
     plumber = require('gulp-plumber'),
     handleErrors = require('./gulp/handleErrors'),
-    util = require('./gulp/utils'),
-    argv = require('yargs').argv,
-    gulpif = require('gulp-if'),
-    map = require('map-stream'),
-    events = require('events'),
-    emmitter = new events.EventEmitter();
+    util = require('./gulp/utils');
 
 var config = {
     app: 'src/main/webapp/',
@@ -42,8 +37,7 @@ var config = {
     scss: 'src/main/webapp/scss/'<% } %>,
     port: 9000,
     apiPort: 8080,
-    liveReloadPort: 35729,
-    notification : (argv.notification === undefined) ? true : argv.notification
+    liveReloadPort: 35729
 };
 
 gulp.task('clean', function () {
@@ -59,7 +53,7 @@ gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function(done) {
 <% if (testFrameworks.indexOf('protractor') > -1) { %>
 gulp.task('protractor', function() {
     return gulp.src([config.test + 'e2e/*.js'])
-        .pipe(gulpif(config.notification, plumber({errorHandler: handleErrors})))
+        .pipe(plumber({errorHandler: handleErrors}))
         .pipe(protractor({
             configFile: config.test + 'protractor.conf.js'
         }));
@@ -68,20 +62,20 @@ gulp.task('protractor', function() {
 gulp.task('copy', function() {
     return es.merge( <% if(enableTranslation) { %> // copy i18n folders only if translation is enabled
         gulp.src(config.app + 'i18n/**')
-        .pipe(gulpif(config.notification, plumber({errorHandler: handleErrors})))
+        .pipe(plumber({errorHandler: handleErrors}))
         .pipe(gulp.dest(config.dist + 'i18n/')), <% } %>
         gulp.src(config.app + 'bower_components/bootstrap/fonts/*.*')
-        .pipe(gulpif(config.notification, plumber({errorHandler: handleErrors})))
+        .pipe(plumber({errorHandler: handleErrors}))
         .pipe(gulp.dest(config.dist + 'content/fonts/')),
         gulp.src(config.app + 'content/**/*.{woff,svg,ttf,eot}')
-        .pipe(gulpif(config.notification, plumber({errorHandler: handleErrors})))
+        .pipe(plumber({errorHandler: handleErrors}))
         .pipe(flatten())
         .pipe(gulp.dest(config.dist + 'content/fonts/')));
 });
 
 gulp.task('images', function() {
     return gulp.src(config.app + 'content/images/**')
-        .pipe(gulpif(config.notification, plumber({errorHandler: handleErrors})))
+        .pipe(plumber({errorHandler: handleErrors}))
         .pipe(imagemin({optimizationLevel: 5}))
         .pipe(gulp.dest(config.dist + 'content/images'))
         .pipe(browserSync.reload({stream: true}));
@@ -89,7 +83,7 @@ gulp.task('images', function() {
 <% if(useSass) { %>
 gulp.task('sass', function () {
     return gulp.src(config.scss + '**/*.{scss,sass}')
-        .pipe(gulpif(config.notification, plumber({errorHandler: handleErrors})))
+        .pipe(plumber({errorHandler: handleErrors}))
         .pipe(sass({includePaths:config.importPath}).on('error', sass.logError))
         .pipe(gulp.dest(config.app + 'content/css'));
 });
@@ -183,14 +177,14 @@ gulp.task('wiredep', ['wiredep:test', 'wiredep:app']);
 
 gulp.task('wiredep:app', function () {
     var stream = gulp.src(config.app + 'index.html')
-        .pipe(gulpif(config.notification, plumber({errorHandler: handleErrors})))
+        .pipe(plumber({errorHandler: handleErrors}))
         .pipe(wiredep({
             exclude: [/angular-i18n/]
         }))
         .pipe(gulp.dest(config.app));
 
     return <% if (useSass) { %>es.merge(stream, gulp.src(config.scss + '*.{scss,sass}')
-        .pipe(gulpif(config.notification, plumber({errorHandler: handleErrors})))
+        .pipe(plumber({errorHandler: handleErrors}))
         .pipe(wiredep({
             exclude: [
                 /angular-i18n/,  // localizations are loaded dynamically
@@ -203,7 +197,7 @@ gulp.task('wiredep:app', function () {
 
 gulp.task('wiredep:test', function () {
     return gulp.src(config.test + 'karma.conf.js')
-        .pipe(gulpif(config.notification, plumber({errorHandler: handleErrors})))
+        .pipe(plumber({errorHandler: handleErrors}))
         .pipe(wiredep({
             exclude: [/angular-i18n/, /angular-scenario/],
             ignorePath: /\.\.\/\.\.\//, // remove ../../ from paths of injected javascripts
@@ -229,7 +223,7 @@ gulp.task('build', function (cb) {
 
 gulp.task('usemin', ['images', 'styles'], function() {
     return gulp.src([config.app + '**/*.html', '!' + config.app + '@(dist|bower_components)/**/*.html'])
-        .pipe(gulpif(config.notification, plumber({errorHandler: handleErrors})))
+        .pipe(plumber({errorHandler: handleErrors}))
         .pipe(usemin({
             css: [
                 prefix,
@@ -286,25 +280,13 @@ gulp.task('ngconstant:prod', function() {
 
 gulp.task('jshint', function() {
     //Custom reporter (in task to have new instance each time)
-    var jsHintErrorReporter = map(function (file, cb) {
-        if (!file.jshint.success) {
-            var nbErrors = 0;
-            file.jshint.results.map(function (data) {
-            if (data.error && data.error.code && data.error.code[0] === 'E') {
-                nbErrors++;
-            }});
-            if (nbErrors){
-                emmitter.emit('error', new Error('JSHint failed for: ' + file.relative + ' (' + nbErrors + ' errors)\n'));
-            }
-        }
-        cb(null, file);
-    });
+    var jsHintErrorReporter = require('./gulp/jsHintErrorReporter');
 
     return gulp.src(['gulpfile.js', config.app + 'app/**/*.js'])
-        .pipe(gulpif(config.notification, plumber({errorHandler: handleErrors})))
+        .pipe(plumber({errorHandler: handleErrors}))
         .pipe(jshint())
         .pipe(jshint.reporter('jshint-stylish'))
-        .pipe(gulpif(config.notification, jsHintErrorReporter));
+        .pipe(jsHintErrorReporter());
 });
 
 <% if (testFrameworks.indexOf('protractor') > -1) { %>
