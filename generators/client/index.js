@@ -5,6 +5,7 @@ var util = require('util'),
     chalk = require('chalk'),
     _ = require('underscore.string'),
     scriptBase = require('../generator-base'),
+    constants = require('../generator-constants'),
     mkdirp = require('mkdirp'),
     html = require("html-wiring"),
     packagejs = require('../../package.json'),
@@ -15,11 +16,11 @@ var JhipsterClientGenerator = generators.Base.extend({});
 util.inherits(JhipsterClientGenerator, scriptBase);
 
 /* Constants use through out */
-const QUESTIONS = 15; // making questions a variable to avoid updating each question by hand when adding additional options
-const WEBAPP_DIR = 'src/main/webapp/';
-const ANGULAR_DIR = WEBAPP_DIR + 'app/';
-const TEST_JS_DIR = 'src/test/javascript/';
-const INTERPOLATE_REGEX = /<%=([\s\S]+?)%>/g; // so that tags in templates do not get mistreated as _ templates
+const QUESTIONS =  constants.QUESTIONS;
+const WEBAPP_DIR =  constants.WEBAPP_DIR;
+const ANGULAR_DIR =  constants.ANGULAR_DIR;
+const TEST_JS_DIR =  constants.TEST_JS_DIR;
+const INTERPOLATE_REGEX =  constants.INTERPOLATE_REGEX;
 
 var currentQuestion;
 var configOptions = {};

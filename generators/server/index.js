@@ -5,6 +5,7 @@ var util = require('util'),
     chalk = require('chalk'),
     _ = require('underscore.string'),
     scriptBase = require('../generator-base'),
+    constants = require('../generator-constants'),
     packagejs = require('../../package.json'),
     crypto = require("crypto"),
     mkdirp = require('mkdirp');
@@ -14,11 +15,11 @@ var JhipsterServerGenerator = generators.Base.extend({});
 util.inherits(JhipsterServerGenerator, scriptBase);
 
 /* Constants used through out */
-const QUESTIONS = 15; // making questions a variable to avoid updating each question by hand when adding additional options
-const RESOURCE_DIR = 'src/main/resources/';
-const TEST_RES_DIR = 'src/test/resources/';
-const DOCKER_DIR = 'src/main/docker/';
-const INTERPOLATE_REGEX = /<%=([\s\S]+?)%>/g; // so that tags in templates do not get mistreated as _ templates
+const QUESTIONS =  constants.QUESTIONS;
+const RESOURCE_DIR = constants.RESOURCE_DIR;
+const TEST_RES_DIR = constants.TEST_RES_DIR;
+const DOCKER_DIR = constants.DOCKER_DIR;
+const INTERPOLATE_REGEX =  constants.INTERPOLATE_REGEX;
 
 var currentQuestion;
 var configOptions = {};
@@ -78,7 +79,6 @@ module.exports = JhipsterServerGenerator.extend({
 
         var skipClient = this.config.get('skipClient');
         this.skipClient = skipClient || !this.options['client-hook'];
-        console.log(this.skipClient);
         this.enableTranslation = this.options['i18n'];
         this.baseName = this.options['base-name'];
         this.testFrameworks = [];

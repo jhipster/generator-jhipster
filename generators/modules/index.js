@@ -4,6 +4,7 @@ var util = require('util'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
     _ = require('underscore.string'),
+    constants = require('../generator-constants'),
     scriptBase = require('../generator-base');
 
 var ModulesGenerator = generators.Base.extend({});
@@ -48,10 +49,10 @@ module.exports = ModulesGenerator.extend({
         jhipsterVar['enableSocialSignIn'] = this.config.get('enableSocialSignIn');
         jhipsterVar['testFrameworks'] = this.config.get('testFrameworks');
 
-        jhipsterVar['angularAppName'] = _.camelize(_.slugify(baseName)) + 'App';
+        jhipsterVar['angularAppName'] = this.getAngularAppName();
         jhipsterVar['javaDir'] = 'src/main/java/' + packageFolder + '/';
-        jhipsterVar['resourceDir'] = 'src/main/resources/';
-        jhipsterVar['webappDir'] = 'src/main/webapp/';
+        jhipsterVar['resourceDir'] = constants.RESOURCE_DIR;
+        jhipsterVar['webappDir'] = constants.WEBAPP_DIR;
 
         // alias fs and log methods so that we can use it in script-base when invoking functions from jhipsterFunc context in modules
         jhipsterFunc['fs'] = this.fs;
