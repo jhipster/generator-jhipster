@@ -597,10 +597,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.template('_travis.yml', '.travis.yml', this, {});
         },
 
-        writeServerFiles: function () {
-
-            var packageFolder = this.packageFolder;
-            var javaDir = this.javaDir;
+        writeDockerFiles: function () {
 
             // Create docker-compose file
             this.template(DOCKER_DIR + '_sonar.yml', DOCKER_DIR + 'sonar.yml', this, {});
@@ -619,6 +616,9 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(DOCKER_DIR + 'cassandra/scripts/_cassandra.sh', DOCKER_DIR + 'cassandra/scripts/cassandra.sh', this, {});
                 this.template(DOCKER_DIR + 'opscenter/_Dockerfile', DOCKER_DIR + 'opscenter/Dockerfile', this, {});
             }
+        },
+
+        writeServerBuildFiles: function () {
 
             switch (this.buildTool) {
                 case 'gradle':
@@ -651,6 +651,9 @@ module.exports = JhipsterServerGenerator.extend({
                     this.copy('.mvn/wrapper/maven-wrapper.properties', '.mvn/wrapper/maven-wrapper.properties');
                     this.template('_pom.xml', 'pom.xml', null, {'interpolate': INTERPOLATE_REGEX});
             }
+        },
+
+        writeServerResourceFiles: function () {
 
             // Create Java resource files
             mkdirp(RESOURCE_DIR);
@@ -701,6 +704,9 @@ module.exports = JhipsterServerGenerator.extend({
             if (this.enableSocialSignIn) {
                 this.copy(RESOURCE_DIR + '/mails/socialRegistrationValidationEmail.html', RESOURCE_DIR + 'mails/socialRegistrationValidationEmail.html');
             }
+        },
+
+        writeServeri18nFiles: function () {
 
             // install all files related to i18n if translation is enabled
             if (this.enableTranslation) {
@@ -708,7 +714,90 @@ module.exports = JhipsterServerGenerator.extend({
                 this.installI18nResFilesByLanguage(this, RESOURCE_DIR, 'fr');
             }
             this.template(RESOURCE_DIR + '/i18n/_messages_en.properties', RESOURCE_DIR + 'i18n/messages.properties', this, {});
+        },
 
+        writeServerJavaAuthConfigFiles: function () {
+            var javaDir = this.javaDir;
+            if (this.authenticationType == 'oauth2') {
+                this.template('src/main/java/package/config/_OAuth2ServerConfiguration.java', javaDir + 'config/OAuth2ServerConfiguration.java', this, {});
+            }
+
+            if (this.databaseType == 'mongodb' && this.authenticationType == 'oauth2') {
+                this.template('src/main/java/package/config/oauth2/_OAuth2AuthenticationReadConverter.java', javaDir + 'config/oauth2/OAuth2AuthenticationReadConverter.java', this, {});
+                this.template('src/main/java/package/config/oauth2/_MongoDBTokenStore.java', javaDir + 'config/oauth2/MongoDBTokenStore.java', this, {});
+                this.template('src/main/java/package/domain/_OAuth2AuthenticationAccessToken.java', javaDir + 'domain/OAuth2AuthenticationAccessToken.java', this, {});
+                this.template('src/main/java/package/domain/_OAuth2AuthenticationRefreshToken.java', javaDir + 'domain/OAuth2AuthenticationRefreshToken.java', this, {});
+                this.template('src/main/java/package/repository/_OAuth2AccessTokenRepository.java', javaDir + 'repository/OAuth2AccessTokenRepository.java', this, {});
+                this.template('src/main/java/package/repository/_OAuth2RefreshTokenRepository.java', javaDir + 'repository/OAuth2RefreshTokenRepository.java', this, {});
+            }
+
+            this.template('src/main/java/package/config/_SecurityConfiguration.java', javaDir + 'config/SecurityConfiguration.java', this, {});
+
+            if (this.authenticationType == 'session') {
+                this.template('src/main/java/package/domain/_PersistentToken.java', javaDir + 'domain/PersistentToken.java', this, {});
+            }
+
+            if (this.authenticationType == 'session') {
+                this.template('src/main/java/package/repository/_PersistentTokenRepository.java', javaDir + 'repository/PersistentTokenRepository.java', this, {});
+            }
+
+            this.template('src/main/java/package/security/_package-info.java', javaDir + 'security/package-info.java', this, {});
+            if (this.authenticationType == 'session') {
+                this.template('src/main/java/package/security/_AjaxAuthenticationFailureHandler.java', javaDir + 'security/AjaxAuthenticationFailureHandler.java', this, {});
+                this.template('src/main/java/package/security/_AjaxAuthenticationSuccessHandler.java', javaDir + 'security/AjaxAuthenticationSuccessHandler.java', this, {});
+            }
+            if (this.authenticationType == 'session' || this.authenticationType == 'oauth2') {
+                this.template('src/main/java/package/security/_AjaxLogoutSuccessHandler.java', javaDir + 'security/AjaxLogoutSuccessHandler.java', this, {});
+            }
+            if (this.authenticationType == 'jwt') {
+                this.template('src/main/java/package/security/_AuthenticationProvider.java', javaDir + 'security/AuthenticationProvider.java', this, {});
+            }
+            this.template('src/main/java/package/security/_AuthoritiesConstants.java', javaDir + 'security/AuthoritiesConstants.java', this, {});
+            if (this.authenticationType == 'session') {
+                this.template('src/main/java/package/security/_CustomAccessDeniedHandler.java', javaDir + 'security/CustomAccessDeniedHandler.java', this, {});
+                this.template('src/main/java/package/security/_CustomPersistentRememberMeServices.java', javaDir + 'security/CustomPersistentRememberMeServices.java', this, {});
+            }
+            this.template('src/main/java/package/security/_Http401UnauthorizedEntryPoint.java', javaDir + 'security/Http401UnauthorizedEntryPoint.java', this, {});
+            this.template('src/main/java/package/security/_SecurityUtils.java', javaDir + 'security/SecurityUtils.java', this, {});
+            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+                this.template('src/main/java/package/security/_SpringSecurityAuditorAware.java', javaDir + 'security/SpringSecurityAuditorAware.java', this, {});
+            }
+            this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java', this, {});
+            this.template('src/main/java/package/security/_UserNotActivatedException.java', javaDir + 'security/UserNotActivatedException.java', this, {});
+
+            if (this.authenticationType == 'jwt') {
+                this.template('src/main/java/package/security/jwt/_TokenProvider.java', javaDir + 'security/jwt/TokenProvider.java', this, {});
+                this.template('src/main/java/package/web/rest/_UserJWTController.java', javaDir + 'web/rest/UserJWTController.java', this, {});
+                this.template('src/main/java/package/security/jwt/_JWTConfigurer.java', javaDir + 'security/jwt/JWTConfigurer.java', this, {});
+                this.template('src/main/java/package/security/jwt/_JWTFilter.java', javaDir + 'security/jwt/JWTFilter.java', this, {});
+            }
+            if (this.authenticationType == 'session') {
+                this.template('src/main/java/package/web/filter/_CsrfCookieGeneratorFilter.java', javaDir + 'web/filter/CsrfCookieGeneratorFilter.java', this, {});
+            }
+            if (this.enableSocialSignIn) {
+                this.template('src/main/java/package/security/social/_package-info.java', javaDir + 'security/social/package-info.java', this, {});
+                this.template('src/main/java/package/config/social/_SocialConfiguration.java', javaDir + 'config/social/SocialConfiguration.java', this, {});
+                this.template('src/main/java/package/domain/_SocialUserConnection.java', javaDir + 'domain/SocialUserConnection.java', this, {});
+                this.template('src/main/java/package/repository/_CustomSocialConnectionRepository.java', javaDir + 'repository/CustomSocialConnectionRepository.java', this, {});
+                this.template('src/main/java/package/repository/_CustomSocialUsersConnectionRepository.java', javaDir + 'repository/CustomSocialUsersConnectionRepository.java', this, {});
+                this.template('src/main/java/package/repository/_SocialUserConnectionRepository.java', javaDir + 'repository/SocialUserConnectionRepository.java', this, {});
+                this.template('src/main/java/package/security/social/_CustomSignInAdapter.java', javaDir + 'security/social/CustomSignInAdapter.java', this, {});
+                this.template('src/main/java/package/security/social/_package-info.java', javaDir + 'security/social/package-info.java', this, {});
+                this.template('src/main/java/package/service/_SocialService.java', javaDir + 'service/SocialService.java', this, {});
+                this.template('src/main/java/package/web/rest/_SocialController.java', javaDir + 'web/rest/SocialController.java', this, {});
+            }
+        },
+
+        writeServerJavaGatewayFiles: function () {
+            if (this.applicationType == 'gateway') {
+                this.template('src/main/java/package/web/rest/dto/_RouteDTO.java', javaDir + 'web/rest/dto/RouteDTO.java', this, {});
+                this.template('src/main/java/package/web/rest/_GatewayResource.java', javaDir + 'web/rest/GatewayResource.java', this, {});
+            }
+
+        },
+
+        writeServerJavaFiles: function () {
+            var javaDir = this.javaDir;
             // Create Java files
             this.template('src/main/java/package/_Application.java', javaDir + '/Application.java', this, {});
             this.template('src/main/java/package/_ApplicationWebXml.java', javaDir + '/ApplicationWebXml.java', this, {});
@@ -740,28 +829,12 @@ module.exports = JhipsterServerGenerator.extend({
             this.template('src/main/java/package/config/_LocaleConfiguration.java', javaDir + 'config/LocaleConfiguration.java', this, {});
             this.template('src/main/java/package/config/_LoggingAspectConfiguration.java', javaDir + 'config/LoggingAspectConfiguration.java', this, {});
             this.template('src/main/java/package/config/_MetricsConfiguration.java', javaDir + 'config/MetricsConfiguration.java', this, {});
-
-            if (this.authenticationType == 'oauth2') {
-                this.template('src/main/java/package/config/_OAuth2ServerConfiguration.java', javaDir + 'config/OAuth2ServerConfiguration.java', this, {});
-            }
-
-            if (this.databaseType == 'mongodb' && this.authenticationType == 'oauth2') {
-                this.template('src/main/java/package/config/oauth2/_OAuth2AuthenticationReadConverter.java', javaDir + 'config/oauth2/OAuth2AuthenticationReadConverter.java', this, {});
-                this.template('src/main/java/package/config/oauth2/_MongoDBTokenStore.java', javaDir + 'config/oauth2/MongoDBTokenStore.java', this, {});
-                this.template('src/main/java/package/domain/_OAuth2AuthenticationAccessToken.java', javaDir + 'domain/OAuth2AuthenticationAccessToken.java', this, {});
-                this.template('src/main/java/package/domain/_OAuth2AuthenticationRefreshToken.java', javaDir + 'domain/OAuth2AuthenticationRefreshToken.java', this, {});
-                this.template('src/main/java/package/repository/_OAuth2AccessTokenRepository.java', javaDir + 'repository/OAuth2AccessTokenRepository.java', this, {});
-                this.template('src/main/java/package/repository/_OAuth2RefreshTokenRepository.java', javaDir + 'repository/OAuth2RefreshTokenRepository.java', this, {});
-            }
-
-            this.template('src/main/java/package/config/_SecurityConfiguration.java', javaDir + 'config/SecurityConfiguration.java', this, {});
             this.template('src/main/java/package/config/_ThymeleafConfiguration.java', javaDir + 'config/ThymeleafConfiguration.java', this, {});
             this.template('src/main/java/package/config/_WebConfigurer.java', javaDir + 'config/WebConfigurer.java', this, {});
             if (this.websocket == 'spring-websocket') {
                 this.template('src/main/java/package/config/_WebsocketConfiguration.java', javaDir + 'config/WebsocketConfiguration.java', this, {});
                 this.template('src/main/java/package/config/_WebsocketSecurityConfiguration.java', javaDir + 'config/WebsocketSecurityConfiguration.java', this, {});
             }
-
             // error handler code - server side
             this.template('src/main/java/package/web/rest/errors/_ErrorConstants.java', javaDir + 'web/rest/errors/ErrorConstants.java', this, {});
             this.template('src/main/java/package/web/rest/errors/_CustomParameterizedException.java', javaDir + 'web/rest/errors/CustomParameterizedException.java', this, {});
@@ -800,9 +873,7 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template('src/main/java/package/domain/_Authority.java', javaDir + 'domain/Authority.java', this, {});
                 this.template('src/main/java/package/domain/_PersistentAuditEvent.java', javaDir + 'domain/PersistentAuditEvent.java', this, {});
             }
-            if (this.authenticationType == 'session') {
-                this.template('src/main/java/package/domain/_PersistentToken.java', javaDir + 'domain/PersistentToken.java', this, {});
-            }
+
             this.template('src/main/java/package/domain/_User.java', javaDir + 'domain/User.java', this, {});
             this.template('src/main/java/package/domain/util/_JSR310DateConverters.java', javaDir + 'domain/util/JSR310DateConverters.java', this, {});
             this.template('src/main/java/package/domain/util/_JSR310PersistenceConverters.java', javaDir + 'domain/util/JSR310PersistenceConverters.java', this, {});
@@ -829,41 +900,6 @@ module.exports = JhipsterServerGenerator.extend({
 
             this.template('src/main/java/package/repository/_UserRepository.java', javaDir + 'repository/UserRepository.java', this, {});
 
-            if (this.authenticationType == 'session') {
-                this.template('src/main/java/package/repository/_PersistentTokenRepository.java', javaDir + 'repository/PersistentTokenRepository.java', this, {});
-            }
-
-            this.template('src/main/java/package/security/_package-info.java', javaDir + 'security/package-info.java', this, {});
-            if (this.authenticationType == 'session') {
-                this.template('src/main/java/package/security/_AjaxAuthenticationFailureHandler.java', javaDir + 'security/AjaxAuthenticationFailureHandler.java', this, {});
-                this.template('src/main/java/package/security/_AjaxAuthenticationSuccessHandler.java', javaDir + 'security/AjaxAuthenticationSuccessHandler.java', this, {});
-            }
-            if (this.authenticationType == 'session' || this.authenticationType == 'oauth2') {
-                this.template('src/main/java/package/security/_AjaxLogoutSuccessHandler.java', javaDir + 'security/AjaxLogoutSuccessHandler.java', this, {});
-            }
-            if (this.authenticationType == 'jwt') {
-                this.template('src/main/java/package/security/_AuthenticationProvider.java', javaDir + 'security/AuthenticationProvider.java', this, {});
-            }
-            this.template('src/main/java/package/security/_AuthoritiesConstants.java', javaDir + 'security/AuthoritiesConstants.java', this, {});
-            if (this.authenticationType == 'session') {
-                this.template('src/main/java/package/security/_CustomAccessDeniedHandler.java', javaDir + 'security/CustomAccessDeniedHandler.java', this, {});
-                this.template('src/main/java/package/security/_CustomPersistentRememberMeServices.java', javaDir + 'security/CustomPersistentRememberMeServices.java', this, {});
-            }
-            this.template('src/main/java/package/security/_Http401UnauthorizedEntryPoint.java', javaDir + 'security/Http401UnauthorizedEntryPoint.java', this, {});
-            this.template('src/main/java/package/security/_SecurityUtils.java', javaDir + 'security/SecurityUtils.java', this, {});
-            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
-                this.template('src/main/java/package/security/_SpringSecurityAuditorAware.java', javaDir + 'security/SpringSecurityAuditorAware.java', this, {});
-            }
-            this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java', this, {});
-            this.template('src/main/java/package/security/_UserNotActivatedException.java', javaDir + 'security/UserNotActivatedException.java', this, {});
-
-            if (this.authenticationType == 'jwt') {
-                this.template('src/main/java/package/security/jwt/_TokenProvider.java', javaDir + 'security/jwt/TokenProvider.java', this, {});
-                this.template('src/main/java/package/web/rest/_UserJWTController.java', javaDir + 'web/rest/UserJWTController.java', this, {});
-                this.template('src/main/java/package/security/jwt/_JWTConfigurer.java', javaDir + 'security/jwt/JWTConfigurer.java', this, {});
-                this.template('src/main/java/package/security/jwt/_JWTFilter.java', javaDir + 'security/jwt/JWTFilter.java', this, {});
-            }
-
             this.template('src/main/java/package/service/_package-info.java', javaDir + 'service/package-info.java', this, {});
             if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
                 this.template('src/main/java/package/service/_AuditEventService.java', javaDir + 'service/AuditEventService.java', this, {});
@@ -875,9 +911,6 @@ module.exports = JhipsterServerGenerator.extend({
             this.template('src/main/java/package/web/filter/_package-info.java', javaDir + 'web/filter/package-info.java', this, {});
             this.template('src/main/java/package/web/filter/_CachingHttpHeadersFilter.java', javaDir + 'web/filter/CachingHttpHeadersFilter.java', this, {});
             this.template('src/main/java/package/web/filter/_StaticResourcesProductionFilter.java', javaDir + 'web/filter/StaticResourcesProductionFilter.java', this, {});
-            if (this.authenticationType == 'session') {
-                this.template('src/main/java/package/web/filter/_CsrfCookieGeneratorFilter.java', javaDir + 'web/filter/CsrfCookieGeneratorFilter.java', this, {});
-            }
 
             this.template('src/main/java/package/web/rest/dto/_package-info.java', javaDir + 'web/rest/dto/package-info.java', this, {});
             this.template('src/main/java/package/web/rest/dto/_LoggerDTO.java', javaDir + 'web/rest/dto/LoggerDTO.java', this, {});
@@ -900,24 +933,6 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template('src/main/java/package/web/websocket/_ActivityService.java', javaDir + 'web/websocket/ActivityService.java', this, {});
                 this.template('src/main/java/package/web/websocket/dto/_package-info.java', javaDir + 'web/websocket/dto/package-info.java', this, {});
                 this.template('src/main/java/package/web/websocket/dto/_ActivityDTO.java', javaDir + 'web/websocket/dto/ActivityDTO.java', this, {});
-            }
-
-            if (this.enableSocialSignIn) {
-                this.template('src/main/java/package/security/social/_package-info.java', javaDir + 'security/social/package-info.java', this, {});
-                this.template('src/main/java/package/config/social/_SocialConfiguration.java', javaDir + 'config/social/SocialConfiguration.java', this, {});
-                this.template('src/main/java/package/domain/_SocialUserConnection.java', javaDir + 'domain/SocialUserConnection.java', this, {});
-                this.template('src/main/java/package/repository/_CustomSocialConnectionRepository.java', javaDir + 'repository/CustomSocialConnectionRepository.java', this, {});
-                this.template('src/main/java/package/repository/_CustomSocialUsersConnectionRepository.java', javaDir + 'repository/CustomSocialUsersConnectionRepository.java', this, {});
-                this.template('src/main/java/package/repository/_SocialUserConnectionRepository.java', javaDir + 'repository/SocialUserConnectionRepository.java', this, {});
-                this.template('src/main/java/package/security/social/_CustomSignInAdapter.java', javaDir + 'security/social/CustomSignInAdapter.java', this, {});
-                this.template('src/main/java/package/security/social/_package-info.java', javaDir + 'security/social/package-info.java', this, {});
-                this.template('src/main/java/package/service/_SocialService.java', javaDir + 'service/SocialService.java', this, {});
-                this.template('src/main/java/package/web/rest/_SocialController.java', javaDir + 'web/rest/SocialController.java', this, {});
-            }
-
-            if (this.applicationType == 'gateway') {
-                this.template('src/main/java/package/web/rest/dto/_RouteDTO.java', javaDir + 'web/rest/dto/RouteDTO.java', this, {});
-                this.template('src/main/java/package/web/rest/_GatewayResource.java', javaDir + 'web/rest/GatewayResource.java', this, {});
             }
         },
 
