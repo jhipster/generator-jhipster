@@ -35,6 +35,13 @@ module.exports = JhipsterServerGenerator.extend({
             type: String
         });
 
+        // This adds support for a `--[no-]client-hook` flag
+        this.option('client-hook', {
+            desc: 'Enable gulp and bower hook from maven/gradle build',
+            type: Boolean,
+            defaults: false
+        });
+
         // This adds support for a `--[no-]i18n` flag
         this.option('i18n', {
             desc: 'Disable or enable i18n when skipping client side generation, has no effect otherwise',
@@ -70,7 +77,8 @@ module.exports = JhipsterServerGenerator.extend({
         });
 
         var skipClient = this.config.get('skipClient');
-        this.skipClient = skipClient || configOptions.skipClient;
+        this.skipClient = skipClient || !this.options['client-hook'];
+        console.log(this.skipClient);
         this.enableTranslation = this.options['i18n'];
         this.baseName = this.options['base-name'];
         this.testFrameworks = [];
