@@ -6,7 +6,8 @@
     "dependencies": {
         "angular": "1.4.8",
         "angular-aria": "1.4.8",
-        "angular-bootstrap": "0.14.3",
+        "angular-bootstrap": "1.1.2",
+        "bootstrap-ui-datetime-picker": "2.2.0",
         "angular-cache-buster": "0.4.3",
         "angular-cookies": "1.4.8",
         <%_ if (enableTranslation) { _%>

@@ -3,6 +3,7 @@ var util = require('util'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
     scriptBase = require('../generator-base'),
+    constants = require('../generator-constants'),
     cleanup = require('../cleanup'),
     packagejs = require('../../package.json');
 
@@ -11,14 +12,10 @@ var JhipsterGenerator = generators.Base.extend({});
 util.inherits(JhipsterGenerator, scriptBase);
 
 /* Constants use through out */
-const QUESTIONS = 15; // making questions a variable to avoid updating each question by hand when adding additional options
-const RESOURCE_DIR = 'src/main/resources/';
-const WEBAPP_DIR = 'src/main/webapp/';
-const ANGULAR_DIR = WEBAPP_DIR + 'app/';
-const TEST_JS_DIR = 'src/test/javascript/';
-const TEST_RES_DIR = 'src/test/resources/';
-const DOCKER_DIR = 'src/main/docker/';
-const INTERPOLATE_REGEX = /<%=([\s\S]+?)%>/g; // so that tags in templates do not get mistreated as _ templates
+const QUESTIONS = constants.QUESTIONS;
+const RESOURCE_DIR = constants.RESOURCE_DIR;
+const WEBAPP_DIR =  constants.WEBAPP_DIR;
+const TEST_JS_DIR =  constants.TEST_JS_DIR;
 
 var currentQuestion = 0;
 var configOptions = {};
@@ -137,12 +134,14 @@ module.exports = JhipsterGenerator.extend({
     },
 
     configuring: {
-
-        composeServer : function () {
+        setup : function () {
             configOptions.applicationType = this.applicationType;
             if(this.skipClient){
                 configOptions.enableTranslation = this.options['i18n'];
             }
+        },
+
+        composeServer : function () {
             this.composeWith('jhipster:server', {
                 options: {
                     'logo': false,
@@ -156,9 +155,8 @@ module.exports = JhipsterGenerator.extend({
         },
 
         composeClient : function () {
-            if(this.skipClient){
-                return;
-            }
+            if(this.skipClient) return;
+            
             this.composeWith('jhipster:client', {
                 options: {
                     'logo': false,
@@ -227,13 +225,18 @@ module.exports = JhipsterGenerator.extend({
     writing: {
 
         cleanup: function () {
-            cleanup.cleanupOldFiles(this, this.javaDir, this.testDir, RESOURCE_DIR, WEBAPP_DIR, TEST_JS_DIR);
+            cleanup.cleanupOldFiles(this, this.javaDir, this.testDir);
         },
 
         regenerateEntities: function () {
             if (this.withEntities) {
                 this.getExistingEntities().forEach( function(entity) {
-                    this.composeWith('jhipster:entity', {options: {regenerate: true}, args:[entity.name]});
+                    this.composeWith('jhipster:entity', {
+                        options: { regenerate: true },
+                        args:[ entity.name ]
+                    }, {
+                        local: require.resolve('../entity')
+                    });
                 }, this);
             }
         }

@@ -108,6 +108,7 @@ gulp.task('serve', function() {
             '/api',
             '/health',
             '/configprops',
+            '/env',
             '/v2/api-docs',
             '/swagger-ui',
             '/configuration/security',
@@ -169,6 +170,7 @@ gulp.task('watch', function() {
     gulp.watch(['gulpfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>], ['ngconstant:dev']);
     gulp.watch(<% if(useSass) { %>config.scss + '**/*.{scss,sass}'<% } else { %>config.app + 'content/css/**/*.css'<% } %>, ['styles']);
     gulp.watch(config.app + 'content/images/**', ['images']);
+    gulp.watch(config.app + 'app/**/*.js', ['jshint']);
     gulp.watch([config.app + '*.html', config.app + 'app/**', config.app + 'i18n/**']).on('change', browserSync.reload);
 });
 
@@ -278,10 +280,14 @@ gulp.task('ngconstant:prod', function() {
 });
 
 gulp.task('jshint', function() {
+    //Custom reporter (in task to have new instance each time)
+    var jsHintErrorReporter = require('./gulp/jsHintErrorReporter');
+
     return gulp.src(['gulpfile.js', config.app + 'app/**/*.js'])
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(jshint())
-        .pipe(jshint.reporter('jshint-stylish'));
+        .pipe(jshint.reporter('jshint-stylish'))
+        .pipe(jsHintErrorReporter());
 });
 
 <% if (testFrameworks.indexOf('protractor') > -1) { %>

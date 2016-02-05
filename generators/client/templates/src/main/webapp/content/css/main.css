@@ -78,6 +78,12 @@ Browser Upgrade Prompt
 .pad {
     padding: 10px;
 }
+
+.break {
+    white-space: normal;
+    word-break:break-all;
+}
+
 /* wait autoprefixer update to allow simple generation of high pixel density media query */
 @media
 only screen and (-webkit-min-device-pixel-ratio: 2),
@@ -273,6 +279,22 @@ Social Buttons
     vertical-align: middle;
 }
 /* end of entity tables helpers */
+
+/* ui bootstrap tweaks */
+.nav, .pagination, .carousel, .panel-title a {
+    cursor: pointer;
+}
+
+.datetime-picker-dropdown > li.date-picker-menu div > table .btn-default,
+.uib-datepicker-popup  > li > div.uib-datepicker > table .btn-default {
+    border: 0;
+}
+
+.datetime-picker-dropdown > li.date-picker-menu div > table:focus,
+.uib-datepicker-popup  > li > div.uib-datepicker > table:focus{
+    outline: none;
+}
+/* end of ui bootstrap tweaks */
 
 /* jhipster-needle-scss-add-main JHipster will add new css style */
 
