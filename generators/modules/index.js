@@ -31,7 +31,7 @@ module.exports = ModulesGenerator.extend({
             this.env.error('JHipster ' + jhipsterVar.moduleName + ' is a JHipster module, and needs a .yo-rc.json configuration file made by JHipster.');
         }
         // add required Jhipster variables
-        jhipsterVar['baseName'] = baseName;
+        jhipsterVar['baseName'] = this.baseName = baseName;
         jhipsterVar['packageName'] = packageName;
         jhipsterVar['packageFolder'] = packageFolder;
 
