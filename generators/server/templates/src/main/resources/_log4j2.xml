@@ -14,7 +14,6 @@ https://github.com/spring-projects/spring-boot/blob/master/spring-boot/src/main/
         <Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
         <Property name="LOG_LEVEL_PATTERN">%5p</Property>
         <Property name="LOG_PATTERN">%clr{%d{yyyy-MM-dd HH:mm:ss.SSS}}{faint} %clr{${LOG_LEVEL_PATTERN}} %clr{${sys:PID}}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40c{1.}}{cyan} %clr{:}{faint} %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
-        <Property name="log4j2.loglevel">debug</Property>
     </Properties>
 
     <Appenders>
@@ -25,7 +24,7 @@ https://github.com/spring-projects/spring-boot/blob/master/spring-boot/src/main/
     </Appenders>
 
     <Loggers>
-        <Logger name="<%=packageName%>" level="${sys:log4j2.loglevel}" />
+        <Logger name="<%=packageName%>" level="@log4j2.loglevel@" />
 <% if (databaseType == 'cassandra') { %>
         <Logger name="io.netty" level="warn"/><% } %>
         <Logger name="javax.activation" level="warn"/>
@@ -71,7 +70,7 @@ https://github.com/spring-projects/spring-boot/blob/master/spring-boot/src/main/
         <Logger name="org.springframework.boot.actuate.autoconfigure.CrshAutoConfiguration" level="warn" />
         <Logger name="org.springframework.boot.actuate.endpoint.jmx" level="warn" />
 
-        <Root level="${sys:log4j2.loglevel}">
+        <Root level="@log4j2.loglevel@">
             <AppenderRef ref="Console" />
         </Root>
     </Loggers>
