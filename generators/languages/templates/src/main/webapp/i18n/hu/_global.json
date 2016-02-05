@@ -48,8 +48,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Ha be akar <a class=\"alert-link\" href=\"#/login\">lépni</a>, kipróbálhatja az alapértelmezett azonosítókat:<br/>- Adminisztrátori (azonosító=\"admin\" és a jelszó=\"admin\") <br/>- Felhasználó (azonosító=\"user\" és jelszó=\"user\").",
-                "register": "Nincs még hozzáférése? <a class=\"alert-link\" href=\"#/register\">Regisztráljon</a>"
+                "authenticated": "Ha be akar <a class=\"alert-link\" href=\"\" ng-click=\"login()\">lépni</a>, kipróbálhatja az alapértelmezett azonosítókat:<br/>- Adminisztrátori (azonosító=\"admin\" és a jelszó=\"admin\") <br/>- Felhasználó (azonosító=\"user\" és jelszó=\"user\").",
+                "register": "Nincs még hozzáférése? <a class=\"alert-link\" href=\"\" ng-click=\"register()\">Regisztráljon</a>"
             },
             "error": {
                 "dontmatch" : "A jelszó és a jelszó megerősítés nem egyezik meg!"

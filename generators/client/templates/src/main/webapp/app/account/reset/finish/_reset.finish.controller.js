@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('ResetFinishController', function ($scope, $stateParams, $timeout, Auth) {
+    .controller('ResetFinishController', function ($scope, $stateParams, $timeout, Auth, LoginService) {
 
         $scope.keyMissing = $stateParams.key === undefined;
         $scope.doNotMatch = null;
@@ -21,4 +21,6 @@ angular.module('<%=angularAppName%>')
                 });
             }
         };
+
+        $scope.login = LoginService.open;
     });
