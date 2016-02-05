@@ -320,9 +320,6 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyHtml(ANGULAR_DIR + 'account/activate/activate.html', ANGULAR_DIR + 'account/activate/activate.html');
             this.copyJs(ANGULAR_DIR + 'account/activate/_activate.js', ANGULAR_DIR + 'account/activate/activate.js', this, {});
             this.template(ANGULAR_DIR + 'account/activate/_activate.controller.js', ANGULAR_DIR + 'account/activate/activate.controller.js', this, {});
-            this.copyHtml(ANGULAR_DIR + 'account/login/login.html', ANGULAR_DIR + 'account/login/login.html');
-            this.copyJs(ANGULAR_DIR + 'account/login/_login.js', ANGULAR_DIR + 'account/login/login.js', this, {});
-            this.template(ANGULAR_DIR + 'account/login/_login.controller.js', ANGULAR_DIR + 'account/login/login.controller.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'account/password/password.html', ANGULAR_DIR + 'account/password/password.html');
             this.copyJs(ANGULAR_DIR + 'account/password/_password.js', ANGULAR_DIR + 'account/password/password.js', this, {});
             this.template(ANGULAR_DIR + 'account/password/_password.controller.js', ANGULAR_DIR + 'account/password/password.controller.js', this, {});
@@ -425,6 +422,9 @@ module.exports = JhipsterClientGenerator.extend({
                 this.template(ANGULAR_DIR + 'components/language/_language.controller.js', ANGULAR_DIR + 'components/language/language.controller.js', this, {});
                 this.template(ANGULAR_DIR + 'components/language/_language.service.js', ANGULAR_DIR + 'components/language/language.service.js', this, {});
             }
+            this.copyHtml(ANGULAR_DIR + 'components/login/login.html', ANGULAR_DIR + 'components/login/login.html');
+            this.template(ANGULAR_DIR + 'components/login/_login.service.js', ANGULAR_DIR + 'components/login/login.service.js', this, {});
+            this.template(ANGULAR_DIR + 'components/login/_login.controller.js', ANGULAR_DIR + 'components/login/login.controller.js', this, {});
             this.template(ANGULAR_DIR + 'components/util/_base64.service.js', ANGULAR_DIR + 'components/util/base64.service.js', this, {});
             this.template(ANGULAR_DIR + 'components/util/_capitalize.filter.js', ANGULAR_DIR + 'components/util/capitalize.filter.js', this, {});
             this.template(ANGULAR_DIR + 'components/util/_parse-links.service.js', ANGULAR_DIR + 'components/util/parse-links.service.js', this, {});
@@ -502,8 +502,6 @@ module.exports = JhipsterClientGenerator.extend({
                 'app/account/account.js',
                 'app/account/activate/activate.js',
                 'app/account/activate/activate.controller.js',
-                'app/account/login/login.js',
-                'app/account/login/login.controller.js',
                 'app/account/password/password.js',
                 'app/account/password/password.controller.js',
                 'app/account/password/password.directive.js',
@@ -550,6 +548,8 @@ module.exports = JhipsterClientGenerator.extend({
                 'app/components/interceptor/auth.interceptor.js',
                 'app/components/interceptor/errorhandler.interceptor.js',
                 'app/components/interceptor/notification.interceptor.js',
+                'app/components/login/login.service.js',
+                'app/components/login/login.controller.js',
                 'app/components/util/truncate.filter.js',
                 'app/components/util/base64.service.js',
                 'app/components/util/capitalize.filter.js',
@@ -636,7 +636,6 @@ module.exports = JhipsterClientGenerator.extend({
                 'spec/helpers/_module.js',
                 'spec/helpers/_httpBackend.js',
                 'spec/app/admin/health/_health.controller.spec.js',
-                'spec/app/account/login/_login.controller.spec.js',
                 'spec/app/account/password/_password.controller.spec.js',
                 'spec/app/account/password/_password.directive.spec.js',
                 'spec/app/account/settings/_settings.controller.spec.js',
@@ -644,7 +643,8 @@ module.exports = JhipsterClientGenerator.extend({
                 'spec/app/account/register/_register.controller.spec.js',
                 'spec/app/account/reset/finish/_reset.finish.controller.spec.js',
                 'spec/app/account/reset/request/_reset.request.controller.spec.js',
-                'spec/app/services/auth/_auth.services.spec.js'
+                'spec/app/services/auth/_auth.services.spec.js',
+                'spec/app/components/login/_login.controller.spec.js'
             ];
             if (this.authenticationType == 'session') {
                 testTemplates.push('spec/app/account/sessions/_sessions.controller.spec.js');
