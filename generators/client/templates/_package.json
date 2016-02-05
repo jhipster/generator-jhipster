@@ -35,7 +35,6 @@
     "gulp-sass": "2.1.0",<% } %>
     "gulp-notify": "2.2.0",
     "gulp-plumber" : "1.0.1",
-    "gulp-if": "2.0.0",
     "yargs": "3.32.0",
     "map-stream": "0.0.7",
     "events": "1.1.0",
