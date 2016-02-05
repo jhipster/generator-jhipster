@@ -3,6 +3,7 @@ package <%=packageName%>.security.jwt;
 import java.io.IOException;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,8 +44,7 @@ public class JWTFilter extends GenericFilterBean {
             filterChain.doFilter(servletRequest, servletResponse);
         } catch (ExpiredJwtException eje) {
             log.info("Security exception for user {} - {}", eje.getClaims().getSubject(), eje.getMessage());
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+            ((HttpServletResponse) servletResponse).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
     }
 }
