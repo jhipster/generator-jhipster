@@ -25,7 +25,7 @@ angular.module('<%=angularAppName%>')<% if (authenticationType == 'oauth2' || a
         return {
             responseError: function (response) {
                 // token has expired
-                if (response.status === 401 && (response.data.error === 'invalid_token' || response.data.error === 'Unauthorized')) {
+                if (response.status === 401) {
                     localStorageService.remove('authentication-token');
                     var Principal = $injector.get('Principal');
                     if (Principal.isAuthenticated()) {
