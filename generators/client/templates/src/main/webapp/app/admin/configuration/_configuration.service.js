@@ -12,6 +12,19 @@ angular.module('<%=angularAppName%>')
                     var orderBy = $filter('orderBy');
                     return orderBy(properties, 'prefix');
                 });
+            },
+            getEnv: function () {
+                return $http.get('env').then(function (response) {
+                    var properties = {};
+                    angular.forEach(response.data, function (val,key) {
+                        var vals = [];
+                        angular.forEach(val, function (v,k) {
+                            vals.push({ key:k, val:v });
+                        });
+                        properties[key] = vals;
+                    });
+                    return properties;
+                });
             }
         };
     });
