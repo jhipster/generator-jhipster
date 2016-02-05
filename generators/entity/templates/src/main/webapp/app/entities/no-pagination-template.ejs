@@ -1,0 +1,23 @@
+        $scope.<%= entityInstancePlural %> = [];
+        <%_ if (fieldsContainBlob) { _%>
+        $scope.abbreviate = DataUtils.abbreviate;
+        $scope.byteSize = DataUtils.byteSize;
+        <%_ } _%>
+        $scope.loadAll = function() {
+            <%= entityClass %>.query(function(result) {
+               $scope.<%= entityInstancePlural %> = result;
+            });
+        };<%_
+        if (searchEngine == 'elasticsearch') { _%>
+
+        $scope.search = function () {
+            <%= entityClass %>Search.query({query: $scope.searchQuery}, function(result) {
+                $scope.<%= entityInstancePlural %> = result;
+            }, function(response) {
+                if(response.status === 404) {
+                    $scope.loadAll();
+                }
+            });
+        };<%_ } _%>
+
+        $scope.loadAll();
