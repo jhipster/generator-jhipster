@@ -57,6 +57,14 @@ spring:
         username: <%= baseName %>
         <%_ } _%>
         password:
+        <%_ if (prodDatabaseType == 'mysql') { _%>
+        hikari:
+            data-source-properties:
+                cachePrepStmts: true
+                prepStmtCacheSize: 250
+                prepStmtCacheSqlLimit: 2048
+                useServerPrepStmts: true
+        <%_ } _%>
     jpa:
         <%_ if (prodDatabaseType == 'mysql') { _%>
         database-platform: org.hibernate.dialect.MySQLInnoDBDialect
@@ -137,13 +145,6 @@ jhipster:
         cache: # Used by the CachingHttpHeadersFilter
             timeToLiveInDays: 31
     <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast' || hibernateCache == 'ehcache') { _%>
-    <%_ if (devDatabaseType == 'mysql') { _%>
-    datasource: # JHipster-specific configuration, in addition to the standard spring.datasource properties
-        cachePrepStmts: true
-        prepStmtCacheSize: 250
-        prepStmtCacheSqlLimit: 2048
-        useServerPrepStmts: true
-    <%_ } _%>
     cache: # Hibernate 2nd level cache, used by CacheConfiguration
         timeToLiveSeconds: 3600
         <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { _%>

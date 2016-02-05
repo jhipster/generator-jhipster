@@ -57,6 +57,14 @@ spring:
         name:
         username: <% if (devDatabaseType == 'mysql') { %>root<% } else if (devDatabaseType == 'postgresql' || devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory' ) { %><%= baseName %><% } %>
         password:
+        <%_ if (devDatabaseType == 'mysql') { _%>
+        hikari:
+            data-source-properties:
+                cachePrepStmts: true
+                prepStmtCacheSize: 250
+                prepStmtCacheSqlLimit: 2048
+                useServerPrepStmts: true
+        <%_ } _%>
     <%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
     h2:
         console:
@@ -142,13 +150,6 @@ server:
 # ===================================================================
 
 jhipster:
-    <%_ if (devDatabaseType == 'mysql') { _%>
-    datasource: # JHipster-specific configuration, in addition to the standard spring.datasource properties
-        cachePrepStmts: true
-        prepStmtCacheSize: 250
-        prepStmtCacheSqlLimit: 2048
-        useServerPrepStmts: true
-    <%_ } _%>
     <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast' || hibernateCache == 'ehcache') { _%>
     cache: # Hibernate 2nd level cache, used by CacheConfiguration
         timeToLiveSeconds: 3600
