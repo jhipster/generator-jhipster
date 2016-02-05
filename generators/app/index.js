@@ -233,7 +233,12 @@ module.exports = JhipsterGenerator.extend({
         regenerateEntities: function () {
             if (this.withEntities) {
                 this.getExistingEntities().forEach( function(entity) {
-                    this.composeWith('jhipster:entity', {options: {regenerate: true}, args:[entity.name]});
+                    this.composeWith('jhipster:entity', {
+                        options: { regenerate: true },
+                        args:[ entity.name ]
+                    }, {
+                        local: require.resolve('../entity')
+                    });
                 }, this);
             }
         }
