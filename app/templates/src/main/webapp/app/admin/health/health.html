@@ -1,0 +1,35 @@
+<div>
+
+    <h2 translate="health.title">Health Checks</h2>
+
+    <p>
+        <button type="button" class="btn btn-primary" ng-click="refresh()"><span class="glyphicon glyphicon-refresh"></span>&nbsp;<span translate="health.refresh.button">Refresh</span>
+        </button>
+    </p>
+
+    <table id="healthCheck" class="table table-striped">
+        <thead>
+            <tr>
+                <th class="col-md-7" translate="health.table.service">Service Name</th>
+                <th class="col-md-2 text-center" translate="health.table.status">Status</th>
+                <th class="col-md-2 text-center" translate="health.details.details">Details</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="health in healthData">
+                <td><% if (enableTranslation){ %>{{'health.indicator.' + baseName(health.name) | translate}}<% }else{ %><span class="text-capitalize">{{ baseName(health.name) }}</span><% } %> {{subSystemName(health.name)}}</td>
+                <td class="text-center">
+                    <span class="label" ng-class="getLabelClass(health.status)">
+                        <% if (enableTranslation){ %>{{'health.status.' + health.status | translate}}<% }else{ %>{{ health.status }}<% } %>
+                    </span>
+                </td>
+                <td class="text-center">
+                    <a class="hand" ng-click="showHealth(health)" ng-show="health.details || health.error">
+                        <i class="glyphicon glyphicon-eye-open"></i>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

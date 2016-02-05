@@ -177,6 +177,37 @@ module.exports = JhipsterServerGenerator.extend({
 
     prompting: {
 
+        askForApplicationType: function () {
+            if(this.existingProject){
+                return;
+            }
+            var done = this.async();
+
+            this.prompt({
+                type: 'list',
+                name: 'applicationType',
+                message: '(1/' + QUESTIONS + ') Which *type* of application would you like to create?',
+                choices: [
+                    {
+                        value: 'monolithic',
+                        name: 'Monolithic application'
+                    },
+                    {
+                        value: 'microservice',
+                        name: 'Microservice application'
+                    },
+                    {
+                        value: 'gateway',
+                        name: 'Microservice gateway'
+                    }
+                ],
+                default: 0
+            }, function (prompt) {
+                this.applicationType = prompt.applicationType;
+                done();
+            }.bind(this));
+        },
+
         askForModuleName: function () {
             if(this.baseName){
                 return;
@@ -516,6 +547,7 @@ module.exports = JhipsterServerGenerator.extend({
         insight: function () {
             var insight = this.insight();
             insight.track('generator', 'app');
+            insight.track('app/applicationType', this.applicationType);
             insight.track('app/authenticationType', this.authenticationType);
             insight.track('app/hibernateCache', this.hibernateCache);
             insight.track('app/clusteredHttpSession', this.clusteredHttpSession);
@@ -556,6 +588,7 @@ module.exports = JhipsterServerGenerator.extend({
 
         saveConfig: function () {
             this.config.set('jhipsterVersion', packagejs.version);
+            this.config.set('applicationType', this.applicationType);
             this.config.set('baseName', this.baseName);
             this.config.set('packageName', this.packageName);
             this.config.set('packageFolder', this.packageFolder);
