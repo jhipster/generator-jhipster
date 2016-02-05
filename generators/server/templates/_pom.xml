@@ -432,7 +432,26 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
+            <%_ if (loggingImpl == 'log4j2') { _%>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                    <groupId>org.springframework.boot</groupId>
+                </exclusion>
+            </exclusions>
+            <%_ } _%>
         </dependency>
+        <%_ if (loggingImpl == 'log4j2') { _%>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+        <%_ } else { _%>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
+        <%_ } _%>
         <%_ if (databaseType == 'sql') { _%>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -451,10 +470,6 @@
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
         <%_ } _%>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-logging</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
@@ -958,7 +973,8 @@
             </activation>
             <properties>
                 <!-- log configuration -->
-                <logback.loglevel>DEBUG</logback.loglevel>
+                <% if(loggingImpl == 'log4j2') { %><log4j2.loglevel>debug</log4j2.loglevel>
+                <% } else { %> <logback.loglevel>DEBUG</logback.loglevel><% } %>
             </properties>
             <dependencies>
                 <dependency>
@@ -1030,7 +1046,8 @@
             </build>
             <properties>
                 <!-- log configuration -->
-                <logback.loglevel>INFO</logback.loglevel>
+                <% if(loggingImpl == 'log4j2') { %><log4j2.loglevel>info</log4j2.loglevel>
+                <% } else { %> <logback.loglevel>INFO</logback.loglevel><% } %>
             </properties>
         </profile>
     </profiles>

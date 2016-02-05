@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+<!--
+Unfortunately Log4J2 can't merge config files yet, see the open issue at
+https://issues.apache.org/jira/browse/LOG4J2-494
+
+So for now I merged an adaptation of logback-spring.xml with the base at
+https://github.com/spring-projects/spring-boot/blob/master/spring-boot/src/main/resources/org/springframework/boot/logging/log4j2/log4j2.xml
+-->
+
+    <Properties>
+        <Property name="PID">????</Property>
+        <Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
+        <Property name="LOG_LEVEL_PATTERN">%5p</Property>
+        <Property name="LOG_PATTERN">%clr{%d{yyyy-MM-dd HH:mm:ss.SSS}}{faint} %clr{${LOG_LEVEL_PATTERN}} %clr{${sys:PID}}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40c{1.}}{cyan} %clr{:}{faint} %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+        </Console>
+        <!-- TODO examples of FILE and ASYNC appenders -->
+    </Appenders>
+
+    <Loggers>
+        <Logger name="<%=packageName%>" level="@log4j2.loglevel@" />
+<% if (databaseType == 'cassandra') { %>
+        <Logger name="io.netty" level="warn"/><% } %>
+        <Logger name="javax.activation" level="warn"/>
+        <Logger name="javax.mail" level="warn"/>
+        <Logger name="javax.xml.bind" level="warn"/>
+        <Logger name="com.codahale.metrics" level="warn"/><% if (databaseType == 'cassandra') { %>
+        <Logger name="com.datastax" level="warn"/><% } %>
+        <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+        <Logger name="com.netflix" level="warn"/>
+        <Logger name="com.netflix.discovery" level="info"/>
+        <%_ } _%>
+        <Logger name="com.ryantenney" level="warn"/>
+        <Logger name="com.sun" level="warn"/>
+        <Logger name="com.zaxxer" level="warn"/>
+        <Logger name="io.undertow" level="warn"/><% if (hibernateCache == 'ehcache') { %>
+        <Logger name="net.sf.ehcache" level="warn"/><% } %>
+        <Logger name="org.apache" level="warn"/>
+        <Logger name="org.apache.catalina.startup.DigesterFactory" level="off"/>
+        <Logger name="org.bson" level="warn"/><% if (searchEngine == 'elasticsearch') { %>
+        <Logger name="org.elasticsearch" level="warn"/><% } %>
+        <Logger name="org.hibernate.validator" level="warn"/>
+        <Logger name="org.hibernate" level="warn"/>
+        <Logger name="org.hibernate.ejb.HibernatePersistence" level="off"/>
+        <Logger name="org.springframework" level="warn"/>
+        <Logger name="org.springframework.web" level="warn"/>
+        <Logger name="org.springframework.security" level="warn"/>
+        <Logger name="org.springframework.cache" level="warn"/>
+        <Logger name="org.thymeleaf" level="warn"/>
+        <Logger name="org.xnio" level="warn"/>
+        <Logger name="springfox" level="warn"/>
+        <Logger name="sun.rmi" level="warn"/><% if (databaseType == 'sql') { %>
+        <Logger name="liquibase" level="warn"/><% } %>
+        <Logger name="sun.rmi.transport" level="warn"/>
+
+        <Logger name="org.apache.catalina.util.LifecycleBase" level="error" />
+        <Logger name="org.apache.coyote.http11.Http11NioProtocol" level="warn" />
+        <Logger name="org.apache.sshd.common.util.SecurityUtils" level="warn" />
+        <Logger name="org.apache.tomcat.util.net.NioSelectorPool" level="warn" />
+        <Logger name="org.crsh.plugin" level="warn" />
+        <Logger name="org.crsh.ssh" level="warn" />
+        <Logger name="org.eclipse.jetty.util.component.AbstractLifeCycle" level="error" />
+        <Logger name="org.hibernate.validator.internal.util.Version" level="warn" />
+        <Logger name="org.springframework.boot.actuate.autoconfigure.CrshAutoConfiguration" level="warn" />
+        <Logger name="org.springframework.boot.actuate.endpoint.jmx" level="warn" />
+
+        <Root level="@log4j2.loglevel@">
+            <AppenderRef ref="Console" />
+        </Root>
+    </Loggers>
+
+</Configuration>

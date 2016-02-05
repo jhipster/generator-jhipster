@@ -14,6 +14,7 @@
     "searchEngine": "no",
     "useSass": false,
     "buildTool": "maven",
+    "loggingImpl": "logback",
     "enableTranslation": true,
     "enableSocialSignIn": false,
     "rememberMeKey": "4207b631feea9ca5dc7d09b5dd45cf3c30222854",

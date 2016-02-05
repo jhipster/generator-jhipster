@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+<!--
+Unfortunately Log4J2 can't merge config files yet, see the open issue at
+https://issues.apache.org/jira/browse/LOG4J2-494
+
+So for now I merged an adaptation of logback-test.xml with the base at
+https://github.com/spring-projects/spring-boot/blob/master/spring-boot/src/main/resources/org/springframework/boot/logging/log4j2/log4j2.xml
+-->
+
+    <Properties>
+        <Property name="PID">????</Property>
+        <Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
+        <Property name="LOG_LEVEL_PATTERN">%5p</Property>
+        <Property name="LOG_PATTERN">%clr{%d{yyyy-MM-dd HH:mm:ss.SSS}}{faint} %clr{${LOG_LEVEL_PATTERN}} %clr{${sys:PID}}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40c{1.}}{cyan} %clr{:}{faint} %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+        </Console>
+        <!-- TODO examples of FILE and ASYNC appenders -->
+    </Appenders>
+
+    <Loggers>
+        <Logger name="<%=packageName%>" level="@log4j2.loglevel@" />
+
+        <Logger name="org.hibernate.ejb.HibernatePersistence" level="off" />
+        <Logger name="org.apache.catalina.startup.DigesterFactory" level="off"/>
+
+        <Logger name="org.apache.catalina.util.LifecycleBase" level="error" />
+        <Logger name="org.apache.coyote.http11.Http11NioProtocol" level="warn" />
+        <Logger name="org.apache.sshd.common.util.SecurityUtils" level="warn" />
+        <Logger name="org.apache.tomcat.util.net.NioSelectorPool" level="warn" />
+        <Logger name="org.crsh.plugin" level="warn" />
+        <Logger name="org.crsh.ssh" level="warn" />
+        <Logger name="org.eclipse.jetty.util.component.AbstractLifeCycle" level="error" />
+        <Logger name="org.hibernate.validator.internal.util.Version" level="warn" />
+        <Logger name="org.springframework.boot.actuate.autoconfigure.CrshAutoConfiguration" level="warn" />
+        <Logger name="org.springframework.boot.actuate.endpoint.jmx" level="warn" />
+        <Logger name="org.thymeleaf" level="warn"/>
+
+        <Root level="warn">
+            <AppenderRef ref="Console" />
+        </Root>
+    </Loggers>
+
+</Configuration>
