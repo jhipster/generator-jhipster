@@ -1,10 +1,13 @@
         $scope.<%= entityInstancePlural %> = [];
+        <%_ if (fieldsContainBlob) { _%>
+        $scope.abbreviate = DataUtils.abbreviate;
+        $scope.byteSize = DataUtils.byteSize;
+        <%_ } _%>
         $scope.loadAll = function() {
             <%= entityClass %>.query(function(result) {
                $scope.<%= entityInstancePlural %> = result;
             });
-        };
-        $scope.loadAll();<%_
+        };<%_
         if (searchEngine == 'elasticsearch') { _%>
 
         $scope.search = function () {
@@ -17,27 +20,4 @@
             });
         };<%_ } _%>
 
-        $scope.refresh = function () {
-            $scope.loadAll();
-            $scope.clear();
-        };
-
-        $scope.clear = function () {
-            $scope.<%= entityInstance %> = {<%_
-                for (fieldId in fields) {
-                        if (fields[fieldId].fieldType == 'Boolean' && fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) { _%>
-                <%= fields[fieldId].fieldName %>: false,<%_
-                        } else { _%>
-                <%= fields[fieldId].fieldName %>: null,<%_
-                            if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
-                <%= fields[fieldId].fieldName %>ContentType: null,<%_
-                            }
-                        }
-                    } _%>
-                id: null
-            };
-        };
-        <%_ if (fieldsContainBlob) { _%>
-        $scope.abbreviate = DataUtils.abbreviate;
-        $scope.byteSize = DataUtils.byteSize;
-        <%_ } _%>
+        $scope.loadAll();

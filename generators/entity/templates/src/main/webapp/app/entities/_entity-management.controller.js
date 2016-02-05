@@ -9,5 +9,5 @@ angular.module('<%=angularAppName%>')
 <%- include('infinite-scroll-template'); -%>
     <%_ } else { _%>
 <%- include('no-pagination-template'); -%>
-    <%_ } _%>
+    <% } %>
     });

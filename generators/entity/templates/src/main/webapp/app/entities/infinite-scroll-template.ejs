@@ -2,6 +2,10 @@
         $scope.predicate = 'id';
         $scope.reverse = true;
         $scope.page = 0;
+        <%_ if (fieldsContainBlob) { _%>
+        $scope.abbreviate = DataUtils.abbreviate;
+        $scope.byteSize = DataUtils.byteSize;
+        <%_ } _%>
         $scope.loadAll = function() {
             <%= entityClass %>.query({page: $scope.page, size: 20, sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'), 'id']}, function(result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
@@ -18,8 +22,7 @@
         $scope.loadPage = function(page) {
             $scope.page = page;
             $scope.loadAll();
-        };
-        $scope.loadAll();<%_
+        };<%_
         if (searchEngine == 'elasticsearch') { _%>
 
         $scope.search = function () {
@@ -32,27 +35,4 @@
             });
         };<%_ } _%>
 
-        $scope.refresh = function () {
-            $scope.reset();
-            $scope.clear();
-        };
-
-        $scope.clear = function () {
-            $scope.<%= entityInstance %> = {<%_
-                for (fieldId in fields) {
-                        if (fields[fieldId].fieldType == 'Boolean' && fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) { _%>
-                <%= fields[fieldId].fieldName %>: false,<%_
-                        } else { _%>
-                <%= fields[fieldId].fieldName %>: null,<%_
-                            if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
-                <%= fields[fieldId].fieldName %>ContentType: null,<%_
-                            }
-                        }
-                    } _%>
-                id: null
-            };
-        };
-        <%_ if (fieldsContainBlob) { _%>
-        $scope.abbreviate = DataUtils.abbreviate;
-        $scope.byteSize = DataUtils.byteSize;
-        <%_ } _%>
+        $scope.loadAll();
