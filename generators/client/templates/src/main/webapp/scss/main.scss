@@ -42,12 +42,11 @@ body {
     background-color: #eee;
     border-radius: 6px;
     padding: 60px;
-}
-
-.hero-unit h1 {
-    font-size: 60px;
-    line-height: 1;
-    letter-spacing: -1px;
+    h1 {
+        font-size: 60px;
+        line-height: 1;
+        letter-spacing: -1px;
+    }
 }
 
 .error {
@@ -65,6 +64,11 @@ body {
 
 .pad {
     padding: 10px;
+}
+
+.break {
+    white-space: normal;
+    word-break:break-all;
 }
 
 /* wait autoprefixer update to allow simple generation of high pixel density media query */
@@ -126,9 +130,6 @@ ul#strength {
     vertical-align:2px;
 }
 
-.point:last {
-    margin:0 !important;
-}
 .point {
     background:#DDD;
     border-radius:2px;
@@ -136,45 +137,44 @@ ul#strength {
     height:5px;
     margin-right:1px;
     width:20px;
+    &:last {
+        margin:0 !important;
+    }
 }
 /* end Password strength bar style */
 /* Custom alerts for notification */
 
-.alerts .alert{
-    text-overflow: ellipsis;
-}
-.alert pre{
-    background: none;
-    border: none;
-    font: inherit;
-    color: inherit;
-    padding: 0;
-    margin: 0;
-}
-
-.alert .popover pre {
-    font-size: 10px;
-}
-
-.alerts .toast {
-    position: fixed;
-    width: 100%;
-}
-
-.alerts .toast.left {
-    left: 5px;
-}
-
-.alerts .toast.right {
-    right: 5px;
-}
-
-.alerts .toast.top {
-    top: 55px;
-}
-
-.alerts .toast.bottom {
-    bottom: 55px;
+.alerts {
+    .alert {
+        text-overflow: ellipsis;
+        pre{
+            background: none;
+            border: none;
+            font: inherit;
+            color: inherit;
+            padding: 0;
+            margin: 0;
+        }
+        .popover pre {
+            font-size: 10px;
+        }
+    }
+    .toast {
+        position: fixed;
+        width: 100%;
+        &.left {
+            left: 5px;
+        }
+        &.right {
+            right: 5px;
+        }
+        &.top {
+            top: 55px;
+        }
+        &.bottom {
+            bottom: 55px;
+        }
+    }
 }
 
 @media screen and (min-width: 480px) {
@@ -262,7 +262,7 @@ ul#strength {
    flex-direction: row;
    -webkit-justify-content: flex-end;
    justify-content: flex-end;
-}  
+}
 
 /* Align text in td verifically (top aligned by Bootstrap) */
 .jh-table > tbody > tr > td {

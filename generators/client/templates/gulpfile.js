@@ -108,6 +108,7 @@ gulp.task('serve', function() {
             '/api',
             '/health',
             '/configprops',
+            '/env',
             '/v2/api-docs',
             '/swagger-ui',
             '/configuration/security',

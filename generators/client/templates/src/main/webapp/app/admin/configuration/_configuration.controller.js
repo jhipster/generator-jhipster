@@ -5,4 +5,7 @@ angular.module('<%=angularAppName%>')
         ConfigurationService.get().then(function(configuration) {
             $scope.configuration = configuration;
         });
+        ConfigurationService.getEnv().then(function (configuration) {
+            $scope.allConfiguration = configuration;
+        });
     });
