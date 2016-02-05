@@ -156,7 +156,7 @@ module.exports = JhipsterGenerator.extend({
 
         composeClient : function () {
             if(this.skipClient) return;
-            
+
             this.composeWith('jhipster:client', {
                 options: {
                     'logo': false,

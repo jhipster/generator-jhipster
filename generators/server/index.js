@@ -203,6 +203,9 @@ module.exports = JhipsterServerGenerator.extend({
                     store: true
                 },
                 {
+                    when: function (response) {
+                        return response.applicationType == 'monolith';
+                    },
                     type: 'list',
                     name: 'authenticationType',
                     message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Which *type* of authentication would you like to use?',
@@ -454,16 +457,20 @@ module.exports = JhipsterServerGenerator.extend({
 
             this.prompt(prompts, function (props) {
                 this.rememberMeKey = crypto.randomBytes(20).toString('hex');
-                // Read the authenticationType to extract the enableSocialSignIn
-                // This allows to have only one authenticationType question for the moment
-                if (props.authenticationType == 'session-social') {
-                    this.authenticationType = 'session';
-                    this.enableSocialSignIn = true;
+                if (this.applicationType == 'microservice' || this.applicationType == 'gateway') {
+                    this.authenticationType = 'jwt';
                 } else {
-                    this.authenticationType = props.authenticationType;
-                    this.enableSocialSignIn = false;
+                    // Read the authenticationType to extract the enableSocialSignIn
+                    // This allows to have only one authenticationType question for the moment
+                    if (props.authenticationType == 'session-social') {
+                        this.authenticationType = 'session';
+                        this.enableSocialSignIn = true;
+                    } else {
+                        this.authenticationType = props.authenticationType;
+                        this.enableSocialSignIn = false;
+                    }
+                    props.enableSocialSignIn = this.enableSocialSignIn;
                 }
-                props.enableSocialSignIn = this.enableSocialSignIn;
                 if (this.authenticationType == 'jwt') {
                     this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
                 }
