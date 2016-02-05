@@ -789,6 +789,7 @@ module.exports = JhipsterServerGenerator.extend({
         },
 
         writeServerJavaGatewayFiles: function () {
+            var javaDir = this.javaDir;
             if (this.applicationType == 'gateway') {
                 this.template('src/main/java/package/web/rest/dto/_RouteDTO.java', javaDir + 'web/rest/dto/RouteDTO.java', this, {});
                 this.template('src/main/java/package/web/rest/_GatewayResource.java', javaDir + 'web/rest/GatewayResource.java', this, {});
