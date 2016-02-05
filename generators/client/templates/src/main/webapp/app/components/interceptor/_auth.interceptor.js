@@ -76,7 +76,8 @@ angular.module('<%=angularAppName%>')<% if (authenticationType == 'oauth2' || a
                     Auth.logout();
                     $rootScope.previousStateName = to;
                     $rootScope.previousStateNameParams = params;
-                    $state.go('login');
+                    var LoginPopupService = $injector.get('LoginService');
+                    LoginPopupService.open();
                 } else if (response.status === 403 && response.config.method !== 'GET' && getCSRF() === '') {
                     // If the CSRF token expired, then try to get a new CSRF token and retry the old request
                     var $http = $injector.get('$http');

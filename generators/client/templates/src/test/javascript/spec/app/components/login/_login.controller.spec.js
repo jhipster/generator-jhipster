@@ -5,12 +5,17 @@ describe('Controller Tests', function () {
     beforeEach(module('<%= angularAppName %>'));
 
     describe('LoginController', function () {
-        var $scope;
+        var $scope, authService;
 
-
-        beforeEach(inject(function ($rootScope, $controller) {
+        beforeEach(inject(function ($rootScope, $controller, Auth) {
             $scope = $rootScope.$new();
-            $controller('LoginController', {$scope: $scope});
+            authService = Auth;
+            $controller('LoginController',
+                {
+                    $scope: $scope,
+                    Auth: authService,
+                    $uibModalInstance: null
+                });
         }));
 
         it('should set remember Me', function () {
