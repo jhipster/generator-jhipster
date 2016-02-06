@@ -48,8 +48,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Si vol <a class=\"alert-link\" href=\"#/login\">autenticar-se</a>, pot usar els comptes per defect:<br/>- Administrador (nom d'usuari=\"admin\" i contrasenya=\"admin\") <br/>- Usuari (nom d'usuari=\"user\" i contrasenya=\"user\").",
-                "register": "No disposa d'un compte encara? <a class=\"alert-link\" href=\"#/register\">Registri un nou compte</a>"
+                "authenticated": "Si vol <a class=\"alert-link\" href=\"\" ng-click=\"login()\">autenticar-se</a>, pot usar els comptes per defect:<br/>- Administrador (nom d'usuari=\"admin\" i contrasenya=\"admin\") <br/>- Usuari (nom d'usuari=\"user\" i contrasenya=\"user\").",
+                "register": "No disposa d'un compte encara? <a class=\"alert-link\" ui-sref=\"register\">Registri un nou compte</a>"
             },
             "error": {
                 "dontmatch" : "La contrasenya i la confirmació no coincideixen!"

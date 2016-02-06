@@ -119,8 +119,8 @@
                 <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary" translate="register.form.button">Register</button>
             </form>
             <p></p>
-            <div class="alert alert-warning" translate="global.messages.info.authenticated">
-                If you want to <a class="alert-link" href="#/login">sign in</a>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").
+            <div class="alert alert-warning" translate="global.messages.info.authenticated" translate-compile>
+                If you want to <a class="alert-link" href="" ng-click="login()">sign in</a>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").
             </div>
         </div>
         <%_ if (enableSocialSignIn) { _%>

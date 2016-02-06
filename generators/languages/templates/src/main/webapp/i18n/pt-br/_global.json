@@ -48,8 +48,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Para <a class=\"alert-link\" href=\"#/login\">entrar</a>, utilize as seguintes contas padrões:<br/>- Administrador (usuário=\"admin\" and senha=\"admin\") <br/>- Usuário (usuário=\"user\" and senha=\"user\").",
-                "register": "Não possui uma conta ainda? <a class=\"alert-link\" href=\"#/register\">Crie uma nova conta</a>"
+                "authenticated": "Para <a class=\"alert-link\" href=\"\" ng-click=\"login()\">entrar</a>, utilize as seguintes contas padrões:<br/>- Administrador (usuário=\"admin\" and senha=\"admin\") <br/>- Usuário (usuário=\"user\" and senha=\"user\").",
+                "register": "Não possui uma conta ainda? <a class=\"alert-link\" ui-sref=\"register\">Crie uma nova conta</a>"
             },
             "error": {
                 "dontmatch" : "A senha e sua confirmação devem ser iguais!"

@@ -20,7 +20,7 @@
             },
             "messages": {
                 "info": "Wybierz nowe hasło",
-                "success": "<strong>Twoje hasło zostało zresetowane.</strong> Proszę <a class=\"alert-link\" href=\"#/login\">zaloguj się</a>.",
+                "success": "<strong>Twoje hasło zostało zresetowane.</strong> Proszę <a class=\"alert-link\" href=\"\" ng-click=\"login()\">zaloguj się</a>.",
                 "keymissing": "Brakuje klucza resetującego hasło.",
                 "error": "Twoje hasło nie mogło zostać zresetowane. Pamiętaj że prośba o zresetowanie hasła jest ważna tylko przez 24 godziny."
             }

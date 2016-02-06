@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('RegisterController', function ($scope, <% if (enableTranslation){ %>$translate, <% } %>$timeout, Auth) {
+    .controller('RegisterController', function ($scope, <% if (enableTranslation){ %>$translate, <% } %>$timeout, Auth, LoginService) {
         $scope.success = null;
         $scope.error = null;
         $scope.doNotMatch = null;
@@ -33,4 +33,6 @@ angular.module('<%=angularAppName%>')
                 });
             }
         };
+
+        $scope.login = LoginService.open;
     });
