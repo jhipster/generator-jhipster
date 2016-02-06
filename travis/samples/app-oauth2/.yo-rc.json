@@ -1,5 +1,6 @@
 {
   "generator-jhipster": {
+    "applicationType": "monolith",
     "baseName": "SampleOauth2",
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",

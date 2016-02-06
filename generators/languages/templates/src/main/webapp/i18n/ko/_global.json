@@ -20,6 +20,9 @@
             },
             "admin": {
                 "main": "관리자",
+                <%_ if (applicationType == 'gateway') { _%>
+                "gateway": "Gateway",
+                <%_ } _%>
                 "tracker": "사용자 트랙커",
                 "metrics": "메트릭스",
                 "health": "상태 확인",
@@ -28,7 +31,7 @@
                 "audits": "Audit",
                 "apidocs": "API",
                 "database": "데이터베이스",
-                "user-management": "사용자 관리",
+                "userManagement": "사용자 관리",
                 "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
             },
             "language": "언어"
@@ -45,8 +48,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "<a class=\"alert-link\" href=\"#/login\">인증</a>을 원하시면, 기본 계정을 사용할 수 있습니다:<br/>- 관리자 (아이디=\"admin\", 비밀번호=\"admin\") <br/>- 사용자 (아이디=\"user\", 비밀번호=\"user\").",
-                "register": "아직 계정이 없습니까? <a class=\"alert-link\" href=\"#/register\">새로운 계정을 등록하세요</a>"
+                "authenticated": "<a class=\"alert-link\" href=\"\" ng-click=\"login()\">인증</a>을 원하시면, 기본 계정을 사용할 수 있습니다:<br/>- 관리자 (아이디=\"admin\", 비밀번호=\"admin\") <br/>- 사용자 (아이디=\"user\", 비밀번호=\"user\").",
+                "register": "아직 계정이 없습니까? <a class=\"alert-link\" ui-sref=\"register\">새로운 계정을 등록하세요</a>"
             },
             "error": {
                 "dontmatch" : "비밀번호가 일치하지 않습니다!"

@@ -20,7 +20,10 @@
             },
             "admin": {
                 "main": "Administration",
-                "user-management": "User management",
+                <%_ if (applicationType == 'gateway') { _%>
+                "gateway": "Gateway",
+                <%_ } _%>
+                "userManagement": "User management",
                 "tracker": "Brugersporing",
                 "metrics": "Målinger",
                 "health": "Sundheds",
@@ -45,8 +48,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Hvis du ønsker at <a class=\"alert-link\" href=\"#/login\">logge ind</a>, så kan du prøve det med:<br/>- Administrator (brugernavn=\"admin\" and kodeord=\"admin\") <br/>- User (brugernavn=\"user\" and kodeord=\"user\").",
-                "register": "You don't have an account yet? <a class=\"alert-link\" href=\"#/register\">Register a new account</a>"
+                "authenticated": "Hvis du ønsker at <a class=\"alert-link\" href=\"\" ng-click=\"login()\">logge ind</a>, så kan du prøve det med:<br/>- Administrator (brugernavn=\"admin\" and kodeord=\"admin\") <br/>- User (brugernavn=\"user\" and kodeord=\"user\").",
+                "register": "You don't have an account yet? <a class=\"alert-link\" ui-sref=\"register\">Register a new account</a>"
             },
             "error": {
                 "dontmatch": "Kodeordet og dets bekræftelse matcher ikke!"

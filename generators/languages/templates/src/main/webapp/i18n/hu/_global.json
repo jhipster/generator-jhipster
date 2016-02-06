@@ -20,7 +20,10 @@
             },
             "admin": {
                 "main": "Adminisztráció",
-                "user-management": "User management",
+                <%_ if (applicationType == 'gateway') { _%>
+                "gateway": "Gateway",
+                <%_ } _%>
+                "userManagement": "User management",
                 "tracker": "Felhasználó követés",
                 "metrics": "Metrikák",
                 "health": "Health",
@@ -45,8 +48,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Ha be akar <a class=\"alert-link\" href=\"#/login\">lépni</a>, kipróbálhatja az alapértelmezett azonosítókat:<br/>- Adminisztrátori (azonosító=\"admin\" és a jelszó=\"admin\") <br/>- Felhasználó (azonosító=\"user\" és jelszó=\"user\").",
-                "register": "Nincs még hozzáférése? <a class=\"alert-link\" href=\"#/register\">Regisztráljon</a>"
+                "authenticated": "Ha be akar <a class=\"alert-link\" href=\"\" ng-click=\"login()\">lépni</a>, kipróbálhatja az alapértelmezett azonosítókat:<br/>- Adminisztrátori (azonosító=\"admin\" és a jelszó=\"admin\") <br/>- Felhasználó (azonosító=\"user\" és jelszó=\"user\").",
+                "register": "Nincs még hozzáférése? <a class=\"alert-link\" ui-sref=\"register\">Regisztráljon</a>"
             },
             "error": {
                 "dontmatch" : "A jelszó és a jelszó megerősítés nem egyezik meg!"

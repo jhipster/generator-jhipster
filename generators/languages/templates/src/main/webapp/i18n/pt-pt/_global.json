@@ -20,7 +20,10 @@
             },
             "admin": {
                 "main": "Administração",
-                "user-management": "User management",
+                <%_ if (applicationType == 'gateway') { _%>
+                "gateway": "Gateway",
+                <%_ } _%>
+                "userManagement": "User management",
                 "tracker": "Atividade dos utilizadores",
                 "metrics": "Métricas",
                 "health": "Estado do Sistema",
@@ -45,8 +48,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Para <a class=\"alert-link\" href=\"#/login\">entrar</a>, utilize as seguintes contas:<br/>- Administrador (utilizador=\"admin\" e palavra-passe=\"admin\") <br/>- Utilizador (utilizador=\"user\" e palavra-passe=\"user\").",
-                "register": "Ainda não tem uma conta? <a class=\"alert-link\" href=\"#/register\">Crie uma nova conta</a>"
+                "authenticated": "Para <a class=\"alert-link\" href=\"\" ng-click=\"login()\">entrar</a>, utilize as seguintes contas:<br/>- Administrador (utilizador=\"admin\" e palavra-passe=\"admin\") <br/>- Utilizador (utilizador=\"user\" e palavra-passe=\"user\").",
+                "register": "Ainda não tem uma conta? <a class=\"alert-link\" ui-sref=\"register\">Crie uma nova conta</a>"
             },
             "error": {
                 "dontmatch" : "A palavra-passe e a sua confirmação devem ser iguais!"

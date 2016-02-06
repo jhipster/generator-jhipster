@@ -1,14 +1,15 @@
 'use strict';
 var util = require('util'),
-fs = require('fs'),
-path = require('path'),
-generators = require('yeoman-generator'),
-chalk = require('chalk'),
-_ = require('lodash'),
-_s = require('underscore.string'),
-shelljs = require('shelljs'),
-pluralize = require('pluralize'),
-scriptBase = require('../generator-base');
+    fs = require('fs'),
+    path = require('path'),
+    generators = require('yeoman-generator'),
+    chalk = require('chalk'),
+    _ = require('lodash'),
+    _s = require('underscore.string'),
+    shelljs = require('shelljs'),
+    pluralize = require('pluralize'),
+    constants = require('../generator-constants'),
+    scriptBase = require('../generator-base');
 
 /* constants used througout */
 const RESERVED_WORDS_JAVA = ["ABSTRACT", "CONTINUE", "FOR", "NEW", "SWITCH", "ASSERT", "DEFAULT", "GOTO", "PACKAGE", "SYNCHRONIZED", "BOOLEAN", "DO", "IF", "PRIVATE", "THIS", "BREAK", "DOUBLE", "IMPLEMENTS", "PROTECTED", "THROW", "BYTE", "ELSE", "IMPORT", "PUBLIC", "THROWS", "CASE", "ENUM", "INSTANCEOF", "RETURN", "TRANSIENT", "CATCH", "EXTENDS", "INT", "SHORT", "TRY", "CHAR", "FINAL", "INTERFACE", "STATIC", "VOID", "CLASS", "FINALLY", "LONG", "STRICTFP", "VOLATILE", "CONST", "FLOAT", "NATIVE", "SUPER", "WHILE"];
@@ -34,9 +35,9 @@ var fieldNamesUnderscored = ['id'];
 var fieldNameChoices = [], relNameChoices = []; // this variable will hold field and relationship names for question options during update
 var databaseType;
 var prodDatabaseType;
-const INTERPOLATE_REGEX = /<%=([\s\S]+?)%>/g; // so that thymeleaf tags in templates do not get mistreated as _ templates
-const RESOURCE_DIR = 'src/main/resources/';
-const ANGULAR_DIR = 'src/main/webapp/app/';
+const INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX;
+const RESOURCE_DIR = constants.RESOURCE_DIR;
+const ANGULAR_DIR =  constants.ANGULAR_DIR;
 
 var EntityGenerator = generators.Base.extend({});
 

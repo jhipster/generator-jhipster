@@ -20,7 +20,10 @@
             },
             "admin": {
                 "main": "Administración",
-                "user-management": "Xestión de usuarios",
+                <%_ if (applicationType == 'gateway') { _%>
+                "gateway": "Gateway",
+                <%_ } _%>
+                "userManagement": "Xestión de usuarios",
                 "tracker": "Rexistro de usuarios",
                 "metrics": "Métricas",
                 "health": "Saúde",
@@ -45,8 +48,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Se desexa <a class=\"alert-link\" href=\"#/login\">iniciar unha sesión</a>, pode intentalo coas contas predeterminadas:<br/>- Administrator (usuario=\"admin\" e contrasinal=\"admin\") <br/>- Usuario (usuario=\"user\" e contrasinal=\"user\").",
-                "register": "Aínda non tes unha conta de usuario? <a class=\"alert-link\" href=\"#/register\">Crea unha conta</a>"
+                "authenticated": "Se desexa <a class=\"alert-link\" href=\"\" ng-click=\"login()\">iniciar unha sesión</a>, pode intentalo coas contas predeterminadas:<br/>- Administrator (usuario=\"admin\" e contrasinal=\"admin\") <br/>- Usuario (usuario=\"user\" e contrasinal=\"user\").",
+                "register": "Aínda non tes unha conta de usuario? <a class=\"alert-link\" ui-sref=\"register\">Crea unha conta</a>"
             },
             "error": {
                 "dontmatch" : "O contrasinal e a confirmación non coinciden!"

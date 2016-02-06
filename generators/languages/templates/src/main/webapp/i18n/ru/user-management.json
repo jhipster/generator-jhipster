@@ -1,0 +1,30 @@
+{
+    "userManagement": {
+        "home": {
+            "title": "Пользователи",
+            "createLabel": "Создать нового пользователя",
+            "createOrEditLabel": "Создать или отредактировать пользователя"
+        },
+        "created": "Новый пользователь будет создан с идентификатором {{ param }}",
+        "updated": "Пользователь с идентификатором {{ param }} обновлен",
+        "deleted": "Пользователь с идентификатором {{ param }} удален",
+        "delete": {
+            "question": "Вы уверены, что хотите удалить пользователя {{ login }}?"
+        },
+        "detail": {
+            "title": "Пользователь"
+        },
+        "login": "Логин",
+        "firstName": "Имя",
+        "lastName": "Фамилия",
+        "email": "Email",
+        "activated": "Активен",
+        "deactivated": "Неактивен",
+        "profiles": "Профили",
+        "langKey": "Язык",
+        "createdBy": "Создал",
+        "createdDate": "Дата создания",
+        "lastModifiedBy": "Изменено",
+        "lastModifiedDate": "Дата изменения"
+    }
+}

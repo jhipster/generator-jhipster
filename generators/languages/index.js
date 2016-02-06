@@ -16,6 +16,7 @@ module.exports = LanguagesGenerator.extend({
     initializing : {
         getConfig : function () {
             this.log(chalk.bold('Languages configuration is starting'));
+            this.applicationType = this.config.get('applicationType');
             this.baseName = this.config.get('baseName');
             this.websocket = this.config.get('websocket');
             this.databaseType = this.config.get('databaseType');
@@ -77,7 +78,8 @@ module.exports = LanguagesGenerator.extend({
 
         for (var id in this.languages) {
             var language = this.languages[id];
-            this.installI18nFilesByLanguage(this, webappDir, resourceDir, language);
+            this.installI18nFilesByLanguage(this, webappDir, language);
+            this.installI18nResFilesByLanguage(this, resourceDir, language);
             this.installNewLanguage(language);
             this.addMessageformatLocaleToIndex(language.split("-")[0] + '.js');
             insight.track('languages/language', language);

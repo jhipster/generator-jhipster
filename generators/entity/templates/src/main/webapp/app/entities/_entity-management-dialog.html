@@ -71,6 +71,14 @@
                         <button type="button" class="btn btn-default" ng-click="datePickerFor<%= fields[fieldId].fieldNameCapitalized %>Open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                 </div>
+                <%_ } else if(fields[fieldId].fieldType == 'ZonedDateTime') { _%>
+                <div class="input-group">
+                    <input id="field_<%= fields[fieldId].fieldName %>" type="text" class="form-control" datetime-picker="{{dateformat}}" ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>" is-open="datePickerFor<%= fields[fieldId].fieldNameCapitalized %>.status.opened"
+                    <%- include ng_validators %>  />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="datePickerFor<%= fields[fieldId].fieldNameCapitalized %>Open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
                 <%_ } else if(fields[fieldId].fieldTypeBlobContent == 'text') { _%>
                 <textarea class="form-control" name="<%= fields[fieldId].fieldName %>" id="field_<%= fields[fieldId].fieldName %>"
                     ng-model="<%= entityInstance %>.<%= fields[fieldId].fieldName %>" <%- include ng_validators %> />

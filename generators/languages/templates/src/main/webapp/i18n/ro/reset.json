@@ -20,7 +20,7 @@
             },
             "messages": {
                 "info": "Alegeți o nouă parolă",
-                "success": "<strong>Parola dumneavoastra a fost resetata.</strong> Vă rugăm să vă <a class=\"alert-link\" href=\"#/login\">autentificați</a>.",
+                "success": "<strong>Parola dumneavoastra a fost resetata.</strong> Vă rugăm să vă <a class=\"alert-link\" href=\"\" ng-click=\"login()\">autentificați</a>.",
                 "keymissing": "Cheia de resetare lipsește.",
                 "error": "Parola dumneavoastră nu a fost resetată. Vă reamintim că o cerere de resetare este valabilă doar 24 de ore."
             }

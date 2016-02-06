@@ -20,7 +20,10 @@
             },
             "admin": {
                 "main": "Yönetim",
-                "user-management": "User management",
+                <%_ if (applicationType == 'gateway') { _%>
+                "gateway": "Gateway",
+                <%_ } _%>
+                "userManagement": "User management",
                 "tracker": "Kullanıcı Takip",
                 "metrics": "Ölçümler",
                 "health": "Heath",
@@ -45,8 +48,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "<a class=\"alert-link\" href=\"#/login\">Giriş</a> yapmak istiyorsanız, varsayılan hesaplardan birini deneyebilirsiniz:<br/>- Yönetici (kullanıcı adı=\"admin\" ve şifre=\"admin\") <br/>- Kullanıcı (kullanıcı adı=\"user\" and şifre=\"user\").",
-                "register": "Henüz bir hesabınız yok mu? <a class=\"alert-link\" href=\"#/register\">Yeni hesap oluştur</a>"
+                "authenticated": "<a class=\"alert-link\" href=\"\" ng-click=\"login()\">Giriş</a> yapmak istiyorsanız, varsayılan hesaplardan birini deneyebilirsiniz:<br/>- Yönetici (kullanıcı adı=\"admin\" ve şifre=\"admin\") <br/>- Kullanıcı (kullanıcı adı=\"user\" and şifre=\"user\").",
+                "register": "Henüz bir hesabınız yok mu? <a class=\"alert-link\" ui-sref=\"register\">Yeni hesap oluştur</a>"
             },
             "error": {
                 "dontmatch" : "Şifreler eşleşmedi!"

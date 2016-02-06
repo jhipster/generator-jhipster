@@ -51,6 +51,7 @@ const expectedFiles = {
         'src/main/resources/config/liquibase/users_authorities.csv',
         'src/main/resources/mails/activationEmail.html',
         'src/main/resources/mails/passwordResetEmail.html',
+        'src/main/resources/i18n/messages.properties',
         'src/main/java/com/mycompany/myapp/Application.java',
         'src/main/java/com/mycompany/myapp/ApplicationWebXml.java',
         'src/main/java/com/mycompany/myapp/aop/logging/LoggingAspect.java',
@@ -146,6 +147,7 @@ const expectedFiles = {
         'src/main/webapp/i18n/en/audits.json',
         'src/main/webapp/i18n/en/configuration.json',
         'src/main/webapp/i18n/en/error.json',
+        'src/main/webapp/i18n/en/gateway.json',
         'src/main/webapp/i18n/en/global.json',
         'src/main/webapp/i18n/en/health.json',
         'src/main/webapp/i18n/en/login.json',
@@ -157,14 +159,13 @@ const expectedFiles = {
         'src/main/webapp/i18n/en/sessions.json',
         'src/main/webapp/i18n/en/settings.json',
         'src/main/webapp/i18n/en/reset.json',
-        'src/main/webapp/i18n/en/user.management.json',
-        'src/main/resources/i18n/messages.properties',
-        'src/main/resources/i18n/messages_en.properties',
+        'src/main/webapp/i18n/en/user-management.json',
         'src/main/webapp/i18n/fr/activate.json',
         'src/main/webapp/i18n/fr/audits.json',
         'src/main/webapp/i18n/fr/configuration.json',
         'src/main/webapp/i18n/fr/error.json',
         'src/main/webapp/i18n/fr/global.json',
+        'src/main/webapp/i18n/fr/gateway.json',
         'src/main/webapp/i18n/fr/health.json',
         'src/main/webapp/i18n/fr/login.json',
         'src/main/webapp/i18n/fr/logs.json',
@@ -175,8 +176,7 @@ const expectedFiles = {
         'src/main/webapp/i18n/fr/sessions.json',
         'src/main/webapp/i18n/fr/settings.json',
         'src/main/webapp/i18n/fr/reset.json',
-        'src/main/webapp/i18n/fr/user.management.json',
-        'src/main/resources/i18n/messages_fr.properties',
+        'src/main/webapp/i18n/fr/user-management.json',
         'src/main/webapp/app/app.module.js',
         'src/main/webapp/app/app.config.js',
         'src/main/webapp/app/app.constants.js',
@@ -212,9 +212,9 @@ const expectedFiles = {
         'src/main/webapp/app/account/activate/activate.html',
         'src/main/webapp/app/account/activate/activate.js',
         'src/main/webapp/app/account/activate/activate.controller.js',
-        'src/main/webapp/app/account/login/login.html',
-        'src/main/webapp/app/account/login/login.js',
-        'src/main/webapp/app/account/login/login.controller.js',
+        'src/main/webapp/app/components/login/login.html',
+        'src/main/webapp/app/components/login/login.service.js',
+        'src/main/webapp/app/components/login/login.controller.js',
         'src/main/webapp/app/account/password/password.html',
         'src/main/webapp/app/account/password/password.js',
         'src/main/webapp/app/account/password/password.controller.js',
@@ -263,7 +263,7 @@ const expectedFiles = {
         'src/test/javascript/spec/helpers/httpBackend.js',
         'src/test/javascript/spec/helpers/module.js',
         'src/test/javascript/spec/app/admin/health/health.controller.spec.js',
-        'src/test/javascript/spec/app/account/login/login.controller.spec.js',
+        'src/test/javascript/spec/app/components/login/login.controller.spec.js',
         'src/test/javascript/spec/app/account/password/password.controller.spec.js',
         'src/test/javascript/spec/app/account/password/password.directive.spec.js',
         'src/test/javascript/spec/app/account/sessions/sessions.controller.spec.js',
@@ -318,7 +318,7 @@ const expectedFiles = {
 };
 
 describe('JHipster generator', function () {
-    this.timeout(4000); //to avoid occassional timeouts
+    this.timeout(5000); //to avoid occassional timeouts
 
     describe('default configuration', function () {
         beforeEach(function (done) {
@@ -538,6 +538,7 @@ describe('JHipster generator', function () {
 
         it('does not create i18n files if i18n is disabled', function () {
             assert.noFile(expectedFiles.i18n);
+            assert.file(['src/main/resources/i18n/messages.properties']);
         });
     });
 
@@ -688,6 +689,61 @@ describe('JHipster generator', function () {
         it('creates expected files with the gateway application type', function () {
             assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.gateway);
+        });
+    });
+});
+describe('JHipster server generator', function () {
+    this.timeout(4000); //to avoid occassional timeouts
+    describe('generate server', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/server'))
+                .withOptions({skipInstall: true, gatling: true})
+                .withPrompts({
+                    "baseName": "jhipster",
+                    "packageName": "com.mycompany.myapp",
+                    "packageFolder": "com/mycompany/myapp",
+                    "authenticationType": "session",
+                    "hibernateCache": "ehcache",
+                    "clusteredHttpSession": "no",
+                    "websocket": "no",
+                    "databaseType": "sql",
+                    "devDatabaseType": "h2Memory",
+                    "prodDatabaseType": "mysql",
+                    "buildTool": "maven",
+                    "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
+                    "searchEngine": "no"
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files for default configuration with gatling enabled for server generator', function () {
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.maven);
+            assert.noFile(expectedFiles.client);
+            assert.noFile(['gulpfile.js']);
+        });
+    });
+});
+
+describe('JHipster client generator', function () {
+    this.timeout(4000); //to avoid occassional timeouts
+    describe('generate client', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/client'))
+                .withOptions({skipInstall: true, auth: 'session'})
+                .withPrompts({
+                    "baseName": "jhipster",
+                    "enableTranslation": true,
+                    "useSass": true
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files for default configuration for client generator', function () {
+            assert.noFile(expectedFiles.server);
+            assert.noFile(expectedFiles.maven);
+            assert.file(expectedFiles.client);
+            assert.file(['gulpfile.js']);
         });
     });
 });

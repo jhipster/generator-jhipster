@@ -23,7 +23,10 @@
             },
             "admin": {
                 "main": "Administrare",
-                "user-management": "User management",
+                <%_ if (applicationType == 'gateway') { _%>
+                "gateway": "Gateway",
+                <%_ } _%>
+                "userManagement": "User management",
                 "tracker": "Informații utilizatori",
                 "metrics": "Metrici",
                 "health": "Stare",
@@ -54,8 +57,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Dacă doriți să vă <a class=\"alert-link\" href=\"#/login\">autentificați</a>, puteți încerca conturile implicite:<br/>- Administrator (login=\"admin\" si parola=\"admin\") <br/>- Utilizator (login=\"user\" si parola=\"user\").",
-                "register": "Înca nu aveți un cont? <a class=\"alert-link\" href=\"#/register\">Înregistrați un nou cont</a>"
+                "authenticated": "Dacă doriți să vă <a class=\"alert-link\" href=\"\" ng-click=\"login()\">autentificați</a>, puteți încerca conturile implicite:<br/>- Administrator (login=\"admin\" si parola=\"admin\") <br/>- Utilizator (login=\"user\" si parola=\"user\").",
+                "register": "Înca nu aveți un cont? <a class=\"alert-link\" ui-sref=\"register\">Înregistrați un nou cont</a>"
             },
             "error": {
                 "dontmatch" : "Parola si confirmarea ei nu corespund!"

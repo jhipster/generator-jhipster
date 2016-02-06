@@ -20,7 +20,10 @@
             },
             "admin": {
                 "main": "管理",
-                "user-management": "User management",
+                <%_ if (applicationType == 'gateway') { _%>
+                "gateway": "Gateway",
+                <%_ } _%>
+                "userManagement": "User management",
                 "tracker": "追蹤使用者",
                 "metrics": "資源監控",
                 "health": "服務狀態",
@@ -45,8 +48,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "如果您要<a class=\"alert-link\" href=\"#/login\">登入</a>, 您可以使用預設帳號:<br/>- 管理者 (帳號=\"admin\"與密碼=\"admin\") <br/>- 使用者 (帳號=\"user\"與密碼=\"user\").",
-                "register": "您還沒有帳號？<a class=\"alert-link\" href=\"#/register\">註冊一個新帳號</a>"
+                "authenticated": "如果您要<a class=\"alert-link\" href=\"\" ng-click=\"login()\">登入</a>, 您可以使用預設帳號:<br/>- 管理者 (帳號=\"admin\"與密碼=\"admin\") <br/>- 使用者 (帳號=\"user\"與密碼=\"user\").",
+                "register": "您還沒有帳號？<a class=\"alert-link\" ui-sref=\"register\">註冊一個新帳號</a>"
             },
             "error": {
                 "dontmatch" : "您輸入的密碼與密碼確認不符合!"

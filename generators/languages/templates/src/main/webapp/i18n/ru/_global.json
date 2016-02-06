@@ -20,7 +20,10 @@
             },
             "admin": {
                 "main": "Администрирование",
-                "user-management": "Управление пользователями",
+                <%_ if (applicationType == 'gateway') { _%>
+                "gateway": "Gateway",
+                <%_ } _%>
+                "userManagement": "Управление пользователями",
                 "tracker": "Трекер польз.",
                 "metrics": "Метрики",
                 "health": "Состояние",
@@ -45,8 +48,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Если вы хотите <a class=\"alert-link\" href=\"#/login\">авторизироваться</a>, вы можете попробовать аккаунты по умолчанию:<br/>- Администратор (логин=\"admin\" и пароль=\"admin\") <br/>- Пользователь (логин=\"user\" и пароль=\"user\").",
-                "register": "У вас нет аккаунта? <a class=\"alert-link\" href=\"#/register\">Создать новый аккаунт</a>"
+                "authenticated": "Если вы хотите <a class=\"alert-link\" href=\"\" ng-click=\"login()\">авторизироваться</a>, вы можете попробовать аккаунты по умолчанию:<br/>- Администратор (логин=\"admin\" и пароль=\"admin\") <br/>- Пользователь (логин=\"user\" и пароль=\"user\").",
+                "register": "У вас нет аккаунта? <a class=\"alert-link\" ui-sref=\"register\">Создать новый аккаунт</a>"
             },
             "error": {
                 "dontmatch": "Пароль и его подтверждение не совпадают!"
