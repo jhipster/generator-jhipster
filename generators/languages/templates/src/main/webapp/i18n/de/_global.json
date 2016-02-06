@@ -48,8 +48,8 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Wenn Sie sich <a class=\"alert-link\" href=\"#/login\">anmelden</a> möchten, versuchen Sie es mit <br/>- Administrator (Name=\"admin\" und Passwort=\"admin\")<br/>- Benutzer (Name=\"user\" und Passwort=\"user\").",
-                "register": "Sie haben noch keinen Zugang? <a class=\"alert-link\" href=\"#/register\">Registrieren Sie sich</a>"
+                "authenticated": "Wenn Sie sich <a class=\"alert-link\" href=\"\" ng-click=\"login()\">anmelden</a> möchten, versuchen Sie es mit <br/>- Administrator (Name=\"admin\" und Passwort=\"admin\")<br/>- Benutzer (Name=\"user\" und Passwort=\"user\").",
+                "register": "Sie haben noch keinen Zugang? <a class=\"alert-link\" href=\"\" ng-click=\"register()\">Registrieren Sie sich</a>"
             },
             "error": {
                 "dontmatch": "Das bestätigte Passwort entspricht nicht dem neuen Passwort!"

@@ -2,7 +2,7 @@
     "activate": {
         "title": "アクティベーション",
         "messages": {
-            "success": "<strong>あなたのアカウントはアクティベートされました。</strong> <a class=\"alert-link\" href=\"#/login\">ログイン</a>してください。",
+            "success": "<strong>あなたのアカウントはアクティベートされました。</strong> <a class=\"alert-link\" href=\"\" ng-click=\"login()\">ログイン</a>してください。",
             "error": "<strong>あなたのアカウントはアクティベートされませんでした。</strong>サインアップするために登録フォームを使ってサインアップしてください。"
         }
     }

@@ -20,7 +20,7 @@
             },
             "messages": {
                 "info": "Yeni şifre seç",
-                "success": "<strong>Şifren sıfırlandı.</strong> Lütfen <a class=\"alert-link\" href=\"#/login\">giriş yap</a>.",
+                "success": "<strong>Şifren sıfırlandı.</strong> Lütfen <a class=\"alert-link\" href=\"\" ng-click=\"login()\">giriş yap</a>.",
                 "keymissing": "Şifre sıfırlama anahtarı geçersiz.",
                 "error": "Şifren sıfırlanamaz. Şifre isteği sadece 24 saat geçerlidir."
             }
