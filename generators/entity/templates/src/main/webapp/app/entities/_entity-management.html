@@ -33,7 +33,7 @@
     <div class="table-responsive">
         <table class="jh-table table table-striped">
             <thead>
-                <tr<% if (pagination != 'no') { %> jh-sort="predicate" ascending="reverse" callback="<%=pagination != 'infinite-scroll' ? 'loadAll' : 'reset'%>()"<% } %>>
+                <tr<% if (pagination != 'no') { %> jh-sort="predicate" ascending="reverse" callback="<%=pagination != 'infinite-scroll' ? 'transition' : 'reset'%>()"<% } %>>
                     <th<% if (pagination != 'no') { %> jh-sort-by="id"<% } %>><span translate="global.field.id">ID</span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
                     <%_ for (fieldId in fields) { _%>
                     <th<% if (pagination != 'no') { %> jh-sort-by="<%= fields[fieldId].fieldName%>"<% } %>><span translate="<%=keyPrefix + fields[fieldId].fieldName %>"><%=fields[fieldId].fieldNameCapitalized%></span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
@@ -136,10 +136,10 @@
         </table>
     </div>
     <%_ if (pagination == 'pager') { _%>
-    <uib-pager total-items="totalItems" ng-model="page" ng-change="loadAll()"></uib-pager>
+    <uib-pager total-items="totalItems" ng-model="page" ng-change="transition()"></uib-pager>
     <%_ } else if (pagination == 'pagination') { _%>
     <div class="text-center">
-        <uib-pagination class="pagination-sm" total-items="totalItems" ng-model="page" ng-change="loadAll()"></uib-pagination>
+        <uib-pagination class="pagination-sm" total-items="totalItems" ng-model="page" ng-change="transition()"></uib-pagination>
     </div>
     <%_ } _%>
 </div>
