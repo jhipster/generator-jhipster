@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('HomeController', function ($scope, Principal, $state, LoginService) {
+    .controller('HomeController', function ($scope, Principal, LoginService) {
         Principal.identity().then(function(account) {
             $scope.account = account;
             $scope.isAuthenticated = Principal.isAuthenticated;
@@ -9,7 +9,4 @@ angular.module('<%=angularAppName%>')
 
         $scope.login = LoginService.open;
 
-        $scope.register = function () {
-            $state.go('register');
-        };
     });

@@ -49,7 +49,7 @@
         "messages": {
             "info": {
                 "authenticated": "Если вы хотите <a class=\"alert-link\" href=\"\" ng-click=\"login()\">авторизироваться</a>, вы можете попробовать аккаунты по умолчанию:<br/>- Администратор (логин=\"admin\" и пароль=\"admin\") <br/>- Пользователь (логин=\"user\" и пароль=\"user\").",
-                "register": "У вас нет аккаунта? <a class=\"alert-link\" href=\"\" ng-click=\"register()\">Создать новый аккаунт</a>"
+                "register": "У вас нет аккаунта? <a class=\"alert-link\" ui-sref=\"register\">Создать новый аккаунт</a>"
             },
             "error": {
                 "dontmatch": "Пароль и его подтверждение не совпадают!"

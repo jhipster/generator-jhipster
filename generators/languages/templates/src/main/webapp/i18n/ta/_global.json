@@ -49,7 +49,7 @@
         "messages": {
             "info": {
                 "authenticated": "<a href=\"#/login\">அங்கீகரிக்க</a>, நீங்கள் இயல்புநிலை கணக்குகள் முயற்சி செய்யலாம்:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\").",
-                "register": "உங்களுக்கு கணக்கு இல்லை? <a href=\"#/register\">புதிய கணக்கு பதிவு செய்க!</a>"
+                "register": "உங்களுக்கு கணக்கு இல்லை? <a class=\"alert-link\" ui-sref=\"register\">புதிய கணக்கு பதிவு செய்க!</a>"
             },
             "error": {
                 "dontmatch" : "கடவுச்சொல் மற்றும் அதன் உறுதி பொருந்தவில்லை!"
