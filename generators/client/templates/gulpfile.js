@@ -26,6 +26,8 @@ var gulp = require('gulp'),
     sourcemaps = require('gulp-sourcemaps'),
     KarmaServer = require('karma').Server,
     plumber = require('gulp-plumber'),
+    changed = require('gulp-changed'),
+    cache = require('gulp-cached'),
     handleErrors = require('./gulp/handleErrors'),
     util = require('./gulp/utils');
 
@@ -63,12 +65,15 @@ gulp.task('copy', function() {
     return es.merge( <% if(enableTranslation) { %> // copy i18n folders only if translation is enabled
         gulp.src(config.app + 'i18n/**')
         .pipe(plumber({errorHandler: handleErrors}))
+        .pipe(changed(config.dist + 'i18n/'))
         .pipe(gulp.dest(config.dist + 'i18n/')), <% } %>
         gulp.src(config.app + 'bower_components/bootstrap/fonts/*.*')
         .pipe(plumber({errorHandler: handleErrors}))
+        .pipe(changed(config.dist + 'content/fonts/'))
         .pipe(gulp.dest(config.dist + 'content/fonts/')),
         gulp.src(config.app + 'content/**/*.{woff,svg,ttf,eot}')
         .pipe(plumber({errorHandler: handleErrors}))
+        .pipe(changed(config.dist + 'content/fonts/'))
         .pipe(flatten())
         .pipe(gulp.dest(config.dist + 'content/fonts/')));
 });
@@ -76,6 +81,7 @@ gulp.task('copy', function() {
 gulp.task('images', function() {
     return gulp.src(config.app + 'content/images/**')
         .pipe(plumber({errorHandler: handleErrors}))
+        .pipe(changed(config.dist + 'content/images'))
         .pipe(imagemin({optimizationLevel: 5}))
         .pipe(gulp.dest(config.dist + 'content/images'))
         .pipe(browserSync.reload({stream: true}));
@@ -84,6 +90,7 @@ gulp.task('images', function() {
 gulp.task('sass', function () {
     return gulp.src(config.scss + '**/*.{scss,sass}')
         .pipe(plumber({errorHandler: handleErrors}))
+        .pipe(changed(config.app + 'content/css', {extension: '.css'}))
         .pipe(sass({includePaths:config.importPath}).on('error', sass.logError))
         .pipe(gulp.dest(config.app + 'content/css'));
 });
@@ -285,6 +292,7 @@ gulp.task('jshint', function() {
 
     return gulp.src(['gulpfile.js', config.app + 'app/**/*.js'])
         .pipe(plumber({errorHandler: handleErrors}))
+        .pipe(cache('jshint'))
         .pipe(jshint())
         .pipe(jshint.reporter('jshint-stylish'))
         .pipe(jsHintErrorReporter());
