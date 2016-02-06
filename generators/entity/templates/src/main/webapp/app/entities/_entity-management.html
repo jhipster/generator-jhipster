@@ -7,9 +7,8 @@
             <div class="col-xs-4 no-padding-left">
                 <button class="btn btn-primary" ui-sref="<%= entityStateName %>.new" >
                     <span class="glyphicon glyphicon-plus"></span>
-                    <span
-                        <%_ if (searchEngine == 'elasticsearch') { _%>class="hidden-xs" <%_ } _%>
-                        translate="<%= keyPrefix %>home.createLabel">Create new <%= entityClass %>
+                    <span <% if (searchEngine == 'elasticsearch') { %>class="hidden-xs" <% } %> translate="<%= keyPrefix %>home.createLabel">
+                        Create new <%= entityClass %>
                     </span>
                 </button>
             </div>
