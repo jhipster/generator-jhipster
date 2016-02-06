@@ -23,6 +23,7 @@ const INTERPOLATE_REGEX =  constants.INTERPOLATE_REGEX;
 
 var currentQuestion;
 var configOptions = {};
+var javaDir;
 
 module.exports = JhipsterServerGenerator.extend({
     constructor: function() {
@@ -536,7 +537,7 @@ module.exports = JhipsterServerGenerator.extend({
             }
 
             this.packageFolder = this.packageName.replace(/\./g, '/');
-            this.javaDir = 'src/main/java/' + this.packageFolder + '/';
+            javaDir = this.javaDir = 'src/main/java/' + this.packageFolder + '/';
             this.testDir = 'src/test/java/' + this.packageFolder + '/';
 
         },
@@ -704,7 +705,7 @@ module.exports = JhipsterServerGenerator.extend({
         },
 
         writeServerJavaAuthConfigFiles: function () {
-            var javaDir = this.javaDir;
+
             if (this.authenticationType == 'oauth2') {
                 this.template('src/main/java/package/config/_OAuth2ServerConfiguration.java', javaDir + 'config/OAuth2ServerConfiguration.java', this, {});
             }
@@ -776,19 +777,23 @@ module.exports = JhipsterServerGenerator.extend({
         },
 
         writeServerJavaGatewayFiles: function () {
-            var javaDir = this.javaDir;
-            if (this.applicationType == 'gateway') {
-                this.template('src/main/java/package/web/rest/dto/_RouteDTO.java', javaDir + 'web/rest/dto/RouteDTO.java', this, {});
-                this.template('src/main/java/package/web/rest/_GatewayResource.java', javaDir + 'web/rest/GatewayResource.java', this, {});
-            }
+
+            if (this.applicationType != 'gateway') return;
+
+
+            this.template('src/main/java/package/web/rest/dto/_RouteDTO.java', javaDir + 'web/rest/dto/RouteDTO.java', this, {});
+            this.template('src/main/java/package/web/rest/_GatewayResource.java', javaDir + 'web/rest/GatewayResource.java', this, {});
 
         },
 
-        writeServerJavaFiles: function () {
-            var javaDir = this.javaDir;
+        writeServerJavaAppFiles: function () {
+
             // Create Java files
             this.template('src/main/java/package/_Application.java', javaDir + '/Application.java', this, {});
             this.template('src/main/java/package/_ApplicationWebXml.java', javaDir + '/ApplicationWebXml.java', this, {});
+        },
+
+        writeServerJavaConfigFiles: function () {
 
             this.template('src/main/java/package/aop/logging/_LoggingAspect.java', javaDir + 'aop/logging/LoggingAspect.java', this, {});
 
@@ -823,14 +828,6 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template('src/main/java/package/config/_WebsocketConfiguration.java', javaDir + 'config/WebsocketConfiguration.java', this, {});
                 this.template('src/main/java/package/config/_WebsocketSecurityConfiguration.java', javaDir + 'config/WebsocketSecurityConfiguration.java', this, {});
             }
-            // error handler code - server side
-            this.template('src/main/java/package/web/rest/errors/_ErrorConstants.java', javaDir + 'web/rest/errors/ErrorConstants.java', this, {});
-            this.template('src/main/java/package/web/rest/errors/_CustomParameterizedException.java', javaDir + 'web/rest/errors/CustomParameterizedException.java', this, {});
-            this.template('src/main/java/package/web/rest/errors/_ErrorDTO.java', javaDir + 'web/rest/errors/ErrorDTO.java', this, {});
-            this.template('src/main/java/package/web/rest/errors/_ExceptionTranslator.java', javaDir + 'web/rest/errors/ExceptionTranslator.java', this, {});
-            this.template('src/main/java/package/web/rest/errors/_FieldErrorDTO.java', javaDir + 'web/rest/errors/FieldErrorDTO.java', this, {});
-            this.template('src/main/java/package/web/rest/errors/_ParameterizedErrorDTO.java', javaDir + 'web/rest/errors/ParameterizedErrorDTO.java', this, {});
-
             if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
                 this.template('src/main/java/package/config/audit/_package-info.java', javaDir + 'config/audit/package-info.java', this, {});
                 this.template('src/main/java/package/config/audit/_AuditEventConverter.java', javaDir + 'config/audit/AuditEventConverter.java', this, {});
@@ -854,6 +851,12 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template('src/main/java/package/config/liquibase/_AsyncSpringLiquibase.java', javaDir + 'config/liquibase/AsyncSpringLiquibase.java', this, {});
                 this.template('src/main/java/package/config/liquibase/_package-info.java', javaDir + 'config/liquibase/package-info.java', this, {});
             }
+            if (this.searchEngine == 'elasticsearch') {
+                this.template('src/main/java/package/config/_ElasticSearchConfiguration.java', javaDir + 'config/ElasticSearchConfiguration.java', this, {});
+            }
+        },
+
+        writeServerJavaDomainFiles: function () {
 
             this.template('src/main/java/package/domain/_package-info.java', javaDir + 'domain/package-info.java', this, {});
             if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
@@ -873,9 +876,11 @@ module.exports = JhipsterServerGenerator.extend({
                     this.template('src/main/java/package/domain/util/_FixedPostgreSQL82Dialect.java', javaDir + 'domain/util/FixedPostgreSQL82Dialect.java', this, {});
                 }
             }
+        },
+
+        writeServerJavaRepoFiles: function () {
 
             if (this.searchEngine == 'elasticsearch') {
-                this.template('src/main/java/package/config/_ElasticSearchConfiguration.java', javaDir + 'config/ElasticSearchConfiguration.java', this, {});
                 this.template('src/main/java/package/repository/search/_package-info.java', javaDir + 'repository/search/package-info.java', this, {});
                 this.template('src/main/java/package/repository/search/_UserSearchRepository.java', javaDir + 'repository/search/UserSearchRepository.java', this, {});
             }
@@ -887,6 +892,9 @@ module.exports = JhipsterServerGenerator.extend({
             }
 
             this.template('src/main/java/package/repository/_UserRepository.java', javaDir + 'repository/UserRepository.java', this, {});
+        },
+
+        writeServerJavaServiceFiles: function () {
 
             this.template('src/main/java/package/service/_package-info.java', javaDir + 'service/package-info.java', this, {});
             if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
@@ -895,6 +903,21 @@ module.exports = JhipsterServerGenerator.extend({
             this.template('src/main/java/package/service/_UserService.java', javaDir + 'service/UserService.java', this, {});
             this.template('src/main/java/package/service/_MailService.java', javaDir + 'service/MailService.java', this, {});
             this.template('src/main/java/package/service/util/_RandomUtil.java', javaDir + 'service/util/RandomUtil.java', this, {});
+        },
+
+        writeServerJavaWebErrorFiles: function () {
+
+            // error handler code - server side
+            this.template('src/main/java/package/web/rest/errors/_ErrorConstants.java', javaDir + 'web/rest/errors/ErrorConstants.java', this, {});
+            this.template('src/main/java/package/web/rest/errors/_CustomParameterizedException.java', javaDir + 'web/rest/errors/CustomParameterizedException.java', this, {});
+            this.template('src/main/java/package/web/rest/errors/_ErrorDTO.java', javaDir + 'web/rest/errors/ErrorDTO.java', this, {});
+            this.template('src/main/java/package/web/rest/errors/_ExceptionTranslator.java', javaDir + 'web/rest/errors/ExceptionTranslator.java', this, {});
+            this.template('src/main/java/package/web/rest/errors/_FieldErrorDTO.java', javaDir + 'web/rest/errors/FieldErrorDTO.java', this, {});
+            this.template('src/main/java/package/web/rest/errors/_ParameterizedErrorDTO.java', javaDir + 'web/rest/errors/ParameterizedErrorDTO.java', this, {});
+
+        },
+
+        writeServerJavaWebFiles: function () {
 
             this.template('src/main/java/package/web/filter/_package-info.java', javaDir + 'web/filter/package-info.java', this, {});
             this.template('src/main/java/package/web/filter/_CachingHttpHeadersFilter.java', javaDir + 'web/filter/CachingHttpHeadersFilter.java', this, {});
@@ -916,14 +939,24 @@ module.exports = JhipsterServerGenerator.extend({
             this.template('src/main/java/package/web/rest/_LogsResource.java', javaDir + 'web/rest/LogsResource.java', this, {});
             this.template('src/main/java/package/web/rest/_UserResource.java', javaDir + 'web/rest/UserResource.java', this, {});
 
-            if (this.websocket == 'spring-websocket') {
-                this.template('src/main/java/package/web/websocket/_package-info.java', javaDir + 'web/websocket/package-info.java', this, {});
-                this.template('src/main/java/package/web/websocket/_ActivityService.java', javaDir + 'web/websocket/ActivityService.java', this, {});
-                this.template('src/main/java/package/web/websocket/dto/_package-info.java', javaDir + 'web/websocket/dto/package-info.java', this, {});
-                this.template('src/main/java/package/web/websocket/dto/_ActivityDTO.java', javaDir + 'web/websocket/dto/ActivityDTO.java', this, {});
-            }
         },
 
+        writeServerJavaWebsocketFiles: function () {
+
+            if(this.websocket != 'spring-websocket') return;
+
+            this.template('src/main/java/package/web/websocket/_package-info.java', javaDir + 'web/websocket/package-info.java', this, {});
+            this.template('src/main/java/package/web/websocket/_ActivityService.java', javaDir + 'web/websocket/ActivityService.java', this, {});
+            this.template('src/main/java/package/web/websocket/dto/_package-info.java', javaDir + 'web/websocket/dto/package-info.java', this, {});
+            this.template('src/main/java/package/web/websocket/dto/_ActivityDTO.java', javaDir + 'web/websocket/dto/ActivityDTO.java', this, {});
+
+        },
+
+        writeJavaUserManagementFiles : function () {
+
+            if(this.skipUserManagement) return;
+            // user management related files
+        },
 
         writeServerTestFwFiles: function () {
 
