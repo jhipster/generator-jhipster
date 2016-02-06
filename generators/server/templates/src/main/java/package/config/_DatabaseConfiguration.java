@@ -21,8 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;<% } %><% if (databaseType == 'mongodb') { %>
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoProperties;<% } %><% if (databaseType == 'sql') { %>
+import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContextException;<% } %>
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -81,7 +83,8 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
 
     @Bean(destroyMethod = "close")
     @ConditionalOnExpression("#{!environment.acceptsProfiles('cloud') && !environment.acceptsProfiles('heroku')}")
-    public DataSource dataSource(DataSourceProperties dataSourceProperties, JHipsterProperties jHipsterProperties<% if (hibernateCache == 'hazelcast') { %>, CacheManager cacheManager<% } %>) {
+    @ConfigurationProperties(prefix = "spring.datasource.hikari")
+    public DataSource dataSource(DataSourceProperties dataSourceProperties<% if (hibernateCache == 'hazelcast') { %>, CacheManager cacheManager<% } %>) {
         log.debug("Configuring Datasource");
         if (dataSourceProperties.getUrl() == null) {
             log.error("Your database connection pool configuration is incorrect! The application" +
@@ -90,30 +93,19 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
 
             throw new ApplicationContextException("Database connection pool is not configured correctly");
         }
-        HikariConfig config = new HikariConfig();
-        config.setDataSourceClassName(dataSourceProperties.getDriverClassName());
-        config.addDataSourceProperty("url", dataSourceProperties.getUrl());
-        if (dataSourceProperties.getUsername() != null) {
-            config.addDataSourceProperty("user", dataSourceProperties.getUsername());
-        } else {
-            config.addDataSourceProperty("user", ""); // HikariCP doesn't allow null user
-        }
-        if (dataSourceProperties.getPassword() != null) {
-            config.addDataSourceProperty("password", dataSourceProperties.getPassword());
-        } else {
-            config.addDataSourceProperty("password", ""); // HikariCP doesn't allow null password
-        }
-<% if (prodDatabaseType == 'mysql' || devDatabaseType == 'mysql') { %>
-        //MySQL optimizations, see https://github.com/brettwooldridge/HikariCP/wiki/MySQL-Configuration
-        if ("com.mysql.jdbc.jdbc2.optional.MysqlDataSource".equals(dataSourceProperties.getDriverClassName())) {
-            config.addDataSourceProperty("cachePrepStmts", jHipsterProperties.getDatasource().isCachePrepStmts());
-            config.addDataSourceProperty("prepStmtCacheSize", jHipsterProperties.getDatasource().getPrepStmtCacheSize());
-            config.addDataSourceProperty("prepStmtCacheSqlLimit", jHipsterProperties.getDatasource().getPrepStmtCacheSqlLimit());
-        }<% } %>
+        HikariDataSource hikariDataSource =  (HikariDataSource) DataSourceBuilder
+                .create(dataSourceProperties.getClassLoader())
+                .type(HikariDataSource.class)
+                .driverClassName(dataSourceProperties.getDriverClassName())
+                .url(dataSourceProperties.getUrl())
+                .username(dataSourceProperties.getUsername())
+                .password(dataSourceProperties.getPassword())
+                .build();
+
         if (metricRegistry != null) {
-            config.setMetricRegistry(metricRegistry);
+            hikariDataSource.setMetricRegistry(metricRegistry);
         }
-        return new HikariDataSource(config);
+        return hikariDataSource;
     }
 <%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
 
