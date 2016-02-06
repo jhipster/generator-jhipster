@@ -31,30 +31,11 @@ module.exports = JhipsterClientGenerator.extend({
 
         configOptions = this.options.configOptions || {};
 
-        // This adds support for a `--base-name` flag
-        this.option('base-name', {
-            desc: 'Provide base name for the application, this will be overwritten if base name is found in .yo-rc file',
-            type: String
-        });
-
         // This adds support for a `--protractor` flag
         this.option('protractor', {
             desc: 'Enable protractor tests',
             type: Boolean,
             defaults: false
-        });
-
-        // This adds support for a `--last-question` flag
-        this.option('last-question', {
-            desc: 'Pass the last question number asked',
-            type: Number
-        });
-
-        // This adds support for a `--[no-]logo` flag
-        this.option('logo', {
-            desc: 'Disable or enable Jhipster logo',
-            type: Boolean,
-            defaults: true
         });
 
         // This adds support for a `--auth` flag
@@ -106,15 +87,9 @@ module.exports = JhipsterClientGenerator.extend({
             type: String
         });
 
-
+        this.skipServer = configOptions.skipServer || this.config.get('skipServer');
+        this.skipUserManagement = configOptions.skipUserManagement ||  this.config.get('skipUserManagement');
         this.i18n = this.options['i18n'];
-        this.baseName = this.options['base-name'];
-        this.testFrameworks = [];
-        var protractor = this.options['protractor'];
-        protractor &&  this.testFrameworks.push('protractor');
-        var lastQuestion = this.options['last-question'] || configOptions.lastQuestion;
-        currentQuestion = lastQuestion ? lastQuestion : 0;
-        this.logo = this.options['logo'];
         this.authenticationType = this.options['auth'];
         this.buildTool = this.options['build'];
         this.websocket = this.options['websocket'];
@@ -123,6 +98,12 @@ module.exports = JhipsterClientGenerator.extend({
         this.enableSocialSignIn = this.options['social'];
         this.searchEngine = this.options['search-engine'];
         this.hibernateCache = this.options['hb-cache'];
+        this.testFrameworks = [];
+        this.options['protractor'] &&  this.testFrameworks.push('protractor');
+        var lastQuestion = configOptions.lastQuestion;
+        currentQuestion = lastQuestion ? lastQuestion : 0;
+        this.baseName = configOptions.baseName;
+        this.logo = configOptions.logo;
 
     },
     initializing : {

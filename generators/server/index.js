@@ -30,12 +30,6 @@ module.exports = JhipsterServerGenerator.extend({
 
         configOptions = this.options.configOptions || {};
 
-        // This adds support for a `--base-name` flag
-        this.option('base-name', {
-            desc: 'Provide base name for the application, this will be overwritten if base name is found in .yo-rc file',
-            type: String
-        });
-
         // This adds support for a `--[no-]client-hook` flag
         this.option('client-hook', {
             desc: 'Enable gulp and bower hook from maven/gradle build',
@@ -64,31 +58,16 @@ module.exports = JhipsterServerGenerator.extend({
             defaults: false
         });
 
-        // This adds support for a `--last-question` flag
-        this.option('last-question', {
-            desc: 'Pass the last question number asked',
-            type: Number
-        });
-
-        // This adds support for a `--[no-]logo` flag
-        this.option('logo', {
-            desc: 'Disable or enable Jhipster logo',
-            type: Boolean,
-            defaults: true
-        });
-
-        var skipClient = this.config.get('skipClient');
-        this.skipClient = skipClient || !this.options['client-hook'];
+        this.skipClient = !this.options['client-hook'] || configOptions.skipClient || this.config.get('skipClient');
+        this.skipUserManagement = configOptions.skipUserManagement ||  this.config.get('skipUserManagement');
         this.enableTranslation = this.options['i18n'];
-        this.baseName = this.options['base-name'];
         this.testFrameworks = [];
-        var gatling = this.options['gatling'];
-        gatling &&  this.testFrameworks.push('gatling');
-        var cucumber = this.options['cucumber'];
-        cucumber &&  this.testFrameworks.push('cucumber');
-        var lastQuestion = this.options['last-question'] || configOptions.lastQuestion;
+        this.options['gatling'] &&  this.testFrameworks.push('gatling');
+        this.options['cucumber'] &&  this.testFrameworks.push('cucumber');
+        var lastQuestion = configOptions.lastQuestion;
         currentQuestion = lastQuestion ? lastQuestion : 0;
-        this.logo = this.options['logo'];
+        this.logo = configOptions.logo;
+        this.baseName = configOptions.baseName;
 
     },
     initializing : {

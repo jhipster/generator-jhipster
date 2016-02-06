@@ -156,8 +156,14 @@ module.exports = JhipsterGenerator.extend({
 
     configuring: {
         setup : function () {
+            configOptions.baseName = this.baseName;
+            configOptions.logo = false;
             if(this.skipClient){
+                // defaults to use when skipping client
                 configOptions.enableTranslation = this.options['i18n'];
+            }
+            if(this.skipServer){
+                // defaults to use when skipping server
             }
         },
 
@@ -166,8 +172,6 @@ module.exports = JhipsterGenerator.extend({
 
             this.composeWith('jhipster:server', {
                 options: {
-                    'logo': false,
-                    'base-name' : this.baseName,
                     'client-hook': !this.skipClient,
                     configOptions : configOptions
                 }
@@ -181,8 +185,6 @@ module.exports = JhipsterGenerator.extend({
 
             this.composeWith('jhipster:client', {
                 options: {
-                    'logo': false,
-                    'base-name' : this.baseName,
                     'skip-install': this.options['skip-install'],
                     configOptions : configOptions
                 }
