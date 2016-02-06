@@ -119,7 +119,7 @@ module.exports = JhipsterGenerator.extend({
                 ],
                 default: 'monolith'
             }, function (prompt) {
-                this.applicationType = prompt.applicationType;
+                this.applicationType = configOptions.applicationType = prompt.applicationType;
                 done();
             }.bind(this));
         },
@@ -135,7 +135,6 @@ module.exports = JhipsterGenerator.extend({
 
     configuring: {
         setup : function () {
-            configOptions.applicationType = this.applicationType;
             if(this.skipClient){
                 configOptions.enableTranslation = this.options['i18n'];
             }

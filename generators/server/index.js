@@ -190,6 +190,7 @@ module.exports = JhipsterServerGenerator.extend({
             }
 
             var done = this.async();
+            var applicationType = this.applicationType;
             var prompts = [
                 {
                     type: 'input',
@@ -204,7 +205,7 @@ module.exports = JhipsterServerGenerator.extend({
                 },
                 {
                     when: function (response) {
-                        return response.applicationType == 'monolith';
+                        return applicationType == 'monolith';
                     },
                     type: 'list',
                     name: 'authenticationType',
