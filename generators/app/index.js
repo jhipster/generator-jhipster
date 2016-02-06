@@ -30,6 +30,20 @@ module.exports = JhipsterGenerator.extend({
             defaults: false
         });
 
+        // This adds support for a `--skip-server` flag
+        this.option('skip-server', {
+            desc: 'Skip the server side app generation',
+            type: Boolean,
+            defaults: false
+        });
+
+        // This adds support for a `--skip-user-management` flag
+        this.option('skip-user-management', {
+            desc: 'Skip the user management module during app generation',
+            type: Boolean,
+            defaults: false
+        });
+
         // This adds support for a `--[no-]i18n` flag
         this.option('i18n', {
             desc: 'Disable or enable i18n when skipping client side generation, has no effect otherwise',
@@ -43,15 +57,22 @@ module.exports = JhipsterGenerator.extend({
             type: Boolean,
             defaults: false
         });
-        var skipClient = this.config.get('skipClient');
-        this.skipClient = this.options['skip-client'] || skipClient;
-        configOptions.skipClient = this.skipClient;
+
+        this.skipClient = configOptions.skipClient = this.options['skip-client'] ||  this.config.get('skipClient');
+        this.skipServer = configOptions.skipServer = this.options['skip-server'] ||  this.config.get('skipServer');
+        this.skipUserManagement = configOptions.skipUserManagement = this.options['skip-user-management'] ||  this.config.get('skipUserManagement');
         this.withEntities = this.options['with-entities'];
 
     },
     initializing : {
         displayLogo : function () {
             this.printJHipsterLogo();
+        },
+
+        validate : function () {
+            if(this.skipServer && this.skipClient){
+                this.env.error(chalk.red('You can not pass both ' + chalk.yellow('--skip-client') + ' and ' + chalk.yellow('--skip-server') + ' together'));
+            }
         },
 
         setupVars : function () {
@@ -141,6 +162,8 @@ module.exports = JhipsterGenerator.extend({
         },
 
         composeServer : function () {
+            if(this.skipServer) return;
+
             this.composeWith('jhipster:server', {
                 options: {
                     'logo': false,
@@ -175,12 +198,16 @@ module.exports = JhipsterGenerator.extend({
             if(this.existingProject){
                 return;
             }
-            var choices = [
-                {name: 'Gatling', value: 'gatling'},
-                {name: 'Cucumber', value: 'cucumber'}
-            ];
+            var choices = [];
+            if(!this.skipServer){
+                // all server side test frameworks should be addded here
+                choices.push(
+                    {name: 'Gatling', value: 'gatling'},
+                    {name: 'Cucumber', value: 'cucumber'}
+                );
+            }
             if(!this.skipClient){
-                // all client side test frameworks are addded here
+                // all client side test frameworks should be addded here
                 choices.push(
                     {name: 'Protractor', value: 'protractor'}
                 );
@@ -215,9 +242,10 @@ module.exports = JhipsterGenerator.extend({
             this.config.set('applicationType', this.applicationType);
             this.config.set('baseName', this.baseName);
             this.config.set('testFrameworks', this.testFrameworks);
-            if(this.skipClient){
-                this.config.set('skipClient', true);
-            }
+            this.skipClient && this.config.set('skipClient', true);
+            this.skipServer && this.config.set('skipServer', true);
+            this.skipUserManagement && this.config.set('skipUserManagement', true);
+
         }
     },
 
@@ -242,7 +270,7 @@ module.exports = JhipsterGenerator.extend({
     },
 
     end: function () {
-        this.log(chalk.green.bold('\nWeb app generated succesfully.\n'));
+        return;
     }
 
 });
