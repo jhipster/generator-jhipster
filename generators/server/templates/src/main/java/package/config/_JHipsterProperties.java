@@ -19,8 +19,6 @@ public class JHipsterProperties {
 
     private final Http http = new Http();
 
-    private final Datasource datasource = new Datasource();
-
     private final Cache cache = new Cache();
 
     private final Mail mail = new Mail();
@@ -44,10 +42,6 @@ public class JHipsterProperties {
 
     public Http getHttp() {
         return http;
-    }
-
-    public Datasource getDatasource() {
-        return datasource;
     }
 
     public Cache getCache() {
@@ -132,49 +126,6 @@ public class JHipsterProperties {
             public void setTimeToLiveInDays(int timeToLiveInDays) {
                 this.timeToLiveInDays = timeToLiveInDays;
             }
-        }
-    }
-
-    public static class Datasource {
-
-        private boolean cachePrepStmts = true;
-
-        private int prepStmtCacheSize = 250;
-
-        private int prepStmtCacheSqlLimit = 2048;
-
-        private boolean useServerPrepStmts = true;
-
-        public boolean isCachePrepStmts() {
-            return cachePrepStmts;
-        }
-
-        public void setCachePrepStmts(boolean cachePrepStmts) {
-            this.cachePrepStmts = cachePrepStmts;
-        }
-
-        public int getPrepStmtCacheSize() {
-            return prepStmtCacheSize;
-        }
-
-        public void setPrepStmtCacheSize(int prepStmtCacheSize) {
-            this.prepStmtCacheSize = prepStmtCacheSize;
-        }
-
-        public int getPrepStmtCacheSqlLimit() {
-            return prepStmtCacheSqlLimit;
-        }
-
-        public void setPrepStmtCacheSqlLimit(int prepStmtCacheSqlLimit) {
-            this.prepStmtCacheSqlLimit = prepStmtCacheSqlLimit;
-        }
-
-        public boolean isUseServerPrepStmts() {
-            return useServerPrepStmts;
-        }
-
-        public void setUseServerPrepStmts(boolean useServerPrepStmts) {
-            this.useServerPrepStmts = useServerPrepStmts;
         }
     }
 
