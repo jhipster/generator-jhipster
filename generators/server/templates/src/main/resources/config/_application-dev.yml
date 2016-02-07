@@ -35,15 +35,6 @@ spring:
     <%_ if (databaseType == 'sql') { _%>
     datasource:
         <%_ if (devDatabaseType == 'mysql') { _%>
-        driver-class-name: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
-        <%_ } else if (devDatabaseType == 'postgresql') { _%>
-        driver-class-name: org.postgresql.ds.PGSimpleDataSource
-        <%_ } else if (devDatabaseType == 'oracle') { _%>
-        driver-class-name: oracle.jdbc.pool.OracleDataSource
-        <%_ } else { _%>
-        driver-class-name: org.h2.jdbcx.JdbcDataSource
-        <%_ } _%>
-        <%_ if (devDatabaseType == 'mysql') { _%>
         url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8
         <%_ } else if (devDatabaseType == 'postgresql') { _%>
         url: jdbc:postgresql://localhost:5432/<%= baseName %>
