@@ -21,34 +21,64 @@
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
             </column><% for (fieldId in fields) {
-            var required = false;
+            var nullable = true;
             if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) {
-                required = true;
+                nullable = false;
             }
             var maxlength = 255;
             if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('maxlength') != -1) {
                 maxlength = fields[fieldId].fieldValidateRulesMaxlength;
             }
             var fieldType = fields[fieldId].fieldType;
-            var fieldTypeBlobContent = fields[fieldId].fieldTypeBlobContent;
-            if (fieldType == 'String' || fields[fieldId].fieldIsEnum) { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="varchar(<%= maxlength %>)"<% } else if (fieldType == 'Integer') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="integer"<% } else if (fieldType == 'Long') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bigint"<% } else if (fieldType == 'Float') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="${floatType}"<% } else if (fieldType == 'Double') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="double"<% } else if (fieldType == 'BigDecimal') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="decimal(10,2)"<% } else if (fieldType == 'LocalDate') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="date"<% } else if (fieldType == 'ZonedDateTime') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="timestamp"<% } else if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="blob" <% if (required == false) { %>/><% } else { %>>
-                <constraints nullable="false" />
-            </column><% } %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>_content_type" type="varchar(50)"<% } else if (fieldTypeBlobContent == 'text') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="clob"<% } else if (fieldType == 'Boolean') { %>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bit"<% } %><% if (required == false && !(fieldType == 'byte[]' && fieldTypeBlobContent != 'text')) {
-                 %>/><% } else { %>>
-                <constraints nullable="false" />
-            </column><% } %>
+            var fieldTypeBlobContent = fields[fieldId].fieldTypeBlobContent; %>
+            <%_ if (fieldType == 'String' || fields[fieldId].fieldIsEnum) { _%>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="varchar(<%= maxlength %>)">
+                <constraints nullable="<%= nullable %>" />
+            </column>
+            <%_ } else if (fieldType == 'Integer') { _%>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="integer">
+                <constraints nullable="<%= nullable %>" />
+            </column>
+            <%_ } else if (fieldType == 'Long') { _%>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bigint">
+                <constraints nullable="<%= nullable %>" />
+            </column>
+            <%_ } else if (fieldType == 'Float') { _%>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="${floatType}">
+                <constraints nullable="<%= nullable %>" />
+            </column>
+            <%_ } else if (fieldType == 'Double') { _%>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="double">
+                <constraints nullable="<%= nullable %>" />
+            </column>
+            <%_ } else if (fieldType == 'BigDecimal') { _%>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="decimal(10,2)">
+                <constraints nullable="<%= nullable %>" />
+            </column>
+            <%_ } else if (fieldType == 'LocalDate') { _%>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="date">
+                <constraints nullable="<%= nullable %>" />
+            </column>
+            <%_ } else if (fieldType == 'ZonedDateTime') { _%>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="timestamp">
+                <constraints nullable="<%= nullable %>" />
+            </column>
+            <%_ } else if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="blob">
+                <constraints nullable="<%= nullable %>" />
+            </column>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>_content_type" type="varchar(50)">
+                <constraints nullable="<%= nullable %>" />
+            </column>
+            <%_ } else if (fieldTypeBlobContent == 'text') { _%>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="clob">
+                <constraints nullable="<%= nullable %>" />
+            </column>
+            <%_ } else if (fieldType == 'Boolean') { _%>
+            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bit">
+                <constraints nullable="<%= nullable %>" />
+            </column>
+            <%_ } _%>
             <%
 
             } %><% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
