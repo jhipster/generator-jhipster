@@ -25,12 +25,11 @@ env:
     - JHIPSTER=app-gateway RUN_APP=0
     - JHIPSTER=app-hazelcast-cucumber
     - JHIPSTER=app-mongodb
-    - JHIPSTER=app-websocket PROTRACTOR=1
     - JHIPSTER=app-oauth2
     - JHIPSTER=app-jwt
     - JHIPSTER=app-mysql PROFILE=prod
     - JHIPSTER=app-psql-es-noi18n PROFILE=prod
-    - JHIPSTER=app-social
+    - JHIPSTER=app-social-websocket PROTRACTOR=1
 
 before_install:
   - sudo /etc/init.d/postgresql stop
