@@ -18,10 +18,9 @@ env:
     - JHIPSTER_SAMPLES=$JHIPSTER_TRAVIS/samples
     - JHIPSTER_SCRIPTS=$JHIPSTER_TRAVIS/scripts
   matrix:
-    - JHIPSTER=app-from-scratch JHIPSTER_NODE_CACHE=0 RUN_APP=0
+    - JHIPSTER=app-default-from-scratch JHIPSTER_NODE_CACHE=0
     - JHIPSTER=app-gradle RUN_APP=0
     - JHIPSTER=app-cassandra
-    - JHIPSTER=app-default
     - JHIPSTER=app-microservice RUN_APP=0
     - JHIPSTER=app-gateway RUN_APP=0
     - JHIPSTER=app-hazelcast-cucumber
