@@ -1,13 +1,13 @@
 {
   "generator-jhipster": {
-    "applicationType": "monolith",
-    "baseName": "sampleWebsocket",
+    "applicationType": "microservice",
+    "baseName": "sampleDefault",
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",
     "authenticationType": "session",
     "hibernateCache": "ehcache",
     "clusteredHttpSession": "no",
-    "websocket": "spring-websocket",
+    "websocket": "no",
     "databaseType": "sql",
     "devDatabaseType": "h2Disk",
     "prodDatabaseType": "mysql",
@@ -16,9 +16,9 @@
     "buildTool": "maven",
     "enableTranslation": true,
     "enableSocialSignIn": false,
-    "rememberMeKey": "9e08e1e17590675533a598f0dca7b75fb11d234a",
+    "rememberMeKey": "f19f0827c622eb9b81f5227a869ccd44932d78eb",
     "testFrameworks": [
-      "protractor"
+      "gatling"
     ]
   }
 }

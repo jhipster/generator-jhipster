@@ -1,22 +1,24 @@
 {
   "generator-jhipster": {
     "applicationType": "monolith",
-    "baseName": "sampleNoi18n",
+    "baseName": "samplePsqlEsNoi18n",
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",
     "authenticationType": "session",
-    "hibernateCache": "no",
+    "hibernateCache": "ehcache",
     "clusteredHttpSession": "no",
     "websocket": "no",
     "databaseType": "sql",
-    "devDatabaseType": "h2Memory",
-    "prodDatabaseType": "mysql",
-    "searchEngine": "no",
-    "useSass": true,
+    "devDatabaseType": "postgresql",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": "elasticsearch",
+    "useSass": false,
     "buildTool": "maven",
     "enableTranslation": false,
     "enableSocialSignIn": false,
-    "rememberMeKey": "4b8122638af186226b3586654df24089137e3fd9",
-    "testFrameworks": []
+    "rememberMeKey": "efaf561e5400af2877060b33324f34288d671c97",
+    "testFrameworks": [
+      "gatling"
+    ]
   }
 }
