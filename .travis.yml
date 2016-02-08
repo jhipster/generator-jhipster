@@ -20,7 +20,6 @@ env:
   matrix:
     - JHIPSTER=app-from-scratch JHIPSTER_NODE_CACHE=0 RUN_APP=0
     - JHIPSTER=app-gradle RUN_APP=0
-    - JHIPSTER=app-gulp
     - JHIPSTER=app-cassandra
     - JHIPSTER=app-default
     - JHIPSTER=app-hazelcast-cucumber
