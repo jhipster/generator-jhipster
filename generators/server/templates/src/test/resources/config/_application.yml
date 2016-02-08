@@ -13,7 +13,6 @@
 spring:
     <%_ if (databaseType == 'sql') { _%>
     datasource:
-        driver-class-name: org.h2.jdbcx.JdbcDataSource
         url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1
         name:
         username:
