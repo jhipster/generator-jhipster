@@ -1,6 +1,7 @@
 <% var keyPrefix = angularAppName + '.' + entityTranslationKey; %>
 <div>
     <h2><span translate="<%= keyPrefix %>.detail.title"><%= entityClass %></span> {{<%= entityInstance %>.id}}</h2>
+    <hr>
     <dl class="dl-horizontal">
         <%_ for (fieldId in fields) { _%>
         <dt><span translate="<%= keyPrefix %>.<%=fields[fieldId].fieldName%>"><%=fields[fieldId].fieldNameCapitalized%></dt></dt>
@@ -13,13 +14,14 @@
             <span>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%> | date:'medium'}}</span>
             <%_ } else if (fields[fieldId].fieldType == 'LocalDate') { _%>
             <span>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%> | date:'mediumDate'}}</span>
-            <%_ } else { _%>
-            <span>{{<%= entityInstance %>.<%=fields[fieldId].fieldName%>}}</span>
+            <%_ } else if (fields[fieldId].fieldTypeBlobContent != 'any') { _%>
+            <span>{{<%= entityInstance %>.<%=fields[fieldId].fieldName%>}}<span>
             <%_ } _%>
             <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
-            <div>{{<%= entityInstance %>.<%= fields[fieldId].fieldName %>ContentType}}  {{byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}</div>
+            <span>{{<%= entityInstance %>.<%= fields[fieldId].fieldName %>ContentType}}  {{byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}</span>
             <%_ } _%>
         </dd>
+        <hr>
         <%_ } _%>
         <%_ for (relationshipId in relationships) {
                 var relationshipType = relationships[relationshipId].relationshipType;
@@ -61,6 +63,7 @@
                 <%_ } _%>
             <%_ } _%>
         </dd>
+        <hr>
         <%_ } _%>
         <%_ } _%>
     </dl>
