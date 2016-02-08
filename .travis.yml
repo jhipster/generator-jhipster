@@ -23,6 +23,7 @@ env:
     - JHIPSTER=app-cassandra
     - JHIPSTER=app-default
     - JHIPSTER=app-microservice RUN_APP=0
+    - JHIPSTER=app-gateway RUN_APP=0
     - JHIPSTER=app-hazelcast-cucumber
     - JHIPSTER=app-mongodb
     - JHIPSTER=app-websocket PROTRACTOR=1
