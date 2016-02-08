@@ -30,55 +30,41 @@
                 maxlength = fields[fieldId].fieldValidateRulesMaxlength;
             }
             var fieldType = fields[fieldId].fieldType;
-            var fieldTypeBlobContent = fields[fieldId].fieldTypeBlobContent; %>
-            <%_ if (fieldType == 'String' || fields[fieldId].fieldIsEnum) { _%>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="varchar(<%= maxlength %>)">
+            var fieldTypeBlobContent = fields[fieldId].fieldTypeBlobContent;
+            var columnName = fields[fieldId].fieldNameUnderscored;
+            var columnType;
+            if (fieldType == 'String' || fields[fieldId].fieldIsEnum) {
+                columnType="varchar(" + maxlength + ")";
+            } else if (fieldType == 'Integer') {
+                columnType="integer";
+            } else if (fieldType == 'Long') {
+                columnType="bigint";
+            } else if (fieldType == 'Float') {
+                columnType="${floatType}";
+            } else if (fieldType == 'Double') {
+                columnType="double";
+            } else if (fieldType == 'BigDecimal') {
+                columnType="decimal(10,2)";
+            } else if (fieldType == 'LocalDate') {
+                columnType="date";
+            } else if (fieldType == 'ZonedDateTime') {
+                columnType="timestamp";
+            } else if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') {
+                columnType="blob";
+            } else if (fieldTypeBlobContent == 'text') {
+                columnType="clob";
+            } else if (fieldType == 'Boolean') {
+                columnType="bit";
+            }
+            %>
+            <column name="<%=columnName %>" type="<%=columnType %>">
                 <constraints nullable="<%= nullable %>" />
             </column>
-            <%_ } else if (fieldType == 'Integer') { _%>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="integer">
+            <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
+            <column name="<%=columnName %>_content_type" type="varchar(255)">
                 <constraints nullable="<%= nullable %>" />
             </column>
-            <%_ } else if (fieldType == 'Long') { _%>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bigint">
-                <constraints nullable="<%= nullable %>" />
-            </column>
-            <%_ } else if (fieldType == 'Float') { _%>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="${floatType}">
-                <constraints nullable="<%= nullable %>" />
-            </column>
-            <%_ } else if (fieldType == 'Double') { _%>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="double">
-                <constraints nullable="<%= nullable %>" />
-            </column>
-            <%_ } else if (fieldType == 'BigDecimal') { _%>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="decimal(10,2)">
-                <constraints nullable="<%= nullable %>" />
-            </column>
-            <%_ } else if (fieldType == 'LocalDate') { _%>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="date">
-                <constraints nullable="<%= nullable %>" />
-            </column>
-            <%_ } else if (fieldType == 'ZonedDateTime') { _%>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="timestamp">
-                <constraints nullable="<%= nullable %>" />
-            </column>
-            <%_ } else if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="blob">
-                <constraints nullable="<%= nullable %>" />
-            </column>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>_content_type" type="varchar(50)">
-                <constraints nullable="<%= nullable %>" />
-            </column>
-            <%_ } else if (fieldTypeBlobContent == 'text') { _%>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="clob">
-                <constraints nullable="<%= nullable %>" />
-            </column>
-            <%_ } else if (fieldType == 'Boolean') { _%>
-            <column name="<%=fields[fieldId].fieldNameUnderscored %>" type="bit">
-                <constraints nullable="<%= nullable %>" />
-            </column>
-            <%_ } _%>
+            <%_ }  _%>
             <%
 
             } %><% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
