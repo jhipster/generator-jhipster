@@ -15,5 +15,6 @@ angular.module('<%=angularAppName%>')
 
         <%_ if (fieldsContainBlob) { _%>
         $scope.byteSize = DataUtils.byteSize;
+        $scope.openFile = DataUtils.openFile;
         <%_ } _%>
     });

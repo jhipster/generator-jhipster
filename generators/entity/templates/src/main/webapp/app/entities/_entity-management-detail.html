@@ -3,22 +3,27 @@
     <h2><span translate="<%= keyPrefix %>.detail.title"><%= entityClass %></span> {{<%= entityInstance %>.id}}</h2>
     <hr>
     <dl class="dl-horizontal">
-        <%_ for (fieldId in fields) { _%>
-        <dt><span translate="<%= keyPrefix %>.<%=fields[fieldId].fieldName%>"><%=fields[fieldId].fieldNameCapitalized%></dt></dt>
+        <%_ for (fieldId in fields) {
+            var fieldName = fields[fieldId].fieldName;
+            var fieldType = fields[fieldId].fieldType;
+            var fieldTypeBlobContent = fields[fieldId].fieldTypeBlobContent; _%>
+        <dt><span translate="<%= keyPrefix %>.<%= fieldName %>"><%= fields[fieldId].fieldNameCapitalized %></dt></dt>
         <dd>
             <%_ if (fields[fieldId].fieldIsEnum) { _%>
-            <span translate="{{'<%= angularAppName %>.<%= fields[fieldId].fieldType %>.' + <%= entityInstance %>.<%= fields[fieldId].fieldName %>}}">{{<%= entityInstance %>.<%= fields[fieldId].fieldName %>}}</span>
-            <%_ } else if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'image') { _%>
-            <img data-ng-src="{{'data:' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-width: 100%;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/>
-            <%_ } else if (fields[fieldId].fieldType == 'ZonedDateTime' || fields[fieldId].fieldType == 'Date') { _%>
-            <span>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%> | date:'medium'}}</span>
-            <%_ } else if (fields[fieldId].fieldType == 'LocalDate') { _%>
-            <span>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%> | date:'mediumDate'}}</span>
-            <%_ } else if (fields[fieldId].fieldTypeBlobContent != 'any') { _%>
-            <span>{{<%= entityInstance %>.<%=fields[fieldId].fieldName%>}}<span>
+            <span translate="{{'<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>}}">{{<%= entityInstance %>.<%= fieldName %>}}</span>
+            <%_ } else if (fieldType == 'byte[]' && fieldTypeBlobContent == 'image') { _%>
+            <img data-ng-src="{{'data:' + <%=entityInstance %>.<%= fieldName %>ContentType + ';base64,' + <%= entityInstance %>.<%= fieldName %>}}" style="max-width: 100%;" ng-if="<%= entityInstance %>.<%= fieldName %>"/>
+            <%_ } else if (fieldType == 'ZonedDateTime' || fieldType == 'Date') { _%>
+            <span>{{<%=entityInstance %>.<%= fieldName %> | date:'medium'}}</span>
+            <%_ } else if (fieldType == 'LocalDate') { _%>
+            <span>{{<%=entityInstance %>.<%= fieldName %> | date:'mediumDate'}}</span>
+            <%_ } else if (fieldType == 'byte[]' && fieldTypeBlobContent == 'any') { _%>
+            <a ng-click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" ng-if="<%= entityInstance %>.<%= fieldName %>" target="_blank">open</a>
+            <%_ } else { _%>
+            <span>{{<%= entityInstance %>.<%= fieldName %>}}<span>
             <%_ } _%>
-            <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
-            <span>{{<%= entityInstance %>.<%= fields[fieldId].fieldName %>ContentType}}  {{byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}</span>
+            <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
+            <div>{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</div>
             <%_ } _%>
         </dd>
         <hr>

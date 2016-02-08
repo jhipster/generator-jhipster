@@ -3,7 +3,7 @@
         $scope.reverse = true;
         $scope.page = 0;
         <%_ if (fieldsContainBlob) { _%>
-        $scope.abbreviate = DataUtils.abbreviate;
+        $scope.openFile = DataUtils.openFile;
         $scope.byteSize = DataUtils.byteSize;
         <%_ } _%>
         $scope.loadAll = function() {

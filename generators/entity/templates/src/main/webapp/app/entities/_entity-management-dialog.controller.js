@@ -60,7 +60,7 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>ManagementDi
         };
         <%_ if (fieldsContainBlob) { _%>
 
-        $scope.abbreviate = DataUtils.abbreviate;
+        $scope.openFile = DataUtils.openFile;
 
         $scope.byteSize = DataUtils.byteSize;
         <%_ } _%>
