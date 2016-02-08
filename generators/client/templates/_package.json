@@ -8,8 +8,7 @@
     "src/main/webapp/bower_components"
   ],
   "dependencies": {
-    "bower": "^1.6.3"<% if (testFrameworks.indexOf('protractor') > -1) { %>,
-    "protractor": "^2.5.1"<% } %>
+    "bower": "^1.6.3"
   },
   "devDependencies": {
     "browser-sync": "2.10.0",
@@ -25,6 +24,7 @@
     "gulp-flatten": "0.2.0",
     "gulp-ng-annotate": "1.1.0",
     "gulp-ng-constant-fork": "0.4.1",<% if (testFrameworks.indexOf('protractor') > -1) { %>
+    "protractor": "^2.5.1",
     "gulp-protractor": "1.0.0",
     "jasmine-reporters": "^2.0.6",
     "protractor-jasmine2-screenshot-reporter": "0.1.7",<% } %>
