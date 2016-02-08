@@ -22,6 +22,7 @@ env:
     - JHIPSTER=app-gradle RUN_APP=0
     - JHIPSTER=app-cassandra
     - JHIPSTER=app-default
+    - JHIPSTER=app-microservice RUN_APP=0
     - JHIPSTER=app-hazelcast-cucumber
     - JHIPSTER=app-mongodb
     - JHIPSTER=app-websocket PROTRACTOR=1
@@ -31,6 +32,7 @@ env:
     - JHIPSTER=app-mysql PROFILE=prod
     - JHIPSTER=app-psql-es PROFILE=prod
     - JHIPSTER=app-social
+
 before_install:
   - sudo /etc/init.d/postgresql stop
   - export DISPLAY=:99.0
