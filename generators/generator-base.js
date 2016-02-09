@@ -1183,7 +1183,7 @@ Generator.prototype.isJhipsterVersionLessThan = function(version) {
     return semver.lt(jhipsterVersion, version);
 }
 
-Generator.prototype.getDefaultAppName = function(text) {
+Generator.prototype.getDefaultAppName = function() {
     return (/^[a-zA-Z0-9_]+$/.test(path.basename(process.cwd())))?path.basename(process.cwd()):'jhipster';
 };
 
