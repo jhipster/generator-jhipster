@@ -95,6 +95,11 @@
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("X-Auth-Token", authToken, "header");
                     window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
                 <% } %>
+                <% if (authenticationType == 'jwt') { %>
+                    var authToken = JSON.parse(localStorage.getItem("ls.authentication-token"));
+                    var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization", "Bearer " + authToken, "header");
+                    window.swaggerUi.api.clientAuthorizations.add("bearer", apiKeyAuth);
+                <% } %>
                 }
 
                 function getCSRF() {
