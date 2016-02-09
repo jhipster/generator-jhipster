@@ -61,7 +61,12 @@ module.exports = EntityGenerator.extend({
             type: Boolean,
             defaults: false
         });
+        this.option('table-name', {
+           desc: 'specify table name that will be used by the entity',
+            type: String
+        });
         this.regenerate = this.options['regenerate'];
+        this.tableName = this.options['table-name'];
     },
     initializing: {
         getConfig: function(args) {
@@ -110,18 +115,44 @@ module.exports = EntityGenerator.extend({
                 this.env.error(chalk.red('The entity name cannot end with \'Detail\''));
             } else if (RESERVED_WORDS_JAVA.indexOf(this.name.toUpperCase()) != -1) {
                 this.env.error(chalk.red('The entity name cannot contain a Java reserved keyword'));
-            } else if (prodDatabaseType == 'mysql' && RESERVED_WORDS_MYSQL.indexOf(this.name.toUpperCase()) != -1) {
-                this.env.error(chalk.red('The entity name cannot contain a MySQL reserved keyword'));
-            } else if (prodDatabaseType == 'postgresql' && RESERVED_WORDS_POSGRES.indexOf(this.name.toUpperCase()) != -1) {
-                this.env.error(chalk.red('The entity name cannot contain a PostgreSQL reserved keyword'));
-            } else if (prodDatabaseType == 'cassandra' && RESERVED_WORDS_CASSANDRA.indexOf(this.name.toUpperCase()) != -1) {
-                this.env.error(chalk.red('The entity name cannot contain a Cassandra reserved keyword'));
-            } else if (prodDatabaseType == 'oracle' && RESERVED_WORDS_ORACLE.indexOf(this.name.toUpperCase()) != -1) {
-                this.env.error(chalk.red('The entity name cannot contain a Oracle reserved keyword'));
-            } else if (prodDatabaseType == 'oracle' && _s.underscored(this.name).length > 26) {
-                this.env.error(chalk.red('The entity name is too long for Oracle, try a shorter name'));
-            } else if (prodDatabaseType == 'mongodb' && RESERVED_WORDS_MONGO.indexOf(this.name.toUpperCase()) != -1) {
-                this.env.error(chalk.red('The entity name cannot contain a MongoDB reserved keyword'));
+            } else if (_.isUndefined(this.tableName)) {
+                if (prodDatabaseType == 'mysql' && RESERVED_WORDS_MYSQL.indexOf(this.name.toUpperCase()) != -1) {
+                    this.env.error(chalk.red('The entity name cannot contain a MySQL reserved keyword'));
+                } else if (prodDatabaseType == 'postgresql' && RESERVED_WORDS_POSGRES.indexOf(this.name.toUpperCase()) != -1) {
+                    this.env.error(chalk.red('The entity name cannot contain a PostgreSQL reserved keyword'));
+                } else if (prodDatabaseType == 'cassandra' && RESERVED_WORDS_CASSANDRA.indexOf(this.name.toUpperCase()) != -1) {
+                    this.env.error(chalk.red('The entity name cannot contain a Cassandra reserved keyword'));
+                } else if (prodDatabaseType == 'oracle' && RESERVED_WORDS_ORACLE.indexOf(this.name.toUpperCase()) != -1) {
+                    this.env.error(chalk.red('The entity name cannot contain a Oracle reserved keyword'));
+                } else if (prodDatabaseType == 'oracle' && _s.underscored(this.name).length > 26) {
+                    this.env.error(chalk.red('The entity name is too long for Oracle, try a shorter name'));
+                } else if (prodDatabaseType == 'mongodb' && RESERVED_WORDS_MONGO.indexOf(this.name.toUpperCase()) != -1) {
+                    this.env.error(chalk.red('The entity name cannot contain a MongoDB reserved keyword'));
+                }
+            }
+        },
+
+        validateTableName: function() {
+            if (!_.isUndefined(this.tableName)) {
+                databaseType = this.databaseType;
+                prodDatabaseType = this.prodDatabaseType;
+                if (!(/^([a-zA-Z0-9_]*)$/.test(this.tableName))) {
+                    this.env.error(chalk.red('The table name cannot contain special characters'));
+                } else if (this.tableName == '') {
+                    this.env.error(chalk.red('The table name cannot be empty'));
+                } else if (prodDatabaseType == 'mysql' && RESERVED_WORDS_MYSQL.indexOf(this.tableName.toUpperCase()) != -1) {
+                    this.env.error(chalk.red('The table name cannot contain a MySQL reserved keyword'));
+                } else if (prodDatabaseType == 'postgresql' && RESERVED_WORDS_POSGRES.indexOf(this.tableName.toUpperCase()) != -1) {
+                    this.env.error(chalk.red('The table name cannot contain a PostgreSQL reserved keyword'));
+                } else if (prodDatabaseType == 'cassandra' && RESERVED_WORDS_CASSANDRA.indexOf(this.tableName.toUpperCase()) != -1) {
+                    this.env.error(chalk.red('The table name cannot contain a Cassandra reserved keyword'));
+                } else if (prodDatabaseType == 'oracle' && RESERVED_WORDS_ORACLE.indexOf(this.tableName.toUpperCase()) != -1) {
+                    this.env.error(chalk.red('The table name cannot contain a Oracle reserved keyword'));
+                } else if (prodDatabaseType == 'oracle' && _s.underscored(this.tableName).length > 26) {
+                    this.env.error(chalk.red('The table name is too long for Oracle, try a shorter name'));
+                } else if (prodDatabaseType == 'mongodb' && RESERVED_WORDS_MONGO.indexOf(this.tableName.toUpperCase()) != -1) {
+                    this.env.error(chalk.red('The table name cannot contain a MongoDB reserved keyword'));
+                }
             }
         },
 
@@ -1459,7 +1490,11 @@ module.exports = EntityGenerator.extend({
             this.entityClassPlural = pluralize(this.entityClass);
             this.entityInstance = _s.decapitalize(this.name);
             this.entityInstancePlural = pluralize(this.entityInstance);
-            this.entityTableName = _s.underscored(this.name).toLowerCase();
+            if (_.isUndefined(this.tableName)) {
+                this.entityTableName = _s.underscored(this.name).toLowerCase();
+            } else {
+                this.entityTableName = _s.underscored(this.tableName).toLowerCase();
+            }
             this.entityApiUrl = entityNamePluralizedAndSpinalCased;
 
             this.entityFolderName = entityNameSpinalCased;
