@@ -4,25 +4,25 @@
     "appPath": "src/main/webapp",
     "testPath": "src/test/javascript/spec",
     "dependencies": {
-        "angular": "1.4.8",
-        "angular-aria": "1.4.8",
+        "angular": "1.4.9",
+        "angular-aria": "1.4.9",
         "angular-bootstrap": "1.1.2",
         "bootstrap-ui-datetime-picker": "2.2.0",
         "angular-cache-buster": "0.4.3",
-        "angular-cookies": "1.4.8",
+        "angular-cookies": "1.4.9",
         <%_ if (enableTranslation) { _%>
         "angular-dynamic-locale": "0.1.28",
-        "angular-i18n": "1.4.8",
+        "angular-i18n": "1.4.9",
         <%_ } _%>
         "angular-local-storage": "0.2.3",
         "angular-loading-bar": "0.8.0",
-        "angular-resource": "1.4.8",
-        "angular-sanitize": "1.4.8",
+        "angular-resource": "1.4.9",
+        "angular-sanitize": "1.4.9",
         <%_ if (enableTranslation) { _%>
-        "angular-translate": "2.8.1",
-        "angular-translate-interpolation-messageformat": "2.8.1",
-        "angular-translate-loader-partial": "2.8.1",
-        "angular-translate-storage-cookie": "2.8.1",
+        "angular-translate": "2.9.0",
+        "angular-translate-interpolation-messageformat": "2.9.0",
+        "angular-translate-loader-partial": "2.9.0",
+        "angular-translate-storage-cookie": "2.9.0",
         <%_ } _%>
         "angular-ui-router": "0.2.15",
         <%_ if (useSass) { _%>
@@ -42,8 +42,8 @@
         "swagger-ui": "2.1.3"
     },
     "devDependencies": {
-        "angular-mocks": "1.4.8",
-        "angular-scenario": "1.4.8"
+        "angular-mocks": "1.4.9",
+        "angular-scenario": "1.4.9"
     },
     <%_ if (!useSass) { _%>
     "overrides": {
@@ -57,8 +57,8 @@
     },
     <%_ } _%>
     "resolutions": {
-        "angular": "1.4.8",
-        "angular-cookies": "1.4.8",
+        "angular": "1.4.9",
+        "angular-cookies": "1.4.9",
         "jquery": "2.1.4"
     }
 }
