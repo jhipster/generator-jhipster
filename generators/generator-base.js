@@ -1192,12 +1192,15 @@ Generator.prototype.contains = _.contains;
 Generator.prototype.formatAsClassJavadoc = function(text) {
     return '/**' + wordwrap(text, WORD_WRAP_WIDTH - 4, '\n * ', false) + '\n */';
 };
+
 Generator.prototype.formatAsFieldJavadoc = function(text) {
     return '    /**' + wordwrap(text, WORD_WRAP_WIDTH - 8, '\n     * ', false) + '\n     */';
 };
+
 Generator.prototype.formatAsApiModel = function(text) {
     return wordwrap(text.replace(/\\/g, '\\\\').replace(/\"/g, '\\\"'), WORD_WRAP_WIDTH - 9, '"\n    + "', true)
 };
+
 Generator.prototype.formatAsApiModelProperty = function(text) {
     return wordwrap(text.replace(/\\/g, '\\\\').replace(/\"/g, '\\\"'), WORD_WRAP_WIDTH - 13, '"\n        + "', true)
 };
