@@ -1,0 +1,56 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "manyToOneEntity",
+            "otherEntityName": "relationshipTestManyToOneEntity",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "relationshipTestEntity"
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "manyToManyEntity",
+            "otherEntityName": "relationshipTestManyToManyEntity",
+            "relationshipType": "many-to-many",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "relationshipTestEntity"
+        },
+        {
+            "relationshipId": 3,
+            "relationshipName": "oneToOneEntity",
+            "otherEntityName": "relationshipTestOneToOneEntity",
+            "relationshipType": "one-to-one",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "relationshipTestEntity"
+        },
+        {
+            "relationshipId": 4,
+            "relationshipName": "userOneToManyEntity",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "login"
+        },
+        {
+            "relationshipId": 5,
+            "relationshipName": "userManyToManyEntity",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "login",
+            "ownerSide": true
+        },
+        {
+            "relationshipId": 6,
+            "relationshipName": "userOneToOneEntity",
+            "otherEntityName": "user",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "login",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "parent"
+        }
+    ],
+    "fields": [],
+    "changelogDate": "20160208210109",
+    "dto": "no",
+    "service": "no",
+    "pagination": "serviceClass"
+}
