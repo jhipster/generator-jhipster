@@ -941,8 +941,8 @@
                                     <action>
                                         <ignore/>
                                     </action>
-                                </pluginExecution>
-                            </pluginExecutions><% } %>
+                                </pluginExecution><% } %>
+                            </pluginExecutions>
                         </lifecycleMappingMetadata>
                     </configuration>
                 </plugin>
@@ -980,8 +980,8 @@
                     <artifactId>spring-boot-starter-tomcat</artifactId>
                 </dependency>
             </dependencies>
-            <build><% if(!skipClient) {%>
-                <plugins>
+            <build>
+                <plugins><% if(!skipClient) {%>
                     <plugin>
                         <groupId>com.github.trecloux</groupId>
                         <artifactId>yeoman-maven-plugin</artifactId>
