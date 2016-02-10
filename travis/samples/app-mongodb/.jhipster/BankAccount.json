@@ -48,7 +48,7 @@
         },
         {
             "fieldId": 9,
-            "fieldName": "isActive",
+            "fieldName": "active",
             "fieldType": "Boolean"
         },
         {
