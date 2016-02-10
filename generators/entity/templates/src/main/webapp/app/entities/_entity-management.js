@@ -57,7 +57,7 @@ angular.module('<%=angularAppName%>')
                 parent: '<%= entityStateName %>',
                 url: '/new',
                 data: {
-                    authorities: ['ROLE_USER'],
+                    authorities: ['ROLE_USER']
                 },
                 onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                     $uibModal.open({
@@ -85,7 +85,7 @@ angular.module('<%=angularAppName%>')
                         $state.go('<%= entityStateName %>', null, { reload: true });
                     }, function() {
                         $state.go('<%= entityStateName %>');
-                    })
+                    });
                 }]
             })
             .state('<%= entityStateName %>.edit', {
@@ -108,7 +108,7 @@ angular.module('<%=angularAppName%>')
                         $state.go('<%= entityStateName %>', null, { reload: true });
                     }, function() {
                         $state.go('^');
-                    })
+                    });
                 }]
             })
             .state('<%= entityStateName %>.delete', {
@@ -131,7 +131,7 @@ angular.module('<%=angularAppName%>')
                         $state.go('<%= entityStateName %>', null, { reload: true });
                     }, function() {
                         $state.go('^');
-                    })
+                    });
                 }]
             });
     });
