@@ -212,21 +212,6 @@
             "fieldValidateRules": [
                 "required"
             ]
-        },
-        {
-            "fieldId": 28,
-            "fieldName": "enumField",
-            "fieldType": "EnumFieldClass",
-            "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3"
-        },
-        {
-            "fieldId": 29,
-            "fieldName": "enumRequiredField",
-            "fieldType": "EnumRequiredFieldClass",
-            "fieldValues": "ENUM_VALUE_1,ENUM_VALUE_2,ENUM_VALUE_3",
-            "fieldValidateRules": [
-                "required"
-            ]
         }
     ],
     "changelogDate": "20160208184031",
