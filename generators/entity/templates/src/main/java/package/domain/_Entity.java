@@ -160,7 +160,11 @@ public class <%= entityClass %> implements Serializable {
     }
 <% for (fieldId in fields) { %>
     <%_ if (fields[fieldId].fieldTypeBlobContent != 'text') { _%>
+        <%_ if (fields[fieldId].fieldType.toLowerCase() == 'boolean') { _%>
+    public <%= fields[fieldId].fieldType %> is<%= fields[fieldId].fieldInJavaBeanMethod %>() {
+        <%_ } else { _%>
     public <%= fields[fieldId].fieldType %> get<%= fields[fieldId].fieldInJavaBeanMethod %>() {
+        <%_ } _%>
     <%_ } else { _%>
     public String get<%= fields[fieldId].fieldInJavaBeanMethod %>() {
     <%_ } _%>
