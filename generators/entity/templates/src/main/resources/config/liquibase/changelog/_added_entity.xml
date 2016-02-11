@@ -85,7 +85,7 @@
             relationshipName = relationships[relationshipId].relationshipName,
             ownerSide = relationships[relationshipId].ownerSide,
             otherEntityName = relationships[relationshipId].otherEntityName;
-            if ((relationshipType == 'many-to-one') || ((relationshipType == 'one-to-one')) && (ownerSide == true)) {
+            if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true)) {
             var constraintName = 'fk_' + name.toLowerCase() + '_' + relationshipName.toLowerCase() + '_id';
             if(prodDatabaseType === 'oracle' && constraintName.length > 30) {
                 constraintName = 'fk_' + name.toLowerCase().substring(0, 3) + '_' + relationshipName.toLowerCase().substring(0, 3) + '_id';
