@@ -1319,7 +1319,7 @@ module.exports = EntityGenerator.extend({
             this.fs.writeJSON(this.filename, this.data, null, 4);
         },
 
-        LoadInMemoryData: function() {
+        loadInMemoryData: function() {
 
             // Load in-memory data for fields
             for (var idx in this.fields) {
