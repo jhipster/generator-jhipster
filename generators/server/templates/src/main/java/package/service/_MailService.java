@@ -21,6 +21,7 @@ import javax.mail.internet.MimeMessage;
 import java.util.Locale;
 
 /**
+ * <p>
  * Service for sending e-mails.
  * <p/>
  * <p>

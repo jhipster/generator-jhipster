@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * <p>
  * Service for managing audit events.
  * <p/>
  * <p>
