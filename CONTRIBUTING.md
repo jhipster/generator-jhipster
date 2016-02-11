@@ -211,7 +211,7 @@ Sub templates should be named with the `ejs` extension because it's the default 
 
     <%- include field_validators -%>
 
-This staement means that [_Entity.java](entity/templates/src/main/java/package/domain/_Entity.java) template includes [field_validators.ejs](entity/templates/src/main/java/package/domain/field_validators.ejs) sub template.
+This statement means that [_Entity.java](generators/entity/templates/src/main/java/package/domain/_Entity.java) template includes [field_validators.ejs](generators/entity/templates/src/main/java/package/domain/field_validators.ejs) sub template.
 
 Sub templates can be unit tested.
 
