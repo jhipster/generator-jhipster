@@ -249,10 +249,7 @@ public class <%= entityClass %> implements Serializable {
     public String toString() {
         return "<%= entityClass %>{" +
             "id=" + id +
-            <%_ for (fieldId in fields) {
-                var fieldType = fields[fieldId].fieldType;
-                var fieldTypeBlobContent = fields[fieldId].fieldTypeBlobContent;
-                var fieldName = fields[fieldId].fieldName; _%>
+            <%_ for (fieldId in fields) { _%>
             ", <%= fieldName %>='" + <%= fieldName %> + "'" +
                 <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
             ", <%= fieldName %>ContentType='" + <%= fieldName %>ContentType + "'" +
