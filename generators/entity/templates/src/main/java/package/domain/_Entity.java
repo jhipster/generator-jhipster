@@ -135,7 +135,7 @@ public class <%= entityClass %> implements Serializable {
     private <%= otherEntityNameCapitalized %> <%= relationshipFieldName %>;
 
     <%_ } else if (relationshipType == 'many-to-many') { _%>
-    @ManyToMany<% if (otherEntityNameCapitalized == false) { %>(mappedBy = "<%= otherEntityRelationshipName %>s")
+    @ManyToMany<% if (ownerSide == false) { %>(mappedBy = "<%= otherEntityRelationshipName %>s")
     @JsonIgnore
     <%_     } else { _%>
 
@@ -143,7 +143,7 @@ public class <%= entityClass %> implements Serializable {
             if (hibernateCache != 'no') { _%>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     <%_     }
-            if (otherEntityNameCapitalized == true) { _%>
+            if (ownerSide == true) { _%>
     @JoinTable(name = "<%= joinTableName %>",
                joinColumns = @JoinColumn(name="<%= getColumnName(name) %>s_id", referencedColumnName="ID"),
                inverseJoinColumns = @JoinColumn(name="<%= getColumnName(relationships[relationshipId].relationshipName) %>s_id", referencedColumnName="ID"))
@@ -151,7 +151,7 @@ public class <%= entityClass %> implements Serializable {
     private Set<<%= otherEntityNameCapitalized %>> <%= relationshipFieldName %>s = new HashSet<>();
 
     <%_ } else { _%>
-    <%_     if (otherEntityNameCapitalized) { _%>
+    <%_     if (ownerSide) { _%>
     @OneToOne
     @JoinColumn(unique = true)
     <%_    } else { _%>
