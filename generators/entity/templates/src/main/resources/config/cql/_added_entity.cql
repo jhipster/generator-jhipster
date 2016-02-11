@@ -1,17 +1,14 @@
 
 CREATE TABLE IF NOT EXISTS <%= entityInstance %> (
-    id uuid,<% for (fieldId in fields) {
-        var fieldType = fields[fieldId].fieldType;
-        var fieldName = fields[fieldId].fieldName;
-        if (fieldType == 'UUID') { %>
-    <%= fieldName %> uuid,<% } else if (fieldType == 'String') { %>
-    <%= fieldName %> text,<% } else if (fieldType == 'Integer') { %>
-    <%= fieldName %> int,<% } else if (fieldType == 'Long') { %>
-    <%= fieldName %> bigint,<% } else if (fieldType == 'Float') { %>
-    <%= fieldName %> float,<% } else if (fieldType == 'Double') { %>
-    <%= fieldName %> double,<% } else if (fieldType == 'BigDecimal') { %>
-    <%= fieldName %> decimal,<% } else if (fieldType == 'Date') { %>
-    <%= fieldName %> timestamp,<% } else if (fieldType == 'Boolean') { %>
-    <%= fieldName %> boolean,<% } } %>
+    id uuid,<% for (fieldId in fields) { %><% if (fields[fieldId].fieldType == 'UUID') { %>
+    <%= fields[fieldId].fieldName %> uuid,<% } else if (fields[fieldId].fieldType == 'String') { %>
+    <%= fields[fieldId].fieldName %> text,<% } else if (fields[fieldId].fieldType == 'Integer') { %>
+    <%= fields[fieldId].fieldName %> int,<% } else if (fields[fieldId].fieldType == 'Long') { %>
+    <%= fields[fieldId].fieldName %> bigint,<% } else if (fields[fieldId].fieldType == 'Float') { %>
+    <%= fields[fieldId].fieldName %> float,<% } else if (fields[fieldId].fieldType == 'Double') { %>
+    <%= fields[fieldId].fieldName %> double,<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
+    <%= fields[fieldId].fieldName %> decimal,<% } else if (fields[fieldId].fieldType == 'Date') { %>
+    <%= fields[fieldId].fieldName %> timestamp,<% } else if (fields[fieldId].fieldType == 'Boolean') { %>
+    <%= fields[fieldId].fieldName %> boolean,<% } } %>
     PRIMARY KEY(id)
 );
