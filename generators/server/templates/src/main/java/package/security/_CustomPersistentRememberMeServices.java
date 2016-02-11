@@ -26,13 +26,10 @@ import java.util.Arrays;<% if (databaseType == 'cassandra') { %>
 import java.util.Date;<%}%>
 
 /**
- * <p>
  * Custom implementation of Spring Security's RememberMeServices.
  * <p/>
- * <p>
  * Persistent tokens are used by Spring Security to automatically log in users.
  * <p/>
- * <p>
  * This is a specific implementation of Spring Security's remember-me authentication, but it is much
  * more powerful than the standard implementations:
  * <ul>
@@ -41,7 +38,6 @@ import java.util.Date;<%}%>
  * <li>When a user logs out, only his current session is invalidated, and not all of his sessions</li>
  * </ul>
  * <p/>
- * <p>
  * This is inspired by:
  * <ul>
  * <li><a href="http://jaspan.com/improved_persistent_login_cookie_best_practice">Improved Persistent Login Cookie
@@ -49,7 +45,6 @@ import java.util.Date;<%}%>
  * <li><a href="https://github.com/blog/1661-modeling-your-app-s-user-session">Github's "Modeling your App's User Session"</a></li></li>
  * </ul>
  * <p/>
- * <p>
  * The main algorithm comes from Spring Security's PersistentTokenBasedRememberMeServices, but this class
  * couldn't be cleanly extended.
  * <p/>
