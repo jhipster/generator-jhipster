@@ -60,8 +60,14 @@ public class <%= entityClass %> implements Serializable {
     @ApiModelProperty(value = "<%- formatAsApiModelProperty(fields[fieldId].javadoc) %>")
     <%_ }
     var required = false;
-    if (fields[fieldId].fieldValidate == true) {
-        if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) {
+    var fieldValidate = fields[fieldId].fieldValidate;
+    var fieldValidateRules = fields[fieldId].fieldValidateRules;
+    var fieldType = fields[fieldId].fieldType;
+    var fieldTypeBlobContent = fields[fieldId].fieldTypeBlobContent;
+    var fieldName = fields[fieldId].fieldName;
+    var fieldNameUnderscored = fields[fieldId].fieldNameUnderscored;
+    if (fieldValidate == true) {
+        if (fieldValidate == true && fieldValidateRules.indexOf('required') != -1) {
             required = true;
         } _%>
     <%- include field_validators -%>
@@ -70,37 +76,41 @@ public class <%= entityClass %> implements Serializable {
         if (fields[fieldId].fieldIsEnum) { _%>
     @Enumerated(EnumType.STRING)
         <%_ }
-        if (fields[fieldId].fieldType == 'byte[]') { _%>
+        if (fieldType == 'byte[]') { _%>
     @Lob
         <%_ }
-        if (fields[fieldId].fieldType == 'LocalDate' || fields[fieldId].fieldType == 'ZonedDateTime') { _%>
-    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>"<% if (required) { %>, nullable = false<% } %>)
-        <%_ } else if (fields[fieldId].fieldType == 'BigDecimal') { _%>
-    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>", precision=10, scale=2<% if (required) { %>, nullable = false<% } %>)
+        if (fieldType == 'LocalDate' || fieldType == 'ZonedDateTime') { _%>
+    @Column(name = "<%=fieldNameUnderscored %>"<% if (required) { %>, nullable = false<% } %>)
+        <%_ } else if (fieldType == 'BigDecimal') { _%>
+    @Column(name = "<%=fieldNameUnderscored %>", precision=10, scale=2<% if (required) { %>, nullable = false<% } %>)
         <%_ } else { _%>
-    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>"<% if (fields[fieldId].fieldValidate == true) { %><% if (fields[fieldId].fieldValidateRules.indexOf('maxlength') != -1) { %>, length = <%= fields[fieldId].fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% } %>)
+    @Column(name = "<%=fieldNameUnderscored %>"<% if (fieldValidate == true) { %><% if (fieldValidateRules.indexOf('maxlength') != -1) { %>, length = <%= fieldValidateRulesMaxlength %><% } %><% if (required) { %>, nullable = false<% } %><% } %>)
     <%_     }
         } _%>
     <%_ if (databaseType == 'mongodb') { _%>
-    @Field("<%=fields[fieldId].fieldNameUnderscored %>")
+    @Field("<%=fieldNameUnderscored %>")
     <%_ } _%>
-    <%_ if (fields[fieldId].fieldTypeBlobContent != 'text') { _%>
-    private <%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>;
+    <%_ if (fieldTypeBlobContent != 'text') { _%>
+    private <%= fieldType %> <%= fieldName %>;
     <%_ } else { _%>
-    private String <%= fields[fieldId].fieldName %>;
+    private String <%= fieldName %>;
     <%_ } _%>
 
-    <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%><%_ if (databaseType == 'sql') { _%>
-    @Column(name = "<%=fields[fieldId].fieldNameUnderscored %>_content_type"<% if (required) { %>, nullable = false<% } %>) <%_ } _%>
-    <% if (databaseType == 'mongodb') { %>@Field("<%=fields[fieldId].fieldNameUnderscored %>_content_type")
+    <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%><%_ if (databaseType == 'sql') { _%>
+    @Column(name = "<%=fieldNameUnderscored %>_content_type"<% if (required) { %>, nullable = false<% } %>) <%_ } _%>
+    <% if (databaseType == 'mongodb') { %>@Field("<%=fieldNameUnderscored %>_content_type")
     <%_ } _%>
-    private String <%= fields[fieldId].fieldName %>ContentType;
+    private String <%= fieldName %>ContentType;
     <%_ }
     }
     for (relationshipId in relationships) {
         var otherEntityRelationshipName = relationships[relationshipId].otherEntityRelationshipName,
         relationshipName = relationships[relationshipId].relationshipName,
-        joinTableName = entityTableName + '_'+ getTableName(relationshipName);
+        relationshipFieldName = relationships[relationshipId].relationshipFieldName,
+        joinTableName = entityTableName + '_'+ getTableName(relationshipName),
+        relationshipType = relationships[relationshipId].relationshipType,
+        otherEntityNameCapitalized = relationships[relationshipId].otherEntityNameCapitalized,
+        ownerSide = relationships[relationshipId].ownerSide;
         if(prodDatabaseType === 'oracle' && joinTableName.length > 30) {
             joinTableName = getTableName(name.substring(0, 5)) + '_' + getTableName(relationshipName.substring(0, 5)) + '_MAPPING';
         }
@@ -111,21 +121,21 @@ public class <%= entityClass %> implements Serializable {
 <%- formatAsFieldJavadoc(relationships[relationshipId].javadoc) %>
     @ApiModelProperty(value = "<%- formatAsApiModelProperty(relationships[relationshipId].javadoc) %>")
     <%_ }
-        if (relationships[relationshipId].relationshipType == 'one-to-many') {
+        if (relationshipType == 'one-to-many') {
     _%>
-    @OneToMany(mappedBy = "<%= relationships[relationshipId].otherEntityRelationshipName %>")
+    @OneToMany(mappedBy = "<%= otherEntityRelationshipName %>")
     @JsonIgnore
     <%_     if (hibernateCache != 'no') { _%>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     <%_     } _%>
-    private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();
+    private Set<<%= otherEntityNameCapitalized %>> <%= relationshipFieldName %>s = new HashSet<>();
 
-    <%_ } else if (relationships[relationshipId].relationshipType == 'many-to-one') { _%>
+    <%_ } else if (relationshipType == 'many-to-one') { _%>
     @ManyToOne
-    private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].relationshipFieldName %>;
+    private <%= otherEntityNameCapitalized %> <%= relationshipFieldName %>;
 
-    <%_ } else if (relationships[relationshipId].relationshipType == 'many-to-many') { _%>
-    @ManyToMany<% if (relationships[relationshipId].ownerSide == false) { %>(mappedBy = "<%= relationships[relationshipId].otherEntityRelationshipName %>s")
+    <%_ } else if (relationshipType == 'many-to-many') { _%>
+    @ManyToMany<% if (otherEntityNameCapitalized == false) { %>(mappedBy = "<%= otherEntityRelationshipName %>s")
     @JsonIgnore
     <%_     } else { _%>
 
@@ -133,22 +143,22 @@ public class <%= entityClass %> implements Serializable {
             if (hibernateCache != 'no') { _%>
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     <%_     }
-            if (relationships[relationshipId].ownerSide == true) { _%>
+            if (otherEntityNameCapitalized == true) { _%>
     @JoinTable(name = "<%= joinTableName %>",
                joinColumns = @JoinColumn(name="<%= getColumnName(name) %>s_id", referencedColumnName="ID"),
                inverseJoinColumns = @JoinColumn(name="<%= getColumnName(relationships[relationshipId].relationshipName) %>s_id", referencedColumnName="ID"))
     <%_     } _%>
-    private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();
+    private Set<<%= otherEntityNameCapitalized %>> <%= relationshipFieldName %>s = new HashSet<>();
 
     <%_ } else { _%>
-    <%_     if (relationships[relationshipId].ownerSide) { _%>
+    <%_     if (otherEntityNameCapitalized) { _%>
     @OneToOne
     @JoinColumn(unique = true)
     <%_    } else { _%>
-    @OneToOne(mappedBy = "<%= relationships[relationshipId].otherEntityRelationshipName %>")
+    @OneToOne(mappedBy = "<%= otherEntityRelationshipName %>")
     @JsonIgnore
     <%_    } _%>
-    private <%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].relationshipFieldName %>;
+    private <%= otherEntityNameCapitalized %> <%= relationshipFieldName %>;
 
     <%_ } } _%>
     public <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %><% if (databaseType == 'cassandra') { %>UUID<% } %> getId() {
@@ -158,50 +168,61 @@ public class <%= entityClass %> implements Serializable {
     public void setId(<% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %><% if (databaseType == 'cassandra') { %>UUID<% } %> id) {
         this.id = id;
     }
-<% for (fieldId in fields) { %>
-    <%_ if (fields[fieldId].fieldTypeBlobContent != 'text') { _%>
-        <%_ if (fields[fieldId].fieldType.toLowerCase() == 'boolean') { _%>
-    public <%= fields[fieldId].fieldType %> is<%= fields[fieldId].fieldInJavaBeanMethod %>() {
+<% for (fieldId in fields) {
+        var fieldType = fields[fieldId].fieldType;
+        var fieldTypeBlobContent = fields[fieldId].fieldTypeBlobContent;
+        var fieldName = fields[fieldId].fieldName;
+        var fieldInJavaBeanMethod = fields[fieldId].fieldInJavaBeanMethod; %>
+    <%_ if (fieldTypeBlobContent != 'text') { _%>
+        <%_ if (fieldType.toLowerCase() == 'boolean') { _%>
+    public <%= fieldType %> is<%= fieldInJavaBeanMethod %>() {
         <%_ } else { _%>
-    public <%= fields[fieldId].fieldType %> get<%= fields[fieldId].fieldInJavaBeanMethod %>() {
+    public <%= fieldType %> get<%= fieldInJavaBeanMethod %>() {
         <%_ } _%>
     <%_ } else { _%>
-    public String get<%= fields[fieldId].fieldInJavaBeanMethod %>() {
+    public String get<%= fieldInJavaBeanMethod %>() {
     <%_ } _%>
-        return <%= fields[fieldId].fieldName %>;
+        return <%= fieldName %>;
     }
 
-    <%_ if (fields[fieldId].fieldTypeBlobContent != 'text') { _%>
-    public void set<%= fields[fieldId].fieldInJavaBeanMethod %>(<%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>) {
+    <%_ if (fieldTypeBlobContent != 'text') { _%>
+    public void set<%= fieldInJavaBeanMethod %>(<%= fieldType %> <%= fieldName %>) {
     <%_ } else { _%>
-    public void set<%= fields[fieldId].fieldInJavaBeanMethod %>(String <%= fields[fieldId].fieldName %>) {
+    public void set<%= fieldInJavaBeanMethod %>(String <%= fieldName %>) {
     <%_ } _%>
-        this.<%= fields[fieldId].fieldName %> = <%= fields[fieldId].fieldName %>;
+        this.<%= fieldName %> = <%= fieldName %>;
     }
-    <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
+    <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
 
-    public String get<%= fields[fieldId].fieldInJavaBeanMethod %>ContentType() {
-        return <%= fields[fieldId].fieldName %>ContentType;
+    public String get<%= fieldInJavaBeanMethod %>ContentType() {
+        return <%= fieldName %>ContentType;
     }
 
-    public void set<%= fields[fieldId].fieldInJavaBeanMethod %>ContentType(String <%= fields[fieldId].fieldName %>ContentType) {
-        this.<%= fields[fieldId].fieldName %>ContentType = <%= fields[fieldId].fieldName %>ContentType;
+    public void set<%= fieldInJavaBeanMethod %>ContentType(String <%= fieldName %>ContentType) {
+        this.<%= fieldName %>ContentType = <%= fieldName %>ContentType;
     }
     <%_ } _%>
-<% } %><% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'one-to-many' || relationships[relationshipId].relationshipType == 'many-to-many') { %>
-    public Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> get<%= relationships[relationshipId].relationshipNameCapitalized %>s() {
-        return <%= relationships[relationshipId].relationshipFieldName %>s;
+<% } %><%
+    for (relationshipId in relationships) {
+        var relationshipFieldName = relationships[relationshipId].relationshipFieldName,
+        relationshipType = relationships[relationshipId].relationshipType,
+        otherEntityNameCapitalized = relationships[relationshipId].otherEntityNameCapitalized,
+        relationshipNameCapitalized = relationships[relationshipId].relationshipNameCapitalized,
+        otherEntityName = relationships[relationshipId].otherEntityName;
+    %><% if (relationshipType == 'one-to-many' || relationshipType == 'many-to-many') { %>
+    public Set<<%= otherEntityNameCapitalized %>> get<%= relationshipNameCapitalized %>s() {
+        return <%= relationshipFieldName %>s;
     }
 
-    public void set<%= relationships[relationshipId].relationshipNameCapitalized %>s(Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>> <%= relationships[relationshipId].otherEntityName %>s) {
-        this.<%= relationships[relationshipId].relationshipFieldName %>s = <%= relationships[relationshipId].otherEntityName %>s;
+    public void set<%= relationshipNameCapitalized %>s(Set<<%= otherEntityNameCapitalized %>> <%= otherEntityName %>s) {
+        this.<%= relationshipFieldName %>s = <%= otherEntityName %>s;
     }<% } else { %>
-    public <%= relationships[relationshipId].otherEntityNameCapitalized %> get<%= relationships[relationshipId].relationshipNameCapitalized %>() {
-        return <%= relationships[relationshipId].relationshipFieldName %>;
+    public <%= otherEntityNameCapitalized %> get<%= relationshipNameCapitalized %>() {
+        return <%= relationshipFieldName %>;
     }
 
-    public void set<%= relationships[relationshipId].relationshipNameCapitalized %>(<%= relationships[relationshipId].otherEntityNameCapitalized %> <%= relationships[relationshipId].otherEntityName %>) {
-        this.<%= relationships[relationshipId].relationshipFieldName %> = <%= relationships[relationshipId].otherEntityName %>;
+    public void set<%= relationshipNameCapitalized %>(<%= otherEntityNameCapitalized %> <%= otherEntityName %>) {
+        this.<%= relationshipFieldName %> = <%= otherEntityName %>;
     }<% } %>
 <% } %>
     @Override
@@ -229,9 +250,9 @@ public class <%= entityClass %> implements Serializable {
         return "<%= entityClass %>{" +
             "id=" + id +
             <%_ for (fieldId in fields) { _%>
-            ", <%= fields[fieldId].fieldName %>='" + <%= fields[fieldId].fieldName %> + "'" +
-                <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
-            ", <%= fields[fieldId].fieldName %>ContentType='" + <%= fields[fieldId].fieldName %>ContentType + "'" +
+            ", <%= fieldName %>='" + <%= fieldName %> + "'" +
+                <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
+            ", <%= fieldName %>ContentType='" + <%= fieldName %>ContentType + "'" +
                 <%_ } _%>
             <%_ } _%>
             '}';
