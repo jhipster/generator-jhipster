@@ -67,9 +67,12 @@
             <%_ }  _%>
             <%
 
-            } %><% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
-            <column name="<%=getColumnName(relationships[relationshipId].relationshipName) %>_id" type="bigint"/><% } else if (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true) { %>
-            <column name="<%=getColumnName(relationships[relationshipId].relationshipName) %>_id" type="bigint">
+            } %><% for (relationshipId in relationships) {
+                var relationshipType = relationships[relationshipId].relationshipType,
+                relationshipName = relationships[relationshipId].relationshipName;
+                if (relationships[relationshipId].relationshipType == 'many-to-one') { %>
+            <column name="<%=getColumnName(relationshipName) %>_id" type="bigint"/><% } else if (relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true) { %>
+            <column name="<%=getColumnName(relationshipName) %>_id" type="bigint">
                 <constraints unique="true"/>
             </column><% } %><% } %>
             <!-- jhipster-needle-liquibase-add-column - Jhipster will add columns here, do not remove-->
@@ -77,22 +80,25 @@
             if (fields[fieldId].fieldType == 'ZonedDateTime') { %>
         <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%=fields[fieldId].fieldNameUnderscored %>" columnDataType="datetime"/>
 <% } } %>
-        <% for (relationshipId in relationships) { %><% if ((relationships[relationshipId].relationshipType == 'many-to-one') || ((relationships[relationshipId].relationshipType == 'one-to-one')) && (relationships[relationshipId].ownerSide == true)) {
-            var constraintName = 'fk_' + name.toLowerCase() + '_' + relationships[relationshipId].relationshipName.toLowerCase() + '_id';
+        <% for (relationshipId in relationships) {
+            var relationshipType = relationships[relationshipId].relationshipType,
+            relationshipName = relationships[relationshipId].relationshipName,
+            ownerSide = relationships[relationshipId].ownerSide,
+            otherEntityName = relationships[relationshipId].otherEntityName;
+            if ((relationshipType == 'many-to-one') || ((relationshipType == 'one-to-one')) && (ownerSide == true)) {
+            var constraintName = 'fk_' + name.toLowerCase() + '_' + relationshipName.toLowerCase() + '_id';
             if(prodDatabaseType === 'oracle' && constraintName.length > 30) {
-                constraintName = 'fk_' + name.toLowerCase().substring(0, 3) + '_' + relationships[relationshipId].relationshipName.toLowerCase().substring(0, 3) + '_id';
+                constraintName = 'fk_' + name.toLowerCase().substring(0, 3) + '_' + relationshipName.toLowerCase().substring(0, 3) + '_id';
             }%>
-        <addForeignKeyConstraint baseColumnNames="<%= getColumnName(relationships[relationshipId].relationshipName) %>_id"
+        <addForeignKeyConstraint baseColumnNames="<%= getColumnName(relationshipName) %>_id"
                                  baseTableName="<%= entityTableName %>"
                                  constraintName="<%= constraintName %>"
                                  referencedColumnNames="id"
                                  referencedTableName="<%
-                                 var otherEntityTable = getTableName(relationships[relationshipId].otherEntityName);
+                                 var otherEntityTable = getTableName(otherEntityName);
                                  if (otherEntityTable == 'user') { %>jhi_user<% } else { %><%=otherEntityTable %><% } %>"/>
-<% } else if ((relationships[relationshipId].relationshipType == 'many-to-many') && (relationships[relationshipId].ownerSide == true)) {
-    var relationshipName = relationships[relationshipId].relationshipName,
-    otherEntityName = relationships[relationshipId].otherEntityName,
-    joinTableName = entityTableName + '_'+ getTableName(relationshipName);
+<% } else if ((relationshipType == 'many-to-many') && (ownerSide == true)) {
+    var joinTableName = entityTableName + '_'+ getTableName(relationshipName);
     if(prodDatabaseType === 'oracle' && joinTableName.length > 30) {
         joinTableName = getTableName(name.substring(0, 5)) + '_' + getTableName(relationshipName.substring(0, 5)) + '_MAPPING';
     }
