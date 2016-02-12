@@ -32,14 +32,6 @@
         },
         {
             "relationshipId": 5,
-            "relationshipName": "userManyToManyEntity",
-            "otherEntityName": "user",
-            "relationshipType": "many-to-many",
-            "otherEntityField": "login",
-            "ownerSide": true
-        },
-        {
-            "relationshipId": 6,
             "relationshipName": "userOneToOneEntity",
             "otherEntityName": "user",
             "relationshipType": "one-to-one",
