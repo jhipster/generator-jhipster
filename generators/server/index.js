@@ -670,16 +670,11 @@ module.exports = JhipsterServerGenerator.extend({
             if (this.databaseType == "sql") {
                 this.template(RESOURCE_DIR + '/config/liquibase/changelog/_initial_schema.xml', RESOURCE_DIR + 'config/liquibase/changelog/00000000000000_initial_schema.xml', this, {'interpolate': INTERPOLATE_REGEX});
                 this.copy(RESOURCE_DIR + '/config/liquibase/master.xml', RESOURCE_DIR + 'config/liquibase/master.xml');
-                this.copy(RESOURCE_DIR + '/config/liquibase/users.csv', RESOURCE_DIR + 'config/liquibase/users.csv');
-                this.copy(RESOURCE_DIR + '/config/liquibase/authorities.csv', RESOURCE_DIR + 'config/liquibase/authorities.csv');
-                this.copy(RESOURCE_DIR + '/config/liquibase/users_authorities.csv', RESOURCE_DIR + 'config/liquibase/users_authorities.csv');
             }
 
             if (this.databaseType == "mongodb") {
                 this.copy(RESOURCE_DIR + '/config/mongeez/authorities.xml', RESOURCE_DIR + 'config/mongeez/authorities.xml');
                 this.copy(RESOURCE_DIR + '/config/mongeez/master.xml', RESOURCE_DIR + 'config/mongeez/master.xml');
-                this.copy(RESOURCE_DIR + '/config/mongeez/users.xml', RESOURCE_DIR + 'config/mongeez/users.xml');
-                this.copy(RESOURCE_DIR + '/config/mongeez/social_user_connections.xml', RESOURCE_DIR + 'config/mongeez/social_user_connections.xml');
             }
 
             if (this.databaseType == "cassandra" || this.applicationType == 'gateway') {
@@ -687,14 +682,6 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(RESOURCE_DIR + '/config/cql/_create-keyspace.cql', RESOURCE_DIR + 'config/cql/create-keyspace.cql', this, {});
                 this.template(RESOURCE_DIR + '/config/cql/_drop-keyspace.cql', RESOURCE_DIR + 'config/cql/drop-keyspace.cql', this, {});
                 this.copy(RESOURCE_DIR + '/config/cql/create-tables.cql', RESOURCE_DIR + 'config/cql/create-tables.cql');
-            }
-
-            // Create mail templates
-            this.copy(RESOURCE_DIR + '/mails/activationEmail.html', RESOURCE_DIR + 'mails/activationEmail.html');
-            this.copy(RESOURCE_DIR + '/mails/creationEmail.html', RESOURCE_DIR + 'mails/creationEmail.html');
-            this.copy(RESOURCE_DIR + '/mails/passwordResetEmail.html', RESOURCE_DIR + 'mails/passwordResetEmail.html');
-            if (this.enableSocialSignIn) {
-                this.copy(RESOURCE_DIR + '/mails/socialRegistrationValidationEmail.html', RESOURCE_DIR + 'mails/socialRegistrationValidationEmail.html');
             }
         },
 
@@ -709,6 +696,36 @@ module.exports = JhipsterServerGenerator.extend({
         },
 
         writeServerJavaAuthConfigFiles: function () {
+            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+                this.template('src/main/java/package/security/_SpringSecurityAuditorAware.java', javaDir + 'security/SpringSecurityAuditorAware.java', this, {});
+            }
+            this.template('src/main/java/package/security/_SecurityUtils.java', javaDir + 'security/SecurityUtils.java', this, {});
+            this.template('src/main/java/package/security/_AuthoritiesConstants.java', javaDir + 'security/AuthoritiesConstants.java', this, {});
+
+            if (this.authenticationType == 'jwt') {
+                this.template('src/main/java/package/security/jwt/_TokenProvider.java', javaDir + 'security/jwt/TokenProvider.java', this, {});
+                this.template('src/main/java/package/security/jwt/_JWTConfigurer.java', javaDir + 'security/jwt/JWTConfigurer.java', this, {});
+                this.template('src/main/java/package/security/jwt/_JWTFilter.java', javaDir + 'security/jwt/JWTFilter.java', this, {});
+            }
+
+            /* Skip the code below for --skip-user-management */
+            if(this.skipUserManagement) return;
+
+            this.template('src/main/java/package/config/_SecurityConfiguration.java', javaDir + 'config/SecurityConfiguration.java', this, {});
+
+            if (this.authenticationType == 'session') {
+                this.template('src/main/java/package/domain/_PersistentToken.java', javaDir + 'domain/PersistentToken.java', this, {});
+                this.template('src/main/java/package/repository/_PersistentTokenRepository.java', javaDir + 'repository/PersistentTokenRepository.java', this, {});
+            }
+
+            this.template('src/main/java/package/security/_Http401UnauthorizedEntryPoint.java', javaDir + 'security/Http401UnauthorizedEntryPoint.java', this, {});
+            this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java', this, {});
+            this.template('src/main/java/package/security/_UserNotActivatedException.java', javaDir + 'security/UserNotActivatedException.java', this, {});
+
+            if (this.authenticationType == 'jwt') {
+                this.template('src/main/java/package/web/rest/_UserJWTController.java', javaDir + 'web/rest/UserJWTController.java', this, {});
+                this.template('src/main/java/package/security/_AuthenticationProvider.java', javaDir + 'security/AuthenticationProvider.java', this, {});
+            }
 
             if (this.authenticationType == 'oauth2') {
                 this.template('src/main/java/package/config/_OAuth2ServerConfiguration.java', javaDir + 'config/OAuth2ServerConfiguration.java', this, {});
@@ -723,16 +740,6 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template('src/main/java/package/repository/_OAuth2RefreshTokenRepository.java', javaDir + 'repository/OAuth2RefreshTokenRepository.java', this, {});
             }
 
-            this.template('src/main/java/package/config/_SecurityConfiguration.java', javaDir + 'config/SecurityConfiguration.java', this, {});
-
-            if (this.authenticationType == 'session') {
-                this.template('src/main/java/package/domain/_PersistentToken.java', javaDir + 'domain/PersistentToken.java', this, {});
-            }
-
-            if (this.authenticationType == 'session') {
-                this.template('src/main/java/package/repository/_PersistentTokenRepository.java', javaDir + 'repository/PersistentTokenRepository.java', this, {});
-            }
-
             this.template('src/main/java/package/security/_package-info.java', javaDir + 'security/package-info.java', this, {});
             if (this.authenticationType == 'session') {
                 this.template('src/main/java/package/security/_AjaxAuthenticationFailureHandler.java', javaDir + 'security/AjaxAuthenticationFailureHandler.java', this, {});
@@ -741,31 +748,13 @@ module.exports = JhipsterServerGenerator.extend({
             if (this.authenticationType == 'session' || this.authenticationType == 'oauth2') {
                 this.template('src/main/java/package/security/_AjaxLogoutSuccessHandler.java', javaDir + 'security/AjaxLogoutSuccessHandler.java', this, {});
             }
-            if (this.authenticationType == 'jwt') {
-                this.template('src/main/java/package/security/_AuthenticationProvider.java', javaDir + 'security/AuthenticationProvider.java', this, {});
-            }
-            this.template('src/main/java/package/security/_AuthoritiesConstants.java', javaDir + 'security/AuthoritiesConstants.java', this, {});
+
             if (this.authenticationType == 'session') {
                 this.template('src/main/java/package/security/_CustomAccessDeniedHandler.java', javaDir + 'security/CustomAccessDeniedHandler.java', this, {});
                 this.template('src/main/java/package/security/_CustomPersistentRememberMeServices.java', javaDir + 'security/CustomPersistentRememberMeServices.java', this, {});
-            }
-            this.template('src/main/java/package/security/_Http401UnauthorizedEntryPoint.java', javaDir + 'security/Http401UnauthorizedEntryPoint.java', this, {});
-            this.template('src/main/java/package/security/_SecurityUtils.java', javaDir + 'security/SecurityUtils.java', this, {});
-            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
-                this.template('src/main/java/package/security/_SpringSecurityAuditorAware.java', javaDir + 'security/SpringSecurityAuditorAware.java', this, {});
-            }
-            this.template('src/main/java/package/security/_UserDetailsService.java', javaDir + 'security/UserDetailsService.java', this, {});
-            this.template('src/main/java/package/security/_UserNotActivatedException.java', javaDir + 'security/UserNotActivatedException.java', this, {});
-
-            if (this.authenticationType == 'jwt') {
-                this.template('src/main/java/package/security/jwt/_TokenProvider.java', javaDir + 'security/jwt/TokenProvider.java', this, {});
-                this.template('src/main/java/package/web/rest/_UserJWTController.java', javaDir + 'web/rest/UserJWTController.java', this, {});
-                this.template('src/main/java/package/security/jwt/_JWTConfigurer.java', javaDir + 'security/jwt/JWTConfigurer.java', this, {});
-                this.template('src/main/java/package/security/jwt/_JWTFilter.java', javaDir + 'security/jwt/JWTFilter.java', this, {});
-            }
-            if (this.authenticationType == 'session') {
                 this.template('src/main/java/package/web/filter/_CsrfCookieGeneratorFilter.java', javaDir + 'web/filter/CsrfCookieGeneratorFilter.java', this, {});
             }
+
             if (this.enableSocialSignIn) {
                 this.template('src/main/java/package/security/social/_package-info.java', javaDir + 'security/social/package-info.java', this, {});
                 this.template('src/main/java/package/config/social/_SocialConfiguration.java', javaDir + 'config/social/SocialConfiguration.java', this, {});
@@ -814,16 +803,18 @@ module.exports = JhipsterServerGenerator.extend({
             this.template('src/main/java/package/config/_AsyncConfiguration.java', javaDir + 'config/AsyncConfiguration.java', this, {});
             this.template('src/main/java/package/config/_CacheConfiguration.java', javaDir + 'config/CacheConfiguration.java', this, {});
             this.template('src/main/java/package/config/_Constants.java', javaDir + 'config/Constants.java', this, {});
-            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
-                this.template('src/main/java/package/config/_CloudDatabaseConfiguration.java', javaDir + 'config/CloudDatabaseConfiguration.java', this, {});
-            }
+
             if (this.databaseType == 'mongodb') {
                 this.template('src/main/java/package/config/_CloudMongoDbConfiguration.java', javaDir + 'config/CloudMongoDbConfiguration.java', this, {});
                 this.template('src/main/java/package/domain/util/_JSR310DateConverters.java', javaDir + 'domain/util/JSR310DateConverters.java', this, {});
             }
             if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+                this.template('src/main/java/package/config/_CloudDatabaseConfiguration.java', javaDir + 'config/CloudDatabaseConfiguration.java', this, {});
                 this.template('src/main/java/package/config/_DatabaseConfiguration.java', javaDir + 'config/DatabaseConfiguration.java', this, {});
+                this.template('src/main/java/package/config/audit/_package-info.java', javaDir + 'config/audit/package-info.java', this, {});
+                this.template('src/main/java/package/config/audit/_AuditEventConverter.java', javaDir + 'config/audit/AuditEventConverter.java', this, {});
             }
+
             this.template('src/main/java/package/config/_JacksonConfiguration.java', javaDir + 'config/JacksonConfiguration.java', this, {});
             this.template('src/main/java/package/config/_JHipsterProperties.java', javaDir + 'config/JHipsterProperties.java', this, {});
             this.template('src/main/java/package/config/_LocaleConfiguration.java', javaDir + 'config/LocaleConfiguration.java', this, {});
@@ -834,10 +825,6 @@ module.exports = JhipsterServerGenerator.extend({
             if (this.websocket == 'spring-websocket') {
                 this.template('src/main/java/package/config/_WebsocketConfiguration.java', javaDir + 'config/WebsocketConfiguration.java', this, {});
                 this.template('src/main/java/package/config/_WebsocketSecurityConfiguration.java', javaDir + 'config/WebsocketSecurityConfiguration.java', this, {});
-            }
-            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
-                this.template('src/main/java/package/config/audit/_package-info.java', javaDir + 'config/audit/package-info.java', this, {});
-                this.template('src/main/java/package/config/audit/_AuditEventConverter.java', javaDir + 'config/audit/AuditEventConverter.java', this, {});
             }
 
             this.template('src/main/java/package/config/locale/_package-info.java', javaDir + 'config/locale/package-info.java', this, {});
@@ -866,13 +853,7 @@ module.exports = JhipsterServerGenerator.extend({
         writeServerJavaDomainFiles: function () {
 
             this.template('src/main/java/package/domain/_package-info.java', javaDir + 'domain/package-info.java', this, {});
-            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
-                this.template('src/main/java/package/domain/_AbstractAuditingEntity.java', javaDir + 'domain/AbstractAuditingEntity.java', this, {});
-                this.template('src/main/java/package/domain/_Authority.java', javaDir + 'domain/Authority.java', this, {});
-                this.template('src/main/java/package/domain/_PersistentAuditEvent.java', javaDir + 'domain/PersistentAuditEvent.java', this, {});
-            }
 
-            this.template('src/main/java/package/domain/_User.java', javaDir + 'domain/User.java', this, {});
             this.template('src/main/java/package/domain/util/_JSR310DateConverters.java', javaDir + 'domain/util/JSR310DateConverters.java', this, {});
             this.template('src/main/java/package/domain/util/_JSR310PersistenceConverters.java', javaDir + 'domain/util/JSR310PersistenceConverters.java', this, {});
             this.template('src/main/java/package/domain/util/_JSR310DateTimeSerializer.java', javaDir + 'domain/util/JSR310DateTimeSerializer.java', this, {});
@@ -883,32 +864,22 @@ module.exports = JhipsterServerGenerator.extend({
                     this.template('src/main/java/package/domain/util/_FixedPostgreSQL82Dialect.java', javaDir + 'domain/util/FixedPostgreSQL82Dialect.java', this, {});
                 }
             }
+            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+                this.template('src/main/java/package/domain/_AbstractAuditingEntity.java', javaDir + 'domain/AbstractAuditingEntity.java', this, {});
+                this.template('src/main/java/package/domain/_PersistentAuditEvent.java', javaDir + 'domain/PersistentAuditEvent.java', this, {});
+            }
         },
 
         writeServerJavaRepoFiles: function () {
 
             if (this.searchEngine == 'elasticsearch') {
                 this.template('src/main/java/package/repository/search/_package-info.java', javaDir + 'repository/search/package-info.java', this, {});
-                this.template('src/main/java/package/repository/search/_UserSearchRepository.java', javaDir + 'repository/search/UserSearchRepository.java', this, {});
             }
             this.template('src/main/java/package/repository/_package-info.java', javaDir + 'repository/package-info.java', this, {});
-            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
-                this.template('src/main/java/package/repository/_AuthorityRepository.java', javaDir + 'repository/AuthorityRepository.java', this, {});
-                this.template('src/main/java/package/repository/_CustomAuditEventRepository.java', javaDir + 'repository/CustomAuditEventRepository.java', this, {});
-                this.template('src/main/java/package/repository/_PersistenceAuditEventRepository.java', javaDir + 'repository/PersistenceAuditEventRepository.java', this, {});
-            }
-
-            this.template('src/main/java/package/repository/_UserRepository.java', javaDir + 'repository/UserRepository.java', this, {});
         },
 
         writeServerJavaServiceFiles: function () {
-
             this.template('src/main/java/package/service/_package-info.java', javaDir + 'service/package-info.java', this, {});
-            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
-                this.template('src/main/java/package/service/_AuditEventService.java', javaDir + 'service/AuditEventService.java', this, {});
-            }
-            this.template('src/main/java/package/service/_UserService.java', javaDir + 'service/UserService.java', this, {});
-            this.template('src/main/java/package/service/_MailService.java', javaDir + 'service/MailService.java', this, {});
             this.template('src/main/java/package/service/util/_RandomUtil.java', javaDir + 'service/util/RandomUtil.java', this, {});
         },
 
@@ -929,23 +900,16 @@ module.exports = JhipsterServerGenerator.extend({
             this.template('src/main/java/package/web/filter/_package-info.java', javaDir + 'web/filter/package-info.java', this, {});
             this.template('src/main/java/package/web/filter/_CachingHttpHeadersFilter.java', javaDir + 'web/filter/CachingHttpHeadersFilter.java', this, {});
             this.template('src/main/java/package/web/filter/_StaticResourcesProductionFilter.java', javaDir + 'web/filter/StaticResourcesProductionFilter.java', this, {});
-
-            this.template('src/main/java/package/web/rest/mapper/_UserMapper.java', javaDir + 'web/rest/mapper/UserMapper.java', this, {});
             this.template('src/main/java/package/web/rest/dto/_package-info.java', javaDir + 'web/rest/dto/package-info.java', this, {});
             this.template('src/main/java/package/web/rest/dto/_LoggerDTO.java', javaDir + 'web/rest/dto/LoggerDTO.java', this, {});
-            this.template('src/main/java/package/web/rest/dto/_UserDTO.java', javaDir + 'web/rest/dto/UserDTO.java', this, {});
-            this.template('src/main/java/package/web/rest/dto/_ManagedUserDTO.java', javaDir + 'web/rest/dto/ManagedUserDTO.java', this, {});
-            this.template('src/main/java/package/web/rest/dto/_KeyAndPasswordDTO.java', javaDir + 'web/rest/dto/KeyAndPasswordDTO.java', this, {});
+
 
             this.template('src/main/java/package/web/rest/util/_HeaderUtil.java', javaDir + 'web/rest/util/HeaderUtil.java', this, {});
+            this.template('src/main/java/package/web/rest/dto/_KeyAndPasswordDTO.java', javaDir + 'web/rest/dto/KeyAndPasswordDTO.java', this, {});
             this.template('src/main/java/package/web/rest/util/_PaginationUtil.java', javaDir + 'web/rest/util/PaginationUtil.java', this, {});
             this.template('src/main/java/package/web/rest/_package-info.java', javaDir + 'web/rest/package-info.java', this, {});
-            this.template('src/main/java/package/web/rest/_AccountResource.java', javaDir + 'web/rest/AccountResource.java', this, {});
-            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
-                this.template('src/main/java/package/web/rest/_AuditResource.java', javaDir + 'web/rest/AuditResource.java', this, {});
-            }
+
             this.template('src/main/java/package/web/rest/_LogsResource.java', javaDir + 'web/rest/LogsResource.java', this, {});
-            this.template('src/main/java/package/web/rest/_UserResource.java', javaDir + 'web/rest/UserResource.java', this, {});
 
         },
 
@@ -960,12 +924,6 @@ module.exports = JhipsterServerGenerator.extend({
 
         },
 
-        writeJavaUserManagementFiles : function () {
-
-            if(this.skipUserManagement) return;
-            // user management related files
-        },
-
         writeServerTestFwFiles: function () {
 
             // Create Test Java files
@@ -977,27 +935,14 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template('src/test/java/package/_CassandraKeyspaceUnitTest.java', testDir + 'CassandraKeyspaceUnitTest.java', this, {});
                 this.template('src/test/java/package/_AbstractCassandraTest.java', testDir + 'AbstractCassandraTest.java', this, {});
             }
-            this.template('src/test/java/package/security/_SecurityUtilsUnitTest.java', testDir + 'security/SecurityUtilsUnitTest.java', this, {});
-            if (this.databaseType == "sql" || this.databaseType == "mongodb") {
-                this.template('src/test/java/package/service/_UserServiceIntTest.java', testDir + 'service/UserServiceIntTest.java', this, {});
-            }
-            this.template('src/test/java/package/web/rest/_AccountResourceIntTest.java', testDir + 'web/rest/AccountResourceIntTest.java', this, {});
-            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
-                this.template('src/test/java/package/web/rest/_AuditResourceIntTest.java', testDir + 'web/rest/AuditResourceIntTest.java', this, {});
-            }
+
             this.template('src/test/java/package/web/rest/_TestUtil.java', testDir + 'web/rest/TestUtil.java', this, {});
-            this.template('src/test/java/package/web/rest/_UserResourceIntTest.java', testDir + 'web/rest/UserResourceIntTest.java', this, {});
 
             this.template(TEST_RES_DIR + 'config/_application.yml', TEST_RES_DIR + 'config/application.yml', this, {});
             this.template(TEST_RES_DIR + '_logback-test.xml', TEST_RES_DIR + 'logback-test.xml', this, {});
 
             if (this.hibernateCache == "ehcache") {
                 this.template(TEST_RES_DIR + '_ehcache.xml', TEST_RES_DIR + 'ehcache.xml', this, {});
-            }
-
-            if (this.enableSocialSignIn) {
-                this.template('src/test/java/package/repository/_CustomSocialUsersConnectionRepositoryIntTest.java', testDir + 'repository/CustomSocialUsersConnectionRepositoryIntTest.java', this, {});
-                this.template('src/test/java/package/service/_SocialServiceIntTest.java', testDir + 'service/SocialServiceIntTest.java', this, {});
             }
 
             // Create Gatling test files
@@ -1012,10 +957,96 @@ module.exports = JhipsterServerGenerator.extend({
             if (this.testFrameworks.indexOf('cucumber') != -1) {
                 this.template('src/test/java/package/cucumber/_CucumberTest.java', testDir + 'cucumber/CucumberTest.java', this, {});
                 this.template('src/test/java/package/cucumber/stepdefs/_StepDefs.java', testDir + 'cucumber/stepdefs/StepDefs.java', this, {});
+                mkdirp("src/test/features/");
+            }
+        },
+
+        writeJavaUserManagementFiles : function () {
+
+            if(this.skipUserManagement) return;
+            // user management related files
+
+            /* User management resources files */
+            if (this.databaseType == "sql") {
+                this.copy(RESOURCE_DIR + '/config/liquibase/users.csv', RESOURCE_DIR + 'config/liquibase/users.csv');
+                this.copy(RESOURCE_DIR + '/config/liquibase/authorities.csv', RESOURCE_DIR + 'config/liquibase/authorities.csv');
+                this.copy(RESOURCE_DIR + '/config/liquibase/users_authorities.csv', RESOURCE_DIR + 'config/liquibase/users_authorities.csv');
+            }
+
+            if (this.databaseType == "mongodb") {
+                this.copy(RESOURCE_DIR + '/config/mongeez/users.xml', RESOURCE_DIR + 'config/mongeez/users.xml');
+                this.copy(RESOURCE_DIR + '/config/mongeez/social_user_connections.xml', RESOURCE_DIR + 'config/mongeez/social_user_connections.xml');
+            }
+
+            // Email templates
+            this.copy(RESOURCE_DIR + '/mails/activationEmail.html', RESOURCE_DIR + 'mails/activationEmail.html');
+            this.copy(RESOURCE_DIR + '/mails/creationEmail.html', RESOURCE_DIR + 'mails/creationEmail.html');
+            this.copy(RESOURCE_DIR + '/mails/passwordResetEmail.html', RESOURCE_DIR + 'mails/passwordResetEmail.html');
+            if (this.enableSocialSignIn) {
+                this.copy(RESOURCE_DIR + '/mails/socialRegistrationValidationEmail.html', RESOURCE_DIR + 'mails/socialRegistrationValidationEmail.html');
+            }
+
+            /* User management java domain files */
+            this.template('src/main/java/package/domain/_User.java', javaDir + 'domain/User.java', this, {});
+
+            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+                this.template('src/main/java/package/domain/_Authority.java', javaDir + 'domain/Authority.java', this, {});
+            }
+
+            /* User management java repo files */
+            if (this.searchEngine == 'elasticsearch') {
+                this.template('src/main/java/package/repository/search/_UserSearchRepository.java', javaDir + 'repository/search/UserSearchRepository.java', this, {});
+            }
+            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+                this.template('src/main/java/package/repository/_CustomAuditEventRepository.java', javaDir + 'repository/CustomAuditEventRepository.java', this, {});
+                this.template('src/main/java/package/repository/_AuthorityRepository.java', javaDir + 'repository/AuthorityRepository.java', this, {});
+                this.template('src/main/java/package/repository/_PersistenceAuditEventRepository.java', javaDir + 'repository/PersistenceAuditEventRepository.java', this, {});
+
+            }
+            this.template('src/main/java/package/repository/_UserRepository.java', javaDir + 'repository/UserRepository.java', this, {});
+
+            /* User management java service files */
+            this.template('src/main/java/package/service/_UserService.java', javaDir + 'service/UserService.java', this, {});
+            this.template('src/main/java/package/service/_MailService.java', javaDir + 'service/MailService.java', this, {});
+            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+                this.template('src/main/java/package/service/_AuditEventService.java', javaDir + 'service/AuditEventService.java', this, {});
+            }
+
+            /* User management java web files */
+            this.template('src/main/java/package/web/rest/dto/_UserDTO.java', javaDir + 'web/rest/dto/UserDTO.java', this, {});
+            this.template('src/main/java/package/web/rest/dto/_ManagedUserDTO.java', javaDir + 'web/rest/dto/ManagedUserDTO.java', this, {});
+            this.template('src/main/java/package/web/rest/_UserResource.java', javaDir + 'web/rest/UserResource.java', this, {});
+            this.template('src/main/java/package/web/rest/_AccountResource.java', javaDir + 'web/rest/AccountResource.java', this, {});
+            this.template('src/main/java/package/web/rest/mapper/_UserMapper.java', javaDir + 'web/rest/mapper/UserMapper.java', this, {});
+
+
+            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+                this.template('src/main/java/package/web/rest/_AuditResource.java', javaDir + 'web/rest/AuditResource.java', this, {});
+            }
+
+            /* User management java test files */
+            var testDir = this.testDir;
+
+            if (this.databaseType == "sql" || this.databaseType == "mongodb") {
+                this.template('src/test/java/package/service/_UserServiceIntTest.java', testDir + 'service/UserServiceIntTest.java', this, {});
+            }
+            this.template('src/test/java/package/web/rest/_UserResourceIntTest.java', testDir + 'web/rest/UserResourceIntTest.java', this, {});
+            if (this.enableSocialSignIn) {
+                this.template('src/test/java/package/repository/_CustomSocialUsersConnectionRepositoryIntTest.java', testDir + 'repository/CustomSocialUsersConnectionRepositoryIntTest.java', this, {});
+                this.template('src/test/java/package/service/_SocialServiceIntTest.java', testDir + 'service/SocialServiceIntTest.java', this, {});
+            }
+
+            this.template('src/test/java/package/web/rest/_AccountResourceIntTest.java', testDir + 'web/rest/AccountResourceIntTest.java', this, {});
+            this.template('src/test/java/package/security/_SecurityUtilsUnitTest.java', testDir + 'security/SecurityUtilsUnitTest.java', this, {});
+
+            if (this.databaseType == 'sql' || this.databaseType == 'mongodb') {
+                this.template('src/test/java/package/web/rest/_AuditResourceIntTest.java', testDir + 'web/rest/AuditResourceIntTest.java', this, {});
+            }
+            //Cucumber user management tests
+            if (this.testFrameworks.indexOf('cucumber') != -1) {
                 this.template('src/test/java/package/cucumber/stepdefs/_UserStepDefs.java', testDir + 'cucumber/stepdefs/UserStepDefs.java', this, {});
                 this.copy('src/test/features/user/user.feature', 'src/test/features/user/user.feature');
             }
-
         }
     },
 

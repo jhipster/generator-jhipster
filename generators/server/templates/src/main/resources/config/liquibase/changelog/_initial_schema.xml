@@ -110,7 +110,7 @@
                                  constraintName="fk_user_persistent_token"
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/><% } %>
-
+        <% if (!skipUserManagement) { %>
         <loadData encoding="UTF-8"
                   file="config/liquibase/users.csv"
                   separator=";"
@@ -129,7 +129,7 @@
                   file="config/liquibase/users_authorities.csv"
                   separator=";"
                   tableName="jhi_user_authority"/>
-
+        <% } %>
         <createTable tableName="jhi_persistent_audit_event">
             <column name="event_id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
