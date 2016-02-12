@@ -1,0 +1,10 @@
+# ===================================================================
+# Spring Cloud Config bootstrap configuration
+# ===================================================================
+
+spring:
+    application:
+        name: <%= baseName %>
+    cloud:
+        config:
+            uri: http://localhost:8761/config
