@@ -89,6 +89,11 @@ public class Application {
             InetAddress.getLocalHost().getHostAddress(),
             env.getProperty("server.port"));
 
+        <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+        String configServerStatus = env.getProperty("configserver.status");
+        log.info("\n\tConfig Server: \t{}\n----------------------------------------------------------",
+            configServerStatus == null ? "Not found" : configServerStatus);
+        <%_ } _%>
     }
 
     /**
