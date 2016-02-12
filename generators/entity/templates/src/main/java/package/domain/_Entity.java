@@ -62,6 +62,7 @@ public class <%= entityClass %> implements Serializable {
     var required = false;
     var fieldValidate = fields[fieldId].fieldValidate;
     var fieldValidateRules = fields[fieldId].fieldValidateRules;
+    var fieldValidateRulesMaxlength = fields[fieldId].fieldValidateRulesMaxlength;
     var fieldType = fields[fieldId].fieldType;
     var fieldTypeBlobContent = fields[fieldId].fieldTypeBlobContent;
     var fieldName = fields[fieldId].fieldName;
