@@ -10,15 +10,15 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>ManagementDi
                 var query;
                 if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide == true && relationships[idx].otherEntityName != 'user') {
                     query = '$scope.' + relationships[idx].relationshipFieldName.toLowerCase() + 's = ' + relationships[idx].otherEntityNameCapitalized + ".query({filter: '" + relationships[idx].otherEntityRelationshipName.toLowerCase() + "-is-null'});"
-                + "\n        $q.all([$scope." + relationships[idx].otherEntityRelationshipName + ".$promise, $scope." + relationships[idx].relationshipFieldName.toLowerCase() + "s.$promise]).then(function() {";
+                + "\n        $q.all([$scope." + entityInstance + ".$promise, $scope." + relationships[idx].relationshipFieldName.toLowerCase() + "s.$promise]).then(function() {";
                     if (dto == "no"){
-                        query += "\n            if (!$scope." + relationships[idx].otherEntityRelationshipName + "." + relationships[idx].relationshipFieldName + " || !$scope." + relationships[idx].otherEntityRelationshipName + "." + relationships[idx].relationshipFieldName + ".id) {"
+                        query += "\n            if (!$scope." + entityInstance + "." + relationships[idx].relationshipFieldName + " || !$scope." + entityInstance + "." + relationships[idx].relationshipFieldName + ".id) {"
                     } else {
-                        query += "\n            if (!$scope." + relationships[idx].otherEntityRelationshipName + "." + relationships[idx].relationshipFieldName + "Id) {"
+                        query += "\n            if (!$scope." + entityInstance + "." + relationships[idx].relationshipFieldName + "Id) {"
                     }
                     query += "\n                return $q.reject();"
                 + "\n            }"
-                + "\n            return " + relationships[idx].otherEntityNameCapitalized + ".get({id : $scope." + relationships[idx].otherEntityRelationshipName + "." + relationships[idx].relationshipFieldName + (dto == 'no' ? ".id" : "Id") + "}).$promise;"
+                + "\n            return " + relationships[idx].otherEntityNameCapitalized + ".get({id : $scope." + entityInstance + "." + relationships[idx].relationshipFieldName + (dto == 'no' ? ".id" : "Id") + "}).$promise;"
                 + "\n        }).then(function(" + relationships[idx].relationshipFieldName + ") {"
                 + "\n            $scope." + relationships[idx].relationshipFieldName.toLowerCase() + "s.push(" + relationships[idx].relationshipFieldName + ");"
                 + "\n        });";
