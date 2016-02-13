@@ -412,6 +412,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'components/util/_truncate.filter.js', ANGULAR_DIR + 'components/util/truncate.filter.js', this, {});
             this.template(ANGULAR_DIR + 'components/util/_date-util.service.js', ANGULAR_DIR + 'components/util/date-util.service.js', this, {});
             this.template(ANGULAR_DIR + 'components/util/_data-util.service.js', ANGULAR_DIR + 'components/util/data-util.service.js', this, {});
+            this.template(ANGULAR_DIR + 'components/util/_pagination-util.service.js', ANGULAR_DIR + 'components/util/pagination-util.service.js', this, {});
             this.template(ANGULAR_DIR + 'components/util/_sort.directive.js', ANGULAR_DIR + 'components/util/sort.directive.js', this, {});
             // interceptor code
             this.template(ANGULAR_DIR + 'components/interceptor/_auth.interceptor.js', ANGULAR_DIR + 'components/interceptor/auth.interceptor.js', this, {});
@@ -539,6 +540,7 @@ module.exports = JhipsterClientGenerator.extend({
                 'app/components/util/parse-links.service.js',
                 'app/components/util/date-util.service.js',
                 'app/components/util/data-util.service.js',
+                'app/components/util/pagination-util.service.js',
                 'app/components/util/sort.directive.js',
                 // entities
                 'app/entities/entity.js',

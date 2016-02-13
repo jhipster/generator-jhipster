@@ -5,7 +5,7 @@ angular.module('<%=angularAppName%>')
         $stateProvider
             .state('<%= entityStateName %>', {
                 parent: 'entity',
-                url: '/<%= entityUrl %>',
+                url: '/<%= entityUrl %><% if (pagination == 'pagination' || pagination == 'pager') { %>?page&sort&search<% } %>',
                 data: {
                     authorities: ['ROLE_USER'],
                     pageTitle: <% if (enableTranslation){ %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% }else{ %>'<%= entityClassPlural %>'<% } %>
@@ -16,7 +16,31 @@ angular.module('<%=angularAppName%>')
                         controller: '<%= entityClass %>ManagementController'
                     }
                 },
-                resolve: {<% if (enableTranslation){ %>
+                <%_ if (pagination == 'pagination' || pagination == 'pager'){ _%>
+                params: {
+                    page: {
+                        value: '1',
+                        squash: true
+                    },
+                    sort: {
+                        value: 'id,asc',
+                        squash: true
+                    },
+                    search: null
+                },
+                <%_ } _%>
+                resolve: {
+                <%_ if (pagination == 'pagination' || pagination == 'pager'){ _%>
+                    pagingParams: ['$stateParams', 'PaginationUtil', function ($stateParams, PaginationUtil) {
+                        return {
+                            page: PaginationUtil.parsePage($stateParams.page),
+                            sort: $stateParams.sort,
+                            predicate: PaginationUtil.parsePredicate($stateParams.sort),
+                            ascending: PaginationUtil.parseAscending($stateParams.sort),
+                            search: $stateParams.search
+                        }
+                    }]<%= (pagination == 'pagination' || pagination == 'pager' && enableTranslation) ? ',' : '' %>
+                <%_ } if (enableTranslation){ _%>
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('<%= entityInstance %>');<%
                         for (var fieldIdx in fields) {
@@ -24,7 +48,8 @@ angular.module('<%=angularAppName%>')
                         $translatePartialLoader.addPart('<%= fields[fieldIdx].enumInstance %>');<% }} %>
                         $translatePartialLoader.addPart('global');
                         return $translate.refresh();
-                    }]<% } %>
+                    }]
+                <%_ } _%>
                 }
             })
             .state('<%= entityStateName %>-detail', {

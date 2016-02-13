@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .controller('<%= entityClass %>ManagementController', function ($scope, $state<% if (fieldsContainBlob) { %>, DataUtils<% } %>, <%= entityClass %><% if (searchEngine == 'elasticsearch') { %>, <%= entityClass %>Search<% } %><% if (pagination != 'no') { %>, ParseLinks<% } %> <%_ if (pagination == 'pager' || pagination == 'pagination'){ %>, paginationConstants<% } %>) {
+    .controller('<%= entityClass %>ManagementController', function ($scope, $state<% if (fieldsContainBlob) { %>, DataUtils<% } %>, <%= entityClass %><% if (searchEngine == 'elasticsearch') { %>, <%= entityClass %>Search<% } %><% if (pagination != 'no') { %>, ParseLinks<% } %> <%_ if (pagination == 'pager' || pagination == 'pagination'){ %>, AlertService, pagingParams, paginationConstants<% } %>) {
 
     <%_ if (pagination == 'pagination' || pagination == 'pager') { _%>
 <%- include('pagination-template'); -%>
@@ -10,4 +10,5 @@ angular.module('<%=angularAppName%>')
     <%_ } else { _%>
 <%- include('no-pagination-template'); -%>
     <% } %>
+
     });

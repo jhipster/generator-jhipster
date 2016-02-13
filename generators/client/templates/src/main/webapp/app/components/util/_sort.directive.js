@@ -9,7 +9,7 @@ angular.module('<%=angularAppName%>')
                 ascending: '=',
                 callback: '&'
             },
-            controller: ['$scope', function ($scope) {
+            controller: ['$scope', '$element', function ($scope, $element) {
                 this.sort = function (field) {
                     if (field !== $scope.predicate) {
                         $scope.ascending = true;
@@ -37,6 +37,7 @@ angular.module('<%=angularAppName%>')
                     thisIcon.removeClass(remove);
                     thisIcon.addClass(add);
                 };
+                this.applyClass($element.find('th[jh-sort-by=' + $scope.predicate + ']'));
             }]
         };
     }).directive('jhSortBy', function () {
