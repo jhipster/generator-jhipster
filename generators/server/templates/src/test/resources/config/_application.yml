@@ -41,8 +41,6 @@ spring:
     <%_ if (databaseType == 'cassandra') { _%>
     data:
         cassandra:
-            # Note this is not an official Spring Boot configuration yet
-            # JHipster's Cassandra support is in the process of being merged in Spring Boot
             contactPoints: localhost
             port: 9142
             protocolVersion: V2
