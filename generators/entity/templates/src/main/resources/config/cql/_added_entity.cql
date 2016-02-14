@@ -1,8 +1,8 @@
 
 CREATE TABLE IF NOT EXISTS <%= entityInstance %> (
-    id uuid,<% for (fieldId in fields) {
-        var fieldType = fields[fieldId].fieldType;
-        var fieldName = fields[fieldId].fieldName;
+    id uuid,<% for (idx in fields) {
+        var fieldType = fields[idx].fieldType;
+        var fieldName = fields[idx].fieldName;
         if (fieldType == 'UUID') { %>
     <%= fieldName %> uuid,<% } else if (fieldType == 'String') { %>
     <%= fieldName %> text,<% } else if (fieldType == 'Integer') { %>
