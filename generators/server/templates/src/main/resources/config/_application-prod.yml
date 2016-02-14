@@ -48,6 +48,9 @@ spring:
         username: <%= baseName %>
         <%_ } _%>
         password:
+        <%_ if (prodDatabaseType == 'postgresql') { _%>
+        driver-class-name: org.postgresql.ds.PGSimpleDataSource
+        <%_ } _%>
         <%_ if (prodDatabaseType == 'mysql') { _%>
         hikari:
             data-source-properties:
