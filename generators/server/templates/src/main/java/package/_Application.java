@@ -38,9 +38,9 @@ import java.util.Collection;
 <%_ if (applicationType == 'gateway') { _%>
 @EnableZuulProxy
 <%_ } _%>
-public class Application {
+public class <%= mainClass %> {
 
-    private static final Logger log = LoggerFactory.getLogger(Application.class);
+    private static final Logger log = LoggerFactory.getLogger(<%= mainClass %>.class);
 
     @Inject
     private Environment env;
@@ -76,7 +76,7 @@ public class Application {
      * Main method, used to run the application.
      */
     public static void main(String[] args) throws UnknownHostException {
-        SpringApplication app = new SpringApplication(Application.class);
+        SpringApplication app = new SpringApplication(<%= mainClass %>.class);
         SimpleCommandLinePropertySource source = new SimpleCommandLinePropertySource(args);
         addDefaultProfile(app, source);
         Environment env = app.run(args).getEnvironment();

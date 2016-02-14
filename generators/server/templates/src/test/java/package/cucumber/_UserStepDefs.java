@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import <%=packageName%>.Application;
+import <%=packageName%>.<%= mainClass %>;
 import <%=packageName%>.web.rest.UserResource;
 
 import cucumber.api.java.Before;
@@ -23,7 +23,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 @WebAppConfiguration
-@ContextConfiguration(classes = Application.class, loader = SpringApplicationContextLoader.class)
+@ContextConfiguration(classes = <%= mainClass %>.class, loader = SpringApplicationContextLoader.class)
 public class UserStepDefs {
 
     @Inject

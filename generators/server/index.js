@@ -522,6 +522,11 @@ module.exports = JhipsterServerGenerator.extend({
             this.camelizedBaseName = _.camelize(this.baseName);
             this.slugifiedBaseName = _.slugify(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();
+            
+            this.mainClass = _.capitalize(this.camelizedBaseName);
+            if (!this.camelizedBaseName.endsWith('App')) {
+               this.mainClass += 'App';
+            }
 
             if (this.prodDatabaseType === 'oracle') {
                 // create a folder for users to place ojdbc jar
@@ -788,7 +793,8 @@ module.exports = JhipsterServerGenerator.extend({
         writeServerJavaAppFiles: function () {
 
             // Create Java files
-            this.template('src/main/java/package/_Application.java', javaDir + '/Application.java', this, {});
+            // Spring Boot main
+            this.template('src/main/java/package/_Application.java', javaDir + '/' + this.mainClass + '.java', this, {});
             this.template('src/main/java/package/_ApplicationWebXml.java', javaDir + '/ApplicationWebXml.java', this, {});
         },
 
