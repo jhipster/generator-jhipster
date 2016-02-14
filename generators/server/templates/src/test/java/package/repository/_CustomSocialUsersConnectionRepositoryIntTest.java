@@ -1,6 +1,6 @@
 package <%=packageName%>.repository;
 
-import <%=packageName%>.Application;
+import <%=packageName%>.<%= mainClass %>;
 import <%=packageName%>.domain.SocialUserConnection;
 
 import org.junit.Before;
@@ -32,7 +32,7 @@ import static org.assertj.core.api.StrictAssertions.assertThat;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = <%= mainClass %>.class)
 @WebAppConfiguration
 @IntegrationTest<% if (databaseType == 'sql') { %>
 @Transactional<% } %>
