@@ -17,10 +17,12 @@ angular.module('<%=angularAppName%>')
                     }
                 },
                 resolve: {
+                <% if (enableTranslation) { %>
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('user-management');
                         return $translate.refresh();
                     }]
+                <% } %>
                 }
             })
             .state('user-management-detail', {
@@ -37,10 +39,12 @@ angular.module('<%=angularAppName%>')
                     }
                 },
                 resolve: {
+                <% if (enableTranslation) { %>
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('user-management');
                         return $translate.refresh();
                     }]
+                <% } %>
                 }
             })
             .state('user-management.new', {
