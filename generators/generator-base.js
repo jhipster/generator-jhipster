@@ -871,7 +871,7 @@ Generator.prototype.copyTemplate = function (source, dest, action, _this, _opt, 
             jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, _opt, template);
             break;
         case 'stripJs' :
-            var regex = '[a-zA-Z]+\:(\s)?\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\>\;\s]*\}\]';
+            var regex = '\,(\s)*(resolve)+\:(\s)?[\{](\s)*[a-zA-Z]+\:(\s)?\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\-\>\;\s]*\}\](\s)*\}';
             //looks for something like mainTranslatePartialLoader: [*]
             jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, _opt, template);
             break;

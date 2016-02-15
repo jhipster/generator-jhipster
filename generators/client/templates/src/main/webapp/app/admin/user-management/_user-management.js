@@ -15,13 +15,13 @@ angular.module('<%=angularAppName%>')
                         templateUrl: 'app/admin/user-management/user-management.html',
                         controller: 'UserManagementController'
                     }
-                }<% if (enableTranslation) { %>,
+                },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('user-management');
                         return $translate.refresh();
                     }]
-                }<% } %>
+                }
             })
             .state('user-management-detail', {
                 parent: 'admin',
@@ -35,13 +35,13 @@ angular.module('<%=angularAppName%>')
                         templateUrl: 'app/admin/user-management/user-management-detail.html',
                         controller: 'UserManagementDetailController'
                     }
-                }<% if (enableTranslation) { %>,
+                },
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('user-management');
                         return $translate.refresh();
                     }]
-                }<% } %>
+                }
             })
             .state('user-management.new', {
                 parent: 'user-management',

@@ -103,7 +103,7 @@ public class <%= entityClass %>ResourceIntTest <% if (databaseType == 'cassandra
         var updatedTextString = "";
         var sampleTextMinLength = fields[fieldId].fieldValidateRulesMinlength;
         if (sampleTextMinLength == undefined) {
-            sampleTextMinLength == fields[fieldId].fieldValidateRulesMaxlength;
+            sampleTextMinLength = fields[fieldId].fieldValidateRulesMaxlength;
             if (sampleTextMinLength == undefined) {
                 sampleTextMinLength = 5;
             }
