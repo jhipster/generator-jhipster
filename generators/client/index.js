@@ -297,30 +297,30 @@ module.exports = JhipsterClientGenerator.extend({
 
         writeAngularAuthFiles : function () {
             // account module
-            this.template(ANGULAR_DIR + 'account/_account.js', ANGULAR_DIR + 'account/account.js', this, {});
+            this.template(ANGULAR_DIR + 'account/_account.state.js', ANGULAR_DIR + 'account/account.state.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'account/activate/activate.html', ANGULAR_DIR + 'account/activate/activate.html');
-            this.copyJs(ANGULAR_DIR + 'account/activate/_activate.js', ANGULAR_DIR + 'account/activate/activate.js', this, {});
+            this.copyJs(ANGULAR_DIR + 'account/activate/_activate.state.js', ANGULAR_DIR + 'account/activate/activate.state.js', this, {});
             this.template(ANGULAR_DIR + 'account/activate/_activate.controller.js', ANGULAR_DIR + 'account/activate/activate.controller.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'account/password/password.html', ANGULAR_DIR + 'account/password/password.html');
-            this.copyJs(ANGULAR_DIR + 'account/password/_password.js', ANGULAR_DIR + 'account/password/password.js', this, {});
+            this.copyJs(ANGULAR_DIR + 'account/password/_password.state.js', ANGULAR_DIR + 'account/password/password.state.js', this, {});
             this.template(ANGULAR_DIR + 'account/password/_password.controller.js', ANGULAR_DIR + 'account/password/password.controller.js', this, {});
             this.template(ANGULAR_DIR + 'account/password/_password.directive.js', ANGULAR_DIR + 'account/password/password.directive.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'account/register/register.html', ANGULAR_DIR + 'account/register/register.html');
-            this.copyJs(ANGULAR_DIR + 'account/register/_register.js', ANGULAR_DIR + 'account/register/register.js', this, {});
+            this.copyJs(ANGULAR_DIR + 'account/register/_register.state.js', ANGULAR_DIR + 'account/register/register.state.js', this, {});
             this.template(ANGULAR_DIR + 'account/register/_register.controller.js', ANGULAR_DIR + 'account/register/register.controller.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'account/reset/request/reset.request.html', ANGULAR_DIR + 'account/reset/request/reset.request.html');
-            this.copyJs(ANGULAR_DIR + 'account/reset/request/_reset.request.js', ANGULAR_DIR + 'account/reset/request/reset.request.js', this, {});
+            this.copyJs(ANGULAR_DIR + 'account/reset/request/_reset.request.state.js', ANGULAR_DIR + 'account/reset/request/reset.request.state.js', this, {});
             this.template(ANGULAR_DIR + 'account/reset/request/_reset.request.controller.js', ANGULAR_DIR + 'account/reset/request/reset.request.controller.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'account/reset/finish/reset.finish.html', ANGULAR_DIR + 'account/reset/finish/reset.finish.html');
-            this.copyJs(ANGULAR_DIR + 'account/reset/finish/_reset.finish.js', ANGULAR_DIR + 'account/reset/finish/reset.finish.js', this, {});
+            this.copyJs(ANGULAR_DIR + 'account/reset/finish/_reset.finish.state.js', ANGULAR_DIR + 'account/reset/finish/reset.finish.state.js', this, {});
             this.template(ANGULAR_DIR + 'account/reset/finish/_reset.finish.controller.js', ANGULAR_DIR + 'account/reset/finish/reset.finish.controller.js', this, {});
             if (this.authenticationType == 'session') {
                 this.copyHtml(ANGULAR_DIR + 'account/sessions/sessions.html', ANGULAR_DIR + 'account/sessions/sessions.html');
-                this.copyJs(ANGULAR_DIR + 'account/sessions/_sessions.js', ANGULAR_DIR + 'account/sessions/sessions.js', this, {});
+                this.copyJs(ANGULAR_DIR + 'account/sessions/_sessions.state.js', ANGULAR_DIR + 'account/sessions/sessions.state.js', this, {});
                 this.template(ANGULAR_DIR + 'account/sessions/_sessions.controller.js', ANGULAR_DIR + 'account/sessions/sessions.controller.js', this, {});
             }
             this.copyHtml(ANGULAR_DIR + 'account/settings/settings.html', ANGULAR_DIR + 'account/settings/settings.html');
-            this.copyJs(ANGULAR_DIR + 'account/settings/_settings.js', ANGULAR_DIR + 'account/settings/settings.js', this, {});
+            this.copyJs(ANGULAR_DIR + 'account/settings/_settings.state.js', ANGULAR_DIR + 'account/settings/settings.state.js', this, {});
             this.template(ANGULAR_DIR + 'account/settings/_settings.controller.js', ANGULAR_DIR + 'account/settings/settings.controller.js', this, {});
             // Social
             if (this.enableSocialSignIn) {
@@ -329,42 +329,42 @@ module.exports = JhipsterClientGenerator.extend({
                 this.copyHtml(ANGULAR_DIR + 'account/social/_social-register.html', ANGULAR_DIR + 'account/social/social-register.html');
                 this.template(ANGULAR_DIR + 'account/social/_social-register.controller.js', ANGULAR_DIR + 'account/social/social-register.controller.js', this, {});
                 this.template(ANGULAR_DIR + 'account/social/_social.service.js', ANGULAR_DIR + 'account/social/social.service.js', this, {});
-                this.copyJs(ANGULAR_DIR + 'account/social/_social-register.js', ANGULAR_DIR + 'account/social/social-register.js', this, {});
+                this.copyJs(ANGULAR_DIR + 'account/social/_social-register.state.js', ANGULAR_DIR + 'account/social/social-register.state.js', this, {});
             }
         },
 
         writeAngularAdminModuleFiles : function () {
             // admin modules
-            this.template(ANGULAR_DIR + 'admin/_admin.js', ANGULAR_DIR + 'admin/admin.js', this, {});
+            this.template(ANGULAR_DIR + 'admin/_admin.state.js', ANGULAR_DIR + 'admin/admin.state.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'admin/audits/audits.html', ANGULAR_DIR + 'admin/audits/audits.html');
-            this.copyJs(ANGULAR_DIR + 'admin/audits/_audits.js', ANGULAR_DIR + 'admin/audits/audits.js', this, {});
+            this.copyJs(ANGULAR_DIR + 'admin/audits/_audits.state.js', ANGULAR_DIR + 'admin/audits/audits.state.js', this, {});
             this.template(ANGULAR_DIR + 'admin/audits/_audits.controller.js', ANGULAR_DIR + 'admin/audits/audits.controller.js', this, {});
             this.template(ANGULAR_DIR + 'admin/audits/_audits.service.js', ANGULAR_DIR + 'admin/audits/audits.service.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'admin/configuration/configuration.html', ANGULAR_DIR + 'admin/configuration/configuration.html');
-            this.copyJs(ANGULAR_DIR + 'admin/configuration/_configuration.js', ANGULAR_DIR + 'admin/configuration/configuration.js', this, {});
+            this.copyJs(ANGULAR_DIR + 'admin/configuration/_configuration.state.js', ANGULAR_DIR + 'admin/configuration/configuration.state.js', this, {});
             this.template(ANGULAR_DIR + 'admin/configuration/_configuration.controller.js', ANGULAR_DIR + 'admin/configuration/configuration.controller.js', this, {});
             this.template(ANGULAR_DIR + 'admin/configuration/_configuration.service.js', ANGULAR_DIR + 'admin/configuration/configuration.service.js', this, {});
             this.copy(ANGULAR_DIR + 'admin/docs/docs.html', ANGULAR_DIR + 'admin/docs/docs.html');
-            this.copyJs(ANGULAR_DIR + 'admin/docs/_docs.js', ANGULAR_DIR + 'admin/docs/docs.js', this, {});
+            this.copyJs(ANGULAR_DIR + 'admin/docs/_docs.state.js', ANGULAR_DIR + 'admin/docs/docs.state.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'admin/health/health.html', ANGULAR_DIR + 'admin/health/health.html');
             this.copyHtml(ANGULAR_DIR + 'admin/health/_health.modal.html', ANGULAR_DIR + 'admin/health/health.modal.html');
-            this.copyJs(ANGULAR_DIR + 'admin/health/_health.js', ANGULAR_DIR + 'admin/health/health.js', this, {});
+            this.copyJs(ANGULAR_DIR + 'admin/health/_health.state.js', ANGULAR_DIR + 'admin/health/health.state.js', this, {});
             this.template(ANGULAR_DIR + 'admin/health/_health.controller.js', ANGULAR_DIR + 'admin/health/health.controller.js', this, {});
             this.template(ANGULAR_DIR + 'admin/health/_health.modal.controller.js', ANGULAR_DIR + 'admin/health/health.modal.controller.js', this, {});
             this.template(ANGULAR_DIR + 'admin/health/_health.service.js', ANGULAR_DIR + 'admin/health/health.service.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'admin/logs/logs.html', ANGULAR_DIR + 'admin/logs/logs.html');
-            this.copyJs(ANGULAR_DIR + 'admin/logs/_logs.js', ANGULAR_DIR + 'admin/logs/logs.js', this, {});
+            this.copyJs(ANGULAR_DIR + 'admin/logs/_logs.state.js', ANGULAR_DIR + 'admin/logs/logs.state.js', this, {});
             this.template(ANGULAR_DIR + 'admin/logs/_logs.controller.js', ANGULAR_DIR + 'admin/logs/logs.controller.js', this, {});
             this.template(ANGULAR_DIR + 'admin/logs/_logs.service.js', ANGULAR_DIR + 'admin/logs/logs.service.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'admin/metrics/_metrics.html', ANGULAR_DIR + 'admin/metrics/metrics.html', this, {}, true);
             this.copyHtml(ANGULAR_DIR + 'admin/metrics/_metrics.modal.html', ANGULAR_DIR + 'admin/metrics/metrics.modal.html', this, {}, true);
-            this.copyJs(ANGULAR_DIR + 'admin/metrics/_metrics.js', ANGULAR_DIR + 'admin/metrics/metrics.js', this, {});
+            this.copyJs(ANGULAR_DIR + 'admin/metrics/_metrics.state.js', ANGULAR_DIR + 'admin/metrics/metrics.state.js', this, {});
             this.template(ANGULAR_DIR + 'admin/metrics/_metrics.controller.js', ANGULAR_DIR + 'admin/metrics/metrics.controller.js', this, {});
             this.template(ANGULAR_DIR + 'admin/metrics/_metrics.modal.controller.js', ANGULAR_DIR + 'admin/metrics/metrics.modal.controller.js', this, {});
             this.template(ANGULAR_DIR + 'admin/metrics/_metrics.service.js', ANGULAR_DIR + 'admin/metrics/metrics.service.js', this, {});
             if (this.websocket == 'spring-websocket') {
                 this.copyHtml(ANGULAR_DIR + 'admin/tracker/tracker.html', ANGULAR_DIR + 'admin/tracker/tracker.html');
-                this.copyJs(ANGULAR_DIR + 'admin/tracker/_tracker.js', ANGULAR_DIR + 'admin/tracker/tracker.js', this, {});
+                this.copyJs(ANGULAR_DIR + 'admin/tracker/_tracker.state.js', ANGULAR_DIR + 'admin/tracker/tracker.state.js', this, {});
                 this.template(ANGULAR_DIR + 'admin/tracker/_tracker.controller.js', ANGULAR_DIR + 'admin/tracker/tracker.controller.js', this, {});
                 this.template(ANGULAR_DIR + 'admin/tracker/_tracker.service.js', ANGULAR_DIR + 'admin/tracker/tracker.service.js', this, {});
             }
@@ -375,7 +375,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/_user-management-detail.html', ANGULAR_DIR + 'admin/user-management/user-management-detail.html');
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/_user-management-dialog.html', ANGULAR_DIR + 'admin/user-management/user-management-dialog.html');
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/_user-management-delete-dialog.html', ANGULAR_DIR + 'admin/user-management/user-management-delete-dialog.html');
-            this.copyJs(ANGULAR_DIR + 'admin/user-management/_user-management.js', ANGULAR_DIR + 'admin/user-management/user-management.js', this, {});
+            this.copyJs(ANGULAR_DIR + 'admin/user-management/_user-management.state.js', ANGULAR_DIR + 'admin/user-management/user-management.state.js', this, {});
             this.template(ANGULAR_DIR + 'admin/user-management/_user-management.controller.js', ANGULAR_DIR + 'admin/user-management/user-management.controller.js', this, {});
             this.template(ANGULAR_DIR + 'admin/user-management/_user-management-detail.controller.js', ANGULAR_DIR + 'admin/user-management/user-management-detail.controller.js', this, {});
             this.template(ANGULAR_DIR + 'admin/user-management/_user-management-dialog.controller.js', ANGULAR_DIR + 'admin/user-management/user-management-dialog.controller.js', this, {});
@@ -386,7 +386,7 @@ module.exports = JhipsterClientGenerator.extend({
             if (this.applicationType != 'gateway') return;
 
             this.copyHtml(ANGULAR_DIR + 'admin/gateway/gateway.html', ANGULAR_DIR + 'admin/gateway/gateway.html');
-            this.copyJs(ANGULAR_DIR + 'admin/gateway/_gateway.js', ANGULAR_DIR + 'admin/gateway/gateway.js', this, {});
+            this.copyJs(ANGULAR_DIR + 'admin/gateway/_gateway.state.js', ANGULAR_DIR + 'admin/gateway/gateway.state.js', this, {});
             this.copyJs(ANGULAR_DIR + 'admin/gateway/_gateway.controller.js', ANGULAR_DIR + 'admin/gateway/gateway.controller.js', this, {});
             this.copyJs(ANGULAR_DIR + 'admin/gateway/_gateway.routes.service.js', ANGULAR_DIR + 'admin/gateway/gateway.routes.service.js', this, {});
         },
@@ -426,11 +426,11 @@ module.exports = JhipsterClientGenerator.extend({
 
         writeAngularMainFiles : function () {
             // entities
-            this.copyJs(ANGULAR_DIR + 'entities/_entity.js', ANGULAR_DIR + 'entities/entity.js', this, {});
+            this.copyJs(ANGULAR_DIR + 'entities/_entity.state.js', ANGULAR_DIR + 'entities/entity.state.js', this, {});
 
             // home module
             this.copyHtml(ANGULAR_DIR + 'home/home.html', ANGULAR_DIR + 'home/home.html');
-            this.copyJs(ANGULAR_DIR + 'home/_home.js', ANGULAR_DIR + 'home/home.js', this, {});
+            this.copyJs(ANGULAR_DIR + 'home/_home.state.js', ANGULAR_DIR + 'home/home.state.js', this, {});
             this.template(ANGULAR_DIR + 'home/_home.controller.js', ANGULAR_DIR + 'home/home.controller.js', this, {});
 
             // layouts
@@ -439,7 +439,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'layouts/navbar/_navbar.controller.js', ANGULAR_DIR + 'layouts/navbar/navbar.controller.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'layouts/error/error.html', ANGULAR_DIR + 'layouts/error/error.html');
             this.copyHtml(ANGULAR_DIR + 'layouts/error/accessdenied.html', ANGULAR_DIR + 'layouts/error/accessdenied.html');
-            this.copyJs(ANGULAR_DIR + 'layouts/error/_error.js', ANGULAR_DIR + 'layouts/error/error.js', this, {});
+            this.copyJs(ANGULAR_DIR + 'layouts/error/_error.state.js', ANGULAR_DIR + 'layouts/error/error.state.js', this, {});
         },
 
         writeAngularAuthServiceFiles : function () {
@@ -481,37 +481,37 @@ module.exports = JhipsterClientGenerator.extend({
                 'app/app.config.js',
                 'app/app.constants.js',
                 // account
-                'app/account/account.js',
-                'app/account/activate/activate.js',
+                'app/account/account.state.js',
+                'app/account/activate/activate.state.js',
                 'app/account/activate/activate.controller.js',
-                'app/account/password/password.js',
+                'app/account/password/password.state.js',
                 'app/account/password/password.controller.js',
                 'app/account/password/password.directive.js',
-                'app/account/register/register.js',
+                'app/account/register/register.state.js',
                 'app/account/register/register.controller.js',
-                'app/account/settings/settings.js',
+                'app/account/settings/settings.state.js',
                 'app/account/settings/settings.controller.js',
                 'app/account/reset/finish/reset.finish.controller.js',
-                'app/account/reset/finish/reset.finish.js',
+                'app/account/reset/finish/reset.finish.state.js',
                 'app/account/reset/request/reset.request.controller.js',
-                'app/account/reset/request/reset.request.js',
+                'app/account/reset/request/reset.request.state.js',
                 // admin
-                'app/admin/admin.js',
-                'app/admin/audits/audits.js',
+                'app/admin/admin.state.js',
+                'app/admin/audits/audits.state.js',
                 'app/admin/audits/audits.controller.js',
                 'app/admin/audits/audits.service.js',
-                'app/admin/configuration/configuration.js',
+                'app/admin/configuration/configuration.state.js',
                 'app/admin/configuration/configuration.controller.js',
                 'app/admin/configuration/configuration.service.js',
-                'app/admin/docs/docs.js',
-                'app/admin/health/health.js',
+                'app/admin/docs/docs.state.js',
+                'app/admin/health/health.state.js',
                 'app/admin/health/health.controller.js',
                 'app/admin/health/health.service.js',
                 'app/admin/health/health.modal.controller.js',
-                'app/admin/logs/logs.js',
+                'app/admin/logs/logs.state.js',
                 'app/admin/logs/logs.controller.js',
                 'app/admin/logs/logs.service.js',
-                'app/admin/metrics/metrics.js',
+                'app/admin/metrics/metrics.state.js',
                 'app/admin/metrics/metrics.controller.js',
                 'app/admin/metrics/metrics.service.js',
                 'app/admin/metrics/metrics.modal.controller.js',
@@ -519,7 +519,7 @@ module.exports = JhipsterClientGenerator.extend({
                 'app/admin/user-management/user-management-dialog.controller.js',
                 'app/admin/user-management/user-management-delete-dialog.controller.js',
                 'app/admin/user-management/user-management.controller.js',
-                'app/admin/user-management/user-management.js',
+                'app/admin/user-management/user-management.state.js',
                 // components
                 'app/components/form/form.directive.js',
                 'app/components/form/maxbytes.directive.js',
@@ -543,12 +543,12 @@ module.exports = JhipsterClientGenerator.extend({
                 'app/components/util/pagination-util.service.js',
                 'app/components/util/sort.directive.js',
                 // entities
-                'app/entities/entity.js',
+                'app/entities/entity.state.js',
                 // home
-                'app/home/home.js',
+                'app/home/home.state.js',
                 'app/home/home.controller.js',
                 // layouts
-                'app/layouts/error/error.js',
+                'app/layouts/error/error.state.js',
                 'app/layouts/navbar/navbar.directive.js',
                 'app/layouts/navbar/navbar.controller.js',
                 // services
@@ -571,7 +571,7 @@ module.exports = JhipsterClientGenerator.extend({
             if (this.enableSocialSignIn) {
                 appScripts = appScripts.concat([
                     'app/account/social/directive/social.directive.js',
-                    'app/account/social/social-register.js',
+                    'app/account/social/social-register.state.js',
                     'app/account/social/social-register.controller.js',
                     'app/account/social/social.service.js']);
             }
@@ -589,20 +589,20 @@ module.exports = JhipsterClientGenerator.extend({
                 appScripts = appScripts.concat([
                     'app/services/auth/sessions.service.js',
                     'app/services/auth/auth.session.service.js',
-                    'app/account/sessions/sessions.js',
+                    'app/account/sessions/sessions.state.js',
                     'app/account/sessions/sessions.controller.js']);
             }
 
             if (this.websocket == 'spring-websocket') {
                 appScripts = appScripts.concat([
-                    'app/admin/tracker/tracker.js',
+                    'app/admin/tracker/tracker.state.js',
                     'app/admin/tracker/tracker.controller.js',
                     'app/admin/tracker/tracker.service.js'])
             }
 
             if (this.applicationType == 'gateway') {
                 appScripts = appScripts.concat([
-                    'app/admin/gateway/gateway.js',
+                    'app/admin/gateway/gateway.state.js',
                     'app/admin/gateway/gateway.controller.js',
                     'app/admin/gateway/gateway.routes.service.js'])
             }
