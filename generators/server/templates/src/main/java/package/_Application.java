@@ -50,15 +50,13 @@ public class Application {
 
     /**
      * Initializes <%= baseName %>.
-     * <p/>
+     * <p>
      * Spring profiles can be configured with a program arguments --spring.profiles.active=your-active-profile
-     * <p/>
      * <p>
      * You can find more information on how profiles work with JHipster on <a href="http://jhipster.github.io/profiles.html">http://jhipster.github.io/profiles.html</a>.
-     * </p>
      */
     @PostConstruct
-    public void initApplication() throws IOException {
+    public void initApplication() {
         if (env.getActiveProfiles().length == 0) {
             log.warn("No Spring profile configured, running with default configuration");
         } else {
@@ -77,6 +75,9 @@ public class Application {
 
     /**
      * Main method, used to run the application.
+     *
+     * @param args the command line arguments
+     * @throws UnknownHostException if the local host name could not be resolved into an address
      */
     public static void main(String[] args) throws UnknownHostException {
         SpringApplication app = new SpringApplication(Application.class);

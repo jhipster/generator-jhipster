@@ -44,6 +44,8 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
     <%- include('../../common/inject_template', {viaService: viaService}); -%>
     /**
      * Save a <%= entityInstance %>.
+     * 
+     * @param <%= instanceName %> the entity to save
      * @return the persisted entity
      */
     public <%= instanceType %> save(<%= instanceType %> <%= instanceName %>) {
@@ -52,7 +54,9 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
     }
 
     /**
-     *  get all the <%= entityInstancePlural %>.
+     *  Get all the <%= entityInstancePlural %>.
+     *  <% if (pagination != 'no') { %>
+     *  @param pageable the pagination information<% } %>
      *  @return the list of entities
      */<% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true) <% } %>
@@ -66,7 +70,9 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
     }
 <%- include('../../common/get_filtered_template'); -%>
     /**
-     *  get one <%= entityInstance %> by id.
+     *  Get one <%= entityInstance %> by id.
+     *
+     *  @param id the id of the entity
      *  @return the entity
      */<% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true) <% } %>
@@ -76,15 +82,19 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
     }
 
     /**
-     *  delete the  <%= entityInstance %> by id.
+     *  Delete the  <%= entityInstance %> by id.
+     *  
+     *  @param id the id of the entity
      */
     public void delete(<%= pkType %> id) {
         log.debug("Request to delete <%= entityClass %> : {}", id);<%- include('../../common/delete_template', {viaService: viaService}); -%>
     }<% if (searchEngine == 'elasticsearch') { %>
 
     /**
-     * search for the <%= entityInstance %> corresponding
-     * to the query.
+     * Search for the <%= entityInstance %> corresponding to the query.
+     *
+     *  @param query the query of the search
+     *  @return the list of entities
      */<% if (databaseType == 'sql') { %>
     @Transactional(readOnly = true) <% } %>
     public List<<%= instanceType %>> search(String query) {
