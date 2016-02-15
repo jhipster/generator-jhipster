@@ -12,13 +12,13 @@ angular.module('<%=angularAppName%>')
                 modalInstance = $uibModal.open({
                     animation: true,
                     templateUrl: 'app/components/login/login.html',
-                    controller: 'LoginController'<% if (enableTranslation) { %>,
+                    controller: 'LoginController',
                     resolve: {
                         translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                             $translatePartialLoader.addPart('login');
                             return $translate.refresh();
                         }]
-                    }<% } %>
+                    }
             });
         modalInstance.result.then(
             resetModal,
