@@ -523,7 +523,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.slugifiedBaseName = _.slugify(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();
             this.mainClass = this.getMainClassName();
-            
+
             if (this.prodDatabaseType === 'oracle') {
                 // create a folder for users to place ojdbc jar
                 this.ojdbcVersion = '7';
