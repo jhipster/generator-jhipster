@@ -96,7 +96,7 @@ spring:
             uri: mongodb://localhost:27017
             database: <%= baseName %>
     <%_ } _%>
-    <%_ if (databaseType == 'cassandra') { _%>
+    <%_ if (databaseType == 'cassandra' || applicationType == 'gateway') { _%>
     data:
         cassandra:
             contactPoints: localhost

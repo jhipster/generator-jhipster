@@ -1,4 +1,4 @@
-
+<%_ if (databaseType == 'cassandra') { _%>
 CREATE TABLE IF NOT EXISTS user (
     id text,
     login text,
@@ -85,3 +85,13 @@ VALUES('4','user','$2a$10$VEjxo0jq2YG9Rbk2HmX9S.k1uZBGYUHdUcid3g/vfiEl7lwWgOH/K'
 
 INSERT INTO user_by_login (login, id)
 VALUES('user','4');
+<%_ } _%>
+<% if (applicationType == 'gateway') { %>
+CREATE TABLE IF NOT EXISTS gateway_ratelimiting (
+    id text,
+    time_unit text,
+    time timestamp,
+    value counter,
+    PRIMARY KEY ((id, time_unit, time))
+);
+<%_ } _%>

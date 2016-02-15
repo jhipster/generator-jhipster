@@ -502,7 +502,7 @@
             <version>0.6.0</version>
         </dependency>
         <%_ } _%>
-        <%_ if (databaseType == 'cassandra' || applicationType == 'gateway') { _%>
+        <%_ if (databaseType == 'cassandra') { _%>
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-cassandra</artifactId>

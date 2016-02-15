@@ -678,7 +678,7 @@ module.exports = JhipsterServerGenerator.extend({
                 this.copy(RESOURCE_DIR + '/config/mongeez/social_user_connections.xml', RESOURCE_DIR + 'config/mongeez/social_user_connections.xml');
             }
 
-            if (this.databaseType == "cassandra") {
+            if (this.databaseType == "cassandra" || this.applicationType == 'gateway') {
                 this.template(RESOURCE_DIR + '/config/cql/_create-keyspace-prod.cql', RESOURCE_DIR + 'config/cql/create-keyspace-prod.cql', this, {});
                 this.template(RESOURCE_DIR + '/config/cql/_create-keyspace.cql', RESOURCE_DIR + 'config/cql/create-keyspace.cql', this, {});
                 this.template(RESOURCE_DIR + '/config/cql/_drop-keyspace.cql', RESOURCE_DIR + 'config/cql/drop-keyspace.cql', this, {});

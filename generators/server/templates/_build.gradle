@@ -134,7 +134,7 @@ dependencies {
     compile group: 'commons-lang', name: 'commons-lang', version: commons_lang_version
     compile group: 'commons-io', name: 'commons-io', version: commons_io_version
     compile group: 'javax.inject', name: 'javax.inject', version: javax_inject_version
-    compile group: 'javax.transaction', name: 'javax.transaction-api'<% if (databaseType == 'cassandra') { %>
+    compile group: 'javax.transaction', name: 'javax.transaction-api'<% if (databaseType == 'cassandra' || applicationType == 'gateway') { %>
     compile group: 'net.jpountz.lz4', name: 'lz4', version: lz4_version<% } %>
     compile group: 'org.apache.geronimo.javamail', name: 'geronimo-javamail_1.4_mail', version: geronimo_javamail_1_4_mail_version
     compile group: 'org.hibernate', name: 'hibernate-core', version: hibernate_entitymanager_version

@@ -30,11 +30,13 @@ zuul:
 spring:
     application:
         name: <%= baseName %>
+    <%_ if (databaseType == 'sql') { _%>
     jpa:
         open-in-view: false
         hibernate:
             ddl-auto: none
             naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
+    <%_ } _%>
     messages:
         basename: i18n/messages
     mvc:

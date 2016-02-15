@@ -35,6 +35,9 @@ public class JHipsterProperties {
     private final Social social = new Social();
     <%_ } _%>
 
+    <%_ if (applicationType == 'gateway') { _%>
+    private final Gateway gateway = new Gateway();
+    <%_ } _%>
 
     public Async getAsync() {
         return async;
@@ -71,6 +74,12 @@ public class JHipsterProperties {
     <%_ if (enableSocialSignIn) { _%>
     public Social getSocial() {
         return social;
+    }
+    <%_ } _%>
+
+    <%_ if (applicationType == 'gateway') { _%>
+    public Gateway getGateway() {
+        return gateway;
     }
     <%_ } _%>
 
@@ -507,6 +516,38 @@ public class JHipsterProperties {
 
         public void setRedirectAfterSignIn(String redirectAfterSignIn) {
             this.redirectAfterSignIn = redirectAfterSignIn;
+        }
+    }<%_ } _%>
+    <%_ if (applicationType == 'gateway') { _%>
+    public static class Gateway {
+
+        private final RateLimiting rateLimiting = new RateLimiting();
+
+        public RateLimiting getRateLimiting() {
+            return rateLimiting;
+        }
+
+        public static class RateLimiting {
+
+            private boolean enabled = false;
+
+            private long limit = 1000L;
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
+
+            public long getLimit() {
+                return this.limit;
+            }
+
+            public void setLimit(long limit) {
+                this.limit = limit;
+            }
         }
     }<%_ } _%>
 }
