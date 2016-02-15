@@ -1218,7 +1218,7 @@ Generator.prototype.printJHipsterLogo = function () {
 };
 
 Generator.prototype.getAngularAppName = function () {
-    return _s.camelize(_s.slugify(this.baseName)) + 'App';
+    return _s.camelize(_s.slugify(this.baseName)) + (this.baseName.endsWith('App') ? '' : 'App');
 };
 
 Generator.prototype.askModuleName = function (generator, question, questions) {
