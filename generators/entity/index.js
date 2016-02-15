@@ -180,7 +180,7 @@ module.exports = EntityGenerator.extend({
      * ask question for a field creation
      */
     _askForField : function(cb){
-        this.log(chalk.green('\nGenerating field\n'));
+        this.log(chalk.green('\nGenerating field #' + (this.fields.length + 1) + '\n'));
         var prompts = [
             {
                 type: 'confirm',
