@@ -152,7 +152,7 @@ jhipster:
     gateway:
         <%_ if (databaseType != 'cassandra') { _%>
         embedded-cassandra: # Starts an embedded Cassandra node (not safe for production)
-            enabled: true
+            enabled: false
         <%_ } _%>
         rate-limiting: # Warning! Read the documentation in the GatewayConfiguration class.
             enabled: false
