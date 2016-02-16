@@ -1,12 +1,12 @@
 var webpack = require('webpack');
 var path = require('path');
-var buildPath = path.resolve(__dirname, 'build');
 var nodeModulesPath = path.resolve(__dirname, 'node_modules');
+var dest = path.resolve(__dirname, 'src/main/webapp/content/js');
 
 var config = {
   //Entry points to the project
   entry: [
-    'webpack/hot/dev-server',
+    'webpack-dev-server/client?http://localhost:3000',
     'webpack/hot/only-dev-server',
     path.join(__dirname, '/src/main/webapp/app/app.jsx')
   ],
@@ -17,16 +17,16 @@ var config = {
   },
   //Server Configuration options
   devServer:{
-    contentBase: 'src/main/webapp',  //Relative directory for base of server
+    contentBase: '.src/main/webapp/app/app',  //Relative directory for base of server
     devtool: 'eval',
     hot: true,        //Live-reload
-    inline: true,
-    port: 3000        //Port Number
+    inline: true
   },
   devtool: 'eval',
   output: {
-    path: buildPath,    //Path of output file
-    filename: 'app.js'
+    path: dest,    //Path of output file
+    filename: 'app.js',
+    publicPath: '/content/js'
   },
   plugins: [
     //Enables Hot Modules Replacement
