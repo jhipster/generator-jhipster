@@ -1,12 +1,10 @@
 {
     "fields": [
         {
-            "fieldId": 1,
             "fieldName": "userId",
             "fieldType": "UUID"
         },
         {
-            "fieldId": 2,
             "fieldName": "name",
             "fieldType": "String",
             "fieldValidateRules": [
@@ -14,27 +12,22 @@
             ]
         },
         {
-            "fieldId": 3,
             "fieldName": "bankNumber",
             "fieldType": "Integer"
         },
         {
-            "fieldId": 4,
             "fieldName": "agencyNumber",
             "fieldType": "Long"
         },
         {
-            "fieldId": 5,
             "fieldName": "lastOperationDuration",
             "fieldType": "Float"
         },
         {
-            "fieldId": 6,
             "fieldName": "meanOperationDuration",
             "fieldType": "Double"
         },
         {
-            "fieldId": 7,
             "fieldName": "balance",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [
@@ -42,12 +35,10 @@
             ]
         },
         {
-            "fieldId": 8,
             "fieldName": "lastOperationDate",
             "fieldType": "Date"
         },
         {
-            "fieldId": 9,
             "fieldName": "active",
             "fieldType": "Boolean"
         }

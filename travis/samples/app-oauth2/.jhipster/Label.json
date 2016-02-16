@@ -1,7 +1,6 @@
 {
     "relationships": [
         {
-            "relationshipId": 1,
             "relationshipName": "operation",
             "otherEntityName": "operation",
             "relationshipType": "many-to-many",
@@ -11,7 +10,6 @@
     ],
     "fields": [
         {
-            "fieldId": 1,
             "fieldName": "label",
             "fieldType": "String",
             "fieldValidateRules": [

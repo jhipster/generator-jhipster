@@ -1,7 +1,6 @@
 {
     "fields": [
         {
-            "fieldId": 1,
             "fieldName": "name",
             "fieldType": "String",
             "fieldValidateRules": [
@@ -9,27 +8,22 @@
             ]
         },
         {
-            "fieldId": 2,
             "fieldName": "bankNumber",
             "fieldType": "Integer"
         },
         {
-            "fieldId": 3,
             "fieldName": "agencyNumber",
             "fieldType": "Long"
         },
         {
-            "fieldId": 4,
             "fieldName": "lastOperationDuration",
             "fieldType": "Float"
         },
         {
-            "fieldId": 5,
             "fieldName": "meanOperationDuration",
             "fieldType": "Double"
         },
         {
-            "fieldId": 6,
             "fieldName": "balance",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [
@@ -37,34 +31,28 @@
             ]
         },
         {
-            "fieldId": 7,
             "fieldName": "openingDay",
             "fieldType": "LocalDate"
         },
         {
-            "fieldId": 8,
             "fieldName": "lastOperationDate",
             "fieldType": "ZonedDateTime"
         },
         {
-            "fieldId": 9,
             "fieldName": "active",
             "fieldType": "Boolean"
         },
         {
-            "fieldId": 10,
             "fieldName": "accountType",
             "fieldType": "BankAccountType",
             "fieldValues": "CHECKING,SAVINGS,LOAN"
         },
         {
-            "fieldId": 11,
             "fieldName": "attachment",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "any"
         },
         {
-            "fieldId": 12,
             "fieldName": "description",
             "fieldType": "byte[]",
             "fieldTypeBlobContent": "text"

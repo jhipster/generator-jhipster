@@ -11,8 +11,8 @@ import java.util.Set;<% } %>
 import java.util.Objects;<% if (databaseType == 'cassandra') { %>
 import java.util.UUID;<% } %><% if (fieldsContainBlob == true) { %>
 import javax.persistence.Lob;<% } %>
-<% for (fieldId in fields) { if (fields[fieldId].fieldIsEnum == true) { %>
-import <%=packageName%>.domain.enumeration.<%= fields[fieldId].fieldType %>;<% } } %>
+<% for (idx in fields) { if (fields[idx].fieldIsEnum == true) { %>
+import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;<% } } %>
 
 /**
  * A DTO for the <%= entityClass %> entity.
@@ -22,19 +22,19 @@ public class <%= entityClass %>DTO implements Serializable {
     private Long id;<% } %><% if (databaseType == 'mongodb') { %>
     private String id;<% } %><% if (databaseType == 'cassandra') { %>
     private UUID id;<% } %>
-    <%_ for (fieldId in fields) {
-        var fieldValidate = fields[fieldId].fieldValidate;
-        var fieldValidateRules = fields[fieldId].fieldValidateRules;
-        var fieldValidateRulesMinlength = fields[fieldId].fieldValidateRulesMinlength;
-        var fieldValidateRulesMaxlength = fields[fieldId].fieldValidateRulesMaxlength;
-        var fieldValidateRulesMinbytes = fields[fieldId].fieldValidateRulesMinbytes;
-        var fieldValidateRulesMaxbytes = fields[fieldId].fieldValidateRulesMaxbytes;
-        var fieldValidateRulesMin = fields[fieldId].fieldValidateRulesMin;
-        var fieldValidateRulesMax = fields[fieldId].fieldValidateRulesMax;
-        var fieldValidateRulesPatternJava = fields[fieldId].fieldValidateRulesPatternJava;
-        var fieldType = fields[fieldId].fieldType;
-        var fieldTypeBlobContent = fields[fieldId].fieldTypeBlobContent;
-        var fieldName = fields[fieldId].fieldName;
+    <%_ for (idx in fields) {
+        var fieldValidate = fields[idx].fieldValidate;
+        var fieldValidateRules = fields[idx].fieldValidateRules;
+        var fieldValidateRulesMinlength = fields[idx].fieldValidateRulesMinlength;
+        var fieldValidateRulesMaxlength = fields[idx].fieldValidateRulesMaxlength;
+        var fieldValidateRulesMinbytes = fields[idx].fieldValidateRulesMinbytes;
+        var fieldValidateRulesMaxbytes = fields[idx].fieldValidateRulesMaxbytes;
+        var fieldValidateRulesMin = fields[idx].fieldValidateRulesMin;
+        var fieldValidateRulesMax = fields[idx].fieldValidateRulesMax;
+        var fieldValidateRulesPatternJava = fields[idx].fieldValidateRulesPatternJava;
+        var fieldType = fields[idx].fieldType;
+        var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+        var fieldName = fields[idx].fieldName;
         if (fieldValidate == true) {
             var required = false;
             var MAX_VALUE = 2147483647;
@@ -63,13 +63,13 @@ public class <%= entityClass %>DTO implements Serializable {
     private String <%= fieldName %>ContentType;
         <%_ } _%>
     <%_ } _%>
-    <%_ for (relationshipId in relationships) {
-        var otherEntityRelationshipName = relationships[relationshipId].otherEntityRelationshipName,
-        relationshipFieldName = relationships[relationshipId].relationshipFieldName,
-        relationshipType = relationships[relationshipId].relationshipType,
-        otherEntityNameCapitalized = relationships[relationshipId].otherEntityNameCapitalized,
-        otherEntityFieldCapitalized = relationships[relationshipId].otherEntityFieldCapitalized,
-        ownerSide = relationships[relationshipId].ownerSide; %><% if (relationshipType == 'many-to-many' && ownerSide == true) { _%>
+    <%_ for (idx in relationships) {
+        var otherEntityRelationshipName = relationships[idx].otherEntityRelationshipName,
+        relationshipFieldName = relationships[idx].relationshipFieldName,
+        relationshipType = relationships[idx].relationshipType,
+        otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized,
+        otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized,
+        ownerSide = relationships[idx].ownerSide; %><% if (relationshipType == 'many-to-many' && ownerSide == true) { _%>
 
     private Set<<%= otherEntityNameCapitalized %>DTO> <%= relationshipFieldName %>s = new HashSet<>();
     <%_ } else if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true)) { _%>
@@ -86,11 +86,11 @@ public class <%= entityClass %>DTO implements Serializable {
     public void setId(<% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %><% if (databaseType == 'cassandra') { %>UUID<% } %> id) {
         this.id = id;
     }
-    <%_ for (fieldId in fields) {
-        var fieldType = fields[fieldId].fieldType;
-        var fieldTypeBlobContent = fields[fieldId].fieldTypeBlobContent;
-        var fieldInJavaBeanMethod = fields[fieldId].fieldInJavaBeanMethod;
-        var fieldName = fields[fieldId].fieldName; _%>
+    <%_ for (idx in fields) {
+        var fieldType = fields[idx].fieldType;
+        var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+        var fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod;
+        var fieldName = fields[idx].fieldName; _%>
     <%_ if(fieldTypeBlobContent != 'text') { _%>
     public <%= fieldType %> get<%= fieldInJavaBeanMethod %>() {
     <%_ } else { _%>
@@ -116,14 +116,14 @@ public class <%= entityClass %>DTO implements Serializable {
         this.<%= fieldName %>ContentType = <%= fieldName %>ContentType;
     }
     <%_ } } _%>
-    <%_ for (relationshipId in relationships) {
-        relationshipFieldName = relationships[relationshipId].relationshipFieldName,
-        otherEntityName = relationships[relationshipId].otherEntityName,
-        relationshipType = relationships[relationshipId].relationshipType,
-        otherEntityNameCapitalized = relationships[relationshipId].otherEntityNameCapitalized,
-        otherEntityFieldCapitalized = relationships[relationshipId].otherEntityFieldCapitalized,
-        relationshipNameCapitalized = relationships[relationshipId].relationshipNameCapitalized,
-        ownerSide = relationships[relationshipId].ownerSide;
+    <%_ for (idx in relationships) {
+        relationshipFieldName = relationships[idx].relationshipFieldName,
+        otherEntityName = relationships[idx].otherEntityName,
+        relationshipType = relationships[idx].relationshipType,
+        otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized,
+        otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized,
+        relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized,
+        ownerSide = relationships[idx].ownerSide;
         if (relationshipType == 'many-to-many' && ownerSide == true) { _%>
 
     public Set<<%= otherEntityNameCapitalized %>DTO> get<%= relationshipNameCapitalized %>s() {
@@ -176,8 +176,8 @@ public class <%= entityClass %>DTO implements Serializable {
     @Override
     public String toString() {
         return "<%= entityClass %>DTO{" +
-            "id=" + id +<% for (fieldId in fields) {
-                var fieldName = fields[fieldId].fieldName; %>
+            "id=" + id +<% for (idx in fields) {
+                var fieldName = fields[idx].fieldName; %>
             ", <%= fieldName %>='" + <%= fieldName %> + "'" +<% } %>
             '}';
     }

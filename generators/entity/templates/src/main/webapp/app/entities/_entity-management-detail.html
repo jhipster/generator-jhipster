@@ -3,13 +3,13 @@
     <h2><span translate="<%= keyPrefix %>.detail.title"><%= entityClass %></span> {{<%= entityInstance %>.id}}</h2>
     <hr>
     <dl class="dl-horizontal">
-        <%_ for (fieldId in fields) {
-            var fieldName = fields[fieldId].fieldName;
-            var fieldType = fields[fieldId].fieldType;
-            var fieldTypeBlobContent = fields[fieldId].fieldTypeBlobContent; _%>
-        <dt><span translate="<%= keyPrefix %>.<%= fieldName %>"><%= fields[fieldId].fieldNameCapitalized %></dt></dt>
+        <%_ for (idx in fields) {
+            var fieldName = fields[idx].fieldName;
+            var fieldType = fields[idx].fieldType;
+            var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent; _%>
+        <dt><span translate="<%= keyPrefix %>.<%= fieldName %>"><%= fields[idx].fieldNameCapitalized %></dt></dt>
         <dd>
-            <%_ if (fields[fieldId].fieldIsEnum) { _%>
+            <%_ if (fields[idx].fieldIsEnum) { _%>
             <span translate="{{'<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>}}">{{<%= entityInstance %>.<%= fieldName %>}}</span>
             <%_ } else if (fieldType == 'byte[]' && fieldTypeBlobContent == 'image') { _%>
             <img data-ng-src="{{'data:' + <%=entityInstance %>.<%= fieldName %>ContentType + ';base64,' + <%= entityInstance %>.<%= fieldName %>}}" style="max-width: 100%;" ng-if="<%= entityInstance %>.<%= fieldName %>"/>
@@ -28,15 +28,15 @@
         </dd>
         <hr>
         <%_ } _%>
-        <%_ for (relationshipId in relationships) {
-                var relationshipType = relationships[relationshipId].relationshipType;
-                var ownerSide = relationships[relationshipId].ownerSide;
-                var relationshipName = relationships[relationshipId].relationshipName;
-                var relationshipFieldName = relationships[relationshipId].relationshipFieldName;
-                var otherEntityName = relationships[relationshipId].otherEntityName;
-                var otherEntityStateName = relationships[relationshipId].otherEntityStateName;
-                var otherEntityField = relationships[relationshipId].otherEntityField;
-                var otherEntityFieldCapitalized = relationships[relationshipId].otherEntityFieldCapitalized;
+        <%_ for (idx in relationships) {
+                var relationshipType = relationships[idx].relationshipType;
+                var ownerSide = relationships[idx].ownerSide;
+                var relationshipName = relationships[idx].relationshipName;
+                var relationshipFieldName = relationships[idx].relationshipFieldName;
+                var otherEntityName = relationships[idx].otherEntityName;
+                var otherEntityStateName = relationships[idx].otherEntityStateName;
+                var otherEntityField = relationships[idx].otherEntityField;
+                var otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
                 if (relationshipType == 'many-to-one'
                     || (relationshipType == 'one-to-one' && ownerSide == true)
                     || (relationshipType == 'many-to-many' && ownerSide == true)) { _%>
