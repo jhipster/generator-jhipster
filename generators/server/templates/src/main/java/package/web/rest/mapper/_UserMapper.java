@@ -1,6 +1,7 @@
 package <%=packageName%>.web.rest.mapper;
 
-import <%=packageName%>.domain.Authority;
+<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+import <%=packageName%>.domain.Authority;<% } %>
 import <%=packageName%>.domain.User;
 import <%=packageName%>.web.rest.dto.UserDTO;
 import org.mapstruct.Mapper;
@@ -23,7 +24,7 @@ public interface UserMapper {
 
     List<User> userDTOsToUsers(List<UserDTO> userDTOs);
 
-    default User userFromId(Long id) {
+    default User userFromId(<% if (databaseType == 'mongodb' || databaseType == 'cassandra') { %>String<% } else { %>Long<% } %> id) {
         if (id == null) {
             return null;
         }
@@ -31,7 +32,7 @@ public interface UserMapper {
         user.setId(id);
         return user;
     }
-
+<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
     default Set<String> stringsFromAuthorities(Set<Authority> authorities) {
         Set<String> auths = new HashSet<>();
         for(Authority auth : authorities){
@@ -48,5 +49,5 @@ public interface UserMapper {
             auths.add(a);
         }
         return auths;
-    }
+    }<% } %>
 }
