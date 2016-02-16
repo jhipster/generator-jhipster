@@ -179,6 +179,7 @@ const expectedFiles = {
         'src/main/webapp/i18n/fr/user-management.json',
         'src/main/webapp/app/app.module.js',
         'src/main/webapp/app/app.config.js',
+        'src/main/webapp/app/app.state.js',
         'src/main/webapp/app/app.constants.js',
         'src/main/webapp/app/admin/audits/audits.service.js',
         'src/main/webapp/app/admin/configuration/configuration.service.js',

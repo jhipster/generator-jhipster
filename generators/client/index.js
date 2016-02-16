@@ -292,6 +292,7 @@ module.exports = JhipsterClientGenerator.extend({
             // Angular JS module
             this.template(ANGULAR_DIR + '_app.module.js', ANGULAR_DIR + 'app.module.js', this, {});
             this.template(ANGULAR_DIR + '_app.config.js', ANGULAR_DIR + 'app.config.js', this, {});
+            this.template(ANGULAR_DIR + '_app.state.js', ANGULAR_DIR + 'app.state.js', this, {});
             this.template(ANGULAR_DIR + '_app.constants.js', ANGULAR_DIR + 'app.constants.js', this, {});
         },
 
@@ -479,6 +480,7 @@ module.exports = JhipsterClientGenerator.extend({
             var appScripts = [
                 'app/app.module.js',
                 'app/app.config.js',
+                'app/app.state.js',
                 'app/app.constants.js',
                 // account
                 'app/account/account.state.js',
