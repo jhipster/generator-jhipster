@@ -1,15 +1,15 @@
 {
-  "name": "<%= slugifiedBaseName %>",
+  "name": "jhipster-react",
   "version": "0.0.0",
-  "description": "Description for <%= baseName %>",
+  "description": "Description for jhipster-react",
   "private": true,
   "cacheDirectories": [
     "node_modules"
   ],
   "dependencies": {
-    "material-ui": "^0.14.3",
-    "react": "^0.14.0",
-    "react-dom": "^0.14.0",
+    "material-ui": "^0.14.4",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3",
     "react-tap-event-plugin": "^0.2.1"
   },
   "devDependencies": {
@@ -32,7 +32,7 @@
     "node": "^0.12 || ^4.2"
   },
   "scripts": {
-    "start": "webpack-dev-server --config webpack-dev-server.config.js --progress --inline --colors",
+    "start": "node server.js",
     "build": "webpack --config webpack-production.config.js --progress --colors"
   }
 }
