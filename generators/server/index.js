@@ -605,6 +605,9 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(DOCKER_DIR + 'cassandra/scripts/_cassandra.sh', DOCKER_DIR + 'cassandra/scripts/cassandra.sh', this, {});
                 this.template(DOCKER_DIR + 'opscenter/_Dockerfile', DOCKER_DIR + 'opscenter/Dockerfile', this, {});
             }
+            if (this.applicationType == 'microservice' || this.applicationType == 'gateway') {
+                this.template(DOCKER_DIR + '_registry.yml', DOCKER_DIR + 'registry.yml', this, {});
+            }
         },
 
         writeServerBuildFiles: function () {
