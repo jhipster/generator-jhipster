@@ -30,12 +30,12 @@ public class JHipsterProperties {
     private final Metrics metrics = new Metrics();
 
     private final CorsConfiguration cors = new CorsConfiguration();
-
     <%_ if (enableSocialSignIn) { _%>
+
     private final Social social = new Social();
     <%_ } _%>
-
     <%_ if (applicationType == 'gateway') { _%>
+
     private final Gateway gateway = new Gateway();
     <%_ } _%>
 
@@ -70,14 +70,14 @@ public class JHipsterProperties {
     public CorsConfiguration getCors() {
         return cors;
     }
-
     <%_ if (enableSocialSignIn) { _%>
+
     public Social getSocial() {
         return social;
     }
     <%_ } _%>
-
     <%_ if (applicationType == 'gateway') { _%>
+
     public Gateway getGateway() {
         return gateway;
     }
@@ -522,16 +522,39 @@ public class JHipsterProperties {
     public static class Gateway {
 
         private final RateLimiting rateLimiting = new RateLimiting();
+        <%_ if (databaseType != 'cassandra') { _%>
+
+        private final EmbeddedCassandra embeddedCassandra = new EmbeddedCassandra();
+        <%_ } _%>
 
         public RateLimiting getRateLimiting() {
             return rateLimiting;
         }
+        <%_ if (databaseType != 'cassandra') { _%>
+
+        public EmbeddedCassandra getEmbeddedCassandra() {
+            return embeddedCassandra;
+        }
+
+        public static class EmbeddedCassandra {
+
+            private boolean enabled = false;
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
+        }
+        <%_ } _%>
 
         public static class RateLimiting {
 
             private boolean enabled = false;
 
-            private long limit = 1000L;
+            private long limit = 100000L;
 
             public boolean isEnabled() {
                 return enabled;
@@ -549,5 +572,6 @@ public class JHipsterProperties {
                 this.limit = limit;
             }
         }
-    }<%_ } _%>
+    }
+<%_ } _%>
 }

@@ -780,6 +780,9 @@ module.exports = JhipsterServerGenerator.extend({
 
             if (this.applicationType != 'gateway') return;
 
+            this.template('src/main/java/package/config/_GatewayConfiguration.java', javaDir + 'config/GatewayConfiguration.java', this, {});
+            this.template('src/main/java/package/gateway/ratelimiting/_RateLimitingFilter.java', javaDir + 'gateway/ratelimiting/RateLimitingFilter.java', this, {});
+            this.template('src/main/java/package/gateway/ratelimiting/_RateLimitingRepository.java', javaDir + 'gateway/ratelimiting/RateLimitingRepository.java', this, {});
             this.template('src/main/java/package/web/rest/dto/_RouteDTO.java', javaDir + 'web/rest/dto/RouteDTO.java', this, {});
             this.template('src/main/java/package/web/rest/_GatewayResource.java', javaDir + 'web/rest/GatewayResource.java', this, {});
             this.template('src/main/java/package/web/rest/_GatewaySwaggerApiResource.java', javaDir + 'web/rest/GatewaySwaggerApiResource.java', this, {});

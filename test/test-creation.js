@@ -308,6 +308,9 @@ const expectedFiles = {
     ],
 
     gateway: [
+        'src/main/java/com/mycompany/myapp/config/GatewayConfiguration.java',
+        'src/main/java/com/mycompany/myapp/gateway/ratelimiting/RateLimitingFilter.java',
+        'src/main/java/com/mycompany/myapp/gateway/ratelimiting/RateLimitingRepository.java',
         'src/main/java/com/mycompany/myapp/web/rest/dto/RouteDTO.java',
         'src/main/java/com/mycompany/myapp/web/rest/GatewayResource.java',
         'src/main/webapp/app/admin/gateway/gateway.controller.js',

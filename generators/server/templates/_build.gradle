@@ -161,12 +161,17 @@ dependencies {
         exclude module: 'spring-boot-starter-tomcat'
     }<% if (websocket == 'spring-websocket') { %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-websocket'<% } %>
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'<% if (databaseType == 'cassandra') { %>
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'<% if (databaseType == 'cassandra' || applicationType == 'gateway') { %>
     compile group: 'org.springframework.data', name: 'spring-data-cassandra'
     compile(group: 'com.datastax.cassandra', name: 'cassandra-driver-core', version: datastax_driver_version) {
         exclude module: 'com.codahale.metrics'
     }
     compile group: 'com.datastax.cassandra', name: 'cassandra-driver-mapping', version: datastax_driver_version<% } %>
+    <%_ if (applicationType == 'gateway' && databaseType != 'cassandra') { _%>
+    // This dependency is used to start an embedded Cassandra server.
+    // You can remove this if you have jhipster.gateway.embedded-cassandra.enabled=false
+    compile group: 'info.archinnov', name: 'achilles-embedded', version: '3.2.3'
+    <%_ } _%>
     <%_ if (applicationType == 'gateway') { _%>
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-zuul', version: spring_cloud_version
     <%_ } _%>

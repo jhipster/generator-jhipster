@@ -11,6 +11,10 @@
 # ===================================================================
 
 spring:
+    <%_ if (applicationType == 'gateway' && databaseType != 'cassandra') { _%>
+    autoconfigure:
+        exclude: org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration, org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration
+    <%_ } _%>
     <%_ if (databaseType == 'sql') { _%>
     datasource:
         url: jdbc:h2:mem:<%= baseName %>;DB_CLOSE_DELAY=-1
@@ -31,24 +35,27 @@ spring:
             hibernate.generate_statistics: true
             hibernate.hbm2ddl.auto: validate
     <%_ } _%>
-    <%_ if (databaseType == 'mongodb') { _%>
+    <%_ if (databaseType == 'mongodb' || databaseType == 'cassandra' || applicationType == 'gateway' || searchEngine == 'elasticsearch') { _%>
     data:
+    <%_ } _%>
+    <%_ if (databaseType == 'mongodb') { _%>
         mongodb:
             host: localhost
             port: 27117
             database: <%= baseName %>
     <%_ } _%>
-    <%_ if (databaseType == 'cassandra') { _%>
-    data:
+    <%_ if (applicationType == 'gateway' || databaseType == 'cassandra') { _%>
         cassandra:
             contactPoints: localhost
             port: 9142
             protocolVersion: V2
             compression: NONE
             keyspaceName: cassandra_unit_keyspace
-    <%_ } _%>
+    <%_ if (applicationType == 'gateway') { _%>
+            repositories:
+                enabled: false
+    <%_ } } _%>
     <%_ if (searchEngine == 'elasticsearch') { _%>
-    data:
         elasticsearch:
             cluster-name:
             cluster-nodes:

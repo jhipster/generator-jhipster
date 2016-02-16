@@ -502,7 +502,7 @@
             <version>0.6.0</version>
         </dependency>
         <%_ } _%>
-        <%_ if (databaseType == 'cassandra') { _%>
+        <%_ if (databaseType == 'cassandra' || applicationType == 'gateway') { _%>
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-cassandra</artifactId>
@@ -523,6 +523,17 @@
             <groupId>com.datastax.cassandra</groupId>
             <artifactId>cassandra-driver-mapping</artifactId>
             <version>${datastax-driver.version}</version>
+        </dependency>
+        <%_ } _%>
+        <%_ if (applicationType == 'gateway' && databaseType != 'cassandra') { _%>
+        <!--
+          This dependency is used to start an embedded Cassandra server.
+          You can remove this if you have jhipster.gateway.embedded-cassandra.enabled=false
+        -->
+        <dependency>
+            <groupId>info.archinnov</groupId>
+            <artifactId>achilles-embedded</artifactId>
+            <version>3.2.3</version>
         </dependency>
         <%_ } _%>
         <!-- Spring Cloud -->
