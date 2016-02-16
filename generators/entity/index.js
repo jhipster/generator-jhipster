@@ -92,7 +92,7 @@ module.exports = EntityGenerator.extend({
             this.angularAppName = this.getAngularAppName();
             this.jhipsterConfigDirectory = '.jhipster';
             this.mainClass = this.getMainClassName();
-            
+
             this.filename = this.jhipsterConfigDirectory + '/' + _s.capitalize(this.name) + '.json';
             if (shelljs.test('-f', this.filename)) {
                 this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
@@ -176,6 +176,57 @@ module.exports = EntityGenerator.extend({
     },
 
     /* private Helper methods */
+    /**
+     * Show the entity and it's fields and relationships in console
+     */
+    logFieldsAndRelationships: function () {
+        if (this.fields.length > 0 || this.relationships.length > 0) {
+            this.log(chalk.red(chalk.white('\n================= ') + _s.capitalize(this.name) + chalk.white(' =================')));
+        }
+        if (this.fields.length > 0) {
+            this.log(chalk.white('Fields'));
+            this.fields.forEach(function (field) {
+                var validationDetails = '';
+                var fieldValidate = _.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
+                if (fieldValidate == true) {
+                    if (field.fieldValidateRules.indexOf('required') != -1) {
+                        validationDetails = 'required ';
+                    }
+                    if (field.fieldValidateRules.indexOf('minlength') != -1) {
+                        validationDetails += 'minlength=\'' + field.fieldValidateRulesMinlength + '\' ';
+                    }
+                    if (field.fieldValidateRules.indexOf('maxlength') != -1) {
+                        validationDetails += 'maxlength=\'' + field.fieldValidateRulesMaxlength + '\' ';
+                    }
+                    if (field.fieldValidateRules.indexOf('pattern') != -1) {
+                        validationDetails += 'pattern=\'' + field.fieldValidateRulesPattern + '\' ';
+                    }
+                    if (field.fieldValidateRules.indexOf('min') != -1) {
+                        validationDetails += 'min=\'' + field.fieldValidateRulesMin + '\' ';
+                    }
+                    if (field.fieldValidateRules.indexOf('max') != -1) {
+                        validationDetails += 'max=\'' + field.fieldValidateRulesMax + '\' ';
+                    }
+                    if (field.fieldValidateRules.indexOf('minbytes') != -1) {
+                        validationDetails += 'minbytes=\'' + field.fieldValidateRulesMinbytes + '\' ';
+                    }
+                    if (field.fieldValidateRules.indexOf('maxbytes') != -1) {
+                        validationDetails += 'maxbytes=\'' + field.fieldValidateRulesMaxbytes + '\' ';
+                    }
+                }
+                this.log(chalk.red(field.fieldName) + chalk.white(' (' + field.fieldType + (field.fieldTypeBlobContent ? ' ' + field.fieldTypeBlobContent : '') + ') ') + chalk.cyan(validationDetails));
+            }, this);
+            this.log();
+        }
+        if (this.relationships.length > 0) {
+            this.log(chalk.white('Relationships'));
+            this.relationships.forEach(function(relationship) {
+                this.log(chalk.red(relationship.relationshipName) + ' ' + chalk.white('(' + _s.capitalize(relationship.otherEntityName) + ')') + ' ' + chalk.cyan(relationship.relationshipType));
+            }, this);
+            this.log();
+        }
+    }
+    ,
     /**
      * ask question for a field creation
      */
@@ -671,38 +722,7 @@ module.exports = EntityGenerator.extend({
                 fieldNamesUnderscored.push(_s.underscored(props.fieldName));
                 this.fields.push(field);
             }
-            this.log(chalk.red('\n=================' + _s.capitalize(this.name) + '================='));
-            this.fields.forEach(function(field) {
-                var validationDetails = '';
-                var fieldValidate = _.isArray(field.fieldValidateRules) && field.fieldValidateRules.length >= 1;
-                if (fieldValidate == true) {
-                    if (field.fieldValidateRules.indexOf('required') != -1) {
-                        validationDetails = 'required ';
-                    }
-                    if (field.fieldValidateRules.indexOf('minlength') != -1) {
-                        validationDetails += 'minlength=\'' + field.fieldValidateRulesMinlength + '\' ';
-                    }
-                    if (field.fieldValidateRules.indexOf('maxlength') != -1) {
-                        validationDetails += 'maxlength=\'' + field.fieldValidateRulesMaxlength + '\' ';
-                    }
-                    if (field.fieldValidateRules.indexOf('pattern') != -1) {
-                        validationDetails += 'pattern=\'' + field.fieldValidateRulesPattern + '\' ';
-                    }
-                    if (field.fieldValidateRules.indexOf('min') != -1) {
-                        validationDetails += 'min=\'' + field.fieldValidateRulesMin + '\' ';
-                    }
-                    if (field.fieldValidateRules.indexOf('max') != -1) {
-                        validationDetails += 'max=\'' + field.fieldValidateRulesMax + '\' ';
-                    }
-                    if (field.fieldValidateRules.indexOf('minbytes') != -1) {
-                        validationDetails += 'minbytes=\'' + field.fieldValidateRulesMinbytes + '\' ';
-                    }
-                    if (field.fieldValidateRules.indexOf('maxbytes') != -1) {
-                        validationDetails += 'maxbytes=\'' + field.fieldValidateRulesMaxbytes + '\' ';
-                    }
-                }
-                this.log(chalk.red(field.fieldName) + chalk.white(' (' + field.fieldType + (field.fieldTypeBlobContent ? ' ' + field.fieldTypeBlobContent : '') + ') ') + chalk.cyan(validationDetails));
-            }, this);
+            this.logFieldsAndRelationships();
             if (props.fieldAdd) {
                 this._askForField(cb);
             } else {
@@ -900,14 +920,7 @@ module.exports = EntityGenerator.extend({
                 fieldNamesUnderscored.push(_s.underscored(props.relationshipName));
                 this.relationships.push(relationship);
             }
-            this.log(chalk.red('\n===========' + _s.capitalize(this.name) + '=============='));
-            this.fields.forEach(function(field) {
-                this.log(chalk.red(field.fieldName + ' (' + field.fieldType + (field.fieldTypeBlobContent ? ' ' + field.fieldTypeBlobContent : '') + ')'));
-            }, this);
-            this.log(chalk.red('-------------------'));
-            this.relationships.forEach(function(relationship) {
-                this.log(chalk.red(relationship.relationshipName + ' - ' + relationship.otherEntityName + ' (' + relationship.relationshipType + ')'));
-            }, this);
+            this.logFieldsAndRelationships();
             if (props.relationshipAdd) {
                 this._askForRelationship(cb);
             } else {
@@ -1010,6 +1023,11 @@ module.exports = EntityGenerator.extend({
             if (this.useConfigurationFile && this.updateEntity != 'add') {
                 return;
             }
+
+            if (this.updateEntity == 'add') {
+                this.logFieldsAndRelationships();
+            }
+
             var cb = this.async();
 
             this._askForField(cb);
