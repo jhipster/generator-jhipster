@@ -316,7 +316,8 @@ const expectedFiles = {
         'src/main/webapp/app/admin/gateway/gateway.controller.js',
         'src/main/webapp/app/admin/gateway/gateway.js',
         'src/main/webapp/app/admin/gateway/gateway.html',
-        'src/main/webapp/app/admin/gateway/gateway.routes.service.js'
+        'src/main/webapp/app/admin/gateway/gateway.routes.service.js',
+        'src/main/docker/registry.yml'
     ]
 };
 
