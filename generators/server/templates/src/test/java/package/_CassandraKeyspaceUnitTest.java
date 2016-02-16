@@ -15,7 +15,7 @@ import javax.inject.Inject;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = <%= mainClass %>.class)
 @WebAppConfiguration
 public class CassandraKeyspaceUnitTest extends AbstractCassandraTest {
 

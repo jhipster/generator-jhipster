@@ -91,3 +91,10 @@ fi
 if [ -a .jhipster/RelationshipTestOneToOneEntity.json ]; then
   yo jhipster:entity RelationshipTestOneToOneEntity --force --no-insight
 fi
+
+# Check Javadoc generation
+if [ $JHIPSTER != "app-gradle" ]; then
+  mvn javadoc:javadoc
+else
+  ./gradlew javadoc
+fi

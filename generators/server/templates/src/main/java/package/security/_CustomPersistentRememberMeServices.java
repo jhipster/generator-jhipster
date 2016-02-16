@@ -27,9 +27,9 @@ import java.util.Date;<%}%>
 
 /**
  * Custom implementation of Spring Security's RememberMeServices.
- * <p/>
+ * <p>
  * Persistent tokens are used by Spring Security to automatically log in users.
- * <p/>
+ * <p>
  * This is a specific implementation of Spring Security's remember-me authentication, but it is much
  * more powerful than the standard implementations:
  * <ul>
@@ -37,17 +37,16 @@ import java.util.Date;<%}%>
  * <li>It stores more information, such as the IP address and the user agent, for audit purposes<li>
  * <li>When a user logs out, only his current session is invalidated, and not all of his sessions</li>
  * </ul>
- * <p/>
+ * <p>
  * This is inspired by:
  * <ul>
  * <li><a href="http://jaspan.com/improved_persistent_login_cookie_best_practice">Improved Persistent Login Cookie
  * Best Practice</a></li>
- * <li><a href="https://github.com/blog/1661-modeling-your-app-s-user-session">Github's "Modeling your App's User Session"</a></li></li>
+ * <li><a href="https://github.com/blog/1661-modeling-your-app-s-user-session">Github's "Modeling your App's User Session"</a></li>
  * </ul>
- * <p/>
+ * <p>
  * The main algorithm comes from Spring Security's PersistentTokenBasedRememberMeServices, but this class
  * couldn't be cleanly extended.
- * <p/>
  */
 @Service
 public class CustomPersistentRememberMeServices extends
@@ -137,7 +136,7 @@ public class CustomPersistentRememberMeServices extends
 
     /**
      * When logout occurs, only invalidate the current token, and not all user sessions.
-     * <p/>
+     * <p>
      * The standard Spring Security implementations are too basic: they invalidate all tokens for the
      * current user, so when he logs out from one browser, all his other sessions are destroyed.
      */

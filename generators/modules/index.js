@@ -50,6 +50,7 @@ module.exports = ModulesGenerator.extend({
         jhipsterVar['testFrameworks'] = this.config.get('testFrameworks');
 
         jhipsterVar['angularAppName'] = this.getAngularAppName();
+        jhipsterVar['mainClassName'] = this.getMainClassName();
         jhipsterVar['javaDir'] = 'src/main/java/' + packageFolder + '/';
         jhipsterVar['resourceDir'] = constants.RESOURCE_DIR;
         jhipsterVar['webappDir'] = constants.WEBAPP_DIR;

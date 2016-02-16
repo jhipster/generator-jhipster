@@ -37,7 +37,9 @@ public class GatewayResource {
     private DiscoveryClient discoveryClient;
 
     /**
-     * GET  /routes -> get the active routes.
+     * GET  /routes : get the active routes.
+     * 
+     * @return the ResponseEntity with status 200 (OK) and with body the list of routes
      */
     @RequestMapping(value = "/routes",
         method = RequestMethod.GET,

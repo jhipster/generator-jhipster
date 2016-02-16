@@ -1221,6 +1221,10 @@ Generator.prototype.getAngularAppName = function () {
     return _s.camelize(_s.slugify(this.baseName)) + (this.baseName.endsWith('App') ? '' : 'App');
 };
 
+Generator.prototype.getMainClassName = function () {
+    return _s.capitalize(this.getAngularAppName());
+};
+
 Generator.prototype.askModuleName = function (generator, question, questions) {
 
     var done = generator.async();

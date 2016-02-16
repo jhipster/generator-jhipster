@@ -1,7 +1,7 @@
 package <%=packageName%>.web.rest;
 <% if (databaseType == 'cassandra') { %>
 import <%=packageName%>.AbstractCassandraTest;<% } %>
-import <%=packageName%>.Application;
+import <%=packageName%>.<%= mainClass %>;
 import <%=packageName%>.repository.UserRepository;
 import <%=packageName%>.service.UserService;
 import org.junit.Before;
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @see UserResource
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = <%= mainClass %>.class)
 @WebAppConfiguration
 @IntegrationTest
 public class UserResourceIntTest <% if (databaseType == 'cassandra') { %>extends AbstractCassandraTest <% } %>{

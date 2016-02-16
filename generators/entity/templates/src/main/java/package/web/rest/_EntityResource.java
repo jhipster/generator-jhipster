@@ -46,7 +46,11 @@ public class <%= entityClass %>Resource {
     var instanceName = (dto == 'mapstruct') ? entityInstance + 'DTO' : entityInstance; -%>
     <%- include('../../common/inject_template', {viaService: viaService}); -%>
     /**
-     * POST  /<%= entityApiUrl %> -> Create a new <%= entityInstance %>.
+     * POST  /<%= entityApiUrl %> : Create a new <%= entityInstance %>.
+     *
+     * @param <%= instanceName %> the <%= instanceName %> to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new <%= instanceName %>, or with status 400 (Bad Request) if the <%= entityInstance %> has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @RequestMapping(value = "/<%= entityApiUrl %>",
         method = RequestMethod.POST,
@@ -63,7 +67,13 @@ public class <%= entityClass %>Resource {
     }
 
     /**
-     * PUT  /<%= entityApiUrl %> -> Updates an existing <%= entityInstance %>.
+     * PUT  /<%= entityApiUrl %> : Updates an existing <%= entityInstance %>.
+     *
+     * @param <%= instanceName %> the <%= instanceName %> to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated <%= instanceName %>,
+     * or with status 400 (Bad Request) if the <%= instanceName %> is not valid,
+     * or with status 500 (Internal Server Error) if the <%= instanceName %> couldnt be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @RequestMapping(value = "/<%= entityApiUrl %>",
         method = RequestMethod.PUT,
@@ -80,7 +90,12 @@ public class <%= entityClass %>Resource {
     }
 
     /**
-     * GET  /<%= entityApiUrl %> -> get all the <%= entityInstancePlural %>.
+     * GET  /<%= entityApiUrl %> : get all the <%= entityInstancePlural %>.
+     *<% if (pagination != 'no') { %>
+     * @param pageable the pagination information<% } if (fieldsContainNoOwnerOneToOne) { %>
+     * @param filter the filter of the request<% } %>
+     * @return the ResponseEntity with status 200 (OK) and the list of <%= entityInstancePlural %> in body<% if (pagination != 'no') { %>
+     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers<% } %>
      */
     @RequestMapping(value = "/<%= entityApiUrl %>",
         method = RequestMethod.GET,
@@ -88,7 +103,10 @@ public class <%= entityClass %>Resource {
     @Timed<%- include('../../common/get_all_template', {viaService: viaService}); -%>
 
     /**
-     * GET  /<%= entityApiUrl %>/:id -> get the "id" <%= entityInstance %>.
+     * GET  /<%= entityApiUrl %>/:id : get the "id" <%= entityInstance %>.
+     *
+     * @param id the id of the <%= instanceName %> to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the <%= instanceName %>, or with status 404 (Not Found)
      */
     @RequestMapping(value = "/<%= entityApiUrl %>/{id}",
         method = RequestMethod.GET,
@@ -104,7 +122,10 @@ public class <%= entityClass %>Resource {
     }
 
     /**
-     * DELETE  /<%= entityApiUrl %>/:id -> delete the "id" <%= entityInstance %>.
+     * DELETE  /<%= entityApiUrl %>/:id : delete the "id" <%= entityInstance %>.
+     *
+     * @param id the id of the <%= instanceName %> to delete
+     * @return the ResponseEntity with status 200 (OK)
      */
     @RequestMapping(value = "/<%= entityApiUrl %>/{id}",
         method = RequestMethod.DELETE,
@@ -116,8 +137,11 @@ public class <%= entityClass %>Resource {
     }<% if (searchEngine == 'elasticsearch') { %>
 
     /**
-     * SEARCH  /_search/<%= entityApiUrl %>/:query -> search for the <%= entityInstance %> corresponding
+     * SEARCH  /_search/<%= entityApiUrl %>/:query : search for the <%= entityInstance %> corresponding
      * to the query.
+     *
+     * @param query the query of the <%= entityInstance %> search
+     * @return the result of the search
      */
     @RequestMapping(value = "/_search/<%= entityApiUrl %>/{query:.+}",
         method = RequestMethod.GET,

@@ -111,6 +111,9 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
 
     /**
      * Open the TCP port for the H2 database, so it is available remotely.
+     *
+     * @return the H2 database TCP server
+     * @throws SQLException if the server failed to start
      */
     @Bean(initMethod = "start", destroyMethod = "stop")
     @Profile(Constants.SPRING_PROFILE_DEVELOPMENT)
