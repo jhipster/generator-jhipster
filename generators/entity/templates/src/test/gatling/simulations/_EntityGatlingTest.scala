@@ -34,12 +34,16 @@ class <%= entityClass %>GatlingTest extends Simulation {
     val headers_http = Map(
         "Accept" -> """application/json"""
     )
-<% if (authenticationType == 'session') { %>
+<%_ if (authenticationType == 'session') { _%>
+
     val headers_http_authenticated = Map(
         "Accept" -> """application/json""",
         "X-CSRF-TOKEN" -> "${csrf_token}"
-    )<% } %><% if (authenticationType == 'oauth2') { %>
-        val authorization_header = "Basic " + Base64.getEncoder.encodeToString("<%= baseName%>app:mySecretOAuthSecret".getBytes(StandardCharsets.UTF_8))
+    )
+<%_ } _%>
+<%_ if (authenticationType == 'oauth2') { _%>
+
+    val authorization_header = "Basic " + Base64.getEncoder.encodeToString("<%= baseName%>app:mySecretOAuthSecret".getBytes(StandardCharsets.UTF_8))
 
     val headers_http_authentication = Map(
         "Content-Type" -> """application/x-www-form-urlencoded""",
@@ -50,7 +54,9 @@ class <%= entityClass %>GatlingTest extends Simulation {
     val headers_http_authenticated = Map(
         "Accept" -> """application/json""",
         "Authorization" -> "Bearer ${access_token}"
-    )<% } %><% if (authenticationType == 'xauth') { %>
+    )
+<%_ } _%>
+<%_ if (authenticationType == 'jwt') { _%>
 
     val headers_http_authentication = Map(
         "Content-Type" -> """application/x-www-form-urlencoded""",
@@ -59,8 +65,9 @@ class <%= entityClass %>GatlingTest extends Simulation {
 
     val headers_http_authenticated = Map(
         "Accept" -> """application/json""",
-        "x-auth-token" -> "${x_auth_token}"
-    )<% } %>
+        "Authorization" -> "${access_token}"
+    )
+<%_ } _%>
 
     val scn = scenario("Test the <%= entityClass %> entity")
         .exec(http("First unauthenticated request")
@@ -69,13 +76,16 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .check(status.is(401))<% if (authenticationType == 'session') { %>
         .check(headerRegex("Set-Cookie", "CSRF-TOKEN=(.*); [P,p]ath=/").saveAs("csrf_token"))<% } %>)
         .pause(10)
-        .exec(http("Authentication")<% if (authenticationType == 'session') { %>
+        .exec(http("Authentication")
+<%_ if (authenticationType == 'session') { _%>
         .post("/api/authentication")
         .headers(headers_http_authenticated)
         .formParam("j_username", "admin")
         .formParam("j_password", "admin")
         .formParam("remember-me", "true")
-        .formParam("submit", "Login")<% } %><% if (authenticationType == 'oauth2') { %>
+        .formParam("submit", "Login")
+<%_ } _%>
+<%_ if (authenticationType == 'oauth2') { _%>
         .post("/oauth/token")
         .headers(headers_http_authentication)
         .formParam("username", "admin")
@@ -85,12 +95,15 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .formParam("client_secret", "mySecretOAuthSecret")
         .formParam("client_id", "<%= baseName%>app")
         .formParam("submit", "Login")
-        .check(jsonPath("$.access_token").saveAs("access_token"))<% } %><% if (authenticationType == 'xauth') { %>
+        .check(jsonPath("$.access_token").saveAs("access_token"))
+<%_ } _%>
+<%_ if (authenticationType == 'jwt') { _%>
         .post("/api/authenticate")
         .headers(headers_http_authentication)
         .formParam("username", "admin")
         .formParam("password", "admin")
-        .check(jsonPath("$.token").saveAs("x_auth_token"))<% } %>)
+        .check(header.get("Authorization").saveAs("access_token"))
+<%_ } _%>)
         .pause(1)
         .exec(http("Authenticated request")
         .get("/api/account")
