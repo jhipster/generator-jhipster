@@ -16,37 +16,48 @@ public interface <%= entityClass %>Service {
 
     /**
      * Save a <%= entityInstance %>.
+     * 
+     * @param <%= instanceName %> the entity to save
      * @return the persisted entity
      */
     <%= instanceType %> save(<%= instanceType %> <%= instanceName %>);
 
     /**
-     *  get all the <%= entityInstancePlural %>.
+     *  Get all the <%= entityInstancePlural %>.
+     *  <% if (pagination != 'no') { %>
+     *  @param pageable the pagination information<% } %>
      *  @return the list of entities
      */
     <% if (pagination != 'no') { %>Page<<%= entityClass %><% } else { %>List<<%= instanceType %><% } %>> findAll(<% if (pagination != 'no') { %>Pageable pageable<% } %>);
 <% for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { -%>
     /**
-     *  get all the <%= entityInstancePlural %> where <%= relationships[idx].relationshipNameCapitalized %> is null.
+     *  Get all the <%= entityInstancePlural %> where <%= relationships[idx].relationshipNameCapitalized %> is null.
+     *  
      *  @return the list of entities
      */
     List<<%= instanceType %>> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull();
 <% } } -%>
 
     /**
-     *  get the "id" <%= entityInstance %>.
+     *  Get the "id" <%= entityInstance %>.
+     *  
+     *  @param id the id of the entity
      *  @return the entity
      */
     <%= instanceType %> findOne(<%= pkType %> id);
 
     /**
-     *  delete the "id" <%= entityInstance %>.
+     *  Delete the "id" <%= entityInstance %>.
+     *  
+     *  @param id the id of the entity
      */
     void delete(<%= pkType %> id);<% if (searchEngine == 'elasticsearch') { %>
 
     /**
-     * search for the <%= entityInstance %> corresponding
-     * to the query.
+     * Search for the <%= entityInstance %> corresponding to the query.
+     * 
+     *  @param query the query of the search
+     *  @return the list of entities
      */
     List<<%= instanceType %>> search(String query);<% } %>
 }

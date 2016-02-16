@@ -34,8 +34,10 @@ public class GatewaySwaggerApiResource {
     private DiscoveryClient discoveryClient;
 
     /**
-     * GET  /swagger-resources -> get the currently registered microservices swagger resources
+     * GET  /swagger-resources : get the currently registered microservices swagger resources
      * (Override the Springfox provided /swagger-resources endpoint)
+     * 
+     * @return the ResponseEntity with status 200 (OK) and with body the list of swagger resources
      */
     @RequestMapping(value = "/swagger-resources",
         method = RequestMethod.GET,
