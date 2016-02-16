@@ -18,35 +18,35 @@ public interface <%= entityClass %>Service {
      * Save a <%= entityInstance %>.
      * @return the persisted entity
      */
-    public <%= instanceType %> save(<%= instanceType %> <%= instanceName %>);
+    <%= instanceType %> save(<%= instanceType %> <%= instanceName %>);
 
     /**
      *  get all the <%= entityInstancePlural %>.
      *  @return the list of entities
      */
-    public <% if (pagination != 'no') { %>Page<<%= entityClass %><% } else { %>List<<%= instanceType %><% } %>> findAll(<% if (pagination != 'no') { %>Pageable pageable<% } %>);
+    <% if (pagination != 'no') { %>Page<<%= entityClass %><% } else { %>List<<%= instanceType %><% } %>> findAll(<% if (pagination != 'no') { %>Pageable pageable<% } %>);
 <% for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { -%>
     /**
      *  get all the <%= entityInstancePlural %> where <%= relationships[idx].relationshipNameCapitalized %> is null.
      *  @return the list of entities
      */
-    public List<<%= instanceType %>> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull();
+    List<<%= instanceType %>> findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull();
 <% } } -%>
 
     /**
      *  get the "id" <%= entityInstance %>.
      *  @return the entity
      */
-    public <%= instanceType %> findOne(<%= pkType %> id);
+    <%= instanceType %> findOne(<%= pkType %> id);
 
     /**
      *  delete the "id" <%= entityInstance %>.
      */
-    public void delete(<%= pkType %> id);<% if (searchEngine == 'elasticsearch') { %>
+    void delete(<%= pkType %> id);<% if (searchEngine == 'elasticsearch') { %>
 
     /**
      * search for the <%= entityInstance %> corresponding
      * to the query.
      */
-    public List<<%= instanceType %>> search(String query);<% } %>
+    List<<%= instanceType %>> search(String query);<% } %>
 }
