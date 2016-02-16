@@ -64,11 +64,11 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>ManagementDi
 
         $scope.byteSize = DataUtils.byteSize;
         <%_ } _%>
-        <%_ for (fieldId in fields) {
-            if (fields[fieldId].fieldType === 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
+        <%_ for (idx in fields) {
+            if (fields[idx].fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent != 'text') { _%>
 
-        $scope.set<%= fields[fieldId].fieldNameCapitalized %> = function ($file, <%= entityInstance %>) {
-            <%_ if (fields[fieldId].fieldTypeBlobContent == 'image') { _%>
+        $scope.set<%= fields[idx].fieldNameCapitalized %> = function ($file, <%= entityInstance %>) {
+            <%_ if (fields[idx].fieldTypeBlobContent == 'image') { _%>
             if ($file && $file.$error == 'pattern') {
                 return;
             }
@@ -79,21 +79,21 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>ManagementDi
                 fileReader.onload = function (e) {
                     var base64Data = e.target.result.substr(e.target.result.indexOf('base64,') + 'base64,'.length);
                     $scope.$apply(function() {
-                        <%= entityInstance %>.<%= fields[fieldId].fieldName %> = base64Data;
-                        <%= entityInstance %>.<%= fields[fieldId].fieldName %>ContentType = $file.type;
+                        <%= entityInstance %>.<%= fields[idx].fieldName %> = base64Data;
+                        <%= entityInstance %>.<%= fields[idx].fieldName %>ContentType = $file.type;
                     });
                 };
             }
         };
-        <%_ } else if (fields[fieldId].fieldType === 'LocalDate' || fields[fieldId].fieldType === 'ZonedDateTime') { _%>
-        $scope.datePickerFor<%= fields[fieldId].fieldNameCapitalized %> = {};
+        <%_ } else if (fields[idx].fieldType === 'LocalDate' || fields[idx].fieldType === 'ZonedDateTime') { _%>
+        $scope.datePickerFor<%= fields[idx].fieldNameCapitalized %> = {};
 
-        $scope.datePickerFor<%= fields[fieldId].fieldNameCapitalized %>.status = {
+        $scope.datePickerFor<%= fields[idx].fieldNameCapitalized %>.status = {
             opened: false
         };
 
-        $scope.datePickerFor<%= fields[fieldId].fieldNameCapitalized %>Open = function($event) {
-            $scope.datePickerFor<%= fields[fieldId].fieldNameCapitalized %>.status.opened = true;
+        $scope.datePickerFor<%= fields[idx].fieldNameCapitalized %>Open = function($event) {
+            $scope.datePickerFor<%= fields[idx].fieldNameCapitalized %>.status.opened = true;
         };
         <%_ } } _%>
 }]);

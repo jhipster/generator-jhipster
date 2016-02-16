@@ -2,12 +2,10 @@
     "relationships": [],
     "fields": [
         {
-            "fieldId": 1,
             "fieldName": "stringField",
             "fieldType": "String"
         },
         {
-            "fieldId": 2,
             "fieldName": "stringRequiredField",
             "fieldType": "String",
             "fieldValidateRules": [
@@ -15,7 +13,6 @@
             ]
         },
         {
-            "fieldId": 3,
             "fieldName": "stringMinlengthField",
             "fieldType": "String",
             "fieldValidateRules": [
@@ -24,7 +21,6 @@
             "fieldValidateRulesMinlength": 0
         },
         {
-            "fieldId": 4,
             "fieldName": "stringMaxlengthField",
             "fieldType": "String",
             "fieldValidateRules": [
@@ -33,7 +29,6 @@
             "fieldValidateRulesMaxlength": 20
         },
         {
-            "fieldId": 5,
             "fieldName": "stringPatternField",
             "fieldType": "String",
             "fieldValidateRules": [
@@ -43,12 +38,10 @@
             "fieldValidateRulesPatternJava": "^[a-zA-Z0-9]*$"
         },
         {
-            "fieldId": 6,
             "fieldName": "integerField",
             "fieldType": "Integer"
         },
         {
-            "fieldId": 7,
             "fieldName": "integerRequiredField",
             "fieldType": "Integer",
             "fieldValidateRules": [
@@ -56,7 +49,6 @@
             ]
         },
         {
-            "fieldId": 8,
             "fieldName": "integerMinField",
             "fieldType": "Integer",
             "fieldValidateRules": [
@@ -65,7 +57,6 @@
             "fieldValidateRulesMin": 0
         },
         {
-            "fieldId": 9,
             "fieldName": "integerMaxField",
             "fieldType": "Integer",
             "fieldValidateRules": [
@@ -74,12 +65,10 @@
             "fieldValidateRulesMax": 100
         },
         {
-            "fieldId": 10,
             "fieldName": "longField",
             "fieldType": "Long"
         },
         {
-            "fieldId": 11,
             "fieldName": "longRequiredField",
             "fieldType": "Long",
             "fieldValidateRules": [
@@ -87,7 +76,6 @@
             ]
         },
         {
-            "fieldId": 12,
             "fieldName": "longMinField",
             "fieldType": "Long",
             "fieldValidateRules": [
@@ -96,7 +84,6 @@
             "fieldValidateRulesMin": 0
         },
         {
-            "fieldId": 13,
             "fieldName": "longMaxField",
             "fieldType": "Long",
             "fieldValidateRules": [
@@ -105,12 +92,10 @@
             "fieldValidateRulesMax": 100
         },
         {
-            "fieldId": 14,
             "fieldName": "floatField",
             "fieldType": "Float"
         },
         {
-            "fieldId": 15,
             "fieldName": "floatRequiredField",
             "fieldType": "Float",
             "fieldValidateRules": [
@@ -118,7 +103,6 @@
             ]
         },
         {
-            "fieldId": 16,
             "fieldName": "floatMinField",
             "fieldType": "Float",
             "fieldValidateRules": [
@@ -127,7 +111,6 @@
             "fieldValidateRulesMin": 0
         },
         {
-            "fieldId": 17,
             "fieldName": "floatMaxField",
             "fieldType": "Float",
             "fieldValidateRules": [
@@ -136,7 +119,6 @@
             "fieldValidateRulesMax": 100
         },
         {
-            "fieldId": 18,
             "fieldName": "doubleRequiredField",
             "fieldType": "Double",
             "fieldValidateRules": [
@@ -144,7 +126,6 @@
             ]
         },
         {
-            "fieldId": 19,
             "fieldName": "doubleMinField",
             "fieldType": "Double",
             "fieldValidateRules": [
@@ -153,7 +134,6 @@
             "fieldValidateRulesMin": 0
         },
         {
-            "fieldId": 20,
             "fieldName": "doubleMaxField",
             "fieldType": "Double",
             "fieldValidateRules": [
@@ -162,7 +142,6 @@
             "fieldValidateRulesMax": 100
         },
         {
-            "fieldId": 21,
             "fieldName": "bigDecimalRequiredField",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [
@@ -170,7 +149,6 @@
             ]
         },
         {
-            "fieldId": 22,
             "fieldName": "bigDecimalMinField",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [
@@ -179,7 +157,6 @@
             "fieldValidateRulesMin": 0
         },
         {
-            "fieldId": 23,
             "fieldName": "bigDecimalMaxField",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [
@@ -188,12 +165,10 @@
             "fieldValidateRulesMax": 100
         },
         {
-            "fieldId": 24,
             "fieldName": "dateField",
             "fieldType": "Date"
         },
         {
-            "fieldId": 25,
             "fieldName": "dateRequiredField",
             "fieldType": "Date",
             "fieldValidateRules": [
@@ -201,12 +176,10 @@
             ]
         },
         {
-            "fieldId": 26,
             "fieldName": "booleanField",
             "fieldType": "Boolean"
         },
         {
-            "fieldId": 27,
             "fieldName": "booleanRequiredField",
             "fieldType": "Boolean",
             "fieldValidateRules": [

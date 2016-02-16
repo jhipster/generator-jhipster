@@ -43,9 +43,9 @@ angular.module('<%=angularAppName%>')
                 <%_ } if (enableTranslation){ _%>
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('<%= entityInstance %>');<%
-                        for (var fieldIdx in fields) {
-                          if (fields[fieldIdx].fieldIsEnum == true) { %>
-                        $translatePartialLoader.addPart('<%= fields[fieldIdx].enumInstance %>');<% }} %>
+                        for (var idx in fields) {
+                          if (fields[idx].fieldIsEnum == true) { %>
+                        $translatePartialLoader.addPart('<%= fields[idx].enumInstance %>');<% }} %>
                         $translatePartialLoader.addPart('global');
                         return $translate.refresh();
                     }]
@@ -68,9 +68,9 @@ angular.module('<%=angularAppName%>')
                 resolve: {<% if (enableTranslation){ %>
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('<%= entityInstance %>');<%
-                        for (var fieldIdx in fields) {
-                          if (fields[fieldIdx].fieldIsEnum == true) { %>
-                        $translatePartialLoader.addPart('<%= fields[fieldIdx].enumInstance %>');<% }} %>
+                        for (var idx in fields) {
+                          if (fields[idx].fieldIsEnum == true) { %>
+                        $translatePartialLoader.addPart('<%= fields[idx].enumInstance %>');<% }} %>
                         return $translate.refresh();
                     }],<% } %>
                     entity: ['$stateParams', '<%= entityClass %>', function($stateParams, <%= entityClass %>) {
@@ -92,13 +92,13 @@ angular.module('<%=angularAppName%>')
                         resolve: {
                             entity: function () {
                                 return {
-                                    <%_ for (fieldId in fields) { _%>
-                                    	<%_ if (fields[fieldId].fieldType == 'Boolean' && fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) { _%>
-                                    <%= fields[fieldId].fieldName %>: false,
+                                    <%_ for (idx in fields) { _%>
+                                    	<%_ if (fields[idx].fieldType == 'Boolean' && fields[idx].fieldValidate == true && fields[idx].fieldValidateRules.indexOf('required') != -1) { _%>
+                                    <%= fields[idx].fieldName %>: false,
                                     	<%_ } else { _%>
-                                    <%= fields[fieldId].fieldName %>: null,
-                                        	<%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
-                                    <%= fields[fieldId].fieldName %>ContentType: null,
+                                    <%= fields[idx].fieldName %>: null,
+                                        	<%_ if (fields[idx].fieldType == 'byte[]' && fields[idx].fieldTypeBlobContent != 'text') { _%>
+                                    <%= fields[idx].fieldName %>ContentType: null,
                                         	<%_ } _%>
                                         <%_ } _%>
                                     <%_ } _%>

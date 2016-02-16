@@ -147,9 +147,7 @@ module.exports = EntityGenerator.extend({
             if (!this.useConfigurationFile) {
                 //no file present, new entity creation
                 this.log(chalk.red('\nThe entity ' + this.name + ' is being created.\n'));
-                this.fieldId = 0;
                 this.fields = [];
-                this.relationshipId = 0;
                 this.relationships = [];
                 this.pagination = 'no';
                 this.validation = false;
@@ -158,8 +156,6 @@ module.exports = EntityGenerator.extend({
             } else {
                 //existing entity reading values from file
                 this.log(chalk.red('\nThe entity ' + this.name + ' is being updated.\n'));
-                this.fieldId = this.fileData.fields? this.fileData.fields.length : 0;
-                this.relationshipId = this.fileData.relationships? this.fileData.relationships.length : 0;
                 this.relationships = this.fileData.relationships;
                 this.fields = this.fileData.fields;
                 this.changelogDate = this.fileData.changelogDate;
@@ -184,8 +180,7 @@ module.exports = EntityGenerator.extend({
      * ask question for a field creation
      */
     _askForField : function(cb){
-        this.fieldId++;
-        this.log(chalk.green('\nGenerating field #' + this.fieldId + '\n'));
+        this.log(chalk.green('\nGenerating field #' + (this.fields.length + 1) + '\n'));
         var prompts = [
             {
                 type: 'confirm',
@@ -658,7 +653,6 @@ module.exports = EntityGenerator.extend({
                 }
 
                 var field = {
-                    fieldId: this.fieldId,
                     fieldName: props.fieldName,
                     fieldType: props.fieldType,
                     fieldTypeBlobContent: props.fieldTypeBlobContent,
@@ -750,11 +744,6 @@ module.exports = EntityGenerator.extend({
                         this.fields.splice(i, 1);
                     }
                 }
-                //reset field IDs
-                for (i = 0; i < this.fields.length; i++) {
-                    this.fields[i].fieldId = i;
-                }
-                this.fieldId = this.fields.length;
             }
             cb();
 
@@ -766,8 +755,7 @@ module.exports = EntityGenerator.extend({
     _askForRelationship: function(cb){
         var packageFolder = this.packageFolder;
         var name = this.name;
-        this.relationshipId++;
-        this.log(chalk.green('\nGenerating relationships with other entities\n'));
+        this.log(chalk.green('\nGenerating relationships to other entities\n'));
         var prompts = [
             {
                 type: 'confirm',
@@ -902,7 +890,6 @@ module.exports = EntityGenerator.extend({
             }
             if (props.relationshipAdd) {
                 var relationship = {
-                    relationshipId: this.relationshipId,
                     relationshipName: props.relationshipName,
                     otherEntityName: _s.decapitalize(props.otherEntityName),
                     relationshipType: props.relationshipType,
@@ -963,11 +950,6 @@ module.exports = EntityGenerator.extend({
                         this.relationships.splice(i, 1);
                     }
                 }
-                //reset relationship IDs
-                for (i = 0; i < this.relationships.length; i++) {
-                    this.relationships[i].relationshipId = i;
-                }
-                this.relationshipId = this.relationships.length;
             }
             cb();
 
@@ -1188,48 +1170,44 @@ module.exports = EntityGenerator.extend({
             // Validate entity json field content
             for (var idx in this.fields) {
                 var field = this.fields[idx];
-                if (_.isUndefined(field.fieldId)) {
-                    this.env.error(chalk.red('ERROR fieldId is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
-                }
-
                 if (_.isUndefined(field.fieldName)) {
-                    this.env.error(chalk.red('ERROR fieldName is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
+                    this.env.error(chalk.red('ERROR fieldName is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                 }
 
                 if (_.isUndefined(field.fieldType)) {
-                    this.env.error(chalk.red('ERROR fieldType is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
+                    this.env.error(chalk.red('ERROR fieldType is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                 }
 
                 if (!_.isUndefined(field.fieldValidateRules)) {
                     if (!_.isArray(field.fieldValidateRules)) {
-                        this.env.error(chalk.red('ERROR fieldValidateRules is not an array in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
+                        this.env.error(chalk.red('ERROR fieldValidateRules is not an array in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
                     for (var idxRules in field.fieldValidateRules) {
                         var fieldValidateRule = field.fieldValidateRules[idxRules];
                         if (!_.contains(SUPPORTED_VALIDATION_RULES, fieldValidateRule)) {
-                            this.env.error(chalk.red('ERROR fieldValidateRules contains unknown validation rule ' + fieldValidateRule + ' in .jhipster/' + this.name + '.json for field with id ' + field.fieldId + ' [supported validation rules ' + SUPPORTED_VALIDATION_RULES + ']'));
+                            this.env.error(chalk.red('ERROR fieldValidateRules contains unknown validation rule ' + fieldValidateRule + ' in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)+ ' [supported validation rules ' + SUPPORTED_VALIDATION_RULES + ']'));
                         }
                     }
                     if (_.contains(field.fieldValidateRules, 'max') && _.isUndefined(field.fieldValidateRulesMax)) {
-                        this.env.error(chalk.red('ERROR fieldValidateRulesMax is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
+                        this.env.error(chalk.red('ERROR fieldValidateRulesMax is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
                     if (_.contains(field.fieldValidateRules, 'min') && _.isUndefined(field.fieldValidateRulesMin)) {
-                        this.env.error(chalk.red('ERROR fieldValidateRulesMin is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
+                        this.env.error(chalk.red('ERROR fieldValidateRulesMin is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
                     if (_.contains(field.fieldValidateRules, 'maxlength') && _.isUndefined(field.fieldValidateRulesMaxlength)) {
-                        this.env.error(chalk.red('ERROR fieldValidateRulesMaxlength is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
+                        this.env.error(chalk.red('ERROR fieldValidateRulesMaxlength is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
                     if (_.contains(field.fieldValidateRules, 'minlength') && _.isUndefined(field.fieldValidateRulesMinlength)) {
-                        this.env.error(chalk.red('ERROR fieldValidateRulesMinlength is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
+                        this.env.error(chalk.red('ERROR fieldValidateRulesMinlength is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
                     if (_.contains(field.fieldValidateRules, 'maxbytes') && _.isUndefined(field.fieldValidateRulesMaxbytes)) {
-                        this.env.error(chalk.red('ERROR fieldValidateRulesMaxbytes is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
+                        this.env.error(chalk.red('ERROR fieldValidateRulesMaxbytes is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
                     if (_.contains(field.fieldValidateRules, 'minbytes') && _.isUndefined(field.fieldValidateRulesMinbytes)) {
-                        this.env.error(chalk.red('ERROR fieldValidateRulesMinbytes is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
+                        this.env.error(chalk.red('ERROR fieldValidateRulesMinbytes is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
                     if (_.contains(field.fieldValidateRules, 'pattern') && _.isUndefined(field.fieldValidateRulesPattern)) {
-                        this.env.error(chalk.red('ERROR fieldValidateRulesPattern is missing in .jhipster/' + this.name + '.json for field with id ' + field.fieldId));
+                        this.env.error(chalk.red('ERROR fieldValidateRulesPattern is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
                 }
             }
@@ -1237,38 +1215,34 @@ module.exports = EntityGenerator.extend({
             // Validate entity json relationship content
             for (var idx in this.relationships) {
                 var relationship = this.relationships[idx];
-                if (_.isUndefined(relationship.relationshipId)) {
-                    this.env.error(chalk.red('ERROR relationshipId is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4)));
-                }
-
                 if (_.isUndefined(relationship.relationshipName)) {
                     relationship.relationshipName = relationship.otherEntityName;
-                    this.log(chalk.yellow('WARNING relationshipName is missing in .jhipster/' + this.name + '.json for relationship with id ' + relationship.relationshipId + ', using ' + relationship.otherEntityName + ' as fallback'));
+                    this.log(chalk.yellow('WARNING relationshipName is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4) + ', using ' + relationship.otherEntityName + ' as fallback'));
                 }
 
                 if (_.isUndefined(relationship.otherEntityName)) {
-                    this.env.error(chalk.red('ERROR otherEntityName is missing in .jhipster/' + this.name + '.json for relationship with id ' + relationship.relationshipId));
+                    this.env.error(chalk.red('ERROR otherEntityName is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4)));
                 }
 
                 if (_.isUndefined(relationship.otherEntityRelationshipName)
                 && (relationship.relationshipType == 'one-to-many' || (relationship.relationshipType == 'many-to-many' && relationship.ownerSide == false) || (relationship.relationshipType == 'one-to-one'))) {
                     relationship.otherEntityRelationshipName = _s.decapitalize(this.name);
-                    this.log(chalk.yellow('WARNING otherEntityRelationshipName is missing in .jhipster/' + this.name + '.json for relationship with id ' + relationship.relationshipId + ', using ' + _s.decapitalize(this.name) + ' as fallback'));
+                    this.log(chalk.yellow('WARNING otherEntityRelationshipName is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4) + ', using ' + _s.decapitalize(this.name) + ' as fallback'));
                 }
 
                 if (_.isUndefined(relationship.otherEntityField)
                 && (relationship.relationshipType == 'many-to-one' || (relationship.relationshipType == 'many-to-many' && relationship.ownerSide == true) || (relationship.relationshipType == 'one-to-one' && relationship.ownerSide == true))) {
-                    this.log(chalk.yellow('WARNING otherEntityField is missing in .jhipster/' + this.name + '.json for relationship with id ' + relationship.relationshipId + ', using id as fallback'));
+                    this.log(chalk.yellow('WARNING otherEntityField is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4) + ', using id as fallback'));
                     relationship.otherEntityField = 'id';
                 }
 
                 if (_.isUndefined(relationship.relationshipType)) {
-                    this.env.error(chalk.red('ERROR relationshipType is missing in .jhipster/' + this.name + '.json for relationship with id ' + relationship.relationshipId));
+                    this.env.error(chalk.red('ERROR relationshipType is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4)));
                 }
 
                 if (_.isUndefined(relationship.ownerSide)
                 && (relationship.relationshipType == 'one-to-one' || relationship.relationshipType == 'many-to-many')) {
-                    this.env.error(chalk.red('ERROR ownerSide is missing in .jhipster/' + this.name + '.json for relationship with id ' + relationship.relationshipId));
+                    this.env.error(chalk.red('ERROR ownerSide is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4)));
                 }
             }
 
@@ -1498,9 +1472,8 @@ module.exports = EntityGenerator.extend({
             if (this.relationships == undefined) {
                 this.relationships = [];
             }
-            var relationshipId;
-            for (relationshipId in this.relationships) {
-                var entityType = this.relationships[relationshipId].otherEntityNameCapitalized;
+            for (var idx in this.relationships) {
+                var entityType = this.relationships[idx].otherEntityNameCapitalized;
                 if (this.differentTypes.indexOf(entityType) == -1) {
                     this.differentTypes.push(entityType);
                 }
@@ -1524,8 +1497,8 @@ module.exports = EntityGenerator.extend({
 
         writeEnumFiles: function() {
 
-            for (var fieldIdx in this.fields) {
-                var field = this.fields[fieldIdx];
+            for (var idx in this.fields) {
+                var field = this.fields[idx];
                 if (field.fieldIsEnum == true) {
                     var fieldType = field.fieldType;
                     var enumInfo = new Object();

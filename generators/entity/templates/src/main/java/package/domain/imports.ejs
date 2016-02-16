@@ -1,41 +1,41 @@
 <%#	Checks which imports are needed -%>
 <%
 
-for (relationshipId in relationships) {
-    if (typeof relationships[relationshipId].javadoc != 'undefined') {
+for (idx in relationships) {
+    if (typeof relationships[idx].javadoc != 'undefined') {
         importApiModelProperty = true;
         break;
     }
 }
 if (importApiModelProperty == false) {
-  for (fieldId in fields) {
-      if (typeof fields[fieldId].javadoc != 'undefined') {
+  for (idx in fields) {
+      if (typeof fields[idx].javadoc != 'undefined') {
           importApiModelProperty = true;
           break;
       }
   }
 }
 
-for (relationshipId in relationships) {
-    if (relationships[relationshipId].relationshipType == 'one-to-many'
-        || relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == false
-        || relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == false) {
+for (idx in relationships) {
+    if (relationships[idx].relationshipType == 'one-to-many'
+        || relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide == false
+        || relationships[idx].relationshipType == 'many-to-many' && relationships[idx].ownerSide == false) {
         importJsonignore = true;
         break;
     }
 }
 
-for (relationshipId in relationships) {
-    if (relationships[relationshipId].relationshipType == 'one-to-many' || relationships[relationshipId].relationshipType == 'many-to-many') {
+for (idx in relationships) {
+    if (relationships[idx].relationshipType == 'one-to-many' || relationships[idx].relationshipType == 'many-to-many') {
         importSet = true;
         break;
     }
 }
 
-for (fieldId in fields) {
-    if (fields[fieldId].fieldIsEnum && (
-            !uniqueEnums[fields[fieldId].fieldType] || (uniqueEnums[fields[fieldId].fieldType] && fields[fieldId].fieldValues.length !== 0))) {
-        uniqueEnums[fields[fieldId].fieldType] = fields[fieldId].fieldType;
+for (idx in fields) {
+    if (fields[idx].fieldIsEnum && (
+            !uniqueEnums[fields[idx].fieldType] || (uniqueEnums[fields[idx].fieldType] && fields[idx].fieldValues.length !== 0))) {
+        uniqueEnums[fields[idx].fieldType] = fields[idx].fieldType;
     }
 }
 

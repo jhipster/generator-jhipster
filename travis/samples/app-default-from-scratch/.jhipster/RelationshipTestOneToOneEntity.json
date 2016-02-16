@@ -1,7 +1,6 @@
 {
     "relationships": [
         {
-            "relationshipId": 1,
             "relationshipName": "relationshipTestEntity",
             "otherEntityName": "relationshipTestEntity",
             "relationshipType": "one-to-one",
@@ -10,7 +9,6 @@
             "otherEntityRelationshipName": "relationshipTestOneToOneEntity"
         },
         {
-            "relationshipId": 2,
             "relationshipName": "relationshipTestMapstructEntity",
             "otherEntityName": "relationshipTestMapstructEntity",
             "relationshipType": "one-to-one",
@@ -19,7 +17,6 @@
             "otherEntityRelationshipName": "relationshipTestOneToOneEntity"
         },
         {
-            "relationshipId": 3,
             "relationshipName": "relationshipTestServiceClassEntity",
             "otherEntityName": "relationshipTestServiceClassEntity",
             "relationshipType": "one-to-one",
@@ -28,7 +25,6 @@
             "otherEntityRelationshipName": "relationshipTestOneToOneEntity"
         },
         {
-            "relationshipId": 4,
             "relationshipName": "relationshipTestServiceImplEntity",
             "otherEntityName": "relationshipTestServiceImplEntity",
             "relationshipType": "one-to-one",
@@ -37,7 +33,6 @@
             "otherEntityRelationshipName": "relationshipTestOneToOneEntity"
         },
         {
-            "relationshipId": 5,
             "relationshipName": "relationshipTestInfiniteScrollEntity",
             "otherEntityName": "relationshipTestInfiniteScrollEntity",
             "relationshipType": "one-to-one",
@@ -46,7 +41,6 @@
             "otherEntityRelationshipName": "relationshipTestOneToOneEntity"
         },
         {
-            "relationshipId": 6,
             "relationshipName": "relationshipTestPagerEntity",
             "otherEntityName": "relationshipTestPagerEntity",
             "relationshipType": "one-to-one",
@@ -55,7 +49,6 @@
             "otherEntityRelationshipName": "relationshipTestOneToOneEntity"
         },
         {
-            "relationshipId": 7,
             "relationshipName": "relationshipTestPaginationEntity",
             "otherEntityName": "relationshipTestPaginationEntity",
             "relationshipType": "one-to-one",
