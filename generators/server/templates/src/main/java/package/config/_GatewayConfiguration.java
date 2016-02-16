@@ -43,12 +43,14 @@ public class GatewayConfiguration {
      * Configures the Zuul filter that limits the number of API calls per user.
      * <p>
      * For this filter to work, you need to:
+     * <p><ul>
      * <li>Have a working Cassandra cluster
      * <li>Have this cluster configured in your application-*.yml files, using the
      * "spring.data.cassandra" keys
      * <li>Have Spring Data Cassandra running, by removing in your application-*.yml the
      * "spring.autoconfigure.exclude" key that excludes the Cassandra and Spring Data
      * Cassandra auto-configuration.
+     * </ul><p>
      */
     @Configuration
     @ConditionalOnProperty("jhipster.gateway.rate-limiting.enabled")
