@@ -10,7 +10,7 @@ import java.util.List;
  * Mapper for the entity <%= entityClass %> and its DTO <%= entityClass %>DTO.
  */
 @Mapper(componentModel = "spring", uses = {<% for (relationshipId in relationships) {
-    if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %><%= relationships[relationshipId].otherEntityNameCapitalized %>Mapper.class, <% } } %>})
+    if ((relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) || relationships[relationshipId].otherEntityNameCapitalized == 'User') { %><%= relationships[relationshipId].otherEntityNameCapitalized %>Mapper.class, <% } } %>})
 public interface <%= entityClass %>Mapper {
 <%
 // entity -> DTO mapping
@@ -40,7 +40,8 @@ for (relationshipId in relationships) {
 
     List<<%= entityClass %>> <%= entityInstance %>DTOsTo<%= entityClassPlural %>(List<<%= entityClass %>DTO> <%= entityInstance %>DTOs);<%
 
-var existingMappings = [];
+// the user mapping is imported in the @Mapper annotation
+var existingMappings = ['user'];
 for (relationshipId in relationships) {
     var relationshipType = relationships[relationshipId].relationshipType;
     var otherEntityName = relationships[relationshipId].otherEntityName;
