@@ -1,6 +1,6 @@
 package <%=packageName%>.web.rest;
 
-import <%=packageName%>.Application;
+import <%=packageName%>.<%= mainClass %>;
 import <%=packageName%>.config.audit.AuditEventConverter;
 import <%=packageName%>.domain.PersistentAuditEvent;
 import <%=packageName%>.repository.PersistenceAuditEventRepository;
@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  *
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = <%= mainClass %>.class)
 @WebAppConfiguration
 @IntegrationTest<% if (databaseType == 'sql') { %>
 @Transactional<% } %>

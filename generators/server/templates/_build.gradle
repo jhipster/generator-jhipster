@@ -27,7 +27,7 @@ apply plugin: 'propdeps'
 defaultTasks 'bootRun'
 
 bootRepackage {
-   mainClass = '<%= packageName %>.Application'
+   mainClass = '<%= packageName %>.<%= mainClass %>'
 }
 
 war {
@@ -35,7 +35,7 @@ war {
 }
 
 springBoot {
-    mainClass = '<%= packageName %>.Application'
+    mainClass = '<%= packageName %>.<%= mainClass %>'
     executable = true
 }
 

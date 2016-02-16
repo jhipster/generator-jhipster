@@ -52,7 +52,7 @@ const expectedFiles = {
         'src/main/resources/mails/activationEmail.html',
         'src/main/resources/mails/passwordResetEmail.html',
         'src/main/resources/i18n/messages.properties',
-        'src/main/java/com/mycompany/myapp/Application.java',
+        'src/main/java/com/mycompany/myapp/JhipsterApp.java',
         'src/main/java/com/mycompany/myapp/ApplicationWebXml.java',
         'src/main/java/com/mycompany/myapp/aop/logging/LoggingAspect.java',
         'src/main/java/com/mycompany/myapp/config/apidoc/package-info.java',
@@ -411,9 +411,9 @@ describe('JHipster generator', function () {
 
         it('creates expected files with correct package names', function () {
             assert.file([
-                'src/main/java/com/otherpackage/Application.java'
+                'src/main/java/com/otherpackage/JhipsterApp.java'
             ]);
-            assert.fileContent('src/main/java/com/otherpackage/Application.java', /package com\.otherpackage;/);
+            assert.fileContent('src/main/java/com/otherpackage/JhipsterApp.java', /package com\.otherpackage;/);
         });
     });
 
@@ -443,8 +443,8 @@ describe('JHipster generator', function () {
 
         it('creates expected files with correct application name', function () {
             assert.file([
-                'src/main/webapp/app/home/home.js'
-            ]);
+                'src/main/webapp/app/home/home.js',
+             ]);
             assert.fileContent('src/main/webapp/app/home/home.js', /myapplicationApp/);
         })
     });

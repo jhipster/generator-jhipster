@@ -89,9 +89,10 @@ module.exports = EntityGenerator.extend({
             if (this.testFrameworks == null) {
                 this.testFrameworks = ['gatling'];
             }
-            this.angularAppName = _s.camelize(_s.slugify(this.baseName)) + 'App';
+            this.angularAppName = this.getAngularAppName();
             this.jhipsterConfigDirectory = '.jhipster';
-
+            this.mainClass = this.getMainClassName();
+            
             this.filename = this.jhipsterConfigDirectory + '/' + _s.capitalize(this.name) + '.json';
             if (shelljs.test('-f', this.filename)) {
                 this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
