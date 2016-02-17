@@ -522,6 +522,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.camelizedBaseName = _.camelize(this.baseName);
             this.slugifiedBaseName = _.slugify(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();
+            this.mainClass = this.getMainClassName();
 
             if (this.prodDatabaseType === 'oracle') {
                 // create a folder for users to place ojdbc jar
@@ -604,6 +605,9 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(DOCKER_DIR + 'cassandra/scripts/_cassandra.sh', DOCKER_DIR + 'cassandra/scripts/cassandra.sh', this, {});
                 this.template(DOCKER_DIR + 'opscenter/_Dockerfile', DOCKER_DIR + 'opscenter/Dockerfile', this, {});
             }
+            if (this.applicationType == 'microservice' || this.applicationType == 'gateway') {
+                this.template(DOCKER_DIR + '_registry.yml', DOCKER_DIR + 'registry.yml', this, {});
+            }
         },
 
         writeServerBuildFiles: function () {
@@ -678,7 +682,7 @@ module.exports = JhipsterServerGenerator.extend({
                 this.copy(RESOURCE_DIR + '/config/mongeez/social_user_connections.xml', RESOURCE_DIR + 'config/mongeez/social_user_connections.xml');
             }
 
-            if (this.databaseType == "cassandra") {
+            if (this.databaseType == "cassandra" || this.applicationType == 'gateway') {
                 this.template(RESOURCE_DIR + '/config/cql/_create-keyspace-prod.cql', RESOURCE_DIR + 'config/cql/create-keyspace-prod.cql', this, {});
                 this.template(RESOURCE_DIR + '/config/cql/_create-keyspace.cql', RESOURCE_DIR + 'config/cql/create-keyspace.cql', this, {});
                 this.template(RESOURCE_DIR + '/config/cql/_drop-keyspace.cql', RESOURCE_DIR + 'config/cql/drop-keyspace.cql', this, {});
@@ -780,16 +784,19 @@ module.exports = JhipsterServerGenerator.extend({
 
             if (this.applicationType != 'gateway') return;
 
-
+            this.template('src/main/java/package/config/_GatewayConfiguration.java', javaDir + 'config/GatewayConfiguration.java', this, {});
+            this.template('src/main/java/package/gateway/ratelimiting/_RateLimitingFilter.java', javaDir + 'gateway/ratelimiting/RateLimitingFilter.java', this, {});
+            this.template('src/main/java/package/gateway/ratelimiting/_RateLimitingRepository.java', javaDir + 'gateway/ratelimiting/RateLimitingRepository.java', this, {});
             this.template('src/main/java/package/web/rest/dto/_RouteDTO.java', javaDir + 'web/rest/dto/RouteDTO.java', this, {});
             this.template('src/main/java/package/web/rest/_GatewayResource.java', javaDir + 'web/rest/GatewayResource.java', this, {});
-
+            this.template('src/main/java/package/web/rest/_GatewaySwaggerApiResource.java', javaDir + 'web/rest/GatewaySwaggerApiResource.java', this, {});
         },
 
         writeServerJavaAppFiles: function () {
 
             // Create Java files
-            this.template('src/main/java/package/_Application.java', javaDir + '/Application.java', this, {});
+            // Spring Boot main
+            this.template('src/main/java/package/_Application.java', javaDir + '/' + this.mainClass + '.java', this, {});
             this.template('src/main/java/package/_ApplicationWebXml.java', javaDir + '/ApplicationWebXml.java', this, {});
         },
 
@@ -923,13 +930,14 @@ module.exports = JhipsterServerGenerator.extend({
             this.template('src/main/java/package/web/filter/_CachingHttpHeadersFilter.java', javaDir + 'web/filter/CachingHttpHeadersFilter.java', this, {});
             this.template('src/main/java/package/web/filter/_StaticResourcesProductionFilter.java', javaDir + 'web/filter/StaticResourcesProductionFilter.java', this, {});
 
+            this.template('src/main/java/package/web/rest/mapper/_UserMapper.java', javaDir + 'web/rest/mapper/UserMapper.java', this, {});
             this.template('src/main/java/package/web/rest/dto/_package-info.java', javaDir + 'web/rest/dto/package-info.java', this, {});
             this.template('src/main/java/package/web/rest/dto/_LoggerDTO.java', javaDir + 'web/rest/dto/LoggerDTO.java', this, {});
             this.template('src/main/java/package/web/rest/dto/_UserDTO.java', javaDir + 'web/rest/dto/UserDTO.java', this, {});
             this.template('src/main/java/package/web/rest/dto/_ManagedUserDTO.java', javaDir + 'web/rest/dto/ManagedUserDTO.java', this, {});
-            this.template('src/main/java/package/web/rest/util/_HeaderUtil.java', javaDir + 'web/rest/util/HeaderUtil.java', this, {});
             this.template('src/main/java/package/web/rest/dto/_KeyAndPasswordDTO.java', javaDir + 'web/rest/dto/KeyAndPasswordDTO.java', this, {});
 
+            this.template('src/main/java/package/web/rest/util/_HeaderUtil.java', javaDir + 'web/rest/util/HeaderUtil.java', this, {});
             this.template('src/main/java/package/web/rest/util/_PaginationUtil.java', javaDir + 'web/rest/util/PaginationUtil.java', this, {});
             this.template('src/main/java/package/web/rest/_package-info.java', javaDir + 'web/rest/package-info.java', this, {});
             this.template('src/main/java/package/web/rest/_AccountResource.java', javaDir + 'web/rest/AccountResource.java', this, {});
@@ -1003,8 +1011,9 @@ module.exports = JhipsterServerGenerator.extend({
             // Create Cucumber test files
             if (this.testFrameworks.indexOf('cucumber') != -1) {
                 this.template('src/test/java/package/cucumber/_CucumberTest.java', testDir + 'cucumber/CucumberTest.java', this, {});
-                this.template('src/test/java/package/cucumber/_UserStepDefs.java', testDir + 'cucumber/UserStepDefs.java', this, {});
-                this.copy('src/test/features/user.feature', 'src/test/features/user.feature');
+                this.template('src/test/java/package/cucumber/stepdefs/_StepDefs.java', testDir + 'cucumber/stepdefs/StepDefs.java', this, {});
+                this.template('src/test/java/package/cucumber/stepdefs/_UserStepDefs.java', testDir + 'cucumber/stepdefs/UserStepDefs.java', this, {});
+                this.copy('src/test/features/user/user.feature', 'src/test/features/user/user.feature');
             }
 
         }

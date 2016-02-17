@@ -25,17 +25,17 @@ import java.util.UUID;<% } %>
  */<% } %><% if (databaseType=='cassandra') { %>/**
  * Cassandra repository for the <%= entityClass %> entity.
  */<% } %><% if (databaseType=='sql' || databaseType=='mongodb') { %>
-public interface <%=entityClass%>Repository extends <% if (databaseType=='sql') { %>JpaRepository<% } %><% if (databaseType=='mongodb') { %>MongoRepository<% } %><<%=entityClass%>,<%= pkType %>> {<% for (relationshipId in relationships) { %><% if (relationships[relationshipId].relationshipType == 'many-to-one' && relationships[relationshipId].otherEntityName == 'user') { %>
+public interface <%=entityClass%>Repository extends <% if (databaseType=='sql') { %>JpaRepository<% } %><% if (databaseType=='mongodb') { %>MongoRepository<% } %><<%=entityClass%>,<%= pkType %>> {<% for (idx in relationships) { %><% if (relationships[idx].relationshipType == 'many-to-one' && relationships[idx].otherEntityName == 'user') { %>
 
-    @Query("select <%= entityInstance %> from <%= entityClass %> <%= entityInstance %> where <%= entityInstance %>.<%= relationships[relationshipId].relationshipFieldName %>.login = ?#{principal.username}")
-    List<<%= entityClass %>> findBy<%= relationships[relationshipId].relationshipNameCapitalized %>IsCurrentUser();<% } } %>
+    @Query("select <%= entityInstance %> from <%= entityClass %> <%= entityInstance %> where <%= entityInstance %>.<%= relationships[idx].relationshipFieldName %>.login = ?#{principal.username}")
+    List<<%= entityClass %>> findBy<%= relationships[idx].relationshipNameCapitalized %>IsCurrentUser();<% } } %>
 <% if (fieldsContainOwnerManyToMany==true) { %>
-    @Query("select distinct <%= entityInstance %> from <%= entityClass %> <%= entityInstance %><% for (relationshipId in relationships) {
-    if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %> left join fetch <%=entityInstance%>.<%=relationships[relationshipId].relationshipFieldName%>s<%} }%>")
+    @Query("select distinct <%= entityInstance %> from <%= entityClass %> <%= entityInstance %><% for (idx in relationships) {
+    if (relationships[idx].relationshipType == 'many-to-many' && relationships[idx].ownerSide == true) { %> left join fetch <%=entityInstance%>.<%=relationships[idx].relationshipFieldName%>s<%} }%>")
     List<<%=entityClass%>> findAllWithEagerRelationships();
 
-    @Query("select <%= entityInstance %> from <%= entityClass %> <%= entityInstance %><% for (relationshipId in relationships) {
-    if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { %> left join fetch <%=entityInstance%>.<%=relationships[relationshipId].relationshipFieldName%>s<%} }%> where <%=entityInstance%>.id =:id")
+    @Query("select <%= entityInstance %> from <%= entityClass %> <%= entityInstance %><% for (idx in relationships) {
+    if (relationships[idx].relationshipType == 'many-to-many' && relationships[idx].ownerSide == true) { %> left join fetch <%=entityInstance%>.<%=relationships[idx].relationshipFieldName%>s<%} }%> where <%=entityInstance%>.id =:id")
     <%=entityClass%> findOneWithEagerRelationships(@Param("id") Long id);
 <% } %>
 }<% } %><% if (databaseType == 'cassandra') { %>
@@ -64,12 +64,16 @@ public class <%= entityClass %>Repository {
         session.execute(stmt).all().stream().map(
             row -> {
                 <%= entityClass %> <%= entityInstance %> = new <%= entityClass %>();
-                <%= entityInstance %>.setId(row.getUUID("id"));<% for (fieldId in fields) { %><% if (fields[fieldId].fieldType == 'Integer') { %>
-                <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(row.getInt("<%= fields[fieldId].fieldName %>"));<% } else if (fields[fieldId].fieldType == 'BigDecimal') { %>
-                <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(row.getDecimal("<%= fields[fieldId].fieldName %>"));<% } else if (fields[fieldId].fieldType == 'Boolean') { %>
-                <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(row.getBool("<%= fields[fieldId].fieldName %>"));<% } else if (fields[fieldId].fieldType == 'Text') { %>
-                <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(row.getString("<%= fields[fieldId].fieldName %>"));<% } else { %>
-                <%= entityInstance %>.set<%= fields[fieldId].fieldInJavaBeanMethod %>(row.get<%= fields[fieldId].fieldType %>("<%= fields[fieldId].fieldName %>"));<% } } %>
+                <%= entityInstance %>.setId(row.getUUID("id"));<%
+                for (idx in fields) {
+                    var fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod;
+                    var fieldName = fields[idx].fieldName;
+                    if (fields[idx].fieldType == 'Integer') { %>
+                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getInt("<%= fieldName %>"));<% } else if (fields[idx].fieldType == 'BigDecimal') { %>
+                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getDecimal("<%= fieldName %>"));<% } else if (fields[idx].fieldType == 'Boolean') { %>
+                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getBool("<%= fieldName %>"));<% } else if (fields[idx].fieldType == 'Text') { %>
+                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.getString("<%= fieldName %>"));<% } else { %>
+                <%= entityInstance %>.set<%= fieldInJavaBeanMethod %>(row.get<%= fields[idx].fieldType %>("<%= fieldName %>"));<% } } %>
                 return <%= entityInstance %>;
             }
         ).forEach(<%= entityInstancePlural %>::add);

@@ -11,8 +11,8 @@ import java.util.Set;<% } %>
 import java.util.Objects;<% if (databaseType == 'cassandra') { %>
 import java.util.UUID;<% } %><% if (fieldsContainBlob == true) { %>
 import javax.persistence.Lob;<% } %>
-<% for (fieldId in fields) { if (fields[fieldId].fieldIsEnum == true) { %>
-import <%=packageName%>.domain.enumeration.<%= fields[fieldId].fieldType %>;<% } } %>
+<% for (idx in fields) { if (fields[idx].fieldIsEnum == true) { %>
+import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;<% } } %>
 
 /**
  * A DTO for the <%= entityClass %> entity.
@@ -22,44 +22,61 @@ public class <%= entityClass %>DTO implements Serializable {
     private Long id;<% } %><% if (databaseType == 'mongodb') { %>
     private String id;<% } %><% if (databaseType == 'cassandra') { %>
     private UUID id;<% } %>
-    <%_ for (fieldId in fields) {
-        if (fields[fieldId].fieldValidate == true) {
+    <%_ for (idx in fields) {
+        var fieldValidate = fields[idx].fieldValidate;
+        var fieldValidateRules = fields[idx].fieldValidateRules;
+        var fieldValidateRulesMinlength = fields[idx].fieldValidateRulesMinlength;
+        var fieldValidateRulesMaxlength = fields[idx].fieldValidateRulesMaxlength;
+        var fieldValidateRulesMinbytes = fields[idx].fieldValidateRulesMinbytes;
+        var fieldValidateRulesMaxbytes = fields[idx].fieldValidateRulesMaxbytes;
+        var fieldValidateRulesMin = fields[idx].fieldValidateRulesMin;
+        var fieldValidateRulesMax = fields[idx].fieldValidateRulesMax;
+        var fieldValidateRulesPatternJava = fields[idx].fieldValidateRulesPatternJava;
+        var fieldType = fields[idx].fieldType;
+        var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+        var fieldName = fields[idx].fieldName;
+        if (fieldValidate == true) {
             var required = false;
             var MAX_VALUE = 2147483647;
-            if (fields[fieldId].fieldValidate == true && fields[fieldId].fieldValidateRules.indexOf('required') != -1) {
+            if (fieldValidate == true && fieldValidateRules.indexOf('required') != -1) {
                 required = true;
             }
             if (required) { _%>
 
-    @NotNull<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('minlength') != -1 && fields[fieldId].fieldValidateRules.indexOf('maxlength') == -1) { %>
-    @Size(min = <%= fields[fieldId].fieldValidateRulesMinlength %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('maxlength') != -1 && fields[fieldId].fieldValidateRules.indexOf('minlength') == -1) { %>
-    @Size(max = <%= fields[fieldId].fieldValidateRulesMaxlength %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('minlength') != -1 && fields[fieldId].fieldValidateRules.indexOf('maxlength') != -1) { %>
-    @Size(min = <%= fields[fieldId].fieldValidateRulesMinlength %>, max = <%= fields[fieldId].fieldValidateRulesMaxlength %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('minbytes') != -1 && fields[fieldId].fieldValidateRules.indexOf('maxbytes') == -1) { %>
-    @Size(min = <%= fields[fieldId].fieldValidateRulesMinbytes %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('maxbytes') != -1 && fields[fieldId].fieldValidateRules.indexOf('minbytes') == -1) { %>
-    @Size(max = <%= fields[fieldId].fieldValidateRulesMaxbytes %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('minbytes') != -1 && fields[fieldId].fieldValidateRules.indexOf('maxbytes') != -1) { %>
-    @Size(min = <%= fields[fieldId].fieldValidateRulesMinbytes %>, max = <%= fields[fieldId].fieldValidateRulesMaxbytes %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('min') != -1) { %>
-    @Min(value = <%= fields[fieldId].fieldValidateRulesMin %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('max') != -1) { %>
-    @Max(value = <%= fields[fieldId].fieldValidateRulesMax %><%= (fields[fieldId].fieldValidateRulesMax > MAX_VALUE) ? 'L' : '' %>)<% } %><% if (fields[fieldId].fieldValidateRules.indexOf('pattern') != -1) { %>
-    @Pattern(regexp = "<%= fields[fieldId].fieldValidateRulesPatternJava %>")<% } } %><% if (fields[fieldId].fieldType == 'byte[]') { %>
+    @NotNull<% } %><% if (fieldValidateRules.indexOf('minlength') != -1 && fieldValidateRules.indexOf('maxlength') == -1) { %>
+    @Size(min = <%= fieldValidateRulesMinlength %>)<% } %><% if (fieldValidateRules.indexOf('maxlength') != -1 && fieldValidateRules.indexOf('minlength') == -1) { %>
+    @Size(max = <%= fieldValidateRulesMaxlength %>)<% } %><% if (fieldValidateRules.indexOf('minlength') != -1 && fieldValidateRules.indexOf('maxlength') != -1) { %>
+    @Size(min = <%= fieldValidateRulesMinlength %>, max = <%= fieldValidateRulesMaxlength %>)<% } %><% if (fieldValidateRules.indexOf('minbytes') != -1 && fieldValidateRules.indexOf('maxbytes') == -1) { %>
+    @Size(min = <%= fieldValidateRulesMinbytes %>)<% } %><% if (fieldValidateRules.indexOf('maxbytes') != -1 && fieldValidateRules.indexOf('minbytes') == -1) { %>
+    @Size(max = <%= fieldValidateRulesMaxbytes %>)<% } %><% if (fieldValidateRules.indexOf('minbytes') != -1 && fieldValidateRules.indexOf('maxbytes') != -1) { %>
+    @Size(min = <%= fieldValidateRulesMinbytes %>, max = <%= fieldValidateRulesMaxbytes %>)<% } %><% if (fieldValidateRules.indexOf('min') != -1) { %>
+    @Min(value = <%= fieldValidateRulesMin %>)<% } %><% if (fieldValidateRules.indexOf('max') != -1) { %>
+    @Max(value = <%= fieldValidateRulesMax %><%= (fieldValidateRulesMax > MAX_VALUE) ? 'L' : '' %>)<% } %><% if (fieldValidateRules.indexOf('pattern') != -1) { %>
+    @Pattern(regexp = "<%= fieldValidateRulesPatternJava %>")<% } } %><% if (fieldType == 'byte[]') { %>
     @Lob<% } %>
-    <%_ if (fields[fieldId].fieldTypeBlobContent != 'text') { _%>
-    private <%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>;
+    <%_ if (fieldTypeBlobContent != 'text') { _%>
+    private <%= fieldType %> <%= fieldName %>;
     <%_ } else { _%>
-    private String <%= fields[fieldId].fieldName %>;
+    private String <%= fieldName %>;
     <%_ } %>
-    <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
-    private String <%= fields[fieldId].fieldName %>ContentType;
+    <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
+    private String <%= fieldName %>ContentType;
         <%_ } _%>
     <%_ } _%>
-    <%_ for (relationshipId in relationships) {
-    otherEntityRelationshipName = relationships[relationshipId].otherEntityRelationshipName;%><% if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { _%>
+    <%_ for (idx in relationships) {
+        var otherEntityRelationshipName = relationships[idx].otherEntityRelationshipName,
+        relationshipFieldName = relationships[idx].relationshipFieldName,
+        relationshipType = relationships[idx].relationshipType,
+        otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized,
+        otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized,
+        ownerSide = relationships[idx].ownerSide; %><% if (relationshipType == 'many-to-many' && ownerSide == true) { _%>
 
-    private Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>DTO> <%= relationships[relationshipId].relationshipFieldName %>s = new HashSet<>();
-    <%_ } else if (relationships[relationshipId].relationshipType == 'many-to-one' || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) { _%>
+    private Set<<%= otherEntityNameCapitalized %>DTO> <%= relationshipFieldName %>s = new HashSet<>();
+    <%_ } else if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true)) { _%>
 
-    private Long <%= relationships[relationshipId].relationshipFieldName %>Id;<% if (relationships[relationshipId].otherEntityFieldCapitalized !='Id' && relationships[relationshipId].otherEntityFieldCapitalized != '') { %>
+    private Long <%= relationshipFieldName %>Id;<% if (otherEntityFieldCapitalized !='Id' && otherEntityFieldCapitalized != '') { %>
 
-    private String <%= relationships[relationshipId].relationshipFieldName %><%= relationships[relationshipId].otherEntityFieldCapitalized %>;
+    private String <%= relationshipFieldName %><%= otherEntityFieldCapitalized %>;
     <%_ } } } _%>
 
     public <% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %><% if (databaseType == 'cassandra') { %>UUID<% } %> getId() {
@@ -69,58 +86,69 @@ public class <%= entityClass %>DTO implements Serializable {
     public void setId(<% if (databaseType == 'sql') { %>Long<% } %><% if (databaseType == 'mongodb') { %>String<% } %><% if (databaseType == 'cassandra') { %>UUID<% } %> id) {
         this.id = id;
     }
-    <%_ for (fieldId in fields) { _%>
-    <%_ if(fields[fieldId].fieldTypeBlobContent != 'text') { _%>
-    public <%= fields[fieldId].fieldType %> get<%= fields[fieldId].fieldInJavaBeanMethod %>() {
+    <%_ for (idx in fields) {
+        var fieldType = fields[idx].fieldType;
+        var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+        var fieldInJavaBeanMethod = fields[idx].fieldInJavaBeanMethod;
+        var fieldName = fields[idx].fieldName; _%>
+    <%_ if(fieldTypeBlobContent != 'text') { _%>
+    public <%= fieldType %> get<%= fieldInJavaBeanMethod %>() {
     <%_ } else { _%>
-    public String get<%= fields[fieldId].fieldInJavaBeanMethod %>() {
+    public String get<%= fieldInJavaBeanMethod %>() {
     <%_ } _%>
-        return <%= fields[fieldId].fieldName %>;
+        return <%= fieldName %>;
     }
 
-    <%_ if(fields[fieldId].fieldTypeBlobContent != 'text') { _%>
-    public void set<%= fields[fieldId].fieldInJavaBeanMethod %>(<%= fields[fieldId].fieldType %> <%= fields[fieldId].fieldName %>) {
+    <%_ if(fieldTypeBlobContent != 'text') { _%>
+    public void set<%= fieldInJavaBeanMethod %>(<%= fieldType %> <%= fieldName %>) {
     <%_ } else { _%>
-    public void set<%= fields[fieldId].fieldInJavaBeanMethod %>(String <%= fields[fieldId].fieldName %>) {
+    public void set<%= fieldInJavaBeanMethod %>(String <%= fieldName %>) {
     <%_ } _%>
-        this.<%= fields[fieldId].fieldName %> = <%= fields[fieldId].fieldName %>;
+        this.<%= fieldName %> = <%= fieldName %>;
     }
-    <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
+    <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
 
-    public String get<%= fields[fieldId].fieldInJavaBeanMethod %>ContentType() {
-        return <%= fields[fieldId].fieldName %>ContentType;
+    public String get<%= fieldInJavaBeanMethod %>ContentType() {
+        return <%= fieldName %>ContentType;
     }
 
-    public void set<%= fields[fieldId].fieldInJavaBeanMethod %>ContentType(String <%= fields[fieldId].fieldName %>ContentType) {
-        this.<%= fields[fieldId].fieldName %>ContentType = <%= fields[fieldId].fieldName %>ContentType;
+    public void set<%= fieldInJavaBeanMethod %>ContentType(String <%= fieldName %>ContentType) {
+        this.<%= fieldName %>ContentType = <%= fieldName %>ContentType;
     }
     <%_ } } _%>
-    <%_ for (relationshipId in relationships) {
-        if (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true) { _%>
+    <%_ for (idx in relationships) {
+        relationshipFieldName = relationships[idx].relationshipFieldName,
+        otherEntityName = relationships[idx].otherEntityName,
+        relationshipType = relationships[idx].relationshipType,
+        otherEntityNameCapitalized = relationships[idx].otherEntityNameCapitalized,
+        otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized,
+        relationshipNameCapitalized = relationships[idx].relationshipNameCapitalized,
+        ownerSide = relationships[idx].ownerSide;
+        if (relationshipType == 'many-to-many' && ownerSide == true) { _%>
 
-    public Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>DTO> get<%= relationships[relationshipId].relationshipNameCapitalized %>s() {
-        return <%= relationships[relationshipId].relationshipFieldName %>s;
+    public Set<<%= otherEntityNameCapitalized %>DTO> get<%= relationshipNameCapitalized %>s() {
+        return <%= relationshipFieldName %>s;
     }
 
-    public void set<%= relationships[relationshipId].relationshipNameCapitalized %>s(Set<<%= relationships[relationshipId].otherEntityNameCapitalized %>DTO> <%= relationships[relationshipId].otherEntityName %>s) {
-        this.<%= relationships[relationshipId].relationshipFieldName %>s = <%= relationships[relationshipId].otherEntityName %>s;
+    public void set<%= relationshipNameCapitalized %>s(Set<<%= otherEntityNameCapitalized %>DTO> <%= otherEntityName %>s) {
+        this.<%= relationshipFieldName %>s = <%= otherEntityName %>s;
     }
-    <%_ } else if (relationships[relationshipId].relationshipType == 'many-to-one' || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)) { _%>
+    <%_ } else if (relationshipType == 'many-to-one' || (relationshipType == 'one-to-one' && ownerSide == true)) { _%>
 
-    public Long get<%= relationships[relationshipId].relationshipNameCapitalized %>Id() {
-        return <%= relationships[relationshipId].relationshipFieldName %>Id;
-    }
-
-    public void set<%= relationships[relationshipId].relationshipNameCapitalized %>Id(Long <%= relationships[relationshipId].otherEntityName %>Id) {
-        this.<%= relationships[relationshipId].relationshipFieldName %>Id = <%= relationships[relationshipId].otherEntityName %>Id;
-    }<% if (relationships[relationshipId].otherEntityFieldCapitalized !='Id' && relationships[relationshipId].otherEntityFieldCapitalized != '') { %>
-
-    public String get<%= relationships[relationshipId].relationshipNameCapitalized %><%= relationships[relationshipId].otherEntityFieldCapitalized %>() {
-        return <%= relationships[relationshipId].relationshipFieldName %><%= relationships[relationshipId].otherEntityFieldCapitalized %>;
+    public Long get<%= relationshipNameCapitalized %>Id() {
+        return <%= relationshipFieldName %>Id;
     }
 
-    public void set<%= relationships[relationshipId].relationshipNameCapitalized %><%= relationships[relationshipId].otherEntityFieldCapitalized %>(String <%= relationships[relationshipId].otherEntityName %><%= relationships[relationshipId].otherEntityFieldCapitalized %>) {
-        this.<%= relationships[relationshipId].relationshipFieldName %><%= relationships[relationshipId].otherEntityFieldCapitalized %> = <%= relationships[relationshipId].otherEntityName %><%= relationships[relationshipId].otherEntityFieldCapitalized %>;
+    public void set<%= relationshipNameCapitalized %>Id(Long <%= otherEntityName %>Id) {
+        this.<%= relationshipFieldName %>Id = <%= otherEntityName %>Id;
+    }<% if (otherEntityFieldCapitalized !='Id' && otherEntityFieldCapitalized != '') { %>
+
+    public String get<%= relationshipNameCapitalized %><%= otherEntityFieldCapitalized %>() {
+        return <%= relationshipFieldName %><%= otherEntityFieldCapitalized %>;
+    }
+
+    public void set<%= relationshipNameCapitalized %><%= otherEntityFieldCapitalized %>(String <%= otherEntityName %><%= otherEntityFieldCapitalized %>) {
+        this.<%= relationshipFieldName %><%= otherEntityFieldCapitalized %> = <%= otherEntityName %><%= otherEntityFieldCapitalized %>;
     }
     <%_ } } } _%>
 
@@ -148,8 +176,9 @@ public class <%= entityClass %>DTO implements Serializable {
     @Override
     public String toString() {
         return "<%= entityClass %>DTO{" +
-            "id=" + id +<% for (fieldId in fields) { %>
-            ", <%= fields[fieldId].fieldName %>='" + <%= fields[fieldId].fieldName %> + "'" +<% } %>
+            "id=" + id +<% for (idx in fields) {
+                var fieldName = fields[idx].fieldName; %>
+            ", <%= fieldName %>='" + <%= fieldName %> + "'" +<% } %>
             '}';
     }
 }

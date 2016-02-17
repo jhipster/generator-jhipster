@@ -27,7 +27,7 @@ apply plugin: 'propdeps'
 defaultTasks 'bootRun'
 
 bootRepackage {
-   mainClass = '<%= packageName %>.Application'
+   mainClass = '<%= packageName %>.<%= mainClass %>'
 }
 
 war {
@@ -35,7 +35,7 @@ war {
 }
 
 springBoot {
-    mainClass = '<%= packageName %>.Application'
+    mainClass = '<%= packageName %>.<%= mainClass %>'
     executable = true
 }
 
@@ -134,7 +134,7 @@ dependencies {
     compile group: 'commons-lang', name: 'commons-lang', version: commons_lang_version
     compile group: 'commons-io', name: 'commons-io', version: commons_io_version
     compile group: 'javax.inject', name: 'javax.inject', version: javax_inject_version
-    compile group: 'javax.transaction', name: 'javax.transaction-api'<% if (databaseType == 'cassandra') { %>
+    compile group: 'javax.transaction', name: 'javax.transaction-api'<% if (databaseType == 'cassandra' || applicationType == 'gateway') { %>
     compile group: 'net.jpountz.lz4', name: 'lz4', version: lz4_version<% } %>
     compile group: 'org.apache.geronimo.javamail', name: 'geronimo-javamail_1.4_mail', version: geronimo_javamail_1_4_mail_version
     compile group: 'org.hibernate', name: 'hibernate-core', version: hibernate_entitymanager_version
@@ -161,12 +161,17 @@ dependencies {
         exclude module: 'spring-boot-starter-tomcat'
     }<% if (websocket == 'spring-websocket') { %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-websocket'<% } %>
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'<% if (databaseType == 'cassandra') { %>
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'<% if (databaseType == 'cassandra' || applicationType == 'gateway') { %>
     compile group: 'org.springframework.data', name: 'spring-data-cassandra'
     compile(group: 'com.datastax.cassandra', name: 'cassandra-driver-core', version: datastax_driver_version) {
         exclude module: 'com.codahale.metrics'
     }
     compile group: 'com.datastax.cassandra', name: 'cassandra-driver-mapping', version: datastax_driver_version<% } %>
+    <%_ if (applicationType == 'gateway' && databaseType != 'cassandra') { _%>
+    // This dependency is used to start an embedded Cassandra server.
+    // You can remove this if you have jhipster.gateway.embedded-cassandra.enabled=false
+    compile group: 'info.archinnov', name: 'achilles-embedded', version: '3.2.3'
+    <%_ } _%>
     <%_ if (applicationType == 'gateway') { _%>
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-zuul', version: spring_cloud_version
     <%_ } _%>
@@ -239,7 +244,7 @@ clean {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.10'
+    gradleVersion = '2.11'
 }
 
 task stage(dependsOn: 'bootRepackage') {

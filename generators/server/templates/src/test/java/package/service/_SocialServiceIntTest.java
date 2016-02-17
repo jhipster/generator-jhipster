@@ -1,6 +1,6 @@
 package <%=packageName%>.service;
 
-import <%=packageName%>.Application;
+import <%=packageName%>.<%= mainClass %>;
 import <%=packageName%>.domain.Authority;
 import <%=packageName%>.domain.User;
 import <%=packageName%>.repository.AuthorityRepository;
@@ -28,7 +28,7 @@ import static org.assertj.core.api.StrictAssertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = <%= mainClass %>.class)
 @WebAppConfiguration
 @IntegrationTest<% if (databaseType == 'sql') { %>
 @Transactional<% } %>

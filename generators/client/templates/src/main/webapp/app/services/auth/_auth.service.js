@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .factory('Auth', function Auth($rootScope, $state, $q, <% if (enableTranslation){ %>$translate, <% } %>Principal, AuthServerProvider, Account, Register, Activate, Password, PasswordResetInit, PasswordResetFinish<% if (websocket === 'spring-websocket') { %>, Tracker<% } %>) {
+    .factory('Auth', function Auth($rootScope, $state, $q, <% if (enableTranslation){ %>$translate, <% } %>Principal, AuthServerProvider, Account, LoginService, Register, Activate, Password, PasswordResetInit, PasswordResetFinish<% if (websocket === 'spring-websocket') { %>, Tracker<% } %>) {
         return {
             login: function (credentials, callback) {
                 var cb = callback || angular.noop;
@@ -37,9 +37,11 @@ angular.module('<%=angularAppName%>')
             logout: function () {
                 AuthServerProvider.logout();
                 Principal.authenticate(null);
-                // Reset state memory
-                $rootScope.previousStateName = undefined;
-                $rootScope.previousStateNameParams = undefined;
+                // Reset state memory if not redirected
+                if(!$rootScope.redirected) {
+                    $rootScope.previousStateName = undefined;
+                    $rootScope.previousStateNameParams = undefined;
+                }
             },
 
             authorize: function(force) {
@@ -59,12 +61,14 @@ angular.module('<%=angularAppName%>')
                             }
                             else {
                                 // user is not authenticated. stow the state they wanted before you
-                                // send them to the signin state, so you can return them when you're done
+                                // send them to the login service, so you can return them when you're done
+                                $rootScope.redirected = true;
                                 $rootScope.previousStateName = $rootScope.toState;
                                 $rootScope.previousStateNameParams = $rootScope.toStateParams;
 
                                 // now, send them to the signin state so they can log in
-                                $state.go('login');
+                                $state.go('accessdenied');
+                                LoginService.open();
                             }
                         }
                     });

@@ -27,6 +27,10 @@ eureka:
 spring:
     profiles:
         active: prod
+    <%_ if (applicationType == 'gateway' && databaseType != 'cassandra') { _%>
+    autoconfigure:
+        exclude: org.springframework.boot.autoconfigure.data.cassandra.CassandraDataAutoConfiguration, org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration
+    <%_ } _%>
     devtools:
         restart:
             enabled: false
@@ -34,15 +38,6 @@ spring:
             enabled: false
     <%_ if (databaseType == 'sql') { _%>
     datasource:
-        <%_ if (prodDatabaseType == 'mysql') { _%>
-        driver-class-name: com.mysql.jdbc.jdbc2.optional.MysqlDataSource
-        <%_ } else if (prodDatabaseType == 'postgresql') { _%>
-        driver-class-name: org.postgresql.ds.PGSimpleDataSource
-        <%_ } else if (prodDatabaseType == 'oracle') { _%>
-        driver-class-name: oracle.jdbc.pool.OracleDataSource
-        <%_ } else { _%>
-        driver-class-name: org.hsqldb.jdbc.JDBCDataSource
-        <%_ } _%>
         <%_ if (prodDatabaseType == 'mysql') { _%>
         url: jdbc:mysql://localhost:3306/<%= baseName %>?useUnicode=true&characterEncoding=utf8
         <%_ } else if (prodDatabaseType == 'postgresql') { _%>
@@ -99,22 +94,25 @@ spring:
             hibernate.cache.hazelcast.use_lite_member: true
             <%_ } _%>
     <%_ } _%>
-    <%_ if (databaseType == 'mongodb') { _%>
+    <%_ if (databaseType == 'mongodb' || databaseType == 'cassandra' || applicationType == 'gateway' || searchEngine == 'elasticsearch') { _%>
     data:
+    <%_ } _%>
+    <%_ if (databaseType == 'mongodb') { _%>
         mongodb:
             uri: mongodb://localhost:27017
             database: <%= baseName %>
     <%_ } _%>
-    <%_ if (databaseType == 'cassandra') { _%>
-    data:
+    <%_ if (databaseType == 'cassandra' || applicationType == 'gateway') { _%>
         cassandra:
             contactPoints: localhost
             protocolVersion: V2
             compression: LZ4
             keyspaceName: <%= baseName %>
-    <%_ } _%>
+    <%_ if (applicationType == 'gateway') { _%>
+            repositories:
+                enabled: false
+    <%_ } } _%>
     <%_ if (searchEngine == 'elasticsearch') { _%>
-    data:
         elasticsearch:
             cluster-name:
             cluster-nodes: localhost:9300
@@ -141,6 +139,15 @@ server:
 # ===================================================================
 
 jhipster:
+    <%_ if (applicationType == 'gateway') { _%>
+    gateway:
+        <%_ if (databaseType != 'cassandra') { _%>
+        embedded-cassandra: # Starts an embedded Cassandra node (not safe for production)
+            enabled: false
+        <%_ } _%>
+        rate-limiting: # Warning! Read the documentation in the GatewayConfiguration class.
+            enabled: false
+    <%_ } _%>
     http:
         cache: # Used by the CachingHttpHeadersFilter
             timeToLiveInDays: 31

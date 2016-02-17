@@ -2,7 +2,7 @@
 
 angular.module('<%=angularAppName%>')
     // uncomment below to make alerts look like toast
-    .config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, <% if (enableTranslation) { %>$translateProvider, tmhDynamicLocaleProvider,<% } %> httpRequestInterceptorCacheBusterProvider/*, AlertServiceProvider*/) {
+    .config(function ($urlRouterProvider, $httpProvider, $locationProvider, <% if (enableTranslation) { %>$translateProvider, tmhDynamicLocaleProvider,<% } %> httpRequestInterceptorCacheBusterProvider/*, AlertServiceProvider*/) {
         //AlertServiceProvider.showAsToast(true);
 <% if (authenticationType == 'session') { %>
         //enable CSRF
@@ -13,25 +13,6 @@ angular.module('<%=angularAppName%>')
         httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*api.*/, /.*protected.*/], true);
 
         $urlRouterProvider.otherwise('/');
-        $stateProvider.state('site', {
-            'abstract': true,
-            views: {
-                'navbar@': {
-                    templateUrl: 'app/layouts/navbar/navbar.html',
-                    controller: 'NavbarController'
-                }
-            },
-            resolve: {
-                authorize: ['Auth',
-                    function (Auth) {
-                        return Auth.authorize();
-                    }
-                ]<% if (enableTranslation) { %>,
-                translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                    $translatePartialLoader.addPart('global');
-                }]<% } %>
-            }
-        });
 
         $httpProvider.interceptors.push('errorHandlerInterceptor');
         $httpProvider.interceptors.push('authExpiredInterceptor');<% if (authenticationType == 'oauth2' || authenticationType == 'jwt') { %>

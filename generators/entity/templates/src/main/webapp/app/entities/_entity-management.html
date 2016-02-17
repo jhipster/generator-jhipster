@@ -32,17 +32,17 @@
     <div class="table-responsive">
         <table class="jh-table table table-striped">
             <thead>
-                <tr<% if (pagination != 'no') { %> jh-sort="predicate" ascending="reverse" callback="<%=pagination != 'infinite-scroll' ? 'loadAll' : 'reset'%>()"<% } %>>
+                <tr<% if (pagination != 'no') { %> jh-sort="predicate" ascending="reverse" callback="<%=pagination != 'infinite-scroll' ? 'transition' : 'reset'%>()"<% } %>>
                     <th<% if (pagination != 'no') { %> jh-sort-by="id"<% } %>><span translate="global.field.id">ID</span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
-                    <%_ for (fieldId in fields) { _%>
-                    <th<% if (pagination != 'no') { %> jh-sort-by="<%= fields[fieldId].fieldName%>"<% } %>><span translate="<%=keyPrefix + fields[fieldId].fieldName %>"><%=fields[fieldId].fieldNameCapitalized%></span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
+                    <%_ for (idx in fields) { _%>
+                    <th<% if (pagination != 'no') { %> jh-sort-by="<%= fields[idx].fieldName%>"<% } %>><span translate="<%=keyPrefix + fields[idx].fieldName %>"><%=fields[idx].fieldNameCapitalized%></span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
                     <%_ } _%>
-                    <%_ for (relationshipId in relationships) { _%>
-                        <%_ if (relationships[relationshipId].relationshipType == 'many-to-one'
-                                || (relationships[relationshipId].relationshipType == 'one-to-one' && relationships[relationshipId].ownerSide == true)
-                                || (relationships[relationshipId].relationshipType == 'many-to-many' && relationships[relationshipId].ownerSide == true && pagination == 'no')) {
-                            var fieldName = dto == 'no' ? "." + relationships[relationshipId].otherEntityField : relationships[relationshipId].otherEntityFieldCapitalized;_%>
-                    <th<% if (pagination != 'no') { %> jh-sort-by="<%=relationships[relationshipId].relationshipName + (fieldName)%>"<% } %>><span translate="<%= keyPrefix + relationships[relationshipId].relationshipName%>"><%=relationships[relationshipId].relationshipName%></span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
+                    <%_ for (idx in relationships) { _%>
+                        <%_ if (relationships[idx].relationshipType == 'many-to-one'
+                                || (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide == true)
+                                || (relationships[idx].relationshipType == 'many-to-many' && relationships[idx].ownerSide == true && pagination == 'no')) {
+                            var fieldName = dto == 'no' ? "." + relationships[idx].otherEntityField : relationships[idx].otherEntityFieldCapitalized;_%>
+                    <th<% if (pagination != 'no') { %> jh-sort-by="<%=relationships[idx].relationshipName + (fieldName)%>"<% } %>><span translate="<%= keyPrefix + relationships[idx].relationshipName%>"><%=relationships[idx].relationshipName%></span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
                         <%_ } _%>
                     <%_ } _%>
                     <th></th>
@@ -51,31 +51,36 @@
             <tbody<% if (pagination == 'infinite-scroll') { %> infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page"<% } %>>
                 <tr ng-repeat="<%=entityInstance %> in <%=entityInstancePlural %> track by <%=entityInstance %>.id">
                     <td><a ui-sref="<%= entityStateName %>-detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td>
-                    <%_ for (fieldId in fields) { _%>
-                        <%_ if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'image') { _%>
+                    <%_ for (idx in fields) {
+                        var fieldName = fields[idx].fieldName;
+                        var fieldNameCapitalized = fields[idx].fieldNameCapitalized;
+                        var fieldType = fields[idx].fieldType;
+                        var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent; _%>
+                        <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent == 'image') { _%>
                     <td>
-                        <img data-ng-src="{{'data:' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fields[fieldId].fieldName%>}}" style="max-height: 30px;" ng-if="<%= entityInstance %>.<%= fields[fieldId].fieldName %>"/> {{<%= entityInstance %>.<%= fields[fieldId].fieldName %>ContentType}} {{byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}
+                        <img data-ng-src="{{'data:' + <%=entityInstance %>.<%=fieldName%>ContentType + ';base64,' + <%=entityInstance %>.<%=fieldName%>}}" style="max-height: 30px;" ng-if="<%= entityInstance %>.<%= fieldName %>"/> {{<%= entityInstance %>.<%= fieldName %>ContentType}} {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}
                     </td>
-                        <%_ } else if (fields[fieldId].fieldType == 'byte[]' && fields[fieldId].fieldTypeBlobContent == 'any') { _%>
-                    <td>{{abbreviate(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}} {{<%= entityInstance %>.<%= fields[fieldId].fieldName %>ContentType}} {{byteSize(<%= entityInstance %>.<%= fields[fieldId].fieldName %>)}}</td>
-                        <%_ } else if (fields[fieldId].fieldIsEnum) { _%>
-                    <td translate="{{'<%= angularAppName %>.<%= fields[fieldId].fieldType %>.' + <%= entityInstance %>.<%= fields[fieldId].fieldName %>}}">{{<%= entityInstance %>.<%= fields[fieldId].fieldName %>}}</td>
-                        <%_ } else if (fields[fieldId].fieldType == 'ZonedDateTime' || fields[fieldId].fieldType == 'Date') { _%>
-                    <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%> | date:'medium'}}</td>
-                    <%_ } else if (fields[fieldId].fieldType == 'LocalDate') { _%>
-                        <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%> | date:'mediumDate'}}</td>
+                        <%_ } else if (fieldType == 'byte[]' && fieldTypeBlobContent == 'any') { _%>
+                    <td><a ng-click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" ng-if="<%= entityInstance %>.<%= fieldName %>" target="_blank">open</a>
+                        {{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</td>
+                        <%_ } else if (fields[idx].fieldIsEnum) { _%>
+                    <td translate="{{'<%= angularAppName %>.<%= fieldType %>.' + <%= entityInstance %>.<%= fieldName %>}}">{{<%= entityInstance %>.<%= fieldName %>}}</td>
+                        <%_ } else if (fieldType == 'ZonedDateTime' || fieldType == 'Date') { _%>
+                    <td>{{<%=entityInstance %>.<%=fieldName%> | date:'medium'}}</td>
+                    <%_ } else if (fieldType == 'LocalDate') { _%>
+                        <td>{{<%=entityInstance %>.<%=fieldName%> | date:'mediumDate'}}</td>
                         <%_ } else { _%>
-                    <td>{{<%=entityInstance %>.<%=fields[fieldId].fieldName%>}}</td>
+                    <td>{{<%=entityInstance %>.<%=fieldName%>}}</td>
                         <%_ } _%>
                     <%_ } _%>
-                    <%_ for (relationshipId in relationships) {
-                            var relationshipType = relationships[relationshipId].relationshipType;
-                            var ownerSide = relationships[relationshipId].ownerSide;
-                            var relationshipFieldName = relationships[relationshipId].relationshipFieldName;
-                            var otherEntityName = relationships[relationshipId].otherEntityName;
-                            var otherEntityStateName = relationships[relationshipId].otherEntityStateName;
-                            var otherEntityField = relationships[relationshipId].otherEntityField;
-                            var otherEntityFieldCapitalized = relationships[relationshipId].otherEntityFieldCapitalized; _%>
+                    <%_ for (idx in relationships) {
+                            var relationshipType = relationships[idx].relationshipType;
+                            var ownerSide = relationships[idx].ownerSide;
+                            var relationshipFieldName = relationships[idx].relationshipFieldName;
+                            var otherEntityName = relationships[idx].otherEntityName;
+                            var otherEntityStateName = relationships[idx].otherEntityStateName;
+                            var otherEntityField = relationships[idx].otherEntityField;
+                            var otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized; _%>
                         <%_ if (relationshipType == 'many-to-one'
                                 || (relationshipType == 'one-to-one' && ownerSide == true)
                                 || (relationshipType == 'many-to-many' && ownerSide == true && pagination == 'no')) { _%>
@@ -135,10 +140,10 @@
         </table>
     </div>
     <%_ if (pagination == 'pager') { _%>
-    <uib-pager total-items="totalItems" ng-model="page" ng-change="loadAll()"></uib-pager>
+    <uib-pager total-items="totalItems" ng-model="page" ng-change="transition()"></uib-pager>
     <%_ } else if (pagination == 'pagination') { _%>
     <div class="text-center">
-        <uib-pagination class="pagination-sm" total-items="totalItems" ng-model="page" ng-change="loadAll()"></uib-pagination>
+        <uib-pagination class="pagination-sm" total-items="totalItems" ng-model="page" ng-change="transition()"></uib-pagination>
     </div>
     <%_ } _%>
 </div>

@@ -866,12 +866,12 @@ Generator.prototype.copyTemplate = function (source, dest, action, _this, _opt, 
     _opt = _opt !== undefined ? _opt : {};
     switch(action) {
         case 'stripHtml' :
-            var regex = '( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")';
+            var regex = /( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")|( translate-compile)|( translate-value-max\="[0-9\{\}\(\)\|]*")/g;
             //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
             jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, _opt, template);
             break;
         case 'stripJs' :
-            var regex = '[a-zA-Z]+\:(\s)?\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\>\;\s]*\}\]';
+            var regex = /\,[\s\n ]*(resolve)\:[\s ]*[\{][\s\n ]*[a-zA-Z]+\:(\s)*\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\-\>\;\s]*\}\][\s\n ]*\}/g;
             //looks for something like mainTranslatePartialLoader: [*]
             jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, _opt, template);
             break;
@@ -1183,7 +1183,7 @@ Generator.prototype.isJhipsterVersionLessThan = function(version) {
     return semver.lt(jhipsterVersion, version);
 }
 
-Generator.prototype.getDefaultAppName = function(text) {
+Generator.prototype.getDefaultAppName = function() {
     return (/^[a-zA-Z0-9_]+$/.test(path.basename(process.cwd())))?path.basename(process.cwd()):'jhipster';
 };
 
@@ -1192,12 +1192,15 @@ Generator.prototype.contains = _.contains;
 Generator.prototype.formatAsClassJavadoc = function(text) {
     return '/**' + wordwrap(text, WORD_WRAP_WIDTH - 4, '\n * ', false) + '\n */';
 };
+
 Generator.prototype.formatAsFieldJavadoc = function(text) {
     return '    /**' + wordwrap(text, WORD_WRAP_WIDTH - 8, '\n     * ', false) + '\n     */';
 };
+
 Generator.prototype.formatAsApiModel = function(text) {
     return wordwrap(text.replace(/\\/g, '\\\\').replace(/\"/g, '\\\"'), WORD_WRAP_WIDTH - 9, '"\n    + "', true)
 };
+
 Generator.prototype.formatAsApiModelProperty = function(text) {
     return wordwrap(text.replace(/\\/g, '\\\\').replace(/\"/g, '\\\"'), WORD_WRAP_WIDTH - 13, '"\n        + "', true)
 };
@@ -1211,10 +1214,15 @@ Generator.prototype.printJHipsterLogo = function () {
     chalk.green('   ██████ ') + chalk.red('  ██    ██  ████████  ██        ██████      ██     ████████  ██    ██\n'));
     this.log(chalk.white.bold('                            http://jhipster.github.io\n'));
     this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version + '\n'));
+    this.log(chalk.white('Application files will be generated in ' + chalk.yellow(process.cwd()) + ' folder\n'));
 };
 
 Generator.prototype.getAngularAppName = function () {
-    return _s.camelize(_s.slugify(this.baseName)) + 'App';
+    return _s.camelize(_s.slugify(this.baseName)) + (this.baseName.endsWith('App') ? '' : 'App');
+};
+
+Generator.prototype.getMainClassName = function () {
+    return _s.capitalize(this.getAngularAppName());
 };
 
 Generator.prototype.askModuleName = function (generator, question, questions) {

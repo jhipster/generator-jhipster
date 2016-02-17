@@ -1,7 +1,7 @@
 package <%=packageName%>.service;
 <% if (databaseType == 'cassandra') { %>
 import <%=packageName%>.AbstractCassandraTest;<% } %>
-import <%=packageName%>.Application;<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
+import <%=packageName%>.<%= mainClass %>;<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 import <%=packageName%>.domain.PersistentToken;<% } %>
 import <%=packageName%>.domain.User;<% if ((databaseType == 'sql' || databaseType == 'mongodb') && authenticationType == 'session') { %>
 import <%=packageName%>.repository.PersistentTokenRepository;<% } %>
@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.*;
  * @see UserService
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringApplicationConfiguration(classes = <%= mainClass %>.class)
 @WebAppConfiguration
 @IntegrationTest<% if (databaseType == 'sql') { %>
 @Transactional<% } %>

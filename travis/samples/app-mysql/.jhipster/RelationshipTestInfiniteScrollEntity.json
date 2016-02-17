@@ -1,0 +1,50 @@
+{
+    "relationships": [
+        {
+            "relationshipName": "manyToOneEntity",
+            "otherEntityName": "relationshipTestManyToOneEntity",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "relationshipTestEntity"
+        },
+        {
+            "relationshipName": "manyToManyEntity",
+            "otherEntityName": "relationshipTestManyToManyEntity",
+            "relationshipType": "many-to-many",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "relationshipTestEntity"
+        },
+        {
+            "relationshipName": "oneToOneEntity",
+            "otherEntityName": "relationshipTestOneToOneEntity",
+            "relationshipType": "one-to-one",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "relationshipTestEntity"
+        },
+        {
+            "relationshipName": "userOneToManyEntity",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "login"
+        },
+        {
+            "relationshipName": "userManyToManyEntity",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "login",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "userOneToOneEntity",
+            "otherEntityName": "user",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "login",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "parent"
+        }
+    ],
+    "fields": [],
+    "changelogDate": "20160208210109",
+    "dto": "no",
+    "service": "no",
+    "pagination": "infinite-scroll"
+}

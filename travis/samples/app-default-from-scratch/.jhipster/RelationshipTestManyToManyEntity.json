@@ -1,0 +1,58 @@
+{
+    "relationships": [
+        {
+            "relationshipName": "relationshipTestEntity",
+            "otherEntityName": "relationshipTestEntity",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "relationshipTestMapstructEntity",
+            "otherEntityName": "relationshipTestMapstructEntity",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "relationshipTestServiceClassEntity",
+            "otherEntityName": "relationshipTestServiceClassEntity",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "relationshipTestServiceImplEntity",
+            "otherEntityName": "relationshipTestServiceImplEntity",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "relationshipTestInfiniteScrollEntity",
+            "otherEntityName": "relationshipTestInfiniteScrollEntity",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "relationshipTestPagerEntity",
+            "otherEntityName": "relationshipTestPagerEntity",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "relationshipTestPaginationEntity",
+            "otherEntityName": "relationshipTestPaginationEntity",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true
+        }
+    ],
+    "fields": [],
+    "changelogDate": "20160208210534",
+    "dto": "no",
+    "service": "no",
+    "pagination": "no"
+}

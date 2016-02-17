@@ -15,7 +15,6 @@ import java.util.Optional;
 
 /**
  * Service for managing audit events.
- * <p/>
  * <p>
  * This is the default implementation to support SpringBoot Actuator AuditEventRepository
  * </p>

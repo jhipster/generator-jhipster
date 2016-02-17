@@ -35,6 +35,9 @@ public class SwaggerConfiguration {
 
     /**
      * Swagger Springfox configuration.
+     *
+     * @param jHipsterProperties the properties of the application
+     * @return the Swagger Springfox configuration
      */
     @Bean
     public Docket swaggerSpringfoxDocket(JHipsterProperties jHipsterProperties) {
@@ -52,6 +55,9 @@ public class SwaggerConfiguration {
 
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
             .apiInfo(apiInfo)
+            <%_ if (applicationType == 'microservice') { _%>
+            .pathMapping("/<%= baseName.toLowerCase() %>")
+            <%_ } _%>
             .forCodeGeneration(true)
             .genericModelSubstitutes(ResponseEntity.class)
             .ignoredParameterTypes(Pageable.class)

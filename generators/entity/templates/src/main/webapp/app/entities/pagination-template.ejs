@@ -1,23 +1,30 @@
-        $scope.<%= entityInstancePlural %> = [];
-        $scope.predicate = 'id';
-        $scope.reverse = true;
-        $scope.page = 1;
+        $scope.predicate = pagingParams.predicate;
+        $scope.reverse = pagingParams.ascending;
         <%_ if (fieldsContainBlob) { _%>
-        $scope.abbreviate = DataUtils.abbreviate;
+        $scope.openFile = DataUtils.openFile;
         $scope.byteSize = DataUtils.byteSize;
         <%_ } _%>
         $scope.loadAll = function() {
-            <%= entityClass %>.query({page: $scope.page - 1, size: paginationConstants.itemsPerPage, sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'), 'id']}, function(result, headers) {
+            var onSuccess = function (data, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 $scope.totalItems = headers('X-Total-Count');
-                $scope.<%= entityInstancePlural %> = result;
-            });
+                $scope.<%= entityInstancePlural %> = data;
+                $scope.page = pagingParams.page;
+            };
+            var onError = function (error) {
+                AlertService.error(error.data.message);
+            };
+            <%= entityClass %>.query({
+                page: pagingParams.page - 1,
+                size: paginationConstants.itemsPerPage,
+                sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'), 'id']
+            }, onSuccess, onError);
         };
         $scope.loadPage = function(page) {
             $scope.page = page;
             $scope.loadAll();
-        };<%_
-        if (searchEngine == 'elasticsearch') { _%>
+        };
+        <%_ if (searchEngine == 'elasticsearch') { _%>
 
         $scope.search = function () {
             <%= entityClass %>Search.query({query: $scope.searchQuery}, function(result) {
@@ -27,6 +34,15 @@
                     $scope.loadAll();
                 }
             });
-        };<%_ } _%>
+        };
+        <%_ } _%>
+
+        $scope.transition = function () {
+            $state.transitionTo($state.$current, {
+                page: $scope.page,
+                sort: $scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'),
+                search: $scope.currentSearch
+            });
+        };
 
         $scope.loadAll();

@@ -57,7 +57,7 @@
         <%_ if (databaseType == 'sql') { _%>
         <hibernate.version>4.3.11.Final</hibernate.version>
         <%_ } _%>
-        <%_ if (databaseType == 'cassandra') { _%>
+        <%_ if (databaseType == 'cassandra' || applicationType == 'gateway') { _%>
         <datastax-driver.version>2.1.7.1</datastax-driver.version>
         <%_ } _%>
         <java.version>1.<%= javaVersion %></java.version>
@@ -69,7 +69,7 @@
         <liquibase-slf4j.version>1.2.1</liquibase-slf4j.version>
         <liquibase-hibernate4.version>3.5</liquibase-hibernate4.version>
         <%_ } _%>
-        <%_ if (databaseType == 'cassandra') { _%>
+        <%_ if (databaseType == 'cassandra' || applicationType == 'gateway') { _%>
         <lz4.version>1.3.0</lz4.version>
         <%_ } _%>
         <mapstruct.version>1.0.0.Final</mapstruct.version>
@@ -280,12 +280,12 @@
             </exclusions>
         </dependency>
         <!-- The HikariCP Java Agent is disabled by default, as it is experimental
-          <dependency>
-              <groupId>com.zaxxer</groupId>
-                  <artifactId>HikariCP-agent</artifactId>
-                      <version>${HikariCP.version}</version>
-                      </dependency>
-                  -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP-agent</artifactId>
+            <version>${HikariCP.version}</version>
+        </dependency>
+        -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -322,7 +322,7 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
         <%_ } _%>
-        <%_ if (databaseType == 'cassandra') { _%>
+        <%_ if (databaseType == 'cassandra' || applicationType == 'gateway') { _%>
         <dependency>
             <groupId>net.jpountz.lz4</groupId>
             <artifactId>lz4</artifactId>
@@ -502,7 +502,7 @@
             <version>0.6.0</version>
         </dependency>
         <%_ } _%>
-        <%_ if (databaseType == 'cassandra') { _%>
+        <%_ if (databaseType == 'cassandra' || applicationType == 'gateway') { _%>
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-cassandra</artifactId>
@@ -523,6 +523,17 @@
             <groupId>com.datastax.cassandra</groupId>
             <artifactId>cassandra-driver-mapping</artifactId>
             <version>${datastax-driver.version}</version>
+        </dependency>
+        <%_ } _%>
+        <%_ if (applicationType == 'gateway' && databaseType != 'cassandra') { _%>
+        <!--
+          This dependency is used to start an embedded Cassandra server.
+          You can remove this if you have jhipster.gateway.embedded-cassandra.enabled=false
+        -->
+        <dependency>
+            <groupId>info.archinnov</groupId>
+            <artifactId>achilles-embedded</artifactId>
+            <version>3.2.3</version>
         </dependency>
         <%_ } _%>
         <!-- Spring Cloud -->
@@ -941,8 +952,8 @@
                                     <action>
                                         <ignore/>
                                     </action>
-                                </pluginExecution>
-                            </pluginExecutions><% } %>
+                                </pluginExecution><% } %>
+                            </pluginExecutions>
                         </lifecycleMappingMetadata>
                     </configuration>
                 </plugin>
@@ -980,8 +991,8 @@
                     <artifactId>spring-boot-starter-tomcat</artifactId>
                 </dependency>
             </dependencies>
-            <build><% if(!skipClient) {%>
-                <plugins>
+            <build>
+                <plugins><% if(!skipClient) {%>
                     <plugin>
                         <groupId>com.github.trecloux</groupId>
                         <artifactId>yeoman-maven-plugin</artifactId>

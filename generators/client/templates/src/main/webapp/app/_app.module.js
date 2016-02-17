@@ -45,7 +45,7 @@ angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTransl
             // reset the state memory after logout. If we're redirected to login, our
             // previousState is already set in the authExpiredInterceptor. If we're going
             // to login directly, we don't want to be sent to some previous state anyway
-            if (toState.name !== 'login' && $rootScope.previousStateName) {
+            if (!$rootScope.redirected && $rootScope.previousStateName) {
               $rootScope.previousStateName = fromState.name;
               $rootScope.previousStateParams = fromParams;
             }

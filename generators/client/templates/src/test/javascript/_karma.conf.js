@@ -15,6 +15,7 @@ module.exports = function (config) {
             // endbower
             'main/webapp/app/app.module.js',
             'main/webapp/app/app.config.js',
+            'main/webapp/app/app.state.js',
             'main/webapp/app/app.constants.js',
             'main/webapp/app/**/*.+(js|html)',
             'test/javascript/spec/helpers/module.js',

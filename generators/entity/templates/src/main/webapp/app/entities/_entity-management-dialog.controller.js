@@ -10,15 +10,15 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>ManagementDi
                 var query;
                 if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide == true && relationships[idx].otherEntityName != 'user') {
                     query = '$scope.' + relationships[idx].relationshipFieldName.toLowerCase() + 's = ' + relationships[idx].otherEntityNameCapitalized + ".query({filter: '" + relationships[idx].otherEntityRelationshipName.toLowerCase() + "-is-null'});"
-                + "\n        $q.all([$scope." + relationships[idx].otherEntityRelationshipName + ".$promise, $scope." + relationships[idx].relationshipFieldName.toLowerCase() + "s.$promise]).then(function() {";
+                + "\n        $q.all([$scope." + entityInstance + ".$promise, $scope." + relationships[idx].relationshipFieldName.toLowerCase() + "s.$promise]).then(function() {";
                     if (dto == "no"){
-                        query += "\n            if (!$scope." + relationships[idx].otherEntityRelationshipName + "." + relationships[idx].relationshipFieldName + " || !$scope." + relationships[idx].otherEntityRelationshipName + "." + relationships[idx].relationshipFieldName + ".id) {"
+                        query += "\n            if (!$scope." + entityInstance + "." + relationships[idx].relationshipFieldName + " || !$scope." + entityInstance + "." + relationships[idx].relationshipFieldName + ".id) {"
                     } else {
-                        query += "\n            if (!$scope." + relationships[idx].otherEntityRelationshipName + "." + relationships[idx].relationshipFieldName + "Id) {"
+                        query += "\n            if (!$scope." + entityInstance + "." + relationships[idx].relationshipFieldName + "Id) {"
                     }
                     query += "\n                return $q.reject();"
                 + "\n            }"
-                + "\n            return " + relationships[idx].otherEntityNameCapitalized + ".get({id : $scope." + relationships[idx].otherEntityRelationshipName + "." + relationships[idx].relationshipFieldName + (dto == 'no' ? ".id" : "Id") + "}).$promise;"
+                + "\n            return " + relationships[idx].otherEntityNameCapitalized + ".get({id : $scope." + entityInstance + "." + relationships[idx].relationshipFieldName + (dto == 'no' ? ".id" : "Id") + "}).$promise;"
                 + "\n        }).then(function(" + relationships[idx].relationshipFieldName + ") {"
                 + "\n            $scope." + relationships[idx].relationshipFieldName.toLowerCase() + "s.push(" + relationships[idx].relationshipFieldName + ");"
                 + "\n        });";
@@ -60,15 +60,15 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>ManagementDi
         };
         <%_ if (fieldsContainBlob) { _%>
 
-        $scope.abbreviate = DataUtils.abbreviate;
+        $scope.openFile = DataUtils.openFile;
 
         $scope.byteSize = DataUtils.byteSize;
         <%_ } _%>
-        <%_ for (fieldId in fields) {
-            if (fields[fieldId].fieldType === 'byte[]' && fields[fieldId].fieldTypeBlobContent != 'text') { _%>
+        <%_ for (idx in fields) {
+            if (fields[idx].fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent != 'text') { _%>
 
-        $scope.set<%= fields[fieldId].fieldNameCapitalized %> = function ($file, <%= entityInstance %>) {
-            <%_ if (fields[fieldId].fieldTypeBlobContent == 'image') { _%>
+        $scope.set<%= fields[idx].fieldNameCapitalized %> = function ($file, <%= entityInstance %>) {
+            <%_ if (fields[idx].fieldTypeBlobContent == 'image') { _%>
             if ($file && $file.$error == 'pattern') {
                 return;
             }
@@ -79,21 +79,21 @@ angular.module('<%=angularAppName%>').controller('<%= entityClass %>ManagementDi
                 fileReader.onload = function (e) {
                     var base64Data = e.target.result.substr(e.target.result.indexOf('base64,') + 'base64,'.length);
                     $scope.$apply(function() {
-                        <%= entityInstance %>.<%= fields[fieldId].fieldName %> = base64Data;
-                        <%= entityInstance %>.<%= fields[fieldId].fieldName %>ContentType = $file.type;
+                        <%= entityInstance %>.<%= fields[idx].fieldName %> = base64Data;
+                        <%= entityInstance %>.<%= fields[idx].fieldName %>ContentType = $file.type;
                     });
                 };
             }
         };
-        <%_ } else if (fields[fieldId].fieldType === 'LocalDate' || fields[fieldId].fieldType === 'ZonedDateTime') { _%>
-        $scope.datePickerFor<%= fields[fieldId].fieldNameCapitalized %> = {};
+        <%_ } else if (fields[idx].fieldType === 'LocalDate' || fields[idx].fieldType === 'ZonedDateTime') { _%>
+        $scope.datePickerFor<%= fields[idx].fieldNameCapitalized %> = {};
 
-        $scope.datePickerFor<%= fields[fieldId].fieldNameCapitalized %>.status = {
+        $scope.datePickerFor<%= fields[idx].fieldNameCapitalized %>.status = {
             opened: false
         };
 
-        $scope.datePickerFor<%= fields[fieldId].fieldNameCapitalized %>Open = function($event) {
-            $scope.datePickerFor<%= fields[fieldId].fieldNameCapitalized %>.status.opened = true;
+        $scope.datePickerFor<%= fields[idx].fieldNameCapitalized %>Open = function($event) {
+            $scope.datePickerFor<%= fields[idx].fieldNameCapitalized %>.status.opened = true;
         };
         <%_ } } _%>
 }]);

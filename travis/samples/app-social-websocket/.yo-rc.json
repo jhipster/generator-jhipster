@@ -1,0 +1,25 @@
+{
+  "generator-jhipster": {
+    "applicationType": "monolith",
+    "baseName": "sampleSocialWebsocket",
+    "packageName": "com.mycompany.myapp",
+    "packageFolder": "com/mycompany/myapp",
+    "authenticationType": "session",
+    "hibernateCache": "ehcache",
+    "clusteredHttpSession": "no",
+    "websocket": "spring-websocket",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": "no",
+    "useSass": false,
+    "buildTool": "maven",
+    "enableTranslation": true,
+    "enableSocialSignIn": true,
+    "rememberMeKey": "cb7ffe96c2de12a54c69ec0940d49c36d596375f",
+    "testFrameworks": [
+      "gatling",
+      "protractor"
+    ]
+  }
+}

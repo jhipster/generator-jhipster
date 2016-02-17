@@ -4,7 +4,6 @@ import <%=packageName%>.config.liquibase.AsyncSpringLiquibase;
 
 import com.codahale.metrics.MetricRegistry;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
-import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import liquibase.integration.spring.SpringLiquibase;<% } %><% if (databaseType == 'mongodb' && authenticationType == 'oauth2') { %>
 import <%=packageName%>.config.oauth2.OAuth2AuthenticationReadConverter;<% } %><% if (databaseType == 'mongodb') { %>
@@ -111,6 +110,9 @@ public class DatabaseConfiguration <% if (databaseType == 'mongodb') { %>extends
 
     /**
      * Open the TCP port for the H2 database, so it is available remotely.
+     *
+     * @return the H2 database TCP server
+     * @throws SQLException if the server failed to start
      */
     @Bean(initMethod = "start", destroyMethod = "stop")
     @Profile(Constants.SPRING_PROFILE_DEVELOPMENT)

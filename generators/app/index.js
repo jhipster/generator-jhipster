@@ -271,8 +271,33 @@ module.exports = JhipsterGenerator.extend({
         }
     },
 
-    end: function () {
-        return;
+    end: {
+        afterRunHook: function() {
+            try {
+                var modules = this.getModuleHooks();
+                if (modules.length > 0) {
+                    this.log('\n' + chalk.bold.green('Running post run module hooks\n'));
+                    // run through all post app creation module hooks
+                    modules.forEach(function(module) {
+                        if (module.hookFor == 'app' && module.hookType == 'post') {
+                            // compose with the modules callback generator
+                            try {
+                                this.composeWith(module.generatorCallback, {
+                                    options: {
+                                        appConfig: configOptions
+                                    }
+                                });
+                            } catch (err) {
+                                this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
+                                chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow('\'npm -g ' + module.npmPackageName + '\''));
+                            }
+                        }
+                    }, this);
+                }
+            } catch (err) {
+                this.log('\n' + chalk.bold.red('Running post run module hooks failed. No modification done to the generated app.'));
+            }
+        }
     }
 
 });

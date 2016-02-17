@@ -50,7 +50,11 @@ public class AccountResource {
     private MailService mailService;
 
     /**
-     * POST  /register -> register the user.
+     * POST  /register : register the user.
+     *
+     * @param userDTO the user DTO
+     * @param request the HTTP request
+     * @return the ResponseEntity with status 201 (Created) if the user is registred or 400 (Bad Request) if the login or e-mail is already in use
      */
     @RequestMapping(value = "/register",
         method = RequestMethod.POST,
@@ -79,7 +83,10 @@ public class AccountResource {
     }
 
     /**
-     * GET  /activate -> activate the registered user.
+     * GET  /activate : activate the registered user.
+     *
+     * @param key the activation key
+     * @return the ResponseEntity with status 200 (OK) and the activated user in body, or status 500 (Internal Server Error) if the user couldn't be activated
      */
     @RequestMapping(value = "/activate",
         method = RequestMethod.GET,
@@ -92,7 +99,10 @@ public class AccountResource {
     }
 
     /**
-     * GET  /authenticate -> check if the user is authenticated, and return its login.
+     * GET  /authenticate : check if the user is authenticated, and return its login.
+     *
+     * @param request the HTTP request
+     * @return the login if the user is authenticated
      */
     @RequestMapping(value = "/authenticate",
         method = RequestMethod.GET,
@@ -104,7 +114,9 @@ public class AccountResource {
     }
 
     /**
-     * GET  /account -> get the current user.
+     * GET  /account : get the current user.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the current user in body, or status 500 (Internal Server Error) if the user couldn't be returned
      */
     @RequestMapping(value = "/account",
         method = RequestMethod.GET,
@@ -117,7 +129,10 @@ public class AccountResource {
     }
 
     /**
-     * POST  /account -> update the current user information.
+     * POST  /account : update the current user information.
+     *
+     * @param userDTO the current user information
+     * @return the ResponseEntity with status 200 (OK), or status 400 (Bad Request) or 500 (Internal Server Error) if the user couldn't be updated
      */
     @RequestMapping(value = "/account",
         method = RequestMethod.POST,
@@ -139,7 +154,10 @@ public class AccountResource {
     }
 
     /**
-     * POST  /change_password -> changes the current user's password
+     * POST  /account/change_password : changes the current user's password
+     *
+     * @param password the new password
+     * @return the ResponseEntity with status 200 (OK), or status 400 (Bad Request) if the new password is not strong enough
      */
     @RequestMapping(value = "/account/change_password",
         method = RequestMethod.POST,
@@ -154,7 +172,10 @@ public class AccountResource {
     }<% if (authenticationType == 'session') { %>
 
     /**
-     * GET  /account/sessions -> get the current open sessions.
+     * GET  /account/sessions : get the current open sessions.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the current open sessions in body,
+     *  or status 500 (Internal Server Error) if the current open sessions couldn't be retrieved
      */
     @RequestMapping(value = "/account/sessions",
         method = RequestMethod.GET,
@@ -169,7 +190,7 @@ public class AccountResource {
     }
 
     /**
-     * DELETE  /account/sessions?series={series} -> invalidate an existing session.
+     * DELETE  /account/sessions?series={series} : invalidate an existing session.
      *
      * - You can only delete your own sessions, not any other user's session
      * - If you delete one of your existing sessions, and that you are currently logged in on that session, you will
@@ -180,6 +201,9 @@ public class AccountResource {
      *   anymore.
      *   There is an API to invalidate the current session, but there is no API to check which session uses which
      *   cookie.
+     *
+     * @param series the series of an existing session
+     * @throws UnsupportedEncodingException if the series couldnt be URL decoded
      */
     @RequestMapping(value = "/account/sessions/{series}",
         method = RequestMethod.DELETE)
@@ -193,6 +217,13 @@ public class AccountResource {
         });
     }<% } %>
 
+    /**
+     * POST   /account/reset_password/init : Send an e-mail to reset the password of the user
+     *
+     * @param mail the mail of the user
+     * @param request the HTTP request
+     * @return the ResponseEntity with status 200 (OK) if the e-mail was sent, or status 400 (Bad Request) if the e-mail address is not registred
+     */
     @RequestMapping(value = "/account/reset_password/init",
         method = RequestMethod.POST,
         produces = MediaType.TEXT_PLAIN_VALUE)
@@ -211,6 +242,13 @@ public class AccountResource {
             }).orElse(new ResponseEntity<>("e-mail address not registered", HttpStatus.BAD_REQUEST));
     }
 
+    /**
+     * POST   /account/reset_password/finish : Finish to reset the password of the user
+     *
+     * @param keyAndPassword the generated key and the new password
+     * @return the ResponseEntity with status 200 (OK) if the password has been reset,
+     * or status 400 (Bad Request) or 500 (Internal Server Error) if the password couldnt be reset
+     */
     @RequestMapping(value = "/account/reset_password/finish",
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)

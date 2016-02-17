@@ -19,8 +19,6 @@ public class JHipsterProperties {
 
     private final Http http = new Http();
 
-    private final Datasource datasource = new Datasource();
-
     private final Cache cache = new Cache();
 
     private final Mail mail = new Mail();
@@ -32,11 +30,14 @@ public class JHipsterProperties {
     private final Metrics metrics = new Metrics();
 
     private final CorsConfiguration cors = new CorsConfiguration();
-
     <%_ if (enableSocialSignIn) { _%>
+
     private final Social social = new Social();
     <%_ } _%>
+    <%_ if (applicationType == 'gateway') { _%>
 
+    private final Gateway gateway = new Gateway();
+    <%_ } _%>
 
     public Async getAsync() {
         return async;
@@ -44,10 +45,6 @@ public class JHipsterProperties {
 
     public Http getHttp() {
         return http;
-    }
-
-    public Datasource getDatasource() {
-        return datasource;
     }
 
     public Cache getCache() {
@@ -73,10 +70,16 @@ public class JHipsterProperties {
     public CorsConfiguration getCors() {
         return cors;
     }
-
     <%_ if (enableSocialSignIn) { _%>
+
     public Social getSocial() {
         return social;
+    }
+    <%_ } _%>
+    <%_ if (applicationType == 'gateway') { _%>
+
+    public Gateway getGateway() {
+        return gateway;
     }
     <%_ } _%>
 
@@ -132,49 +135,6 @@ public class JHipsterProperties {
             public void setTimeToLiveInDays(int timeToLiveInDays) {
                 this.timeToLiveInDays = timeToLiveInDays;
             }
-        }
-    }
-
-    public static class Datasource {
-
-        private boolean cachePrepStmts = true;
-
-        private int prepStmtCacheSize = 250;
-
-        private int prepStmtCacheSqlLimit = 2048;
-
-        private boolean useServerPrepStmts = true;
-
-        public boolean isCachePrepStmts() {
-            return cachePrepStmts;
-        }
-
-        public void setCachePrepStmts(boolean cachePrepStmts) {
-            this.cachePrepStmts = cachePrepStmts;
-        }
-
-        public int getPrepStmtCacheSize() {
-            return prepStmtCacheSize;
-        }
-
-        public void setPrepStmtCacheSize(int prepStmtCacheSize) {
-            this.prepStmtCacheSize = prepStmtCacheSize;
-        }
-
-        public int getPrepStmtCacheSqlLimit() {
-            return prepStmtCacheSqlLimit;
-        }
-
-        public void setPrepStmtCacheSqlLimit(int prepStmtCacheSqlLimit) {
-            this.prepStmtCacheSqlLimit = prepStmtCacheSqlLimit;
-        }
-
-        public boolean isUseServerPrepStmts() {
-            return useServerPrepStmts;
-        }
-
-        public void setUseServerPrepStmts(boolean useServerPrepStmts) {
-            this.useServerPrepStmts = useServerPrepStmts;
         }
     }
 
@@ -558,4 +518,60 @@ public class JHipsterProperties {
             this.redirectAfterSignIn = redirectAfterSignIn;
         }
     }<%_ } _%>
+    <%_ if (applicationType == 'gateway') { _%>
+    public static class Gateway {
+
+        private final RateLimiting rateLimiting = new RateLimiting();
+        <%_ if (databaseType != 'cassandra') { _%>
+
+        private final EmbeddedCassandra embeddedCassandra = new EmbeddedCassandra();
+        <%_ } _%>
+
+        public RateLimiting getRateLimiting() {
+            return rateLimiting;
+        }
+        <%_ if (databaseType != 'cassandra') { _%>
+
+        public EmbeddedCassandra getEmbeddedCassandra() {
+            return embeddedCassandra;
+        }
+
+        public static class EmbeddedCassandra {
+
+            private boolean enabled = false;
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
+        }
+        <%_ } _%>
+
+        public static class RateLimiting {
+
+            private boolean enabled = false;
+
+            private long limit = 100000L;
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
+            }
+
+            public long getLimit() {
+                return this.limit;
+            }
+
+            public void setLimit(long limit) {
+                this.limit = limit;
+            }
+        }
+    }
+<%_ } _%>
 }

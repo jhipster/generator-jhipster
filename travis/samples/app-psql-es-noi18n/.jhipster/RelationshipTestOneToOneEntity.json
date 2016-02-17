@@ -1,0 +1,65 @@
+{
+    "relationships": [
+        {
+            "relationshipName": "relationshipTestEntity",
+            "otherEntityName": "relationshipTestEntity",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "relationshipTestOneToOneEntity"
+        },
+        {
+            "relationshipName": "relationshipTestMapstructEntity",
+            "otherEntityName": "relationshipTestMapstructEntity",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "relationshipTestOneToOneEntity"
+        },
+        {
+            "relationshipName": "relationshipTestServiceClassEntity",
+            "otherEntityName": "relationshipTestServiceClassEntity",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "relationshipTestOneToOneEntity"
+        },
+        {
+            "relationshipName": "relationshipTestServiceImplEntity",
+            "otherEntityName": "relationshipTestServiceImplEntity",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "relationshipTestOneToOneEntity"
+        },
+        {
+            "relationshipName": "relationshipTestInfiniteScrollEntity",
+            "otherEntityName": "relationshipTestInfiniteScrollEntity",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "relationshipTestOneToOneEntity"
+        },
+        {
+            "relationshipName": "relationshipTestPagerEntity",
+            "otherEntityName": "relationshipTestPagerEntity",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "relationshipTestOneToOneEntity"
+        },
+        {
+            "relationshipName": "relationshipTestPaginationEntity",
+            "otherEntityName": "relationshipTestPaginationEntity",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "id",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "relationshipTestOneToOneEntity"
+        }
+    ],
+    "fields": [],
+    "changelogDate": "20160208211541",
+    "dto": "no",
+    "service": "no",
+    "pagination": "no"
+}

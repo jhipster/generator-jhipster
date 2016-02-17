@@ -15,5 +15,10 @@ elif [[ ($JHIPSTER == 'app-mysql') || ($JHIPSTER == 'app-psql-es') ]]; then
   if [ -a src/main/docker/prod.yml ]; then
     docker-compose -f src/main/docker/prod.yml up -d
   fi
+elif [[ ($JHIPSTER == 'app-gateway') || ($JHIPSTER == 'app-microservice') ]]; then
+  if [ -a src/main/docker/registry.yml ]; then
+    docker-compose -f src/main/docker/registry.yml up -d
+    sleep 15
+  fi
 fi
 docker ps -a
