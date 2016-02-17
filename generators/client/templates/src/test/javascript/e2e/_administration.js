@@ -7,7 +7,7 @@ describe('administration', function () {
         browser.driver.wait(protractor.until.elementIsVisible(element(by.css('h1'))));
 
         element(by.id('account-menu')).click();
-        element(by.css('[ui-sref="login"]')).click();
+        element(by.id('login')).click();
 
         element(by.model('username')).sendKeys('admin');
         element(by.model('password')).sendKeys('admin');
@@ -30,7 +30,7 @@ describe('administration', function () {
 
     it('should load health', function () {
         element(by.css('[ui-sref="health"]')).click();
-        expect(element.all(by.css('h2')).first().getText()).toMatch(/Health Checks/);
+        expect(element.all(by.css('h2')).first().getText()).toMatch(/Health checks/);
     });
 
     it('should load configuration', function () {

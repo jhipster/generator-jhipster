@@ -20,6 +20,8 @@ angular.module('<%=angularAppName%>')
                 if ($rootScope.redirected && $rootScope.previousStateName) {
                     $state.go($rootScope.previousStateName, $rootScope.previousStateParams);
                     $rootScope.redirected = false;
+                } else {
+                    $rootScope.$broadcast('authenticationSuccess');
                 }
             }).catch(function () {
                 $scope.authenticationError = true;
