@@ -181,11 +181,12 @@ dependencies {
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-eureka', version: spring_cloud_version
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-hystrix', version: spring_cloud_version
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-config', version: spring_cloud_version
-    <%_ } _%>
     compile group: 'org.springframework.cloud', name: 'spring-cloud-cloudfoundry-connector'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-spring-service-connector'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-localconfig-connector'
-    compile(group: 'org.springframework', name: 'spring-context-support') {
+    compile group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: logstash_logback_encoder_version
+    <%_ } _%>
+        compile(group: 'org.springframework', name: 'spring-context-support') {
         exclude(module: 'quartz')
     }
     compile group: 'org.springframework.security', name: 'spring-security-config', version: spring_security_version
