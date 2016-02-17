@@ -57,7 +57,7 @@
     "karma-script-launcher": "0.1.0",
     "lodash": "3.10.1",
     "map-stream": "0.0.6",
-    "phantomjs": "1.9.18",
+    "phantomjs": "2.1.3",
     <%_ if (testFrameworks.indexOf('protractor') > -1) { _%>
     "protractor": "^2.5.1",
     "protractor-jasmine2-screenshot-reporter": "0.1.7",
