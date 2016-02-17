@@ -179,7 +179,7 @@ module.exports = EntityGenerator.extend({
     /**
      * Show the entity and it's fields and relationships in console
      */
-    logFieldsAndRelationships: function () {
+    _logFieldsAndRelationships: function () {
         if (this.fields.length > 0 || this.relationships.length > 0) {
             this.log(chalk.red(chalk.white('\n================= ') + _s.capitalize(this.name) + chalk.white(' =================')));
         }
@@ -722,7 +722,7 @@ module.exports = EntityGenerator.extend({
                 fieldNamesUnderscored.push(_s.underscored(props.fieldName));
                 this.fields.push(field);
             }
-            this.logFieldsAndRelationships();
+            this._logFieldsAndRelationships();
             if (props.fieldAdd) {
                 this._askForField(cb);
             } else {
@@ -920,7 +920,7 @@ module.exports = EntityGenerator.extend({
                 fieldNamesUnderscored.push(_s.underscored(props.relationshipName));
                 this.relationships.push(relationship);
             }
-            this.logFieldsAndRelationships();
+            this._logFieldsAndRelationships();
             if (props.relationshipAdd) {
                 this._askForRelationship(cb);
             } else {
@@ -1025,7 +1025,7 @@ module.exports = EntityGenerator.extend({
             }
 
             if (this.updateEntity == 'add') {
-                this.logFieldsAndRelationships();
+                this._logFieldsAndRelationships();
             }
 
             var cb = this.async();

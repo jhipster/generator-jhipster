@@ -866,12 +866,12 @@ Generator.prototype.copyTemplate = function (source, dest, action, _this, _opt, 
     _opt = _opt !== undefined ? _opt : {};
     switch(action) {
         case 'stripHtml' :
-            var regex = '( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")';
+            var regex = /( translate\="([a-zA-Z0-9](\.)?)+")|( translate-values\="\{([a-zA-Z]|\d|\:|\{|\}|\[|\]|\-|\'|\s|\.)*?\}")|( translate-compile)|( translate-value-max\="[0-9\{\}\(\)\|]*")/g;
             //looks for something like translate="foo.bar.message" and translate-values="{foo: '{{ foo.bar }}'}"
             jhipsterUtils.copyWebResource(source, dest, regex, 'html', _this, _opt, template);
             break;
         case 'stripJs' :
-            var regex = '\,(\s)*(resolve)+\:(\s)?[\{](\s)*[a-zA-Z]+\:(\s)?\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\-\>\;\s]*\}\](\s)*\}';
+            var regex = /\,[\s\n ]*(resolve)\:[\s ]*[\{][\s\n ]*[a-zA-Z]+\:(\s)*\[[ \'a-zA-Z0-9\$\,\(\)\{\}\n\.\<\%\=\-\>\;\s]*\}\][\s\n ]*\}/g;
             //looks for something like mainTranslatePartialLoader: [*]
             jhipsterUtils.copyWebResource(source, dest, regex, 'js', _this, _opt, template);
             break;
