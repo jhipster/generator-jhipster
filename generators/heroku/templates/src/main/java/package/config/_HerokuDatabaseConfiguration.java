@@ -23,15 +23,16 @@ public class HerokuDatabaseConfiguration {
 
         String herokuUrl = System.getenv("JDBC_DATABASE_URL");
         if (herokuUrl != null) {
-	    HikariConfig config = new HikariConfig();
+	        HikariConfig config = new HikariConfig();
 
-	    //MySQL optimizations, see https://github.com/brettwooldridge/HikariCP/wiki/MySQL-Configuration
-	    if ("com.mysql.jdbc.jdbc2.optional.MysqlDataSource".equals(dataSourceProperties.getDriverClassName())) {
+	        <%_ if (prodDatabaseType == 'mysql') { _%>
+            //MySQL optimizations, see https://github.com/brettwooldridge/HikariCP/wiki/MySQL-Configuration
+    	    if ("com.mysql.jdbc.jdbc2.optional.MysqlDataSource".equals(dataSourceProperties.getDriverClassName())) {
                 config.addDataSourceProperty("cachePrepStmts", jHipsterProperties.getDatasource().isCachePrepStmts());
                 config.addDataSourceProperty("prepStmtCacheSize", jHipsterProperties.getDatasource().getPrepStmtCacheSize());
                 config.addDataSourceProperty("prepStmtCacheSqlLimit", jHipsterProperties.getDatasource().getPrepStmtCacheSqlLimit());
             }
-
+            <%_ } _%>
             config.setDataSourceClassName(dataSourceProperties.getDriverClassName());
             config.addDataSourceProperty("url", herokuUrl);
             return new HikariDataSource(config);
