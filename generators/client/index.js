@@ -682,7 +682,7 @@ module.exports = JhipsterClientGenerator.extend({
     },
 
     end: function () {
-        this.log(chalk.green.bold('\nClient app generated succesfully.\n'));
+        this.log(chalk.green.bold('\nClient app generated successfully.\n'));
     }
 
 });
