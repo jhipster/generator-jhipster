@@ -25,8 +25,7 @@ import org.springframework.stereotype.Service;
 
 import javax.inject.Inject;<% if (dto == 'mapstruct') { %>
 import java.util.LinkedList;<% } %>
-import java.util.List;
-import java.util.Optional;<% if (databaseType == 'cassandra') { %>
+import java.util.List;<% if (databaseType == 'cassandra') { %>
 import java.util.UUID;<% } %><% if (searchEngine == 'elasticsearch' || dto == 'mapstruct' || fieldsContainNoOwnerOneToOne == true) { %>
 import java.util.stream.Collectors;<% } %><% if (searchEngine == 'elasticsearch' || fieldsContainNoOwnerOneToOne == true) { %>
 import java.util.stream.StreamSupport;<% } %><% if (searchEngine == 'elasticsearch') { %>
