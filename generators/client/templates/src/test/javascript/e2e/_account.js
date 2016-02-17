@@ -10,7 +10,7 @@ describe('account', function () {
     it('should fail to login with bad password', function () {
         expect(element.all(by.css('h1')).first().getText()).toMatch(/Welcome, Java Hipster!/);
         element(by.id('account-menu')).click();
-        element(by.css('[ui-sref="login"]')).click();
+        element(by.id('login')).click();
 
         element(by.model('username')).sendKeys('admin');
         element(by.model('password')).sendKeys('foo');
@@ -56,7 +56,7 @@ describe('account', function () {
         element(by.id('logout')).click();
 
         element(by.id('account-menu')).click();
-        element(by.css('[ui-sref="login"]')).click();
+        element(by.id('login')).click();
 
         element(by.model('username')).sendKeys('admin');
         element(by.model('password')).sendKeys('newpassword');

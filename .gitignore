@@ -1,6 +1,8 @@
 node_modules
 .idea
 *.iml
+*.ipr
+*.iws
 atlassian-ide-plugin.xml
 /.project
 test/temp/
