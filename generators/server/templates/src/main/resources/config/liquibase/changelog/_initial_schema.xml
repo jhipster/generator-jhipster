@@ -19,6 +19,7 @@
         The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
     -->
     <changeSet id="00000000000001" author="jhipster">
+        <% if (!skipUserManagement) { %>
         <createTable tableName="jhi_user">
             <column name="id" type="bigint" autoIncrement="${autoIncrement}">
                 <constraints primaryKey="true" nullable="false"/>
@@ -110,7 +111,6 @@
                                  constraintName="fk_user_persistent_token"
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/><% } %>
-        <% if (!skipUserManagement) { %>
         <loadData encoding="UTF-8"
                   file="config/liquibase/users.csv"
                   separator=";"
