@@ -17,7 +17,7 @@ const expectedFiles = {
         'src/main/webapp/app/entities/foo/foo-management-detail.html',
         'src/main/webapp/app/entities/foo/foo-management-dialog.html',
         'src/main/webapp/app/entities/foo/foo-management-delete-dialog.html',
-        'src/main/webapp/app/entities/foo/foo-management.js',
+        'src/main/webapp/app/entities/foo/foo-management.state.js',
         'src/main/webapp/app/entities/foo/foo-management.controller.js',
         'src/main/webapp/app/entities/foo/foo-management-dialog.controller.js',
         'src/main/webapp/app/entities/foo/foo-management-delete-dialog.controller.js',

@@ -1580,8 +1580,8 @@ module.exports = EntityGenerator.extend({
 
             this.addEntityToMenu(this.entityStateName, this.enableTranslation);
 
-            this.template(ANGULAR_DIR + 'entities/_entity-management.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '.js', this, {});
-            this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityFileName + '.js');
+            this.template(ANGULAR_DIR + 'entities/_entity-management.state.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '.state.js', this, {});
+            this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityFileName + '.state.js');
             this.template(ANGULAR_DIR + 'entities/_entity-management.controller.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '.controller' + '.js', this, {});
             this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityFileName + '.controller' + '.js');
             this.template(ANGULAR_DIR + 'entities/_entity-management-dialog.controller.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-dialog.controller' + '.js', this, {});
