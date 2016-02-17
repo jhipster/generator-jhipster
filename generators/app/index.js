@@ -5,7 +5,8 @@ var util = require('util'),
     scriptBase = require('../generator-base'),
     constants = require('../generator-constants'),
     cleanup = require('../cleanup'),
-    packagejs = require('../../package.json');
+    packagejs = require('../../package.json'),
+    exec = require('child_process').exec;
 
 var JhipsterGenerator = generators.Base.extend({});
 
@@ -67,6 +68,46 @@ module.exports = JhipsterGenerator.extend({
     initializing : {
         displayLogo : function () {
             this.printJHipsterLogo();
+        },
+
+        checkJava: function () {
+            var done = this.async();
+            exec('javac -version', function (err) {
+                if (err) {
+                    this.log(chalk.yellow.bold('WARNING!') + ' You don\'t have java installed.');
+                }
+                done();
+            }.bind(this));
+        },
+
+        checkGit: function () {
+            var done = this.async();
+            exec('git --version', function (err) {
+                if (err) {
+                    this.log(chalk.yellow.bold('WARNING!') + ' You don\'t have git installed.');
+                }
+                done();
+            }.bind(this));
+        },
+
+        checkBower: function () {
+            var done = this.async();
+            exec('bower --version', function (err) {
+                if (err) {
+                    this.log(chalk.yellow.bold('WARNING!') + ' You don\'t have bower installed.');
+                }
+                done();
+            }.bind(this));
+        },
+
+        checkGulp: function () {
+            var done = this.async();
+            exec('gulp --version', function (err) {
+                if (err) {
+                    this.log(chalk.yellow.bold('WARNING!') + ' You don\'t have gulp installed.');
+                }
+                done();
+            }.bind(this));
         },
 
         validate : function () {
