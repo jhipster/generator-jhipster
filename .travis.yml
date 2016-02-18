@@ -21,8 +21,8 @@ env:
     - JHIPSTER=app-default-from-scratch JHIPSTER_NODE_CACHE=0
     - JHIPSTER=app-gradle RUN_APP=0
     - JHIPSTER=app-cassandra
-    - JHIPSTER=app-microservice RUN_APP=0
-    - JHIPSTER=app-gateway RUN_APP=0
+    - JHIPSTER=app-microservice
+    - JHIPSTER=app-gateway
     - JHIPSTER=app-hazelcast-cucumber
     - JHIPSTER=app-mongodb
     - JHIPSTER=app-oauth2
