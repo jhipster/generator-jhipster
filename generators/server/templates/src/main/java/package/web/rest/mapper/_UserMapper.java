@@ -22,7 +22,7 @@ public interface UserMapper {
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdDate", ignore = true)
     @Mapping(target = "lastModifiedBy", ignore = true)
-    @Mapping(target = "lastModifiedDate", ignore = true)<% if (authenticationType == 'session') { %>
+    @Mapping(target = "lastModifiedDate", ignore = true)<% if ((authenticationType == 'session') && (databaseType == 'sql')) { %>
     @Mapping(target = "persistentTokens", ignore = true)<% } } %>
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "activationKey", ignore = true)
