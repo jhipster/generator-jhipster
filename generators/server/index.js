@@ -975,8 +975,8 @@ module.exports = JhipsterServerGenerator.extend({
 
             // Create Cucumber test files
             if (this.testFrameworks.indexOf('cucumber') != -1) {
-                this.template(SERVER_MAIN_SRC_DIR + 'package/cucumber/_CucumberTest.java', testDir + 'cucumber/CucumberTest.java', this, {});
-                this.template(SERVER_MAIN_SRC_DIR + 'package/cucumber/stepdefs/_StepDefs.java', testDir + 'cucumber/stepdefs/StepDefs.java', this, {});
+                this.template(SERVER_TEST_SRC_DIR + 'package/cucumber/_CucumberTest.java', testDir + 'cucumber/CucumberTest.java', this, {});
+                this.template(SERVER_TEST_SRC_DIR + 'package/cucumber/stepdefs/_StepDefs.java', testDir + 'cucumber/stepdefs/StepDefs.java', this, {});
                 mkdirp(TEST_DIR + 'features/');
             }
         },
