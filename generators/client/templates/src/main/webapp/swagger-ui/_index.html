@@ -85,18 +85,18 @@
                     window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
                 <% } %>
                 <% if (authenticationType == 'oauth2') { %>
-                    var authToken = JSON.parse(localStorage.getItem("ls.token")).access_token;
+                    var authToken = JSON.parse(localStorage.getItem("ngStorage-authenticationToken")).access_token;
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization",
                             "Bearer " + authToken, "header");
                     window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
                 <% } %>
                 <% if (authenticationType == 'xauth') { %>
-                    var authToken = JSON.parse(localStorage.getItem("ls.token")).token;
+                    var authToken = JSON.parse(localStorage.getItem("ngStorage-authenticationToken")).token;
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("X-Auth-Token", authToken, "header");
                     window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
                 <% } %>
                 <% if (authenticationType == 'jwt') { %>
-                    var authToken = JSON.parse(localStorage.getItem("ls.authentication-token"));
+                    var authToken = JSON.parse(localStorage.getItem("ngStorage-authenticationToken"));
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization", "Bearer " + authToken, "header");
                     window.swaggerUi.api.clientAuthorizations.add("bearer", apiKeyAuth);
                 <% } %>
