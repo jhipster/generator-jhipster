@@ -402,6 +402,9 @@ module.exports = JhipsterServerGenerator.extend({
                     default: 0
                 },
                 {
+                    when: function (response) {
+                        return applicationType == 'monolith' || applicationType == 'gateway';
+                    },
                     type: 'list',
                     name: 'clusteredHttpSession',
                     message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Do you want to use clustered HTTP sessions?',
@@ -418,6 +421,9 @@ module.exports = JhipsterServerGenerator.extend({
                     default: 0
                 },
                 {
+                    when: function (response) {
+                        return applicationType == 'monolith' || applicationType == 'gateway';
+                    },
                     type: 'list',
                     name: 'websocket',
                     message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Do you want to use WebSockets?',
