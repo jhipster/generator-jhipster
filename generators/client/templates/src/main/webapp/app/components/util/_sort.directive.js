@@ -37,7 +37,7 @@ angular.module('<%=angularAppName%>')
                     thisIcon.removeClass(remove);
                     thisIcon.addClass(add);
                 };
-                this.applyClass($element.find('th[jh-sort-by=' + $scope.predicate + ']'));
+                this.applyClass($element.find('th[jh-sort-by=\'' + $scope.predicate + '\']'));
             }]
         };
     }).directive('jhSortBy', function () {
