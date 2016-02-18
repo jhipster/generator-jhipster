@@ -131,6 +131,8 @@ module.exports = JhipsterServerGenerator.extend({
             this.jhipsterVersion = this.config.get('jhipsterVersion');
             this.rememberMeKey = this.config.get('rememberMeKey');
             this.jwtSecretKey = this.config.get('jwtSecretKey');
+            this.nativeLanguage = this.config.get('nativeLanguage');
+            this.languages = this.config.get('languages');
             var testFrameworks = this.config.get('testFrameworks');
             if (testFrameworks) {
                 this.testFrameworks = testFrameworks;
@@ -561,6 +563,8 @@ module.exports = JhipsterServerGenerator.extend({
             configOptions.buildTool = this.buildTool;
             configOptions.enableSocialSignIn = this.enableSocialSignIn;
             configOptions.authenticationType = this.authenticationType;
+            configOptions.nativeLanguage = this.nativeLanguage;
+            configOptions.languages = this.languages;
         }
     },
 
@@ -631,6 +635,12 @@ module.exports = JhipsterServerGenerator.extend({
         getSharedConfigOptions: function () {
             if(configOptions.enableTranslation != null) {
                 this.enableTranslation = configOptions.enableTranslation;
+            }
+            if(configOptions.nativeLanguage != null) {
+                this.nativeLanguage = configOptions.nativeLanguage;
+            }
+            if(configOptions.languages != null) {
+                this.languages = configOptions.languages;
             }
             this.useSass = configOptions.useSass ? configOptions.useSass : false;
             if(configOptions.testFrameworks) {
@@ -753,16 +763,6 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(SERVER_MAIN_RES_DIR + 'config/cql/_drop-keyspace.cql', SERVER_MAIN_RES_DIR + 'config/cql/drop-keyspace.cql', this, {});
                 this.copy(SERVER_MAIN_RES_DIR + 'config/cql/create-tables.cql', SERVER_MAIN_RES_DIR + 'config/cql/create-tables.cql');
             }
-        },
-
-        writeServeri18nFiles: function () {
-
-            // install all files related to i18n if translation is enabled
-            if (this.enableTranslation) {
-                this.installI18nServerFilesByLanguage(this, SERVER_MAIN_RES_DIR, 'en');
-                this.installI18nServerFilesByLanguage(this, SERVER_MAIN_RES_DIR, 'fr');
-            }
-            this.template(SERVER_MAIN_RES_DIR + 'i18n/_messages_en.properties', SERVER_MAIN_RES_DIR + 'i18n/messages.properties', this, {});
         },
 
         writeServerJavaAuthConfigFiles: function () {

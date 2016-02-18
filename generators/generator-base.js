@@ -270,36 +270,42 @@ Generator.prototype.getAllInstalledLanguages = function () {
  * get all the languages supported by JHipster
  */
 Generator.prototype.getAllSupportedLanguages = function () {
-    return [
-      'ca',
-      'zh-cn',
-      'zh-tw',
-      'da',
-      'nl',
-      'de',
-      'en',
-      'fr',
-      'gl',
-      'hu',
-      'it',
-      'ja',
-      'ko',
-      'pl',
-      'pt-br',
-      'pt-pt',
-      'ro',
-      'ru',
-      'es',
-      'sv',
-      'tr',
-      'ta'
-    ];
+    return _.pluck(this.getAllSupportedLanguageOptions(), 'value');
 }
 /**
  * check if a language is supported by JHipster
  */
 Generator.prototype.isSupportedLanguage = function (language) {
     return _.contains(this.getAllSupportedLanguages(), language);
+}
+/**
+ * get all the languages options supported by JHipster
+ */
+Generator.prototype.getAllSupportedLanguageOptions = function () {
+    return [
+        {name: 'Catalan', value: 'ca'},
+        {name: 'Chinese (Simplified)', value: 'zh-cn'},
+        {name: 'Chinese (Traditional)', value: 'zh-tw'},
+        {name: 'Danish', value: 'da'},
+        {name: 'Dutch', value: 'nl'},
+        {name: 'English', value: 'en'},
+        {name: 'French', value: 'fr'},
+        {name: 'Galician', value: 'gl'},
+        {name: 'German', value: 'de'},
+        {name: 'Hungarian', value: 'hu'},
+        {name: 'Italian', value: 'it'},
+        {name: 'Japanese', value: 'ja'},
+        {name: 'Korean', value: 'ko'},
+        {name: 'Polish', value: 'pl'},
+        {name: 'Portuguese (Brazilian)', value: 'pt-br'},
+        {name: 'Portuguese', value: 'pt-pt'},
+        {name: 'Romanian', value: 'ro'},
+        {name: 'Russian', value: 'ru'},
+        {name: 'Spanish', value: 'es'},
+        {name: 'Swedish', value: 'sv'},
+        {name: 'Turkish', value: 'tr'},
+        {name: 'Tamil', value: 'ta'}
+    ];
 }
 
 /**
@@ -1105,18 +1111,25 @@ Generator.prototype.copyEnumI18n = function(language, enumInfo) {
     }
 };
 
-Generator.prototype.addLanguageToLanguageConstant = function(language) {
+Generator.prototype.updateLanguagesInLanguageConstant = function(languages) {
     var fullPath = CLIENT_MAIN_SRC_DIR + 'app/components/language/language.constants.js';
     try {
-        jhipsterUtils.rewriteFile({
+        var content = ".constant('LANGUAGES', [\n";
+        for (var i = 0, len = languages.length; i < len; i++) {
+            var language = languages[i];
+            content += "            '" + language + "'" + (i != languages.length - 1 ? "," : "") + "\n";
+        }
+        content +=
+            "            // jhipster-needle-i18n - JHipster will add/remove languages in this array\n" +
+            "        ]";
+
+        jhipsterUtils.replaceContent({
             file: fullPath,
-            needle: 'jhipster-needle-add-language',
-            splicable: [
-                    ',\'' + language + '\''
-            ]
+            pattern: /\.constant.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\]/g,
+            content: content
         }, this);
     } catch (e) {
-        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new language. Check if you have enabled translation support.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
     }
 };
 

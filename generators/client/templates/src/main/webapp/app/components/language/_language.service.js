@@ -26,7 +26,7 @@
             var language = $translate.storage().get('NG_TRANSLATE_LANG_KEY');
 
             if (angular.isUndefined(language)) {
-                language = 'en';
+                language = '<%= nativeLanguage.split("-")[0] %>';
             }
 
             deferred.resolve(language);

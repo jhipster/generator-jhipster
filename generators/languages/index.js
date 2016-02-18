@@ -2,7 +2,7 @@
 var util = require('util'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
-    _ = require('underscore.string'),
+    _ = require('lodash'),
     scriptBase = require('../generator-base');
 
 const constants = require('../generator-constants'),
@@ -13,9 +13,14 @@ var LanguagesGenerator = generators.Base.extend({});
 
 util.inherits(LanguagesGenerator, scriptBase);
 
+var configOptions = {};
+
 module.exports = LanguagesGenerator.extend({
     constructor: function() {
         generators.Base.apply(this, arguments);
+
+        configOptions = this.options.configOptions || {};
+
         // This makes it possible to pass `languages` by argument
         this.argument('languagesArgument', {
             type: Array,
@@ -60,6 +65,7 @@ module.exports = LanguagesGenerator.extend({
         var cb = this.async();
 
         var languagesArgument = this.languagesArgument;
+        var languageOptions = this.getAllSupportedLanguageOptions();
         var prompts = [
         {
             when: function(){
@@ -68,31 +74,9 @@ module.exports = LanguagesGenerator.extend({
             type: 'checkbox',
             name: 'languages',
             message: 'Please choose additional languages to install',
-            choices: [
-                {name: 'Catalan', value: 'ca'},
-                {name: 'Chinese (Simplified)', value: 'zh-cn'},
-                {name: 'Chinese (Traditional)', value: 'zh-tw'},
-                {name: 'Danish', value: 'da'},
-                {name: 'Dutch', value: 'nl'},
-                {name: 'Galician', value: 'gl'},
-                {name: 'German', value: 'de'},
-                {name: 'Hungarian', value: 'hu'},
-                {name: 'Italian', value: 'it'},
-                {name: 'Japanese', value: 'ja'},
-                {name: 'Korean', value: 'ko'},
-                {name: 'Polish', value: 'pl'},
-                {name: 'Portuguese (Brazilian)', value: 'pt-br'},
-                {name: 'Portuguese', value: 'pt-pt'},
-                {name: 'Romanian', value: 'ro'},
-                {name: 'Russian', value: 'ru'},
-                {name: 'Spanish', value: 'es'},
-                {name: 'Swedish', value: 'sv'},
-                {name: 'Turkish', value: 'tr'},
-                {name: 'Tamil', value: 'ta'}
-            ],
-            default: 0
+            choices: languageOptions
         }];
-        if (this.enableTranslation) {
+        if (this.enableTranslation || configOptions.enableTranslation) {
             this.prompt(prompts, function (props) {
                 this.languages = this.languagesArgument || props.languages;
                 cb();
@@ -103,17 +87,60 @@ module.exports = LanguagesGenerator.extend({
         }
     },
 
+    default: {
+
+        getSharedConfigOptions: function () {
+            if(configOptions.applicationType) {
+                this.applicationType = configOptions.applicationType;
+            }
+            if(configOptions.baseName) {
+                this.baseName = configOptions.baseName;
+            }
+            if(configOptions.websocket) {
+                this.websocket = configOptions.websocket;
+            }
+            if(configOptions.databaseType) {
+                this.databaseType = configOptions.databaseType;
+            }
+            if(configOptions.searchEngine) {
+                this.searchEngine = configOptions.searchEngine;
+            }
+            if(configOptions.enableTranslation) {
+                this.enableTranslation = configOptions.enableTranslation;
+            }
+            if(configOptions.nativeLanguage) {
+                this.nativeLanguage = configOptions.nativeLanguage;
+            }
+            if(configOptions.enableSocialSignIn != null) {
+                this.enableSocialSignIn = configOptions.enableSocialSignIn;
+            }
+        },
+
+        saveConfig: function () {
+            if (this.enableTranslation) {
+                var currentLanguages = this.config.get('languages');
+                this.config.set('languages', _.union(currentLanguages, this.languages));
+            }
+        }
+    },
+
     writing : function () {
         var insight = this.insight();
         insight.track('generator', 'languages');
 
         for (var id in this.languages) {
             var language = this.languages[id];
-            this.installI18nClientFilesByLanguage(this, CLIENT_MAIN_SRC_DIR, language);
-            this.installI18nServerFilesByLanguage(this, SERVER_MAIN_RES_DIR, language);
-            this.addLanguageToLanguageConstant(language);
-            this.addMessageformatLocaleToBowerOverride(language.split("-")[0]);
+            if (!configOptions.skipClient) {
+                this.installI18nClientFilesByLanguage(this, CLIENT_MAIN_SRC_DIR, language);
+                this.addMessageformatLocaleToBowerOverride(language.split("-")[0]);
+            }
+            if (!configOptions.skipServer) {
+                this.installI18nServerFilesByLanguage(this, SERVER_MAIN_RES_DIR, language);
+            }
             insight.track('languages/language', language);
+        }
+        if (!configOptions.skipClient) {
+            this.updateLanguagesInLanguageConstant(this.config.get('languages'));
         }
     },
 

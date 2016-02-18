@@ -3,7 +3,8 @@ var util = require('util'),
     path = require('path'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
-    _ = require('underscore.string'),
+    _ = require('lodash'),
+    _s = require('underscore.string'),
     scriptBase = require('../generator-base'),
     mkdirp = require('mkdirp'),
     html = require("html-wiring"),
@@ -122,6 +123,8 @@ module.exports = JhipsterClientGenerator.extend({
             }
             this.useSass = this.config.get('useSass');
             this.enableTranslation = this.config.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
+            this.nativeLanguage = this.config.get('nativeLanguage');
+            this.languages = this.config.get('languages');
             this.packagejs = packagejs;
             var baseName = this.config.get('baseName');
             if (baseName) {
@@ -133,6 +136,12 @@ module.exports = JhipsterClientGenerator.extend({
                 // If translation is not defined, it is enabled by default
                 if (this.enableTranslation == null) {
                     this.enableTranslation = true;
+                }
+                if (this.nativeLanguage == null) {
+                    this.nativeLanguage = 'en';
+                }
+                if (this.languages == null) {
+                    this.languages = ['fr'];
                 }
 
                 this.existingProject = true;
@@ -152,6 +161,8 @@ module.exports = JhipsterClientGenerator.extend({
         askForClientSideOpts: function () {
             if(this.existingProject) return;
 
+            var languageOptions = this.getAllSupportedLanguageOptions();
+
             var done = this.async();
             var prompts = [
                 {
@@ -165,11 +176,35 @@ module.exports = JhipsterClientGenerator.extend({
                     name: 'enableTranslation',
                     message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Would you like to enable translation support with Angular Translate?',
                     default: true
+                },
+                {
+                    when: function(response) {
+                        return response.enableTranslation == true;
+                    },
+                    type: 'list',
+                    name: 'nativeLanguage',
+                    message: 'Please chooose the native language of the application?',
+                    choices: languageOptions,
+                    default: 'en',
+                    store: true
+                },
+                {
+                    when: function(response) {
+                        return response.enableTranslation == true;
+                    },
+                    type: 'checkbox',
+                    name: 'languages',
+                    message: 'Please choose additional languages to install',
+                    choices: function (response) {
+                        return _.filter(languageOptions, function(o) { return o.value !== response.nativeLanguage; });
+                    }
                 }
             ];
             this.prompt(prompts, function (props) {
                 this.useSass = props.useSass;
                 this.enableTranslation = props.enableTranslation;
+                this.nativeLanguage = props.nativeLanguage;
+                this.languages = [props.nativeLanguage].concat(props.languages);
                 done();
             }.bind(this));
         },
@@ -177,6 +212,8 @@ module.exports = JhipsterClientGenerator.extend({
         setSharedConfigOptions : function () {
             configOptions.useSass = this.useSass;
             configOptions.enableTranslation = this.enableTranslation;
+            configOptions.nativeLanguage = this.nativeLanguage;
+            configOptions.languages = this.languages;
         }
 
     },
@@ -187,19 +224,28 @@ module.exports = JhipsterClientGenerator.extend({
             insight.track('generator', 'app');
             insight.track('app/useSass', this.useSass);
             insight.track('app/enableTranslation', this.enableTranslation);
+            insight.track('app/nativeLanguage', this.nativeLanguage);
+            insight.track('app/languages', this.languages);
         },
 
         configureGlobal: function () {
             // Application name modified, using each technology's conventions
             this.angularAppName = this.getAngularAppName();
-            this.camelizedBaseName = _.camelize(this.baseName);
-            this.slugifiedBaseName = _.slugify(this.baseName);
+            this.camelizedBaseName = _s.camelize(this.baseName);
+            this.slugifiedBaseName = _s.slugify(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();
         },
 
         saveConfig: function () {
             this.config.set('useSass', this.useSass);
             this.config.set('enableTranslation', this.enableTranslation);
+            if (this.enableTranslation) {
+                this.config.set('nativeLanguage', this.nativeLanguage);
+                this.config.set('languages', this.languages);
+            } else {
+                this.config.set('nativeLanguage', undefined);
+                this.config.set('languages', undefined);
+            }
         }
     },
 
@@ -274,14 +320,6 @@ module.exports = JhipsterClientGenerator.extend({
             this.copy(MAIN_SRC_DIR + 'robots.txt', MAIN_SRC_DIR + 'robots.txt');
             this.copy(MAIN_SRC_DIR + 'htaccess.txt', MAIN_SRC_DIR + '.htaccess');
             this.copy(MAIN_SRC_DIR + '404.html', MAIN_SRC_DIR + '404.html');
-        },
-
-        writei18nFiles : function () {
-            // install all files related to i18n if translation is enabled
-            if (this.enableTranslation) {
-                this.installI18nClientFilesByLanguage(this, MAIN_SRC_DIR, 'en');
-                this.installI18nClientFilesByLanguage(this, MAIN_SRC_DIR, 'fr');
-            }
         },
 
         writeSwaggerFiles : function () {
@@ -598,8 +636,6 @@ module.exports = JhipsterClientGenerator.extend({
             ];
             if (this.enableTranslation) {
                 appScripts = appScripts.concat([
-                    'bower_components/messageformat/locale/en.js',
-                    'bower_components/messageformat/locale/fr.js',
                     'app/blocks/handlers/translation.handler.js',
                     'app/blocks/config/translation.config.js',
                     'app/components/language/language.service.js',
