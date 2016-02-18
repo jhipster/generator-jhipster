@@ -69,9 +69,17 @@ module.exports = JhipsterGenerator.extend({
 
         checkJava: function () {
             var done = this.async();
-            exec('javac -version', function (err) {
+            exec('javac -version', function (err, stdout, stderr) {
                 if (err) {
                     this.log(chalk.yellow.bold('WARNING!') + ' You don\'t have java installed.');
+                } else {
+                    var javaFullVersion = stderr.split(' ')[1];
+                    var javaVersion = javaFullVersion.substring(0,3);
+                    if (javaVersion !== '1.8') {
+                        this.log(chalk.yellow.bold('WARNING!') + ' You don\'t have JAVA 8 installed. Your JAVA version is: ' + chalk.yellow(javaFullVersion));
+                    } else {
+                        this.log('Your JAVA version is: ' + chalk.yellow(javaFullVersion));
+                    }
                 }
                 done();
             }.bind(this));
