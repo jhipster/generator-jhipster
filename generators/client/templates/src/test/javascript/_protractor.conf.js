@@ -1,9 +1,11 @@
 var HtmlScreenshotReporter = require("protractor-jasmine2-screenshot-reporter");
 var JasmineReporters = require('jasmine-reporters');
 
+var prefix = '<%= TEST_SRC_DIR %>'.replace(/[^/]+/g,'..');
+
 exports.config = {
-    seleniumServerJar: '../../../node_modules/protractor/selenium/selenium-server-standalone-2.47.1.jar',
-    chromeDriver: '../../../node_modules/protractor/selenium/chromedriver',
+    seleniumServerJar: prefix + 'node_modules/protractor/selenium/selenium-server-standalone-2.47.1.jar',
+    chromeDriver: prefix + 'node_modules/protractor/selenium/chromedriver',
     allScriptsTimeout: 20000,
 
     specs: [

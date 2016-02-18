@@ -5,7 +5,7 @@
   "private": true,
   "cacheDirectories": [
     "node_modules",
-    "src/main/webapp/bower_components"
+    "<%= MAIN_SRC_DIR %>bower_components"
   ],
   "dependencies": {
     "bower": "^1.6.3"

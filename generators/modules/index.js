@@ -4,8 +4,12 @@ var util = require('util'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
     _ = require('underscore.string'),
-    constants = require('../generator-constants'),
     scriptBase = require('../generator-base');
+
+const constants = require('../generator-constants'),
+    CLIENT_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
+    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
+    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 var ModulesGenerator = generators.Base.extend({});
 
@@ -51,9 +55,9 @@ module.exports = ModulesGenerator.extend({
 
         jhipsterVar['angularAppName'] = this.getAngularAppName();
         jhipsterVar['mainClassName'] = this.getMainClassName();
-        jhipsterVar['javaDir'] = 'src/main/java/' + packageFolder + '/';
-        jhipsterVar['resourceDir'] = constants.RESOURCE_DIR;
-        jhipsterVar['webappDir'] = constants.WEBAPP_DIR;
+        jhipsterVar['javaDir'] = SERVER_MAIN_SRC_DIR + packageFolder + '/';
+        jhipsterVar['resourceDir'] = SERVER_MAIN_RES_DIR;
+        jhipsterVar['webappDir'] = CLIENT_MAIN_SRC_DIR;
 
         // alias fs and log methods so that we can use it in script-base when invoking functions from jhipsterFunc context in modules
         jhipsterFunc['fs'] = this.fs;

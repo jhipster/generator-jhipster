@@ -4,7 +4,7 @@
 module.exports = function (config) {
     config.set({
         // base path, that will be used to resolve files and exclude
-        basePath: '../../',
+        basePath: '<%= TEST_SRC_DIR %>'.replace(/[^/]+/g,'..'),
 
         // testing framework to use (jasmine/mocha/qunit/...)
         frameworks: ['jasmine'],
@@ -13,19 +13,19 @@ module.exports = function (config) {
         files: [
             // bower:js
             // endbower
-            'main/webapp/app/app.module.js',
-            'main/webapp/app/app.config.js',
-            'main/webapp/app/app.state.js',
-            'main/webapp/app/app.constants.js',
-            'main/webapp/app/**/*.+(js|html)',
-            'test/javascript/spec/helpers/module.js',
-            'test/javascript/spec/helpers/httpBackend.js',
-            'test/javascript/**/!(karma.conf<% if (testFrameworks.indexOf("protractor") > -1) { %>|protractor.conf<% } %>).js'
+            '<%= MAIN_SRC_DIR %>app/app.module.js',
+            '<%= MAIN_SRC_DIR %>app/app.config.js',
+            '<%= MAIN_SRC_DIR %>app/app.state.js',
+            '<%= MAIN_SRC_DIR %>app/app.constants.js',
+            '<%= MAIN_SRC_DIR %>app/**/*.+(js|html)',
+            '<%= TEST_SRC_DIR %>spec/helpers/module.js',
+            '<%= TEST_SRC_DIR %>spec/helpers/httpBackend.js',
+            '<%= TEST_SRC_DIR %>**/!(karma.conf<% if (testFrameworks.indexOf("protractor") > -1) { %>|protractor.conf<% } %>).js'
         ],
 
 
         // list of files / patterns to exclude
-        exclude: [<% if (testFrameworks.indexOf('protractor') > -1) { %>'test/javascript/e2e/**'<% } %>],
+        exclude: [<% if (testFrameworks.indexOf('protractor') > -1) { %>'<%= TEST_SRC_DIR %>e2e/**'<% } %>],
 
         preprocessors: {
             './**/*.js': ['coverage']
@@ -35,14 +35,14 @@ module.exports = function (config) {
 
         jenkinsReporter: {
             <% if (buildTool == 'maven') { %>
-            outputFile: '../target/test-results/karma/TESTS-results.xml'<% } else { %>
-            outputFile: '../build/test-results/karma/TESTS-results.xml'<% } %>
+            outputFile: 'target/test-results/karma/TESTS-results.xml'<% } else { %>
+            outputFile: 'build/test-results/karma/TESTS-results.xml'<% } %>
         },
 
         coverageReporter: {
             <% if (buildTool == 'maven') { %>
-            dir: '../target/test-results/coverage',<% } else { %>
-            dir: '../build/test-results/coverage',<% } %>
+            dir: 'target/test-results/coverage',<% } else { %>
+            dir: 'build/test-results/coverage',<% } %>
             reporters: [
                 {type: 'lcov', subdir: 'report-lcov'}
             ]

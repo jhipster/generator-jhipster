@@ -5,6 +5,10 @@ chalk = require('chalk'),
 _ = require('underscore.string'),
 scriptBase = require('../generator-base');
 
+const constants = require('../generator-constants'),
+    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
+    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+
 var LanguagesGenerator = generators.Base.extend({});
 
 util.inherits(LanguagesGenerator, scriptBase);
@@ -21,7 +25,7 @@ module.exports = LanguagesGenerator.extend({
             this.websocket = this.config.get('websocket');
             this.databaseType = this.config.get('databaseType');
             this.searchEngine = this.config.get('searchEngine');
-            this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
+            this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
             this.enableTranslation = this.config.get('enableTranslation');
             this.enableSocialSignIn = this.config.get('enableSocialSignIn');
         }
@@ -71,15 +75,13 @@ module.exports = LanguagesGenerator.extend({
     },
 
     writing : function () {
-        var webappDir = 'src/main/webapp/';
-        var resourceDir = 'src/main/resources/';
         var insight = this.insight();
         insight.track('generator', 'languages');
 
         for (var id in this.languages) {
             var language = this.languages[id];
-            this.installI18nFilesByLanguage(this, webappDir, language);
-            this.installI18nResFilesByLanguage(this, resourceDir, language);
+            this.installI18nFilesByLanguage(this, CLIENT_MAIN_SRC_DIR, language);
+            this.installI18nResFilesByLanguage(this, SERVER_MAIN_RES_DIR, language);
             this.installNewLanguage(language);
             this.addMessageformatLocaleToIndex(language.split("-")[0] + '.js');
             insight.track('languages/language', language);

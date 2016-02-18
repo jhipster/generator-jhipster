@@ -5,6 +5,8 @@ var path = require('path'),
     engine = require('ejs').render,
     _s = require('underscore.string');
 
+const constants = require('./generator-constants'),
+    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
 
 module.exports = {
     rewrite: rewrite,
@@ -112,7 +114,7 @@ function stripContent (source, regex, _this, _opt) {
 
     var body = html.readFileAsString(path.join(_this.sourceRoot(), source));
     //temp hack to fix error thrown by ejs during entity creation, this needs a permanent fix when we add more .ejs files
-    _opt.filename = path.join(_this.sourceRoot(), "src/main/webapp/app/entities/ng_validators.ejs");
+    _opt.filename = path.join(_this.sourceRoot(), CLIENT_MAIN_SRC_DIR + 'app/entities/ng_validators.ejs');
     body = engine(body, _this, _opt);
     body = body.replace(regex, '');
 
@@ -153,7 +155,7 @@ function replacePlaceholders (body, _this) {
 
 function geti18nJson (key, _this, template) {
 
-    var i18nDirectory = 'src/main/webapp/i18n/en/',
+    var i18nDirectory = CLIENT_MAIN_SRC_DIR + 'i18n/en/',
     name = _s.slugify(key.split('.')[0]),
     filename = i18nDirectory + name + '.json',
     keyValue, render = template;
