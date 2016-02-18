@@ -5,6 +5,9 @@ var util = require('util'),
     _ = require('underscore.string'),
     scriptBase = require('../generator-base');
 
+const constants = require('../generator-constants'),
+    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
+
 var ServiceGenerator = generators.Base.extend({});
 
 util.inherits(ServiceGenerator, scriptBase);
@@ -49,12 +52,12 @@ module.exports = ServiceGenerator.extend({
         insight.track('generator', 'service');
         insight.track('service/interface', this.useInterface);
 
-        this.template('src/main/java/package/service/_Service.java',
-        'src/main/java/' + this.packageFolder + '/service/' +  this.serviceClass + 'Service.java');
+        this.template(SERVER_MAIN_SRC_DIR + 'package/service/_Service.java',
+        SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/' +  this.serviceClass + 'Service.java');
 
         if (this.useInterface) {
-            this.template('src/main/java/package/service/impl/_ServiceImpl.java',
-            'src/main/java/' + this.packageFolder + '/service/impl/' +  this.serviceClass + 'ServiceImpl.java');
+            this.template(SERVER_MAIN_SRC_DIR + 'package/service/impl/_ServiceImpl.java',
+            SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/impl/' +  this.serviceClass + 'ServiceImpl.java');
         }
     }
 

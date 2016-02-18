@@ -6,6 +6,9 @@ var assert = require('yeoman-assert');
 var helpers = require('yeoman-test');
 var fse = require('fs-extra');
 
+const constants = require('../generators/generator-constants'),
+    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
+
 describe('JHipster generator service', function () {
     describe('creates service without interface', function () {
         beforeEach(function (done) {
@@ -22,13 +25,13 @@ describe('JHipster generator service', function () {
 
         it('creates service file', function () {
             assert.file([
-                'src/main/java/com/mycompany/myapp/service/FooService.java'
+                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/FooService.java'
             ]);
         });
 
         it('doesnt create interface', function () {
             assert.noFile([
-                'src/main/java/com/mycompany/myapp/service/impl/FooServiceImpl.java'
+                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/impl/FooServiceImpl.java'
             ]);
         });
     });
@@ -48,8 +51,8 @@ describe('JHipster generator service', function () {
 
         it('creates service file', function () {
             assert.file([
-                'src/main/java/com/mycompany/myapp/service/FooService.java',
-                'src/main/java/com/mycompany/myapp/service/impl/FooServiceImpl.java'
+                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/FooService.java',
+                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/impl/FooServiceImpl.java'
             ]);
         });
     });

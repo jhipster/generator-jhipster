@@ -9,10 +9,13 @@ var util = require('util'),
     _ = require('underscore.string'),
     scriptBase = require('../generator-base');
 
+const constants = require('../generator-constants'),
+    MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+
 var HerokuGenerator = module.exports = function HerokuGenerator(args, options, config) {
     generators.Base.apply(this, arguments);
     console.log(chalk.bold('Heroku configuration is starting'));
-    this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
+    this.env.options.appPath = this.config.get('appPath') || MAIN_SRC_DIR;
     this.baseName = this.config.get('baseName');
     this.packageName = this.config.get('packageName');
     this.packageFolder = this.config.get('packageFolder');
@@ -175,7 +178,7 @@ HerokuGenerator.prototype.copyHerokuFiles = function copyHerokuFiles() {
     var done = this.async();
     this.log(chalk.bold('\nCreating Heroku deployment files'));
 
-    this.template('src/main/java/package/config/_HerokuDatabaseConfiguration.java', 'src/main/java/' + this.packageFolder + '/config/HerokuDatabaseConfiguration.java');
+    this.template(SERVER_MAIN_SRC_DIR + 'package/config/_HerokuDatabaseConfiguration.java', SERVER_MAIN_SRC_DIR + this.packageFolder + '/config/HerokuDatabaseConfiguration.java');
     this.template('_Procfile', 'Procfile');
 
     this.conflicter.resolve(function (err) {

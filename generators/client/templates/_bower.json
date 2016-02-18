@@ -1,8 +1,8 @@
 {
   "version": "0.0.0",
   "name": "<%= camelizedBaseName %>",
-  "appPath": "src/main/webapp",
-  "testPath": "src/test/javascript/spec",
+  "appPath": "<%= MAIN_SRC_DIR %>",
+  "testPath": "<%= TEST_SRC_DIR %>spec",
   "dependencies": {
     "angular": "1.4.9",
     "angular-aria": "1.4.9",

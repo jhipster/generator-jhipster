@@ -102,7 +102,7 @@
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
         <sonar-maven-plugin.version>2.6</sonar-maven-plugin.version>
         <jacoco-maven-plugin.version>0.7.4.201502262128</jacoco-maven-plugin.version>
-        <sonar.exclusions>src/main/webapp/content/**/*.*, src/main/webapp/bower_components/**/*.*, src/main/webapp/dist/**/*.*</sonar.exclusions>
+        <sonar.exclusions><%= CLIENT_MAIN_SRC_DIR %>content/**/*.*, <%= CLIENT_MAIN_SRC_DIR %>bower_components/**/*.*, <%= CLIENT_MAIN_SRC_DIR %>dist/**/*.*</sonar.exclusions>
         <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
         <sonar.jacoco.itReportPath>${project.testresult.directory}/coverage/jacoco/jacoco-it.exec</sonar.jacoco.itReportPath>
         <sonar.jacoco.reportPath>${project.testresult.directory}/coverage/jacoco/jacoco.exec</sonar.jacoco.reportPath>
@@ -110,9 +110,9 @@
         <sonar.javascript.jstestdriver.reportsPath>${project.testresult.directory}/karma</sonar.javascript.jstestdriver.reportsPath>
         <sonar.javascript.lcov.reportPath>${project.testresult.directory}/coverage/report-lcov/lcov.info</sonar.javascript.lcov.reportPath>
 
-        <sonar.sources>${project.basedir}/src/main/</sonar.sources>
+        <sonar.sources>${project.basedir}/<%= MAIN_DIR %></sonar.sources>
         <sonar.surefire.reportsPath>${project.testresult.directory}/surefire-reports</sonar.surefire.reportsPath>
-        <sonar.tests>${project.basedir}/src/test/</sonar.tests>
+        <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
     </properties>
 
     <dependencies>
@@ -645,14 +645,14 @@
         <defaultGoal>spring-boot:run</defaultGoal>
         <resources>
             <resource>
-                <directory>src/main/resources</directory>
+                <directory><%= SERVER_MAIN_RES_DIR %></directory>
                 <filtering>true</filtering>
                 <includes>
                     <include>**/*.xml</include>
                 </includes>
             </resource>
             <resource>
-                <directory>src/main/resources</directory>
+                <directory><%= SERVER_MAIN_RES_DIR %></directory>
                 <filtering>false</filtering>
                 <excludes>
                     <exclude>**/*.xml</exclude>
@@ -662,10 +662,10 @@
         <%_ if (testFrameworks.indexOf('cucumber') != -1) { _%>
         <testResources>
             <testResource>
-                <directory>src/test/resources</directory>
+                <directory><%= SERVER_TEST_RES_DIR %></directory>
             </testResource>
             <testResource>
-                <directory>src/test/features</directory>
+                <directory><%= TEST_DIR %>features</directory>
             </testResource>
         </testResources>
         <%_ } _%>
@@ -697,11 +697,11 @@
                 <artifactId>gatling-maven-plugin</artifactId>
                 <version>${gatling-maven-plugin.version}</version>
                 <configuration>
-                    <configFolder>src/test/gatling/conf</configFolder>
-                    <dataFolder>src/test/gatling/data</dataFolder>
+                    <configFolder><%= TEST_DIR %>gatling/conf</configFolder>
+                    <dataFolder><%= TEST_DIR %>gatling/data</dataFolder>
                     <resultsFolder>target/gatling/results</resultsFolder>
-                    <bodiesFolder>src/test/gatling/bodies</bodiesFolder>
-                    <simulationsFolder>src/test/gatling/simulations</simulationsFolder>
+                    <bodiesFolder><%= TEST_DIR %>gatling/bodies</bodiesFolder>
+                    <simulationsFolder><%= TEST_DIR %>gatling/simulations</simulationsFolder>
                     <!-- This will force Gatling to ask which simulation to run
                       This is useful when you have multiple simulations -->
                     <simulationClass>*</simulationClass>
@@ -856,8 +856,8 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>${liquibase.version}</version>
                 <configuration>
-                    <changeLogFile>src/main/resources/config/liquibase/master.xml</changeLogFile>
-                    <diffChangeLogFile>src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
+                    <changeLogFile><%= SERVER_MAIN_RES_DIR %>config/liquibase/master.xml</changeLogFile>
+                    <diffChangeLogFile><%= SERVER_MAIN_RES_DIR %>config/liquibase/changelog/${maven.build.timestamp}_changelog.xml</diffChangeLogFile>
                     <driver><% if (devDatabaseType == 'mysql') { %>com.mysql.jdbc.Driver<% } else if (devDatabaseType == 'postgresql') { %>org.postgresql.Driver<% } else if (devDatabaseType == 'h2Disk') { %>org.h2.Driver<% } else if (devDatabaseType == 'oracle') { %>oracle.jdbc.OracleDriver<% } %></driver>
                     <url><% if (devDatabaseType == 'mysql') { %>jdbc:mysql://localhost:3306/<%= baseName %><% } else if (devDatabaseType == 'postgresql') { %>jdbc:postgresql://localhost:5432/<%= baseName %><% } else if (devDatabaseType == 'h2Disk') { %>jdbc:h2:file:./target/h2db/db/<%= lowercaseBaseName %><% } else if (devDatabaseType == 'oracle') { %>jdbc:oracle:thin:@localhost:1521:<%= baseName %><% } %></url>
                     <defaultSchemaName><% if (devDatabaseType == 'mysql') { %><%= baseName %><% } else if (devDatabaseType == 'postgresql') { %><% } %></defaultSchemaName>
@@ -1019,7 +1019,7 @@
                         <configuration>
                             <filesets>
                                 <fileset>
-                                    <directory>src/main/webapp/dist</directory>
+                                    <directory><%= CLIENT_MAIN_SRC_DIR %>dist</directory>
                                 </fileset>
                                 <fileset>
                                     <directory>node_modules</directory>

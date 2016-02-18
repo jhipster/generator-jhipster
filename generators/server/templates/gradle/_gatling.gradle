@@ -3,7 +3,7 @@ apply plugin: 'scala'
 sourceSets {
     test {
         scala {
-            srcDirs = ['src/test/gatling/simulations']
+            srcDirs = ['<%= TEST_DIR %>gatling/simulations']
             output.classesDir = 'target/test-classes'
         }
     }
@@ -26,14 +26,14 @@ task gatlingRun(dependsOn:'manifestJar', type: JavaExec) {
     standardInput = System.in
 
     final def sourceSet = sourceSets.test
-    File configFile = file('src/test/gatling/conf/gatling.conf')
+    File configFile = file('<%= TEST_DIR %>gatling/conf/gatling.conf')
 
-    def String gatlingDataFolder = "$project.rootDir.absolutePath/src/test/gatling/data"
+    def String gatlingDataFolder = "$project.rootDir.absolutePath/<%= TEST_DIR %>gatling/data"
     def String gatlingReportsFolder = "$project.buildDir.absolutePath/reports/gatling"
-    def String gatlingBodiesFolder = "$project.rootDir.absolutePath/src/test/gatling/bodies"
-    def String gatlingSimulationsFolder = "$project.rootDir.absolutePath/src/test/gatling/simulations"
+    def String gatlingBodiesFolder = "$project.rootDir.absolutePath/<%= TEST_DIR %>gatling/bodies"
+    def String gatlingSimulationsFolder = "$project.rootDir.absolutePath/<%= TEST_DIR %>gatling/simulations"
 
-    classpath sourceSet.output + files(manifestJar.archivePath) + files("src/test/gatling/conf")
+    classpath sourceSet.output + files(manifestJar.archivePath) + files("<%= TEST_DIR %>gatling/conf")
     main = "io.gatling.app.Gatling"
 
     environment GATLING_HOME:''

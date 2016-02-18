@@ -32,11 +32,11 @@ var gulp = require('gulp'),
     util = require('./gulp/utils');
 
 var config = {
-    app: 'src/main/webapp/',
-    dist: 'src/main/webapp/dist/',
-    test: 'src/test/javascript/'<% if(useSass) { %>,
-    importPath: 'src/main/webapp/bower_components',
-    scss: 'src/main/webapp/scss/'<% } %>,
+    app: '<%= MAIN_SRC_DIR %>',
+    dist: '<%= MAIN_SRC_DIR %>dist/',
+    test: '<%= TEST_SRC_DIR %>'<% if(useSass) { %>,
+    importPath: '<%= MAIN_SRC_DIR %>bower_components',
+    scss: '<%= MAIN_SRC_DIR %>scss/'<% } %>,
     port: 9000,
     apiPort: 8080,
     liveReloadPort: 35729
@@ -217,7 +217,7 @@ gulp.task('wiredep:test', function () {
                         js: /'(.*\.js)'/gi
                     },
                     replace: {
-                        js: '\'{{filePath}}\','
+                        js: '\'src/{{filePath}}\','
                     }
                 }
             }

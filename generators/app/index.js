@@ -3,7 +3,6 @@ var util = require('util'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
     scriptBase = require('../generator-base'),
-    constants = require('../generator-constants'),
     cleanup = require('../cleanup'),
     packagejs = require('../../package.json'),
     exec = require('child_process').exec;
@@ -12,11 +11,9 @@ var JhipsterGenerator = generators.Base.extend({});
 
 util.inherits(JhipsterGenerator, scriptBase);
 
-/* Constants use through out */
-const QUESTIONS = constants.QUESTIONS;
-const RESOURCE_DIR = constants.RESOURCE_DIR;
-const WEBAPP_DIR =  constants.WEBAPP_DIR;
-const TEST_JS_DIR =  constants.TEST_JS_DIR;
+/* Constants use throughout */
+const constants = require('../generator-constants'),
+    QUESTIONS = constants.QUESTIONS;
 
 var currentQuestion = 0;
 var configOptions = {};

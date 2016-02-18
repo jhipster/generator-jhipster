@@ -8,7 +8,6 @@ var util = require('util'),
     _s = require('underscore.string'),
     shelljs = require('shelljs'),
     pluralize = require('pluralize'),
-    constants = require('../generator-constants'),
     scriptBase = require('../generator-base');
 
 /* constants used througout */
@@ -35,9 +34,16 @@ var fieldNamesUnderscored = ['id'];
 var fieldNameChoices = [], relNameChoices = []; // this variable will hold field and relationship names for question options during update
 var databaseType;
 var prodDatabaseType;
-const INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX;
-const RESOURCE_DIR = constants.RESOURCE_DIR;
-const ANGULAR_DIR =  constants.ANGULAR_DIR;
+
+const constants = require('../generator-constants'),
+    INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX,
+    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
+    CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
+    ANGULAR_DIR =  constants.ANGULAR_DIR,
+    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
+    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
+    TEST_DIR = constants.TEST_DIR,
+    SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
 var EntityGenerator = generators.Base.extend({});
 
@@ -72,7 +78,7 @@ module.exports = EntityGenerator.extend({
     initializing: {
         getConfig: function(args) {
             this.useConfigurationFile = false;
-            this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
+            this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
             this.baseName = this.config.get('baseName');
             this.packageName = this.config.get('packageName');
             this.packageFolder = this.config.get('packageFolder');
@@ -853,7 +859,7 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function(response) {
-                    return (response.relationshipAdd == true && response.relationshipType == 'many-to-one' && !shelljs.test('-f', 'src/main/java/' + packageFolder + '/domain/' + _s.capitalize(response.otherEntityName) + '.java'))
+                    return (response.relationshipAdd == true && response.relationshipType == 'many-to-one' && !shelljs.test('-f', SERVER_MAIN_SRC_DIR + packageFolder + '/domain/' + _s.capitalize(response.otherEntityName) + '.java'))
                 },
                 type: 'confirm',
                 name: 'noOtherEntity',
@@ -884,7 +890,7 @@ module.exports = EntityGenerator.extend({
             },
             {
                 when: function(response) {
-                    return (response.relationshipAdd == true && response.ownerSide == true && !shelljs.test('-f', 'src/main/java/' + packageFolder + '/domain/' + _s.capitalize(response.otherEntityName) + '.java'))
+                    return (response.relationshipAdd == true && response.ownerSide == true && !shelljs.test('-f', SERVER_MAIN_SRC_DIR + packageFolder + '/domain/' + _s.capitalize(response.otherEntityName) + '.java'))
                 },
                 type: 'confirm',
                 name: 'noOtherEntity2',
@@ -1527,8 +1533,8 @@ module.exports = EntityGenerator.extend({
                     enumInfo.enumInstance = field.enumInstance;
                     enumInfo.angularAppName = this.angularAppName;
                     enumInfo.enums = enumInfo.enumValues.replace(/\s/g, '').split(',');
-                    this.template('src/main/java/package/domain/enumeration/_Enum.java',
-                    'src/main/java/' + this.packageFolder + '/domain/enumeration/' + fieldType + '.java', enumInfo, {});
+                    this.template(SERVER_MAIN_SRC_DIR + 'package/domain/enumeration/_Enum.java',
+                    SERVER_MAIN_SRC_DIR + this.packageFolder + '/domain/enumeration/' + fieldType + '.java', enumInfo, {});
 
                     // Copy for each
                     if (!this.skipClient && this.enableTranslation) {
@@ -1543,47 +1549,47 @@ module.exports = EntityGenerator.extend({
 
         writeServerFiles: function() {
 
-            this.template('src/main/java/package/domain/_Entity.java',
-            'src/main/java/' + this.packageFolder + '/domain/' + this.entityClass + '.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/domain/_Entity.java',
+            SERVER_MAIN_SRC_DIR + this.packageFolder + '/domain/' + this.entityClass + '.java', this, {});
 
-            this.template('src/main/java/package/repository/_EntityRepository.java',
-            'src/main/java/' + this.packageFolder + '/repository/' + this.entityClass + 'Repository.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/repository/_EntityRepository.java',
+            SERVER_MAIN_SRC_DIR + this.packageFolder + '/repository/' + this.entityClass + 'Repository.java', this, {});
 
             if (this.searchEngine == 'elasticsearch') {
-                this.template('src/main/java/package/repository/search/_EntitySearchRepository.java',
-                'src/main/java/' + this.packageFolder + '/repository/search/' + this.entityClass + 'SearchRepository.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/repository/search/_EntitySearchRepository.java',
+                SERVER_MAIN_SRC_DIR + this.packageFolder + '/repository/search/' + this.entityClass + 'SearchRepository.java', this, {});
             }
 
-            this.template('src/main/java/package/web/rest/_EntityResource.java',
-            'src/main/java/' + this.packageFolder + '/web/rest/' + this.entityClass + 'Resource.java', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_EntityResource.java',
+            SERVER_MAIN_SRC_DIR + this.packageFolder + '/web/rest/' + this.entityClass + 'Resource.java', this, {});
             if (this.service == 'serviceImpl') {
-                this.template('src/main/java/package/service/_EntityService.java',
-                'src/main/java/' + this.packageFolder + '/service/' + this.entityClass + 'Service.java', this, {});
-                this.template('src/main/java/package/service/impl/_EntityServiceImpl.java',
-                'src/main/java/' + this.packageFolder + '/service/impl/' + this.entityClass + 'ServiceImpl.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/service/_EntityService.java',
+                SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/' + this.entityClass + 'Service.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/service/impl/_EntityServiceImpl.java',
+                SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/impl/' + this.entityClass + 'ServiceImpl.java', this, {});
             } else if (this.service == 'serviceClass') {
-                this.template('src/main/java/package/service/impl/_EntityServiceImpl.java',
-                'src/main/java/' + this.packageFolder + '/service/' + this.entityClass + 'Service.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/service/impl/_EntityServiceImpl.java',
+                SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/' + this.entityClass + 'Service.java', this, {});
             }
             if (this.dto == 'mapstruct') {
-                this.template('src/main/java/package/web/rest/dto/_EntityDTO.java',
-                'src/main/java/' + this.packageFolder + '/web/rest/dto/' + this.entityClass + 'DTO.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_EntityDTO.java',
+                SERVER_MAIN_SRC_DIR + this.packageFolder + '/web/rest/dto/' + this.entityClass + 'DTO.java', this, {});
 
-                this.template('src/main/java/package/web/rest/mapper/_EntityMapper.java',
-                'src/main/java/' + this.packageFolder + '/web/rest/mapper/' + this.entityClass + 'Mapper.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/mapper/_EntityMapper.java',
+                SERVER_MAIN_SRC_DIR + this.packageFolder + '/web/rest/mapper/' + this.entityClass + 'Mapper.java', this, {});
             }
         },
 
         writeDbFiles: function() {
             if (this.databaseType == "sql") {
-                this.template(RESOURCE_DIR + '/config/liquibase/changelog/_added_entity.xml',
-                    RESOURCE_DIR + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml', this, { 'interpolate': INTERPOLATE_REGEX });
+                this.template(SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/_added_entity.xml',
+                    SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml', this, { 'interpolate': INTERPOLATE_REGEX });
 
                 this.addChangelogToLiquibase(this.changelogDate + '_added_entity_' + this.entityClass);
             }
             if (this.databaseType == "cassandra") {
-                this.template(RESOURCE_DIR + '/config/cql/_added_entity.cql',
-                RESOURCE_DIR + 'config/cql/' + this.changelogDate + '_added_entity_' + this.entityClass + '.cql', this, {});
+                this.template(SERVER_MAIN_RES_DIR + 'config/cql/_added_entity.cql',
+                SERVER_MAIN_RES_DIR + 'config/cql/' + this.changelogDate + '_added_entity_' + this.entityClass + '.cql', this, {});
             }
         },
 
@@ -1631,17 +1637,17 @@ module.exports = EntityGenerator.extend({
             if(this.skipClient){
                 return;
             }
-            this.template('src/test/javascript/spec/app/entities/_entity-management-detail.controller.spec.js',
-                'src/test/javascript/spec/app/entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.controller.spec.js', this, {});
+            this.template(CLIENT_TEST_SRC_DIR + 'spec/app/entities/_entity-management-detail.controller.spec.js',
+                CLIENT_TEST_SRC_DIR + 'spec/app/entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.controller.spec.js', this, {});
         },
 
         writeTestFiles: function() {
-            this.template('src/test/java/package/web/rest/_EntityResourceIntTest.java',
-                'src/test/java/' + this.packageFolder + '/web/rest/' + this.entityClass + 'ResourceIntTest.java', this, {});
+            this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_EntityResourceIntTest.java',
+                SERVER_TEST_SRC_DIR + this.packageFolder + '/web/rest/' + this.entityClass + 'ResourceIntTest.java', this, {});
 
             if (this.testFrameworks.indexOf('gatling') != -1) {
-                this.template('src/test/gatling/simulations/_EntityGatlingTest.scala',
-                    'src/test/gatling/simulations/' + this.entityClass + 'GatlingTest.scala', this, {'interpolate': INTERPOLATE_REGEX });
+                this.template(TEST_DIR + 'gatling/simulations/_EntityGatlingTest.scala',
+                    TEST_DIR + 'gatling/simulations/' + this.entityClass + 'GatlingTest.scala', this, {'interpolate': INTERPOLATE_REGEX });
             }
 
         }

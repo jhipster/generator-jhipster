@@ -7,13 +7,16 @@ var util = require('util'),
     _ = require('underscore.string'),
     scriptBase = require('../generator-base');
 
+const constants = require('../generator-constants'),
+    MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+
 var exec = childProcess.exec;
 var spawn = childProcess.spawn;
 
 var CloudFoundryGenerator = module.exports = function CloudFoundryGenerator() {
     generators.Base.apply(this, arguments);
     console.log(chalk.bold('CloudFoundry configuration is starting'));
-    this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
+    this.env.options.appPath = this.config.get('appPath') || MAIN_SRC_DIR;
     this.baseName = this.config.get('baseName');
     this.packageName = this.config.get('packageName');
     this.packageFolder = this.config.get('packageFolder');
