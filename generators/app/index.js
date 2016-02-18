@@ -76,9 +76,9 @@ module.exports = JhipsterGenerator.extend({
                     var javaFullVersion = stderr.split(' ')[1];
                     var javaVersion = javaFullVersion.substring(0,3);
                     if (javaVersion !== '1.8') {
-                        this.log(chalk.yellow.bold('WARNING!') + ' You don\'t have JAVA 8 installed. Your JAVA version is: ' + chalk.yellow(javaFullVersion));
+                        this.log(chalk.yellow.bold('WARNING!') + ' You don\'t have Java 8 installed. Your Java version is: ' + chalk.yellow(javaFullVersion));
                     } else {
-                        this.log('Your JAVA version is: ' + chalk.yellow(javaFullVersion));
+                        this.log('Your Java version is: ' + chalk.yellow(javaFullVersion));
                     }
                 }
                 done();
@@ -89,7 +89,7 @@ module.exports = JhipsterGenerator.extend({
             var done = this.async();
             exec('git --version', function (err) {
                 if (err) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' You don\'t have git installed.');
+                    this.log(chalk.yellow.bold('WARNING!') + ' You don\'t have Git installed.');
                 }
                 done();
             }.bind(this));
@@ -99,7 +99,7 @@ module.exports = JhipsterGenerator.extend({
             var done = this.async();
             exec('bower --version', function (err) {
                 if (err) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' You don\'t have bower installed.');
+                    this.log(chalk.yellow.bold('WARNING!') + ' You don\'t have Bower installed.');
                 }
                 done();
             }.bind(this));
@@ -109,7 +109,7 @@ module.exports = JhipsterGenerator.extend({
             var done = this.async();
             exec('gulp --version', function (err) {
                 if (err) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' You don\'t have gulp installed.');
+                    this.log(chalk.yellow.bold('WARNING!') + ' You don\'t have Gulp.js installed.');
                 }
                 done();
             }.bind(this));
