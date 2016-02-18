@@ -56,10 +56,18 @@ module.exports = JhipsterGenerator.extend({
             defaults: false
         });
 
+        // This adds support for a `--[no-]check-install` flag
+        this.option('check-install', {
+            desc: 'Check the installation',
+            type: Boolean,
+            defaults: true
+        });
+
         this.skipClient = configOptions.skipClient = this.options['skip-client'] ||  this.config.get('skipClient');
         this.skipServer = configOptions.skipServer = this.options['skip-server'] ||  this.config.get('skipServer');
         this.skipUserManagement = configOptions.skipUserManagement = this.options['skip-user-management'] ||  this.config.get('skipUserManagement');
         this.withEntities = this.options['with-entities'];
+        this.checkInstall = this.options['check-install'];
 
     },
     initializing: {
@@ -68,6 +76,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         checkJava: function () {
+            if (!this.checkInstall) return;
             var done = this.async();
             exec('javac -version', function (err, stdout, stderr) {
                 if (err) {
@@ -86,6 +95,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         checkGit: function () {
+            if (!this.checkInstall) return;
             var done = this.async();
             exec('git --version', function (err) {
                 if (err) {
@@ -96,6 +106,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         checkBower: function () {
+            if (!this.checkInstall) return;
             var done = this.async();
             exec('bower --version', function (err) {
                 if (err) {
@@ -106,6 +117,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         checkGulp: function () {
+            if (!this.checkInstall) return;
             var done = this.async();
             exec('gulp --version', function (err) {
                 if (err) {
