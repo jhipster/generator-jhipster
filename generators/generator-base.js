@@ -1217,8 +1217,8 @@ Generator.prototype.printJHipsterLogo = function () {
     chalk.green('  ██    ██') + chalk.red('  ██    ██     ██     ██             ██     ██     ██        ██   ██\n') +
     chalk.green('   ██████ ') + chalk.red('  ██    ██  ████████  ██        ██████      ██     ████████  ██    ██\n'));
     this.log(chalk.white.bold('                            http://jhipster.github.io\n'));
-    this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version + '\n'));
-    this.log(chalk.white('Application files will be generated in folder: ' + chalk.yellow(process.cwd()) + ' \n'));
+    this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version));
+    this.log(chalk.white('Application files will be generated in folder: ' + chalk.yellow(process.cwd())));
 };
 
 Generator.prototype.getAngularAppName = function () {
