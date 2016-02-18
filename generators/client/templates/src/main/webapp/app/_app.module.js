@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('<%=angularAppName%>', ['LocalStorageModule', <% if (enableTranslation) { %>'tmh.dynamicLocale', 'pascalprecht.translate', <% } %>
+angular.module('<%=angularAppName%>', ['ngStorage', <% if (enableTranslation) { %>'tmh.dynamicLocale', 'pascalprecht.translate', <% } %>
     'ngResource', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload',
     // jhipster-needle-angularjs-add-module JHipster will add new module here
     'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'ui.router',  'infinite-scroll', 'angular-loading-bar'])

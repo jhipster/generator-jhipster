@@ -23,7 +23,7 @@ angular.module('<%=angularAppName%>')
                 var url = '//' + loc.host + loc.pathname + 'websocket/tracker';<% if (authenticationType == 'oauth2') { %>
                 /* globals localStorage */
                 /*jshint camelcase: false */
-                var authToken = JSON.parse(localStorage.getItem('ls.token')).access_token;
+                var authToken = JSON.parse(localStorage.getItem('jhi-authenticationToken')).access_token;
                 url += '?access_token=' + authToken;<% } %>
                 var socket = new SockJS(url);
                 stompClient = Stomp.over(socket);

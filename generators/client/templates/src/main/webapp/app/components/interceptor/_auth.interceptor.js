@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')<% if (authenticationType == 'oauth2' || authenticationType == 'jwt') { %>
-    .factory('authInterceptor', function ($rootScope, $q, $location, localStorageService) {
+    .factory('authInterceptor', function ($rootScope, $q, $location, $localStorage, $sessionStorage) {
         return {
             // Add authorization token to headers
             request: function (config) {
                 /*jshint camelcase: false */
                 config.headers = config.headers || {};
-                var token = localStorageService.get('authentication-token');
+                var token = $localStorage.authenticationToken || $sessionStorage.authenticationToken;
                 <% if (authenticationType == 'oauth2') { %>
                 if (token && token.expires_at && token.expires_at > new Date().getTime()) {
                     config.headers.Authorization = 'Bearer ' + token.access_token;
@@ -21,12 +21,13 @@ angular.module('<%=angularAppName%>')<% if (authenticationType == 'oauth2' || a
             }
         };
     })<% } %><% if (authenticationType === 'oauth2' || authenticationType === 'jwt') { %>
-    .factory('authExpiredInterceptor', function ($rootScope, $q, $injector, localStorageService) {
+    .factory('authExpiredInterceptor', function ($rootScope, $q, $injector, $localStorage, $sessionStorage) {
         return {
             responseError: function (response) {
                 // token has expired
                 if (response.status === 401) {
-                    localStorageService.remove('authentication-token');
+                    delete $localStorage.authenticationToken;
+                    delete $sessionStorage.authenticationToken;
                     var Principal = $injector.get('Principal');
                     if (Principal.isAuthenticated()) {
                         var Auth = $injector.get('Auth');

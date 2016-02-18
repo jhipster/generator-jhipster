@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .factory('AuthServerProvider', function loginService($http, localStorageService, Base64) {
+    .factory('AuthServerProvider', function loginService($http, $localStorage, Base64) {
         return {
             login: function(credentials) {
                 var data = 'username=' +  encodeURIComponent(credentials.username) + '&password=' +
@@ -18,18 +18,18 @@ angular.module('<%=angularAppName%>')
                     var expiredAt = new Date();
                     expiredAt.setSeconds(expiredAt.getSeconds() + response.expires_in);
                     response.expires_at = expiredAt.getTime();
-                    localStorageService.set('authentication-token', response);
+                    $localStorage.authenticationToken = response;
                     return response;
                 });
             },
             logout: function() {
                 // logout from the server
                 $http.post('api/logout').then(function() {
-                    localStorageService.clearAll();
+                    delete $localStorage.authenticationToken;
                 });
             },
             getToken: function () {
-                return localStorageService.get('authentication-token');
+                return $localStorage.authenticationToken;
             },
             hasValidToken: function () {
                 var token = this.getToken();
