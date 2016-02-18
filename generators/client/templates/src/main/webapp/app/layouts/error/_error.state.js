@@ -4,7 +4,7 @@ angular.module('<%=angularAppName%>')
     .config(function ($stateProvider) {
         $stateProvider
             .state('error', {
-                parent: 'site',
+                parent: 'app',
                 url: '/error',
                 data: {
                     authorities: [],
@@ -23,7 +23,7 @@ angular.module('<%=angularAppName%>')
                 }
             })
             .state('accessdenied', {
-                parent: 'site',
+                parent: 'app',
                 url: '/accessdenied',
                 data: {
                     authorities: []

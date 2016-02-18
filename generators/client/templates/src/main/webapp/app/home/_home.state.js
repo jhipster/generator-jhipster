@@ -4,7 +4,7 @@ angular.module('<%=angularAppName%>')
     .config(function ($stateProvider) {
         $stateProvider
             .state('home', {
-                parent: 'site',
+                parent: 'app',
                 url: '/',
                 data: {
                     authorities: []

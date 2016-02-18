@@ -5,6 +5,6 @@ angular.module('<%=angularAppName%>')
         $stateProvider
             .state('entity', {
                 abstract: true,
-                parent: 'site'
+                parent: 'app'
             });
     });
