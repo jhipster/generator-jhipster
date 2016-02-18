@@ -62,8 +62,8 @@ module.exports = JhipsterGenerator.extend({
         this.withEntities = this.options['with-entities'];
 
     },
-    initializing : {
-        displayLogo : function () {
+    initializing: {
+        displayLogo: function () {
             this.printJHipsterLogo();
         },
 
@@ -115,13 +115,13 @@ module.exports = JhipsterGenerator.extend({
             }.bind(this));
         },
 
-        validate : function () {
+        validate: function () {
             if(this.skipServer && this.skipClient){
                 this.env.error(chalk.red('You can not pass both ' + chalk.yellow('--skip-client') + ' and ' + chalk.yellow('--skip-server') + ' together'));
             }
         },
 
-        setupVars : function () {
+        setupVars: function () {
             this.applicationType = this.config.get('applicationType');
             if (!this.applicationType) {
                 this.applicationType = 'monolith';
@@ -201,7 +201,7 @@ module.exports = JhipsterGenerator.extend({
     },
 
     configuring: {
-        setup : function () {
+        setup: function () {
             configOptions.baseName = this.baseName;
             configOptions.logo = false;
             if(this.skipClient){
@@ -213,26 +213,26 @@ module.exports = JhipsterGenerator.extend({
             }
         },
 
-        composeServer : function () {
+        composeServer: function () {
             if(this.skipServer) return;
 
             this.composeWith('jhipster:server', {
                 options: {
                     'client-hook': !this.skipClient,
-                    configOptions : configOptions
+                    configOptions: configOptions
                 }
             }, {
                 local: require.resolve('../server')
             });
         },
 
-        composeClient : function () {
+        composeClient: function () {
             if(this.skipClient) return;
 
             this.composeWith('jhipster:client', {
                 options: {
                     'skip-install': this.options['skip-install'],
-                    configOptions : configOptions
+                    configOptions: configOptions
                 }
             }, {
                 local: require.resolve('../client')
@@ -247,14 +247,14 @@ module.exports = JhipsterGenerator.extend({
                 return;
             }
             var choices = [];
-            if(!this.skipServer){
+            if (!this.skipServer) {
                 // all server side test frameworks should be addded here
                 choices.push(
                     {name: 'Gatling', value: 'gatling'},
                     {name: 'Cucumber', value: 'cucumber'}
                 );
             }
-            if(!this.skipClient){
+            if (!this.skipClient) {
                 // all client side test frameworks should be addded here
                 choices.push(
                     {name: 'Protractor', value: 'protractor'}
