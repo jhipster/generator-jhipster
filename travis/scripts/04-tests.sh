@@ -11,4 +11,4 @@ else
 fi
 if [ $JHIPSTER != "app-microservice" ]; then
   gulp test
-else
+fi
