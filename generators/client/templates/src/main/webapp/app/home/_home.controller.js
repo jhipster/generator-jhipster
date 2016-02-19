@@ -13,4 +13,6 @@ angular.module('<%=angularAppName%>')
         $scope.$on('authenticationSuccess', function() {
             getAccount();
         });
+
+        $scope.login = LoginService.open;
     });
