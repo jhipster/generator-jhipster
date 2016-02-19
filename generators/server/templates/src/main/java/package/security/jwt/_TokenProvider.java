@@ -28,6 +28,8 @@ public class TokenProvider {
 
     private long tokenValidityInSeconds;
 
+    private long tokenValidityInSecondsForRememberMe;
+
     @Inject
     private JHipsterProperties jHipsterProperties;
 
@@ -38,15 +40,22 @@ public class TokenProvider {
 
         this.tokenValidityInSeconds =
             1000 * jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSeconds();
+        this.tokenValidityInSecondsForRememberMe =
+            1000 * jHipsterProperties.getSecurity().getAuthentication().getJwt().getTokenValidityInSecondsForRememberMe();
     }
 
-    public String createToken(Authentication authentication) {
+    public String createToken(Authentication authentication, Boolean rememberMe) {
         String authorities = authentication.getAuthorities().stream()
             .map(authority -> authority.getAuthority())
             .collect(Collectors.joining(","));
 
         long now = (new Date()).getTime();
-        Date validity = new Date(now + this.tokenValidityInSeconds);
+        Date validity = new Date(now);
+        if (rememberMe) {
+            validity = new Date(now + this.tokenValidityInSecondsForRememberMe);
+        } else {
+            validity = new Date(now + this.tokenValidityInSeconds);
+        }
 
         return Jwts.builder()
             .setSubject(authentication.getName())
