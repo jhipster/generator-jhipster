@@ -76,18 +76,15 @@ module.exports = JhipsterGenerator.extend({
         },
 
         checkJava: function () {
-            if (!this.checkInstall) return;
+            if (!this.checkInstall || this.skipServer) return;
             var done = this.async();
-            exec('javac -version', function (err, stdout, stderr) {
+            exec('java -version', function (err, stdout, stderr) {
                 if (err) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' You don\'t have java installed.');
+                    this.log(chalk.yellow.bold('WARNING!') + ' Java 8 is not found on your computer.');
                 } else {
-                    var javaFullVersion = stderr.split(' ')[1];
-                    var javaVersion = javaFullVersion.substring(0,3);
-                    if (javaVersion !== '1.8') {
-                        this.log(chalk.yellow.bold('WARNING!') + ' You don\'t have Java 8 installed. Your Java version is: ' + chalk.yellow(javaFullVersion));
-                    } else {
-                        this.log('Your Java version is: ' + chalk.yellow(javaFullVersion));
+                    var javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
+                    if (!javaVersion.match(/1\.8/)) {
+                        this.log(chalk.yellow.bold('WARNING!') + ' Java 8 is not found on your computeur. Your Java version is: ' + chalk.yellow(javaVersion));
                     }
                 }
                 done();
@@ -95,7 +92,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         checkGit: function () {
-            if (!this.checkInstall) return;
+            if (!this.checkInstall || this.skipClient) return;
             var done = this.async();
             exec('git --version', function (err) {
                 if (err) {
@@ -110,7 +107,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         checkGitConnection: function () {
-            if (!this.checkInstall || !this.gitInstalled) return;
+            if (!this.gitInstalled) return;
             var done = this.async();
             exec('git ls-remote git://github.com/jhipster/generator-jhipster.git HEAD', {timeout: 15000}, function (error) {
                 if (error) {
@@ -124,7 +121,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         checkBower: function () {
-            if (!this.checkInstall) return;
+            if (!this.checkInstall || this.skipClient) return;
             var done = this.async();
             exec('bower --version', function (err) {
                 if (err) {
@@ -137,12 +134,12 @@ module.exports = JhipsterGenerator.extend({
         },
 
         checkGulp: function () {
-            if (!this.checkInstall) return;
+            if (!this.checkInstall || this.skipClient) return;
             var done = this.async();
             exec('gulp --version', function (err) {
                 if (err) {
                     this.log(chalk.yellow.bold('WARNING!') + ' gulp is not found on your computer.\n',
-                        ' Install gulp using npm command: ' + chalk.yellow('npm install -g gulp')
+                        ' Install gulp using npm command: ' + chalk.yellow('npm install -g gulp-cli')
                     );
                 }
                 done();
