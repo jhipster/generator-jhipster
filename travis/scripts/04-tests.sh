@@ -9,5 +9,6 @@ if [ $JHIPSTER != "app-gradle" ]; then
 else
   ./gradlew test
 fi
-
-gulp test
+if [ $JHIPSTER != "app-microservice" ]; then
+  gulp test
+else
