@@ -204,17 +204,21 @@ module.exports = JhipsterGenerator.extend({
         setup: function () {
             configOptions.baseName = this.baseName;
             configOptions.logo = false;
-            if(this.skipClient){
+            if (this.applicationType == 'microservice') {
+                this.skipClient = true;
+                this.skipUserManagement = true;
+            }
+            if (this.skipClient) {
                 // defaults to use when skipping client
                 configOptions.enableTranslation = this.options['i18n'];
             }
-            if(this.skipServer){
+            if (this.skipServer) {
                 // defaults to use when skipping server
             }
         },
 
         composeServer: function () {
-            if(this.skipServer) return;
+            if (this.skipServer) return;
 
             this.composeWith('jhipster:server', {
                 options: {
