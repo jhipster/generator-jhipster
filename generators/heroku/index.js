@@ -10,12 +10,13 @@ var util = require('util'),
     scriptBase = require('../generator-base');
 
 const constants = require('../generator-constants'),
-    MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
+    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR;
 
 var HerokuGenerator = module.exports = function HerokuGenerator(args, options, config) {
     generators.Base.apply(this, arguments);
     console.log(chalk.bold('Heroku configuration is starting'));
-    this.env.options.appPath = this.config.get('appPath') || MAIN_SRC_DIR;
+    this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
     this.baseName = this.config.get('baseName');
     this.packageName = this.config.get('packageName');
     this.packageFolder = this.config.get('packageFolder');
