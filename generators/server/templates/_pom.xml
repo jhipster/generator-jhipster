@@ -40,7 +40,7 @@
 
     <properties>
         <hikaricp.version>2.4.1</hikaricp.version>
-        <assertj-core.version>3.1.0</assertj-core.version>
+        <assertj-core.version>3.3.0</assertj-core.version>
         <awaitility.version>1.4.0</awaitility.version>
         <commons-io.version>2.4</commons-io.version>
         <commons-lang.version>2.6</commons-lang.version>
