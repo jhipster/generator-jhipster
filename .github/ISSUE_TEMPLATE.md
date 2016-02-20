@@ -1,5 +1,6 @@
-> Please follow the issue template below.
-> Issues opened without any of these info will be **closed** without any explanation.
+> Please follow the issue template below for bug reports and quiries.
+> Bug reports or quiries opened without any of these info will be **closed** without any explanation.
+> For feature requests, label the title with [FEATURE] and explain your use case and ideas clearly below, you can remove sections which are not relevant.
 
 ##### **Overview of the issue**
 
