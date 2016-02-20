@@ -52,23 +52,31 @@ Generator.prototype.addJavaScriptToIndex = function (script) {
 };
 
 /**
- * A a new message format to the application, in the index.html file.
+ * A a new message format to the application, in the bower.json file.
  *
  * This is used for internationalization.
- * @param {string} script - name of the messageformat script file
+ * @param {string} language - name of the messageformat language
  */
-Generator.prototype.addMessageformatLocaleToIndex = function (script) {
+Generator.prototype.addMessageformatLocaleToBowerOverride = function (language) {
+    var fullPath = 'bower.json';
     try {
-        var fullPath = CLIENT_MAIN_SRC_DIR + 'index.html';
-        jhipsterUtils.rewriteFile({
-            file: fullPath,
-            needle: '<!-- endbuild -->',
-            splicable: [
-                    '<script src="bower_components/messageformat/locale/' + script + '"></script>'
-            ]
+        jhipsterUtils.rewriteJSONFile(fullPath, function(jsonObj) {
+            var messageformatLocale = 'locale/' + language + '.js';
+            if (jsonObj.overrides === undefined) {
+                jsonObj.overrides = {};
+            }
+            if (jsonObj.overrides.messageformat === undefined) {
+                jsonObj.overrides.messageformat = {};
+            }
+            if (jsonObj.overrides.messageformat.main === undefined) {
+                jsonObj.overrides.messageformat.main = ['messageformat.js'];
+            }
+            if (!_.contains(jsonObj.overrides.messageformat.main, messageformatLocale)) {
+                jsonObj.overrides.messageformat.main.push(messageformatLocale);
+            }
         }, this);
     } catch (e) {
-        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + script + '.js ' + chalk.yellow('not added.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Messageformat locale override not added for language: ' + language + ' to ') + 'bower override configuration ' + chalk.yellow(' not added.\n'));
     }
 };
 

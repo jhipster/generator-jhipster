@@ -23,6 +23,16 @@ module.exports = LanguagesGenerator.extend({
             description: 'Languages'
         });
 
+        // This adds support for a `--skip-wiredep` flag
+        this.option('skip-wiredep', {
+            desc: 'Skip the wiredep step',
+            type: Boolean,
+            defaults: false
+        });
+
+        this.skipWiredep = this.options['skip-wiredep'];
+
+
         // Validate languages passed as argument
         for (var id in this.languagesArgument) {
             var language = this.languagesArgument[id];
@@ -102,8 +112,17 @@ module.exports = LanguagesGenerator.extend({
             this.installI18nFilesByLanguage(this, CLIENT_MAIN_SRC_DIR, language);
             this.installI18nResFilesByLanguage(this, SERVER_MAIN_RES_DIR, language);
             this.installNewLanguage(language);
-            this.addMessageformatLocaleToIndex(language.split("-")[0] + '.js');
+            this.addMessageformatLocaleToBowerOverride(language.split("-")[0]);
             insight.track('languages/language', language);
+        }
+    },
+
+    install: function () {
+        var wiredepAddedBowerOverrides = function () {
+            this.spawnCommand('gulp', ['wiredep']);
+        };
+        if (!this.skipWiredep) {
+            wiredepAddedBowerOverrides.call(this);
         }
     }
 });
