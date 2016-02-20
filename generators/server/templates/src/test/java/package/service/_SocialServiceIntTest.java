@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;<% } %>
 import javax.inject.Inject;
 import java.util.Optional;
 
-import static org.assertj.core.api.StrictAssertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
