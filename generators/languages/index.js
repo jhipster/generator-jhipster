@@ -109,9 +109,9 @@ module.exports = LanguagesGenerator.extend({
 
         for (var id in this.languages) {
             var language = this.languages[id];
-            this.installI18nFilesByLanguage(this, CLIENT_MAIN_SRC_DIR, language);
-            this.installI18nResFilesByLanguage(this, SERVER_MAIN_RES_DIR, language);
-            this.installNewLanguage(language);
+            this.installI18nClientFilesByLanguage(this, CLIENT_MAIN_SRC_DIR, language);
+            this.installI18nServerFilesByLanguage(this, SERVER_MAIN_RES_DIR, language);
+            this.addLanguageToLanguageConstant(language);
             this.addMessageformatLocaleToBowerOverride(language.split("-")[0]);
             insight.track('languages/language', language);
         }

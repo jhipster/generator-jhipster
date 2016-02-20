@@ -279,8 +279,8 @@ module.exports = JhipsterClientGenerator.extend({
         writei18nFiles : function () {
             // install all files related to i18n if translation is enabled
             if (this.enableTranslation) {
-                this.installI18nFilesByLanguage(this, MAIN_SRC_DIR, 'en');
-                this.installI18nFilesByLanguage(this, MAIN_SRC_DIR, 'fr');
+                this.installI18nClientFilesByLanguage(this, MAIN_SRC_DIR, 'en');
+                this.installI18nClientFilesByLanguage(this, MAIN_SRC_DIR, 'fr');
             }
         },
 

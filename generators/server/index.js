@@ -759,8 +759,8 @@ module.exports = JhipsterServerGenerator.extend({
 
             // install all files related to i18n if translation is enabled
             if (this.enableTranslation) {
-                this.installI18nResFilesByLanguage(this, SERVER_MAIN_RES_DIR, 'en');
-                this.installI18nResFilesByLanguage(this, SERVER_MAIN_RES_DIR, 'fr');
+                this.installI18nServerFilesByLanguage(this, SERVER_MAIN_RES_DIR, 'en');
+                this.installI18nServerFilesByLanguage(this, SERVER_MAIN_RES_DIR, 'fr');
             }
             this.template(SERVER_MAIN_RES_DIR + 'i18n/_messages_en.properties', SERVER_MAIN_RES_DIR + 'i18n/messages.properties', this, {});
         },

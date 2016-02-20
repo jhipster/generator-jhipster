@@ -1036,7 +1036,7 @@ Generator.prototype.getExistingEntities = function(warn) {
     return entities.sort(isBefore);
 }
 
-Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, lang) {
+Generator.prototype.installI18nClientFilesByLanguage = function (_this, webappDir, lang) {
     this.copyI18nFilesByName(_this, webappDir, 'activate.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'audits.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'configuration.json', lang);
@@ -1069,7 +1069,7 @@ Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, lan
 
 };
 
-Generator.prototype.installI18nResFilesByLanguage = function (_this, resourceDir, lang) {
+Generator.prototype.installI18nServerFilesByLanguage = function (_this, resourceDir, lang) {
     // Template the message server side properties
     var lang_prop = lang.replace(/-/g, "_");
     _this.template(resourceDir + 'i18n/_messages_' + lang_prop + '.properties', resourceDir + 'i18n/messages_' + lang_prop + '.properties', this, {});
@@ -1105,7 +1105,7 @@ Generator.prototype.copyEnumI18n = function(language, enumInfo) {
     }
 };
 
-Generator.prototype.installNewLanguage = function(language) {
+Generator.prototype.addLanguageToLanguageConstant = function(language) {
     var fullPath = CLIENT_MAIN_SRC_DIR + 'app/components/language/language.constants.js';
     try {
         jhipsterUtils.rewriteFile({
