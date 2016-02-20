@@ -16,6 +16,21 @@ util.inherits(LanguagesGenerator, scriptBase);
 module.exports = LanguagesGenerator.extend({
     constructor: function() {
         generators.Base.apply(this, arguments);
+        // This makes it possible to pass `languages` by argument
+        this.argument('languagesArgument', {
+            type: Array,
+            required: false,
+            description: 'Languages'
+        });
+
+        // Validate languages passed as argument
+        for (var id in this.languagesArgument) {
+            var language = this.languagesArgument[id];
+            if (!this.isSupportedLanguage(language)) {
+                this.env.error(chalk.red('ERROR Unsupported language "' + language + '" passed as argument to language generator.' +
+                    '\nSupported languages: ' + this.getAllSupportedLanguages().join(', ')));
+            }
+        }
     },
     initializing : {
         getConfig : function () {
@@ -34,8 +49,12 @@ module.exports = LanguagesGenerator.extend({
     prompting : function () {
         var cb = this.async();
 
+        var languagesArgument = this.languagesArgument;
         var prompts = [
         {
+            when: function(){
+                return languagesArgument === undefined;
+            },
             type: 'checkbox',
             name: 'languages',
             message: 'Please choose additional languages to install',
@@ -65,7 +84,7 @@ module.exports = LanguagesGenerator.extend({
         }];
         if (this.enableTranslation) {
             this.prompt(prompts, function (props) {
-                this.languages = props.languages;
+                this.languages = this.languagesArgument || props.languages;
                 cb();
             }.bind(this));
         } else {
