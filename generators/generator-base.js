@@ -287,6 +287,12 @@ Generator.prototype.getAllSupportedLanguages = function () {
       'ta'
     ];
 }
+/**
+ * check if a language is supported by JHipster
+ */
+Generator.prototype.isSupportedLanguage = function (language) {
+    return _.contains(this.getAllSupportedLanguages(), language);
+}
 
 /**
  * Add new social configuration in the "application.yml".

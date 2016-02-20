@@ -89,6 +89,7 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc['addGlobalTranslationKey'] = this.addGlobalTranslationKey;
         jhipsterFunc['addTranslationKeyToAllLanguages'] = this.addTranslationKeyToAllLanguages;
         jhipsterFunc['getAllSupportedLanguages'] = this.getAllSupportedLanguages;
+        jhipsterFunc['isSupportedLanguage'] = this.isSupportedLanguage;
         jhipsterFunc['getAllInstalledLanguages'] = this.getAllInstalledLanguages;
         jhipsterFunc['addEntityTranslationKey'] = this.addEntityTranslationKey;
         jhipsterFunc['addChangelogToLiquibase'] = this.addChangelogToLiquibase;
