@@ -56,10 +56,18 @@ module.exports = JhipsterGenerator.extend({
             defaults: false
         });
 
+        // This adds support for a `--[no-]check-install` flag
+        this.option('check-install', {
+            desc: 'Check the installation',
+            type: Boolean,
+            defaults: true
+        });
+
         this.skipClient = configOptions.skipClient = this.options['skip-client'] ||  this.config.get('skipClient');
         this.skipServer = configOptions.skipServer = this.options['skip-server'] ||  this.config.get('skipServer');
         this.skipUserManagement = configOptions.skipUserManagement = this.options['skip-user-management'] ||  this.config.get('skipUserManagement');
         this.withEntities = this.options['with-entities'];
+        this.checkInstall = this.options['check-install'];
 
     },
     initializing: {
@@ -68,17 +76,15 @@ module.exports = JhipsterGenerator.extend({
         },
 
         checkJava: function () {
+            if (!this.checkInstall || this.skipServer) return;
             var done = this.async();
-            exec('javac -version', function (err, stdout, stderr) {
+            exec('java -version', function (err, stdout, stderr) {
                 if (err) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' You don\'t have java installed.');
+                    this.log(chalk.yellow.bold('WARNING!') + ' Java 8 is not found on your computer.');
                 } else {
-                    var javaFullVersion = stderr.split(' ')[1];
-                    var javaVersion = javaFullVersion.substring(0,3);
-                    if (javaVersion !== '1.8') {
-                        this.log(chalk.yellow.bold('WARNING!') + ' You don\'t have Java 8 installed. Your Java version is: ' + chalk.yellow(javaFullVersion));
-                    } else {
-                        this.log('Your Java version is: ' + chalk.yellow(javaFullVersion));
+                    var javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
+                    if (!javaVersion.match(/1\.8/)) {
+                        this.log(chalk.yellow.bold('WARNING!') + ' Java 8 is not found on your computeur. Your Java version is: ' + chalk.yellow(javaVersion));
                     }
                 }
                 done();
@@ -86,30 +92,55 @@ module.exports = JhipsterGenerator.extend({
         },
 
         checkGit: function () {
+            if (!this.checkInstall || this.skipClient) return;
             var done = this.async();
             exec('git --version', function (err) {
                 if (err) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' You don\'t have Git installed.');
+                    this.log(chalk.yellow.bold('WARNING!') + ' git is not found on your computer.\n',
+                        ' Install git: ' + chalk.yellow('http://git-scm.com/')
+                    );
+                } else {
+                    this.gitInstalled = true;
+                }
+                done();
+            }.bind(this));
+        },
+
+        checkGitConnection: function () {
+            if (!this.gitInstalled) return;
+            var done = this.async();
+            exec('git ls-remote git://github.com/jhipster/generator-jhipster.git HEAD', {timeout: 15000}, function (error) {
+                if (error) {
+                    this.log(chalk.yellow.bold('WARNING!') + ' Failed to connect to "git://github.com"\n',
+                        ' 1. Check the Internet connection.\n',
+                        ' 2. If you are using HTTP proxy, try this command: ' + chalk.yellow('git config --global url."https://".insteadOf git://')
+                    );
                 }
                 done();
             }.bind(this));
         },
 
         checkBower: function () {
+            if (!this.checkInstall || this.skipClient) return;
             var done = this.async();
             exec('bower --version', function (err) {
                 if (err) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' You don\'t have Bower installed.');
+                    this.log(chalk.yellow.bold('WARNING!') + ' bower is not found on your computer.\n',
+                        ' Install bower using npm command: ' + chalk.yellow('npm install -g bower')
+                    );
                 }
                 done();
             }.bind(this));
         },
 
         checkGulp: function () {
+            if (!this.checkInstall || this.skipClient) return;
             var done = this.async();
             exec('gulp --version', function (err) {
                 if (err) {
-                    this.log(chalk.yellow.bold('WARNING!') + ' You don\'t have Gulp.js installed.');
+                    this.log(chalk.yellow.bold('WARNING!') + ' gulp is not found on your computer.\n',
+                        ' Install gulp using npm command: ' + chalk.yellow('npm install -g gulp-cli')
+                    );
                 }
                 done();
             }.bind(this));

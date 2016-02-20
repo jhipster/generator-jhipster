@@ -370,7 +370,7 @@ describe('JHipster generator', function () {
     describe('default gradle configuration', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true})
+                .withOptions({skipInstall: true, checkInstall: false})
                 .withPrompts({
                     "baseName": "jhipster",
                     "packageName": "com.mycompany.myapp",
@@ -403,7 +403,7 @@ describe('JHipster generator', function () {
     describe('package names', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true})
+                .withOptions({skipInstall: true, checkInstall: false})
                 .withPrompts({
                     "baseName": "jhipster",
                     "packageName": "com.otherpackage",
@@ -435,7 +435,7 @@ describe('JHipster generator', function () {
     describe('application names', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true})
+                .withOptions({skipInstall: true, checkInstall: false})
                 .withPrompts({
                     "baseName": "myapplication",
                     "packageName": "com.mycompany.myapp",
@@ -467,7 +467,7 @@ describe('JHipster generator', function () {
     describe('oauth2', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true})
+                .withOptions({skipInstall: true, checkInstall: false})
                 .withPrompts({
                     "baseName": "jhipster",
                     "packageName": "com.mycompany.myapp",
@@ -498,7 +498,7 @@ describe('JHipster generator', function () {
     describe('hazelcast', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true})
+                .withOptions({skipInstall: true, checkInstall: false})
                 .withPrompts({
                     "baseName": "jhipster",
                     "packageName": "com.mycompany.myapp",
@@ -530,7 +530,7 @@ describe('JHipster generator', function () {
     describe('i18n', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true})
+                .withOptions({skipInstall: true, checkInstall: false})
                 .withPrompts({
                     "baseName": "jhipster",
                     "packageName": "com.mycompany.myapp",
@@ -560,7 +560,7 @@ describe('JHipster generator', function () {
     describe('social login', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true})
+                .withOptions({skipInstall: true, checkInstall: false})
                 .withPrompts({
                     "baseName": "jhipster",
                     "packageName": "com.mycompany.myapp",
@@ -589,7 +589,7 @@ describe('JHipster generator', function () {
     describe('JWT authentication', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true})
+                .withOptions({skipInstall: true, checkInstall: false})
                 .withPrompts({
                     "baseName": "jhipster",
                     "packageName": "com.mycompany.myapp",
@@ -618,7 +618,7 @@ describe('JHipster generator', function () {
     describe('skip client', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipClient: true})
+                .withOptions({skipInstall: true, skipClient: true, checkInstall: false})
                 .withPrompts({
                     "baseName": "jhipster",
                     "packageName": "com.mycompany.myapp",
@@ -648,7 +648,7 @@ describe('JHipster generator', function () {
     describe('skip client with gradle', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true, skipClient: true})
+                .withOptions({skipInstall: true, skipClient: true, checkInstall: false})
                 .withPrompts({
                     "baseName": "jhipster",
                     "packageName": "com.mycompany.myapp",
@@ -679,7 +679,7 @@ describe('JHipster generator', function () {
     describe('gateway', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
-                .withOptions({skipInstall: true})
+                .withOptions({skipInstall: true, checkInstall: false})
                 .withPrompts({
                     "applicationType": "gateway",
                     "baseName": "jhipster",
@@ -713,7 +713,7 @@ describe('JHipster server generator', function () {
     describe('generate server', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/server'))
-                .withOptions({skipInstall: true, gatling: true})
+                .withOptions({skipInstall: true, gatling: true, checkInstall: false})
                 .withPrompts({
                     "baseName": "jhipster",
                     "packageName": "com.mycompany.myapp",
