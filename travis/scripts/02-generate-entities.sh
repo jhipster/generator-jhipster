@@ -21,7 +21,7 @@ generateEntity() {
 #-------------------------------------------------------------------------------
 mkdir -p $HOME/$JHIPSTER/.jhipster/
 if [ "$JHIPSTER" == "app-mongodb" ]; then
-  moveEntity BankAccountMongo
+  moveEntity MongoBankAccount
 
   moveEntity FieldTestEntity
   moveEntity FieldTestMapstructEntity
@@ -32,12 +32,12 @@ if [ "$JHIPSTER" == "app-mongodb" ]; then
   moveEntity FieldTestPaginationEntity
 
 elif [ "$JHIPSTER" == "app-cassandra" ]; then
-  moveEntity BankAccountCassandra
+  moveEntity CassBankAccount
 
-  moveEntity FieldTestEntity
-  moveEntity FieldTestMapstructEntity
-  moveEntity FieldTestServiceClassEntity
-  moveEntity FieldTestServiceImplEntity
+  moveEntity CassTestEntity
+  moveEntity CassTestMapstructEntity
+  moveEntity CassTestServiceClassEntity
+  moveEntity CassTestServiceImplEntity
 
 elif [ "$JHIPSTER" == "app-mysql" || "$JHIPSTER" == "app-psql-es-noi18n" ]; then
   moveEntity BankAccount
@@ -77,13 +77,22 @@ else
   moveEntity FieldTestPaginationEntity
 fi
 
+ls -l $HOME/$JHIPSTER/.jhipster/
+
 #-------------------------------------------------------------------------------
 # Generate the entities with yo jhipster:entity
 #-------------------------------------------------------------------------------
 cd $HOME/$JHIPSTER
 generateEntity BankAccount
+generateEntity MongoBankAccount
+generateEntity CassBankAccount
 generateEntity Label
 generateEntity Operation
+
+generateEntity CassTestEntity
+generateEntity CassTestMapstructEntity
+generateEntity CassTestServiceClassEntity
+generateEntity CassTestServiceImplEntity
 
 generateEntity FieldTestEntity
 generateEntity FieldTestMapstructEntity
