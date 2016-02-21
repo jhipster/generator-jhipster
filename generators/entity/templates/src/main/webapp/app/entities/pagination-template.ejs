@@ -1,5 +1,9 @@
         vm.predicate = pagingParams.predicate;
         vm.reverse = pagingParams.ascending;
+        <%_ if (searchEngine == 'elasticsearch') { _%>
+        vm.searchQuery = pagingParams.search;
+        vm.currentSearch = pagingParams.search;
+        <%_ } _%>
         <%_ if (fieldsContainBlob) { _%>
         vm.openFile = DataUtils.openFile;
         vm.byteSize = DataUtils.byteSize;
@@ -14,28 +18,34 @@
             var onError = function (error) {
                 AlertService.error(error.data.message);
             };
+
+        <%_ if (searchEngine != 'elasticsearch') { _%>
             <%= entityClass %>.query({
                 page: pagingParams.page - 1,
                 size: paginationConstants.itemsPerPage,
                 sort: [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'), 'id']
             }, onSuccess, onError);
+        <%_ } else { _%>
+            if (pagingParams.search) {
+                <%= entityClass %>Search.query({
+                    query: pagingParams.search,
+                    page: pagingParams.page - 1,
+                    size: paginationConstants.itemsPerPage,
+                    sort: [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'), 'id']
+                }, onSuccess, onError);
+            } else {
+                <%= entityClass %>.query({
+                    page: pagingParams.page - 1,
+                    size: paginationConstants.itemsPerPage,
+                    sort: [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'), 'id']
+                }, onSuccess, onError);
+            }
+        <%_ } _%>
         };
         vm.loadPage = function(page) {
             vm.page = page;
-            vm.loadAll();
+            vm.transition();
         };
-        <%_ if (searchEngine == 'elasticsearch') { _%>
-
-        vm.search = function () {
-            <%= entityClass %>Search.query({query: vm.searchQuery}, function(result) {
-                vm.<%= entityInstancePlural %> = result;
-            }, function(response) {
-                if(response.status === 404) {
-                    vm.loadAll();
-                }
-            });
-        };
-        <%_ } _%>
 
         vm.transition = function () {
             $state.transitionTo($state.$current, {
@@ -44,5 +54,28 @@
                 search: vm.currentSearch
             });
         };
+        <%_ if (searchEngine == 'elasticsearch') { _%>
+
+        vm.search = function (searchQuery) {
+            if (!searchQuery){
+                return vm.clear();
+            }
+            vm.links = null;
+            vm.page = 1;
+            vm.predicate = '_score';
+            vm.reverse = false;
+            vm.currentSearch = searchQuery;
+            vm.transition();
+        };
+
+        vm.clear = function () {
+            vm.links = null;
+            vm.page = 1;
+            vm.predicate = 'id';
+            vm.reverse = true;
+            vm.currentSearch = null;
+            vm.transition();
+        };
+        <%_ } _%>
 
         vm.loadAll();

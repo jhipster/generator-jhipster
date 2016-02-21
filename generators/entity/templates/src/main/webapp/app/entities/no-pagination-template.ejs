@@ -7,16 +7,15 @@
             <%= entityClass %>.query(function(result) {
                 vm.<%= entityInstancePlural %> = result;
             });
-        };<%_
-        if (searchEngine == 'elasticsearch') { _%>
+        };
+        <%_ if (searchEngine == 'elasticsearch') { _%>
 
         vm.search = function () {
+            if (!vm.searchQuery) {
+                return vm.loadAll();
+            }
             <%= entityClass %>Search.query({query: vm.searchQuery}, function(result) {
                 vm.<%= entityInstancePlural %> = result;
-            }, function(response) {
-                if(response.status === 404) {
-                    vm.loadAll();
-                }
             });
         };<%_ } _%>
 

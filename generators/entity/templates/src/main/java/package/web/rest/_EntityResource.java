@@ -137,16 +137,15 @@ public class <%= entityClass %>Resource {
     }<% if (searchEngine == 'elasticsearch') { %>
 
     /**
-     * SEARCH  /_search/<%= entityApiUrl %>/:query : search for the <%= entityInstance %> corresponding
+     * SEARCH  /_search/<%= entityApiUrl %>?query=:query : search for the <%= entityInstance %> corresponding
      * to the query.
      *
      * @param query the query of the <%= entityInstance %> search
      * @return the result of the search
      */
-    @RequestMapping(value = "/_search/<%= entityApiUrl %>/{query:.+}",
+    @RequestMapping(value = "/_search/<%= entityApiUrl %>",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public List<<%= instanceType %>> search<%= entityClassPlural %>(@PathVariable String query) {<%- include('../../common/search_template', {viaService: viaService}); -%>
-    }<% } %>
+    @Timed<%- include('../../common/search_template', {viaService: viaService}); -%><% } %>
+
 }
