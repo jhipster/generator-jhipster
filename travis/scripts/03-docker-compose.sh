@@ -11,7 +11,7 @@ if [[ ($JHIPSTER == 'app-cassandra') && (-a src/main/docker/dev.yml) ]]; then
   docker-compose -f src/main/docker/dev.yml up -d
 elif [[ ($JHIPSTER == 'app-mongodb') && (-a src/main/docker/dev.yml) ]]; then
   docker-compose -f src/main/docker/dev.yml up -d
-elif [[ ($JHIPSTER == 'app-mysql') || ($JHIPSTER == 'app-psql-es') ]]; then
+elif [[ ($JHIPSTER == 'app-mysql') || ($JHIPSTER == 'app-psql-es-noi18n') ]]; then
   if [ -a src/main/docker/prod.yml ]; then
     docker-compose -f src/main/docker/prod.yml up -d
   fi
