@@ -3,7 +3,7 @@ set -ev
 
 moveEntity() {
   local entity="$1"
-  mv $JHIPSTER_SAMPLES/.jhipster/"$entity".json $HOME/$JHIPSTER/.jhipster/
+  mv "$JHIPSTER_SAMPLES"/.jhipster/"$entity".json "$HOME"/"$JHIPSTER"/.jhipster/
 }
 
 generateEntity() {
@@ -19,7 +19,7 @@ generateEntity() {
 #-------------------------------------------------------------------------------
 # Copy entities json
 #-------------------------------------------------------------------------------
-mkdir -p $HOME/$JHIPSTER/.jhipster/
+mkdir -p "$HOME"/"$JHIPSTER"/.jhipster/
 if [ "$JHIPSTER" == "app-mongodb" ]; then
   moveEntity MongoBankAccount
 
@@ -39,7 +39,7 @@ elif [ "$JHIPSTER" == "app-cassandra" ]; then
   moveEntity CassTestServiceClassEntity
   moveEntity CassTestServiceImplEntity
 
-elif [ ("$JHIPSTER" == "app-mysql") || ("$JHIPSTER" == "app-psql-es-noi18n") ]; then
+elif [[ ("$JHIPSTER" == "app-mysql") || ("$JHIPSTER" == "app-psql-es-noi18n") ]]; then
   moveEntity BankAccount
   moveEntity Label
   moveEntity Operation
@@ -77,12 +77,12 @@ else
   moveEntity FieldTestPaginationEntity
 fi
 
-ls -l $HOME/$JHIPSTER/.jhipster/
+ls -l "$HOME"/"$JHIPSTER"/.jhipster/
 
 #-------------------------------------------------------------------------------
 # Generate the entities with yo jhipster:entity
 #-------------------------------------------------------------------------------
-cd $HOME/$JHIPSTER
+cd "$HOME"/"$JHIPSTER"
 generateEntity BankAccount
 generateEntity MongoBankAccount
 generateEntity CassBankAccount
@@ -116,7 +116,7 @@ generateEntity TestOneToOneEntity
 #-------------------------------------------------------------------------------
 # Check Javadoc generation
 #-------------------------------------------------------------------------------
-if [ $JHIPSTER != "app-gradle" ]; then
+if [ "$JHIPSTER" != "app-gradle" ]; then
   mvn javadoc:javadoc
 else
   ./gradlew javadoc
