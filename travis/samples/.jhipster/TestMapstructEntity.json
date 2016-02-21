@@ -1,0 +1,50 @@
+{
+    "relationships": [
+        {
+            "relationshipName": "manyToOneEntity",
+            "otherEntityName": "testManyToOneEntity",
+            "relationshipType": "one-to-many",
+            "otherEntityRelationshipName": "testEntity"
+        },
+        {
+            "relationshipName": "manyToManyEntity",
+            "otherEntityName": "testManyToManyEntity",
+            "relationshipType": "many-to-many",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "testEntity"
+        },
+        {
+            "relationshipName": "oneToOneEntity",
+            "otherEntityName": "testOneToOneEntity",
+            "relationshipType": "one-to-one",
+            "ownerSide": false,
+            "otherEntityRelationshipName": "testEntity"
+        },
+        {
+            "relationshipName": "userOneToManyEntity",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "login"
+        },
+        {
+            "relationshipName": "userManyToManyEntity",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "login",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "userOneToOneEntity",
+            "otherEntityName": "user",
+            "relationshipType": "one-to-one",
+            "otherEntityField": "login",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "parent"
+        }
+    ],
+    "fields": [],
+    "changelogDate": "20160208210109",
+    "dto": "mapstruct",
+    "service": "no",
+    "pagination": "no"
+}

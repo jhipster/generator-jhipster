@@ -1,0 +1,51 @@
+{
+    "relationships": [
+        {
+            "relationshipName": "testEntity",
+            "otherEntityName": "testEntity",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipName": "testMapstructEntity",
+            "otherEntityName": "testMapstructEntity",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipName": "testServiceClassEntity",
+            "otherEntityName": "testServiceClassEntity",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipName": "testServiceImplEntity",
+            "otherEntityName": "testServiceImplEntity",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipName": "testInfiniteScrollEntity",
+            "otherEntityName": "testInfiniteScrollEntity",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipName": "testPagerEntity",
+            "otherEntityName": "testPagerEntity",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipName": "testPaginationEntity",
+            "otherEntityName": "testPaginationEntity",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [],
+    "changelogDate": "20160208211440",
+    "dto": "no",
+    "service": "no",
+    "pagination": "no"
+}

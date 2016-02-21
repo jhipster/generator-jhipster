@@ -1,0 +1,58 @@
+{
+    "relationships": [
+        {
+            "relationshipName": "testEntity",
+            "otherEntityName": "testEntity",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "testMapstructEntity",
+            "otherEntityName": "testMapstructEntity",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "testServiceClassEntity",
+            "otherEntityName": "testServiceClassEntity",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "testServiceImplEntity",
+            "otherEntityName": "testServiceImplEntity",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "testInfiniteScrollEntity",
+            "otherEntityName": "testInfiniteScrollEntity",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "testPagerEntity",
+            "otherEntityName": "testPagerEntity",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipName": "testPaginationEntity",
+            "otherEntityName": "testPaginationEntity",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "id",
+            "ownerSide": true
+        }
+    ],
+    "fields": [],
+    "changelogDate": "20160208210534",
+    "dto": "no",
+    "service": "no",
+    "pagination": "no"
+}
