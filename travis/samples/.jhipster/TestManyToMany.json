@@ -8,43 +8,43 @@
             "ownerSide": true
         },
         {
-            "relationshipName": "testMapstructEntity",
-            "otherEntityName": "testMapstructEntity",
+            "relationshipName": "testMapstruct",
+            "otherEntityName": "testMapstruct",
             "relationshipType": "many-to-many",
             "otherEntityField": "id",
             "ownerSide": true
         },
         {
-            "relationshipName": "testServiceClassEntity",
-            "otherEntityName": "testServiceClassEntity",
+            "relationshipName": "testServiceClass",
+            "otherEntityName": "testServiceClass",
             "relationshipType": "many-to-many",
             "otherEntityField": "id",
             "ownerSide": true
         },
         {
-            "relationshipName": "testServiceImplEntity",
-            "otherEntityName": "testServiceImplEntity",
+            "relationshipName": "testServiceImpl",
+            "otherEntityName": "testServiceImpl",
             "relationshipType": "many-to-many",
             "otherEntityField": "id",
             "ownerSide": true
         },
         {
-            "relationshipName": "testInfiniteScrollEntity",
-            "otherEntityName": "testInfiniteScrollEntity",
+            "relationshipName": "testInfiniteScroll",
+            "otherEntityName": "testInfiniteScroll",
             "relationshipType": "many-to-many",
             "otherEntityField": "id",
             "ownerSide": true
         },
         {
-            "relationshipName": "testPagerEntity",
-            "otherEntityName": "testPagerEntity",
+            "relationshipName": "testPager",
+            "otherEntityName": "testPager",
             "relationshipType": "many-to-many",
             "otherEntityField": "id",
             "ownerSide": true
         },
         {
-            "relationshipName": "testPaginationEntity",
-            "otherEntityName": "testPaginationEntity",
+            "relationshipName": "testPagination",
+            "otherEntityName": "testPagination",
             "relationshipType": "many-to-many",
             "otherEntityField": "id",
             "ownerSide": true

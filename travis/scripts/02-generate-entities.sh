@@ -53,15 +53,15 @@ elif [[ ("$JHIPSTER" == "app-mysql") || ("$JHIPSTER" == "app-psql-es-noi18n") ]]
   moveEntity FieldTestPaginationEntity
 
   moveEntity TestEntity
-  moveEntity TestMapstructEntity
-  moveEntity TestServiceClassEntity
-  moveEntity TestServiceImplEntity
-  moveEntity TestInfiniteScrollEntity
-  moveEntity TestPagerEntity
-  moveEntity TestPaginationEntity
-  moveEntity TestManyToOneEntity
-  moveEntity TestManyToManyEntity
-  moveEntity TestOneToOneEntity
+  moveEntity TestMapstruct
+  moveEntity TestServiceClass
+  moveEntity TestServiceImpl
+  moveEntity TestInfiniteScroll
+  moveEntity TestPager
+  moveEntity TestPagination
+  moveEntity TestManyToOne
+  moveEntity TestManyToMany
+  moveEntity TestOneToOne
 
 else
   moveEntity BankAccount

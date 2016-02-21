@@ -6,55 +6,55 @@
             "relationshipType": "one-to-one",
             "otherEntityField": "id",
             "ownerSide": true,
-            "otherEntityRelationshipName": "testOneToOneEntity"
+            "otherEntityRelationshipName": "testOneToOne"
         },
         {
-            "relationshipName": "testMapstructEntity",
-            "otherEntityName": "testMapstructEntity",
+            "relationshipName": "testMapstruct",
+            "otherEntityName": "testMapstruct",
             "relationshipType": "one-to-one",
             "otherEntityField": "id",
             "ownerSide": true,
-            "otherEntityRelationshipName": "testOneToOneEntity"
+            "otherEntityRelationshipName": "testOneToOne"
         },
         {
-            "relationshipName": "testServiceClassEntity",
-            "otherEntityName": "testServiceClassEntity",
+            "relationshipName": "testServiceClass",
+            "otherEntityName": "testServiceClass",
             "relationshipType": "one-to-one",
             "otherEntityField": "id",
             "ownerSide": true,
-            "otherEntityRelationshipName": "testOneToOneEntity"
+            "otherEntityRelationshipName": "testOneToOne"
         },
         {
-            "relationshipName": "testServiceImplEntity",
-            "otherEntityName": "testServiceImplEntity",
+            "relationshipName": "testServiceImpl",
+            "otherEntityName": "testServiceImpl",
             "relationshipType": "one-to-one",
             "otherEntityField": "id",
             "ownerSide": true,
-            "otherEntityRelationshipName": "testOneToOneEntity"
+            "otherEntityRelationshipName": "testOneToOne"
         },
         {
-            "relationshipName": "testInfiniteScrollEntity",
-            "otherEntityName": "testInfiniteScrollEntity",
+            "relationshipName": "testInfiniteScroll",
+            "otherEntityName": "testInfiniteScroll",
             "relationshipType": "one-to-one",
             "otherEntityField": "id",
             "ownerSide": true,
-            "otherEntityRelationshipName": "testOneToOneEntity"
+            "otherEntityRelationshipName": "testOneToOne"
         },
         {
-            "relationshipName": "testPagerEntity",
-            "otherEntityName": "testPagerEntity",
+            "relationshipName": "testPager",
+            "otherEntityName": "testPager",
             "relationshipType": "one-to-one",
             "otherEntityField": "id",
             "ownerSide": true,
-            "otherEntityRelationshipName": "testOneToOneEntity"
+            "otherEntityRelationshipName": "testOneToOne"
         },
         {
-            "relationshipName": "testPaginationEntity",
-            "otherEntityName": "testPaginationEntity",
+            "relationshipName": "testPagination",
+            "otherEntityName": "testPagination",
             "relationshipType": "one-to-one",
             "otherEntityField": "id",
             "ownerSide": true,
-            "otherEntityRelationshipName": "testOneToOneEntity"
+            "otherEntityRelationshipName": "testOneToOne"
         }
     ],
     "fields": [],
