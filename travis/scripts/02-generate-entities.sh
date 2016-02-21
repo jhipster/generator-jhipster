@@ -22,24 +22,59 @@ generateEntity() {
 mkdir -p $HOME/$JHIPSTER/.jhipster/
 if [ "$JHIPSTER" == "app-mongodb" ]; then
   moveEntity BankAccountMongo
-  moveEntity Field*
-elif [ "$JHIPSTER" == "app-cassandra" ]; then
-  moveEntity BankAccountCassandra
+
   moveEntity FieldTestEntity
   moveEntity FieldTestMapstructEntity
   moveEntity FieldTestServiceClassEntity
   moveEntity FieldTestServiceImplEntity
+  moveEntity FieldTestInfiniteScrollEntity
+  moveEntity FieldTestPagerEntity
+  moveEntity FieldTestPaginationEntity
+
+elif [ "$JHIPSTER" == "app-cassandra" ]; then
+  moveEntity BankAccountCassandra
+
+  moveEntity FieldTestEntity
+  moveEntity FieldTestMapstructEntity
+  moveEntity FieldTestServiceClassEntity
+  moveEntity FieldTestServiceImplEntity
+
 elif [ "$JHIPSTER" == "app-mysql" || "$JHIPSTER" == "app-psql-es-noi18n" ]; then
   moveEntity BankAccount
   moveEntity Label
   moveEntity Operation
-  moveEntity Field*
-  moveEntity Test*
+
+  moveEntity FieldTestEntity
+  moveEntity FieldTestMapstructEntity
+  moveEntity FieldTestServiceClassEntity
+  moveEntity FieldTestServiceImplEntity
+  moveEntity FieldTestInfiniteScrollEntity
+  moveEntity FieldTestPagerEntity
+  moveEntity FieldTestPaginationEntity
+
+  moveEntity TestEntity
+  moveEntity TestMapstructEntity
+  moveEntity TestServiceClassEntity
+  moveEntity TestServiceImplEntity
+  moveEntity TestInfiniteScrollEntity
+  moveEntity TestPagerEntity
+  moveEntity TestPaginationEntity
+  moveEntity TestManyToOneEntity
+  moveEntity TestManyToManyEntity
+  moveEntity TestOneToOneEntity
+
 else
   moveEntity BankAccount
   moveEntity Label
   moveEntity Operation
-  moveEntity Field*
+
+  moveEntity FieldTestEntity
+  moveEntity FieldTestMapstructEntity
+  moveEntity FieldTestServiceClassEntity
+  moveEntity FieldTestServiceImplEntity
+  moveEntity FieldTestInfiniteScrollEntity
+  moveEntity FieldTestPagerEntity
+  moveEntity FieldTestPaginationEntity
 fi
 
 #-------------------------------------------------------------------------------
