@@ -7,6 +7,9 @@
                 "createOrEditLabel": "<%= entityClass %>を追加または編集",
                 "search": "Search for <%= entityClass %>"
             },
+            "created": "A new <%= entityClass %> is created with identifier {{ param }}",
+            "updated": "A <%= entityClass %> is updated with identifier {{ param }}",
+            "deleted": "A <%= entityClass %> is deleted with identifier {{ param }}",
             "delete": {
                 "question": "<%= entityClass %> {{ id }}を削除してもよろしいですか？"
             },
