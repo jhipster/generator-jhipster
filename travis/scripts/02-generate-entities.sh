@@ -39,7 +39,7 @@ elif [ "$JHIPSTER" == "app-cassandra" ]; then
   moveEntity CassTestServiceClassEntity
   moveEntity CassTestServiceImplEntity
 
-elif [ "$JHIPSTER" == "app-mysql" || "$JHIPSTER" == "app-psql-es-noi18n" ]; then
+elif [ ("$JHIPSTER" == "app-mysql") || ("$JHIPSTER" == "app-psql-es-noi18n") ]; then
   moveEntity BankAccount
   moveEntity Label
   moveEntity Operation
