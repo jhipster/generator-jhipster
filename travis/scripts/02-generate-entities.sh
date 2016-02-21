@@ -103,15 +103,15 @@ generateEntity FieldTestPagerEntity
 generateEntity FieldTestPaginationEntity
 
 generateEntity TestEntity
-generateEntity TestMapstructEntity
-generateEntity TestServiceClassEntity
-generateEntity TestServiceImplEntity
-generateEntity TestInfiniteScrollEntity
-generateEntity TestPagerEntity
-generateEntity TestPaginationEntity
-generateEntity TestManyToOneEntity
-generateEntity TestManyToManyEntity
-generateEntity TestOneToOneEntity
+generateEntity TestMapstruct
+generateEntity TestServiceClass
+generateEntity TestServiceImpl
+generateEntity TestInfiniteScroll
+generateEntity TestPager
+generateEntity TestPagination
+generateEntity TestManyToOne
+generateEntity TestManyToMany
+generateEntity TestOneToOne
 
 #-------------------------------------------------------------------------------
 # Check Javadoc generation
