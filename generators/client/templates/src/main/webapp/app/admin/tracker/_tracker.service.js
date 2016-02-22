@@ -2,7 +2,7 @@
 /* globals window, SockJS, Stomp */
 
 angular.module('<%=angularAppName%>')
-    .factory('Tracker', function ($rootScope, $cookies, $http, $q) {
+    .factory('Tracker', function ($rootScope, $cookies, $http, $q<% if (authenticationType == 'jwt') { %>, AuthServerProvider<%}%>) {
         var stompClient = null;
         var subscriber = null;
         var listener = $q.defer();
@@ -24,7 +24,11 @@ angular.module('<%=angularAppName%>')
                 /* globals localStorage */
                 /*jshint camelcase: false */
                 var authToken = JSON.parse(localStorage.getItem('jhi-authenticationToken')).access_token;
-                url += '?access_token=' + authToken;<% } %>
+                url += '?access_token=' + authToken;<% } %><% if (authenticationType == 'jwt') { %>
+                var authToken = AuthServerProvider.getToken();
+                if(authToken){
+                    url += '?access_token=' + authToken;
+                }<% } %>
                 var socket = new SockJS(url);
                 stompClient = Stomp.over(socket);
                 var headers = {};<% if (authenticationType == 'session') { %>
