@@ -519,16 +519,16 @@ module.exports = JhipsterGenerator.extend({
                     name: 'frontendBuilder',
                     choices: [
                         {
-                            value: 'grunt',
-                            name: 'Grunt (recommended)'
+                            value: 'gulp',
+                            name: 'Gulp.js (will be the default in JHipster 3.0)'
                         },
                         {
-                            value: 'gulp',
-                            name: 'Gulp.js'
+                            value: 'grunt',
+                            name: 'Grunt'
                         }
                     ],
                     message: '(12/' + questions + ') Would you like to use Grunt or Gulp.js for building the frontend?',
-                    default: 'grunt'
+                    default: 'gulp'
                 },
                 {
                     type: 'confirm',
