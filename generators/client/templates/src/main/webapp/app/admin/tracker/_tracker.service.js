@@ -1,5 +1,6 @@
-'use strict';
-/* globals window, SockJS, Stomp */
+(function() {
+  'use strict';
+  /* globals window, SockJS, Stomp */
 
 angular.module('<%=angularAppName%>')
     .factory('Tracker', function ($rootScope, $cookies, $http, $q<% if (authenticationType == 'jwt') { %>, AuthServerProvider<%}%>) {
@@ -73,3 +74,4 @@ angular.module('<%=angularAppName%>')
             }
         };
     });
+})();
