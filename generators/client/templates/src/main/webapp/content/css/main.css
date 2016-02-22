@@ -279,14 +279,14 @@ Social Buttons
     vertical-align: middle;
 }
 
-/* less visible sort icons */
-.glyphicon-sort, .glyphicon-sort-by-attributes, .glyphicon-sort-by-attributes-alt {
-    color: #bbb;
+/* less visible sorting icons */
+.jh-table > thead > tr > th > .glyphicon-sort, .glyphicon-sort-by-attributes, .glyphicon-sort-by-attributes-alt {
+    opacity: 0.5;
 }
 
-/* full visible sort icons and pointer when mouse is over them */
-.glyphicon-sort:hover, .glyphicon-sort-by-attributes:hover, .glyphicon-sort-by-attributes-alt:hover {
-    color: #000;
+/* full visible sorting icons and pointer when mouse is over them */
+.jh-table > thead > tr > th > .glyphicon-sort:hover, .glyphicon-sort-by-attributes:hover, .glyphicon-sort-by-attributes-alt:hover {
+    opacity: 1;
     cursor: pointer;
 }
 /* end of entity tables helpers */

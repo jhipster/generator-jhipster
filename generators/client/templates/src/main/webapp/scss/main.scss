@@ -268,6 +268,17 @@ ul#strength {
 .jh-table > tbody > tr > td {
     vertical-align: middle;
 }
+
+/* less visible sorting icons */
+.jh-table > thead > tr > th > .glyphicon-sort, .glyphicon-sort-by-attributes, .glyphicon-sort-by-attributes-alt {
+    opacity: 0.5;
+}
+
+/* full visible sorting icons and pointer when mouse is over them */
+.jh-table > thead > tr > th > .glyphicon-sort:hover, .glyphicon-sort-by-attributes:hover, .glyphicon-sort-by-attributes-alt:hover {
+    opacity: 1;
+    cursor: pointer;
+}
 /* end of entity tables helpers */
 
 /* ui bootstrap tweaks */
