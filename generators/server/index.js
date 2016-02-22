@@ -802,6 +802,13 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_GatewaySwaggerApiResource.java', javaDir + 'web/rest/GatewaySwaggerApiResource.java', this, {});
         },
 
+        writeServerMicroserviceAndGatewayFiles: function () {
+            if (this.applicationType != 'microservice' && this.applicationType != 'gateway') return;
+
+            this.template(RESOURCE_DIR + 'config/_bootstrap-dev.yml', RESOURCE_DIR + 'config/bootstrap-dev.yml', this, {});
+            this.template(RESOURCE_DIR + 'config/_bootstrap-prod.yml', RESOURCE_DIR + 'config/bootstrap-prod.yml', this, {});
+        },
+
         writeServerJavaAppFiles: function () {
 
             // Create Java files
