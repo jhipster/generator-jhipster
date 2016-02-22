@@ -1,99 +1,122 @@
 #!/bin/bash
 set -ev
-#--------------------------------------------------
+
+moveEntity() {
+  local entity="$1"
+  mv "$JHIPSTER_SAMPLES"/.jhipster/"$entity".json "$HOME"/"$JHIPSTER"/.jhipster/
+}
+
+generateEntity() {
+  local entity="$1"
+  if [ -a .jhipster/"$entity".json ]; then
+    yo jhipster:entity "$entity" --force --no-insight
+    if [ "$JHIPSTER" == "app-cassandra" ]; then
+      cat src/main/resources/config/cql/*_added_entity_"$entity".cql >> src/main/resources/config/cql/create-tables.cql
+    fi
+  fi
+}
+
+#-------------------------------------------------------------------------------
+# Copy entities json
+#-------------------------------------------------------------------------------
+mkdir -p "$HOME"/"$JHIPSTER"/.jhipster/
+if [ "$JHIPSTER" == "app-mongodb" ]; then
+  moveEntity MongoBankAccount
+
+  moveEntity FieldTestEntity
+  moveEntity FieldTestMapstructEntity
+  moveEntity FieldTestServiceClassEntity
+  moveEntity FieldTestServiceImplEntity
+  moveEntity FieldTestInfiniteScrollEntity
+  moveEntity FieldTestPagerEntity
+  moveEntity FieldTestPaginationEntity
+
+elif [ "$JHIPSTER" == "app-cassandra" ]; then
+  moveEntity CassBankAccount
+
+  moveEntity CassTestEntity
+  moveEntity CassTestMapstructEntity
+  moveEntity CassTestServiceClassEntity
+  moveEntity CassTestServiceImplEntity
+
+elif [[ ("$JHIPSTER" == "app-mysql") || ("$JHIPSTER" == "app-psql-es-noi18n") ]]; then
+  moveEntity BankAccount
+  moveEntity Label
+  moveEntity Operation
+
+  moveEntity FieldTestEntity
+  moveEntity FieldTestMapstructEntity
+  moveEntity FieldTestServiceClassEntity
+  moveEntity FieldTestServiceImplEntity
+  moveEntity FieldTestInfiniteScrollEntity
+  moveEntity FieldTestPagerEntity
+  moveEntity FieldTestPaginationEntity
+
+  moveEntity TestEntity
+  moveEntity TestMapstruct
+  moveEntity TestServiceClass
+  moveEntity TestServiceImpl
+  moveEntity TestInfiniteScroll
+  moveEntity TestPager
+  moveEntity TestPagination
+  moveEntity TestManyToOne
+  moveEntity TestManyToMany
+  moveEntity TestOneToOne
+
+else
+  moveEntity BankAccount
+  moveEntity Label
+  moveEntity Operation
+
+  moveEntity FieldTestEntity
+  moveEntity FieldTestMapstructEntity
+  moveEntity FieldTestServiceClassEntity
+  moveEntity FieldTestServiceImplEntity
+  moveEntity FieldTestInfiniteScrollEntity
+  moveEntity FieldTestPagerEntity
+  moveEntity FieldTestPaginationEntity
+fi
+
+ls -l "$HOME"/"$JHIPSTER"/.jhipster/
+
+#-------------------------------------------------------------------------------
 # Generate the entities with yo jhipster:entity
-#--------------------------------------------------
-cd $HOME/$JHIPSTER
-if [ -a .jhipster/BankAccount.json ]; then
-  yo jhipster:entity BankAccount --force --no-insight
-  if [ $JHIPSTER == "app-cassandra" ]; then
-    cat src/main/resources/config/cql/*_added_entity_BankAccount.cql >> src/main/resources/config/cql/create-tables.cql
-  fi
-fi
-if [ -a .jhipster/Label.json ]; then
-  yo jhipster:entity Label --force --no-insight
-fi
-if [ -a .jhipster/Operation.json ]; then
-  yo jhipster:entity Operation --force --no-insight
-fi
+#-------------------------------------------------------------------------------
+cd "$HOME"/"$JHIPSTER"
+generateEntity BankAccount
+generateEntity MongoBankAccount
+generateEntity CassBankAccount
+generateEntity Label
+generateEntity Operation
 
-if [ -a .jhipster/FieldTestEntity.json ]; then
-  yo jhipster:entity FieldTestEntity --force --no-insight
-  if [ $JHIPSTER == "app-cassandra" ]; then
-    cat src/main/resources/config/cql/*_added_entity_FieldTestEntity.cql >> src/main/resources/config/cql/create-tables.cql
-  fi
-fi
-if [ -a .jhipster/FieldTestMapstructEntity.json ]; then
-  yo jhipster:entity FieldTestMapstructEntity --force --no-insight
-  if [ $JHIPSTER == "app-cassandra" ]; then
-    cat src/main/resources/config/cql/*_added_entity_FieldTestMapstructEntity.cql >> src/main/resources/config/cql/create-tables.cql
-  fi
-fi
-if [ -a .jhipster/FieldTestServiceClassEntity.json ]; then
-  yo jhipster:entity FieldTestServiceClassEntity --force --no-insight
-  if [ $JHIPSTER == "app-cassandra" ]; then
-    cat src/main/resources/config/cql/*_added_entity_FieldTestServiceClassEntity.cql >> src/main/resources/config/cql/create-tables.cql
-  fi
-fi
-if [ -a .jhipster/FieldTestServiceImplEntity.json ]; then
-  yo jhipster:entity FieldTestServiceImplEntity --force --no-insight
-  if [ $JHIPSTER == "app-cassandra" ]; then
-    cat src/main/resources/config/cql/*_added_entity_FieldTestServiceImplEntity.cql >> src/main/resources/config/cql/create-tables.cql
-  fi
-fi
-if [ -a .jhipster/FieldTestInfiniteScrollEntity.json ]; then
-  yo jhipster:entity FieldTestInfiniteScrollEntity --force --no-insight
-  if [ $JHIPSTER == "app-cassandra" ]; then
-    cat src/main/resources/config/cql/*_added_entity_FieldTestInfiniteScrollEntity.cql >> src/main/resources/config/cql/create-tables.cql
-  fi
-fi
-if [ -a .jhipster/FieldTestPagerEntity.json ]; then
-  yo jhipster:entity FieldTestPagerEntity --force --no-insight
-  if [ $JHIPSTER == "app-cassandra" ]; then
-    cat src/main/resources/config/cql/*_added_entity_FieldTestPagerEntity.cql >> src/main/resources/config/cql/create-tables.cql
-  fi
-fi
-if [ -a .jhipster/FieldTestPaginationEntity.json ]; then
-  yo jhipster:entity FieldTestPaginationEntity --force --no-insight
-  if [ $JHIPSTER == "app-cassandra" ]; then
-    cat src/main/resources/config/cql/*_added_entity_FieldTestPaginationEntity.cql >> src/main/resources/config/cql/create-tables.cql
-  fi
-fi
+generateEntity CassTestEntity
+generateEntity CassTestMapstructEntity
+generateEntity CassTestServiceClassEntity
+generateEntity CassTestServiceImplEntity
 
+generateEntity FieldTestEntity
+generateEntity FieldTestMapstructEntity
+generateEntity FieldTestServiceClassEntity
+generateEntity FieldTestServiceImplEntity
+generateEntity FieldTestInfiniteScrollEntity
+generateEntity FieldTestPagerEntity
+generateEntity FieldTestPaginationEntity
 
-if [ -a .jhipster/RelationshipTestEntity.json ]; then
-  yo jhipster:entity RelationshipTestEntity --force --no-insight
-fi
-if [ -a .jhipster/RelationshipTestMapstructEntity.json ]; then
-  yo jhipster:entity RelationshipTestMapstructEntity --force --no-insight
-fi
-if [ -a .jhipster/RelationshipTestServiceClassEntity.json ]; then
-  yo jhipster:entity RelationshipTestServiceClassEntity --force --no-insight
-fi
-if [ -a .jhipster/RelationshipTestServiceImplEntity.json ]; then
-  yo jhipster:entity RelationshipTestServiceImplEntity --force --no-insight
-fi
-if [ -a .jhipster/RelationshipTestInfiniteScrollEntity.json ]; then
-  yo jhipster:entity RelationshipTestInfiniteScrollEntity --force --no-insight
-fi
-if [ -a .jhipster/RelationshipTestPagerEntity.json ]; then
-  yo jhipster:entity RelationshipTestPagerEntity --force --no-insight
-fi
-if [ -a .jhipster/RelationshipTestPaginationEntity.json ]; then
-  yo jhipster:entity RelationshipTestPaginationEntity --force --no-insight
-fi
-if [ -a .jhipster/RelationshipTestManyToOneEntity.json ]; then
-  yo jhipster:entity RelationshipTestManyToOneEntity --force --no-insight
-fi
-if [ -a .jhipster/RelationshipTestManyToManyEntity.json ]; then
-  yo jhipster:entity RelationshipTestManyToManyEntity --force --no-insight
-fi
-if [ -a .jhipster/RelationshipTestOneToOneEntity.json ]; then
-  yo jhipster:entity RelationshipTestOneToOneEntity --force --no-insight
-fi
+generateEntity TestEntity
+generateEntity TestMapstruct
+generateEntity TestServiceClass
+generateEntity TestServiceImpl
+generateEntity TestInfiniteScroll
+generateEntity TestPager
+generateEntity TestPagination
+generateEntity TestManyToOne
+generateEntity TestManyToMany
+generateEntity TestOneToOne
 
+#-------------------------------------------------------------------------------
 # Check Javadoc generation
-if [ $JHIPSTER != "app-gradle" ]; then
+#-------------------------------------------------------------------------------
+if [ "$JHIPSTER" != "app-gradle" ]; then
   mvn javadoc:javadoc
 else
   ./gradlew javadoc
