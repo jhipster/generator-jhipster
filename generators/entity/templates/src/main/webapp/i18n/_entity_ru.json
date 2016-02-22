@@ -3,12 +3,15 @@
         "<%= entityTranslationKey %>" : {
             "home": {
                 "title": "<%= entityClassPlural %>",
-                "createLabel": "Create a new <%= entityClass %>",
-                "createOrEditLabel": "Create or edit a <%= entityClass %>",
-                "search": "Search for <%= entityClass %>"
+                "createLabel": "Создать новый <%= entityClass %>",
+                "createOrEditLabel": "Создать или отредактировать <%= entityClass %>",
+                "search": "Найти <%= entityClass %>"
             },
+            "created": "Новый <%= entityClass %> создан с идентификатором {{ param }}",
+            "updated": "<%= entityClass %> обновлен с идентификатором {{ param }}",
+            "deleted": "<%= entityClass %> удален с идентификатором {{ param }}",
             "delete": {
-                "question": "Are you sure you want to delete <%= entityClass %> {{ id }}?"
+                "question": "Вы уверены что хотите удалить <%= entityClass %> {{ id }}?"
             },
             "detail": {
                 "title": "<%= entityClass %>"
