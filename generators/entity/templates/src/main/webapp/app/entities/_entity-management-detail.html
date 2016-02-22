@@ -18,12 +18,12 @@
             <%_ } else if (fieldType == 'LocalDate') { _%>
             <span>{{<%=entityInstance %>.<%= fieldName %> | date:'mediumDate'}}</span>
             <%_ } else if (fieldType == 'byte[]' && fieldTypeBlobContent == 'any') { _%>
-            <a ng-click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" ng-if="<%= entityInstance %>.<%= fieldName %>" target="_blank">open</a>
+            <a ng-click="vm.openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" ng-if="<%= entityInstance %>.<%= fieldName %>" target="_blank">open</a>
             <%_ } else { _%>
             <span>{{<%= entityInstance %>.<%= fieldName %>}}<span>
             <%_ } _%>
             <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
-            <div>{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</div>
+            <div>{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(<%= entityInstance %>.<%= fieldName %>)}}</div>
             <%_ } _%>
         </dd>
         <hr>

@@ -1,15 +1,15 @@
-        $scope.predicate = pagingParams.predicate;
-        $scope.reverse = pagingParams.ascending;
+        vm.predicate = pagingParams.predicate;
+        vm.reverse = pagingParams.ascending;
         <%_ if (fieldsContainBlob) { _%>
-        $scope.openFile = DataUtils.openFile;
-        $scope.byteSize = DataUtils.byteSize;
+        vm.openFile = DataUtils.openFile;
+        vm.byteSize = DataUtils.byteSize;
         <%_ } _%>
-        $scope.loadAll = function() {
+        vm.loadAll = function() {
             var onSuccess = function (data, headers) {
-                $scope.links = ParseLinks.parse(headers('link'));
-                $scope.totalItems = headers('X-Total-Count');
-                $scope.<%= entityInstancePlural %> = data;
-                $scope.page = pagingParams.page;
+                vm.links = ParseLinks.parse(headers('link'));
+                vm.totalItems = headers('X-Total-Count');
+                vm.<%= entityInstancePlural %> = data;
+                vm.page = pagingParams.page;
             };
             var onError = function (error) {
                 AlertService.error(error.data.message);
@@ -17,32 +17,32 @@
             <%= entityClass %>.query({
                 page: pagingParams.page - 1,
                 size: paginationConstants.itemsPerPage,
-                sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'), 'id']
+                sort: [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'), 'id']
             }, onSuccess, onError);
         };
-        $scope.loadPage = function(page) {
-            $scope.page = page;
-            $scope.loadAll();
+        vm.loadPage = function(page) {
+            vm.page = page;
+            vm.loadAll();
         };
         <%_ if (searchEngine == 'elasticsearch') { _%>
 
-        $scope.search = function () {
-            <%= entityClass %>Search.query({query: $scope.searchQuery}, function(result) {
-                $scope.<%= entityInstancePlural %> = result;
+        vm.search = function () {
+            <%= entityClass %>Search.query({query: vm.searchQuery}, function(result) {
+                vm.<%= entityInstancePlural %> = result;
             }, function(response) {
                 if(response.status === 404) {
-                    $scope.loadAll();
+                    vm.loadAll();
                 }
             });
         };
         <%_ } _%>
 
-        $scope.transition = function () {
+        vm.transition = function () {
             $state.transitionTo($state.$current, {
-                page: $scope.page,
-                sort: $scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'),
-                search: $scope.currentSearch
+                page: vm.page,
+                sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
+                search: vm.currentSearch
             });
         };
 
-        $scope.loadAll();
+        vm.loadAll();

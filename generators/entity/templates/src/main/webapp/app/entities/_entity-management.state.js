@@ -14,7 +14,8 @@
                     views: {
                         'content@': {
                             templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.html',
-                            controller: '<%= entityClass %>ManagementController'
+                            controller: '<%= entityClass %>ManagementController',
+                            controllerAs: 'vm'
                         }
                     },
                     <%_ if (pagination == 'pagination' || pagination == 'pager'){ _%>
@@ -63,7 +64,8 @@
                     views: {
                         'content@': {
                             templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-detail.html',
-                            controller: '<%= entityClass %>ManagementDetailController'
+                            controller: '<%= entityClass %>ManagementDetailController',
+                            controllerAs: 'vm'
                         }
                     },
                     resolve: {<% if (enableTranslation){ %>
@@ -89,6 +91,7 @@
                         $uibModal.open({
                             templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.html',
                             controller: '<%= entityClass %>ManagementDialogController',
+                            controllerAs: 'vm',
                             size: 'lg',
                             resolve: {
                                 entity: function () {
@@ -124,6 +127,7 @@
                         $uibModal.open({
                             templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.html',
                             controller: '<%= entityClass %>ManagementDialogController',
+                            controllerAs: 'vm',
                             size: 'lg',
                             resolve: {
                                 entity: ['<%= entityClass %>', function(<%= entityClass %>) {
@@ -147,6 +151,7 @@
                         $uibModal.open({
                             templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-delete-dialog.html',
                             controller: '<%= entityClass %>ManagementDeleteController',
+                            controllerAs: 'vm',
                             size: 'md',
                             resolve: {
                                 entity: ['<%= entityClass %>', function(<%= entityClass %>) {

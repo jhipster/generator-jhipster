@@ -1,22 +1,28 @@
 (function() {
     'use strict';
 
-    angular.module('<%=angularAppName%>')
-        .controller('<%= entityClass %>ManagementDetailController', function ($scope, $rootScope, $stateParams<% if (fieldsContainBlob) { %>, DataUtils<% } %>, entity<% for (idx in differentTypes) { %>, <%= differentTypes[idx] %><% } %>) {
-            $scope.<%= entityInstance %> = entity;
-            $scope.load = function (id) {
-                <%= entityClass %>.get({id: id}, function(result) {
-                    $scope.<%= entityInstance %> = result;
-                });
-            };
-            var unsubscribe = $rootScope.$on('<%=angularAppName%>:<%= entityInstance %>Update', function(event, result) {
-                $scope.<%= entityInstance %> = result;
-            });
-            $scope.$on('$destroy', unsubscribe);
+    angular
+        .module('<%=angularAppName%>')
+        .controller('<%= entityClass %>ManagementDetailController', <%= entityClass %>ManagementDetailController);
 
-            <%_ if (fieldsContainBlob) { _%>
-            $scope.byteSize = DataUtils.byteSize;
-            $scope.openFile = DataUtils.openFile;
-            <%_ } _%>
+    <%= entityClass %>ManagementDetailController.$inject = ['$scope', '$rootScope', '$stateParams'<% if (fieldsContainBlob) { %>, 'DataUtils'<% } %>, 'entity'<% for (idx in differentTypes) { %>, '<%= differentTypes[idx] %>'<% } %>];
+
+    function <%= entityClass %>ManagementDetailController($scope, $rootScope, $stateParams<% if (fieldsContainBlob) { %>, DataUtils<% } %>, entity<% for (idx in differentTypes) { %>, <%= differentTypes[idx] %><% } %>) {
+        var vm = this;
+        vm.<%= entityInstance %> = entity;
+        vm.load = function (id) {
+            <%= entityClass %>.get({id: id}, function(result) {
+                vm.<%= entityInstance %> = result;
+            });
+        };
+        var unsubscribe = $rootScope.$on('<%=angularAppName%>:<%= entityInstance %>Update', function(event, result) {
+            vm.<%= entityInstance %> = result;
         });
+        $scope.$on('$destroy', unsubscribe);
+
+        <%_ if (fieldsContainBlob) { _%>
+        vm.byteSize = DataUtils.byteSize;
+        vm.openFile = DataUtils.openFile;
+        <%_ } _%>
+    }
 })();

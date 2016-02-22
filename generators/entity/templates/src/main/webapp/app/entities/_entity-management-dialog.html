@@ -1,9 +1,9 @@
 <% var keyPrefix = angularAppName + '.'+ entityTranslationKey + '.'; %>
-<form name="editForm" role="form" novalidate ng-submit="save()"<% if (validation) { %> show-validation<% } %>>
+<form name="editForm" role="form" novalidate ng-submit="vm.save()"<% if (validation) { %> show-validation<% } %>>
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                ng-click="clear()">&times;</button>
+                ng-click="vm.clear()">&times;</button>
         <h4 class="modal-title" id="my<%= entityClass %>Label" translate="<%= keyPrefix %>home.createOrEditLabel">Create or edit a <%= entityClass %></h4>
     </div>
     <div class="modal-body">
@@ -51,7 +51,7 @@
                     <%_ } _%>
                 <div class="help-block clearfix">
                     <%_ if (fieldTypeBlobContent == 'any') { _%>
-                    <a class="pull-left" ng-click="openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" ng-if="<%= entityInstance %>.<%= fieldName %>" target="_blank">open</a><br>
+                    <a class="pull-left" ng-click="vm.openFile(<%= entityInstance %>.<%= fieldName %>ContentType, <%= entityInstance %>.<%= fieldName %>)" ng-if="<%= entityInstance %>.<%= fieldName %>" target="_blank">open</a><br>
                     <span class="pull-left">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
                     <%_ } else { _%>
                     <span class="pull-left">{{<%= entityInstance %>.<%= fieldName %>ContentType}}, {{byteSize(<%= entityInstance %>.<%= fieldName %>)}}</span>
@@ -73,7 +73,7 @@
                     <input id="field_<%= fieldName %>" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="<%= entityInstance %>.<%= fieldName %>" is-open="datePickerFor<%=fieldNameCapitalized %>.status.opened"
                     <%- include ng_validators %>/>
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="datePickerFor<%=fieldNameCapitalized %>Open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                        <button type="button" class="btn btn-default" ng-click="vm.datePickerFor<%=fieldNameCapitalized %>Open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                 </div>
                 <%_ } else if(fieldType == 'ZonedDateTime') { _%>
@@ -81,7 +81,7 @@
                     <input id="field_<%= fieldName %>" type="text" class="form-control" datetime-picker="{{dateformat}}" ng-model="<%= entityInstance %>.<%= fieldName %>" is-open="datePickerFor<%=fieldNameCapitalized %>.status.opened"
                     <%- include ng_validators %>  />
                     <span class="input-group-btn">
-                        <button type="button" class="btn btn-default" ng-click="datePickerFor<%=fieldNameCapitalized %>Open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                        <button type="button" class="btn btn-default" ng-click="vm.datePickerFor<%=fieldNameCapitalized %>Open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
                     </span>
                 </div>
                 <%_ } else if(fieldTypeBlobContent == 'text') { _%>
@@ -208,7 +208,7 @@
         <%_ } _%>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
             <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
         </button>
         <button type="submit" ng-disabled="editForm.$invalid || isSaving" class="btn btn-primary">

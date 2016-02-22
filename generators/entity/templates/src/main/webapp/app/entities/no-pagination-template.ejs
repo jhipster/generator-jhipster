@@ -1,23 +1,23 @@
-        $scope.<%= entityInstancePlural %> = [];
-        <%_ if (fieldsContainBlob) { _%>
-        $scope.openFile = DataUtils.openFile;
-        $scope.byteSize = DataUtils.byteSize;
-        <%_ } _%>
-        $scope.loadAll = function() {
-            <%= entityClass %>.query(function(result) {
-               $scope.<%= entityInstancePlural %> = result;
-            });
-        };<%_
-        if (searchEngine == 'elasticsearch') { _%>
+vm.<%= entityInstancePlural %> = [];
+<%_ if (fieldsContainBlob) { _%>
+    vm.openFile = DataUtils.openFile;
+    vm.byteSize = DataUtils.byteSize;
+    <%_ } _%>
+    vm.loadAll = function() {
+        <%= entityClass %>.query(function(result) {
+            vm.<%= entityInstancePlural %> = result;
+        });
+    };<%_
+    if (searchEngine == 'elasticsearch') { _%>
 
-        $scope.search = function () {
-            <%= entityClass %>Search.query({query: $scope.searchQuery}, function(result) {
-                $scope.<%= entityInstancePlural %> = result;
+        vm.search = function () {
+            <%= entityClass %>Search.query({query: vm.searchQuery}, function(result) {
+                vm.<%= entityInstancePlural %> = result;
             }, function(response) {
                 if(response.status === 404) {
-                    $scope.loadAll();
+                    vm.loadAll();
                 }
             });
         };<%_ } _%>
 
-        $scope.loadAll();
+        vm.loadAll();

@@ -1,38 +1,38 @@
-        $scope.<%= entityInstancePlural %> = [];
-        $scope.predicate = 'id';
-        $scope.reverse = true;
-        $scope.page = 0;
+        vm.<%= entityInstancePlural %> = [];
+        vm.predicate = 'id';
+        vm.reverse = true;
+        vm.page = 0;
         <%_ if (fieldsContainBlob) { _%>
-        $scope.openFile = DataUtils.openFile;
-        $scope.byteSize = DataUtils.byteSize;
+        vm.openFile = DataUtils.openFile;
+        vm.byteSize = DataUtils.byteSize;
         <%_ } _%>
-        $scope.loadAll = function() {
-            <%= entityClass %>.query({page: $scope.page, size: 20, sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'), 'id']}, function(result, headers) {
-                $scope.links = ParseLinks.parse(headers('link'));
+        vm.loadAll = function() {
+            <%= entityClass %>.query({page: vm.page, size: 20, sort: [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'), 'id']}, function(result, headers) {
+                vm.links = ParseLinks.parse(headers('link'));
                 for (var i = 0; i < result.length; i++) {
-                    $scope.<%= entityInstancePlural %>.push(result[i]);
+                    vm.<%= entityInstancePlural %>.push(result[i]);
                 }
             });
         };
-        $scope.reset = function() {
-            $scope.page = 0;
-            $scope.<%= entityInstancePlural %> = [];
-            $scope.loadAll();
+        vm.reset = function() {
+            vm.page = 0;
+            vm.<%= entityInstancePlural %> = [];
+            vm.loadAll();
         };
-        $scope.loadPage = function(page) {
-            $scope.page = page;
-            $scope.loadAll();
+        vm.loadPage = function(page) {
+            vm.page = page;
+            vm.loadAll();
         };<%_
         if (searchEngine == 'elasticsearch') { _%>
 
-        $scope.search = function () {
-            <%= entityClass %>Search.query({query: $scope.searchQuery}, function(result) {
-                $scope.<%= entityInstancePlural %> = result;
+        vm.search = function () {
+            <%= entityClass %>Search.query({query: vm.searchQuery}, function(result) {
+                vm.<%= entityInstancePlural %> = result;
             }, function(response) {
                 if(response.status === 404) {
-                    $scope.loadAll();
+                    vm.loadAll();
                 }
             });
         };<%_ } _%>
 
-        $scope.loadAll();
+        vm.loadAll();
