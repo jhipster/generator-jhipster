@@ -278,6 +278,17 @@ Social Buttons
 .jh-table > tbody > tr > td {
     vertical-align: middle;
 }
+
+/* less visible sort icons */
+.glyphicon-sort, .glyphicon-sort-by-attributes, .glyphicon-sort-by-attributes-alt {
+    color: #bbb;
+}
+
+/* full visible sort icons and pointer when mouse is over them */
+.glyphicon-sort:hover, .glyphicon-sort-by-attributes:hover, .glyphicon-sort-by-attributes-alt:hover {
+    color: #000;
+    cursor: pointer;
+}
 /* end of entity tables helpers */
 
 /* ui bootstrap tweaks */
