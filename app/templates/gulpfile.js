@@ -267,7 +267,7 @@ gulp.task('ngconstant:dev', function() {
             VERSION: util.parseVersion()
         }
     })
-    .pipe(gulp.dest(config.app + 'app/'));
+    .pipe(gulp.dest(config.app + 'scripts/app/'));
 });
 
 gulp.task('ngconstant:prod', function() {
@@ -283,7 +283,7 @@ gulp.task('ngconstant:prod', function() {
             VERSION: util.parseVersion()
         }
     })
-    .pipe(gulp.dest(config.app + 'app/'));
+    .pipe(gulp.dest(config.app + 'scripts/app/'));
 });
 
 gulp.task('jshint', function() {
