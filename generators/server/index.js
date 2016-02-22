@@ -805,8 +805,8 @@ module.exports = JhipsterServerGenerator.extend({
         writeServerMicroserviceAndGatewayFiles: function () {
             if (this.applicationType != 'microservice' && this.applicationType != 'gateway') return;
 
-            this.template(RESOURCE_DIR + 'config/_bootstrap-dev.yml', RESOURCE_DIR + 'config/bootstrap-dev.yml', this, {});
-            this.template(RESOURCE_DIR + 'config/_bootstrap-prod.yml', RESOURCE_DIR + 'config/bootstrap-prod.yml', this, {});
+            this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-dev.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-dev.yml', this, {});
+            this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-prod.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-prod.yml', this, {});
         },
 
         writeServerJavaAppFiles: function () {
