@@ -33,9 +33,8 @@ public class JWTFilter extends GenericFilterBean {
         throws IOException, ServletException {
         try {
             HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-            String bearerToken = httpServletRequest.getHeader(JWTConfigurer.AUTHORIZATION_HEADER);
-            if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-                String jwt = bearerToken.substring(7, bearerToken.length());
+            String jwt = resolveToken(httpServletRequest);
+            if (StringUtils.hasText(jwt)) {
                 if (this.tokenProvider.validateToken(jwt)) {
                     Authentication authentication = this.tokenProvider.getAuthentication(jwt);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -46,5 +45,19 @@ public class JWTFilter extends GenericFilterBean {
             log.info("Security exception for user {} - {}", eje.getClaims().getSubject(), eje.getMessage());
             ((HttpServletResponse) servletResponse).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
+    }
+
+    private String resolveToken(HttpServletRequest request){
+        String bearerToken = request.getHeader(JWTConfigurer.AUTHORIZATION_HEADER);
+        if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")){
+            String jwt = bearerToken.substring(7, bearerToken.length());
+            return jwt;
+        }
+        <% if (websocket == 'spring-websocket') { %>
+        String jwt = request.getParameter(JWTConfigurer.AUTHORIZATION_TOKEN);
+        if(StringUtils.hasText(jwt)) {
+            return jwt;
+        }<% } %>
+        return null;
     }
 }
