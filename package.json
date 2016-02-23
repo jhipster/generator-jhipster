@@ -29,25 +29,26 @@
   },
   "dependencies": {
     "chalk": "1.1.1",
-    "cheerio": "0.19.0",
-    "ejs": "2.3.4",
+    "cheerio": "0.20.0",
+    "ejs": "2.4.1",
+    "graceful-fs": "4.1.3",
     "html-wiring": "1.2.0",
     "insight": "0.7.0",
-    "lodash": "3.10.1",
+    "lodash": "4.5.1",
     "mkdirp": "0.5.1",
-    "shelljs": "0.5.3",
+    "shelljs": "0.6.0",
     "pluralize": "1.2.1",
-    "underscore.string": "3.2.2",
+    "underscore.string": "3.2.3",
     "wordwrap": "1.0.0",
-    "yeoman-generator": "0.22.2",
+    "yeoman-generator": "0.22.5",
     "yo": "1.6.0",
     "semver": "5.1.0"
   },
   "devDependencies": {
-    "fs-extra": "0.26.4",
-    "mocha": "2.3.4",
+    "fs-extra": "0.26.5",
+    "mocha": "2.4.5",
     "yeoman-assert": "2.1.1",
-    "yeoman-test": "1.0.0"
+    "yeoman-test": "1.1.0"
   },
   "engines": {
     "node": ">=0.12.0",

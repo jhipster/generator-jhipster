@@ -1191,8 +1191,6 @@ Generator.prototype.getDefaultAppName = function() {
     return (/^[a-zA-Z0-9_]+$/.test(path.basename(process.cwd())))?path.basename(process.cwd()):'jhipster';
 };
 
-Generator.prototype.contains = _.contains;
-
 Generator.prototype.formatAsClassJavadoc = function(text) {
     return '/**' + wordwrap(text, WORD_WRAP_WIDTH - 4, '\n * ', false) + '\n */';
 };
