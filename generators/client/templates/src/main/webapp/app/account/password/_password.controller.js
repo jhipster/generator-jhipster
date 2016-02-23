@@ -10,14 +10,16 @@
     function PasswordController (Auth, Principal) {
         var vm = this;
 
+        vm.changePassword = changePassword;
+        vm.doNotMatch = null;
+        vm.error = null;
+        vm.success = null;
+
         Principal.identity().then(function(account) {
             vm.account = account;
         });
 
-        vm.success = null;
-        vm.error = null;
-        vm.doNotMatch = null;
-        vm.changePassword = function () {
+        function changePassword () {
             if (vm.password !== vm.confirmPassword) {
                 vm.error = null;
                 vm.success = null;
@@ -32,6 +34,6 @@
                     vm.error = 'ERROR';
                 });
             }
-        };
+        }
     }
 })();
