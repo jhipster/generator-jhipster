@@ -11,9 +11,4 @@ angular.module('<%=angularAppName%>')
         };
 
         $scope.refresh();
-
-        // refresh the list of services every 2 seconds
-        $interval(function() {
-            $scope.refresh();
-        }.bind(this), 2000);
     });
