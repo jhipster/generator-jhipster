@@ -8,11 +8,12 @@ describe('Service Tests', function () {
     beforeEach(mockScriptsCalls);
 
     describe('Auth', function () {
-        var $httpBackend, spiedLocalStorageService, authService, spiedAuthServerProvider;
+        var $httpBackend, localStorageService, sessionStorageService, authService, spiedAuthServerProvider;
 
-        beforeEach(inject(function($injector, localStorageService, Auth, AuthServerProvider) {
+        beforeEach(inject(function($injector, $localStorage, $sessionStorage, Auth, AuthServerProvider) {
             $httpBackend = $injector.get('$httpBackend');
-            spiedLocalStorageService = localStorageService;
+            localStorageService = $localStorage;
+            sessionStorageService = $sessionStorage;
             authService = Auth;
             spiedAuthServerProvider = AuthServerProvider;
 <%_ if (authenticationType != 'jwt') { _%>
@@ -29,7 +30,6 @@ describe('Service Tests', function () {
             //GIVEN
             //Set spy
             spyOn(spiedAuthServerProvider, 'logout').and.callThrough();
-            spyOn(spiedLocalStorageService, "clearAll").and.callThrough();
 
             //WHEN
             authService.logout();
@@ -38,7 +38,8 @@ describe('Service Tests', function () {
 
             //THEN
             expect(spiedAuthServerProvider.logout).toHaveBeenCalled();
-            expect(spiedLocalStorageService.clearAll).toHaveBeenCalled();
+            expect(localStorageService.authenticationToken).toBe(undefined);
+            expect(sessionStorageService.authenticationToken).toBe(undefined);
         });
     });
 });

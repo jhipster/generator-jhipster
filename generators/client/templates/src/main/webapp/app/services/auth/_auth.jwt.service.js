@@ -1,11 +1,12 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .factory('AuthServerProvider', function loginService($http, localStorageService) {
+    .factory('AuthServerProvider', function loginService($http, $localStorage, $sessionStorage) {
         return {
             login: function(credentials) {
                 var data = 'username=' +  encodeURIComponent(credentials.username) + '&password=' +
-                    encodeURIComponent(credentials.password);
+                    encodeURIComponent(credentials.password) + '&rememberMe=' +
+                    encodeURIComponent(credentials.rememberMe);
                 return $http.post('api/authenticate', data, {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -15,16 +16,21 @@ angular.module('<%=angularAppName%>')
                     var bearerToken = headers('Authorization');
                     if (bearerToken !== undefined && bearerToken.slice(0, 7) === 'Bearer ') {
                         var jwt = bearerToken.slice(7, bearerToken.length);
-                        localStorageService.set('authentication-token', jwt);
+                        if(credentials.rememberMe){
+                            $localStorage.authenticationToken = jwt;
+                        } else {
+                            $sessionStorage.authenticationToken = jwt;
+                        }
                         return jwt;
                     }
                 });
             },
             logout: function() {
-                localStorageService.clearAll();
+                delete $localStorage.authenticationToken;
+                delete $sessionStorage.authenticationToken;
             },
             getToken: function () {
-                return localStorageService.get('authentication-token');
+                return $localStorage.authenticationToken || $sessionStorage.authenticationToken;
             },
             hasValidToken: function () {
                 var token = this.getToken();

@@ -264,9 +264,22 @@ ul#strength {
    justify-content: flex-end;
 }
 
-/* Align text in td verifically (top aligned by Bootstrap) */
-.jh-table > tbody > tr > td {
-    vertical-align: middle;
+.jh-table > {
+    tbody > tr > td {
+        /* Align text in td verifically (top aligned by Bootstrap) */
+        vertical-align: middle;
+    }
+    thead > tr > th > {
+        .glyphicon-sort, .glyphicon-sort-by-attributes, .glyphicon-sort-by-attributes-alt {
+            /* less visible sorting icons */
+            opacity: 0.5;
+            &:hover {
+                /* full visible sorting icons and pointer when mouse is over them */
+                opacity: 1;
+                cursor: pointer;
+            }
+        }
+    }
 }
 /* end of entity tables helpers */
 

@@ -1,8 +1,8 @@
 ######################
 # Project Specific
 ######################<% if (!skipClient && useSass) { %>
-/src/main/webapp/content/css/main.css<% } %>
-/src/main/webapp/dist
+/<%= CLIENT_MAIN_SRC_DIR %>content/css/main.css<% } %>
+/<%= CLIENT_MAIN_SRC_DIR %>dist
 
 ######################
 # Node
@@ -32,7 +32,7 @@ local.properties
 .classpath
 .settings/**
 .loadpath
-/src/main/resources/rebel.xml
+/<%= SERVER_MAIN_RES_DIR %>rebel.xml
 
 # External tool builders
 .externalToolBuilders/**

@@ -5,7 +5,7 @@ package <%=packageName%>.config;
  */
 public final class Constants {
 
-    // Spring profile for development and production, see http://jhipster.github.io/profiles.html
+    // Spring profile for development and production, see http://jhipster.github.io/profiles/
     public static final String SPRING_PROFILE_DEVELOPMENT = "dev";
     public static final String SPRING_PROFILE_PRODUCTION = "prod";
     // Spring profile used when deploying with Spring Cloud (used when deploying to CloudFoundry)

@@ -5,6 +5,6 @@ angular.module('<%=angularAppName%>')
         $stateProvider
             .state('admin', {
                 abstract: true,
-                parent: 'site'
+                parent: 'app'
             });
     });

@@ -17,11 +17,15 @@ const JHIPSTER_CONFIG_DIR = ".jhipster";
 const MODULES_HOOK_FILE = JHIPSTER_CONFIG_DIR + '/modules/jhi-hooks.json';
 const WORD_WRAP_WIDTH = 80;
 
+const constants = require('./generator-constants'),
+    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
+    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+
 module.exports = Generator;
 
 function Generator() {
     yeoman.Base.apply(this, arguments);
-    this.env.options.appPath = this.config.get('appPath') || 'src/main/webapp';
+    this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
 }
 
 util.inherits(Generator, yeoman.Base);
@@ -34,7 +38,7 @@ util.inherits(Generator, yeoman.Base);
  */
 Generator.prototype.addJavaScriptToIndex = function (script) {
     try {
-        var fullPath = 'src/main/webapp/index.html';
+        var fullPath = CLIENT_MAIN_SRC_DIR + 'index.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: '<!-- endbuild -->',
@@ -55,7 +59,7 @@ Generator.prototype.addJavaScriptToIndex = function (script) {
  */
 Generator.prototype.addMessageformatLocaleToIndex = function (script) {
     try {
-        var fullPath = 'src/main/webapp/index.html';
+        var fullPath = CLIENT_MAIN_SRC_DIR + 'index.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: '<!-- endbuild -->',
@@ -77,7 +81,7 @@ Generator.prototype.addMessageformatLocaleToIndex = function (script) {
  */
 Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enableTranslation) {
     try {
-        var fullPath = 'src/main/webapp/app/layouts/navbar/navbar.html';
+        var fullPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-add-element-to-menu',
@@ -100,7 +104,7 @@ Generator.prototype.addElementToMenu = function (routerName, glyphiconName, enab
  */
 Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName, enableTranslation) {
     try {
-        var fullPath = 'src/main/webapp/app/layouts/navbar/navbar.html';
+        var fullPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-add-element-to-admin-menu',
@@ -122,7 +126,7 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
  */
 Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
     try {
-        var fullPath = 'src/main/webapp/app/layouts/navbar/navbar.html';
+        var fullPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-add-entity-to-menu',
@@ -144,7 +148,7 @@ Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
  * @param {string} language - The language to which this translation should be added
  */
 Generator.prototype.addElementTranslationKey = function(key, value, language) {
-    var fullPath = 'src/main/webapp/i18n/' + language + '/global.json';
+    var fullPath = CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/global.json';
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
@@ -166,7 +170,7 @@ Generator.prototype.addElementTranslationKey = function(key, value, language) {
  * @param {string} language - The language to which this translation should be added
  */
 Generator.prototype.addAdminElementTranslationKey = function(key, value, language) {
-    var fullPath = 'src/main/webapp/i18n/' + language + '/global.json';
+    var fullPath = CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/global.json';
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
@@ -188,7 +192,7 @@ Generator.prototype.addAdminElementTranslationKey = function(key, value, languag
  * @param {string} language - The language to which this translation should be added
  */
 Generator.prototype.addEntityTranslationKey = function(key, value, language) {
-    var fullPath = 'src/main/webapp/i18n/' + language + '/global.json';
+    var fullPath = CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/global.json';
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
@@ -210,7 +214,7 @@ Generator.prototype.addEntityTranslationKey = function(key, value, language) {
  * @param {string} language - The language to which this translation should be added
  */
 Generator.prototype.addGlobalTranslationKey = function(key, value, language) {
-    var fullPath = 'src/main/webapp/i18n/' + language + '/global.json';
+    var fullPath = CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/global.json';
     try {
         jhipsterUtils.rewriteJSONFile(fullPath, function(jsonObj) {
             jsonObj[key] = value;
@@ -243,7 +247,7 @@ Generator.prototype.getAllInstalledLanguages = function () {
     var languages = [];
     this.getAllSupportedLanguages().forEach(function(language) {
         try {
-            var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
+            var stats = fs.lstatSync(CLIENT_MAIN_SRC_DIR + 'i18n/' + language);
             if (stats.isDirectory()) {
                 languages.push(language);
             }
@@ -293,7 +297,7 @@ Generator.prototype.getAllSupportedLanguages = function () {
  * @param {string} comment - url of how to configure the social service
  */
 Generator.prototype.addSocialConfiguration = function(name, clientId, clientSecret, comment) {
-    var fullPath ='src/main/resources/config/application.yml';
+    var fullPath = SERVER_MAIN_RES_DIR + 'config/application.yml';
     try {
         this.log(chalk.yellow('   update ') + fullPath);
         var config = '';
@@ -391,7 +395,7 @@ Generator.prototype.addBowerrcParameter = function(key, value) {
  *
  */
 Generator.prototype.addAngularJsModule = function(moduleName) {
-    var fullPath = 'src/main/webapp/app/app.module.js';
+    var fullPath = CLIENT_MAIN_SRC_DIR + 'app/app.module.js';
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
@@ -426,7 +430,7 @@ Generator.prototype.addAngularJsModule = function(moduleName) {
  *
  */
 Generator.prototype.addAngularJsConfig = function(moduleConfigNames, config, comment) {
-    var fullPath = 'src/main/webapp/app/app.config.js';
+    var fullPath = CLIENT_MAIN_SRC_DIR + 'app/app.config.js';
     var configBlock = '';
     if (comment) {
         configBlock += '// ' + comment + '\n    ';
@@ -454,7 +458,7 @@ Generator.prototype.addAngularJsConfig = function(moduleConfigNames, config, com
  *
  */
 Generator.prototype.addAngularJsInterceptor = function(interceptorName) {
-    var fullPath = 'src/main/webapp/app/app.config.js';
+    var fullPath = CLIENT_MAIN_SRC_DIR + 'app/app.config.js';
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
@@ -475,7 +479,7 @@ Generator.prototype.addAngularJsInterceptor = function(interceptorName) {
  */
 Generator.prototype.addChangelogToLiquibase = function (changelogName) {
     try {
-        var fullPath = 'src/main/resources/config/liquibase/master.xml';
+        var fullPath = SERVER_MAIN_RES_DIR + 'config/liquibase/master.xml';
         jhipsterUtils.rewriteFile({
             file: fullPath,
             needle: 'jhipster-needle-liquibase-add-changelog',
@@ -517,9 +521,9 @@ Generator.prototype.addColumnToLiquibaseEntityChangeset = function (filePath, co
  * @param {string} buttonHoverColor - color of the social button when is hover. ex: '#2d4373'
  */
 Generator.prototype.addSocialButton = function (isUseSass, socialName, socialParameter, buttonColor, buttonHoverColor) {
-    var socialServicefullPath = 'src/main/webapp/app/account/social/social.service.js';
-    var loginfullPath = 'src/main/webapp/app/account/login/login.html';
-    var registerfullPath = 'src/main/webapp/app/account/register/register.html';
+    var socialServicefullPath = CLIENT_MAIN_SRC_DIR + 'app/account/social/social.service.js';
+    var loginfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/login/login.html';
+    var registerfullPath = CLIENT_MAIN_SRC_DIR + 'app/account/register/register.html';
     try {
         this.log(chalk.yellow('\nupdate ') + socialServicefullPath);
         var serviceCode =  "case '" + socialName + "': return '"+ socialParameter +"';";
@@ -641,7 +645,7 @@ Generator.prototype.addMainCSSStyle = function(isUseSass, style, comment) {
         this.addMainSCSSStyle(style, comment);
     }
 
-    var fullPath = 'src/main/webapp/content/css/main.css';
+    var fullPath = CLIENT_MAIN_SRC_DIR + 'content/css/main.css';
     var styleBlock = '';
     if (comment) {
         styleBlock += '/* ==========================================================================\n';
@@ -683,7 +687,7 @@ Generator.prototype.addMainCSSStyle = function(isUseSass, style, comment) {
  *
  */
 Generator.prototype.addMainSCSSStyle = function(style, comment) {
-    var fullPath = 'src/main/webapp/scss/main.scss';
+    var fullPath = CLIENT_MAIN_SRC_DIR + 'scss/main.scss';
     var styleBlock = '';
     if (comment) {
         styleBlock += '/* ==========================================================================\n';
@@ -1087,8 +1091,8 @@ Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, lan
     }
 
     // Templates
-    _this.template(webappDir + '/i18n/' + lang + '/_global.json', webappDir + 'i18n/' + lang + '/global.json', this, {});
-    _this.template(webappDir + '/i18n/' + lang + '/_health.json', webappDir + 'i18n/' + lang + '/health.json', this, {});
+    _this.template(webappDir + 'i18n/' + lang + '/_global.json', webappDir + 'i18n/' + lang + '/global.json', this, {});
+    _this.template(webappDir + 'i18n/' + lang + '/_health.json', webappDir + 'i18n/' + lang + '/health.json', this, {});
 
 
 };
@@ -1096,19 +1100,19 @@ Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, lan
 Generator.prototype.installI18nResFilesByLanguage = function (_this, resourceDir, lang) {
     // Template the message server side properties
     var lang_prop = lang.replace(/-/g, "_");
-    _this.template(resourceDir + '/i18n/_messages_' + lang_prop + '.properties', resourceDir + 'i18n/messages_' + lang_prop + '.properties', this, {});
+    _this.template(resourceDir + 'i18n/_messages_' + lang_prop + '.properties', resourceDir + 'i18n/messages_' + lang_prop + '.properties', this, {});
 
 };
 
 Generator.prototype.copyI18nFilesByName = function(_this, webappDir, fileToCopy, lang) {
-    _this.copy(webappDir + '/i18n/' + lang + '/' + fileToCopy, webappDir + '/i18n/' + lang + '/' + fileToCopy);
+    _this.copy(webappDir + 'i18n/' + lang + '/' + fileToCopy, webappDir + 'i18n/' + lang + '/' + fileToCopy);
 };
 
 Generator.prototype.copyI18n = function(language) {
     try {
-        var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
+        var stats = fs.lstatSync(CLIENT_MAIN_SRC_DIR + 'i18n/' + language);
         if (stats.isDirectory()) {
-            this.template('src/main/webapp/i18n/_entity_' + language + '.json', 'src/main/webapp/i18n/' + language + '/' + this.entityInstance + '.json', this, {});
+            this.template(CLIENT_MAIN_SRC_DIR + 'i18n/_entity_' + language + '.json', CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/' + this.entityInstance + '.json', this, {});
             this.addEntityTranslationKey(this.entityTranslationKey, this.entityClass, language);
         }
     } catch(e) {
@@ -1119,9 +1123,9 @@ Generator.prototype.copyI18n = function(language) {
 
 Generator.prototype.copyEnumI18n = function(language, enumInfo) {
     try {
-        var stats = fs.lstatSync('src/main/webapp/i18n/' + language);
+        var stats = fs.lstatSync(CLIENT_MAIN_SRC_DIR + 'i18n/' + language);
         if (stats.isDirectory()) {
-            this.template('src/main/webapp/i18n/_enum_' + language + '.json', 'src/main/webapp/i18n/' + language + '/' + enumInfo.enumInstance + '.json', enumInfo, {});
+            this.template(CLIENT_MAIN_SRC_DIR + 'i18n/_enum_' + language + '.json', CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/' + enumInfo.enumInstance + '.json', enumInfo, {});
         }
     } catch(e) {
         // An exception is thrown if the folder doesn't exist
@@ -1130,7 +1134,7 @@ Generator.prototype.copyEnumI18n = function(language, enumInfo) {
 };
 
 Generator.prototype.installNewLanguage = function(language) {
-    var fullPath = 'src/main/webapp/app/components/language/language.service.js';
+    var fullPath = CLIENT_MAIN_SRC_DIR + 'app/components/language/language.service.js';
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
@@ -1213,8 +1217,8 @@ Generator.prototype.printJHipsterLogo = function () {
     chalk.green('  ██    ██') + chalk.red('  ██    ██     ██     ██             ██     ██     ██        ██   ██\n') +
     chalk.green('   ██████ ') + chalk.red('  ██    ██  ████████  ██        ██████      ██     ████████  ██    ██\n'));
     this.log(chalk.white.bold('                            http://jhipster.github.io\n'));
-    this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version + '\n'));
-    this.log(chalk.white('Application files will be generated in ' + chalk.yellow(process.cwd()) + ' folder\n'));
+    this.log(chalk.white('Welcome to the JHipster Generator ') + chalk.yellow('v' + packagejs.version));
+    this.log(chalk.white('Application files will be generated in folder: ' + chalk.yellow(process.cwd())));
 };
 
 Generator.prototype.getAngularAppName = function () {

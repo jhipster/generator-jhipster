@@ -3,7 +3,7 @@
 angular.module('<%=angularAppName%>')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('site', {
+            .state('app', {
                 abstract: true,
                 views: {
                     'navbar@': {

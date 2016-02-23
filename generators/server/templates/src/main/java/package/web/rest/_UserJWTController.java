@@ -32,7 +32,7 @@ public class UserJWTController {
     @RequestMapping(value = "/authenticate",
         method = RequestMethod.POST)
     @Timed
-    public ResponseEntity<?> authorize(@RequestParam String username, @RequestParam String password,
+    public ResponseEntity<?> authorize(@RequestParam String username, @RequestParam String password, @RequestParam Boolean rememberMe,
         HttpServletResponse response) {
 
         UsernamePasswordAuthenticationToken authenticationToken =
@@ -40,7 +40,7 @@ public class UserJWTController {
 
         Authentication authentication = this.authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = tokenProvider.createToken(authentication);
+        String jwt = tokenProvider.createToken(authentication, rememberMe);
         response.addHeader(JWTConfigurer.AUTHORIZATION_HEADER, "Bearer " + jwt);
         return ResponseEntity.ok().build();
     }

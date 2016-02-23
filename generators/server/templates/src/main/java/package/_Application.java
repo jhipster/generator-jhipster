@@ -9,9 +9,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.autoconfigure.*;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;<% if (clusteredHttpSession == 'hazelcast') { %>
 import org.springframework.boot.autoconfigure.hazelcast.HazelcastAutoConfiguration;<% } %>
-<%_ if (databaseType != 'cassandra' && applicationType == 'gateway') { _%>
-import org.springframework.boot.autoconfigure.cassandra.CassandraAutoConfiguration;
-<%_ } _%>
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
@@ -33,7 +30,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @ComponentScan
-@EnableAutoConfiguration(exclude = { MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class<% if (clusteredHttpSession == 'hazelcast') { %>, HazelcastAutoConfiguration.class<% } %><% if (applicationType == 'gateway') { %>, MetricsDropwizardAutoConfiguration.class<% } %><% if (databaseType != 'cassandra' && applicationType == 'gateway') { %>, CassandraAutoConfiguration.class<% } %> })
+@EnableAutoConfiguration(exclude = { MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class<% if (clusteredHttpSession == 'hazelcast') { %>, HazelcastAutoConfiguration.class<% } %><% if (applicationType == 'gateway') { %>, MetricsDropwizardAutoConfiguration.class<% } %> })
 @EnableConfigurationProperties({ JHipsterProperties.class<% if (databaseType == 'sql') { %>, LiquibaseProperties.class<% } %> })
 <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
 @EnableEurekaClient
@@ -53,7 +50,7 @@ public class <%= mainClass %> {
      * <p>
      * Spring profiles can be configured with a program arguments --spring.profiles.active=your-active-profile
      * <p>
-     * You can find more information on how profiles work with JHipster on <a href="http://jhipster.github.io/profiles.html">http://jhipster.github.io/profiles.html</a>.
+     * You can find more information on how profiles work with JHipster on <a href="http://jhipster.github.io/profiles/">http://jhipster.github.io/profiles/</a>.
      */
     @PostConstruct
     public void initApplication() {
@@ -93,6 +90,12 @@ public class <%= mainClass %> {
             InetAddress.getLocalHost().getHostAddress(),
             env.getProperty("server.port"));
 
+        <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+        String configServerStatus = env.getProperty("configserver.status");
+        log.info("\n----------------------------------------------------------\n\t" +
+        "Config Server: \t{}\n----------------------------------------------------------",
+            configServerStatus == null ? "Not found or not setup for this application" : configServerStatus);
+        <%_ } _%>
     }
 
     /**

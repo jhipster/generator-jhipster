@@ -2,7 +2,7 @@
 
 angular.module('<%=angularAppName%>')
     // uncomment below to make alerts look like toast
-    .config(function ($urlRouterProvider, $httpProvider, $locationProvider, <% if (enableTranslation) { %>$translateProvider, tmhDynamicLocaleProvider,<% } %> httpRequestInterceptorCacheBusterProvider/*, AlertServiceProvider*/) {
+    .config(function ($urlRouterProvider, $httpProvider, $locationProvider, $localStorageProvider, <% if (enableTranslation) { %>$translateProvider, tmhDynamicLocaleProvider,<% } %> httpRequestInterceptorCacheBusterProvider/*, AlertServiceProvider*/) {
         //AlertServiceProvider.showAsToast(true);
 <% if (authenticationType == 'session') { %>
         //enable CSRF
@@ -34,6 +34,7 @@ angular.module('<%=angularAppName%>')
         tmhDynamicLocaleProvider.useCookieStorage();
         tmhDynamicLocaleProvider.storageKey('NG_TRANSLATE_LANG_KEY');
         <% } %>
+        $localStorageProvider.setKeyPrefix('jhi-');
     })
     // jhipster-needle-angularjs-add-config JHipster will add new application configuration here
     .config(['$urlMatcherFactoryProvider', function($urlMatcherFactory) {

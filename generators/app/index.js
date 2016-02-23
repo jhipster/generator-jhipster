@@ -3,19 +3,17 @@ var util = require('util'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
     scriptBase = require('../generator-base'),
-    constants = require('../generator-constants'),
     cleanup = require('../cleanup'),
-    packagejs = require('../../package.json');
+    packagejs = require('../../package.json'),
+    exec = require('child_process').exec;
 
 var JhipsterGenerator = generators.Base.extend({});
 
 util.inherits(JhipsterGenerator, scriptBase);
 
-/* Constants use through out */
-const QUESTIONS = constants.QUESTIONS;
-const RESOURCE_DIR = constants.RESOURCE_DIR;
-const WEBAPP_DIR =  constants.WEBAPP_DIR;
-const TEST_JS_DIR =  constants.TEST_JS_DIR;
+/* Constants use throughout */
+const constants = require('../generator-constants'),
+    QUESTIONS = constants.QUESTIONS;
 
 var currentQuestion = 0;
 var configOptions = {};
@@ -58,24 +56,103 @@ module.exports = JhipsterGenerator.extend({
             defaults: false
         });
 
+        // This adds support for a `--[no-]check-install` flag
+        this.option('check-install', {
+            desc: 'Check the installation',
+            type: Boolean,
+            defaults: true
+        });
+
         this.skipClient = configOptions.skipClient = this.options['skip-client'] ||  this.config.get('skipClient');
         this.skipServer = configOptions.skipServer = this.options['skip-server'] ||  this.config.get('skipServer');
         this.skipUserManagement = configOptions.skipUserManagement = this.options['skip-user-management'] ||  this.config.get('skipUserManagement');
         this.withEntities = this.options['with-entities'];
+        this.checkInstall = this.options['check-install'];
 
     },
-    initializing : {
-        displayLogo : function () {
+    initializing: {
+        displayLogo: function () {
             this.printJHipsterLogo();
         },
 
-        validate : function () {
+        checkJava: function () {
+            if (!this.checkInstall || this.skipServer) return;
+            var done = this.async();
+            exec('java -version', function (err, stdout, stderr) {
+                if (err) {
+                    this.log(chalk.yellow.bold('WARNING!') + ' Java 8 is not found on your computer.');
+                } else {
+                    var javaVersion = stderr.match(/(?:java|openjdk) version "(.*)"/)[1];
+                    if (!javaVersion.match(/1\.8/)) {
+                        this.log(chalk.yellow.bold('WARNING!') + ' Java 8 is not found on your computeur. Your Java version is: ' + chalk.yellow(javaVersion));
+                    }
+                }
+                done();
+            }.bind(this));
+        },
+
+        checkGit: function () {
+            if (!this.checkInstall || this.skipClient) return;
+            var done = this.async();
+            exec('git --version', function (err) {
+                if (err) {
+                    this.log(chalk.yellow.bold('WARNING!') + ' git is not found on your computer.\n',
+                        ' Install git: ' + chalk.yellow('http://git-scm.com/')
+                    );
+                } else {
+                    this.gitInstalled = true;
+                }
+                done();
+            }.bind(this));
+        },
+
+        checkGitConnection: function () {
+            if (!this.gitInstalled) return;
+            var done = this.async();
+            exec('git ls-remote git://github.com/jhipster/generator-jhipster.git HEAD', {timeout: 15000}, function (error) {
+                if (error) {
+                    this.log(chalk.yellow.bold('WARNING!') + ' Failed to connect to "git://github.com"\n',
+                        ' 1. Check the Internet connection.\n',
+                        ' 2. If you are using HTTP proxy, try this command: ' + chalk.yellow('git config --global url."https://".insteadOf git://')
+                    );
+                }
+                done();
+            }.bind(this));
+        },
+
+        checkBower: function () {
+            if (!this.checkInstall || this.skipClient) return;
+            var done = this.async();
+            exec('bower --version', function (err) {
+                if (err) {
+                    this.log(chalk.yellow.bold('WARNING!') + ' bower is not found on your computer.\n',
+                        ' Install bower using npm command: ' + chalk.yellow('npm install -g bower')
+                    );
+                }
+                done();
+            }.bind(this));
+        },
+
+        checkGulp: function () {
+            if (!this.checkInstall || this.skipClient) return;
+            var done = this.async();
+            exec('gulp --version', function (err) {
+                if (err) {
+                    this.log(chalk.yellow.bold('WARNING!') + ' gulp is not found on your computer.\n',
+                        ' Install gulp using npm command: ' + chalk.yellow('npm install -g gulp-cli')
+                    );
+                }
+                done();
+            }.bind(this));
+        },
+
+        validate: function () {
             if(this.skipServer && this.skipClient){
                 this.env.error(chalk.red('You can not pass both ' + chalk.yellow('--skip-client') + ' and ' + chalk.yellow('--skip-server') + ' together'));
             }
         },
 
-        setupVars : function () {
+        setupVars: function () {
             this.applicationType = this.config.get('applicationType');
             if (!this.applicationType) {
                 this.applicationType = 'monolith';
@@ -155,38 +232,42 @@ module.exports = JhipsterGenerator.extend({
     },
 
     configuring: {
-        setup : function () {
+        setup: function () {
             configOptions.baseName = this.baseName;
             configOptions.logo = false;
-            if(this.skipClient){
+            if (this.applicationType == 'microservice') {
+                this.skipClient = true;
+                this.skipUserManagement = true;
+            }
+            if (this.skipClient) {
                 // defaults to use when skipping client
                 configOptions.enableTranslation = this.options['i18n'];
             }
-            if(this.skipServer){
+            if (this.skipServer) {
                 // defaults to use when skipping server
             }
         },
 
-        composeServer : function () {
-            if(this.skipServer) return;
+        composeServer: function () {
+            if (this.skipServer) return;
 
             this.composeWith('jhipster:server', {
                 options: {
                     'client-hook': !this.skipClient,
-                    configOptions : configOptions
+                    configOptions: configOptions
                 }
             }, {
                 local: require.resolve('../server')
             });
         },
 
-        composeClient : function () {
+        composeClient: function () {
             if(this.skipClient) return;
 
             this.composeWith('jhipster:client', {
                 options: {
                     'skip-install': this.options['skip-install'],
-                    configOptions : configOptions
+                    configOptions: configOptions
                 }
             }, {
                 local: require.resolve('../client')
@@ -201,14 +282,14 @@ module.exports = JhipsterGenerator.extend({
                 return;
             }
             var choices = [];
-            if(!this.skipServer){
+            if (!this.skipServer) {
                 // all server side test frameworks should be addded here
                 choices.push(
                     {name: 'Gatling', value: 'gatling'},
                     {name: 'Cucumber', value: 'cucumber'}
                 );
             }
-            if(!this.skipClient){
+            if (!this.skipClient) {
                 // all client side test frameworks should be addded here
                 choices.push(
                     {name: 'Protractor', value: 'protractor'}

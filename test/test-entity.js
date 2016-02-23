@@ -6,26 +6,33 @@ var assert = require('yeoman-assert');
 var helpers = require('yeoman-test');
 var fse = require('fs-extra');
 
+const constants = require('../generators/generator-constants'),
+    TEST_DIR = constants.TEST_DIR,
+    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
+    CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
+    SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
+    SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
+
 const expectedFiles = {
     default: [
         '.jhipster/Foo.json',
-        'src/main/java/com/mycompany/myapp/domain/Foo.java',
-        'src/main/java/com/mycompany/myapp/repository/FooRepository.java',
-        'src/main/java/com/mycompany/myapp/web/rest/FooResource.java',
-        // 'src/main/resources/config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
-        'src/main/webapp/app/entities/foo/foo-management.html',
-        'src/main/webapp/app/entities/foo/foo-management-detail.html',
-        'src/main/webapp/app/entities/foo/foo-management-dialog.html',
-        'src/main/webapp/app/entities/foo/foo-management-delete-dialog.html',
-        'src/main/webapp/app/entities/foo/foo-management.state.js',
-        'src/main/webapp/app/entities/foo/foo-management.controller.js',
-        'src/main/webapp/app/entities/foo/foo-management-dialog.controller.js',
-        'src/main/webapp/app/entities/foo/foo-management-delete-dialog.controller.js',
-        'src/main/webapp/app/entities/foo/foo-management-detail.controller.js',
-        'src/main/webapp/app/entities/foo/foo.service.js',
-        'src/test/javascript/spec/app/entities/foo/foo-management-detail.controller.spec.js',
-        'src/test/java/com/mycompany/myapp/web/rest/FooResourceIntTest.java',
-        'src/test/gatling/simulations/FooGatlingTest.scala',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/Foo.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/repository/FooRepository.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/FooResource.java',
+        // SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management.html',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management-detail.html',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management-dialog.html',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management-delete-dialog.html',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management.state.js',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management.controller.js',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management-dialog.controller.js',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management-delete-dialog.controller.js',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management-detail.controller.js',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo.service.js',
+        CLIENT_TEST_SRC_DIR + 'spec/app/entities/foo/foo-management-detail.controller.spec.js',
+        SERVER_TEST_SRC_DIR + 'com/mycompany/myapp/web/rest/FooResourceIntTest.java',
+        TEST_DIR + 'gatling/simulations/FooGatlingTest.scala',
     ]
 }
 describe('JHipster generator entity', function () {
@@ -49,8 +56,8 @@ describe('JHipster generator entity', function () {
         it('creates expected default files', function () {
             assert.file(expectedFiles.default);
             assert.file([
-                //'src/main/webapp/i18n/en/foo.json', //this should ideally be working
-                //'src/main/webapp/i18n/fr/foo.json'
+                //CLIENT_MAIN_SRC_DIR + 'i18n/en/foo.json', //this should ideally be working
+                //CLIENT_MAIN_SRC_DIR + 'i18n/fr/foo.json'
             ]);
         });
     });
@@ -75,8 +82,8 @@ describe('JHipster generator entity', function () {
         it('creates expected default files', function () {
             assert.file(expectedFiles.default);
             assert.file([
-                'src/main/java/com/mycompany/myapp/web/rest/dto/FooDTO.java',
-                'src/main/java/com/mycompany/myapp/web/rest/mapper/FooMapper.java'
+                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/dto/FooDTO.java',
+                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/mapper/FooMapper.java'
             ]);
         });
     });
@@ -101,7 +108,7 @@ describe('JHipster generator entity', function () {
         it('creates expected default files', function () {
             assert.file(expectedFiles.default)
             assert.file([,
-                'src/main/java/com/mycompany/myapp/service/FooService.java'
+                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/FooService.java'
             ]);
         });
     });
@@ -126,8 +133,8 @@ describe('JHipster generator entity', function () {
         it('creates expected default files', function () {
             assert.file(expectedFiles.default);
             assert.file([
-                'src/main/java/com/mycompany/myapp/service/FooService.java',
-                'src/main/java/com/mycompany/myapp/service/impl/FooServiceImpl.java'
+                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/FooService.java',
+                SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/impl/FooServiceImpl.java'
             ]);
         });
     });
@@ -218,8 +225,8 @@ describe('JHipster generator entity', function () {
         it('creates expected default files', function () {
             assert.file(expectedFiles.default);
             assert.noFile([
-                'src/main/webapp/i18n/en/foo.json',
-                'src/main/webapp/i18n/fr/foo.json'
+                CLIENT_MAIN_SRC_DIR + 'i18n/en/foo.json',
+                CLIENT_MAIN_SRC_DIR + 'i18n/fr/foo.json'
             ])
         });
     });

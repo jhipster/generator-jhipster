@@ -5,7 +5,6 @@ var util = require('util'),
     chalk = require('chalk'),
     _ = require('underscore.string'),
     scriptBase = require('../generator-base'),
-    constants = require('../generator-constants'),
     mkdirp = require('mkdirp'),
     html = require("html-wiring"),
     packagejs = require('../../package.json'),
@@ -15,12 +14,12 @@ var JhipsterClientGenerator = generators.Base.extend({});
 
 util.inherits(JhipsterClientGenerator, scriptBase);
 
-/* Constants use through out */
-const QUESTIONS =  constants.QUESTIONS;
-const WEBAPP_DIR =  constants.WEBAPP_DIR;
-const ANGULAR_DIR =  constants.ANGULAR_DIR;
-const TEST_JS_DIR =  constants.TEST_JS_DIR;
-const INTERPOLATE_REGEX =  constants.INTERPOLATE_REGEX;
+/* Constants use throughout */
+const constants = require('../generator-constants'),
+    QUESTIONS = constants.QUESTIONS,
+    MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
+    TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
+    ANGULAR_DIR =  constants.ANGULAR_DIR;
 
 var currentQuestion;
 var configOptions = {};
@@ -105,6 +104,9 @@ module.exports = JhipsterClientGenerator.extend({
         this.baseName = configOptions.baseName;
         this.logo = configOptions.logo;
 
+        // Make constants available in templates
+        this.MAIN_SRC_DIR = MAIN_SRC_DIR;
+        this.TEST_SRC_DIR = TEST_SRC_DIR;
     },
     initializing : {
         displayLogo : function () {
@@ -193,7 +195,6 @@ module.exports = JhipsterClientGenerator.extend({
             this.camelizedBaseName = _.camelize(this.baseName);
             this.slugifiedBaseName = _.slugify(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();
-
         },
 
         saveConfig: function () {
@@ -254,38 +255,38 @@ module.exports = JhipsterClientGenerator.extend({
         writeCssFiles : function () {
             // normal CSS or SCSS?
             if (this.useSass) {
-                this.template(WEBAPP_DIR + 'scss/main.scss', WEBAPP_DIR + 'scss/main.scss');
-                this.template(WEBAPP_DIR + 'scss/vendor.scss', WEBAPP_DIR + 'scss/vendor.scss');
+                this.template(MAIN_SRC_DIR + 'scss/main.scss', MAIN_SRC_DIR + 'scss/main.scss');
+                this.template(MAIN_SRC_DIR + 'scss/vendor.scss', MAIN_SRC_DIR + 'scss/vendor.scss');
             }
             // this css file will be overwritten by the sass generated css if sass is enabled
             // but this will avoid errors when running app without running sass task first
-            this.template(WEBAPP_DIR + 'content/css/main.css', WEBAPP_DIR + 'content/css/main.css');
-            this.copy(WEBAPP_DIR + 'content/css/documentation.css', WEBAPP_DIR + 'content/css/documentation.css');
+            this.template(MAIN_SRC_DIR + 'content/css/main.css', MAIN_SRC_DIR + 'content/css/main.css');
+            this.copy(MAIN_SRC_DIR + 'content/css/documentation.css', MAIN_SRC_DIR + 'content/css/documentation.css');
         },
 
         writeCommonWebFiles : function () {
             // Create Webapp
-            mkdirp(WEBAPP_DIR);
+            mkdirp(MAIN_SRC_DIR);
 
             // HTML5 BoilerPlate
-            this.copy(WEBAPP_DIR + 'favicon.ico', WEBAPP_DIR + 'favicon.ico');
-            this.copy(WEBAPP_DIR + 'robots.txt', WEBAPP_DIR + 'robots.txt');
-            this.copy(WEBAPP_DIR + 'htaccess.txt', WEBAPP_DIR + '.htaccess');
-            this.copy(WEBAPP_DIR + '404.html', WEBAPP_DIR + '404.html');
+            this.copy(MAIN_SRC_DIR + 'favicon.ico', MAIN_SRC_DIR + 'favicon.ico');
+            this.copy(MAIN_SRC_DIR + 'robots.txt', MAIN_SRC_DIR + 'robots.txt');
+            this.copy(MAIN_SRC_DIR + 'htaccess.txt', MAIN_SRC_DIR + '.htaccess');
+            this.copy(MAIN_SRC_DIR + '404.html', MAIN_SRC_DIR + '404.html');
         },
 
         writei18nFiles : function () {
             // install all files related to i18n if translation is enabled
             if (this.enableTranslation) {
-                this.installI18nFilesByLanguage(this, WEBAPP_DIR, 'en');
-                this.installI18nFilesByLanguage(this, WEBAPP_DIR, 'fr');
+                this.installI18nFilesByLanguage(this, MAIN_SRC_DIR, 'en');
+                this.installI18nFilesByLanguage(this, MAIN_SRC_DIR, 'fr');
             }
         },
 
         writeSwaggerFiles : function () {
             // Swagger-ui for Jhipster
-            this.template(WEBAPP_DIR + '/swagger-ui/_index.html', WEBAPP_DIR + 'swagger-ui/index.html', this, {});
-            this.copy(WEBAPP_DIR + '/swagger-ui/images/throbber.gif', WEBAPP_DIR + 'swagger-ui/images/throbber.gif');
+            this.template(MAIN_SRC_DIR + 'swagger-ui/_index.html', MAIN_SRC_DIR + 'swagger-ui/index.html', this, {});
+            this.copy(MAIN_SRC_DIR + 'swagger-ui/images/throbber.gif', MAIN_SRC_DIR + 'swagger-ui/images/throbber.gif');
         },
 
         writeAngularAppFiles : function () {
@@ -465,15 +466,15 @@ module.exports = JhipsterClientGenerator.extend({
 
         writeImageFiles : function () {
             // Images
-            this.copy(WEBAPP_DIR + 'content/images/development_ribbon.png', WEBAPP_DIR + 'content/images/development_ribbon.png');
-            this.copy(WEBAPP_DIR + 'content/images/hipster.png', WEBAPP_DIR + 'content/images/hipster.png');
-            this.copy(WEBAPP_DIR + 'content/images/hipster2x.png', WEBAPP_DIR + 'content/images/hipster2x.png');
+            this.copy(MAIN_SRC_DIR + 'content/images/development_ribbon.png', MAIN_SRC_DIR + 'content/images/development_ribbon.png');
+            this.copy(MAIN_SRC_DIR + 'content/images/hipster.png', MAIN_SRC_DIR + 'content/images/hipster.png');
+            this.copy(MAIN_SRC_DIR + 'content/images/hipster2x.png', MAIN_SRC_DIR + 'content/images/hipster2x.png');
 
         },
 
         updateJsToHtml: function () {
             // Index page
-            var indexFile = html.readFileAsString(path.join(this.sourceRoot(), WEBAPP_DIR + '_index.html'));
+            var indexFile = html.readFileAsString(path.join(this.sourceRoot(), MAIN_SRC_DIR + '_index.html'));
 
             indexFile = engine(indexFile, this, {});
 
@@ -610,7 +611,7 @@ module.exports = JhipsterClientGenerator.extend({
             }
 
             indexFile = html.appendScripts(indexFile, 'app/app.js', appScripts, {});
-            this.write(WEBAPP_DIR + 'index.html', indexFile);
+            this.write(MAIN_SRC_DIR + 'index.html', indexFile);
 
         },
 
@@ -641,7 +642,7 @@ module.exports = JhipsterClientGenerator.extend({
                 testTemplates.push('_protractor.conf.js')
             }
             testTemplates.map(function(testTemplatePath) {
-                this.template(TEST_JS_DIR + testTemplatePath, TEST_JS_DIR + testTemplatePath.replace(/_/,''), this, {});
+                this.template(TEST_SRC_DIR + testTemplatePath, TEST_SRC_DIR + testTemplatePath.replace(/_/,''), this, {});
             }.bind(this));
 
         }
@@ -682,7 +683,7 @@ module.exports = JhipsterClientGenerator.extend({
     },
 
     end: function () {
-        this.log(chalk.green.bold('\nClient app generated succesfully.\n'));
+        this.log(chalk.green.bold('\nClient app generated successfully.\n'));
     }
 
 });

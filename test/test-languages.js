@@ -6,6 +6,10 @@ var assert = require('yeoman-assert');
 var helpers = require('yeoman-test');
 var fse = require('fs-extra');
 
+const constants = require('../generators/generator-constants'),
+    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
+    SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
+
 describe('JHipster generator languages', function () {
     var languages = [
         {name: 'Catalan', value: 'ca'},
@@ -45,37 +49,37 @@ describe('JHipster generator languages', function () {
 
             it('creates expected files', function () {
                 assert.file([
-                    'src/main/webapp/i18n/' + language.value + '/activate.json',
-                    'src/main/webapp/i18n/' + language.value + '/audits.json',
-                    'src/main/webapp/i18n/' + language.value + '/configuration.json',
-                    'src/main/webapp/i18n/' + language.value + '/error.json',
-                    'src/main/webapp/i18n/' + language.value + '/gateway.json',
-                    'src/main/webapp/i18n/' + language.value + '/login.json',
-                    'src/main/webapp/i18n/' + language.value + '/logs.json',
-                    'src/main/webapp/i18n/' + language.value + '/home.json',
-                    'src/main/webapp/i18n/' + language.value + '/metrics.json',
-                    'src/main/webapp/i18n/' + language.value + '/password.json',
-                    'src/main/webapp/i18n/' + language.value + '/register.json',
-                    'src/main/webapp/i18n/' + language.value + '/sessions.json',
-                    'src/main/webapp/i18n/' + language.value + '/settings.json',
-                    'src/main/webapp/i18n/' + language.value + '/reset.json',
-                    'src/main/webapp/i18n/' + language.value + '/user-management.json',
-                    'src/main/webapp/i18n/' + language.value + '/global.json',
-                    'src/main/webapp/i18n/' + language.value + '/health.json',
-                    'src/main/resources/i18n/messages_' + language.value.replace('-','_') + '.properties'
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/activate.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/audits.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/configuration.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/error.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/gateway.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/login.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/logs.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/home.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/metrics.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/password.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/register.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/sessions.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/settings.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/reset.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/user-management.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/global.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/health.json',
+                    SERVER_MAIN_RES_DIR + 'i18n/messages_' + language.value.replace('-','_') + '.properties'
                 ]);
             });
             it('doesnt create social.json', function () {
                 assert.noFile([
-                    'src/main/webapp/i18n/' + language.value + '/social.json'
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/social.json'
                 ]);
             });
             it('contains 3 needles in global.json', function () {
-                assert.fileContent('src/main/webapp/i18n/' + language.value + '/global.json',
+                assert.fileContent(CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/global.json',
                     '"jhipster-needle-menu-add-element": \"JHipster will add additional menu entries here (do not translate!)"');
-                assert.fileContent('src/main/webapp/i18n/' + language.value + '/global.json',
+                assert.fileContent(CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/global.json',
                     '"jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"');
-                assert.fileContent('src/main/webapp/i18n/' + language.value + '/global.json',
+                assert.fileContent(CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/global.json',
                     '"jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"');
             })
         });
@@ -96,25 +100,25 @@ describe('JHipster generator languages', function () {
 
             it('creates expected files', function () {
                 assert.file([
-                    'src/main/webapp/i18n/' + language.value + '/activate.json',
-                    'src/main/webapp/i18n/' + language.value + '/audits.json',
-                    'src/main/webapp/i18n/' + language.value + '/configuration.json',
-                    'src/main/webapp/i18n/' + language.value + '/error.json',
-                    'src/main/webapp/i18n/' + language.value + '/gateway.json',
-                    'src/main/webapp/i18n/' + language.value + '/login.json',
-                    'src/main/webapp/i18n/' + language.value + '/logs.json',
-                    'src/main/webapp/i18n/' + language.value + '/home.json',
-                    'src/main/webapp/i18n/' + language.value + '/metrics.json',
-                    'src/main/webapp/i18n/' + language.value + '/password.json',
-                    'src/main/webapp/i18n/' + language.value + '/register.json',
-                    'src/main/webapp/i18n/' + language.value + '/sessions.json',
-                    'src/main/webapp/i18n/' + language.value + '/settings.json',
-                    'src/main/webapp/i18n/' + language.value + '/reset.json',
-                    'src/main/webapp/i18n/' + language.value + '/user-management.json',
-                    'src/main/webapp/i18n/' + language.value + '/global.json',
-                    'src/main/webapp/i18n/' + language.value + '/health.json',
-                    'src/main/webapp/i18n/' + language.value + '/social.json',
-                    'src/main/resources/i18n/messages_' + language.value.replace('-','_') + '.properties'
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/activate.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/audits.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/configuration.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/error.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/gateway.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/login.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/logs.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/home.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/metrics.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/password.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/register.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/sessions.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/settings.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/reset.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/user-management.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/global.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/health.json',
+                    CLIENT_MAIN_SRC_DIR + 'i18n/' + language.value + '/social.json',
+                    SERVER_MAIN_RES_DIR + 'i18n/messages_' + language.value.replace('-','_') + '.properties'
                 ]);
             });
         });

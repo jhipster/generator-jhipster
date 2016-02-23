@@ -29,7 +29,7 @@ RUN curl -sL https://deb.nodesource.com/setup_4.x | sudo bash -
 RUN apt-get install -y nodejs python g++ build-essential
 
 # install yeoman bower gulp
-RUN npm install -g yo bower gulp
+RUN npm install -g yo bower gulp-cli
 
 # clean
 RUN apt-get clean && \

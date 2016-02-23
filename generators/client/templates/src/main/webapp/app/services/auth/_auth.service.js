@@ -73,6 +73,7 @@ angular.module('<%=angularAppName%>')
                         }
                     });
             },
+
             createAccount: function (account, callback) {
                 var cb = callback || angular.noop;
 
