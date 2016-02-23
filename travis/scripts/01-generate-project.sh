@@ -8,6 +8,7 @@ cd "$HOME"/"$JHIPSTER"
 
 rm -Rf "$HOME"/"$JHIPSTER"/node_modules/.bin/*grunt*
 rm -Rf "$HOME"/"$JHIPSTER"/node_modules/*grunt*
+rm -Rf "$HOME"/"$JHIPSTER"/node_modules/*phantom*
 
 npm link generator-jhipster
 yo jhipster --force --no-insight
