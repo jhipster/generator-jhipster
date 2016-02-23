@@ -16,7 +16,7 @@
     "event-stream": "3.3.2",
     "events": "1.1.0",
     "generator-jhipster": "<%= packagejs.version %>",
-    "gulp": "3.9.0",
+    "gulp": "3.9.1",
     "gulp-autoprefixer": "3.1.0",
     "gulp-browserify": "0.5.1",
     "gulp-cached": "1.1.0",
