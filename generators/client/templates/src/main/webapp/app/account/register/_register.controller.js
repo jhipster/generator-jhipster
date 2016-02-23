@@ -18,8 +18,8 @@
         vm.register = register;
         vm.registerAccount = {};
         vm.success = null;
-        
-        $timeout(function (){angular.element('[ng-model="registerAccount.login"]').focus();});
+
+        $timeout(function (){angular.element('[ng-model="vm.registerAccount.login"]').focus();});
 
         function register () {
             if (vm.registerAccount.password !== vm.confirmPassword) {
