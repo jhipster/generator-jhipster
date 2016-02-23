@@ -16,7 +16,7 @@
             <div class="col-xs-8 no-padding-right">
                 <form name="searchForm" class="form-inline">
                     <div class="input-group pull-right" >
-                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="<% if (enableTranslation) { %>{{ '<%= keyPrefix %>home.search' | translate }}<% } else { %>Query<% } %>">
+                        <input type="text" class="form-control" ng-model="vm.searchQuery" id="searchQuery" placeholder="<% if (enableTranslation) { %>{{ '<%= keyPrefix %>home.search' | translate }}<% } else { %>Query<% } %>">
                         <span  class="input-group-btn width-min" >
                             <button class="btn btn-info" ng-click="vm.search()">
                                 <span class="glyphicon glyphicon-search"></span>
@@ -140,10 +140,10 @@
         </table>
     </div>
     <%_ if (pagination == 'pager') { _%>
-    <uib-pager total-items="totalItems" ng-model="page" ng-change="vm.transition()"></uib-pager>
+    <uib-pager total-items="totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pager>
     <%_ } else if (pagination == 'pagination') { _%>
     <div class="text-center">
-        <uib-pagination class="pagination-sm" total-items="totalItems" ng-model="page" ng-change="vm.transition()"></uib-pagination>
+        <uib-pagination class="pagination-sm" total-items="totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
     </div>
     <%_ } _%>
 </div>
