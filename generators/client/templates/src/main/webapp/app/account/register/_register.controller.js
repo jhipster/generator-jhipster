@@ -1,38 +1,49 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('RegisterController', function ($scope, <% if (enableTranslation){ %>$translate, <% } %>$timeout, Auth, LoginService) {
-        $scope.success = null;
-        $scope.error = null;
-        $scope.doNotMatch = null;
-        $scope.errorUserExists = null;
-        $scope.registerAccount = {};
+    angular
+        .module('<%=angularAppName%>')
+        .controller('RegisterController', RegisterController);
+
+
+    RegisterController.$inject = [<% if (enableTranslation){ %>'$translate',<% } %> '$timeout', 'Auth', 'LoginService'];
+
+    function RegisterController (<% if (enableTranslation){ %>$translate, <% } %>$timeout, Auth, LoginService) {
+        var vm = this;
+
+        vm.doNotMatch = null;
+        vm.error = null;
+        vm.errorUserExists = null;
+        vm.login = LoginService.open;
+        vm.register = register;
+        vm.registerAccount = {};
+        vm.success = null;
+        
         $timeout(function (){angular.element('[ng-model="registerAccount.login"]').focus();});
 
-        $scope.register = function () {
-            if ($scope.registerAccount.password !== $scope.confirmPassword) {
-                $scope.doNotMatch = 'ERROR';
+        function register () {
+            if (vm.registerAccount.password !== vm.confirmPassword) {
+                vm.doNotMatch = 'ERROR';
             } else {
-                $scope.registerAccount.langKey = <% if (enableTranslation){ %>$translate.use()<% }else {%> 'en' <% } %>;
-                $scope.doNotMatch = null;
-                $scope.error = null;
-                $scope.errorUserExists = null;
-                $scope.errorEmailExists = null;
+                vm.registerAccount.langKey = <% if (enableTranslation){ %>$translate.use()<% }else {%> 'en' <% } %>;
+                vm.doNotMatch = null;
+                vm.error = null;
+                vm.errorUserExists = null;
+                vm.errorEmailExists = null;
 
-                Auth.createAccount($scope.registerAccount).then(function () {
-                    $scope.success = 'OK';
+                Auth.createAccount(vm.registerAccount).then(function () {
+                    vm.success = 'OK';
                 }).catch(function (response) {
-                    $scope.success = null;
+                    vm.success = null;
                     if (response.status === 400 && response.data === 'login already in use') {
-                        $scope.errorUserExists = 'ERROR';
+                        vm.errorUserExists = 'ERROR';
                     } else if (response.status === 400 && response.data === 'e-mail address already in use') {
-                        $scope.errorEmailExists = 'ERROR';
+                        vm.errorEmailExists = 'ERROR';
                     } else {
-                        $scope.error = 'ERROR';
+                        vm.error = 'ERROR';
                     }
                 });
             }
-        };
-
-        $scope.login = LoginService.open;
-    });
+        }
+    }
+})();
