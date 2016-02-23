@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 <%_ if (databaseType != 'cassandra') { _%>
 
@@ -35,6 +36,11 @@ public class GatewayConfiguration {
                 .withKeyspaceName("gateway2")
                 .withScript("config/cql/create-tables.cql")
                 .buildPersistenceManager().getNativeSession();
+        }
+
+        @Bean
+        public Cluster cluster(Session session) {
+            return session.getCluster();
         }
     }
     <%_ } _%>
