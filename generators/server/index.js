@@ -745,7 +745,6 @@ module.exports = JhipsterServerGenerator.extend({
 
             if (this.authenticationType == 'jwt') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_UserJWTController.java', javaDir + 'web/rest/UserJWTController.java', this, {});
-                this.template(SERVER_MAIN_SRC_DIR + 'package/security/_AuthenticationProvider.java', javaDir + 'security/AuthenticationProvider.java', this, {});
             }
 
             if (this.authenticationType == 'oauth2') {
