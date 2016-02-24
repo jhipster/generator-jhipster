@@ -1,34 +1,29 @@
 'use strict';
 
 angular.module('<%=angularAppName%>')
-    .directive('jhAlert', function(AlertService) {
-        return {
-            restrict: 'E',
+    .component('jhAlert',  {
             template: '<div class="alerts" ng-cloak="">' +
                             '<div ng-repeat="alert in alerts" ng-class="[alert.position, {\'toast\': alert.toast}]">' +
                                 '<uib-alert ng-cloak="" type="{{alert.type}}" close="alert.close()"><pre>{{ alert.msg }}</pre></uib-alert>' +
                             '</div>' +
                       '</div>',
-            controller: ['$scope',
-                function($scope) {
+            controller: ['$scope','AlertService',
+                function($scope, AlertService) {
                     $scope.alerts = AlertService.get();
                     $scope.$on('$destroy', function () {
                         $scope.alerts = [];
                     });
                 }
             ]
-        };
     })
-    .directive('jhAlertError', function(AlertService, $rootScope<% if (enableTranslation) { %>, $translate<% } %>) {
-        return {
-            restrict: 'E',
+    .component('jhAlertError',  {
             template: '<div class="alerts" ng-cloak="">' +
                             '<div ng-repeat="alert in alerts" ng-class="[alert.position, {\'toast\': alert.toast}]">' +
                                 '<uib-alert ng-cloak="" type="{{alert.type}}" close="alert.close(alerts)"><pre>{{ alert.msg }}</pre></uib-alert>' +
                             '</div>' +
                       '</div>',
-            controller: ['$scope',
-                function($scope) {
+            controller: ['$scope', 'AlertService', '$rootScope'<% if (enableTranslation) { %>, '$translate'<% } %>,
+                function($scope, AlertService, $rootScope<% if (enableTranslation) { %>, $translate<% } %>) {
 
                     $scope.alerts = [];
 
@@ -112,5 +107,4 @@ angular.module('<%=angularAppName%>')
                     });
                 }
             ]
-        };
     });
