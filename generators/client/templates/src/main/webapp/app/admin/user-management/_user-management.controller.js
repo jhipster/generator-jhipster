@@ -1,50 +1,57 @@
 (function() {
-  'use strict';
+    'use strict';
 
-  angular.module('<%=angularAppName%>')
-      .controller('UserManagementController', function ($scope, Principal, User, ParseLinks, paginationConstants<% if (enableTranslation) { %>, Language<% } %>) {
-          $scope.users = [];
-          $scope.authorities = ['ROLE_USER', 'ROLE_ADMIN'];<% if (enableTranslation) { %>
-          Language.getAll().then(function (languages) {
-              $scope.languages = languages;
-          });<% } %>
+    angular
+        .module('<%=angularAppName%>')
+        .controller('UserManagementController', function ($scope, Principal, User, ParseLinks, paginationConstants<% if (enableTranslation) { %>, Language<% } %>) {
+            $scope.users = [];
+            $scope.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
+            <% if (enableTranslation) { %>
+                Language.getAll().then(function (languages) {
+                    $scope.languages = languages;
+                });
+            <% } %>
 
-  		Principal.identity().then(function(account) {
-              $scope.currentAccount = account;
-          });
-          $scope.page = 1;
-          $scope.loadAll = function () {<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-              User.query({page: $scope.page - 1, size: paginationConstants.itemsPerPage}, function (result, headers) {
-                  $scope.links = ParseLinks.parse(headers('link'));
-                  $scope.totalItems = headers('X-Total-Count');<% } else { %>
-              User.query({}, function (result) {<% } %>
-                  $scope.users = result;
-              });
-          };
+            Principal.identity().then(function(account) {
+                $scope.currentAccount = account;
+            });
 
-          $scope.loadPage = function (page) {
-              $scope.page = page;
-              $scope.loadAll();
-          };
-          $scope.loadAll();
+            $scope.page = 1;
+            $scope.loadAll = function () {
+                <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+                User.query({page: $scope.page - 1, size: paginationConstants.itemsPerPage}, function (result, headers) {
+                    $scope.links = ParseLinks.parse(headers('link'));
+                    $scope.totalItems = headers('X-Total-Count');
+                <% } else { %>
+                    User.query({}, function (result) {
+                <% } %>
+                    $scope.users = result;
+                });
+            };
 
-          $scope.setActive = function (user, isActivated) {
-              user.activated = isActivated;
-              User.update(user, function () {
-                  $scope.loadAll();
-                  $scope.clear();
-              });
-          };
+            $scope.loadPage = function (page) {
+                $scope.page = page;
+                $scope.loadAll();
+            };
+            $scope.loadAll();
 
-          $scope.clear = function () {
-              $scope.user = {
-                  id: null, login: null, firstName: null, lastName: null, email: null,
-                  activated: null, langKey: null, createdBy: null, createdDate: null,
-                  lastModifiedBy: null, lastModifiedDate: null, resetDate: null,
-                  resetKey: null, authorities: null
-              };
-              $scope.editForm.$setPristine();
-              $scope.editForm.$setUntouched();
-          };
-      });
+            $scope.setActive = function (user, isActivated) {
+                user.activated = isActivated;
+                User.update(user, function () {
+                    $scope.loadAll();
+                    $scope.clear();
+                });
+            };
+
+            $scope.clear = function () {
+                $scope.user = {
+                    id: null, login: null, firstName: null, lastName: null, email: null,
+                    activated: null, langKey: null, createdBy: null, createdDate: null,
+                    lastModifiedBy: null, lastModifiedDate: null, resetDate: null,
+                    resetKey: null, authorities: null
+                };
+                $scope.editForm.$setPristine();
+                $scope.editForm.$setUntouched();
+            };
+        });
 })();

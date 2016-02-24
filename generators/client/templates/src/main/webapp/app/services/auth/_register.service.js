@@ -1,9 +1,10 @@
 (function() {
-  'use strict';
+    'use strict';
 
-  angular.module('<%=angularAppName%>')
-      .factory('Register', function ($resource) {
-          return $resource('api/register', {}, {
-          });
-      });
+    angular
+        .module('<%=angularAppName%>')
+        .factory('Register', function ($resource) {
+            return $resource('api/register', {}, {
+            });
+        });
 })();
