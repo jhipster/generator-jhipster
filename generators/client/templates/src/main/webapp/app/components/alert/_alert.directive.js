@@ -100,17 +100,6 @@ angular.module('<%=angularAppName%>')
                           }
                       });
 
-<<<<<<< HEAD
-                    $scope.$on('$destroy', function () {
-                        if(cleanHttpErrorListener !== undefined && cleanHttpErrorListener !== null){
-                            cleanHttpErrorListener();
-                            $scope.alerts = [];
-                        }
-                    });
-                }
-            ]
-    });
-=======
                       $scope.$on('$destroy', function () {
                           if(cleanHttpErrorListener !== undefined && cleanHttpErrorListener !== null){
                               cleanHttpErrorListener();
@@ -123,4 +112,3 @@ angular.module('<%=angularAppName%>')
       });
 
 })();
->>>>>>> iife wrapping
