@@ -1,7 +1,8 @@
 (function() {
     'use strict';
 
-    angular.module('<%=angularAppName%>')
+    angular
+        .module('<%=angularAppName%>')
         .config(function ($stateProvider) {
             $stateProvider
                 .state('finishReset', {

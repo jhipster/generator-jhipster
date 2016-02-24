@@ -1,7 +1,8 @@
 (function() {
     'use strict';
 
-    angular.module('<%=angularAppName%>')
+    angular
+        .module('<%=angularAppName%>')
         .controller('ResetFinishController', ResetFinishController);
 
     ResetFinishController.$inject = ['$stateParams', '$timeout', 'Auth', 'LoginService'];
