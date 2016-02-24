@@ -13,9 +13,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.data.repository.query.SecurityEvaluationContextExtension;
 
-import io.github.jhipster.app1.security.AuthoritiesConstants;
-import io.github.jhipster.app1.security.jwt.JWTConfigurer;
-import io.github.jhipster.app1.security.jwt.TokenProvider;
+import <%=packageName%>.security.AuthoritiesConstants;
+import <%=packageName%>.security.jwt.JWTConfigurer;
+import <%=packageName%>.security.jwt.TokenProvider;
 
 @Configuration
 @EnableWebSecurity
