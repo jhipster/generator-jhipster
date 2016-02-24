@@ -7,9 +7,9 @@
             $scope.users = [];
             $scope.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
             <% if (enableTranslation) { %>
-                Language.getAll().then(function (languages) {
-                    $scope.languages = languages;
-                });
+            Language.getAll().then(function (languages) {
+                $scope.languages = languages;
+            });
             <% } %>
 
             Principal.identity().then(function(account) {

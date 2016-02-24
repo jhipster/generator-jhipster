@@ -90,45 +90,45 @@
                 function addAlert(alertOptions, extAlerts) {
                     alertOptions.alertId = alertId++;
                     <%_ if (enableTranslation) { _%>
-                        alertOptions.msg = $translate.instant(alertOptions.msg, alertOptions.params);
-                        <%_ } _%>
-                        var that = this;
-                        var alert = this.factory(alertOptions);
-                        if (alertOptions.timeout && alertOptions.timeout > 0) {
-                            $timeout(function () {
-                                that.closeAlert(alertOptions.alertId, extAlerts);
-                            }, alertOptions.timeout);
-                        }
-                        return alert;
+                    alertOptions.msg = $translate.instant(alertOptions.msg, alertOptions.params);
+                    <%_ } _%>
+                    var that = this;
+                    var alert = this.factory(alertOptions);
+                    if (alertOptions.timeout && alertOptions.timeout > 0) {
+                        $timeout(function () {
+                            that.closeAlert(alertOptions.alertId, extAlerts);
+                        }, alertOptions.timeout);
                     }
+                    return alert;
+                }
 
-                    function closeAlert(id, extAlerts) {
-                        var thisAlerts = extAlerts ? extAlerts : alerts;
-                        return this.closeAlertByIndex(thisAlerts.map(function(e) { return e.id; }).indexOf(id), thisAlerts);
-                    }
+                function closeAlert(id, extAlerts) {
+                    var thisAlerts = extAlerts ? extAlerts : alerts;
+                    return this.closeAlertByIndex(thisAlerts.map(function(e) { return e.id; }).indexOf(id), thisAlerts);
+                }
 
-                    function closeAlertByIndex(index, thisAlerts) {
-                        return thisAlerts.splice(index, 1);
-                    }
+                function closeAlertByIndex(index, thisAlerts) {
+                    return thisAlerts.splice(index, 1);
+                }
 
-                    return {
-                        factory: factory,
-                        isToast: isToast,
-                        add: addAlert,
-                        closeAlert: closeAlert,
-                        closeAlertByIndex: closeAlertByIndex,
-                        clear: clear,
-                        get: get,
-                        success: success,
-                        error: error,
-                        info: info,
-                        warning : warning
-                    };
-                }];
-
-                this.showAsToast = function(isToast) {
-                    this.toast = isToast;
+                return {
+                    factory: factory,
+                    isToast: isToast,
+                    add: addAlert,
+                    closeAlert: closeAlert,
+                    closeAlertByIndex: closeAlertByIndex,
+                    clear: clear,
+                    get: get,
+                    success: success,
+                    error: error,
+                    info: info,
+                    warning : warning
                 };
+            }];
 
-            });
-    })();
+            this.showAsToast = function(isToast) {
+                this.toast = isToast;
+            };
+
+        });
+})();

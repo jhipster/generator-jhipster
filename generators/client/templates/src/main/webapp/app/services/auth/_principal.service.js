@@ -63,15 +63,15 @@
                         _identity = account.data;
                         _authenticated = true;
                         deferred.resolve(_identity);<% if (websocket == 'spring-websocket') { %>
-                            Tracker.connect();<% } %>
-                        })
-                        .catch(function() {
-                            _identity = null;
-                            _authenticated = false;
-                            deferred.resolve(_identity);
-                        });
-                        return deferred.promise;
-                    }
-                };
-            });
+                        Tracker.connect();<% } %>
+                    })
+                    .catch(function() {
+                        _identity = null;
+                        _authenticated = false;
+                        deferred.resolve(_identity);
+                    });
+                    return deferred.promise;
+                }
+            };
+        });
 })();

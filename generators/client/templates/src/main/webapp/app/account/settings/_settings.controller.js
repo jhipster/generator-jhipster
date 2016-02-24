@@ -33,16 +33,16 @@
                         $scope.settingsAccount = copyAccount(account);
                     });
                     <% if (enableTranslation){ %>
-                        Language.getCurrent().then(function(current) {
-                            if ($scope.settingsAccount.langKey !== current) {
-                                $translate.use($scope.settingsAccount.langKey);
-                            }
-                        });
-                    <% } %>
-                    }).catch(function() {
-                        $scope.success = null;
-                        $scope.error = 'ERROR';
+                    Language.getCurrent().then(function(current) {
+                        if ($scope.settingsAccount.langKey !== current) {
+                            $translate.use($scope.settingsAccount.langKey);
+                        }
                     });
-                };
-            });
+                    <% } %>
+                }).catch(function() {
+                    $scope.success = null;
+                    $scope.error = 'ERROR';
+                });
+            };
+        });
 })();

@@ -31,6 +31,6 @@
         .constant('LANGUAGES', [
             'en', 'fr'
             // jhipster-needle-006 - JHipster will add new languages here
-            ]
+        ]
         );
 })();
