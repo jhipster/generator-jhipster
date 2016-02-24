@@ -5,7 +5,7 @@
         .module('<%=angularAppName%>')
         .factory('Principal', function Principal($q, Account<% if (websocket == 'spring-websocket') { %>, Tracker<% } %>) {
             var _identity,
-            _authenticated = false;
+                _authenticated = false;
 
             return {
                 isIdentityResolved: function () {
