@@ -329,6 +329,10 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.html',
         CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.routes.service.js',
         DOCKER_DIR + 'registry.yml'
+    ],
+
+    microservice: [
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/MicroserviceSecurityConfiguration.java',
     ]
 };
 
@@ -704,6 +708,37 @@ describe('JHipster generator', function () {
         it('creates expected files with the gateway application type', function () {
             assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.gateway);
+        });
+    });
+
+    describe('microservice', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, checkInstall: false})
+                .withPrompts({
+                    "applicationType": "microservice",
+                    "baseName": "jhipster",
+                    "packageName": "com.mycompany.myapp",
+                    "packageFolder": "com/mycompany/myapp",
+                    "authenticationType": "jwt",
+                    "hibernateCache": "ehcache",
+                    "clusteredHttpSession": "no",
+                    "websocket": "no",
+                    "databaseType": "sql",
+                    "devDatabaseType": "h2Memory",
+                    "prodDatabaseType": "mysql",
+                    "useSass": false,
+                    "enableTranslation": true,
+                    "buildTool": "maven",
+                    "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
+                    "searchEngine": "no"
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with the microservice application type', function () {
+            assert.file(expectedFiles.jwt);
+            assert.file(expectedFiles.microservice);
         });
     });
 });

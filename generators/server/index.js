@@ -801,6 +801,12 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_GatewaySwaggerApiResource.java', javaDir + 'web/rest/GatewaySwaggerApiResource.java', this, {});
         },
 
+        writeServerMicroserviceFiles: function () {
+            if (this.applicationType != 'microservice') return;
+
+            this.template(SERVER_MAIN_SRC_DIR + 'package/config/_MicroserviceSecurityConfiguration.java', javaDir + 'config/MicroserviceSecurityConfiguration.java', this, {});
+        },
+
         writeServerMicroserviceAndGatewayFiles: function () {
             if (this.applicationType != 'microservice' && this.applicationType != 'gateway') return;
 
@@ -907,6 +913,10 @@ module.exports = JhipsterServerGenerator.extend({
 
         writeServerJavaServiceFiles: function () {
             this.template(SERVER_MAIN_SRC_DIR + 'package/service/_package-info.java', javaDir + 'service/package-info.java', this, {});
+
+            /* Skip the code below for --skip-user-management */
+            if(this.skipUserManagement) return;
+
             this.template(SERVER_MAIN_SRC_DIR + 'package/service/util/_RandomUtil.java', javaDir + 'service/util/RandomUtil.java', this, {});
         },
 
