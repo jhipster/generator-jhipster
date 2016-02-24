@@ -25,7 +25,7 @@ describe('Controller Tests', function() {
                 'Auth': MockAuth
             };
             createController = function() {
-                $injector.get('$controller')('ActivationController', locals);
+                $injector.get('$controller')('ActivationController as vm', locals);
             };
         }));
 
@@ -46,8 +46,8 @@ describe('Controller Tests', function() {
             // when
             $scope.$apply(createController);
             // then
-            expect($scope.error).toBe(null);
-            expect($scope.success).toEqual('OK');
+            expect($scope.vm.error).toBe(null);
+            expect($scope.vm.success).toEqual('OK');
         });
 
         it('should set set error to ERROR upon activation failure', function() {
@@ -56,8 +56,8 @@ describe('Controller Tests', function() {
             // when
             $scope.$apply(createController);
             // then
-            expect($scope.error).toBe('ERROR');
-            expect($scope.success).toEqual(null);
+            expect($scope.vm.error).toBe('ERROR');
+            expect($scope.vm.success).toEqual(null);
         });
     });
 });

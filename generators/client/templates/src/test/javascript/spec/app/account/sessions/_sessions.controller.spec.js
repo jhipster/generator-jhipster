@@ -30,7 +30,7 @@ describe('Controller Tests', function() {
                 'Principal': MockPrincipal
             };
             createController = function() {
-                return $injector.get('$controller')('SessionsController', locals);
+                return $injector.get('$controller')('SessionsController as vm', locals);
             };
         }));
 
@@ -44,12 +44,12 @@ describe('Controller Tests', function() {
             // then
             expect(MockPrincipal.identity).toHaveBeenCalled();
             expect(MockSessions.getAll).toHaveBeenCalled();
-            expect($scope.success).toBeNull();
-            expect($scope.error).toBeNull();
-            expect($scope.account).toEqual({
+            expect($scope.vm.success).toBeNull();
+            expect($scope.vm.error).toBeNull();
+            expect($scope.vm.account).toEqual({
                 id: 'fuzzer'
             });
-            expect($scope.sessions).toEqual(sessions);
+            expect($scope.vm.sessions).toEqual(sessions);
         });
 
         it('should call delete on Sessions to invalidate a session', function() {
@@ -59,7 +59,7 @@ describe('Controller Tests', function() {
             MockSessions.getAll.and.returnValue(sessions);
             // given
             createController();
-            $scope.invalidate('xyz');
+            $scope.vm.invalidate('xyz');
             $scope.$apply();
             // then
             expect(MockSessions.delete).toHaveBeenCalledWith({
@@ -77,11 +77,11 @@ describe('Controller Tests', function() {
             });
             // given
             createController();
-            $scope.invalidate('xyz');
+            $scope.vm.invalidate('xyz');
             $scope.$apply();
             // then
-            expect($scope.success).toBeNull();
-            expect($scope.error).toBe('ERROR');
+            expect($scope.vm.success).toBeNull();
+            expect($scope.vm.error).toBe('ERROR');
         });
 
         it('should call notify of success upon session invalidation', function() {
@@ -94,11 +94,11 @@ describe('Controller Tests', function() {
             });
             // given
             createController();
-            $scope.invalidate('xyz');
+            $scope.vm.invalidate('xyz');
             $scope.$apply();
             // then
-            expect($scope.error).toBeNull();
-            expect($scope.success).toBe('OK');
+            expect($scope.vm.error).toBeNull();
+            expect($scope.vm.success).toBe('OK');
         });
     });
 });
