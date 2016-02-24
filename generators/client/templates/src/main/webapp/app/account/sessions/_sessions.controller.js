@@ -1,24 +1,37 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('SessionsController', function ($scope, Sessions, Principal) {
+    angular
+        .module('<%=angularAppName%>')
+        .controller('SessionsController', SessionsController);
+
+    SessionsController.$inject = ['Sessions', 'Principal'];
+
+    function SessionsController (Sessions, Principal) {
+        var vm = this;
+
+        vm.account = null;
+        vm.error = null;
+        vm.invalidate = invalidate;
+        vm.sessions = Sessions.getAll();
+        vm.success = null;
+
+
         Principal.identity().then(function(account) {
-            $scope.account = account;
+            vm.account = account;
         });
 
-        $scope.success = null;
-        $scope.error = null;
-        $scope.sessions = Sessions.getAll();
-        $scope.invalidate = function (series) {
+        function invalidate (series) {
             Sessions.delete({series: encodeURIComponent(series)},
                 function () {
-                    $scope.error = null;
-                    $scope.success = 'OK';
-                    $scope.sessions = Sessions.getAll();
+                    vm.error = null;
+                    vm.success = 'OK';
+                    vm.sessions = Sessions.getAll();
                 },
                 function () {
-                    $scope.success = null;
-                    $scope.error = 'ERROR';
+                    vm.success = null;
+                    vm.error = 'ERROR';
                 });
-        };
-    });
+        }
+    }
+})();
