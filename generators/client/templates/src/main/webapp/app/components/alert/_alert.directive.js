@@ -46,7 +46,7 @@
                                 $scope.alerts
                             )
                         );<%_ } else { _%>
-                            $scope.alerts.push(
+                        $scope.alerts.push(
                             AlertService.add(
                                 {
                                     type: 'danger',
