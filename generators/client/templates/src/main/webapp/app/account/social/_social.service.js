@@ -1,24 +1,34 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .factory('SocialService', function () {
-        var socialService = {};
+    angular
+        .module('<%=angularAppName%>')
+        .factory('SocialService', SocialService);
 
-        socialService.getProviderSetting = function (provider) {
+    function SocialService () {
+        var socialService = {
+            getProviderSetting: getProviderSetting,
+            getProviderURL: getProviderURL,
+            getCSRF: getCSRF
+        };
+
+        return socialService;
+
+        function getProviderSetting (provider) {
             switch(provider) {
-                case 'google': return 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email';
-                case 'facebook': return 'public_profile,email';
-                case 'twitter': return '';
+            case 'google': return 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email';
+            case 'facebook': return 'public_profile,email';
+            case 'twitter': return '';
                 // jhipster-needle-add-social-button
-                default: return 'Provider setting not defined';
+            default: return 'Provider setting not defined';
             }
-        };
+        }
 
-        socialService.getProviderURL = function (provider) {
+        function getProviderURL (provider) {
             return 'signin/' + provider;
-        };
+        }
 
-        socialService.getCSRF = function () {
+        function getCSRF () {
             /* globals document */
             var name = 'CSRF-TOKEN=';
             var ca = document.cookie.split(';');
@@ -32,7 +42,6 @@ angular.module('<%=angularAppName%>')
                 }
             }
             return '';
-        };
-
-        return socialService;
-    });
+        }
+    }
+})();
