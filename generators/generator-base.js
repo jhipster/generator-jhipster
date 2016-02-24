@@ -1247,6 +1247,8 @@ Generator.prototype.askModuleName = function (generator, question, questions) {
     }.bind(generator));
 };
 
+Generator.prototype.contains = _.includes;
+
 var wordwrap = function(text, width, seperator, keepLF) {
     var wrappedText = '';
     var rows = text.split('\n');
