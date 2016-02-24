@@ -1,8 +1,10 @@
-'use strict';
+(function (){
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .config(function ($stateProvider) {
-        $stateProvider
+    angular
+        .module('<%=angularAppName%>')
+        .config(function ($stateProvider) {
+            $stateProvider
             .state('activate', {
                 parent: 'account',
                 url: '/activate?key',
@@ -23,4 +25,5 @@ angular.module('<%=angularAppName%>')
                     }]
                 }
             });
-    });
+        });
+})();

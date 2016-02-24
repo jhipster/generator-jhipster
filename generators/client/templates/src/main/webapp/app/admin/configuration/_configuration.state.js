@@ -1,8 +1,10 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .config(function ($stateProvider) {
-        $stateProvider
+    angular
+        .module('<%=angularAppName%>')
+        .config(function ($stateProvider) {
+            $stateProvider
             .state('configuration', {
                 parent: 'admin',
                 url: '/configuration',
@@ -23,4 +25,6 @@ angular.module('<%=angularAppName%>')
                     }]
                 }
             });
-    });
+        });
+
+})();

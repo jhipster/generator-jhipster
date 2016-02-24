@@ -1,13 +1,16 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('HealthModalController', function($scope, $uibModalInstance, currentHealth, baseName, subSystemName) {
+    angular
+        .module('<%=angularAppName%>')
+        .controller('HealthModalController', function($scope, $uibModalInstance, currentHealth, baseName, subSystemName) {
 
-        $scope.currentHealth = currentHealth;
-        $scope.baseName = baseName;
-        $scope.subSystemName = subSystemName;
+            $scope.currentHealth = currentHealth;
+            $scope.baseName = baseName;
+            $scope.subSystemName = subSystemName;
 
-        $scope.cancel = function() {
-            $uibModalInstance.dismiss('cancel');
-        };
-    });
+            $scope.cancel = function() {
+                $uibModalInstance.dismiss('cancel');
+            };
+        });
+})();

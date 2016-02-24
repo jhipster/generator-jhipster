@@ -1,18 +1,21 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('HomeController', function ($scope, Principal, LoginService) {
-        function getAccount() {
-            Principal.identity().then(function(account) {
-                $scope.account = account;
-                $scope.isAuthenticated = Principal.isAuthenticated;
-            });
-        }
-        getAccount();
-
-        $scope.$on('authenticationSuccess', function() {
+    angular
+        .module('<%=angularAppName%>')
+        .controller('HomeController', function ($scope, Principal, LoginService) {
+            function getAccount() {
+                Principal.identity().then(function(account) {
+                    $scope.account = account;
+                    $scope.isAuthenticated = Principal.isAuthenticated;
+                });
+            }
             getAccount();
-        });
 
-        $scope.login = LoginService.open;
-    });
+            $scope.$on('authenticationSuccess', function() {
+                getAccount();
+            });
+
+            $scope.login = LoginService.open;
+        });
+})();

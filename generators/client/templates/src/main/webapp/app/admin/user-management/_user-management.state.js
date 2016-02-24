@@ -1,8 +1,10 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .config(function ($stateProvider) {
-        $stateProvider
+    angular
+        .module('<%=angularAppName%>')
+        .config(function ($stateProvider) {
+            $stateProvider
             .state('user-management', {
                 parent: 'admin',
                 url: '/user-management',
@@ -117,4 +119,5 @@ angular.module('<%=angularAppName%>')
                     });
                 }]
             });
-    });
+        });
+})();

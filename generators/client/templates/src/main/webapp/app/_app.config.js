@@ -1,14 +1,15 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
+    angular.module('<%=angularAppName%>')
     // uncomment below to make alerts look like toast
     .config(function ($urlRouterProvider, $httpProvider, $locationProvider, $localStorageProvider, <% if (enableTranslation) { %>$translateProvider, tmhDynamicLocaleProvider,<% } %> httpRequestInterceptorCacheBusterProvider/*, AlertServiceProvider*/) {
         //AlertServiceProvider.showAsToast(true);
-<% if (authenticationType == 'session') { %>
-        //enable CSRF
+        <% if (authenticationType == 'session') { %>
+            //enable CSRF
         $httpProvider.defaults.xsrfCookieName = 'CSRF-TOKEN';
         $httpProvider.defaults.xsrfHeaderName = 'X-CSRF-TOKEN';
-<% } %>
+        <% } %>
         //Cache everything except rest api requests
         httpRequestInterceptorCacheBusterProvider.setMatchlist([/.*api.*/, /.*protected.*/], true);
 
@@ -20,7 +21,7 @@ angular.module('<%=angularAppName%>')
         $httpProvider.interceptors.push('notificationInterceptor');
         // jhipster-needle-angularjs-add-interceptor JHipster will add new application interceptor here
         <% if (enableTranslation) { %>
-        // Initialize angular-translate
+            // Initialize angular-translate
         $translateProvider.useLoader('$translatePartialLoader', {
             urlTemplate: 'i18n/{lang}/{part}.json'
         });
@@ -36,7 +37,7 @@ angular.module('<%=angularAppName%>')
         <% } %>
         $localStorageProvider.setKeyPrefix('jhi-');
     })
-    // jhipster-needle-angularjs-add-config JHipster will add new application configuration here
+        // jhipster-needle-angularjs-add-config JHipster will add new application configuration here
     .config(['$urlMatcherFactoryProvider', function($urlMatcherFactory) {
         $urlMatcherFactory.type('boolean', {
             name : 'boolean',
@@ -47,3 +48,4 @@ angular.module('<%=angularAppName%>')
             pattern: /bool|true|0|1/
         });
     }]);
+})();

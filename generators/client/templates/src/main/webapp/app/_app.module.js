@@ -1,16 +1,17 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>', ['ngStorage', <% if (enableTranslation) { %>'tmh.dynamicLocale', 'pascalprecht.translate', <% } %>
+    angular.module('<%=angularAppName%>', ['ngStorage', <% if (enableTranslation) { %>'tmh.dynamicLocale', 'pascalprecht.translate', <% } %>
     'ngResource', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload',
     // jhipster-needle-angularjs-add-module JHipster will add new module here
     'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'ui.router',  'infinite-scroll', 'angular-loading-bar'])
 
     .run(function ($rootScope, $location, $window, $http, $state, <% if (enableTranslation) { %>$translate, Language,<% } %> Auth, Principal, ENV, VERSION) {
         <% if (enableTranslation) { %>// update the window title using params in the following
-        // precendence
-        // 1. titleKey parameter
-        // 2. $state.$current.data.pageTitle (current state page title)
-        // 3. 'global.title'
+            // precendence
+            // 1. titleKey parameter
+            // 2. $state.$current.data.pageTitle (current state page title)
+            // 3. 'global.title'
         var updateTitle = function(titleKey) {
             if (!titleKey && $state.$current.data && $state.$current.data.pageTitle) {
                 titleKey = $state.$current.data.pageTitle;
@@ -31,7 +32,7 @@ angular.module('<%=angularAppName%>', ['ngStorage', <% if (enableTranslation) { 
             }
 
             <% if (enableTranslation) { %>
-            // Update the language
+                // Update the language
             Language.getCurrent().then(function (language) {
                 $translate.use(language);
             });
@@ -46,8 +47,8 @@ angular.module('<%=angularAppName%>', ['ngStorage', <% if (enableTranslation) { 
             // previousState is already set in the authExpiredInterceptor. If we're going
             // to login directly, we don't want to be sent to some previous state anyway
             if (!$rootScope.redirected && $rootScope.previousStateName) {
-              $rootScope.previousStateName = fromState.name;
-              $rootScope.previousStateParams = fromParams;
+                $rootScope.previousStateName = fromState.name;
+                $rootScope.previousStateParams = fromParams;
             }
 
             // Set the page title key to the one configured in state or use default one
@@ -57,7 +58,7 @@ angular.module('<%=angularAppName%>', ['ngStorage', <% if (enableTranslation) { 
             <% if (enableTranslation) { %>updateTitle(titleKey);<% } else { %>$window.document.title = titleKey;<% } %>
         });
         <% if (enableTranslation) { %>
-        // if the current translation changes, update the window title
+            // if the current translation changes, update the window title
         $rootScope.$on('$translateChangeSuccess', function() { updateTitle(); });
 
         <% } %>
@@ -70,3 +71,4 @@ angular.module('<%=angularAppName%>', ['ngStorage', <% if (enableTranslation) { 
             }
         };
     });
+})();

@@ -1,16 +1,18 @@
-'use strict';
+(function () {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('SessionsController', function ($scope, Sessions, Principal) {
-        Principal.identity().then(function(account) {
-            $scope.account = account;
-        });
+    angular
+        .module('<%=angularAppName%>')
+        .controller('SessionsController', function ($scope, Sessions, Principal) {
+            Principal.identity().then(function(account) {
+                $scope.account = account;
+            });
 
-        $scope.success = null;
-        $scope.error = null;
-        $scope.sessions = Sessions.getAll();
-        $scope.invalidate = function (series) {
-            Sessions.delete({series: encodeURIComponent(series)},
+            $scope.success = null;
+            $scope.error = null;
+            $scope.sessions = Sessions.getAll();
+            $scope.invalidate = function (series) {
+                Sessions.delete({series: encodeURIComponent(series)},
                 function () {
                     $scope.error = null;
                     $scope.success = 'OK';
@@ -20,5 +22,7 @@ angular.module('<%=angularAppName%>')
                     $scope.success = null;
                     $scope.error = 'ERROR';
                 });
-        };
-    });
+            };
+        });
+
+})();

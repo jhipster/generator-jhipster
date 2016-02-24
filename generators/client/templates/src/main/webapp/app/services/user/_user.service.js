@@ -1,8 +1,10 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .factory('User', function ($resource) {
-        return $resource('api/users/:login', {}, {
+    angular
+        .module('<%=angularAppName%>')
+        .factory('User', function ($resource) {
+            return $resource('api/users/:login', {}, {
                 'query': {method: 'GET', isArray: true},
                 'get': {
                     method: 'GET',
@@ -16,3 +18,4 @@ angular.module('<%=angularAppName%>')
                 'delete':{ method:'DELETE'}
             });
         });
+})();

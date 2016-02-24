@@ -1,8 +1,10 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .config(function ($stateProvider) {
-        $stateProvider
+    angular
+        .module('<%=angularAppName%>')
+        .config(function ($stateProvider) {
+            $stateProvider
             .state('app', {
                 abstract: true,
                 views: {
@@ -13,13 +15,14 @@ angular.module('<%=angularAppName%>')
                 },
                 resolve: {
                     authorize: ['Auth',
-                        function (Auth) {
-                            return Auth.authorize();
-                        }
-                    ]<% if (enableTranslation) { %>,
+                    function (Auth) {
+                        return Auth.authorize();
+                    }
+                ]<% if (enableTranslation) { %>,
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('global');
                     }]<% } %>
                 }
             });
-    });
+        });
+})();

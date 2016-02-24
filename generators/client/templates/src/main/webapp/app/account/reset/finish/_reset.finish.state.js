@@ -1,8 +1,10 @@
-'use strict';
+(function () {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .config(function ($stateProvider) {
-        $stateProvider
+    angular
+        .module('<%=angularAppName%>')
+        .config(function ($stateProvider) {
+            $stateProvider
             .state('finishReset', {
                 parent: 'account',
                 url: '/reset/finish?key',
@@ -22,4 +24,6 @@ angular.module('<%=angularAppName%>')
                     }]
                 }
             });
-    });
+        });
+
+})();
