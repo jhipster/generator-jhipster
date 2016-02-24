@@ -204,7 +204,7 @@ module.exports = JhipsterGenerator.extend({
                 choices: [
                     {
                         value: 'monolith',
-                        name: 'Monolithic application'
+                        name: 'Monolithic application (recommended for simple projects)'
                     },
                     {
                         value: 'microservice',
