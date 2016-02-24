@@ -17,7 +17,7 @@
             <%= entityClass %>.query({
                 page: pagingParams.page - 1,
                 size: paginationConstants.itemsPerPage,
-                sort: [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'), 'id']
+                sort: [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc')]
             }, onSuccess, onError);
         };
         vm.loadPage = function(page) {
