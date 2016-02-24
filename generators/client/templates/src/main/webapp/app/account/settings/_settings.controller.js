@@ -7,7 +7,7 @@
 
     SettingsController.$inject = ['Principal', 'Auth'<% if (enableTranslation){ %>, 'Language', '$translate'<% } %>]
 
-    function SettingsController (vm, Principal, Auth<% if (enableTranslation){ %>, Language, $translate<% } %>) {
+    function SettingsController (Principal, Auth<% if (enableTranslation){ %>, Language, $translate<% } %>) {
         var vm = this;
 
         vm.error = null;
