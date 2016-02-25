@@ -1236,7 +1236,10 @@ Generator.prototype.askModuleName = function (generator, question, questions) {
         type: 'input',
         name: 'baseName',
         validate: function (input) {
-            if (/^([a-zA-Z0-9_]*)$/.test(input)) return true;
+            if (/^([a-zA-Z0-9_]*)$/.test(input)  && input != 'application') return true;
+            if (input == 'application') {
+                return 'Your application name cannot be named \'application\' as this is a reserved name for Spring Boot';
+            }
             return 'Your application name cannot contain special characters or a blank space, using the default name instead';
         },
         message: '(' + (question) + '/' + questions + ') What is the base name of your application?',
