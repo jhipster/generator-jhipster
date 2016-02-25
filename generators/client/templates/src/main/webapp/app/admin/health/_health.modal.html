@@ -2,12 +2,12 @@
     <button aria-label="Close" data-dismiss="modal" class="close" type="button" ng-click="vm.cancel()"><span aria-hidden="true">&times;</span>
     </button>
     <h4 class="modal-title" id="showHealthLabel"><% if (enableTranslation){ %>
-		{{'health.indicator.' + vm.basename(vm.currenthealth.name) | translate}}<% }else{ %><span class="text-capitalize">{{ vm.basename(vm.currenthealth.name) }}</span><% } %>
-        {{vm.subSystemName(vm.currenthealth.name)}}
+		{{'health.indicator.' + vm.baseName(vm.currentHealth.name) | translate}}<% }else{ %><span class="text-capitalize">{{ vm.baseName(vm.currentHealth.name) }}</span><% } %>
+        {{vm.subSystemName(vm.currentHealth.name)}}
     </h4>
 </div>
 <div class="modal-body pad">
-    <div ng-show="vm.vm.currenthealth.details">
+    <div ng-show="vm.currentHealth.details">
         <h4 translate="health.details.properties">Properties</h4>
         <table class="table table-striped">
             <thead>
@@ -17,16 +17,16 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="(k,v) in vm.currenthealth.details">
+                <tr ng-repeat="(k,v) in vm.currentHealth.details">
                     <td class="col-md-6 text-left">{{k}}</td>
                     <td class="col-md-6 text-left">{{v}}</td>
                 </tr>
             </tbody>
         </table>
     </div>
-    <div ng-show="vm.currenthealth.error">
+    <div ng-show="vm.currentHealth.error">
         <h4 translate="health.details.error">Error</h4>
-            <pre>{{vm.currenthealth.error}}</pre>
+            <pre>{{vm.currentHealth.error}}</pre>
     </div>
 </div>
 <div class="modal-footer">

@@ -57,6 +57,7 @@
                 $uibModal.open({
                     templateUrl: 'app/admin/metrics/metrics.modal.html',
                     controller: 'MetricsModalController',
+                    controllerAs: 'vm',
                     size: 'lg',
                     resolve: {
                         threadDump: function() {

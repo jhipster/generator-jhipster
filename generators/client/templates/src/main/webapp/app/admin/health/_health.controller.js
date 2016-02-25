@@ -136,6 +136,7 @@
             $uibModal.open({
                 templateUrl: 'app/admin/health/health.modal.html',
                 controller: 'HealthModalController',
+                controllerAs: 'vm',
                 size: 'lg',
                 resolve: {
                     currentHealth: function() {
