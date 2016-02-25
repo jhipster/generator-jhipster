@@ -5,6 +5,8 @@
         .module('<%=angularAppName%>')
         .directive('jhSocial', jhSocial);
 
+    jhSocial.$inject = [<% if (enableTranslation){ %>'$translatePartialLoader', '$translate', <% } %>'$filter', 'SocialService'];
+
     function jhSocial(<% if (enableTranslation){ %>$translatePartialLoader, $translate, <% } %>$filter, SocialService) {
         var directive = {
             restrict: 'E',
@@ -14,6 +16,10 @@
             templateUrl: 'app/account/social/directive/social.html',
             link: linkFunc
         };
+
+        return directive;
+
+        /* private helper methods */
 
         function linkFunc(scope) {
             <% if (enableTranslation){ %>
@@ -26,6 +32,5 @@
             scope.csrf = SocialService.getCSRF();
         }
 
-        return directive;
     }
 })();
