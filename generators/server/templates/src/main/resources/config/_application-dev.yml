@@ -182,3 +182,11 @@ jhipster:
             host: localhost
             port: 2003
             prefix: <%= baseName %>
+    <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+    logging:
+        logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
+            enabled: false
+            host: localhost
+            port: 5000
+            queueSize: 512
+    <%_ } _%>
