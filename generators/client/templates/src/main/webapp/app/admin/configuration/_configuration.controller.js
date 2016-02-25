@@ -5,9 +5,9 @@
         .module('<%=angularAppName%>')
         .controller('ConfigurationController', ConfigurationController);
 
-    ConfigurationController.$inject = ['ConfigurationService'];
+    ConfigurationController.$inject = ['$filter','ConfigurationService'];
 
-    function ConfigurationController (ConfigurationService) {
+    function ConfigurationController (filter,ConfigurationService) {
         var vm = this;
 
         vm.allConfiguration = null;
