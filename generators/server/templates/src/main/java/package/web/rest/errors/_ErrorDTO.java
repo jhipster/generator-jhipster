@@ -16,16 +16,16 @@ public class ErrorDTO implements Serializable {
 
     private List<FieldErrorDTO> fieldErrors;
 
-    ErrorDTO(String message) {
+    public ErrorDTO(String message) {
         this(message, null);
     }
 
-    ErrorDTO(String message, String description) {
+    public ErrorDTO(String message, String description) {
         this.message = message;
         this.description = description;
     }
 
-    ErrorDTO(String message, String description, List<FieldErrorDTO> fieldErrors) {
+    public ErrorDTO(String message, String description, List<FieldErrorDTO> fieldErrors) {
         this.message = message;
         this.description = description;
         this.fieldErrors = fieldErrors;
