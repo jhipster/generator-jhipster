@@ -19,7 +19,7 @@
             views: {
                 'content@': {
                     templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.html',
-                    controller: '<%= entityClass %>ManagementController',
+                    controller: '<%= entityAngularJSName %>Controller',
                     controllerAs: 'vm'
                 }
             },
@@ -69,7 +69,7 @@
             views: {
                 'content@': {
                     templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-detail.html',
-                    controller: '<%= entityClass %>ManagementDetailController',
+                    controller: '<%= entityAngularJSName %>DetailController',
                     controllerAs: 'vm'
                 }
             },
@@ -95,7 +95,7 @@
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
                     templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.html',
-                    controller: '<%= entityClass %>ManagementDialogController',
+                    controller: '<%= entityAngularJSName %>DialogController',
                     controllerAs: 'vm',
                     size: 'lg',
                     resolve: {
@@ -131,7 +131,7 @@
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
                     templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-dialog.html',
-                    controller: '<%= entityClass %>ManagementDialogController',
+                    controller: '<%= entityAngularJSName %>DialogController',
                     controllerAs: 'vm',
                     size: 'lg',
                     resolve: {
@@ -155,7 +155,7 @@
             onEnter: ['$stateParams', '$state', '$uibModal', function($stateParams, $state, $uibModal) {
                 $uibModal.open({
                     templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>-delete-dialog.html',
-                    controller: '<%= entityClass %>ManagementDeleteController',
+                    controller: '<%= entityAngularJSName %>DeleteController',
                     controllerAs: 'vm',
                     size: 'md',
                     resolve: {

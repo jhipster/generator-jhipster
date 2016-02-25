@@ -3,11 +3,11 @@
 
     angular
         .module('<%=angularAppName%>')
-        .controller('<%= entityClass %>ManagementDetailController', <%= entityClass %>ManagementDetailController);
+        .controller('<%= entityAngularJSName %>DetailController', <%= entityAngularJSName %>DetailController);
 
-    <%= entityClass %>ManagementDetailController.$inject = ['$scope', '$rootScope', '$stateParams'<% if (fieldsContainBlob) { %>, 'DataUtils'<% } %>, 'entity'<% for (idx in differentTypes) { %>, '<%= differentTypes[idx] %>'<% } %>];
+    <%= entityAngularJSName %>DetailController.$inject = ['$scope', '$rootScope', '$stateParams'<% if (fieldsContainBlob) { %>, 'DataUtils'<% } %>, 'entity'<% for (idx in differentTypes) { %>, '<%= differentTypes[idx] %>'<% } %>];
 
-    function <%= entityClass %>ManagementDetailController($scope, $rootScope, $stateParams<% if (fieldsContainBlob) { %>, DataUtils<% } %>, entity<% for (idx in differentTypes) { %>, <%= differentTypes[idx] %><% } %>) {
+    function <%= entityAngularJSName %>DetailController($scope, $rootScope, $stateParams<% if (fieldsContainBlob) { %>, DataUtils<% } %>, entity<% for (idx in differentTypes) { %>, <%= differentTypes[idx] %><% } %>) {
         var vm = this;
         vm.<%= entityInstance %> = entity;
         vm.load = function (id) {
