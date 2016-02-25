@@ -205,7 +205,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/services/auth/password.service.js',
         CLIENT_MAIN_SRC_DIR + 'app/services/auth/register.service.js',
         CLIENT_MAIN_SRC_DIR + 'app/services/auth/sessions.service.js',
-        CLIENT_MAIN_SRC_DIR + 'app/components/form/form.directive.js',
+        CLIENT_MAIN_SRC_DIR + 'app/components/form/show-validation.directive.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/form/uib-pager.config.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/form/uib-pagination.config.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.controller.js',
