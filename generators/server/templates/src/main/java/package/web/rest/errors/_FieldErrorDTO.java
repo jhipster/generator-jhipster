@@ -12,7 +12,7 @@ public class FieldErrorDTO implements Serializable {
 
     private final String message;
 
-    FieldErrorDTO(String dto, String field, String message) {
+    public FieldErrorDTO(String dto, String field, String message) {
         this.objectName = dto;
         this.field = field;
         this.message = message;

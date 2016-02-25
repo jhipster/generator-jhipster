@@ -1,4 +1,4 @@
-FROM cassandra:2.2.3
+FROM cassandra:2.2.5
 
 # script to initialize the database
 ADD cassandra/scripts/init-dev.sh /usr/local/bin/init

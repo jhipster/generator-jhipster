@@ -1,28 +1,38 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('RequestResetController', function ($rootScope, $scope, $state, $timeout, Auth) {
+    angular
+        .module('<%=angularAppName%>')
+        .controller('RequestResetController', RequestResetController);
 
-        $scope.success = null;
-        $scope.error = null;
-        $scope.errorEmailNotExists = null;
-        $scope.resetAccount = {};
+    RequestResetController.$inject = ['$timeout', 'Auth'];
+
+    function RequestResetController ($timeout, Auth) {
+        var vm = this;
+
+        vm.error = null;
+        vm.errorEmailNotExists = null;
+        vm.requestReset = requestReset;
+        vm.resetAccount = {};
+        vm.success = null;
+
         $timeout(function (){angular.element('[ng-model="resetAccount.email"]').focus();});
 
-        $scope.requestReset = function () {
+        function requestReset () {
 
-            $scope.error = null;
-            $scope.errorEmailNotExists = null;
+            vm.error = null;
+            vm.errorEmailNotExists = null;
 
-            Auth.resetPasswordInit($scope.resetAccount.email).then(function () {
-                $scope.success = 'OK';
+            Auth.resetPasswordInit(vm.resetAccount.email).then(function () {
+                vm.success = 'OK';
             }).catch(function (response) {
-                $scope.success = null;
+                vm.success = null;
                 if (response.status === 400 && response.data === 'e-mail address not registered') {
-                    $scope.errorEmailNotExists = 'ERROR';
+                    vm.errorEmailNotExists = 'ERROR';
                 } else {
-                    $scope.error = 'ERROR';
+                    vm.error = 'ERROR';
                 }
             });
         };
-    });
+    }
+})();

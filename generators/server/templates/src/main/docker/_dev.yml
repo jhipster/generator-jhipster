@@ -1,7 +1,7 @@
 <%_ if (devDatabaseType == 'mysql') { _%>
 <%= baseName.toLowerCase() %>-dev-mysql:
   container_name: <%= baseName.toLowerCase() %>-dev-mysql
-  image: mysql:5.7.9
+  image: mysql:5.7.11
   # volumes:
   #   - ~/volumes/jhipster/<%= baseName %>/dev-mysql/:/var/lib/mysql/
   environment:
@@ -15,7 +15,7 @@
 <%_ if (devDatabaseType == 'postgresql') { _%>
 <%= baseName.toLowerCase() %>-dev-postgresql:
   container_name: <%= baseName.toLowerCase() %>-dev-postgresql
-  image: postgres:9.4.5
+  image: postgres:9.5.1
   # volumes:
   #   - ~/volumes/jhipster/<%= baseName %>/dev-postgresql/:/var/lib/postgresql/
   environment:
@@ -27,7 +27,7 @@
 <%_ if (devDatabaseType == 'mongodb') { _%>
 <%= baseName.toLowerCase() %>-dev-mongodb:
   container_name: <%= baseName.toLowerCase() %>-dev-mongodb
-  image: mongo:3.0.7
+  image: mongo:3.2.3
   # volumes:
   #   - ~/volumes/jhipster/<%= baseName %>/dev-mongodb/:/data/db/
   ports:

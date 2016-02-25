@@ -1,38 +1,80 @@
-        $scope.<%= entityInstancePlural %> = [];
-        $scope.predicate = 'id';
-        $scope.reverse = true;
-        $scope.page = 0;
+        vm.<%= entityInstancePlural %> = [];
+        vm.predicate = 'id';
+        vm.reverse = true;
+        vm.page = 0;
         <%_ if (fieldsContainBlob) { _%>
-        $scope.openFile = DataUtils.openFile;
-        $scope.byteSize = DataUtils.byteSize;
+        vm.openFile = DataUtils.openFile;
+        vm.byteSize = DataUtils.byteSize;
         <%_ } _%>
-        $scope.loadAll = function() {
-            <%= entityClass %>.query({page: $scope.page, size: 20, sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'), 'id']}, function(result, headers) {
-                $scope.links = ParseLinks.parse(headers('link'));
-                for (var i = 0; i < result.length; i++) {
-                    $scope.<%= entityInstancePlural %>.push(result[i]);
+        vm.loadAll = function() {
+            var onSuccess = function (data, headers) {
+                vm.links = ParseLinks.parse(headers('link'));
+                vm.totalItems = headers('X-Total-Count');
+                for (var i = 0; i < data.length; i++) {
+                    vm.<%= entityInstancePlural %>.push(data[i]);
                 }
-            });
-        };
-        $scope.reset = function() {
-            $scope.page = 0;
-            $scope.<%= entityInstancePlural %> = [];
-            $scope.loadAll();
-        };
-        $scope.loadPage = function(page) {
-            $scope.page = page;
-            $scope.loadAll();
-        };<%_
-        if (searchEngine == 'elasticsearch') { _%>
+            };
+            var onError = function (error) {
+                AlertService.error(error.data.message);
+            };
 
-        $scope.search = function () {
-            <%= entityClass %>Search.query({query: $scope.searchQuery}, function(result) {
-                $scope.<%= entityInstancePlural %> = result;
-            }, function(response) {
-                if(response.status === 404) {
-                    $scope.loadAll();
-                }
-            });
-        };<%_ } _%>
+        <%_ if (searchEngine != 'elasticsearch') { _%>
+            <%= entityClass %>.query({
+                page: vm.page,
+                size: 20,
+                sort: [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'), 'id']
+            }, onSuccess, onError);
+        <%_ } else { _%>
+            if (vm.currentSearch) {
+                <%= entityClass %>Search.query({
+                    query: vm.currentSearch,
+                    page: vm.page,
+                    size: 20,
+                    sort: [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'), 'id']
+                }, onSuccess, onError);
+            } else {
+                <%= entityClass %>.query({
+                    page: vm.page,
+                    size: 20,
+                    sort: [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'), 'id']
+                }, onSuccess, onError);
+            }
+        <%_ } _%>
+        };
+        vm.reset = function() {
+            vm.page = 0;
+            vm.<%= entityInstancePlural %> = [];
+            vm.loadAll();
+        };
+        vm.loadPage = function(page) {
+            vm.page = page;
+            vm.loadAll();
+        };
+        <%_ if (searchEngine == 'elasticsearch') { _%>
 
-        $scope.loadAll();
+        vm.search = function (searchQuery) {
+            if (!searchQuery){
+                return vm.clear();
+            }
+            vm.<%= entityInstancePlural %> = [];
+            vm.links = null;
+            vm.page = 0;
+            vm.predicate = '_score';
+            vm.reverse = false;
+            vm.currentSearch = searchQuery;
+            vm.loadAll();
+        };
+
+        vm.clear = function () {
+            vm.<%= entityInstancePlural %> = [];
+            vm.links = null;
+            vm.page = 0;
+            vm.predicate = 'id';
+            vm.reverse = true;
+            vm.searchQuery = null;
+            vm.currentSearch = null;
+            vm.loadAll();
+        };
+        <%_ } _%>
+
+        vm.loadAll();

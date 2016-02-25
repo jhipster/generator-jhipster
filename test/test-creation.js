@@ -229,7 +229,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/account/password/password.html',
         CLIENT_MAIN_SRC_DIR + 'app/account/password/password.state.js',
         CLIENT_MAIN_SRC_DIR + 'app/account/password/password.controller.js',
-        CLIENT_MAIN_SRC_DIR + 'app/account/password/password.directive.js',
+        CLIENT_MAIN_SRC_DIR + 'app/account/password/password-strength-bar.directive.js',
         CLIENT_MAIN_SRC_DIR + 'app/account/register/register.html',
         CLIENT_MAIN_SRC_DIR + 'app/account/register/register.state.js',
         CLIENT_MAIN_SRC_DIR + 'app/account/register/register.controller.js',
@@ -276,7 +276,7 @@ const expectedFiles = {
         CLIENT_TEST_SRC_DIR + 'spec/app/admin/health/health.controller.spec.js',
         CLIENT_TEST_SRC_DIR + 'spec/app/components/login/login.controller.spec.js',
         CLIENT_TEST_SRC_DIR + 'spec/app/account/password/password.controller.spec.js',
-        CLIENT_TEST_SRC_DIR + 'spec/app/account/password/password.directive.spec.js',
+        CLIENT_TEST_SRC_DIR + 'spec/app/account/password/password-strength-bar.directive.spec.js',
         CLIENT_TEST_SRC_DIR + 'spec/app/account/sessions/sessions.controller.spec.js',
         CLIENT_TEST_SRC_DIR + 'spec/app/account/settings/settings.controller.spec.js',
         CLIENT_TEST_SRC_DIR + 'spec/app/account/activate/activate.controller.spec.js',
@@ -329,6 +329,10 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.html',
         CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.routes.service.js',
         DOCKER_DIR + 'registry.yml'
+    ],
+
+    microservice: [
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/SecurityConfiguration.java',
     ]
 };
 
@@ -354,7 +358,10 @@ describe('JHipster generator', function () {
                     "enableTranslation": true,
                     "buildTool": "maven",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
-                    "searchEngine": "no"
+                    "searchEngine": "no",
+                    "enableSocialSignIn": false,
+                    "skipClient": false,
+                    "skipUserManagement": false
                 })
                 .on('end', done);
         });
@@ -704,6 +711,40 @@ describe('JHipster generator', function () {
         it('creates expected files with the gateway application type', function () {
             assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.gateway);
+        });
+    });
+
+    describe('microservice', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, checkInstall: false})
+                .withPrompts({
+                    "applicationType": "microservice",
+                    "baseName": "jhipster",
+                    "packageName": "com.mycompany.myapp",
+                    "packageFolder": "com/mycompany/myapp",
+                    "authenticationType": "jwt",
+                    "hibernateCache": "ehcache",
+                    "clusteredHttpSession": "no",
+                    "websocket": "no",
+                    "databaseType": "sql",
+                    "devDatabaseType": "h2Memory",
+                    "prodDatabaseType": "mysql",
+                    "useSass": false,
+                    "enableTranslation": true,
+                    "buildTool": "maven",
+                    "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
+                    "searchEngine": "no",
+                    "enableSocialSignIn": false,
+                    "skipClient": true,
+                    "skipUserManagement": true
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with the microservice application type', function () {
+            assert.file(expectedFiles.jwt);
+            assert.file(expectedFiles.microservice);
         });
     });
 });

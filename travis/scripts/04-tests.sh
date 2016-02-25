@@ -10,5 +10,5 @@ else
   ./gradlew test
 fi
 if [ "$JHIPSTER" != "app-microservice" ]; then
-  gulp test
+  gulp test --no-notification
 fi

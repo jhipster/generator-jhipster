@@ -124,7 +124,7 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
  * @param {string} routerName - The name of the AngularJS router (which by default is the name of the entity).
  * @param {boolean} enableTranslation - If translations are enabled or not
  */
-Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
+Generator.prototype.addEntityToMenu = function(routerName, enableTranslation) {
     try {
         var fullPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
         jhipsterUtils.rewriteFile({
@@ -1191,8 +1191,6 @@ Generator.prototype.getDefaultAppName = function() {
     return (/^[a-zA-Z0-9_]+$/.test(path.basename(process.cwd())))?path.basename(process.cwd()):'jhipster';
 };
 
-Generator.prototype.contains = _.contains;
-
 Generator.prototype.formatAsClassJavadoc = function(text) {
     return '/**' + wordwrap(text, WORD_WRAP_WIDTH - 4, '\n * ', false) + '\n */';
 };
@@ -1238,7 +1236,10 @@ Generator.prototype.askModuleName = function (generator, question, questions) {
         type: 'input',
         name: 'baseName',
         validate: function (input) {
-            if (/^([a-zA-Z0-9_]*)$/.test(input)) return true;
+            if (/^([a-zA-Z0-9_]*)$/.test(input)  && input != 'application') return true;
+            if (input == 'application') {
+                return 'Your application name cannot be named \'application\' as this is a reserved name for Spring Boot';
+            }
             return 'Your application name cannot contain special characters or a blank space, using the default name instead';
         },
         message: '(' + (question) + '/' + questions + ') What is the base name of your application?',
@@ -1248,6 +1249,8 @@ Generator.prototype.askModuleName = function (generator, question, questions) {
         done();
     }.bind(generator));
 };
+
+Generator.prototype.contains = _.includes;
 
 var wordwrap = function(text, width, seperator, keepLF) {
     var wrappedText = '';

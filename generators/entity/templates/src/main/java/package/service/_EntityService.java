@@ -59,5 +59,5 @@ public interface <%= entityClass %>Service {
      *  @param query the query of the search
      *  @return the list of entities
      */
-    List<<%= instanceType %>> search(String query);<% } %>
+    <% if (pagination != 'no') { %>Page<<%= entityClass %><% } else { %>List<<%= instanceType %><% } %>> search(String query<% if (pagination != 'no') { %>, Pageable pageable<% } %>);<% } %>
 }

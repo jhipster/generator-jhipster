@@ -1,11 +1,30 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>', ['ngStorage', <% if (enableTranslation) { %>'tmh.dynamicLocale', 'pascalprecht.translate', <% } %>
-    'ngResource', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload',
-    // jhipster-needle-angularjs-add-module JHipster will add new module here
-    'ui.bootstrap', 'ui.bootstrap.datetimepicker', 'ui.router',  'infinite-scroll', 'angular-loading-bar'])
+    angular
+        .module('<%=angularAppName%>', [
+            'ngStorage', <% if (enableTranslation) { %>
+            'tmh.dynamicLocale',
+            'pascalprecht.translate', <% } %>
+            'ngResource',
+            'ngCookies',
+            'ngAria',
+            'ngCacheBuster',
+            'ngFileUpload',
+            'ui.bootstrap',
+            'ui.bootstrap.datetimepicker',
+            'ui.router',
+            'infinite-scroll',
+            // jhipster-needle-angularjs-add-module JHipster will add new module here
+            'angular-loading-bar'
+        ])
+        .run(run);
 
-    .run(function ($rootScope, $location, $window, $http, $state, <% if (enableTranslation) { %>$translate, Language,<% } %> Auth, Principal, ENV, VERSION) {
+    run.$inject = ['$rootScope', '$location', '$window', '$http', '$state', <% if (enableTranslation) { %>'$translate', 'Language',<% } %>
+        'Auth', 'Principal', 'ENV', 'VERSION'];
+
+    function run($rootScope, $location, $window, $http, $state, <% if (enableTranslation) { %>$translate, Language,<% } %>
+        Auth, Principal, ENV, VERSION) {
         <% if (enableTranslation) { %>// update the window title using params in the following
         // precendence
         // 1. titleKey parameter
@@ -69,4 +88,5 @@ angular.module('<%=angularAppName%>', ['ngStorage', <% if (enableTranslation) { 
                 $state.go($rootScope.previousStateName, $rootScope.previousStateParams);
             }
         };
-    });
+    }
+})();

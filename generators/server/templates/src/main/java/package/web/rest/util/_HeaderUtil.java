@@ -3,7 +3,7 @@ package <%=packageName%>.web.rest.util;
 import org.springframework.http.HttpHeaders;
 
 /**
- * Utility class for http header creation.
+ * Utility class for HTTP headers creation.
  *
  */
 public class HeaderUtil {
@@ -16,9 +16,9 @@ public class HeaderUtil {
     }
 <%
     if(enableTranslation) {
-        var createdMessage = '"' + angularAppName + '." + entityName + "Management.created"';
-        var updatedMessage = '"' + angularAppName + '." + entityName + "Management.updated"';
-        var deletedMessage = '"' + angularAppName + '." + entityName + "Management.deleted"';
+        var createdMessage = '"' + angularAppName + '." + entityName + ".created"';
+        var updatedMessage = '"' + angularAppName + '." + entityName + ".updated"';
+        var deletedMessage = '"' + angularAppName + '." + entityName + ".deleted"';
         var errorMessage = '"error." + errorKey';
     } else {
         var createdMessage = '"A new " + entityName + " is created with identifier " + param';

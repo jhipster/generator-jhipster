@@ -1,4 +1,4 @@
-FROM cassandra:2.2.3
+FROM cassandra:2.2.5
 
 # install datastax-agent
 RUN apt-get update && apt-get install -y curl sysstat

@@ -745,7 +745,6 @@ module.exports = JhipsterServerGenerator.extend({
 
             if (this.authenticationType == 'jwt') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_UserJWTController.java', javaDir + 'web/rest/UserJWTController.java', this, {});
-                this.template(SERVER_MAIN_SRC_DIR + 'package/security/_AuthenticationProvider.java', javaDir + 'security/AuthenticationProvider.java', this, {});
             }
 
             if (this.authenticationType == 'oauth2') {
@@ -800,6 +799,12 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_RouteDTO.java', javaDir + 'web/rest/dto/RouteDTO.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_GatewayResource.java', javaDir + 'web/rest/GatewayResource.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_GatewaySwaggerApiResource.java', javaDir + 'web/rest/GatewaySwaggerApiResource.java', this, {});
+        },
+
+        writeServerMicroserviceFiles: function () {
+            if (this.applicationType != 'microservice') return;
+
+            this.template(SERVER_MAIN_SRC_DIR + 'package/config/_MicroserviceSecurityConfiguration.java', javaDir + 'config/MicroserviceSecurityConfiguration.java', this, {});
         },
 
         writeServerMicroserviceAndGatewayFiles: function () {
@@ -908,6 +913,10 @@ module.exports = JhipsterServerGenerator.extend({
 
         writeServerJavaServiceFiles: function () {
             this.template(SERVER_MAIN_SRC_DIR + 'package/service/_package-info.java', javaDir + 'service/package-info.java', this, {});
+
+            /* Skip the code below for --skip-user-management */
+            if(this.skipUserManagement) return;
+
             this.template(SERVER_MAIN_SRC_DIR + 'package/service/util/_RandomUtil.java', javaDir + 'service/util/RandomUtil.java', this, {});
         },
 

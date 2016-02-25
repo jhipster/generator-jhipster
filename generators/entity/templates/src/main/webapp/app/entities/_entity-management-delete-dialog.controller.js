@@ -1,17 +1,23 @@
-'use strict';
+(function() {
+	'use strict';
 
-angular.module('<%=angularAppName%>')
-	.controller('<%= entityClass %>ManagementDeleteController', function($scope, $uibModalInstance, entity, <%= entityClass %>) {
+	angular
+		.module('<%=angularAppName%>')
+		.controller('<%= entityAngularJSName %>DeleteController',<%= entityAngularJSName %>DeleteController);
 
-        $scope.<%= entityInstance %> = entity;
-        $scope.clear = function() {
-            $uibModalInstance.dismiss('cancel');
-        };
-        $scope.confirmDelete = function (id) {
-            <%= entityClass %>.delete({id: id},
-                function () {
-                    $uibModalInstance.close(true);
-                });
-        };
+	<%= entityAngularJSName %>DeleteController.$inject = ['$uibModalInstance', 'entity', '<%= entityClass %>'];
 
-    });
+	function <%= entityAngularJSName %>DeleteController($uibModalInstance, entity, <%= entityClass %>) {
+		var vm = this;
+		vm.<%= entityInstance %> = entity;
+		vm.clear = function() {
+			$uibModalInstance.dismiss('cancel');
+		};
+		vm.confirmDelete = function (id) {
+			<%= entityClass %>.delete({id: id},
+				function () {
+					$uibModalInstance.close(true);
+				});
+		};
+	}
+})();

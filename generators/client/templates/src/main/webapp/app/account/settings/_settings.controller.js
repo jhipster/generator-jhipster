@@ -1,9 +1,19 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('SettingsController', function ($scope, Principal, Auth<% if (enableTranslation){ %>, Language, $translate<% } %>) {
-        $scope.success = null;
-        $scope.error = null;
+    angular
+        .module('<%=angularAppName%>')
+        .controller('SettingsController', SettingsController);
+
+    SettingsController.$inject = ['Principal', 'Auth'<% if (enableTranslation){ %>, 'Language', '$translate'<% } %>]
+
+    function SettingsController (Principal, Auth<% if (enableTranslation){ %>, Language, $translate<% } %>) {
+        var vm = this;
+
+        vm.error = null;
+        vm.save = save;
+        vm.settingsAccount = null;
+        vm.success = null;
 
         /**
          * Store the "settings account" in a separate variable, and not in the shared "account" variable.
@@ -20,24 +30,25 @@ angular.module('<%=angularAppName%>')
         };
 
         Principal.identity().then(function(account) {
-            $scope.settingsAccount = copyAccount(account);
+            vm.settingsAccount = copyAccount(account);
         });
 
-        $scope.save = function () {
-            Auth.updateAccount($scope.settingsAccount).then(function() {
-                $scope.error = null;
-                $scope.success = 'OK';
+        function save () {
+            Auth.updateAccount(vm.settingsAccount).then(function() {
+                vm.error = null;
+                vm.success = 'OK';
                 Principal.identity(true).then(function(account) {
-                    $scope.settingsAccount = copyAccount(account);
+                    vm.settingsAccount = copyAccount(account);
                 });<% if (enableTranslation){ %>
                 Language.getCurrent().then(function(current) {
-                    if ($scope.settingsAccount.langKey !== current) {
-                        $translate.use($scope.settingsAccount.langKey);
+                    if (vm.settingsAccount.langKey !== current) {
+                        $translate.use(vm.settingsAccount.langKey);
                     }
                 });<% } %>
             }).catch(function() {
-                $scope.success = null;
-                $scope.error = 'ERROR';
+                vm.success = null;
+                vm.error = 'ERROR';
             });
-        };
-    });
+        }
+    }
+})();

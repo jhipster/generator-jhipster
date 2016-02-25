@@ -22,7 +22,7 @@ describe('Controller Tests', function() {
                 'Auth': MockAuth
             };
             createController = function() {
-                $injector.get('$controller')('SettingsController', locals);
+                $injector.get('$controller')('SettingsController as vm', locals);
             }
         }));
 
@@ -42,12 +42,12 @@ describe('Controller Tests', function() {
             $scope.$apply(createController);
 
             //WHEN
-            $scope.save();
+            $scope.vm.save();
 
             //THEN
             expect(MockPrincipal.identity).toHaveBeenCalled();
             expect(MockAuth.updateAccount).toHaveBeenCalledWith(accountValues);
-            expect($scope.settingsAccount).toEqual(accountValues);
+            expect($scope.vm.settingsAccount).toEqual(accountValues);
         });
 
         it('should notify of success upon successful save', function() {
@@ -61,11 +61,11 @@ describe('Controller Tests', function() {
             createController();
 
             //WHEN
-            $scope.$apply($scope.save);
+            $scope.$apply($scope.vm.save);
 
             //THEN
-            expect($scope.error).toBeNull();
-            expect($scope.success).toBe('OK');
+            expect($scope.vm.error).toBeNull();
+            expect($scope.vm.success).toBe('OK');
         });
 
         it('should notify of error upon failed save', function() {
@@ -75,11 +75,11 @@ describe('Controller Tests', function() {
             createController();
 
             //WHEN
-            $scope.$apply($scope.save);
+            $scope.$apply($scope.vm.save);
 
             //THEN
-            expect($scope.error).toEqual('ERROR');
-            expect($scope.success).toBeNull();
+            expect($scope.vm.error).toEqual('ERROR');
+            expect($scope.vm.success).toBeNull();
         });
     });
 });

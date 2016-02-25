@@ -60,20 +60,33 @@ module.exports = EntityGenerator.extend({
             description: 'Entity name'
         });
         // remove extention if feeding json files
-        this.name = this.name.replace('.json', '');
+        if (this.name != undefined) {
+            this.name = this.name.replace('.json', '');
+        }
+
         // This method adds support for a `--[no-]regenerate` flag
         this.option('regenerate', {
-            desc: 'regenerate the entity without presenting an option to update it',
+            desc: 'Regenerate the entity without presenting an option to update it',
             type: Boolean,
             defaults: false
         });
+
         this.option('table-name', {
-           desc: 'specify table name that will be used by the entity',
+            desc: 'Specify table name that will be used by the entity',
             type: String
         });
+
+        // This adds support for a `--entity-angularjs-suffix` flag
+        this.option('entity-angularjs-suffix', {
+            desc: 'Use a suffix to generate AngularJS routes and files, to avoid name clashes',
+            type: String,
+            defaults: ''
+        });
+
         this.regenerate = this.options['regenerate'];
         this.entityTableName = this.options['table-name'] || this.name;
         this.entityTableName = _s.underscored(this.entityTableName).toLowerCase();
+        this.entityAngularJSSuffix = this.options['entity-angularjs-suffix'];
     },
     initializing: {
         getConfig: function(args) {
@@ -1208,29 +1221,29 @@ module.exports = EntityGenerator.extend({
                     }
                     for (var idxRules in field.fieldValidateRules) {
                         var fieldValidateRule = field.fieldValidateRules[idxRules];
-                        if (!_.contains(SUPPORTED_VALIDATION_RULES, fieldValidateRule)) {
+                        if (!_.includes(SUPPORTED_VALIDATION_RULES, fieldValidateRule)) {
                             this.env.error(chalk.red('ERROR fieldValidateRules contains unknown validation rule ' + fieldValidateRule + ' in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)+ ' [supported validation rules ' + SUPPORTED_VALIDATION_RULES + ']'));
                         }
                     }
-                    if (_.contains(field.fieldValidateRules, 'max') && _.isUndefined(field.fieldValidateRulesMax)) {
+                    if (_.includes(field.fieldValidateRules, 'max') && _.isUndefined(field.fieldValidateRulesMax)) {
                         this.env.error(chalk.red('ERROR fieldValidateRulesMax is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
-                    if (_.contains(field.fieldValidateRules, 'min') && _.isUndefined(field.fieldValidateRulesMin)) {
+                    if (_.includes(field.fieldValidateRules, 'min') && _.isUndefined(field.fieldValidateRulesMin)) {
                         this.env.error(chalk.red('ERROR fieldValidateRulesMin is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
-                    if (_.contains(field.fieldValidateRules, 'maxlength') && _.isUndefined(field.fieldValidateRulesMaxlength)) {
+                    if (_.includes(field.fieldValidateRules, 'maxlength') && _.isUndefined(field.fieldValidateRulesMaxlength)) {
                         this.env.error(chalk.red('ERROR fieldValidateRulesMaxlength is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
-                    if (_.contains(field.fieldValidateRules, 'minlength') && _.isUndefined(field.fieldValidateRulesMinlength)) {
+                    if (_.includes(field.fieldValidateRules, 'minlength') && _.isUndefined(field.fieldValidateRulesMinlength)) {
                         this.env.error(chalk.red('ERROR fieldValidateRulesMinlength is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
-                    if (_.contains(field.fieldValidateRules, 'maxbytes') && _.isUndefined(field.fieldValidateRulesMaxbytes)) {
+                    if (_.includes(field.fieldValidateRules, 'maxbytes') && _.isUndefined(field.fieldValidateRulesMaxbytes)) {
                         this.env.error(chalk.red('ERROR fieldValidateRulesMaxbytes is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
-                    if (_.contains(field.fieldValidateRules, 'minbytes') && _.isUndefined(field.fieldValidateRulesMinbytes)) {
+                    if (_.includes(field.fieldValidateRules, 'minbytes') && _.isUndefined(field.fieldValidateRulesMinbytes)) {
                         this.env.error(chalk.red('ERROR fieldValidateRulesMinbytes is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
-                    if (_.contains(field.fieldValidateRules, 'pattern') && _.isUndefined(field.fieldValidateRulesPattern)) {
+                    if (_.includes(field.fieldValidateRules, 'pattern') && _.isUndefined(field.fieldValidateRulesPattern)) {
                         this.env.error(chalk.red('ERROR fieldValidateRulesPattern is missing in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)));
                     }
                 }
@@ -1328,7 +1341,7 @@ module.exports = EntityGenerator.extend({
                 if (field.fieldType == 'DateTime') {
                     field.fieldType = 'ZonedDateTime';
                 }
-                var nonEnumType = _.contains(['String', 'Integer', 'Long', 'Float', 'Double', 'BigDecimal',
+                var nonEnumType = _.includes(['String', 'Integer', 'Long', 'Float', 'Double', 'BigDecimal',
                 'LocalDate', 'ZonedDateTime', 'Boolean', 'byte[]'], field.fieldType);
                 if ((databaseType == 'sql' || databaseType == 'mongodb') && !nonEnumType) {
                     field.fieldIsEnum = true;
@@ -1388,7 +1401,7 @@ module.exports = EntityGenerator.extend({
                 }
 
                 if (_.isUndefined(relationship.otherEntityStateName)) {
-                    relationship.otherEntityStateName = _s.trim(_s.dasherize(relationship.otherEntityName), '-') + '-management';
+                    relationship.otherEntityStateName = _s.trim(_s.dasherize(relationship.otherEntityName), '-') + this.entityAngularJSSuffix;
                 }
             }
 
@@ -1479,10 +1492,11 @@ module.exports = EntityGenerator.extend({
             this.entityApiUrl = entityNamePluralizedAndSpinalCased;
 
             this.entityFolderName = entityNameSpinalCased;
-            this.entityFileName = entityNameSpinalCased + '-management';
+            this.entityFileName = entityNameSpinalCased + this.entityAngularJSSuffix;
             this.entityServiceFileName = entityNameSpinalCased;
-            this.entityStateName = entityNameSpinalCased + '-management';
-            this.entityUrl = entityNameSpinalCased + '-management';
+            this.entityAngularJSName = this.entityClass + _s.camelize(this.entityAngularJSSuffix) ;
+            this.entityStateName = entityNameSpinalCased + this.entityAngularJSSuffix;
+            this.entityUrl = entityNameSpinalCased + this.entityAngularJSSuffix;
             if (databaseType == 'sql') {
                 this.entityUrlType = 'int';
             } else if (databaseType == 'mongodb') {
@@ -1490,7 +1504,7 @@ module.exports = EntityGenerator.extend({
             } else if (databaseType == 'cassandra') {
                 this.entityUrlType = '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}';
             }
-            this.entityTranslationKey = this.entityInstance + 'Management';
+            this.entityTranslationKey = this.entityInstance;
 
             this.differentTypes = [this.entityClass];
             if (this.relationships == undefined) {
@@ -1602,7 +1616,7 @@ module.exports = EntityGenerator.extend({
             this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-dialog.html', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-dialog.html', this, {}, true);
             this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-delete-dialog.html', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-delete-dialog.html', this, {}, true);
 
-            this.addEntityToMenu(this.entityStateName, this.enableTranslation);
+            this.addEntityToMenu(this.entityInstance, this.enableTranslation);
 
             this.template(ANGULAR_DIR + 'entities/_entity-management.state.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '.state.js', this, {});
             this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityFileName + '.state.js');
