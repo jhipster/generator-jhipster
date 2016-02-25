@@ -19,7 +19,8 @@
             views: {
                 'content@': {
                     templateUrl: 'app/admin/gateway/gateway.html',
-                    controller: 'GatewayController'
+                    controller: 'GatewayController',
+                    controllerAs: 'vm'
                 }
             },
             resolve: {

@@ -4,7 +4,7 @@
     angular
         .module('<%=angularAppName%>')
         .config(stateConfig);
-        
+
     stateConfig.$inject = ['$stateProvider'];
 
     function stateConfig($stateProvider) {
@@ -19,7 +19,8 @@
             views: {
                 'content@': {
                     templateUrl: 'app/admin/metrics/metrics.html',
-                    controller: 'MetricsController'
+                    controller: 'MetricsController',
+                    controllerAs: 'vm'
                 }
             },
             resolve: {

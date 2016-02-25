@@ -19,7 +19,8 @@
             views: {
                 'content@': {
                     templateUrl: 'app/admin/user-management/user-management.html',
-                    controller: 'UserManagementController'
+                    controller: 'UserManagementController',
+                    controllerAs: 'vm'
                 }
             },
             resolve: {
@@ -39,7 +40,8 @@
             views: {
                 'content@': {
                     templateUrl: 'app/admin/user-management/user-management-detail.html',
-                    controller: 'UserManagementDetailController'
+                    controller: 'UserManagementDetailController',
+                    controllerAs: 'vm'
                 }
             },
             resolve: {
@@ -59,6 +61,7 @@
                 $uibModal.open({
                     templateUrl: 'app/admin/user-management/user-management-dialog.html',
                     controller: 'UserManagementDialogController',
+                    controllerAs: 'vm',
                     size: 'lg',
                     resolve: {
                         entity: function () {
@@ -87,6 +90,7 @@
                 $uibModal.open({
                     templateUrl: 'app/admin/user-management/user-management-dialog.html',
                     controller: 'UserManagementDialogController',
+                    controllerAs: 'vm',
                     size: 'lg',
                     resolve: {
                         entity: ['User', function(User) {
@@ -110,6 +114,7 @@
                 $uibModal.open({
                     templateUrl: 'app/admin/user-management/user-management-delete-dialog.html',
                     controller: 'UserManagementDeleteController',
+                    controllerAs: 'vm',
                     size: 'md',
                     resolve: {
                         entity: ['User', function(User) {

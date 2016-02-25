@@ -19,7 +19,8 @@
             views: {
                 'content@': {
                     templateUrl: 'app/admin/configuration/configuration.html',
-                    controller: 'ConfigurationController'
+                    controller: 'ConfigurationController',
+                    controllerAs: 'vm'
                 }
             },
             resolve: {

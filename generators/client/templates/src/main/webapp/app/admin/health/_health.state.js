@@ -19,7 +19,8 @@
             views: {
                 'content@': {
                     templateUrl: 'app/admin/health/health.html',
-                    controller: 'HealthController'
+                    controller: 'HealthController',
+                    controllerAs: 'vm'
                 }
             },
             resolve: {
