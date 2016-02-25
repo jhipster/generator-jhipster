@@ -124,7 +124,7 @@ Generator.prototype.addElementToAdminMenu = function (routerName, glyphiconName,
  * @param {string} routerName - The name of the AngularJS router (which by default is the name of the entity).
  * @param {boolean} enableTranslation - If translations are enabled or not
  */
-Generator.prototype.addEntityToMenu = function (routerName, enableTranslation) {
+Generator.prototype.addEntityToMenu = function(routerName, enableTranslation) {
     try {
         var fullPath = CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html';
         jhipsterUtils.rewriteFile({
