@@ -1,14 +1,25 @@
- 'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .factory('notificationInterceptor', function ($q, AlertService) {
-        return {
-            response: function(response) {
-                var alertKey = response.headers('X-<%=angularAppName%>-alert');
-                if (angular.isString(alertKey)) {
-                    AlertService.success(alertKey, { param : response.headers('X-<%=angularAppName%>-params')});
-                }
-                return response;
-            }
+    angular
+        .module('<%=angularAppName%>')
+        .factory('notificationInterceptor', notificationInterceptor);
+
+    notificationInterceptor.$inject = ['q', 'AlertService'];
+
+    function notificationInterceptor ($q, AlertService) {
+        var service = {
+            response: response
         };
-    });
+
+        return service;
+
+        function response (response) {
+            var alertKey = response.headers('X-<%=angularAppName%>-alert');
+            if (angular.isString(alertKey)) {
+                AlertService.success(alertKey, { param : response.headers('X-<%=angularAppName%>-params')});
+            }
+            return response;
+        }
+    }
+})();

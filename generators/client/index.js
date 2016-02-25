@@ -417,7 +417,9 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'components/util/_pagination-util.service.js', ANGULAR_DIR + 'components/util/pagination-util.service.js', this, {});
             this.template(ANGULAR_DIR + 'components/util/_sort.directive.js', ANGULAR_DIR + 'components/util/sort.directive.js', this, {});
             // interceptor code
-            this.template(ANGULAR_DIR + 'components/interceptor/_auth.interceptor.js', ANGULAR_DIR + 'components/interceptor/auth.interceptor.js', this, {});
+            if (this.authenticationType == 'oauth2' || this.authenticationType == 'jwt') {
+                this.template(ANGULAR_DIR + 'components/interceptor/_auth.interceptor.js', ANGULAR_DIR + 'components/interceptor/auth.interceptor.js', this, {});
+            }
             this.template(ANGULAR_DIR + 'components/interceptor/_errorhandler.interceptor.js', ANGULAR_DIR + 'components/interceptor/errorhandler.interceptor.js', this, {});
             this.template(ANGULAR_DIR + 'components/interceptor/_notification.interceptor.js', ANGULAR_DIR + 'components/interceptor/notification.interceptor.js', this, {});
 
@@ -525,13 +527,13 @@ module.exports = JhipsterClientGenerator.extend({
                 'app/admin/user-management/user-management.controller.js',
                 'app/admin/user-management/user-management.state.js',
                 // components
-                'app/components/form/form.directive.js',
+                'app/components/form/show-validation.directive.js',
                 'app/components/form/maxbytes.directive.js',
                 'app/components/form/minbytes.directive.js',
                 'app/components/form/uib-pager.config.js',
                 'app/components/form/uib-pagination.config.js',
                 'app/components/form/pagination.constants.js',
-                'app/components/interceptor/auth.interceptor.js',
+                'app/components/interceptor/auth-expired.interceptor.js',
                 'app/components/interceptor/errorhandler.interceptor.js',
                 'app/components/interceptor/notification.interceptor.js',
                 'app/components/login/login.service.js',
@@ -581,12 +583,14 @@ module.exports = JhipsterClientGenerator.extend({
             }
             if (this.authenticationType == 'jwt') {
                 appScripts = appScripts.concat([
-                    'app/services/auth/auth.jwt.service.js']);
+                    'app/services/auth/auth.jwt.service.js',
+                    'app/components/interceptor/auth.interceptor.js']);
             }
 
             if (this.authenticationType == 'oauth2') {
                 appScripts = appScripts.concat([
-                    'app/services/auth/auth.oauth2.service.js']);
+                    'app/services/auth/auth.oauth2.service.js',
+                    'app/components/interceptor/auth.interceptor.js']);
             }
 
             if (this.authenticationType == 'session') {
