@@ -3,8 +3,8 @@
 
     angular
         .module('<%=angularAppName%>')
-        .config(httpConfig)
-        .config(translationConfig)
+        .config(httpConfig)<% if (enableTranslation) { %>
+        .config(translationConfig)<% } %>
         .config(localStorageConfig)
         // uncomment alertServiceConfig below to make alerts look like toast
         //.config(alertServiceConfig)
