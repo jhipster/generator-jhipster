@@ -402,6 +402,8 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'components/form/_uib-pagination.config.js', ANGULAR_DIR + 'components/form/uib-pagination.config.js', this, {});
             this.template(ANGULAR_DIR + 'components/form/_pagination.constants.js', ANGULAR_DIR + 'components/form/pagination.constants.js', this, {});
             if (this.enableTranslation) {
+                this.template(ANGULAR_DIR + 'components/language/_language.filter.js', ANGULAR_DIR + 'components/language/language.filter.js', this, {});
+                this.template(ANGULAR_DIR + 'components/language/_language.constants.js', ANGULAR_DIR + 'components/language/language.constants.js', this, {});
                 this.template(ANGULAR_DIR + 'components/language/_language.controller.js', ANGULAR_DIR + 'components/language/language.controller.js', this, {});
                 this.template(ANGULAR_DIR + 'components/language/_language.service.js', ANGULAR_DIR + 'components/language/language.service.js', this, {});
             }
@@ -572,6 +574,8 @@ module.exports = JhipsterClientGenerator.extend({
                     'bower_components/messageformat/locale/en.js',
                     'bower_components/messageformat/locale/fr.js',
                     'app/components/language/language.service.js',
+                    'app/components/language/language.filter.js',
+                    'app/components/language/language.constants.js',
                     'app/components/language/language.controller.js']);
             }
             if (this.enableSocialSignIn) {
