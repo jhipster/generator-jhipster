@@ -5,14 +5,14 @@
         .module('<%=angularAppName%>')
         .controller('TrackerController', TrackerController);
 
-    TrackerController.$inject = [<% if (authenticationType == 'oauth2') { %>, 'AuthServerProvider'<% } %>, '$cookies', '$http', 'Tracker'];
+    TrackerController.$inject = [<% if (authenticationType == 'oauth2') { %>'AuthServerProvider'<% } %>, '$cookies', '$http', 'Tracker'];
 
-    function TrackerController (<% if (authenticationType == 'oauth2') { %>, AuthServerProvider<% } %>, $cookies, $http, Tracker) {
+    function TrackerController (<% if (authenticationType == 'oauth2') { %>AuthServerProvider<% } %>, $cookies, $http, Tracker) {
         // This controller uses a Websocket connection to receive user activities in real-time.
         var vm = this;
 
         vm.activities = [];
-        
+
         Tracker.receive().then(null, null, function(activity) {
             showActivity(activity);
         });
