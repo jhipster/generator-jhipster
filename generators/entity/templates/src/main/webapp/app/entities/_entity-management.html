@@ -18,8 +18,13 @@
                     <div class="input-group pull-right" >
                         <input type="text" class="form-control" ng-model="vm.searchQuery" id="searchQuery" placeholder="<% if (enableTranslation) { %>{{ '<%= keyPrefix %>home.search' | translate }}<% } else { %>Query<% } %>">
                         <span  class="input-group-btn width-min" >
-                            <button class="btn btn-info" ng-click="vm.search()">
+                            <button class="btn btn-info" ng-click="vm.search(vm.searchQuery)">
                                 <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                        <span class="input-group-btn width-min" ng-if="vm.currentSearch">
+                            <button class="btn btn-info" ng-click="vm.clear()">
+                                <span class="glyphicon glyphicon-trash"></span>
                             </button>
                         </span>
                     </div>
@@ -32,7 +37,7 @@
     <div class="table-responsive">
         <table class="jh-table table table-striped">
             <thead>
-                <tr<% if (pagination != 'no') { %> jh-sort="predicate" ascending="reverse" callback="<%=pagination != 'infinite-scroll' ? 'transition' : 'reset'%>()"<% } %>>
+                <tr<% if (pagination != 'no') { %> jh-sort="vm.predicate" ascending="vm.reverse" callback="vm.<%=pagination != 'infinite-scroll' ? 'transition' : 'reset'%>()"<% } %>>
                     <th<% if (pagination != 'no') { %> jh-sort-by="id"<% } %>><span translate="global.field.id">ID</span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
                     <%_ for (idx in fields) { _%>
                     <th<% if (pagination != 'no') { %> jh-sort-by="<%= fields[idx].fieldName%>"<% } %>><span translate="<%=keyPrefix + fields[idx].fieldName %>"><%=fields[idx].fieldNameCapitalized%></span><% if (pagination != 'no') { %> <span class="glyphicon glyphicon-sort"></span><% } %></th>
@@ -48,7 +53,7 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody<% if (pagination == 'infinite-scroll') { %> infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page"<% } %>>
+            <tbody<% if (pagination == 'infinite-scroll') { %> infinite-scroll="vm.loadPage(vm.page + 1)" infinite-scroll-disabled="vm.page >= vm.links['last']"<% } %>>
                 <tr ng-repeat="<%=entityInstance %> in vm.<%=entityInstancePlural %> track by <%=entityInstance %>.id">
                     <td><a ui-sref="<%= entityStateName %>-detail({id:<%= entityInstance %>.id})">{{<%=entityInstance %>.id}}</a></td>
                     <%_ for (idx in fields) {
@@ -140,10 +145,10 @@
         </table>
     </div>
     <%_ if (pagination == 'pager') { _%>
-    <uib-pager total-items="totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pager>
+    <uib-pager total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pager>
     <%_ } else if (pagination == 'pagination') { _%>
     <div class="text-center">
-        <uib-pagination class="pagination-sm" total-items="totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
+        <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.transition()"></uib-pagination>
     </div>
     <%_ } _%>
 </div>

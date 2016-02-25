@@ -8,7 +8,7 @@
     <%= entityClass %>Search.$inject = ['$resource'];
 
     function <%= entityClass %>Search($resource) {
-        return $resource('api/_search/<%= entityApiUrl %>/:query', {}, {
+        return $resource('api/_search/<%= entityApiUrl %>', {}, {
             'query': { method: 'GET', isArray: true}
         });
     }

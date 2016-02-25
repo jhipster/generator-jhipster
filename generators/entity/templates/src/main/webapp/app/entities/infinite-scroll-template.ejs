@@ -7,12 +7,39 @@
         vm.byteSize = DataUtils.byteSize;
         <%_ } _%>
         vm.loadAll = function() {
-            <%= entityClass %>.query({page: vm.page, size: 20, sort: [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'), 'id']}, function(result, headers) {
+            var onSuccess = function (data, headers) {
                 vm.links = ParseLinks.parse(headers('link'));
-                for (var i = 0; i < result.length; i++) {
-                    vm.<%= entityInstancePlural %>.push(result[i]);
+                vm.totalItems = headers('X-Total-Count');
+                for (var i = 0; i < data.length; i++) {
+                    vm.<%= entityInstancePlural %>.push(data[i]);
                 }
-            });
+            };
+            var onError = function (error) {
+                AlertService.error(error.data.message);
+            };
+
+        <%_ if (searchEngine != 'elasticsearch') { _%>
+            <%= entityClass %>.query({
+                page: vm.page,
+                size: 20,
+                sort: [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'), 'id']
+            }, onSuccess, onError);
+        <%_ } else { _%>
+            if (vm.currentSearch) {
+                <%= entityClass %>Search.query({
+                    query: vm.currentSearch,
+                    page: vm.page,
+                    size: 20,
+                    sort: [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'), 'id']
+                }, onSuccess, onError);
+            } else {
+                <%= entityClass %>.query({
+                    page: vm.page,
+                    size: 20,
+                    sort: [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'), 'id']
+                }, onSuccess, onError);
+            }
+        <%_ } _%>
         };
         vm.reset = function() {
             vm.page = 0;
@@ -22,17 +49,32 @@
         vm.loadPage = function(page) {
             vm.page = page;
             vm.loadAll();
-        };<%_
-        if (searchEngine == 'elasticsearch') { _%>
+        };
+        <%_ if (searchEngine == 'elasticsearch') { _%>
 
-        vm.search = function () {
-            <%= entityClass %>Search.query({query: vm.searchQuery}, function(result) {
-                vm.<%= entityInstancePlural %> = result;
-            }, function(response) {
-                if(response.status === 404) {
-                    vm.loadAll();
-                }
-            });
-        };<%_ } _%>
+        vm.search = function (searchQuery) {
+            if (!searchQuery){
+                return vm.clear();
+            }
+            vm.<%= entityInstancePlural %> = [];
+            vm.links = null;
+            vm.page = 0;
+            vm.predicate = '_score';
+            vm.reverse = false;
+            vm.currentSearch = searchQuery;
+            vm.loadAll();
+        };
+
+        vm.clear = function () {
+            vm.<%= entityInstancePlural %> = [];
+            vm.links = null;
+            vm.page = 0;
+            vm.predicate = 'id';
+            vm.reverse = true;
+            vm.searchQuery = null;
+            vm.currentSearch = null;
+            vm.loadAll();
+        };
+        <%_ } _%>
 
         vm.loadAll();

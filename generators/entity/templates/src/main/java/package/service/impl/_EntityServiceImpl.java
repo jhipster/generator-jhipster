@@ -95,8 +95,13 @@ public class <%= serviceClassName %> <% if (service == 'serviceImpl') { %>implem
      *  @param query the query of the search
      *  @return the list of entities
      */<% if (databaseType == 'sql') { %>
-    @Transactional(readOnly = true) <% } %>
-    public List<<%= instanceType %>> search(String query) {
-        <%- include('../../common/search_template', {viaService: viaService}); -%>
+    @Transactional(readOnly = true)<% } %>
+    public <% if (pagination != 'no') { %>Page<<%= entityClass %><% } else { %>List<<%= instanceType %><% } %>> search(String query<% if (pagination != 'no') { %>, Pageable pageable<% } %>) {
+        <%_ if (pagination == 'no') { _%>
+        log.debug("Request to search <%= entityClassPlural %> for query {}", query);<%- include('../../common/search_stream_template', {viaService: viaService}); -%>
+        <%_ } else { _%>
+        log.debug("Request to search for a page of <%= entityClassPlural %> for query {}", query);
+        return <%= entityInstance %>SearchRepository.search(queryStringQuery(query), pageable);
+        <%_ } _%>
     }<% } %>
 }
