@@ -9,8 +9,8 @@ describe('administration', function () {
         element(by.id('account-menu')).click();
         element(by.id('login')).click();
 
-        element(by.model('username')).sendKeys('admin');
-        element(by.model('password')).sendKeys('admin');
+        element(by.id('username')).sendKeys('admin');
+        element(by.id('password')).sendKeys('admin');
         element(by.css('button[type=submit]')).click();
     });
 

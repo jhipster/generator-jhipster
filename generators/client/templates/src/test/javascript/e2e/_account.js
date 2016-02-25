@@ -12,8 +12,8 @@ describe('account', function () {
         element(by.id('account-menu')).click();
         element(by.id('login')).click();
 
-        element(by.model('username')).sendKeys('admin');
-        element(by.model('password')).sendKeys('foo');
+        element(by.id('username')).sendKeys('admin');
+        element(by.id('password')).sendKeys('foo');
         element(by.css('button[type=submit]')).click();
 
         var error = $('.alert-danger').getText();
@@ -23,8 +23,8 @@ describe('account', function () {
     it('should login successfully with admin account', function () {
         expect(element.all(by.css('h1')).first().getText()).toMatch(/Sign in/);
 
-        element(by.model('username')).clear().sendKeys('admin');
-        element(by.model('password')).clear().sendKeys('admin');
+        element(by.id('username')).clear().sendKeys('admin');
+        element(by.id('password')).clear().sendKeys('admin');
         element(by.css('button[type=submit]')).click();
 
         expect(element(by.css('.alert-success')).getText()).toMatch(/You are logged in as user "admin"/);
@@ -46,8 +46,8 @@ describe('account', function () {
         element(by.css('[ui-sref="password"]')).click();
 
         expect(element.all(by.css('h2')).first().getText()).toMatch(/Password for \[admin\]/);
-        element(by.model('password')).sendKeys('newpassword');
-        element(by.model('confirmPassword')).sendKeys('newpassword');
+        element(by.id('password')).sendKeys('newpassword');
+        element(by.id('confirmPassword')).sendKeys('newpassword');
         element(by.css('button[type=submit]')).click();
 
         var message = $('.alert-success').getText();
@@ -58,15 +58,15 @@ describe('account', function () {
         element(by.id('account-menu')).click();
         element(by.id('login')).click();
 
-        element(by.model('username')).sendKeys('admin');
-        element(by.model('password')).sendKeys('newpassword');
+        element(by.id('username')).sendKeys('admin');
+        element(by.id('password')).sendKeys('newpassword');
         element(by.css('button[type=submit]')).click();
 
         element(by.id('account-menu')).click();
         element(by.css('[ui-sref="password"]')).click();
         // change back to default
-        element(by.model('password')).clear().sendKeys('admin');
-        element(by.model('confirmPassword')).clear().sendKeys('admin');
+        element(by.id('password')).clear().sendKeys('admin');
+        element(by.id('confirmPassword')).clear().sendKeys('admin');
         element(by.css('button[type=submit]')).click();
     });
 
