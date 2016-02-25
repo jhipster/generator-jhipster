@@ -4,7 +4,7 @@
     "baseName": "sampleDefault",
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",
-    "authenticationType": "session",
+    "authenticationType": "jwt",
     "hibernateCache": "ehcache",
     "clusteredHttpSession": "no",
     "websocket": "no",
