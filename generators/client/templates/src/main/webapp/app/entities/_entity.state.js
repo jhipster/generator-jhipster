@@ -7,7 +7,7 @@
 
     stateConfig.$inject = ['$stateProvider'];
 
-    function ($stateProvider) {
+    function stateConfig($stateProvider) {
         $stateProvider.state('entity', {
             abstract: true,
             parent: 'app'
