@@ -1,15 +1,15 @@
-<form name="deleteForm" ng-submit="confirmDelete(user.login)">
+<form name="deleteForm" ng-submit="confirmDelete(vm.user.login)">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
-                ng-click="clear()">&times;</button>
+                ng-click="vm.clear()">&times;</button>
         <h4 class="modal-title" translate="entity.delete.title">Confirm delete operation</h4>
     </div>
     <div class="modal-body">
         <jh-alert-error></jh-alert-error>
-        <p translate="userManagement.delete.question" translate-values="{login: '{{user.login}}'}">Are you sure you want to delete this User?</p>
+        <p translate="userManagement.delete.question" translate-values="{login: '{{vm.user.login}}'}">Are you sure you want to delete this User?</p>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="vm.clear()">
             <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
         </button>
         <button type="submit" ng-disabled="deleteForm.$invalid" class="btn btn-danger">
