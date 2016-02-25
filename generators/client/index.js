@@ -395,7 +395,7 @@ module.exports = JhipsterClientGenerator.extend({
 
         writeAngularComponentFiles : function () {
             //components
-            this.template(ANGULAR_DIR + 'components/form/_form.directive.js', ANGULAR_DIR + 'components/form/form.directive.js', this, {});
+            this.template(ANGULAR_DIR + 'components/form/_show-validation.directive.js', ANGULAR_DIR + 'components/form/show-validation.directive.js', this, {});
             this.template(ANGULAR_DIR + 'components/form/_maxbytes.directive.js', ANGULAR_DIR + 'components/form/maxbytes.directive.js', this, {});
             this.template(ANGULAR_DIR + 'components/form/_minbytes.directive.js', ANGULAR_DIR + 'components/form/minbytes.directive.js', this, {});
             this.template(ANGULAR_DIR + 'components/form/_uib-pager.config.js', ANGULAR_DIR + 'components/form/uib-pager.config.js', this, {});
@@ -424,6 +424,7 @@ module.exports = JhipsterClientGenerator.extend({
             //alert service code
             this.template(ANGULAR_DIR + 'components/alert/_alert.service.js', ANGULAR_DIR + 'components/alert/alert.service.js', this, {});
             this.template(ANGULAR_DIR + 'components/alert/_alert.directive.js', ANGULAR_DIR + 'components/alert/alert.directive.js', this, {});
+            this.template(ANGULAR_DIR + 'components/alert/_alert-error.directive.js', ANGULAR_DIR + 'components/alert/alert-error.directive.js', this, {});
         },
 
         writeAngularMainFiles : function () {
