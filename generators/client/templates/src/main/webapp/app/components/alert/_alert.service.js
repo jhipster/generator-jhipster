@@ -1,14 +1,40 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .provider('AlertService', function () {
+    angular
+        .module('<%=angularAppName%>')
+        .provider('AlertService', AlertService);
+
+    function AlertService () {
         this.toast = false;
         /*jshint validthis: true */
-        this.$get = ['$timeout', '$sce'<% if (enableTranslation) { %>, '$translate'<% } %>, function($timeout, $sce<% if (enableTranslation) { %>,$translate<% } %>) {
+        this.$get = getService;
+        
+        this.showAsToast = function(isToast) {
+            this.toast = isToast;
+        };
+
+        getService.$inject = ['$timeout', '$sce'<% if (enableTranslation) { %>, '$translate'<% } %>];
+
+        function getService ($timeout, $sce<% if (enableTranslation) { %>,$translate<% } %>) {
             var toast = this.toast,
-            alertId = 0, // unique id for each alert. Starts from 0.
-            alerts = [],
-            timeout = 5000; // default timeout
+                alertId = 0, // unique id for each alert. Starts from 0.
+                alerts = [],
+                timeout = 5000; // default timeout
+
+            return {
+                factory: factory,
+                isToast: isToast,
+                add: addAlert,
+                closeAlert: closeAlert,
+                closeAlertByIndex: closeAlertByIndex,
+                clear: clear,
+                get: get,
+                success: success,
+                error: error,
+                info: info,
+                warning : warning
+            };
 
             function isToast() {
                 return toast;
@@ -108,24 +134,6 @@ angular.module('<%=angularAppName%>')
             function closeAlertByIndex(index, thisAlerts) {
                 return thisAlerts.splice(index, 1);
             }
-
-            return {
-                factory: factory,
-                isToast: isToast,
-                add: addAlert,
-                closeAlert: closeAlert,
-                closeAlertByIndex: closeAlertByIndex,
-                clear: clear,
-                get: get,
-                success: success,
-                error: error,
-                info: info,
-                warning : warning
-            };
-        }];
-
-        this.showAsToast = function(isToast) {
-            this.toast = isToast;
-        };
-
-    });
+        }
+    }
+})();
