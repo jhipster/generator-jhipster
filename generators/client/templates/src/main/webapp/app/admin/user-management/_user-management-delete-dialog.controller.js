@@ -11,8 +11,12 @@
 		var vm = this;
 
 		vm.user = entity;
-		vm.clear = $uibModalInstance.dismiss('cancel');
+		vm.clear = clear;
 		vm.confirmDelete = confirmDelete;
+
+		function clear () {
+            $uibModalInstance.dismiss('cancel')
+        }
 
 		function confirmDelete (login) {
 			User.delete({login: login},

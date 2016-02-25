@@ -11,17 +11,21 @@
         var vm = this;
 
         vm.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
-        vm.clear = $uibModalInstance.dismiss('cancel');
+        vm.clear = clear;
         vm.languages = null;
         vm.save = save;
         vm.user = entity;
 
-        
+
         <%_ if (enableTranslation) { _%>
         Language.getAll().then(function (languages) {
             vm.languages = languages;
         });
         <%_ } _%>
+
+        function clear () {
+            $uibModalInstance.dismiss('cancel')
+        }
 
         function onSaveSuccess (result) {
             vm.isSaving = false;
