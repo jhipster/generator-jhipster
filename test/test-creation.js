@@ -332,7 +332,7 @@ const expectedFiles = {
     ],
 
     microservice: [
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/MicroserviceSecurityConfiguration.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/SecurityConfiguration.java',
     ]
 };
 
@@ -358,7 +358,10 @@ describe('JHipster generator', function () {
                     "enableTranslation": true,
                     "buildTool": "maven",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
-                    "searchEngine": "no"
+                    "searchEngine": "no",
+                    "enableSocialSignIn": false,
+                    "skipClient": false,
+                    "skipUserManagement": false
                 })
                 .on('end', done);
         });
@@ -731,7 +734,10 @@ describe('JHipster generator', function () {
                     "enableTranslation": true,
                     "buildTool": "maven",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
-                    "searchEngine": "no"
+                    "searchEngine": "no",
+                    "enableSocialSignIn": false,
+                    "skipClient": true,
+                    "skipUserManagement": true
                 })
                 .on('end', done);
         });
