@@ -1,18 +1,27 @@
 /* globals $ */
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .directive('passwordStrengthBar', function () {
-        return {
-            replace: true,
-            restrict: 'E',
-            template: '<div id="strength">' +
-                '<small<% if (enableTranslation) { %> translate="global.messages.validate.newpassword.strength"<% } %>>Password strength:</small>' +
-                '<ul id="strengthBar">' +
-                '<li class="point"></li><li class="point"></li><li class="point"></li><li class="point"></li><li class="point"></li>' +
-                '</ul>' +
-                '</div>',
-            link: function (scope, iElement, attr) {
+    angular
+        .module('<%=angularAppName%>')
+        .directive('passwordStrengthBar', passwordStrengthBar);
+
+        function passwordStrengthBar () {
+            var directive = {
+                replace: true,
+                restrict: 'E',
+                template: '<div id="strength">' +
+                    '<small<% if (enableTranslation) { %> translate="global.messages.validate.newpassword.strength"<% } %>>Password strength:</small>' +
+                    '<ul id="strengthBar">' +
+                    '<li class="point"></li><li class="point"></li><li class="point"></li><li class="point"></li><li class="point"></li>' +
+                    '</ul>' +
+                    '</div>',
+                link: linkFunc
+            };
+
+            return directive;
+
+            function linkFunc(scope, iElement, attr) {
                 var strength = {
                     colors: ['#F00', '#F90', '#FF0', '#9F0', '#0F0'],
                     mesureStrength: function (p) {
@@ -77,5 +86,5 @@ angular.module('<%=angularAppName%>')
                     }
                 });
             }
-        };
-    });
+        }
+})();

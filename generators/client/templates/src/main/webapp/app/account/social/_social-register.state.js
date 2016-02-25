@@ -13,7 +13,8 @@ angular.module('<%=angularAppName%>')
                 views: {
                     'content@': {
                         templateUrl: 'app/account/social/social-register.html',
-                        controller: 'SocialRegisterController'
+                        controller: 'SocialRegisterController',
+                        controllerAs: 'vm'
                     }
                 },
                 resolve: {

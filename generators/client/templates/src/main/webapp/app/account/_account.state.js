@@ -1,10 +1,11 @@
 'use strict';
 
-angular.module('<%=angularAppName%>')
+angular
+    .module('<%=angularAppName%>')
     .config(function ($stateProvider) {
         $stateProvider
-            .state('account', {
-                abstract: true,
-                parent: 'app'
-            });
+        .state('account', {
+            abstract: true,
+            parent: 'app'
+        });
     });

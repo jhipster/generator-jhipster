@@ -306,7 +306,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyHtml(ANGULAR_DIR + 'account/password/password.html', ANGULAR_DIR + 'account/password/password.html');
             this.copyJs(ANGULAR_DIR + 'account/password/_password.state.js', ANGULAR_DIR + 'account/password/password.state.js', this, {});
             this.template(ANGULAR_DIR + 'account/password/_password.controller.js', ANGULAR_DIR + 'account/password/password.controller.js', this, {});
-            this.template(ANGULAR_DIR + 'account/password/_password.directive.js', ANGULAR_DIR + 'account/password/password.directive.js', this, {});
+            this.template(ANGULAR_DIR + 'account/password/_password-strength-bar.directive.js', ANGULAR_DIR + 'account/password/password-strength-bar.directive.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'account/register/register.html', ANGULAR_DIR + 'account/register/register.html');
             this.copyJs(ANGULAR_DIR + 'account/register/_register.state.js', ANGULAR_DIR + 'account/register/register.state.js', this, {});
             this.template(ANGULAR_DIR + 'account/register/_register.controller.js', ANGULAR_DIR + 'account/register/register.controller.js', this, {});
@@ -489,7 +489,7 @@ module.exports = JhipsterClientGenerator.extend({
                 'app/account/activate/activate.controller.js',
                 'app/account/password/password.state.js',
                 'app/account/password/password.controller.js',
-                'app/account/password/password.directive.js',
+                'app/account/password/password-strength-bar.directive.js',
                 'app/account/register/register.state.js',
                 'app/account/register/register.controller.js',
                 'app/account/settings/settings.state.js',
@@ -623,7 +623,7 @@ module.exports = JhipsterClientGenerator.extend({
                 'spec/helpers/_httpBackend.js',
                 'spec/app/admin/health/_health.controller.spec.js',
                 'spec/app/account/password/_password.controller.spec.js',
-                'spec/app/account/password/_password.directive.spec.js',
+                'spec/app/account/password/_password-strength-bar.directive.spec.js',
                 'spec/app/account/settings/_settings.controller.spec.js',
                 'spec/app/account/activate/_activate.controller.spec.js',
                 'spec/app/account/register/_register.controller.spec.js',

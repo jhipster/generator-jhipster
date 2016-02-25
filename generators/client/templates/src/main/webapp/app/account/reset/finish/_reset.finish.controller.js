@@ -1,26 +1,37 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('ResetFinishController', function ($scope, $stateParams, $timeout, Auth, LoginService) {
+    angular
+        .module('<%=angularAppName%>')
+        .controller('ResetFinishController', ResetFinishController);
 
-        $scope.keyMissing = $stateParams.key === undefined;
-        $scope.doNotMatch = null;
+    ResetFinishController.$inject = ['$stateParams', '$timeout', 'Auth', 'LoginService'];
 
-        $scope.resetAccount = {};
-        $timeout(function (){angular.element('[ng-model="resetAccount.password"]').focus();});
+    function ResetFinishController ($stateParams, $timeout, Auth, LoginService) {
+        var vm = this;
 
-        $scope.finishReset = function() {
-            if ($scope.resetAccount.password !== $scope.confirmPassword) {
-                $scope.doNotMatch = 'ERROR';
+        vm.keyMissing = $stateParams.key === undefined;
+        vm.confirmPassword = null;
+        vm.doNotMatch = null;
+        vm.error = null;
+        vm.finishReset = finishReset;
+        vm.login = LoginService.open;
+        vm.resetAccount = {};
+        vm.success = null;
+
+        $timeout(function (){angular.element('[ng-model="vm.resetAccount.password"]').focus();});
+
+        function finishReset() {
+            if (vm.resetAccount.password !== vm.confirmPassword) {
+                vm.doNotMatch = 'ERROR';
             } else {
-                Auth.resetPasswordFinish({key: $stateParams.key, newPassword: $scope.resetAccount.password}).then(function () {
-                    $scope.success = 'OK';
+                Auth.resetPasswordFinish({key: $stateParams.key, newPassword: vm.resetAccount.password}).then(function () {
+                    vm.success = 'OK';
                 }).catch(function () {
-                    $scope.success = null;
-                    $scope.error = 'ERROR';
+                    vm.success = null;
+                    vm.error = 'ERROR';
                 });
             }
-        };
-
-        $scope.login = LoginService.open;
-    });
+        }
+    }
+})();
