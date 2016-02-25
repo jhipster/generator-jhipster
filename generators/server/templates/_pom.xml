@@ -774,7 +774,7 @@
                 </executions>
                 <%_ } _%>
                 <configuration>
-                    <argLine>-Xmx256m ${surefireArgLine}</argLine>
+                    <argLine>-Djava.security.egd=file:/dev/./urandom -Xmx256m ${surefireArgLine}</argLine>
                     <!-- Force alphabetical order to have a reproducible build -->
                     <runOrder>alphabetical</runOrder>
                 </configuration>
