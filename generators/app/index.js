@@ -23,14 +23,14 @@ module.exports = JhipsterGenerator.extend({
         generators.Base.apply(this, arguments);
         // This adds support for a `--skip-client` flag
         this.option('skip-client', {
-            desc: 'Skip the client side app generation',
+            desc: 'Skip the client-side application generation',
             type: Boolean,
             defaults: false
         });
 
         // This adds support for a `--skip-server` flag
         this.option('skip-server', {
-            desc: 'Skip the server side app generation',
+            desc: 'Skip the server-side application generation',
             type: Boolean,
             defaults: false
         });
