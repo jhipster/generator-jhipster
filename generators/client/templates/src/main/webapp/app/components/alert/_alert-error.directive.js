@@ -8,8 +8,8 @@
     function jhAlertError () {
         var component = {
             template: '<div class="alerts" ng-cloak="">' +
-                            '<div ng-repeat="alert in alerts" ng-class="[alert.position, {\'toast\': alert.toast}]">' +
-                                '<uib-alert ng-cloak="" type="{{alert.type}}" close="alert.close(alerts)"><pre>{{ alert.msg }}</pre></uib-alert>' +
+                            '<div ng-repeat="alert in vm.alerts" ng-class="[alert.position, {\'toast\': alert.toast}]">' +
+                                '<uib-alert ng-cloak="" type="{{alert.type}}" close="alert.close(vm.alerts)"><pre>{{ alert.msg }}</pre></uib-alert>' +
                             '</div>' +
                       '</div>',
             controller: jhAlertErrorController,
