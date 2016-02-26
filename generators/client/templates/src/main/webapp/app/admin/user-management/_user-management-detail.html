@@ -1,5 +1,5 @@
 <div>
-    <h2><span translate="userManagement.detail.title">User</span> "{{user.login}}"</h2>
+    <h2><span translate="userManagement.detail.title">User</span> "{{vm.user.login}}"</h2>
 
     <div class="table-responsive">
         <table class="table table-striped">
@@ -15,7 +15,7 @@
                     <span translate="userManagement.login">Login</span>
                 </td>
                 <td>
-                    <input type="text" class="input-sm form-control" value="{{user.login}}" readonly>
+                    <input type="text" class="input-sm form-control" value="{{vm.user.login}}" readonly>
                 </td>
             </tr>
             <tr>
@@ -23,7 +23,7 @@
                     <span translate="userManagement.firstName">FirstName</span>
                 </td>
                 <td>
-                    <input type="text" class="input-sm form-control" value="{{user.firstName}}" readonly>
+                    <input type="text" class="input-sm form-control" value="{{vm.user.firstName}}" readonly>
                 </td>
             </tr>
             <tr>
@@ -31,7 +31,7 @@
                     <span translate="userManagement.lastName">LastName</span>
                 </td>
                 <td>
-                    <input type="text" class="input-sm form-control" value="{{user.lastName}}" readonly>
+                    <input type="text" class="input-sm form-control" value="{{vm.user.lastName}}" readonly>
                 </td>
             </tr>
             <tr>
@@ -39,7 +39,7 @@
                     <span translate="userManagement.email">Email</span>
                 </td>
                 <td>
-                    <input type="text" class="input-sm form-control" value="{{user.email}}" readonly>
+                    <input type="text" class="input-sm form-control" value="{{vm.user.email}}" readonly>
                 </td>
             </tr>
             <tr>
@@ -47,7 +47,7 @@
                     <span translate="userManagement.activated">Activated</span>
                 </td>
                 <td>
-                    <input type="text" class="input-sm form-control" value="{{user.activated}}" readonly>
+                    <input type="text" class="input-sm form-control" value="{{vm.user.activated}}" readonly>
                 </td>
             </tr>
             <% if (enableTranslation) { %>
@@ -56,7 +56,7 @@
                     <span translate="userManagement.langKey">LangKey</span>
                 </td>
                 <td>
-                    <input type="text" class="input-sm form-control" value="{{user.langKey}}" readonly>
+                    <input type="text" class="input-sm form-control" value="{{vm.user.langKey}}" readonly>
                 </td>
             </tr>
             <% } %>
@@ -65,7 +65,7 @@
                     <span translate="userManagement.createdBy">CreatedBy</span>
                 </td>
                 <td>
-                    <input type="text" class="input-sm form-control" value="{{user.createdBy}}" readonly>
+                    <input type="text" class="input-sm form-control" value="{{vm.user.createdBy}}" readonly>
                 </td>
             </tr>
             <tr>
@@ -74,7 +74,7 @@
                 </td>
                 <td>
                     <input type="text" class="input-sm form-control"
-                           value="{{user.createdDate | date:'dd/MM/yy HH:mm' }}" readonly>
+                           value="{{vm.user.createdDate | date:'dd/MM/yy HH:mm' }}" readonly>
                 </td>
             </tr>
             <tr>
@@ -82,7 +82,7 @@
                     <span translate="userManagement.lastModifiedBy">LastModifiedBy</span>
                 </td>
                 <td>
-                    <input type="text" class="input-sm form-control" value="{{user.lastModifiedBy}}" readonly>
+                    <input type="text" class="input-sm form-control" value="{{vm.user.lastModifiedBy}}" readonly>
                 </td>
             </tr>
             <tr>
@@ -91,7 +91,7 @@
                 </td>
                 <td>
                     <input type="text" class="input-sm form-control"
-                           value="{{user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}" readonly>
+                           value="{{vm.user.lastModifiedDate | date:'dd/MM/yy HH:mm'}}" readonly>
                 </td>
             </tr>
             <tr>

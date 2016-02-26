@@ -1,12 +1,24 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('UserManagementDetailController', function ($scope, $stateParams, User) {
-        $scope.user = {};
-        $scope.load = function (login) {
+    angular
+        .module('<%=angularAppName%>')
+        .controller('UserManagementDetailController', UserManagementDetailController);
+
+    UserManagementDetailController.$inject = ['$stateParams', 'User'];
+
+    function UserManagementDetailController ($stateParams, User) {
+        var vm = this;
+
+        vm.load = load;
+        vm.user = {};
+
+        vm.load($stateParams.login);
+
+        function load (login) {
             User.get({login: login}, function(result) {
-                $scope.user = result;
+                vm.user = result;
             });
-        };
-        $scope.load($stateParams.login);
-    });
+        }
+    }
+})();

@@ -1,36 +1,49 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>').controller('UserManagementDialogController',
-    ['$scope', '$stateParams', '$uibModalInstance', 'entity', 'User', <% if (enableTranslation) { %>'Language',<% } %>
-        function($scope, $stateParams, $uibModalInstance, entity, User<% if (enableTranslation) { %>, Language<% } %>) {
+    angular
+        .module('<%=angularAppName%>')
+        .controller('UserManagementDialogController',UserManagementDialogController);
 
-        $scope.user = entity;
-        $scope.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
+    UserManagementDialogController.$inject = ['$stateParams', '$uibModalInstance', 'entity', 'User', <% if (enableTranslation) { %>'Language',<% } %>];
+
+    function UserManagementDialogController ($stateParams, $uibModalInstance, entity, User<% if (enableTranslation) { %>, Language<% } %>) {
+        var vm = this;
+
+        vm.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
+        vm.clear = clear;
+        vm.languages = null;
+        vm.save = save;
+        vm.user = entity;
+
+
         <%_ if (enableTranslation) { _%>
         Language.getAll().then(function (languages) {
-            $scope.languages = languages;
+            vm.languages = languages;
         });
         <%_ } _%>
-        var onSaveSuccess = function (result) {
-            $scope.isSaving = false;
+
+        function clear () {
+            $uibModalInstance.dismiss('cancel')
+        }
+
+        function onSaveSuccess (result) {
+            vm.isSaving = false;
             $uibModalInstance.close(result);
         };
 
-        var onSaveError = function () {
-            $scope.isSaving = false;
+        function onSaveError () {
+            vm.isSaving = false;
         };
 
-        $scope.save = function () {
-            $scope.isSaving = true;
-            if ($scope.user.id !== null) {
-                User.update($scope.user, onSaveSuccess, onSaveError);
+        function save () {
+            vm.isSaving = true;
+            if (vm.user.id !== null) {
+                User.update(vm.user, onSaveSuccess, onSaveError);
             } else {<% if (!enableTranslation){ %>
-                $scope.user.langKey = 'en';<% } %>
-                User.save($scope.user, onSaveSuccess, onSaveError);
+                vm.user.langKey = 'en';<% } %>
+                User.save(vm.user, onSaveSuccess, onSaveError);
             }
-        };
-
-        $scope.clear = function() {
-            $uibModalInstance.dismiss('cancel');
-        };
-}]);
+        }
+    }
+})();

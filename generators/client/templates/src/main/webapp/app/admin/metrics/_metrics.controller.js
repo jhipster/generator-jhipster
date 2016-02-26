@@ -1,27 +1,30 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('MetricsController', function ($scope, MetricsService, $uibModal) {
-        $scope.metrics = {};
-        $scope.updatingMetrics = true;
+    angular
+        .module('<%=angularAppName%>')
+        .controller('MetricsController', MetricsController);
 
-        $scope.refresh = function () {
-            $scope.updatingMetrics = true;
-            MetricsService.getMetrics().then(function (promise) {
-                $scope.metrics = promise;
-                $scope.updatingMetrics = false;
-            }, function (promise) {
-                $scope.metrics = promise.data;
-                $scope.updatingMetrics = false;
-            });
-        };
+    MetricsController.$inject = ['$scope','MetricsService', '$uibModal'];
 
-        $scope.$watch('metrics', function (newValue) {
-            $scope.servicesStats = {};
-            $scope.cachesStats = {};
+    function MetricsController ($scope, MetricsService, $uibModal) {
+        var vm = this;
+
+        vm.cachesStats = {};
+        vm.metrics = {};
+        vm.refresh = refresh;
+        vm.refreshThreadDumpData = refreshThreadDumpData;
+        vm.servicesStats = {};
+        vm.updatingMetrics = true;
+
+        vm.refresh();
+
+        $scope.$watch('vm.metrics', function (newValue) {
+            vm.servicesStats = {};
+            vm.cachesStats = {};
             angular.forEach(newValue.timers, function (value, key) {
                 if (key.indexOf('web.rest') !== -1 || key.indexOf('service') !== -1) {
-                    $scope.servicesStats[key] = value;
+                    vm.servicesStats[key] = value;
                 }
                 if (key.indexOf('net.sf.ehcache.Cache') !== -1) {
                     // remove gets or puts
@@ -30,7 +33,7 @@ angular.module('<%=angularAppName%>')
 
                     // Keep the name of the domain
                     index = newKey.lastIndexOf('.');
-                    $scope.cachesStats[newKey] = {
+                    vm.cachesStats[newKey] = {
                         'name': newKey.substr(index + 1),
                         'value': value
                     };
@@ -38,13 +41,23 @@ angular.module('<%=angularAppName%>')
             });
         });
 
-        $scope.refresh();
+        function refresh () {
+            vm.updatingMetrics = true;
+            MetricsService.getMetrics().then(function (promise) {
+                vm.metrics = promise;
+                vm.updatingMetrics = false;
+            }, function (promise) {
+                vm.metrics = promise.data;
+                vm.updatingMetrics = false;
+            });
+        }
 
-        $scope.refreshThreadDumpData = function() {
+        function refreshThreadDumpData () {
             MetricsService.threadDump().then(function(data) {
                 $uibModal.open({
                     templateUrl: 'app/admin/metrics/metrics.modal.html',
                     controller: 'MetricsModalController',
+                    controllerAs: 'vm',
                     size: 'lg',
                     resolve: {
                         threadDump: function() {
@@ -54,5 +67,8 @@ angular.module('<%=angularAppName%>')
                     }
                 });
             });
-        };
-    });
+        }
+
+
+    }
+})();
