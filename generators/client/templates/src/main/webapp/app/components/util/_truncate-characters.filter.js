@@ -1,8 +1,14 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .filter('characters', function () {
-        return function (input, chars, breakOnWord) {
+    angular
+        .module('<%=angularAppName%>')
+        .filter('characters', characters);
+        
+    function characters () {
+        return charactersFilter;
+
+        function charactersFilter(input, chars, breakOnWord) {
             if (isNaN(chars)) {
                 return input;
             }
@@ -26,22 +32,6 @@ angular.module('<%=angularAppName%>')
                 return input + '...';
             }
             return input;
-        };
-    })
-    .filter('words', function () {
-        return function (input, words) {
-            if (isNaN(words)) {
-                return input;
-            }
-            if (words <= 0) {
-                return '';
-            }
-            if (input) {
-                var inputWords = input.split(/\s+/);
-                if (inputWords.length > words) {
-                    input = inputWords.slice(0, words).join(' ') + '...';
-                }
-            }
-            return input;
-        };
-    });
+        }
+    }
+})();

@@ -1,19 +1,45 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('LoginController', function ($rootScope, $scope, $state, $timeout, Auth, $uibModalInstance) {
-        $scope.authenticationError = false;
+    angular
+        .module('<%=angularAppName%>')
+        .controller('LoginController', LoginController);
 
-        $scope.rememberMe = true;
-        $timeout(function (){angular.element('[ng-model="username"]').focus();});
-        $scope.login = function (event) {
+    LoginController.$inject = ['$rootScope', '$state', '$timeout', 'Auth', '$uibModalInstance'];
+
+    function LoginController ($rootScope,$state, $timeout, Auth, $uibModalInstance) {
+        var vm = this;
+
+        vm.authenticationError = false;
+        vm.cancel = cancel;
+        vm.credentials = {};
+        vm.login = login;
+        vm.password = null;
+        vm.register = register;
+        vm.rememberMe = true;
+        vm.requestResetPassword = requestResetPassword;
+        vm.username = null;
+
+        $timeout(function (){angular.element('[ng-model="vm.username"]').focus();});
+
+        function cancel () {
+            vm.credentials = {
+                username: null,
+                password: null,
+                rememberMe: true
+            };
+            vm.authenticationError = false;
+            $uibModalInstance.dismiss('cancel');
+        }
+
+        function login (event) {
             event.preventDefault();
             Auth.login({
-                username: $scope.username,
-                password: $scope.password,
-                rememberMe: $scope.rememberMe
+                username: vm.username,
+                password: vm.password,
+                rememberMe: vm.rememberMe
             }).then(function () {
-                $scope.authenticationError = false;
+                vm.authenticationError = false;
                 $uibModalInstance.close();
                 // If we're redirected to login, our
                 // previousState is already set in the authExpiredInterceptor. When login succesful go to stored state
@@ -24,27 +50,18 @@ angular.module('<%=angularAppName%>')
                     $rootScope.$broadcast('authenticationSuccess');
                 }
             }).catch(function () {
-                $scope.authenticationError = true;
+                vm.authenticationError = true;
             });
-        };
+        }
 
-        $scope.cancel = function () {
-            $scope.credentials = {
-                username: null,
-                password: null,
-                rememberMe: true
-            };
-            $scope.authenticationError = false;
-            $uibModalInstance.dismiss('cancel');
-        };
-
-        $scope.requestResetPassword = function () {
-            $uibModalInstance.dismiss('cancel');
-            $state.go('requestReset');
-        };
-
-        $scope.register = function () {
+        function register () {
             $uibModalInstance.dismiss('cancel');
             $state.go('register');
-        };
-    });
+        }
+
+        function requestResetPassword () {
+            $uibModalInstance.dismiss('cancel');
+            $state.go('requestReset');
+        }
+    }
+})();
