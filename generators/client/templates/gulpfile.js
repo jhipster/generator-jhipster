@@ -295,9 +295,9 @@ gulp.task('ngconstant:prod', function () {
     .pipe(gulp.dest(config.app + 'app/'));
 });
 
-// check app and test for eslint errors
+// check app for eslint errors
 gulp.task('eslint', function () {
-    return gulp.src(['gulpfile.js', config.app + 'app/**/*.js', 'src/test/javascript/**/*.js'])
+    return gulp.src(['gulpfile.js', config.app + 'app/**/*.js'])
       .pipe(eslint())
       .pipe(eslint.format())
       // commented out until current refactorings complete

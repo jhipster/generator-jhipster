@@ -1,7 +1,10 @@
 // See: http://eslint.org/
 // See: https://www.npmjs.com/package/eslint-plugin-angular
 {
-  "extends": "angular",
+  "extends": [
+        "eslint:recommended",
+        "angular"
+  ],
   "env": {
     "node": true,
     "browser": true
