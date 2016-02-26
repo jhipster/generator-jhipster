@@ -78,7 +78,6 @@ module.exports = ModulesGenerator.extend({
         jhipsterFunc['addMainCSSStyle'] = this.addMainCSSStyle;
         jhipsterFunc['addMainSCSSStyle'] = this.addMainSCSSStyle;
         jhipsterFunc['addAngularJsModule'] = this.addAngularJsModule;
-        jhipsterFunc['addAngularJsConfig'] = this.addAngularJsConfig;
         jhipsterFunc['addAngularJsInterceptor'] = this.addAngularJsInterceptor;
         jhipsterFunc['addJavaScriptToIndex'] = this.addJavaScriptToIndex;
         jhipsterFunc['addMessageformatLocaleToIndex'] = this.addMessageformatLocaleToIndex;

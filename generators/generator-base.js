@@ -410,55 +410,13 @@ Generator.prototype.addAngularJsModule = function(moduleName) {
 };
 
 /**
- * Add a new configuration to the angular application in "app.config.js".
- *
- * @param {array} moduleConfigNames - modules name to import in your config
- * @param {string} config - javascript to put inside config
- * @param {string} comment - comment to add before the .config() to describe the config
- *
- * example:
- *
- * moduleConfigNames = ['moduleName1', 'moduleName2']
- * config = 'moduleName1.doSomething();\nmoduleName2.doOtherthing();'
- * comment = 'I am a config test'
- *
- * // I am a config test
- * .config(function(moduleName1, moduleName2) {
- *      moduleName1.doSomething();
- *      moduleName2.doOtherthing();
- * });
- *
- */
-Generator.prototype.addAngularJsConfig = function(moduleConfigNames, config, comment) {
-    var fullPath = CLIENT_MAIN_SRC_DIR + 'app/app.config.js';
-    var configBlock = '';
-    if (comment) {
-        configBlock += '// ' + comment + '\n    ';
-    }
-    configBlock += '.config(function (' + moduleConfigNames.join(', ') + ') {\n';
-    configBlock += '        ' + config.replace(/\n/g, '\n        ') + '\n';
-    configBlock += '    })';
-    try {
-        jhipsterUtils.rewriteFile({
-            file: fullPath,
-            needle: 'jhipster-needle-angularjs-add-config',
-            splicable: [
-                configBlock
-            ]
-        }, this);
-    } catch (e) {
-        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Configuration not added to JHipster app.\n'));
-    }
-};
-
-/**
- * Add a new interceptor to the angular application in "app.config.js".
- * The interceptor should be in its own .js file inside app/components/interceptor folder
+ * Add a new http interceptor to the angular application in "blocks/config/http.config.js".
+ * The interceptor should be in its own .js file inside app/blocks/interceptor folder
  * @param {string} interceptorName - angular name of the interceptor
  *
  */
 Generator.prototype.addAngularJsInterceptor = function(interceptorName) {
-    var fullPath = CLIENT_MAIN_SRC_DIR + 'app/app.config.js';
+    var fullPath = CLIENT_MAIN_SRC_DIR + 'app/blocks/config/http.config.js';
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
