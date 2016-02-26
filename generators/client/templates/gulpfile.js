@@ -1,5 +1,4 @@
 // Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= packagejs.name %> <%= packagejs.version %>
-/* jshint camelcase: false */
 'use strict';
 
 var gulp = require('gulp'),
@@ -12,7 +11,7 @@ var gulp = require('gulp'),
     imagemin = require('gulp-imagemin'),
     ngAnnotate = require('gulp-ng-annotate'),
     ngConstant = require('gulp-ng-constant-fork'),
-    jshint = require('gulp-jshint'),
+    eslint = require('gulp-eslint'),
     rev = require('gulp-rev'),<% if (testFrameworks.indexOf('protractor') > -1) { %>
     protractor = require('gulp-protractor').protractor,<% } %>
     proxy = require('proxy-middleware'),
@@ -27,7 +26,6 @@ var gulp = require('gulp'),
     KarmaServer = require('karma').Server,
     plumber = require('gulp-plumber'),
     changed = require('gulp-changed'),
-    cache = require('gulp-cached'),
     handleErrors = require('./gulp/handleErrors'),
     util = require('./gulp/utils');
 
@@ -46,14 +44,14 @@ gulp.task('clean', function () {
     return del([config.dist]);
 });
 
-gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function(done) {
+gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function (done) {
     new KarmaServer({
         configFile: __dirname + '/' + config.test + 'karma.conf.js',
         singleRun: true
     }, done).start();
 });
 <% if (testFrameworks.indexOf('protractor') > -1) { %>
-gulp.task('protractor', function() {
+gulp.task('protractor', function () {
     return gulp.src([config.test + 'e2e/*.js'])
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(protractor({
@@ -61,12 +59,12 @@ gulp.task('protractor', function() {
         }));
 });<% } %>
 
-gulp.task('copy', function() {
+gulp.task('copy', function () {
     return es.merge( <% if(enableTranslation) { %> // copy i18n folders only if translation is enabled
         gulp.src(config.app + 'i18n/**')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist + 'i18n/'))
-        .pipe(gulp.dest(config.dist + 'i18n/')), <% } %>
+        .pipe(gulp.dest(config.dist + 'i18n/')),<% } %>
         gulp.src(config.app + 'bower_components/bootstrap/fonts/*.*')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist + 'content/fonts/'))
@@ -78,7 +76,7 @@ gulp.task('copy', function() {
         .pipe(gulp.dest(config.dist + 'content/fonts/')));
 });
 
-gulp.task('images', function() {
+gulp.task('images', function () {
     return gulp.src(config.app + 'content/images/**')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist + 'content/images'))
@@ -95,16 +93,16 @@ gulp.task('sass', function () {
         .pipe(gulp.dest(config.app + 'content/css'));
 });
 <% } %>
-gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function() {
+gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function () {
     return gulp.src(config.app + 'content/css')
         .pipe(browserSync.reload({stream: true}));
 });
 
-gulp.task('install', function(done) {
+gulp.task('install', function (done) {
     runSequence('wiredep', 'ngconstant:dev'<% if(useSass) { %>, 'sass'<% } %>, done);
 });
 
-gulp.task('serve', function() {
+gulp.task('serve', function () {
     runSequence('install', function () {
         var baseUri = 'http://localhost:' + config.apiPort;
         // Routes to proxy to the backend. Routes ending with a / will setup
@@ -139,7 +137,7 @@ gulp.task('serve', function() {
         var proxies = [
             // Ensure trailing slash in routes that require it
             function (req, res, next) {
-                requireTrailingSlash.forEach(function(route){
+                requireTrailingSlash.forEach(function (route){
                     if (url.parse(req.url).path === route) {
                         res.statusCode = 301;
                         res.setHeader('Location', route + '/');
@@ -172,12 +170,12 @@ gulp.task('serve', function() {
     });
 });
 
-gulp.task('watch', function() {
+gulp.task('watch', function () {
     gulp.watch('bower.json', ['wiredep']);
     gulp.watch(['gulpfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>], ['ngconstant:dev']);
     gulp.watch(<% if(useSass) { %>config.scss + '**/*.{scss,sass}'<% } else { %>config.app + 'content/css/**/*.css'<% } %>, ['styles']);
     gulp.watch(config.app + 'content/images/**', ['images']);
-    gulp.watch(config.app + 'app/**/*.js', ['jshint']);
+    gulp.watch(config.app + 'app/**/*.js', ['eslint']);
     gulp.watch([config.app + '*.html', config.app + 'app/**', config.app + 'i18n/**']).on('change', browserSync.reload);
 });
 
@@ -229,7 +227,7 @@ gulp.task('build', function (cb) {
     runSequence('clean', 'copy', 'wiredep:app', 'ngconstant:prod', 'usemin', cb);
 });
 
-gulp.task('usemin', ['images', 'styles'], function() {
+gulp.task('usemin', ['images', 'styles'], function () {
     return gulp.src([config.app + '**/*.html', '!' + config.app + '@(dist|bower_components)/**/*.html'])
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(usemin({
@@ -254,14 +252,14 @@ gulp.task('usemin', ['images', 'styles'], function() {
         .pipe(gulp.dest(config.dist));
 });
 
-gulp.task('ngconstant:dev', function() {
+gulp.task('ngconstant:dev', function () {
     return ngConstant({
         dest: 'app.constants.js',
         name: '<%= angularAppName %>',
         deps:   false,
         noFile: true,
         interpolate: /\{%=(.+?)%\}/g,
-        wrap: '/* jshint quotmark: false */\n' +
+        wrap: 
             '(function() {\n' +
             '    "use strict";\n' +
             '    // DO NOT EDIT THIS FILE, EDIT THE GULP TASK NGCONSTANT SETTINGS INSTEAD WHICH GENERATES THIS FILE\n' +
@@ -275,14 +273,14 @@ gulp.task('ngconstant:dev', function() {
     .pipe(gulp.dest(config.app + 'app/'));
 });
 
-gulp.task('ngconstant:prod', function() {
+gulp.task('ngconstant:prod', function () {
     return ngConstant({
         dest: 'app.constants.js',
         name: '<%= angularAppName %>',
         deps:   false,
         noFile: true,
         interpolate: /\{%=(.+?)%\}/g,
-        wrap: '/* jshint quotmark: false */\n' +
+        wrap: 
             '(function() {\n' +
             '    "use strict";\n' +
             '    // DO NOT EDIT THIS FILE, EDIT THE GULP TASK NGCONSTANT SETTINGS INSTEAD WHICH GENERATES THIS FILE\n' +
@@ -296,16 +294,13 @@ gulp.task('ngconstant:prod', function() {
     .pipe(gulp.dest(config.app + 'app/'));
 });
 
-gulp.task('jshint', function() {
-    //Custom reporter (in task to have new instance each time)
-    var jsHintErrorReporter = require('./gulp/jsHintErrorReporter');
-
+// check app and test for eslint errors
+gulp.task('eslint', function () {
     return gulp.src(['gulpfile.js', config.app + 'app/**/*.js'])
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(cache('jshint'))
-        .pipe(jshint())
-        .pipe(jshint.reporter('jshint-stylish'))
-        .pipe(jsHintErrorReporter());
+      .pipe(eslint())
+      .pipe(eslint.format())
+      // commented out until current refactorings complete
+      // .pipe(eslint.failOnError());  
 });
 
 <% if (testFrameworks.indexOf('protractor') > -1) { %>
