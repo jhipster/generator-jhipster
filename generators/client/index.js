@@ -141,7 +141,7 @@ module.exports = JhipsterClientGenerator.extend({
                     this.nativeLanguage = 'en';
                 }
                 if (this.languages == null) {
-                    this.languages = ['fr'];
+                    this.languages = ['en', 'fr'];
                 }
 
                 this.existingProject = true;
