@@ -196,7 +196,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/blocks/config/translation.config.js',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/handlers/state.handler.js',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/handlers/translation.handler.js',
-        CLIENT_MAIN_SRC_DIR + 'app/blocks/interceptor/auth.interceptor.js',
+        CLIENT_MAIN_SRC_DIR + 'app/blocks/interceptor/auth-expired.interceptor.js',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/interceptor/errorhandler.interceptor.js',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/interceptor/notification.interceptor.js',
         CLIENT_MAIN_SRC_DIR + 'app/admin/audits/audits.service.js',
