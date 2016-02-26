@@ -5,7 +5,7 @@
         .module('<%=angularAppName%>')
         .factory('translationHandler', translationHandler);
 
-    translationHandler.$inject = ['$rootScope',' $window', '$state', '$translate'];
+    translationHandler.$inject = ['$rootScope', '$window', '$state', '$translate'];
 
     function translationHandler($rootScope, $window, $state, $translate) {
         return {
@@ -16,7 +16,7 @@
         function initialize() {
             // if the current translation changes, update the window title
             $rootScope.$on('$translateChangeSuccess', function() {
-                this.updateTitle();
+                updateTitle();
             });
         }
 

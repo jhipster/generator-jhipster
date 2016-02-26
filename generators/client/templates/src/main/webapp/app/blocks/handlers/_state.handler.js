@@ -5,10 +5,10 @@
         .module('<%=angularAppName%>')
         .factory('stateHandler', stateHandler);
 
-    stateHandler.$inject = ['$rootScope', '$window', '$state', <% if (enableTranslation) { %>'$translate', 'Language', 'translationHandler',<% } %>
+    stateHandler.$inject = ['$rootScope', '$state', <% if (enableTranslation) { %>'$translate', 'Language', 'translationHandler',<% } else { %> '$window', <% } %>
         'Auth', 'Principal', 'ENV', 'VERSION'];
 
-    function stateHandler($rootScope, $window, $state, <% if (enableTranslation) { %>$translate, Language, translationHandler,<% } %>
+    function stateHandler($rootScope, $state, <% if (enableTranslation) { %>$translate, Language, translationHandler,<% } else { %> $window, <% } %>
         Auth, Principal, ENV, VERSION) {
         return {
             initialize: initialize

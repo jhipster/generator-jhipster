@@ -5,7 +5,7 @@
         .module('<%=angularAppName%>')
         .config(translationConfig);
 
-    translationConfig.$inject = ['$$translateProvider', 'tmhDynamicLocaleProvider'];
+    translationConfig.$inject = ['$translateProvider', 'tmhDynamicLocaleProvider'];
 
     function translationConfig($translateProvider, tmhDynamicLocaleProvider) {
         // Initialize angular-translate

@@ -500,9 +500,16 @@ module.exports = JhipsterClientGenerator.extend({
 
             var appScripts = [
                 'app/app.module.js',
-                'app/app.config.js',
                 'app/app.state.js',
                 'app/app.constants.js',
+                //blocks
+                'app/blocks/handlers/state.handler.js',
+                'app/blocks/config/alert.config.js',
+                'app/blocks/config/http.config.js',
+                'app/blocks/config/localstorage.config.js',
+                'app/blocks/interceptor/auth.interceptor.js',
+                'app/blocks/interceptor/errorhandler.interceptor.js',
+                'app/blocks/interceptor/notification.interceptor.js',
                 // account
                 'app/account/account.state.js',
                 'app/account/activate/activate.state.js',
@@ -543,14 +550,6 @@ module.exports = JhipsterClientGenerator.extend({
                 'app/admin/user-management/user-management-delete-dialog.controller.js',
                 'app/admin/user-management/user-management.controller.js',
                 'app/admin/user-management/user-management.state.js',
-                //blocks
-                'app/blocks/interceptor/auth-expired.interceptor.js',
-                'app/blocks/interceptor/errorhandler.interceptor.js',
-                'app/blocks/interceptor/notification.interceptor.js',
-                'app/blocks/handlers/state.handler.js',
-                'app/blocks/config/alert.config.js',
-                'app/blocks/config/http.config.js',
-                'app/blocks/config/localstorage.config.js',
                 // components
                 'app/components/form/show-validation.directive.js',
                 'app/components/form/maxbytes.directive.js',
