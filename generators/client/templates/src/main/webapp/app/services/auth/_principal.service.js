@@ -15,7 +15,7 @@
             identity: identity,
             isAuthenticated: isAuthenticated,
             isIdentityResolved: isIdentityResolved
-        },
+        };
         var _identity,
             _authenticated = false;
 
