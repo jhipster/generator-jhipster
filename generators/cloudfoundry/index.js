@@ -32,6 +32,7 @@ util.inherits(CloudFoundryGenerator, scriptBase);
 
 CloudFoundryGenerator.prototype.askForName = function askForName() {
     var done = this.async();
+    var databaseType = this.databaseType;
     var prompts = [{
         name: 'cloudfoundryDeployedName',
         message: 'Name to deploy as:',
@@ -54,11 +55,17 @@ CloudFoundryGenerator.prototype.askForName = function askForName() {
         default: 0
     },
     {
+        when: function(response) {
+            return databaseType != 'no';
+        },
         name: 'cloudfoundryDatabaseServiceName',
         message: 'What is the name of your database service?',
         default: 'elephantsql'
     },
     {
+        when: function(response) {
+            return databaseType != 'no';
+        },
         name: 'cloudfoundryDatabaseServicePlan',
         message: 'What is the name of your database plan?',
         default: 'turtle'
@@ -98,7 +105,7 @@ CloudFoundryGenerator.prototype.cloudfoundryAppShow = function cloudfoundryAppSh
     var done = this.async();
 
     this.log(chalk.bold("\nChecking for an existing Cloud Foundry hosting environment..."));
-    var child = exec('cf app '+this.cloudfoundryDeployedName+' ', { }, function (err, stdout, stderr) {
+    var child = exec('cf app ' + this.cloudfoundryDeployedName + ' ', { }, function (err, stdout, stderr) {
         var lines = stdout.split('\n');
         var dist_repo = '';
         // Unauthenticated
@@ -117,14 +124,17 @@ CloudFoundryGenerator.prototype.cloudfoundryAppCreate = function cloudfoundryApp
     this.log(chalk.bold("\nCreating your Cloud Foundry hosting environment, this may take a couple minutes..."));
     var insight = this.insight();
     insight.track('generator', 'cloudfoundry');
-    this.log(chalk.bold("Creating the database"));
-    var child = exec('cf create-service ' + this.cloudfoundryDatabaseServiceName + ' ' + this.cloudfoundryDatabaseServicePlan + ' ' + this.cloudfoundryDeployedName, { }, function (err, stdout, stderr) {
+    if (this.databaseType != 'no') {
+        this.log(chalk.bold("Creating the database"));
+        var child = exec('cf create-service ' + this.cloudfoundryDatabaseServiceName + ' ' + this.cloudfoundryDatabaseServicePlan + ' ' + this.cloudfoundryDeployedName, { }, function (err, stdout, stderr) {
+            done();
+        }.bind(this));
+        child.stdout.on('data', function(data) {
+            this.log(data.toString());
+        }.bind(this));
+    } else {
         done();
-    }.bind(this));
-
-    child.stdout.on('data', function(data) {
-        this.log(data.toString());
-    }.bind(this));
+    }
 };
 
 CloudFoundryGenerator.prototype.productionBuild = function productionBuild() {
