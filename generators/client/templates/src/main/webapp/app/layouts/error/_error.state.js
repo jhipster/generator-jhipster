@@ -1,7 +1,13 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .config(function ($stateProvider) {
+    angular
+        .module('<%=angularAppName%>')
+        .config(stateConfig);
+
+    stateConfig.$inject = ['$stateProvider'];
+
+    function stateConfig($stateProvider) {
         $stateProvider
             .state('error', {
                 parent: 'app',
@@ -40,4 +46,5 @@ angular.module('<%=angularAppName%>')
                     }]
                 }
             });
-    });
+    }
+})();
