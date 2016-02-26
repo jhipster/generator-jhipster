@@ -5,7 +5,6 @@
         .module('<%=angularAppName%>')
         .directive('activeLink', activeLink);
 
-    /* @ngInject */
     function activeLink() {
         var directive = {
             restrict: 'A',
