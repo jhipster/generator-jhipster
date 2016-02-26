@@ -5,24 +5,28 @@
         .module('<%=angularAppName%>')
         .component('jhAlert', jhAlert);
 
-    var jhAlert = {
-        template: '<div class="alerts" ng-cloak="">' +
-                        '<div ng-repeat="alert in vm.alerts" ng-class="[alert.position, {\'toast\': alert.toast}]">' +
-                            '<uib-alert ng-cloak="" type="{{alert.type}}" close="alert.close()"><pre>{{ alert.msg }}</pre></uib-alert>' +
-                        '</div>' +
-                  '</div>',
-        controller: jhAlertController,
-        controllerAs: 'vm'
-    };
+    function jhAlert () {
+        var component = {
+            template: '<div class="alerts" ng-cloak="">' +
+                            '<div ng-repeat="alert in vm.alerts" ng-class="[alert.position, {\'toast\': alert.toast}]">' +
+                                '<uib-alert ng-cloak="" type="{{alert.type}}" close="alert.close()"><pre>{{ alert.msg }}</pre></uib-alert>' +
+                            '</div>' +
+                      '</div>',
+            controller: jhAlertController,
+            controllerAs: 'vm'
+        };
 
-    jhAlertController.$inject = ['$scope', 'AlertService'];
+        return component;
 
-    function jhAlertController($scope, AlertService) {
-        var vm = this;
+        jhAlertController.$inject = ['$scope', 'AlertService'];
 
-        vm.alerts = AlertService.get();
-        $scope.$on('$destroy', function () {
-            vm.alerts = [];
-        });
+        function jhAlertController($scope, AlertService) {
+            var vm = this;
+
+            vm.alerts = AlertService.get();
+            $scope.$on('$destroy', function () {
+                vm.alerts = [];
+            });
+        }
     }
 })();

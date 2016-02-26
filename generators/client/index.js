@@ -426,6 +426,7 @@ module.exports = JhipsterClientGenerator.extend({
             if (this.authenticationType == 'oauth2' || this.authenticationType == 'jwt') {
                 this.template(ANGULAR_DIR + 'components/interceptor/_auth.interceptor.js', ANGULAR_DIR + 'components/interceptor/auth.interceptor.js', this, {});
             }
+            this.template(ANGULAR_DIR + 'components/interceptor/_auth-expired.interceptor.js', ANGULAR_DIR + 'components/interceptor/auth-expired.interceptor.js', this, {});
             this.template(ANGULAR_DIR + 'components/interceptor/_errorhandler.interceptor.js', ANGULAR_DIR + 'components/interceptor/errorhandler.interceptor.js', this, {});
             this.template(ANGULAR_DIR + 'components/interceptor/_notification.interceptor.js', ANGULAR_DIR + 'components/interceptor/notification.interceptor.js', this, {});
 
@@ -581,8 +582,8 @@ module.exports = JhipsterClientGenerator.extend({
                     'bower_components/messageformat/locale/en.js',
                     'bower_components/messageformat/locale/fr.js',
                     'app/components/language/language.service.js',
-                    'app/components/language/language.filter.js',
                     'app/components/language/language.constants.js',
+                    'app/components/language/language.filter.js',
                     'app/components/language/language.controller.js']);
             }
             if (this.enableSocialSignIn) {

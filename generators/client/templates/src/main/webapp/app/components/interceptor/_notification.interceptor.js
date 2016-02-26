@@ -5,7 +5,7 @@
         .module('<%=angularAppName%>')
         .factory('notificationInterceptor', notificationInterceptor);
 
-    notificationInterceptor.$inject = ['q', 'AlertService'];
+    notificationInterceptor.$inject = ['$q', 'AlertService'];
 
     function notificationInterceptor ($q, AlertService) {
         var service = {

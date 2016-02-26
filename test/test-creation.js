@@ -210,6 +210,8 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/components/form/uib-pagination.config.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.service.js',
+        CLIENT_MAIN_SRC_DIR + 'app/components/language/language.filter.js',
+        CLIENT_MAIN_SRC_DIR + 'app/components/language/language.constants.js',
         CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.directive.js',
         CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.html',
         CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.controller.js',
@@ -299,7 +301,9 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'i18n/en/global.json',
         CLIENT_MAIN_SRC_DIR + 'i18n/fr/global.json',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.controller.js',
-        CLIENT_MAIN_SRC_DIR + 'app/components/language/language.service.js'
+        CLIENT_MAIN_SRC_DIR + 'app/components/language/language.service.js',
+        CLIENT_MAIN_SRC_DIR + 'app/components/language/language.filter.js',
+        CLIENT_MAIN_SRC_DIR + 'app/components/language/language.constants.js'
     ],
 
     socialLogin: [

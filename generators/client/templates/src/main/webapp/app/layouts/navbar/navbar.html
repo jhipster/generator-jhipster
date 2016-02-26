@@ -98,7 +98,7 @@
                     </ul>
                 </li>
                 <%_ if (enableTranslation){ _%>
-                <li ui-sref-active="active" class="dropdown pointer" ng-controller="LanguageController">
+                <li ui-sref-active="active" class="dropdown pointer" ng-controller="LanguageController as languageVm">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="">
                         <span>
                             <span class="glyphicon glyphicon-flag"></span>
@@ -107,8 +107,8 @@
                         </span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li active-menu="{{language}}" ng-repeat="language in languages">
-                            <a href="" ng-click="changeLanguage(language)" data-toggle="collapse" data-target=".navbar-collapse.in">{{language | findLanguageFromKey}}</a>
+                        <li active-menu="{{language}}" ng-repeat="language in languageVm.languages">
+                            <a href="" ng-click="languageVm.changeLanguage(language)" data-toggle="collapse" data-target=".navbar-collapse.in">{{language | findLanguageFromKey}}</a>
                         </li>
                     </ul>
                 </li>
