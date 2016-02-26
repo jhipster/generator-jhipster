@@ -26,6 +26,8 @@ import java.util.Objects;
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)<% } %><% if (databaseType == 'mongodb') { %>
 @Document(collection = "jhi_social_user_connection")<% } %>
 public class SocialUserConnection implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 <% if (databaseType == 'sql') { %>
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

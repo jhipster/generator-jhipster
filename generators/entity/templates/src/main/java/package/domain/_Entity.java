@@ -45,6 +45,8 @@ import <%=packageName%>.domain.enumeration.<%= element %>;<% }); %>
 @Table(name = "<%= entityInstance %>")<% } %><% if (searchEngine == 'elasticsearch') { %>
 @Document(indexName = "<%= entityInstance.toLowerCase() %>")<% } %>
 public class <%= entityClass %> implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 <% if (databaseType == 'sql') { %>
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
