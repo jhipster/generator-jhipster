@@ -28,20 +28,20 @@
             function addErrorAlert (message, key, data) {
                 <%_ if (enableTranslation) { _%>
                 key = key && key !== null ? key : message;
-                    vm.alerts.push(
+                vm.alerts.push(
                     AlertService.add(
-                {
-                    type: 'danger',
-                    msg: key,
-                    params: data,
-                    timeout: 5000,
-                    toast: AlertService.isToast(),
-                    scoped: true
-                },
-                    vm.alerts
+                        {
+                            type: 'danger',
+                            msg: key,
+                            params: data,
+                            timeout: 5000,
+                            toast: AlertService.isToast(),
+                            scoped: true
+                        },
+                        vm.alerts
                     )
-                    );
-                    <%_ } else { _%>
+                );
+                <%_ } else { _%>
                 vm.alerts.push(
                     AlertService.add(
                         {
