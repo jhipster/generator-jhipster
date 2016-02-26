@@ -39,7 +39,9 @@
     </prerequisites>
 
     <properties>
+        <%_ if (databaseType == 'sql') { _%>
         <hikaricp.version>2.4.3</hikaricp.version>
+        <%_ } _%>
         <assertj-core.version>3.3.0</assertj-core.version>
         <awaitility.version>1.7.0</awaitility.version>
         <commons-io.version>2.4</commons-io.version>
@@ -269,6 +271,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <%_ if (databaseType == 'sql') { _%>
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
@@ -286,6 +289,7 @@
             <version>${HikariCP.version}</version>
         </dependency>
         -->
+        <%_ } %>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -371,13 +375,13 @@
         <%_ } _%>
         <dependency>
             <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-envers</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
         </dependency>
         <%_ if (databaseType == 'sql') { _%>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-envers</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>

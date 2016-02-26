@@ -328,7 +328,6 @@ module.exports = JhipsterGenerator.extend({
             this.skipClient && this.config.set('skipClient', true);
             this.skipServer && this.config.set('skipServer', true);
             this.skipUserManagement && this.config.set('skipUserManagement', true);
-
         }
     },
 
@@ -380,5 +379,4 @@ module.exports = JhipsterGenerator.extend({
             }
         }
     }
-
 });
