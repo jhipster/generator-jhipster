@@ -76,8 +76,8 @@ module.exports = EntityGenerator.extend({
             type: String
         });
 
-        // This adds support for a `--entity-angularjs-suffix` flag
-        this.option('entity-angularjs-suffix', {
+        // This adds support for a `--angular-suffix` flag
+        this.option('angular-suffix', {
             desc: 'Use a suffix to generate AngularJS routes and files, to avoid name clashes',
             type: String,
             defaults: ''
@@ -87,6 +87,9 @@ module.exports = EntityGenerator.extend({
         this.entityTableName = this.options['table-name'] || this.name;
         this.entityTableName = _s.underscored(this.entityTableName).toLowerCase();
         this.entityAngularJSSuffix = this.options['entity-angularjs-suffix'];
+        if(this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')){
+            this.entityAngularJSSuffix = '-' + this.entityAngularJSSuffix;
+        }
     },
     initializing: {
         getConfig: function(args) {
@@ -1616,7 +1619,7 @@ module.exports = EntityGenerator.extend({
             this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-dialog.html', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-dialog.html', this, {}, true);
             this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-delete-dialog.html', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-delete-dialog.html', this, {}, true);
 
-            this.addEntityToMenu(this.entityInstance, this.enableTranslation);
+            this.addEntityToMenu(this.entityStateName, this.enableTranslation);
 
             this.template(ANGULAR_DIR + 'entities/_entity-management.state.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '.state.js', this, {});
             this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityFileName + '.state.js');
