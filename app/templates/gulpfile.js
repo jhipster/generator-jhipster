@@ -36,7 +36,7 @@ var config = {
     dist: 'src/main/webapp/dist/',
     test: 'src/test/javascript/'<% if(useSass) { %>,
     importPath: 'src/main/webapp/bower_components',
-    scss: 'src/main/webapp/scss/'<% } %>,
+    scss: 'src/main/scss/'<% } %>,
     port: 9000,
     apiPort: 8080,
     liveReloadPort: 35729
