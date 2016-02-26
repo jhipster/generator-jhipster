@@ -411,13 +411,17 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyJs(ANGULAR_DIR + 'components/login/_login.service.js', ANGULAR_DIR + 'components/login/login.service.js', this, {});
             this.template(ANGULAR_DIR + 'components/login/_login.controller.js', ANGULAR_DIR + 'components/login/login.controller.js', this, {});
             this.template(ANGULAR_DIR + 'components/util/_base64.service.js', ANGULAR_DIR + 'components/util/base64.service.js', this, {});
+            this.template(ANGULAR_DIR + 'components/util/_storage.service.js', ANGULAR_DIR + 'components/util/storage.service.js', this, {});
             this.template(ANGULAR_DIR + 'components/util/_capitalize.filter.js', ANGULAR_DIR + 'components/util/capitalize.filter.js', this, {});
             this.template(ANGULAR_DIR + 'components/util/_parse-links.service.js', ANGULAR_DIR + 'components/util/parse-links.service.js', this, {});
-            this.template(ANGULAR_DIR + 'components/util/_truncate.filter.js', ANGULAR_DIR + 'components/util/truncate.filter.js', this, {});
+            this.template(ANGULAR_DIR + 'components/util/_truncate-characters.filter.js', ANGULAR_DIR + 'components/util/truncate-characters.filter.js', this, {});
+            this.template(ANGULAR_DIR + 'components/util/_truncate-words.filter.js', ANGULAR_DIR + 'components/util/truncate-words.filter.js', this, {});
             this.template(ANGULAR_DIR + 'components/util/_date-util.service.js', ANGULAR_DIR + 'components/util/date-util.service.js', this, {});
             this.template(ANGULAR_DIR + 'components/util/_data-util.service.js', ANGULAR_DIR + 'components/util/data-util.service.js', this, {});
             this.template(ANGULAR_DIR + 'components/util/_pagination-util.service.js', ANGULAR_DIR + 'components/util/pagination-util.service.js', this, {});
             this.template(ANGULAR_DIR + 'components/util/_sort.directive.js', ANGULAR_DIR + 'components/util/sort.directive.js', this, {});
+            this.template(ANGULAR_DIR + 'components/util/_sort-by.directive.js', ANGULAR_DIR + 'components/util/sort-by.directive.js', this, {});
+
             // interceptor code
             if (this.authenticationType == 'oauth2' || this.authenticationType == 'jwt') {
                 this.template(ANGULAR_DIR + 'components/interceptor/_auth.interceptor.js', ANGULAR_DIR + 'components/interceptor/auth.interceptor.js', this, {});
@@ -540,8 +544,10 @@ module.exports = JhipsterClientGenerator.extend({
                 'app/components/interceptor/notification.interceptor.js',
                 'app/components/login/login.service.js',
                 'app/components/login/login.controller.js',
-                'app/components/util/truncate.filter.js',
+                'app/components/util/truncate-characters.filter.js',
+                'app/components/util/truncate-words.filter.js',
                 'app/components/util/base64.service.js',
+                'app/components/util/storage.service.js',
                 'app/components/util/capitalize.filter.js',
                 'app/components/alert/alert.service.js',
                 'app/components/alert/alert.directive.js',
@@ -550,6 +556,7 @@ module.exports = JhipsterClientGenerator.extend({
                 'app/components/util/data-util.service.js',
                 'app/components/util/pagination-util.service.js',
                 'app/components/util/sort.directive.js',
+                'app/components/util/sort-by.directive.js',
                 // entities
                 'app/entities/entity.state.js',
                 // home

@@ -1,71 +1,79 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .directive('jhSort', function () {
-        return {
+    angular.module('<%=angularAppName%>')
+        .directive('jhSort', jhSort);
+
+    function jhSort () {
+        var directive = {
             restrict: 'A',
             scope: {
                 predicate: '=jhSort',
                 ascending: '=',
                 callback: '&'
             },
-            controller: ['$scope', '$element', function ($scope, $element) {
-                var vm = this;
-                vm.sort = function (field) {
-                    if (field !== $scope.predicate) {
-                        $scope.ascending = true;
-                    } else {
-                        $scope.ascending = !$scope.ascending;
-                    }
-                    $scope.predicate = field;
-                    $scope.$apply();
-                    $scope.callback();
-                };
-                vm.resetClasses = function () {
-                    var allThIcons = $element.find('span.glyphicon'),
-                        sortIcon = 'glyphicon-sort',
-                        sortAsc = 'glyphicon-sort-by-attributes',
-                        sortDesc = 'glyphicon-sort-by-attributes-alt';
-                    allThIcons.removeClass(sortAsc + ' ' + sortDesc);
-                    allThIcons.addClass(sortIcon);
-                };
-                vm.applyClass = function (element) {
-                    var thisIcon = element.find('span.glyphicon'),
-                        sortIcon = 'glyphicon-sort',
-                        sortAsc = 'glyphicon-sort-by-attributes',
-                        sortDesc = 'glyphicon-sort-by-attributes-alt',
-                        remove = sortIcon + ' ' + sortDesc,
-                        add = sortAsc;
-                    if (!$scope.ascending) {
-                        remove = sortIcon + ' ' + sortAsc;
-                        add = sortDesc;
-                    }
-                    vm.resetClasses();
-                    thisIcon.removeClass(remove);
-                    thisIcon.addClass(add);
-                };
-
-                vm.triggerApply = function (values) {
-                    vm.resetClasses();
-                    if (values && values[0] !== '_score') {
-                        vm.applyClass($element.find('th[jh-sort-by=\'' + values[0] + '\']'));
-                    }
-                };
-
-                $scope.$watchGroup(['predicate', 'ascending'], vm.triggerApply);
-
-                vm.triggerApply();
-            }]
+            controller: Controller,
+            controllerAs: 'vm',
+            bindToController: true
         };
-    }).directive('jhSortBy', function () {
-        return {
-            restrict: 'A',
-            scope: false,
-            require: '^jhSort',
-            link: function (scope, element, attrs, parentCtrl) {
-                element.bind('click', function () {
-                    parentCtrl.sort(attrs.jhSortBy);
-                });
+
+        return directive;
+
+        Controller.$inject = ['$scope', '$element'];
+
+        function Controller ($scope, $element) {
+            var vm = this;
+
+            vm.applyClass = applyClass;
+            vm.resetClasses = resetClasses;
+            vm.sort = sort;
+            vm.triggerApply = triggerApply;
+
+            $scope.$watchGroup(['predicate', 'ascending'], vm.triggerApply);
+            vm.triggerApply();
+
+            function applyClass (element) {
+                var thisIcon = element.find('span.glyphicon'),
+                    sortIcon = 'glyphicon-sort',
+                    sortAsc = 'glyphicon-sort-by-attributes',
+                    sortDesc = 'glyphicon-sort-by-attributes-alt',
+                    remove = sortIcon + ' ' + sortDesc,
+                    add = sortAsc;
+                if (!vm.ascending) {
+                    remove = sortIcon + ' ' + sortAsc;
+                    add = sortDesc;
+                }
+                vm.resetClasses();
+                thisIcon.removeClass(remove);
+                thisIcon.addClass(add);
             }
-        };
-    });
+
+            function resetClasses () {
+                var allThIcons = $element.find('span.glyphicon'),
+                    sortIcon = 'glyphicon-sort',
+                    sortAsc = 'glyphicon-sort-by-attributes',
+                    sortDesc = 'glyphicon-sort-by-attributes-alt';
+                allThIcons.removeClass(sortAsc + ' ' + sortDesc);
+                allThIcons.addClass(sortIcon);
+            }
+
+            function sort (field) {
+                if (field !== vm.predicate) {
+                    vm.ascending = true;
+                } else {
+                    vm.ascending = !vm.ascending;
+                }
+                vm.predicate = field;
+                $scope.$apply();
+                $scope.callback();
+            }
+
+            function triggerApply (values)  {
+                vm.resetClasses();
+                if (values && values[0] !== '_score') {
+                    vm.applyClass($element.find('th[jh-sort-by=\'' + values[0] + '\']'));
+                }
+            }
+        }
+    }
+})();
