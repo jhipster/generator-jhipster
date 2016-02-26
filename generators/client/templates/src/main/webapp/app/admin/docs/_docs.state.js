@@ -8,8 +8,7 @@
     stateConfig.$inject = ['$stateProvider'];
 
     function stateConfig ($stateProvider) {
-        $stateProvider
-        .state('docs', {
+        $stateProvider.state('docs', {
             parent: 'admin',
             url: '/docs',
             data: {
