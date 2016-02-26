@@ -1,11 +1,23 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('ConfigurationController', function ($scope, ConfigurationService) {
+    angular
+        .module('<%=angularAppName%>')
+        .controller('ConfigurationController', ConfigurationController);
+
+    ConfigurationController.$inject = ['$filter','ConfigurationService'];
+
+    function ConfigurationController (filter,ConfigurationService) {
+        var vm = this;
+
+        vm.allConfiguration = null;
+        vm.configuration = null;
+
         ConfigurationService.get().then(function(configuration) {
-            $scope.configuration = configuration;
+            vm.configuration = configuration;
         });
         ConfigurationService.getEnv().then(function (configuration) {
-            $scope.allConfiguration = configuration;
+            vm.allConfiguration = configuration;
         });
-    });
+    }
+})();

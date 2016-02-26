@@ -1,8 +1,14 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .factory('GatewayRoutes', function ($resource) {
-        return $resource('api/gateway/routes/:id', {}, {
+    angular
+        .module('<%=angularAppName%>')
+        .factory('GatewayRoutes', GatewayRoutes);
+
+    GatewayRoutes.$inject = ['$resource'];
+
+    function GatewayRoutes ($resource) {
+        var service = $resource('api/gateway/routes/:id', {}, {
             'query': { method: 'GET', isArray: true},
             'get': {
                 method: 'GET',
@@ -13,4 +19,8 @@ angular.module('<%=angularAppName%>')
             },
             'update': { method:'PUT' }
         });
-    });
+
+        return service;
+    }
+
+})();

@@ -1,9 +1,18 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .factory('LogsService', function ($resource) {
-        return $resource('api/logs', {}, {
+    angular
+        .module('<%=angularAppName%>')
+        .factory('LogsService', LogsService);
+
+    LogsService.$inject = ['$resource'];
+
+    function LogsService ($resource) {
+        var service = $resource('api/logs', {}, {
             'findAll': { method: 'GET', isArray: true},
             'changeLevel': { method: 'PUT'}
         });
-    });
+
+        return service;
+    }
+})();
