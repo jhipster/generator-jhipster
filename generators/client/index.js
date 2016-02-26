@@ -295,6 +295,10 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + '_app.config.js', ANGULAR_DIR + 'app.config.js', this, {});
             this.template(ANGULAR_DIR + '_app.state.js', ANGULAR_DIR + 'app.state.js', this, {});
             this.template(ANGULAR_DIR + '_app.constants.js', ANGULAR_DIR + 'app.constants.js', this, {});
+            this.template(ANGULAR_DIR + 'blocks/handlers/_state.handler.js', ANGULAR_DIR + 'blocks/handlers/state.handler.js', this, {});
+            if (this.enableTranslation) {
+                this.template(ANGULAR_DIR + 'blocks/handlers/_translation.handler.js', ANGULAR_DIR + 'blocks/handlers/translation.handler.js', this, {});
+            }
         },
 
         writeAngularAuthFiles : function () {
