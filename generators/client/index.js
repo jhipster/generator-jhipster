@@ -543,6 +543,14 @@ module.exports = JhipsterClientGenerator.extend({
                 'app/admin/user-management/user-management-delete-dialog.controller.js',
                 'app/admin/user-management/user-management.controller.js',
                 'app/admin/user-management/user-management.state.js',
+                //blocks
+                'app/blocks/interceptor/auth-expired.interceptor.js',
+                'app/blocks/interceptor/errorhandler.interceptor.js',
+                'app/blocks/interceptor/notification.interceptor.js',
+                'app/blocks/handlers/state.handler.js',
+                'app/blocks/config/alert.config.js',
+                'app/blocks/config/http.config.js',
+                'app/blocks/config/localstorage.config.js',
                 // components
                 'app/components/form/show-validation.directive.js',
                 'app/components/form/maxbytes.directive.js',
@@ -550,9 +558,6 @@ module.exports = JhipsterClientGenerator.extend({
                 'app/components/form/uib-pager.config.js',
                 'app/components/form/uib-pagination.config.js',
                 'app/components/form/pagination.constants.js',
-                'app/components/interceptor/auth-expired.interceptor.js',
-                'app/components/interceptor/errorhandler.interceptor.js',
-                'app/components/interceptor/notification.interceptor.js',
                 'app/components/login/login.service.js',
                 'app/components/login/login.controller.js',
                 'app/components/util/truncate-characters.filter.js',
@@ -591,29 +596,35 @@ module.exports = JhipsterClientGenerator.extend({
                 appScripts = appScripts.concat([
                     'bower_components/messageformat/locale/en.js',
                     'bower_components/messageformat/locale/fr.js',
+                    'app/blocks/handlers/translation.handler.js',
+                    'app/blocks/config/translation.config.js',
                     'app/components/language/language.service.js',
                     'app/components/language/language.constants.js',
                     'app/components/language/language.filter.js',
                     'app/components/language/language.controller.js',
-                    'app/layouts/navbar/active-menu.directive.js']);
+                    'app/layouts/navbar/active-menu.directive.js'
+                ]);
             }
             if (this.enableSocialSignIn) {
                 appScripts = appScripts.concat([
                     'app/account/social/directive/social.directive.js',
                     'app/account/social/social-register.state.js',
                     'app/account/social/social-register.controller.js',
-                    'app/account/social/social.service.js']);
+                    'app/account/social/social.service.js'
+                ]);
             }
             if (this.authenticationType == 'jwt') {
                 appScripts = appScripts.concat([
                     'app/services/auth/auth.jwt.service.js',
-                    'app/components/interceptor/auth.interceptor.js']);
+                    'app/blocks/interceptor/auth.interceptor.js'
+                ]);
             }
 
             if (this.authenticationType == 'oauth2') {
                 appScripts = appScripts.concat([
                     'app/services/auth/auth.oauth2.service.js',
-                    'app/components/interceptor/auth.interceptor.js']);
+                    'app/blocks/interceptor/auth.interceptor.js'
+                ]);
             }
 
             if (this.authenticationType == 'session') {
@@ -621,21 +632,24 @@ module.exports = JhipsterClientGenerator.extend({
                     'app/services/auth/sessions.service.js',
                     'app/services/auth/auth.session.service.js',
                     'app/account/sessions/sessions.state.js',
-                    'app/account/sessions/sessions.controller.js']);
+                    'app/account/sessions/sessions.controller.js'
+                ]);
             }
 
             if (this.websocket == 'spring-websocket') {
                 appScripts = appScripts.concat([
                     'app/admin/tracker/tracker.state.js',
                     'app/admin/tracker/tracker.controller.js',
-                    'app/admin/tracker/tracker.service.js'])
+                    'app/admin/tracker/tracker.service.js'
+                ]);
             }
 
             if (this.applicationType == 'gateway') {
                 appScripts = appScripts.concat([
                     'app/admin/gateway/gateway.state.js',
                     'app/admin/gateway/gateway.controller.js',
-                    'app/admin/gateway/gateway.routes.service.js'])
+                    'app/admin/gateway/gateway.routes.service.js'
+                ]);
             }
 
             indexFile = html.appendScripts(indexFile, 'app/app.js', appScripts, {});
