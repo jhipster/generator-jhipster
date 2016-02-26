@@ -25,7 +25,5 @@
                 vm.isAuthenticated = Principal.isAuthenticated;
             });
         }
-
-
     }
 })();
