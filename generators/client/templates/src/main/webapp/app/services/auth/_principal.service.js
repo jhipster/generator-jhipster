@@ -16,6 +16,9 @@
             isAuthenticated: isAuthenticated,
             isIdentityResolved: isIdentityResolved
         };
+
+        return service;
+        
         var _identity,
             _authenticated = false;
 

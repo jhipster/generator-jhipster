@@ -65,106 +65,106 @@
                     }
                 }
             }
+        }
 
-            function changePassword (newPassword, callback) {
-                var cb = callback || angular.noop;
+        function changePassword (newPassword, callback) {
+            var cb = callback || angular.noop;
 
-                return Password.save(newPassword, function () {
-                    return cb();
-                }, function (err) {
+            return Password.save(newPassword, function () {
+                return cb();
+            }, function (err) {
+                return cb(err);
+            }).$promise;
+        }
+
+        function createAccount (account, callback) {
+            var cb = callback || angular.noop;
+
+            return Register.save(account,
+                function () {
+                    return cb(account);
+                },
+                function (err) {
+                    this.logout();
                     return cb(err);
-                }).$promise;
-            }
+                }.bind(this)).$promise;
+        }
 
-            function createAccount (account, callback) {
-                var cb = callback || angular.noop;
+        function login (credentials, callback) {
+            var cb = callback || angular.noop;
+            var deferred = $q.defer();
 
-                return Register.save(account,
-                    function () {
-                        return cb(account);
-                    },
-                    function (err) {
-                        this.logout();
-                        return cb(err);
-                    }.bind(this)).$promise;
-            }
-
-            function login (credentials, callback) {
-                var cb = callback || angular.noop;
-                var deferred = $q.defer();
-
-                AuthServerProvider.login(credentials)
-                    .then(loginThen)
-                    .catch(function (err) {
-                        this.logout();
-                        deferred.reject(err);
-                        return cb(err);
-                    }.bind(this));
-
-                function loginThen (data) {
-                    Principal.identity(true).then(function(account) {
-                        <%_ if (enableTranslation){ _%>
-                        // After the login the language will be changed to
-                        // the language selected by the user during his registration
-                        if (account!== null) {
-                            $translate.use(account.langKey).then(function () {
-                                $translate.refresh();
-                            });
-                        }
-                        <%_ } _%>
-                        <%_ if (websocket === 'spring-websocket') { _%>
-                        Tracker.sendActivity();
-                        <%_ } _%>
-                        deferred.resolve(data);
-                    });
-                    return cb();
-                }
-
-                return deferred.promise;
-            }
-
-            function logout () {
-                AuthServerProvider.logout();
-                Principal.authenticate(null);
-
-                // Reset state memory if not redirected
-                if(!$rootScope.redirected) {
-                    $rootScope.previousStateName = undefined;
-                    $rootScope.previousStateNameParams = undefined;
-                }
-            }
-
-            function resetPasswordFinish (keyAndPassword, callback) {
-                var cb = callback || angular.noop;
-
-                return PasswordResetFinish.save(keyAndPassword, function () {
-                    return cb();
-                }, function (err) {
+            AuthServerProvider.login(credentials)
+                .then(loginThen)
+                .catch(function (err) {
+                    this.logout();
+                    deferred.reject(err);
                     return cb(err);
-                }).$promise;
+                }.bind(this));
+
+            function loginThen (data) {
+                Principal.identity(true).then(function(account) {
+                    <%_ if (enableTranslation){ _%>
+                    // After the login the language will be changed to
+                    // the language selected by the user during his registration
+                    if (account!== null) {
+                        $translate.use(account.langKey).then(function () {
+                            $translate.refresh();
+                        });
+                    }
+                    <%_ } _%>
+                    <%_ if (websocket === 'spring-websocket') { _%>
+                    Tracker.sendActivity();
+                    <%_ } _%>
+                    deferred.resolve(data);
+                });
+                return cb();
             }
 
-            function resetPasswordInit (mail, callback) {
-                var cb = callback || angular.noop;
+            return deferred.promise;
+        }
 
-                return PasswordResetInit.save(mail, function() {
-                    return cb();
-                }, function (err) {
+        function logout () {
+            AuthServerProvider.logout();
+            Principal.authenticate(null);
+
+            // Reset state memory if not redirected
+            if(!$rootScope.redirected) {
+                $rootScope.previousStateName = undefined;
+                $rootScope.previousStateNameParams = undefined;
+            }
+        }
+
+        function resetPasswordFinish (keyAndPassword, callback) {
+            var cb = callback || angular.noop;
+
+            return PasswordResetFinish.save(keyAndPassword, function () {
+                return cb();
+            }, function (err) {
+                return cb(err);
+            }).$promise;
+        }
+
+        function resetPasswordInit (mail, callback) {
+            var cb = callback || angular.noop;
+
+            return PasswordResetInit.save(mail, function() {
+                return cb();
+            }, function (err) {
+                return cb(err);
+            }).$promise;
+        }
+
+        function updateAccount (account, callback) {
+            var cb = callback || angular.noop;
+
+            return Account.save(account,
+                function () {
+                    return cb(account);
+                },
+                function (err) {
                     return cb(err);
-                }).$promise;
-            }
-
-            function updateAccount (account, callback) {
-                var cb = callback || angular.noop;
-
-                return Account.save(account,
-                    function () {
-                        return cb(account);
-                    },
-                    function (err) {
-                        return cb(err);
-                    }.bind(this)).$promise;
-            }
+                }.bind(this)).$promise;
         }
     }
 })();
