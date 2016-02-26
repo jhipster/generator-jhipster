@@ -42,7 +42,10 @@ module.exports = LanguagesGenerator.extend({
         this.languagesArgument.forEach(function (language) {
             if (!this.isSupportedLanguage(language)) {
                 this.env.error(chalk.red('ERROR Unsupported language "' + language + '" passed as argument to language generator.' +
-                    '\nSupported languages: ' + this.getAllSupportedLanguages().join(', ')));
+                    '\nSupported languages: ' + _.map(this.getAllSupportedLanguageOptions(), function(o){
+                        return '\n  ' + _.padRight(o.value, 5) + ' (' + o.name + ')'
+                    }).join(''))
+                );
             }
         }, this);
     },
