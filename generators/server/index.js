@@ -441,6 +441,26 @@ module.exports = JhipsterServerGenerator.extend({
                 },
                 {
                     type: 'list',
+                    name: 'container',
+                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Which container Tomcat/Jetty/Undertow?',
+                    choices: [
+                        {
+                            value: 'tomcat',
+                            name: 'Tomcat'
+                        },
+                        {
+                            value: 'jetty',
+                            name: 'Jetty'
+                        },
+                        {
+                            value: 'undertow',
+                            name: 'Undertow'
+                        }
+                    ],
+                    default: 0
+                },
+                {
+                    type: 'list',
                     name: 'buildTool',
                     message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Would you like to use Maven or Gradle for building the backend?',
                     choices: [
@@ -487,6 +507,7 @@ module.exports = JhipsterServerGenerator.extend({
                 this.searchEngine = props.searchEngine;
                 this.buildTool = props.buildTool;
                 this.enableSocialSignIn = props.enableSocialSignIn;
+                this.container = props.container;
 
                 if (this.databaseType == 'mongodb') {
                     this.devDatabaseType = 'mongodb';
@@ -518,6 +539,7 @@ module.exports = JhipsterServerGenerator.extend({
             configOptions.buildTool = this.buildTool;
             configOptions.enableSocialSignIn = this.enableSocialSignIn;
             configOptions.authenticationType = this.authenticationType;
+            configOptions.container = this.container;
         }
     },
 
