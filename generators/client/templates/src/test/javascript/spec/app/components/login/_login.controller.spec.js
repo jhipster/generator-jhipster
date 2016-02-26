@@ -10,7 +10,7 @@ describe('Controller Tests', function () {
         beforeEach(inject(function ($rootScope, $controller, Auth) {
             $scope = $rootScope.$new();
             authService = Auth;
-            $controller('LoginController',
+            $controller('LoginController as vm',
                 {
                     $scope: $scope,
                     Auth: authService,
@@ -19,7 +19,7 @@ describe('Controller Tests', function () {
         }));
 
         it('should set remember Me', function () {
-            expect($scope.rememberMe).toBeTruthy();
+            expect($scope.vm.rememberMe).toBeTruthy();
         });
     });
 });
