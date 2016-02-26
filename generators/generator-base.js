@@ -1092,11 +1092,11 @@ Generator.prototype.copyEnumI18n = function(language, enumInfo) {
 };
 
 Generator.prototype.installNewLanguage = function(language) {
-    var fullPath = CLIENT_MAIN_SRC_DIR + 'app/components/language/language.service.js';
+    var fullPath = CLIENT_MAIN_SRC_DIR + 'app/components/language/language.constants.js';
     try {
         jhipsterUtils.rewriteFile({
             file: fullPath,
-            needle: 'jhipster-needle-006',
+            needle: 'jhipster-needle-add-language',
             splicable: [
                     ',\'' + language + '\''
             ]

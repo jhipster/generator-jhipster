@@ -10,7 +10,7 @@
          */
         .constant('LANGUAGES', [
             'en', 'fr'
-            // jhipster-needle-006 - JHipster will add new languages here
+            // jhipster-needle-add-language - JHipster will add new languages here
         ]
     );
 })();
