@@ -247,7 +247,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template('_bower.json', 'bower.json', this, {});
             this.template('bowerrc', '.bowerrc', this, {});
             this.template('gulpfile.js', 'gulpfile.js', this, {});
-            this.template('_eslintrc', '.eslintrc', this, {})
+            this.template('_eslintrc.json', '.eslintrc.json', this, {})
             this.template('_eslintignore', '.eslintignore', this, {});
             this.fs.copy(this.templatePath('gulp/handleErrors.js'), this.destinationPath('gulp/handleErrors.js')); // to avoid interpolate errors
             this.template('gulp/utils.js', 'gulp/utils.js', this, {});

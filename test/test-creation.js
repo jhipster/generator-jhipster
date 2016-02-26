@@ -148,7 +148,7 @@ const expectedFiles = {
         'bower.json',
         'package.json',
         '.bowerrc',
-        '.eslintrc',
+        '.eslintrc.json',
         '.eslintignore',
         CLIENT_MAIN_SRC_DIR + 'content/css/main.css',
         CLIENT_MAIN_SRC_DIR + 'favicon.ico',
