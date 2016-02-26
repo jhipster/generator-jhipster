@@ -39,13 +39,12 @@ module.exports = LanguagesGenerator.extend({
 
 
         // Validate languages passed as argument
-        for (var id in this.languagesArgument) {
-            var language = this.languagesArgument[id];
+        this.languagesArgument.forEach(function (language) {
             if (!this.isSupportedLanguage(language)) {
                 this.env.error(chalk.red('ERROR Unsupported language "' + language + '" passed as argument to language generator.' +
                     '\nSupported languages: ' + this.getAllSupportedLanguages().join(', ')));
             }
-        }
+        }, this);
     },
     initializing : {
         getConfig : function () {
@@ -128,8 +127,7 @@ module.exports = LanguagesGenerator.extend({
         var insight = this.insight();
         insight.track('generator', 'languages');
 
-        for (var id in this.languages) {
-            var language = this.languages[id];
+        this.languages.forEach(function (language) {
             if (!configOptions.skipClient) {
                 this.installI18nClientFilesByLanguage(this, CLIENT_MAIN_SRC_DIR, language);
                 this.addMessageformatLocaleToBowerOverride(language.split("-")[0]);
@@ -138,7 +136,7 @@ module.exports = LanguagesGenerator.extend({
                 this.installI18nServerFilesByLanguage(this, SERVER_MAIN_RES_DIR, language);
             }
             insight.track('languages/language', language);
-        }
+        }, this);
         if (!configOptions.skipClient) {
             this.updateLanguagesInLanguageConstant(this.config.get('languages'));
         }
