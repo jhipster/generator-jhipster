@@ -9,21 +9,11 @@
         vm.byteSize = DataUtils.byteSize;
         <%_ } _%>
         vm.loadAll = function() {
-            var onSuccess = function (data, headers) {
-                vm.links = ParseLinks.parse(headers('link'));
-                vm.totalItems = headers('X-Total-Count');
-                vm.<%= entityInstancePlural %> = data;
-                vm.page = pagingParams.page;
-            };
-            var onError = function (error) {
-                AlertService.error(error.data.message);
-            };
-
         <%_ if (searchEngine != 'elasticsearch') { _%>
             <%= entityClass %>.query({
                 page: pagingParams.page - 1,
                 size: paginationConstants.itemsPerPage,
-                sort: [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'), 'id']
+                sort: sort()
             }, onSuccess, onError);
         <%_ } else { _%>
             if (pagingParams.search) {
@@ -31,16 +21,32 @@
                     query: pagingParams.search,
                     page: pagingParams.page - 1,
                     size: paginationConstants.itemsPerPage,
-                    sort: [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'), 'id']
+                    sort: sort()
                 }, onSuccess, onError);
             } else {
                 <%= entityClass %>.query({
                     page: pagingParams.page - 1,
                     size: paginationConstants.itemsPerPage,
-                    sort: [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'), 'id']
+                    sort: sort()
                 }, onSuccess, onError);
             }
         <%_ } _%>
+            function sort() {
+                var result = [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc')]
+                if (vm.predicate !== 'id') {
+                    result.push('id');
+                }
+                return result;
+            }
+            function onSuccess(data, headers) {
+                vm.links = ParseLinks.parse(headers('link'));
+                vm.totalItems = headers('X-Total-Count');
+                vm.<%= entityInstancePlural %> = data;
+                vm.page = pagingParams.page;
+            }
+            function onError(error) {
+                AlertService.error(error.data.message);
+            }
         };
         vm.loadPage = function(page) {
             vm.page = page;
