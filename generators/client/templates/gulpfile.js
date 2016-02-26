@@ -27,7 +27,8 @@ var gulp = require('gulp'),
     plumber = require('gulp-plumber'),
     changed = require('gulp-changed'),
     handleErrors = require('./gulp/handleErrors'),
-    util = require('./gulp/utils');
+    util = require('./gulp/utils'),
+    gulpIf = require('gulp-if');
 
 var config = {
     app: '<%= MAIN_SRC_DIR %>',
@@ -296,12 +297,28 @@ gulp.task('ngconstant:prod', function () {
 
 // check app and test for eslint errors
 gulp.task('eslint', function () {
-    return gulp.src(['gulpfile.js', config.app + 'app/**/*.js'])
+    return gulp.src(['gulpfile.js', config.app + 'app/**/*.js', 'src/test/javascript/**/*.js'])
       .pipe(eslint())
       .pipe(eslint.format())
       // commented out until current refactorings complete
       // .pipe(eslint.failOnError());  
 });
+
+function isFixed(file) {
+	// Has ESLint fixed the file contents?
+	return file.eslint != null && file.eslint.fixed;
+}
+
+// check app for eslint errors anf fix some of them
+gulp.task('eslint-and-fix', function () {
+    return gulp.src(config.app + 'app/**/*.js')
+        .pipe(eslint({
+            fix: true
+        }))
+        .pipe(eslint.format())
+        .pipe(gulpIf(isFixed, gulp.dest(config.app + 'app')));
+});
+
 
 <% if (testFrameworks.indexOf('protractor') > -1) { %>
 gulp.task('itest', ['protractor']);

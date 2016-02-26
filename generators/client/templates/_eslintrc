@@ -12,7 +12,7 @@
     "no-console": 0,
 
     // strict
-    "strict": [2, "global"],
+    "strict": [2, "function"],
 
     // formatting, spaces, operators
     "indent": 2,
@@ -20,7 +20,7 @@
     "semi": [2, "always"],
     "keyword-spacing": 2,
     "space-before-blocks": [2, "always"],
-    "space-before-function-paren": [2, { "anonymous": "always", "named": "never" }],
+    "space-before-function-paren": [2, "never"],
     "dot-location": [2, "property"],
     "space-infix-ops": 2,
     "key-spacing": [2, {"beforeColon": false, "afterColon": true}],
