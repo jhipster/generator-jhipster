@@ -507,7 +507,7 @@ module.exports = JhipsterClientGenerator.extend({
                 'app/blocks/config/alert.config.js',
                 'app/blocks/config/http.config.js',
                 'app/blocks/config/localstorage.config.js',
-                'app/blocks/interceptor/auth.interceptor.js',
+                'app/blocks/interceptor/auth-expired.interceptor.js',
                 'app/blocks/interceptor/errorhandler.interceptor.js',
                 'app/blocks/interceptor/notification.interceptor.js',
                 // account
