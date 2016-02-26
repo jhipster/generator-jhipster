@@ -1,7 +1,11 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .config(function (uibPaginationConfig, paginationConstants) {
+    angular
+        .module('<%=angularAppName%>')
+        .config(paginationConfig);
+
+    function paginationConfig(uibPaginationConfig, paginationConstants) {
         uibPaginationConfig.itemsPerPage = paginationConstants.itemsPerPage;
         uibPaginationConfig.maxSize = 5;
         uibPaginationConfig.boundaryLinks = true;
@@ -9,4 +13,5 @@ angular.module('<%=angularAppName%>')
         uibPaginationConfig.previousText = '‹';
         uibPaginationConfig.nextText = '›';
         uibPaginationConfig.lastText = '»';
-    });
+    }
+})();
