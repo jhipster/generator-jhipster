@@ -24,8 +24,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import javax.inject.Inject;
-import javax.transaction.Transactional;
+import javax.inject.Inject;<% if (databaseType == 'sql') { %>
+import javax.transaction.Transactional;<% } %>
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -143,8 +143,8 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
                 .andExpect(status().isInternalServerError());
     }
 
-    @Test
-    @Transactional
+    @Test<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>
     public void testRegisterValid() throws Exception {
         UserDTO u = new UserDTO(
             "joe",                  // login
@@ -167,8 +167,8 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
         assertThat(user.isPresent()).isTrue();
     }
 
-    @Test
-    @Transactional
+    @Test<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>
     public void testRegisterInvalidLogin() throws Exception {
         UserDTO u = new UserDTO(
             "funky-log!n",          // login <-- invalid
@@ -191,8 +191,8 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
         assertThat(user.isPresent()).isFalse();
     }
 
-    @Test
-    @Transactional
+    @Test<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>
     public void testRegisterInvalidEmail() throws Exception {
         UserDTO u = new UserDTO(
             "bob",              // login
@@ -215,8 +215,8 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
         assertThat(user.isPresent()).isFalse();
     }
 
-    @Test
-    @Transactional
+    @Test<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>
     public void testRegisterEmailEmpty() throws Exception {
         UserDTO u = new UserDTO(
             "bob",              // login
@@ -239,8 +239,8 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
         assertThat(user.isPresent()).isFalse();
     }
 
-    @Test
-    @Transactional
+    @Test<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>
     public void testRegisterDuplicateLogin() throws Exception {
         // Good
         UserDTO u = new UserDTO(
@@ -276,8 +276,8 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
         assertThat(userDup.isPresent()).isFalse();
     }
 
-    @Test
-    @Transactional
+    @Test<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>
     public void testRegisterDuplicateEmail() throws Exception {
         // Good
         UserDTO u = new UserDTO(
@@ -313,8 +313,8 @@ public class AccountResourceIntTest <% if (databaseType == 'cassandra') { %>exte
         assertThat(userDup.isPresent()).isFalse();
     }
 
-    @Test
-    @Transactional
+    @Test<% if (databaseType == 'sql') { %>
+    @Transactional<% } %>
     public void testRegisterAdminIsIgnored() throws Exception {
         UserDTO u = new UserDTO(
             "badguy",               // login
