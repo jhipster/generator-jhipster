@@ -188,9 +188,17 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'i18n/fr/reset.json',
         CLIENT_MAIN_SRC_DIR + 'i18n/fr/user-management.json',
         CLIENT_MAIN_SRC_DIR + 'app/app.module.js',
-        CLIENT_MAIN_SRC_DIR + 'app/app.config.js',
         CLIENT_MAIN_SRC_DIR + 'app/app.state.js',
         CLIENT_MAIN_SRC_DIR + 'app/app.constants.js',
+        CLIENT_MAIN_SRC_DIR + 'app/blocks/config/http.config.js',
+        CLIENT_MAIN_SRC_DIR + 'app/blocks/config/localstorage.config.js',
+        CLIENT_MAIN_SRC_DIR + 'app/blocks/config/alert.config.js',
+        CLIENT_MAIN_SRC_DIR + 'app/blocks/config/translation.config.js',
+        CLIENT_MAIN_SRC_DIR + 'app/blocks/handlers/state.handler.js',
+        CLIENT_MAIN_SRC_DIR + 'app/blocks/handlers/translation.handler.js',
+        CLIENT_MAIN_SRC_DIR + 'app/blocks/interceptor/auth-expired.interceptor.js',
+        CLIENT_MAIN_SRC_DIR + 'app/blocks/interceptor/errorhandler.interceptor.js',
+        CLIENT_MAIN_SRC_DIR + 'app/blocks/interceptor/notification.interceptor.js',
         CLIENT_MAIN_SRC_DIR + 'app/admin/audits/audits.service.js',
         CLIENT_MAIN_SRC_DIR + 'app/admin/configuration/configuration.service.js',
         CLIENT_MAIN_SRC_DIR + 'app/admin/logs/logs.service.js',
@@ -303,7 +311,9 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.service.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.filter.js',
-        CLIENT_MAIN_SRC_DIR + 'app/components/language/language.constants.js'
+        CLIENT_MAIN_SRC_DIR + 'app/components/language/language.constants.js',
+        CLIENT_MAIN_SRC_DIR + 'app/blocks/config/translation.config.js',
+        CLIENT_MAIN_SRC_DIR + 'app/blocks/handlers/translation.handler.js'
     ],
 
     socialLogin: [

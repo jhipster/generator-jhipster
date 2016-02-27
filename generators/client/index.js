@@ -292,9 +292,16 @@ module.exports = JhipsterClientGenerator.extend({
         writeAngularAppFiles : function () {
             // Angular JS module
             this.template(ANGULAR_DIR + '_app.module.js', ANGULAR_DIR + 'app.module.js', this, {});
-            this.template(ANGULAR_DIR + '_app.config.js', ANGULAR_DIR + 'app.config.js', this, {});
             this.template(ANGULAR_DIR + '_app.state.js', ANGULAR_DIR + 'app.state.js', this, {});
             this.template(ANGULAR_DIR + '_app.constants.js', ANGULAR_DIR + 'app.constants.js', this, {});
+            this.template(ANGULAR_DIR + 'blocks/handlers/_state.handler.js', ANGULAR_DIR + 'blocks/handlers/state.handler.js', this, {});
+            if (this.enableTranslation) {
+                this.template(ANGULAR_DIR + 'blocks/handlers/_translation.handler.js', ANGULAR_DIR + 'blocks/handlers/translation.handler.js', this, {});
+                this.template(ANGULAR_DIR + 'blocks/config/_translation.config.js', ANGULAR_DIR + 'blocks/config/translation.config.js', this, {});
+            }
+            this.template(ANGULAR_DIR + 'blocks/config/_alert.config.js', ANGULAR_DIR + 'blocks/config/alert.config.js', this, {});
+            this.template(ANGULAR_DIR + 'blocks/config/_http.config.js', ANGULAR_DIR + 'blocks/config/http.config.js', this, {});
+            this.template(ANGULAR_DIR + 'blocks/config/_localstorage.config.js', ANGULAR_DIR + 'blocks/config/localstorage.config.js', this, {});
         },
 
         writeAngularAuthFiles : function () {
@@ -424,11 +431,11 @@ module.exports = JhipsterClientGenerator.extend({
 
             // interceptor code
             if (this.authenticationType == 'oauth2' || this.authenticationType == 'jwt') {
-                this.template(ANGULAR_DIR + 'components/interceptor/_auth.interceptor.js', ANGULAR_DIR + 'components/interceptor/auth.interceptor.js', this, {});
+                this.template(ANGULAR_DIR + 'blocks/interceptor/_auth.interceptor.js', ANGULAR_DIR + 'blocks/interceptor/auth.interceptor.js', this, {});
             }
-            this.template(ANGULAR_DIR + 'components/interceptor/_auth-expired.interceptor.js', ANGULAR_DIR + 'components/interceptor/auth-expired.interceptor.js', this, {});
-            this.template(ANGULAR_DIR + 'components/interceptor/_errorhandler.interceptor.js', ANGULAR_DIR + 'components/interceptor/errorhandler.interceptor.js', this, {});
-            this.template(ANGULAR_DIR + 'components/interceptor/_notification.interceptor.js', ANGULAR_DIR + 'components/interceptor/notification.interceptor.js', this, {});
+            this.template(ANGULAR_DIR + 'blocks/interceptor/_auth-expired.interceptor.js', ANGULAR_DIR + 'blocks/interceptor/auth-expired.interceptor.js', this, {});
+            this.template(ANGULAR_DIR + 'blocks/interceptor/_errorhandler.interceptor.js', ANGULAR_DIR + 'blocks/interceptor/errorhandler.interceptor.js', this, {});
+            this.template(ANGULAR_DIR + 'blocks/interceptor/_notification.interceptor.js', ANGULAR_DIR + 'blocks/interceptor/notification.interceptor.js', this, {});
 
             //alert service code
             this.template(ANGULAR_DIR + 'components/alert/_alert.service.js', ANGULAR_DIR + 'components/alert/alert.service.js', this, {});
@@ -493,9 +500,16 @@ module.exports = JhipsterClientGenerator.extend({
 
             var appScripts = [
                 'app/app.module.js',
-                'app/app.config.js',
                 'app/app.state.js',
                 'app/app.constants.js',
+                //blocks
+                'app/blocks/handlers/state.handler.js',
+                'app/blocks/config/alert.config.js',
+                'app/blocks/config/http.config.js',
+                'app/blocks/config/localstorage.config.js',
+                'app/blocks/interceptor/auth-expired.interceptor.js',
+                'app/blocks/interceptor/errorhandler.interceptor.js',
+                'app/blocks/interceptor/notification.interceptor.js',
                 // account
                 'app/account/account.state.js',
                 'app/account/activate/activate.state.js',
@@ -543,9 +557,6 @@ module.exports = JhipsterClientGenerator.extend({
                 'app/components/form/uib-pager.config.js',
                 'app/components/form/uib-pagination.config.js',
                 'app/components/form/pagination.constants.js',
-                'app/components/interceptor/auth-expired.interceptor.js',
-                'app/components/interceptor/errorhandler.interceptor.js',
-                'app/components/interceptor/notification.interceptor.js',
                 'app/components/login/login.service.js',
                 'app/components/login/login.controller.js',
                 'app/components/util/truncate-characters.filter.js',
@@ -584,29 +595,35 @@ module.exports = JhipsterClientGenerator.extend({
                 appScripts = appScripts.concat([
                     'bower_components/messageformat/locale/en.js',
                     'bower_components/messageformat/locale/fr.js',
+                    'app/blocks/handlers/translation.handler.js',
+                    'app/blocks/config/translation.config.js',
                     'app/components/language/language.service.js',
                     'app/components/language/language.constants.js',
                     'app/components/language/language.filter.js',
                     'app/components/language/language.controller.js',
-                    'app/layouts/navbar/active-menu.directive.js']);
+                    'app/layouts/navbar/active-menu.directive.js'
+                ]);
             }
             if (this.enableSocialSignIn) {
                 appScripts = appScripts.concat([
                     'app/account/social/directive/social.directive.js',
                     'app/account/social/social-register.state.js',
                     'app/account/social/social-register.controller.js',
-                    'app/account/social/social.service.js']);
+                    'app/account/social/social.service.js'
+                ]);
             }
             if (this.authenticationType == 'jwt') {
                 appScripts = appScripts.concat([
                     'app/services/auth/auth.jwt.service.js',
-                    'app/components/interceptor/auth.interceptor.js']);
+                    'app/blocks/interceptor/auth.interceptor.js'
+                ]);
             }
 
             if (this.authenticationType == 'oauth2') {
                 appScripts = appScripts.concat([
                     'app/services/auth/auth.oauth2.service.js',
-                    'app/components/interceptor/auth.interceptor.js']);
+                    'app/blocks/interceptor/auth.interceptor.js'
+                ]);
             }
 
             if (this.authenticationType == 'session') {
@@ -614,21 +631,24 @@ module.exports = JhipsterClientGenerator.extend({
                     'app/services/auth/sessions.service.js',
                     'app/services/auth/auth.session.service.js',
                     'app/account/sessions/sessions.state.js',
-                    'app/account/sessions/sessions.controller.js']);
+                    'app/account/sessions/sessions.controller.js'
+                ]);
             }
 
             if (this.websocket == 'spring-websocket') {
                 appScripts = appScripts.concat([
                     'app/admin/tracker/tracker.state.js',
                     'app/admin/tracker/tracker.controller.js',
-                    'app/admin/tracker/tracker.service.js'])
+                    'app/admin/tracker/tracker.service.js'
+                ]);
             }
 
             if (this.applicationType == 'gateway') {
                 appScripts = appScripts.concat([
                     'app/admin/gateway/gateway.state.js',
                     'app/admin/gateway/gateway.controller.js',
-                    'app/admin/gateway/gateway.routes.service.js'])
+                    'app/admin/gateway/gateway.routes.service.js'
+                ]);
             }
 
             indexFile = html.appendScripts(indexFile, 'app/app.js', appScripts, {});
