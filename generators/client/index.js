@@ -468,7 +468,8 @@ module.exports = JhipsterClientGenerator.extend({
             // services
             this.template(ANGULAR_DIR + 'services/auth/_auth.service.js', ANGULAR_DIR + 'services/auth/auth.service.js', this, {});
             this.template(ANGULAR_DIR + 'services/auth/_principal.service.js', ANGULAR_DIR + 'services/auth/principal.service.js', this, {});
-            this.template(ANGULAR_DIR + 'services/auth/_authority.directive.js', ANGULAR_DIR + 'services/auth/authority.directive.js', this, {});
+            this.template(ANGULAR_DIR + 'services/auth/_has-authority.directive.js', ANGULAR_DIR + 'services/auth/has-authority.directive.js', this, {});
+            this.template(ANGULAR_DIR + 'services/auth/_has-any-authority.directive.js', ANGULAR_DIR + 'services/auth/has-any-authority.directive.js', this, {});
             if (this.authenticationType == 'oauth2') {
                 this.template(ANGULAR_DIR + 'services/auth/_auth.oauth2.service.js', ANGULAR_DIR + 'services/auth/auth.oauth2.service.js', this, {});
             } else if (this.authenticationType == 'jwt') {
@@ -480,6 +481,8 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'services/auth/_account.service.js', ANGULAR_DIR + 'services/auth/account.service.js', this, {});
             this.template(ANGULAR_DIR + 'services/auth/_activate.service.js', ANGULAR_DIR + 'services/auth/activate.service.js', this, {});
             this.template(ANGULAR_DIR + 'services/auth/_password.service.js', ANGULAR_DIR + 'services/auth/password.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/auth/_password-reset-init.service.js', ANGULAR_DIR + 'services/auth/password-reset-init.service.js', this, {});
+            this.template(ANGULAR_DIR + 'services/auth/_password-reset-finish.service.js', ANGULAR_DIR + 'services/auth/password-reset-finish.service.js', this, {});
             this.template(ANGULAR_DIR + 'services/auth/_register.service.js', ANGULAR_DIR + 'services/auth/register.service.js', this, {});
             this.template(ANGULAR_DIR + 'services/user/_user.service.js', ANGULAR_DIR + 'services/user/user.service.js', this, {});
         },
@@ -584,10 +587,13 @@ module.exports = JhipsterClientGenerator.extend({
                 // services
                 'app/services/auth/auth.service.js',
                 'app/services/auth/principal.service.js',
-                'app/services/auth/authority.directive.js',
+                'app/services/auth/has-authority.directive.js',
+                'app/services/auth/has-any-authority.directive.js',
                 'app/services/auth/account.service.js',
                 'app/services/auth/activate.service.js',
                 'app/services/auth/password.service.js',
+                'app/services/auth/password-reset-init.service.js',
+                'app/services/auth/password-reset-finish.service.js',
                 'app/services/auth/register.service.js',
                 'app/services/user/user.service.js'
             ];
