@@ -14,6 +14,7 @@
     "searchEngine": "no",
     "useSass": false,
     "buildTool": "maven",
+    "container": "tomcat",
     "enableTranslation": true,
     "enableSocialSignIn": true,
     "rememberMeKey": "cb7ffe96c2de12a54c69ec0940d49c36d596375f",
