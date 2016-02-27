@@ -446,7 +446,10 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'home/_home.controller.js', ANGULAR_DIR + 'home/home.controller.js', this, {});
 
             // layouts
-            this.template(ANGULAR_DIR + 'layouts/navbar/_navbar.directive.js', ANGULAR_DIR + 'layouts/navbar/navbar.directive.js', this, {});
+            this.template(ANGULAR_DIR + 'layouts/navbar/_active-link.directive.js', ANGULAR_DIR + 'layouts/navbar/active-link.directive.js', this, {});
+            if(this.enableTranslation) {
+                this.template(ANGULAR_DIR + 'layouts/navbar/_active-menu.directive.js', ANGULAR_DIR + 'layouts/navbar/active-menu.directive.js', this, {});
+            }
             this.copyHtml(ANGULAR_DIR + 'layouts/navbar/navbar.html', ANGULAR_DIR + 'layouts/navbar/navbar.html');
             this.template(ANGULAR_DIR + 'layouts/navbar/_navbar.controller.js', ANGULAR_DIR + 'layouts/navbar/navbar.controller.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'layouts/error/error.html', ANGULAR_DIR + 'layouts/error/error.html');
@@ -565,7 +568,7 @@ module.exports = JhipsterClientGenerator.extend({
                 'app/home/home.controller.js',
                 // layouts
                 'app/layouts/error/error.state.js',
-                'app/layouts/navbar/navbar.directive.js',
+                'app/layouts/navbar/active-link.directive.js',
                 'app/layouts/navbar/navbar.controller.js',
                 // services
                 'app/services/auth/auth.service.js',
@@ -584,7 +587,8 @@ module.exports = JhipsterClientGenerator.extend({
                     'app/components/language/language.service.js',
                     'app/components/language/language.constants.js',
                     'app/components/language/language.filter.js',
-                    'app/components/language/language.controller.js']);
+                    'app/components/language/language.controller.js',
+                    'app/layouts/navbar/active-menu.directive.js']);
             }
             if (this.enableSocialSignIn) {
                 appScripts = appScripts.concat([

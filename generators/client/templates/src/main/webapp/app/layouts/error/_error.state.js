@@ -1,7 +1,13 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .config(function ($stateProvider) {
+    angular
+        .module('<%=angularAppName%>')
+        .config(stateConfig);
+
+    stateConfig.$inject = ['$stateProvider'];
+
+    function stateConfig($stateProvider) {
         $stateProvider
             .state('error', {
                 parent: 'app',
@@ -12,7 +18,7 @@ angular.module('<%=angularAppName%>')
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'app/error/error.html'
+                        templateUrl: 'app/layouts/error/error.html'
                     }
                 },
                 resolve: {
@@ -30,7 +36,7 @@ angular.module('<%=angularAppName%>')
                 },
                 views: {
                     'content@': {
-                        templateUrl: 'app/error/accessdenied.html'
+                        templateUrl: 'app/layouts/error/accessdenied.html'
                     }
                 },
                 resolve: {
@@ -40,4 +46,5 @@ angular.module('<%=angularAppName%>')
                     }]
                 }
             });
-    });
+    }
+})();
