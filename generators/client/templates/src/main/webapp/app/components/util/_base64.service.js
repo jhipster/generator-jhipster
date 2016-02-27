@@ -13,8 +13,12 @@
             'wxyz0123456789+/' +
             '=';
 
-        this.decode = decode;
-        this.encode = encode;
+        var service = {
+            decode : decode,
+            encode : encode
+        }
+
+        return service;
 
         function encode (input) {
             var output = '',

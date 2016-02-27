@@ -6,9 +6,14 @@
         .factory('PaginationUtil', PaginationUtil);
 
     function PaginationUtil () {
-        this.parseAscending = parseAscending;
-        this.parsePage = parsePage;
-        this.parsePredicate = parsePredicate;
+
+        var service = {
+            parseAscending : parseAscending,
+            parsePage : parsePage,
+            parsePredicate : parsePredicate
+        }
+
+        return service;
 
         function parseAscending (sort) {
             var sortArray = sort.split(',');

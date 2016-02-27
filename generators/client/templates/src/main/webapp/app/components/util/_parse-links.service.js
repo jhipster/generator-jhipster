@@ -6,7 +6,12 @@
         .factory('ParseLinks', ParseLinks);
 
     function ParseLinks () {
-        this.parse = parse;
+
+        var service = {
+            parse : parse
+        }
+
+        return service;
 
         function parse (header) {
             if (header.length === 0) {

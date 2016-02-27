@@ -8,10 +8,15 @@
     DateUtils.$inject = ['$filter'];
 
     function DateUtils ($filter) {
-        this.convertDateTimeFromServer = convertDateTimeFromServer;
-        this.convertLocaleDateFromServer = convertLocaleDateFromServer;
-        this.convertLocaleDateToServer = convertLocaleDateToServer;
-        this.dateformat = dateformat;
+
+        var service = {
+            convertDateTimeFromServer : convertDateTimeFromServer,
+            convertLocaleDateFromServer : convertLocaleDateFromServer,
+            convertLocaleDateToServer : convertLocaleDateToServer,
+            dateformat : dateformat
+        }
+
+        return service;
 
         function convertDateTimeFromServer (date) {
             if (date) {

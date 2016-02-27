@@ -8,9 +8,14 @@
     DataUtils.$inject = ['$window'];
 
     function DataUtils ($window) {
-        this.abbreviate = abbreviate;
-        this.byteSize = byteSize;
-        this.openFile = openFile;
+
+        var service = {
+            abbreviate : abbreviate,
+            byteSize : byteSize,
+            openFile : openFile
+        }
+
+        return service;
 
         function abbreviate (text) {
             if (!angular.isString(text)) {
