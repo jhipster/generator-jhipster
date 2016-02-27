@@ -2,8 +2,8 @@
 // See: https://www.npmjs.com/package/eslint-plugin-angular
 {
   "extends": [
-        "eslint:recommended",
-        "angular"
+    "eslint:recommended",
+    "angular"
   ],
   "env": {
     "node": true,

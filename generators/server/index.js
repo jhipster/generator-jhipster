@@ -646,7 +646,6 @@ module.exports = JhipsterServerGenerator.extend({
             this.copy('gitignore', '.gitignore');
             this.copy('gitattributes', '.gitattributes');
             this.copy('editorconfig', '.editorconfig');
-            this.copy('jshintrc', '.jshintrc');
             this.template('_travis.yml', '.travis.yml', this, {});
         },
 
