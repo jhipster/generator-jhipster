@@ -7,22 +7,11 @@
         vm.byteSize = DataUtils.byteSize;
         <%_ } _%>
         vm.loadAll = function() {
-            var onSuccess = function (data, headers) {
-                vm.links = ParseLinks.parse(headers('link'));
-                vm.totalItems = headers('X-Total-Count');
-                for (var i = 0; i < data.length; i++) {
-                    vm.<%= entityInstancePlural %>.push(data[i]);
-                }
-            };
-            var onError = function (error) {
-                AlertService.error(error.data.message);
-            };
-
         <%_ if (searchEngine != 'elasticsearch') { _%>
             <%= entityClass %>.query({
                 page: vm.page,
                 size: 20,
-                sort: [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'), 'id']
+                sort: sort()
             }, onSuccess, onError);
         <%_ } else { _%>
             if (vm.currentSearch) {
@@ -30,16 +19,33 @@
                     query: vm.currentSearch,
                     page: vm.page,
                     size: 20,
-                    sort: [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'), 'id']
+                    sort: sort()
                 }, onSuccess, onError);
             } else {
                 <%= entityClass %>.query({
                     page: vm.page,
                     size: 20,
-                    sort: [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'), 'id']
+                    sort: sort()
                 }, onSuccess, onError);
             }
         <%_ } _%>
+            function sort() {
+                var result = [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc')]
+                if (vm.predicate !== 'id') {
+                    result.push('id');
+                }
+                return result;
+            }
+            function onSuccess(data, headers) {
+                vm.links = ParseLinks.parse(headers('link'));
+                vm.totalItems = headers('X-Total-Count');
+                for (var i = 0; i < data.length; i++) {
+                    vm.<%= entityInstancePlural %>.push(data[i]);
+                }
+            }
+            function onError(error) {
+                AlertService.error(error.data.message);
+            }
         };
         vm.reset = function() {
             vm.page = 0;
