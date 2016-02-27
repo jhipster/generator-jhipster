@@ -19,7 +19,7 @@
             $rootScope.VERSION = VERSION;
             $rootScope.back = back;
 
-            $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
+            var stateChangeStart = $rootScope.$on('$stateChangeStart', function (event, toState, toStateParams) {
                 $rootScope.toState = toState;
                 $rootScope.toStateParams = toStateParams;
 
@@ -35,7 +35,7 @@
                 <% } %>
             });
 
-            $rootScope.$on('$stateChangeSuccess',  function(event, toState, toParams, fromState, fromParams) {
+            var stateChangeSuccess = $rootScope.$on('$stateChangeSuccess',  function(event, toState, toParams, fromState, fromParams) {
                 var titleKey =<% if (enableTranslation) { %> 'global.title' <% }else { %> '<%= baseName %>' <% } %>;
 
                 // Remember previous state unless we've been redirected to login or we've just
@@ -54,6 +54,15 @@
                 <% if (enableTranslation) { %>translationHandler.updateTitle(titleKey);<% } else { %>$window.document.title = titleKey;<% } %>
             });
 
+            $rootScope.$on('$destroy', function () {
+                if(angular.isDefined(stateChangeStart) && stateChangeStart !== null){
+                    stateChangeStart();
+                }
+                if(angular.isDefined(stateChangeSuccess) && stateChangeSuccess !== null){
+                    stateChangeSuccess();
+                }
+            });
+
             function back() {
                 // If previous state is 'activate' or do not exist go to 'home'
                 if ($rootScope.previousStateName === 'activate' || $state.get($rootScope.previousStateName) === null) {
@@ -61,7 +70,7 @@
                 } else {
                     $state.go($rootScope.previousStateName, $rootScope.previousStateParams);
                 }
-            };
+            }
         }
     }
 })();

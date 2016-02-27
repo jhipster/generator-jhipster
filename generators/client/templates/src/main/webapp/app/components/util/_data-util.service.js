@@ -3,7 +3,7 @@
 
     angular
         .module('<%=angularAppName%>')
-        .service('DataUtils', DataUtils);
+        .factory('DataUtils', DataUtils);
 
     DataUtils.$inject = ['$window'];
 

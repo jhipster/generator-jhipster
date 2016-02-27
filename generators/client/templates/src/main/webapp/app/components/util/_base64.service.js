@@ -4,8 +4,8 @@
 
     angular
         .module('<%=angularAppName%>')
-        .service('Base64', Base64);
-        
+        .factory('Base64', Base64);
+
     function Base64 () {
         var keyStr = 'ABCDEFGHIJKLMNOP' +
             'QRSTUVWXYZabcdef' +

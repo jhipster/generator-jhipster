@@ -28,9 +28,9 @@
             return $q.reject(response);
         }
     }<% } %><% if (authenticationType === 'session') { %>
-    authExpiredInterceptor.$inject = ['$rootScope', '$q', '$injector'];
+    authExpiredInterceptor.$inject = ['$rootScope', '$q', '$injector', '$document'];
 
-    function authExpiredInterceptor($rootScope, $q, $injector) {
+    function authExpiredInterceptor($rootScope, $q, $injector, $document) {
         var service = {
             responseError: responseError
         };
@@ -40,9 +40,8 @@
         function responseError(response) {
             // If we have an unauthorized request we redirect to the login page
             // Don't do this check on the account API to avoid infinite loop
-            if (response.status === 401 && response.data.path !== undefined && response.data.path.indexOf('/api/account') === -1){
+            if (response.status === 401 && angular.isDefined(response.data.path) && response.data.path.indexOf('/api/account') === -1){
                 var Auth = $injector.get('Auth');
-                var $state = $injector.get('$state');
                 var to = $rootScope.toState;
                 var params = $rootScope.toStateParams;
                 Auth.logout();
@@ -60,7 +59,7 @@
 
         function getCSRF() {
             var name = 'CSRF-TOKEN=';
-            var ca = document.cookie.split(';');
+            var ca = $document.cookie.split(';');
             for (var i = 0; i < ca.length; i++) {
                 var c = ca[i];
                 while (c.charAt(0) === ' ') {c = c.substring(1);}

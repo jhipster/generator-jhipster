@@ -5,7 +5,7 @@
         .module('<%=angularAppName%>')
         .controller('UserManagementDialogController',UserManagementDialogController);
 
-    UserManagementDialogController.$inject = ['$stateParams', '$uibModalInstance', 'entity', 'User', <% if (enableTranslation) { %>'Language',<% } %>];
+    UserManagementDialogController.$inject = ['$stateParams', '$uibModalInstance', 'entity', 'User'<% if (enableTranslation) { %>, 'Language'<% } %>];
 
     function UserManagementDialogController ($stateParams, $uibModalInstance, entity, User<% if (enableTranslation) { %>, Language<% } %>) {
         var vm = this;
@@ -30,11 +30,11 @@
         function onSaveSuccess (result) {
             vm.isSaving = false;
             $uibModalInstance.close(result);
-        };
+        }
 
         function onSaveError () {
             vm.isSaving = false;
-        };
+        }
 
         function save () {
             vm.isSaving = true;

@@ -8,6 +8,9 @@
     Principal.$inject = ['$q', 'Account'<% if (websocket == 'spring-websocket') { %>, 'Tracker'<% } %>];
 
     function Principal ($q, Account<% if (websocket == 'spring-websocket') { %>, Tracker<% } %>) {
+        var _identity,
+            _authenticated = false;
+
         var service = {
             authenticate: authenticate,
             hasAnyAuthority: hasAnyAuthority,
@@ -18,10 +21,6 @@
         };
 
         return service;
-        
-        var _identity,
-            _authenticated = false;
-
 
         function authenticate (identity) {
             _identity = identity;

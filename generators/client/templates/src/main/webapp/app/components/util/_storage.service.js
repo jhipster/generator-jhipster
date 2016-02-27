@@ -22,7 +22,7 @@
         }
 
         function get (key) {
-            return JSON.parse($window.localStorage.getItem(key));
+            return angular.fromJson($window.localStorage.getItem(key));
         }
 
         function remove (key) {
@@ -30,7 +30,7 @@
         }
 
         function save (key, data) {
-            $window.localStorage.setItem(key, JSON.stringify(data));
+            $window.localStorage.setItem(key, angular.toJson(data));
         }
     }
 })();

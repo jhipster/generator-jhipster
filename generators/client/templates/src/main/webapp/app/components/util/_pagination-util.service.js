@@ -3,7 +3,7 @@
 
     angular
         .module('<%=angularAppName%>')
-        .service('PaginationUtil', PaginationUtil);
+        .factory('PaginationUtil', PaginationUtil);
 
     function PaginationUtil () {
         this.parseAscending = parseAscending;
@@ -13,7 +13,7 @@
         function parseAscending (sort) {
             var sortArray = sort.split(',');
             if (sortArray.length > 1){
-                return sort.split(',').slice(-1)[0] == 'asc';
+                return sort.split(',').slice(-1)[0] === 'asc';
             } else {
                 // default to true if no sort defined
                 return true;

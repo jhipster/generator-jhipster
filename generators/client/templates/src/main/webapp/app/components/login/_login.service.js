@@ -20,7 +20,7 @@
         return service;
 
         function open () {
-            if (modalInstance != null) return;
+            if (modalInstance !== null) return;
             modalInstance = $uibModal.open({
                 animation: true,
                 templateUrl: 'app/components/login/login.html',

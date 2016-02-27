@@ -3,7 +3,7 @@
 
     angular
         .module('<%=angularAppName%>')
-        .service('DateUtils', DateUtils);
+        .factory('DateUtils', DateUtils);
 
     DateUtils.$inject = ['$filter'];
 

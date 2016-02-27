@@ -15,8 +15,14 @@
 
         function initialize() {
             // if the current translation changes, update the window title
-            $rootScope.$on('$translateChangeSuccess', function() {
+            var translateChangeSuccess = $rootScope.$on('$translateChangeSuccess', function() {
                 updateTitle();
+            });
+
+            $rootScope.$on('$destroy', function () {
+                if(angular.isDefined(translateChangeSuccess) && translateChangeSuccess !== null){
+                    translateChangeSuccess();
+                }
             });
         }
 
@@ -32,6 +38,6 @@
             $translate(titleKey || 'global.title').then(function (title) {
                 $window.document.title = title;
             });
-        };
+        }
     }
 })();

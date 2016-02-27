@@ -3,7 +3,7 @@
 
     angular
         .module('<%=angularAppName%>')
-        .service('ParseLinks', ParseLinks);
+        .factory('ParseLinks', ParseLinks);
 
     function ParseLinks () {
         this.parse = parse;
