@@ -9,7 +9,7 @@ import java.util.Date;<% } %><% if (relationships.length > 0) { %>
 import java.util.HashSet;
 import java.util.Set;<% } %>
 import java.util.Objects;<% if (databaseType == 'cassandra') { %>
-import java.util.UUID;<% } %><% if (fieldsContainBlob == true && databaseType != 'mongodb') { %>
+import java.util.UUID;<% } %><% if (fieldsContainBlob && databaseType === 'sql') { %>
 import javax.persistence.Lob;<% } %>
 <% for (idx in fields) { if (fields[idx].fieldIsEnum == true) { %>
 import <%=packageName%>.domain.enumeration.<%= fields[idx].fieldType %>;<% } } %>
@@ -52,7 +52,7 @@ public class <%= entityClass %>DTO implements Serializable {
     @Size(min = <%= fieldValidateRulesMinbytes %>, max = <%= fieldValidateRulesMaxbytes %>)<% } %><% if (fieldValidateRules.indexOf('min') != -1) { %>
     @Min(value = <%= fieldValidateRulesMin %>)<% } %><% if (fieldValidateRules.indexOf('max') != -1) { %>
     @Max(value = <%= fieldValidateRulesMax %><%= (fieldValidateRulesMax > MAX_VALUE) ? 'L' : '' %>)<% } %><% if (fieldValidateRules.indexOf('pattern') != -1) { %>
-    @Pattern(regexp = "<%= fieldValidateRulesPatternJava %>")<% } } %><% if (fieldType == 'byte[]' && databaseType != 'mongodb') { %>
+    @Pattern(regexp = "<%= fieldValidateRulesPatternJava %>")<% } } %><% if (fieldType == 'byte[]' && databaseType === 'sql') { %>
     @Lob<% } %>
     <%_ if (fieldTypeBlobContent != 'text') { _%>
     private <%= fieldType %> <%= fieldName %>;
