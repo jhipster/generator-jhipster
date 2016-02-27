@@ -273,20 +273,6 @@ module.exports = JhipsterGenerator.extend({
                 local: require.resolve('../client')
             });
 
-        },
-
-        composeLanguages: function () {
-            if (configOptions.enableTranslation && configOptions.languages) {
-                this.composeWith('jhipster:languages', {
-                    options: {
-                        'skip-wiredep': true,
-                        configOptions: configOptions
-                    },
-                    args: configOptions.languages
-                }, {
-                    local: require.resolve('../languages')
-                });
-            }
         }
     },
 

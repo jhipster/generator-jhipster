@@ -161,8 +161,6 @@ module.exports = JhipsterClientGenerator.extend({
         askForClientSideOpts: function () {
             if(this.existingProject) return;
 
-            var languageOptions = this.getAllSupportedLanguageOptions();
-
             var done = this.async();
             var prompts = [
                 {
@@ -170,50 +168,28 @@ module.exports = JhipsterClientGenerator.extend({
                     name: 'useSass',
                     message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
                     default: false
-                },
-                {
-                    type: 'confirm',
-                    name: 'enableTranslation',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Would you like to enable translation support with Angular Translate?',
-                    default: true
-                },
-                {
-                    when: function(response) {
-                        return response.enableTranslation == true;
-                    },
-                    type: 'list',
-                    name: 'nativeLanguage',
-                    message: 'Please chooose the native language of the application?',
-                    choices: languageOptions,
-                    default: 'en',
-                    store: true
-                },
-                {
-                    when: function(response) {
-                        return response.enableTranslation == true;
-                    },
-                    type: 'checkbox',
-                    name: 'languages',
-                    message: 'Please choose additional languages to install',
-                    choices: function (response) {
-                        return _.filter(languageOptions, function(o) { return o.value !== response.nativeLanguage; });
-                    }
                 }
             ];
             this.prompt(prompts, function (props) {
                 this.useSass = props.useSass;
-                this.enableTranslation = props.enableTranslation;
-                this.nativeLanguage = props.nativeLanguage;
-                this.languages = [props.nativeLanguage].concat(props.languages);
                 done();
             }.bind(this));
         },
 
+        askFori18n: function () {
+            if(this.existingProject) return;
+            if(configOptions.enableTranslation != undefined) return;
+
+            this.aski18n(this, ++currentQuestion, QUESTIONS);
+        },
+
         setSharedConfigOptions : function () {
             configOptions.useSass = this.useSass;
-            configOptions.enableTranslation = this.enableTranslation;
-            configOptions.nativeLanguage = this.nativeLanguage;
-            configOptions.languages = this.languages;
+            if (configOptions.enableTranslation == undefined) {
+                configOptions.enableTranslation = this.enableTranslation;
+                configOptions.nativeLanguage = this.nativeLanguage;
+                configOptions.languages = this.languages;
+            }
         }
 
     },
@@ -238,11 +214,12 @@ module.exports = JhipsterClientGenerator.extend({
 
         saveConfig: function () {
             this.config.set('useSass', this.useSass);
-            this.config.set('enableTranslation', this.enableTranslation);
-            if (this.enableTranslation) {
+            if (this.enableTranslation === true) {
+                this.config.set('enableTranslation', true);
                 this.config.set('nativeLanguage', this.nativeLanguage);
                 this.config.set('languages', this.languages);
-            } else {
+            } else if (this.enableTranslation === false) {
+                this.config.set('enableTranslation', false);
                 this.config.set('nativeLanguage', undefined);
                 this.config.set('languages', undefined);
             }
@@ -282,6 +259,15 @@ module.exports = JhipsterClientGenerator.extend({
             if(configOptions.testFrameworks) {
                 this.testFrameworks = configOptions.testFrameworks;
             }
+            if(configOptions.enableTranslation != null) {
+                this.enableTranslation = configOptions.enableTranslation;
+            }
+            if(configOptions.nativeLanguage != null) {
+                this.nativeLanguage = configOptions.nativeLanguage;
+            }
+            if(configOptions.languages != null) {
+                this.languages = configOptions.languages;
+            }
         }
     },
 
@@ -320,6 +306,21 @@ module.exports = JhipsterClientGenerator.extend({
             this.copy(MAIN_SRC_DIR + 'robots.txt', MAIN_SRC_DIR + 'robots.txt');
             this.copy(MAIN_SRC_DIR + 'htaccess.txt', MAIN_SRC_DIR + '.htaccess');
             this.copy(MAIN_SRC_DIR + '404.html', MAIN_SRC_DIR + '404.html');
+        },
+
+        writei18nFiles : function () {
+            if (this.enableTranslation) {
+                this.composeWith('jhipster:languages', {
+                    options: {
+                        'skip-wiredep': true,
+                        'skip-server': true,
+                        configOptions: configOptions
+                    },
+                    args: this.languages
+                }, {
+                    local: require.resolve('../languages')
+                });
+            }
         },
 
         writeSwaggerFiles : function () {

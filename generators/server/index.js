@@ -176,6 +176,17 @@ module.exports = JhipsterServerGenerator.extend({
                     this.enableSocialSignIn = false;
                 }
 
+                // If translation is not defined, it is enabled by default
+                if (this.enableTranslation == null) {
+                    this.enableTranslation = true;
+                }
+                if (this.nativeLanguage == null) {
+                    this.nativeLanguage = 'en';
+                }
+                if (this.languages == null) {
+                    this.languages = ['en', 'fr'];
+                }
+
                 this.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
                 'to re-generate the project...\n'));
 
@@ -550,6 +561,14 @@ module.exports = JhipsterServerGenerator.extend({
             }.bind(this));
         },
 
+        askFori18n: function () {
+            if(this.existingProject) return;
+            if(configOptions.enableTranslation != undefined) return;
+
+            this.aski18n(this, ++currentQuestion, QUESTIONS);
+
+        },
+
         setSharedConfigOptions : function () {
             configOptions.lastQuestion = currentQuestion;
             configOptions.packageName = this.packageName;
@@ -563,6 +582,7 @@ module.exports = JhipsterServerGenerator.extend({
             configOptions.buildTool = this.buildTool;
             configOptions.enableSocialSignIn = this.enableSocialSignIn;
             configOptions.authenticationType = this.authenticationType;
+            configOptions.enableTranslation = this.enableTranslation;
             configOptions.nativeLanguage = this.nativeLanguage;
             configOptions.languages = this.languages;
         }
@@ -628,11 +648,21 @@ module.exports = JhipsterServerGenerator.extend({
             this.config.set('enableSocialSignIn', this.enableSocialSignIn);
             this.config.set('jwtSecretKey', this.jwtSecretKey);
             this.config.set('rememberMeKey', this.rememberMeKey);
+            if (this.enableTranslation === true) {
+                this.config.set('enableTranslation', true);
+                this.config.set('nativeLanguage', this.nativeLanguage);
+                this.config.set('languages', this.languages);
+            } else if (this.enableTranslation === false) {
+                this.config.set('enableTranslation', false);
+                this.config.set('nativeLanguage', undefined);
+                this.config.set('languages', undefined);
+            }
         }
     },
 
     default: {
         getSharedConfigOptions: function () {
+            this.useSass = configOptions.useSass ? configOptions.useSass : false;
             if(configOptions.enableTranslation != null) {
                 this.enableTranslation = configOptions.enableTranslation;
             }
@@ -642,7 +672,6 @@ module.exports = JhipsterServerGenerator.extend({
             if(configOptions.languages != null) {
                 this.languages = configOptions.languages;
             }
-            this.useSass = configOptions.useSass ? configOptions.useSass : false;
             if(configOptions.testFrameworks) {
                 this.testFrameworks = configOptions.testFrameworks;
             }
@@ -763,6 +792,22 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(SERVER_MAIN_RES_DIR + 'config/cql/_drop-keyspace.cql', SERVER_MAIN_RES_DIR + 'config/cql/drop-keyspace.cql', this, {});
                 this.copy(SERVER_MAIN_RES_DIR + 'config/cql/create-tables.cql', SERVER_MAIN_RES_DIR + 'config/cql/create-tables.cql');
             }
+        },
+
+        writeServeri18nFiles: function () {
+            if (this.enableTranslation) {
+                this.composeWith('jhipster:languages', {
+                    options: {
+                        'skip-wiredep': true,
+                        'skip-client': true,
+                        configOptions: configOptions
+                    },
+                    args: this.languages
+                }, {
+                    local: require.resolve('../languages')
+                });
+            }
+            this.template('../../languages/templates/' + SERVER_MAIN_RES_DIR + 'i18n/_messages_en.properties', SERVER_MAIN_RES_DIR + 'i18n/messages.properties', this, {});
         },
 
         writeServerJavaAuthConfigFiles: function () {

@@ -35,11 +35,27 @@ module.exports = LanguagesGenerator.extend({
             defaults: false
         });
 
+        // This adds support for a `--skip-client` flag
+        this.option('skip-client', {
+            desc: 'Skip installing client files',
+            type: Boolean,
+            defaults: false
+        });
+
+        // This adds support for a `--skip-server` flag
+        this.option('skip-server', {
+            desc: 'Skip installing server files',
+            type: Boolean,
+            defaults: false
+        });
+
         this.skipWiredep = this.options['skip-wiredep'];
+        this.skipClient = this.options['skip-client'];
+        this.skipServer = this.options['skip-server'];
 
 
         // Validate languages passed as argument
-        this.languagesArgument.forEach(function (language) {
+        this.languagesArgument && this.languagesArgument.forEach(function (language) {
             if (!this.isSupportedLanguage(language)) {
                 this.env.error(chalk.red('ERROR Unsupported language "' + language + '" passed as argument to language generator.' +
                     '\nSupported languages: ' + _.map(this.getAllSupportedLanguageOptions(), function(o){
@@ -51,7 +67,17 @@ module.exports = LanguagesGenerator.extend({
     },
     initializing : {
         getConfig : function () {
-            this.log(chalk.bold('Languages configuration is starting'));
+            if (this.languagesArgument) {
+                if (this.skipClient) {
+                    this.log(chalk.bold('Installing languages: ' + this.languagesArgument.join(' ') + ' for server'));
+                } else if (this.skipServer) {
+                    this.log(chalk.bold('Installing languages: ' + this.languagesArgument.join(' ') + ' for client'));
+                } else {
+                    this.log(chalk.bold('Installing languages: ' + this.languagesArgument.join(' ')));
+                }
+            } else {
+                this.log(chalk.bold('Languages configuration is starting'));
+            }
             this.applicationType = this.config.get('applicationType');
             this.baseName = this.config.get('baseName');
             this.websocket = this.config.get('websocket');
@@ -84,7 +110,7 @@ module.exports = LanguagesGenerator.extend({
                 cb();
             }.bind(this));
         } else {
-            this.log(chalk.red('Translation is disabled for the project. Language cannot be added.'));
+            this.log(chalk.red('Translation is disabled for the project. Languages cannot be added.'));
             return;
         }
     },
@@ -116,6 +142,12 @@ module.exports = LanguagesGenerator.extend({
             if(configOptions.enableSocialSignIn != null) {
                 this.enableSocialSignIn = configOptions.enableSocialSignIn;
             }
+            if(configOptions.skipClient) {
+                this.skipClient = configOptions.skipClient;
+            }
+            if(configOptions.skipServer) {
+                this.skipServer = configOptions.skipServer;
+            }
         },
 
         saveConfig: function () {
@@ -131,16 +163,16 @@ module.exports = LanguagesGenerator.extend({
         insight.track('generator', 'languages');
 
         this.languages.forEach(function (language) {
-            if (!configOptions.skipClient) {
+            if (!this.skipClient) {
                 this.installI18nClientFilesByLanguage(this, CLIENT_MAIN_SRC_DIR, language);
                 this.addMessageformatLocaleToBowerOverride(language.split("-")[0]);
             }
-            if (!configOptions.skipServer) {
+            if (!this.skipServer) {
                 this.installI18nServerFilesByLanguage(this, SERVER_MAIN_RES_DIR, language);
             }
             insight.track('languages/language', language);
         }, this);
-        if (!configOptions.skipClient) {
+        if (!this.skipClient) {
             this.updateLanguagesInLanguageConstant(this.config.get('languages'));
         }
     },
@@ -149,7 +181,7 @@ module.exports = LanguagesGenerator.extend({
         var wiredepAddedBowerOverrides = function () {
             this.spawnCommand('gulp', ['wiredep']);
         };
-        if (!this.skipWiredep) {
+        if (!this.skipWiredep && !this.skipClient) {
             wiredepAddedBowerOverrides.call(this);
         }
     }

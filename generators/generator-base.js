@@ -1235,6 +1235,51 @@ Generator.prototype.askModuleName = function (generator, question, questions) {
     }.bind(generator));
 };
 
+Generator.prototype.aski18n = function (generator, question, questions) {
+
+    var languageOptions = this.getAllSupportedLanguageOptions();
+
+    var done = generator.async();
+    var prompts = [
+        {
+            type: 'confirm',
+            name: 'enableTranslation',
+            message: '(' + (question) + '/' + questions + ') Would you like to enable translation support with Angular Translate?',
+            default: true
+        },
+        {
+            when: function(response) {
+                return response.enableTranslation == true;
+            },
+            type: 'list',
+            name: 'nativeLanguage',
+            message: 'Please chooose the native language of the application?',
+            choices: languageOptions,
+            default: 'en',
+            store: true
+        },
+        {
+            when: function(response) {
+                return response.enableTranslation == true;
+            },
+            type: 'checkbox',
+            name: 'languages',
+            message: 'Please choose additional languages to install',
+            choices: function (response) {
+                return _.filter(languageOptions, function(o) { return o.value !== response.nativeLanguage; });
+            }
+        }
+    ];
+
+    generator.prompt(prompts, function (prompt) {
+        generator.enableTranslation = prompt.enableTranslation;
+        generator.nativeLanguage = prompt.nativeLanguage;
+        generator.languages = [prompt.nativeLanguage].concat(prompt.languages);
+
+        done();
+    }.bind(generator));
+};
+
 Generator.prototype.contains = _.includes;
 
 var wordwrap = function(text, width, seperator, keepLF) {
