@@ -419,7 +419,6 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyJs(ANGULAR_DIR + 'components/login/_login.service.js', ANGULAR_DIR + 'components/login/login.service.js', this, {});
             this.template(ANGULAR_DIR + 'components/login/_login.controller.js', ANGULAR_DIR + 'components/login/login.controller.js', this, {});
             this.template(ANGULAR_DIR + 'components/util/_base64.service.js', ANGULAR_DIR + 'components/util/base64.service.js', this, {});
-            this.template(ANGULAR_DIR + 'components/util/_storage.service.js', ANGULAR_DIR + 'components/util/storage.service.js', this, {});
             this.template(ANGULAR_DIR + 'components/util/_capitalize.filter.js', ANGULAR_DIR + 'components/util/capitalize.filter.js', this, {});
             this.template(ANGULAR_DIR + 'components/util/_parse-links.service.js', ANGULAR_DIR + 'components/util/parse-links.service.js', this, {});
             this.template(ANGULAR_DIR + 'components/util/_truncate-characters.filter.js', ANGULAR_DIR + 'components/util/truncate-characters.filter.js', this, {});
@@ -566,7 +565,6 @@ module.exports = JhipsterClientGenerator.extend({
                 'app/components/util/truncate-characters.filter.js',
                 'app/components/util/truncate-words.filter.js',
                 'app/components/util/base64.service.js',
-                'app/components/util/storage.service.js',
                 'app/components/util/capitalize.filter.js',
                 'app/components/alert/alert.service.js',
                 'app/components/alert/alert.directive.js',

@@ -229,7 +229,6 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/layouts/navbar/navbar.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/services/user/user.service.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/util/base64.service.js',
-        CLIENT_MAIN_SRC_DIR + 'app/components/util/storage.service.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/util/parse-links.service.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/util/truncate-characters.filter.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/util/truncate-words.filter.js',
