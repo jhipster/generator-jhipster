@@ -352,7 +352,7 @@ const expectedFiles = {
     ],
 
     microservice: [
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/SecurityConfiguration.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/MicroserviceSecurityConfiguration.java',
     ]
 };
 
