@@ -18,7 +18,7 @@
             },
             views: {
                 'content@': {
-                    templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityFileName %>.html',
+                    templateUrl: 'app/entities/<%= entityFolderName %>/<%= entityPluralFileName %>.html',
                     controller: '<%= entityAngularJSName %>Controller',
                     controllerAs: 'vm'
                 }
