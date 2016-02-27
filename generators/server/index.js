@@ -75,7 +75,7 @@ module.exports = JhipsterServerGenerator.extend({
         currentQuestion = lastQuestion ? lastQuestion : 0;
         this.logo = configOptions.logo;
         this.baseName = configOptions.baseName;
-
+        
         // Make constants available in templates
         this.MAIN_DIR = MAIN_DIR;
         this.TEST_DIR = TEST_DIR;

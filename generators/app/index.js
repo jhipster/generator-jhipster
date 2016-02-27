@@ -237,7 +237,7 @@ module.exports = JhipsterGenerator.extend({
             configOptions.logo = false;
             if (this.applicationType == 'microservice') {
                 this.skipClient = true;
-                this.skipUserManagement = true;
+                this.skipUserManagement = configOptions.skipUserManagement = true;
             }
             if (this.skipClient) {
                 // defaults to use when skipping client
