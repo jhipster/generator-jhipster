@@ -50,7 +50,11 @@
             } else if (fieldType == 'ZonedDateTime') {
                 columnType="timestamp";
             } else if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') {
-                columnType="blob";
+                if (prodDatabaseType === 'mysql') {
+                    columnType="longblob";
+                } else {
+                    columnType="blob";
+                }
             } else if (fieldTypeBlobContent == 'text') {
                 columnType="clob";
             } else if (fieldType == 'Boolean') {
