@@ -20,7 +20,7 @@
             },
             "messages": {
                 "info": "Escolha uma nova senha",
-                "success": "<strong>Sua senha foi alterada com sucesso!</strong> Por favor <a class=\"alert-link\" href=\"\" ng-click=\"login()\">Entre novamente</a>.",
+                "success": "<strong>Sua senha foi alterada com sucesso!</strong> Por favor <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">Entre novamente</a>.",
                 "keymissing": "Chave de reestabelecimento não encontrada.",
                 "error": "Sua senha não pôde ser trocada. Lembre-se, requisição de troca de senha é válida apenas por 24h."
             }
