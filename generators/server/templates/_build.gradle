@@ -144,8 +144,8 @@ dependencies {
     compile (group: 'org.hibernate', name: 'hibernate-ehcache') {
         exclude(module: 'ehcache-core')
     }<% } %>
-    compile group: 'org.hibernate', name: 'hibernate-validator'<% if (databaseType == 'sql') { %>
     compile group: 'org.hibernate', name: 'hibernate-envers'
+    compile group: 'org.hibernate', name: 'hibernate-validator'<% if (databaseType == 'sql') { %>
     compile (group: 'org.liquibase', name: 'liquibase-core', version: liquibase_core_version) {
         exclude(module: 'jetty-servlet')
     }

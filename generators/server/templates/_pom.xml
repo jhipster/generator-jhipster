@@ -375,17 +375,13 @@
         <%_ } _%>
         <dependency>
             <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-envers</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-envers</artifactId>
-        </dependency>
         <%_ if (databaseType == 'sql') { _%>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-envers</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
