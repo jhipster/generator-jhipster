@@ -14,13 +14,8 @@ const constants = require('../generators/generator-constants'),
     SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR;
 
 const expectedFiles = {
-    default: [
-        '.jhipster/Foo.json',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/Foo.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/repository/FooRepository.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/FooResource.java',
-        // SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
-        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo.html',
+    client : [
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foos.html',
         CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-detail.html',
         CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-dialog.html',
         CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-delete-dialog.html',
@@ -31,6 +26,26 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-detail.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo.service.js',
         CLIENT_TEST_SRC_DIR + 'spec/app/entities/foo/foo-detail.controller.spec.js',
+    ],
+    clientWithSuffix : [
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foos-management.html',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management-detail.html',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management-dialog.html',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management-delete-dialog.html',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management.state.js',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management.controller.js',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management-dialog.controller.js',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management-delete-dialog.controller.js',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management-detail.controller.js',
+        CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo.service.js',
+        CLIENT_TEST_SRC_DIR + 'spec/app/entities/foo/foo-management-detail.controller.spec.js',
+    ],
+    server : [
+        '.jhipster/Foo.json',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/domain/Foo.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/repository/FooRepository.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/FooResource.java',
+        // SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
         SERVER_TEST_SRC_DIR + 'com/mycompany/myapp/web/rest/FooResourceIntTest.java',
         TEST_DIR + 'gatling/simulations/FooGatlingTest.scala',
     ]
@@ -54,7 +69,8 @@ describe('JHipster generator entity', function () {
         });
 
         it('creates expected default files', function () {
-            assert.file(expectedFiles.default);
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.client);
             assert.file([
                 //CLIENT_MAIN_SRC_DIR + 'i18n/en/foo.json', //this should ideally be working
                 //CLIENT_MAIN_SRC_DIR + 'i18n/fr/foo.json'
@@ -80,7 +96,8 @@ describe('JHipster generator entity', function () {
         });
 
         it('creates expected default files', function () {
-            assert.file(expectedFiles.default);
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.client);
             assert.file([
                 SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/dto/FooDTO.java',
                 SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/mapper/FooMapper.java'
@@ -106,7 +123,8 @@ describe('JHipster generator entity', function () {
         });
 
         it('creates expected default files', function () {
-            assert.file(expectedFiles.default)
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.client);
             assert.file([,
                 SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/FooService.java'
             ]);
@@ -131,7 +149,8 @@ describe('JHipster generator entity', function () {
         });
 
         it('creates expected default files', function () {
-            assert.file(expectedFiles.default);
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.client);
             assert.file([
                 SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/FooService.java',
                 SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/impl/FooServiceImpl.java'
@@ -157,7 +176,8 @@ describe('JHipster generator entity', function () {
         });
 
         it('creates expected default files', function () {
-            assert.file(expectedFiles.default);
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.client);
         });
     });
 
@@ -179,7 +199,8 @@ describe('JHipster generator entity', function () {
         });
 
         it('creates expected default files', function () {
-            assert.file(expectedFiles.default);
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.client);
         });
     });
 
@@ -201,7 +222,8 @@ describe('JHipster generator entity', function () {
         });
 
         it('creates expected default files', function () {
-            assert.file(expectedFiles.default);
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.client);
         });
     });
 
@@ -223,11 +245,36 @@ describe('JHipster generator entity', function () {
         });
 
         it('creates expected default files', function () {
-            assert.file(expectedFiles.default);
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.client);
             assert.noFile([
                 CLIENT_MAIN_SRC_DIR + 'i18n/en/foo.json',
                 CLIENT_MAIN_SRC_DIR + 'i18n/fr/foo.json'
             ])
+        });
+    });
+
+    describe('with angulr suffix', function () {
+        beforeEach(function (done) {
+            helpers.run(require.resolve('../generators/entity'))
+                .inTmpDir(function (dir) {
+                    fse.copySync(path.join(__dirname, '../test/templates/default'), dir)
+                })
+                .withArguments(['foo'])
+                .withOptions({'angular-suffix': 'management'})
+                .withPrompts({
+                    fieldAdd: false,
+                    relationshipAdd: false,
+                    dto: 'yes',
+                    service: 'serviceImpl',
+                    pagination: 'infinite-scroll'
+                })
+                .on('end', done);
+        });
+
+        it('creates expected default files', function () {
+            assert.file(expectedFiles.server);
+            assert.file(expectedFiles.clientWithSuffix);
         });
     });
 });

@@ -86,7 +86,7 @@ module.exports = EntityGenerator.extend({
         this.regenerate = this.options['regenerate'];
         this.entityTableName = this.options['table-name'] || this.name;
         this.entityTableName = _s.underscored(this.entityTableName).toLowerCase();
-        this.entityAngularJSSuffix = this.options['entity-angularjs-suffix'];
+        this.entityAngularJSSuffix = this.options['angular-suffix'];
         if(this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')){
             this.entityAngularJSSuffix = '-' + this.entityAngularJSSuffix;
         }
@@ -1496,6 +1496,7 @@ module.exports = EntityGenerator.extend({
 
             this.entityFolderName = entityNameSpinalCased;
             this.entityFileName = entityNameSpinalCased + this.entityAngularJSSuffix;
+            this.entityPluralFileName = entityNamePluralizedAndSpinalCased + this.entityAngularJSSuffix;
             this.entityServiceFileName = entityNameSpinalCased;
             this.entityAngularJSName = this.entityClass + _s.camelize(this.entityAngularJSSuffix) ;
             this.entityStateName = entityNameSpinalCased + this.entityAngularJSSuffix;
@@ -1614,7 +1615,7 @@ module.exports = EntityGenerator.extend({
             if(this.skipClient){
                 return;
             }
-            this.copyHtml(ANGULAR_DIR + 'entities/_entity-management.html', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '.html', this, {}, true);
+            this.copyHtml(ANGULAR_DIR + 'entities/_entity-management.html', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityPluralFileName + '.html', this, {}, true);
             this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-detail.html', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.html', this, {}, true);
             this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-dialog.html', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-dialog.html', this, {}, true);
             this.copyHtml(ANGULAR_DIR + 'entities/_entity-management-delete-dialog.html', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-delete-dialog.html', this, {}, true);
