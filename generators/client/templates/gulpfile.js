@@ -298,6 +298,7 @@ gulp.task('ngconstant:prod', function () {
 // check app for eslint errors
 gulp.task('eslint', function () {
     return gulp.src(['gulpfile.js', config.app + 'app/**/*.js'])
+      .pipe(plumber({errorHandler: handleErrors}))
       .pipe(eslint())
       .pipe(eslint.format())
       // commented out until current refactorings complete
@@ -312,7 +313,8 @@ function isFixed(file) {
 // check app for eslint errors anf fix some of them
 gulp.task('eslint-and-fix', function () {
     return gulp.src(config.app + 'app/**/*.js')
-        .pipe(eslint({
+       .pipe(plumber({errorHandler: handleErrors}))
+       .pipe(eslint({
             fix: true
         }))
         .pipe(eslint.format())
