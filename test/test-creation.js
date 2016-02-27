@@ -141,14 +141,15 @@ const expectedFiles = {
         SERVER_TEST_RES_DIR + 'logback-test.xml',
         SERVER_TEST_RES_DIR + 'ehcache.xml',
         TEST_DIR + 'gatling/conf/gatling.conf',
-        '.editorconfig',
-        '.jshintrc'
+        '.editorconfig'
     ],
 
     client: [
         'bower.json',
         'package.json',
         '.bowerrc',
+        '.eslintrc.json',
+        '.eslintignore',
         CLIENT_MAIN_SRC_DIR + 'content/css/main.css',
         CLIENT_MAIN_SRC_DIR + 'favicon.ico',
         CLIENT_MAIN_SRC_DIR + 'robots.txt',
