@@ -431,11 +431,11 @@ module.exports = JhipsterClientGenerator.extend({
 
             // interceptor code
             if (this.authenticationType == 'oauth2' || this.authenticationType == 'jwt') {
-                this.template(ANGULAR_DIR + 'components/interceptor/_auth.interceptor.js', ANGULAR_DIR + 'components/interceptor/auth.interceptor.js', this, {});
+                this.template(ANGULAR_DIR + 'blocks/interceptor/_auth.interceptor.js', ANGULAR_DIR + 'blocks/interceptor/auth.interceptor.js', this, {});
             }
-            this.template(ANGULAR_DIR + 'components/interceptor/_auth-expired.interceptor.js', ANGULAR_DIR + 'components/interceptor/auth-expired.interceptor.js', this, {});
-            this.template(ANGULAR_DIR + 'components/interceptor/_errorhandler.interceptor.js', ANGULAR_DIR + 'components/interceptor/errorhandler.interceptor.js', this, {});
-            this.template(ANGULAR_DIR + 'components/interceptor/_notification.interceptor.js', ANGULAR_DIR + 'components/interceptor/notification.interceptor.js', this, {});
+            this.template(ANGULAR_DIR + 'blocks/interceptor/_auth-expired.interceptor.js', ANGULAR_DIR + 'blocks/interceptor/auth-expired.interceptor.js', this, {});
+            this.template(ANGULAR_DIR + 'blocks/interceptor/_errorhandler.interceptor.js', ANGULAR_DIR + 'blocks/interceptor/errorhandler.interceptor.js', this, {});
+            this.template(ANGULAR_DIR + 'blocks/interceptor/_notification.interceptor.js', ANGULAR_DIR + 'blocks/interceptor/notification.interceptor.js', this, {});
 
             //alert service code
             this.template(ANGULAR_DIR + 'components/alert/_alert.service.js', ANGULAR_DIR + 'components/alert/alert.service.js', this, {});
