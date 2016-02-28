@@ -115,6 +115,10 @@
         <sonar.sources>${project.basedir}/<%= MAIN_DIR %></sonar.sources>
         <sonar.surefire.reportsPath>${project.testresult.directory}/surefire-reports</sonar.surefire.reportsPath>
         <sonar.tests>${project.basedir}/<%= TEST_DIR %></sonar.tests>
+        <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+        <!-- Docker properties -->
+        <docker.image.prefix>jhipster</docker.image.prefix>
+        <%_ } _%>
     </properties>
 
     <dependencies>
@@ -912,6 +916,24 @@
                     </arguments>
                 </configuration>
             </plugin>
+            <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>0.4.1</version>
+                <configuration>
+                    <imageName>${docker.image.prefix}/<%= baseName.toLowerCase() %></imageName>
+                    <dockerDirectory>src/main/docker</dockerDirectory>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>${project.build.finalName}.war</include>
+                        </resource>
+                    </resources>
+                </configuration>
+            </plugin>
+            <%_ } _%>
             <!-- jhipster-needle-maven-add-plugin -->
         </plugins>
         <pluginManagement>
