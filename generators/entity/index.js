@@ -193,6 +193,9 @@ module.exports = EntityGenerator.extend({
                 this.relationships && this.relationships.forEach(function (rel) {
                     relNameChoices.push({name: rel.relationshipName + ':' + rel.relationshipType, value: rel.relationshipName + ':' + rel.relationshipType});
                 }, this);
+                if (this.fileData.angularJSSuffix !== undefined){
+                    this.entityAngularJSSuffix = this.fileData.angularJSSuffix;
+                }
             }
         }
     },
@@ -1331,6 +1334,9 @@ module.exports = EntityGenerator.extend({
                 this.data.pagination = this.pagination;
             }
             this.data.javadoc = this.javadoc;
+            if (this.entityAngularJSSuffix){
+                this.data.angularJSSuffix = this.entityAngularJSSuffix;
+            }
             this.fs.writeJSON(this.filename, this.data, null, 4);
         },
 
