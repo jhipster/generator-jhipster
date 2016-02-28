@@ -210,6 +210,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.camelizedBaseName = _s.camelize(this.baseName);
             this.slugifiedBaseName = _s.slugify(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();
+            this.nativeLanguageShortName = this.enableTranslation ? this.nativeLanguage.split("-")[0] : 'en';
         },
 
         saveConfig: function () {
