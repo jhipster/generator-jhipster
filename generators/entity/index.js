@@ -1508,7 +1508,7 @@ module.exports = EntityGenerator.extend({
             } else if (databaseType == 'cassandra') {
                 this.entityUrlType = '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}';
             }
-            this.entityTranslationKey = this.entityInstance;
+            this.entityTranslationKey = _s.camelize(this.entityStateName);
 
             this.differentTypes = [this.entityClass];
             if (this.relationships == undefined) {
