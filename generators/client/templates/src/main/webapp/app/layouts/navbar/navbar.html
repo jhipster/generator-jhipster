@@ -9,7 +9,7 @@
             </button>
             <a class="navbar-brand" href="#/"><span translate="global.title"><%= baseName %></span> <span class="navbar-version">v{{VERSION}}</span></a>
         </div>
-        <div class="collapse navbar-collapse" id="navbar-collapse" ng-switch="isAuthenticated()">
+        <div class="collapse navbar-collapse" id="navbar-collapse" ng-switch="vm.isAuthenticated()">
             <ul class="nav navbar-nav navbar-right">
                 <li ui-sref-active="active">
                     <a ui-sref="home" data-toggle="collapse" data-target=".navbar-collapse.in">
@@ -18,7 +18,7 @@
                     </a>
                 </li>
                 <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
-                <li ng-class="{active: $state.includes('entity')}" ng-switch-when="true" class="dropdown pointer">
+                <li ng-class="{active: vm.$state.includes('entity')}" ng-switch-when="true" class="dropdown pointer">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="">
                         <span>
                             <span class="glyphicon glyphicon-th-list"></span>
@@ -32,7 +32,7 @@
                         <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                     </ul>
                 </li>
-                <li ng-class="{active: $state.includes('account')}" class="dropdown pointer">
+                <li ng-class="{active: vm.$state.includes('account')}" class="dropdown pointer">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="" id="account-menu">
                         <span>
                             <span class="glyphicon glyphicon-user"></span>
@@ -51,15 +51,15 @@
                         <li ui-sref-active="active" ng-switch-when="true"><a ui-sref="sessions" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-cloud"></span>
                             &#xA0;<span translate="global.menu.account.sessions">Sessions</span></a></li>
                         <%_ } _%>
-                        <li ui-sref-active="active" ng-switch-when="true"><a href="" ng-click="logout()" id="logout" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-log-out"></span>
+                        <li ui-sref-active="active" ng-switch-when="true"><a href="" ng-click="vm.logout()" id="logout" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-log-out"></span>
                             &#xA0;<span translate="global.menu.account.logout">Sign out</span></a></li>
-                        <li ui-sref-active="active" ng-switch-when="false"><a href="" ng-click="login()" id="login" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-log-in"></span>
+                        <li ui-sref-active="active" ng-switch-when="false"><a href="" ng-click="vm.login()" id="login" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-log-in"></span>
                             &#xA0;<span translate="global.menu.account.login">Sign in</span></a></li>
                         <li ui-sref-active="active" ng-switch-when="false"><a ui-sref="register" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-plus-sign"></span>
                             &#xA0;<span translate="global.menu.account.register">Register</span></a></li>
                     </ul>
                 </li>
-                <li ng-class="{active: $state.includes('admin')}"  ng-switch-when="true" has-authority="ROLE_ADMIN" class="dropdown pointer">
+                <li ng-class="{active: vm.vm.$state.includes('admin')}"  ng-switch-when="true" has-authority="ROLE_ADMIN" class="dropdown pointer">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="" id="admin-menu">
                         <span>
                             <span class="glyphicon glyphicon-tower"></span>
@@ -88,17 +88,17 @@
                             &#xA0;<span translate="global.menu.admin.audits">Audits</span></a></li>
                         <li ui-sref-active="active"><a ui-sref="logs" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-tasks"></span>
                             &#xA0;<span translate="global.menu.admin.logs">Logs</span></a></li>
-                        <li ng-hide="inProduction" ui-sref-active="active"><a ui-sref="docs" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-book"></span>
+                        <li ng-hide="vm.inProduction" ui-sref-active="active"><a ui-sref="docs" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-book"></span>
                             &#xA0;<span translate="global.menu.admin.apidocs">API</span></a></li>
                         <!-- jhipster-needle-add-element-to-admin-menu - JHipster will add entities to the admin menu here -->
                         <%_ if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { _%>
-                        <li ng-hide="inProduction"><a href='/h2-console' target="_tab" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-hdd"></span>
+                        <li ng-hide="vm.inProduction"><a href='/h2-console' target="_tab" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-hdd"></span>
                             &#xA0;<span translate="global.menu.admin.database">Database</span></a></li>
                         <%_ } _%>
                     </ul>
                 </li>
                 <%_ if (enableTranslation){ _%>
-                <li ui-sref-active="active" class="dropdown pointer" ng-controller="LanguageController">
+                <li ui-sref-active="active" class="dropdown pointer" ng-controller="LanguageController as languageVm">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="">
                         <span>
                             <span class="glyphicon glyphicon-flag"></span>
@@ -107,8 +107,8 @@
                         </span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li active-menu="{{language}}" ng-repeat="language in languages">
-                            <a href="" ng-click="changeLanguage(language)" data-toggle="collapse" data-target=".navbar-collapse.in">{{language | findLanguageFromKey}}</a>
+                        <li active-menu="{{language}}" ng-repeat="language in languageVm.languages">
+                            <a href="" ng-click="languageVm.changeLanguage(language)" data-toggle="collapse" data-target=".navbar-collapse.in">{{language | findLanguageFromKey}}</a>
                         </li>
                     </ul>
                 </li>

@@ -39,6 +39,19 @@ elif [ "$JHIPSTER" == "app-cassandra" ]; then
   moveEntity CassTestServiceClassEntity
   moveEntity CassTestServiceImplEntity
 
+elif [ "$JHIPSTER" == "app-microservice" ]; then
+  moveEntity MicroserviceBankAccount
+  moveEntity MicroserviceOperation
+  moveEntity MicroserviceLabel
+
+  moveEntity FieldTestEntity
+  moveEntity FieldTestMapstructEntity
+  moveEntity FieldTestServiceClassEntity
+  moveEntity FieldTestServiceImplEntity
+  moveEntity FieldTestInfiniteScrollEntity
+  moveEntity FieldTestPagerEntity
+  moveEntity FieldTestPaginationEntity
+
 elif [[ ("$JHIPSTER" == "app-mysql") || ("$JHIPSTER" == "app-psql-es-noi18n") ]]; then
   moveEntity BankAccount
   moveEntity Label
@@ -85,9 +98,12 @@ ls -l "$HOME"/"$JHIPSTER"/.jhipster/
 cd "$HOME"/"$JHIPSTER"
 generateEntity BankAccount
 generateEntity MongoBankAccount
+generateEntity MicroserviceBankAccount
 generateEntity CassBankAccount
 generateEntity Label
+generateEntity MicroserviceLabel
 generateEntity Operation
+generateEntity MicroserviceOperation
 
 generateEntity CassTestEntity
 generateEntity CassTestMapstructEntity

@@ -34,6 +34,8 @@ import java.time.ZonedDateTime;<% } %>
 @Table(name = "user")<% } %><% if (searchEngine == 'elasticsearch') { %>
 @Document(indexName = "user")<% } %>
 public class User<% if (databaseType == 'sql' || databaseType == 'mongodb') { %> extends AbstractAuditingEntity<% } %> implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 <% if (databaseType == 'sql') { %>
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -48,7 +48,7 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Si vol <a class=\"alert-link\" href=\"\" ng-click=\"login()\">autenticar-se</a>, pot usar els comptes per defect:<br/>- Administrador (nom d'usuari=\"admin\" i contrasenya=\"admin\") <br/>- Usuari (nom d'usuari=\"user\" i contrasenya=\"user\").",
+                "authenticated": "Si vol <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autenticar-se</a>, pot usar els comptes per defect:<br/>- Administrador (nom d'usuari=\"admin\" i contrasenya=\"admin\") <br/>- Usuari (nom d'usuari=\"user\" i contrasenya=\"user\").",
                 "register": "No disposa d'un compte encara? <a class=\"alert-link\" ui-sref=\"register\">Registri un nou compte</a>"
             },
             "error": {

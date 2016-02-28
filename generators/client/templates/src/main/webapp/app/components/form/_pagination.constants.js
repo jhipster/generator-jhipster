@@ -1,6 +1,9 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .constant('paginationConstants', {
-        'itemsPerPage': 20
-    });
+    angular
+        .module('<%=angularAppName%>')
+        .constant('paginationConstants', {
+            'itemsPerPage': 20
+        });
+})();

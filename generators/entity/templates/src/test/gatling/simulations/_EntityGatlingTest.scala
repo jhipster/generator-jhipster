@@ -83,9 +83,8 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .formParam("j_username", "admin")
         .formParam("j_password", "admin")
         .formParam("remember-me", "true")
-        .formParam("submit", "Login")
-<%_ } _%>
-<%_ if (authenticationType == 'oauth2') { _%>
+        .formParam("submit", "Login"))
+<%_ } else if (authenticationType == 'oauth2') { _%>
         .post("/oauth/token")
         .headers(headers_http_authentication)
         .formParam("username", "admin")
@@ -95,15 +94,14 @@ class <%= entityClass %>GatlingTest extends Simulation {
         .formParam("client_secret", "mySecretOAuthSecret")
         .formParam("client_id", "<%= baseName%>app")
         .formParam("submit", "Login")
-        .check(jsonPath("$.access_token").saveAs("access_token"))
-<%_ } _%>
-<%_ if (authenticationType == 'jwt') { _%>
+        .check(jsonPath("$.access_token").saveAs("access_token")))
+<%_ } else if (authenticationType == 'jwt') { _%>
         .post("/api/authenticate")
         .headers(headers_http_authentication)
         .formParam("username", "admin")
         .formParam("password", "admin")
-        .check(header.get("Authorization").saveAs("access_token"))
-<%_ } _%>)
+        .check(header.get("Authorization").saveAs("access_token")))
+<%_ } _%>
         .pause(1)
         .exec(http("Authenticated request")
         .get("/api/account")

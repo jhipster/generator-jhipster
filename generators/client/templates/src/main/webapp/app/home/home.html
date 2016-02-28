@@ -7,13 +7,13 @@
             <h1 translate="home.title">Welcome, Java Hipster!</h1>
             <p class="lead" translate="home.subtitle">This is your homepage</p>
 
-            <div ng-switch="isAuthenticated()">
-                <div class="alert alert-success" ng-switch-when="true" translate="home.logged.message" translate-values="{username: '{{account.login}}'}">
-                    You are logged in as user "{{account.login}}".
+            <div ng-switch="vm.isAuthenticated()">
+                <div class="alert alert-success" ng-switch-when="true" translate="home.logged.message" translate-values="{username: '{{vm.account.login}}'}">
+                    You are logged in as user "{{vm.account.login}}".
                 </div>
 
                 <div class="alert alert-warning" ng-switch-when="false" translate="global.messages.info.authenticated" translate-compile>
-                    If you want to <a class="alert-link" href="" ng-click="login()">sign in</a>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").
+                    If you want to <a class="alert-link" href="" ng-click="vm.login()">sign in</a>, you can try the default accounts:<br/>- Administrator (login="admin" and password="admin") <br/>- User (login="user" and password="user").
                 </div>
 
                 <div class="alert alert-warning" ng-switch-when="false" translate="global.messages.info.register" translate-compile>

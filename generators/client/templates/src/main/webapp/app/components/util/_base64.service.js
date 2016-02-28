@@ -1,14 +1,26 @@
-/*jshint bitwise: false*/
-'use strict';
+(function() {
+    /*jshint bitwise: false*/
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .service('Base64', function () {
+    angular
+        .module('<%=angularAppName%>')
+        .factory('Base64', Base64);
+
+    function Base64 () {
         var keyStr = 'ABCDEFGHIJKLMNOP' +
             'QRSTUVWXYZabcdef' +
             'ghijklmnopqrstuv' +
             'wxyz0123456789+/' +
             '=';
-        this.encode = function (input) {
+
+        var service = {
+            decode : decode,
+            encode : encode
+        }
+
+        return service;
+
+        function encode (input) {
             var output = '',
                 chr1, chr2, chr3 = '',
                 enc1, enc2, enc3, enc4 = '',
@@ -40,9 +52,9 @@ angular.module('<%=angularAppName%>')
             }
 
             return output;
-        };
+        }
 
-        this.decode = function (input) {
+        function decode (input) {
             var output = '',
                 chr1, chr2, chr3 = '',
                 enc1, enc2, enc3, enc4 = '',
@@ -73,26 +85,6 @@ angular.module('<%=angularAppName%>')
                 chr1 = chr2 = chr3 = '';
                 enc1 = enc2 = enc3 = enc4 = '';
             }
-        };
-    })
-    .factory('StorageService', function ($window) {
-        return {
-
-            get: function (key) {
-                return JSON.parse($window.localStorage.getItem(key));
-            },
-
-            save: function (key, data) {
-                $window.localStorage.setItem(key, JSON.stringify(data));
-            },
-
-            remove: function (key) {
-                $window.localStorage.removeItem(key);
-            },
-
-            clearAll : function () {
-                $window.localStorage.clear();
-            }
-        };
-    });
-
+        }
+    }
+})();

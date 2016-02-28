@@ -14,7 +14,6 @@ module.exports = function (config) {
             // bower:js
             // endbower
             '<%= MAIN_SRC_DIR %>app/app.module.js',
-            '<%= MAIN_SRC_DIR %>app/app.config.js',
             '<%= MAIN_SRC_DIR %>app/app.state.js',
             '<%= MAIN_SRC_DIR %>app/app.constants.js',
             '<%= MAIN_SRC_DIR %>app/**/*.+(js|html)',

@@ -1,8 +1,13 @@
-'use strict';
+(function () {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .config(function (uibPagerConfig, paginationConstants) {
+    angular
+        .module('<%=angularAppName%>')
+        .config(pagerConfig);
+
+    function pagerConfig(uibPagerConfig, paginationConstants) {
         uibPagerConfig.itemsPerPage = paginationConstants.itemsPerPage;
         uibPagerConfig.previousText = '«';
         uibPagerConfig.nextText = '»';
-    });
+    }
+})();

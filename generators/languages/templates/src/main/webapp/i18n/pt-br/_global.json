@@ -48,7 +48,7 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Para <a class=\"alert-link\" href=\"\" ng-click=\"login()\">entrar</a>, utilize as seguintes contas padrões:<br/>- Administrador (usuário=\"admin\" and senha=\"admin\") <br/>- Usuário (usuário=\"user\" and senha=\"user\").",
+                "authenticated": "Para <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">entrar</a>, utilize as seguintes contas padrões:<br/>- Administrador (usuário=\"admin\" and senha=\"admin\") <br/>- Usuário (usuário=\"user\" and senha=\"user\").",
                 "register": "Não possui uma conta ainda? <a class=\"alert-link\" ui-sref=\"register\">Crie uma nova conta</a>"
             },
             "error": {

@@ -1,14 +1,28 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('GatewayController', function ($scope, $filter, $interval, GatewayRoutes) {
-        $scope.refresh = function () {
-            $scope.updatingRoutes = true;
+    angular
+        .module('<%=angularAppName%>')
+        .controller('GatewayController', GatewayController);
+
+    GatewayController.$inject = ['$filter', '$interval', 'GatewayRoutes'];
+
+    function GatewayController ($filter, $interval, GatewayRoutes) {
+        var vm = this;
+
+        vm.gatewayRoutes = null;
+        vm.refresh = refresh;
+        vm.updatingRoutes = null;
+
+        vm.refresh();
+
+        function refresh () {
+            vm.updatingRoutes = true;
             GatewayRoutes.query(function(result) {
-                $scope.gatewayRoutes = result;
-                $scope.updatingRoutes = false;
+                vm.gatewayRoutes = result;
+                vm.updatingRoutes = false;
             });
-        };
+        }
+    }
 
-        $scope.refresh();
-    });
+})();

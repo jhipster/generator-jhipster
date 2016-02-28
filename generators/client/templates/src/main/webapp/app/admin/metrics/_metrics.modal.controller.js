@@ -1,34 +1,44 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('MetricsModalController', function($scope, $uibModalInstance, threadDump) {
+    angular
+        .module('<%=angularAppName%>')
+        .controller('MetricsModalController', MetricsModalController);
 
-        $scope.threadDump = threadDump;
-        $scope.threadDumpRunnable = 0;
-        $scope.threadDumpWaiting = 0;
-        $scope.threadDumpTimedWaiting = 0;
-        $scope.threadDumpBlocked = 0;
+    MetricsModalController.$inject = ['$uibModalInstance', 'threadDump'];
+
+    function MetricsModalController ($uibModalInstance, threadDump) {
+        var vm = this;
+
+        vm.cancel = cancel;
+        vm.getLabelClass = getLabelClass;
+        vm.threadDump = threadDump;
+        vm.threadDumpAll = 0;
+        vm.threadDumpBlocked = 0;
+        vm.threadDumpRunnable = 0;
+        vm.threadDumpTimedWaiting = 0;
+        vm.threadDumpWaiting = 0;
 
         angular.forEach(threadDump, function(value) {
             if (value.threadState === 'RUNNABLE') {
-                $scope.threadDumpRunnable += 1;
+                vm.threadDumpRunnable += 1;
             } else if (value.threadState === 'WAITING') {
-                $scope.threadDumpWaiting += 1;
+                vm.threadDumpWaiting += 1;
             } else if (value.threadState === 'TIMED_WAITING') {
-                $scope.threadDumpTimedWaiting += 1;
+                vm.threadDumpTimedWaiting += 1;
             } else if (value.threadState === 'BLOCKED') {
-                $scope.threadDumpBlocked += 1;
+                vm.threadDumpBlocked += 1;
             }
         });
 
-        $scope.threadDumpAll = $scope.threadDumpRunnable + $scope.threadDumpWaiting +
-            $scope.threadDumpTimedWaiting + $scope.threadDumpBlocked;
+        vm.threadDumpAll = vm.threadDumpRunnable + vm.threadDumpWaiting +
+            vm.threadDumpTimedWaiting + vm.threadDumpBlocked;
 
-        $scope.cancel = function() {
+        function cancel () {
             $uibModalInstance.dismiss('cancel');
-        };
+        }
 
-        $scope.getLabelClass = function (threadState) {
+        function getLabelClass (threadState) {
             if (threadState === 'RUNNABLE') {
                 return 'label-success';
             } else if (threadState === 'WAITING') {
@@ -38,5 +48,6 @@ angular.module('<%=angularAppName%>')
             } else if (threadState === 'BLOCKED') {
                 return 'label-danger';
             }
-        };
-    });
+        }
+    }
+})();

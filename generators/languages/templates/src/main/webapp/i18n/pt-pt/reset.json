@@ -20,7 +20,7 @@
             },
             "messages": {
                 "info": "Escolha uma nova palavra-passe",
-                "success": "<strong>A sua palavra-passe foi reposta.</strong> Por favor <a class=\"alert-link\" href=\"\" ng-click=\"login()\">autentique-se</a>.",
+                "success": "<strong>A sua palavra-passe foi reposta.</strong> Por favor <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autentique-se</a>.",
                 "keymissing": "Chave de reposição em falta.",
                 "error": "A sua palavra-passe não pode ser reposta. O pedido de reposição da palavra-passe é válido apenas por 24 horas."
             }
