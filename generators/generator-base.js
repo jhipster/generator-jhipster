@@ -71,7 +71,7 @@ Generator.prototype.addMessageformatLocaleToBowerOverride = function (language) 
             if (jsonObj.overrides.messageformat.main === undefined) {
                 jsonObj.overrides.messageformat.main = ['messageformat.js'];
             }
-            if (!_.contains(jsonObj.overrides.messageformat.main, messageformatLocale)) {
+            if (!_.includes(jsonObj.overrides.messageformat.main, messageformatLocale)) {
                 jsonObj.overrides.messageformat.main.push(messageformatLocale);
             }
         }, this);
@@ -270,13 +270,13 @@ Generator.prototype.getAllInstalledLanguages = function () {
  * get all the languages supported by JHipster
  */
 Generator.prototype.getAllSupportedLanguages = function () {
-    return _.pluck(this.getAllSupportedLanguageOptions(), 'value');
+    return _.map(this.getAllSupportedLanguageOptions(), 'value');
 }
 /**
  * check if a language is supported by JHipster
  */
 Generator.prototype.isSupportedLanguage = function (language) {
-    return _.contains(this.getAllSupportedLanguages(), language);
+    return _.includes(this.getAllSupportedLanguages(), language);
 }
 /**
  * get all the languages options supported by JHipster
