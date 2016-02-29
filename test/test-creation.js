@@ -347,19 +347,24 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.state.js',
         CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.html',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.routes.service.js',
-        DOCKER_DIR + 'registry.yml',
-        DOCKER_DIR + 'Dockerfile'
+        CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.routes.service.js'
     ],
 
     microservice: [
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/MicroserviceSecurityConfiguration.java',
-        DOCKER_DIR + 'registry.yml',
-        DOCKER_DIR + 'Dockerfile'
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/MicroserviceSecurityConfiguration.java'
     ],
 
     microserviceGradle: [
         'gradle/docker.gradle'
+    ],
+
+    containerizeWithDocker: [
+        DOCKER_DIR + 'registry.yml',
+        DOCKER_DIR + 'Dockerfile',
+        DOCKER_DIR + 'app.dev.yml',
+        DOCKER_DIR + 'app.prod.yml',
+        DOCKER_DIR + 'app.noregistry.dev.yml',
+        DOCKER_DIR + 'app.noregistry.prod.yml'
     ]
 };
 
@@ -738,6 +743,7 @@ describe('JHipster generator', function () {
         it('creates expected files with the gateway application type', function () {
             assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.gateway);
+            assert.file(expectedFiles.containerizeWithDocker);
         });
     });
 
@@ -772,6 +778,7 @@ describe('JHipster generator', function () {
         it('creates expected files with the microservice application type', function () {
             assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.microservice);
+            assert.file(expectedFiles.containerizeWithDocker);
         });
     });
 
@@ -807,6 +814,7 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.microservice);
             assert.file(expectedFiles.microserviceGradle);
+            assert.file(expectedFiles.containerizeWithDocker);
         });
     });
 });
