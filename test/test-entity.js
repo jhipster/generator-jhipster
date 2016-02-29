@@ -275,6 +275,7 @@ describe('JHipster generator entity', function () {
         it('creates expected default files', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.clientWithSuffix);
+            assert.fileContent('.jhipster/Foo.json', 'angularJSSuffix');
         });
     });
 });
