@@ -1,28 +1,28 @@
 (function() {
-	'use strict';
+    'use strict';
 
-	angular
-		.module('<%=angularAppName%>')
-		.controller('UserManagementDeleteController', UserManagementDeleteController);
+    angular
+        .module('<%=angularAppName%>')
+        .controller('UserManagementDeleteController', UserManagementDeleteController);
 
-	UserManagementDeleteController.$inject = ['$uibModalInstance', 'entity', 'User'];
+    UserManagementDeleteController.$inject = ['$uibModalInstance', 'entity', 'User'];
 
-	function UserManagementDeleteController ($uibModalInstance, entity, User) {
-		var vm = this;
+    function UserManagementDeleteController ($uibModalInstance, entity, User) {
+        var vm = this;
 
-		vm.user = entity;
-		vm.clear = clear;
-		vm.confirmDelete = confirmDelete;
+        vm.user = entity;
+        vm.clear = clear;
+        vm.confirmDelete = confirmDelete;
 
-		function clear () {
-            $uibModalInstance.dismiss('cancel')
+        function clear () {
+            $uibModalInstance.dismiss('cancel');
         }
 
-		function confirmDelete (login) {
-			User.delete({login: login},
-				function () {
-					$uibModalInstance.close(true);
-				});
-		}
-	}
+        function confirmDelete (login) {
+            User.delete({login: login},
+                function () {
+                    $uibModalInstance.close(true);
+                });
+        }
+    }
 })();

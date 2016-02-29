@@ -31,7 +31,6 @@ bootRepackage {
 }
 
 war {
-    rootSpec.exclude("**/tomcat-*.jar")
 }
 
 springBoot {
@@ -161,7 +160,9 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security'
     compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web') {
         exclude module: 'spring-boot-starter-tomcat'
-    }<% if (websocket == 'spring-websocket') { %>
+    }
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-undertow'
+    <%_ if (websocket == 'spring-websocket') { _%>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-websocket'<% } %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'<% if (databaseType == 'cassandra' || applicationType == 'gateway') { %>
     compile group: 'org.springframework.data', name: 'spring-data-cassandra'

@@ -18,6 +18,8 @@
     "no-unused-vars": 2,
     "no-multi-str": 2,
     "no-irregular-whitespace": 2,
+    "semi": [2, "always"],
+    "indent": 2,
 
     // os/git options
     // we want to run on all OSes

@@ -9,7 +9,7 @@
 
         var service = {
             parse : parse
-        }
+        };
 
         return service;
 

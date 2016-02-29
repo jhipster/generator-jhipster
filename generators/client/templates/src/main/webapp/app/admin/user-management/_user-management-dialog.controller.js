@@ -24,7 +24,7 @@
         <%_ } _%>
 
         function clear () {
-            $uibModalInstance.dismiss('cancel')
+            $uibModalInstance.dismiss('cancel');
         }
 
         function onSaveSuccess (result) {

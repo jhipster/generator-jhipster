@@ -68,7 +68,7 @@ module.exports = LanguagesGenerator.extend({
                 this.languages = props.languages;
                 cb();
             }.bind(this));
-        }else{
+        } else {
             this.log(chalk.red('Translation is disabled for the project. Language cannot be added.'));
             return;
         }

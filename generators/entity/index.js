@@ -193,6 +193,9 @@ module.exports = EntityGenerator.extend({
                 this.relationships && this.relationships.forEach(function (rel) {
                     relNameChoices.push({name: rel.relationshipName + ':' + rel.relationshipType, value: rel.relationshipName + ':' + rel.relationshipType});
                 }, this);
+                if (this.fileData.angularJSSuffix !== undefined){
+                    this.entityAngularJSSuffix = this.fileData.angularJSSuffix;
+                }
             }
         }
     },
@@ -1331,6 +1334,9 @@ module.exports = EntityGenerator.extend({
                 this.data.pagination = this.pagination;
             }
             this.data.javadoc = this.javadoc;
+            if (this.entityAngularJSSuffix){
+                this.data.angularJSSuffix = this.entityAngularJSSuffix;
+            }
             this.fs.writeJSON(this.filename, this.data, null, 4);
         },
 
@@ -1509,6 +1515,7 @@ module.exports = EntityGenerator.extend({
                 this.entityUrlType = '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}';
             }
             this.entityTranslationKey = this.entityInstance;
+            this.entityTranslationKeyMenu = _s.camelize(this.entityStateName);
 
             this.differentTypes = [this.entityClass];
             if (this.relationships == undefined) {
