@@ -1275,7 +1275,6 @@ Generator.prototype.aski18n = function (generator, question, questions) {
         generator.enableTranslation = prompt.enableTranslation;
         generator.nativeLanguage = prompt.nativeLanguage;
         generator.languages = [prompt.nativeLanguage].concat(prompt.languages);
-
         done();
     }.bind(generator));
 };

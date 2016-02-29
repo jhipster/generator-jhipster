@@ -89,7 +89,6 @@ module.exports = JhipsterClientGenerator.extend({
 
         this.skipServer = configOptions.skipServer || this.config.get('skipServer');
         this.skipUserManagement = configOptions.skipUserManagement ||  this.config.get('skipUserManagement');
-        this.i18n = this.options['i18n'];
         this.authenticationType = this.options['auth'];
         this.buildTool = this.options['build'];
         this.websocket = this.options['websocket'];
@@ -105,9 +104,6 @@ module.exports = JhipsterClientGenerator.extend({
         this.baseName = configOptions.baseName;
         this.logo = configOptions.logo;
 
-        // Make constants available in templates
-        this.MAIN_SRC_DIR = MAIN_SRC_DIR;
-        this.TEST_SRC_DIR = TEST_SRC_DIR;
     },
     initializing : {
         displayLogo : function () {
@@ -117,6 +113,10 @@ module.exports = JhipsterClientGenerator.extend({
         },
 
         setupClientVars : function () {
+            // Make constants available in templates
+            this.MAIN_SRC_DIR = MAIN_SRC_DIR;
+            this.TEST_SRC_DIR = TEST_SRC_DIR;
+
             this.applicationType = this.config.get('applicationType') || configOptions.applicationType;
             if (!this.applicationType) {
                 this.applicationType = 'monolith';

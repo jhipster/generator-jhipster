@@ -75,16 +75,6 @@ module.exports = JhipsterServerGenerator.extend({
         currentQuestion = lastQuestion ? lastQuestion : 0;
         this.logo = configOptions.logo;
         this.baseName = configOptions.baseName;
-
-        // Make constants available in templates
-        this.MAIN_DIR = MAIN_DIR;
-        this.TEST_DIR = TEST_DIR;
-        this.CLIENT_MAIN_SRC_DIR = CLIENT_MAIN_SRC_DIR;
-        this.CLIENT_TEST_SRC_DIR = CLIENT_TEST_SRC_DIR;
-        this.SERVER_MAIN_SRC_DIR = SERVER_MAIN_SRC_DIR;
-        this.SERVER_MAIN_RES_DIR = SERVER_MAIN_RES_DIR;
-        this.SERVER_TEST_SRC_DIR = SERVER_TEST_SRC_DIR;
-        this.SERVER_TEST_RES_DIR = SERVER_TEST_RES_DIR;
     },
     initializing : {
         displayLogo : function () {
@@ -94,6 +84,16 @@ module.exports = JhipsterServerGenerator.extend({
         },
 
         setupServerVars : function () {
+
+            // Make constants available in templates
+            this.MAIN_DIR = MAIN_DIR;
+            this.TEST_DIR = TEST_DIR;
+            this.CLIENT_MAIN_SRC_DIR = CLIENT_MAIN_SRC_DIR;
+            this.CLIENT_TEST_SRC_DIR = CLIENT_TEST_SRC_DIR;
+            this.SERVER_MAIN_SRC_DIR = SERVER_MAIN_SRC_DIR;
+            this.SERVER_MAIN_RES_DIR = SERVER_MAIN_RES_DIR;
+            this.SERVER_TEST_SRC_DIR = SERVER_TEST_SRC_DIR;
+            this.SERVER_TEST_RES_DIR = SERVER_TEST_RES_DIR;
 
             this.applicationType = this.config.get('applicationType') || configOptions.applicationType;
             if (!this.applicationType) {
@@ -283,7 +283,7 @@ module.exports = JhipsterServerGenerator.extend({
                     },
                     type: 'list',
                     name: 'databaseType',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Which *type* of database would you like to use?',
+                    message: '(' + (currentQuestion) + '/' + QUESTIONS + ') Which *type* of database would you like to use?',
                     choices: [
                         {
                             value: 'sql',

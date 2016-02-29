@@ -22,7 +22,7 @@ module.exports = LanguagesGenerator.extend({
         configOptions = this.options.configOptions || {};
 
         // This makes it possible to pass `languages` by argument
-        this.argument('languagesArgument', {
+        this.argument('languages', {
             type: Array,
             required: false,
             description: 'Languages'
@@ -55,9 +55,9 @@ module.exports = LanguagesGenerator.extend({
 
 
         // Validate languages passed as argument
-        this.languagesArgument && this.languagesArgument.forEach(function (language) {
+        this.languages && this.languages.forEach(function (language) {
             if (!this.isSupportedLanguage(language)) {
-                this.env.error(chalk.red('ERROR Unsupported language "' + language + '" passed as argument to language generator.' +
+                this.env.error(chalk.red('\nERROR Unsupported language "' + language + '" passed as argument to language generator.' +
                     '\nSupported languages: ' + _.map(this.getAllSupportedLanguageOptions(), function(o){
                         return '\n  ' + _.padEnd(o.value, 5) + ' (' + o.name + ')'
                     }).join(''))
@@ -67,16 +67,16 @@ module.exports = LanguagesGenerator.extend({
     },
     initializing : {
         getConfig : function () {
-            if (this.languagesArgument) {
+            if (this.languages) {
                 if (this.skipClient) {
-                    this.log(chalk.bold('Installing languages: ' + this.languagesArgument.join(' ') + ' for server'));
+                    this.log(chalk.bold('\nInstalling languages: ' + this.languages.join(', ') + ' for server'));
                 } else if (this.skipServer) {
-                    this.log(chalk.bold('Installing languages: ' + this.languagesArgument.join(' ') + ' for client'));
+                    this.log(chalk.bold('\nInstalling languages: ' + this.languages.join(', ') + ' for client'));
                 } else {
-                    this.log(chalk.bold('Installing languages: ' + this.languagesArgument.join(' ')));
+                    this.log(chalk.bold('\nInstalling languages: ' + this.languages.join(', ')));
                 }
             } else {
-                this.log(chalk.bold('Languages configuration is starting'));
+                this.log(chalk.bold('\nLanguages configuration is starting'));
             }
             this.applicationType = this.config.get('applicationType');
             this.baseName = this.config.get('baseName');
@@ -90,15 +90,12 @@ module.exports = LanguagesGenerator.extend({
     },
 
     prompting : function () {
-        var cb = this.async();
+        if(this.languages) return;
 
-        var languagesArgument = this.languagesArgument;
+        var cb = this.async();
         var languageOptions = this.getAllSupportedLanguageOptions();
         var prompts = [
         {
-            when: function(){
-                return languagesArgument === undefined;
-            },
             type: 'checkbox',
             name: 'languages',
             message: 'Please choose additional languages to install',
@@ -106,7 +103,7 @@ module.exports = LanguagesGenerator.extend({
         }];
         if (this.enableTranslation || configOptions.enableTranslation) {
             this.prompt(prompts, function (props) {
-                this.languages = this.languagesArgument || props.languages;
+                this.languages = this.languages || props.languages;
                 cb();
             }.bind(this));
         } else {
@@ -161,7 +158,6 @@ module.exports = LanguagesGenerator.extend({
     writing : function () {
         var insight = this.insight();
         insight.track('generator', 'languages');
-
         this.languages.forEach(function (language) {
             if (!this.skipClient) {
                 this.installI18nClientFilesByLanguage(this, CLIENT_MAIN_SRC_DIR, language);
