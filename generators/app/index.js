@@ -314,7 +314,7 @@ module.exports = JhipsterGenerator.extend({
             this.prompt({
                 type: 'checkbox',
                 name: 'testFrameworks',
-                message: '(' + ++currentQuestion + '/' + QUESTIONS + ') Which testing frameworks would you like to use?',
+                message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Which testing frameworks would you like to use?',
                 choices: choices,
                 default: [ 'gatling' ]
             }, function (prompt) {
