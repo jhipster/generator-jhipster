@@ -59,7 +59,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
 <%_ if (authenticationType == 'jwt') { _%>
 
     val headers_http_authentication = Map(
-        "Content-Type" -> """application/x-www-form-urlencoded""",
+        "Content-Type" -> """application/json""",
         "Accept" -> """application/json"""
     )
 
@@ -98,8 +98,7 @@ class <%= entityClass %>GatlingTest extends Simulation {
 <%_ } else if (authenticationType == 'jwt') { _%>
         .post("/api/authenticate")
         .headers(headers_http_authentication)
-        .formParam("username", "admin")
-        .formParam("password", "admin")
+        .body(StringBody("""{"username":"admin", "password":"admin"}""")).asJSON
         .check(header.get("Authorization").saveAs("access_token")))
 <%_ } _%>
         .pause(1)
