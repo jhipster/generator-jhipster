@@ -670,6 +670,10 @@ module.exports = JhipsterServerGenerator.extend({
             if (this.applicationType == 'microservice' || this.applicationType == 'gateway') {
                 this.template(DOCKER_DIR + '_registry.yml', DOCKER_DIR + 'registry.yml', this, {});
                 this.template(DOCKER_DIR + '_Dockerfile', DOCKER_DIR + 'Dockerfile', this, {});
+                this.template(DOCKER_DIR + '_app.dev.yml', DOCKER_DIR + 'app.dev.yml', this, {});
+                this.template(DOCKER_DIR + '_app.noreg.dev.yml', DOCKER_DIR + 'app.noreg.dev.yml', this, {});
+                this.template(DOCKER_DIR + '_app.prod.yml', DOCKER_DIR + 'app.prod.yml', this, {});
+                this.template(DOCKER_DIR + '_app.noreg.prod.yml', DOCKER_DIR + 'app.noreg.prod.yml', this, {});
             }
         },
 
