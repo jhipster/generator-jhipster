@@ -1,6 +1,6 @@
 {
     "health": {
-        "title": "Health checks",
+        "title": "Health Checks",
         "refresh.button": "Refresh",
         "stacktrace": "Stacktrace",
         "details": {
