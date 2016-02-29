@@ -388,6 +388,8 @@ describe('JHipster generator', function () {
                     "prodDatabaseType": "mysql",
                     "useSass": false,
                     "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "buildTool": "maven",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no",
@@ -423,6 +425,8 @@ describe('JHipster generator', function () {
                     "prodDatabaseType": "mysql",
                     "useSass": false,
                     "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "buildTool": "gradle",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
@@ -456,6 +460,8 @@ describe('JHipster generator', function () {
                     "prodDatabaseType": "mysql",
                     "useSass": false,
                     "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "buildTool": "maven",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
@@ -488,6 +494,8 @@ describe('JHipster generator', function () {
                     "prodDatabaseType": "mysql",
                     "useSass": false,
                     "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "buildTool": "maven",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
@@ -520,6 +528,8 @@ describe('JHipster generator', function () {
                     "prodDatabaseType": "mysql",
                     "useSass": false,
                     "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "buildTool": "maven",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
@@ -551,6 +561,8 @@ describe('JHipster generator', function () {
                     "prodDatabaseType": "mysql",
                     "useSass": false,
                     "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "buildTool": "maven",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
@@ -613,6 +625,8 @@ describe('JHipster generator', function () {
                     "prodDatabaseType": "mysql",
                     "useSass": false,
                     "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "buildTool": "maven",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
@@ -642,6 +656,8 @@ describe('JHipster generator', function () {
                     "prodDatabaseType": "mysql",
                     "useSass": false,
                     "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "buildTool": "maven",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
@@ -733,6 +749,8 @@ describe('JHipster generator', function () {
                     "prodDatabaseType": "mysql",
                     "useSass": false,
                     "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "buildTool": "maven",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
@@ -765,6 +783,8 @@ describe('JHipster generator', function () {
                     "prodDatabaseType": "mysql",
                     "useSass": false,
                     "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "buildTool": "maven",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no",
@@ -836,6 +856,9 @@ describe('JHipster server generator', function () {
                     "databaseType": "sql",
                     "devDatabaseType": "h2Memory",
                     "prodDatabaseType": "mysql",
+                    "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "buildTool": "maven",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
@@ -861,6 +884,8 @@ describe('JHipster client generator', function () {
                 .withPrompts({
                     "baseName": "jhipster",
                     "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "useSass": true
                 })
                 .on('end', done);
