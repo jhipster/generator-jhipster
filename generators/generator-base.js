@@ -1120,7 +1120,7 @@ Generator.prototype.updateLanguagesInLanguageConstant = function(languages) {
             content += "            '" + language + "'" + (i != languages.length - 1 ? "," : "") + "\n";
         }
         content +=
-            "            // jhipster-needle-i18n - JHipster will add/remove languages in this array\n" +
+            "            // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n" +
             "        ]";
 
         jhipsterUtils.replaceContent({
