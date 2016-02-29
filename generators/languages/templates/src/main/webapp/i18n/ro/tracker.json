@@ -1,0 +1,12 @@
+{
+    "tracker": {
+        "title": "Activitătile utilizatorilor în timp real",
+        "table": {
+            "userlogin": "Utilizator",
+            "ipaddress": "Adresă IP",
+            "userAgent": "Agent utilizator",
+            "page": "Pagină curentă",
+            "time": "Timp"
+        }
+    }
+}

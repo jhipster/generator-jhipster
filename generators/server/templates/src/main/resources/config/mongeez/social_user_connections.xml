@@ -1,0 +1,7 @@
+<mongoChangeLog>
+    <changeSet changeId="ChangeSet-2" author="jhipster">
+        <script>
+            db.jhi_social_user_connection.ensureIndex({"user_id" : 1, "provider_id" : 1, "provider_user_id": 1}, { unique: true });
+        </script>
+    </changeSet>
+</mongoChangeLog>

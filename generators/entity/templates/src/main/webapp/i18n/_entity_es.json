@@ -1,0 +1,23 @@
+{
+    "<%= angularAppName %>": {
+        "<%= entityTranslationKey %>" : {
+            "home": {
+                "title": "<%= entityClassPlural %>",
+                "createLabel": "Crear nuevo <%= entityClass %>",
+                "createOrEditLabel": "Crear o editar <%= entityClass %>",
+                "search": "Search for <%= entityClass %>"
+            },
+            "created": "Un nuevo <%= entityClass %> ha sido creado con el identificador {{ param }}",
+            "updated": "Un <%= entityClass %> ha sido actualizado con el identificador {{ param }}",
+            "deleted": "Un <%= entityClass %> ha sido eliminado con el identificador {{ param }}",
+            "delete": {
+                "question": "¿Seguro que quiere eliminar <%= entityClass %> {{ id }}?"
+            },
+            "detail": {
+                "title": "<%= entityClass %>"
+            }<% for (idx in fields) { %>,
+            "<%=fields[idx].fieldName%>": "<%=fields[idx].fieldNameCapitalized%>"<% } %><% for (idx in relationships) { %>,
+            "<%=relationships[idx].relationshipName%>": "<%= relationships[idx].relationshipNameCapitalized %>"<% } %>
+        }
+    }
+}

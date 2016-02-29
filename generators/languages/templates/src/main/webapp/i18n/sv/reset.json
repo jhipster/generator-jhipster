@@ -1,0 +1,30 @@
+{
+    "reset": {
+        "request": {
+            "title": "Återställ ditt lösenord",
+            "form": {
+                "button": "Återställ lösenord"
+            },
+            "messages": {
+                "info": "Ange mailadressen du använde för att registrera dig",
+                "success": "Kolla din mail för detaljer om hur du återställer ditt lösenord.",
+                "notfound": "<strong>Mailadressen är inte registrerad!</strong> Vänligen försök igen"
+
+            }
+
+        },
+        "finish" : {
+            "title": "Återställ lösenord",
+            "form": {
+                "button": "Bekräfta nytt lösenord"
+            },
+            "messages": {
+                "info": "Välj ett nytt lösenord",
+                "success": "<strong>Ditt lösenord är återställt.</strong> Vänligen <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">logga in</a>.",
+                "keymissing": "Återställningsnyckeln saknas.",
+                "error": "Ditt lösenord kunde inte återställas. Kom ihåg att en lösenordsåterställning endast är giltlig i 24 hours."
+            }
+        }
+    }
+
+}

@@ -1,0 +1,16 @@
+<%
+var mapper = entityInstance  + 'Mapper';
+var entityToDtoReference = mapper + '::'+ entityInstance +'To' + entityClass + 'DTO';
+for (idx in relationships) { if (relationships[idx].relationshipType == 'one-to-one' && relationships[idx].ownerSide != true) { %>
+        if ("<%= relationships[idx].relationshipName.toLowerCase() %>-is-null".equals(filter)) {
+            log.debug("REST request to get all <%= entityClass %>s where <%= relationships[idx].relationshipName %> is null");<% if (viaService) { %>
+            return <% if (pagination != 'no') { %>new ResponseEntity<>(<% } %><%= entityInstance %>Service.findAllWhere<%= relationships[idx].relationshipNameCapitalized %>IsNull()<% if (pagination != 'no') { %>,
+                    HttpStatus.OK)<% } %>;<% } else { %>
+            return <% if (pagination != 'no') { %>new ResponseEntity<>(<% } %>StreamSupport
+                .stream(<%= entityInstance %>Repository.findAll().spliterator(), false)
+                .filter(<%= entityInstance %> -> <%= entityInstance %>.get<%= relationships[idx].relationshipNameCapitalized %>() == null)<% if (dto == 'mapstruct') { %>
+                .map(<%= entityToDtoReference %>)<% } if (pagination != 'no') { %>
+                .collect(Collectors.toList()), HttpStatus.OK);<% } else { if (dto == 'mapstruct') { %>
+                .collect(Collectors.toCollection(LinkedList::new));<% } else { %>
+                .collect(Collectors.toList());<% }} %><% } %>
+        }<% } } %>

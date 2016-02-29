@@ -1,5 +1,6 @@
 {
   "generator-jhipster": {
+    "applicationType": "monolith",
     "baseName": "sampleGradle",
     "packageName": "com.mycompany.myapp",
     "packageFolder": "com/mycompany/myapp",
@@ -13,8 +14,8 @@
     "searchEngine": "no",
     "useSass": false,
     "buildTool": "gradle",
-    "frontendBuilder": "grunt",
     "enableTranslation": true,
+    "enableSocialSignIn": false,
     "rememberMeKey": "0b557a1f94eb8ea76db0a95b5e8b64bec08bb869",
     "testFrameworks": [
       "gatling"

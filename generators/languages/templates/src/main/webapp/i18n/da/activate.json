@@ -1,0 +1,9 @@
+{
+    "activate": {
+        "title": "Aktivering",
+        "messages": {
+            "success": "<strong>Din bruger er blevet aktiveret.</strong> Du bedes venligst <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autentificere</a>.",
+            "error": "<strong>Din bruger kunne ikke blive aktiveret.</strong> Anvend venligst registeringsformularen for at oprette en bruger."
+        }
+    }
+}

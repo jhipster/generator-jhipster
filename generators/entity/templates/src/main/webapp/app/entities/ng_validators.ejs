@@ -1,0 +1,38 @@
+<%#	Returns a string of all angular validators required for the input field. -%>
+<%
+var field = fields[idx];
+var result = '';
+
+if (field.fieldValidate == true) {
+	var rules = field.fieldValidateRules;
+	var validators = [];
+
+    if (rules.indexOf('required') != -1 && field.fieldType != 'Boolean') {
+        validators.push('required');
+    }
+    if (rules.indexOf('minlength') != -1) {
+        validators.push('ng-minlength="' + field.fieldValidateRulesMinlength + '"');
+    }
+    if (rules.indexOf('maxlength') != -1) {
+        validators.push('ng-maxlength="' + field.fieldValidateRulesMaxlength + '"');
+    }
+    if (rules.indexOf('min') != -1) {
+        validators.push('min="' + field.fieldValidateRulesMin + '"');
+    }
+    if (rules.indexOf('max') != -1) {
+        validators.push('max="' + field.fieldValidateRulesMax + '"');
+    }
+    if (rules.indexOf('minbytes') != -1) {
+        validators.push('minbytes="' + field.fieldValidateRulesMinbytes +'"');
+    }
+    if (rules.indexOf('maxbytes') != -1) {
+        validators.push('maxbytes="' + field.fieldValidateRulesMaxbytes +'"');
+    }
+    if (rules.indexOf('pattern') != -1) {
+        validators.push('ng-pattern="/' + field.fieldValidateRulesPattern + '/"');
+    }
+
+    result = validators.join(' ');
+}
+-%>
+<%- result -%>

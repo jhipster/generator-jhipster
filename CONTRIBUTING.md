@@ -101,6 +101,37 @@ Before you submit your pull request consider the following guidelines:
 
 That's it! Thank you for your contribution!
 
+#### Resolving merge conflicts ("This branch has conflicts that must be resolved")
+
+Sometimes your PR will have merge conflicts with the upstream repository's master branch. There are several ways to solve this but if not done correctly this can end up as a true nightmare. So here is one method that works quite well.
+
+* First, fetch the latest information from the master
+
+    ```shell
+    git fetch upstream
+    ```
+
+* Rebase your branch against the upstream/master
+
+    ```shell
+    git rebase upstream/master
+    ```
+
+* Git will stop rebasing at the first merge conflict and indicate which file is in conflict. Edit the file, resolve the conflict then
+
+    ```shell
+    git add <the file that was in conflict>
+    git rebase --continue
+    ```
+
+* The rebase will continue up to the next conflict. Repeat the previous step until all files are merged and the rebase ends successfully.
+* Re-run the JHipster tests on your sample generated project to ensure tests are still passing.
+* Force push to your GitHub repository (this will update your Pull Request)
+
+    ```shell
+    git push -f
+    ```
+
 #### After your pull request is merged
 
 After your pull request is merged, you can safely delete your branch and pull the changes
@@ -180,7 +211,7 @@ Sub templates should be named with the `ejs` extension because it's the default 
 
     <%- include field_validators -%>
 
-This staement means that [_Entity.java](entity/templates/src/main/java/package/domain/_Entity.java) template includes [field_validators.ejs](entity/templates/src/main/java/package/domain/field_validators.ejs) sub template.
+This statement means that [_Entity.java](generators/entity/templates/src/main/java/package/domain/_Entity.java) template includes [field_validators.ejs](generators/entity/templates/src/main/java/package/domain/field_validators.ejs) sub template.
 
 Sub templates can be unit tested.
 

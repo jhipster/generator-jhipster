@@ -1,0 +1,30 @@
+{
+    "reset": {
+        "request": {
+            "title": "Resetați parola dumneavoastră",
+            "form": {
+                "button": "Reseteaza parola"
+            },
+            "messages": {
+                "info": "Introduceți adresa de email folosită la înregistrare",
+                "success": "Verificați-vă emailul pentru instrucțiunile de schimbare a parolei.",
+                "notfound": "<strong>Adresa de email nu a fost înregistrata</strong> Vă rugăm verificați și încercați din nou."
+
+            }
+
+        },
+        "finish" : {
+            "title": "Resetează parola",
+            "form": {
+                "button": "Validează noua parolă"
+            },
+            "messages": {
+                "info": "Alegeți o nouă parolă",
+                "success": "<strong>Parola dumneavoastra a fost resetata.</strong> Vă rugăm să vă <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">autentificați</a>.",
+                "keymissing": "Cheia de resetare lipsește.",
+                "error": "Parola dumneavoastră nu a fost resetată. Vă reamintim că o cerere de resetare este valabilă doar 24 de ore."
+            }
+        }
+    }
+
+}

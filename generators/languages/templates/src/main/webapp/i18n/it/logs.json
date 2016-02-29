@@ -1,0 +1,11 @@
+{
+    "logs": {
+        "title": "Logs",
+        "nbloggers": "Hai {{ total }} loggers.",
+        "filter": "Filtro",
+        "table": {
+            "name": "Nome",
+            "level": "Livello"
+        }
+    }
+}

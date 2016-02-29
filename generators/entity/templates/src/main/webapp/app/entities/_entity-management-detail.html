@@ -1,0 +1,81 @@
+<% var keyPrefix = angularAppName + '.' + entityTranslationKey; %>
+<div>
+    <h2><span translate="<%= keyPrefix %>.detail.title"><%= entityClass %></span> {{vm.<%= entityInstance %>.id}}</h2>
+    <hr>
+    <dl class="dl-horizontal">
+        <%_ for (idx in fields) {
+            var fieldName = fields[idx].fieldName;
+            var fieldType = fields[idx].fieldType;
+            var fieldTypeBlobContent = fields[idx].fieldTypeBlobContent; _%>
+        <dt><span translate="<%= keyPrefix %>.<%= fieldName %>"><%= fields[idx].fieldNameCapitalized %></dt></dt>
+        <dd>
+            <%_ if (fields[idx].fieldIsEnum) { _%>
+            <span translate="{{'<%= angularAppName %>.<%= fieldType %>.' + vm.<%= entityInstance %>.<%= fieldName %>}}">{{vm.<%= entityInstance %>.<%= fieldName %>}}</span>
+            <%_ } else if (fieldType == 'byte[]' && fieldTypeBlobContent == 'image') { _%>
+            <img data-ng-src="{{'data:' + <%=entityInstance %>.<%= fieldName %>ContentType + ';base64,' + vm.<%= entityInstance %>.<%= fieldName %>}}" style="max-width: 100%;" ng-if="vm.<%= entityInstance %>.<%= fieldName %>"/>
+            <%_ } else if (fieldType == 'ZonedDateTime' || fieldType == 'Date') { _%>
+            <span>{{vm.<%=entityInstance %>.<%= fieldName %> | date:'medium'}}</span>
+            <%_ } else if (fieldType == 'LocalDate') { _%>
+            <span>{{vm.<%=entityInstance %>.<%= fieldName %> | date:'mediumDate'}}</span>
+            <%_ } else if (fieldType == 'byte[]' && fieldTypeBlobContent == 'any') { _%>
+            <a ng-click="vm.openFile(vm.<%= entityInstance %>.<%= fieldName %>ContentType, vm.<%= entityInstance %>.<%= fieldName %>)" ng-if="vm.<%= entityInstance %>.<%= fieldName %>" target="_blank">open</a>
+            <%_ } else { _%>
+            <span>{{vm.<%= entityInstance %>.<%= fieldName %>}}<span>
+            <%_ } _%>
+            <%_ if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { _%>
+            <div>{{vm.<%= entityInstance %>.<%= fieldName %>ContentType}}, {{vm.byteSize(vm.<%= entityInstance %>.<%= fieldName %>)}}</div>
+            <%_ } _%>
+        </dd>
+        <hr>
+        <%_ } _%>
+        <%_ for (idx in relationships) {
+                var relationshipType = relationships[idx].relationshipType;
+                var ownerSide = relationships[idx].ownerSide;
+                var relationshipName = relationships[idx].relationshipName;
+                var relationshipFieldName = relationships[idx].relationshipFieldName;
+                var otherEntityName = relationships[idx].otherEntityName;
+                var otherEntityStateName = relationships[idx].otherEntityStateName;
+                var otherEntityField = relationships[idx].otherEntityField;
+                var otherEntityFieldCapitalized = relationships[idx].otherEntityFieldCapitalized;
+                if (relationshipType == 'many-to-one'
+                    || (relationshipType == 'one-to-one' && ownerSide == true)
+                    || (relationshipType == 'many-to-many' && ownerSide == true)) { _%>
+        <dt><span translate="<%= keyPrefix %>.<%= relationshipName %>"><%=relationshipName%></span></dt>
+        <dd>
+            <%_ if (otherEntityName == 'user') { _%>
+                <%_ if (relationshipType == 'many-to-many') { _%>
+            <span ng-repeat="<%= relationshipFieldName %> in vm.<%= entityInstance %>.<%= relationshipFieldName %>s">
+                {{<%= relationshipFieldName %>.<%= otherEntityField %>}}{{$last ? '' : ', '}}
+            </span>
+                <%_ } else { _%>
+                    <%_ if (dto == 'no') { _%>
+            {{vm.<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}
+                    <%_ } else { _%>
+            {{vm.<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}
+                    <%_ } _%>
+                <%_ } _%>
+            <%_ } else { _%>
+                <%_ if (relationshipType == 'many-to-many') { _%>
+            <span ng-repeat="<%= relationshipFieldName %> in vm.<%= entityInstance %>.<%= relationshipFieldName %>s">
+                <a ui-sref="<%= otherEntityStateName %>-detail({id: {{<%= relationshipFieldName %>.id}}})">{{<%= relationshipFieldName %>.<%= otherEntityField %>}}</a>{{$last ? '' : ', '}}
+            </span>
+                <%_ } else { _%>
+                    <%_ if (dto == 'no') { _%>
+            <a ui-sref="<%= otherEntityStateName %>-detail({id:vm.<%= entityInstance + "." + relationshipFieldName + ".id" %>})">{{vm.<%= entityInstance + "." + relationshipFieldName + "." + otherEntityField %>}}</a>
+                    <%_ } else { _%>
+            <a ui-sref="<%= otherEntityStateName %>-detail({id:vm.<%= entityInstance + "." + relationshipFieldName + "Id" %>})">{{vm.<%= entityInstance + "." + relationshipFieldName + otherEntityFieldCapitalized %>}}</a>
+                    <%_ } _%>
+                <%_ } _%>
+            <%_ } _%>
+        </dd>
+        <hr>
+        <%_ } _%>
+        <%_ } _%>
+    </dl>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

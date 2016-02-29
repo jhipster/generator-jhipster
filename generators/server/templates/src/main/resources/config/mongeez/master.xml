@@ -1,0 +1,7 @@
+<changeFiles>
+    <%_ if (!skipUserManagement) { _%>
+    <file path="authorities.xml"/>
+    <file path="users.xml"/>
+    <file path="social_user_connections.xml"/>
+    <%_ } _%>
+</changeFiles>
