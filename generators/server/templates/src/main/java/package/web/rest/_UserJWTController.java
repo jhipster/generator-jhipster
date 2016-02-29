@@ -32,7 +32,7 @@ public class UserJWTController {
     @RequestMapping(value = "/authenticate",
         method = RequestMethod.POST)
     @Timed
-    public ResponseEntity<?> authorize(@RequestParam String username, @RequestParam String password, @RequestParam Boolean rememberMe,
+    public ResponseEntity<?> authorize(@RequestParam String username, @RequestParam String password, @RequestParam(required = false) boolean rememberMe,
         HttpServletResponse response) {
 
         UsernamePasswordAuthenticationToken authenticationToken =

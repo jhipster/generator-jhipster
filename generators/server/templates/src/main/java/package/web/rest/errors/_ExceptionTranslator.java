@@ -3,7 +3,9 @@ package <%=packageName%>.web.rest.errors;
 import java.util.List;
 
 import org.springframework.core.annotation.AnnotationUtils;
+<%_ if (databaseType != 'no') { _%>
 import org.springframework.dao.ConcurrencyFailureException;
+<%_ } _%>
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @ControllerAdvice
 public class ExceptionTranslator {
+<%_ if (databaseType != 'no') { _%>
 
     @ExceptionHandler(ConcurrencyFailureException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
@@ -26,6 +29,7 @@ public class ExceptionTranslator {
     public ErrorDTO processConcurencyError(ConcurrencyFailureException ex) {
         return new ErrorDTO(ErrorConstants.ERR_CONCURRENCY_FAILURE);
     }
+<%_ } _%>
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

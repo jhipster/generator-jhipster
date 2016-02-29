@@ -1,8 +1,14 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .factory('AuditsService', function ($resource) {
-        return $resource('api/audits/:id', {}, {
+    angular
+        .module('<%=angularAppName%>')
+        .factory('AuditsService', AuditsService);
+
+    AuditsService.$inject = ['$resource'];
+
+    function AuditsService ($resource) {
+        var service = $resource('api/audits/:id', {}, {
             'get': {
                 method: 'GET',
                 isArray: true
@@ -13,4 +19,7 @@ angular.module('<%=angularAppName%>')
                 params: {fromDate: null, toDate: null}
             }
         });
-    });
+
+        return service;
+    }
+})();

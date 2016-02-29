@@ -1,19 +1,19 @@
 <!-- Modal used to display the threads dump -->
 <div class="modal-header">
-    <button type="button" class="close" ng-click="cancel()">&times;</button>
+    <button type="button" class="close" ng-click="vm.cancel()">&times;</button>
     <h4 class="modal-title" translate="metrics.jvm.threads.dump.title">Threads dump</h4>
 </div>
 <div class="modal-body pad">
-    <span class="label label-primary" ng-click="threadDumpFilter = {}">All&nbsp;<span class="badge">{{threadDumpAll}}</span></span>&nbsp;
-    <span class="label label-success" ng-click="threadDumpFilter = {threadState: 'RUNNABLE'}">Runnable&nbsp;<span class="badge">{{threadDumpRunnable}}</span></span>&nbsp;
-    <span class="label label-info" ng-click="threadDumpFilter = {threadState: 'WAITING'}">Waiting&nbsp;<span class="badge">{{threadDumpWaiting}}</span></span>&nbsp;
-    <span class="label label-warning" ng-click="threadDumpFilter = {threadState: 'TIMED_WAITING'}">Timed Waiting&nbsp;<span class="badge">{{threadDumpTimedWaiting}}</span></span>&nbsp;
-    <span class="label label-danger" ng-click="threadDumpFilter = {threadState: 'BLOCKED'}">Blocked&nbsp;<span class="badge">{{threadDumpBlocked}}</span></span>&nbsp;
+    <span class="label label-primary" ng-click="threadDumpFilter = {}">All&nbsp;<span class="badge">{{vm.threadDumpAll}}</span></span>&nbsp;
+    <span class="label label-success" ng-click="threadDumpFilter = {threadState: 'RUNNABLE'}">Runnable&nbsp;<span class="badge">{{vm.threadDumpRunnable}}</span></span>&nbsp;
+    <span class="label label-info" ng-click="threadDumpFilter = {threadState: 'WAITING'}">Waiting&nbsp;<span class="badge">{{vm.threadDumpWaiting}}</span></span>&nbsp;
+    <span class="label label-warning" ng-click="threadDumpFilter = {threadState: 'TIMED_WAITING'}">Timed Waiting&nbsp;<span class="badge">{{vm.threadDumpTimedWaiting}}</span></span>&nbsp;
+    <span class="label label-danger" ng-click="threadDumpFilter = {threadState: 'BLOCKED'}">Blocked&nbsp;<span class="badge">{{vm.threadDumpBlocked}}</span></span>&nbsp;
     <div class="voffset2">&nbsp;</div>
     Filter
     <input type="text" ng-model="threadDumpFilter" class="form-control">
-    <div class="row pad" ng-repeat="(k, v) in threadDump | filter:threadDumpFilter">
-        <h5><span class="label" ng-class="getLabelClass(v.threadState)">{{v.threadState}}</span>&nbsp;{{v.threadName}} (ID {{v.threadId}}) 
+    <div class="row pad" ng-repeat="(k, v) in vm.threadDump | filter:threadDumpFilter">
+        <h5><span class="label" ng-class="vm.getLabelClass(v.threadState)">{{v.threadState}}</span>&nbsp;{{v.threadName}} (ID {{v.threadId}})
             <a ng-click="show = !show">
                <span ng-show="!show" translate="metrics.jvm.threads.dump.show">Show StackTrace</span>
                <span ng-show="show" translate="metrics.jvm.threads.dump.hide">Hide StackTrace</span>
@@ -49,5 +49,5 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-default  pull-left" data-dismiss="modal" ng-click="cancel()">Done</button>
+    <button type="button" class="btn btn-default  pull-left" data-dismiss="modal" ng-click="vm.cancel()">Done</button>
 </div>

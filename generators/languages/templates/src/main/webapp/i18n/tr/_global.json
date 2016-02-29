@@ -48,7 +48,7 @@
         },
         "messages": {
             "info": {
-                "authenticated": "<a class=\"alert-link\" href=\"\" ng-click=\"login()\">Giriş</a> yapmak istiyorsanız, varsayılan hesaplardan birini deneyebilirsiniz:<br/>- Yönetici (kullanıcı adı=\"admin\" ve şifre=\"admin\") <br/>- Kullanıcı (kullanıcı adı=\"user\" and şifre=\"user\").",
+                "authenticated": "<a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">Giriş</a> yapmak istiyorsanız, varsayılan hesaplardan birini deneyebilirsiniz:<br/>- Yönetici (kullanıcı adı=\"admin\" ve şifre=\"admin\") <br/>- Kullanıcı (kullanıcı adı=\"user\" and şifre=\"user\").",
                 "register": "Henüz bir hesabınız yok mu? <a class=\"alert-link\" ui-sref=\"register\">Yeni hesap oluştur</a>"
             },
             "error": {

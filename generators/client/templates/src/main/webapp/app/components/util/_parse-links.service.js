@@ -1,8 +1,19 @@
-'use strict';
+(function(){
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .service('ParseLinks', function () {
-        this.parse = function (header) {
+    angular
+        .module('<%=angularAppName%>')
+        .factory('ParseLinks', ParseLinks);
+
+    function ParseLinks () {
+
+        var service = {
+            parse : parse
+        }
+
+        return service;
+
+        function parse (header) {
             if (header.length === 0) {
                 throw new Error('input must not be of zero length');
             }
@@ -31,5 +42,6 @@ angular.module('<%=angularAppName%>')
             });
 
             return links;
-        };
-    });
+        }
+    }
+})();

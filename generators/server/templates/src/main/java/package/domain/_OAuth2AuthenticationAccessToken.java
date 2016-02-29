@@ -12,6 +12,8 @@ import java.util.UUID;
 @Document(collection = "OAUTH_AUTHENTICATION_ACCESS_TOKEN")
 public class OAuth2AuthenticationAccessToken implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
     private String id;
 

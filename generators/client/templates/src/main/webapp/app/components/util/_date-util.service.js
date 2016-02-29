@@ -1,34 +1,50 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .service('DateUtils', function ($filter) {
+    angular
+        .module('<%=angularAppName%>')
+        .factory('DateUtils', DateUtils);
 
-    this.convertLocaleDateToServer = function(date) {
-        if (date) {
-            return $filter('date')(date, 'yyyy-MM-dd');
-        } else {
+    DateUtils.$inject = ['$filter'];
+
+    function DateUtils ($filter) {
+
+        var service = {
+            convertDateTimeFromServer : convertDateTimeFromServer,
+            convertLocaleDateFromServer : convertLocaleDateFromServer,
+            convertLocaleDateToServer : convertLocaleDateToServer,
+            dateformat : dateformat
+        }
+
+        return service;
+
+        function convertDateTimeFromServer (date) {
+            if (date) {
+                return new Date(date);
+            } else {
+                return null;
+            }
+        }
+
+        function convertLocaleDateFromServer (date) {
+            if (date) {
+                var dateString = date.split('-');
+                return new Date(dateString[0], dateString[1] - 1, dateString[2]);
+            }
             return null;
         }
-    };
 
-    this.convertLocaleDateFromServer = function(date) {
-        if (date) {
-            var dateString = date.split('-');
-            return new Date(dateString[0], dateString[1] - 1, dateString[2]);
+        function convertLocaleDateToServer (date) {
+            if (date) {
+                return $filter('date')(date, 'yyyy-MM-dd');
+            } else {
+                return null;
+            }
         }
-        return null;
-    };
 
-    this.convertDateTimeFromServer = function(date) {
-        if (date) {
-            return new Date(date);
-        } else {
-            return null;
+        function dateformat () {
+            return 'yyyy-MM-dd';
         }
-    };
+    }
 
-    // common date format for all date input fields
-    this.dateformat = function() {
-        return 'yyyy-MM-dd';
-    };
-});
+})();

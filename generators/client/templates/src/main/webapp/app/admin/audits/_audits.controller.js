@@ -1,29 +1,50 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('AuditsController', function ($scope, $filter, AuditsService, ParseLinks) {
-        $scope.page = 1;
+    angular
+        .module('<%=angularAppName%>')
+        .controller('AuditsController', AuditsController);
 
-        $scope.onChangeDate = function () {
+    AuditsController.$inject = ['$filter', 'AuditsService', 'ParseLinks'];
+
+    function AuditsController ($filter, AuditsService, ParseLinks) {
+        var vm = this;
+
+        vm.audits = null;
+        vm.fromDate = null;
+        vm.links = null;
+        vm.loadPage = loadPage;
+        vm.onChangeDate = onChangeDate;
+        vm.page = 1;
+        vm.previousMonth = previousMonth;
+        vm.toDate = null;
+        vm.today = today;
+        vm.totalItems = null;
+
+        vm.today();
+        vm.previousMonth();
+        vm.onChangeDate();
+
+        function onChangeDate () {
             var dateFormat = 'yyyy-MM-dd';
-            var fromDate = $filter('date')($scope.fromDate, dateFormat);
-            var toDate = $filter('date')($scope.toDate, dateFormat);
+            var fromDate = $filter('date')(vm.fromDate, dateFormat);
+            var toDate = $filter('date')(vm.toDate, dateFormat);
 
-            AuditsService.query({page: $scope.page -1, size: 20, fromDate: fromDate, toDate: toDate}, function(result, headers){
-                $scope.audits = result;
-                $scope.links = ParseLinks.parse(headers('link'));
-                $scope.totalItems = headers('X-Total-Count');
+            AuditsService.query({page: vm.page -1, size: 20, fromDate: fromDate, toDate: toDate}, function(result, headers){
+                vm.audits = result;
+                vm.links = ParseLinks.parse(headers('link'));
+                vm.totalItems = headers('X-Total-Count');
             });
-        };
+        }
 
         // Date picker configuration
-        $scope.today = function () {
+        function today () {
             // Today + 1 day - needed if the current day must be included
             var today = new Date();
-            $scope.toDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
-        };
+            vm.toDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+        }
 
-        $scope.previousMonth = function () {
+        function previousMonth () {
             var fromDate = new Date();
             if (fromDate.getMonth() === 0) {
                 fromDate = new Date(fromDate.getFullYear() - 1, 11, fromDate.getDate());
@@ -31,15 +52,12 @@ angular.module('<%=angularAppName%>')
                 fromDate = new Date(fromDate.getFullYear(), fromDate.getMonth() - 1, fromDate.getDate());
             }
 
-            $scope.fromDate = fromDate;
-        };
+            vm.fromDate = fromDate;
+        }
 
-        $scope.loadPage = function (page) {
-            $scope.page = page;
-            $scope.onChangeDate();
-        };
-
-        $scope.today();
-        $scope.previousMonth();
-        $scope.onChangeDate();
-    });
+        function loadPage (page) {
+            vm.page = page;
+            vm.onChangeDate();
+        }
+    }
+})();

@@ -1,41 +1,25 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('LanguageController', function ($scope, $translate, Language, tmhDynamicLocale) {
-        $scope.changeLanguage = function (languageKey) {
-            $translate.use(languageKey);
-            tmhDynamicLocale.set(languageKey);
-        };
+    angular
+        .module('<%=angularAppName%>')
+        .controller('LanguageController', LanguageController);
+
+    LanguageController.$inject = ['$translate', 'Language', 'tmhDynamicLocale'];
+
+    function LanguageController ($translate, Language, tmhDynamicLocale) {
+        var vm = this;
+
+        vm.changeLanguage = changeLanguage;
+        vm.languages = null;
 
         Language.getAll().then(function (languages) {
-            $scope.languages = languages;
+            vm.languages = languages;
         });
-    })
-    .filter('findLanguageFromKey', function () {
-        return function (lang) {
-            return {
-                'ca': 'Català',
-                'da': 'Dansk',
-                'de': 'Deutsch',
-                'en': 'English',
-                'es': 'Español',
-                'fr': 'Français',
-                'gl': 'Galego',
-                'hu': 'Magyar',
-                'it': 'Italiano',
-                'ja': '日本語',
-                'ko': '한국어',
-                'nl': 'Nederlands',
-                'pl': 'Polski',
-                'pt-br': 'Português (Brasil)',
-                'pt-pt': 'Português',
-                'ro': 'Română',
-                'ru': 'Русский',
-                'sv': 'Svenska',
-                'ta': 'தமிழ்',
-                'tr': 'Türkçe',
-                'zh-cn': '中文（简体）',
-                'zh-tw': '繁體中文'
-            }[lang];
-        };
-    });
+
+        function changeLanguage (languageKey) {
+            $translate.use(languageKey);
+            tmhDynamicLocale.set(languageKey);
+        }
+    }
+})();

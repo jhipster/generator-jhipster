@@ -31,12 +31,15 @@ import java.text.SimpleDateFormat;<% } %>
 @Table(name = "persistent_token")<% } %>
 public class PersistentToken implements Serializable {
 
-    <% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+    private static final long serialVersionUID = 1L;
+    <%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
+
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("d MMMM yyyy");
-    <% } %>
-    <% if (databaseType == 'cassandra') { %>
+    <%_ } _%>
+    <%_ if (databaseType == 'cassandra') { _%>
+
     private static final SimpleDateFormat DATE_TIME_FORMATTER = new SimpleDateFormat("d MMMM yyyy");
-    <% } %>
+    <%_ } _%>
 
     private static final int MAX_USER_AGENT_LEN = 255;
 <% if (databaseType == 'sql' || databaseType == 'mongodb')  { %>

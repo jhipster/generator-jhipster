@@ -10,7 +10,7 @@
     function ResetFinishController ($stateParams, $timeout, Auth, LoginService) {
         var vm = this;
 
-        vm.keyMissing = $stateParams.key === undefined;
+        vm.keyMissing = angular.isUndefined($stateParams.key);
         vm.confirmPassword = null;
         vm.doNotMatch = null;
         vm.error = null;

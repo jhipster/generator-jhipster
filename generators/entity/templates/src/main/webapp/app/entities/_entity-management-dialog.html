@@ -7,7 +7,7 @@
         <h4 class="modal-title" id="my<%= entityClass %>Label" translate="<%= keyPrefix %>home.createOrEditLabel">Create or edit a <%= entityClass %></h4>
     </div>
     <div class="modal-body">
-        <jh-alert-error></jh-alert-error>
+        <jhi-alert-error></jhi-alert-error>
         <div class="form-group">
             <label for="id" translate="global.field.id">ID</label>
             <input type="text" class="form-control" id="id" name="id"
@@ -32,7 +32,7 @@
             } else if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') {
                 fieldInputType = 'hidden';
             } _%>
-        <div class="form-group"<% if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { %> ngf-drop ngf-change="set<%=fieldNameCapitalized %>($file, vm.<%= entityInstance %>)"<% if (fieldTypeBlobContent == 'image') { %> ngf-pattern="'image/*'"<% } %><% } %>>
+        <div class="form-group"<% if (fieldType == 'byte[]' && fieldTypeBlobContent != 'text') { %> ngf-drop ngf-change="vm.set<%=fieldNameCapitalized %>($file, vm.<%= entityInstance %>)"<% if (fieldTypeBlobContent == 'image') { %> ngf-pattern="'image/*'"<% } %><% } %>>
             <label class="control-label" translate="<%= translationKey %>" for="field_<%= fieldName %>"><%=fieldNameCapitalized%></label>
             <%_ if (fields[idx].fieldIsEnum) { _%>
             <select class="form-control" name="<%= fieldName %>" ng-model="vm.<%= entityInstance %>.<%= fieldName %>" id="field_<%= fieldName %>"<% if (fields[idx].fieldValidate == true && fields[idx].fieldValidateRules.indexOf('required') != -1) { %> required<% } %>>
@@ -63,7 +63,7 @@
                     </button>
                 </div>
                 <button type="file" ngf-select class="btn btn-default btn-block"
-                        ngf-change="set<%=fieldNameCapitalized %>($file, vm.<%= entityInstance %>)"<% if (fieldTypeBlobContent == 'image') { %> accept="image/*" translate="entity.action.addimage"<% } else { %> translate="entity.action.addblob"<% } %>>
+                        ngf-change="vm.set<%=fieldNameCapitalized %>($file, vm.<%= entityInstance %>)"<% if (fieldTypeBlobContent == 'image') { %> accept="image/*" translate="entity.action.addimage"<% } else { %> translate="entity.action.addblob"<% } %>>
                     <% if (fieldTypeBlobContent == 'image') { %>Add image<% } else { %>Add blob<% } %>
                 </button>
             </div>

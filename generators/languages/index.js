@@ -1,9 +1,9 @@
 'use strict';
 var util = require('util'),
-generators = require('yeoman-generator'),
-chalk = require('chalk'),
-_ = require('underscore.string'),
-scriptBase = require('../generator-base');
+    generators = require('yeoman-generator'),
+    chalk = require('chalk'),
+    _ = require('underscore.string'),
+    scriptBase = require('../generator-base');
 
 const constants = require('../generator-constants'),
     CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
@@ -68,7 +68,7 @@ module.exports = LanguagesGenerator.extend({
                 this.languages = props.languages;
                 cb();
             }.bind(this));
-        }else{
+        } else {
             this.log(chalk.red('Translation is disabled for the project. Language cannot be added.'));
             return;
         }

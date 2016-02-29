@@ -12,7 +12,7 @@
         </tr>
         </thead>
 
-        <tr ng-repeat="entry in filtered = (configuration | filter:filter | orderBy:predicate:reverse)">
+        <tr ng-repeat="entry in filtered = (vm.configuration | filter:filter | orderBy:predicate:reverse)">
             <td><span>{{entry.prefix}}</span></td>
             <td>
                 <div class="row" ng-repeat="(key, value) in entry.properties">
@@ -24,7 +24,7 @@
             </td>
         </tr>
     </table>
-    <div ng-repeat="(key, value) in allConfiguration">
+    <div ng-repeat="(key, value) in vm.allConfiguration">
         <label ng-hide="filtered.length == 0"><span>{{key}}</span></label>
         <table class="table table-condensed table-striped table-bordered table-responsive"
                style="table-layout:fixed" ng-hide="filtered.length == 0">

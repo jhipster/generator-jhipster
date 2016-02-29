@@ -1,29 +1,42 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .factory('LoginService', function ($uibModal) {
+    angular
+        .module('<%=angularAppName%>')
+        .factory('LoginService', LoginService);
+
+    LoginService.$inject = ['$uibModal'];
+
+    function LoginService ($uibModal) {
+        var service = {
+            open: open
+        };
+
         var modalInstance = null;
         var resetModal = function () {
             modalInstance = null;
         };
-        return {
-            open: function () {
-                if (modalInstance != null) return;
-                modalInstance = $uibModal.open({
-                    animation: true,
-                    templateUrl: 'app/components/login/login.html',
-                    controller: 'LoginController',
-                    resolve: {
-                        translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
-                            $translatePartialLoader.addPart('login');
-                            return $translate.refresh();
-                        }]
-                    }
+
+        return service;
+
+        function open () {
+            if (modalInstance !== null) return;
+            modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'app/components/login/login.html',
+                controller: 'LoginController',
+                controllerAs: 'vm',
+                resolve: {
+                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                        $translatePartialLoader.addPart('login');
+                        return $translate.refresh();
+                    }]
+                }
             });
-        modalInstance.result.then(
-            resetModal,
-            resetModal
-        );
+            modalInstance.result.then(
+                resetModal,
+                resetModal
+            );
+        }
     }
-}
-});
+})();

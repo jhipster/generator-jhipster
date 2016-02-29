@@ -3,10 +3,10 @@
 
     <h3 translate="gateway.routes.title">Current routes</h3>
     <p>
-        <button type="button" class="btn btn-primary" ng-click="refresh()" ng-show="updatingRoutes == false">
+        <button type="button" class="btn btn-primary" ng-click="vm.refresh()" ng-show="vm.updatingRoutes == false">
             <span class="glyphicon glyphicon-refresh glyphicon-"></span>&nbsp;<span translate="gateway.refresh.button">Refresh</span>
         </button>
-        <button type="button" class="btn btn-danger" ng-show="updatingRoutes">
+        <button type="button" class="btn btn-danger" ng-show="vm.updatingRoutes">
             <span class="glyphicon glyphicon-refresh"></span>&nbsp;<span translate="gateway.refresh.button">Refresh</span>
         </button>
     </p>
@@ -19,7 +19,7 @@
         </tr>
         </thead>
 
-        <tr ng-repeat="route in gatewayRoutes">
+        <tr ng-repeat="route in vm.gatewayRoutes">
             <td>{{route.path}}</td>
             <td>{{route.serviceId}}</td>
             <td>

@@ -75,7 +75,7 @@ module.exports = JhipsterServerGenerator.extend({
         currentQuestion = lastQuestion ? lastQuestion : 0;
         this.logo = configOptions.logo;
         this.baseName = configOptions.baseName;
-
+        
         // Make constants available in templates
         this.MAIN_DIR = MAIN_DIR;
         this.TEST_DIR = TEST_DIR;
@@ -114,6 +114,11 @@ module.exports = JhipsterServerGenerator.extend({
                 this.devDatabaseType = 'cassandra';
                 this.prodDatabaseType = 'cassandra';
                 this.hibernateCache = 'no';
+            } else if (this.databaseType == 'no') {
+                // no database, only available for microservice applications
+                this.devDatabaseType = 'no';
+                this.prodDatabaseType = 'no';
+                this.hibernateCache = 'no';
             } else {
                 // sql
                 this.devDatabaseType = this.config.get('devDatabaseType');
@@ -134,6 +139,13 @@ module.exports = JhipsterServerGenerator.extend({
             if (baseName) {
                 this.baseName = baseName;
             }
+
+            // force variables unused by microservice applications
+            if (this.applicationType == 'microservice') {
+                this.clusteredHttpSession = 'no';
+                this.websocket = 'no';
+            }
+
             var serverConfigFound = this.packageName != null &&
             this.authenticationType != null &&
             this.hibernateCache != null &&
@@ -227,6 +239,33 @@ module.exports = JhipsterServerGenerator.extend({
                 },
                 {
                     when: function (response) {
+                        return applicationType == 'microservice';
+                    },
+                    type: 'list',
+                    name: 'databaseType',
+                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Which *type* of database would you like to use?',
+                    choices: [
+                        {
+                            value: 'no',
+                            name: 'No database'
+                        },
+                        {
+                            value: 'sql',
+                            name: 'SQL (H2, MySQL, PostgreSQL, Oracle)'
+                        },
+                        {
+                            value: 'mongodb',
+                            name: 'MongoDB'
+                        },
+                        {
+                            value: 'cassandra',
+                            name: 'Cassandra'
+                        }
+                    ],
+                    default: 1
+                },
+                {
+                    when: function (response) {
                         return response.authenticationType == 'session-social';
                     },
                     type: 'list',
@@ -246,7 +285,7 @@ module.exports = JhipsterServerGenerator.extend({
                 },
                 {
                     when: function (response) {
-                        return response.authenticationType != 'session-social';
+                        return response.authenticationType != 'session-social' && applicationType != 'microservice';
                     },
                     type: 'list',
                     name: 'databaseType',
@@ -488,7 +527,11 @@ module.exports = JhipsterServerGenerator.extend({
                 this.buildTool = props.buildTool;
                 this.enableSocialSignIn = props.enableSocialSignIn;
 
-                if (this.databaseType == 'mongodb') {
+                if (this.databaseType == 'no') {
+                    this.devDatabaseType = 'no';
+                    this.prodDatabaseType = 'no';
+                    this.hibernateCache = 'no';
+                } else if (this.databaseType == 'mongodb') {
                     this.devDatabaseType = 'mongodb';
                     this.prodDatabaseType = 'mongodb';
                     this.hibernateCache = 'no';
@@ -603,7 +646,6 @@ module.exports = JhipsterServerGenerator.extend({
             this.copy('gitignore', '.gitignore');
             this.copy('gitattributes', '.gitattributes');
             this.copy('editorconfig', '.editorconfig');
-            this.copy('jshintrc', '.jshintrc');
             this.template('_travis.yml', '.travis.yml', this, {});
         },
 
@@ -890,10 +932,10 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/domain/_package-info.java', javaDir + 'domain/package-info.java', this, {});
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310DateConverters.java', javaDir + 'domain/util/JSR310DateConverters.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310PersistenceConverters.java', javaDir + 'domain/util/JSR310PersistenceConverters.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310DateTimeSerializer.java', javaDir + 'domain/util/JSR310DateTimeSerializer.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310LocalDateDeserializer.java', javaDir + 'domain/util/JSR310LocalDateDeserializer.java', this, {});
             if (this.databaseType == "sql") {
+                this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_JSR310PersistenceConverters.java', javaDir + 'domain/util/JSR310PersistenceConverters.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_FixedH2Dialect.java', javaDir + 'domain/util/FixedH2Dialect.java', this, {});
                 if (this.prodDatabaseType == 'postgresql') {
                     this.template(SERVER_MAIN_SRC_DIR + 'package/domain/util/_FixedPostgreSQL82Dialect.java', javaDir + 'domain/util/FixedPostgreSQL82Dialect.java', this, {});

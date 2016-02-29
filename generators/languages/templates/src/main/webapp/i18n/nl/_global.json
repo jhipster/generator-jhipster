@@ -48,7 +48,7 @@
         },
         "messages": {
             "info": {
-                "authenticated": "Indien u wilt <a class=\"alert-link\" href=\"\" ng-click=\"login()\">aanmelden</a>, dan kan u de standaard gebruikers proberen:<br/>- Administrator (login=\"admin\" en wachtwoord=\"admin\") <br/>- Gebruiker (login=\"user\" en wachtwoord=\"user\").",
+                "authenticated": "Indien u wilt <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">aanmelden</a>, dan kan u de standaard gebruikers proberen:<br/>- Administrator (login=\"admin\" en wachtwoord=\"admin\") <br/>- Gebruiker (login=\"user\" en wachtwoord=\"user\").",
                 "register": "U heeft nog geen gebruiker? <a class=\"alert-link\" ui-sref=\"register\">Registreer een nieuwe gebruiker</a>"
             },
             "error": {

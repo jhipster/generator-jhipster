@@ -20,7 +20,7 @@
             },
             "messages": {
                 "info": "Elixa un contrasinal novo",
-                "success": "<strong>O seu contrasinal foi restablecida.</strong> Por favor <a class=\"alert-link\" href=\"\" ng-click=\"login()\">inicie sesión</a>.",
+                "success": "<strong>O seu contrasinal foi restablecida.</strong> Por favor <a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">inicie sesión</a>.",
                 "keymissing": "Falta a clave de reinicio.",
                 "error": "O seu contrasinal non pode ser restablecida. Lembre que unha solicitude de reinicio de contrasinal só é válida durante 24 horas."
             }

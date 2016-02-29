@@ -1,6 +1,6 @@
 <div>
     <h2 translate="userManagement.home.title">Users</h2>
-    <jh-alert></jh-alert>
+    <jhi-alert></jhi-alert>
     <div class="container">
         <div class="row">
           <div class="col-md-4">
@@ -27,14 +27,14 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="user in users track by user.id">
+            <tr ng-repeat="user in vm.users track by user.id">
                 <td><a ui-sref="user-management-detail({login:user.login})">{{user.id}}</a></td>
                 <td>{{user.login}}</td>
                 <td>{{user.email}}</td>
                 <td>
-                    <span class="label label-danger" ng-click="setActive(user, true)" ng-show="!user.activated"
+                    <span class="label label-danger" ng-click="vm.setActive(user, true)" ng-show="!user.activated"
                           translate="userManagement.deactivated" style="cursor: pointer;">Desactivated</span>
-                    <span class="label label-success" ng-click="setActive(user, false)" ng-show="user.activated"
+                    <span class="label label-success" ng-click="vm.setActive(user, false)" ng-show="user.activated"
                           translate="userManagement.activated" style="cursor: pointer;">Activated</span>
                 </td>
                 <% if (enableTranslation) { %><td>{{user.langKey}}</td><% } %>
@@ -60,7 +60,7 @@
                     <button type="submit"
                             ui-sref="user-management.delete({login:user.login})"
                             class="btn btn-danger btn-sm"
-                            ng-disabled="currentAccount.login==user.login">
+                            ng-disabled="vm.currentAccount.login==user.login">
                         <span class="glyphicon glyphicon-remove-circle"></span>
                     </button>
                 </td>
@@ -70,7 +70,7 @@
     </div>
     <%_ if (databaseType == 'sql' || databaseType == 'mongodb') { _%>
     <div class="text-center">
-        <uib-pagination class="pagination-sm" total-items="totalItems" ng-model="page" ng-change="loadAll()"></uib-pagination>
+        <uib-pagination class="pagination-sm" total-items="vm.totalItems" ng-model="vm.page" ng-change="vm.loadAll()"></uib-pagination>
     </div>
     <%_ } _%>
 </div>

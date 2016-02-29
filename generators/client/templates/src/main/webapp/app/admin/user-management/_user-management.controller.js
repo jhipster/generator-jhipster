@@ -1,48 +1,71 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('<%=angularAppName%>')
-    .controller('UserManagementController', function ($scope, Principal, User, ParseLinks, paginationConstants<% if (enableTranslation) { %>, Language<% } %>) {
-        $scope.users = [];
-        $scope.authorities = ['ROLE_USER', 'ROLE_ADMIN'];<% if (enableTranslation) { %>
+    angular
+        .module('<%=angularAppName%>')
+        .controller('UserManagementController', UserManagementController);
+
+    UserManagementController.$inject = ['Principal', 'User', 'ParseLinks', 'paginationConstants'<% if (enableTranslation) { %>, 'Language'<% } %>];
+
+    function UserManagementController(Principal, User, ParseLinks, paginationConstants<% if (enableTranslation) { %>, Language<% } %>) {
+        var vm = this;
+
+        vm.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
+        vm.clear = clear;
+        vm.currentAccount = null;
+        vm.languages = null;
+        vm.links = null;
+        vm.loadAll = loadAll;
+        vm.loadPage = loadPage;
+        vm.page = 1;
+        vm.setActive = setActive;
+        vm.totalItems = null;
+        vm.users = [];
+
+
+        vm.loadAll();
+
+        <% if (enableTranslation) { %>
         Language.getAll().then(function (languages) {
-            $scope.languages = languages;
+            vm.languages = languages;
         });<% } %>
 
-		Principal.identity().then(function(account) {
-            $scope.currentAccount = account;
+        Principal.identity().then(function(account) {
+            vm.currentAccount = account;
         });
-        $scope.page = 1;
-        $scope.loadAll = function () {<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
-            User.query({page: $scope.page - 1, size: paginationConstants.itemsPerPage}, function (result, headers) {
-                $scope.links = ParseLinks.parse(headers('link'));
-                $scope.totalItems = headers('X-Total-Count');<% } else { %>
+
+
+        function loadAll () {<% if (databaseType == 'sql' || databaseType == 'mongodb') { %>
+            User.query({page: vm.page - 1, size: paginationConstants.itemsPerPage}, function (result, headers) {
+                vm.links = ParseLinks.parse(headers('link'));
+                vm.totalItems = headers('X-Total-Count');<% } else { %>
             User.query({}, function (result) {<% } %>
-                $scope.users = result;
+                vm.users = result;
             });
-        };
+        }
 
-        $scope.loadPage = function (page) {
-            $scope.page = page;
-            $scope.loadAll();
-        };
-        $scope.loadAll();
+        function loadPage (page) {
+            vm.page = page;
+            vm.loadAll();
+        }
 
-        $scope.setActive = function (user, isActivated) {
+        function setActive (user, isActivated) {
             user.activated = isActivated;
             User.update(user, function () {
-                $scope.loadAll();
-                $scope.clear();
+                vm.loadAll();
+                vm.clear();
             });
-        };
+        }
 
-        $scope.clear = function () {
-            $scope.user = {
+        function clear () {
+            vm.user = {
                 id: null, login: null, firstName: null, lastName: null, email: null,
                 activated: null, langKey: null, createdBy: null, createdDate: null,
                 lastModifiedBy: null, lastModifiedDate: null, resetDate: null,
                 resetKey: null, authorities: null
             };
-            $scope.editForm.$setPristine();
-            $scope.editForm.$setUntouched();
-        };
-    });
+            vm.editForm.$setPristine();
+            vm.editForm.$setUntouched();
+        }
+    }
+})();

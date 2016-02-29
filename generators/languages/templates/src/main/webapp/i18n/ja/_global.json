@@ -48,7 +48,7 @@
         },
         "messages": {
             "info": {
-                "authenticated": "<a class=\"alert-link\" href=\"\" ng-click=\"login()\">認証</a>を試したければ, デフォルトアカウント:<br/>- 管理者 (ユーザー名=\"admin\", パスワード=\"admin\") <br/>- ユーザー (login=\"user\", password=\"user\").",
+                "authenticated": "<a class=\"alert-link\" href=\"\" ng-click=\"vm.login()\">認証</a>を試したければ, デフォルトアカウント:<br/>- 管理者 (ユーザー名=\"admin\", パスワード=\"admin\") <br/>- ユーザー (login=\"user\", password=\"user\").",
                 "register": "アカウントをまだお持ちでないですか? <a class=\"alert-link\" ui-sref=\"register\">アカウントを登録する</a>"
             },
             "error": {

@@ -31,7 +31,6 @@ bootRepackage {
 }
 
 war {
-    rootSpec.exclude("**/tomcat-*.jar")
 }
 
 springBoot {
@@ -128,9 +127,11 @@ dependencies {
     compile group: 'com.hazelcast', name: 'hazelcast-spring', version: hazelcast_version<% } %><% if (clusteredHttpSession == 'hazelcast' && hibernateCache != 'hazelcast') { %>
     compile group: 'com.hazelcast', name: 'hazelcast', version: hazelcast_version<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
     compile group: 'com.hazelcast', name: 'hazelcast-wm', version: hazelcast_version<% } %>
+    <%_ if (databaseType == 'sql') { _%>
     compile(group: 'com.zaxxer', name: 'HikariCP', version: HikariCP_version) {
         exclude(module: 'tools')
     }
+    <%_ } _%>
     compile group: 'commons-lang', name: 'commons-lang', version: commons_lang_version
     compile group: 'commons-io', name: 'commons-io', version: commons_io_version
     compile group: 'javax.inject', name: 'javax.inject', version: javax_inject_version
@@ -159,7 +160,9 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security'
     compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web') {
         exclude module: 'spring-boot-starter-tomcat'
-    }<% if (websocket == 'spring-websocket') { %>
+    }
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-undertow'
+    <%_ if (websocket == 'spring-websocket') { _%>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-websocket'<% } %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'<% if (databaseType == 'cassandra' || applicationType == 'gateway') { %>
     compile group: 'org.springframework.data', name: 'spring-data-cassandra'
