@@ -701,8 +701,8 @@ module.exports = JhipsterClientGenerator.extend({
             }
             // Create Protractor test files
             if (this.testFrameworks.indexOf('protractor') != -1) {
-                testTemplates.push('e2e/_account.js');
-                testTemplates.push('e2e/_administration.js');
+                testTemplates.push('e2e/account/_account.js');
+                testTemplates.push('e2e/admin/_administration.js');
                 testTemplates.push('_protractor.conf.js')
             }
             testTemplates.map(function(testTemplatePath) {
