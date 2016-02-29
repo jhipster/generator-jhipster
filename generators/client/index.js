@@ -184,11 +184,6 @@ module.exports = JhipsterClientGenerator.extend({
         setSharedConfigOptions : function () {
             configOptions.lastQuestion = currentQuestion;
             configOptions.useSass = this.useSass;
-            if (configOptions.enableTranslation == undefined) {
-                configOptions.enableTranslation = this.enableTranslation;
-                configOptions.nativeLanguage = this.nativeLanguage;
-                configOptions.languages = this.languages;
-            }
         }
 
     },
@@ -209,19 +204,15 @@ module.exports = JhipsterClientGenerator.extend({
             this.camelizedBaseName = _s.camelize(this.baseName);
             this.slugifiedBaseName = _s.slugify(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();
-            this.nativeLanguageShortName = this.enableTranslation ? this.nativeLanguage.split("-")[0] : 'en';
+            this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split("-")[0] : 'en';
         },
 
         saveConfig: function () {
             this.config.set('useSass', this.useSass);
-            if (this.enableTranslation === true) {
-                this.config.set('enableTranslation', true);
+            this.config.set('enableTranslation', this.enableTranslation);
+            if (this.enableTranslation && !configOptions.skipI18nQuestion) {
                 this.config.set('nativeLanguage', this.nativeLanguage);
                 this.config.set('languages', this.languages);
-            } else if (this.enableTranslation === false) {
-                this.config.set('enableTranslation', false);
-                this.config.set('nativeLanguage', undefined);
-                this.config.set('languages', undefined);
             }
         }
     },
@@ -272,7 +263,7 @@ module.exports = JhipsterClientGenerator.extend({
 
         composeLanguages : function () {
             if(configOptions.skipI18nQuestion) return;
-            this.composeLanguagesSub(this, true, false, configOptions);
+            this.composeLanguagesSub(this, configOptions, 'client');
         }
     },
 

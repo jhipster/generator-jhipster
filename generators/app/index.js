@@ -329,7 +329,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         composeLanguages: function () {
-            this.composeLanguagesSub(this, false, false, configOptions);
+            this.composeLanguagesSub(this, configOptions);
         },
 
         saveConfig: function () {

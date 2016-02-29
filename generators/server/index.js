@@ -677,7 +677,7 @@ module.exports = JhipsterServerGenerator.extend({
 
         composeLanguages : function () {
             if(configOptions.skipI18nQuestion) return;
-            this.composeLanguagesSub(this, false, true, configOptions);
+            this.composeLanguagesSub(this, configOptions, 'server');
         }
     },
 

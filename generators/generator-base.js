@@ -1280,9 +1280,12 @@ Generator.prototype.aski18n = function (generator, question, questions) {
     }.bind(generator));
 };
 
-Generator.prototype.composeLanguagesSub = function (generator, skipServer, skipClient, configOptions) {
+Generator.prototype.composeLanguagesSub = function (generator, configOptions, type) {
     if (generator.enableTranslation) {
-        console.log('Im here');
+        // skip server if app type is client
+        var skipServer = type && type === 'client';
+        // skip client if app type is server
+        var skipClient = type && type === 'server';
         generator.composeWith('jhipster:languages', {
             options: {
                 'skip-wiredep': true,
