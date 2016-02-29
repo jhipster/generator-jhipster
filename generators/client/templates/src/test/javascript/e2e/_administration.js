@@ -5,6 +5,7 @@ describe('administration', function () {
     var username = element(by.id('username'));
     var password = element(by.id('password'));
     var accountMenu = element(by.id('account-menu'));
+    var adminMenu = element(by.id('admin-menu'));
     var login = element(by.id('login'));
     var logout = element(by.id('logout'));
 
@@ -21,7 +22,7 @@ describe('administration', function () {
     });
 
     beforeEach(function () {
-        accountMenu.click();
+        adminMenu.click();
     });
 
     it('should load user management', function () {
