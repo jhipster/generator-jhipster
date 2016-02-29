@@ -1,4 +1,4 @@
-package com.mycompany.myapp.config.apidoc;
+package <%=packageName%>.config.apidoc;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
