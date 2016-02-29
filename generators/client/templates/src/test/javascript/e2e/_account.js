@@ -2,6 +2,12 @@
 
 describe('account', function () {
 
+    var username = element(by.id('username'));
+    var password = element(by.id('password'));
+    var accountMenu = element(by.id('account-menu'));
+    var login = element(by.id('login'));
+    var logout = element(by.id('logout'));
+
     beforeAll(function () {
         browser.get('/');
         browser.driver.wait(protractor.until.elementIsVisible(element(by.css('h1'))));
@@ -9,11 +15,11 @@ describe('account', function () {
 
     it('should fail to login with bad password', function () {
         expect(element.all(by.css('h1')).first().getText()).toMatch(/Welcome, Java Hipster!/);
-        element(by.id('account-menu')).click();
-        element(by.id('login')).click();
+        accountMenu.click();
+        login.click();
 
-        element(by.id('username')).sendKeys('admin');
-        element(by.id('password')).sendKeys('foo');
+        username.sendKeys('admin');
+        password.sendKeys('foo');
         element(by.css('button[type=submit]')).click();
 
         var error = $('.alert-danger').getText();
@@ -23,15 +29,15 @@ describe('account', function () {
     it('should login successfully with admin account', function () {
         expect(element.all(by.css('h1')).first().getText()).toMatch(/Sign in/);
 
-        element(by.id('username')).clear().sendKeys('admin');
-        element(by.id('password')).clear().sendKeys('admin');
+        username.clear().sendKeys('admin');
+        password.clear().sendKeys('admin');
         element(by.css('button[type=submit]')).click();
 
         expect(element(by.css('.alert-success')).getText()).toMatch(/You are logged in as user "admin"/);
     });
 
     it('should be able to update settings', function () {
-        element(by.id('account-menu')).click();
+        accountMenu.click();
         element(by.css('[ui-sref="settings"]')).click();
 
         expect(element(by.css('h2')).getText()).toMatch(/User settings for \[admin\]/);
@@ -42,36 +48,36 @@ describe('account', function () {
     });
 
     it('should be able to update password', function () {
-        element(by.id('account-menu')).click();
+        accountMenu.click();
         element(by.css('[ui-sref="password"]')).click();
 
         expect(element.all(by.css('h2')).first().getText()).toMatch(/Password for \[admin\]/);
-        element(by.id('password')).sendKeys('newpassword');
+        password.sendKeys('newpassword');
         element(by.id('confirmPassword')).sendKeys('newpassword');
         element(by.css('button[type=submit]')).click();
 
         var message = $('.alert-success').getText();
         expect(message).toMatch(/Password changed!/);
-        element(by.id('account-menu')).click();
-        element(by.id('logout')).click();
+        accountMenu.click();
+        logout.click();
 
-        element(by.id('account-menu')).click();
-        element(by.id('login')).click();
+        accountMenu.click();
+        login.click();
 
-        element(by.id('username')).sendKeys('admin');
-        element(by.id('password')).sendKeys('newpassword');
+        username.sendKeys('admin');
+        password.sendKeys('newpassword');
         element(by.css('button[type=submit]')).click();
 
-        element(by.id('account-menu')).click();
+        accountMenu.click();
         element(by.css('[ui-sref="password"]')).click();
         // change back to default
-        element(by.id('password')).clear().sendKeys('admin');
+        password.clear().sendKeys('admin');
         element(by.id('confirmPassword')).clear().sendKeys('admin');
         element(by.css('button[type=submit]')).click();
     });
 
     afterAll(function () {
-        element(by.id('account-menu')).click();
-        element(by.id('logout')).click();
+        accountMenu.click();
+        logout.click();
     });
 });

@@ -2,20 +2,26 @@
 
 describe('administration', function () {
 
+    var username = element(by.id('username'));
+    var password = element(by.id('password'));
+    var accountMenu = element(by.id('account-menu'));
+    var login = element(by.id('login'));
+    var logout = element(by.id('logout'));
+
     beforeAll(function () {
         browser.get('/');
         browser.driver.wait(protractor.until.elementIsVisible(element(by.css('h1'))));
 
-        element(by.id('account-menu')).click();
-        element(by.id('login')).click();
+        accountMenu.click();
+        login.click();
 
-        element(by.id('username')).sendKeys('admin');
-        element(by.id('password')).sendKeys('admin');
+        username.sendKeys('admin');
+        password.sendKeys('admin');
         element(by.css('button[type=submit]')).click();
     });
 
     beforeEach(function () {
-        element(by.id('admin-menu')).click();
+        accountMenu.click();
     });
 
     it('should load user management', function () {
@@ -54,7 +60,7 @@ describe('administration', function () {
     });
 
     afterAll(function () {
-        element(by.id('account-menu')).click();
-        element(by.id('logout')).click();
+        accountMenu.click();
+        logout.click();
     });
 });
