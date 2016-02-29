@@ -233,6 +233,7 @@ module.exports = JhipsterGenerator.extend({
 
     configuring: {
         setup: function () {
+            configOptions.skipI18nQuestion = true;
             configOptions.baseName = this.baseName;
             configOptions.logo = false;
             if (this.applicationType == 'microservice') {
@@ -277,6 +278,13 @@ module.exports = JhipsterGenerator.extend({
     },
 
     default: {
+
+        askFori18n: function () {
+            currentQuestion = configOptions.lastQuestion;
+            if(this.existingProject) return;
+            this.aski18n(this, ++currentQuestion, QUESTIONS);
+        },
+
         askForTestOpts: function () {
             if(this.existingProject){
                 return;
@@ -300,7 +308,7 @@ module.exports = JhipsterGenerator.extend({
             this.prompt({
                 type: 'checkbox',
                 name: 'testFrameworks',
-                message: '(15/' + QUESTIONS + ') Which testing frameworks would you like to use?',
+                message: '(' + currentQuestion + '/' + QUESTIONS + ') Which testing frameworks would you like to use?',
                 choices: choices,
                 default: [ 'gatling' ]
             }, function (prompt) {
@@ -318,6 +326,10 @@ module.exports = JhipsterGenerator.extend({
             insight.track('generator', 'app');
             insight.track('app/applicationType', this.applicationType);
             insight.track('app/testFrameworks', this.testFrameworks);
+        },
+
+        composeLanguages: function () {
+            this.composeLanguagesSub(this, false, false, configOptions);
         },
 
         saveConfig: function () {

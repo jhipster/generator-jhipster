@@ -177,13 +177,12 @@ module.exports = JhipsterClientGenerator.extend({
         },
 
         askFori18n: function () {
-            if(this.existingProject) return;
-            if(configOptions.enableTranslation != undefined) return;
-
+            if(this.existingProject || configOptions.skipI18nQuestion) return;
             this.aski18n(this, ++currentQuestion, QUESTIONS);
         },
 
         setSharedConfigOptions : function () {
+            configOptions.lastQuestion = currentQuestion;
             configOptions.useSass = this.useSass;
             if (configOptions.enableTranslation == undefined) {
                 configOptions.enableTranslation = this.enableTranslation;
@@ -269,6 +268,11 @@ module.exports = JhipsterClientGenerator.extend({
             if(configOptions.languages != null) {
                 this.languages = configOptions.languages;
             }
+        },
+
+        composeLanguages : function () {
+            if(configOptions.skipI18nQuestion) return;
+            this.composeLanguagesSub(this, true, false, configOptions);
         }
     },
 
@@ -307,21 +311,6 @@ module.exports = JhipsterClientGenerator.extend({
             this.copy(MAIN_SRC_DIR + 'robots.txt', MAIN_SRC_DIR + 'robots.txt');
             this.copy(MAIN_SRC_DIR + 'htaccess.txt', MAIN_SRC_DIR + '.htaccess');
             this.copy(MAIN_SRC_DIR + '404.html', MAIN_SRC_DIR + '404.html');
-        },
-
-        writei18nFiles : function () {
-            if (this.enableTranslation) {
-                this.composeWith('jhipster:languages', {
-                    options: {
-                        'skip-wiredep': true,
-                        'skip-server': true,
-                        configOptions: configOptions
-                    },
-                    args: this.languages
-                }, {
-                    local: require.resolve('../languages')
-                });
-            }
         },
 
         writeSwaggerFiles : function () {

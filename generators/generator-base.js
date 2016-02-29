@@ -1244,12 +1244,12 @@ Generator.prototype.aski18n = function (generator, question, questions) {
         {
             type: 'confirm',
             name: 'enableTranslation',
-            message: '(' + (question) + '/' + questions + ') Would you like to enable translation support with Angular Translate?',
+            message: '(' + (question) + '/' + questions + ') Would you like to enable internationalization support?',
             default: true
         },
         {
             when: function(response) {
-                return response.enableTranslation == true;
+                return response.enableTranslation === true;
             },
             type: 'list',
             name: 'nativeLanguage',
@@ -1260,7 +1260,7 @@ Generator.prototype.aski18n = function (generator, question, questions) {
         },
         {
             when: function(response) {
-                return response.enableTranslation == true;
+                return response.enableTranslation === true;
             },
             type: 'checkbox',
             name: 'languages',
@@ -1278,6 +1278,23 @@ Generator.prototype.aski18n = function (generator, question, questions) {
 
         done();
     }.bind(generator));
+};
+
+Generator.prototype.composeLanguagesSub = function (generator, skipServer, skipClient, configOptions) {
+    if (generator.enableTranslation) {
+        console.log('Im here');
+        generator.composeWith('jhipster:languages', {
+            options: {
+                'skip-wiredep': true,
+                'skip-server': skipServer,
+                'skip-client': skipClient,
+                configOptions: configOptions
+            },
+            args: generator.languages
+        }, {
+            local: require.resolve('./languages')
+        });
+    }
 };
 
 Generator.prototype.contains = _.includes;

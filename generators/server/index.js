@@ -562,11 +562,8 @@ module.exports = JhipsterServerGenerator.extend({
         },
 
         askFori18n: function () {
-            if(this.existingProject) return;
-            if(configOptions.enableTranslation != undefined) return;
-
+            if(this.existingProject || configOptions.skipI18nQuestion) return;
             this.aski18n(this, ++currentQuestion, QUESTIONS);
-
         },
 
         setSharedConfigOptions : function () {
@@ -628,7 +625,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.packageFolder = this.packageName.replace(/\./g, '/');
             javaDir = this.javaDir = SERVER_MAIN_SRC_DIR + this.packageFolder + '/';
             this.testDir = SERVER_TEST_SRC_DIR + this.packageFolder + '/';
-            this.nativeLanguageShortName = this.enableTranslation ? this.nativeLanguage.split("-")[0] : 'en';
+            this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split("-")[0] : 'en';
 
         },
 
@@ -676,6 +673,11 @@ module.exports = JhipsterServerGenerator.extend({
             if(configOptions.testFrameworks) {
                 this.testFrameworks = configOptions.testFrameworks;
             }
+        },
+
+        composeLanguages : function () {
+            if(configOptions.skipI18nQuestion) return;
+            this.composeLanguagesSub(this, false, true, configOptions);
         }
     },
 
@@ -795,19 +797,7 @@ module.exports = JhipsterServerGenerator.extend({
             }
         },
 
-        writeServeri18nFiles: function () {
-            if (this.enableTranslation) {
-                this.composeWith('jhipster:languages', {
-                    options: {
-                        'skip-wiredep': true,
-                        'skip-client': true,
-                        configOptions: configOptions
-                    },
-                    args: this.languages
-                }, {
-                    local: require.resolve('../languages')
-                });
-            }
+        writeServerPropertyFiles: function () {
             this.template('../../languages/templates/' + SERVER_MAIN_RES_DIR + 'i18n/_messages_en.properties', SERVER_MAIN_RES_DIR + 'i18n/messages.properties', this, {});
         },
 
