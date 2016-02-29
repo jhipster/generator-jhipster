@@ -62,38 +62,38 @@
             var i;
             event.stopPropagation();
             switch (httpResponse.status) {
-                // connection refused, server not reachable
-                case 0:
-                    addErrorAlert('Server not reachable','error.server.not.reachable');
-                    break;
+            // connection refused, server not reachable
+            case 0:
+                addErrorAlert('Server not reachable','error.server.not.reachable');
+                break;
 
-                case 400:
-                    var errorHeader = httpResponse.headers('X-<%=angularAppName%>-error');
-                    var entityKey = httpResponse.headers('X-<%=angularAppName%>-params');
-                    if (errorHeader) {
-                        var entityName = <% if (enableTranslation) { %>$translate.instant('global.menu.entities.' + entityKey)<% }else{ %>entityKey<% } %>;
-                        addErrorAlert(errorHeader, errorHeader, {entityName: entityName});
-                    } else if (httpResponse.data && httpResponse.data.fieldErrors) {
-                        for (i = 0; i < httpResponse.data.fieldErrors.length; i++) {
-                            var fieldError = httpResponse.data.fieldErrors[i];
-                            // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
-                            var convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
-                            var fieldName = <% if (enableTranslation) { %>$translate.instant('<%= angularAppName %>.' + fieldError.objectName + '.' + convertedField)<% }else{ %>convertedField.charAt(0).toUpperCase() + convertedField.slice(1)<% } %>;
-                            addErrorAlert('Field ' + fieldName + ' cannot be empty', 'error.' + fieldError.message, {fieldName: fieldName});
-                        }
-                    } else if (httpResponse.data && httpResponse.data.message) {
-                        addErrorAlert(httpResponse.data.message, httpResponse.data.message, httpResponse.data);
-                    } else {
-                        addErrorAlert(httpResponse.data);
+            case 400:
+                var errorHeader = httpResponse.headers('X-<%=angularAppName%>-error');
+                var entityKey = httpResponse.headers('X-<%=angularAppName%>-params');
+                if (errorHeader) {
+                    var entityName = <% if (enableTranslation) { %>$translate.instant('global.menu.entities.' + entityKey)<% }else{ %>entityKey<% } %>;
+                    addErrorAlert(errorHeader, errorHeader, {entityName: entityName});
+                } else if (httpResponse.data && httpResponse.data.fieldErrors) {
+                    for (i = 0; i < httpResponse.data.fieldErrors.length; i++) {
+                        var fieldError = httpResponse.data.fieldErrors[i];
+                        // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
+                        var convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
+                        var fieldName = <% if (enableTranslation) { %>$translate.instant('<%= angularAppName %>.' + fieldError.objectName + '.' + convertedField)<% }else{ %>convertedField.charAt(0).toUpperCase() + convertedField.slice(1)<% } %>;
+                        addErrorAlert('Field ' + fieldName + ' cannot be empty', 'error.' + fieldError.message, {fieldName: fieldName});
                     }
-                    break;
+                } else if (httpResponse.data && httpResponse.data.message) {
+                    addErrorAlert(httpResponse.data.message, httpResponse.data.message, httpResponse.data);
+                } else {
+                    addErrorAlert(httpResponse.data);
+                }
+                break;
 
-                default:
-                    if (httpResponse.data && httpResponse.data.message) {
-                        addErrorAlert(httpResponse.data.message);
-                    } else {
-                        addErrorAlert(angular.toJson(httpResponse));
-                    }
+            default:
+                if (httpResponse.data && httpResponse.data.message) {
+                    addErrorAlert(httpResponse.data.message);
+                } else {
+                    addErrorAlert(angular.toJson(httpResponse));
+                }
             }
         });
 

@@ -13,7 +13,7 @@
             abbreviate : abbreviate,
             byteSize : byteSize,
             openFile : openFile
-        }
+        };
 
         return service;
 

@@ -11,7 +11,7 @@
             parseAscending : parseAscending,
             parsePage : parsePage,
             parsePredicate : parsePredicate
-        }
+        };
 
         return service;
 

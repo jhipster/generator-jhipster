@@ -16,7 +16,7 @@
         var service = {
             decode : decode,
             encode : encode
-        }
+        };
 
         return service;
 

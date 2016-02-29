@@ -5,7 +5,7 @@
         .module('<%=angularAppName%>')
         .controller('SettingsController', SettingsController);
 
-    SettingsController.$inject = ['Principal', 'Auth'<% if (enableTranslation){ %>, 'Language', '$translate'<% } %>]
+    SettingsController.$inject = ['Principal', 'Auth'<% if (enableTranslation){ %>, 'Language', '$translate'<% } %>];
 
     function SettingsController (Principal, Auth<% if (enableTranslation){ %>, Language, $translate<% } %>) {
         var vm = this;

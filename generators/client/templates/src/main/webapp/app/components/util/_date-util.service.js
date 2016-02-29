@@ -14,7 +14,7 @@
             convertLocaleDateFromServer : convertLocaleDateFromServer,
             convertLocaleDateToServer : convertLocaleDateToServer,
             dateformat : dateformat
-        }
+        };
 
         return service;
 
