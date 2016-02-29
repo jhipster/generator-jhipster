@@ -100,6 +100,9 @@
         <spring-social-facebook.version>2.0.3.RELEASE</spring-social-facebook.version>
         <spring-social-twitter.version>1.1.2.RELEASE</spring-social-twitter.version>
         <%_ } _%>
+        <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+        <logstash-logback-encoder.version>4.6</logstash-logback-encoder.version>
+        <%_ } _%>
         <!-- Sonar properties -->
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
         <sonar-maven-plugin.version>2.7.1</sonar-maven-plugin.version>
@@ -581,6 +584,25 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-config</artifactId>
             <version>${spring-cloud.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>${logstash-logback-encoder.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-access</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <%_ } _%>
         <dependency>
