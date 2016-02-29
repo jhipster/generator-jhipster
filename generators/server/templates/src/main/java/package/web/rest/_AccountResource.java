@@ -56,9 +56,7 @@ public class AccountResource {
      * @param request the HTTP request
      * @return the ResponseEntity with status 201 (Created) if the user is registred or 400 (Bad Request) if the login or e-mail is already in use
      */
-    @RequestMapping(value = "/register",
-        method = RequestMethod.POST,
-        produces = MediaType.TEXT_PLAIN_VALUE)
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
     @Timed
     public ResponseEntity<?> registerAccount(@Valid @RequestBody UserDTO userDTO, HttpServletRequest request) {
         return userRepository.findOneByLogin(userDTO.getLogin())
