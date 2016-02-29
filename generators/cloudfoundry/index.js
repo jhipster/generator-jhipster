@@ -8,7 +8,8 @@ var util = require('util'),
     scriptBase = require('../generator-base');
 
 const constants = require('../generator-constants'),
-    MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+    MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
+    MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR;
 
 var exec = childProcess.exec;
 var spawn = childProcess.spawn;
@@ -92,6 +93,7 @@ module.exports = CloudFoundryGenerator.extend({
             if(this.abort) return;
             this.log(chalk.bold('\nCreating Cloud Foundry deployment files'));
             this.template('_manifest.yml', 'deploy/cloudfoundry/manifest.yml');
+            this.template('_application-cloudfoundry.yml', MAIN_RES_DIR + 'config/application-cloudfoundry.yml');
         },
 
         checkInstallation: function () {

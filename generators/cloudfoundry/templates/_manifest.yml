@@ -7,6 +7,6 @@ services:
 - <%= cloudfoundryDeployedName %>
 <%_ } _%>
 applications:
-- name: <%= cloudfoundryDeployedName %><% if (cloudfoundryProfile == 'prod') { %>
+- name: <%= cloudfoundryDeployedName %>
   env:
-    SPRING_PROFILES_ACTIVE: prod<% } %>
+    SPRING_PROFILES_ACTIVE: <%= cloudfoundryProfile %>, cloudfoundry
