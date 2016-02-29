@@ -340,6 +340,11 @@ module.exports = JhipsterGenerator.extend({
             this.skipClient && this.config.set('skipClient', true);
             this.skipServer && this.config.set('skipServer', true);
             this.skipUserManagement && this.config.set('skipUserManagement', true);
+            this.config.set('enableTranslation', this.enableTranslation);
+            if (this.enableTranslation) {
+                this.config.set('nativeLanguage', this.nativeLanguage);
+                this.config.set('languages', this.languages);
+            }
         }
     },
 

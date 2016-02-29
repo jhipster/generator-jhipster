@@ -579,9 +579,6 @@ module.exports = JhipsterServerGenerator.extend({
             configOptions.buildTool = this.buildTool;
             configOptions.enableSocialSignIn = this.enableSocialSignIn;
             configOptions.authenticationType = this.authenticationType;
-            configOptions.enableTranslation = this.enableTranslation;
-            configOptions.nativeLanguage = this.nativeLanguage;
-            configOptions.languages = this.languages;
         }
     },
 
@@ -646,14 +643,10 @@ module.exports = JhipsterServerGenerator.extend({
             this.config.set('enableSocialSignIn', this.enableSocialSignIn);
             this.config.set('jwtSecretKey', this.jwtSecretKey);
             this.config.set('rememberMeKey', this.rememberMeKey);
-            if (this.enableTranslation === true) {
-                this.config.set('enableTranslation', true);
+            this.config.set('enableTranslation', this.enableTranslation);
+            if (this.enableTranslation && !configOptions.skipI18nQuestion) {
                 this.config.set('nativeLanguage', this.nativeLanguage);
                 this.config.set('languages', this.languages);
-            } else if (this.enableTranslation === false) {
-                this.config.set('enableTranslation', false);
-                this.config.set('nativeLanguage', undefined);
-                this.config.set('languages', undefined);
             }
         }
     },
