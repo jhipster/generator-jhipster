@@ -28,7 +28,8 @@ var gulp = require('gulp'),
     changed = require('gulp-changed'),
     handleErrors = require('./gulp/handleErrors'),
     util = require('./gulp/utils'),
-    gulpIf = require('gulp-if');
+    gulpIf = require('gulp-if'),
+    footer = require('gulp-footer');
 
 var config = {
     app: '<%= MAIN_SRC_DIR %>',
@@ -244,6 +245,7 @@ gulp.task('usemin', ['images', 'styles'], function () {
             js: [
                 sourcemaps.init,
                 ngAnnotate,
+                footer.bind(footer, ';'),
                 'concat',
                 uglify.bind(uglify, { mangle: false }),
                 rev,
