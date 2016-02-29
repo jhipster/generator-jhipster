@@ -50,9 +50,8 @@ module.exports = LanguagesGenerator.extend({
         });
 
         this.skipWiredep = this.options['skip-wiredep'];
-        this.skipClient = this.options['skip-client'];
-        this.skipServer = this.options['skip-server'];
-
+        this.skipClient = this.options['skip-client'] ||  this.config.get('skipClient');
+        this.skipServer = this.options['skip-server'] ||  this.config.get('skipServer');
 
         // Validate languages passed as argument
         this.languages && this.languages.forEach(function (language) {
@@ -75,6 +74,7 @@ module.exports = LanguagesGenerator.extend({
                 } else {
                     this.log(chalk.bold('\nInstalling languages: ' + this.languages.join(', ')));
                 }
+                this.languagesToApply = this.languages;
             } else {
                 this.log(chalk.bold('\nLanguages configuration is starting'));
             }
@@ -103,7 +103,7 @@ module.exports = LanguagesGenerator.extend({
         }];
         if (this.enableTranslation || configOptions.enableTranslation) {
             this.prompt(prompts, function (props) {
-                this.languages = this.languages || props.languages;
+                this.languagesToApply = props.languages;
                 cb();
             }.bind(this));
         } else {
@@ -150,7 +150,7 @@ module.exports = LanguagesGenerator.extend({
         saveConfig: function () {
             if (this.enableTranslation) {
                 var currentLanguages = this.config.get('languages');
-                this.config.set('languages', _.union(currentLanguages, this.languages));
+                this.config.set('languages', _.union(currentLanguages, this.languagesToApply));
             }
         }
     },
@@ -158,7 +158,7 @@ module.exports = LanguagesGenerator.extend({
     writing : function () {
         var insight = this.insight();
         insight.track('generator', 'languages');
-        this.languages.forEach(function (language) {
+        this.languagesToApply.forEach(function (language) {
             if (!this.skipClient) {
                 this.installI18nClientFilesByLanguage(this, CLIENT_MAIN_SRC_DIR, language);
                 this.addMessageformatLocaleToBowerOverride(language.split("-")[0]);
