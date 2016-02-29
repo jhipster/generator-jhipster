@@ -347,12 +347,24 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.state.js',
         CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.html',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.routes.service.js',
-        DOCKER_DIR + 'registry.yml'
+        CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.routes.service.js'
     ],
 
     microservice: [
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/MicroserviceSecurityConfiguration.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/MicroserviceSecurityConfiguration.java'
+    ],
+
+    microserviceGradle: [
+        'gradle/docker.gradle'
+    ],
+
+    containerizeWithDocker: [
+        DOCKER_DIR + 'registry.yml',
+        DOCKER_DIR + 'Dockerfile',
+        DOCKER_DIR + 'app.dev.yml',
+        DOCKER_DIR + 'app.prod.yml',
+        DOCKER_DIR + 'app.noregistry.dev.yml',
+        DOCKER_DIR + 'app.noregistry.prod.yml'
     ]
 };
 
@@ -731,6 +743,7 @@ describe('JHipster generator', function () {
         it('creates expected files with the gateway application type', function () {
             assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.gateway);
+            assert.file(expectedFiles.containerizeWithDocker);
         });
     });
 
@@ -765,6 +778,43 @@ describe('JHipster generator', function () {
         it('creates expected files with the microservice application type', function () {
             assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.microservice);
+            assert.file(expectedFiles.containerizeWithDocker);
+        });
+    });
+
+    describe('microservice with gradle', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, checkInstall: false})
+                .withPrompts({
+                    "applicationType": "microservice",
+                    "baseName": "jhipster",
+                    "packageName": "com.mycompany.myapp",
+                    "packageFolder": "com/mycompany/myapp",
+                    "authenticationType": "jwt",
+                    "hibernateCache": "ehcache",
+                    "clusteredHttpSession": "no",
+                    "websocket": "no",
+                    "databaseType": "sql",
+                    "devDatabaseType": "h2Memory",
+                    "prodDatabaseType": "mysql",
+                    "useSass": false,
+                    "enableTranslation": true,
+                    "buildTool": "gradle",
+                    "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
+                    "searchEngine": "no",
+                    "enableSocialSignIn": false,
+                    "skipClient": true,
+                    "skipUserManagement": true
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with the microservice application type', function () {
+            assert.file(expectedFiles.jwt);
+            assert.file(expectedFiles.microservice);
+            assert.file(expectedFiles.microserviceGradle);
+            assert.file(expectedFiles.containerizeWithDocker);
         });
     });
 });

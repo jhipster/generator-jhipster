@@ -75,7 +75,7 @@ module.exports = JhipsterServerGenerator.extend({
         currentQuestion = lastQuestion ? lastQuestion : 0;
         this.logo = configOptions.logo;
         this.baseName = configOptions.baseName;
-        
+
         // Make constants available in templates
         this.MAIN_DIR = MAIN_DIR;
         this.TEST_DIR = TEST_DIR;
@@ -650,7 +650,6 @@ module.exports = JhipsterServerGenerator.extend({
         },
 
         writeDockerFiles: function () {
-
             // Create docker-compose file
             this.template(DOCKER_DIR + '_sonar.yml', DOCKER_DIR + 'sonar.yml', this, {});
             if (this.devDatabaseType != "h2Disk" && this.devDatabaseType != "h2Memory" && this.devDatabaseType != "oracle") {
@@ -670,6 +669,11 @@ module.exports = JhipsterServerGenerator.extend({
             }
             if (this.applicationType == 'microservice' || this.applicationType == 'gateway') {
                 this.template(DOCKER_DIR + '_registry.yml', DOCKER_DIR + 'registry.yml', this, {});
+                this.template(DOCKER_DIR + '_Dockerfile', DOCKER_DIR + 'Dockerfile', this, {});
+                this.template(DOCKER_DIR + '_app.dev.yml', DOCKER_DIR + 'app.dev.yml', this, {});
+                this.template(DOCKER_DIR + '_app.noregistry.dev.yml', DOCKER_DIR + 'app.noregistry.dev.yml', this, {});
+                this.template(DOCKER_DIR + '_app.prod.yml', DOCKER_DIR + 'app.prod.yml', this, {});
+                this.template(DOCKER_DIR + '_app.noregistry.prod.yml', DOCKER_DIR + 'app.noregistry.prod.yml', this, {});
             }
         },
 
@@ -684,6 +688,9 @@ module.exports = JhipsterServerGenerator.extend({
                         this.template('gradle/_yeoman.gradle', 'gradle/yeoman.gradle', this, {});
                     }
                     this.template('gradle/_sonar.gradle', 'gradle/sonar.gradle', this, {});
+                    if (this.applicationType == 'microservice' || this.applicationType == 'gateway') {
+                        this.template('gradle/_docker.gradle', 'gradle/docker.gradle', this, {});
+                    }
                     this.template('gradle/_profile_dev.gradle', 'gradle/profile_dev.gradle', this, {'interpolate': INTERPOLATE_REGEX});
                     this.template('gradle/_profile_prod.gradle', 'gradle/profile_prod.gradle', this, {'interpolate': INTERPOLATE_REGEX});
                     this.template('gradle/_mapstruct.gradle', 'gradle/mapstruct.gradle', this, {'interpolate': INTERPOLATE_REGEX});
