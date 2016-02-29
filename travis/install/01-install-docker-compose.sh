@@ -3,7 +3,8 @@ set -ev
 #-------------------------------------------------------------------------------
 # Upgrade Docker
 #-------------------------------------------------------------------------------
-
+apt-cache madison docker-engine
+sudo apt-get -o Dpkg::Options::="--force-confnew" install -y docker-engine=1.10.1-0~trusty
 
 #-------------------------------------------------------------------------------
 # Install docker-compose
