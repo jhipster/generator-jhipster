@@ -22,7 +22,7 @@ services:
 <%_ if (devDatabaseType == 'mongodb') { _%>
     <%= baseName.toLowerCase() %>-dev-mongodb:
         extends:
-            file: prod.yml
+            file: dev.yml
             service: <%= baseName.toLowerCase() %>-dev-mongodb
 
 <%_ } _%>
