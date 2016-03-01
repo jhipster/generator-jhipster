@@ -75,16 +75,6 @@ module.exports = JhipsterServerGenerator.extend({
         currentQuestion = lastQuestion ? lastQuestion : 0;
         this.logo = configOptions.logo;
         this.baseName = configOptions.baseName;
-        
-        // Make constants available in templates
-        this.MAIN_DIR = MAIN_DIR;
-        this.TEST_DIR = TEST_DIR;
-        this.CLIENT_MAIN_SRC_DIR = CLIENT_MAIN_SRC_DIR;
-        this.CLIENT_TEST_SRC_DIR = CLIENT_TEST_SRC_DIR;
-        this.SERVER_MAIN_SRC_DIR = SERVER_MAIN_SRC_DIR;
-        this.SERVER_MAIN_RES_DIR = SERVER_MAIN_RES_DIR;
-        this.SERVER_TEST_SRC_DIR = SERVER_TEST_SRC_DIR;
-        this.SERVER_TEST_RES_DIR = SERVER_TEST_RES_DIR;
     },
     initializing : {
         displayLogo : function () {
@@ -94,6 +84,16 @@ module.exports = JhipsterServerGenerator.extend({
         },
 
         setupServerVars : function () {
+
+            // Make constants available in templates
+            this.MAIN_DIR = MAIN_DIR;
+            this.TEST_DIR = TEST_DIR;
+            this.CLIENT_MAIN_SRC_DIR = CLIENT_MAIN_SRC_DIR;
+            this.CLIENT_TEST_SRC_DIR = CLIENT_TEST_SRC_DIR;
+            this.SERVER_MAIN_SRC_DIR = SERVER_MAIN_SRC_DIR;
+            this.SERVER_MAIN_RES_DIR = SERVER_MAIN_RES_DIR;
+            this.SERVER_TEST_SRC_DIR = SERVER_TEST_SRC_DIR;
+            this.SERVER_TEST_RES_DIR = SERVER_TEST_RES_DIR;
 
             this.applicationType = this.config.get('applicationType') || configOptions.applicationType;
             if (!this.applicationType) {
@@ -131,6 +131,8 @@ module.exports = JhipsterServerGenerator.extend({
             this.jhipsterVersion = this.config.get('jhipsterVersion');
             this.rememberMeKey = this.config.get('rememberMeKey');
             this.jwtSecretKey = this.config.get('jwtSecretKey');
+            this.nativeLanguage = this.config.get('nativeLanguage');
+            this.languages = this.config.get('languages');
             var testFrameworks = this.config.get('testFrameworks');
             if (testFrameworks) {
                 this.testFrameworks = testFrameworks;
@@ -172,6 +174,17 @@ module.exports = JhipsterServerGenerator.extend({
                 // If social sign in is not defined, it is disabled by default
                 if (this.enableSocialSignIn == null) {
                     this.enableSocialSignIn = false;
+                }
+
+                // If translation is not defined, it is enabled by default
+                if (this.enableTranslation == null) {
+                    this.enableTranslation = true;
+                }
+                if (this.nativeLanguage == null) {
+                    this.nativeLanguage = 'en';
+                }
+                if (this.languages == null) {
+                    this.languages = ['en', 'fr'];
                 }
 
                 this.log(chalk.green('This is an existing project, using the configuration from your .yo-rc.json file \n' +
@@ -270,7 +283,7 @@ module.exports = JhipsterServerGenerator.extend({
                     },
                     type: 'list',
                     name: 'databaseType',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Which *type* of database would you like to use?',
+                    message: '(' + (currentQuestion) + '/' + QUESTIONS + ') Which *type* of database would you like to use?',
                     choices: [
                         {
                             value: 'sql',
@@ -548,6 +561,11 @@ module.exports = JhipsterServerGenerator.extend({
             }.bind(this));
         },
 
+        askFori18n: function () {
+            if(this.existingProject || configOptions.skipI18nQuestion) return;
+            this.aski18n(this, ++currentQuestion, QUESTIONS);
+        },
+
         setSharedConfigOptions : function () {
             configOptions.lastQuestion = currentQuestion;
             configOptions.packageName = this.packageName;
@@ -604,6 +622,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.packageFolder = this.packageName.replace(/\./g, '/');
             javaDir = this.javaDir = SERVER_MAIN_SRC_DIR + this.packageFolder + '/';
             this.testDir = SERVER_TEST_SRC_DIR + this.packageFolder + '/';
+            this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split("-")[0] : 'en';
 
         },
 
@@ -624,18 +643,34 @@ module.exports = JhipsterServerGenerator.extend({
             this.config.set('enableSocialSignIn', this.enableSocialSignIn);
             this.config.set('jwtSecretKey', this.jwtSecretKey);
             this.config.set('rememberMeKey', this.rememberMeKey);
+            this.config.set('enableTranslation', this.enableTranslation);
+            if (this.enableTranslation && !configOptions.skipI18nQuestion) {
+                this.config.set('nativeLanguage', this.nativeLanguage);
+                this.config.set('languages', this.languages);
+            }
         }
     },
 
     default: {
         getSharedConfigOptions: function () {
+            this.useSass = configOptions.useSass ? configOptions.useSass : false;
             if(configOptions.enableTranslation != null) {
                 this.enableTranslation = configOptions.enableTranslation;
             }
-            this.useSass = configOptions.useSass ? configOptions.useSass : false;
+            if(configOptions.nativeLanguage != null) {
+                this.nativeLanguage = configOptions.nativeLanguage;
+            }
+            if(configOptions.languages != null) {
+                this.languages = configOptions.languages;
+            }
             if(configOptions.testFrameworks) {
                 this.testFrameworks = configOptions.testFrameworks;
             }
+        },
+
+        composeLanguages : function () {
+            if(configOptions.skipI18nQuestion) return;
+            this.composeLanguagesSub(this, configOptions, 'server');
         }
     },
 
@@ -650,7 +685,6 @@ module.exports = JhipsterServerGenerator.extend({
         },
 
         writeDockerFiles: function () {
-
             // Create docker-compose file
             this.template(DOCKER_DIR + '_sonar.yml', DOCKER_DIR + 'sonar.yml', this, {});
             if (this.devDatabaseType != "h2Disk" && this.devDatabaseType != "h2Memory" && this.devDatabaseType != "oracle") {
@@ -670,6 +704,11 @@ module.exports = JhipsterServerGenerator.extend({
             }
             if (this.applicationType == 'microservice' || this.applicationType == 'gateway') {
                 this.template(DOCKER_DIR + '_registry.yml', DOCKER_DIR + 'registry.yml', this, {});
+                this.template(DOCKER_DIR + '_Dockerfile', DOCKER_DIR + 'Dockerfile', this, {});
+                this.template(DOCKER_DIR + '_app.dev.yml', DOCKER_DIR + 'app.dev.yml', this, {});
+                this.template(DOCKER_DIR + '_app.noregistry.dev.yml', DOCKER_DIR + 'app.noregistry.dev.yml', this, {});
+                this.template(DOCKER_DIR + '_app.prod.yml', DOCKER_DIR + 'app.prod.yml', this, {});
+                this.template(DOCKER_DIR + '_app.noregistry.prod.yml', DOCKER_DIR + 'app.noregistry.prod.yml', this, {});
             }
         },
 
@@ -684,6 +723,9 @@ module.exports = JhipsterServerGenerator.extend({
                         this.template('gradle/_yeoman.gradle', 'gradle/yeoman.gradle', this, {});
                     }
                     this.template('gradle/_sonar.gradle', 'gradle/sonar.gradle', this, {});
+                    if (this.applicationType == 'microservice' || this.applicationType == 'gateway') {
+                        this.template('gradle/_docker.gradle', 'gradle/docker.gradle', this, {});
+                    }
                     this.template('gradle/_profile_dev.gradle', 'gradle/profile_dev.gradle', this, {'interpolate': INTERPOLATE_REGEX});
                     this.template('gradle/_profile_prod.gradle', 'gradle/profile_prod.gradle', this, {'interpolate': INTERPOLATE_REGEX});
                     this.template('gradle/_mapstruct.gradle', 'gradle/mapstruct.gradle', this, {'interpolate': INTERPOLATE_REGEX});
@@ -748,14 +790,8 @@ module.exports = JhipsterServerGenerator.extend({
             }
         },
 
-        writeServeri18nFiles: function () {
-
-            // install all files related to i18n if translation is enabled
-            if (this.enableTranslation) {
-                this.installI18nResFilesByLanguage(this, SERVER_MAIN_RES_DIR, 'en');
-                this.installI18nResFilesByLanguage(this, SERVER_MAIN_RES_DIR, 'fr');
-            }
-            this.template(SERVER_MAIN_RES_DIR + 'i18n/_messages_en.properties', SERVER_MAIN_RES_DIR + 'i18n/messages.properties', this, {});
+        writeServerPropertyFiles: function () {
+            this.template('../../languages/templates/' + SERVER_MAIN_RES_DIR + 'i18n/_messages_en.properties', SERVER_MAIN_RES_DIR + 'i18n/messages.properties', this, {});
         },
 
         writeServerJavaAuthConfigFiles: function () {
@@ -854,6 +890,8 @@ module.exports = JhipsterServerGenerator.extend({
 
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-dev.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-dev.yml', this, {});
             this.template(SERVER_MAIN_RES_DIR + 'config/_bootstrap-prod.yml', SERVER_MAIN_RES_DIR + 'config/bootstrap-prod.yml', this, {});
+            this.template(SERVER_MAIN_SRC_DIR + 'package/config/_LoggingConfiguration.java', javaDir + 'config/LoggingConfiguration.java', this, {});
+
         },
 
         writeServerJavaAppFiles: function () {

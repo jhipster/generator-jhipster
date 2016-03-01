@@ -160,7 +160,9 @@ module.exports = JhipsterGenerator.extend({
             this.baseName = this.config.get('baseName');
             this.jhipsterVersion = this.config.get('jhipsterVersion');
             this.testFrameworks = this.config.get('testFrameworks');
-
+            this.enableTranslation = this.config.get('enableTranslation');
+            this.nativeLanguage = this.config.get('nativeLanguage');
+            this.languages = this.config.get('languages');
             var configFound = this.baseName != null && this.applicationType != null;
             if (configFound) {
                 this.existingProject = true;
@@ -233,17 +235,22 @@ module.exports = JhipsterGenerator.extend({
 
     configuring: {
         setup: function () {
+            configOptions.skipI18nQuestion = true;
             configOptions.baseName = this.baseName;
             configOptions.logo = false;
+            this.generatorType = 'app';
             if (this.applicationType == 'microservice') {
                 this.skipClient = true;
+                this.generatorType = 'server';
                 this.skipUserManagement = configOptions.skipUserManagement = true;
             }
             if (this.skipClient) {
                 // defaults to use when skipping client
+                this.generatorType = 'server';
                 configOptions.enableTranslation = this.options['i18n'];
             }
             if (this.skipServer) {
+                this.generatorType = 'client';
                 // defaults to use when skipping server
             }
         },
@@ -273,10 +280,17 @@ module.exports = JhipsterGenerator.extend({
                 local: require.resolve('../client')
             });
 
+        },
+
+        askFori18n: function () {
+            currentQuestion = configOptions.lastQuestion;
+            if(this.skipI18n || this.existingProject) return;
+            this.aski18n(this, ++currentQuestion, QUESTIONS);
         }
     },
 
     default: {
+
         askForTestOpts: function () {
             if(this.existingProject){
                 return;
@@ -300,7 +314,7 @@ module.exports = JhipsterGenerator.extend({
             this.prompt({
                 type: 'checkbox',
                 name: 'testFrameworks',
-                message: '(15/' + QUESTIONS + ') Which testing frameworks would you like to use?',
+                message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Which testing frameworks would you like to use?',
                 choices: choices,
                 default: [ 'gatling' ]
             }, function (prompt) {
@@ -310,7 +324,11 @@ module.exports = JhipsterGenerator.extend({
         },
 
         setSharedConfigOptions: function () {
+            configOptions.lastQuestion = currentQuestion;
             configOptions.testFrameworks = this.testFrameworks;
+            configOptions.enableTranslation = this.enableTranslation;
+            configOptions.nativeLanguage = this.nativeLanguage;
+            configOptions.languages = this.languages;
         },
 
         insight: function () {
@@ -318,6 +336,11 @@ module.exports = JhipsterGenerator.extend({
             insight.track('generator', 'app');
             insight.track('app/applicationType', this.applicationType);
             insight.track('app/testFrameworks', this.testFrameworks);
+        },
+
+        composeLanguages: function () {
+            if(this.skipI18n) return;
+            this.composeLanguagesSub(this, configOptions, this.generatorType);
         },
 
         saveConfig: function () {
@@ -328,6 +351,11 @@ module.exports = JhipsterGenerator.extend({
             this.skipClient && this.config.set('skipClient', true);
             this.skipServer && this.config.set('skipServer', true);
             this.skipUserManagement && this.config.set('skipUserManagement', true);
+            this.config.set('enableTranslation', this.enableTranslation);
+            if (this.enableTranslation) {
+                this.config.set('nativeLanguage', this.nativeLanguage);
+                this.config.set('languages', this.languages);
+            }
         }
     },
 

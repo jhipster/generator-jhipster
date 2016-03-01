@@ -7,9 +7,9 @@
                 "createOrEditLabel": "Skapa eller ändra en <%= entityClass %>",
                 "search": "Sök efter <%= entityClass %>"
             },
-            "created": "A new <%= entityClass %> is created with identifier {{ param }}",
-            "updated": "A <%= entityClass %> is updated with identifier {{ param }}",
-            "deleted": "A <%= entityClass %> is deleted with identifier {{ param }}",
+            "created": "En ny <%= entityClass %> är skapad med id {{ param }}",
+            "updated": "En <%= entityClass %> är uppdaterad med id  {{ param }}",
+            "deleted": "En <%= entityClass %> är borttagen med id  {{ param }}",
             "delete": {
                 "question": "Är du säker på att du vill ta bort <%= entityClass %> {{ id }}?"
             },

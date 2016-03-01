@@ -334,7 +334,7 @@ const expectedFiles = {
     jwt: [
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/security/jwt/JWTConfigurer.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/security/jwt/JWTFilter.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/security/jwt/TokenProvider.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/security/jwt/TokenProvider.java'
     ],
 
     gateway: [
@@ -346,12 +346,24 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.state.js',
         CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.html',
-        CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.routes.service.js',
-        DOCKER_DIR + 'registry.yml'
+        CLIENT_MAIN_SRC_DIR + 'app/admin/gateway/gateway.routes.service.js'
     ],
 
     microservice: [
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/MicroserviceSecurityConfiguration.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/MicroserviceSecurityConfiguration.java'
+    ],
+
+    microserviceGradle: [
+        'gradle/docker.gradle'
+    ],
+
+    containerizeWithDocker: [
+        DOCKER_DIR + 'registry.yml',
+        DOCKER_DIR + 'Dockerfile',
+        DOCKER_DIR + 'app.dev.yml',
+        DOCKER_DIR + 'app.prod.yml',
+        DOCKER_DIR + 'app.noregistry.dev.yml',
+        DOCKER_DIR + 'app.noregistry.prod.yml'
     ]
 };
 
@@ -375,6 +387,8 @@ describe('JHipster generator', function () {
                     "prodDatabaseType": "mysql",
                     "useSass": false,
                     "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "buildTool": "maven",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no",
@@ -410,6 +424,8 @@ describe('JHipster generator', function () {
                     "prodDatabaseType": "mysql",
                     "useSass": false,
                     "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "buildTool": "gradle",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
@@ -443,6 +459,8 @@ describe('JHipster generator', function () {
                     "prodDatabaseType": "mysql",
                     "useSass": false,
                     "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "buildTool": "maven",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
@@ -475,6 +493,8 @@ describe('JHipster generator', function () {
                     "prodDatabaseType": "mysql",
                     "useSass": false,
                     "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "buildTool": "maven",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
@@ -507,6 +527,8 @@ describe('JHipster generator', function () {
                     "prodDatabaseType": "mysql",
                     "useSass": false,
                     "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "buildTool": "maven",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
@@ -538,6 +560,8 @@ describe('JHipster generator', function () {
                     "prodDatabaseType": "mysql",
                     "useSass": false,
                     "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "buildTool": "maven",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
@@ -600,6 +624,8 @@ describe('JHipster generator', function () {
                     "prodDatabaseType": "mysql",
                     "useSass": false,
                     "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "buildTool": "maven",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
@@ -629,6 +655,8 @@ describe('JHipster generator', function () {
                     "prodDatabaseType": "mysql",
                     "useSass": false,
                     "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "buildTool": "maven",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
@@ -657,6 +685,9 @@ describe('JHipster generator', function () {
                     "devDatabaseType": "h2Memory",
                     "prodDatabaseType": "mysql",
                     "buildTool": "maven",
+                    "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
                 })
@@ -687,6 +718,9 @@ describe('JHipster generator', function () {
                     "devDatabaseType": "h2Memory",
                     "prodDatabaseType": "mysql",
                     "buildTool": "gradle",
+                    "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
                 })
@@ -720,6 +754,8 @@ describe('JHipster generator', function () {
                     "prodDatabaseType": "mysql",
                     "useSass": false,
                     "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "buildTool": "maven",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
@@ -730,10 +766,46 @@ describe('JHipster generator', function () {
         it('creates expected files with the gateway application type', function () {
             assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.gateway);
+            assert.file(expectedFiles.containerizeWithDocker);
         });
     });
 
     describe('microservice', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, checkInstall: false, skipClient: true, skipUserManagement: true})
+                .withPrompts({
+                    "applicationType": "microservice",
+                    "baseName": "jhipster",
+                    "packageName": "com.mycompany.myapp",
+                    "packageFolder": "com/mycompany/myapp",
+                    "authenticationType": "jwt",
+                    "hibernateCache": "ehcache",
+                    "clusteredHttpSession": "no",
+                    "websocket": "no",
+                    "databaseType": "sql",
+                    "devDatabaseType": "h2Memory",
+                    "prodDatabaseType": "mysql",
+                    "useSass": false,
+                    "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
+                    "buildTool": "maven",
+                    "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
+                    "searchEngine": "no",
+                    "enableSocialSignIn": false
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with the microservice application type', function () {
+            assert.file(expectedFiles.jwt);
+            assert.file(expectedFiles.microservice);
+            assert.file(expectedFiles.containerizeWithDocker);
+        });
+    });
+
+    describe('microservice with gradle', function () {
         beforeEach(function (done) {
             helpers.run(path.join(__dirname, '../generators/app'))
                 .withOptions({skipInstall: true, checkInstall: false})
@@ -751,7 +823,9 @@ describe('JHipster generator', function () {
                     "prodDatabaseType": "mysql",
                     "useSass": false,
                     "enableTranslation": true,
-                    "buildTool": "maven",
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
+                    "buildTool": "gradle",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no",
                     "enableSocialSignIn": false,
@@ -764,6 +838,8 @@ describe('JHipster generator', function () {
         it('creates expected files with the microservice application type', function () {
             assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.microservice);
+            assert.file(expectedFiles.microserviceGradle);
+            assert.file(expectedFiles.containerizeWithDocker);
         });
     });
 });
@@ -785,6 +861,9 @@ describe('JHipster server generator', function () {
                     "databaseType": "sql",
                     "devDatabaseType": "h2Memory",
                     "prodDatabaseType": "mysql",
+                    "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "buildTool": "maven",
                     "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
                     "searchEngine": "no"
@@ -810,6 +889,8 @@ describe('JHipster client generator', function () {
                 .withPrompts({
                     "baseName": "jhipster",
                     "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
                     "useSass": true
                 })
                 .on('end', done);

@@ -3,7 +3,8 @@ var util = require('util'),
     path = require('path'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
-    _ = require('underscore.string'),
+    _ = require('lodash'),
+    _s = require('underscore.string'),
     scriptBase = require('../generator-base'),
     mkdirp = require('mkdirp'),
     html = require("html-wiring"),
@@ -88,7 +89,6 @@ module.exports = JhipsterClientGenerator.extend({
 
         this.skipServer = configOptions.skipServer || this.config.get('skipServer');
         this.skipUserManagement = configOptions.skipUserManagement ||  this.config.get('skipUserManagement');
-        this.i18n = this.options['i18n'];
         this.authenticationType = this.options['auth'];
         this.buildTool = this.options['build'];
         this.websocket = this.options['websocket'];
@@ -104,9 +104,6 @@ module.exports = JhipsterClientGenerator.extend({
         this.baseName = configOptions.baseName;
         this.logo = configOptions.logo;
 
-        // Make constants available in templates
-        this.MAIN_SRC_DIR = MAIN_SRC_DIR;
-        this.TEST_SRC_DIR = TEST_SRC_DIR;
     },
     initializing : {
         displayLogo : function () {
@@ -116,12 +113,18 @@ module.exports = JhipsterClientGenerator.extend({
         },
 
         setupClientVars : function () {
+            // Make constants available in templates
+            this.MAIN_SRC_DIR = MAIN_SRC_DIR;
+            this.TEST_SRC_DIR = TEST_SRC_DIR;
+
             this.applicationType = this.config.get('applicationType') || configOptions.applicationType;
             if (!this.applicationType) {
                 this.applicationType = 'monolith';
             }
             this.useSass = this.config.get('useSass');
             this.enableTranslation = this.config.get('enableTranslation'); // this is enabled by default to avoid conflicts for existing applications
+            this.nativeLanguage = this.config.get('nativeLanguage');
+            this.languages = this.config.get('languages');
             this.packagejs = packagejs;
             var baseName = this.config.get('baseName');
             if (baseName) {
@@ -133,6 +136,12 @@ module.exports = JhipsterClientGenerator.extend({
                 // If translation is not defined, it is enabled by default
                 if (this.enableTranslation == null) {
                     this.enableTranslation = true;
+                }
+                if (this.nativeLanguage == null) {
+                    this.nativeLanguage = 'en';
+                }
+                if (this.languages == null) {
+                    this.languages = ['en', 'fr'];
                 }
 
                 this.existingProject = true;
@@ -159,24 +168,22 @@ module.exports = JhipsterClientGenerator.extend({
                     name: 'useSass',
                     message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Would you like to use the LibSass stylesheet preprocessor for your CSS?',
                     default: false
-                },
-                {
-                    type: 'confirm',
-                    name: 'enableTranslation',
-                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Would you like to enable translation support with Angular Translate?',
-                    default: true
                 }
             ];
             this.prompt(prompts, function (props) {
                 this.useSass = props.useSass;
-                this.enableTranslation = props.enableTranslation;
                 done();
             }.bind(this));
         },
 
+        askFori18n: function () {
+            if(this.existingProject || configOptions.skipI18nQuestion) return;
+            this.aski18n(this, ++currentQuestion, QUESTIONS);
+        },
+
         setSharedConfigOptions : function () {
+            configOptions.lastQuestion = currentQuestion;
             configOptions.useSass = this.useSass;
-            configOptions.enableTranslation = this.enableTranslation;
         }
 
     },
@@ -187,19 +194,26 @@ module.exports = JhipsterClientGenerator.extend({
             insight.track('generator', 'app');
             insight.track('app/useSass', this.useSass);
             insight.track('app/enableTranslation', this.enableTranslation);
+            insight.track('app/nativeLanguage', this.nativeLanguage);
+            insight.track('app/languages', this.languages);
         },
 
         configureGlobal: function () {
             // Application name modified, using each technology's conventions
             this.angularAppName = this.getAngularAppName();
-            this.camelizedBaseName = _.camelize(this.baseName);
-            this.slugifiedBaseName = _.slugify(this.baseName);
+            this.camelizedBaseName = _s.camelize(this.baseName);
+            this.slugifiedBaseName = _s.slugify(this.baseName);
             this.lowercaseBaseName = this.baseName.toLowerCase();
+            this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split("-")[0] : 'en';
         },
 
         saveConfig: function () {
             this.config.set('useSass', this.useSass);
             this.config.set('enableTranslation', this.enableTranslation);
+            if (this.enableTranslation && !configOptions.skipI18nQuestion) {
+                this.config.set('nativeLanguage', this.nativeLanguage);
+                this.config.set('languages', this.languages);
+            }
         }
     },
 
@@ -236,6 +250,20 @@ module.exports = JhipsterClientGenerator.extend({
             if(configOptions.testFrameworks) {
                 this.testFrameworks = configOptions.testFrameworks;
             }
+            if(configOptions.enableTranslation != null) {
+                this.enableTranslation = configOptions.enableTranslation;
+            }
+            if(configOptions.nativeLanguage != null) {
+                this.nativeLanguage = configOptions.nativeLanguage;
+            }
+            if(configOptions.languages != null) {
+                this.languages = configOptions.languages;
+            }
+        },
+
+        composeLanguages : function () {
+            if(configOptions.skipI18nQuestion) return;
+            this.composeLanguagesSub(this, configOptions, 'client');
         }
     },
 
@@ -273,14 +301,6 @@ module.exports = JhipsterClientGenerator.extend({
             this.copy(MAIN_SRC_DIR + 'favicon.ico', MAIN_SRC_DIR + 'favicon.ico');
             this.copy(MAIN_SRC_DIR + 'robots.txt', MAIN_SRC_DIR + 'robots.txt');
             this.copy(MAIN_SRC_DIR + '404.html', MAIN_SRC_DIR + '404.html');
-        },
-
-        writei18nFiles : function () {
-            // install all files related to i18n if translation is enabled
-            if (this.enableTranslation) {
-                this.installI18nFilesByLanguage(this, MAIN_SRC_DIR, 'en');
-                this.installI18nFilesByLanguage(this, MAIN_SRC_DIR, 'fr');
-            }
         },
 
         writeSwaggerFiles : function () {
@@ -597,8 +617,6 @@ module.exports = JhipsterClientGenerator.extend({
             ];
             if (this.enableTranslation) {
                 appScripts = appScripts.concat([
-                    'bower_components/messageformat/locale/en.js',
-                    'bower_components/messageformat/locale/fr.js',
                     'app/blocks/handlers/translation.handler.js',
                     'app/blocks/config/translation.config.js',
                     'app/components/language/language.service.js',
@@ -682,8 +700,8 @@ module.exports = JhipsterClientGenerator.extend({
             }
             // Create Protractor test files
             if (this.testFrameworks.indexOf('protractor') != -1) {
-                testTemplates.push('e2e/_account.js');
-                testTemplates.push('e2e/_administration.js');
+                testTemplates.push('e2e/account/_account.js');
+                testTemplates.push('e2e/admin/_administration.js');
                 testTemplates.push('_protractor.conf.js')
             }
             testTemplates.map(function(testTemplatePath) {
