@@ -34,7 +34,7 @@
     "gulp-notify": "2.2.0",
     "gulp-plumber": "1.1.0",
     <%_ if (testFrameworks.indexOf('protractor') > -1) { _%>
-    "gulp-protractor": "1.0.0",
+    "gulp-protractor": "2.1.0",
     <%_ } _%>
     "gulp-rev": "7.0.0",
     <%_ if (useSass) { _%>
