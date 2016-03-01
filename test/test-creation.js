@@ -335,7 +335,7 @@ const expectedFiles = {
     jwt: [
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/security/jwt/JWTConfigurer.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/security/jwt/JWTFilter.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/security/jwt/TokenProvider.java',
+        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/security/jwt/TokenProvider.java'
     ],
 
     gateway: [

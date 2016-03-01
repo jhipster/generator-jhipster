@@ -1661,11 +1661,13 @@ module.exports = EntityGenerator.extend({
         },
 
         writeClientTestFiles: function () {
-            if(this.skipClient){
-                return;
-            }
+            if(this.skipClient) return;
             this.template(CLIENT_TEST_SRC_DIR + 'spec/app/entities/_entity-management-detail.controller.spec.js',
                 CLIENT_TEST_SRC_DIR + 'spec/app/entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.controller.spec.js', this, {});
+            // Create Protractor test files
+            if (this.testFrameworks.indexOf('protractor') != -1) {
+                this.template(CLIENT_TEST_SRC_DIR + 'e2e/entities/_entity.js', CLIENT_TEST_SRC_DIR + 'e2e/entities/' + this.entityFileName + '.js', this, {});
+            }
         },
 
         writeTestFiles: function() {

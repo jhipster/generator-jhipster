@@ -25,7 +25,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-delete-dialog.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-detail.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo.service.js',
-        CLIENT_TEST_SRC_DIR + 'spec/app/entities/foo/foo-detail.controller.spec.js',
+        CLIENT_TEST_SRC_DIR + 'spec/app/entities/foo/foo-detail.controller.spec.js'
     ],
     clientWithSuffix : [
         CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foos-management.html',
@@ -38,7 +38,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management-delete-dialog.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo-management-detail.controller.js',
         CLIENT_MAIN_SRC_DIR + 'app/entities/foo/foo.service.js',
-        CLIENT_TEST_SRC_DIR + 'spec/app/entities/foo/foo-management-detail.controller.spec.js',
+        CLIENT_TEST_SRC_DIR + 'spec/app/entities/foo/foo-management-detail.controller.spec.js'
     ],
     server : [
         '.jhipster/Foo.json',
@@ -47,7 +47,7 @@ const expectedFiles = {
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/FooResource.java',
         // SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/20160120213555_added_entity_Foo.xml',
         SERVER_TEST_SRC_DIR + 'com/mycompany/myapp/web/rest/FooResourceIntTest.java',
-        TEST_DIR + 'gatling/simulations/FooGatlingTest.scala',
+        TEST_DIR + 'gatling/simulations/FooGatlingTest.scala'
     ]
 }
 describe('JHipster generator entity', function () {
