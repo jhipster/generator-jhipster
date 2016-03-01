@@ -96,8 +96,7 @@ gulp.task('sass', function () {
         .pipe(expect(files))
         .pipe(changed(config.app + 'content/css', {extension: '.css'}))
         .pipe(sass({includePaths:config.importPath}).on('error', sass.logError))
-        .pipe(gulp.dest(cssDir))
-        .pipe(expect(cssDir + '/*.css'));
+        .pipe(gulp.dest(cssDir));
 });
 <% } %>
 gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function () {
