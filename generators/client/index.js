@@ -272,7 +272,6 @@ module.exports = JhipsterClientGenerator.extend({
             // HTML5 BoilerPlate
             this.copy(MAIN_SRC_DIR + 'favicon.ico', MAIN_SRC_DIR + 'favicon.ico');
             this.copy(MAIN_SRC_DIR + 'robots.txt', MAIN_SRC_DIR + 'robots.txt');
-            this.copy(MAIN_SRC_DIR + 'htaccess.txt', MAIN_SRC_DIR + '.htaccess');
             this.copy(MAIN_SRC_DIR + '404.html', MAIN_SRC_DIR + '404.html');
         },
 

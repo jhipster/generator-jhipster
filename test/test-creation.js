@@ -153,7 +153,6 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'content/css/main.css',
         CLIENT_MAIN_SRC_DIR + 'favicon.ico',
         CLIENT_MAIN_SRC_DIR + 'robots.txt',
-        CLIENT_MAIN_SRC_DIR + '.htaccess',
         CLIENT_MAIN_SRC_DIR + 'i18n/en/activate.json',
         CLIENT_MAIN_SRC_DIR + 'i18n/en/audits.json',
         CLIENT_MAIN_SRC_DIR + 'i18n/en/configuration.json',
