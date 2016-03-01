@@ -10,6 +10,12 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+eureka:
+    client:
+        enabled: false
+
+<%_ } _%>
 spring:
     <%_ if (applicationType == 'gateway' && databaseType != 'cassandra') { _%>
     autoconfigure:
