@@ -177,8 +177,8 @@ gulp.task('watch', function() {
     gulp.watch(['gulpfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>], ['ngconstant:dev']);
     gulp.watch(<% if(useSass) { %>config.scss + '**/*.{scss,sass}'<% } else { %>config.app + 'assets/styles/**/*.css'<% } %>, ['styles']);
     gulp.watch(config.app + 'assets/images/**', ['images']);
-    gulp.watch(config.app + 'app/**/*.js', ['jshint']);
-    gulp.watch([config.app + '*.html', config.app + 'app/**', config.app + 'i18n/**']).on('change', browserSync.reload);
+    gulp.watch(config.app + 'scripts/**/*.js', ['jshint']);
+    gulp.watch([config.app + '*.html', config.app + 'scripts/**', config.app + 'i18n/**']).on('change', browserSync.reload);
 });
 
 gulp.task('wiredep', ['wiredep:test', 'wiredep:app']);
@@ -290,7 +290,7 @@ gulp.task('jshint', function() {
     //Custom reporter (in task to have new instance each time)
     var jsHintErrorReporter = require('./gulp/jsHintErrorReporter');
 
-    return gulp.src(['gulpfile.js', config.app + 'app/**/*.js'])
+    return gulp.src(['gulpfile.js', config.app + 'scripts/**/*.js'])
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(cache('jshint'))
         .pipe(jshint())
