@@ -3,11 +3,11 @@
 
     angular
         .module('<%=angularAppName%>')
-        .factory('MetricsService', MetricsService);
+        .factory('JhiMetricsService', JhiMetricsService);
 
-    MetricsService.$inject = ['$rootScope', '$http'];
+    JhiMetricsService.$inject = ['$rootScope', '$http'];
 
-    function MetricsService ($rootScope, $http) {
+    function JhiMetricsService ($rootScope, $http) {
         var service = {
             getMetrics: getMetrics,
             threadDump: threadDump

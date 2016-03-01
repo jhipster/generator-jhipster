@@ -28,11 +28,11 @@
                     return $translate.refresh();
                 }]
             },
-            onEnter: function(Tracker) {
-                Tracker.subscribe();
+            onEnter: function(JhiTrackerService) {
+                JhiTrackerService.subscribe();
             },
-            onExit: function(Tracker) {
-                Tracker.unsubscribe();
+            onExit: function(JhiTrackerService) {
+                JhiTrackerService.unsubscribe();
             }
         });
     }

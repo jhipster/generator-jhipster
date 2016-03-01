@@ -5,9 +5,9 @@
         .module('<%=angularAppName%>')
         .controller('HealthController', HealthController);
 
-    HealthController.$inject = ['HealthService', '$uibModal'];
+    HealthController.$inject = ['JhiHealthService', '$uibModal'];
 
-    function HealthController (HealthService, $uibModal) {
+    function HealthController (JhiHealthService, $uibModal) {
         var vm = this;
 
         vm.addHealthObject = addHealthObject;
@@ -123,7 +123,7 @@
 
         function refresh () {
             vm.updatingHealth = true;
-            HealthService.checkHealth().then(function (response) {
+            JhiHealthService.checkHealth().then(function (response) {
                 vm.healthData = vm.transformHealthData(response);
                 vm.updatingHealth = false;
             }, function (response) {

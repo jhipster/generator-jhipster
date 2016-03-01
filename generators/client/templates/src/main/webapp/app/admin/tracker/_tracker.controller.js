@@ -5,15 +5,15 @@
         .module('<%=angularAppName%>')
         .controller('TrackerController', TrackerController);
 
-    TrackerController.$inject = ['$cookies', '$http', 'Tracker'];
+    TrackerController.$inject = ['$cookies', '$http', 'JhiTrackerService'];
 
-    function TrackerController ($cookies, $http, Tracker) {
+    function TrackerController ($cookies, $http, JhiTrackerService) {
         // This controller uses a Websocket connection to receive user activities in real-time.
         var vm = this;
 
         vm.activities = [];
 
-        Tracker.receive().then(null, null, function(activity) {
+        JhiTrackerService.receive().then(null, null, function(activity) {
             showActivity(activity);
         });
 

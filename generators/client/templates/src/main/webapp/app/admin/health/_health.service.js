@@ -3,11 +3,11 @@
 
     angular
         .module('<%=angularAppName%>')
-        .factory('HealthService', HealthService);
-        
-    HealthService.$inject = ['$rootScope', '$http'];
+        .factory('JhiHealthService', JhiHealthService);
 
-    function HealthService ($rootScope, $http) {
+    JhiHealthService.$inject = ['$rootScope', '$http'];
+
+    function JhiHealthService ($rootScope, $http) {
         var service = {
             checkHealth: checkHealth
         };
