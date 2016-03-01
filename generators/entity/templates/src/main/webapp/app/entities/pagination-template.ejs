@@ -1,6 +1,11 @@
+        vm.loadAll = loadAll;
+        vm.loadPage = loadPage;
         vm.predicate = pagingParams.predicate;
         vm.reverse = pagingParams.ascending;
+        vm.transition = transition;
         <%_ if (searchEngine == 'elasticsearch') { _%>
+        vm.clear = clear;
+        vm.search = search;
         vm.searchQuery = pagingParams.search;
         vm.currentSearch = pagingParams.search;
         <%_ } _%>
@@ -8,7 +13,9 @@
         vm.openFile = DataUtils.openFile;
         vm.byteSize = DataUtils.byteSize;
         <%_ } _%>
-        vm.loadAll = function() {
+        vm.loadAll();
+
+        function loadAll () {
         <%_ if (searchEngine != 'elasticsearch') { _%>
             <%= entityClass %>.query({
                 page: pagingParams.page - 1,
@@ -32,7 +39,7 @@
             }
         <%_ } _%>
             function sort() {
-                var result = [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc')]
+                var result = [vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc')];
                 if (vm.predicate !== 'id') {
                     result.push('id');
                 }
@@ -41,28 +48,30 @@
             function onSuccess(data, headers) {
                 vm.links = ParseLinks.parse(headers('link'));
                 vm.totalItems = headers('X-Total-Count');
+                vm.queryCount = vm.totalItems;
                 vm.<%= entityInstancePlural %> = data;
                 vm.page = pagingParams.page;
             }
             function onError(error) {
                 AlertService.error(error.data.message);
             }
-        };
-        vm.loadPage = function(page) {
+        }
+
+        function loadPage (page) {
             vm.page = page;
             vm.transition();
-        };
+        }
 
-        vm.transition = function () {
+        function transition () {
             $state.transitionTo($state.$current, {
                 page: vm.page,
                 sort: vm.predicate + ',' + (vm.reverse ? 'asc' : 'desc'),
                 search: vm.currentSearch
             });
-        };
+        }
         <%_ if (searchEngine == 'elasticsearch') { _%>
 
-        vm.search = function (searchQuery) {
+        function search (searchQuery) {
             if (!searchQuery){
                 return vm.clear();
             }
@@ -72,16 +81,14 @@
             vm.reverse = false;
             vm.currentSearch = searchQuery;
             vm.transition();
-        };
+        }
 
-        vm.clear = function () {
+        function clear () {
             vm.links = null;
             vm.page = 1;
             vm.predicate = 'id';
             vm.reverse = true;
             vm.currentSearch = null;
             vm.transition();
-        };
+        }
         <%_ } _%>
-
-        vm.loadAll();
