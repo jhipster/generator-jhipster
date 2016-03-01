@@ -53,14 +53,24 @@ gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function (done) {
         singleRun: true
     }, done).start();
 });
-<% if (testFrameworks.indexOf('protractor') > -1) { %>
+
+<%_ if (testFrameworks.indexOf('protractor') > -1) { _%>
 gulp.task('protractor', function () {
-    return gulp.src([config.test + 'e2e/**/*.js'])
-        .pipe(plumber({errorHandler: handleErrors}))
+    gulp.src([config.test + 'e2e/!**!/!*.js'])
         .pipe(protractor({
             configFile: config.test + 'protractor.conf.js'
-        }));
-});<% } %>
+        }))
+        .on('end', function() {
+            console.log('E2E Testing complete');
+            // exit with success.
+            process.exit(0);
+        })
+        .on('error', function(err) {
+            console.log('E2E Tests failed');
+            process.exit(1);
+        });
+});
+<%_ } _%>
 
 gulp.task('copy', function () {
     return es.merge( <% if(enableTranslation) { %> // copy i18n folders only if translation is enabled
