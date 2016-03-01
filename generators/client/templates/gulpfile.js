@@ -53,7 +53,7 @@ gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function (done) {
 });
 <% if (testFrameworks.indexOf('protractor') > -1) { %>
 gulp.task('protractor', function () {
-    return gulp.src([config.test + 'e2e/*.js'])
+    return gulp.src([config.test + 'e2e/**/*.js'])
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(protractor({
             configFile: config.test + 'protractor.conf.js'
