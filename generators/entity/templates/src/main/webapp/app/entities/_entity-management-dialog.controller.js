@@ -47,13 +47,13 @@
             vm.isSaving = false;
         };
 
-        var onSaveError = function (result) {
+        var onSaveError = function () {
             vm.isSaving = false;
         };
 
         vm.save = function () {
             vm.isSaving = true;
-            if (vm.<%= entityInstance %>.id != null) {
+            if (vm.<%= entityInstance %>.id !== null) {
                 <%= entityClass %>.update(vm.<%= entityInstance %>, onSaveSuccess, onSaveError);
             } else {
                 <%= entityClass %>.save(vm.<%= entityInstance %>, onSaveSuccess, onSaveError);
