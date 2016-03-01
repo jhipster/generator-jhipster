@@ -84,6 +84,11 @@ module.exports = CloudFoundryGenerator.extend({
             this.cloudfoundryProfile = props.cloudfoundryProfile;
             this.cloudfoundryDatabaseServiceName = props.cloudfoundryDatabaseServiceName;
             this.cloudfoundryDatabaseServicePlan = props.cloudfoundryDatabaseServicePlan;
+
+            if ((this.devDatabaseType == 'h2Disk' || this.devDatabaseType == 'h2Memory') && this.cloudfoundryProfile == 'dev') {
+                this.log(chalk.yellow('\nH2 database will not work with development profile. Setting production profile.'));
+                this.cloudfoundryProfile = 'prod';
+            }
             done();
         }.bind(this));
     },
@@ -151,9 +156,10 @@ module.exports = CloudFoundryGenerator.extend({
     productionBuild: function () {
         if(this.abort) return;
         var done = this.async();
-        var mvn = 'mvn package -Pprod -DskipTests';
+        var mvn = '';
         if (this.cloudfoundryProfile == 'prod') {
             this.log(chalk.bold('\nBuilding the application with the production profile'));
+            mvn = 'mvn package -Pprod -DskipTests';
         } else {
             this.log(chalk.bold('\nBuilding the application with the development profile'));
             mvn = 'mvn package -DskipTests';
@@ -174,12 +180,16 @@ module.exports = CloudFoundryGenerator.extend({
         this.on('end', function () {
             if(this.abort) return;
             var done = this.async();
+            var cloudfoundryDeployCommand = 'cf push -f ./deploy/cloudfoundry/manifest.yml -p target/*.war';
 
             this.log(chalk.bold('\nPushing the application to Cloud Foundry'));
-            var child = exec('cf push -f ./deploy/cloudfoundry/manifest.yml -p target/*.war', function (err, stdout) {
+            var child = exec(cloudfoundryDeployCommand, function (err, stdout) {
                 if (err) {
                     this.log.error(err);
                 }
+                this.log(chalk.green('\nYour app should now be live'));
+                this.log(chalk.yellow('After application modification, repackage it with\n\t' + chalk.bold('mvn package -P' + this.cloudfoundryProfile + ' -DskipTests')));
+                this.log(chalk.yellow('And then re-deploy it with\n\t' + chalk.bold('cf push -f deploy/cloudfoundry/manifest.yml -p target/*.war')));
                 done();
             }.bind(this));
 
