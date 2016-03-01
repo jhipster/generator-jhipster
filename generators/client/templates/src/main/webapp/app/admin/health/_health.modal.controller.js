@@ -2,11 +2,11 @@
     'use strict';
 
     angular.module('<%=angularAppName%>')
-        .controller('HealthModalController', HealthModalController);
+        .controller('JhiHealthModalController', JhiHealthModalController);
 
-    HealthModalController.$inject = ['$uibModalInstance', 'currentHealth', 'baseName', 'subSystemName'];
+    JhiHealthModalController.$inject = ['$uibModalInstance', 'currentHealth', 'baseName', 'subSystemName'];
 
-    function HealthModalController ($uibModalInstance, currentHealth, baseName, subSystemName) {
+    function JhiHealthModalController ($uibModalInstance, currentHealth, baseName, subSystemName) {
         var vm = this;
 
         vm.cancel = cancel;

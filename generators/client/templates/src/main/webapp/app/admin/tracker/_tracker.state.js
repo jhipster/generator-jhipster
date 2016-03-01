@@ -18,7 +18,7 @@
             views: {
                 'content@': {
                     templateUrl: 'app/admin/tracker/tracker.html',
-                    controller: 'TrackerController',
+                    controller: 'JhiTrackerController',
                     controllerAs: 'vm'
                 }
             },

@@ -3,11 +3,11 @@
 
     angular
         .module('<%=angularAppName%>')
-        .controller('MetricsController', MetricsController);
+        .controller('JhiMetricsController', JhiMetricsController);
 
-    MetricsController.$inject = ['$scope','JhiMetricsService', '$uibModal'];
+    JhiMetricsController.$inject = ['$scope','JhiMetricsService', '$uibModal'];
 
-    function MetricsController ($scope, JhiMetricsService, $uibModal) {
+    function JhiMetricsController ($scope, JhiMetricsService, $uibModal) {
         var vm = this;
 
         vm.cachesStats = {};
@@ -56,7 +56,7 @@
             JhiMetricsService.threadDump().then(function(data) {
                 $uibModal.open({
                     templateUrl: 'app/admin/metrics/metrics.modal.html',
-                    controller: 'MetricsModalController',
+                    controller: 'JhiMetricsModalController',
                     controllerAs: 'vm',
                     size: 'lg',
                     resolve: {
