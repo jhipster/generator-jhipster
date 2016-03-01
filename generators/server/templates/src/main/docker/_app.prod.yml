@@ -27,7 +27,6 @@ services:
 
 <%_ } _%>
     <%= baseName.toLowerCase() %>-app:
-        container_name: <%= baseName.toLowerCase() %>-app
         image: jhipster/<%= baseName.toLowerCase() %>
         depends_on:
             - jhipster-registry

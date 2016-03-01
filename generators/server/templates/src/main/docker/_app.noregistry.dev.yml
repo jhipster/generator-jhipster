@@ -22,7 +22,6 @@ services:
 
 <%_ } _%>
     <%= baseName.toLowerCase() %>-dev-app:
-        container_name: <%= baseName.toLowerCase() %>-dev-app
         image: jhipster/<%= baseName.toLowerCase() %>
         <%_ if (devDatabaseType == 'mysql') { _%>
         depends_on:
