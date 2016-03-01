@@ -15,6 +15,8 @@
     "useSass": false,
     "buildTool": "maven",
     "enableTranslation": true,
+    "nativeLanguage": "en",
+    "languages": ["en", "fr"],
     "enableSocialSignIn": false,
     "rememberMeKey": "338224d584859bd80d093bc4346526637190816b",
     "testFrameworks": [

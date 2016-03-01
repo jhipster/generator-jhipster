@@ -52,23 +52,31 @@ Generator.prototype.addJavaScriptToIndex = function (script) {
 };
 
 /**
- * A a new message format to the application, in the index.html file.
+ * A a new message format to the application, in the bower.json file.
  *
  * This is used for internationalization.
- * @param {string} script - name of the messageformat script file
+ * @param {string} language - name of the messageformat language
  */
-Generator.prototype.addMessageformatLocaleToIndex = function (script) {
+Generator.prototype.addMessageformatLocaleToBowerOverride = function (language) {
+    var fullPath = 'bower.json';
     try {
-        var fullPath = CLIENT_MAIN_SRC_DIR + 'index.html';
-        jhipsterUtils.rewriteFile({
-            file: fullPath,
-            needle: '<!-- endbuild -->',
-            splicable: [
-                    '<script src="bower_components/messageformat/locale/' + script + '"></script>'
-            ]
+        jhipsterUtils.rewriteJSONFile(fullPath, function(jsonObj) {
+            var messageformatLocale = 'locale/' + language + '.js';
+            if (jsonObj.overrides === undefined) {
+                jsonObj.overrides = {};
+            }
+            if (jsonObj.overrides.messageformat === undefined) {
+                jsonObj.overrides.messageformat = {};
+            }
+            if (jsonObj.overrides.messageformat.main === undefined) {
+                jsonObj.overrides.messageformat.main = ['messageformat.js'];
+            }
+            if (!_.includes(jsonObj.overrides.messageformat.main, messageformatLocale)) {
+                jsonObj.overrides.messageformat.main.push(messageformatLocale);
+            }
         }, this);
     } catch (e) {
-        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + script + '.js ' + chalk.yellow('not added.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow('. Messageformat locale override not added for language: ' + language + ' to ') + 'bower override configuration ' + chalk.yellow(' not added.\n'));
     }
 };
 
@@ -262,29 +270,41 @@ Generator.prototype.getAllInstalledLanguages = function () {
  * get all the languages supported by JHipster
  */
 Generator.prototype.getAllSupportedLanguages = function () {
+    return _.map(this.getAllSupportedLanguageOptions(), 'value');
+}
+/**
+ * check if a language is supported by JHipster
+ */
+Generator.prototype.isSupportedLanguage = function (language) {
+    return _.includes(this.getAllSupportedLanguages(), language);
+}
+/**
+ * get all the languages options supported by JHipster
+ */
+Generator.prototype.getAllSupportedLanguageOptions = function () {
     return [
-      'ca',
-      'zh-cn',
-      'zh-tw',
-      'da',
-      'nl',
-      'de',
-      'en',
-      'fr',
-      'gl',
-      'hu',
-      'it',
-      'ja',
-      'ko',
-      'pl',
-      'pt-br',
-      'pt-pt',
-      'ro',
-      'ru',
-      'es',
-      'sv',
-      'tr',
-      'ta'
+        {name: 'Catalan', value: 'ca'},
+        {name: 'Chinese (Simplified)', value: 'zh-cn'},
+        {name: 'Chinese (Traditional)', value: 'zh-tw'},
+        {name: 'Danish', value: 'da'},
+        {name: 'Dutch', value: 'nl'},
+        {name: 'English', value: 'en'},
+        {name: 'French', value: 'fr'},
+        {name: 'Galician', value: 'gl'},
+        {name: 'German', value: 'de'},
+        {name: 'Hungarian', value: 'hu'},
+        {name: 'Italian', value: 'it'},
+        {name: 'Japanese', value: 'ja'},
+        {name: 'Korean', value: 'ko'},
+        {name: 'Polish', value: 'pl'},
+        {name: 'Portuguese (Brazilian)', value: 'pt-br'},
+        {name: 'Portuguese', value: 'pt-pt'},
+        {name: 'Romanian', value: 'ro'},
+        {name: 'Russian', value: 'ru'},
+        {name: 'Spanish', value: 'es'},
+        {name: 'Swedish', value: 'sv'},
+        {name: 'Turkish', value: 'tr'},
+        {name: 'Tamil', value: 'ta'}
     ];
 }
 
@@ -1022,7 +1042,7 @@ Generator.prototype.getExistingEntities = function(warn) {
     return entities.sort(isBefore);
 }
 
-Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, lang) {
+Generator.prototype.installI18nClientFilesByLanguage = function (_this, webappDir, lang) {
     this.copyI18nFilesByName(_this, webappDir, 'activate.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'audits.json', lang);
     this.copyI18nFilesByName(_this, webappDir, 'configuration.json', lang);
@@ -1055,7 +1075,7 @@ Generator.prototype.installI18nFilesByLanguage = function (_this, webappDir, lan
 
 };
 
-Generator.prototype.installI18nResFilesByLanguage = function (_this, resourceDir, lang) {
+Generator.prototype.installI18nServerFilesByLanguage = function (_this, resourceDir, lang) {
     // Template the message server side properties
     var lang_prop = lang.replace(/-/g, "_");
     _this.template(resourceDir + 'i18n/_messages_' + lang_prop + '.properties', resourceDir + 'i18n/messages_' + lang_prop + '.properties', this, {});
@@ -1091,18 +1111,25 @@ Generator.prototype.copyEnumI18n = function(language, enumInfo) {
     }
 };
 
-Generator.prototype.installNewLanguage = function(language) {
+Generator.prototype.updateLanguagesInLanguageConstant = function(languages) {
     var fullPath = CLIENT_MAIN_SRC_DIR + 'app/components/language/language.constants.js';
     try {
-        jhipsterUtils.rewriteFile({
+        var content = ".constant('LANGUAGES', [\n";
+        for (var i = 0, len = languages.length; i < len; i++) {
+            var language = languages[i];
+            content += "            '" + language + "'" + (i != languages.length - 1 ? "," : "") + "\n";
+        }
+        content +=
+            "            // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array\n" +
+            "        ]";
+
+        jhipsterUtils.replaceContent({
             file: fullPath,
-            needle: 'jhipster-needle-add-language',
-            splicable: [
-                    ',\'' + language + '\''
-            ]
+            pattern: /\.constant.*LANGUAGES.*\[([^\]]*jhipster-needle-i18n-language-constant[^\]]*)\]/g,
+            content: content
         }, this);
     } catch (e) {
-        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + language + chalk.yellow(' not added as a new language. Check if you have enabled translation support.\n'));
+        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. LANGUAGE constant not updated with languages: ') + languages + chalk.yellow(' since block was not found. Check if you have enabled translation support.\n'));
     }
 };
 
@@ -1206,6 +1233,70 @@ Generator.prototype.askModuleName = function (generator, question, questions) {
         generator.baseName = prompt.baseName;
         done();
     }.bind(generator));
+};
+
+Generator.prototype.aski18n = function (generator, question, questions) {
+
+    var languageOptions = this.getAllSupportedLanguageOptions();
+
+    var done = generator.async();
+    var prompts = [
+        {
+            type: 'confirm',
+            name: 'enableTranslation',
+            message: '(' + (question) + '/' + questions + ') Would you like to enable internationalization support?',
+            default: true
+        },
+        {
+            when: function(response) {
+                return response.enableTranslation === true;
+            },
+            type: 'list',
+            name: 'nativeLanguage',
+            message: 'Please chooose the native language of the application?',
+            choices: languageOptions,
+            default: 'en',
+            store: true
+        },
+        {
+            when: function(response) {
+                return response.enableTranslation === true;
+            },
+            type: 'checkbox',
+            name: 'languages',
+            message: 'Please choose additional languages to install',
+            choices: function (response) {
+                return _.filter(languageOptions, function(o) { return o.value !== response.nativeLanguage; });
+            }
+        }
+    ];
+
+    generator.prompt(prompts, function (prompt) {
+        generator.enableTranslation = prompt.enableTranslation;
+        generator.nativeLanguage = prompt.nativeLanguage;
+        generator.languages = [prompt.nativeLanguage].concat(prompt.languages);
+        done();
+    }.bind(generator));
+};
+
+Generator.prototype.composeLanguagesSub = function (generator, configOptions, type) {
+    if (generator.enableTranslation) {
+        // skip server if app type is client
+        var skipServer = type && type === 'client';
+        // skip client if app type is server
+        var skipClient = type && type === 'server';
+        generator.composeWith('jhipster:languages', {
+            options: {
+                'skip-wiredep': true,
+                'skip-server': skipServer,
+                'skip-client': skipClient,
+                configOptions: configOptions
+            },
+            args: generator.languages
+        }, {
+            local: require.resolve('./languages')
+        });
+    }
 };
 
 Generator.prototype.contains = _.includes;

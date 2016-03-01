@@ -2,7 +2,7 @@
 var util = require('util'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
-    _ = require('underscore.string'),
+    _ = require('lodash'),
     scriptBase = require('../generator-base');
 
 const constants = require('../generator-constants'),
@@ -13,13 +13,71 @@ var LanguagesGenerator = generators.Base.extend({});
 
 util.inherits(LanguagesGenerator, scriptBase);
 
+var configOptions = {};
+
 module.exports = LanguagesGenerator.extend({
     constructor: function() {
         generators.Base.apply(this, arguments);
+
+        configOptions = this.options.configOptions || {};
+
+        // This makes it possible to pass `languages` by argument
+        this.argument('languages', {
+            type: Array,
+            required: false,
+            description: 'Languages'
+        });
+
+        // This adds support for a `--skip-wiredep` flag
+        this.option('skip-wiredep', {
+            desc: 'Skip the wiredep step',
+            type: Boolean,
+            defaults: false
+        });
+
+        // This adds support for a `--skip-client` flag
+        this.option('skip-client', {
+            desc: 'Skip installing client files',
+            type: Boolean,
+            defaults: false
+        });
+
+        // This adds support for a `--skip-server` flag
+        this.option('skip-server', {
+            desc: 'Skip installing server files',
+            type: Boolean,
+            defaults: false
+        });
+
+        this.skipWiredep = this.options['skip-wiredep'];
+        this.skipClient = this.options['skip-client'] ||  this.config.get('skipClient');
+        this.skipServer = this.options['skip-server'] ||  this.config.get('skipServer');
+
+        // Validate languages passed as argument
+        this.languages && this.languages.forEach(function (language) {
+            if (!this.isSupportedLanguage(language)) {
+                this.env.error(chalk.red('\nERROR Unsupported language "' + language + '" passed as argument to language generator.' +
+                    '\nSupported languages: ' + _.map(this.getAllSupportedLanguageOptions(), function(o){
+                        return '\n  ' + _.padEnd(o.value, 5) + ' (' + o.name + ')'
+                    }).join(''))
+                );
+            }
+        }, this);
     },
     initializing : {
         getConfig : function () {
-            this.log(chalk.bold('Languages configuration is starting'));
+            if (this.languages) {
+                if (this.skipClient) {
+                    this.log(chalk.bold('\nInstalling languages: ' + this.languages.join(', ') + ' for server'));
+                } else if (this.skipServer) {
+                    this.log(chalk.bold('\nInstalling languages: ' + this.languages.join(', ') + ' for client'));
+                } else {
+                    this.log(chalk.bold('\nInstalling languages: ' + this.languages.join(', ')));
+                }
+                this.languagesToApply = this.languages;
+            } else {
+                this.log(chalk.bold('\nLanguages configuration is starting'));
+            }
             this.applicationType = this.config.get('applicationType');
             this.baseName = this.config.get('baseName');
             this.websocket = this.config.get('websocket');
@@ -32,59 +90,95 @@ module.exports = LanguagesGenerator.extend({
     },
 
     prompting : function () {
-        var cb = this.async();
+        if(this.languages) return;
 
+        var cb = this.async();
+        var languageOptions = this.getAllSupportedLanguageOptions();
         var prompts = [
         {
             type: 'checkbox',
             name: 'languages',
             message: 'Please choose additional languages to install',
-            choices: [
-                {name: 'Catalan', value: 'ca'},
-                {name: 'Chinese (Simplified)', value: 'zh-cn'},
-                {name: 'Chinese (Traditional)', value: 'zh-tw'},
-                {name: 'Danish', value: 'da'},
-                {name: 'Dutch', value: 'nl'},
-                {name: 'Galician', value: 'gl'},
-                {name: 'German', value: 'de'},
-                {name: 'Hungarian', value: 'hu'},
-                {name: 'Italian', value: 'it'},
-                {name: 'Japanese', value: 'ja'},
-                {name: 'Korean', value: 'ko'},
-                {name: 'Polish', value: 'pl'},
-                {name: 'Portuguese (Brazilian)', value: 'pt-br'},
-                {name: 'Portuguese', value: 'pt-pt'},
-                {name: 'Romanian', value: 'ro'},
-                {name: 'Russian', value: 'ru'},
-                {name: 'Spanish', value: 'es'},
-                {name: 'Swedish', value: 'sv'},
-                {name: 'Turkish', value: 'tr'},
-                {name: 'Tamil', value: 'ta'}
-            ],
-            default: 0
+            choices: languageOptions
         }];
-        if (this.enableTranslation) {
+        if (this.enableTranslation || configOptions.enableTranslation) {
             this.prompt(prompts, function (props) {
-                this.languages = props.languages;
+                this.languagesToApply = props.languages;
                 cb();
             }.bind(this));
         } else {
-            this.log(chalk.red('Translation is disabled for the project. Language cannot be added.'));
+            this.log(chalk.red('Translation is disabled for the project. Languages cannot be added.'));
             return;
+        }
+    },
+
+    default: {
+
+        getSharedConfigOptions: function () {
+            if(configOptions.applicationType) {
+                this.applicationType = configOptions.applicationType;
+            }
+            if(configOptions.baseName) {
+                this.baseName = configOptions.baseName;
+            }
+            if(configOptions.websocket) {
+                this.websocket = configOptions.websocket;
+            }
+            if(configOptions.databaseType) {
+                this.databaseType = configOptions.databaseType;
+            }
+            if(configOptions.searchEngine) {
+                this.searchEngine = configOptions.searchEngine;
+            }
+            if(configOptions.enableTranslation) {
+                this.enableTranslation = configOptions.enableTranslation;
+            }
+            if(configOptions.nativeLanguage) {
+                this.nativeLanguage = configOptions.nativeLanguage;
+            }
+            if(configOptions.enableSocialSignIn != null) {
+                this.enableSocialSignIn = configOptions.enableSocialSignIn;
+            }
+            if(configOptions.skipClient) {
+                this.skipClient = configOptions.skipClient;
+            }
+            if(configOptions.skipServer) {
+                this.skipServer = configOptions.skipServer;
+            }
+        },
+
+        saveConfig: function () {
+            if (this.enableTranslation) {
+                var currentLanguages = this.config.get('languages');
+                this.config.set('languages', _.union(currentLanguages, this.languagesToApply));
+            }
         }
     },
 
     writing : function () {
         var insight = this.insight();
         insight.track('generator', 'languages');
-
-        for (var id in this.languages) {
-            var language = this.languages[id];
-            this.installI18nFilesByLanguage(this, CLIENT_MAIN_SRC_DIR, language);
-            this.installI18nResFilesByLanguage(this, SERVER_MAIN_RES_DIR, language);
-            this.installNewLanguage(language);
-            this.addMessageformatLocaleToIndex(language.split("-")[0] + '.js');
+        this.languagesToApply.forEach(function (language) {
+            if (!this.skipClient) {
+                this.installI18nClientFilesByLanguage(this, CLIENT_MAIN_SRC_DIR, language);
+                this.addMessageformatLocaleToBowerOverride(language.split("-")[0]);
+            }
+            if (!this.skipServer) {
+                this.installI18nServerFilesByLanguage(this, SERVER_MAIN_RES_DIR, language);
+            }
             insight.track('languages/language', language);
+        }, this);
+        if (!this.skipClient) {
+            this.updateLanguagesInLanguageConstant(this.config.get('languages'));
+        }
+    },
+
+    install: function () {
+        var wiredepAddedBowerOverrides = function () {
+            this.spawnCommand('gulp', ['wiredep']);
+        };
+        if (!this.skipWiredep && !this.skipClient) {
+            wiredepAddedBowerOverrides.call(this);
         }
     }
 });

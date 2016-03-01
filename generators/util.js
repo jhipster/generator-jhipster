@@ -6,7 +6,8 @@ var path = require('path'),
     _s = require('underscore.string');
 
 const constants = require('./generator-constants'),
-    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR;
+    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
+    LANGUAGES_MAIN_SRC_DIR = '../../languages/templates/' + constants.CLIENT_MAIN_SRC_DIR;
 
 module.exports = {
     rewrite: rewrite,
@@ -155,7 +156,7 @@ function replacePlaceholders (body, _this) {
 
 function geti18nJson (key, _this, template) {
 
-    var i18nDirectory = CLIENT_MAIN_SRC_DIR + 'i18n/en/',
+    var i18nDirectory = LANGUAGES_MAIN_SRC_DIR + 'i18n/en/',
     name = _s.slugify(key.split('.')[0]),
     filename = i18nDirectory + name + '.json',
     keyValue, render = template;
