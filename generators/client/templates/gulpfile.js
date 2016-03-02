@@ -56,6 +56,14 @@ gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function (done) {
 
 <%_ if (testFrameworks.indexOf('protractor') > -1) { _%>
 gulp.task('protractor', function () {
+    return gulp.src([config.test + 'e2e/**/*.js'])
+        .pipe(plumber({errorHandler: handleErrors}))
+        .pipe(protractor({
+            configFile: config.test + 'protractor.conf.js'
+    }));
+});
+
+gulp.task('protractor-travis', function () {
     gulp.src([config.test + 'e2e/**/*.js'])
         .pipe(protractor({
             configFile: config.test + 'protractor.conf.js'
@@ -331,8 +339,8 @@ gulp.task('eslint-and-fix', function () {
         .pipe(gulpIf(util.isLintFixed, gulp.dest(config.app + 'app')));
 });
 
-
-<% if (testFrameworks.indexOf('protractor') > -1) { %>
+<%_ if (testFrameworks.indexOf('protractor') > -1) { _%>
 gulp.task('itest', ['protractor']);
-<% } %>
+gulp.task('itest-travis', ['protractor-travis']);
+<%_ } _%>
 gulp.task('default', ['serve']);

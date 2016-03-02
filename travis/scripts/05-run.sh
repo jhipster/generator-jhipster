@@ -24,6 +24,6 @@ if [ "$RUN_APP" == 1 ]; then
   # Launch protractor tests
   #-------------------------------------------------------------------------------
   if [ "$PROTRACTOR" == 1 ]; then
-    gulp itest --no-notification
+    gulp itest-travis --no-notification
   fi
 fi
