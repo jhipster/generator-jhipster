@@ -25,7 +25,9 @@
     "gulp-changed": "1.3.0",
     "gulp-cssnano": "2.1.1",
     "gulp-eslint": "2.0.0",
+    <%_ if (useSass) { _%>
     "gulp-expect-file": "0.0.7",
+    <%_ } _%>
     "gulp-flatten": "0.2.0",
     "gulp-footer": "1.0.5",
     "gulp-htmlmin": "1.3.0",

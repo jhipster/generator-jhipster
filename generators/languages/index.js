@@ -86,11 +86,12 @@ module.exports = LanguagesGenerator.extend({
             this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
             this.enableTranslation = this.config.get('enableTranslation');
             this.enableSocialSignIn = this.config.get('enableSocialSignIn');
+            this.currentLanguages = this.config.get('languages');
         }
     },
 
     prompting : function () {
-        if(this.languages) return;
+        if(this.currentLanguages || this.languages) return;
 
         var cb = this.async();
         var languageOptions = this.getAllSupportedLanguageOptions();
@@ -149,8 +150,7 @@ module.exports = LanguagesGenerator.extend({
 
         saveConfig: function () {
             if (this.enableTranslation) {
-                var currentLanguages = this.config.get('languages');
-                this.config.set('languages', _.union(currentLanguages, this.languagesToApply));
+                this.config.set('languages', _.union(this.currentLanguages, this.languagesToApply));
             }
         }
     },
@@ -158,7 +158,7 @@ module.exports = LanguagesGenerator.extend({
     writing : function () {
         var insight = this.insight();
         insight.track('generator', 'languages');
-        this.languagesToApply.forEach(function (language) {
+        this.languagesToApply && this.languagesToApply.forEach(function (language) {
             if (!this.skipClient) {
                 this.installI18nClientFilesByLanguage(this, CLIENT_MAIN_SRC_DIR, language);
                 this.addMessageformatLocaleToBowerOverride(language.split("-")[0]);

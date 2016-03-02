@@ -6,6 +6,7 @@ var gulp = require('gulp'),
     cssnano = require('gulp-cssnano'),
     usemin = require('gulp-usemin'),
     uglify = require('gulp-uglify'),<% if(useSass) { %>
+    expect = require('gulp-expect-file'),
     sass = require('gulp-sass'),<% } %>
     htmlmin = require('gulp-htmlmin'),
     imagemin = require('gulp-imagemin'),
@@ -14,11 +15,9 @@ var gulp = require('gulp'),
     eslint = require('gulp-eslint'),
     rev = require('gulp-rev'),<% if (testFrameworks.indexOf('protractor') > -1) { %>
     protractor = require('gulp-protractor').protractor,<% } %>
-    proxy = require('proxy-middleware'),
     es = require('event-stream'),
     flatten = require('gulp-flatten'),
     del = require('del'),
-    url = require('url'),
     wiredep = require('wiredep').stream,
     runSequence = require('run-sequence'),
     browserSync = require('browser-sync'),
@@ -27,20 +26,19 @@ var gulp = require('gulp'),
     plumber = require('gulp-plumber'),
     changed = require('gulp-changed'),
     handleErrors = require('./gulp/handleErrors'),
+    serve = require('./gulp/serve'),
     util = require('./gulp/utils'),
     gulpIf = require('gulp-if'),
-    footer = require('gulp-footer'),
-    expect = require('gulp-expect-file');
+    footer = require('gulp-footer');
 
 var config = {
     app: '<%= MAIN_SRC_DIR %>',
     dist: '<%= MAIN_SRC_DIR %>dist/',
     test: '<%= TEST_SRC_DIR %>'<% if(useSass) { %>,
     importPath: '<%= MAIN_SRC_DIR %>bower_components',
-    scss: '<%= MAIN_SRC_DIR %>scss/'<% } %>,
-    port: 9000,
-    apiPort: 8080,
-    liveReloadPort: 35729
+    scss: '<%= MAIN_SRC_DIR %>scss/',
+    sassFiles = '<%= MAIN_SRC_DIR %>scss/**/*.{scss,sass}',
+    cssDir = '<%= MAIN_SRC_DIR %>content/css'<% } %>
 };
 
 gulp.task('clean', function () {
@@ -89,14 +87,12 @@ gulp.task('images', function () {
 });
 <% if(useSass) { %>
 gulp.task('sass', function () {
-    var files = config.scss + '**/*.{scss,sass}',
-        cssDir = config.app + 'content/css';
-    return gulp.src(files)
+    return gulp.src(config.sassFiles)
         .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(expect(files))
-        .pipe(changed(config.app + 'content/css', {extension: '.css'}))
+        .pipe(expect(config.sassFiles))
+        .pipe(changed(config.cssDir, {extension: '.css'}))
         .pipe(sass({includePaths:config.importPath}).on('error', sass.logError))
-        .pipe(gulp.dest(cssDir));
+        .pipe(gulp.dest(config.cssDir));
 });
 <% } %>
 gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function () {
@@ -109,71 +105,7 @@ gulp.task('install', function (done) {
 });
 
 gulp.task('serve', function () {
-    runSequence('install', function () {
-        var baseUri = 'http://localhost:' + config.apiPort;
-        // Routes to proxy to the backend. Routes ending with a / will setup
-        // a redirect so that if accessed without a trailing slash, will
-        // redirect. This is required for some endpoints for proxy-middleware
-        // to correctly handle them.
-        var proxyRoutes = [
-            '/api',
-            '/health',
-            '/configprops',
-            '/env',
-            '/v2/api-docs',
-            '/swagger-ui',
-            '/configuration/security',
-            '/configuration/ui',
-            '/swagger-resources',
-            '/metrics',
-            '/websocket/tracker',
-            '/dump'<% if (authenticationType == 'oauth2') { %>,
-            '/oauth/token'<% } %><% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>,
-            '/console/'<% } %>
-        ];
-
-        var requireTrailingSlash = proxyRoutes.filter(function (r) {
-            return util.endsWith(r, '/');
-        }).map(function (r) {
-            // Strip trailing slash so we can use the route to match requests
-            // with non trailing slash
-            return r.substr(0, r.length - 1);
-        });
-
-        var proxies = [
-            // Ensure trailing slash in routes that require it
-            function (req, res, next) {
-                requireTrailingSlash.forEach(function (route){
-                    if (url.parse(req.url).path === route) {
-                        res.statusCode = 301;
-                        res.setHeader('Location', route + '/');
-                        res.end();
-                    }
-                });
-
-                next();
-            }
-        ]
-        .concat(
-            // Build a list of proxies for routes: [route1_proxy, route2_proxy, ...]
-            proxyRoutes.map(function (r) {
-                var options = url.parse(baseUri + r);
-                options.route = r;
-                options.preserveHost = true;
-                return proxy(options);
-            }));
-
-        browserSync({
-            open: true,
-            port: config.port,
-            server: {
-                baseDir: config.app,
-                middleware: proxies
-            }
-        });
-
-        gulp.start('watch');
-    });
+    runSequence('install', serve);
 });
 
 gulp.task('watch', function () {
