@@ -56,7 +56,7 @@
     "karma-jenkins-reporter": "0.0.2",
     "karma-phantomjs-launcher": "1.0.0",
     "karma-script-launcher": "0.1.0",
-    "lodash": "4.5.1",
+    "lodash": "4.6.0",
     "map-stream": "0.0.6",
     "phantomjs-prebuilt": "2.1.4",
     <%_ if (testFrameworks.indexOf('protractor') > -1) { _%>
@@ -65,11 +65,11 @@
     <%_ } _%>
     "proxy-middleware": "0.15.0",
     "run-sequence": "1.1.5",
-    "wiredep": "2.2.2",
+    "wiredep": "3.0.0",
     <%_ if (buildTool == 'maven') { _%>
     "xml2js": "0.4.16",
     <%_ } _%>
-    "yargs": "4.1.0"
+    "yargs": "4.2.0"
   },
   "engines": {
     "node": "^4.3"
