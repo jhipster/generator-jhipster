@@ -112,8 +112,8 @@ module.exports = JhipsterGenerator.extend({
             exec('git ls-remote git://github.com/jhipster/generator-jhipster.git HEAD', {timeout: 15000}, function (error) {
                 if (error) {
                     this.log(chalk.yellow.bold('WARNING!') + ' Failed to connect to "git://github.com"\n',
-                        ' 1. Check the Internet connection.\n',
-                        ' 2. If you are using HTTP proxy, try this command: ' + chalk.yellow('git config --global url."https://".insteadOf git://')
+                        ' 1. Check your Internet connection.\n',
+                        ' 2. If you are using an HTTP proxy, try this command: ' + chalk.yellow('git config --global url."https://".insteadOf git://')
                     );
                 }
                 done();
