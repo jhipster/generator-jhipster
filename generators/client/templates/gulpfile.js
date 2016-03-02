@@ -56,7 +56,7 @@ gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function (done) {
 
 <%_ if (testFrameworks.indexOf('protractor') > -1) { _%>
 gulp.task('protractor', function () {
-    gulp.src([config.test + 'e2e/!**!/!*.js'])
+    gulp.src([config.test + 'e2e/**/*.js'])
         .pipe(protractor({
             configFile: config.test + 'protractor.conf.js'
         }))
