@@ -37,7 +37,7 @@ var config = {
     test: '<%= TEST_SRC_DIR %>'<% if(useSass) { %>,
     importPath: '<%= MAIN_SRC_DIR %>bower_components',
     scss: '<%= MAIN_SRC_DIR %>scss/',
-    sassFiles: '<%= MAIN_SRC_DIR %>scss/**/*.{scss,sass}',
+    sassSrc: '<%= MAIN_SRC_DIR %>scss/**/*.{scss,sass}',
     cssDir: '<%= MAIN_SRC_DIR %>content/css'<% } %>
 };
 
@@ -87,9 +87,9 @@ gulp.task('images', function () {
 });
 <% if(useSass) { %>
 gulp.task('sass', function () {
-    return gulp.src(config.sassFiles)
+    return gulp.src(config.sassSrc)
         .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(expect(config.sassFiles))
+        .pipe(expect(config.sassSrc))
         .pipe(changed(config.cssDir, {extension: '.css'}))
         .pipe(sass({includePaths:config.importPath}).on('error', sass.logError))
         .pipe(gulp.dest(config.cssDir));
@@ -105,15 +105,15 @@ gulp.task('install', function (done) {
 });
 
 gulp.task('serve', function () {
-    runSequence('install', serve);
+    runSequence('install', 'eslint', serve);
 });
 
 gulp.task('watch', function () {
     gulp.watch('bower.json', ['wiredep']);
     gulp.watch(['gulpfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>], ['ngconstant:dev']);
-    gulp.watch(<% if(useSass) { %>config.scss + '**/*.{scss,sass}'<% } else { %>config.app + 'content/css/**/*.css'<% } %>, ['styles']);
+    gulp.watch(<% if(useSass) { %>config.sassSrc<% } else { %>config.app + 'content/css/**/*.css'<% } %>, ['styles']);
     gulp.watch(config.app + 'content/images/**', ['images']);
-    gulp.watch(config.app + 'app/**/*.js', ['eslint']);
+    //gulp.watch(config.app + 'app/**/*.js', ['eslint']);
     gulp.watch([config.app + '*.html', config.app + 'app/**', config.app + 'i18n/**']).on('change', browserSync.reload);
 });
 
@@ -127,7 +127,7 @@ gulp.task('wiredep:app', function () {
         }))
         .pipe(gulp.dest(config.app));
 
-    return <% if (useSass) { %>es.merge(stream, gulp.src(config.scss + '*.{scss,sass}')
+    return <% if (useSass) { %>es.merge(stream, gulp.src(config.sassSrc)
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(wiredep({
             exclude: [
