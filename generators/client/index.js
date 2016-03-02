@@ -447,6 +447,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'components/util/_pagination-util.service.js', ANGULAR_DIR + 'components/util/pagination-util.service.js', this, {});
             this.template(ANGULAR_DIR + 'components/util/_sort.directive.js', ANGULAR_DIR + 'components/util/sort.directive.js', this, {});
             this.template(ANGULAR_DIR + 'components/util/_sort-by.directive.js', ANGULAR_DIR + 'components/util/sort-by.directive.js', this, {});
+            this.template(ANGULAR_DIR + 'components/util/_jhi-item-count.directive.js', ANGULAR_DIR + 'components/util/jhi-item-count.directive.js', this, {});
 
             // interceptor code
             if (this.authenticationType == 'oauth2' || this.authenticationType == 'jwt') {
@@ -593,6 +594,7 @@ module.exports = JhipsterClientGenerator.extend({
                 'app/components/util/pagination-util.service.js',
                 'app/components/util/sort.directive.js',
                 'app/components/util/sort-by.directive.js',
+                'app/components/util/jhi-item-count.directive.js',
                 // entities
                 'app/entities/entity.state.js',
                 // home
