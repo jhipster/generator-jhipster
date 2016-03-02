@@ -18,7 +18,7 @@
                 '</div>',
             scope: {
                 passwordToCheck: '='
-            }
+            },
             link: linkFunc
         };
 
@@ -80,8 +80,7 @@
                     return { idx: idx + 1, col: this.colors[idx] };
                 }
             };
-            scope.$watch(scope.passwordToCheck, function (password) {
-                console.log("test");
+            scope.$watch('passwordToCheck', function (password) {
                 if (password) {
                     var c = strength.getColor(strength.mesureStrength(password));
                     iElement.removeClass('ng-hide');
