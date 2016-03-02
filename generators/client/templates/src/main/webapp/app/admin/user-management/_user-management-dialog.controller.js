@@ -5,9 +5,9 @@
         .module('<%=angularAppName%>')
         .controller('UserManagementDialogController',UserManagementDialogController);
 
-    UserManagementDialogController.$inject = ['$stateParams', '$uibModalInstance', 'entity', 'User'<% if (enableTranslation) { %>, 'JhiLanguageService'<% } %>];
+    UserManagementDialogController.$inject = ['$stateParams', '$uibModalInstance', 'entity', 'User'<% if (enableTranslation) { %>, '<%=jhiPrefix%>LanguageService'<% } %>];
 
-    function UserManagementDialogController ($stateParams, $uibModalInstance, entity, User<% if (enableTranslation) { %>, JhiLanguageService<% } %>) {
+    function UserManagementDialogController ($stateParams, $uibModalInstance, entity, User<% if (enableTranslation) { %>, <%=jhiPrefix%>LanguageService<% } %>) {
         var vm = this;
 
         vm.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
@@ -18,7 +18,7 @@
 
 
         <%_ if (enableTranslation) { _%>
-        JhiLanguageService.getAll().then(function (languages) {
+        <%=jhiPrefix%>LanguageService.getAll().then(function (languages) {
             vm.languages = languages;
         });
         <%_ } _%>

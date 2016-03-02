@@ -5,10 +5,10 @@
         .module('<%=angularAppName%>')
         .factory('stateHandler', stateHandler);
 
-    stateHandler.$inject = ['$rootScope', '$state', <% if (enableTranslation) { %>'$translate', 'JhiLanguageService', 'translationHandler',<% } else { %> '$window', <% } %>
+    stateHandler.$inject = ['$rootScope', '$state', <% if (enableTranslation) { %>'$translate', '<%=jhiPrefix%>LanguageService', 'translationHandler',<% } else { %> '$window', <% } %>
         'Auth', 'Principal', 'ENV', 'VERSION'];
 
-    function stateHandler($rootScope, $state, <% if (enableTranslation) { %>$translate, JhiLanguageService, translationHandler,<% } else { %> $window, <% } %>
+    function stateHandler($rootScope, $state, <% if (enableTranslation) { %>$translate, <%=jhiPrefix%>LanguageService, translationHandler,<% } else { %> $window, <% } %>
         Auth, Principal, ENV, VERSION) {
         return {
             initialize: initialize
@@ -29,7 +29,7 @@
 
                 <% if (enableTranslation) { %>
                 // Update the language
-                JhiLanguageService.getCurrent().then(function (language) {
+                <%=jhiPrefix%>LanguageService.getCurrent().then(function (language) {
                     $translate.use(language);
                 });
                 <% } %>

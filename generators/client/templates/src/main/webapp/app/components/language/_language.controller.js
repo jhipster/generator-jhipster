@@ -3,17 +3,17 @@
 
     angular
         .module('<%=angularAppName%>')
-        .controller('LanguageController', LanguageController);
+        .controller('<%=jhiPrefix%>LanguageController', <%=jhiPrefix%>LanguageController);
 
-    LanguageController.$inject = ['$translate', 'JhiLanguageService', 'tmhDynamicLocale'];
+    <%=jhiPrefix%>LanguageController.$inject = ['$translate', '<%=jhiPrefix%>LanguageService', 'tmhDynamicLocale'];
 
-    function LanguageController ($translate, JhiLanguageService, tmhDynamicLocale) {
+    function <%=jhiPrefix%>LanguageController ($translate, <%=jhiPrefix%>LanguageService, tmhDynamicLocale) {
         var vm = this;
 
         vm.changeLanguage = changeLanguage;
         vm.languages = null;
 
-        JhiLanguageService.getAll().then(function (languages) {
+        <%=jhiPrefix%>LanguageService.getAll().then(function (languages) {
             vm.languages = languages;
         });
 
