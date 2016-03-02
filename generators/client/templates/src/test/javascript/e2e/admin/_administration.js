@@ -37,7 +37,7 @@ describe('administration', function () {
 
     it('should load health', function () {
         element(by.css('[ui-sref="health"]')).click();
-        expect(element.all(by.css('h2')).first().getText()).toMatch(/Wrong Health Checks/);
+        expect(element.all(by.css('h2')).first().getText()).toMatch(/Health Checks/);
     });
 
     it('should load configuration', function () {
@@ -53,11 +53,6 @@ describe('administration', function () {
     it('should load logs', function () {
         element(by.css('[ui-sref="logs"]')).click();
         expect(element.all(by.css('h2')).first().getText()).toMatch(/Logs/);
-    });
-
-    it('should load api docs', function () {
-        element(by.css('[ui-sref="docs"]')).click();
-        expect(element.all(by.css('iframe')).isDisplayed()).toBeTruthy();
     });
 
     afterAll(function () {
