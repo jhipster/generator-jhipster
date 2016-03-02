@@ -5,9 +5,9 @@
         .module('<%=angularAppName%>')
         .factory('Auth', Auth);
 
-    Auth.$inject = ['$rootScope', '$state', '$q', <% if (enableTranslation){ %>'$translate', <% } %>'Principal', 'AuthServerProvider', 'Account', 'LoginService', 'Register', 'Activate', 'Password', 'PasswordResetInit', 'PasswordResetFinish'<% if (websocket === 'spring-websocket') { %>, 'JhiTrackerService'<% } %>];
+    Auth.$inject = ['$rootScope', '$state', '$q', <% if (enableTranslation){ %>'$translate', <% } %>'Principal', 'AuthServerProvider', 'Account', 'LoginService', 'Register', 'Activate', 'Password', 'PasswordResetInit', 'PasswordResetFinish'<% if (websocket === 'spring-websocket') { %>, '<%=jhiPrefix%>TrackerService'<% } %>];
 
-    function Auth ($rootScope, $state, $q, <% if (enableTranslation){ %>$translate, <% } %>Principal, AuthServerProvider, Account, LoginService, Register, Activate, Password, PasswordResetInit, PasswordResetFinish<% if (websocket === 'spring-websocket') { %>, JhiTrackerService<% } %>) {
+    function Auth ($rootScope, $state, $q, <% if (enableTranslation){ %>$translate, <% } %>Principal, AuthServerProvider, Account, LoginService, Register, Activate, Password, PasswordResetInit, PasswordResetFinish<% if (websocket === 'spring-websocket') { %>, <%=jhiPrefix%>TrackerService<% } %>) {
         var service = {
             activateAccount: activateAccount,
             authorize: authorize,
@@ -114,7 +114,7 @@
                     }
                     <%_ } _%>
                     <%_ if (websocket === 'spring-websocket') { _%>
-                    JhiTrackerService.sendActivity();
+                    <%=jhiPrefix%>TrackerService.sendActivity();
                     <%_ } _%>
                     deferred.resolve(data);
                 });

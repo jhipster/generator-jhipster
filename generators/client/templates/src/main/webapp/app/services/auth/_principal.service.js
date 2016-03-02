@@ -5,9 +5,9 @@
         .module('<%=angularAppName%>')
         .factory('Principal', Principal);
 
-    Principal.$inject = ['$q', 'Account'<% if (websocket == 'spring-websocket') { %>, 'JhiTrackerService'<% } %>];
+    Principal.$inject = ['$q', 'Account'<% if (websocket == 'spring-websocket') { %>, '<%=jhiPrefix%>TrackerService'<% } %>];
 
-    function Principal ($q, Account<% if (websocket == 'spring-websocket') { %>, JhiTrackerService<% } %>) {
+    function Principal ($q, Account<% if (websocket == 'spring-websocket') { %>, <%=jhiPrefix%>TrackerService<% } %>) {
         var _identity,
             _authenticated = false;
 
@@ -79,7 +79,7 @@
                 _identity = account.data;
                 _authenticated = true;
                 deferred.resolve(_identity);<% if (websocket == 'spring-websocket') { %>
-                JhiTrackerService.connect();<% } %>
+                <%=jhiPrefix%>TrackerService.connect();<% } %>
             }
 
             function getAccountCatch () {

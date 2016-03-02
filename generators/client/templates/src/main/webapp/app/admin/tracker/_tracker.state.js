@@ -8,7 +8,7 @@
     stateConfig.$inject = ['$stateProvider'];
 
     function stateConfig($stateProvider) {
-        $stateProvider.state('tracker', {
+        $stateProvider.state('<%=jhiPrefix%>tracker', {
             parent: 'admin',
             url: '/tracker',
             data: {
@@ -18,7 +18,7 @@
             views: {
                 'content@': {
                     templateUrl: 'app/admin/tracker/tracker.html',
-                    controller: 'TrackerController',
+                    controller: '<%=jhiPrefix%>TrackerController',
                     controllerAs: 'vm'
                 }
             },
@@ -28,11 +28,11 @@
                     return $translate.refresh();
                 }]
             },
-            onEnter: function(JhiTrackerService) {
-                JhiTrackerService.subscribe();
+            onEnter: function(<%=jhiPrefix%>TrackerService) {
+                <%=jhiPrefix%>TrackerService.subscribe();
             },
-            onExit: function(JhiTrackerService) {
-                JhiTrackerService.unsubscribe();
+            onExit: function(<%=jhiPrefix%>TrackerService) {
+                <%=jhiPrefix%>TrackerService.unsubscribe();
             }
         });
     }

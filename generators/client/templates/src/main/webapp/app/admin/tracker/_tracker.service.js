@@ -4,11 +4,11 @@
 
     angular
         .module('<%=angularAppName%>')
-        .factory('JhiTrackerService', JhiTrackerService);
+        .factory('<%=jhiPrefix%>TrackerService', <%=jhiPrefix%>TrackerService);
 
-    JhiTrackerService.$inject = ['$rootScope', '$window', '$cookies', '$http', '$q'<% if (authenticationType == 'jwt') { %>, 'AuthServerProvider'<%}%>];
+    <%=jhiPrefix%>TrackerService.$inject = ['$rootScope', '$window', '$cookies', '$http', '$q'<% if (authenticationType == 'jwt') { %>, 'AuthServerProvider'<%}%>];
 
-    function JhiTrackerService ($rootScope, $window, $cookies, $http, $q<% if (authenticationType == 'jwt') { %>, AuthServerProvider<%}%>) {
+    function <%=jhiPrefix%>TrackerService ($rootScope, $window, $cookies, $http, $q<% if (authenticationType == 'jwt') { %>, AuthServerProvider<%}%>) {
         var stompClient = null;
         var subscriber = null;
         var listener = $q.defer();
