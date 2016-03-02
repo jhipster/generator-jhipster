@@ -26,7 +26,7 @@
 
         /* private helper methods*/
 
-        function linkFunc(scope, iElement, attr) {
+        function linkFunc(scope, iElement) {
             var strength = {
                 colors: ['#F00', '#F90', '#FF0', '#9F0', '#0F0'],
                 mesureStrength: function (p) {
