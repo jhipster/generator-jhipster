@@ -60,19 +60,7 @@ gulp.task('protractor', function () {
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(protractor({
             configFile: config.test + 'protractor.conf.js'
-    }));
-});
-
-gulp.task('protractor-travis', function () {
-    gulp.src([config.test + 'e2e/**/*.js'])
-        .pipe(protractor({
-            configFile: config.test + 'protractor.conf.js'
         }))
-        .on('end', function() {
-            console.log('E2E Testing complete');
-            // exit with success.
-            process.exit(0);
-        })
         .on('error', function(err) {
             console.log('E2E Tests failed');
             process.exit(1);
@@ -341,6 +329,5 @@ gulp.task('eslint-and-fix', function () {
 
 <%_ if (testFrameworks.indexOf('protractor') > -1) { _%>
 gulp.task('itest', ['protractor']);
-gulp.task('itest-travis', ['protractor-travis']);
 <%_ } _%>
 gulp.task('default', ['serve']);
