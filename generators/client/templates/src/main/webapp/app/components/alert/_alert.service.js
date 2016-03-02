@@ -9,7 +9,7 @@
         this.toast = false;
         /*jshint validthis: true */
         this.$get = getService;
-        
+
         this.showAsToast = function(isToast) {
             this.toast = isToast;
         };
@@ -102,7 +102,7 @@
                     position: alertOptions.position ? alertOptions.position : 'top right',
                     scoped: alertOptions.scoped,
                     close: function (alerts) {
-                        return exports.closeAlert(this.id, alerts);
+                        return closeAlert(this.id, alerts);
                     }
                 };
                 if(!alert.scoped) {
@@ -128,7 +128,7 @@
 
             function closeAlert(id, extAlerts) {
                 var thisAlerts = extAlerts ? extAlerts : alerts;
-                return this.closeAlertByIndex(thisAlerts.map(function(e) { return e.id; }).indexOf(id), thisAlerts);
+                return closeAlertByIndex(thisAlerts.map(function(e) { return e.id; }).indexOf(id), thisAlerts);
             }
 
             function closeAlertByIndex(index, thisAlerts) {
