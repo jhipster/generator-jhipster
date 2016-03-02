@@ -3,11 +3,11 @@
 
     angular
         .module('<%=angularAppName%>')
-        .factory('<%=jhiPrefix%>HealthService', <%=jhiPrefix%>HealthService);
+        .factory('<%=jhiPrefixCapitalized%>HealthService', <%=jhiPrefixCapitalized%>HealthService);
 
-    <%=jhiPrefix%>HealthService.$inject = ['$rootScope', '$http'];
+    <%=jhiPrefixCapitalized%>HealthService.$inject = ['$rootScope', '$http'];
 
-    function <%=jhiPrefix%>HealthService ($rootScope, $http) {
+    function <%=jhiPrefixCapitalized%>HealthService ($rootScope, $http) {
         var service = {
             checkHealth: checkHealth
         };

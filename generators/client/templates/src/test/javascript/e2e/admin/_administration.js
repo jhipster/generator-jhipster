@@ -31,17 +31,17 @@ describe('administration', function () {
     });
 
     it('should load metrics', function () {
-        element(by.css('[ui-sref="<%=jhiPrefix%>metrics"]')).click();
+        element(by.css('[ui-sref="<%=jhiPrefix%>-metrics"]')).click();
         expect(element.all(by.css('h2')).first().getText()).toMatch(/Application Metrics/);
     });
 
     it('should load health', function () {
-        element(by.css('[ui-sref="<%=jhiPrefix%>health"]')).click();
+        element(by.css('[ui-sref="<%=jhiPrefix%>-health"]')).click();
         expect(element.all(by.css('h2')).first().getText()).toMatch(/Health Checks/);
     });
 
     it('should load configuration', function () {
-        element(by.css('[ui-sref="<%=jhiPrefix%>configuration"]')).click();
+        element(by.css('[ui-sref="<%=jhiPrefix%>-configuration"]')).click();
         expect(element.all(by.css('h2')).first().getText()).toMatch(/Configuration/);
     });
 

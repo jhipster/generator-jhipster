@@ -105,6 +105,7 @@ module.exports = JhipsterClientGenerator.extend({
         this.searchEngine = this.options['search-engine'];
         this.hibernateCache = this.options['hb-cache'];
         this.jhiPrefix = this.options['jhi-prefix'];
+        this.jhiPrefixCapitalized = _.capitalize(this.jhiPrefix);
         this.testFrameworks = [];
         this.options['protractor'] &&  this.testFrameworks.push('protractor');
         var lastQuestion = configOptions.lastQuestion;

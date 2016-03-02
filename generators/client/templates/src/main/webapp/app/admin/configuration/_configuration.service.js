@@ -3,11 +3,11 @@
 
     angular
         .module('<%=angularAppName%>')
-        .factory('<%=jhiPrefix%>ConfigurationService', <%=jhiPrefix%>ConfigurationService);
+        .factory('<%=jhiPrefixCapitalized%>ConfigurationService', <%=jhiPrefixCapitalized%>ConfigurationService);
 
-    <%=jhiPrefix%>ConfigurationService.$inject = ['$filter', '$http'];
+    <%=jhiPrefixCapitalized%>ConfigurationService.$inject = ['$filter', '$http'];
 
-    function <%=jhiPrefix%>ConfigurationService ($filter, $http) {
+    function <%=jhiPrefixCapitalized%>ConfigurationService ($filter, $http) {
         var service = {
             get: get,
             getEnv: getEnv

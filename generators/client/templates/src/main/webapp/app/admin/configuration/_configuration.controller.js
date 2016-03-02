@@ -3,20 +3,20 @@
 
     angular
         .module('<%=angularAppName%>')
-        .controller('<%=jhiPrefix%>ConfigurationController', <%=jhiPrefix%>ConfigurationController);
+        .controller('<%=jhiPrefixCapitalized%>ConfigurationController', <%=jhiPrefixCapitalized%>ConfigurationController);
 
-    <%=jhiPrefix%>ConfigurationController.$inject = ['$filter','<%=jhiPrefix%>ConfigurationService'];
+    <%=jhiPrefixCapitalized%>ConfigurationController.$inject = ['$filter','<%=jhiPrefixCapitalized%>ConfigurationService'];
 
-    function <%=jhiPrefix%>ConfigurationController (filter,<%=jhiPrefix%>ConfigurationService) {
+    function <%=jhiPrefixCapitalized%>ConfigurationController (filter,<%=jhiPrefixCapitalized%>ConfigurationService) {
         var vm = this;
 
         vm.allConfiguration = null;
         vm.configuration = null;
 
-        <%=jhiPrefix%>ConfigurationService.get().then(function(configuration) {
+        <%=jhiPrefixCapitalized%>ConfigurationService.get().then(function(configuration) {
             vm.configuration = configuration;
         });
-        <%=jhiPrefix%>ConfigurationService.getEnv().then(function (configuration) {
+        <%=jhiPrefixCapitalized%>ConfigurationService.getEnv().then(function (configuration) {
             vm.allConfiguration = configuration;
         });
     }

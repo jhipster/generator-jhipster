@@ -3,17 +3,17 @@
 
     angular
         .module('<%=angularAppName%>')
-        .controller('<%=jhiPrefix%>TrackerController', <%=jhiPrefix%>TrackerController);
+        .controller('<%=jhiPrefixCapitalized%>TrackerController', <%=jhiPrefixCapitalized%>TrackerController);
 
-    <%=jhiPrefix%>TrackerController.$inject = ['$cookies', '$http', '<%=jhiPrefix%>TrackerService'];
+    <%=jhiPrefixCapitalized%>TrackerController.$inject = ['$cookies', '$http', '<%=jhiPrefixCapitalized%>TrackerService'];
 
-    function <%=jhiPrefix%>TrackerController ($cookies, $http, <%=jhiPrefix%>TrackerService) {
+    function <%=jhiPrefixCapitalized%>TrackerController ($cookies, $http, <%=jhiPrefixCapitalized%>TrackerService) {
         // This controller uses a Websocket connection to receive user activities in real-time.
         var vm = this;
 
         vm.activities = [];
 
-        <%=jhiPrefix%>TrackerService.receive().then(null, null, function(activity) {
+        <%=jhiPrefixCapitalized%>TrackerService.receive().then(null, null, function(activity) {
             showActivity(activity);
         });
 
