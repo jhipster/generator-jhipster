@@ -29,7 +29,8 @@ var gulp = require('gulp'),
     handleErrors = require('./gulp/handleErrors'),
     util = require('./gulp/utils'),
     gulpIf = require('gulp-if'),
-    footer = require('gulp-footer');
+    footer = require('gulp-footer'),
+    expect = require('gulp-expect-file');
 
 var config = {
     app: '<%= MAIN_SRC_DIR %>',
@@ -88,11 +89,14 @@ gulp.task('images', function () {
 });
 <% if(useSass) { %>
 gulp.task('sass', function () {
-    return gulp.src(config.scss + '**/*.{scss,sass}')
+    var files = config.scss + '**/*.{scss,sass}',
+        cssDir = config.app + 'content/css';
+    return gulp.src(files)
         .pipe(plumber({errorHandler: handleErrors}))
+        .pipe(expect(files))
         .pipe(changed(config.app + 'content/css', {extension: '.css'}))
         .pipe(sass({includePaths:config.importPath}).on('error', sass.logError))
-        .pipe(gulp.dest(config.app + 'content/css'));
+        .pipe(gulp.dest(cssDir));
 });
 <% } %>
 gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function () {

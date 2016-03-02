@@ -12,7 +12,7 @@
     "devDatabaseType": "postgresql",
     "prodDatabaseType": "postgresql",
     "searchEngine": "elasticsearch",
-    "useSass": false,
+    "useSass": true,
     "buildTool": "maven",
     "enableTranslation": false,
     "enableSocialSignIn": false,
