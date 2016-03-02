@@ -3,11 +3,11 @@
 
     angular
         .module('<%=angularAppName%>')
-        .controller('JhiConfigurationController', JhiConfigurationController);
+        .controller('ConfigurationController', ConfigurationController);
 
-    JhiConfigurationController.$inject = ['$filter','JhiConfigurationService'];
+    ConfigurationController.$inject = ['$filter','JhiConfigurationService'];
 
-    function JhiConfigurationController (filter,JhiConfigurationService) {
+    function ConfigurationController (filter,JhiConfigurationService) {
         var vm = this;
 
         vm.allConfiguration = null;

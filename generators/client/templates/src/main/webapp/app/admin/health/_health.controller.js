@@ -3,11 +3,11 @@
 
     angular
         .module('<%=angularAppName%>')
-        .controller('JhiHealthController', JhiHealthController);
+        .controller('HealthController', HealthController);
 
-    JhiHealthController.$inject = ['JhiHealthService', '$uibModal'];
+    HealthController.$inject = ['JhiHealthService', '$uibModal'];
 
-    function JhiHealthController (JhiHealthService, $uibModal) {
+    function HealthController (JhiHealthService, $uibModal) {
         var vm = this;
 
         vm.addHealthObject = addHealthObject;
@@ -135,7 +135,7 @@
         function showHealth (health) {
             $uibModal.open({
                 templateUrl: 'app/admin/health/health.modal.html',
-                controller: 'JhiHealthModalController',
+                controller: 'HealthModalController',
                 controllerAs: 'vm',
                 size: 'lg',
                 resolve: {

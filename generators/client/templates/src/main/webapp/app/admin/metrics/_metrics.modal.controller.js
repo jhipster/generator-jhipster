@@ -3,11 +3,11 @@
 
     angular
         .module('<%=angularAppName%>')
-        .controller('JhiMetricsModalController', JhiMetricsModalController);
+        .controller('MetricsModalController', MetricsModalController);
 
-    JhiMetricsModalController.$inject = ['$uibModalInstance', 'threadDump'];
+    MetricsModalController.$inject = ['$uibModalInstance', 'threadDump'];
 
-    function JhiMetricsModalController ($uibModalInstance, threadDump) {
+    function MetricsModalController ($uibModalInstance, threadDump) {
         var vm = this;
 
         vm.cancel = cancel;
