@@ -3,11 +3,11 @@
 
     angular
         .module('<%=angularAppName%>')
-        .controller('HealthCheckController', HealthCheckController);
+        .controller('<%=jhiPrefix%>HealthCheckController', <%=jhiPrefix%>HealthCheckController);
 
-    HealthCheckController.$inject = ['JhiHealthService', '$uibModal'];
+    <%=jhiPrefix%>HealthCheckController.$inject = ['<%=jhiPrefix%>HealthService', '$uibModal'];
 
-    function HealthCheckController (JhiHealthService, $uibModal) {
+    function <%=jhiPrefix%>HealthCheckController (<%=jhiPrefix%>HealthService, $uibModal) {
         var vm = this;
 
         vm.addHealthObject = addHealthObject;
@@ -123,7 +123,7 @@
 
         function refresh () {
             vm.updatingHealth = true;
-            JhiHealthService.checkHealth().then(function (response) {
+            <%=jhiPrefix%>HealthService.checkHealth().then(function (response) {
                 vm.healthData = vm.transformHealthData(response);
                 vm.updatingHealth = false;
             }, function (response) {

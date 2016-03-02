@@ -2,7 +2,7 @@
 
 describe('Controller Tests', function () {
 
-    describe('HealthCheckController', function () {
+    describe('<%=jhiPrefix%>HealthCheckController', function () {
         var $scope; // actual implementations
         var createController; // local utility functions
 
@@ -12,7 +12,7 @@ describe('Controller Tests', function () {
                 '$scope': $scope
             };
             createController = function() {
-                $injector.get('$controller')('HealthCheckController as vm', locals);
+                $injector.get('$controller')('<%=jhiPrefix%>HealthCheckController as vm', locals);
             };
             createController();
         }));
