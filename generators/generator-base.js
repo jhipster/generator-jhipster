@@ -1253,7 +1253,7 @@ Generator.prototype.aski18n = function (generator, question, questions) {
             },
             type: 'list',
             name: 'nativeLanguage',
-            message: 'Please chooose the native language of the application?',
+            message: 'Please choose the native language of the application?',
             choices: languageOptions,
             default: 'en',
             store: true
