@@ -37,8 +37,8 @@ var config = {
     test: '<%= TEST_SRC_DIR %>'<% if(useSass) { %>,
     importPath: '<%= MAIN_SRC_DIR %>bower_components',
     scss: '<%= MAIN_SRC_DIR %>scss/',
-    sassFiles = '<%= MAIN_SRC_DIR %>scss/**/*.{scss,sass}',
-    cssDir = '<%= MAIN_SRC_DIR %>content/css'<% } %>
+    sassFiles: '<%= MAIN_SRC_DIR %>scss/**/*.{scss,sass}',
+    cssDir: '<%= MAIN_SRC_DIR %>content/css'<% } %>
 };
 
 gulp.task('clean', function () {
