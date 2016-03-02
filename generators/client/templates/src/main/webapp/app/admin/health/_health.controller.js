@@ -3,11 +3,11 @@
 
     angular
         .module('<%=angularAppName%>')
-        .controller('HealthController', HealthController);
+        .controller('HealthCheckController', HealthCheckController);
 
-    HealthController.$inject = ['JhiHealthService', '$uibModal'];
+    HealthCheckController.$inject = ['JhiHealthService', '$uibModal'];
 
-    function HealthController (JhiHealthService, $uibModal) {
+    function HealthCheckController (JhiHealthService, $uibModal) {
         var vm = this;
 
         vm.addHealthObject = addHealthObject;

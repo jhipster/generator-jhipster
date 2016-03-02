@@ -3,11 +3,11 @@
 
     angular
         .module('<%=angularAppName%>')
-        .controller('MetricsController', MetricsController);
+        .controller('MetricsMonitoringController', MetricsMonitoringController);
 
-    MetricsController.$inject = ['$scope','JhiMetricsService', '$uibModal'];
+    MetricsMonitoringController.$inject = ['$scope','JhiMetricsService', '$uibModal'];
 
-    function MetricsController ($scope, JhiMetricsService, $uibModal) {
+    function MetricsMonitoringController ($scope, JhiMetricsService, $uibModal) {
         var vm = this;
 
         vm.cachesStats = {};
