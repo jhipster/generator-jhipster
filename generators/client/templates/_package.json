@@ -16,12 +16,9 @@
     "eslint-config-angular": "0.5.0",
     "eslint-plugin-angular": "1.0.0",
     "event-stream": "3.3.2",
-    "events": "1.1.0",
     "generator-jhipster": "<%= packagejs.version %>",
     "gulp": "3.9.1",
     "gulp-autoprefixer": "3.1.0",
-    "gulp-browserify": "0.5.1",
-    "gulp-cached": "1.1.0",
     "gulp-changed": "1.3.0",
     "gulp-cssnano": "2.1.1",
     "gulp-eslint": "2.0.0",
@@ -55,11 +52,9 @@
     "karma": "0.13.21",
     "karma-chrome-launcher": "0.2.2",
     "karma-coverage": "0.5.3",
-    "karma-html2js-preprocessor": "0.1.0",
     "karma-jasmine": "0.3.7",
     "karma-jenkins-reporter": "0.0.2",
     "karma-phantomjs-launcher": "1.0.0",
-    "karma-requirejs": "0.2.5",
     "karma-script-launcher": "0.1.0",
     "lodash": "4.5.1",
     "map-stream": "0.0.6",
@@ -69,15 +64,12 @@
     "protractor-jasmine2-screenshot-reporter": "0.3.0",
     <%_ } _%>
     "proxy-middleware": "0.15.0",
-    "requirejs": "2.1",
     "run-sequence": "1.1.5",
     "wiredep": "2.2.2",
     <%_ if (buildTool == 'maven') { _%>
     "xml2js": "0.4.16",
     <%_ } _%>
-    "yargs": "4.1.0",
-    "yo": ">=1.6.0",
-    "zeparser": "0.0.7"
+    "yargs": "4.1.0"
   },
   "engines": {
     "node": "^4.3"
