@@ -8,7 +8,7 @@
     stateConfig.$inject = ['$stateProvider'];
 
     function stateConfig($stateProvider) {
-        $stateProvider.state('metrics', {
+        $stateProvider.state('<%=jhiPrefix%>metrics', {
             parent: 'admin',
             url: '/metrics',
             data: {
@@ -18,7 +18,7 @@
             views: {
                 'content@': {
                     templateUrl: 'app/admin/metrics/metrics.html',
-                    controller: 'MetricsMonitoringController',
+                    controller: '<%=jhiPrefix%>MetricsMonitoringController',
                     controllerAs: 'vm'
                 }
             },

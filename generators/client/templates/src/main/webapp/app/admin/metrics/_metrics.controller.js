@@ -3,11 +3,11 @@
 
     angular
         .module('<%=angularAppName%>')
-        .controller('MetricsMonitoringController', MetricsMonitoringController);
+        .controller('<%=jhiPrefix%>MetricsMonitoringController', <%=jhiPrefix%>MetricsMonitoringController);
 
-    MetricsMonitoringController.$inject = ['$scope','JhiMetricsService', '$uibModal'];
+    <%=jhiPrefix%>MetricsMonitoringController.$inject = ['$scope','<%=jhiPrefix%>MetricsService', '$uibModal'];
 
-    function MetricsMonitoringController ($scope, JhiMetricsService, $uibModal) {
+    function <%=jhiPrefix%>MetricsMonitoringController ($scope, <%=jhiPrefix%>MetricsService, $uibModal) {
         var vm = this;
 
         vm.cachesStats = {};
@@ -43,7 +43,7 @@
 
         function refresh () {
             vm.updatingMetrics = true;
-            JhiMetricsService.getMetrics().then(function (promise) {
+            <%=jhiPrefix%>MetricsService.getMetrics().then(function (promise) {
                 vm.metrics = promise;
                 vm.updatingMetrics = false;
             }, function (promise) {
@@ -53,10 +53,10 @@
         }
 
         function refreshThreadDumpData () {
-            JhiMetricsService.threadDump().then(function(data) {
+            <%=jhiPrefix%>MetricsService.threadDump().then(function(data) {
                 $uibModal.open({
                     templateUrl: 'app/admin/metrics/metrics.modal.html',
-                    controller: 'MetricsModalController',
+                    controller: '<%=jhiPrefix%>MetricsMonitoringModalController',
                     controllerAs: 'vm',
                     size: 'lg',
                     resolve: {
