@@ -19,7 +19,7 @@ var currentQuestion = 0;
 var configOptions = {};
 
 module.exports = JhipsterGenerator.extend({
-    constructor: function() {
+    constructor: function () {
         generators.Base.apply(this, arguments);
         // This adds support for a `--skip-client` flag
         this.option('skip-client', {
@@ -63,9 +63,9 @@ module.exports = JhipsterGenerator.extend({
             defaults: true
         });
 
-        this.skipClient = configOptions.skipClient = this.options['skip-client'] ||  this.config.get('skipClient');
-        this.skipServer = configOptions.skipServer = this.options['skip-server'] ||  this.config.get('skipServer');
-        this.skipUserManagement = configOptions.skipUserManagement = this.options['skip-user-management'] ||  this.config.get('skipUserManagement');
+        this.skipClient = configOptions.skipClient = this.options['skip-client'] || this.config.get('skipClient');
+        this.skipServer = configOptions.skipServer = this.options['skip-server'] || this.config.get('skipServer');
+        this.skipUserManagement = configOptions.skipUserManagement = this.options['skip-user-management'] || this.config.get('skipUserManagement');
         this.withEntities = this.options['with-entities'];
         this.checkInstall = this.options['check-install'];
 
@@ -147,7 +147,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         validate: function () {
-            if(this.skipServer && this.skipClient){
+            if (this.skipServer && this.skipClient) {
                 this.env.error(chalk.red('You can not pass both ' + chalk.yellow('--skip-client') + ' and ' + chalk.yellow('--skip-server') + ' together'));
             }
         },
@@ -172,7 +172,7 @@ module.exports = JhipsterGenerator.extend({
 
     prompting: {
         askForInsightOptIn: function () {
-            if(this.existingProject){
+            if (this.existingProject) {
                 return;
             }
             var done = this.async();
@@ -194,7 +194,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         askForApplicationType: function () {
-            if(this.existingProject){
+            if (this.existingProject) {
                 return;
             }
             var done = this.async();
@@ -225,12 +225,12 @@ module.exports = JhipsterGenerator.extend({
         },
 
         askForModuleName: function () {
-            if(this.existingProject){
+            if (this.existingProject) {
                 return;
             }
             this.askModuleName(this, ++currentQuestion, QUESTIONS);
             configOptions.lastQuestion = currentQuestion;
-        },
+        }
     },
 
     configuring: {
@@ -269,7 +269,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         composeClient: function () {
-            if(this.skipClient) return;
+            if (this.skipClient) return;
 
             this.composeWith('jhipster:client', {
                 options: {
@@ -284,7 +284,7 @@ module.exports = JhipsterGenerator.extend({
 
         askFori18n: function () {
             currentQuestion = configOptions.lastQuestion;
-            if(this.skipI18n || this.existingProject) return;
+            if (this.skipI18n || this.existingProject) return;
             this.aski18n(this, ++currentQuestion, QUESTIONS);
         }
     },
@@ -292,7 +292,7 @@ module.exports = JhipsterGenerator.extend({
     default: {
 
         askForTestOpts: function () {
-            if(this.existingProject){
+            if (this.existingProject) {
                 return;
             }
             var choices = [];
@@ -316,7 +316,7 @@ module.exports = JhipsterGenerator.extend({
                 name: 'testFrameworks',
                 message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') Which testing frameworks would you like to use?',
                 choices: choices,
-                default: [ 'gatling' ]
+                default: ['gatling']
             }, function (prompt) {
                 this.testFrameworks = prompt.testFrameworks;
                 done();
@@ -339,7 +339,7 @@ module.exports = JhipsterGenerator.extend({
         },
 
         composeLanguages: function () {
-            if(this.skipI18n) return;
+            if (this.skipI18n) return;
             this.composeLanguagesSub(this, configOptions, this.generatorType);
         },
 
@@ -367,10 +367,10 @@ module.exports = JhipsterGenerator.extend({
 
         regenerateEntities: function () {
             if (this.withEntities) {
-                this.getExistingEntities().forEach( function(entity) {
+                this.getExistingEntities().forEach(function (entity) {
                     this.composeWith('jhipster:entity', {
-                        options: { regenerate: true },
-                        args:[ entity.name ]
+                        options: {regenerate: true},
+                        args: [entity.name]
                     }, {
                         local: require.resolve('../entity')
                     });
@@ -380,13 +380,13 @@ module.exports = JhipsterGenerator.extend({
     },
 
     end: {
-        afterRunHook: function() {
+        afterRunHook: function () {
             try {
                 var modules = this.getModuleHooks();
                 if (modules.length > 0) {
                     this.log('\n' + chalk.bold.green('Running post run module hooks\n'));
                     // run through all post app creation module hooks
-                    modules.forEach(function(module) {
+                    modules.forEach(function (module) {
                         if (module.hookFor == 'app' && module.hookType == 'post') {
                             // compose with the modules callback generator
                             try {
@@ -397,7 +397,7 @@ module.exports = JhipsterGenerator.extend({
                                 });
                             } catch (err) {
                                 this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
-                                chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow('\'npm -g ' + module.npmPackageName + '\''));
+                                    chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow('\'npm -g ' + module.npmPackageName + '\''));
                             }
                         }
                     }, this);
