@@ -5,6 +5,12 @@ import javax.validation.constraints.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.cors.CorsConfiguration;
 
+<%_ if (applicationType == 'gateway') { _%>
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+<%_ } _%>
+
 /**
  * Properties specific to JHipster.
  *
@@ -599,6 +605,16 @@ public class JHipsterProperties {
             }
         }
         <%_ } _%>
+
+        private Map<String, List<String>> authorizedMicroservicesEndpoints = new LinkedHashMap<>();
+
+        public Map<String, List<String>> getAuthorizedMicroservicesEndpoints() {
+            return authorizedMicroservicesEndpoints;
+        }
+
+        public void setAuthorizedMicroservicesEndpoints(Map<String, List<String>> authorizedMicroservicesEndpoints) {
+            this.authorizedMicroservicesEndpoints = authorizedMicroservicesEndpoints;
+        }
 
         public static class RateLimiting {
 
