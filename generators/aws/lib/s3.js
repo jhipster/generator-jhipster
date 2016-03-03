@@ -107,11 +107,11 @@ var findWarFilename = function findWarFilename(buildFolder, callback) {
             error(err, callback);
         }
         files.filter(function (file) {
-                return file.substr(-FILE_EXTENSION.length) === FILE_EXTENSION;
-            })
-            .forEach(function (file) {
-                warFilename = file;
-            });
+            return file.substr(-FILE_EXTENSION.length) === FILE_EXTENSION;
+        })
+        .forEach(function (file) {
+            warFilename = file;
+        });
         callback(null, warFilename);
     });
 };
