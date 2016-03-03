@@ -65,7 +65,7 @@
     <%_ } _%>
     "proxy-middleware": "0.15.0",
     "run-sequence": "1.1.5",
-    "wiredep": "2.2.2",
+    "wiredep": "3.0.0",
     <%_ if (buildTool == 'maven') { _%>
     "xml2js": "0.4.16",
     <%_ } _%>

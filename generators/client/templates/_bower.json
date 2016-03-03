@@ -45,17 +45,20 @@
     "angular-mocks": "1.5.0",
     "angular-scenario": "1.5.0"
   },
-  <%_ if (!useSass) { _%>
   "overrides": {
+    "angular" : {
+      "dependencies": {
+        "jquery": "2.2.1"
+      }
+    }<% if (!useSass) { %>,
     "bootstrap": {
       "main": [
         "dist/js/bootstrap.js",
         "dist/css/bootstrap.css",
         "less/bootstrap.less"
       ]
-    }
+    }<% } %>
   },
-  <%_ } _%>
   "resolutions": {
     "angular": "1.5.0",
     "angular-cookies": "1.5.0",
