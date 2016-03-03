@@ -83,11 +83,27 @@ module.exports = EntityGenerator.extend({
             defaults: ''
         });
 
+        // This adds support for a `--skip-client` flag
+        this.option('skip-client', {
+            desc: 'Skip the client-side application generation',
+            type: Boolean,
+            defaults: false
+        });
+
+        // This adds support for a `--skip-server` flag
+        this.option('skip-server', {
+            desc: 'Skip the server-side application generation',
+            type: Boolean,
+            defaults: false
+        });
+
         this.regenerate = this.options['regenerate'];
         this.entityTableName = this.options['table-name'] || this.name;
         this.entityTableName = _s.underscored(this.entityTableName).toLowerCase();
         this.entityAngularJSSuffix = this.options['angular-suffix'];
-        if (this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')) {
+        this.skipClient = this.options['skip-client'];
+        this.skipServer = this.options['skip-server'];
+        if(this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')){
             this.entityAngularJSSuffix = '-' + this.entityAngularJSSuffix;
         }
         this.rootDir = this.destinationRoot();
@@ -111,7 +127,6 @@ module.exports = EntityGenerator.extend({
             this.languages = this.config.get('languages');
             this.buildTool = this.config.get('buildTool');
             this.testFrameworks = this.config.get('testFrameworks');
-            this.skipClient = this.config.get('skipClient');
             // backward compatibility on testing frameworks
             if (this.testFrameworks == null) {
                 this.testFrameworks = ['gatling'];
@@ -1028,11 +1043,21 @@ module.exports = EntityGenerator.extend({
                     },
                     type: 'input',
                     name: 'microservicePath',
-                    message: 'Enter the path to the microservice root directory:'
+                    message: 'Enter the absolute path to the microservice root directory:',
+                    validate: function(input) {
+                        var fromPath = input + '/' + this.filename;
+                        if (shelljs.test('-f', fromPath)) {
+                            return true;
+                        }
+                        else {
+                            return this.filename + ' not found in ' + input + '/';
+                        }
+                    }.bind(this)
                 }
             ];
 
             this.prompt(prompts, function(props) {
+                this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
                 this.microservicePath = props.microservicePath;
                 this.importMicroserviceJson = true;
                 cb();
@@ -1619,6 +1644,8 @@ module.exports = EntityGenerator.extend({
         },
 
         writeEnumFiles: function() {
+            if(this.skipServer) return;
+
             for (var idx in this.fields) {
                 var field = this.fields[idx];
                 if (field.fieldIsEnum == true) {
@@ -1645,7 +1672,8 @@ module.exports = EntityGenerator.extend({
             }
         },
 
-        writeServerFiles: function () {
+        writeServerFiles: function() {
+            if(this.skipServer) return;
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/domain/_Entity.java',
                 SERVER_MAIN_SRC_DIR + this.packageFolder + '/domain/' + this.entityClass + '.java', this, {});
@@ -1678,7 +1706,9 @@ module.exports = EntityGenerator.extend({
             }
         },
 
-        writeDbFiles: function () {
+        writeDbFiles: function() {
+            if(this.skipServer) return;
+
             if (this.databaseType == "sql") {
                 this.template(SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/_added_entity.xml',
                     SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml', this, {'interpolate': INTERPOLATE_REGEX});
@@ -1732,7 +1762,8 @@ module.exports = EntityGenerator.extend({
         },
 
         writeClientTestFiles: function () {
-            if (this.skipClient) return;
+            if(this.skipClient) return;
+
             this.template(CLIENT_TEST_SRC_DIR + 'spec/app/entities/_entity-management-detail.controller.spec.js',
                 CLIENT_TEST_SRC_DIR + 'spec/app/entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.controller.spec.js', this, {});
             // Create Protractor test files
@@ -1741,7 +1772,9 @@ module.exports = EntityGenerator.extend({
             }
         },
 
-        writeTestFiles: function () {
+        writeTestFiles: function() {
+            if(this.skipServer) return;
+
             this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_EntityResourceIntTest.java',
                 SERVER_TEST_SRC_DIR + this.packageFolder + '/web/rest/' + this.entityClass + 'ResourceIntTest.java', this, {});
 
