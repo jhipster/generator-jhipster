@@ -328,6 +328,7 @@ module.exports = JhipsterClientGenerator.extend({
             if (this.enableTranslation) {
                 this.template(ANGULAR_DIR + 'blocks/handlers/_translation.handler.js', ANGULAR_DIR + 'blocks/handlers/translation.handler.js', this, {});
                 this.template(ANGULAR_DIR + 'blocks/config/_translation.config.js', ANGULAR_DIR + 'blocks/config/translation.config.js', this, {});
+                this.template(ANGULAR_DIR + 'blocks/config/_translation.storage.js', ANGULAR_DIR + 'blocks/config/translation.storage.js', this, {});
             }
             this.template(ANGULAR_DIR + 'blocks/config/_alert.config.js', ANGULAR_DIR + 'blocks/config/alert.config.js', this, {});
             this.template(ANGULAR_DIR + 'blocks/config/_http.config.js', ANGULAR_DIR + 'blocks/config/http.config.js', this, {});
@@ -633,6 +634,7 @@ module.exports = JhipsterClientGenerator.extend({
                 appScripts = appScripts.concat([
                     'app/blocks/handlers/translation.handler.js',
                     'app/blocks/config/translation.config.js',
+                    'app/blocks/config/translation.storage.js',
                     'app/components/language/language.service.js',
                     'app/components/language/language.constants.js',
                     'app/components/language/language.filter.js',
