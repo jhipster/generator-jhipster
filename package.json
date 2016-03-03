@@ -34,7 +34,7 @@
     "graceful-fs": "4.1.3",
     "html-wiring": "1.2.0",
     "insight": "0.7.0",
-    "lodash": "4.6.0",
+    "lodash": "4.6.1",
     "mkdirp": "0.5.1",
     "shelljs": "0.6.0",
     "pluralize": "1.2.1",
