@@ -90,6 +90,7 @@ module.exports = EntityGenerator.extend({
         if (this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')) {
             this.entityAngularJSSuffix = '-' + this.entityAngularJSSuffix;
         }
+        this.rootDir = this.destinationRoot();
     },
     initializing: {
         getConfig: function (args) {
@@ -260,8 +261,7 @@ module.exports = EntityGenerator.extend({
             }, this);
             this.log();
         }
-    }
-    ,
+    },
     /**
      * ask question for a field creation
      */
@@ -1053,7 +1053,37 @@ module.exports = EntityGenerator.extend({
             }.bind(this));
         },
 
-        askForFields: function () {
+        askForMicroserviceJson: function(){
+            var cb = this.async();
+            var prompts = [
+                {
+                    type: 'confirm',
+                    name: 'useMicroserviceJson',
+                    message: 'Do you want to generate this entity from an existing microservice?',
+                    default: true
+                },
+                {
+                    when: function(response) {
+                        return response.useMicroserviceJson == true;
+                    },
+                    type: 'input',
+                    name: 'microservicePath',
+                    message: 'Enter the path to the microservice root directory:'
+                }
+            ];
+
+            this.prompt(prompts, function(props) {
+                console.log("in prompt function");
+                this.microservicePath = props.microservicePath;
+                console.log(props.microservicePath + "/.jhipster/" + _.capitalize(this.name) + ".json");
+                console.log(this.rootDir + '/.jhipster/' + _.capitalize(this.name) + ".json");
+
+                cb();
+            }.bind(this));
+            //this.log(chalk.bold())
+        },
+
+        askForFields: function() {
             // don't prompt if data is imported from a file
             if (this.useConfigurationFile && this.updateEntity != 'add') {
                 return;
@@ -1556,9 +1586,11 @@ module.exports = EntityGenerator.extend({
     },
 
     writing: {
+        copyEntityJson: function () {
+            this.template(this.microservicePath + "/.jhipster/" + _.capitalize(this.name) + ".json", this.rootDir + '/.jhipster/' + _.capitalize(this.name) + ".json");
+        },
 
-        writeEnumFiles: function () {
-
+        writeEnumFiles: function() {
             for (var idx in this.fields) {
                 var field = this.fields[idx];
                 if (field.fieldIsEnum == true) {
