@@ -97,6 +97,7 @@ module.exports = EntityGenerator.extend({
             this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
             this.baseName = this.config.get('baseName');
             this.packageName = this.config.get('packageName');
+            this.applicationType = this.config.get('applicationType');
             this.packageFolder = this.config.get('packageFolder');
             this.authenticationType = this.config.get('authenticationType');
             this.hibernateCache = this.config.get('hibernateCache');
@@ -201,6 +202,10 @@ module.exports = EntityGenerator.extend({
                 if (this.fileData.angularJSSuffix !== undefined) {
                     this.entityAngularJSSuffix = this.fileData.angularJSSuffix;
                 }
+                if (this.applicationType == 'gateway'){
+                    this.microserviceName = this.fileData.microserviceName;
+                }
+                this.log(this.applicationType);
             }
         }
     },

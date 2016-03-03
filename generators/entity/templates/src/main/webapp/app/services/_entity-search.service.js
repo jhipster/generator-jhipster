@@ -8,7 +8,9 @@
     <%= entityClass %>Search.$inject = ['$resource'];
 
     function <%= entityClass %>Search($resource) {
-        return $resource('api/_search/<%= entityApiUrl %>', {}, {
+        var resourceUrl = <% if (applicationType == 'gateway') {%> '<%= microserviceName %>/' +<% } %> 'api/_search/<%= entityApiUrl %>/:id';
+
+        return $resource(resourceUrl, {}, {
             'query': { method: 'GET', isArray: true}
         });
     }
