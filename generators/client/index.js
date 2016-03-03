@@ -87,6 +87,13 @@ module.exports = JhipsterClientGenerator.extend({
             type: String
         });
 
+        // This adds support for a `--jhi-prefix` flag
+        this.option('jhi-prefix', {
+            desc: 'Add prefix before services, controllers and states name',
+            type: String,
+            defaults: 'jhi'
+        });
+
         this.skipServer = configOptions.skipServer || this.config.get('skipServer');
         this.skipUserManagement = configOptions.skipUserManagement ||  this.config.get('skipUserManagement');
         this.authenticationType = this.options['auth'];
@@ -97,6 +104,8 @@ module.exports = JhipsterClientGenerator.extend({
         this.enableSocialSignIn = this.options['social'];
         this.searchEngine = this.options['search-engine'];
         this.hibernateCache = this.options['hb-cache'];
+        this.jhiPrefix = this.options['jhi-prefix'];
+        this.jhiPrefixCapitalized = _.capitalize(this.jhiPrefix);
         this.testFrameworks = [];
         this.options['protractor'] &&  this.testFrameworks.push('protractor');
         var lastQuestion = configOptions.lastQuestion;

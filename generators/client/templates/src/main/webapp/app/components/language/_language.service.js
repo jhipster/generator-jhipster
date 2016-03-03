@@ -3,11 +3,11 @@
 
     angular
         .module('<%=angularAppName%>')
-        .factory('Language', Language);
+        .factory('<%=jhiPrefixCapitalized%>LanguageService', <%=jhiPrefixCapitalized%>LanguageService);
 
-    Language.$inject = ['$q', '$http', '$translate', 'LANGUAGES'];
+    <%=jhiPrefixCapitalized%>LanguageService.$inject = ['$q', '$http', '$translate', 'LANGUAGES'];
 
-    function Language ($q, $http, $translate, LANGUAGES) {
+    function <%=jhiPrefixCapitalized%>LanguageService ($q, $http, $translate, LANGUAGES) {
         var service = {
             getAll: getAll,
             getCurrent: getCurrent
