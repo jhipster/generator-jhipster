@@ -56,7 +56,7 @@
     "karma-jenkins-reporter": "0.0.2",
     "karma-phantomjs-launcher": "1.0.0",
     "karma-script-launcher": "0.1.0",
-    "lodash": "4.6.0",
+    "lodash": "4.6.1",
     "map-stream": "0.0.6",
     "phantomjs-prebuilt": "2.1.4",
     <%_ if (testFrameworks.indexOf('protractor') > -1) { _%>
