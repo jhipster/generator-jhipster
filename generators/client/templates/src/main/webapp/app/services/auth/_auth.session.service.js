@@ -5,9 +5,9 @@
         .module('<%=angularAppName%>')
         .factory('AuthServerProvider', AuthServerProvider);
 
-    AuthServerProvider.$inject = ['$http', '$localStorage' <% if (websocket == 'spring-websocket') { %>, 'Tracker'<% } %>];
+    AuthServerProvider.$inject = ['$http', '$localStorage' <% if (websocket == 'spring-websocket') { %>, '<%=jhiPrefixCapitalized%>TrackerService'<% } %>];
 
-    function AuthServerProvider ($http, $localStorage <% if (websocket == 'spring-websocket') { %>, Tracker<% } %>) {
+    function AuthServerProvider ($http, $localStorage <% if (websocket == 'spring-websocket') { %>, <%=jhiPrefixCapitalized%>TrackerService<% } %>) {
         var service = {
             getToken: getToken,
             hasValidToken: hasValidToken,
@@ -42,7 +42,7 @@
         }
 
         function logout () {<% if (websocket == 'spring-websocket') { %>
-            Tracker.disconnect();<% } %>
+            <%=jhiPrefixCapitalized%>TrackerService.disconnect();<% } %>
             // logout from the server
             $http.post('api/logout').success(function (response) {
                 delete $localStorage.authenticationToken;

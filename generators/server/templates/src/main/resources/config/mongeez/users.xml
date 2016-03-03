@@ -12,7 +12,7 @@
                 "last_name": "System",
                 "email": "system@localhost",
                 "activated": "true",
-                "lang_key": "en",
+                "lang_key": "<%= nativeLanguageShortName %>",
                 "created_by": "system",
                 "created_date": new Date(),
                 "authorities": [{"_id": "ROLE_ADMIN"}, {"_id": "ROLE_USER"}]
@@ -26,7 +26,7 @@
                 "last_name": "User",
                 "email": "anonymous@localhost",
                 "activated": "true",
-                "lang_key": "en",
+                "lang_key": "<%= nativeLanguageShortName %>",
                 "created_by": "system",
                 "created_date": new Date(),
                 "authorities": []
@@ -40,7 +40,7 @@
                 "last_name": "Administrator",
                 "email": "admin@localhost",
                 "activated": "true",
-                "lang_key": "en",
+                "lang_key": "<%= nativeLanguageShortName %>",
                 "created_by": "system",
                 "created_date": new Date(),
                 "authorities": [{"_id": "ROLE_ADMIN"}, {"_id": "ROLE_USER"}]
@@ -54,7 +54,7 @@
                 "last_name": "User",
                 "email": "user@localhost",
                 "activated": "true",
-                "lang_key": "en",
+                "lang_key": "<%= nativeLanguageShortName %>",
                 "created_by": "system",
                 "created_date": new Date(),
                 "authorities": [{"_id": "ROLE_USER"}]
