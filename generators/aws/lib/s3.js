@@ -66,7 +66,7 @@ S3.prototype.uploadWar = function uploadWar(params, callback) {
     var buildTool = params.buildTool;
     var buildFolder;
 
-    if(buildTool === 'gradle') {
+    if (buildTool === 'gradle') {
         buildFolder = 'build/libs/'
     } else {
         buildFolder = 'target/'
@@ -107,8 +107,8 @@ var findWarFilename = function findWarFilename(buildFolder, callback) {
             error(err, callback);
         }
         files.filter(function (file) {
-            return file.substr(-FILE_EXTENSION.length) === FILE_EXTENSION;
-        })
+                return file.substr(-FILE_EXTENSION.length) === FILE_EXTENSION;
+            })
             .forEach(function (file) {
                 warFilename = file;
             });
@@ -123,30 +123,28 @@ var uploadToS3 = function uploadToS3(s3, body, callback) {
         if (err) {
             callback(err, null);
         } else {
-            s3.upload({Body: body}).
-                on('httpUploadProgress', function (evt) {
+            s3.upload({Body: body}).on('httpUploadProgress', function (evt) {
 
-                    if (bar === undefined && evt.total) {
-                        var total = evt.total / 1000000;
-                        bar = new progressbar('uploading [:bar] :percent :etas', {
-                            complete: '=',
-                            incomplete: ' ',
-                            width: 20,
-                            total: total,
-                            clear: true
-                        });
-                    }
+                if (bar === undefined && evt.total) {
+                    var total = evt.total / 1000000;
+                    bar = new progressbar('uploading [:bar] :percent :etas', {
+                        complete: '=',
+                        incomplete: ' ',
+                        width: 20,
+                        total: total,
+                        clear: true
+                    });
+                }
 
-                    var curr = evt.loaded / 1000000;
-                    bar.tick(curr - bar.curr);
-                }).
-                send(function (err) {
-                    if (err) {
-                        callback(err, null);
-                    } else {
-                        callback(null, 'War uploaded successful');
-                    }
-                });
+                var curr = evt.loaded / 1000000;
+                bar.tick(curr - bar.curr);
+            }).send(function (err) {
+                if (err) {
+                    callback(err, null);
+                } else {
+                    callback(null, 'War uploaded successful');
+                }
+            });
         }
     });
 };
