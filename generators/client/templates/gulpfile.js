@@ -105,7 +105,7 @@ gulp.task('install', function (done) {
 });
 
 gulp.task('serve', function () {
-    runSequence('install', 'eslint', serve);
+    runSequence('install', serve);
 });
 
 gulp.task('watch', function () {
@@ -113,7 +113,6 @@ gulp.task('watch', function () {
     gulp.watch(['gulpfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>], ['ngconstant:dev']);
     gulp.watch(<% if(useSass) { %>config.sassSrc<% } else { %>config.app + 'content/css/**/*.css'<% } %>, ['styles']);
     gulp.watch(config.app + 'content/images/**', ['images']);
-    //gulp.watch(config.app + 'app/**/*.js', ['eslint']);
     gulp.watch([config.app + '*.html', config.app + 'app/**', config.app + 'i18n/**']).on('change', browserSync.reload);
 });
 
@@ -162,7 +161,7 @@ gulp.task('wiredep:test', function () {
 });
 
 gulp.task('build', function (cb) {
-    runSequence('clean', 'copy', 'wiredep:app', 'ngconstant:prod', 'usemin', cb);
+    runSequence('clean', 'copy', 'wiredep:app', 'ngconstant:prod', 'eslint', 'usemin', cb);
 });
 
 gulp.task('usemin', ['images', 'styles'], function () {
