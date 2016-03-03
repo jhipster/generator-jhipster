@@ -95,6 +95,7 @@ description = ''
 
 configurations {
     providedRuntime
+    compile.exclude module: "spring-boot-starter-tomcat"
 }
 
 repositories {
