@@ -20,13 +20,13 @@ const constants = require('../generator-constants'),
     QUESTIONS = constants.QUESTIONS,
     MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
     TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
-    ANGULAR_DIR =  constants.ANGULAR_DIR;
+    ANGULAR_DIR = constants.ANGULAR_DIR;
 
 var currentQuestion;
 var configOptions = {};
 
 module.exports = JhipsterClientGenerator.extend({
-    constructor: function() {
+    constructor: function () {
         generators.Base.apply(this, arguments);
 
         configOptions = this.options.configOptions || {};
@@ -95,7 +95,7 @@ module.exports = JhipsterClientGenerator.extend({
         });
 
         this.skipServer = configOptions.skipServer || this.config.get('skipServer');
-        this.skipUserManagement = configOptions.skipUserManagement ||  this.config.get('skipUserManagement');
+        this.skipUserManagement = configOptions.skipUserManagement || this.config.get('skipUserManagement');
         this.authenticationType = this.options['auth'];
         this.buildTool = this.options['build'];
         this.websocket = this.options['websocket'];
@@ -107,21 +107,21 @@ module.exports = JhipsterClientGenerator.extend({
         this.jhiPrefix = this.options['jhi-prefix'];
         this.jhiPrefixCapitalized = _.capitalize(this.jhiPrefix);
         this.testFrameworks = [];
-        this.options['protractor'] &&  this.testFrameworks.push('protractor');
+        this.options['protractor'] && this.testFrameworks.push('protractor');
         var lastQuestion = configOptions.lastQuestion;
         currentQuestion = lastQuestion ? lastQuestion : 0;
         this.baseName = configOptions.baseName;
         this.logo = configOptions.logo;
 
     },
-    initializing : {
-        displayLogo : function () {
-            if(this.logo){
+    initializing: {
+        displayLogo: function () {
+            if (this.logo) {
                 this.printJHipsterLogo();
             }
         },
 
-        setupClientVars : function () {
+        setupClientVars: function () {
             // Make constants available in templates
             this.MAIN_SRC_DIR = MAIN_SRC_DIR;
             this.TEST_SRC_DIR = TEST_SRC_DIR;
@@ -162,13 +162,13 @@ module.exports = JhipsterClientGenerator.extend({
 
         askForModuleName: function () {
 
-            if(this.baseName) return;
+            if (this.baseName) return;
 
             this.askModuleName(this, ++currentQuestion, QUESTIONS);
         },
 
         askForClientSideOpts: function () {
-            if(this.existingProject) return;
+            if (this.existingProject) return;
 
             var done = this.async();
             var prompts = [
@@ -186,11 +186,11 @@ module.exports = JhipsterClientGenerator.extend({
         },
 
         askFori18n: function () {
-            if(this.existingProject || configOptions.skipI18nQuestion) return;
+            if (this.existingProject || configOptions.skipI18nQuestion) return;
             this.aski18n(this, ++currentQuestion, QUESTIONS);
         },
 
-        setSharedConfigOptions : function () {
+        setSharedConfigOptions: function () {
             configOptions.lastQuestion = currentQuestion;
             configOptions.useSass = this.useSass;
         }
@@ -229,49 +229,49 @@ module.exports = JhipsterClientGenerator.extend({
     default: {
 
         getSharedConfigOptions: function () {
-            if(configOptions.hibernateCache) {
+            if (configOptions.hibernateCache) {
                 this.hibernateCache = configOptions.hibernateCache;
             }
-            if(configOptions.websocket) {
+            if (configOptions.websocket) {
                 this.websocket = configOptions.websocket;
             }
-            if(configOptions.databaseType) {
+            if (configOptions.databaseType) {
                 this.databaseType = configOptions.databaseType;
             }
-            if(configOptions.devDatabaseType) {
+            if (configOptions.devDatabaseType) {
                 this.devDatabaseType = configOptions.devDatabaseType;
             }
-            if(configOptions.prodDatabaseType) {
+            if (configOptions.prodDatabaseType) {
                 this.prodDatabaseType = configOptions.prodDatabaseType;
             }
-            if(configOptions.searchEngine) {
+            if (configOptions.searchEngine) {
                 this.searchEngine = configOptions.searchEngine;
             }
-            if(configOptions.buildTool) {
+            if (configOptions.buildTool) {
                 this.buildTool = configOptions.buildTool;
             }
-            if(configOptions.enableSocialSignIn != null) {
+            if (configOptions.enableSocialSignIn != null) {
                 this.enableSocialSignIn = configOptions.enableSocialSignIn;
             }
-            if(configOptions.authenticationType) {
+            if (configOptions.authenticationType) {
                 this.authenticationType = configOptions.authenticationType;
             }
-            if(configOptions.testFrameworks) {
+            if (configOptions.testFrameworks) {
                 this.testFrameworks = configOptions.testFrameworks;
             }
-            if(configOptions.enableTranslation != null) {
+            if (configOptions.enableTranslation != null) {
                 this.enableTranslation = configOptions.enableTranslation;
             }
-            if(configOptions.nativeLanguage != null) {
+            if (configOptions.nativeLanguage != null) {
                 this.nativeLanguage = configOptions.nativeLanguage;
             }
-            if(configOptions.languages != null) {
+            if (configOptions.languages != null) {
                 this.languages = configOptions.languages;
             }
         },
 
-        composeLanguages : function () {
-            if(configOptions.skipI18nQuestion) return;
+        composeLanguages: function () {
+            if (configOptions.skipI18nQuestion) return;
             this.composeLanguagesSub(this, configOptions, 'client');
         }
     },
@@ -291,7 +291,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template('gulp/serve.js', 'gulp/serve.js', this, {});
         },
 
-        writeCssFiles : function () {
+        writeCssFiles: function () {
             // normal CSS or SCSS?
             if (this.useSass) {
                 this.template(MAIN_SRC_DIR + 'scss/main.scss', MAIN_SRC_DIR + 'scss/main.scss');
@@ -303,7 +303,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.copy(MAIN_SRC_DIR + 'content/css/documentation.css', MAIN_SRC_DIR + 'content/css/documentation.css');
         },
 
-        writeCommonWebFiles : function () {
+        writeCommonWebFiles: function () {
             // Create Webapp
             mkdirp(MAIN_SRC_DIR);
 
@@ -313,13 +313,13 @@ module.exports = JhipsterClientGenerator.extend({
             this.copy(MAIN_SRC_DIR + '404.html', MAIN_SRC_DIR + '404.html');
         },
 
-        writeSwaggerFiles : function () {
+        writeSwaggerFiles: function () {
             // Swagger-ui for Jhipster
             this.template(MAIN_SRC_DIR + 'swagger-ui/_index.html', MAIN_SRC_DIR + 'swagger-ui/index.html', this, {});
             this.copy(MAIN_SRC_DIR + 'swagger-ui/images/throbber.gif', MAIN_SRC_DIR + 'swagger-ui/images/throbber.gif');
         },
 
-        writeAngularAppFiles : function () {
+        writeAngularAppFiles: function () {
             // Angular JS module
             this.template(ANGULAR_DIR + '_app.module.js', ANGULAR_DIR + 'app.module.js', this, {});
             this.template(ANGULAR_DIR + '_app.state.js', ANGULAR_DIR + 'app.state.js', this, {});
@@ -334,7 +334,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'blocks/config/_localstorage.config.js', ANGULAR_DIR + 'blocks/config/localstorage.config.js', this, {});
         },
 
-        writeAngularAuthFiles : function () {
+        writeAngularAuthFiles: function () {
             // account module
             this.template(ANGULAR_DIR + 'account/_account.state.js', ANGULAR_DIR + 'account/account.state.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'account/activate/activate.html', ANGULAR_DIR + 'account/activate/activate.html');
@@ -372,7 +372,7 @@ module.exports = JhipsterClientGenerator.extend({
             }
         },
 
-        writeAngularAdminModuleFiles : function () {
+        writeAngularAdminModuleFiles: function () {
             // admin modules
             this.template(ANGULAR_DIR + 'admin/_admin.state.js', ANGULAR_DIR + 'admin/admin.state.js', this, {});
             this.copyHtml(ANGULAR_DIR + 'admin/audits/audits.html', ANGULAR_DIR + 'admin/audits/audits.html');
@@ -409,7 +409,7 @@ module.exports = JhipsterClientGenerator.extend({
             }
         },
 
-        writeAngularUserMgmntFiles : function () {
+        writeAngularUserMgmntFiles: function () {
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/user-management.html', ANGULAR_DIR + 'admin/user-management/user-management.html');
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/_user-management-detail.html', ANGULAR_DIR + 'admin/user-management/user-management-detail.html');
             this.copyHtml(ANGULAR_DIR + 'admin/user-management/_user-management-dialog.html', ANGULAR_DIR + 'admin/user-management/user-management-dialog.html');
@@ -421,7 +421,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'admin/user-management/_user-management-delete-dialog.controller.js', ANGULAR_DIR + 'admin/user-management/user-management-delete-dialog.controller.js', this, {});
         },
 
-        writeAngularGatewayFiles : function () {
+        writeAngularGatewayFiles: function () {
             if (this.applicationType != 'gateway') return;
 
             this.copyHtml(ANGULAR_DIR + 'admin/gateway/gateway.html', ANGULAR_DIR + 'admin/gateway/gateway.html');
@@ -430,7 +430,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyJs(ANGULAR_DIR + 'admin/gateway/_gateway.routes.service.js', ANGULAR_DIR + 'admin/gateway/gateway.routes.service.js', this, {});
         },
 
-        writeAngularComponentFiles : function () {
+        writeAngularComponentFiles: function () {
             //components
             this.template(ANGULAR_DIR + 'components/form/_show-validation.directive.js', ANGULAR_DIR + 'components/form/show-validation.directive.js', this, {});
             this.template(ANGULAR_DIR + 'components/form/_maxbytes.directive.js', ANGULAR_DIR + 'components/form/maxbytes.directive.js', this, {});
@@ -460,7 +460,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'components/util/_jhi-item-count.directive.js', ANGULAR_DIR + 'components/util/jhi-item-count.directive.js', this, {});
 
             // interceptor code
-            if (this.authenticationType == 'oauth2' || this.authenticationType == 'jwt') {
+            if (this.authenticationType == 'oauth2' || this.authenticationType == 'jwt') {
                 this.template(ANGULAR_DIR + 'blocks/interceptor/_auth.interceptor.js', ANGULAR_DIR + 'blocks/interceptor/auth.interceptor.js', this, {});
             }
             this.template(ANGULAR_DIR + 'blocks/interceptor/_auth-expired.interceptor.js', ANGULAR_DIR + 'blocks/interceptor/auth-expired.interceptor.js', this, {});
@@ -473,7 +473,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'components/alert/_alert-error.directive.js', ANGULAR_DIR + 'components/alert/alert-error.directive.js', this, {});
         },
 
-        writeAngularMainFiles : function () {
+        writeAngularMainFiles: function () {
             // entities
             this.copyJs(ANGULAR_DIR + 'entities/_entity.state.js', ANGULAR_DIR + 'entities/entity.state.js', this, {});
 
@@ -484,7 +484,7 @@ module.exports = JhipsterClientGenerator.extend({
 
             // layouts
             this.template(ANGULAR_DIR + 'layouts/navbar/_active-link.directive.js', ANGULAR_DIR + 'layouts/navbar/active-link.directive.js', this, {});
-            if(this.enableTranslation) {
+            if (this.enableTranslation) {
                 this.template(ANGULAR_DIR + 'layouts/navbar/_active-menu.directive.js', ANGULAR_DIR + 'layouts/navbar/active-menu.directive.js', this, {});
             }
             this.copyHtml(ANGULAR_DIR + 'layouts/navbar/navbar.html', ANGULAR_DIR + 'layouts/navbar/navbar.html');
@@ -494,7 +494,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.copyJs(ANGULAR_DIR + 'layouts/error/_error.state.js', ANGULAR_DIR + 'layouts/error/error.state.js', this, {});
         },
 
-        writeAngularAuthServiceFiles : function () {
+        writeAngularAuthServiceFiles: function () {
             // services
             this.template(ANGULAR_DIR + 'services/auth/_auth.service.js', ANGULAR_DIR + 'services/auth/auth.service.js', this, {});
             this.template(ANGULAR_DIR + 'services/auth/_principal.service.js', ANGULAR_DIR + 'services/auth/principal.service.js', this, {});
@@ -517,7 +517,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'services/user/_user.service.js', ANGULAR_DIR + 'services/user/user.service.js', this, {});
         },
 
-        writeImageFiles : function () {
+        writeImageFiles: function () {
             // Images
             this.copy(MAIN_SRC_DIR + 'content/images/development_ribbon.png', MAIN_SRC_DIR + 'content/images/development_ribbon.png');
             this.copy(MAIN_SRC_DIR + 'content/images/hipster.png', MAIN_SRC_DIR + 'content/images/hipster.png');
@@ -716,8 +716,8 @@ module.exports = JhipsterClientGenerator.extend({
                 testTemplates.push('e2e/admin/_administration.js');
                 testTemplates.push('_protractor.conf.js')
             }
-            testTemplates.map(function(testTemplatePath) {
-                this.template(TEST_SRC_DIR + testTemplatePath, TEST_SRC_DIR + testTemplatePath.replace(/_/,''), this, {});
+            testTemplates.map(function (testTemplatePath) {
+                this.template(TEST_SRC_DIR + testTemplatePath, TEST_SRC_DIR + testTemplatePath.replace(/_/, ''), this, {});
             }.bind(this));
 
         }

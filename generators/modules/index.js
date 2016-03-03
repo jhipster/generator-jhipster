@@ -16,14 +16,15 @@ var ModulesGenerator = generators.Base.extend({});
 util.inherits(ModulesGenerator, scriptBase);
 
 module.exports = ModulesGenerator.extend({
-    constructor: function() {
+    constructor: function () {
         generators.Base.apply(this, arguments);
 
         var jhipsterVar = this.options.jhipsterVar;
         var jhipsterFunc = this.options.jhipsterFunc;
         if (jhipsterVar == null || jhipsterVar.moduleName == null) {
             this.env.error(chalk.red('ERROR! This sub-generator must be used by JHipster modules, and the module name is not defined.'));
-        };
+        }
+        ;
         this.log('Composing JHipster configuration with module ' + chalk.red(jhipsterVar.moduleName));
 
         var baseName = this.config.get('baseName');
@@ -111,7 +112,7 @@ module.exports = ModulesGenerator.extend({
 
     },
 
-    initializing : function () {
+    initializing: function () {
         //at least one method is required for yeoman to initilize the generator
         this.log('Reading the JHipster project configuration for your module');
     }

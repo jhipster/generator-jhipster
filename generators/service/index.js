@@ -13,13 +13,13 @@ var ServiceGenerator = generators.Base.extend({});
 util.inherits(ServiceGenerator, scriptBase);
 
 module.exports = ServiceGenerator.extend({
-    constructor: function() {
+    constructor: function () {
         generators.Base.apply(this, arguments);
-        this.argument('name', { type: String, required: true });
+        this.argument('name', {type: String, required: true});
     },
 
-    initializing : {
-        getConfig : function () {
+    initializing: {
+        getConfig: function () {
             this.log('The service ' + this.name + ' is being created.');
             this.baseName = this.config.get('baseName');
             this.packageName = this.config.get('packageName');
@@ -28,16 +28,16 @@ module.exports = ServiceGenerator.extend({
         }
     },
 
-    prompting : function () {
+    prompting: function () {
         var cb = this.async();
 
         var prompts = [
-        {
-            type: 'confirm',
-            name: 'useInterface',
-            message: '(1/1) Do you want to use an interface for your service?',
-            default: false
-        }
+            {
+                type: 'confirm',
+                name: 'useInterface',
+                message: '(1/1) Do you want to use an interface for your service?',
+                default: false
+            }
         ]
         this.prompt(prompts, function (props) {
             this.useInterface = props.useInterface;
@@ -45,7 +45,7 @@ module.exports = ServiceGenerator.extend({
         }.bind(this));
     },
 
-    writing : function () {
+    writing: function () {
         this.serviceClass = _.capitalize(this.name);
         this.serviceInstance = this.name.toLowerCase();
         var insight = this.insight();
@@ -53,11 +53,11 @@ module.exports = ServiceGenerator.extend({
         insight.track('service/interface', this.useInterface);
 
         this.template(SERVER_MAIN_SRC_DIR + 'package/service/_Service.java',
-        SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/' +  this.serviceClass + 'Service.java');
+            SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/' + this.serviceClass + 'Service.java');
 
         if (this.useInterface) {
             this.template(SERVER_MAIN_SRC_DIR + 'package/service/impl/_ServiceImpl.java',
-            SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/impl/' +  this.serviceClass + 'ServiceImpl.java');
+                SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/impl/' + this.serviceClass + 'ServiceImpl.java');
         }
     }
 
