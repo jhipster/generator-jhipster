@@ -14,7 +14,7 @@
         });
 
         $translateProvider.preferredLanguage('<%= nativeLanguageShortName %>');
-        $translateProvider.useStorage('translationStorage');
+        $translateProvider.useStorage('translationStorageProvider');
         $translateProvider.useSanitizeValueStrategy('escaped');
         $translateProvider.addInterpolation('$translateMessageFormatInterpolation');
 

@@ -3,11 +3,11 @@
 
     angular
         .module('<%=angularAppName%>')
-        .factory('translationStorage', translationStorage);
+        .factory('translationStorageProvider', translationStorageProvider);
 
-    translationStorage.$inject = ['$cookies', '$log', 'LANGUAGES'];
+    translationStorageProvider.$inject = ['$cookies', '$log', 'LANGUAGES'];
 
-    function translationStorage($cookies, $log, LANGUAGES) {
+    function translationStorageProvider($cookies, $log, LANGUAGES) {
         return {
             get: get,
             put: put
