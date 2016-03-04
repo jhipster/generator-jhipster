@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * Zuul filter for restricting access to backend micro-services endpoints
  */
-public class AccessControlFilter extends ZuulFilter{
+public class AccessControlFilter extends ZuulFilter {
 
     private final Logger log = LoggerFactory.getLogger(AccessControlFilter.class);
 
@@ -61,7 +61,7 @@ public class AccessControlFilter extends ZuulFilter{
 
         // If the authorized endpoints list was left empty for this route, all access are allowed
         if(authorizedMicroservicesEndpoints.get(serviceName) == null){
-            log.debug("Access Control: allowing access for: " + requestUri + ", as no access control policy has been set up for service: " + serviceName);
+            log.debug("Access Control: allowing access for {}, as no access control policy has been set up for service: {}", requestUri, serviceName);
             return true;
         }
         else {
@@ -71,7 +71,7 @@ public class AccessControlFilter extends ZuulFilter{
             for (String endpoint : authorizedEndpoints) {
                 String gatewayEndpoint = serviceUrl.substring(0, serviceUrl.length() - 3) + endpoint;
                 if (requestUri.startsWith(gatewayEndpoint)) {
-                    log.debug("Access Control: allowing access for: " + requestUri + ", as it matches the following authorized microservice endpoint: " + gatewayEndpoint);
+                    log.debug("Access Control: allowing access for {}, as it matches the following authorized microservice endpoint: {}", requestUri, gatewayEndpoint);
                     return true;
                 }
             }
@@ -86,7 +86,7 @@ public class AccessControlFilter extends ZuulFilter{
         if (ctx.getResponseBody() == null) {
             ctx.setSendZuulResponse(false);
         }
-        log.debug("Access Control: filtered unauthorized access on endpoint " + ctx.getRequest().getRequestURI());
+        log.debug("Access Control: filtered unauthorized access on endpoint {}", ctx.getRequest().getRequestURI());
         return null;
     }
 }
