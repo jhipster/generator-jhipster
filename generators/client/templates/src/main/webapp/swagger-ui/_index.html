@@ -97,7 +97,7 @@
                     window.swaggerUi.api.clientAuthorizations.add("key", apiKeyAuth);
                 <% } %>
                 <% if (authenticationType == 'jwt') { %>
-                    var authToken = JSON.parse(localStorage.getItem("jhi-authenticationToken"));
+                    var authToken = JSON.parse(localStorage.getItem("jhi-authenticationToken") || sessionStorage.getItem("jhi-authenticationToken"));
                     var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization("Authorization", "Bearer " + authToken, "header");
                     window.swaggerUi.api.clientAuthorizations.add("bearer", apiKeyAuth);
                 <% } %>
