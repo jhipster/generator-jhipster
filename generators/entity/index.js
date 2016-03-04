@@ -83,13 +83,6 @@ module.exports = EntityGenerator.extend({
             defaults: ''
         });
 
-        // This adds support for a `--skip-client` flag
-        this.option('skip-client', {
-            desc: 'Skip the client-side application generation',
-            type: Boolean,
-            defaults: false
-        });
-
         // This adds support for a `--skip-server` flag
         this.option('skip-server', {
             desc: 'Skip the server-side application generation',
@@ -101,7 +94,6 @@ module.exports = EntityGenerator.extend({
         this.entityTableName = this.options['table-name'] || this.name;
         this.entityTableName = _s.underscored(this.entityTableName).toLowerCase();
         this.entityAngularJSSuffix = this.options['angular-suffix'];
-        this.skipClient = this.options['skip-client'];
         this.skipServer = this.options['skip-server'];
         if(this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')){
             this.entityAngularJSSuffix = '-' + this.entityAngularJSSuffix;
@@ -111,7 +103,6 @@ module.exports = EntityGenerator.extend({
     initializing: {
         getConfig: function (args) {
             this.useConfigurationFile = false;
-            this.importMicroserviceJson = false;
             this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
             this.baseName = this.config.get('baseName');
             this.packageName = this.config.get('packageName');
@@ -131,6 +122,14 @@ module.exports = EntityGenerator.extend({
             if (this.testFrameworks == null) {
                 this.testFrameworks = ['gatling'];
             }
+
+            if(this.applicationType == 'microservice') {
+                this.skipClient = true;
+            }
+            else {
+                this.skipClient = this.config.get('skipClient');
+            }
+
             this.angularAppName = this.getAngularAppName();
             this.jhipsterConfigDirectory = '.jhipster';
             this.mainClass = this.getMainClassName();
@@ -138,12 +137,6 @@ module.exports = EntityGenerator.extend({
             this.filename = this.jhipsterConfigDirectory + '/' + _s.capitalize(this.name) + '.json';
             if (shelljs.test('-f', this.filename)) {
                 this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
-                try {
-                    this.fileData = this.fs.readJSON(this.filename);
-                } catch (err) {
-                    this.log(chalk.red('\nThe configuration file could not be read!\n'));
-                    return;
-                }
                 this.useConfigurationFile = true;
             }
         },
@@ -198,35 +191,41 @@ module.exports = EntityGenerator.extend({
             } else {
                 //existing entity reading values from file
                 this.log(chalk.red('\nThe entity ' + this.name + ' is being updated.\n'));
-                this.relationships = this.fileData.relationships;
-                this.fields = this.fileData.fields;
-                this.changelogDate = this.fileData.changelogDate;
-                this.dto = this.fileData.dto;
-                this.service = this.fileData.service;
-                this.pagination = this.fileData.pagination;
-                this.javadoc = this.fileData.javadoc;
-                this.entityTableName = this.fileData.entityTableName || _s.underscored(this.name).toLowerCase();
-                this.fields && this.fields.forEach(function (field) {
-                    fieldNamesUnderscored.push(_s.underscored(field.fieldName));
-                    fieldNameChoices.push({name: field.fieldName, value: field.fieldName});
-                }, this);
-                this.relationships && this.relationships.forEach(function (rel) {
-                    relNameChoices.push({
-                        name: rel.relationshipName + ':' + rel.relationshipType,
-                        value: rel.relationshipName + ':' + rel.relationshipType
-                    });
-                }, this);
-                if (this.fileData.angularJSSuffix !== undefined) {
-                    this.entityAngularJSSuffix = this.fileData.angularJSSuffix;
-                }
-                if (this.applicationType == 'gateway'){
-                    this.microserviceName = this.fileData.microserviceName;
-                }
             }
         }
     },
 
     /* private Helper methods */
+    _loadJSON: function (path) {
+        try {
+            this.fileData = this.fs.readJSON(path);
+            this.log(this.fileData);
+        } catch (err) {
+            this.log(chalk.red('\nThe configuration file could not be read!\n'));
+            return;
+        }
+        this.relationships = this.fileData.relationships;
+        this.fields = this.fileData.fields;
+        this.changelogDate = this.fileData.changelogDate;
+        this.dto = this.fileData.dto;
+        this.service = this.fileData.service;
+        this.pagination = this.fileData.pagination;
+        this.javadoc = this.fileData.javadoc;
+        this.entityTableName = this.fileData.entityTableName || _s.underscored(this.name).toLowerCase();
+        this.fields && this.fields.forEach(function (field) {
+            fieldNamesUnderscored.push(_s.underscored(field.fieldName));
+            fieldNameChoices.push({name: field.fieldName, value: field.fieldName});
+        }, this);
+        this.relationships && this.relationships.forEach(function (rel) {
+            relNameChoices.push({name: rel.relationshipName + ':' + rel.relationshipType, value: rel.relationshipName + ':' + rel.relationshipType});
+        }, this);
+        if (this.fileData.angularJSSuffix !== undefined){
+            this.entityAngularJSSuffix = this.fileData.angularJSSuffix;
+        }
+        if (this.applicationType == 'gateway'){
+            this.microserviceName = this.fileData.microserviceName;
+        }
+    },
     /**
      * Show the entity and it's fields and relationships in console
      */
@@ -1024,7 +1023,7 @@ module.exports = EntityGenerator.extend({
     prompting: {
         /* pre entity hook needs to be written here */
         askForMicroserviceJson: function(){
-            if(this.applicationType != 'gateway') {
+            if(this.applicationType != 'gateway' || this.useConfigurationFile) {
                 return;
             }
 
@@ -1059,7 +1058,7 @@ module.exports = EntityGenerator.extend({
             this.prompt(prompts, function(props) {
                 this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
                 this.microservicePath = props.microservicePath;
-                this.importMicroserviceJson = true;
+                this.useConfigurationFile = true;
                 cb();
 
             }.bind(this));
@@ -1069,7 +1068,7 @@ module.exports = EntityGenerator.extend({
             // ask only if running an existing entity without arg option --force or --regenerate
             var isForce = this.options['force'] || this.regenerate;
             this.updateEntity = 'regenerate'; // default if skipping questions by --force
-            if (isForce || !this.useConfigurationFile || this.importMicroserviceJson) {
+            if (isForce || !this.useConfigurationFile) {
                 return;
             }
             var cb = this.async();
@@ -1111,7 +1110,7 @@ module.exports = EntityGenerator.extend({
 
         askForFields: function() {
             // don't prompt if data is imported from a file
-            if ((this.useConfigurationFile && this.updateEntity != 'add') || this.importMicroserviceJson) {
+            if (this.useConfigurationFile && this.updateEntity != 'add') {
                 return;
             }
 
@@ -1126,7 +1125,7 @@ module.exports = EntityGenerator.extend({
 
         askForFieldsToRemove: function () {
             // prompt only if data is imported from a file
-            if ((!this.useConfigurationFile || this.updateEntity != 'remove') || this.importMicroserviceJson) {
+            if (!this.useConfigurationFile || this.updateEntity != 'remove') {
                 return;
             }
             var cb = this.async();
@@ -1136,7 +1135,7 @@ module.exports = EntityGenerator.extend({
 
         askForRelationships: function () {
             // don't prompt if data is imported from a file
-            if ((this.useConfigurationFile && this.updateEntity != 'add') || this.importMicroserviceJson) {
+            if (this.useConfigurationFile && this.updateEntity != 'add') {
                 return;
             }
             if (this.databaseType == 'mongodb' || this.databaseType == 'cassandra') {
@@ -1150,7 +1149,7 @@ module.exports = EntityGenerator.extend({
 
         askForRelationsToRemove: function () {
             // prompt only if data is imported from a file
-            if ((!this.useConfigurationFile || this.updateEntity != 'remove') || this.importMicroserviceJson) {
+            if (!this.useConfigurationFile || this.updateEntity != 'remove') {
                 return;
             }
             if (this.databaseType == 'mongodb' || this.databaseType == 'cassandra') {
@@ -1164,7 +1163,7 @@ module.exports = EntityGenerator.extend({
 
         askForDTO: function () {
             // don't prompt if data is imported from a file
-            if (this.useConfigurationFile || this.importMicroserviceJson) {
+            if (this.useConfigurationFile) {
                 return;
             }
             var cb = this.async();
@@ -1194,7 +1193,7 @@ module.exports = EntityGenerator.extend({
 
         askForService: function () {
             // don't prompt if data are imported from a file
-            if (this.useConfigurationFile || this.importMicroserviceJson) {
+            if (this.useConfigurationFile) {
                 return;
             }
             var cb = this.async();
@@ -1228,7 +1227,7 @@ module.exports = EntityGenerator.extend({
 
         askForPagination: function () {
             // don't prompt if data are imported from a file
-            if (this.useConfigurationFile || this.importMicroserviceJson) {
+            if (this.useConfigurationFile) {
                 return;
             }
             if (this.databaseType == 'cassandra') {
@@ -1271,31 +1270,15 @@ module.exports = EntityGenerator.extend({
 
     configuring: {
         loadEntityJson: function() {
-            if(!this.importMicroserviceJson) {
+            if(!this.useConfigurationFile) {
                 return;
             }
-
-            this.fromPath = this.microservicePath + '/' + this.filename;
-            this.fileData = this.fs.readJSON(this.fromPath);
-            this.relationships = this.fileData.relationships;
-            this.fields = this.fileData.fields;
-            this.changelogDate = this.fileData.changelogDate;
-            this.dto = this.fileData.dto;
-            this.service = this.fileData.service;
-            this.pagination = this.fileData.pagination;
-            this.javadoc = this.fileData.javadoc;
-            this.entityTableName = this.fileData.entityTableName || _s.underscored(this.name).toLowerCase();
-            this.fields && this.fields.forEach(function (field) {
-                fieldNamesUnderscored.push(_s.underscored(field.fieldName));
-                fieldNameChoices.push({name: field.fieldName, value: field.fieldName});
-            }, this);
-            this.relationships && this.relationships.forEach(function (rel) {
-                relNameChoices.push({name: rel.relationshipName + ':' + rel.relationshipType, value: rel.relationshipName + ':' + rel.relationshipType});
-            }, this);
-            if (this.fileData.angularJSSuffix !== undefined){
-                this.entityAngularJSSuffix = this.fileData.angularJSSuffix;
+            if(_.isUndefined(this.microservicePath)) {
+                this.fromPath = this.filename;
+            } else {
+                this.fromPath = this.microservicePath + '/' + this.filename;
             }
-            this.microserviceName = this.fileData.microserviceName;
+            this._loadJSON(this.fromPath);
         },
 
         validateFile: function() {
@@ -1408,7 +1391,7 @@ module.exports = EntityGenerator.extend({
         },
 
         writeEntityJson: function () {
-            if ((this.useConfigurationFile && this.updateEntity == 'regenerate') || this.importMicroserviceJson) {
+            if (this.useConfigurationFile && this.updateEntity == 'regenerate') {
                 return; //do not update if regenerating entity
             }
             // store informations in a file for further use.
@@ -1637,8 +1620,8 @@ module.exports = EntityGenerator.extend({
         }
     },
     writing : {
-        writeEntityJson: function () {
-            if(this.importMicroserviceJson) {
+        writeMicroserviceEntityJson: function () {
+            if(this.useConfigurationFile && !_.isUndefined(this.microservicePath)) {
                 this.template(this.fromPath, this.rootDir + '/' + this.filename, this,{});
             }
         },
