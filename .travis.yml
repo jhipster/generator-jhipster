@@ -4,7 +4,7 @@ services:
   - docker
 language: node_js
 node_js:
-  - "4.2.4"
+  - "4.3.2"
 jdk:
   - oraclejdk8
 env:
@@ -28,7 +28,7 @@ env:
     - JHIPSTER=app-oauth2
     - JHIPSTER=app-jwt
     - JHIPSTER=app-mysql PROFILE=prod PROTRACTOR=1
-    - JHIPSTER=app-psql-es-noi18n PROFILE=prod
+    - JHIPSTER=app-psql-es-noi18n PROFILE=prod PROTRACTOR=1
     - JHIPSTER=app-social-websocket PROTRACTOR=1
 
 before_install:
@@ -38,7 +38,7 @@ before_install:
 install:
   - $JHIPSTER_INSTALL/01-install-docker-compose.sh
   - $JHIPSTER_INSTALL/02-install-jhipster-stack.sh
-  # - $JHIPSTER_INSTALL/03-checkVersion.sh
+  - $JHIPSTER_INSTALL/03-checkVersion.sh
   - $JHIPSTER_INSTALL/04-cache.sh
 script:
   - $JHIPSTER_SCRIPTS/01-generate-project.sh
