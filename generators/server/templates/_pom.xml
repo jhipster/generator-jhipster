@@ -91,7 +91,7 @@
         <%_ if (authenticationType == 'oauth2') { _%>
         <spring-security-oauth2.version>2.0.9.RELEASE</spring-security-oauth2.version>
         <%_ } _%>
-        <springfox.version>2.3.1</springfox.version>
+        <springfox.version>2.4.0</springfox.version>
         <%_ if (enableSocialSignIn) { _%>
         <!-- Spring social -->
         <httpclient.version>4.5.1</httpclient.version>
