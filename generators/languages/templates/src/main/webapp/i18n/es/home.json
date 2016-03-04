@@ -11,9 +11,9 @@
             "stackoverflow": "JHipster en Stack Overflow",
             "bugtracker": "JHipster seguimiento de errores",
             "chat": "Sala de chat pública de JHipster",
-            "contact": "contacto @java_hipster en Twitter"
+            "follow": "contacto @java_hipster en Twitter"
         },
         "like": "Si te gusta JHipster, danos una estrella en",
-        "github": "Github"
+        "github": "GitHub"
     }
 }

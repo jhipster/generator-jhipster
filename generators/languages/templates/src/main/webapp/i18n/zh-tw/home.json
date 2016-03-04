@@ -11,9 +11,9 @@
             "stackoverflow": "Stack Overflow 上關於 JHipster 的討論",
             "bugtracker": "JHipster 的錯誤追蹤",
             "chat": "JHipster public chat room",
-            "contact": "在 Twitter 上聯絡 @java_hipster"
+            "follow": "在 Twitter 上聯絡 @java_hipster"
         },
         "like": "如果您喜歡 JHipster, 請記得給我們一顆星星在",
-        "github": "Github"
+        "github": "GitHub"
     }
 }
