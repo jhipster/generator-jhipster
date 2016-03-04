@@ -332,6 +332,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.template(ANGULAR_DIR + 'blocks/config/_alert.config.js', ANGULAR_DIR + 'blocks/config/alert.config.js', this, {});
             this.template(ANGULAR_DIR + 'blocks/config/_http.config.js', ANGULAR_DIR + 'blocks/config/http.config.js', this, {});
             this.template(ANGULAR_DIR + 'blocks/config/_localstorage.config.js', ANGULAR_DIR + 'blocks/config/localstorage.config.js', this, {});
+            this.template(ANGULAR_DIR + 'blocks/config/_compile.config.js', ANGULAR_DIR + 'blocks/config/compile.config.js', this, {});
         },
 
         writeAngularAuthFiles: function () {
@@ -540,6 +541,7 @@ module.exports = JhipsterClientGenerator.extend({
                 'app/blocks/config/alert.config.js',
                 'app/blocks/config/http.config.js',
                 'app/blocks/config/localstorage.config.js',
+                'app/blocks/config/compile.config.js',
                 'app/blocks/interceptor/auth-expired.interceptor.js',
                 'app/blocks/interceptor/errorhandler.interceptor.js',
                 'app/blocks/interceptor/notification.interceptor.js',

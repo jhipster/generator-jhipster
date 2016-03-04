@@ -30,6 +30,7 @@ describe('<%= entityClass %> e2e test', function () {
     it('should load create <%= entityClass %> dialog', function () {
         element(by.css('[ui-sref="<%= entityStateName %>.new"]')).click();
         expect(element.all(by.css('h4')).first().getText()).toMatch(/Create or edit a <%= entityClass %>/);
+        element(by.css('button.close')).click();
     });
 
     afterAll(function () {

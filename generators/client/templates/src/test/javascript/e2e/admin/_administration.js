@@ -55,11 +55,6 @@ describe('administration', function () {
         expect(element.all(by.css('h2')).first().getText()).toMatch(/Logs/);
     });
 
-    it('should load api docs', function () {
-        element(by.css('[ui-sref="docs"]')).click();
-        expect(element.all(by.css('iframe')).isDisplayed()).toBeTruthy();
-    });
-
     afterAll(function () {
         accountMenu.click();
         logout.click();
