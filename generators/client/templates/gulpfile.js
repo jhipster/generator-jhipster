@@ -45,21 +45,6 @@ gulp.task('clean', function () {
     return del([config.dist]);
 });
 
-gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function (done) {
-    new KarmaServer({
-        configFile: __dirname + '/' + config.test + 'karma.conf.js',
-        singleRun: true
-    }, done).start();
-});
-<% if (testFrameworks.indexOf('protractor') > -1) { %>
-gulp.task('protractor', function () {
-    return gulp.src([config.test + 'e2e/**/*.js'])
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(protractor({
-            configFile: config.test + 'protractor.conf.js'
-        }));
-});<% } %>
-
 gulp.task('copy', function () {
     return es.merge( <% if(enableTranslation) { %> // copy i18n folders only if translation is enabled
         gulp.src(config.app + 'i18n/**')
@@ -85,7 +70,8 @@ gulp.task('images', function () {
         .pipe(gulp.dest(config.dist + 'content/images'))
         .pipe(browserSync.reload({stream: true}));
 });
-<% if(useSass) { %>
+
+<%_ if(useSass) { _%>
 gulp.task('sass', function () {
     return gulp.src(config.sassSrc)
         .pipe(plumber({errorHandler: handleErrors}))
@@ -94,26 +80,11 @@ gulp.task('sass', function () {
         .pipe(sass({includePaths:config.importPath}).on('error', sass.logError))
         .pipe(gulp.dest(config.cssDir));
 });
-<% } %>
+<%_ } _%>
+
 gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function () {
     return gulp.src(config.app + 'content/css')
         .pipe(browserSync.reload({stream: true}));
-});
-
-gulp.task('install', function (done) {
-    runSequence('wiredep', 'ngconstant:dev'<% if(useSass) { %>, 'sass'<% } %>, done);
-});
-
-gulp.task('serve', function () {
-    runSequence('install', serve);
-});
-
-gulp.task('watch', function () {
-    gulp.watch('bower.json', ['wiredep']);
-    gulp.watch(['gulpfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>], ['ngconstant:dev']);
-    gulp.watch(<% if(useSass) { %>config.sassSrc<% } else { %>config.app + 'content/css/**/*.css'<% } %>, ['styles']);
-    gulp.watch(config.app + 'content/images/**', ['images']);
-    gulp.watch([config.app + '*.html', config.app + 'app/**', config.app + 'i18n/**']).on('change', browserSync.reload);
 });
 
 gulp.task('wiredep', ['wiredep:test', 'wiredep:app']);
@@ -158,10 +129,6 @@ gulp.task('wiredep:test', function () {
             }
         }))
         .pipe(gulp.dest(config.test));
-});
-
-gulp.task('build', function (cb) {
-    runSequence('clean', 'copy', 'wiredep:app', 'ngconstant:prod', 'eslint', 'usemin', cb);
 });
 
 gulp.task('usemin', ['images', 'styles'], function () {
@@ -252,8 +219,47 @@ gulp.task('eslint-and-fix', function () {
         .pipe(gulpIf(util.isLintFixed, gulp.dest(config.app + 'app')));
 });
 
+gulp.task('test', ['wiredep:test', 'ngconstant:dev'], function (done) {
+    new KarmaServer({
+        configFile: __dirname + '/' + config.test + 'karma.conf.js',
+        singleRun: true
+    }, done).start();
+});
 
-<% if (testFrameworks.indexOf('protractor') > -1) { %>
+<%_ if (testFrameworks.indexOf('protractor') > -1) { _%>
+gulp.task('protractor', function () {
+    return gulp.src([config.test + 'e2e/**/*.js'])
+        .pipe(plumber({errorHandler: handleErrors}))
+        .pipe(protractor({
+            configFile: config.test + 'protractor.conf.js'
+        }))
+        .on('error', function(err) {
+            console.log('E2E Tests failed');
+            process.exit(1);
+        });
+});
+
 gulp.task('itest', ['protractor']);
-<% } %>
+<%_ } _%>
+
+gulp.task('watch', function () {
+    gulp.watch('bower.json', ['wiredep']);
+    gulp.watch(['gulpfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>], ['ngconstant:dev']);
+    gulp.watch(<% if(useSass) { %>config.sassSrc<% } else { %>config.app + 'content/css/**/*.css'<% } %>, ['styles']);
+    gulp.watch(config.app + 'content/images/**', ['images']);
+    gulp.watch([config.app + '*.html', config.app + 'app/**', config.app + 'i18n/**']).on('change', browserSync.reload);
+});
+
+gulp.task('install', function (done) {
+    runSequence('wiredep', 'ngconstant:dev'<% if(useSass) { %>, 'sass'<% } %>, done);
+});
+
+gulp.task('serve', function () {
+    runSequence('install', serve);
+});
+
+gulp.task('build', function (cb) {
+    runSequence('clean', 'copy', 'wiredep:app', 'ngconstant:prod', 'eslint', 'usemin', cb);
+});
+
 gulp.task('default', ['serve']);
