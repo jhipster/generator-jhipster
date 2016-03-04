@@ -194,6 +194,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/blocks/config/localstorage.config.js',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/config/alert.config.js',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/config/translation.config.js',
+        CLIENT_MAIN_SRC_DIR + 'app/blocks/config/compile.config.js',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/handlers/state.handler.js',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/handlers/translation.handler.js',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/interceptor/auth-expired.interceptor.js',
