@@ -27,16 +27,12 @@
         }
 
         function login (credentials) {
-            var data = 'username=' +  encodeURIComponent(credentials.username) + '&password=' +
-                encodeURIComponent(credentials.password) + '&rememberMe=' +
-                encodeURIComponent(credentials.rememberMe);
-
-            return $http.post('api/authenticate', data, {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Accept': 'application/json'
-                }
-            }).success(authenticateSuccess);
+            var data = {
+                username: credentials.username,
+                password: credentials.password,
+                rememberMe: credentials.rememberMe
+            };
+            return $http.post('api/authenticate', data).success(authenticateSuccess);
 
             function authenticateSuccess (data, status, headers) {
                 var bearerToken = headers('Authorization');

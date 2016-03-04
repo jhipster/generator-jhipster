@@ -27,22 +27,22 @@ public class UserStepDefs extends StepDefs {
         this.restUserMockMvc = MockMvcBuilders.standaloneSetup(userResource).build();
     }
 
-	@When("^I search user '(.*)'$")
-	public void i_search_user_admin(String userId) throws Throwable {
+    @When("^I search user '(.*)'$")
+    public void i_search_user_admin(String userId) throws Throwable {
         actions = restUserMockMvc.perform(get("/api/users/" + userId)
                 .accept(MediaType.APPLICATION_JSON));
     }
 
-	@Then("^the user is found$")
-	public void the_user_is_found() throws Throwable {
-		actions
-	        .andExpect(status().isOk())
-	        .andExpect(content().contentType("application/json"));
-	}
+    @Then("^the user is found$")
+    public void the_user_is_found() throws Throwable {
+        actions
+            .andExpect(status().isOk())
+            .andExpect(content().contentType("application/json"));
+    }
 
-	@Then("^his last name is '(.*)'$")
-	public void his_last_name_is(String lastName) throws Throwable {
-		actions.andExpect(jsonPath("$.lastName").value(lastName));
-	}
+    @Then("^his last name is '(.*)'$")
+    public void his_last_name_is(String lastName) throws Throwable {
+        actions.andExpect(jsonPath("$.lastName").value(lastName));
+    }
 
 }

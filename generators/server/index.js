@@ -822,7 +822,9 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/security/_UserNotActivatedException.java', javaDir + 'security/UserNotActivatedException.java', this, {});
 
             if (this.authenticationType == 'jwt') {
+                this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_LoginDTO.java', javaDir + 'web/rest/dto/LoginDTO.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_UserJWTController.java', javaDir + 'web/rest/UserJWTController.java', this, {});
+                this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_JWTToken.java', javaDir + 'web/rest/JWTToken.java', this, {});
             }
 
             if (this.authenticationType == 'oauth2') {
