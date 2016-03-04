@@ -1,6 +1,5 @@
 'use strict';
 var util = require('util'),
-    fs = require('fs'),
     path = require('path'),
     generators = require('yeoman-generator'),
     chalk = require('chalk'),
@@ -138,6 +137,20 @@ module.exports = EntityGenerator.extend({
             if (shelljs.test('-f', this.filename)) {
                 this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
                 this.useConfigurationFile = true;
+                this.fromPath = this.filename;
+            }
+            else {
+                var filePath = this.jhipsterConfigDirectory + '/jhipster-remote-entities.json';
+                var allData = this.fs.readJSON(filePath);
+                for(var key in allData) {
+                    if(key == _s.capitalize(this.name)) {
+                        this.log(chalk.green('\nFound the ' + this.filename + ' configuration file in remote microservice ' +  allData[key].appName));
+                        this.log(chalk.green('\nUsing configuration file ' + allData[key].entityPath));
+                        this.useConfigurationFile = true;
+                        this.fromPath = allData[key].entityPath;
+                        this.microserviceName = allData[key].appName;
+                    }
+                }
             }
         },
 
@@ -191,15 +204,15 @@ module.exports = EntityGenerator.extend({
             } else {
                 //existing entity reading values from file
                 this.log(chalk.red('\nThe entity ' + this.name + ' is being updated.\n'));
+                this._loadJson();
             }
         }
     },
 
     /* private Helper methods */
-    _loadJSON: function (path) {
+    _loadJson: function () {
         try {
-            this.fileData = this.fs.readJSON(path);
-            this.log(this.fileData);
+            this.fileData = this.fs.readJSON(this.fromPath);
         } catch (err) {
             this.log(chalk.red('\nThe configuration file could not be read!\n'));
             return;
@@ -1056,11 +1069,14 @@ module.exports = EntityGenerator.extend({
             ];
 
             this.prompt(prompts, function(props) {
-                this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
-                this.microservicePath = props.microservicePath;
-                this.useConfigurationFile = true;
+                if(props.useMicroserviceJson) {
+                    this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
+                    this.microservicePath = props.microservicePath;
+                    this.fromPath = this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + _s.capitalize(this.name) + '.json';
+                    this.useConfigurationFile = true;
+                    this._loadJson();
+                }
                 cb();
-
             }.bind(this));
         },
         /* ask question to user if s/he wants to update entity */
@@ -1268,19 +1284,7 @@ module.exports = EntityGenerator.extend({
         }
     },
 
-    configuring: {
-        loadEntityJson: function() {
-            if(!this.useConfigurationFile) {
-                return;
-            }
-            if(_.isUndefined(this.microservicePath)) {
-                this.fromPath = this.filename;
-            } else {
-                this.fromPath = this.microservicePath + '/' + this.filename;
-            }
-            this._loadJSON(this.fromPath);
-        },
-
+    configuring : {
         validateFile: function() {
             if (!this.useConfigurationFile) {
                 return;
@@ -1620,10 +1624,22 @@ module.exports = EntityGenerator.extend({
         }
     },
     writing : {
-        writeMicroserviceEntityJson: function () {
-            if(this.useConfigurationFile && !_.isUndefined(this.microservicePath)) {
-                this.template(this.fromPath, this.rootDir + '/' + this.filename, this,{});
+        saveRemoteEntityPath: function() {
+            if(_.isUndefined(this.microservicePath)) {
+                return;
             }
+
+            var entityname = _s.capitalize(this.name);
+            var filePath = this.jhipsterConfigDirectory + '/jhipster-remote-entities.json';
+            var allData = this.fs.readJSON(filePath);
+            if (_.isUndefined(allData)) allData = {};
+
+            allData[entityname] = {
+                appName: this.microserviceName,
+                entityPath: this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + entityname + '.json'
+            };
+
+            this.fs.writeJSON(this.jhipsterConfigDirectory + '/jhipster-remote-entities.json', allData, null, 4);
         },
 
         writeEnumFiles: function() {
