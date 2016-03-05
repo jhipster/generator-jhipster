@@ -364,9 +364,7 @@ const expectedFiles = {
         DOCKER_DIR + 'registry.yml',
         DOCKER_DIR + 'Dockerfile',
         DOCKER_DIR + 'app.dev.yml',
-        DOCKER_DIR + 'app.prod.yml',
-        DOCKER_DIR + 'app.noregistry.dev.yml',
-        DOCKER_DIR + 'app.noregistry.prod.yml'
+        DOCKER_DIR + 'app.prod.yml'
     ]
 };
 
