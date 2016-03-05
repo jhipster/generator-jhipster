@@ -16,7 +16,7 @@ util.inherits(LanguagesGenerator, scriptBase);
 var configOptions = {};
 
 module.exports = LanguagesGenerator.extend({
-    constructor: function() {
+    constructor: function () {
         generators.Base.apply(this, arguments);
 
         configOptions = this.options.configOptions || {};
@@ -50,22 +50,22 @@ module.exports = LanguagesGenerator.extend({
         });
 
         this.skipWiredep = this.options['skip-wiredep'];
-        this.skipClient = this.options['skip-client'] ||  this.config.get('skipClient');
-        this.skipServer = this.options['skip-server'] ||  this.config.get('skipServer');
+        this.skipClient = this.options['skip-client'] || this.config.get('skipClient');
+        this.skipServer = this.options['skip-server'] || this.config.get('skipServer');
 
         // Validate languages passed as argument
         this.languages && this.languages.forEach(function (language) {
             if (!this.isSupportedLanguage(language)) {
                 this.env.error(chalk.red('\nERROR Unsupported language "' + language + '" passed as argument to language generator.' +
-                    '\nSupported languages: ' + _.map(this.getAllSupportedLanguageOptions(), function(o){
+                    '\nSupported languages: ' + _.map(this.getAllSupportedLanguageOptions(), function (o) {
                         return '\n  ' + _.padEnd(o.value, 5) + ' (' + o.name + ')'
                     }).join(''))
                 );
             }
         }, this);
     },
-    initializing : {
-        getConfig : function () {
+    initializing: {
+        getConfig: function () {
             if (this.languages) {
                 if (this.skipClient) {
                     this.log(chalk.bold('\nInstalling languages: ' + this.languages.join(', ') + ' for server'));
@@ -90,19 +90,19 @@ module.exports = LanguagesGenerator.extend({
         }
     },
 
-    prompting : function () {
-        if(this.currentLanguages || this.languages) return;
+    prompting: function () {
+        if (this.currentLanguages || this.languages) return;
 
         var cb = this.async();
         var languageOptions = this.getAllSupportedLanguageOptions();
         var prompts = [
-        {
-            type: 'checkbox',
-            name: 'languages',
-            message: 'Please choose additional languages to install',
-            choices: languageOptions
-        }];
-        if (this.enableTranslation || configOptions.enableTranslation) {
+            {
+                type: 'checkbox',
+                name: 'languages',
+                message: 'Please choose additional languages to install',
+                choices: languageOptions
+            }];
+        if (this.enableTranslation || configOptions.enableTranslation) {
             this.prompt(prompts, function (props) {
                 this.languagesToApply = props.languages;
                 cb();
@@ -116,34 +116,34 @@ module.exports = LanguagesGenerator.extend({
     default: {
 
         getSharedConfigOptions: function () {
-            if(configOptions.applicationType) {
+            if (configOptions.applicationType) {
                 this.applicationType = configOptions.applicationType;
             }
-            if(configOptions.baseName) {
+            if (configOptions.baseName) {
                 this.baseName = configOptions.baseName;
             }
-            if(configOptions.websocket) {
+            if (configOptions.websocket) {
                 this.websocket = configOptions.websocket;
             }
-            if(configOptions.databaseType) {
+            if (configOptions.databaseType) {
                 this.databaseType = configOptions.databaseType;
             }
-            if(configOptions.searchEngine) {
+            if (configOptions.searchEngine) {
                 this.searchEngine = configOptions.searchEngine;
             }
-            if(configOptions.enableTranslation) {
+            if (configOptions.enableTranslation) {
                 this.enableTranslation = configOptions.enableTranslation;
             }
-            if(configOptions.nativeLanguage) {
+            if (configOptions.nativeLanguage) {
                 this.nativeLanguage = configOptions.nativeLanguage;
             }
-            if(configOptions.enableSocialSignIn != null) {
+            if (configOptions.enableSocialSignIn != null) {
                 this.enableSocialSignIn = configOptions.enableSocialSignIn;
             }
-            if(configOptions.skipClient) {
+            if (configOptions.skipClient) {
                 this.skipClient = configOptions.skipClient;
             }
-            if(configOptions.skipServer) {
+            if (configOptions.skipServer) {
                 this.skipServer = configOptions.skipServer;
             }
         },
@@ -155,7 +155,7 @@ module.exports = LanguagesGenerator.extend({
         }
     },
 
-    writing : function () {
+    writing: function () {
         var insight = this.insight();
         insight.track('generator', 'languages');
         this.languagesToApply && this.languagesToApply.forEach(function (language) {

@@ -39,7 +39,7 @@ const constants = require('../generator-constants'),
     INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX,
     CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
     CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
-    ANGULAR_DIR =  constants.ANGULAR_DIR,
+    ANGULAR_DIR = constants.ANGULAR_DIR,
     SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
     SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
     TEST_DIR = constants.TEST_DIR,
@@ -50,7 +50,7 @@ var EntityGenerator = generators.Base.extend({});
 util.inherits(EntityGenerator, scriptBase);
 
 module.exports = EntityGenerator.extend({
-    constructor: function() {
+    constructor: function () {
         generators.Base.apply(this, arguments);
 
         // This makes `name` a required argument.
@@ -87,12 +87,12 @@ module.exports = EntityGenerator.extend({
         this.entityTableName = this.options['table-name'] || this.name;
         this.entityTableName = _s.underscored(this.entityTableName).toLowerCase();
         this.entityAngularJSSuffix = this.options['angular-suffix'];
-        if(this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')){
+        if (this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')) {
             this.entityAngularJSSuffix = '-' + this.entityAngularJSSuffix;
         }
     },
     initializing: {
-        getConfig: function(args) {
+        getConfig: function (args) {
             this.useConfigurationFile = false;
             this.env.options.appPath = this.config.get('appPath') || CLIENT_MAIN_SRC_DIR;
             this.baseName = this.config.get('baseName');
@@ -130,7 +130,7 @@ module.exports = EntityGenerator.extend({
             }
         },
 
-        validateEntityName: function() {
+        validateEntityName: function () {
             databaseType = this.databaseType;
             prodDatabaseType = this.prodDatabaseType;
             if (!(/^([a-zA-Z0-9_]*)$/.test(this.name))) {
@@ -144,7 +144,7 @@ module.exports = EntityGenerator.extend({
             }
         },
 
-        validateTableName: function() {
+        validateTableName: function () {
             databaseType = this.databaseType;
             prodDatabaseType = this.prodDatabaseType;
             if (!(/^([a-zA-Z0-9_]*)$/.test(this.entityTableName))) {
@@ -166,7 +166,7 @@ module.exports = EntityGenerator.extend({
             }
         },
 
-        setupVars: function() {
+        setupVars: function () {
             // Specific Entity sub-generator variables
             if (!this.useConfigurationFile) {
                 //no file present, new entity creation
@@ -193,9 +193,12 @@ module.exports = EntityGenerator.extend({
                     fieldNameChoices.push({name: field.fieldName, value: field.fieldName});
                 }, this);
                 this.relationships && this.relationships.forEach(function (rel) {
-                    relNameChoices.push({name: rel.relationshipName + ':' + rel.relationshipType, value: rel.relationshipName + ':' + rel.relationshipType});
+                    relNameChoices.push({
+                        name: rel.relationshipName + ':' + rel.relationshipType,
+                        value: rel.relationshipName + ':' + rel.relationshipType
+                    });
                 }, this);
-                if (this.fileData.angularJSSuffix !== undefined){
+                if (this.fileData.angularJSSuffix !== undefined) {
                     this.entityAngularJSSuffix = this.fileData.angularJSSuffix;
                 }
             }
@@ -247,7 +250,7 @@ module.exports = EntityGenerator.extend({
         }
         if (this.relationships.length > 0) {
             this.log(chalk.white('Relationships'));
-            this.relationships.forEach(function(relationship) {
+            this.relationships.forEach(function (relationship) {
                 this.log(chalk.red(relationship.relationshipName) + ' ' + chalk.white('(' + _s.capitalize(relationship.otherEntityName) + ')') + ' ' + chalk.cyan(relationship.relationshipType));
             }, this);
             this.log();
@@ -257,7 +260,7 @@ module.exports = EntityGenerator.extend({
     /**
      * ask question for a field creation
      */
-    _askForField : function(cb){
+    _askForField: function (cb) {
         this.log(chalk.green('\nGenerating field #' + (this.fields.length + 1) + '\n'));
         var prompts = [
             {
@@ -267,12 +270,12 @@ module.exports = EntityGenerator.extend({
                 default: true
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return response.fieldAdd == true;
                 },
                 type: 'input',
                 name: 'fieldName',
-                validate: function(input) {
+                validate: function (input) {
                     if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
                         return 'Your field name cannot contain special characters';
                     } else if (input == '') {
@@ -301,7 +304,7 @@ module.exports = EntityGenerator.extend({
                 message: 'What is the name of your field?'
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return response.fieldAdd == true && (databaseType == 'sql' || databaseType == 'mongodb');
                 },
                 type: 'list',
@@ -356,7 +359,7 @@ module.exports = EntityGenerator.extend({
                 default: 0
             },
             {
-                when: function(response) {
+                when: function (response) {
                     if (response.fieldType == 'enum') {
                         response.fieldIsEnum = true;
                         return true;
@@ -367,7 +370,7 @@ module.exports = EntityGenerator.extend({
                 },
                 type: 'input',
                 name: 'fieldType',
-                validate: function(input) {
+                validate: function (input) {
                     if (input == '') {
                         return 'Your class name cannot be empty.';
                     }
@@ -381,12 +384,12 @@ module.exports = EntityGenerator.extend({
                 message: 'What is the class name of your enumeration?'
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return response.fieldIsEnum;
                 },
                 type: 'input',
                 name: 'fieldValues',
-                validate: function(input) {
+                validate: function (input) {
                     if (input == '' && existingEnum) {
                         existingEnum = false;
                         return true;
@@ -412,7 +415,7 @@ module.exports = EntityGenerator.extend({
 
                     return true;
                 },
-                message: function(answers) {
+                message: function (answers) {
                     if (!existingEnum) {
                         return 'What are the values of your enumeration (separated by comma)?';
                     }
@@ -420,7 +423,7 @@ module.exports = EntityGenerator.extend({
                 }
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return response.fieldAdd == true && databaseType == 'cassandra';
                 },
                 type: 'list',
@@ -467,9 +470,9 @@ module.exports = EntityGenerator.extend({
                 default: 0
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return response.fieldAdd == true &&
-                    response.fieldType == 'byte[]';
+                        response.fieldType == 'byte[]';
                 },
                 type: 'list',
                 name: 'fieldTypeBlobContent',
@@ -491,7 +494,7 @@ module.exports = EntityGenerator.extend({
                 default: 0
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return response.fieldAdd == true;
                 },
                 type: 'confirm',
@@ -500,10 +503,10 @@ module.exports = EntityGenerator.extend({
                 default: false
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return response.fieldAdd == true &&
-                    response.fieldValidate == true &&
-                    response.fieldType == 'String';
+                        response.fieldValidate == true &&
+                        response.fieldType == 'String';
                 },
                 type: 'checkbox',
                 name: 'fieldValidateRules',
@@ -529,15 +532,15 @@ module.exports = EntityGenerator.extend({
                 default: 0
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return response.fieldAdd == true &&
-                    response.fieldValidate == true &&
-                    (response.fieldType == 'Integer' ||
-                    response.fieldType == 'Long' ||
-                    response.fieldType == 'Float' ||
-                    response.fieldType == 'Double' ||
-                    response.fieldType == 'BigDecimal' ||
-                    response.fieldTypeBlobContent == 'text');
+                        response.fieldValidate == true &&
+                        (response.fieldType == 'Integer' ||
+                        response.fieldType == 'Long' ||
+                        response.fieldType == 'Float' ||
+                        response.fieldType == 'Double' ||
+                        response.fieldType == 'BigDecimal' ||
+                        response.fieldTypeBlobContent == 'text');
                 },
                 type: 'checkbox',
                 name: 'fieldValidateRules',
@@ -559,11 +562,11 @@ module.exports = EntityGenerator.extend({
                 default: 0
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return response.fieldAdd == true &&
-                    response.fieldValidate == true &&
-                    response.fieldType == 'byte[]' &&
-                    response.fieldTypeBlobContent != 'text';
+                        response.fieldValidate == true &&
+                        response.fieldType == 'byte[]' &&
+                        response.fieldTypeBlobContent != 'text';
                 },
                 type: 'checkbox',
                 name: 'fieldValidateRules',
@@ -585,15 +588,15 @@ module.exports = EntityGenerator.extend({
                 default: 0
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return response.fieldAdd == true &&
-                    response.fieldValidate == true &&
-                    (response.fieldType == 'LocalDate' ||
-                    response.fieldType == 'ZonedDateTime' ||
-                    response.fieldType == 'UUID' ||
-                    response.fieldType == 'Date' ||
-                    response.fieldType == 'Boolean' ||
-                    response.fieldIsEnum == true);
+                        response.fieldValidate == true &&
+                        (response.fieldType == 'LocalDate' ||
+                        response.fieldType == 'ZonedDateTime' ||
+                        response.fieldType == 'UUID' ||
+                        response.fieldType == 'Date' ||
+                        response.fieldType == 'Boolean' ||
+                        response.fieldIsEnum == true);
                 },
                 type: 'checkbox',
                 name: 'fieldValidateRules',
@@ -607,14 +610,14 @@ module.exports = EntityGenerator.extend({
                 default: 0
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return response.fieldAdd == true &&
-                    response.fieldValidate == true &&
-                    response.fieldValidateRules.indexOf('minlength') != -1;
+                        response.fieldValidate == true &&
+                        response.fieldValidateRules.indexOf('minlength') != -1;
                 },
                 type: 'input',
                 name: 'fieldValidateRulesMinlength',
-                validate: function(input) {
+                validate: function (input) {
                     if (/^([0-9]*)$/.test(input)) return true;
                     return 'Minimum length must be a number';
                 },
@@ -622,14 +625,14 @@ module.exports = EntityGenerator.extend({
                 default: 0
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return response.fieldAdd == true &&
-                    response.fieldValidate == true &&
-                    response.fieldValidateRules.indexOf('maxlength') != -1;
+                        response.fieldValidate == true &&
+                        response.fieldValidateRules.indexOf('maxlength') != -1;
                 },
                 type: 'input',
                 name: 'fieldValidateRulesMaxlength',
-                validate: function(input) {
+                validate: function (input) {
                     if (/^([0-9]*)$/.test(input)) return true;
                     return 'Maximum length must be a number';
                 },
@@ -637,10 +640,10 @@ module.exports = EntityGenerator.extend({
                 default: 20
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return response.fieldAdd == true &&
-                    response.fieldValidate == true &&
-                    response.fieldValidateRules.indexOf('pattern') != -1;
+                        response.fieldValidate == true &&
+                        response.fieldValidateRules.indexOf('pattern') != -1;
                 },
                 type: 'input',
                 name: 'fieldValidateRulesPattern',
@@ -648,83 +651,83 @@ module.exports = EntityGenerator.extend({
                 default: '^[a-zA-Z0-9]*$'
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return response.fieldAdd == true &&
-                    response.fieldValidate == true &&
-                    response.fieldValidateRules.indexOf('min') != -1 &&
-                    (response.fieldType == 'Integer' ||
-                    response.fieldType == 'Long' ||
-                    response.fieldType == 'Float' ||
-                    response.fieldType == 'Double' ||
-                    response.fieldTypeBlobContent == 'text' ||
-                    response.fieldType == 'BigDecimal');
+                        response.fieldValidate == true &&
+                        response.fieldValidateRules.indexOf('min') != -1 &&
+                        (response.fieldType == 'Integer' ||
+                        response.fieldType == 'Long' ||
+                        response.fieldType == 'Float' ||
+                        response.fieldType == 'Double' ||
+                        response.fieldTypeBlobContent == 'text' ||
+                        response.fieldType == 'BigDecimal');
                 },
                 type: 'input',
                 name: 'fieldValidateRulesMin',
                 message: 'What is the minimum of your field?',
-                validate: function(input) {
+                validate: function (input) {
                     if (/^([0-9]*)$/.test(input)) return true;
                     return 'Minimum must be a number';
                 },
                 default: 0
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return response.fieldAdd == true &&
-                    response.fieldValidate == true &&
-                    response.fieldValidateRules.indexOf('max') != -1 &&
-                    (response.fieldType == 'Integer' ||
-                    response.fieldType == 'Long' ||
-                    response.fieldType == 'Float' ||
-                    response.fieldType == 'Double' ||
-                    response.fieldTypeBlobContent == 'text' ||
-                    response.fieldType == 'BigDecimal');
+                        response.fieldValidate == true &&
+                        response.fieldValidateRules.indexOf('max') != -1 &&
+                        (response.fieldType == 'Integer' ||
+                        response.fieldType == 'Long' ||
+                        response.fieldType == 'Float' ||
+                        response.fieldType == 'Double' ||
+                        response.fieldTypeBlobContent == 'text' ||
+                        response.fieldType == 'BigDecimal');
                 },
                 type: 'input',
                 name: 'fieldValidateRulesMax',
                 message: 'What is the maximum of your field?',
-                validate: function(input) {
+                validate: function (input) {
                     if (/^([0-9]*)$/.test(input)) return true;
                     return 'Maximum must be a number';
                 },
                 default: 100
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return response.fieldAdd == true &&
-                    response.fieldValidate == true &&
-                    response.fieldValidateRules.indexOf('minbytes') != -1 &&
-                    response.fieldType == 'byte[]' &&
-                    response.fieldTypeBlobContent != 'text';
+                        response.fieldValidate == true &&
+                        response.fieldValidateRules.indexOf('minbytes') != -1 &&
+                        response.fieldType == 'byte[]' &&
+                        response.fieldTypeBlobContent != 'text';
                 },
                 type: 'input',
                 name: 'fieldValidateRulesMinbytes',
                 message: 'What is the minimum byte size of your field?',
-                validate: function(input) {
+                validate: function (input) {
                     if (/^([0-9]*)$/.test(input)) return true;
                     return 'Minimum byte size must be a number';
                 },
                 default: 0
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return response.fieldAdd == true &&
-                    response.fieldValidate == true &&
-                    response.fieldValidateRules.indexOf('maxbytes') != -1 &&
-                    response.fieldType == 'byte[]' &&
-                    response.fieldTypeBlobContent != 'text';
+                        response.fieldValidate == true &&
+                        response.fieldValidateRules.indexOf('maxbytes') != -1 &&
+                        response.fieldType == 'byte[]' &&
+                        response.fieldTypeBlobContent != 'text';
                 },
                 type: 'input',
                 name: 'fieldValidateRulesMaxbytes',
                 message: 'What is the maximum byte size of your field?',
-                validate: function(input) {
+                validate: function (input) {
                     if (/^([0-9]*)$/.test(input)) return true;
                     return 'Maximum byte size must be a number';
                 },
                 default: 5000000
             }
         ];
-        this.prompt(prompts, function(props) {
+        this.prompt(prompts, function (props) {
             if (props.fieldAdd) {
                 if (props.fieldIsEnum) {
                     props.fieldType = _s.capitalize(props.fieldType);
@@ -760,7 +763,7 @@ module.exports = EntityGenerator.extend({
     /**
      * ask question for field deletion
      */
-    _askForFieldsToRemove : function(cb){
+    _askForFieldsToRemove: function (cb) {
         var prompts = [
             {
                 type: 'checkbox',
@@ -770,7 +773,7 @@ module.exports = EntityGenerator.extend({
                 default: 'none'
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return response.fieldsToRemove != 'none';
                 },
                 type: 'confirm',
@@ -779,15 +782,15 @@ module.exports = EntityGenerator.extend({
                 default: true
             }
         ];
-        this.prompt(prompts, function(props) {
+        this.prompt(prompts, function (props) {
             if (props.confirmRemove) {
                 this.log(chalk.red('\nRemoving fields: ' + props.fieldsToRemove + '\n'));
                 var i;
                 for (i = this.fields.length - 1; i >= 0; i -= 1) {
                     var field = this.fields[i];
-                    if(props.fieldsToRemove.filter(function (val) {
-                        return val == field.fieldName;
-                    }).length > 0){
+                    if (props.fieldsToRemove.filter(function (val) {
+                            return val == field.fieldName;
+                        }).length > 0) {
                         this.fields.splice(i, 1);
                     }
                 }
@@ -799,7 +802,7 @@ module.exports = EntityGenerator.extend({
     /**
      * ask question for a relationship creation
      */
-    _askForRelationship: function(cb){
+    _askForRelationship: function (cb) {
         var packageFolder = this.packageFolder;
         var name = this.name;
         this.log(chalk.green('\nGenerating relationships to other entities\n'));
@@ -811,12 +814,12 @@ module.exports = EntityGenerator.extend({
                 default: true
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return response.relationshipAdd == true;
                 },
                 type: 'input',
                 name: 'otherEntityName',
-                validate: function(input) {
+                validate: function (input) {
                     if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
                         return 'Your other entity name cannot contain special characters';
                     } else if (input == '') {
@@ -829,12 +832,12 @@ module.exports = EntityGenerator.extend({
                 message: 'What is the name of the other entity?'
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return response.relationshipAdd == true;
                 },
                 type: 'input',
                 name: 'relationshipName',
-                validate: function(input) {
+                validate: function (input) {
                     if (!(/^([a-zA-Z0-9_]*)$/.test(input))) {
                         return 'Your relationship cannot contain special characters';
                     } else if (input == '') {
@@ -847,12 +850,12 @@ module.exports = EntityGenerator.extend({
                     return true;
                 },
                 message: 'What is the name of the relationship?',
-                default: function(response) {
+                default: function (response) {
                     return _s.decapitalize(response.otherEntityName);
                 }
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return response.relationshipAdd == true;
                 },
                 type: 'list',
@@ -879,7 +882,7 @@ module.exports = EntityGenerator.extend({
                 default: 0
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return (response.relationshipAdd == true && response.relationshipType == 'many-to-one' && !shelljs.test('-f', SERVER_MAIN_SRC_DIR + packageFolder + '/domain/' + _s.capitalize(response.otherEntityName) + '.java'))
                 },
                 type: 'confirm',
@@ -888,7 +891,7 @@ module.exports = EntityGenerator.extend({
                 default: false
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return (response.relationshipAdd == true && (response.relationshipType == 'many-to-many' || response.relationshipType == 'one-to-one'));
                 },
                 type: 'confirm',
@@ -897,7 +900,7 @@ module.exports = EntityGenerator.extend({
                 default: false
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return (response.relationshipAdd == true && (response.relationshipType == 'one-to-many' ||
                     (response.relationshipType == 'many-to-many' && response.ownerSide == false) ||
                     (response.relationshipType == 'one-to-one' && response.otherEntityName.toLowerCase() != "user")));
@@ -905,12 +908,12 @@ module.exports = EntityGenerator.extend({
                 type: 'input',
                 name: 'otherEntityRelationshipName',
                 message: 'What is the name of this relationship in the other entity?',
-                default: function(response) {
+                default: function (response) {
                     return _s.decapitalize(name);
                 }
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return (response.relationshipAdd == true && response.ownerSide == true && !shelljs.test('-f', SERVER_MAIN_SRC_DIR + packageFolder + '/domain/' + _s.capitalize(response.otherEntityName) + '.java'))
                 },
                 type: 'confirm',
@@ -919,18 +922,18 @@ module.exports = EntityGenerator.extend({
                 default: false
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return (!(response.noOtherEntity == false || response.noOtherEntity2 == false) && response.relationshipAdd == true && (response.relationshipType == 'many-to-one' || (response.relationshipType == 'many-to-many' && response.ownerSide == true) || (response.relationshipType == 'one-to-one' && response.ownerSide == true)));
                 },
                 type: 'input',
                 name: 'otherEntityField',
-                message: function(response) {
+                message: function (response) {
                     return 'When you display this relationship with AngularJS, which field from \'' + response.otherEntityName + '\' do you want to use?'
                 },
                 default: 'id'
             }
         ];
-        this.prompt(prompts, function(props) {
+        this.prompt(prompts, function (props) {
             if (props.noOtherEntity == false || props.noOtherEntity2 == false) {
                 this.log(chalk.red('\nGeneration aborted, as requested by the user.\n'));
                 return;
@@ -959,7 +962,7 @@ module.exports = EntityGenerator.extend({
     /**
      * ask question for relationship deletion
      */
-    _askForRelationsToRemove : function(cb){
+    _askForRelationsToRemove: function (cb) {
         var prompts = [
             {
                 type: 'checkbox',
@@ -969,7 +972,7 @@ module.exports = EntityGenerator.extend({
                 default: 'none'
             },
             {
-                when: function(response) {
+                when: function (response) {
                     return response.relsToRemove != 'none';
                 },
                 type: 'confirm',
@@ -978,15 +981,15 @@ module.exports = EntityGenerator.extend({
                 default: true
             }
         ];
-        this.prompt(prompts, function(props) {
+        this.prompt(prompts, function (props) {
             if (props.confirmRemove) {
                 this.log(chalk.red('\nRemoving relationships: ' + props.relsToRemove + '\n'));
                 var i;
                 for (i = this.relationships.length - 1; i >= 0; i -= 1) {
                     var rel = this.relationships[i];
-                    if(props.relsToRemove.filter(function (val) {
-                        return val == rel.relationshipName + ':' + rel.relationshipType;
-                    }).length > 0){
+                    if (props.relsToRemove.filter(function (val) {
+                            return val == rel.relationshipName + ':' + rel.relationshipType;
+                        }).length > 0) {
                         this.relationships.splice(i, 1);
                     }
                 }
@@ -1035,9 +1038,9 @@ module.exports = EntityGenerator.extend({
                     default: 0
                 }
             ];
-            this.prompt(prompts, function(props) {
+            this.prompt(prompts, function (props) {
                 this.updateEntity = props.updateEntity;
-                if(this.updateEntity == 'none'){
+                if (this.updateEntity == 'none') {
                     this.env.error(chalk.green('Aborting entity update, no changes were made.'));
                 }
                 cb();
@@ -1045,7 +1048,7 @@ module.exports = EntityGenerator.extend({
             }.bind(this));
         },
 
-        askForFields: function() {
+        askForFields: function () {
             // don't prompt if data is imported from a file
             if (this.useConfigurationFile && this.updateEntity != 'add') {
                 return;
@@ -1060,7 +1063,7 @@ module.exports = EntityGenerator.extend({
             this._askForField(cb);
         },
 
-        askForFieldsToRemove: function() {
+        askForFieldsToRemove: function () {
             // prompt only if data is imported from a file
             if (!this.useConfigurationFile || this.updateEntity != 'remove') {
                 return;
@@ -1070,7 +1073,7 @@ module.exports = EntityGenerator.extend({
             this._askForFieldsToRemove(cb);
         },
 
-        askForRelationships: function() {
+        askForRelationships: function () {
             // don't prompt if data is imported from a file
             if (this.useConfigurationFile && this.updateEntity != 'add') {
                 return;
@@ -1084,7 +1087,7 @@ module.exports = EntityGenerator.extend({
             this._askForRelationship(cb);
         },
 
-        askForRelationsToRemove: function() {
+        askForRelationsToRemove: function () {
             // prompt only if data is imported from a file
             if (!this.useConfigurationFile || this.updateEntity != 'remove') {
                 return;
@@ -1098,7 +1101,7 @@ module.exports = EntityGenerator.extend({
             this._askForRelationsToRemove(cb);
         },
 
-        askForDTO: function() {
+        askForDTO: function () {
             // don't prompt if data is imported from a file
             if (this.useConfigurationFile) {
                 return;
@@ -1122,13 +1125,13 @@ module.exports = EntityGenerator.extend({
                     default: 0
                 }
             ];
-            this.prompt(prompts, function(props) {
+            this.prompt(prompts, function (props) {
                 this.dto = props.dto;
                 cb();
             }.bind(this));
         },
 
-        askForService: function() {
+        askForService: function () {
             // don't prompt if data are imported from a file
             if (this.useConfigurationFile) {
                 return;
@@ -1156,13 +1159,13 @@ module.exports = EntityGenerator.extend({
                     default: 0
                 }
             ];
-            this.prompt(prompts, function(props) {
+            this.prompt(prompts, function (props) {
                 this.service = props.service;
                 cb();
             }.bind(this));
         },
 
-        askForPagination: function() {
+        askForPagination: function () {
             // don't prompt if data are imported from a file
             if (this.useConfigurationFile) {
                 return;
@@ -1197,7 +1200,7 @@ module.exports = EntityGenerator.extend({
                     default: 0
                 }
             ];
-            this.prompt(prompts, function(props) {
+            this.prompt(prompts, function (props) {
                 this.pagination = props.pagination;
                 this.log(chalk.green('\nEverything is configured, generating the entity...\n'));
                 cb();
@@ -1205,9 +1208,9 @@ module.exports = EntityGenerator.extend({
         }
     },
 
-    configuring : {
+    configuring: {
 
-        validateFile: function() {
+        validateFile: function () {
 
             if (!this.useConfigurationFile) {
                 return;
@@ -1230,7 +1233,7 @@ module.exports = EntityGenerator.extend({
                     for (var idxRules in field.fieldValidateRules) {
                         var fieldValidateRule = field.fieldValidateRules[idxRules];
                         if (!_.includes(SUPPORTED_VALIDATION_RULES, fieldValidateRule)) {
-                            this.env.error(chalk.red('ERROR fieldValidateRules contains unknown validation rule ' + fieldValidateRule + ' in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4)+ ' [supported validation rules ' + SUPPORTED_VALIDATION_RULES + ']'));
+                            this.env.error(chalk.red('ERROR fieldValidateRules contains unknown validation rule ' + fieldValidateRule + ' in .jhipster/' + this.name + '.json for field ' + JSON.stringify(field, null, 4) + ' [supported validation rules ' + SUPPORTED_VALIDATION_RULES + ']'));
                         }
                     }
                     if (_.includes(field.fieldValidateRules, 'max') && _.isUndefined(field.fieldValidateRulesMax)) {
@@ -1270,13 +1273,13 @@ module.exports = EntityGenerator.extend({
                 }
 
                 if (_.isUndefined(relationship.otherEntityRelationshipName)
-                && (relationship.relationshipType == 'one-to-many' || (relationship.relationshipType == 'many-to-many' && relationship.ownerSide == false) || (relationship.relationshipType == 'one-to-one'))) {
+                    && (relationship.relationshipType == 'one-to-many' || (relationship.relationshipType == 'many-to-many' && relationship.ownerSide == false) || (relationship.relationshipType == 'one-to-one'))) {
                     relationship.otherEntityRelationshipName = _s.decapitalize(this.name);
                     this.log(chalk.yellow('WARNING otherEntityRelationshipName is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4) + ', using ' + _s.decapitalize(this.name) + ' as fallback'));
                 }
 
                 if (_.isUndefined(relationship.otherEntityField)
-                && (relationship.relationshipType == 'many-to-one' || (relationship.relationshipType == 'many-to-many' && relationship.ownerSide == true) || (relationship.relationshipType == 'one-to-one' && relationship.ownerSide == true))) {
+                    && (relationship.relationshipType == 'many-to-one' || (relationship.relationshipType == 'many-to-many' && relationship.ownerSide == true) || (relationship.relationshipType == 'one-to-one' && relationship.ownerSide == true))) {
                     this.log(chalk.yellow('WARNING otherEntityField is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4) + ', using id as fallback'));
                     relationship.otherEntityField = 'id';
                 }
@@ -1286,14 +1289,14 @@ module.exports = EntityGenerator.extend({
                 }
 
                 if (_.isUndefined(relationship.ownerSide)
-                && (relationship.relationshipType == 'one-to-one' || relationship.relationshipType == 'many-to-many')) {
+                    && (relationship.relationshipType == 'one-to-one' || relationship.relationshipType == 'many-to-many')) {
                     this.env.error(chalk.red('ERROR ownerSide is missing in .jhipster/' + this.name + '.json for relationship ' + JSON.stringify(relationship, null, 4)));
                 }
             }
 
             // Validate root entity json content
             if (_.isUndefined(this.changelogDate)
-            && (this.databaseType == "sql" || this.databaseType == "cassandra")) {
+                && (this.databaseType == "sql" || this.databaseType == "cassandra")) {
                 var currentDate = this.dateFormatForLiquibase();
                 this.log(chalk.yellow('WARNING changelogDate is missing in .jhipster/' + this.name + '.json, using ' + currentDate + ' as fallback'));
                 this.changelogDate = currentDate;
@@ -1321,7 +1324,7 @@ module.exports = EntityGenerator.extend({
             if (this.useConfigurationFile && this.updateEntity == 'regenerate') {
                 return; //do not update if regenerating entity
             }
-             // store informations in a file for further use.
+            // store informations in a file for further use.
             if (!this.useConfigurationFile && (this.databaseType == "sql" || this.databaseType == "cassandra")) {
                 this.changelogDate = this.dateFormatForLiquibase();
             }
@@ -1336,13 +1339,13 @@ module.exports = EntityGenerator.extend({
                 this.data.pagination = this.pagination;
             }
             this.data.javadoc = this.javadoc;
-            if (this.entityAngularJSSuffix){
+            if (this.entityAngularJSSuffix) {
                 this.data.angularJSSuffix = this.entityAngularJSSuffix;
             }
             this.fs.writeJSON(this.filename, this.data, null, 4);
         },
 
-        loadInMemoryData: function() {
+        loadInMemoryData: function () {
 
             // Load in-memory data for fields
             for (var idx in this.fields) {
@@ -1353,7 +1356,7 @@ module.exports = EntityGenerator.extend({
                     field.fieldType = 'ZonedDateTime';
                 }
                 var nonEnumType = _.includes(['String', 'Integer', 'Long', 'Float', 'Double', 'BigDecimal',
-                'LocalDate', 'ZonedDateTime', 'Boolean', 'byte[]'], field.fieldType);
+                    'LocalDate', 'ZonedDateTime', 'Boolean', 'byte[]'], field.fieldType);
                 if ((databaseType == 'sql' || databaseType == 'mongodb') && !nonEnumType) {
                     field.fieldIsEnum = true;
                 } else {
@@ -1506,7 +1509,7 @@ module.exports = EntityGenerator.extend({
             this.entityFileName = entityNameSpinalCased + this.entityAngularJSSuffix;
             this.entityPluralFileName = entityNamePluralizedAndSpinalCased + this.entityAngularJSSuffix;
             this.entityServiceFileName = entityNameSpinalCased;
-            this.entityAngularJSName = this.entityClass + _s.camelize(this.entityAngularJSSuffix) ;
+            this.entityAngularJSName = this.entityClass + _s.camelize(this.entityAngularJSSuffix);
             this.entityStateName = entityNameSpinalCased + this.entityAngularJSSuffix;
             this.entityUrl = entityNameSpinalCased + this.entityAngularJSSuffix;
             if (databaseType == 'sql') {
@@ -1531,7 +1534,7 @@ module.exports = EntityGenerator.extend({
             }
         },
 
-        insight: function() {
+        insight: function () {
             // track insights
             var insight = this.insight();
 
@@ -1544,9 +1547,9 @@ module.exports = EntityGenerator.extend({
         }
     },
 
-    writing : {
+    writing: {
 
-        writeEnumFiles: function() {
+        writeEnumFiles: function () {
 
             for (var idx in this.fields) {
                 var field = this.fields[idx];
@@ -1561,11 +1564,11 @@ module.exports = EntityGenerator.extend({
                     enumInfo.angularAppName = this.angularAppName;
                     enumInfo.enums = enumInfo.enumValues.replace(/\s/g, '').split(',');
                     this.template(SERVER_MAIN_SRC_DIR + 'package/domain/enumeration/_Enum.java',
-                    SERVER_MAIN_SRC_DIR + this.packageFolder + '/domain/enumeration/' + fieldType + '.java', enumInfo, {});
+                        SERVER_MAIN_SRC_DIR + this.packageFolder + '/domain/enumeration/' + fieldType + '.java', enumInfo, {});
 
                     // Copy for each
                     if (!this.skipClient && this.enableTranslation) {
-                        this.getAllInstalledLanguages().forEach(function(language) {
+                        this.getAllInstalledLanguages().forEach(function (language) {
                             this.copyEnumI18n(language, enumInfo);
                         }, this);
                     }
@@ -1574,54 +1577,54 @@ module.exports = EntityGenerator.extend({
             }
         },
 
-        writeServerFiles: function() {
+        writeServerFiles: function () {
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/domain/_Entity.java',
-            SERVER_MAIN_SRC_DIR + this.packageFolder + '/domain/' + this.entityClass + '.java', this, {});
+                SERVER_MAIN_SRC_DIR + this.packageFolder + '/domain/' + this.entityClass + '.java', this, {});
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/repository/_EntityRepository.java',
-            SERVER_MAIN_SRC_DIR + this.packageFolder + '/repository/' + this.entityClass + 'Repository.java', this, {});
+                SERVER_MAIN_SRC_DIR + this.packageFolder + '/repository/' + this.entityClass + 'Repository.java', this, {});
 
             if (this.searchEngine == 'elasticsearch') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/repository/search/_EntitySearchRepository.java',
-                SERVER_MAIN_SRC_DIR + this.packageFolder + '/repository/search/' + this.entityClass + 'SearchRepository.java', this, {});
+                    SERVER_MAIN_SRC_DIR + this.packageFolder + '/repository/search/' + this.entityClass + 'SearchRepository.java', this, {});
             }
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/_EntityResource.java',
-            SERVER_MAIN_SRC_DIR + this.packageFolder + '/web/rest/' + this.entityClass + 'Resource.java', this, {});
+                SERVER_MAIN_SRC_DIR + this.packageFolder + '/web/rest/' + this.entityClass + 'Resource.java', this, {});
             if (this.service == 'serviceImpl') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/service/_EntityService.java',
-                SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/' + this.entityClass + 'Service.java', this, {});
+                    SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/' + this.entityClass + 'Service.java', this, {});
                 this.template(SERVER_MAIN_SRC_DIR + 'package/service/impl/_EntityServiceImpl.java',
-                SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/impl/' + this.entityClass + 'ServiceImpl.java', this, {});
+                    SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/impl/' + this.entityClass + 'ServiceImpl.java', this, {});
             } else if (this.service == 'serviceClass') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/service/impl/_EntityServiceImpl.java',
-                SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/' + this.entityClass + 'Service.java', this, {});
+                    SERVER_MAIN_SRC_DIR + this.packageFolder + '/service/' + this.entityClass + 'Service.java', this, {});
             }
             if (this.dto == 'mapstruct') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_EntityDTO.java',
-                SERVER_MAIN_SRC_DIR + this.packageFolder + '/web/rest/dto/' + this.entityClass + 'DTO.java', this, {});
+                    SERVER_MAIN_SRC_DIR + this.packageFolder + '/web/rest/dto/' + this.entityClass + 'DTO.java', this, {});
 
                 this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/mapper/_EntityMapper.java',
-                SERVER_MAIN_SRC_DIR + this.packageFolder + '/web/rest/mapper/' + this.entityClass + 'Mapper.java', this, {});
+                    SERVER_MAIN_SRC_DIR + this.packageFolder + '/web/rest/mapper/' + this.entityClass + 'Mapper.java', this, {});
             }
         },
 
-        writeDbFiles: function() {
+        writeDbFiles: function () {
             if (this.databaseType == "sql") {
                 this.template(SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/_added_entity.xml',
-                    SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml', this, { 'interpolate': INTERPOLATE_REGEX });
+                    SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/' + this.changelogDate + '_added_entity_' + this.entityClass + '.xml', this, {'interpolate': INTERPOLATE_REGEX});
 
                 this.addChangelogToLiquibase(this.changelogDate + '_added_entity_' + this.entityClass);
             }
             if (this.databaseType == "cassandra") {
                 this.template(SERVER_MAIN_RES_DIR + 'config/cql/_added_entity.cql',
-                SERVER_MAIN_RES_DIR + 'config/cql/' + this.changelogDate + '_added_entity_' + this.entityClass + '.cql', this, {});
+                    SERVER_MAIN_RES_DIR + 'config/cql/' + this.changelogDate + '_added_entity_' + this.entityClass + '.cql', this, {});
             }
         },
 
-        writeClientFiles: function() {
-            if(this.skipClient){
+        writeClientFiles: function () {
+            if (this.skipClient) {
                 return;
             }
             this.copyHtml(ANGULAR_DIR + 'entities/_entity-management.html', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityPluralFileName + '.html', this, {}, true);
@@ -1654,14 +1657,14 @@ module.exports = EntityGenerator.extend({
 
             // Copy for each
             if (this.enableTranslation) {
-                this.getAllInstalledLanguages().forEach(function(language) {
+                this.getAllInstalledLanguages().forEach(function (language) {
                     this.copyI18n(language);
                 }, this);
             }
         },
 
         writeClientTestFiles: function () {
-            if(this.skipClient) return;
+            if (this.skipClient) return;
             this.template(CLIENT_TEST_SRC_DIR + 'spec/app/entities/_entity-management-detail.controller.spec.js',
                 CLIENT_TEST_SRC_DIR + 'spec/app/entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.controller.spec.js', this, {});
             // Create Protractor test files
@@ -1670,20 +1673,20 @@ module.exports = EntityGenerator.extend({
             }
         },
 
-        writeTestFiles: function() {
+        writeTestFiles: function () {
             this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_EntityResourceIntTest.java',
                 SERVER_TEST_SRC_DIR + this.packageFolder + '/web/rest/' + this.entityClass + 'ResourceIntTest.java', this, {});
 
             if (this.testFrameworks.indexOf('gatling') != -1) {
                 this.template(TEST_DIR + 'gatling/simulations/_EntityGatlingTest.scala',
-                    TEST_DIR + 'gatling/simulations/' + this.entityClass + 'GatlingTest.scala', this, {'interpolate': INTERPOLATE_REGEX });
+                    TEST_DIR + 'gatling/simulations/' + this.entityClass + 'GatlingTest.scala', this, {'interpolate': INTERPOLATE_REGEX});
             }
 
         }
     },
 
     end: {
-        afterRunHook: function() {
+        afterRunHook: function () {
             try {
                 var modules = this.getModuleHooks();
                 if (modules.length > 0) {
@@ -1717,7 +1720,7 @@ module.exports = EntityGenerator.extend({
                         entityTranslationKey: this.entityTranslationKey
                     };
                     // run through all post entity creation module hooks
-                    modules.forEach(function(module) {
+                    modules.forEach(function (module) {
                         if (module.hookFor == 'entity' && module.hookType == 'post') {
                             // compose with the modules callback generator
                             try {
@@ -1728,7 +1731,7 @@ module.exports = EntityGenerator.extend({
                                 });
                             } catch (err) {
                                 this.log(chalk.red('Could not compose module ') + chalk.bold.yellow(module.npmPackageName) +
-                                chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow('\'npm -g ' + module.npmPackageName + '\''));
+                                    chalk.red('. \nMake sure you have installed the module with ') + chalk.bold.yellow('\'npm -g ' + module.npmPackageName + '\''));
                             }
                         }
                     }, this);
