@@ -119,6 +119,9 @@ public class <%= entityClass %> implements Serializable {
         if(prodDatabaseType === 'oracle' && joinTableName.length > 30) {
             joinTableName = getTableName(name.substring(0, 5)) + '_' + getTableName(relationshipName.substring(0, 5)) + '_MAPPING';
         }
+        if(prodDatabaseType === 'mysql' && joinTableName.length > 64) {
+            joinTableName = getTableName(name.substring(0, 10)) + '_' + getTableName(relationshipName.substring(0, 10)) + '_MAPPING';
+        }
         if (otherEntityRelationshipName != null) {
             mappedBy = otherEntityRelationshipName.charAt(0).toLowerCase() + otherEntityRelationshipName.slice(1)
         }

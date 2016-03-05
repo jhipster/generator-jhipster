@@ -80,10 +80,12 @@
                 <constraints unique="true"/>
             </column><% } %><% } %>
             <!-- jhipster-needle-liquibase-add-column - Jhipster will add columns here, do not remove-->
-        </createTable><% for (idx in fields) {
-            if (fields[idx].fieldType == 'ZonedDateTime') { %>
+        </createTable>
+        <%_ for (idx in fields) {
+            if (fields[idx].fieldType == 'ZonedDateTime') { _%>
         <dropDefaultValue tableName="<%= entityTableName %>" columnName="<%=fields[idx].fieldNameUnderscored %>" columnDataType="datetime"/>
-<% } } %>
+        <%_ }
+        } _%>
         <% for (idx in relationships) {
             var relationshipType = relationships[idx].relationshipType,
             relationshipName = relationships[idx].relationshipName,
@@ -101,18 +103,25 @@
                                  referencedTableName="<%
                                  var otherEntityTable = getTableName(otherEntityName);
                                  if (otherEntityTable == 'user') { %>jhi_user<% } else { %><%=otherEntityTable %><% } %>"/>
-<% } else if ((relationshipType == 'many-to-many') && (ownerSide == true)) {
-    var joinTableName = entityTableName + '_'+ getTableName(relationshipName);
-    if(prodDatabaseType === 'oracle' && joinTableName.length > 30) {
-        joinTableName = getTableName(name.substring(0, 5)) + '_' + getTableName(relationshipName.substring(0, 5)) + '_MAPPING';
-    }
-    var constraintName = 'fk_' + joinTableName + '_' + otherEntityName.toLowerCase() + '_id';
-    var otherEntityConstraintName = 'fk_' + joinTableName + '_' + name.toLowerCase() + '_id';
-    if(prodDatabaseType === 'oracle' && constraintName.length > 30) {
-        constraintName = 'fk_' + name.toLowerCase().substring(0, 3) + '_' + relationshipName.toLowerCase().substring(0, 3) +  '_' + otherEntityName.toLowerCase().substring(0, 3) + '_id';
-        otherEntityConstraintName = 'fk_' + otherEntityName.toLowerCase().substring(0, 3) + '_' + relationshipName.toLowerCase().substring(0, 3) +  '_' + name.toLowerCase().substring(0, 3) + '_id';
-    }
-  %>
+        <%_ } else if ((relationshipType == 'many-to-many') && (ownerSide == true)) {
+            var joinTableName = entityTableName + '_'+ getTableName(relationshipName);
+            if(prodDatabaseType === 'oracle' && joinTableName.length > 30) {
+                joinTableName = getTableName(name.substring(0, 5)) + '_' + getTableName(relationshipName.substring(0, 5)) + '_MAPPING';
+            }
+            if(prodDatabaseType === 'mysql' && joinTableName.length > 64) {
+                joinTableName = getTableName(name.substring(0, 10)) + '_' + getTableName(relationshipName.substring(0, 10)) + '_MAPPING';
+            }
+            var constraintName = 'fk_' + joinTableName + '_' + otherEntityName.toLowerCase() + '_id';
+            var otherEntityConstraintName = 'fk_' + joinTableName + '_' + name.toLowerCase() + '_id';
+            if(prodDatabaseType === 'oracle' && constraintName.length > 30) {
+                constraintName = 'fk_' + name.toLowerCase().substring(0, 3) + '_' + relationshipName.toLowerCase().substring(0, 3) +  '_' + otherEntityName.toLowerCase().substring(0, 3) + '_id';
+                otherEntityConstraintName = 'fk_' + otherEntityName.toLowerCase().substring(0, 3) + '_' + relationshipName.toLowerCase().substring(0, 3) +  '_' + name.toLowerCase().substring(0, 3) + '_id';
+            }
+            if(prodDatabaseType === 'mysql' && constraintName.length > 64) {
+                constraintName = 'fk_' + name.toLowerCase().substring(0, 6) + '_' + relationshipName.toLowerCase().substring(0, 6) +  '_' + otherEntityName.toLowerCase().substring(0, 6) + '_id';
+                otherEntityConstraintName = 'fk_' + otherEntityName.toLowerCase().substring(0, 6) + '_' + relationshipName.toLowerCase().substring(0, 6) +  '_' + name.toLowerCase().substring(0, 6) + '_id';
+            }
+          _%>
         <createTable tableName="<%= joinTableName %>">
             <column name="<%= getColumnName(relationshipName) %>s_id" type="bigint">
                 <constraints nullable="false"/>
