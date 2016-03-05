@@ -24,7 +24,7 @@ module.exports = ModulesGenerator.extend({
         if (jhipsterVar == null || jhipsterVar.moduleName == null) {
             this.env.error(chalk.red('ERROR! This sub-generator must be used by JHipster modules, and the module name is not defined.'));
         }
-        ;
+        
         this.log('Composing JHipster configuration with module ' + chalk.red(jhipsterVar.moduleName));
 
         var baseName = this.config.get('baseName');
