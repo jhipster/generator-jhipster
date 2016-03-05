@@ -194,6 +194,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/blocks/config/localstorage.config.js',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/config/alert.config.js',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/config/translation.config.js',
+        CLIENT_MAIN_SRC_DIR + 'app/blocks/config/translation-storage.provider.js',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/config/compile.config.js',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/handlers/state.handler.js',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/handlers/translation.handler.js',
@@ -316,6 +317,7 @@ const expectedFiles = {
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.filter.js',
         CLIENT_MAIN_SRC_DIR + 'app/components/language/language.constants.js',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/config/translation.config.js',
+        CLIENT_MAIN_SRC_DIR + 'app/blocks/config/translation-storage.provider.js',
         CLIENT_MAIN_SRC_DIR + 'app/blocks/handlers/translation.handler.js'
     ],
 
