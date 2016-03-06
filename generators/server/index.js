@@ -706,9 +706,7 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(DOCKER_DIR + '_registry.yml', DOCKER_DIR + 'registry.yml', this, {});
                 this.template(DOCKER_DIR + '_Dockerfile', DOCKER_DIR + 'Dockerfile', this, {});
                 this.template(DOCKER_DIR + '_app.dev.yml', DOCKER_DIR + 'app.dev.yml', this, {});
-                this.template(DOCKER_DIR + '_app.noregistry.dev.yml', DOCKER_DIR + 'app.noregistry.dev.yml', this, {});
                 this.template(DOCKER_DIR + '_app.prod.yml', DOCKER_DIR + 'app.prod.yml', this, {});
-                this.template(DOCKER_DIR + '_app.noregistry.prod.yml', DOCKER_DIR + 'app.noregistry.prod.yml', this, {});
             }
         },
 

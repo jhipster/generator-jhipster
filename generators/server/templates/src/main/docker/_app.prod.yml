@@ -1,10 +1,5 @@
 version: '2'
 services:
-    jhipster-registry:
-        extends:
-            file: registry.yml
-            service: jhipster-registry
-
 <%_ if (prodDatabaseType == 'mysql') { _%>
     <%= baseName.toLowerCase() %>-mysql:
         extends:
@@ -28,28 +23,26 @@ services:
 <%_ } _%>
     <%= baseName.toLowerCase() %>-app:
         image: jhipster/<%= baseName.toLowerCase() %>
+        <%_ if (prodDatabaseType == 'mysql') { _%>
         depends_on:
-            - jhipster-registry
-            <%_ if (prodDatabaseType == 'mysql') { _%>
             - <%= baseName.toLowerCase() %>-mysql
-            <%_ } _%>
-            <%_ if (prodDatabaseType == 'postgresql') { _%>
-            - <%= baseName.toLowerCase() %>-postgresql
-            <%_ } _%>
-            <%_ if (prodDatabaseType == 'mongodb') { _%>
-            - <%= baseName.toLowerCase() %>-mongodb
-            <%_ } _%>
         links:
-            - "jhipster-registry:registry"
-            <%_ if (prodDatabaseType == 'mysql') { _%>
             - "<%= baseName.toLowerCase() %>-mysql:mysql"
-            <%_ } _%>
-            <%_ if (prodDatabaseType == 'postgresql') { _%>
+        <%_ } _%>
+        <%_ if (prodDatabaseType == 'postgresql') { _%>
+        depends_on:
+            - <%= baseName.toLowerCase() %>-postgresql
+        links:
             - "<%= baseName.toLowerCase() %>-postgresql:postgresql"
-            <%_ } _%>
-            <%_ if (prodDatabaseType == 'mongodb') { _%>
+        <%_ } _%>
+        <%_ if (prodDatabaseType == 'mongodb') { _%>
+        depends_on:
+            - <%= baseName.toLowerCase() %>-mongodb
+        links:
             - "<%= baseName.toLowerCase() %>-mongodb:mongodb"
-            <%_ } _%>
+        <%_ } _%>
+        external_links:
+            - "jhipster-registry:registry"
         environment:
             - SPRING_PROFILES_ACTIVE=prod
             <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>

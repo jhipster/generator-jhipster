@@ -1,10 +1,5 @@
 version: '2'
 services:
-    jhipster-registry:
-        extends:
-            file: registry.yml
-            service: jhipster-registry
-
 <%_ if (devDatabaseType == 'mysql') { _%>
     <%= baseName.toLowerCase() %>-dev-mysql:
         extends:
@@ -28,28 +23,26 @@ services:
 <%_ } _%>
     <%= baseName.toLowerCase() %>-dev-app:
         image: jhipster/<%= baseName.toLowerCase() %>
+        <%_ if (devDatabaseType == 'mysql') { _%>
         depends_on:
-            - jhipster-registry
-            <%_ if (devDatabaseType == 'mysql') { _%>
             - <%= baseName.toLowerCase() %>-dev-mysql
-            <%_ } _%>
-            <%_ if (devDatabaseType == 'postgresql') { _%>
-            - <%= baseName.toLowerCase() %>-dev-postgresql
-            <%_ } _%>
-            <%_ if (devDatabaseType == 'mongodb') { _%>
-            - <%= baseName.toLowerCase() %>-dev-mongodb
-            <%_ } _%>
         links:
-            - "jhipster-registry:registry"
-            <%_ if (devDatabaseType == 'mysql') { _%>
             - "<%= baseName.toLowerCase() %>-dev-mysql:mysql"
-            <%_ } _%>
-            <%_ if (devDatabaseType == 'postgresql') { _%>
+        <%_ } _%>
+        <%_ if (devDatabaseType == 'postgresql') { _%>
+        depends_on:
+            - <%= baseName.toLowerCase() %>-dev-postgresql
+        links:
             - "<%= baseName.toLowerCase() %>-dev-postgresql:postgresql"
-            <%_ } _%>
-            <%_ if (devDatabaseType == 'mongodb') { _%>
+        <%_ } _%>
+        <%_ if (devDatabaseType == 'mongodb') { _%>
+        depends_on:
+            - <%= baseName.toLowerCase() %>-dev-mongodb
+        links:
             - "<%= baseName.toLowerCase() %>-dev-mongodb:mongodb"
-            <%_ } _%>
+        <%_ } _%>
+        external_links:
+            - "jhipster-registry:registry"
         environment:
             - SPRING_PROFILES_ACTIVE=dev
             <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
@@ -72,5 +65,5 @@ services:
         <%_ } _%>
         <%_ if (applicationType == 'microservice') { _%>
         expose:
-            - "8080"
+            - "8081"
         <%_ } _%>
