@@ -96,7 +96,6 @@ description = ''
 
 configurations {
     providedRuntime
-    compile.exclude module: "spring-boot-starter-tomcat"
 }
 
 repositories {
@@ -166,9 +165,7 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-elasticsearch'<% } %><% if (databaseType == 'mongodb') { %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb'<% } %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security'
-    compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web') {
-        exclude module: 'spring-boot-starter-tomcat'
-    }<% if (websocket == 'spring-websocket') { %>
+    compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web')<% if (websocket == 'spring-websocket') { %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-websocket'<% } %>
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'<% if (databaseType == 'cassandra' || applicationType == 'gateway') { %>
     compile group: 'org.springframework.data', name: 'spring-data-cassandra'

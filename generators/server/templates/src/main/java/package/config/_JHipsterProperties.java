@@ -342,7 +342,11 @@ public class JHipsterProperties {
 
         private String termsOfServiceUrl;
 
-        private String contact;
+        private String contactName;
+
+        private String contactUrl;
+
+        private String contactEmail;
 
         private String license;
 
@@ -380,12 +384,28 @@ public class JHipsterProperties {
             this.termsOfServiceUrl = termsOfServiceUrl;
         }
 
-        public String getContact() {
-            return contact;
+        public String getContactName() {
+            return contactName;
         }
 
-        public void setContact(String contact) {
-            this.contact = contact;
+        public void setContactName(String contactName) {
+            this.contactName = contactName;
+        }
+
+        public String getContactUrl() {
+            return contactUrl;
+        }
+
+        public void setContactUrl(String contactUrl) {
+            this.contactUrl = contactUrl;
+        }
+
+        public String getContactEmail() {
+            return contactEmail;
+        }
+
+        public void setContactEmail(String contactEmail) {
+            this.contactEmail = contactEmail;
         }
 
         public String getLicense() {
