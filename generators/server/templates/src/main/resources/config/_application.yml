@@ -103,7 +103,7 @@ jhipster:
                 tokenValidityInSeconds: 1800
     <%_ } _%>
 <%_ } _%>
-        rememberme:
+        rememberMe:
             # security key (this key should be unique for your application, and kept secret)
             key: <%= rememberMeKey %>
     swagger:
