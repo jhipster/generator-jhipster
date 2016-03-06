@@ -25,6 +25,7 @@ Developement Ribbon
     background-image: url("../images/development_ribbon.png");
     background-position: center center;
     background-repeat: no-repeat;
+    pointer-events: none;
 }
 
 /* ==========================================================================
