@@ -5,9 +5,8 @@ import com.codahale.metrics.servlet.InstrumentedFilter;
 import com.codahale.metrics.servlets.MetricsServlet;<% if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast') { %>
 import com.hazelcast.core.HazelcastInstance;<% } %><% if (clusteredHttpSession == 'hazelcast') { %>
 import com.hazelcast.web.SessionListener;
-import com.hazelcast.web.spring.SpringAwareWebFilter;<% } %>
-import <%=packageName%>.web.filter.CachingHttpHeadersFilter;
-import <%=packageName%>.web.filter.StaticResourcesProductionFilter;
+import com.hazelcast.web.spring.SpringAwareWebFilter;<% } %><% if (!skipClient) { %>
+import <%=packageName%>.web.filter.CachingHttpHeadersFilter;<% } %>
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-
+<% if (!skipClient) { %>
+import java.io.File;<% } %>
 import java.util.*;
 import javax.inject.Inject;
 import javax.servlet.*;
@@ -52,11 +52,10 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         log.info("Web application configuration, using profiles: {}", Arrays.toString(env.getActiveProfiles()));
         EnumSet<DispatcherType> disps = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC);<% if (clusteredHttpSession == 'hazelcast') { %>
         initClusteredHttpSessionFilter(servletContext, disps);<% } %>
-        initMetrics(servletContext, disps);
+        initMetrics(servletContext, disps);<% if (!skipClient) { %>
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
             initCachingHttpHeadersFilter(servletContext, disps);
-            initStaticResourcesProductionFilter(servletContext, disps);
-        }<% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>
+        }<% } %><% if (devDatabaseType == 'h2Disk' || devDatabaseType == 'h2Memory') { %>
         if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
             initH2Console(servletContext);
         }<% } %>
@@ -116,26 +115,14 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
         mappings.add("html", "text/html;charset=utf-8");
         // CloudFoundry issue, see https://github.com/cloudfoundry/gorouter/issues/64
         mappings.add("json", "text/html;charset=utf-8");
-        container.setMimeMappings(mappings);
-    }
-
-    /**
-     * Initializes the static resources production Filter.
-     */
-    private void initStaticResourcesProductionFilter(ServletContext servletContext,
-                                                     EnumSet<DispatcherType> disps) {
-
-        log.debug("Registering static resources production Filter");
-        FilterRegistration.Dynamic staticResourcesProductionFilter =
-            servletContext.addFilter("staticResourcesProductionFilter",
-                new StaticResourcesProductionFilter());
-
-        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/");
-        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/index.html");
-        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/content/*");
-        staticResourcesProductionFilter.addMappingForUrlPatterns(disps, true, "/app/*");
-        staticResourcesProductionFilter.setAsyncSupported(true);
-    }
+        container.setMimeMappings(mappings);<% if (!skipClient) { %>
+        // Set document root
+        if (env.acceptsProfiles(Constants.SPRING_PROFILE_PRODUCTION)) {
+            container.setDocumentRoot(new File("<%= CLIENT_DIST_DIR %>"));
+        } else if (env.acceptsProfiles(Constants.SPRING_PROFILE_DEVELOPMENT)) {
+            container.setDocumentRoot(new File("<%= CLIENT_MAIN_SRC_DIR %>"));
+        }<% } %>
+    }<% if (!skipClient) { %>
 
     /**
      * Initializes the caching HTTP Headers Filter.
@@ -147,10 +134,10 @@ public class WebConfigurer implements ServletContextInitializer, EmbeddedServlet
             servletContext.addFilter("cachingHttpHeadersFilter",
                 new CachingHttpHeadersFilter(env));
 
-        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/dist/content/*");
-        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/dist/app/*");
+        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/content/*");
+        cachingHttpHeadersFilter.addMappingForUrlPatterns(disps, true, "/app/*");
         cachingHttpHeadersFilter.setAsyncSupported(true);
-    }
+    }<% } %>
 
     /**
      * Initializes Metrics.

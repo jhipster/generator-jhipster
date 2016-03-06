@@ -33,33 +33,43 @@ var gulp = require('gulp'),
 
 var config = {
     app: '<%= MAIN_SRC_DIR %>',
-    dist: '<%= MAIN_SRC_DIR %>dist/',
+    dist: '<%= DIST_DIR %>',
     test: '<%= TEST_SRC_DIR %>'<% if(useSass) { %>,
-    importPath: '<%= MAIN_SRC_DIR %>bower_components',
     scss: '<%= MAIN_SRC_DIR %>scss/',
     sassSrc: '<%= MAIN_SRC_DIR %>scss/**/*.{scss,sass}',
-    cssDir: '<%= MAIN_SRC_DIR %>content/css'<% } %>
+    cssDir: '<%= MAIN_SRC_DIR %>content/css'<% } %>,
+    bower: '<%= MAIN_SRC_DIR %>bower_components/'
 };
 
 gulp.task('clean', function () {
-    return del([config.dist]);
+    return del([config.dist], { dot: true });
 });
 
 gulp.task('copy', function () {
-    return es.merge( <% if(enableTranslation) { %> // copy i18n folders only if translation is enabled
+    return es.merge( <% if(enableTranslation) { /* copy i18n folders only if translation is enabled */ %>
         gulp.src(config.app + 'i18n/**')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist + 'i18n/'))
-        .pipe(gulp.dest(config.dist + 'i18n/')),<% } %>
-        gulp.src(config.app + 'bower_components/bootstrap/fonts/*.*')
+        .pipe(gulp.dest(config.dist + 'i18n/')),
+        // TODO copy all locales for the moment, should probably be selective:
+        gulp.src(config.app + 'bower_components/angular-i18n/angular-locale_*.js')
+        .pipe(plumber({errorHandler: handleErrors}))
+        .pipe(changed(config.dist + 'bower_components/angular-i18n/'))
+        .pipe(gulp.dest(config.dist + 'bower_components/angular-i18n/')), <% } %><% if(!useSass) { %>
+        gulp.src(config.bower + 'bootstrap/fonts/*.*')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist + 'content/fonts/'))
-        .pipe(gulp.dest(config.dist + 'content/fonts/')),
+        .pipe(gulp.dest(config.dist + 'content/fonts/')),<% } %>
         gulp.src(config.app + 'content/**/*.{woff,svg,ttf,eot}')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist + 'content/fonts/'))
         .pipe(flatten())
-        .pipe(gulp.dest(config.dist + 'content/fonts/')));
+        .pipe(gulp.dest(config.dist + 'content/fonts/')),
+        gulp.src([config.app + 'robots.txt', config.app + 'favicon.ico', config.app + '.htaccess'], { dot: true })
+        .pipe(plumber({errorHandler: handleErrors}))
+        .pipe(changed(config.dist))
+        .pipe(gulp.dest(config.dist))
+    );
 });
 
 gulp.task('images', function () {
@@ -73,12 +83,18 @@ gulp.task('images', function () {
 
 <%_ if(useSass) { _%>
 gulp.task('sass', function () {
-    return gulp.src(config.sassSrc)
+    return es.merge(
+        gulp.src(config.sassSrc)
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(expect(config.sassSrc))
         .pipe(changed(config.cssDir, {extension: '.css'}))
-        .pipe(sass({includePaths:config.importPath}).on('error', sass.logError))
-        .pipe(gulp.dest(config.cssDir));
+        .pipe(sass({includePaths:config.bower}).on('error', sass.logError))
+        .pipe(gulp.dest(config.cssDir)),
+        gulp.src(config.bower + 'bootstrap-sass/assets/fonts/bootstrap/*.*')
+        .pipe(plumber({errorHandler: handleErrors}))
+        .pipe(changed(config.app + 'content/fonts'))
+        .pipe(gulp.dest(config.app + 'content/fonts'))
+    );
 });
 <%_ } _%>
 
@@ -132,7 +148,7 @@ gulp.task('wiredep:test', function () {
 });
 
 gulp.task('usemin', ['images', 'styles'], function () {
-    return gulp.src([config.app + '**/*.html', '!' + config.app + '@(dist|bower_components)/**/*.html'])
+    return gulp.src([config.app + '**/*.html', '!' + config.bower + '**/*.html'])
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(usemin({
             css: [
