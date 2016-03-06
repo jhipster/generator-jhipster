@@ -111,7 +111,9 @@ jhipster:
         description: <%=baseName%> API documentation
         version: 0.0.1
         termsOfServiceUrl:
-        contact:
+        contactName:
+        contactUrl:
+        contactEmail:
         license:
         licenseUrl:
 <%_ if (enableSocialSignIn) { _%>

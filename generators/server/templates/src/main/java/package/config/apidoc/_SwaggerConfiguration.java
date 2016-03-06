@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StopWatch;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -44,12 +45,17 @@ public class SwaggerConfiguration {
         log.debug("Starting Swagger");
         StopWatch watch = new StopWatch();
         watch.start();
+        Contact contact = new Contact(
+            jHipsterProperties.getSwagger().getContactName(),
+            jHipsterProperties.getSwagger().getContactUrl(),
+            jHipsterProperties.getSwagger().getContactEmail());
+
         ApiInfo apiInfo = new ApiInfo(
             jHipsterProperties.getSwagger().getTitle(),
             jHipsterProperties.getSwagger().getDescription(),
             jHipsterProperties.getSwagger().getVersion(),
             jHipsterProperties.getSwagger().getTermsOfServiceUrl(),
-            jHipsterProperties.getSwagger().getContact(),
+            contact,
             jHipsterProperties.getSwagger().getLicense(),
             jHipsterProperties.getSwagger().getLicenseUrl());
 
