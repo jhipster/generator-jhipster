@@ -31,6 +31,8 @@ var gulp = require('gulp'),
     gulpIf = require('gulp-if'),
     footer = require('gulp-footer');
 
+var yorc = require('./.yo-rc.json')['generator-jhipster'];
+
 var config = {
     app: '<%= MAIN_SRC_DIR %>',
     dist: '<%= DIST_DIR %>',
@@ -50,12 +52,7 @@ gulp.task('copy', function () {
         gulp.src(config.app + 'i18n/**')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist + 'i18n/'))
-        .pipe(gulp.dest(config.dist + 'i18n/')),
-        // TODO copy all locales for the moment, should probably be selective:
-        gulp.src(config.app + 'bower_components/angular-i18n/angular-locale_*.js')
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(changed(config.dist + 'bower_components/angular-i18n/'))
-        .pipe(gulp.dest(config.dist + 'bower_components/angular-i18n/')), <% } %><% if(!useSass) { %>
+        .pipe(gulp.dest(config.dist + 'i18n/')),<% } %><% if(!useSass) { %>
         gulp.src(config.bower + 'bootstrap/fonts/*.*')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist + 'content/fonts/'))
@@ -95,6 +92,15 @@ gulp.task('sass', function () {
         .pipe(changed(config.app + 'content/fonts'))
         .pipe(gulp.dest(config.app + 'content/fonts'))
     );
+});
+<%_ } _%>
+
+<%_ if(enableTranslation) { _%>
+gulp.task('languages', function () {
+    return gulp.src(config.bower + 'angular-i18n/angular-locale_{' + yorc.languages.join(',') + '}.js')
+        .pipe(plumber({errorHandler: handleErrors}))
+        .pipe(changed(config.app + 'i18n/'))
+        .pipe(gulp.dest(config.app + 'i18n/'));
 });
 <%_ } _%>
 
@@ -267,7 +273,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('install', function (done) {
-    runSequence('wiredep', 'ngconstant:dev'<% if(useSass) { %>, 'sass'<% } %>, done);
+    runSequence('wiredep', 'ngconstant:dev'<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>, done);
 });
 
 gulp.task('serve', function () {
