@@ -211,14 +211,14 @@ public class JHipsterProperties {
 
     public static class Security {
 
-        private final Rememberme rememberme = new Rememberme();
+        private final RememberMe rememberMe = new RememberMe();
 
         <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
         private final Authentication authentication = new Authentication();
 
         <%_ } _%>
-        public Rememberme getRememberme() {
-            return rememberme;
+        public RememberMe getRememberMe() {
+            return rememberMe;
         }
 
         <%_ if (authenticationType == 'oauth2' || authenticationType == 'jwt') { _%>
@@ -317,7 +317,7 @@ public class JHipsterProperties {
             <%_ } _%>
         }
         <%_ } _%>
-        public static class Rememberme {
+        public static class RememberMe {
 
             @NotNull
             private String key;
