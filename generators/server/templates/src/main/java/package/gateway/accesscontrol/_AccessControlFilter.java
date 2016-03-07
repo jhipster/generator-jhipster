@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Zuul filter for restricting access to backend micro-services endpoints
+ * Zuul filter for restricting access to backend micro-services endpoints.
  */
 public class AccessControlFilter extends ZuulFilter {
 
