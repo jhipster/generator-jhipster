@@ -15,6 +15,10 @@ dependencies {
 bootRun {
   args = ["--spring.profiles.active=prod"]
 }
+<% if (!skipClient) { %>
+war {
+  webAppDirName = '<%= CLIENT_DIST_DIR %>'
+}<% } %>
 
 processResources {
     filesMatching('**/logback-spring.xml') {
