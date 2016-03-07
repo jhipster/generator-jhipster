@@ -199,16 +199,13 @@ module.exports = JhipsterServerGenerator.extend({
     prompting: {
 
         askForModuleName: function () {
-            if (this.baseName) {
-                return;
-            }
+            if (this.baseName) return;
+
             this.askModuleName(this, ++currentQuestion, QUESTIONS);
         },
 
         askForServerSideOpts: function () {
-            if (this.existingProject) {
-                return;
-            }
+            if (this.existingProject) return;
 
             var done = this.async();
             var applicationType = this.applicationType;
@@ -677,6 +674,7 @@ module.exports = JhipsterServerGenerator.extend({
 
         composeLanguages: function () {
             if (configOptions.skipI18nQuestion) return;
+
             this.composeLanguagesSub(this, configOptions, 'server');
         }
     },

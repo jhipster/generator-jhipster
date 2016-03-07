@@ -189,6 +189,7 @@ module.exports = JhipsterClientGenerator.extend({
 
         askFori18n: function () {
             if (this.existingProject || configOptions.skipI18nQuestion) return;
+
             this.aski18n(this, ++currentQuestion, QUESTIONS);
         },
 
@@ -281,6 +282,7 @@ module.exports = JhipsterClientGenerator.extend({
 
         composeLanguages: function () {
             if (configOptions.skipI18nQuestion) return;
+            
             this.composeLanguagesSub(this, configOptions, 'client');
         }
     },
