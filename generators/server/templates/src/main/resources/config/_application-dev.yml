@@ -154,6 +154,8 @@ jhipster:
         <%_ } _%>
         rate-limiting: # Warning! Read the documentation in the GatewayConfiguration class.
             enabled: false
+        authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
+            app1: /api,/v2/api-docs # recommended dev configuration
     <%_ } _%>
     <%_ if (clusteredHttpSession == 'hazelcast' || hibernateCache == 'hazelcast' || hibernateCache == 'ehcache') { _%>
     cache: # Hibernate 2nd level cache, used by CacheConfiguration
