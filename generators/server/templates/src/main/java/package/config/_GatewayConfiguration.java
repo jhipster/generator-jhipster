@@ -2,6 +2,7 @@ package <%=packageName%>.config;
 
 import <%=packageName%>.gateway.ratelimiting.RateLimitingFilter;
 import <%=packageName%>.gateway.ratelimiting.RateLimitingRepository;
+import <%=packageName%>.gateway.accesscontrol.AccessControlFilter;
 
 import javax.inject.Inject;
 
@@ -18,6 +19,14 @@ import info.archinnov.achilles.embedded.CassandraEmbeddedServerBuilder;
 
 @Configuration
 public class GatewayConfiguration {
+
+    @Configuration
+    public static class AccessControl {
+        @Bean
+        public AccessControlFilter accessControlFilter(){
+            return new AccessControlFilter();
+        }
+    }
     <%_ if (databaseType != 'cassandra') { _%>
 
     /**
