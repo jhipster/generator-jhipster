@@ -687,10 +687,10 @@ module.exports = JhipsterServerGenerator.extend({
         writeDockerFiles: function () {
             // Create docker-compose file
             this.template(DOCKER_DIR + '_sonar.yml', DOCKER_DIR + 'sonar.yml', this, {});
-            if (this.devDatabaseType != "h2Disk" && this.devDatabaseType != "h2Memory" && this.devDatabaseType != "oracle") {
+            if (this.devDatabaseType != "no" && this.devDatabaseType != "h2Disk" && this.devDatabaseType != "h2Memory" && this.devDatabaseType != "oracle") {
                 this.template(DOCKER_DIR + '_dev.yml', DOCKER_DIR + 'dev.yml', this, {});
             }
-            if (this.prodDatabaseType != "oracle" || this.searchEngine == "elasticsearch") {
+            if ((this.prodDatabaseType != "no" && this.prodDatabaseType != "oracle") || this.searchEngine == "elasticsearch") {
                 this.template(DOCKER_DIR + '_prod.yml', DOCKER_DIR + 'prod.yml', this, {});
             }
             if (this.devDatabaseType == "cassandra") {
