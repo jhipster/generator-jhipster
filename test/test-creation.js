@@ -627,7 +627,7 @@ describe('JHipster generator', function () {
                 .on('end', done);
         });
 
-        it('creates expected files with Cassandra"', function () {
+        it('creates expected files with "Cassandra"', function () {
             assert.file(expectedFiles.dockerCassandra);
         });
     });
