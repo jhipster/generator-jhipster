@@ -1,6 +1,9 @@
-FROM isuper/java-oracle:jdk_8
+FROM ubuntu:trusty
 
-# configure the "jhipster" user
+ENV JAVA_VERSION 8
+ENV JAVA_HOME /usr/lib/jvm/java-${JAVA_VERSION}-oracle
+
+# configure the "jhipster" user before copying generator-jhipster source files so home folder is properly created
 RUN \
   groupadd jhipster && \
   useradd jhipster -s /bin/bash -m -g jhipster -G sudo && \
@@ -10,11 +13,21 @@ RUN \
 COPY . /home/jhipster/generator-jhipster
 
 RUN \
-  # install utilities & node.js
-  curl -sL https://deb.nodesource.com/setup_4.x | sudo bash - && \
+
+  # install oracle jdk 8
+  echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" >> /etc/apt/sources.list && \
+  echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" >> /etc/apt/sources.list && \
+  apt-key adv --keyserver keyserver.ubuntu.com --recv-keys C2518248EEA14886 && \
   apt-get update && \
+  echo oracle-java${JAVA_VERSION}-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections && \
+  apt-get install -y --force-yes --no-install-recommends \
+    oracle-java${JAVA_VERSION}-installer \
+    oracle-java${JAVA_VERSION}-set-default && \
+
+  # install utilities
   apt-get install -y \
      wget \
+     curl \
      vim \
      git \
      zip \
@@ -22,8 +35,11 @@ RUN \
      fontconfig \
      python \
      g++ \
-     build-essential \
-     nodejs && \
+     build-essential && \
+
+  # install node.js
+  curl -sL https://deb.nodesource.com/setup_4.x | sudo bash - && \
+  apt-get install -y nodejs && \
 
   # upgrade npm
   npm install -g npm && \
@@ -35,6 +51,7 @@ RUN \
     gulp-cli \
     /home/jhipster/generator-jhipster && \
 
+  # fix jhipster user permissions
   chown -R jhipster:jhipster \
     /home/jhipster \
     /usr/lib/node_modules && \
