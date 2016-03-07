@@ -292,7 +292,7 @@ Generator.prototype.getAllSupportedLanguageOptions = function () {
         {name: 'French', value: 'fr'},
         {name: 'Galician', value: 'gl'},
         {name: 'German', value: 'de'},
-		    {name: 'Greek', value: 'el'},
+        {name: 'Greek', value: 'el'},
         {name: 'Hungarian', value: 'hu'},
         {name: 'Italian', value: 'it'},
         {name: 'Japanese', value: 'ja'},
