@@ -19,6 +19,7 @@ describe('JHipster generator languages', function () {
         {name: 'Dutch', value: 'nl'},
         {name: 'Galician', value: 'gl'},
         {name: 'German', value: 'de'},
+		{name: 'Greek', value: 'el'},
         {name: 'Hungarian', value: 'hu'},
         {name: 'Italian', value: 'it'},
         {name: 'Japanese', value: 'ja'},
