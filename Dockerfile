@@ -3,16 +3,12 @@ FROM ubuntu:trusty
 ENV JAVA_VERSION 8
 ENV JAVA_HOME /usr/lib/jvm/java-${JAVA_VERSION}-oracle
 
-# configure the "jhipster" user before copying generator-jhipster source files so home folder is properly created
 RUN \
+  # configure the "jhipster" user
   groupadd jhipster && \
   useradd jhipster -s /bin/bash -m -g jhipster -G sudo && \
   echo 'jhipster:jhipster' |chpasswd && \
-  mkdir /home/jhipster/app
-
-COPY . /home/jhipster/generator-jhipster
-
-RUN \
+  mkdir /home/jhipster/app && \
 
   # install oracle jdk 8
   echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu trusty main" >> /etc/apt/sources.list && \
@@ -44,12 +40,18 @@ RUN \
   # upgrade npm
   npm install -g npm && \
 
-  # install yeoman bower gulp jhipster
+  # install yeoman bower gulp
   npm install -g \
     yo \
     bower \
-    gulp-cli \
-    /home/jhipster/generator-jhipster && \
+    gulp-cli
+
+# copy sources
+COPY . /home/jhipster/generator-jhipster
+
+RUN \
+  # install jhipster
+  npm install -g /home/jhipster/generator-jhipster && \
 
   # fix jhipster user permissions
   chown -R jhipster:jhipster \
