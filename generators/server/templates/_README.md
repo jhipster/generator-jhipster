@@ -2,6 +2,11 @@
 
 This application was generated using JHipster, you can find documentation and help at [https://jhipster.github.io](https://jhipster.github.io).
 
+<%_ if (applicationType == 'gateway') { _%>
+<%- include('_micro_services_architecture.md'); %>
+<%_ } _%>
+## Development
+
 Before you can build this project, you must install and configure the following dependencies on your machine:
 <% if(!skipClient) { %>
 1. [Node.js][]: We use Node to run a development web server and build the project.
@@ -27,7 +32,8 @@ Bower is used to manage CSS and JavaScript dependencies used in this application
 specifying a newer version in `bower.json`. You can also run `bower update` and `bower install` to manage dependencies.
 Add the `-h` flag on any command to see how you can use it. For example, `bower update -h`.
 <% } %>
-# Building for production
+
+## Building for production
 
 To optimize the <%= baseName %> client for production, run:
 <% if (buildTool == 'maven') { %>
@@ -44,7 +50,7 @@ To ensure everything worked, run:
 <% if(!skipClient) { %>
 Then navigate to [http://localhost:8080](http://localhost:8080) in your browser.
 
-# Testing
+## Testing
 
 Unit tests are run by [Karma][] and written with [Jasmine][]. They're located in `<%= CLIENT_TEST_SRC_DIR %>` and can be run with:
 
@@ -53,7 +59,7 @@ Unit tests are run by [Karma][] and written with [Jasmine][]. They're located in
 <% if (testFrameworks.indexOf("protractor") > -1) { %>UI end-to-end tests are powered by [Protractor][], which is built on top of WebDriverJS. They're located in `<%= CLIENT_TEST_SRC_DIR %>e2e`
 and can be run by starting Spring Boot in one terminal (`<% if (buildTool == 'maven') { %>mvn spring-boot:run<% } else { %>./gradlew bootRun<% } %>`) and running the tests (`gulp itest`) in a second one.<% } %>
 <% } %>
-# Continuous Integration
+## Continuous Integration
 
 To setup this project in Jenkins, use the following configuration:
 
