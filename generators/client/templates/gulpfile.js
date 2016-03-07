@@ -32,7 +32,9 @@ var gulp = require('gulp'),
     gulpIf = require('gulp-if'),
     footer = require('gulp-footer');
 
+<%_ if(enableTranslation) { _%>
 var yorc = require('./.yo-rc.json')['generator-jhipster'];
+<%_ } _%>
 
 var config = {
     app: '<%= MAIN_SRC_DIR %>',
@@ -118,7 +120,7 @@ gulp.task('wiredep:app', function () {
         .pipe(wiredep({
             exclude: [
                 /angular-i18n/,  // localizations are loaded dynamically<% if (useSass) { %>
-                'bower_components/bootstrap-sass/assets/javascripts/', // Exclude Bootstrap js files as we use ui-bootstrap<% } else { %>
+                'bower_components/bootstrap-sass/assets/javascripts/' // Exclude Bootstrap js files as we use ui-bootstrap<% } else { %>
                 'bower_components/bootstrap/dist/js/' // exclude bootstrap js files as we use ui-bootstrap<% } %>
             ]
         }))
