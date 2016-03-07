@@ -140,9 +140,9 @@ gulp.task('wiredep:test', function () {
                 /angular-i18n/,  // localizations are loaded dynamically
                 /angular-scenario/,<% if (useSass) { %>
                 'bower_components/bootstrap-sass/assets/javascripts/', // Exclude Bootstrap js files as we use ui-bootstrap<% } else { %>
-                'bower_components/bootstrap/dist/js/' // exclude bootstrap js files as we use ui-bootstrap<% } %>
-            ]
-            ignorePath: /\.\.\/\.\.\//, // remove ../../ from paths of injected javascripts
+                'bower_components/bootstrap/dist/js/' // exclude Bootstrap js files as we use ui-bootstrap<% } %>
+            ],
+            ignorePath: /\.\.\/\.\.\//, // remove ../../ from paths of injected JavaScript files
             devDependencies: true,
             fileTypes: {
                 js: {
