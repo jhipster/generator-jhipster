@@ -18,10 +18,11 @@ const constants = require('../generator-constants'),
     QUESTIONS = constants.QUESTIONS,
     INTERPOLATE_REGEX = constants.INTERPOLATE_REGEX,
     DOCKER_DIR = constants.DOCKER_DIR,
-    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
-    CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
     MAIN_DIR = constants.MAIN_DIR,
     TEST_DIR = constants.TEST_DIR,
+    CLIENT_DIST_DIR = constants.CLIENT_DIST_DIR,
+    CLIENT_MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
+    CLIENT_TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
     SERVER_MAIN_SRC_DIR = constants.SERVER_MAIN_SRC_DIR,
     SERVER_MAIN_RES_DIR = constants.SERVER_MAIN_RES_DIR,
     SERVER_TEST_SRC_DIR = constants.SERVER_TEST_SRC_DIR,
@@ -579,6 +580,13 @@ module.exports = JhipsterServerGenerator.extend({
             configOptions.buildTool = this.buildTool;
             configOptions.enableSocialSignIn = this.enableSocialSignIn;
             configOptions.authenticationType = this.authenticationType;
+
+            // Make dist dir available in templates
+            if (this.buildTool === 'maven') {
+                this.CLIENT_DIST_DIR = 'target/' + CLIENT_DIST_DIR;
+            } else {
+                this.CLIENT_DIST_DIR = 'build/' + CLIENT_DIST_DIR;
+            }
         }
     },
 
@@ -623,7 +631,6 @@ module.exports = JhipsterServerGenerator.extend({
             javaDir = this.javaDir = SERVER_MAIN_SRC_DIR + this.packageFolder + '/';
             this.testDir = SERVER_TEST_SRC_DIR + this.packageFolder + '/';
             this.nativeLanguageShortName = this.enableTranslation && this.nativeLanguage ? this.nativeLanguage.split("-")[0] : 'en';
-
         },
 
         saveConfig: function () {
@@ -1016,7 +1023,6 @@ module.exports = JhipsterServerGenerator.extend({
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/filter/_package-info.java', javaDir + 'web/filter/package-info.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/filter/_CachingHttpHeadersFilter.java', javaDir + 'web/filter/CachingHttpHeadersFilter.java', this, {});
-            this.template(SERVER_MAIN_SRC_DIR + 'package/web/filter/_StaticResourcesProductionFilter.java', javaDir + 'web/filter/StaticResourcesProductionFilter.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_package-info.java', javaDir + 'web/rest/dto/package-info.java', this, {});
             this.template(SERVER_MAIN_SRC_DIR + 'package/web/rest/dto/_LoggerDTO.java', javaDir + 'web/rest/dto/LoggerDTO.java', this, {});
 
