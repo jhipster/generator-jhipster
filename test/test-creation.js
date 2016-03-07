@@ -360,7 +360,7 @@ const expectedFiles = {
     ],
 
     containerizeWithDocker: [
-        DOCKER_DIR + 'registry.yml',
+        DOCKER_DIR + 'jhipster-registry.yml',
         DOCKER_DIR + 'Dockerfile',
         DOCKER_DIR + 'app.dev.yml',
         DOCKER_DIR + 'app.prod.yml'

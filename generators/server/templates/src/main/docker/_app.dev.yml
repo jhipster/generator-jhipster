@@ -3,21 +3,21 @@ services:
 <%_ if (devDatabaseType == 'mysql') { _%>
     <%= baseName.toLowerCase() %>-dev-mysql:
         extends:
-            file: dev.yml
+            file: db.dev.yml
             service: <%= baseName.toLowerCase() %>-dev-mysql
 
 <%_ } _%>
 <%_ if (devDatabaseType == 'postgresql') { _%>
     <%= baseName.toLowerCase() %>-dev-postgresql:
         extends:
-            file: dev.yml
+            file: db.dev.yml
             service: <%= baseName.toLowerCase() %>-dev-postgresql
 
 <%_ } _%>
 <%_ if (devDatabaseType == 'mongodb') { _%>
     <%= baseName.toLowerCase() %>-dev-mongodb:
         extends:
-            file: dev.yml
+            file: db.dev.yml
             service: <%= baseName.toLowerCase() %>-dev-mongodb
 
 <%_ } _%>
