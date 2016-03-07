@@ -95,7 +95,7 @@ module.exports = EntityGenerator.extend({
         this.entityTableName = _s.underscored(this.entityTableName).toLowerCase();
         this.entityAngularJSSuffix = this.options['angular-suffix'];
         this.skipServer = this.config.get('skipServer') || this.options['skip-server'];
-        if(this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')){
+        if (this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')){
             this.entityAngularJSSuffix = '-' + this.entityAngularJSSuffix;
         }
         this.rootDir = this.destinationRoot();
@@ -138,9 +138,9 @@ module.exports = EntityGenerator.extend({
             else {
                 var filePath = this.jhipsterConfigDirectory + '/jhipster-remote-entities.json';
                 var pathConfigs = this.fs.readJSON(filePath);
-                if(pathConfigs) {
+                if (pathConfigs) {
                     var pathConfig = pathConfigs[this.entityNameCapitalized];
-                    if(pathConfig) {
+                    if (pathConfig) {
                         this.log(chalk.green('\nFound the ' + this.filename + ' configuration file in remote microservice ' +  pathConfig.appName));
                         this.log(chalk.green('\nUsing configuration file ' + pathConfig.entityPath));
                         this.useConfigurationFile = true;
@@ -1034,7 +1034,7 @@ module.exports = EntityGenerator.extend({
     prompting: {
         /* pre entity hook needs to be written here */
         askForMicroserviceJson: function(){
-            if(this.applicationType != 'gateway' || this.useConfigurationFile) {
+            if (this.applicationType != 'gateway' || this.useConfigurationFile) {
                 return;
             }
 
@@ -1067,7 +1067,7 @@ module.exports = EntityGenerator.extend({
             ];
 
             this.prompt(prompts, function(props) {
-                if(props.useMicroserviceJson) {
+                if (props.useMicroserviceJson) {
                     this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
                     this.microservicePath = props.microservicePath;
                     this.fromPath = this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json';
@@ -1625,7 +1625,7 @@ module.exports = EntityGenerator.extend({
     },
     writing : {
         saveRemoteEntityPath: function() {
-            if(_.isUndefined(this.microservicePath)) {
+            if (_.isUndefined(this.microservicePath)) {
                 return;
             }
 
@@ -1642,7 +1642,7 @@ module.exports = EntityGenerator.extend({
         },
 
         writeEnumFiles: function() {
-            if(this.skipServer) return;
+            if (this.skipServer) return;
 
             for (var idx in this.fields) {
                 var field = this.fields[idx];
@@ -1671,7 +1671,7 @@ module.exports = EntityGenerator.extend({
         },
 
         writeServerFiles: function() {
-            if(this.skipServer) return;
+            if (this.skipServer) return;
 
             this.template(SERVER_MAIN_SRC_DIR + 'package/domain/_Entity.java',
                 SERVER_MAIN_SRC_DIR + this.packageFolder + '/domain/' + this.entityClass + '.java', this, {});
@@ -1705,7 +1705,7 @@ module.exports = EntityGenerator.extend({
         },
 
         writeDbFiles: function() {
-            if(this.skipServer) return;
+            if (this.skipServer) return;
 
             if (this.databaseType == "sql") {
                 this.template(SERVER_MAIN_RES_DIR + 'config/liquibase/changelog/_added_entity.xml',
@@ -1760,7 +1760,7 @@ module.exports = EntityGenerator.extend({
         },
 
         writeClientTestFiles: function () {
-            if(this.skipClient) return;
+            if (this.skipClient) return;
 
             this.template(CLIENT_TEST_SRC_DIR + 'spec/app/entities/_entity-management-detail.controller.spec.js',
                 CLIENT_TEST_SRC_DIR + 'spec/app/entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.controller.spec.js', this, {});
@@ -1771,7 +1771,7 @@ module.exports = EntityGenerator.extend({
         },
 
         writeTestFiles: function() {
-            if(this.skipServer) return;
+            if (this.skipServer) return;
 
             this.template(SERVER_TEST_SRC_DIR + 'package/web/rest/_EntityResourceIntTest.java',
                 SERVER_TEST_SRC_DIR + this.packageFolder + '/web/rest/' + this.entityClass + 'ResourceIntTest.java', this, {});
