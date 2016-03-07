@@ -91,7 +91,7 @@ module.exports = EntityGenerator.extend({
 
         this.regenerate = this.options['regenerate'];
         this.entityTableName = this.options['table-name'] || this.name;
-        this.entityName = _s.capitalize(this.name);
+        this.entityNameCapitalized = _s.capitalize(this.name);
         this.entityTableName = _s.underscored(this.entityTableName).toLowerCase();
         this.entityAngularJSSuffix = this.options['angular-suffix'];
         this.skipServer = this.config.get('skipServer') || this.options['skip-server'];
@@ -129,7 +129,7 @@ module.exports = EntityGenerator.extend({
             this.jhipsterConfigDirectory = '.jhipster';
             this.mainClass = this.getMainClassName();
 
-            this.filename = this.jhipsterConfigDirectory + '/' + this.entityName + '.json';
+            this.filename = this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json';
             if (shelljs.test('-f', this.filename)) {
                 this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
                 this.useConfigurationFile = true;
@@ -139,7 +139,7 @@ module.exports = EntityGenerator.extend({
                 var filePath = this.jhipsterConfigDirectory + '/jhipster-remote-entities.json';
                 var pathConfigs = this.fs.readJSON(filePath);
                 if(pathConfigs) {
-                    var pathConfig = pathConfigs[this.entityName];
+                    var pathConfig = pathConfigs[this.entityNameCapitalized];
                     if(pathConfig) {
                         this.log(chalk.green('\nFound the ' + this.filename + ' configuration file in remote microservice ' +  pathConfig.appName));
                         this.log(chalk.green('\nUsing configuration file ' + pathConfig.entityPath));
@@ -242,7 +242,7 @@ module.exports = EntityGenerator.extend({
      */
     _logFieldsAndRelationships: function () {
         if (this.fields.length > 0 || this.relationships.length > 0) {
-            this.log(chalk.red(chalk.white('\n================= ') + this.entityName + chalk.white(' =================')));
+            this.log(chalk.red(chalk.white('\n================= ') + this.entityNameCapitalized + chalk.white(' =================')));
         }
         if (this.fields.length > 0) {
             this.log(chalk.white('Fields'));
@@ -1070,7 +1070,7 @@ module.exports = EntityGenerator.extend({
                 if(props.useMicroserviceJson) {
                     this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
                     this.microservicePath = props.microservicePath;
-                    this.fromPath = this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + this.entityName + '.json';
+                    this.fromPath = this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json';
                     this.useConfigurationFile = true;
                     this.skipServer = true;
                     this._loadJson();
@@ -1576,7 +1576,7 @@ module.exports = EntityGenerator.extend({
             var entityNameSpinalCased = _s.dasherize(_s.decapitalize(this.name));
             var entityNamePluralizedAndSpinalCased = _s.dasherize(_s.decapitalize(pluralize(this.name)));
 
-            this.entityClass = this.entityName;
+            this.entityClass = this.entityNameCapitalized;
             this.entityClassPlural = pluralize(this.entityClass);
             this.entityInstance = _s.decapitalize(this.name);
             this.entityInstancePlural = pluralize(this.entityInstance);
@@ -1633,9 +1633,9 @@ module.exports = EntityGenerator.extend({
             var pathConfigs = this.fs.readJSON(filePath);
             if (_.isUndefined(pathConfigs)) pathConfigs = {};
 
-            pathConfigs[this.entityName] = {
+            pathConfigs[this.entityNameCapitalized] = {
                 appName: this.microserviceName,
-                entityPath: this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + this.entityName + '.json'
+                entityPath: this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json'
             };
 
             this.fs.writeJSON(this.jhipsterConfigDirectory + '/jhipster-remote-entities.json', pathConfigs, null, 4);
