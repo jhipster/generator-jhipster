@@ -24,7 +24,7 @@ module.exports = ModulesGenerator.extend({
         if (jhipsterVar == null || jhipsterVar.moduleName == null) {
             this.env.error(chalk.red('ERROR! This sub-generator must be used by JHipster modules, and the module name is not defined.'));
         }
-        
+
         this.log('Composing JHipster configuration with module ' + chalk.red(jhipsterVar.moduleName));
 
         var baseName = this.config.get('baseName');
@@ -61,6 +61,7 @@ module.exports = ModulesGenerator.extend({
         jhipsterVar['javaDir'] = SERVER_MAIN_SRC_DIR + packageFolder + '/';
         jhipsterVar['resourceDir'] = SERVER_MAIN_RES_DIR;
         jhipsterVar['webappDir'] = CLIENT_MAIN_SRC_DIR;
+        jhipsterVar['CONSTANTS'] = constants;
 
         // alias fs and log methods so that we can use it in script-base when invoking functions from jhipsterFunc context in modules
         jhipsterFunc['fs'] = this.fs;
