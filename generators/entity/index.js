@@ -94,7 +94,11 @@ module.exports = EntityGenerator.extend({
         this.entityName = _s.capitalize(this.name);
         this.entityTableName = _s.underscored(this.entityTableName).toLowerCase();
         this.entityAngularJSSuffix = this.options['angular-suffix'];
-        this.skipServer = this.options['skip-server'];
+        if(!_.isUndefined(this.config.get('skipServer'))) {
+            this.skipServer = this.config.get('skipServer');
+        } else {
+            this.skipServer = this.options['skip-server'];
+        }
         if(this.entityAngularJSSuffix && !this.entityAngularJSSuffix.startsWith('-')){
             this.entityAngularJSSuffix = '-' + this.entityAngularJSSuffix;
         }
@@ -113,8 +117,6 @@ module.exports = EntityGenerator.extend({
             this.databaseType = this.config.get('databaseType');
             this.prodDatabaseType = this.config.get('prodDatabaseType');
             this.searchEngine = this.config.get('searchEngine');
-            this.searchEngines = [];
-            this.searchEngines[this.entityName] = this.searchEngine;
             this.enableTranslation = this.config.get('enableTranslation');
             this.nativeLanguage = this.config.get('nativeLanguage');
             this.languages = this.config.get('languages');
@@ -125,18 +127,13 @@ module.exports = EntityGenerator.extend({
                 this.testFrameworks = ['gatling'];
             }
 
-            if(this.applicationType == 'microservice') {
-                this.skipClient = true;
-            }
-            else {
-                this.skipClient = this.config.get('skipClient');
-            }
+            this.skipClient = this.applicationType === 'microservice' || this.config.get('skipClient');
 
             this.angularAppName = this.getAngularAppName();
             this.jhipsterConfigDirectory = '.jhipster';
             this.mainClass = this.getMainClassName();
 
-            this.filename = this.jhipsterConfigDirectory + '/' + _s.capitalize(this.name) + '.json';
+            this.filename = this.jhipsterConfigDirectory + '/' + this.entityName + '.json';
             if (shelljs.test('-f', this.filename)) {
                 this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
                 this.useConfigurationFile = true;
@@ -144,14 +141,15 @@ module.exports = EntityGenerator.extend({
             }
             else {
                 var filePath = this.jhipsterConfigDirectory + '/jhipster-remote-entities.json';
-                var allData = this.fs.readJSON(filePath);
-                for(var key in allData) {
-                    if(key == _s.capitalize(this.name)) {
-                        this.log(chalk.green('\nFound the ' + this.filename + ' configuration file in remote microservice ' +  allData[key].appName));
-                        this.log(chalk.green('\nUsing configuration file ' + allData[key].entityPath));
+                var pathConfigs = this.fs.readJSON(filePath);
+                if(pathConfigs) {
+                    var pathConfig = pathConfigs[this.entityName];
+                    if(pathConfig) {
+                        this.log(chalk.green('\nFound the ' + this.filename + ' configuration file in remote microservice ' +  pathConfig.appName));
+                        this.log(chalk.green('\nUsing configuration file ' + pathConfig.entityPath));
                         this.useConfigurationFile = true;
-                        this.fromPath = allData[key].entityPath;
-                        this.microserviceName = allData[key].appName;
+                        this.fromPath = pathConfig.entityPath;
+                        this.microserviceName = pathConfig.appName;
                     }
                 }
             }
@@ -240,8 +238,7 @@ module.exports = EntityGenerator.extend({
         }
         if (this.applicationType == 'gateway'){
             this.microserviceName = this.fileData.microserviceName;
-            this.searchEngines = [];
-            this.searchEngines[this.entityName] = this.fileData.searchEngine;
+            this.searchEngine = this.fileData.searchEngine;
         }
     },
     /**
@@ -249,7 +246,7 @@ module.exports = EntityGenerator.extend({
      */
     _logFieldsAndRelationships: function () {
         if (this.fields.length > 0 || this.relationships.length > 0) {
-            this.log(chalk.red(chalk.white('\n================= ') + _s.capitalize(this.name) + chalk.white(' =================')));
+            this.log(chalk.red(chalk.white('\n================= ') + this.entityName + chalk.white(' =================')));
         }
         if (this.fields.length > 0) {
             this.log(chalk.white('Fields'));
@@ -1077,8 +1074,9 @@ module.exports = EntityGenerator.extend({
                 if(props.useMicroserviceJson) {
                     this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
                     this.microservicePath = props.microservicePath;
-                    this.fromPath = this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + _s.capitalize(this.name) + '.json';
+                    this.fromPath = this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + this.entityName + '.json';
                     this.useConfigurationFile = true;
+                    this.skipServer = true;
                     this._loadJson();
                 }
                 cb();
@@ -1582,7 +1580,7 @@ module.exports = EntityGenerator.extend({
             var entityNameSpinalCased = _s.dasherize(_s.decapitalize(this.name));
             var entityNamePluralizedAndSpinalCased = _s.dasherize(_s.decapitalize(pluralize(this.name)));
 
-            this.entityClass = _s.capitalize(this.name);
+            this.entityClass = this.entityName;
             this.entityClassPlural = pluralize(this.entityClass);
             this.entityInstance = _s.decapitalize(this.name);
             this.entityInstancePlural = pluralize(this.entityInstance);
@@ -1636,15 +1634,15 @@ module.exports = EntityGenerator.extend({
             }
 
             var filePath = this.jhipsterConfigDirectory + '/jhipster-remote-entities.json';
-            var allData = this.fs.readJSON(filePath);
-            if (_.isUndefined(allData)) allData = {};
+            var pathConfigs = this.fs.readJSON(filePath);
+            if (_.isUndefined(pathConfigs)) pathConfigs = {};
 
-            allData[this.entityName] = {
+            pathConfigs[this.entityName] = {
                 appName: this.microserviceName,
                 entityPath: this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + this.entityName + '.json'
             };
 
-            this.fs.writeJSON(this.jhipsterConfigDirectory + '/jhipster-remote-entities.json', allData, null, 4);
+            this.fs.writeJSON(this.jhipsterConfigDirectory + '/jhipster-remote-entities.json', pathConfigs, null, 4);
         },
 
         writeEnumFiles: function() {
@@ -1685,7 +1683,7 @@ module.exports = EntityGenerator.extend({
             this.template(SERVER_MAIN_SRC_DIR + 'package/repository/_EntityRepository.java',
                 SERVER_MAIN_SRC_DIR + this.packageFolder + '/repository/' + this.entityClass + 'Repository.java', this, {});
 
-            if (this.searchEngines[this.entityName] == 'elasticsearch') {
+            if (this.searchEngine == 'elasticsearch') {
                 this.template(SERVER_MAIN_SRC_DIR + 'package/repository/search/_EntitySearchRepository.java',
                     SERVER_MAIN_SRC_DIR + this.packageFolder + '/repository/search/' + this.entityClass + 'SearchRepository.java', this, {});
             }
@@ -1752,7 +1750,7 @@ module.exports = EntityGenerator.extend({
             this.template(ANGULAR_DIR + 'services/_entity.service.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.service' + '.js', this, {});
             this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.service' + '.js');
 
-            if (this.searchEngines[this.entityName] == 'elasticsearch') {
+            if (this.searchEngine == 'elasticsearch') {
                 this.template(ANGULAR_DIR + 'services/_entity-search.service.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.search.service' + '.js', this, {});
                 this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.search.service' + '.js');
             }
