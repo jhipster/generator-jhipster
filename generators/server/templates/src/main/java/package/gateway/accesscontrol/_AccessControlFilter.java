@@ -35,8 +35,10 @@ public class AccessControlFilter extends ZuulFilter {
         return 0;
     }
 
+    /**
+     * Filter requests on endpoints that are not in the list of authorized microservices endpoints.
+     */
     @Override
-    // Filter requests on endpoints that are not in the list of authorized microservices endpoints
     public boolean shouldFilter() {
         Map<String, String> routes = routeLocator.getRoutes();
         String requestUri = RequestContext.getCurrentContext().getRequest().getRequestURI();
