@@ -598,33 +598,10 @@ public class JHipsterProperties {
     public static class Gateway {
 
         private final RateLimiting rateLimiting = new RateLimiting();
-        <%_ if (databaseType != 'cassandra') { _%>
-
-        private final EmbeddedCassandra embeddedCassandra = new EmbeddedCassandra();
-        <%_ } _%>
 
         public RateLimiting getRateLimiting() {
             return rateLimiting;
         }
-        <%_ if (databaseType != 'cassandra') { _%>
-
-        public EmbeddedCassandra getEmbeddedCassandra() {
-            return embeddedCassandra;
-        }
-
-        public static class EmbeddedCassandra {
-
-            private boolean enabled = false;
-
-            public boolean isEnabled() {
-                return enabled;
-            }
-
-            public void setEnabled(boolean enabled) {
-                this.enabled = enabled;
-            }
-        }
-        <%_ } _%>
 
         private Map<String, List<String>> authorizedMicroservicesEndpoints = new LinkedHashMap<>();
 
