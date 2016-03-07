@@ -1,7 +1,7 @@
 <nav class="navbar navbar-default" role="navigation">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+            <button type="button" class="navbar-toggle" ng-click="vm.navCollapsed = !vm.navCollapsed">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -9,17 +9,17 @@
             </button>
             <a class="navbar-brand" href="#/"><span translate="global.title"><%= baseName %></span> <span class="navbar-version">v{{VERSION}}</span></a>
         </div>
-        <div class="collapse navbar-collapse" id="navbar-collapse" ng-switch="vm.isAuthenticated()">
+        <div class="collapse navbar-collapse" id="navbar-collapse" uib-collapse="vm.navCollapsed" ng-switch="vm.isAuthenticated()">
             <ul class="nav navbar-nav navbar-right">
                 <li ui-sref-active="active">
-                    <a ui-sref="home" data-toggle="collapse" data-target=".navbar-collapse.in">
+                    <a ui-sref="home" ng-click="vm.navCollapsed = true">
                         <span class="glyphicon glyphicon-home"></span>
                         <span class="hidden-sm" translate="global.menu.home">Home</span>
                     </a>
                 </li>
                 <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
-                <li ng-class="{active: vm.$state.includes('entity')}" ng-switch-when="true" class="dropdown pointer">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="" id="entity-menu">
+                <li ng-class="{active: vm.$state.includes('entity')}" ng-switch-when="true" uib-dropdown class="dropdown pointer">
+                    <a class="dropdown-toggle" uib-dropdown-toggle href="" id="entity-menu">
                         <span>
                             <span class="glyphicon glyphicon-th-list"></span>
                             <span class="hidden-sm" translate="global.menu.entities.main">
@@ -28,12 +28,12 @@
                             <b class="caret"></b>
                         </span>
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu" uib-dropdown-menu>
                         <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                     </ul>
                 </li>
-                <li ng-class="{active: vm.$state.includes('account')}" class="dropdown pointer">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="" id="account-menu">
+                <li ng-class="{active: vm.$state.includes('account')}" uib-dropdown class="dropdown pointer">
+                    <a class="dropdown-toggle" uib-dropdown-toggle href="" id="account-menu">
                         <span>
                             <span class="glyphicon glyphicon-user"></span>
                             <span class="hidden-sm" translate="global.menu.account.main">
@@ -42,7 +42,7 @@
                             <b class="caret"></b>
                         </span>
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu" uib-dropdown-menu>
                         <li ui-sref-active="active" ng-switch-when="true"><a ui-sref="settings" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-wrench"></span>
                             &#xA0;<span translate="global.menu.account.settings">Settings</span></a></li>
                         <li ui-sref-active="active" ng-switch-when="true"><a ui-sref="password" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-lock"></span>
@@ -59,15 +59,15 @@
                             &#xA0;<span translate="global.menu.account.register">Register</span></a></li>
                     </ul>
                 </li>
-                <li ng-class="{active: vm.vm.$state.includes('admin')}"  ng-switch-when="true" has-authority="ROLE_ADMIN" class="dropdown pointer">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="" id="admin-menu">
+                <li ng-class="{active: vm.vm.$state.includes('admin')}"  ng-switch-when="true" has-authority="ROLE_ADMIN" uib-dropdown class="dropdown pointer">
+                    <a class="dropdown-toggle" uib-dropdown-toggle href="" id="admin-menu">
                         <span>
                             <span class="glyphicon glyphicon-tower"></span>
                             <span class="hidden-sm" translate="global.menu.admin.main">Administration</span>
                             <b class="caret"></b>
                         </span>
                     </a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu" uib-dropdown-menu>
                         <%_ if (applicationType == 'gateway') { _%>
                         <li ui-sref-active="active"><a ui-sref="gateway" data-toggle="collapse" data-target=".navbar-collapse.in"><span class="glyphicon glyphicon-road"></span>
                             &#xA0;<span translate="global.menu.admin.gateway">Gateway</span></a></li>
@@ -98,15 +98,15 @@
                     </ul>
                 </li>
                 <%_ if (enableTranslation){ _%>
-                <li ui-sref-active="active" class="dropdown pointer" ng-controller="<%=jhiPrefixCapitalized%>LanguageController as languageVm">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="" ng-if="languageVm.languages.length > 1">
+                <li ui-sref-active="active" uib-dropdown class="dropdown pointer" ng-controller="<%=jhiPrefixCapitalized%>LanguageController as languageVm">
+                    <a class="dropdown-toggle" uib-dropdown-toggle href="" ng-if="languageVm.languages.length > 1">
                         <span>
                             <span class="glyphicon glyphicon-flag"></span>
                             <span class="hidden-sm" translate="global.menu.language">Language</span>
                             <b class="caret"></b>
                         </span>
                     </a>
-                    <ul class="dropdown-menu" ng-if="languageVm.languages.length > 1">
+                    <ul class="dropdown-menu" uib-dropdown-menu ng-if="languageVm.languages.length > 1">
                         <li active-menu="{{language}}" ng-repeat="language in languageVm.languages">
                             <a href="" ng-click="languageVm.changeLanguage(language)" data-toggle="collapse" data-target=".navbar-collapse.in">{{language | findLanguageFromKey}}</a>
                         </li>
