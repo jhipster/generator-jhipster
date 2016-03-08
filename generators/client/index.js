@@ -18,6 +18,7 @@ util.inherits(JhipsterClientGenerator, scriptBase);
 /* Constants use throughout */
 const constants = require('../generator-constants'),
     QUESTIONS = constants.QUESTIONS,
+    DIST_DIR = constants.CLIENT_DIST_DIR,
     MAIN_SRC_DIR = constants.CLIENT_MAIN_SRC_DIR,
     TEST_SRC_DIR = constants.CLIENT_TEST_SRC_DIR,
     ANGULAR_DIR = constants.ANGULAR_DIR;
@@ -114,6 +115,7 @@ module.exports = JhipsterClientGenerator.extend({
         this.logo = configOptions.logo;
 
     },
+
     initializing: {
         displayLogo: function () {
             if (this.logo) {
@@ -187,6 +189,7 @@ module.exports = JhipsterClientGenerator.extend({
 
         askFori18n: function () {
             if (this.existingProject || configOptions.skipI18nQuestion) return;
+
             this.aski18n(this, ++currentQuestion, QUESTIONS);
         },
 
@@ -268,10 +271,18 @@ module.exports = JhipsterClientGenerator.extend({
             if (configOptions.languages != null) {
                 this.languages = configOptions.languages;
             }
+
+            // Make dist dir available in templates
+            if (configOptions.buildTool === 'maven') {
+                this.DIST_DIR = 'target/' + DIST_DIR;
+            } else {
+                this.DIST_DIR = 'build/' + DIST_DIR;
+            }
         },
 
         composeLanguages: function () {
             if (configOptions.skipI18nQuestion) return;
+            
             this.composeLanguagesSub(this, configOptions, 'client');
         }
     },

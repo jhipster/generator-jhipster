@@ -86,7 +86,7 @@ apply from: 'gradle/docker.gradle'
 if (project.hasProperty('prod')) {
     apply from: 'gradle/profile_prod.gradle'
 } else {
-  apply from: 'gradle/profile_dev.gradle'
+    apply from: 'gradle/profile_dev.gradle'
 }
 
 group = '<%= packageName %>'
@@ -173,11 +173,6 @@ dependencies {
         exclude module: 'com.codahale.metrics'
     }
     compile group: 'com.datastax.cassandra', name: 'cassandra-driver-mapping', version: datastax_driver_version<% } %>
-    <%_ if (applicationType == 'gateway' && databaseType != 'cassandra') { _%>
-    // This dependency is used to start an embedded Cassandra server.
-    // You can remove this if you have jhipster.gateway.embedded-cassandra.enabled=false
-    compile group: 'info.archinnov', name: 'achilles-embedded', version: '3.2.3'
-    <%_ } _%>
     <%_ if (applicationType == 'gateway') { _%>
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-zuul', version: spring_cloud_version
     <%_ } _%>

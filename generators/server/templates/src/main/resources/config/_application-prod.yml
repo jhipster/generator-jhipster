@@ -146,12 +146,10 @@ server:
 jhipster:
     <%_ if (applicationType == 'gateway') { _%>
     gateway:
-        <%_ if (databaseType != 'cassandra') { _%>
-        embedded-cassandra: # Starts an embedded Cassandra node (not safe for production)
-            enabled: false
-        <%_ } _%>
         rate-limiting: # Warning! Read the documentation in the GatewayConfiguration class.
             enabled: false
+        authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
+            app1: /api # recommended prod configuration
     <%_ } _%>
     http:
         cache: # Used by the CachingHttpHeadersFilter

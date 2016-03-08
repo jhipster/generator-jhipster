@@ -172,9 +172,8 @@ module.exports = JhipsterGenerator.extend({
 
     prompting: {
         askForInsightOptIn: function () {
-            if (this.existingProject) {
-                return;
-            }
+            if (this.existingProject) return;
+
             var done = this.async();
             var insight = this.insight();
             this.prompt({
@@ -194,9 +193,8 @@ module.exports = JhipsterGenerator.extend({
         },
 
         askForApplicationType: function () {
-            if (this.existingProject) {
-                return;
-            }
+            if (this.existingProject) return;
+
             var done = this.async();
 
             this.prompt({
@@ -225,9 +223,8 @@ module.exports = JhipsterGenerator.extend({
         },
 
         askForModuleName: function () {
-            if (this.existingProject) {
-                return;
-            }
+            if (this.existingProject) return;
+
             this.askModuleName(this, ++currentQuestion, QUESTIONS);
             configOptions.lastQuestion = currentQuestion;
         }
@@ -292,9 +289,8 @@ module.exports = JhipsterGenerator.extend({
     default: {
 
         askForTestOpts: function () {
-            if (this.existingProject) {
-                return;
-            }
+            if (this.existingProject) return;
+
             var choices = [];
             if (!this.skipServer) {
                 // all server side test frameworks should be addded here

@@ -2,6 +2,7 @@ package <%=packageName%>.config;
 
 import <%=packageName%>.gateway.ratelimiting.RateLimitingFilter;
 import <%=packageName%>.gateway.ratelimiting.RateLimitingRepository;
+import <%=packageName%>.gateway.accesscontrol.AccessControlFilter;
 
 import javax.inject.Inject;
 
@@ -11,49 +12,31 @@ import org.springframework.context.annotation.Configuration;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
-<%_ if (databaseType != 'cassandra') { _%>
-
-import info.archinnov.achilles.embedded.CassandraEmbeddedServerBuilder;
-<%_ } _%>
 
 @Configuration
 public class GatewayConfiguration {
-    <%_ if (databaseType != 'cassandra') { _%>
 
-    /**
-     * Starts an embedded Cassandra server, useful in development.
-     */
     @Configuration
-    @ConditionalOnProperty("jhipster.gateway.embedded-cassandra.enabled")
-    public static class EmbeddedCassandra {
+    public static class AccessControl {
 
         @Bean
-        public Session session() {
-            return CassandraEmbeddedServerBuilder
-                .noEntityPackages()
-                .withCQLPort(9042)
-                .withClusterName("JHipster embedded cluster")
-                .withKeyspaceName("gateway2")
-                .withScript("config/cql/create-tables.cql")
-                .buildPersistenceManager().getNativeSession();
-        }
-
-        @Bean
-        public Cluster cluster(Session session) {
-            return session.getCluster();
+        public AccessControlFilter accessControlFilter(){
+            return new AccessControlFilter();
         }
     }
-    <%_ } _%>
 
     /**
      * Configures the Zuul filter that limits the number of API calls per user.
      * <p>
-     * For this filter to work, you need to:
+     * For this filter to work, you need to have:
      * <p><ul>
-     * <li>Have a working Cassandra cluster
-     * <li>Have this cluster configured in your application-*.yml files, using the
+     * <li>A working Cassandra cluster
+     * <li>A schema with the JHipster rate-limiting tables configured, using the
+     * "create_keyspace.cql" and "create_tables.cql" scripts from the
+     * "src/main/resources/config/cql" directory
+     * <li>Your cluster configured in your application-*.yml files, using the
      * "spring.data.cassandra" keys
-     * <li>Have Spring Data Cassandra running, by removing in your application-*.yml the
+     * <li>Spring Data Cassandra running, by removing in your application-*.yml the
      * "spring.autoconfigure.exclude" key that excludes the Cassandra and Spring Data
      * Cassandra auto-configuration.
      * </ul><p>

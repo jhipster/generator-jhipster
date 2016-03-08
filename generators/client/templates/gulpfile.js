@@ -2,6 +2,7 @@
 'use strict';
 
 var gulp = require('gulp'),
+    gutil = require('gulp-util'),
     prefix = require('gulp-autoprefixer'),
     cssnano = require('gulp-cssnano'),
     usemin = require('gulp-usemin'),
@@ -31,35 +32,44 @@ var gulp = require('gulp'),
     gulpIf = require('gulp-if'),
     footer = require('gulp-footer');
 
+<%_ if(enableTranslation) { _%>
+var yorc = require('./.yo-rc.json')['generator-jhipster'];
+<%_ } _%>
+
 var config = {
     app: '<%= MAIN_SRC_DIR %>',
-    dist: '<%= MAIN_SRC_DIR %>dist/',
+    dist: '<%= DIST_DIR %>',
     test: '<%= TEST_SRC_DIR %>'<% if(useSass) { %>,
-    importPath: '<%= MAIN_SRC_DIR %>bower_components',
     scss: '<%= MAIN_SRC_DIR %>scss/',
     sassSrc: '<%= MAIN_SRC_DIR %>scss/**/*.{scss,sass}',
-    cssDir: '<%= MAIN_SRC_DIR %>content/css'<% } %>
+    cssDir: '<%= MAIN_SRC_DIR %>content/css'<% } %>,
+    bower: '<%= MAIN_SRC_DIR %>bower_components/'
 };
 
 gulp.task('clean', function () {
-    return del([config.dist]);
+    return del([config.dist], { dot: true });
 });
 
 gulp.task('copy', function () {
-    return es.merge( <% if(enableTranslation) { %> // copy i18n folders only if translation is enabled
+    return es.merge( <% if(enableTranslation) { /* copy i18n folders only if translation is enabled */ %>
         gulp.src(config.app + 'i18n/**')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist + 'i18n/'))
-        .pipe(gulp.dest(config.dist + 'i18n/')),<% } %>
-        gulp.src(config.app + 'bower_components/bootstrap/fonts/*.*')
+        .pipe(gulp.dest(config.dist + 'i18n/')),<% } %><% if(!useSass) { %>
+        gulp.src(config.bower + 'bootstrap/fonts/*.*')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist + 'content/fonts/'))
-        .pipe(gulp.dest(config.dist + 'content/fonts/')),
+        .pipe(gulp.dest(config.dist + 'content/fonts/')),<% } %>
         gulp.src(config.app + 'content/**/*.{woff,svg,ttf,eot}')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist + 'content/fonts/'))
         .pipe(flatten())
-        .pipe(gulp.dest(config.dist + 'content/fonts/')));
+        .pipe(gulp.dest(config.dist + 'content/fonts/')),
+        gulp.src([config.app + 'robots.txt', config.app + 'favicon.ico', config.app + '.htaccess'], { dot: true })
+        .pipe(plumber({errorHandler: handleErrors}))
+        .pipe(changed(config.dist))
+        .pipe(gulp.dest(config.dist))
+    );
 });
 
 gulp.task('images', function () {
@@ -73,12 +83,27 @@ gulp.task('images', function () {
 
 <%_ if(useSass) { _%>
 gulp.task('sass', function () {
-    return gulp.src(config.sassSrc)
+    return es.merge(
+        gulp.src(config.sassSrc)
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(expect(config.sassSrc))
         .pipe(changed(config.cssDir, {extension: '.css'}))
-        .pipe(sass({includePaths:config.importPath}).on('error', sass.logError))
-        .pipe(gulp.dest(config.cssDir));
+        .pipe(sass({includePaths:config.bower}).on('error', sass.logError))
+        .pipe(gulp.dest(config.cssDir)),
+        gulp.src(config.bower + 'bootstrap-sass/assets/fonts/bootstrap/*.*')
+        .pipe(plumber({errorHandler: handleErrors}))
+        .pipe(changed(config.app + 'content/fonts'))
+        .pipe(gulp.dest(config.app + 'content/fonts'))
+    );
+});
+<%_ } _%>
+
+<%_ if(enableTranslation) { _%>
+gulp.task('languages', function () {
+    return gulp.src(config.bower + 'angular-i18n/angular-locale_{' + yorc.languages.join(',') + '}.js')
+        .pipe(plumber({errorHandler: handleErrors}))
+        .pipe(changed(config.app + 'i18n/'))
+        .pipe(gulp.dest(config.app + 'i18n/'));
 });
 <%_ } _%>
 
@@ -93,17 +118,17 @@ gulp.task('wiredep:app', function () {
     var stream = gulp.src(config.app + 'index.html')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(wiredep({
-            exclude: [/angular-i18n/]
+            exclude: [
+                /angular-i18n/,  // localizations are loaded dynamically<% if (useSass) { %>
+                'bower_components/bootstrap-sass/assets/javascripts/' // Exclude Bootstrap js files as we use ui-bootstrap<% } else { %>
+                'bower_components/bootstrap/dist/js/' // exclude bootstrap js files as we use ui-bootstrap<% } %>
+            ]
         }))
         .pipe(gulp.dest(config.app));
 
     return <% if (useSass) { %>es.merge(stream, gulp.src(config.sassSrc)
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(wiredep({
-            exclude: [
-                /angular-i18n/,  // localizations are loaded dynamically
-                'bower_components/bootstrap/' // Exclude Bootstrap LESS as we use bootstrap-sass
-            ],
             ignorePath: /\.\.\/webapp\/bower_components\// // remove ../webapp/bower_components/ from paths of injected sass files
         }))
         .pipe(gulp.dest(config.scss)));<% } else { %>stream;<% } %>
@@ -113,8 +138,13 @@ gulp.task('wiredep:test', function () {
     return gulp.src(config.test + 'karma.conf.js')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(wiredep({
-            exclude: [/angular-i18n/, /angular-scenario/],
-            ignorePath: /\.\.\/\.\.\//, // remove ../../ from paths of injected javascripts
+            exclude: [
+                /angular-i18n/,  // localizations are loaded dynamically
+                /angular-scenario/,<% if (useSass) { %>
+                'bower_components/bootstrap-sass/assets/javascripts/' // Exclude Bootstrap js files as we use ui-bootstrap<% } else { %>
+                'bower_components/bootstrap/dist/js/' // exclude Bootstrap js files as we use ui-bootstrap<% } %>
+            ],
+            ignorePath: /\.\.\/\.\.\//, // remove ../../ from paths of injected JavaScript files
             devDependencies: true,
             fileTypes: {
                 js: {
@@ -132,7 +162,7 @@ gulp.task('wiredep:test', function () {
 });
 
 gulp.task('usemin', ['images', 'styles'], function () {
-    return gulp.src([config.app + '**/*.html', '!' + config.app + '@(dist|bower_components)/**/*.html'])
+    return gulp.src([config.app + '**/*.html', '!' + config.bower + '**/*.html'])
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(usemin({
             css: [
@@ -189,7 +219,7 @@ gulp.task('ngconstant:prod', function () {
             '(function() {\n' +
             '    "use strict";\n' +
             '    // DO NOT EDIT THIS FILE, EDIT THE GULP TASK NGCONSTANT SETTINGS INSTEAD WHICH GENERATES THIS FILE\n' +
-            '    {%= __ngModule %}\n ' +
+            '    {%= __ngModule %}\n' +
             '})();\n',
         constants: {
             ENV: 'prod',
@@ -233,8 +263,8 @@ gulp.task('protractor', function () {
         .pipe(protractor({
             configFile: config.test + 'protractor.conf.js'
         }))
-        .on('error', function(err) {
-            console.log('E2E Tests failed');
+        .on('error', function() {
+            gutil.log('E2E Tests failed');
             process.exit(1);
         });
 });
@@ -251,7 +281,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('install', function (done) {
-    runSequence('wiredep', 'ngconstant:dev'<% if(useSass) { %>, 'sass'<% } %>, done);
+    runSequence('wiredep', 'ngconstant:dev'<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>, done);
 });
 
 gulp.task('serve', function () {

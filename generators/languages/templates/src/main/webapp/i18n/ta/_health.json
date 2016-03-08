@@ -12,7 +12,8 @@
         },
         "indicator": {
             "diskSpace": "வட்டு காலியிடம்",
-            "mail": "மின்னஞ்சல்",<% if (databaseType == 'sql') { %>
+            "mail": "மின்னஞ்சல்"<% if (searchEngine == 'elasticsearch') { %>,
+            "elasticsearch": "Elasticsearch"<% } %><% if (databaseType == 'sql') { %>,
             "db": "Database"<% } %><% if (databaseType == 'mongodb') { %>
             "mongo": "MongoDB"<% } %><% if (databaseType == 'cassandra') { %>
             "cassandra": "Cassandra"<% } %>

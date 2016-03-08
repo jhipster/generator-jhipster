@@ -1,13 +1,17 @@
 (function() {
     'use strict';
-
+<%_ var hasDate = false;
+    if (fieldsContainZonedDateTime || fieldsContainLocalDate || fieldsContainDate) {
+        hasDate = true;
+    }
+_%>
     angular
         .module('<%=angularAppName%>')
         .factory('<%= entityClass %>', <%= entityClass %>);
 
-    <%= entityClass %>.$inject = ['$resource', 'DateUtils'];
+    <%= entityClass %>.$inject = ['$resource'<% if (hasDate) { %>, 'DateUtils'<% } %>];
 
-    function <%= entityClass %> ($resource, DateUtils) {
+    function <%= entityClass %> ($resource<% if (hasDate) { %>, DateUtils<% } %>) {
         return $resource('api/<%= entityApiUrl %>/:id', {}, {
             'query': { method: 'GET', isArray: true},
             'get': {
@@ -18,7 +22,7 @@
                     data.<%=fields[idx].fieldName%> = DateUtils.convertDateTimeFromServer(data.<%=fields[idx].fieldName%>);<% } }%>
                     return data;
                 }
-            },<% if (fieldsContainLocalDate == true) { %>
+            },<% if (fieldsContainLocalDate) { %>
             'update': {
                 method: 'PUT',
                 transformRequest: function (data) {<% for (idx in fields) { if (fields[idx].fieldType == 'LocalDate') { %>

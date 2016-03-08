@@ -45,6 +45,6 @@
     "fields": [],
     "changelogDate": "20160208210109",
     "dto": "no",
-    "service": "no",
-    "pagination": "serviceClass"
+    "service": "serviceClass",
+    "pagination": "no"
 }

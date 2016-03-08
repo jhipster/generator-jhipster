@@ -2,7 +2,7 @@
 # Project Specific
 ######################<% if (!skipClient && useSass) { %>
 /<%= CLIENT_MAIN_SRC_DIR %>content/css/main.css<% } %>
-/<%= CLIENT_MAIN_SRC_DIR %>dist
+/<%= CLIENT_DIST_DIR %>**
 
 ######################
 # Node

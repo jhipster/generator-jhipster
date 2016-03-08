@@ -5,6 +5,12 @@ import javax.validation.constraints.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.cors.CorsConfiguration;
 
+<%_ if (applicationType == 'gateway') { _%>
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+<%_ } _%>
+
 /**
  * Properties specific to JHipster.
  *
@@ -592,33 +598,20 @@ public class JHipsterProperties {
     public static class Gateway {
 
         private final RateLimiting rateLimiting = new RateLimiting();
-        <%_ if (databaseType != 'cassandra') { _%>
-
-        private final EmbeddedCassandra embeddedCassandra = new EmbeddedCassandra();
-        <%_ } _%>
 
         public RateLimiting getRateLimiting() {
             return rateLimiting;
         }
-        <%_ if (databaseType != 'cassandra') { _%>
 
-        public EmbeddedCassandra getEmbeddedCassandra() {
-            return embeddedCassandra;
+        private Map<String, List<String>> authorizedMicroservicesEndpoints = new LinkedHashMap<>();
+
+        public Map<String, List<String>> getAuthorizedMicroservicesEndpoints() {
+            return authorizedMicroservicesEndpoints;
         }
 
-        public static class EmbeddedCassandra {
-
-            private boolean enabled = false;
-
-            public boolean isEnabled() {
-                return enabled;
-            }
-
-            public void setEnabled(boolean enabled) {
-                this.enabled = enabled;
-            }
+        public void setAuthorizedMicroservicesEndpoints(Map<String, List<String>> authorizedMicroservicesEndpoints) {
+            this.authorizedMicroservicesEndpoints = authorizedMicroservicesEndpoints;
         }
-        <%_ } _%>
 
         public static class RateLimiting {
 

@@ -70,11 +70,11 @@
         vm.byteSize = DataUtils.byteSize;
         <%_ } _%>
         <%_ for (idx in fields) {
-            if (fields[idx].fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent != 'text') { _%>
+            if (fields[idx].fieldType === 'byte[]' && fields[idx].fieldTypeBlobContent !== 'text') { _%>
 
         vm.set<%= fields[idx].fieldNameCapitalized %> = function ($file, <%= entityInstance %>) {
-            <%_ if (fields[idx].fieldTypeBlobContent == 'image') { _%>
-            if ($file && $file.$error == 'pattern') {
+            <%_ if (fields[idx].fieldTypeBlobContent === 'image') { _%>
+            if ($file && $file.$error === 'pattern') {
                 return;
             }
             <%_ } _%>
@@ -97,7 +97,7 @@
             opened: false
         };
 
-        vm.datePickerFor<%= fields[idx].fieldNameCapitalized %>Open = function($event) {
+        vm.datePickerFor<%= fields[idx].fieldNameCapitalized %>Open = function() {
             vm.datePickerFor<%= fields[idx].fieldNameCapitalized %>.status.opened = true;
         };
         <%_ } } _%>

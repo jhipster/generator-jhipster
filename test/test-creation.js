@@ -120,7 +120,6 @@ const expectedFiles = {
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/service/util/RandomUtil.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/filter/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/filter/CachingHttpHeadersFilter.java',
-        SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/filter/StaticResourcesProductionFilter.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/filter/CsrfCookieGeneratorFilter.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/dto/package-info.java',
         SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/web/rest/dto/LoggerDTO.java',
@@ -360,8 +359,27 @@ const expectedFiles = {
         'gradle/docker.gradle'
     ],
 
+    dockerServicesDev: [
+        DOCKER_DIR + 'db.dev.yml'
+    ],
+
+    dockerServicesProd: [
+        DOCKER_DIR + 'sonar.yml',
+        DOCKER_DIR + 'db.prod.yml'
+    ],
+
+    dockerCassandra: [
+        DOCKER_DIR + 'cassandra/Cassandra-Dev.Dockerfile',
+        DOCKER_DIR + 'cassandra/Cassandra-Prod.Dockerfile',
+        DOCKER_DIR + 'cassandra/scripts/init-dev.sh',
+        DOCKER_DIR + 'cassandra/scripts/init-prod.sh',
+        DOCKER_DIR + 'cassandra/scripts/entities.sh',
+        DOCKER_DIR + 'cassandra/scripts/cassandra.sh',
+        DOCKER_DIR + 'opscenter/Dockerfile'
+    ],
+
     containerizeWithDocker: [
-        DOCKER_DIR + 'registry.yml',
+        DOCKER_DIR + 'jhipster-registry.yml',
         DOCKER_DIR + 'Dockerfile',
         DOCKER_DIR + 'app.dev.yml',
         DOCKER_DIR + 'app.prod.yml'
@@ -404,6 +422,7 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.maven);
             assert.file(expectedFiles.client);
+            assert.file(expectedFiles.dockerServicesProd);
             assert.file(['gulpfile.js']);
         });
     });
@@ -438,6 +457,7 @@ describe('JHipster generator', function () {
             assert.file(expectedFiles.server);
             assert.file(expectedFiles.gradle);
             assert.file(expectedFiles.client);
+            assert.file(expectedFiles.dockerServicesProd);
             assert.file(['gulpfile.js']);
             assert.file(['gradle/yeoman.gradle']);
         });
@@ -575,6 +595,40 @@ describe('JHipster generator', function () {
                 SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/hazelcast/HazelcastCacheRegionFactory.java',
                 SERVER_MAIN_SRC_DIR + 'com/mycompany/myapp/config/hazelcast/package-info.java'
             ]);
+        });
+    });
+
+    describe('cassandra', function () {
+        beforeEach(function (done) {
+            helpers.run(path.join(__dirname, '../generators/app'))
+                .withOptions({skipInstall: true, checkInstall: false})
+                .withPrompts({
+                    "baseName": "jhipster",
+                    "packageName": "com.mycompany.myapp",
+                    "packageFolder": "com/mycompany/myapp",
+                    "authenticationType": "session",
+                    "hibernateCache": "no",
+                    "clusteredHttpSession": "no",
+                    "websocket": "no",
+                    "databaseType": "cassandra",
+                    "devDatabaseType": "cassandra",
+                    "prodDatabaseType": "cassandra",
+                    "useSass": false,
+                    "enableTranslation": true,
+                    "nativeLanguage": 'en',
+                    "languages": ['fr'],
+                    "buildTool": "maven",
+                    "rememberMeKey": "5c37379956bd1242f5636c8cb322c2966ad81277",
+                    "searchEngine": "no",
+                    "enableSocialSignIn": false,
+                    "skipClient": false,
+                    "skipUserManagement": false
+                })
+                .on('end', done);
+        });
+
+        it('creates expected files with "Cassandra"', function () {
+            assert.file(expectedFiles.dockerCassandra);
         });
     });
 
@@ -785,7 +839,7 @@ describe('JHipster generator', function () {
                     "clusteredHttpSession": "no",
                     "websocket": "no",
                     "databaseType": "sql",
-                    "devDatabaseType": "h2Memory",
+                    "devDatabaseType": "mysql",
                     "prodDatabaseType": "mysql",
                     "useSass": false,
                     "enableTranslation": true,
@@ -802,6 +856,8 @@ describe('JHipster generator', function () {
         it('creates expected files with the microservice application type', function () {
             assert.file(expectedFiles.jwt);
             assert.file(expectedFiles.microservice);
+            assert.file(expectedFiles.dockerServicesDev);
+            assert.file(expectedFiles.dockerServicesProd);
             assert.file(expectedFiles.containerizeWithDocker);
         });
     });

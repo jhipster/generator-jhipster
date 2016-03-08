@@ -1,0 +1,95 @@
+{
+    "metrics": {
+        "title": "Μετρήσεις Εφαρμογή",
+        "refresh.button": "Ανανέωση",
+        "updating": "Γίνεται ανανέωση...",
+        "jvm": {
+            "title": "Μετρήσεις JVM",
+            "memory": {
+                "title": "Μνήμη",
+                "total": "Συνολική Μνήμη",
+                "heap": "Μνήμη Heap",
+                "nonheap": "Μνήμη Non-Heap"
+            },
+            "threads": {
+                "title": "Νήματα",
+                "all": "Όλα",
+                "runnable": "Εκτελέσιμο",
+                "timedwaiting": "Timed waiting",
+                "waiting": "Αναμονή",
+                "blocked": "Μπλοκαρισμένο/α",
+                "dump": {
+                    "title": "Threads dump",
+                    "id": "Id: ",
+                    "blockedtime": "Χρόνος μπλοκαρίσματος",
+                    "blockedcount": "Μέτρηση μπλοκαρισμένων",
+                    "waitedtime": "Χρόνος αναμονής",
+                    "waitedcount": "Συνολικές αναμονές",
+                    "lockname": "Όνομα κλειδώματος",
+                    "stacktrace": "Stacktrace",
+                    "show": "Εμφάνιση του Stacktrace",
+                    "hide": "Απόκρυψη του Stacktrace"
+                }
+            },
+            "gc": {
+                "title": "Συλλογές σκουπιδιών",
+                "marksweepcount": "Mark Sweep count",
+                "marksweeptime": "Mark Sweep time",
+                "scavengecount": "Scavenge count",
+                "scavengetime": "Scavenge time"
+            },
+            "http": {
+                "title": "Αιτήματα HTTP (γεγονότα ανά δευτερόλεπτο)",
+                "active": "Ενεργά αιτήματα:",
+                "total": "Συνολικά αιτήματα:",
+                "table": {
+                    "code": "Code",
+                    "count": "Αριθμός",
+                    "mean": "Μέσο",
+                    "average": "Μέσος ορος"
+                },
+                "code": {
+                    "ok": "Ok",
+                    "notfound": "Δεν βρέθηκε",
+                    "servererror": "Σφάλμα διακομιστή"
+                }
+            }
+        },
+        "servicesstats": {
+            "title": "Στατιστικά των Services (φορά σε χιλιοστά του δευτερολέπτου)",
+            "table": {
+                "name": "Όνομα Service",
+                "count": "Αριθμός",
+                "mean": "Μέσο",
+                "min": "Ελάχιστο",
+                "max": "Ανώτατο",
+                "p50": "p50",
+                "p75": "p75",
+                "p95": "p95",
+                "p99": "p99"
+            }
+        },
+        "ehcache": {
+            "title": "Ehcache statistics",
+            "cachename": "Όνομα cache",
+            "objects": "Αντικείμενα",
+            "hits": "Κτυπήματα",
+            "misses": "Αποφυγές",
+            "evictioncount": "Αριθμός εξώσεων",
+            "mean": "Μέσος χρόνος (ms)"
+        },
+        "datasource": {
+        	"usage": "Χρήση",
+            "title": "Στατιστικά του DataSource(φορά σε χιλιοστά του δευτερολέπτου)",
+            "name": "Χρήση Pool",
+            "count": "Αριθμός",
+            "mean": "Μέσο",
+            "min": "Ελάχιστο",
+            "max": "Ανώτατο",
+            "p50": "p50",
+            "p75": "p75",
+            "p95": "p95",
+            "p99": "p99"
+        }
+    }
+}
