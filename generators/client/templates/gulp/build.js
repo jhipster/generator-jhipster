@@ -5,17 +5,17 @@ var fs = require('fs'),
     sourcemaps = require('gulp-sourcemaps'),
     rev = require('gulp-rev'),
     htmlmin = require('gulp-htmlmin'),
-    imagemin = require('gulp-imagemin'),
     ngAnnotate = require('gulp-ng-annotate'),
     prefix = require('gulp-autoprefixer'),
     cssnano = require('gulp-cssnano'),
     uglify = require('gulp-uglify'),
-    templateCache = require('gulp-angular-templatecache'),
     useref = require("gulp-useref"),
     revReplace = require("gulp-rev-replace")
     plumber = require('gulp-plumber'),
     gulpIf = require('gulp-if'),
     handleErrors = require('./handleErrors');
+
+var config = require('./config');
 
 var initTask = lazypipe()
     .pipe(sourcemaps.init)
