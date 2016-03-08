@@ -4,6 +4,8 @@
 var gulp = require('gulp'),<% if(useSass) { %>
     expect = require('gulp-expect-file'),
     sass = require('gulp-sass'),<% } %>
+    rev = require('gulp-rev'),
+    templateCache = require('gulp-angular-templatecache'),
     htmlmin = require('gulp-htmlmin'),
     imagemin = require('gulp-imagemin'),
     ngConstant = require('gulp-ng-constant-fork'),
@@ -30,7 +32,7 @@ var handleErrors = require('./gulp/handleErrors'),
 var yorc = require('./.yo-rc.json')['generator-jhipster'];
 <%_ } _%>
 
-var config = require('./config');
+var config = require('./gulp/config');
 
 gulp.task('clean', function () {
     return del([config.dist], { dot: true });
