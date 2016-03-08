@@ -13,6 +13,7 @@
                 'ca': 'Català',
                 'da': 'Dansk',
                 'de': 'Deutsch',
+                'el': 'Ελληνικά',
                 'en': 'English',
                 'es': 'Español',
                 'fr': 'Français',
