@@ -15,7 +15,7 @@
     "wrap-iife": [2, "inside"],
     "eqeqeq": 2,
     "no-use-before-define": [2, "nofunc"],
-    "no-unused-vars": 2,
+    "no-unused-vars": [2, {"vars": "local", "args": "none"}],
     "no-multi-str": 2,
     "no-irregular-whitespace": 2,
     "semi": [2, "always"],
