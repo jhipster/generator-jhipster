@@ -31,27 +31,6 @@ function Generator() {
 util.inherits(Generator, yeoman.Base);
 
 /**
- * A a new script to the application, in the index.html file.
- *
- * This is used to add AngularJS controllers or components to the application.
- * @param {string} script - path of the script rlative to the app folder
- */
-Generator.prototype.addJavaScriptToIndex = function (script) {
-    try {
-        var fullPath = CLIENT_MAIN_SRC_DIR + 'index.html';
-        jhipsterUtils.rewriteFile({
-            file: fullPath,
-            needle: '<!-- endbuild -->',
-            splicable: [
-                '<script src="app/' + script + '"></script>'
-            ]
-        }, this);
-    } catch (e) {
-        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + script + '.js ' + chalk.yellow('not added.\n'));
-    }
-};
-
-/**
  * A a new message format to the application, in the bower.json file.
  *
  * This is used for internationalization.

@@ -1635,24 +1635,13 @@ module.exports = EntityGenerator.extend({
             this.addEntityToMenu(this.entityStateName, this.enableTranslation);
 
             this.template(ANGULAR_DIR + 'entities/_entity-management.state.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '.state.js', this, {});
-            this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityFileName + '.state.js');
             this.template(ANGULAR_DIR + 'entities/_entity-management.controller.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '.controller' + '.js', this, {});
-            this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityFileName + '.controller' + '.js');
             this.template(ANGULAR_DIR + 'entities/_entity-management-dialog.controller.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-dialog.controller' + '.js', this, {});
-            this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityFileName + '-dialog.controller' + '.js');
             this.template(ANGULAR_DIR + 'entities/_entity-management-delete-dialog.controller.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-delete-dialog.controller' + '.js', this, {});
-            this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityFileName + '-delete-dialog.controller' + '.js');
-
             this.template(ANGULAR_DIR + 'entities/_entity-management-detail.controller.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.controller' + '.js', this, {});
-
-            this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.controller' + '.js');
-
             this.template(ANGULAR_DIR + 'services/_entity.service.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.service' + '.js', this, {});
-            this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.service' + '.js');
-
             if (this.searchEngine == 'elasticsearch') {
                 this.template(ANGULAR_DIR + 'services/_entity-search.service.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.search.service' + '.js', this, {});
-                this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.search.service' + '.js');
             }
 
             // Copy for each
