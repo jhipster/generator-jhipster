@@ -1053,6 +1053,7 @@ module.exports = EntityGenerator.extend({
                     type: 'input',
                     name: 'microservicePath',
                     message: 'Enter the absolute path to the microservice root directory:',
+                    store: true,
                     validate: function(input) {
                         var fromPath = input + '/' + this.filename;
                         if (shelljs.test('-f', fromPath)) {
