@@ -118,6 +118,7 @@ module.exports = EntityGenerator.extend({
             this.languages = this.config.get('languages');
             this.buildTool = this.config.get('buildTool');
             this.testFrameworks = this.config.get('testFrameworks');
+            this.pathConfigs = (this.config.get('pathConfigs'));
             // backward compatibility on testing frameworks
             if (this.testFrameworks == null) {
                 this.testFrameworks = ['gatling'];
@@ -136,10 +137,8 @@ module.exports = EntityGenerator.extend({
                 this.fromPath = this.filename;
             }
             else {
-                var filePath = this.jhipsterConfigDirectory + '/jhipster-remote-entities.json';
-                var pathConfigs = this.fs.readJSON(filePath);
-                if (pathConfigs) {
-                    var pathConfig = pathConfigs[this.entityNameCapitalized];
+                if (this.pathConfigs) {
+                    var pathConfig = this.pathConfigs[this.entityNameCapitalized];
                     if (pathConfig) {
                         this.log(chalk.green('\nFound the ' + this.filename + ' configuration file in remote microservice ' +  pathConfig.appName));
                         this.log(chalk.green('\nUsing configuration file ' + pathConfig.entityPath));
@@ -1629,16 +1628,14 @@ module.exports = EntityGenerator.extend({
                 return;
             }
 
-            var filePath = this.jhipsterConfigDirectory + '/jhipster-remote-entities.json';
-            var pathConfigs = this.fs.readJSON(filePath);
-            if (_.isUndefined(pathConfigs)) pathConfigs = {};
+            if (_.isUndefined(this.pathConfigs)) this.pathConfigs = {};
 
-            pathConfigs[this.entityNameCapitalized] = {
+            this.pathConfigs[this.entityNameCapitalized] = {
                 appName: this.microserviceName,
                 entityPath: this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json'
             };
 
-            this.fs.writeJSON(this.jhipsterConfigDirectory + '/jhipster-remote-entities.json', pathConfigs, null, 4);
+            this.config.set('pathConfigs', this.pathConfigs);
         },
 
         writeEnumFiles: function() {
