@@ -331,6 +331,8 @@ module.exports = JhipsterClientGenerator.extend({
         },
 
         writeAngularAppFiles: function () {
+            this.copyHtml(MAIN_SRC_DIR + '_index.html', MAIN_SRC_DIR + 'index.html');
+
             // Angular JS module
             this.template(ANGULAR_DIR + '_app.module.js', ANGULAR_DIR + 'app.module.js', this, {});
             this.template(ANGULAR_DIR + '_app.state.js', ANGULAR_DIR + 'app.state.js', this, {});
@@ -536,14 +538,6 @@ module.exports = JhipsterClientGenerator.extend({
             this.copy(MAIN_SRC_DIR + 'content/images/hipster.png', MAIN_SRC_DIR + 'content/images/hipster.png');
             this.copy(MAIN_SRC_DIR + 'content/images/hipster2x.png', MAIN_SRC_DIR + 'content/images/hipster2x.png');
 
-        },
-
-        updateJsToHtml: function () {
-            // Index page
-            var indexFile = html.readFileAsString(path.join(this.sourceRoot(), MAIN_SRC_DIR + '_index.html'));
-            indexFile = engine(indexFile, this, {});
-            indexFile = html.append(indexFile, 'body', '\n<!-- build:js app/app.js  -->\n<!-- inject:js -->\n<!-- endinject -->\n<!-- endbuild -->\n');
-            this.write(MAIN_SRC_DIR + 'index.html', indexFile);
         },
 
         writeClientTestFwFiles: function () {
