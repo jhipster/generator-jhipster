@@ -1,19 +1,13 @@
 // Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= packagejs.name %> <%= packagejs.version %>
 'use strict';
 
-var gulp = require('gulp'),
-    prefix = require('gulp-autoprefixer'),
-    cssnano = require('gulp-cssnano'),
-    usemin = require('gulp-usemin'),
-    uglify = require('gulp-uglify'),<% if(useSass) { %>
+var gulp = require('gulp'),<% if(useSass) { %>
     expect = require('gulp-expect-file'),
     sass = require('gulp-sass'),<% } %>
     htmlmin = require('gulp-htmlmin'),
     imagemin = require('gulp-imagemin'),
-    ngAnnotate = require('gulp-ng-annotate'),
     ngConstant = require('gulp-ng-constant-fork'),
-    eslint = require('gulp-eslint'),
-    rev = require('gulp-rev'),<% if (testFrameworks.indexOf('protractor') > -1) { %>
+    eslint = require('gulp-eslint'),<% if (testFrameworks.indexOf('protractor') > -1) { %>
     gutil = require('gulp-util'),
     protractor = require('gulp-protractor').protractor,<% } %>
     es = require('event-stream'),
@@ -22,29 +16,19 @@ var gulp = require('gulp'),
     wiredep = require('wiredep').stream,
     runSequence = require('run-sequence'),
     browserSync = require('browser-sync'),
-    sourcemaps = require('gulp-sourcemaps'),
     KarmaServer = require('karma').Server,
     plumber = require('gulp-plumber'),
     changed = require('gulp-changed'),
     handleErrors = require('./gulp/handleErrors'),
     serve = require('./gulp/serve'),
     util = require('./gulp/utils'),
-    gulpIf = require('gulp-if'),
-    footer = require('gulp-footer');
+    gulpIf = require('gulp-if');
 
 <%_ if(enableTranslation) { _%>
 var yorc = require('./.yo-rc.json')['generator-jhipster'];
 <%_ } _%>
 
-var config = {
-    app: '<%= MAIN_SRC_DIR %>',
-    dist: '<%= DIST_DIR %>',
-    test: '<%= TEST_SRC_DIR %>'<% if(useSass) { %>,
-    scss: '<%= MAIN_SRC_DIR %>scss/',
-    sassSrc: '<%= MAIN_SRC_DIR %>scss/**/*.{scss,sass}',
-    cssDir: '<%= MAIN_SRC_DIR %>content/css'<% } %>,
-    bower: '<%= MAIN_SRC_DIR %>bower_components/'
-};
+var config = require('./config');
 
 gulp.task('clean', function () {
     return del([config.dist], { dot: true });

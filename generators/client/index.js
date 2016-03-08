@@ -274,15 +274,16 @@ module.exports = JhipsterClientGenerator.extend({
 
             // Make dist dir available in templates
             if (configOptions.buildTool === 'maven') {
-                this.DIST_DIR = 'target/' + DIST_DIR;
+                this.BUILD_DIR = 'target/';
             } else {
-                this.DIST_DIR = 'build/' + DIST_DIR;
+                this.BUILD_DIR = 'build/';
             }
+            this.DIST_DIR = this.BUILD_DIR + DIST_DIR;
         },
 
         composeLanguages: function () {
             if (configOptions.skipI18nQuestion) return;
-            
+
             this.composeLanguagesSub(this, configOptions, 'client');
         }
     },
@@ -300,6 +301,7 @@ module.exports = JhipsterClientGenerator.extend({
             this.fs.copy(this.templatePath('gulp/handleErrors.js'), this.destinationPath('gulp/handleErrors.js')); // to avoid interpolate errors
             this.template('gulp/utils.js', 'gulp/utils.js', this, {});
             this.template('gulp/serve.js', 'gulp/serve.js', this, {});
+            this.template('gulp/config.js', 'gulp/config.js', this, {});
         },
 
         writeCssFiles: function () {
