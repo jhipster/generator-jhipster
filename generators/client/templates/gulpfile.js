@@ -19,10 +19,12 @@ var gulp = require('gulp'),<% if(useSass) { %>
     KarmaServer = require('karma').Server,
     plumber = require('gulp-plumber'),
     changed = require('gulp-changed'),
-    handleErrors = require('./gulp/handleErrors'),
+    gulpIf = require('gulp-if');
+
+var handleErrors = require('./gulp/handleErrors'),
     serve = require('./gulp/serve'),
     util = require('./gulp/utils'),
-    gulpIf = require('gulp-if');
+    build = require('./gulp/build');
 
 <%_ if(enableTranslation) { _%>
 var yorc = require('./.yo-rc.json')['generator-jhipster'];
@@ -44,7 +46,7 @@ gulp.task('copy', function () {
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist + 'content/fonts/'))
         .pipe(gulp.dest(config.dist + 'content/fonts/')),<% } %>
-        gulp.src(config.app + 'content/**/*.{woff,svg,ttf,eot}')
+        gulp.src(config.app + 'content/**/*.{woff,woff2,svg,ttf,eot}')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist + 'content/fonts/'))
         .pipe(flatten())
@@ -60,8 +62,14 @@ gulp.task('images', function () {
     return gulp.src(config.app + 'content/images/**')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist + 'content/images'))
-        .pipe(imagemin({optimizationLevel: 5}))
+        .pipe(imagemin({optimizationLevel: 5, progressive: true, interlaced: true}))
+        .pipe(rev())
         .pipe(gulp.dest(config.dist + 'content/images'))
+        .pipe(rev.manifest(config.revManifest, {
+            base: config.dist,
+            merge: true
+        }))
+        .pipe(gulp.dest(config.dist))
         .pipe(browserSync.reload({stream: true}));
 });
 
@@ -145,30 +153,17 @@ gulp.task('wiredep:test', function () {
         .pipe(gulp.dest(config.test));
 });
 
-gulp.task('usemin', ['images', 'styles'], function () {
-    return gulp.src([config.app + '**/*.html', '!' + config.bower + '**/*.html'])
-        .pipe(plumber({errorHandler: handleErrors}))
-        .pipe(usemin({
-            css: [
-                prefix,
-                'concat',
-                cssnano,
-                rev
-            ],
-            html: [
-                htmlmin.bind(htmlmin, {collapseWhitespace: true})
-            ],
-            js: [
-                sourcemaps.init,
-                ngAnnotate,
-                footer.bind(footer, ';'),
-                'concat',
-                uglify.bind(uglify, { mangle: false }),
-                rev,
-                sourcemaps.write.bind(sourcemaps.write, '.')
-            ]
+gulp.task('assets:prod', ['images', 'styles', 'html'], build);
+
+gulp.task('html', function() {
+    return gulp.src(config.app + 'app/**/*.html')
+        .pipe(htmlmin({collapseWhitespace: true}))
+        .pipe(templateCache({
+            module: '<%= angularAppName %>',
+            root: 'app/',
+            moduleSystem: 'IIFE'
         }))
-        .pipe(gulp.dest(config.dist));
+        .pipe(gulp.dest(config.tmp));
 });
 
 gulp.task('ngconstant:dev', function () {
@@ -223,7 +218,7 @@ gulp.task('eslint', function () {
 });
 
 // check app for eslint errors anf fix some of them
-gulp.task('eslint-and-fix', function () {
+gulp.task('eslint:fix', function () {
     return gulp.src(config.app + 'app/**/*.js')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(eslint({
@@ -273,7 +268,7 @@ gulp.task('serve', function () {
 });
 
 gulp.task('build', function (cb) {
-    runSequence('clean', 'copy', 'wiredep:app', 'ngconstant:prod', 'eslint', 'usemin', cb);
+    runSequence('clean', 'copy', 'wiredep:app', 'ngconstant:prod', 'eslint', 'assets:prod', cb);
 });
 
 gulp.task('default', ['serve']);
