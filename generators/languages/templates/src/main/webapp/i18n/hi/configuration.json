@@ -1,0 +1,10 @@
+{
+    "configuration": {
+        "title": "कॉन्फ़िगरेशन",
+        "filter": "(उपसर्ग) द्वारा फ़िल्टर",
+        "table": {
+            "prefix": "उपसर्ग",
+            "properties": "गुण"
+        }
+    }
+}
