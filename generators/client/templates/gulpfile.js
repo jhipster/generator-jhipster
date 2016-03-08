@@ -2,7 +2,6 @@
 'use strict';
 
 var gulp = require('gulp'),
-    gutil = require('gulp-util'),
     prefix = require('gulp-autoprefixer'),
     cssnano = require('gulp-cssnano'),
     usemin = require('gulp-usemin'),
@@ -15,6 +14,7 @@ var gulp = require('gulp'),
     ngConstant = require('gulp-ng-constant-fork'),
     eslint = require('gulp-eslint'),
     rev = require('gulp-rev'),<% if (testFrameworks.indexOf('protractor') > -1) { %>
+    gutil = require('gulp-util'),
     protractor = require('gulp-protractor').protractor,<% } %>
     es = require('event-stream'),
     flatten = require('gulp-flatten'),
