@@ -1052,14 +1052,19 @@ module.exports = EntityGenerator.extend({
                     },
                     type: 'input',
                     name: 'microservicePath',
-                    message: 'Enter the absolute path to the microservice root directory:',
+                    message: 'Enter the path to the microservice root directory:',
                     store: true,
                     validate: function(input) {
-                        var fromPath = input + '/' + this.filename;
+                        var fromPath = '';
+                        if(path.isAbsolute(input)) {
+                            fromPath = input + '/' + this.filename;
+                        } else {
+                            fromPath = this.destinationPath(input + '/' + this.filename);
+                        }
+
                         if (shelljs.test('-f', fromPath)) {
                             return true;
-                        }
-                        else {
+                        } else {
                             return this.filename + ' not found in ' + input + '/';
                         }
                     }.bind(this)
@@ -1069,7 +1074,11 @@ module.exports = EntityGenerator.extend({
             this.prompt(prompts, function(props) {
                 if (props.useMicroserviceJson) {
                     this.log(chalk.green('\nFound the ' + this.filename + ' configuration file, entity can be automatically generated!\n'));
-                    this.microservicePath = props.microservicePath;
+                    if(path.isAbsolute(props.microservicePath)) {
+                        this.microservicePath = path.relative(this.destinationRoot(), props.microservicePath);
+                    } else {
+                        this.microservicePath = props.microservicePath;
+                    }
                     this.fromPath = this.microservicePath + '/' + this.jhipsterConfigDirectory + '/' + this.entityNameCapitalized + '.json';
                     this.useConfigurationFile = true;
                     this.skipServer = true;
