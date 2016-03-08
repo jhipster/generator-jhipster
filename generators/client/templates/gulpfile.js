@@ -30,6 +30,8 @@ var gulp = require('gulp'),
     serve = require('./gulp/serve'),
     util = require('./gulp/utils'),
     gulpIf = require('gulp-if'),
+    inject = require('gulp-inject'),
+    angularFilesort = require('gulp-angular-filesort'),
     footer = require('gulp-footer');
 
 <%_ if(enableTranslation) { _%>
@@ -281,15 +283,21 @@ gulp.task('watch', function () {
 });
 
 gulp.task('install', function (done) {
-    runSequence('wiredep', 'ngconstant:dev'<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>, done);
+    runSequence('wiredep', 'inject', 'ngconstant:dev'<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>, done);
 });
 
 gulp.task('serve', function () {
     runSequence('install', serve);
 });
 
+gulp.task('inject', function() {
+    return gulp.src(config.app + 'index.html')
+        .pipe(inject(gulp.src(config.app + 'app/**/*.js').pipe(angularFilesort()), {relative: true}))
+        .pipe(gulp.dest(config.app));
+});
+
 gulp.task('build', function (cb) {
-    runSequence('clean', 'copy', 'wiredep:app', 'ngconstant:prod', 'eslint', 'usemin', cb);
+    runSequence('clean', 'copy', 'wiredep:app', 'ngconstant:prod', 'inject', 'eslint', 'usemin', cb);
 });
 
 gulp.task('default', ['serve']);
