@@ -693,10 +693,10 @@ module.exports = JhipsterServerGenerator.extend({
             // Create docker-compose file
             this.template(DOCKER_DIR + '_sonar.yml', DOCKER_DIR + 'sonar.yml', this, {});
             if (this.devDatabaseType != "no" && this.devDatabaseType != "h2Disk" && this.devDatabaseType != "h2Memory" && this.devDatabaseType != "oracle") {
-                this.template(DOCKER_DIR + '_dev.yml', DOCKER_DIR + 'dev.yml', this, {});
+                this.template(DOCKER_DIR + '_db.dev.yml', DOCKER_DIR + 'db.dev.yml', this, {});
             }
             if ((this.prodDatabaseType != "no" && this.prodDatabaseType != "oracle") || this.searchEngine == "elasticsearch") {
-                this.template(DOCKER_DIR + '_prod.yml', DOCKER_DIR + 'prod.yml', this, {});
+                this.template(DOCKER_DIR + '_db.prod.yml', DOCKER_DIR + 'db.prod.yml', this, {});
             }
             if (this.devDatabaseType == "cassandra") {
                 this.template(DOCKER_DIR + 'cassandra/_Cassandra-Dev.Dockerfile', DOCKER_DIR + 'cassandra/Cassandra-Dev.Dockerfile', this, {});
@@ -708,7 +708,7 @@ module.exports = JhipsterServerGenerator.extend({
                 this.template(DOCKER_DIR + 'opscenter/_Dockerfile', DOCKER_DIR + 'opscenter/Dockerfile', this, {});
             }
             if (this.applicationType == 'microservice' || this.applicationType == 'gateway') {
-                this.template(DOCKER_DIR + '_registry.yml', DOCKER_DIR + 'registry.yml', this, {});
+                this.template(DOCKER_DIR + '_jhipster-registry.yml', DOCKER_DIR + 'jhipster-registry.yml', this, {});
                 this.template(DOCKER_DIR + '_Dockerfile', DOCKER_DIR + 'Dockerfile', this, {});
                 this.template(DOCKER_DIR + '_app.dev.yml', DOCKER_DIR + 'app.dev.yml', this, {});
                 this.template(DOCKER_DIR + '_app.prod.yml', DOCKER_DIR + 'app.prod.yml', this, {});
