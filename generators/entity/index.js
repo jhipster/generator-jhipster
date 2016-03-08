@@ -234,7 +234,7 @@ module.exports = EntityGenerator.extend({
         }
         if (this.applicationType == 'gateway'){
             this.microserviceName = this.fileData.microserviceName;
-            this.searchEngine = this.fileData.searchEngine;
+            this.searchEngine = this.fileData.searchEngine || this.searchEngine;
         }
     },
     /**
