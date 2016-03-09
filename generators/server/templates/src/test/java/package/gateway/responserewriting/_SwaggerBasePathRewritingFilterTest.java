@@ -51,24 +51,6 @@ public class SwaggerBasePathRewritingFilterTest {
     }
 
     @Test
-    public void run_on_error_404() {
-        MockHttpServletRequest request = new MockHttpServletRequest("GET", DEFAULT_URL);
-        RequestContext context = RequestContext.getCurrentContext();
-        context.setRequest(request);
-
-        // Simulate an HTTP error 404, this should probably be done differently in Zuul
-        // according to SendErrorFilter
-        MockHttpServletResponse response = new MockHttpServletResponse();
-        response.setStatus(404);
-        context.setResponse(response);
-
-        // filter should not fail with an empty body
-
-        filter.run();
-        assertEquals(404, context.getResponseStatusCode());
-    }
-
-    @Test
     public void run_on_valid_response() throws Exception {
         MockHttpServletRequest request = new MockHttpServletRequest("GET", "/service1" + DEFAULT_URL);
         RequestContext context = RequestContext.getCurrentContext();
