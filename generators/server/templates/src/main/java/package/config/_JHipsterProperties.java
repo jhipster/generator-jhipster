@@ -439,6 +439,8 @@ public class JHipsterProperties {
 
         private final Graphite graphite = new Graphite();
 
+        private final Logs logs = new Logs();
+
         public Jmx getJmx() {
             return jmx;
         }
@@ -450,6 +452,11 @@ public class JHipsterProperties {
         public Graphite getGraphite() {
             return graphite;
         }
+
+        public Logs getLogs() {
+            return logs;
+        }
+
 
         public static class Jmx {
 
@@ -537,6 +544,29 @@ public class JHipsterProperties {
 
             public void setPrefix(String prefix) {
                 this.prefix = prefix;
+            }
+        }
+
+        public static  class Logs {
+
+            private boolean enabled = false;
+
+            private long reportFrequency = 60;
+
+            public long getReportFrequency() {
+                return reportFrequency;
+            }
+
+            public void setReportFrequency(int reportFrequency) {
+                this.reportFrequency = reportFrequency;
+            }
+
+            public boolean isEnabled() {
+                return enabled;
+            }
+
+            public void setEnabled(boolean enabled) {
+                this.enabled = enabled;
             }
         }
     }
