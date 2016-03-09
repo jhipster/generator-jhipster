@@ -1063,6 +1063,11 @@ module.exports = JhipsterServerGenerator.extend({
             this.template(SERVER_TEST_RES_DIR + 'config/_application.yml', SERVER_TEST_RES_DIR + 'config/application.yml', this, {});
             this.template(SERVER_TEST_RES_DIR + '_logback-test.xml', SERVER_TEST_RES_DIR + 'logback-test.xml', this, {});
 
+            // Create Gateway tests files
+            if (this.applicationType == "gateway"){
+                this.template(SERVER_TEST_SRC_DIR + 'package/gateway/responserewriting/_SwaggerBasePathRewritingFilterTest.java', testDir + 'gateway/responserewriting/SwaggerBasePathRewritingFilterTest.java', this, {});
+            }
+
             if (this.hibernateCache == "ehcache") {
                 this.template(SERVER_TEST_RES_DIR + '_ehcache.xml', SERVER_TEST_RES_DIR + 'ehcache.xml', this, {});
             }
