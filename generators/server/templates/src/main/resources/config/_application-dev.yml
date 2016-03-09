@@ -135,8 +135,8 @@ liquibase:
     contexts: dev
 
 server:
-<%_ if (applicationType == 'microservice') { _%>
-    port: 8081
+<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+    port: <%= serverPort %>
 <%_ } else { _%>
     port: 8080
 <%_ } _%>

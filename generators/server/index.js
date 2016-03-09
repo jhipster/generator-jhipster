@@ -102,6 +102,10 @@ module.exports = JhipsterServerGenerator.extend({
             }
             this.javaVersion = '8'; // Java version is forced to be 1.8. We keep the variable as it might be useful in the future.
             this.packageName = this.config.get('packageName');
+            this.serverPort = this.config.get('serverPort');
+            if (this.serverPort == undefined) {
+                this.serverPort = 8080;
+            }
             this.authenticationType = this.config.get('authenticationType');
             this.clusteredHttpSession = this.config.get('clusteredHttpSession');
             this.searchEngine = this.config.get('searchEngine');
@@ -210,6 +214,22 @@ module.exports = JhipsterServerGenerator.extend({
             var done = this.async();
             var applicationType = this.applicationType;
             var prompts = [
+                {
+                    when: function (response) {
+                        if (applicationType == 'monolith') {
+                            ++currentQuestion; //skip the question for monoliths
+                        }
+                        return (applicationType == 'gateway' || applicationType == 'microservice');
+                    },
+                    type: 'input',
+                    name: 'serverPort',
+                    validate: function (input) {
+                        if (/^([0-9]*)$/.test(input)) return true;
+                        return 'This is not a valid port number.';
+                    },
+                    message: '(' + (++currentQuestion) + '/' + QUESTIONS + ') As you are running in a microservice architecture, on which port would like your server to run? It should be unique to avoid port conflicts.',
+                    default: '8080'
+                },
                 {
                     type: 'input',
                     name: 'packageName',
@@ -528,6 +548,7 @@ module.exports = JhipsterServerGenerator.extend({
                 }
 
                 this.packageName = props.packageName;
+                this.serverPort = props.serverPort;
                 this.hibernateCache = props.hibernateCache;
                 this.clusteredHttpSession = props.clusteredHttpSession;
                 this.websocket = props.websocket;
@@ -635,6 +656,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.config.set('baseName', this.baseName);
             this.config.set('packageName', this.packageName);
             this.config.set('packageFolder', this.packageFolder);
+            this.config.set('serverPort', this.serverPort);
             this.config.set('authenticationType', this.authenticationType);
             this.config.set('hibernateCache', this.hibernateCache);
             this.config.set('clusteredHttpSession', this.clusteredHttpSession);

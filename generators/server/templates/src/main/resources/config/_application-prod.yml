@@ -134,7 +134,11 @@ liquibase:
     contexts: prod
 
 server:
+<%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
+    port: <%= serverPort %>
+<%_ } else { _%>
     port: 8080
+<%_ } _%>
     compression:
         enabled: true
         mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
