@@ -1568,7 +1568,8 @@ module.exports = EntityGenerator.extend({
 
                     // Copy for each
                     if (!this.skipClient && this.enableTranslation) {
-                        this.getAllInstalledLanguages().forEach(function (language) {
+                        var languages = this.languages || this.getAllInstalledLanguages();
+                        languages.forEach(function (language) {
                             this.copyEnumI18n(language, enumInfo);
                         }, this);
                     }
@@ -1635,29 +1636,19 @@ module.exports = EntityGenerator.extend({
             this.addEntityToMenu(this.entityStateName, this.enableTranslation);
 
             this.template(ANGULAR_DIR + 'entities/_entity-management.state.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '.state.js', this, {});
-            this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityFileName + '.state.js');
             this.template(ANGULAR_DIR + 'entities/_entity-management.controller.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '.controller' + '.js', this, {});
-            this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityFileName + '.controller' + '.js');
             this.template(ANGULAR_DIR + 'entities/_entity-management-dialog.controller.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-dialog.controller' + '.js', this, {});
-            this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityFileName + '-dialog.controller' + '.js');
             this.template(ANGULAR_DIR + 'entities/_entity-management-delete-dialog.controller.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-delete-dialog.controller' + '.js', this, {});
-            this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityFileName + '-delete-dialog.controller' + '.js');
-
             this.template(ANGULAR_DIR + 'entities/_entity-management-detail.controller.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.controller' + '.js', this, {});
-
-            this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityFileName + '-detail.controller' + '.js');
-
             this.template(ANGULAR_DIR + 'services/_entity.service.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.service' + '.js', this, {});
-            this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.service' + '.js');
-
             if (this.searchEngine == 'elasticsearch') {
                 this.template(ANGULAR_DIR + 'services/_entity-search.service.js', ANGULAR_DIR + 'entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.search.service' + '.js', this, {});
-                this.addJavaScriptToIndex('entities/' + this.entityFolderName + '/' + this.entityServiceFileName + '.search.service' + '.js');
             }
 
             // Copy for each
             if (this.enableTranslation) {
-                this.getAllInstalledLanguages().forEach(function (language) {
+                var languages = this.languages || this.getAllInstalledLanguages();
+                languages.forEach(function (language) {
                     this.copyI18n(language);
                 }, this);
             }
@@ -1682,6 +1673,16 @@ module.exports = EntityGenerator.extend({
                     TEST_DIR + 'gatling/simulations/' + this.entityClass + 'GatlingTest.scala', this, {'interpolate': INTERPOLATE_REGEX});
             }
 
+        }
+    },
+
+    install: function () {
+        var injectJsFilesToIndex = function () {
+            this.log('\n' + chalk.bold.green('Running gulp Inject to add javascript to index\n'));
+            this.spawnCommand('gulp', ['inject']);
+        };
+        if (!this.options['skip-install'] && !this.skipClient) {
+            injectJsFilesToIndex.call(this);
         }
     },
 

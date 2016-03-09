@@ -31,27 +31,6 @@ function Generator() {
 util.inherits(Generator, yeoman.Base);
 
 /**
- * A a new script to the application, in the index.html file.
- *
- * This is used to add AngularJS controllers or components to the application.
- * @param {string} script - path of the script rlative to the app folder
- */
-Generator.prototype.addJavaScriptToIndex = function (script) {
-    try {
-        var fullPath = CLIENT_MAIN_SRC_DIR + 'index.html';
-        jhipsterUtils.rewriteFile({
-            file: fullPath,
-            needle: '<!-- endbuild -->',
-            splicable: [
-                '<script src="app/' + script + '"></script>'
-            ]
-        }, this);
-    } catch (e) {
-        this.log(chalk.yellow('\nUnable to find ') + fullPath + chalk.yellow(' or missing required jhipster-needle. Reference to ') + script + '.js ' + chalk.yellow('not added.\n'));
-    }
-};
-
-/**
  * A a new message format to the application, in the bower.json file.
  *
  * This is used for internationalization.
@@ -1104,11 +1083,8 @@ Generator.prototype.copyI18nFilesByName = function (_this, webappDir, fileToCopy
 
 Generator.prototype.copyI18n = function (language) {
     try {
-        var stats = fs.lstatSync(CLIENT_MAIN_SRC_DIR + 'i18n/' + language);
-        if (stats.isDirectory()) {
-            this.template(CLIENT_MAIN_SRC_DIR + 'i18n/_entity_' + language + '.json', CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/' + this.entityInstance + '.json', this, {});
-            this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
-        }
+        this.template(CLIENT_MAIN_SRC_DIR + 'i18n/_entity_' + language + '.json', CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/' + this.entityInstance + '.json', this, {});
+        this.addEntityTranslationKey(this.entityTranslationKeyMenu, this.entityClass, language);
     } catch (e) {
         // An exception is thrown if the folder doesn't exist
         // do nothing
@@ -1117,10 +1093,7 @@ Generator.prototype.copyI18n = function (language) {
 
 Generator.prototype.copyEnumI18n = function (language, enumInfo) {
     try {
-        var stats = fs.lstatSync(CLIENT_MAIN_SRC_DIR + 'i18n/' + language);
-        if (stats.isDirectory()) {
-            this.template(CLIENT_MAIN_SRC_DIR + 'i18n/_enum_' + language + '.json', CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/' + enumInfo.enumInstance + '.json', enumInfo, {});
-        }
+        this.template(CLIENT_MAIN_SRC_DIR + 'i18n/_enum_' + language + '.json', CLIENT_MAIN_SRC_DIR + 'i18n/' + language + '/' + enumInfo.enumInstance + '.json', enumInfo, {});
     } catch (e) {
         // An exception is thrown if the folder doesn't exist
         // do nothing

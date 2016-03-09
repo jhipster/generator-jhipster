@@ -1053,6 +1053,7 @@
                                 </goals>
                                 <configuration>
                                     <buildTool>gulp</buildTool>
+                                    <buildArgs>build --no-notification</buildArgs>
                                 </configuration>
                             </execution>
                         </executions>

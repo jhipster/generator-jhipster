@@ -534,7 +534,6 @@ module.exports = JhipsterServerGenerator.extend({
                     this.jwtSecretKey = crypto.randomBytes(20).toString('hex');
                 }
 
-                this.authenticationType = props.authenticationType;
                 this.packageName = props.packageName;
                 this.hibernateCache = props.hibernateCache;
                 this.clusteredHttpSession = props.clusteredHttpSession;
