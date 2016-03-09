@@ -15,6 +15,7 @@ import javax.inject.Inject;
 public class LoggingConfiguration {
 
     private final Logger log = LoggerFactory.getLogger(LoggingConfiguration.class);
+
     private LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
 
     @Value("${spring.application.name}")
@@ -43,7 +44,6 @@ public class LoggingConfiguration {
         LogstashSocketAppender logstashAppender = new LogstashSocketAppender();
         logstashAppender.setName("LOGSTASH");
         logstashAppender.setContext(context);
-
         <%_ if (applicationType == 'microservice' || applicationType == 'gateway') { _%>
         String customFields = "{\"app_name\":\"" + appName + "\",\"app_port\":\"" + serverPort + "\"," +
             "\"instance_id\":\"" + instanceId + "\"}";
