@@ -73,10 +73,10 @@ public class CustomPersistentRememberMeServices extends
     private UserRepository userRepository;
 
     @Inject
-    public CustomPersistentRememberMeServices(Environment env, JHipsterProperties jhipsterProperties, org.springframework.security.core.userdetails
+    public CustomPersistentRememberMeServices(JHipsterProperties jHipsterProperties, org.springframework.security.core.userdetails
         .UserDetailsService userDetailsService) {
 
-        super(jhipsterProperties.getSecurity().getRememberMe().getKey(), userDetailsService);
+        super(jHipsterProperties.getSecurity().getRememberMe().getKey(), userDetailsService);
         random = new SecureRandom();
     }
 
