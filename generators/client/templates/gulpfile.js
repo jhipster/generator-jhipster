@@ -30,6 +30,8 @@ var gulp = require('gulp'),
     serve = require('./gulp/serve'),
     util = require('./gulp/utils'),
     gulpIf = require('gulp-if'),
+    inject = require('gulp-inject'),
+    angularFilesort = require('gulp-angular-filesort'),
     footer = require('gulp-footer');
 
 <%_ if(enableTranslation) { _%>
@@ -110,6 +112,12 @@ gulp.task('languages', function () {
 gulp.task('styles', [<% if(useSass) { %>'sass'<% } %>], function () {
     return gulp.src(config.app + 'content/css')
         .pipe(browserSync.reload({stream: true}));
+});
+
+gulp.task('inject', function() {
+    return gulp.src(config.app + 'index.html')
+        .pipe(inject(gulp.src(config.app + 'app/**/*.js').pipe(angularFilesort()), {relative: true}))
+        .pipe(gulp.dest(config.app));
 });
 
 gulp.task('wiredep', ['wiredep:test', 'wiredep:app']);
@@ -277,11 +285,12 @@ gulp.task('watch', function () {
     gulp.watch(['gulpfile.js', <% if(buildTool == 'maven') { %>'pom.xml'<% } else { %>'build.gradle'<% } %>], ['ngconstant:dev']);
     gulp.watch(<% if(useSass) { %>config.sassSrc<% } else { %>config.app + 'content/css/**/*.css'<% } %>, ['styles']);
     gulp.watch(config.app + 'content/images/**', ['images']);
+    gulp.watch(config.app + 'app/**/*.js', ['inject']);
     gulp.watch([config.app + '*.html', config.app + 'app/**', config.app + 'i18n/**']).on('change', browserSync.reload);
 });
 
 gulp.task('install', function (done) {
-    runSequence('wiredep', 'ngconstant:dev'<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>, done);
+    runSequence('wiredep', 'inject', 'ngconstant:dev'<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>, done);
 });
 
 gulp.task('serve', function () {
@@ -289,7 +298,7 @@ gulp.task('serve', function () {
 });
 
 gulp.task('build', function (cb) {
-    runSequence('clean', 'copy', 'wiredep:app', 'ngconstant:prod', 'eslint', 'usemin', cb);
+    runSequence('clean', 'copy', 'wiredep:app', 'ngconstant:prod', 'inject', 'eslint', 'usemin', cb);
 });
 
 gulp.task('default', ['serve']);

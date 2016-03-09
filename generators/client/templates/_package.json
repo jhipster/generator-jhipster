@@ -44,6 +44,8 @@
     "gulp-sourcemaps": "1.6.0",
     "gulp-uglify": "1.5.3",
     "gulp-usemin": "0.3.21",
+    "gulp-inject": "3.0.0",
+    "gulp-angular-filesort": "1.1.1",
     "gulp-util": "3.0.7",
     "jasmine-core": "2.4.1",
     <%_ if (testFrameworks.indexOf('protractor') > -1) { _%>
