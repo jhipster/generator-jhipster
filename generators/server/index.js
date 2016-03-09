@@ -608,6 +608,7 @@ module.exports = JhipsterServerGenerator.extend({
             this.angularAppName = this.getAngularAppName();
             this.camelizedBaseName = _.camelize(this.baseName);
             this.slugifiedBaseName = _.slugify(this.baseName);
+            this.dasherizedBaseName = _.dasherize(_.camelize(this.baseName,true));
             this.lowercaseBaseName = this.baseName.toLowerCase();
             this.mainClass = this.getMainClassName();
 
