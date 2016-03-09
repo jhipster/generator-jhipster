@@ -41,7 +41,7 @@ gulp.task('clean', function () {
 });
 
 gulp.task('copy', function () {
-    return es.merge( <% if(enableTranslation) { /* copy i18n folders only if translation is enabled */ %>
+    return es.merge(<% if(enableTranslation) { /* copy i18n folders only if translation is enabled */ %>
         gulp.src(config.app + 'i18n/**')
         .pipe(plumber({errorHandler: handleErrors}))
         .pipe(changed(config.dist + 'i18n/'))
@@ -125,6 +125,21 @@ gulp.task('inject', function () {
         .pipe(inject(gulp.src(config.app + 'app/**/*.js').pipe(angularFilesort()), {relative: true}))
         .pipe(gulp.dest(config.app));
 });
+
+<%_ if(useSass) { _%>
+gulp.task('inject:sass', function () {
+    return gulp.src(config.scss + 'main.scss')
+        .pipe(inject(gulp.src(config.app + 'app/**/*.{scss,sass}').pipe(angularFilesort()), {
+            relative: true,
+            starttag: '// inject:sass',
+            endtag: '// endinject',
+            transform: function (filepath) {
+                return "@import '"+ filepath + "';";
+            }
+        }))
+        .pipe(gulp.dest(config.scss));
+});
+<%_ } _%>
 
 gulp.task('wiredep', ['wiredep:test', 'wiredep:app']);
 
@@ -279,11 +294,14 @@ gulp.task('watch', function () {
     gulp.watch(<% if(useSass) { %>config.sassSrc<% } else { %>config.app + 'content/css/**/*.css'<% } %>, ['styles']);
     gulp.watch(config.app + 'content/images/**', ['images']);
     gulp.watch(config.app + 'app/**/*.js', ['inject']);
+    <%_ if(useSass) { _%>
+    gulp.watch(config.app + 'app/**/*.{scss,sass}', ['inject:sass']);
+    <%_ } _%>
     gulp.watch([config.app + '*.html', config.app + 'app/**', config.app + 'i18n/**']).on('change', browserSync.reload);
 });
 
 gulp.task('install', function () {
-    runSequence(['wiredep', 'ngconstant:dev'<% if(useSass) { %>, 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>], 'inject');
+    runSequence(['wiredep', 'ngconstant:dev'<% if(useSass) { %>, 'inject:sass', 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>], 'inject');
 });
 
 gulp.task('serve', function () {
@@ -291,7 +309,7 @@ gulp.task('serve', function () {
 });
 
 gulp.task('build', ['clean'], function (cb) {
-    runSequence(['copy', 'wiredep:app', 'ngconstant:prod'<% if(enableTranslation) { %>, 'languages'<% } %>], 'inject', 'assets:prod', cb);
+    runSequence(['copy', 'wiredep:app', 'ngconstant:prod'<% if(useSass) { %>, 'inject:sass', 'sass'<% } %><% if(enableTranslation) { %>, 'languages'<% } %>], 'inject', 'assets:prod', cb);
 });
 
 gulp.task('default', ['serve']);
