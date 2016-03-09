@@ -4,13 +4,7 @@ var gulp = require('gulp'),
     browserSync = require('browser-sync'),
     proxy = require('proxy-middleware');
 
-var config = {
-    app: '<%= MAIN_SRC_DIR %>',
-    port: 9000,
-    apiPort: 8080,
-    liveReloadPort: 35729,
-    uri: 'http://localhost:'
-};
+var config = require('./config');
 
 module.exports = function () {
     var baseUri = config.uri + config.apiPort;
