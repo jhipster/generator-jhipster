@@ -15,7 +15,7 @@ public class CachingHttpHeadersFilter implements Filter {
     // We consider the last modified date is the start up time of the server
     private final static long LAST_MODIFIED = System.currentTimeMillis();
 
-    private long CACHE_TIME_TO_LIVE = TimeUnit.DAYS.toMillis(31L);
+    private long CACHE_TIME_TO_LIVE = TimeUnit.DAYS.toMillis(1461L);
 
     private Environment env;
 
@@ -26,7 +26,7 @@ public class CachingHttpHeadersFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         CACHE_TIME_TO_LIVE = TimeUnit.DAYS.toMillis(env.getProperty("jhipster.http.cache.timeToLiveInDays",
-            Long.class, 31L));
+            Long.class, 1461L));
     }
 
     @Override
